@@ -2,35 +2,21 @@ input-language C/C++
 decl-version 2.0
 var-comparability none
 
-ppt ..my_getline():::ENTER
+ppt ..Caseerror():::ENTER
   ppt-type enter
-  variable s
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable maxsize
+  variable n
     var-kind variable
     rep-type int
     dec-type int
     flags is_param 
 
-ppt ..my_getline():::EXIT0
+ppt ..Caseerror():::EXIT0
   ppt-type subexit
-  variable s
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable maxsize
+  variable n
     var-kind variable
     rep-type int
     dec-type int
     flags is_param 
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type char
 
 ppt ..addstr():::ENTER
   ppt-type enter
@@ -38,11 +24,6 @@ ppt ..addstr():::ENTER
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
-  variable outset
-    var-kind variable
-    rep-type string
-    dec-type char*
     flags is_param 
   variable j
     var-kind variable
@@ -59,6 +40,11 @@ ppt ..addstr():::ENTER
     var-kind variable
     rep-type int
     dec-type int
+    flags is_param 
+  variable outset
+    var-kind variable
+    rep-type string
+    dec-type char*
     flags is_param 
 
 ppt ..addstr():::EXIT0
@@ -68,11 +54,6 @@ ppt ..addstr():::EXIT0
     rep-type int
     dec-type char
     flags is_param 
-  variable outset
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable j
     var-kind variable
     rep-type hashcode
@@ -89,52 +70,91 @@ ppt ..addstr():::EXIT0
     rep-type int
     dec-type int
     flags is_param 
+  variable outset
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
   variable return
     var-kind variable
     rep-type int
     dec-type int
 
-ppt ..esc():::ENTER
+ppt ..amatch():::ENTER
   ppt-type enter
-  variable s
+  variable j
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable lin
     var-kind variable
     rep-type string
     dec-type char*
     flags is_param 
-  variable i
+  variable offset
     var-kind variable
-    rep-type hashcode
-    dec-type int*
+    rep-type int
+    dec-type int
     flags is_param 
-  variable i[..]
-    var-kind array
-    enclosing-var i
-    array 1
-    rep-type int[]
-    dec-type int[]
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
 
-ppt ..esc():::EXIT0
+ppt ..amatch():::EXIT0
   ppt-type subexit
-  variable s
+  variable j
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable lin
     var-kind variable
     rep-type string
     dec-type char*
     flags is_param 
-  variable i
+  variable offset
     var-kind variable
-    rep-type hashcode
-    dec-type int*
+    rep-type int
+    dec-type int
     flags is_param 
-  variable i[..]
-    var-kind array
-    enclosing-var i
-    array 1
-    rep-type int[]
-    dec-type int[]
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
   variable return
     var-kind variable
     rep-type int
-    dec-type char
+    dec-type int
+
+ppt ..change():::ENTER
+  ppt-type enter
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable sub
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..change():::EXIT0
+  ppt-type subexit
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable sub
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
 
 ppt ..dodash():::ENTER
   ppt-type enter
@@ -143,7 +163,7 @@ ppt ..dodash():::ENTER
     rep-type int
     dec-type char
     flags is_param 
-  variable src
+  variable dest
     var-kind variable
     rep-type string
     dec-type char*
@@ -159,11 +179,6 @@ ppt ..dodash():::ENTER
     array 1
     rep-type int[]
     dec-type int[]
-  variable dest
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable j
     var-kind variable
     rep-type hashcode
@@ -179,6 +194,11 @@ ppt ..dodash():::ENTER
     var-kind variable
     rep-type int
     dec-type int
+    flags is_param 
+  variable src
+    var-kind variable
+    rep-type string
+    dec-type char*
     flags is_param 
 
 ppt ..dodash():::EXIT0
@@ -188,7 +208,7 @@ ppt ..dodash():::EXIT0
     rep-type int
     dec-type char
     flags is_param 
-  variable src
+  variable dest
     var-kind variable
     rep-type string
     dec-type char*
@@ -204,11 +224,6 @@ ppt ..dodash():::EXIT0
     array 1
     rep-type int[]
     dec-type int[]
-  variable dest
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable j
     var-kind variable
     rep-type hashcode
@@ -224,6 +239,53 @@ ppt ..dodash():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
+    flags is_param 
+  variable src
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..esc():::ENTER
+  ppt-type enter
+  variable i
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable i[..]
+    var-kind array
+    enclosing-var i
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable s
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..esc():::EXIT0
+  ppt-type subexit
+  variable i
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable i[..]
+    var-kind array
+    enclosing-var i
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable s
+    var-kind variable
+    rep-type string
+    dec-type char*
     flags is_param 
 
 ppt ..getccl():::ENTER
@@ -244,11 +306,6 @@ ppt ..getccl():::ENTER
     array 1
     rep-type int[]
     dec-type int[]
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable j
     var-kind variable
     rep-type hashcode
@@ -260,6 +317,11 @@ ppt ..getccl():::ENTER
     array 1
     rep-type int[]
     dec-type int[]
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
 
 ppt ..getccl():::EXIT0
   ppt-type subexit
@@ -279,11 +341,6 @@ ppt ..getccl():::EXIT0
     array 1
     rep-type int[]
     dec-type int[]
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable j
     var-kind variable
     rep-type hashcode
@@ -295,139 +352,6 @@ ppt ..getccl():::EXIT0
     array 1
     rep-type int[]
     dec-type int[]
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type char
-
-ppt ..stclose():::ENTER
-  ppt-type enter
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable j
-    var-kind variable
-    rep-type hashcode
-    dec-type int*
-    flags is_param 
-  variable j[..]
-    var-kind array
-    enclosing-var j
-    array 1
-    rep-type int[]
-    dec-type int[]
-  variable lastj
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-
-ppt ..stclose():::EXIT0
-  ppt-type subexit
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable j
-    var-kind variable
-    rep-type hashcode
-    dec-type int*
-    flags is_param 
-  variable j[..]
-    var-kind array
-    enclosing-var j
-    array 1
-    rep-type int[]
-    dec-type int[]
-  variable lastj
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-
-ppt ..in_set_2():::ENTER
-  ppt-type enter
-  variable c
-    var-kind variable
-    rep-type int
-    dec-type char
-    flags is_param 
-
-ppt ..in_set_2():::EXIT0
-  ppt-type subexit
-  variable c
-    var-kind variable
-    rep-type int
-    dec-type char
-    flags is_param 
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type char
-
-ppt ..in_pat_set():::ENTER
-  ppt-type enter
-  variable c
-    var-kind variable
-    rep-type int
-    dec-type char
-    flags is_param 
-
-ppt ..in_pat_set():::EXIT0
-  ppt-type subexit
-  variable c
-    var-kind variable
-    rep-type int
-    dec-type char
-    flags is_param 
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type char
-
-ppt ..makepat():::ENTER
-  ppt-type enter
-  variable arg
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable start
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable delim
-    var-kind variable
-    rep-type int
-    dec-type char
-    flags is_param 
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-
-ppt ..makepat():::EXIT0
-  ppt-type subexit
-  variable arg
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable start
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable delim
-    var-kind variable
-    rep-type int
-    dec-type char
-    flags is_param 
   variable pat
     var-kind variable
     rep-type string
@@ -436,7 +360,7 @@ ppt ..makepat():::EXIT0
   variable return
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type char
 
 ppt ..getpat():::ENTER
   ppt-type enter
@@ -468,56 +392,6 @@ ppt ..getpat():::EXIT0
     rep-type int
     dec-type int
 
-ppt ..makesub():::ENTER
-  ppt-type enter
-  variable arg
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable from
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable delim
-    var-kind variable
-    rep-type int
-    dec-type char
-    flags is_param 
-  variable sub
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-
-ppt ..makesub():::EXIT0
-  ppt-type subexit
-  variable arg
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable from
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable delim
-    var-kind variable
-    rep-type int
-    dec-type char
-    flags is_param 
-  variable sub
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type int
-
 ppt ..getsub():::ENTER
   ppt-type enter
   variable arg
@@ -538,10 +412,50 @@ ppt ..getsub():::EXIT0
     rep-type string
     dec-type char*
     flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type char
   variable sub
     var-kind variable
     rep-type string
     dec-type char*
+    flags is_param 
+
+ppt ..in_pat_set():::ENTER
+  ppt-type enter
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+
+ppt ..in_pat_set():::EXIT0
+  ppt-type subexit
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type char
+
+ppt ..in_set_2():::ENTER
+  ppt-type enter
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+
+ppt ..in_set_2():::EXIT0
+  ppt-type subexit
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type char
     flags is_param 
   variable return
     var-kind variable
@@ -555,15 +469,15 @@ ppt ..locate():::ENTER
     rep-type int
     dec-type char
     flags is_param 
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable offset
     var-kind variable
     rep-type int
     dec-type int
+    flags is_param 
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
     flags is_param 
 
 ppt ..locate():::EXIT0
@@ -573,12 +487,179 @@ ppt ..locate():::EXIT0
     rep-type int
     dec-type char
     flags is_param 
+  variable offset
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
   variable pat
     var-kind variable
     rep-type string
     dec-type char*
     flags is_param 
-  variable offset
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type char
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable argc
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable argv
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable argv[..]
+    var-kind array
+    enclosing-var argv
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable argc
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable argv
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable argv[..]
+    var-kind array
+    enclosing-var argv
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..makepat():::ENTER
+  ppt-type enter
+  variable arg
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable delim
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable start
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..makepat():::EXIT0
+  ppt-type subexit
+  variable arg
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable delim
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable start
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..makesub():::ENTER
+  ppt-type enter
+  variable arg
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable delim
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable from
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable sub
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..makesub():::EXIT0
+  ppt-type subexit
+  variable arg
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable delim
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable from
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable sub
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..my_getline():::ENTER
+  ppt-type enter
+  variable maxsize
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable s
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..my_getline():::EXIT0
+  ppt-type subexit
+  variable maxsize
     var-kind variable
     rep-type int
     dec-type int
@@ -587,14 +668,14 @@ ppt ..locate():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
-
-ppt ..omatch():::ENTER
-  ppt-type enter
-  variable lin
+  variable s
     var-kind variable
     rep-type string
     dec-type char*
     flags is_param 
+
+ppt ..omatch():::ENTER
+  ppt-type enter
   variable i
     var-kind variable
     rep-type hashcode
@@ -606,24 +687,24 @@ ppt ..omatch():::ENTER
     array 1
     rep-type int[]
     dec-type int[]
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable j
     var-kind variable
     rep-type int
     dec-type int
+    flags is_param 
+  variable lin
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
     flags is_param 
 
 ppt ..omatch():::EXIT0
   ppt-type subexit
-  variable lin
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable i
     var-kind variable
     rep-type hashcode
@@ -635,15 +716,20 @@ ppt ..omatch():::EXIT0
     array 1
     rep-type int[]
     dec-type int[]
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable j
     var-kind variable
     rep-type int
     dec-type int
+    flags is_param 
+  variable lin
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
     flags is_param 
   variable return
     var-kind variable
@@ -652,78 +738,28 @@ ppt ..omatch():::EXIT0
 
 ppt ..patsize():::ENTER
   ppt-type enter
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable n
     var-kind variable
     rep-type int
     dec-type int
+    flags is_param 
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
     flags is_param 
 
 ppt ..patsize():::EXIT0
   ppt-type subexit
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
   variable n
     var-kind variable
     rep-type int
     dec-type int
     flags is_param 
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type int
-
-ppt ..amatch():::ENTER
-  ppt-type enter
-  variable lin
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable offset
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
   variable pat
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
-  variable j
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-
-ppt ..amatch():::EXIT0
-  ppt-type subexit
-  variable lin
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable offset
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable j
-    var-kind variable
-    rep-type int
-    dec-type int
     flags is_param 
   variable return
     var-kind variable
@@ -776,6 +812,54 @@ ppt ..putsub():::EXIT0
     dec-type char*
     flags is_param 
 
+ppt ..stclose():::ENTER
+  ppt-type enter
+  variable j
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable j[..]
+    var-kind array
+    enclosing-var j
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable lastj
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..stclose():::EXIT0
+  ppt-type subexit
+  variable j
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable j[..]
+    var-kind array
+    enclosing-var j
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable lastj
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable pat
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
 ppt ..subline():::ENTER
   ppt-type enter
   variable lin
@@ -810,89 +894,5 @@ ppt ..subline():::EXIT0
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
-
-ppt ..change():::ENTER
-  ppt-type enter
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable sub
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-
-ppt ..change():::EXIT0
-  ppt-type subexit
-  variable pat
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-  variable sub
-    var-kind variable
-    rep-type string
-    dec-type char*
-    flags is_param 
-
-ppt ..main():::ENTER
-  ppt-type enter
-  variable argc
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable argv
-    var-kind variable
-    rep-type hashcode
-    dec-type char**
-    flags is_param 
-  variable argv[..]
-    var-kind array
-    enclosing-var argv
-    array 1
-    rep-type string[]
-    dec-type char*[]
-
-ppt ..main():::EXIT0
-  ppt-type subexit
-  variable argc
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable argv
-    var-kind variable
-    rep-type hashcode
-    dec-type char**
-    flags is_param 
-  variable argv[..]
-    var-kind array
-    enclosing-var argv
-    array 1
-    rep-type string[]
-    dec-type char*[]
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type int
-
-ppt ..Caseerror():::ENTER
-  ppt-type enter
-  variable n
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-
-ppt ..Caseerror():::EXIT0
-  ppt-type subexit
-  variable n
-    var-kind variable
-    rep-type int
-    dec-type int
     flags is_param 
 

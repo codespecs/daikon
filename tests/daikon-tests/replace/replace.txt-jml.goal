@@ -1,407 +1,219 @@
 ===========================================================================
-std.addstr(char;char *;int *;int;)int:::ENTER
-    Variables: c outset outset[] j *j maxset
-outset != null
-j != null
-*j >= 0
+..addstr():::ENTER
+    Variables: c outset j j[] maxset size(j[]) size(j[])-1 j[c] j[c-1] j[c..] j[c+1..] j[0..c] j[0..c-1] j[maxset] j[maxset-1] j[maxset..] j[maxset+1..] j[0..maxset] j[0..maxset-1]
 maxset == 100
-*j <= maxset
+daikon.Quant.size(j) == 1
+c < maxset
+c != daikon.Quant.size(j)
+c >= daikon.Quant.size(j)-1
+daikon.Quant.eltsLT(j, maxset)
+daikon.Quant.eltsGTE(j, daikon.Quant.size(j)-1)
 ===========================================================================
-std.addstr(char;char *;int *;int;)int:::EXIT
-    Variables: c outset outset[] j *j maxset return orig(c) orig(outset) orig(outset[]) orig(j) orig(*j) orig(maxset)
-assignable outset[*], *j
-c == \old(c)
-outset == \old(outset)
-j == \old(j)
-maxset == \old(maxset)
-outset != null
-j != null
-*j >= 1
-maxset == 100
-\result == 0 || \result == 1
-*j <= maxset
-*j >= \old(*j)
-maxset >= \old(*j)
+..addstr():::EXIT
+    Variables: c outset j j[] maxset return orig(c) orig(outset) orig(j) orig(j[]) orig(maxset) size(j[]) size(j[])-1 orig(size(j[])) orig(size(j[]))-1 j[c] j[c-1] j[c..] j[c+1..] j[0..c] j[0..c-1] orig(j[post(c)]) orig(j[post(c)-1]) orig(j[post(c)..]) orig(j[post(c)+1..]) orig(j[0..post(c)]) orig(j[0..post(c)-1]) j[maxset] j[maxset-1] j[maxset..] j[maxset+1..] j[0..maxset] j[0..maxset-1] j[return] j[return-1] j[return..] j[return+1..] j[0..return] j[0..return-1] j[orig(c)] j[orig(c)-1] j[orig(c)..] j[orig(c)+1..] j[0..orig(c)] j[0..orig(c)-1] j[orig(maxset)] j[orig(maxset)-1] j[orig(maxset)..] j[orig(maxset)+1..] j[0..orig(maxset)] j[0..orig(maxset)-1] orig(j[post(maxset)]) orig(j[post(maxset)-1]) orig(j[post(maxset)..]) orig(j[post(maxset)+1..]) orig(j[0..post(maxset)]) orig(j[0..post(maxset)-1]) orig(j[post(return)]) orig(j[post(return)-1]) orig(j[post(return)..]) orig(j[post(return)+1..]) orig(j[0..post(return)]) orig(j[0..post(return)-1]) orig(j[c]) orig(j[c-1]) orig(j[c..]) orig(j[c+1..]) orig(j[0..c]) orig(j[0..c-1]) orig(j[maxset]) orig(j[maxset-1]) orig(j[maxset..]) orig(j[maxset+1..]) orig(j[0..maxset]) orig(j[0..maxset-1])
+assignable j[*]
+return == \old(daikon.Quant.size(j))
+return == 1
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.eltsGTE(j, return)
+warning: method daikon.inv.binary.twoSequence.PairwiseLinearBinary.format(OutputFormat:JML) needs to be implemented: j[] - orig(j[]) - 1 == 0
+daikon.Quant.eltsLT(j, \old(maxset))
+daikon.Quant.eltsEqual(j, daikon.Quant.getElement_int(j, return-1))
+daikon.Quant.eltsGT(j, \old(daikon.Quant.getElement_int(j, \new(return)-1)))
+return != \old(c)
+return <= daikon.Quant.getElement_int(j, return-1)
+\old(c) >= daikon.Quant.size(j)-1
+\old(c) != daikon.Quant.getElement_int(j, return-1)
+\old(c) != \old(daikon.Quant.getElement_int(j, \new(return)-1))
+daikon.Quant.eltsGTE(\old(j), daikon.Quant.size(j)-1)
+daikon.Quant.eltsLT(\old(j), daikon.Quant.getElement_int(j, return-1))
+daikon.Quant.eltsEqual(\old(j), \old(daikon.Quant.getElement_int(j, \new(return)-1)))
+\old(maxset) > daikon.Quant.getElement_int(j, return-1)
+\old(maxset) > \old(daikon.Quant.getElement_int(j, \new(return)-1))
+daikon.Quant.size(j)-1 <= \old(daikon.Quant.getElement_int(j, \new(return)-1))
+daikon.Quant.getElement_int(j, return-1) - \old(daikon.Quant.getElement_int(j, \new(return)-1)) - 1 == 0
+return == (plume.MathMDE.gcd(daikon.Quant.getElement_int(j, return-1), \old(daikon.Quant.getElement_int(j, \new(return)-1))))
 ===========================================================================
-std.amatch(char *;int;char *;int;)int:::ENTER
-    Variables: lin lin[] offset pat pat[] j
-lin != null
+..amatch():::ENTER
+    Variables: lin offset pat j
+lin.equals("UW=Fq9MPD@sF6X@g|76zA\":NFc_4vtv%>/L>/W\n") || lin.equals("j+X+RpIPzC8;tLH#@;j+X+RpIPzC8;tLH#@;\n")
 offset >= 0
-pat != null
-j >= 0
+pat.equals("cX")
+j == 0
+!lin.equals(pat)
+offset >= j
 ===========================================================================
-std.amatch(char *;int;char *;int;)int:::EXIT
-    Variables: lin lin[] offset pat pat[] j return orig(lin) orig(lin[]) orig(offset) orig(pat) orig(pat[]) orig(j)
-assignable lin[*], offset, j
-lin == \old(lin)
-offset == \result
-pat == \old(pat)
-lin != null
-offset >= -1
-pat != null
-j >= 0
-lin.compareTo(\old(lin)) >= 0
-lin.contains(\old(lin))
-(!(offset == 0)) || (\old(offset) == 0)
-pat.equals(\old(pat))
-(!(j == 0)) || (\old(j) == 0)
-j >= \old(j)
+..amatch():::EXIT
+    Variables: lin offset pat j return orig(lin) orig(offset) orig(pat) orig(j)
+return != 0
+return >= -1
+return != \old(offset)
+return != \old(j)
 ===========================================================================
-std.change(char *;char *;)void:::ENTER
-    Variables: pat pat[] sub sub[]
-pat != null
-sub != null
+..change():::ENTER
+    Variables: pat sub
+pat.equals("cX")
+sub.equals("NEW")
 ===========================================================================
-std.change(char *;char *;)void:::EXIT
-    Variables: pat pat[] sub sub[] orig(pat) orig(pat[]) orig(sub) orig(sub[])
-pat == \old(pat)
-sub == \old(sub)
-pat != null
-sub != null
-pat.equals(\old(pat))
-sub.equals(\old(sub))
+..change():::EXIT
+    Variables: pat sub orig(pat) orig(sub)
 ===========================================================================
-std.dodash(char;char *;int *;char *;int *;int;)void:::ENTER
-    Variables: delim src src[] i *i dest dest[] j *j maxset
-delim == 93
-src != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: src[] is printable
-i != null
-*i >= 2
-dest != null
-j != null
-maxset == 100
-delim != *j
-*j <= maxset
+..esc():::ENTER
+    Variables: s i i[] size(i[]) size(i[])-1
+s.equals("NEW") || s.equals("X")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: s is printable
+daikon.Quant.subsetOf(i, new long[] { 0, 1, 2 })
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.size(i) == 1
 ===========================================================================
-std.dodash(char;char *;int *;char *;int *;int;)void:::EXIT
-    Variables: delim src src[] i *i dest dest[] j *j maxset orig(delim) orig(src) orig(src[]) orig(i) orig(*i) orig(dest) orig(dest[]) orig(j) orig(*j) orig(maxset)
-assignable *i, *j
-delim == \old(delim)
-src == \old(src)
-i == \old(i)
-dest == \old(dest)
-j == \old(j)
-maxset == \old(maxset)
-delim == 93
-src != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: src[] is printable
-i != null
-dest != null
-j != null
-maxset == 100
-delim != *j
-delim != \old(*j)
-src.equals(\old(src))
-*i >= \old(*i)
-dest.equals(\old(dest))
-*j <= maxset
-*j >= \old(*j)
-maxset >= \old(*j)
+..esc():::EXIT
+    Variables: s i i[] return orig(s) orig(i) orig(i[]) size(i[]) size(i[])-1 orig(size(i[])) orig(size(i[]))-1 i[return] i[return-1] i[return..] i[return+1..] i[0..return] i[0..return-1] orig(i[post(return)]) orig(i[post(return)-1]) orig(i[post(return)..]) orig(i[post(return)+1..]) orig(i[0..post(return)]) orig(i[0..post(return)-1])
+daikon.Quant.pairwiseEqual(i, \old(i))
+daikon.Quant.subsetOf(i, new long[] { 0, 1, 2 })
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 ===========================================================================
-std.esc(char *;int *;)char:::ENTER
-    Variables: s s[] i *i
-s != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: s[] is printable
-i != null
-*i >= 0
+..getpat():::ENTER
+    Variables: arg pat
+arg.equals("X")
 ===========================================================================
-std.esc(char *;int *;)char:::EXIT
-    Variables: s s[] i *i return orig(s) orig(s[]) orig(i) orig(*i)
-assignable *i
-s == \old(s)
-i == \old(i)
-s != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: s[] is printable
-i != null
-*i >= 0
-s.equals(\old(s))
-(!(*i == 0)) || (\old(*i) == 0)
-*i >= \old(*i)
+..getpat():::EXIT
+    Variables: arg pat return orig(arg) orig(pat)
+return == 1
 ===========================================================================
-std.getccl(char *;int *;char *;int *;)boolean:::ENTER
-    Variables: arg arg[] i *i pat pat[] j *j
-arg != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: arg[] is printable
-i != null
-pat != null
-j != null
+..getsub():::ENTER
+    Variables: arg sub
+arg.equals("NEW")
 ===========================================================================
-std.getccl(char *;int *;char *;int *;)boolean:::EXIT
-    Variables: arg arg[] i *i pat pat[] j *j return orig(arg) orig(arg[]) orig(i) orig(*i) orig(pat) orig(pat[]) orig(j) orig(*j)
-assignable *i, pat[*], *j
-arg == \old(arg)
-i == \old(i)
-pat == \old(pat)
-j == \old(j)
-(\result == 0)  ==>  (\old(*i) >= 1)
-(\result == 0)  ==>  (pat.compareTo(\old(pat)) > 0)
-(\result == 0)  ==>  (\result  isPointer)
-arg != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: arg[] is printable
-i != null
-pat != null
-j != null
-\result == 0 || \result == 1
-arg.equals(\old(arg))
-*i > \old(*i)
-(\old(pat) != null)  ==>  (pat.contains(\old(pat)))
-(\old(pat) != null)  ==>  (pat.compareTo(\old(pat)) >= 0)
-*j > \old(*j)
+..getsub():::EXIT
+    Variables: arg sub return orig(arg) orig(sub)
+return == 1
 ===========================================================================
-std.getline(char *;int;)boolean:::ENTER
-    Variables: s s[] maxsize
-s != null
+..in_pat_set():::ENTER
+    Variables: c
+c == 99
+===========================================================================
+..in_pat_set():::EXIT
+    Variables: c return orig(c)
+return == 1
+===========================================================================
+..main():::ENTER
+    Variables: argc argv argv[] size(argv[]) size(argv[])-1
+argc == 3
+argv != null
+daikon.Quant.pairwiseEqual(argv, new String[] { "./replace" })
+daikon.Quant.eltsEqual(argv, "./replace")
+daikon.Quant.size(argv) == 1
+===========================================================================
+..main():::EXIT
+    Variables: argc argv argv[] return orig(argc) orig(argv) orig(argv[]) size(argv[]) size(argv[])-1 orig(size(argv[])) orig(size(argv[]))-1
+return == daikon.Quant.size(argv)-1
+return == \old(daikon.Quant.size(argv))-1
+daikon.Quant.pairwiseEqual(argv, new String[] { "./replace" })
+daikon.Quant.eltsEqual(argv, "./replace")
+===========================================================================
+..makepat():::ENTER
+    Variables: arg start delim pat
+start == delim
+arg.equals("X")
+start == 0
+===========================================================================
+..makepat():::EXIT
+    Variables: arg start delim pat return orig(arg) orig(start) orig(delim) orig(pat)
+return == 1
+===========================================================================
+..makesub():::ENTER
+    Variables: arg from delim sub
+from == delim
+arg.equals("NEW")
+from == 0
+===========================================================================
+..makesub():::EXIT
+    Variables: arg from delim sub return orig(arg) orig(from) orig(delim) orig(sub)
+return == 3
+===========================================================================
+..my_getline():::ENTER
+    Variables: s maxsize
+s.equals("UW=Fq9MPD@sF6X@g|76zA\":NFc_4vtv%>/L>/W\n") || s.equals("j+X+RpIPzC8;tLH#@;j+X+RpIPzC8;tLH#@;\n")
 maxsize == 100
 ===========================================================================
-std.getline(char *;int;)boolean:::EXIT
-    Variables: s s[] maxsize return orig(s) orig(s[]) orig(maxsize)
-assignable s[*]
-s == \old(s)
-maxsize == \old(maxsize)
-(\result == 0)  ==>  (\result  isPointer)
-(\result == 0)  ==>  (s.equals(\old(s)))
-s != null
-maxsize == 100
-\result == 0 || \result == 1
+..my_getline():::EXIT
+    Variables: s maxsize return orig(s) orig(maxsize)
+return == 0 || return == 1
 ===========================================================================
-std.getpat(char *;char *;)int:::ENTER
-    Variables: arg arg[] pat pat[]
-arg != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: arg[] is printable
-pat != null
-===========================================================================
-std.getpat(char *;char *;)int:::EXIT
-    Variables: arg arg[] pat pat[] return orig(arg) orig(arg[]) orig(pat) orig(pat[])
-assignable pat[*]
-arg == \old(arg)
-pat == \old(pat)
-arg != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: arg[] is printable
-pat != null
-\result == 0 || \result == 1
-arg.equals(\old(arg))
-===========================================================================
-std.getsub(char *;char *;)boolean:::ENTER
-    Variables: arg arg[] sub sub[]
-arg != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: arg[] is printable
-sub != null
-===========================================================================
-std.getsub(char *;char *;)boolean:::EXIT
-    Variables: arg arg[] sub sub[] return orig(arg) orig(arg[]) orig(sub) orig(sub[])
-assignable sub[*]
-arg == \old(arg)
-sub == \old(sub)
-(\result == 0)  ==>  (\result  isPointer)
-arg != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: arg[] is printable
-sub != null
-\result == 0 || \result == 1
-arg.equals(\old(arg))
-===========================================================================
-std.in_pat_set(char;)boolean:::ENTER
-    Variables: c
-===========================================================================
-std.in_pat_set(char;)boolean:::EXIT
-    Variables: c return orig(c)
-c == \old(c)
-\result == 1
-===========================================================================
-std.in_set_2(char;)boolean:::ENTER
-    Variables: c
-===========================================================================
-std.in_set_2(char;)boolean:::EXIT
-    Variables: c return orig(c)
-c == \old(c)
-(\result == 0)  ==>  (c % 2 == 1)
-(\result == 0)  ==>  (\result  isPointer)
-(\result == 1)  ==>  (c % 5 == 2)
-(\result == 1)  ==>  (c == 37 || c == 42)
-\result == 0 || \result == 1
-===========================================================================
-std.locate(character;char *;int;)boolean:::ENTER
-    Variables: c pat pat[] offset
-pat != null
-offset >= 1
-===========================================================================
-std.locate(character;char *;int;)boolean:::EXIT
-    Variables: c pat pat[] offset return orig(c) orig(pat) orig(pat[]) orig(offset)
-c == \old(c)
-pat == \old(pat)
-offset == \old(offset)
-(\result == 0)  ==>  (\result  isPointer)
-pat != null
-offset >= 1
-\result == 0 || \result == 1
-pat.equals(\old(pat))
-===========================================================================
-std.main(int;char **;)int:::ENTER
-    Variables: argc argv
-argc == 2 || argc == 3
-argv != null
-===========================================================================
-std.main(int;char **;)int:::EXIT
-    Variables: argc argv return orig(argc) orig(argv)
-argc == \old(argc)
-argv == \old(argv)
-argc == 2 || argc == 3
-argv != null
-\result == 0
-===========================================================================
-std.makepat(char *;int;char;char *;)int:::ENTER
-    Variables: arg arg[] start delim pat pat[]
-arg != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: arg[] is printable
-start == 0
-delim == 0
-pat != null
-===========================================================================
-std.makepat(char *;int;char;char *;)int:::EXIT
-    Variables: arg arg[] start delim pat pat[] return orig(arg) orig(arg[]) orig(start) orig(delim) orig(pat) orig(pat[])
-assignable pat[*]
-arg == \old(arg)
-start == \old(start)
-delim == \old(delim)
-pat == \old(pat)
-arg != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: arg[] is printable
-start == 0
-delim == 0
-pat != null
-\result >= 0
-arg.equals(\old(arg))
-start <= \result
-===========================================================================
-std.makesub(char *;int;character;char *;)int:::ENTER
-    Variables: arg arg[] from delim sub sub[]
-arg != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: arg[] is printable
-from == 0
-delim == 0
-sub != null
-===========================================================================
-std.makesub(char *;int;character;char *;)int:::EXIT
-    Variables: arg arg[] from delim sub sub[] return orig(arg) orig(arg[]) orig(from) orig(delim) orig(sub) orig(sub[])
-assignable sub[*]
-arg == \old(arg)
-from == \old(from)
-delim == \old(delim)
-sub == \old(sub)
-arg != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: arg[] is printable
-from == 0
-delim == 0
-sub != null
-\result >= 0
-arg.equals(\old(arg))
-from <= \result
-===========================================================================
-std.omatch(char *;int *;char *;int;)boolean:::ENTER
-    Variables: lin lin[] i *i pat pat[] j
-lin != null
+..omatch():::ENTER
+    Variables: lin i i[] pat j size(i[]) size(i[])-1 i[j] i[j-1] i[j..] i[j+1..] i[0..j] i[0..j-1]
+j == daikon.Quant.size(i)-1
+lin.equals("UW=Fq9MPD@sF6X@g|76zA\":NFc_4vtv%>/L>/W\n") || lin.equals("j+X+RpIPzC8;tLH#@;j+X+RpIPzC8;tLH#@;\n")
 i != null
-*i >= 0
-pat != null
-j >= 0
-===========================================================================
-std.omatch(char *;int *;char *;int;)boolean:::EXIT
-    Variables: lin lin[] i *i pat pat[] j return orig(lin) orig(lin[]) orig(i) orig(*i) orig(pat) orig(pat[]) orig(j)
-assignable lin[*], *i
-lin == \old(lin)
-i == \old(i)
-pat == \old(pat)
-j == \old(j)
-(\result == 0)  ==>  (*i == \old(*i))
-(\result == 0)  ==>  (\result  isPointer)
-lin != null
 i != null
-*i >= 0
-pat != null
-j >= 0
-\result == 0 || \result == 1
-lin.compareTo(\old(lin)) >= 0
-lin.contains(\old(lin))
-(!(*i == 0)) || (\old(*i) == 0)
-*i >= \old(*i)
-pat.equals(\old(pat))
+daikon.Quant.eltsGteIndex(i)
+pat.equals("cX")
+daikon.Quant.size(i) == 1
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+!lin.equals(pat)
+daikon.Quant.eltsGTE(i, j)
+daikon.Quant.eltsEqual(i, daikon.Quant.getElement_int(i, j))
+j <= daikon.Quant.getElement_int(i, j)
 ===========================================================================
-std.patsize(char *;int;)int:::ENTER
-    Variables: pat pat[] n
-pat != null
-n >= 0
+..omatch():::EXIT
+    Variables: lin i i[] pat j return orig(lin) orig(i) orig(i[]) orig(pat) orig(j) size(i[]) size(i[])-1 orig(size(i[])) orig(size(i[]))-1 i[j] i[j-1] i[j..] i[j+1..] i[0..j] i[0..j-1] i[return] i[return-1] i[return..] i[return+1..] i[0..return] i[0..return-1] i[orig(j)] i[orig(j)-1] i[orig(j)..] i[orig(j)+1..] i[0..orig(j)] i[0..orig(j)-1] orig(i[post(j)]) orig(i[post(j)-1]) orig(i[post(j)..]) orig(i[post(j)+1..]) orig(i[0..post(j)]) orig(i[0..post(j)-1]) orig(i[post(return)]) orig(i[post(return)-1]) orig(i[post(return)..]) orig(i[post(return)+1..]) orig(i[0..post(return)]) orig(i[0..post(return)-1]) orig(i[j]) orig(i[j-1]) orig(i[j..]) orig(i[j+1..]) orig(i[0..j]) orig(i[0..j-1])
+assignable i[*]
+\old(j) == daikon.Quant.size(i)-1
+daikon.Quant.pairwiseEqual(daikon.Quant.slice(i, return, daikon.Quant.size(i)), \old(daikon.Quant.slice(i, \new(return), daikon.Quant.size(i))))
+daikon.Quant.eltsGteIndex(i)
+return == 0 || return == 1
+daikon.Quant.subsetOf(daikon.Quant.slice(i, 0, return-1), new long[] { 3, 14, 21 })
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.subsetOf(\old(daikon.Quant.slice(i, 0, \new(return)-1)), new long[] { 2, 13, 20 })
+daikon.Quant.eltsGTE(i, return)
+daikon.Quant.eltsGTE(i, \old(j))
+daikon.Quant.eltsEqual(i, daikon.Quant.getElement_int(i, \old(j)))
+daikon.Quant.eltsGTE(i, \old(daikon.Quant.getElement_int(i, j)))
+daikon.Quant.eltsGTE(\old(i), return)
+return >= \old(j)
+return <= \old(daikon.Quant.size(i))
+daikon.Quant.eltsGT(daikon.Quant.slice(i, 0, return-1), return)
+(!(daikon.Quant.getElement_int(i, \old(j)) == 0)) || (return == 0)
+return <= daikon.Quant.getElement_int(i, \old(j))
+daikon.Quant.eltsGT(\old(daikon.Quant.slice(i, 0, \new(return)-1)), return)
+(!(\old(daikon.Quant.getElement_int(i, j)) == 0)) || (return == 0)
+return <= \old(daikon.Quant.getElement_int(i, j))
+daikon.Quant.eltsLTE(\old(i), daikon.Quant.getElement_int(i, \old(j)))
+\old(j) <= daikon.Quant.getElement_int(i, \old(j))
+daikon.Quant.eltsGT(daikon.Quant.slice(i, 0, return-1), \old(daikon.Quant.size(i)))
+daikon.Quant.eltsGT(\old(daikon.Quant.slice(i, 0, \new(return)-1)), \old(daikon.Quant.size(i)))
+daikon.Quant.eltsGT(daikon.Quant.slice(i, 0, return-1), \old(daikon.Quant.getElement_int(i, j)))
+daikon.Quant.eltsLT(\old(daikon.Quant.slice(i, 0, \new(return)-1)), daikon.Quant.getElement_int(i, \old(j)))
+(!(daikon.Quant.getElement_int(i, \old(j)) == 0)) || (\old(daikon.Quant.getElement_int(i, j)) == 0)
+(daikon.Quant.getElement_int(i, \old(j)) >> \old(daikon.Quant.getElement_int(i, j)) == 0)
+(!(\old(daikon.Quant.getElement_int(i, j)) == 0)) || (daikon.Quant.getElement_int(i, \old(j)) == 0)
+return - daikon.Quant.getElement_int(i, \old(j)) + \old(daikon.Quant.getElement_int(i, j)) == 0
 ===========================================================================
-std.patsize(char *;int;)int:::EXIT
-    Variables: pat pat[] n return orig(pat) orig(pat[]) orig(n)
-pat == \old(pat)
-n == \old(n)
-pat != null
-n >= 0
-\result >= 1
-pat.equals(\old(pat))
+..patsize():::ENTER
+    Variables: pat n
+pat.equals("cX")
+n == 0
 ===========================================================================
-std.putsub(char *;int;int;char *;)void:::ENTER
-    Variables: lin lin[] s1 s2 sub sub[]
-lin != null
-s1 >= 0
-s2 >= 0
-sub != null
-(!(s2 == 0)) || (s1 == 0)
-s1 <= s2
+..patsize():::EXIT
+    Variables: pat n return orig(pat) orig(n)
+return == 2
 ===========================================================================
-std.putsub(char *;int;int;char *;)void:::EXIT
-    Variables: lin lin[] s1 s2 sub sub[] orig(lin) orig(lin[]) orig(s1) orig(s2) orig(sub) orig(sub[])
-lin == \old(lin)
-s1 == \old(s1)
-s2 == \old(s2)
-sub == \old(sub)
-lin != null
-s1 >= 0
-s2 >= 0
-sub != null
-lin.equals(\old(lin))
-(!(s2 == 0)) || (s1 == 0)
-s1 <= s2
-sub.equals(\old(sub))
+..putsub():::ENTER
+    Variables: lin s1 s2 sub
+lin.equals("UW=Fq9MPD@sF6X@g|76zA\":NFc_4vtv%>/L>/W\n") || lin.equals("j+X+RpIPzC8;tLH#@;j+X+RpIPzC8;tLH#@;\n")
+s1 == 2 || s1 == 13 || s1 == 20
+s2 == 3 || s2 == 14 || s2 == 21
+sub.equals("NEW")
+(s2 >> s1 == 0)
 ===========================================================================
-std.stclose(char *;int *;int;)void:::ENTER
-    Variables: pat pat[] j *j lastj
-pat != null
-j != null
-*j >= 2
-lastj >= 0
-*j > lastj
+..putsub():::EXIT
+    Variables: lin s1 s2 sub orig(lin) orig(s1) orig(s2) orig(sub)
 ===========================================================================
-std.stclose(char *;int *;int;)void:::EXIT
-    Variables: pat pat[] j *j lastj orig(pat) orig(pat[]) orig(j) orig(*j) orig(lastj)
-assignable pat[*], *j
-pat == \old(pat)
-j == \old(j)
-lastj == \old(lastj)
-pat != null
-j != null
-lastj >= 0
-!pat.equals(\old(pat))
-*j > lastj
-*j - \old(*j) - 1 == 0
-lastj < \old(*j)
+..subline():::ENTER
+    Variables: lin pat sub
+lin.equals("UW=Fq9MPD@sF6X@g|76zA\":NFc_4vtv%>/L>/W\n") || lin.equals("j+X+RpIPzC8;tLH#@;j+X+RpIPzC8;tLH#@;\n")
+pat.equals("cX")
+sub.equals("NEW")
 ===========================================================================
-std.subline(char *;char *;char *;)void:::ENTER
-    Variables: lin lin[] pat pat[] sub sub[]
-lin != null
-pat != null
-sub != null
-===========================================================================
-std.subline(char *;char *;char *;)void:::EXIT
-    Variables: lin lin[] pat pat[] sub sub[] orig(lin) orig(lin[]) orig(pat) orig(pat[]) orig(sub) orig(sub[])
-assignable lin[*]
-lin == \old(lin)
-pat == \old(pat)
-sub == \old(sub)
-lin != null
-pat != null
-sub != null
-lin.compareTo(\old(lin)) >= 0
-lin.contains(\old(lin))
-pat.equals(\old(pat))
-sub.equals(\old(sub))
+..subline():::EXIT
+    Variables: lin pat sub orig(lin) orig(pat) orig(sub)
