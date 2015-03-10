@@ -1,0 +1,15 @@
+..addstr() ENTER/18: 7 EXIT0/21: 7
+..amatch() ENTER/15: 113 EXIT0/18: 113
+..change() ENTER/9: 1 EXIT0/9: 1
+..esc() ENTER/12: 4 EXIT0/15: 4
+..getpat() ENTER/9: 1 EXIT0/12: 1
+..getsub() ENTER/9: 1 EXIT0/12: 1
+..in_pat_set() ENTER/6: 118 EXIT0/9: 118
+..main() ENTER/12: 1 EXIT0/15: 1
+..makepat() ENTER/15: 1 EXIT0/18: 1
+..makesub() ENTER/15: 1 EXIT0/18: 1
+..my_getline() ENTER/9: 4 EXIT0/12: 4
+..omatch() ENTER/18: 113 EXIT0/21: 113
+..patsize() ENTER/9: 5 EXIT0/12: 5
+..putsub() ENTER/15: 5 EXIT0/15: 5
+..subline() ENTER/12: 3 EXIT0/12: 3

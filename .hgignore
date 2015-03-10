@@ -418,6 +418,7 @@ tests/kvasir-tests/pointer-levels/pointer-levels
 tests/kvasir-tests/printf-interact/printf-interact
 tests/kvasir-tests/pthread-test/pthread-test
 tests/kvasir-tests/rdtsc/rdtsc
+tests/kvasir-tests/replace/replace
 tests/kvasir-tests/rijndael/cbc_*.txt
 tests/kvasir-tests/rijndael/ecb_*.txt
 tests/kvasir-tests/rijndael/rijndael

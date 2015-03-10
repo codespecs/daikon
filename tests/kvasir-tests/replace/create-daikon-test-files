@@ -1,0 +1,7 @@
+echo "gcc -gdwarf-2  replace.c -o replace "
+gcc -gdwarf-2  replace.c -o replace
+echo "kvasir-dtrace --decls-file=replace.decls --dtrace-file=replace.dtrace.gz ./replace 'X' 'NEW' <ruin.8 >/dev/null"
+kvasir-dtrace --decls-file=replace.decls --dtrace-file=replace.dtrace.gz ./replace 'X' 'NEW' <ruin.8 >/dev/null
+echo
+echo "If no errors, then copy replace.decls and replace.dtrace.gz to DAIKONDIR/tests/daikon-tests/replace"
+

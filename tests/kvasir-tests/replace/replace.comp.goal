@@ -1,0 +1,208 @@
+..Caseerror():::ENTER
+n
+
+..Caseerror():::EXIT0
+n
+
+..addstr():::ENTER
+c outset
+j
+j[..] maxset
+
+..addstr():::EXIT0
+c outset
+j
+j[..] maxset
+return
+
+..amatch():::ENTER
+j
+lin pat
+offset
+
+..amatch():::EXIT0
+j
+lin pat
+offset return
+
+..change():::ENTER
+pat
+sub
+
+..change():::EXIT0
+pat
+sub
+
+..dodash():::ENTER
+delim
+dest
+i
+i[..]
+j
+j[..]
+maxset
+src
+
+..dodash():::EXIT0
+delim
+dest
+i
+i[..]
+j
+j[..]
+maxset
+src
+
+..esc():::ENTER
+i
+i[..]
+s
+
+..esc():::EXIT0
+i
+i[..]
+return s
+
+..getccl():::ENTER
+arg
+i
+i[..]
+j
+j[..]
+pat
+
+..getccl():::EXIT0
+arg
+i
+i[..]
+j
+j[..]
+pat
+return
+
+..getpat():::ENTER
+arg pat
+
+..getpat():::EXIT0
+arg pat
+return
+
+..getsub():::ENTER
+arg sub
+
+..getsub():::EXIT0
+arg sub
+return
+
+..in_pat_set():::ENTER
+c
+
+..in_pat_set():::EXIT0
+c
+return
+
+..in_set_2():::ENTER
+c
+
+..in_set_2():::EXIT0
+c
+return
+
+..locate():::ENTER
+c
+offset
+pat
+
+..locate():::EXIT0
+c
+offset
+pat
+return
+
+..main():::ENTER
+argc
+argv
+argv[..]
+
+..main():::EXIT0
+argc
+argv
+argv[..]
+return
+
+..makepat():::ENTER
+arg delim pat
+start
+
+..makepat():::EXIT0
+arg delim pat
+return start
+
+..makesub():::ENTER
+arg delim sub
+from
+
+..makesub():::EXIT0
+arg delim sub
+from return
+
+..my_getline():::ENTER
+maxsize
+s
+
+..my_getline():::EXIT0
+maxsize
+return
+s
+
+..omatch():::ENTER
+i
+i[..]
+j
+lin pat
+
+..omatch():::EXIT0
+i
+i[..]
+j
+lin pat
+return
+
+..patsize():::ENTER
+n
+pat
+
+..patsize():::EXIT0
+n return
+pat
+
+..putsub():::ENTER
+lin
+s1 s2
+sub
+
+..putsub():::EXIT0
+lin
+s1 s2
+sub
+
+..stclose():::ENTER
+j
+j[..]
+lastj
+pat
+
+..stclose():::EXIT0
+j
+j[..]
+lastj
+pat
+
+..subline():::ENTER
+lin pat
+sub
+
+..subline():::EXIT0
+lin pat
+sub
+
