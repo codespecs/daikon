@@ -7614,11 +7614,12 @@ understand Daikon's operation; @pxref{Daikon debugging options}.
 
 
 @node       Can't run Daikon
-@subsection Can't run Daikon: NoClassDefFoundError
+@subsection Can't run Daikon: could not find or load main class, or NoClassDefFoundError
 
 @exampleindent 1
-If you can't run Daikon at all and you get an error such as 
+If you can't run Daikon at all and you get an error such as one of these:
 @example
+Error: Could not find or load main class daikon.Chicory
 Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
 @end example
 
