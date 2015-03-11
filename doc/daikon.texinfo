@@ -4731,6 +4731,7 @@ reach the desired variables.
 
 @end table
 
+@anchor{Pointer type disambiguation command-line arguments}
 @ref{Pointer type disambiguation}:
 
 @table @option
@@ -5263,6 +5264,8 @@ already-existent @file{ppt-list-file}.
 
 @cindex pointer type disambiguation
 @cindex disambiguation of pointer types
+@cindex array type disambiguation
+@cindex disambiguation of array types
 
 Kvasir permits users (or external analyses) to specify whether pointers
 refer to arrays or to single values, and optionally, to specify the type
@@ -5290,6 +5293,8 @@ In order to improve the formatting of Daikon's output (and to speed it
 up), you can indicate to Kvasir that certain pointers refer to single
 elements rather than to arrays.
 For an example, see @ref{Pointer type disambiguation example}.
+For a list of command-line options that are related to pointer type
+disambiguation, see @ref{Pointer type disambiguation command-line arguments}.
 
 Information about whether each pointer refers to an array or a single
 element can be specified in a @dfn{.disambig file} that resides in the
