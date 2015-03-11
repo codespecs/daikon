@@ -340,7 +340,7 @@ InfoTbl( r, c, f, pdf )
 			if ( k < 0L )
 				{
 				info = -2.0;
-/* 				goto ret1; missing code */
+				goto ret1;
 				}
 
 			sum += (double)k;

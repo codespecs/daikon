@@ -112,8 +112,7 @@ int	maxset;
 		junk = addstr(src[*i], dest, j, maxset);
 	    else if (*j <= 1 || src[*i + 1] == ENDSTR)
 		junk = addstr(DASH, dest, j, maxset);
-	    else if ((isalnum(src[*i - 1])) & (isalnum(src[*i + 1]))
-                    /*  Replaced logical AND with bitwise AND  */
+        else if ((isalnum(src[*i - 1])) && (isalnum(src[*i + 1]))
 		&& (src[*i - 1] <= src[*i + 1]))
 		{
 		    for (k = src[*i-1]+1; k<=src[*i+1]; k++) 
