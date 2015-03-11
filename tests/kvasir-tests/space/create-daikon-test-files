@@ -1,0 +1,7 @@
+echo "gcc -gdwarf-2  space.c -o space  -lm"
+gcc -gdwarf-2  space.c -o space  -lm
+echo "kvasir-dtrace --decls-file=space.decls --dtrace-file=space.dtrace.gz --disambig-ptrs ./space gr2712 >/dev/null"
+kvasir-dtrace --decls-file=space.decls --dtrace-file=space.dtrace.gz --disambig-ptrs ./space gr2712 >/dev/null
+echo
+echo "If no errors, then copy space.decls and space.dtrace.gz to DAIKONDIR/tests/daikon-tests/space"
+

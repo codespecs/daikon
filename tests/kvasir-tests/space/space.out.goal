@@ -1,0 +1,71 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== COPYRIGHT
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./space gr2712
+==PID== 
+
+Begin processing disambiguation file "./space.disambig" ...
+Done processing disambiguation file "./space.disambig"
+*******************************************************************************
+                         ARRAY PREPROCESSOR ver. 1.0
+*******************************************************************************
+
+
+
+   1	GROUP testgroup
+   3	 GRID HEXAGONAL
+   4	 ELEMENT
+   5	 GEOMETRY CIRCULAR RADIUS 43
+   7	 ADD HEXAGON 9 1
+   9	 GROUP_EXCITATION
+  10	 AMPLITUDE SECOND ORDER CENTRE 29 P1_VAL 25 P2_VAL 22 Q1_VAL 34 Q2_VAL 25
+  11	 PHASE UNIFORM -219
+  12	 END
+
+** Generating GROUP: testgroup.
+** PSTEP,QSTEP set to:86.000000,86.000000
+** Grid ANGLE set to:60.000000 
+** Group ROT_ANGLE set to: 0.000000 
+
+** Writing output file: gr2712.dat
+
+NEL 
+NPORTS
+IDUM      REXA     REYA     REZA     THEA     PHEA     PSEA 
+          AMP      PSH      PSC      PHEPOL
+   7
+   7
+   1
+   1
+   1 	  774.00   148.96     0.00     0.00     0.00     0.00
+   1 	  774.00   148.96     0.00     0.00     0.00     0.00
+   	   29.00  -219.00     0.00    90.00
+   	   29.00  -219.00     0.00    90.00
+   2 	  860.00   148.96     0.00     0.00     0.00     0.00
+   2 	  860.00   148.96     0.00     0.00     0.00     0.00
+   	   22.00  -219.00     0.00    90.00
+   	   22.00  -219.00     0.00    90.00
+   3 	  903.00    74.48     0.00     0.00     0.00     0.00
+   3 	  903.00    74.48     0.00     0.00     0.00     0.00
+   	   12.25  -219.00     0.00    90.00
+   	   12.25  -219.00     0.00    90.00
+   4 	  860.00     0.00     0.00     0.00     0.00     0.00
+   4 	  860.00     0.00     0.00     0.00     0.00     0.00
+   	   18.00  -219.00     0.00    90.00
+   	   18.00  -219.00     0.00    90.00
+   5 	  774.00     0.00     0.00     0.00     0.00     0.00
+   5 	  774.00     0.00     0.00     0.00     0.00     0.00
+   	   25.00  -219.00     0.00    90.00
+   	   25.00  -219.00     0.00    90.00
+   6 	  731.00    74.48     0.00     0.00     0.00     0.00
+   6 	  731.00    74.48     0.00     0.00     0.00     0.00
+   	   26.25  -219.00     0.00    90.00
+   	   26.25  -219.00     0.00    90.00
+   7 	  817.00    74.48     0.00     0.00     0.00     0.00
+   7 	  817.00    74.48     0.00     0.00     0.00     0.00
+   	   24.75  -219.00     0.00    90.00
+   	   24.75  -219.00     0.00    90.00
+
+** End writing output file: gr2712.dat 
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

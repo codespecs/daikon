@@ -1,0 +1,10 @@
+The space test case causes Kvasir and Daikon some problems due to
+pointer ambiguity.  These problems are fixed by using a disambig
+file that indicates that the x_ptr argument to degconv() should not be 
+treated as a potential array.  This is how the program is run here in
+kvasir-tests.  However, while this output will work in Daikon, the
+processing time is excessive.  So the create-daikon-test-files script
+uses the '--disambig-ptrs' option to tell Kvasir to not treat any
+pointers as potential arrays.  This version of the data files allows
+Daikon to run in a reasonably short amount of time.
+
