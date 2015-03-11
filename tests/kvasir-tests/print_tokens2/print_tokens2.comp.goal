@@ -1,0 +1,164 @@
+..get_char():::ENTER
+::buffer
+fp
+fp[..]
+
+..get_char():::EXIT0
+::buffer return
+fp
+fp[..]
+
+..get_token():::ENTER
+::buffer
+tp
+tp[..]
+
+..get_token():::EXIT0
+::buffer return
+tp
+tp[..]
+
+..is_eof_token():::ENTER
+::buffer tok
+
+..is_eof_token():::EXIT0
+::buffer tok
+return
+
+..main():::ENTER
+::buffer
+argc
+argv
+argv[..]
+
+..main():::EXIT0
+::buffer
+argc
+argv
+argv[..]
+return
+
+..open_character_stream():::ENTER
+::buffer
+fname
+
+..open_character_stream():::EXIT0
+::buffer
+fname
+return
+return[..]
+
+..open_token_stream():::ENTER
+::buffer
+fname
+
+..open_token_stream():::EXIT0
+::buffer
+fname
+return
+return[..]
+
+..print_token():::ENTER
+::buffer tok
+
+..print_token():::EXIT0
+::buffer tok
+return
+
+..unget_char():::ENTER
+::buffer
+ch
+fp
+fp[..]
+
+..unget_char():::EXIT0
+::buffer
+ch
+fp
+fp[..]
+return
+
+print_tokens2.c.is_char_constant():::ENTER
+::buffer str
+
+print_tokens2.c.is_char_constant():::EXIT0
+::buffer str
+return
+
+print_tokens2.c.is_comment():::ENTER
+::buffer ident
+
+print_tokens2.c.is_comment():::EXIT0
+::buffer ident
+return
+
+print_tokens2.c.is_identifier():::ENTER
+::buffer str
+
+print_tokens2.c.is_identifier():::EXIT0
+::buffer str
+return
+
+print_tokens2.c.is_keyword():::ENTER
+::buffer str
+
+print_tokens2.c.is_keyword():::EXIT0
+::buffer str
+return
+
+print_tokens2.c.is_num_constant():::ENTER
+::buffer str
+
+print_tokens2.c.is_num_constant():::EXIT0
+::buffer str
+return
+
+print_tokens2.c.is_spec_symbol():::ENTER
+::buffer str
+
+print_tokens2.c.is_spec_symbol():::EXIT0
+::buffer str
+return
+
+print_tokens2.c.is_str_constant():::ENTER
+::buffer str
+
+print_tokens2.c.is_str_constant():::EXIT0
+::buffer str
+return
+
+print_tokens2.c.is_token_end():::ENTER
+::buffer ch
+str_com_id
+
+print_tokens2.c.is_token_end():::EXIT0
+::buffer ch
+return
+str_com_id
+
+print_tokens2.c.print_spec_symbol():::ENTER
+::buffer str
+
+print_tokens2.c.print_spec_symbol():::EXIT0
+::buffer str
+
+print_tokens2.c.token_type():::ENTER
+::buffer tok
+
+print_tokens2.c.token_type():::EXIT0
+::buffer tok
+return
+
+print_tokens2.c.unget_error():::ENTER
+::buffer
+fp
+fp[..]
+fp[..][0]
+
+print_tokens2.c.unget_error():::EXIT0
+::buffer
+fp
+fp[..]
+fp[..][0]
+return
+

@@ -1,480 +1,134 @@
 ===========================================================================
-std.get_char(character_stream;)char:::ENTER
-::buffer != null
-::buffer[] is printable
+..get_char():::ENTER
+::buffer is printable
+fp has only one value
+fp != null
 ===========================================================================
-std.get_char(character_stream;)char:::EXIT
+..get_char():::EXIT
+::buffer is printable
+return != 0
 ::buffer == orig(::buffer)
-::buffer != null
-::buffer[] is printable
-return >= -1
-::buffer[] == orig(::buffer[])
 ===========================================================================
-std.get_token(token_stream;)token:::ENTER
-::buffer != null
-::buffer[] is printable
+..get_token():::ENTER
+::buffer is printable
+tp has only one value
+tp != null
 ===========================================================================
-std.get_token(token_stream;)token:::EXIT10
-::buffer[] == ""
-===========================================================================
-std.get_token(token_stream;)token:::EXIT11
-::buffer[] is printable
-orig(::buffer[]) one of { "", "'", ")" }
-===========================================================================
-std.get_token(token_stream;)token:::EXIT13
-::buffer[] == ""
-===========================================================================
-std.get_token(token_stream;)token:::EXIT7
-::buffer[] == "\377"
-::buffer[] > orig(::buffer[])
-===========================================================================
-std.get_token(token_stream;)token:::EXIT8
-::buffer[] is printable
-===========================================================================
-std.get_token(token_stream;)token:::EXIT9
-::buffer[] is printable
-::buffer[] != orig(::buffer[])
-===========================================================================
-std.get_token(token_stream;)token:::EXIT
+..get_token():::EXIT
 ::buffer == return
-::buffer == orig(::buffer)
-::buffer != null
-::buffer[] == return[]
 ===========================================================================
-std.is_char_constant(token;)int:::ENTER
-str != null
-::buffer != null
+..is_eof_token():::ENTER
 ===========================================================================
-std.is_char_constant(token;)int:::EXIT38
-str[] is printable
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_char_constant(token;)int:::EXIT39
-str[] one of { "", "#5", "\377" }
-::buffer[] one of { "", "#5", "\377" }
-return == 0
-===========================================================================
-std.is_char_constant(token;)int:::EXIT
-str == orig(str)
-::buffer == orig(::buffer)
-(return == 0)  ==>  (::buffer[] one of { "", "#5", "\377" })
-(return == 0)  ==>  (return  isPointer)
-(return == 0)  ==>  (str[] one of { "", "#5", "\377" })
-(return == 1)  ==>  (::buffer[] is printable)
-(return == 1)  ==>  (str[] is printable)
-str != null
-::buffer != null
+..is_eof_token():::EXIT
 return one of { 0, 1 }
-str[] == orig(str[])
-::buffer[] == orig(::buffer[])
-===========================================================================
-std.is_comment(token;)int:::ENTER
-ident != null
-ident[] one of { "", "#5", "\377" }
-::buffer != null
-::buffer[] one of { "", "#5", "\377" }
-===========================================================================
-std.is_comment(token;)int:::EXIT35
-===========================================================================
-std.is_comment(token;)int:::EXIT
-ident == orig(ident)
 ::buffer == orig(::buffer)
-ident != null
-ident[] one of { "", "#5", "\377" }
-::buffer != null
-::buffer[] one of { "", "#5", "\377" }
-return == 0
-ident[] == orig(ident[])
-::buffer[] == orig(::buffer[])
 ===========================================================================
-std.is_eof_token(token;)int:::ENTER
-tok != null
-::buffer != null
+..open_character_stream():::ENTER
+::buffer == ""
 ===========================================================================
-std.is_eof_token(token;)int:::EXIT32
-tok[] == "\377"
-return == 1
-tok[] >= ::buffer[]
-===========================================================================
-std.is_eof_token(token;)int:::EXIT33
-tok[] is printable
-::buffer[] is printable
-return == 0
-===========================================================================
-std.is_eof_token(token;)int:::EXIT
-tok == orig(tok)
+..open_character_stream():::EXIT
+::buffer == ""
+return has only one value
 ::buffer == orig(::buffer)
-(return == 0)  ==>  (::buffer[] is printable)
-(return == 0)  ==>  (return  isPointer)
-(return == 0)  ==>  (tok[] is printable)
-(return == 1)  ==>  (tok[] == "\377")
-(return == 1)  ==>  (tok[] >= ::buffer[])
-tok != null
-::buffer != null
-return one of { 0, 1 }
-tok[] == orig(tok[])
-::buffer[] == orig(::buffer[])
 ===========================================================================
-std.is_identifier(token;)int:::ENTER
-str != null
-::buffer != null
+..open_token_stream():::ENTER
+::buffer == ""
+::buffer == fname
 ===========================================================================
-std.is_identifier(token;)int:::EXIT47
-str[] is printable
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_identifier(token;)int:::EXIT48
-return == 0
-===========================================================================
-std.is_identifier(token;)int:::EXIT
-str == orig(str)
+..open_token_stream():::EXIT
+::buffer == ""
+return has only one value
 ::buffer == orig(::buffer)
-str != null
-::buffer != null
-return one of { 0, 1 }
-str[] == orig(str[])
-::buffer[] == orig(::buffer[])
+::buffer == orig(fname)
 ===========================================================================
-std.is_keyword(token;)int:::ENTER
-str != null
-::buffer != null
+..print_token():::ENTER
+::buffer == tok
 ===========================================================================
-std.is_keyword(token;)int:::EXIT36
-str[] is printable
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_keyword(token;)int:::EXIT37
-return == 0
-===========================================================================
-std.is_keyword(token;)int:::EXIT
-str == orig(str)
+..print_token():::EXIT
 ::buffer == orig(::buffer)
-(return == 0)  ==>  (return  isPointer)
-(return == 1)  ==>  (::buffer[] is printable)
-(return == 1)  ==>  (str[] is printable)
-str != null
-::buffer != null
-return one of { 0, 1 }
-str[] == orig(str[])
-::buffer[] == orig(::buffer[])
-===========================================================================
-std.is_num_constant(token;)int:::ENTER
-str != null
-::buffer != null
-===========================================================================
-std.is_num_constant(token;)int:::EXIT41
-str[] is printable
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_num_constant(token;)int:::EXIT42
-return == 0
-===========================================================================
-std.is_num_constant(token;)int:::EXIT
-str == orig(str)
-::buffer == orig(::buffer)
-str != null
-::buffer != null
-return one of { 0, 1 }
-str[] == orig(str[])
-::buffer[] == orig(::buffer[])
-===========================================================================
-std.is_spec_symbol(token;)int:::ENTER
-str != null
-::buffer != null
-===========================================================================
-std.is_spec_symbol(token;)int:::EXIT57
-str[] == "("
-::buffer[] one of { "", "(" }
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_spec_symbol(token;)int:::EXIT58
-str[] == ")"
-::buffer[] one of { "", ")" }
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_spec_symbol(token;)int:::EXIT59
-str[] == "["
-::buffer[] one of { "", "[" }
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_spec_symbol(token;)int:::EXIT60
-str[] == "]"
-::buffer[] one of { "", "]" }
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_spec_symbol(token;)int:::EXIT61
-str[] == "'"
-::buffer[] one of { "", "'" }
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_spec_symbol(token;)int:::EXIT62
-str[] == "`"
-::buffer[] one of { "", "`" }
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_spec_symbol(token;)int:::EXIT63
-str[] == ","
-::buffer[] one of { "", "," }
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_spec_symbol(token;)int:::EXIT64
-return == 0
-===========================================================================
-std.is_spec_symbol(token;)int:::EXIT
-str == orig(str)
-::buffer == orig(::buffer)
-str != null
-::buffer != null
-return one of { 0, 1 }
-str[] == orig(str[])
-::buffer[] == orig(::buffer[])
-===========================================================================
-std.is_str_constant(token;)int:::ENTER
-str != null
-::buffer != null
-===========================================================================
-std.is_str_constant(token;)int:::EXIT43
-str[] is printable
-::buffer[] is printable
-return == 1
-===========================================================================
-std.is_str_constant(token;)int:::EXIT45
-return == 0
-===========================================================================
-std.is_str_constant(token;)int:::EXIT
-str == orig(str)
-::buffer == orig(::buffer)
-str != null
-::buffer != null
-return one of { 0, 1 }
-str[] == orig(str[])
-::buffer[] == orig(::buffer[])
-===========================================================================
-std.is_token_end(int;char;)int:::ENTER
-str_com_id one of { 0, 1 }
-ch != 0
-ch >= -1
-::buffer != null
-::buffer[] is printable
-===========================================================================
-std.is_token_end(int;char;)int:::EXIT14
-str_com_id == 0
-ch == -1
-return == 1
-===========================================================================
-std.is_token_end(int;char;)int:::EXIT15
-str_com_id == 1
-ch == 34
-return == 1
-===========================================================================
-std.is_token_end(int;char;)int:::EXIT16
-str_com_id == 1
-return == 0
-===========================================================================
-std.is_token_end(int;char;)int:::EXIT19
-str_com_id == 0
-::buffer[] == ""
-return == 1
-===========================================================================
-std.is_token_end(int;char;)int:::EXIT20
-str_com_id == 0
-ch == 32
-::buffer[] == ""
-return == 1
-===========================================================================
-std.is_token_end(int;char;)int:::EXIT21
-str_com_id == 0
-return == 0
-===========================================================================
-std.is_token_end(int;char;)int:::EXIT
-str_com_id == orig(str_com_id)
-ch == orig(ch)
-::buffer == orig(::buffer)
-str_com_id one of { 0, 1 }
-ch != 0
-ch >= -1
-::buffer != null
-::buffer[] is printable
-return one of { 0, 1 }
-::buffer[] == orig(::buffer[])
-===========================================================================
-std.open_character_stream(char *;)character_stream:::ENTER
-fname == null
-::buffer != null
-===========================================================================
-std.open_character_stream(char *;)character_stream:::EXIT
-fname == orig(fname)
-::buffer == orig(::buffer)
-fname == null
-::buffer != null
-===========================================================================
-std.open_token_stream(char *;)token_stream:::ENTER
-fname != null
-fname[] == ""
-::buffer != null
-===========================================================================
-std.open_token_stream(char *;)token_stream:::EXIT
-fname == orig(fname)
-::buffer == orig(::buffer)
-fname != null
-fname[] == ""
-::buffer != null
-fname[] == orig(fname[])
-===========================================================================
-std.print_spec_symbol(token;)void:::ENTER
-str != null
-str[] is printable
-::buffer != null
-::buffer[] is printable
-===========================================================================
-std.print_spec_symbol(token;)void:::EXIT50
-str[] == "("
-::buffer[] == "("
-===========================================================================
-std.print_spec_symbol(token;)void:::EXIT51
-str[] == ")"
-::buffer[] == ")"
-===========================================================================
-std.print_spec_symbol(token;)void:::EXIT52
-str[] == "["
-::buffer[] == "["
-===========================================================================
-std.print_spec_symbol(token;)void:::EXIT53
-str[] == "]"
-::buffer[] == "]"
-===========================================================================
-std.print_spec_symbol(token;)void:::EXIT54
-str[] == "'"
-::buffer[] == "'"
-===========================================================================
-std.print_spec_symbol(token;)void:::EXIT55
-str[] == "`"
-::buffer[] == "`"
-===========================================================================
-std.print_spec_symbol(token;)void:::EXIT56
-str[] == ","
-::buffer[] == ","
-===========================================================================
-std.print_spec_symbol(token;)void:::EXIT
-str == orig(str)
-::buffer == orig(::buffer)
-str != null
-str[] is printable
-::buffer != null
-::buffer[] is printable
-str[] == orig(str[])
-::buffer[] == orig(::buffer[])
-===========================================================================
-std.print_token(token;)int:::ENTER
-tok == ::buffer
-tok != null
-tok[] == ::buffer[]
-===========================================================================
-std.print_token(token;)int:::EXIT
 ::buffer == orig(tok)
-::buffer == orig(::buffer)
-tok != null
-::buffer != null
-tok[] >= ::buffer[]
-tok[] is a substring of ::buffer[]
-::buffer[] == orig(tok[])
-::buffer[] == orig(::buffer[])
 ===========================================================================
-std.token_type(token;)int:::ENTER
-tok != null
-::buffer != null
+print_tokens2.c.is_char_constant():::ENTER
+::buffer == str
 ===========================================================================
-std.token_type(token;)int:::EXIT22
-tok[] is printable
-::buffer[] is printable
-return == 1
-===========================================================================
-std.token_type(token;)int:::EXIT23
-tok[] is printable
-::buffer[] is printable
-return == 2
-===========================================================================
-std.token_type(token;)int:::EXIT24
-tok[] is printable
-::buffer[] is printable
-return == 3
-===========================================================================
-std.token_type(token;)int:::EXIT25
-tok[] is printable
-::buffer[] is printable
-return == 41
-===========================================================================
-std.token_type(token;)int:::EXIT26
-tok[] is printable
-::buffer[] is printable
-return == 42
-===========================================================================
-std.token_type(token;)int:::EXIT27
-tok[] is printable
-::buffer[] is printable
-return == 43
-===========================================================================
-std.token_type(token;)int:::EXIT29
-tok[] == "\377"
-::buffer[] == "\377"
-return == 6
-===========================================================================
-std.token_type(token;)int:::EXIT30
-tok[] one of { "", "#5" }
-tok[] is printable
-::buffer[] one of { "", "#5" }
-::buffer[] is printable
+print_tokens2.c.is_char_constant():::EXIT
 return == 0
-===========================================================================
-std.token_type(token;)int:::EXIT
-tok == orig(tok)
 ::buffer == orig(::buffer)
-tok != null
-::buffer != null
-return >= 0
-tok[] == orig(tok[])
-::buffer[] == orig(::buffer[])
+::buffer == orig(str)
 ===========================================================================
-std.unget_char(char;character_stream;)char:::ENTER
-ch != 0
-ch >= -1
-::buffer != null
-::buffer[] is printable
+print_tokens2.c.is_comment():::ENTER
+::buffer == ident
 ===========================================================================
-std.unget_char(char;character_stream;)char:::EXIT4
-ch == -1
-===========================================================================
-std.unget_char(char;character_stream;)char:::EXIT5
-::buffer[] == ""
-===========================================================================
-std.unget_char(char;character_stream;)char:::EXIT
-ch == return
-ch == orig(ch)
+print_tokens2.c.is_comment():::EXIT
+return one of { 0, 1 }
 ::buffer == orig(::buffer)
-(ch >= 39)  ==>  (::buffer[] == "")
-ch != 0
-ch >= -1
-::buffer != null
-::buffer[] is printable
-::buffer[] == orig(::buffer[])
+::buffer == orig(ident)
 ===========================================================================
-std.unget_error(token_stream;)int:::ENTER
-::buffer != null
-::buffer[] is printable
+print_tokens2.c.is_identifier():::ENTER
+::buffer == str
 ===========================================================================
-std.unget_error(token_stream;)int:::EXIT
+print_tokens2.c.is_identifier():::EXIT
+return one of { 0, 1 }
 ::buffer == orig(::buffer)
-::buffer != null
-::buffer[] is printable
-::buffer[] == orig(::buffer[])
+::buffer == orig(str)
+===========================================================================
+print_tokens2.c.is_keyword():::ENTER
+::buffer == str
+===========================================================================
+print_tokens2.c.is_keyword():::EXIT
+return one of { 0, 1 }
+::buffer == orig(::buffer)
+::buffer == orig(str)
+===========================================================================
+print_tokens2.c.is_num_constant():::ENTER
+::buffer == str
+===========================================================================
+print_tokens2.c.is_num_constant():::EXIT
+return one of { 0, 1 }
+::buffer == orig(::buffer)
+::buffer == orig(str)
+===========================================================================
+print_tokens2.c.is_spec_symbol():::ENTER
+===========================================================================
+print_tokens2.c.is_spec_symbol():::EXIT
+return one of { 0, 1 }
+::buffer == orig(::buffer)
+===========================================================================
+print_tokens2.c.is_str_constant():::ENTER
+::buffer == str
+===========================================================================
+print_tokens2.c.is_str_constant():::EXIT
+return one of { 0, 1 }
+::buffer == orig(::buffer)
+::buffer == orig(str)
+===========================================================================
+print_tokens2.c.is_token_end():::ENTER
+::buffer is printable
+str_com_id one of { 0, 1, 2 }
+str_com_id < ch
+===========================================================================
+print_tokens2.c.is_token_end():::EXIT
+::buffer is printable
+return one of { 0, 1 }
+::buffer == orig(::buffer)
+(return & orig(ch)) == 0
+return < orig(ch)
+===========================================================================
+print_tokens2.c.print_spec_symbol():::ENTER
+::buffer one of { "'", ")", "`" }
+::buffer is printable
+::buffer == str
+===========================================================================
+print_tokens2.c.print_spec_symbol():::EXIT
+::buffer one of { "'", ")", "`" }
+::buffer is printable
+::buffer == orig(::buffer)
+::buffer == orig(str)
+===========================================================================
+print_tokens2.c.token_type():::ENTER
+::buffer == tok
+===========================================================================
+print_tokens2.c.token_type():::EXIT
+return >= 1
+::buffer == orig(::buffer)
+::buffer == orig(tok)

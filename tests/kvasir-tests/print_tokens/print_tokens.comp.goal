@@ -1,0 +1,434 @@
+..get_char():::ENTER
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+stream_ptr stream_ptr[..].stream_ind
+stream_ptr[..]
+stream_ptr[..].fp
+stream_ptr[..].fp[0]
+stream_ptr[..].stream
+
+..get_char():::EXIT0
+::base
+::base[..] return
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+stream_ptr stream_ptr[..].stream_ind
+stream_ptr[..]
+stream_ptr[..].fp
+stream_ptr[..].fp[0]
+stream_ptr[..].stream
+
+..get_token():::ENTER
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+tstream_ptr
+tstream_ptr[..]
+tstream_ptr[..].ch_stream tstream_ptr[..].ch_stream->stream_ind
+tstream_ptr[..].ch_stream->fp
+tstream_ptr[..].ch_stream->fp[0]
+tstream_ptr[..].ch_stream->stream
+tstream_ptr[..].ch_stream[0]
+
+..get_token():::EXIT0
+::base
+::base[..] return[..].token_string
+::check
+::check[..] ::default1[..] ::next[..] return
+::default1
+::next
+return[..]
+return[..].token_id
+tstream_ptr
+tstream_ptr[..]
+tstream_ptr[..].ch_stream tstream_ptr[..].ch_stream->stream_ind
+tstream_ptr[..].ch_stream->fp
+tstream_ptr[..].ch_stream->fp[0]
+tstream_ptr[..].ch_stream->stream
+tstream_ptr[..].ch_stream[0]
+
+..is_end_of_character_stream():::ENTER
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+stream_ptr stream_ptr[..].stream_ind
+stream_ptr[..]
+stream_ptr[..].fp
+stream_ptr[..].fp[0]
+stream_ptr[..].stream
+
+..is_end_of_character_stream():::EXIT0
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+return
+stream_ptr stream_ptr[..].stream_ind
+stream_ptr[..]
+stream_ptr[..].fp
+stream_ptr[..].fp[0]
+stream_ptr[..].stream
+
+..is_eof_token():::ENTER
+::base
+::base[..] t[..].token_string
+::check
+::check[..] ::default1[..] ::next[..] t
+::default1
+::next
+t[..]
+t[..].token_id
+
+..is_eof_token():::EXIT0
+::base
+::base[..] t[..].token_string
+::check
+::check[..] ::default1[..] ::next[..] t
+::default1
+::next
+return
+t[..]
+t[..].token_id
+
+..main():::ENTER
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+argc
+argv
+argv[..]
+
+..main():::EXIT0
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+argc
+argv
+argv[..]
+return
+
+..open_character_stream():::ENTER
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+FILENAME
+
+..open_character_stream():::EXIT0
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+FILENAME
+return return[..].stream_ind
+return[..]
+return[..].fp
+return[..].fp[0]
+return[..].stream
+
+..open_token_stream():::ENTER
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+FILENAME
+
+..open_token_stream():::EXIT0
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+FILENAME
+return
+return[..]
+return[..].ch_stream return[..].ch_stream->stream_ind
+return[..].ch_stream->fp
+return[..].ch_stream->fp[0]
+return[..].ch_stream->stream
+return[..].ch_stream[0]
+
+..print_token():::ENTER
+::base
+::base[..] token_ptr[..].token_string
+::check
+::check[..] ::default1[..] ::next[..] token_ptr
+::default1
+::next
+token_ptr[..]
+token_ptr[..].token_id
+
+..print_token():::EXIT0
+::base
+::base[..] token_ptr[..].token_string
+::check
+::check[..] ::default1[..] ::next[..] token_ptr
+::default1
+::next
+return
+token_ptr[..]
+token_ptr[..].token_id
+
+..unget_char():::ENTER
+::base
+::base[..] ch
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+stream_ptr stream_ptr[..].stream_ind
+stream_ptr[..]
+stream_ptr[..].fp
+stream_ptr[..].fp[0]
+stream_ptr[..].stream
+
+..unget_char():::EXIT0
+::base
+::base[..] ch
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+return stream_ptr stream_ptr[..].stream_ind
+stream_ptr[..]
+stream_ptr[..].fp
+stream_ptr[..].fp[0]
+stream_ptr[..].stream
+
+print_tokens.c.check_delimiter():::ENTER
+::base
+::base[..] ch
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+
+print_tokens.c.check_delimiter():::EXIT0
+::base
+::base[..] ch
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+return
+
+print_tokens.c.constant():::ENTER
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..] state token_ind
+::default1
+::next
+token_str
+
+print_tokens.c.constant():::EXIT0
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..] state token_ind
+::default1
+::next
+return
+token_str
+
+print_tokens.c.error_or_eof_case():::ENTER
+::base
+::base[..] ch
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+cu_state token_ind
+token_ptr
+token_ptr[..]
+token_ptr[..].token_id
+token_ptr[..].token_string
+token_str
+tstream_ptr
+tstream_ptr[..]
+tstream_ptr[..].ch_stream tstream_ptr[..].ch_stream->stream_ind
+tstream_ptr[..].ch_stream->fp
+tstream_ptr[..].ch_stream->fp[0]
+tstream_ptr[..].ch_stream->stream
+tstream_ptr[..].ch_stream[0]
+
+print_tokens.c.error_or_eof_case():::EXIT0
+::base
+::base[..] ch
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+cu_state token_ind
+return token_ptr
+return[..]
+return[..].token_id token_ptr[..].token_id
+return[..].token_string
+token_ptr[..]
+token_ptr[..].token_string
+token_str
+tstream_ptr
+tstream_ptr[..]
+tstream_ptr[..].ch_stream tstream_ptr[..].ch_stream->stream_ind
+tstream_ptr[..].ch_stream->fp
+tstream_ptr[..].ch_stream->fp[0]
+tstream_ptr[..].ch_stream->stream
+tstream_ptr[..].ch_stream[0]
+
+print_tokens.c.get_actual_token():::ENTER
+::base
+::base[..] token_str
+::check
+::check[..] ::default1[..] ::next[..] token_ind
+::default1
+::next
+
+print_tokens.c.get_actual_token():::EXIT0
+::base
+::base[..] token_str
+::check
+::check[..] ::default1[..] ::next[..] return token_ind
+::default1
+::next
+
+print_tokens.c.keyword():::ENTER
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..] state
+::default1
+::next
+
+print_tokens.c.keyword():::EXIT0
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..] state
+::default1
+::next
+return
+
+print_tokens.c.next_state():::ENTER
+::base
+::base[..] ch
+::check
+::check[..] ::default1[..] ::next[..] state
+::default1
+::next
+
+print_tokens.c.next_state():::EXIT0
+::base
+::base[..] ch
+::check
+::check[..] ::default1[..] ::next[..] return state
+::default1
+::next
+
+print_tokens.c.numeric_case():::ENTER
+::base
+::base[..] ch token_str
+::check
+::check[..] ::default1[..] ::next[..] token_ind token_ptr
+::default1
+::next
+token_ptr[..]
+token_ptr[..].token_id
+token_ptr[..].token_string
+tstream_ptr
+tstream_ptr[..]
+tstream_ptr[..].ch_stream tstream_ptr[..].ch_stream->stream_ind
+tstream_ptr[..].ch_stream->fp
+tstream_ptr[..].ch_stream->fp[0]
+tstream_ptr[..].ch_stream->stream
+tstream_ptr[..].ch_stream[0]
+
+print_tokens.c.numeric_case():::EXIT0
+::base
+::base[..] ch token_str
+::check
+::check[..] ::default1[..] ::next[..] return token_ind token_ptr
+::default1
+::next
+return[..]
+return[..].token_id token_ptr[..].token_id
+return[..].token_string
+token_ptr[..]
+token_ptr[..].token_string
+tstream_ptr
+tstream_ptr[..]
+tstream_ptr[..].ch_stream tstream_ptr[..].ch_stream->stream_ind
+tstream_ptr[..].ch_stream->fp
+tstream_ptr[..].ch_stream->fp[0]
+tstream_ptr[..].ch_stream->stream
+tstream_ptr[..].ch_stream[0]
+
+print_tokens.c.skip():::ENTER
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+stream_ptr stream_ptr[..].stream_ind
+stream_ptr[..]
+stream_ptr[..].fp
+stream_ptr[..].fp[0]
+stream_ptr[..].stream
+
+print_tokens.c.skip():::EXIT0
+::base
+::base[..] return
+::check
+::check[..] ::default1[..] ::next[..]
+::default1
+::next
+stream_ptr stream_ptr[..].stream_ind
+stream_ptr[..]
+stream_ptr[..].fp
+stream_ptr[..].fp[0]
+stream_ptr[..].stream
+
+print_tokens.c.special():::ENTER
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..] state
+::default1
+::next
+
+print_tokens.c.special():::EXIT0
+::base
+::base[..]
+::check
+::check[..] ::default1[..] ::next[..] state
+::default1
+::next
+return
+

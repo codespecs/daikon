@@ -1,856 +1,3043 @@
-VarComparability
-implicit
-
-DECLARE
-std.main(int;char **;)int:::ENTER
-argc
-int
-int
-1
-argv
-char *[]
-hashcode
-2
-
-DECLARE
-std.main(int;char **;)int:::EXIT1
-argc
-int
-int
-1
-argv
-char *[]
-hashcode
-2
-return
-int
-int
-3
-
-DECLARE
-std.open_character_stream(string;)character_stream:::ENTER
-FILENAME
-char[]
-hashcode
-4
-FILENAME[]
-char[]
-java.lang.String
-5[6]
-
-DECLARE
-std.open_character_stream(string;)character_stream:::EXIT2
-FILENAME
-char[]
-hashcode
-4
-FILENAME[]
-char[]
-java.lang.String
-5[6]
-
-DECLARE
-std.get_char(character_stream;)CHARACTER:::ENTER
-
-DECLARE
-std.get_char(character_stream;)CHARACTER:::EXIT3
-return
-CHARACTER
-int
-3
-
-DECLARE
-std.is_end_of_character_stream(character_stream;)BOOLEAN:::ENTER
-
-DECLARE
-std.is_end_of_character_stream(character_stream;)BOOLEAN:::EXIT4
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.is_end_of_character_stream(character_stream;)BOOLEAN:::EXIT5
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.unget_char(CHARACTER;character_stream;)void:::ENTER
-ch
-CHARACTER
-int
-7
-
-DECLARE
-std.unget_char(CHARACTER;character_stream;)void:::EXIT6
-ch
-CHARACTER
-int
-7
-
-DECLARE
-std.unget_char(CHARACTER;character_stream;)void:::EXIT7
-ch
-CHARACTER
-int
-7
-
-DECLARE
-std.open_token_stream(string;)token_stream:::ENTER
-FILENAME
-char[]
-hashcode
-4
-FILENAME[]
-char[]
-java.lang.String
-5[6]
-
-DECLARE
-std.open_token_stream(string;)token_stream:::EXIT8
-FILENAME
-char[]
-hashcode
-4
-FILENAME[]
-char[]
-java.lang.String
-5[6]
-
-DECLARE
-std.get_token(token_stream;)token:::ENTER
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT9
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT10
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT11
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT12
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT13
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT14
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT15
-
-DECLARE
-std.numeric_case(token_stream;token;char;char *;int;)token:::ENTER
-ch
-char
-int
-7
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-
-DECLARE
-std.numeric_case(token_stream;token;char;char *;int;)token:::EXIT16
-ch
-char
-int
-7
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-
-DECLARE
-std.numeric_case(token_stream;token;char;char *;int;)token:::EXIT17
-ch
-char
-int
-7
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-
-DECLARE
-std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::ENTER
-cu_state
-int
-int
-12
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-ch
-char
-int
-7
-
-DECLARE
-std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::EXIT18
-cu_state
-int
-int
-12
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-ch
-char
-int
-7
-
-DECLARE
-std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::EXIT19
-cu_state
-int
-int
-12
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-ch
-char
-int
-7
-
-DECLARE
-std.check_delimiter(char;)int:::ENTER
-ch
-char
-int
-7
-
-DECLARE
-std.check_delimiter(char;)int:::EXIT20
-ch
-char
-int
-7
-return
-int
-int
-3
-
-DECLARE
-std.check_delimiter(char;)int:::EXIT21
-ch
-char
-int
-7
-return
-int
-int
-3
-
-DECLARE
-std.keyword(int;)int:::ENTER
-state
-int
-int
-13
-
-DECLARE
-std.keyword(int;)int:::EXIT22
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.keyword(int;)int:::EXIT23
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.keyword(int;)int:::EXIT24
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.keyword(int;)int:::EXIT25
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.keyword(int;)int:::EXIT26
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.keyword(int;)int:::EXIT27
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.special(int;)int:::ENTER
-state
-int
-int
-13
-
-DECLARE
-std.special(int;)int:::EXIT28
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.special(int;)int:::EXIT29
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.special(int;)int:::EXIT30
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.special(int;)int:::EXIT31
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.special(int;)int:::EXIT32
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.special(int;)int:::EXIT33
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.special(int;)int:::EXIT34
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.special(int;)int:::EXIT35
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.special(int;)int:::EXIT36
-state
-int
-int
-13
-return
-int
-int
-3
-
-DECLARE
-std.skip(character_stream;)int:::ENTER
-
-DECLARE
-std.skip(character_stream;)int:::EXIT37
-return
-int
-int
-3
-
-DECLARE
-std.constant(int;char *;int;)int:::ENTER
-state
-int
-int
-13
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-
-DECLARE
-std.constant(int;char *;int;)int:::EXIT38
-state
-int
-int
-13
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-return
-int
-int
-3
-
-DECLARE
-std.constant(int;char *;int;)int:::EXIT39
-state
-int
-int
-13
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-return
-int
-int
-3
-
-DECLARE
-std.constant(int;char *;int;)int:::EXIT40
-state
-int
-int
-13
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-return
-int
-int
-3
-
-DECLARE
-std.next_state(int;char;)int:::ENTER
-state
-int
-int
-13
-ch
-char
-int
-7
-
-DECLARE
-std.next_state(int;char;)int:::EXIT41
-state
-int
-int
-13
-ch
-char
-int
-7
-return
-int
-int
-3
-
-DECLARE
-std.next_state(int;char;)int:::EXIT42
-state
-int
-int
-13
-ch
-char
-int
-7
-return
-int
-int
-3
-
-DECLARE
-std.next_state(int;char;)int:::EXIT43
-state
-int
-int
-13
-ch
-char
-int
-7
-return
-int
-int
-3
-
-DECLARE
-std.next_state(int;char;)int:::EXIT44
-state
-int
-int
-13
-ch
-char
-int
-7
-return
-int
-int
-3
-
-DECLARE
-std.is_eof_token(token;)BOOLEAN:::ENTER
-
-DECLARE
-std.is_eof_token(token;)BOOLEAN:::EXIT45
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.is_eof_token(token;)BOOLEAN:::EXIT46
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::ENTER
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT47
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT48
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT49
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT50
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT51
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT52
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT53
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT54
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT55
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT56
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT57
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT58
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT59
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT60
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT61
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT62
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT63
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT64
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT65
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.print_token(token;)BOOLEAN:::EXIT66
-return
-BOOLEAN
-int
-3
-
-DECLARE
-std.get_actual_token(char *;int;)int:::ENTER
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-
-DECLARE
-std.get_actual_token(char *;int;)int:::EXIT67
-token_str
-char[]
-hashcode
-8
-token_str[]
-char[]
-java.lang.String
-9[10]
-token_ind
-int
-int
-11
-return
-int
-int
-3
-
-# Implicit Type to Explicit Type
-#   1 : argc
-#   2 : argv
-#   3 : lh_return_value
-#   4 : FILENAME
-#   5 : FILENAME_element
-#   6 : FILENAME_index
-#   7 : ch
-#   8 : token_str
-#   9 : token_str_element
-#  10 : token_str_index
-#  11 : token_ind
-#  12 : cu_state
-#  13 : state
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable argc
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable argv
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable argv[..]
+    var-kind array
+    enclosing-var argv
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable argc
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable argv
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable argv[..]
+    var-kind array
+    enclosing-var argv
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..open_character_stream():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable FILENAME
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..open_character_stream():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable FILENAME
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type hashcode
+    dec-type stream_type*
+  variable return[..]
+    var-kind array
+    enclosing-var return
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable return[..].fp
+    var-kind field fp
+    enclosing-var return[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable return[..].fp[0]
+    var-kind field [0]
+    enclosing-var return[..].fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable return[..].stream_ind
+    var-kind field stream_ind
+    enclosing-var return[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].stream
+    var-kind field stream
+    enclosing-var return[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..get_char():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type stream_type*
+    flags is_param 
+  variable stream_ptr[..]
+    var-kind array
+    enclosing-var stream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable stream_ptr[..].fp
+    var-kind field fp
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable stream_ptr[..].fp[0]
+    var-kind field [0]
+    enclosing-var stream_ptr[..].fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable stream_ptr[..].stream_ind
+    var-kind field stream_ind
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr[..].stream
+    var-kind field stream
+    enclosing-var stream_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..get_char():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type stream_type*
+    flags is_param 
+  variable stream_ptr[..]
+    var-kind array
+    enclosing-var stream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable stream_ptr[..].fp
+    var-kind field fp
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable stream_ptr[..].fp[0]
+    var-kind field [0]
+    enclosing-var stream_ptr[..].fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable stream_ptr[..].stream_ind
+    var-kind field stream_ind
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr[..].stream
+    var-kind field stream
+    enclosing-var stream_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type char
+
+ppt ..is_end_of_character_stream():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type stream_type*
+    flags is_param 
+  variable stream_ptr[..]
+    var-kind array
+    enclosing-var stream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable stream_ptr[..].fp
+    var-kind field fp
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable stream_ptr[..].fp[0]
+    var-kind field [0]
+    enclosing-var stream_ptr[..].fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable stream_ptr[..].stream_ind
+    var-kind field stream_ind
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr[..].stream
+    var-kind field stream
+    enclosing-var stream_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..is_end_of_character_stream():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type stream_type*
+    flags is_param 
+  variable stream_ptr[..]
+    var-kind array
+    enclosing-var stream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable stream_ptr[..].fp
+    var-kind field fp
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable stream_ptr[..].fp[0]
+    var-kind field [0]
+    enclosing-var stream_ptr[..].fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable stream_ptr[..].stream_ind
+    var-kind field stream_ind
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr[..].stream
+    var-kind field stream
+    enclosing-var stream_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..unget_char():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable stream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type stream_type*
+    flags is_param 
+  variable stream_ptr[..]
+    var-kind array
+    enclosing-var stream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable stream_ptr[..].fp
+    var-kind field fp
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable stream_ptr[..].fp[0]
+    var-kind field [0]
+    enclosing-var stream_ptr[..].fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable stream_ptr[..].stream_ind
+    var-kind field stream_ind
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr[..].stream
+    var-kind field stream
+    enclosing-var stream_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..unget_char():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable stream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type stream_type*
+    flags is_param 
+  variable stream_ptr[..]
+    var-kind array
+    enclosing-var stream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable stream_ptr[..].fp
+    var-kind field fp
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable stream_ptr[..].fp[0]
+    var-kind field [0]
+    enclosing-var stream_ptr[..].fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable stream_ptr[..].stream_ind
+    var-kind field stream_ind
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr[..].stream
+    var-kind field stream
+    enclosing-var stream_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..open_token_stream():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable FILENAME
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..open_token_stream():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable FILENAME
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type hashcode
+    dec-type token_stream_type*
+  variable return[..]
+    var-kind array
+    enclosing-var return
+    array 1
+    rep-type hashcode[]
+    dec-type token_stream_type[]
+  variable return[..].ch_stream
+    var-kind field ch_stream
+    enclosing-var return[..]
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type*[]
+  variable return[..].ch_stream[0]
+    var-kind field [0]
+    enclosing-var return[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable return[..].ch_stream->fp
+    var-kind field fp
+    enclosing-var return[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable return[..].ch_stream->fp[0]
+    var-kind field [0]
+    enclosing-var return[..].ch_stream->fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable return[..].ch_stream->stream_ind
+    var-kind field stream_ind
+    enclosing-var return[..].ch_stream
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].ch_stream->stream
+    var-kind field stream
+    enclosing-var return[..].ch_stream
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..get_token():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_stream_type*
+    flags is_param 
+  variable tstream_ptr[..]
+    var-kind array
+    enclosing-var tstream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_stream_type[]
+  variable tstream_ptr[..].ch_stream
+    var-kind field ch_stream
+    enclosing-var tstream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type*[]
+  variable tstream_ptr[..].ch_stream[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable tstream_ptr[..].ch_stream->fp
+    var-kind field fp
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable tstream_ptr[..].ch_stream->fp[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream->fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable tstream_ptr[..].ch_stream->stream_ind
+    var-kind field stream_ind
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr[..].ch_stream->stream
+    var-kind field stream
+    enclosing-var tstream_ptr[..].ch_stream
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..get_token():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_stream_type*
+    flags is_param 
+  variable tstream_ptr[..]
+    var-kind array
+    enclosing-var tstream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_stream_type[]
+  variable tstream_ptr[..].ch_stream
+    var-kind field ch_stream
+    enclosing-var tstream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type*[]
+  variable tstream_ptr[..].ch_stream[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable tstream_ptr[..].ch_stream->fp
+    var-kind field fp
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable tstream_ptr[..].ch_stream->fp[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream->fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable tstream_ptr[..].ch_stream->stream_ind
+    var-kind field stream_ind
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr[..].ch_stream->stream
+    var-kind field stream
+    enclosing-var tstream_ptr[..].ch_stream
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+  variable return[..]
+    var-kind array
+    enclosing-var return
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable return[..].token_id
+    var-kind field token_id
+    enclosing-var return[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].token_string
+    var-kind field token_string
+    enclosing-var return[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt print_tokens.c.numeric_case():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_stream_type*
+    flags is_param 
+  variable tstream_ptr[..]
+    var-kind array
+    enclosing-var tstream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_stream_type[]
+  variable tstream_ptr[..].ch_stream
+    var-kind field ch_stream
+    enclosing-var tstream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type*[]
+  variable tstream_ptr[..].ch_stream[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable tstream_ptr[..].ch_stream->fp
+    var-kind field fp
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable tstream_ptr[..].ch_stream->fp[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream->fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable tstream_ptr[..].ch_stream->stream_ind
+    var-kind field stream_ind
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr[..].ch_stream->stream
+    var-kind field stream
+    enclosing-var tstream_ptr[..].ch_stream
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable token_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+    flags is_param 
+  variable token_ptr[..]
+    var-kind array
+    enclosing-var token_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable token_ptr[..].token_id
+    var-kind field token_id
+    enclosing-var token_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable token_ptr[..].token_string
+    var-kind field token_string
+    enclosing-var token_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable token_str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable token_ind
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt print_tokens.c.numeric_case():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_stream_type*
+    flags is_param 
+  variable tstream_ptr[..]
+    var-kind array
+    enclosing-var tstream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_stream_type[]
+  variable tstream_ptr[..].ch_stream
+    var-kind field ch_stream
+    enclosing-var tstream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type*[]
+  variable tstream_ptr[..].ch_stream[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable tstream_ptr[..].ch_stream->fp
+    var-kind field fp
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable tstream_ptr[..].ch_stream->fp[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream->fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable tstream_ptr[..].ch_stream->stream_ind
+    var-kind field stream_ind
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr[..].ch_stream->stream
+    var-kind field stream
+    enclosing-var tstream_ptr[..].ch_stream
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable token_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+    flags is_param 
+  variable token_ptr[..]
+    var-kind array
+    enclosing-var token_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable token_ptr[..].token_id
+    var-kind field token_id
+    enclosing-var token_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable token_ptr[..].token_string
+    var-kind field token_string
+    enclosing-var token_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable token_str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable token_ind
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+  variable return[..]
+    var-kind array
+    enclosing-var return
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable return[..].token_id
+    var-kind field token_id
+    enclosing-var return[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].token_string
+    var-kind field token_string
+    enclosing-var return[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt print_tokens.c.error_or_eof_case():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_stream_type*
+    flags is_param 
+  variable tstream_ptr[..]
+    var-kind array
+    enclosing-var tstream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_stream_type[]
+  variable tstream_ptr[..].ch_stream
+    var-kind field ch_stream
+    enclosing-var tstream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type*[]
+  variable tstream_ptr[..].ch_stream[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable tstream_ptr[..].ch_stream->fp
+    var-kind field fp
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable tstream_ptr[..].ch_stream->fp[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream->fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable tstream_ptr[..].ch_stream->stream_ind
+    var-kind field stream_ind
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr[..].ch_stream->stream
+    var-kind field stream
+    enclosing-var tstream_ptr[..].ch_stream
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable token_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+    flags is_param 
+  variable token_ptr[..]
+    var-kind array
+    enclosing-var token_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable token_ptr[..].token_id
+    var-kind field token_id
+    enclosing-var token_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable token_ptr[..].token_string
+    var-kind field token_string
+    enclosing-var token_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable cu_state
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable token_str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable token_ind
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+
+ppt print_tokens.c.error_or_eof_case():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_stream_type*
+    flags is_param 
+  variable tstream_ptr[..]
+    var-kind array
+    enclosing-var tstream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_stream_type[]
+  variable tstream_ptr[..].ch_stream
+    var-kind field ch_stream
+    enclosing-var tstream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type*[]
+  variable tstream_ptr[..].ch_stream[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable tstream_ptr[..].ch_stream->fp
+    var-kind field fp
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable tstream_ptr[..].ch_stream->fp[0]
+    var-kind field [0]
+    enclosing-var tstream_ptr[..].ch_stream->fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable tstream_ptr[..].ch_stream->stream_ind
+    var-kind field stream_ind
+    enclosing-var tstream_ptr[..].ch_stream
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tstream_ptr[..].ch_stream->stream
+    var-kind field stream
+    enclosing-var tstream_ptr[..].ch_stream
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable token_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+    flags is_param 
+  variable token_ptr[..]
+    var-kind array
+    enclosing-var token_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable token_ptr[..].token_id
+    var-kind field token_id
+    enclosing-var token_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable token_ptr[..].token_string
+    var-kind field token_string
+    enclosing-var token_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable cu_state
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable token_str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable token_ind
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+  variable return[..]
+    var-kind array
+    enclosing-var return
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable return[..].token_id
+    var-kind field token_id
+    enclosing-var return[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].token_string
+    var-kind field token_string
+    enclosing-var return[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt print_tokens.c.check_delimiter():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+
+ppt print_tokens.c.check_delimiter():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens.c.keyword():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable state
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt print_tokens.c.keyword():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable state
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens.c.special():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable state
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt print_tokens.c.special():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable state
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens.c.skip():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type stream_type*
+    flags is_param 
+  variable stream_ptr[..]
+    var-kind array
+    enclosing-var stream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable stream_ptr[..].fp
+    var-kind field fp
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable stream_ptr[..].fp[0]
+    var-kind field [0]
+    enclosing-var stream_ptr[..].fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable stream_ptr[..].stream_ind
+    var-kind field stream_ind
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr[..].stream
+    var-kind field stream
+    enclosing-var stream_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt print_tokens.c.skip():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type stream_type*
+    flags is_param 
+  variable stream_ptr[..]
+    var-kind array
+    enclosing-var stream_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type stream_type[]
+  variable stream_ptr[..].fp
+    var-kind field fp
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable stream_ptr[..].fp[0]
+    var-kind field [0]
+    enclosing-var stream_ptr[..].fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable stream_ptr[..].stream_ind
+    var-kind field stream_ind
+    enclosing-var stream_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable stream_ptr[..].stream
+    var-kind field stream
+    enclosing-var stream_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens.c.constant():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable state
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable token_str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable token_ind
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt print_tokens.c.constant():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable state
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable token_str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable token_ind
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens.c.next_state():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable state
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+
+ppt print_tokens.c.next_state():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable state
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..is_eof_token():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable t
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+    flags is_param 
+  variable t[..]
+    var-kind array
+    enclosing-var t
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable t[..].token_id
+    var-kind field token_id
+    enclosing-var t[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable t[..].token_string
+    var-kind field token_string
+    enclosing-var t[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..is_eof_token():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable t
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+    flags is_param 
+  variable t[..]
+    var-kind array
+    enclosing-var t
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable t[..].token_id
+    var-kind field token_id
+    enclosing-var t[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable t[..].token_string
+    var-kind field token_string
+    enclosing-var t[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..print_token():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable token_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+    flags is_param 
+  variable token_ptr[..]
+    var-kind array
+    enclosing-var token_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable token_ptr[..].token_id
+    var-kind field token_id
+    enclosing-var token_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable token_ptr[..].token_string
+    var-kind field token_string
+    enclosing-var token_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..print_token():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable token_ptr
+    var-kind variable
+    rep-type hashcode
+    dec-type token_type*
+    flags is_param 
+  variable token_ptr[..]
+    var-kind array
+    enclosing-var token_ptr
+    array 1
+    rep-type hashcode[]
+    dec-type token_type[]
+  variable token_ptr[..].token_id
+    var-kind field token_id
+    enclosing-var token_ptr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable token_ptr[..].token_string
+    var-kind field token_string
+    enclosing-var token_ptr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens.c.get_actual_token():::ENTER
+  ppt-type enter
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable token_str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable token_ind
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt print_tokens.c.get_actual_token():::EXIT0
+  ppt-type subexit
+  variable ::default1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::default1[..]
+    var-kind array
+    enclosing-var ::default1
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::base
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::base[..]
+    var-kind array
+    enclosing-var ::base
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::next
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::next[..]
+    var-kind array
+    enclosing-var ::next
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::check
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::check[..]
+    var-kind array
+    enclosing-var ::check
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable token_str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable token_ind
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

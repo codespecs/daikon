@@ -1,0 +1,7 @@
+echo "gcc -gdwarf-2  print_tokens.c -o print_tokens "
+gcc -gdwarf-2  print_tokens.c -o print_tokens
+echo "kvasir-dtrace --decls-file=print_tokens.decls --dtrace-file=print_tokens.dtrace.gz ./print_tokens < tst180 >/dev/null"
+kvasir-dtrace --decls-file=print_tokens.decls --dtrace-file=print_tokens.dtrace.gz ./print_tokens  < tst180 >/dev/null
+echo
+echo "If no errors, then copy print_tokens.decls and print_tokens.dtrace.gz to DAIKONDIR/tests/daikon-tests/print_tokens"
+

@@ -1,1750 +1,684 @@
-VarComparability
-implicit
-
-DECLARE
-std.main(int;char **;)int:::ENTER
-argc
-int
-int
-1
-argv
-char *[]
-hashcode
-2
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.main(int;char **;)int:::EXIT1
-argc
-int
-int
-1
-argv
-char *[]
-hashcode
-2
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.open_character_stream(char *;)character_stream:::ENTER
-fname
-char[]
-hashcode
-7
-fname[]
-char[]
-java.lang.String
-8[9]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.open_character_stream(char *;)character_stream:::EXIT2
-fname
-char[]
-hashcode
-7
-fname[]
-char[]
-java.lang.String
-8[9]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.get_char(character_stream;)char:::ENTER
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.get_char(character_stream;)char:::EXIT3
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-10[5]
-return
-char
-int
-10
-
-DECLARE
-std.unget_char(char;character_stream;)char:::ENTER
-ch
-char
-int
-11
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-11[5]
-
-DECLARE
-std.unget_char(char;character_stream;)char:::EXIT4
-ch
-char
-int
-12
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-12[5]
-return
-char
-int
-12
-
-DECLARE
-std.unget_char(char;character_stream;)char:::EXIT5
-ch
-char
-int
-12
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-12[5]
-return
-char
-int
-12
-
-DECLARE
-std.open_token_stream(char *;)token_stream:::ENTER
-fname
-char[]
-hashcode
-7
-fname[]
-char[]
-java.lang.String
-8[9]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.open_token_stream(char *;)token_stream:::EXIT6
-fname
-char[]
-hashcode
-7
-fname[]
-char[]
-java.lang.String
-8[9]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.get_token(token_stream;)token:::ENTER
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT7
-::buffer
-char[]
-hashcode
-13
-::buffer[]
-char[]
-java.lang.String
-14[15]
-return
-char[]
-hashcode
-13
-return[]
-char[]
-java.lang.String
-14[15]
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT8
-::buffer
-char[]
-hashcode
-13
-::buffer[]
-char[]
-java.lang.String
-14[15]
-return
-char[]
-hashcode
-13
-return[]
-char[]
-java.lang.String
-14[15]
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT9
-::buffer
-char[]
-hashcode
-13
-::buffer[]
-char[]
-java.lang.String
-14[15]
-return
-char[]
-hashcode
-13
-return[]
-char[]
-java.lang.String
-14[15]
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT10
-::buffer
-char[]
-hashcode
-13
-::buffer[]
-char[]
-java.lang.String
-14[15]
-return
-char[]
-hashcode
-13
-return[]
-char[]
-java.lang.String
-14[15]
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT11
-::buffer
-char[]
-hashcode
-13
-::buffer[]
-char[]
-java.lang.String
-14[15]
-return
-char[]
-hashcode
-13
-return[]
-char[]
-java.lang.String
-14[15]
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT12
-::buffer
-char[]
-hashcode
-13
-::buffer[]
-char[]
-java.lang.String
-14[15]
-return
-char[]
-hashcode
-13
-return[]
-char[]
-java.lang.String
-14[15]
-
-DECLARE
-std.get_token(token_stream;)token:::EXIT13
-::buffer
-char[]
-hashcode
-13
-::buffer[]
-char[]
-java.lang.String
-14[15]
-return
-char[]
-hashcode
-13
-return[]
-char[]
-java.lang.String
-14[15]
-
-DECLARE
-std.is_token_end(int;char;)int:::ENTER
-str_com_id
-int
-int
-16
-ch
-char
-int
-17
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.is_token_end(int;char;)int:::EXIT14
-str_com_id
-int
-int
-16
-ch
-char
-int
-17
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_token_end(int;char;)int:::EXIT15
-str_com_id
-int
-int
-16
-ch
-char
-int
-17
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_token_end(int;char;)int:::EXIT16
-str_com_id
-int
-int
-16
-ch
-char
-int
-17
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_token_end(int;char;)int:::EXIT17
-str_com_id
-int
-int
-16
-ch
-char
-int
-17
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_token_end(int;char;)int:::EXIT18
-str_com_id
-int
-int
-16
-ch
-char
-int
-17
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_token_end(int;char;)int:::EXIT19
-str_com_id
-int
-int
-16
-ch
-char
-int
-17
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_token_end(int;char;)int:::EXIT20
-str_com_id
-int
-int
-16
-ch
-char
-int
-17
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_token_end(int;char;)int:::EXIT21
-str_com_id
-int
-int
-16
-ch
-char
-int
-17
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.token_type(token;)int:::ENTER
-tok
-char[]
-hashcode
-18
-tok[]
-char[]
-java.lang.String
-19[20]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.token_type(token;)int:::EXIT22
-tok
-char[]
-hashcode
-18
-tok[]
-char[]
-java.lang.String
-19[20]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.token_type(token;)int:::EXIT23
-tok
-char[]
-hashcode
-18
-tok[]
-char[]
-java.lang.String
-19[20]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.token_type(token;)int:::EXIT24
-tok
-char[]
-hashcode
-18
-tok[]
-char[]
-java.lang.String
-19[20]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.token_type(token;)int:::EXIT25
-tok
-char[]
-hashcode
-18
-tok[]
-char[]
-java.lang.String
-19[20]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.token_type(token;)int:::EXIT26
-tok
-char[]
-hashcode
-18
-tok[]
-char[]
-java.lang.String
-19[20]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.token_type(token;)int:::EXIT27
-tok
-char[]
-hashcode
-18
-tok[]
-char[]
-java.lang.String
-19[20]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.token_type(token;)int:::EXIT28
-tok
-char[]
-hashcode
-18
-tok[]
-char[]
-java.lang.String
-19[20]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.token_type(token;)int:::EXIT29
-tok
-char[]
-hashcode
-18
-tok[]
-char[]
-java.lang.String
-19[20]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.token_type(token;)int:::EXIT30
-tok
-char[]
-hashcode
-18
-tok[]
-char[]
-java.lang.String
-19[20]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.print_token(token;)int:::ENTER
-tok
-char[]
-hashcode
-21
-tok[]
-char[]
-java.lang.String
-22[23]
-::buffer
-char[]
-hashcode
-21
-::buffer[]
-char[]
-java.lang.String
-22[23]
-
-DECLARE
-std.print_token(token;)int:::EXIT31
-tok
-char[]
-hashcode
-21
-tok[]
-char[]
-java.lang.String
-22[23]
-::buffer
-char[]
-hashcode
-21
-::buffer[]
-char[]
-java.lang.String
-22[23]
-return
-int
-int
-6
-
-DECLARE
-std.is_eof_token(token;)int:::ENTER
-tok
-char[]
-hashcode
-21
-tok[]
-char[]
-java.lang.String
-22[23]
-::buffer
-char[]
-hashcode
-21
-::buffer[]
-char[]
-java.lang.String
-22[23]
-
-DECLARE
-std.is_eof_token(token;)int:::EXIT32
-tok
-char[]
-hashcode
-21
-tok[]
-char[]
-java.lang.String
-22[23]
-::buffer
-char[]
-hashcode
-21
-::buffer[]
-char[]
-java.lang.String
-22[23]
-return
-int
-int
-6
-
-DECLARE
-std.is_eof_token(token;)int:::EXIT33
-tok
-char[]
-hashcode
-21
-tok[]
-char[]
-java.lang.String
-22[23]
-::buffer
-char[]
-hashcode
-21
-::buffer[]
-char[]
-java.lang.String
-22[23]
-return
-int
-int
-6
-
-DECLARE
-std.is_comment(token;)int:::ENTER
-ident
-char[]
-hashcode
-24
-ident[]
-char[]
-java.lang.String
-25[26]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.is_comment(token;)int:::EXIT34
-ident
-char[]
-hashcode
-24
-ident[]
-char[]
-java.lang.String
-25[26]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_comment(token;)int:::EXIT35
-ident
-char[]
-hashcode
-24
-ident[]
-char[]
-java.lang.String
-25[26]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_keyword(token;)int:::ENTER
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.is_keyword(token;)int:::EXIT36
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_keyword(token;)int:::EXIT37
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_char_constant(token;)int:::ENTER
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.is_char_constant(token;)int:::EXIT38
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_char_constant(token;)int:::EXIT39
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_num_constant(token;)int:::ENTER
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.is_num_constant(token;)int:::EXIT40
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_num_constant(token;)int:::EXIT41
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_num_constant(token;)int:::EXIT42
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_str_constant(token;)int:::ENTER
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.is_str_constant(token;)int:::EXIT43
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_str_constant(token;)int:::EXIT44
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_str_constant(token;)int:::EXIT45
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_identifier(token;)int:::ENTER
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.is_identifier(token;)int:::EXIT46
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_identifier(token;)int:::EXIT47
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_identifier(token;)int:::EXIT48
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.unget_error(token_stream;)int:::ENTER
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.unget_error(token_stream;)int:::EXIT49
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.print_spec_symbol(token;)void:::ENTER
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.print_spec_symbol(token;)void:::EXIT50
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.print_spec_symbol(token;)void:::EXIT51
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.print_spec_symbol(token;)void:::EXIT52
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.print_spec_symbol(token;)void:::EXIT53
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.print_spec_symbol(token;)void:::EXIT54
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.print_spec_symbol(token;)void:::EXIT55
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.print_spec_symbol(token;)void:::EXIT56
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.is_spec_symbol(token;)int:::ENTER
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-
-DECLARE
-std.is_spec_symbol(token;)int:::EXIT57
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_spec_symbol(token;)int:::EXIT58
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_spec_symbol(token;)int:::EXIT59
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_spec_symbol(token;)int:::EXIT60
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_spec_symbol(token;)int:::EXIT61
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_spec_symbol(token;)int:::EXIT62
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_spec_symbol(token;)int:::EXIT63
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-DECLARE
-std.is_spec_symbol(token;)int:::EXIT64
-str
-char[]
-hashcode
-27
-str[]
-char[]
-java.lang.String
-28[29]
-::buffer
-char[]
-hashcode
-3
-::buffer[]
-char[]
-java.lang.String
-4[5]
-return
-int
-int
-6
-
-# Implicit Type to Explicit Type
-#   1 : argc
-#   2 : argv
-#   3 : buffer
-#   4 : buffer_element
-#   5 : buffer_index
-#   6 : lh_return_value
-#   7 : fname
-#   8 : fname_element
-#   9 : fname_index
-#  10 : buffer_element lh_return_value
-#  11 : buffer_element ch
-#  12 : buffer_element ch lh_return_value
-#  13 : buffer lh_return_value
-#  14 : buffer_element lh_return_value_element
-#  15 : buffer_index lh_return_value_index
-#  16 : str_com_id
-#  17 : ch
-#  18 : tok
-#  19 : tok_element
-#  20 : tok_index
-#  21 : buffer tok
-#  22 : buffer_element tok_element
-#  23 : buffer_index tok_index
-#  24 : ident
-#  25 : ident_element
-#  26 : ident_index
-#  27 : str
-#  28 : str_element
-#  29 : str_index
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable argc
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable argv
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable argv[..]
+    var-kind array
+    enclosing-var argv
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable argc
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable argv
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable argv[..]
+    var-kind array
+    enclosing-var argv
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..open_character_stream():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable fname
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..open_character_stream():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable fname
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+  variable return[..]
+    var-kind array
+    enclosing-var return
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+
+ppt ..get_char():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable fp
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+    flags is_param 
+  variable fp[..]
+    var-kind array
+    enclosing-var fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+
+ppt ..get_char():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable fp
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+    flags is_param 
+  variable fp[..]
+    var-kind array
+    enclosing-var fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type char
+
+ppt ..unget_char():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable fp
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+    flags is_param 
+  variable fp[..]
+    var-kind array
+    enclosing-var fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+
+ppt ..unget_char():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable fp
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+    flags is_param 
+  variable fp[..]
+    var-kind array
+    enclosing-var fp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type char
+
+ppt ..open_token_stream():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable fname
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..open_token_stream():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable fname
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+  variable return[..]
+    var-kind array
+    enclosing-var return
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+
+ppt ..get_token():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable tp
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+    flags is_param 
+  variable tp[..]
+    var-kind array
+    enclosing-var tp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+
+ppt ..get_token():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable tp
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+    flags is_param 
+  variable tp[..]
+    var-kind array
+    enclosing-var tp
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable return
+    var-kind variable
+    rep-type string
+    dec-type char*
+
+ppt print_tokens2.c.is_token_end():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str_com_id
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+
+ppt print_tokens2.c.is_token_end():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str_com_id
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable ch
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens2.c.token_type():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable tok
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt print_tokens2.c.token_type():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable tok
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..print_token():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable tok
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..print_token():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable tok
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..is_eof_token():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable tok
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..is_eof_token():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable tok
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens2.c.is_comment():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ident
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt print_tokens2.c.is_comment():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ident
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens2.c.is_keyword():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt print_tokens2.c.is_keyword():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens2.c.is_char_constant():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt print_tokens2.c.is_char_constant():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens2.c.is_num_constant():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt print_tokens2.c.is_num_constant():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens2.c.is_str_constant():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt print_tokens2.c.is_str_constant():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens2.c.is_identifier():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt print_tokens2.c.is_identifier():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens2.c.unget_error():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable fp
+    var-kind variable
+    rep-type hashcode
+    dec-type void**
+    flags is_param 
+  variable fp[..]
+    var-kind array
+    enclosing-var fp
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable fp[..][0]
+    var-kind field [0]
+    enclosing-var fp[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+
+ppt print_tokens2.c.unget_error():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable fp
+    var-kind variable
+    rep-type hashcode
+    dec-type void**
+    flags is_param 
+  variable fp[..]
+    var-kind array
+    enclosing-var fp
+    array 1
+    rep-type hashcode[]
+    dec-type void*[]
+  variable fp[..][0]
+    var-kind field [0]
+    enclosing-var fp[..]
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt print_tokens2.c.print_spec_symbol():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt print_tokens2.c.print_spec_symbol():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt print_tokens2.c.is_spec_symbol():::ENTER
+  ppt-type enter
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt print_tokens2.c.is_spec_symbol():::EXIT0
+  ppt-type subexit
+  variable ::buffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable str
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
