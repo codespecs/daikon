@@ -29,7 +29,7 @@ with newer versions of Valgrind and VEX.
 * Getting Started::
 * Creating the diffs::
 * Merging the changes::
-* Updating disasm from Binutils::
+* Updating Readelf from Binutils::
 * Compiling and Testing::
 * Committing::
 * Valgrind modifications::
@@ -409,7 +409,7 @@ find -name '*.rej'
 
 For every change in the file you will need to examine both the changed
 code as well as our original code and determine if it needs to be hand
-merged or if the change is not relevant. It is useful to refer to
+merged or if the change is not relevant. It may help to refer to
 @code{coregrind-PLSE.diff} during this process. Remove the @code{.rej}
 and @code{.orig} files as you go, so that finally the @code{find}
 command produces no output.
@@ -510,11 +510,50 @@ to be explicitly supported by DynComp. Please see Appendix C for
 guidelines on supporting new VEX instructions.
 
 
-@node Updating disasm from Binutils
-@chapter Updating disasm from Binutils
+@node Updating Readelf from Binutils
+@chapter Updating Readelf from Binutils
+
+@menu
+* Overview::
+* Creating the binutil diff files::
+* Merging the binutil changes::
+@end menu
 
 @emph{(This section still under construction.)} @*
 
+@node Overview
+@section Overview
+
+The GNU Binutils (@uref{http://www.gnu.org/software/binutils})
+are a collection of approximately twenty binary tools.
+We are interested only in @command{readelf}, a tool that displays
+information from an ELF format object file.  Fjalar does not use this
+binary directly, rather a large portion of the source code for Fjalar contains 
+a modified version of the source used to build @command{readelf}.
+
+As noted in the Introduction, the GNU Binutils are completely
+independent of Valgrind and have their own release site
+(@uref{http://ftp.gnu.org/gnu/binutils}).
+This site lists all the versions of Binutils that are available. If you
+click on @command{Last modified} you will see the releases sorted by
+date. Select the most recent version and download the tar file to
+your machine.  After unpacking, you will have a directory structure
+whose root is @file{binutils-<version>}. 
+To complete the update process, you will need a copy of both the current
+version within Fjalar and the version you wish to update to.
+For the example instructions
+that follow, we assume the current version is @file{binutils-2.24} 
+and you are updating to version @file{binutils-2.25}.
+
+
+@node Creating the binutil diff files
+@section Creating the binutil diff files
+
+First, we create diff files showing what the Binutils maintainers have
+changed since the last time the readelf code was merged into Fjalar.
+There are two diff files: one for the include files and one for the
+readelf files.
+Two sets of diffs
 can use @command{diff -r} for include subdirectory(9 files).  
 patch should work OK
 
@@ -531,36 +570,18 @@ diff -ub  binutils-2.24/libiberty/dwarfnames.c \
           binutils-2.25/libiberty/dwarfnames.c >> ~/include.patch
 
 diff -urb binutils-2.24/binutils binutils-2.25/binutils > ~/binutils.patch
+@end example
 
+
+@node Merging the binutil changes
+@section Merging the binutil changes
+
+@example
 cd $INV/fjalar/valgrind/fjalar
 patch -p1 -lu -f <~/include.patch --dry-run
 patch -p2 -lu -f -F3 <~/binutils.patch --dry-run
-
-fjalar/valgrind/fjalar:
-bucomm.h
-dwarf.c
-dwarf.h
-elfcomm.c
-elfcomm.h
-readelf.c
-unwind-ia64.h
-
-fjalar/valgrind/fjalar/include:
-dwarf2.def
-dwarf2.h
-
-fjalar/valgrind/fjalar/include/elf:
-common.h
-external.h
-i386.h
-ia64.h
-internal.h
-reloc-macros.h
-x86-64.h
-
-fjalar/valgrind/fjalar/libiberty:
-dwarfnames.c
 @end example
+
 
 @node Compiling and Testing
 @chapter Compiling and Testing

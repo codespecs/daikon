@@ -1,0 +1,22 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== COPYRIGHT
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./print_tokens2
+==PID== 
+keyword,"and".
+bquote.
+rparen.
+keyword,"=>".
+rparen.
+rparen.
+rparen.
+keyword,"xor".
+quote.
+numeric,9.
+identifier,"P".
+identifier,"On".
+string,"rX".
+keyword,"=>".
+eof.
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

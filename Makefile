@@ -240,6 +240,7 @@ build-kvasir: kvasir
 
 rebuild-everything:
 	-rm -rf daikon.jar
+	-rm -rf java/java_files.txt
 	${MAKE} -C $(DAIKONDIR)/java very-clean
 	${MAKE} -C $(DAIKONDIR)/java tags compile
 	${MAKE} -C $(DAIKONDIR) daikon.jar

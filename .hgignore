@@ -416,6 +416,8 @@ tests/kvasir-tests/partial-init/partial-init
 tests/kvasir-tests/perl/perl
 tests/kvasir-tests/pointer-levels/pointer-levels
 tests/kvasir-tests/printf-interact/printf-interact
+tests/kvasir-tests/print_tokens/print_tokens
+tests/kvasir-tests/print_tokens2/print_tokens2
 tests/kvasir-tests/pthread-test/pthread-test
 tests/kvasir-tests/rdtsc/rdtsc
 tests/kvasir-tests/replace/replace
@@ -427,6 +429,7 @@ tests/kvasir-tests/shared-lib/shared-lib
 tests/kvasir-tests/shared-lib/liba.so
 tests/kvasir-tests/shared-lib/libb.so
 tests/kvasir-tests/small-test/small-test
+tests/kvasir-tests/space/space
 tests/kvasir-tests/static-struct/static-struct
 tests/kvasir-tests/string-arrays/string-arrays
 tests/kvasir-tests/tcas/tcas
