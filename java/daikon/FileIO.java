@@ -1046,6 +1046,8 @@ public final class FileIO {
       try {
         read_data_trace_file(filename, all_ppts, processor, false,
                              ppts_may_be_new);
+      } catch (Daikon.TerminationMessage e) {
+        throw e;
       } catch (Throwable e) {
         String message = e.getMessage();
         if (message != null && message.equals("Corrupt GZIP trailer")) {
@@ -2370,6 +2372,9 @@ public final class FileIO {
         // ValueTuple.MISSING + "), rep=" + value_rep +
         // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
 
+        String is_declared_as_non_missing
+          = "is declared as non-missing, but the value is missing";
+
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
           if (vals[val_index] == null) {
@@ -2377,14 +2382,23 @@ public final class FileIO {
               System.out.printf ("Var %s ppt %s at line %d null-not missing%n",
                                vi, ppt.name(),
                                FileIO.get_linenum());
-            assert vi.canBeMissing
-              : String.format("Var %s ppt %s at line %d null-not missing",
-                              vi, ppt.name(),
-                              FileIO.get_linenum());
+            if (! vi.canBeMissing) {
+              // Not Daikon.TerminationMessage because this is within
+              // "catch ... throw new Daikon.TerminationMessage".
+              throw new Error(
+                  String.format("Varable %s at program point %s " + is_declared_as_non_missing,
+                                vi, ppt.name()));
+            }
             mods[val_index] = ValueTuple.MISSING_NONSENSICAL;
             vi.canBeMissing = true;
           }
-        } catch (Exception e) {
+        } catch (Daikon.TerminationMessage e) {
+          throw e;
+        } catch (Throwable e) {
+          String message = e.getLocalizedMessage();
+          if (vi.rep_type.isArray() && message.contains(is_declared_as_non_missing)) {
+            message = message + ".  If the trace file was created by Kvasir, this might be caused by incorrect pointer type disambiguation.";
+          }
           throw new Daikon.TerminationMessage(e,
             "Error while parsing value "
               + value_rep
@@ -2393,7 +2407,7 @@ public final class FileIO {
               + " of type "
               + vi.rep_type
               + ": "
-              + e.toString(),
+              + message,
             reader,
             filename);
         }
