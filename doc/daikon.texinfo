@@ -7148,7 +7148,7 @@ then running @samp{java daikon.@/tools.@/runtimechecker.@/WriteViolationFile
 MyProg arg1 arg2} creates a file called @file{violations.txt} in the
 current directory, immediately before the program exits normally.
 If the program under test calls @code{System.exit}, then no
-@file{violations.txt} file is created.  (JUnit is an example of a program
+@file{violations.txt} file is created.  (@command{JUnit} is an example of a program
 that calls @code{System.exit}.)
 
 @c Here are two possible ways to handle System.exit:
