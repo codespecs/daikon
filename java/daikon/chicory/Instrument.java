@@ -478,6 +478,8 @@ public class Instrument implements ClassFileTransformer {
   // kind of a hack since no pointers in Java and not
   // worth making a container object.
   private int running_offset;
+  // original stack map table
+  private Attribute smta;
 
 
  /**
@@ -551,7 +553,7 @@ public class Instrument implements ClassFileTransformer {
         }
 
         // Get existing StackMapTable (if present)
-        Attribute smta = get_stack_map_table_attribute(mg);
+        smta = get_stack_map_table_attribute(mg);
         if (smta != null) {
             stack_map_table = ((StackMapTable)smta).getStackMapTable();
             if (debug) {
@@ -593,15 +595,14 @@ public class Instrument implements ClassFileTransformer {
 
         print_stack_map_table("After add_entry_instrumentation");
 
-        // If there was no orginal StackMapTable (smta == null)
-        // then there are no switches and/or class was compiled for
-        // Java 5.  In either case, no need to process switches.
-        if (smta != null ) {
-           // Need to see if there are any switches after this location.
-           // If so, we may need to update the corresponding stackmap if
-           // the amount of the switch padding changed.
-           modify_stack_maps_for_switches(il.getStart(), il);
+        if (debug) {
+          out.format ("Modified code: %s%n", mg.getMethod().getCode());
         }
+
+        // Need to see if there are any switches after this location.
+        // If so, we may need to update the corresponding stackmap if
+        // the amount of the switch padding changed.
+        modify_stack_maps_for_switches(il.getStart(), il);
 
         Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
         Iterator<Integer> exitIter = mi.exit_locations.iterator();
@@ -661,15 +662,10 @@ public class Instrument implements ClassFileTransformer {
                 }
               }
 
-              // If there was no orginal StackMapTable (smta == null)
-              // then there are no switches and/or class was compiled for
-              // Java 5.  In either case, no need to process switches.
-              if (smta != null ) {
-                 // Need to see if there are any switches after this location.
-                 // If so, we may need to update the corresponding stackmap if
-                 // the amount of the switch padding changed.
-                 modify_stack_maps_for_switches(next_ih, il);
-              }
+              // Need to see if there are any switches after this location.
+              // If so, we may need to update the corresponding stackmap if
+              // the amount of the switch padding changed.
+              modify_stack_maps_for_switches(next_ih, il);
           }
           // Go on to the next instruction in the list
           ih = next_ih;
@@ -975,6 +971,13 @@ public class Instrument implements ClassFileTransformer {
       Instruction inst;
       short opcode;
 
+      // If there was no orginal StackMapTable (smta == null)
+      // then there are no switches and/or class was compiled for
+      // Java 5.  In either case, no need to process switches.
+      if (smta == null ) {
+          return;
+      }
+
       // Make sure all instruction offsets are uptodate.
       il.setPositions();
 
@@ -1115,6 +1118,8 @@ public class Instrument implements ClassFileTransformer {
                   il.setPositions();
                   // Which means we might need to update a StackMap offset.
                   update_stack_map_offset(ih.getPosition());
+                  // Also need to see if switch padding has changed
+                  modify_stack_maps_for_switches(ih.getNext(), il);
               }
           }
           break;
@@ -1218,6 +1223,10 @@ public class Instrument implements ClassFileTransformer {
     LocalVariableGen nonce_lv = create_local_nonce(il, c);
 
     print_stack_map_table("After cln");
+
+        if (debug) {
+          out.format ("Modified code: %s%n", c.mgen.getMethod().getCode());
+        }
 
     // The following implements:
     //     this_invocation_nonce = Runtime.nonce++;
