@@ -2372,9 +2372,6 @@ public final class FileIO {
         // ValueTuple.MISSING + "), rep=" + value_rep +
         // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
 
-        String is_declared_as_non_missing
-          = "is declared as non-missing, but the value is missing";
-
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
           if (vals[val_index] == null) {
@@ -2385,9 +2382,12 @@ public final class FileIO {
             if (! vi.canBeMissing) {
               // Not Daikon.TerminationMessage because this is within
               // "catch ... throw new Daikon.TerminationMessage".
-              throw new Error(
-                  String.format("Varable %s at program point %s " + is_declared_as_non_missing,
-                                vi, ppt.name()));
+              String message = String.format("Varable %s at program point %s is declared as non-missing, but the value is missing",
+                                             vi, ppt.name());
+              if (vi.rep_type.isArray()) {
+                message = message + ".  If the trace file was created by Kvasir, this might be caused by incorrect pointer type disambiguation.";
+              }
+              throw new Error(message);
             }
             mods[val_index] = ValueTuple.MISSING_NONSENSICAL;
             vi.canBeMissing = true;
@@ -2395,10 +2395,6 @@ public final class FileIO {
         } catch (Daikon.TerminationMessage e) {
           throw e;
         } catch (Throwable e) {
-          String message = e.getLocalizedMessage();
-          if (vi.rep_type.isArray() && message.contains(is_declared_as_non_missing)) {
-            message = message + ".  If the trace file was created by Kvasir, this might be caused by incorrect pointer type disambiguation.";
-          }
           throw new Daikon.TerminationMessage(e,
             "Error while parsing value "
               + value_rep
@@ -2407,7 +2403,7 @@ public final class FileIO {
               + " of type "
               + vi.rep_type
               + ": "
-              + message,
+              + e.getLocalizedMessage(),
             reader,
             filename);
         }
