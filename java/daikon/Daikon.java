@@ -148,7 +148,7 @@ public final class Daikon {
   // Problem with setting this to true:
   //  get no invariants over any value that can ever be missing
   // Problem with setting this to false:
-  //  due to differrent number of samples, IsEqualityComparison is
+  //  due to different number of samples, IsEqualityComparison is
   //  non-transitive (that is specially handled in the code)
   public static final boolean invariants_check_canBeMissing = false;
 
