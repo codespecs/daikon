@@ -801,17 +801,17 @@ public final class FileIO {
         filename);
     }
     // COMPARABILITY TEST
-    // if (!(comparability.alwaysComparable()
-    //       || ((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions())) {
-    //   System.err.println();
-    //   throw new Daikon.TerminationMessage(
-    //     "Rep type " + file_rep_type.format() + " has " + file_rep_type.dimensions() + " dimensions,"
-    //       + " but comparability " + comparability + " has " + ((VarComparabilityImplicit)comparability).dimensions + " dimensions,"
-    //       + " for variable "
-    //       + varname,
-    //     file,
-    //     filename);
-    // }
+    if (!(comparability.alwaysComparable()
+          || ((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions())) {
+      System.err.println();
+      throw new Daikon.TerminationMessage(
+        "Rep type " + file_rep_type.format() + " has " + file_rep_type.dimensions() + " dimensions,"
+          + " but comparability " + comparability + " has " + ((VarComparabilityImplicit)comparability).dimensions + " dimensions,"
+          + " for variable "
+          + varname,
+        file,
+        filename);
+    }
 
     return new VarInfo(varname,
       prog_type,
