@@ -188,7 +188,10 @@ public final class FileIO {
 
   // Logging Categories
 
-  /** true prints info about variables marked as missing/nonsensical **/
+  /**
+   * If true, then print the variable name each time the variable's value
+   * is first missing/nonsensical.
+   **/
   public static boolean debug_missing = false;
 
   /** Debug tracer for reading. **/
@@ -2356,7 +2359,6 @@ public final class FileIO {
               + "  text of value should be \"nonsensical\"",
               data_trace_state);
         } else {
-          // Report each variable the first time that its value was missing.
           if (debug_missing && !vi.canBeMissing) {
               System.out.printf ("Var %s ppt %s at line %d missing%n",
                                vi, ppt.name(),
@@ -2381,22 +2383,18 @@ public final class FileIO {
               System.out.printf ("Var %s ppt %s at line %d is null, and modbit is not missing%n",
                                vi, ppt.name(),
                                FileIO.get_linenum());
-            if (! vi.canBeMissing) {
-              // Not Daikon.TerminationMessage because this is within
-              // "catch ... throw new Daikon.TerminationMessage".
-              String message = String.format("Varable %s at program point %s is declared as non-missing, but the value is missing",
-                                             vi, ppt.name());
-              if (vi.rep_type.isArray()) {
-                message = message + ".  If the trace file was created by Kvasir, this might be caused by incorrect pointer type disambiguation.";
-              }
-              throw new Error(message);
-            }
+            // The value in the trace was null even though the modbit was not
+            // MISSING_NONSENSICAL.  Set the modbit to MISSING_NONSENSICAL.
+            // This can happen for a value like [1 nonsensical 2], because
+            // if any array value is nonsensical, the whole array is
+            // treated as nonsensical.
             mods[val_index] = ValueTuple.MISSING_NONSENSICAL;
             vi.canBeMissing = true;
           }
         } catch (Daikon.TerminationMessage e) {
           throw e;
         } catch (Throwable e) {
+          // e.printStackTrace(System.err); // for debugging
           throw new Daikon.TerminationMessage(e,
             "Error while parsing value "
               + value_rep
@@ -2540,7 +2538,7 @@ public final class FileIO {
         int mod = invoc.mods[val_index];
         mods[ppt.num_tracevars + val_index] = mod;
 
-        // If the value was missing, mark this variable as can be missing
+        // If the value was missing, mark this variable as can be missing.
         // Carefully check that we have orig version of the variable from
         // the ENTER point.
         if (ValueTuple.modIsMissingNonsensical (mod)) {
