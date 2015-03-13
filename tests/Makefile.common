@@ -758,8 +758,8 @@ ${PROJECT_FILE}.txt-chicory.dtrace : $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrac
 	@echo "### txt-chicory (${PROJECT_FILE} (first 100,000 lines of dtrace)"
 	@echo
 # zcat into head that truncates causes a non-zero status, so ignore failures
-	-${GZCAT} ${DTRACE_FILES} | head -n 100000 \
-	  > ${PROJECT_FILE}.txt-chicory.dtrace
+	${GZCAT} ${DTRACE_FILES} | head -n 100000 \
+	  > ${PROJECT_FILE}.txt-chicory.dtrace || true
 # trace-untruncate fails on files with DOS line endings
 	${DOS2UNIX} ${PROJECT_FILE}.txt-chicory.dtrace
 	${TRACE_UNTRUNCATE} ${PROJECT_FILE}.txt-chicory.dtrace
@@ -1060,7 +1060,7 @@ txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 # may be inefficient, but I don't see a way around that either.)
 %.diff: force
 	@[ -f $*.goal ] || { echo "File $*.goal does not exist!"; exit 1; }
-	@-[ -f $@ ] && mv -f $@ $@-implementation
+	@([ -f $@ ] && mv -f $@ $@-implementation) || true
 	@echo "Failed to build $*" > $@
 	$(MAKE) $@-implementation
 	@mv -f $@-implementation $@
