@@ -54,8 +54,6 @@ table all zeros
 ==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
 ==PID== Command: ./tot_info
 ==PID== 
-  Start garbage collecting (next tag = 10000001, total assigned = 10000000)
-   Done garbage collecting (next tag = 9934688, total assigned = 10000000)
 2info = 4904.19	df = 65	q =  0.0000
 2info =  0.54	df =  2	q =  0.7649
 2info = 6813.98	df =  8	q =  0.0000

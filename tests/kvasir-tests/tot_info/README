@@ -1,6 +1,0 @@
-This test may get a failure in the tot_info.out file due to the fact
-that Kvasir does tag garbage collection during runtime. 
-You may consider the test successful if the only diff is of the form:
-
--   Done garbage collecting (next tag = 9934688, total assigned = 10000000)
-+   Done garbage collecting (next tag = 9935542, total assigned = 10000000)

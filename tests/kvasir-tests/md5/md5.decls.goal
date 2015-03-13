@@ -255,110 +255,50 @@ ppt ..MD5Init():::ENTER
     rep-type hashcode
     dec-type MD5Context*
     flags is_param 
-  variable ctx[..]
-    var-kind array
-    enclosing-var ctx
-    array 1
-    rep-type hashcode[]
-    dec-type MD5Context[]
-  variable ctx[..].bits[0]
-    var-kind field [0]
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].bits[0][0]
-    var-kind field [0]
-    enclosing-var ctx[..].bits[0]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].bits[1]
+  variable ctx->bits
     var-kind field bits
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_int*
     flags non_null 
-  variable ctx[..].bits[1][0]
-    var-kind field [0]
-    enclosing-var ctx[..].bits[1]
+  variable ctx->bits[..]
+    var-kind array
+    enclosing-var ctx->bits
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_int[]
-  variable ctx[..].buf[0]
-    var-kind field [0]
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[0][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[0]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].buf[1]
+  variable ctx->buf
     var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_int*
     flags non_null 
-  variable ctx[..].buf[1][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[1]
+  variable ctx->buf[..]
+    var-kind array
+    enclosing-var ctx->buf
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_int[]
-  variable ctx[..].buf[2]
-    var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[2][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[2]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].buf[3]
-    var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[3][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[3]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].in
+  variable ctx->in
     var-kind field in
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_char*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_char*
     flags non_null 
-  variable ctx[..].in[0]
-    var-kind field [0]
-    enclosing-var ctx[..].in
+  variable ctx->in[..]
+    var-kind array
+    enclosing-var ctx->in
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_char[]
+  variable ctx[0]
+    var-kind field [0]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type MD5Context
 
 ppt ..MD5Init():::EXIT0
   ppt-type subexit
@@ -367,110 +307,50 @@ ppt ..MD5Init():::EXIT0
     rep-type hashcode
     dec-type MD5Context*
     flags is_param 
-  variable ctx[..]
-    var-kind array
-    enclosing-var ctx
-    array 1
-    rep-type hashcode[]
-    dec-type MD5Context[]
-  variable ctx[..].bits[0]
-    var-kind field [0]
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].bits[0][0]
-    var-kind field [0]
-    enclosing-var ctx[..].bits[0]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].bits[1]
+  variable ctx->bits
     var-kind field bits
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_int*
     flags non_null 
-  variable ctx[..].bits[1][0]
-    var-kind field [0]
-    enclosing-var ctx[..].bits[1]
+  variable ctx->bits[..]
+    var-kind array
+    enclosing-var ctx->bits
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_int[]
-  variable ctx[..].buf[0]
-    var-kind field [0]
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[0][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[0]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].buf[1]
+  variable ctx->buf
     var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_int*
     flags non_null 
-  variable ctx[..].buf[1][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[1]
+  variable ctx->buf[..]
+    var-kind array
+    enclosing-var ctx->buf
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_int[]
-  variable ctx[..].buf[2]
-    var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[2][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[2]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].buf[3]
-    var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[3][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[3]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].in
+  variable ctx->in
     var-kind field in
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_char*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_char*
     flags non_null 
-  variable ctx[..].in[0]
-    var-kind field [0]
-    enclosing-var ctx[..].in
+  variable ctx->in[..]
+    var-kind array
+    enclosing-var ctx->in
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_char[]
+  variable ctx[0]
+    var-kind field [0]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type MD5Context
 
 ppt ..MD5Transform():::ENTER
   ppt-type enter
@@ -540,110 +420,50 @@ ppt ..MD5Update():::ENTER
     rep-type hashcode
     dec-type MD5Context*
     flags is_param 
-  variable ctx[..]
-    var-kind array
-    enclosing-var ctx
-    array 1
-    rep-type hashcode[]
-    dec-type MD5Context[]
-  variable ctx[..].bits[0]
-    var-kind field [0]
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].bits[0][0]
-    var-kind field [0]
-    enclosing-var ctx[..].bits[0]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].bits[1]
+  variable ctx->bits
     var-kind field bits
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_int*
     flags non_null 
-  variable ctx[..].bits[1][0]
-    var-kind field [0]
-    enclosing-var ctx[..].bits[1]
+  variable ctx->bits[..]
+    var-kind array
+    enclosing-var ctx->bits
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_int[]
-  variable ctx[..].buf[0]
-    var-kind field [0]
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[0][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[0]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].buf[1]
+  variable ctx->buf
     var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_int*
     flags non_null 
-  variable ctx[..].buf[1][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[1]
+  variable ctx->buf[..]
+    var-kind array
+    enclosing-var ctx->buf
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_int[]
-  variable ctx[..].buf[2]
-    var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[2][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[2]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].buf[3]
-    var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[3][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[3]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].in
+  variable ctx->in
     var-kind field in
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_char*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_char*
     flags non_null 
-  variable ctx[..].in[0]
-    var-kind field [0]
-    enclosing-var ctx[..].in
+  variable ctx->in[..]
+    var-kind array
+    enclosing-var ctx->in
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_char[]
+  variable ctx[0]
+    var-kind field [0]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type MD5Context
   variable len
     var-kind variable
     rep-type int
@@ -668,110 +488,50 @@ ppt ..MD5Update():::EXIT0
     rep-type hashcode
     dec-type MD5Context*
     flags is_param 
-  variable ctx[..]
-    var-kind array
-    enclosing-var ctx
-    array 1
-    rep-type hashcode[]
-    dec-type MD5Context[]
-  variable ctx[..].bits[0]
-    var-kind field [0]
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].bits[0][0]
-    var-kind field [0]
-    enclosing-var ctx[..].bits[0]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].bits[1]
+  variable ctx->bits
     var-kind field bits
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_int*
     flags non_null 
-  variable ctx[..].bits[1][0]
-    var-kind field [0]
-    enclosing-var ctx[..].bits[1]
+  variable ctx->bits[..]
+    var-kind array
+    enclosing-var ctx->bits
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_int[]
-  variable ctx[..].buf[0]
-    var-kind field [0]
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[0][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[0]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].buf[1]
+  variable ctx->buf
     var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_int*
     flags non_null 
-  variable ctx[..].buf[1][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[1]
+  variable ctx->buf[..]
+    var-kind array
+    enclosing-var ctx->buf
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_int[]
-  variable ctx[..].buf[2]
-    var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[2][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[2]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].buf[3]
-    var-kind field buf
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_int*[]
-    flags non_null 
-  variable ctx[..].buf[3][0]
-    var-kind field [0]
-    enclosing-var ctx[..].buf[3]
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type unsigned\_int[]
-  variable ctx[..].in
+  variable ctx->in
     var-kind field in
-    enclosing-var ctx[..]
-    array 1
-    rep-type hashcode[]
-    dec-type unsigned\_char*[]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type unsigned\_char*
     flags non_null 
-  variable ctx[..].in[0]
-    var-kind field [0]
-    enclosing-var ctx[..].in
+  variable ctx->in[..]
+    var-kind array
+    enclosing-var ctx->in
     reference-type offset
     array 1
     rep-type int[]
     dec-type unsigned\_char[]
+  variable ctx[0]
+    var-kind field [0]
+    enclosing-var ctx
+    rep-type hashcode
+    dec-type MD5Context
   variable len
     var-kind variable
     rep-type int
