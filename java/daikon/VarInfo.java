@@ -213,7 +213,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return (false);
   }
 
-    /** True if this variable is ever missing **/
+  /**
+   * True if a missing/nonsensical value was ever observed for this variable.
+   * This starts out false and is set dynamically, while reading the trace file.
+   */
   public boolean canBeMissing = false;
 
   /**

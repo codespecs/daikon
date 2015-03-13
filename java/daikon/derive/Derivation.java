@@ -152,6 +152,7 @@ public abstract class Derivation
    **/
   /*@Pure*/ public abstract boolean isSameFormula(Derivation other);
 
+  /** @see Varinfo#canBeMissing */
   public abstract boolean canBeMissing();
 
   /**
