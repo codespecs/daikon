@@ -2356,7 +2356,7 @@ public final class FileIO {
               + "  text of value should be \"nonsensical\"",
               data_trace_state);
         } else {
-          // Keep track of variables that can be missing
+          // Report each variable the first time that its value was missing.
           if (debug_missing && !vi.canBeMissing) {
               System.out.printf ("Var %s ppt %s at line %d missing%n",
                                vi, ppt.name(),
@@ -2368,6 +2368,8 @@ public final class FileIO {
         }
         vals[val_index] = null;
       } else {
+        // mod is not MISSING_NONSENSICAL
+
         // System.out.println("Mod is " + mod + " (missing=" +
         // ValueTuple.MISSING + "), rep=" + value_rep +
         // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
@@ -2376,7 +2378,7 @@ public final class FileIO {
           vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
           if (vals[val_index] == null) {
             if (debug_missing && !vi.canBeMissing)
-              System.out.printf ("Var %s ppt %s at line %d null-not missing%n",
+              System.out.printf ("Var %s ppt %s at line %d is null, and modbit is not missing%n",
                                vi, ppt.name(),
                                FileIO.get_linenum());
             if (! vi.canBeMissing) {
