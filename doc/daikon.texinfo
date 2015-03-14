@@ -44,15 +44,8 @@
 @set exinenum 1
 @exampleindent 4
 
-@ifset final
-@c FINAL version
 @c Avoid black boxes marking overfull hboxes in TeX output.
 @finalout
-@end ifset
-
-@ifclear final
-@c DRAFT version
-@end ifclear
 
 @c Start of Document
 

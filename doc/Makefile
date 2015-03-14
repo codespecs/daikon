@@ -119,10 +119,6 @@ developer.pdf: developer.texinfo
 valgrind-merge.pdf: valgrind-merge.texinfo
 	makeinfo --pdf $<
 
-pdf-final: daikon.texinfo config-options.texinfo invariants-doc.texinfo developer.texinfo
-	makeinfo --pdf --Xopt=--command='@set final' daikon.texinfo
-	makeinfo --pdf --Xopt=--command='@set final' developer.texinfo
-
 # Note that the clean target does not remove invariants-doc.texinfo or
 # config-options.texinfo.
 
