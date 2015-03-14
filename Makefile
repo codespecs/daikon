@@ -263,7 +263,7 @@ rebuild-everything-but-kvasir:
 rebuild-everything-no-clean:
 	${MAKE} -C $(DAIKONDIR)/java tags compile
 	${MAKE} -C $(DAIKONDIR) daikon.jar
-	${MAKE} -C $(DAIKONDIR)/doc
+	${MAKE} -C $(DAIKONDIR) doc-all
 	${MAKE} kvasir
 
 ### Testing the code
@@ -424,7 +424,6 @@ doc/CHANGES: doc/daikon.texinfo
 
 doc-all:
 	cd doc && $(MAKE) all
-	cd doc && $(MAKE) pdf-final
 
 # Get the current release version
 CUR_VER := $(shell unzip -p /cse/web/research/plse/daikon/download/daikon.zip daikon/README.txt |head -2|tail -1|perl -p -e 's/ version /\./' |perl -p -e 's/,.*//')

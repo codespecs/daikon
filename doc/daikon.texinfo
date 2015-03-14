@@ -44,15 +44,8 @@
 @set exinenum 1
 @exampleindent 4
 
-@ifset final
-@c FINAL version
 @c Avoid black boxes marking overfull hboxes in TeX output.
 @finalout
-@end ifset
-
-@ifclear final
-@c DRAFT version
-@end ifclear
 
 @c Start of Document
 
@@ -295,7 +288,7 @@ Place three commands in your shell initialization file.
 Optionally, customize your installation.
 
 @item
-Optionally, compile Daikon and build other tools by running @code{make}.
+Optionally, compile Daikon and build other tools.
 
 @end enumerate
 
@@ -394,7 +387,7 @@ automatically read at the beginning of the main Makefile, and prevents
 you from having to edit the main Makefile directly).
 
 @item
-Optionally, compile Daikon and build other tools by running @code{make}.
+Optionally, compile Daikon and build other tools.
 Note that this step is @emph{not} required if you only want to use Daikon
 with its Java front end (Chicory) or its .NET front end (Celeriac).
 This step is required for using
@@ -402,7 +395,7 @@ Daikon with its C/C++ front end (Kvasir), and for other tools.
 
 @example
 cd $DAIKONDIR
-make
+make -C $DAIKONDIR rebuild-everything-no-clean
 @end example
 
 @noindent
@@ -518,14 +511,13 @@ OSTYPE = cygwin
 @end example
 
 @item
-Optionally, compile Daikon and build other tools by running @command{make}.
+Optionally, compile Daikon and build other tools.
 Note that this step is @emph{not} required if you only want to use Daikon
 with its Java front end (Chicory).  This step is required for using
 Daikon with its C/C++ front end (Kvasir), and for other tools.
 
 @example
-cd $DAIKONDIR
-make
+make -C $DAIKONDIR rebuild-everything-no-clean
 @end example
 
 @noindent

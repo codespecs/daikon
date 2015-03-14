@@ -21,15 +21,8 @@
 @firstparagraphindent insert
 @codequotebacktick on
 
-@ifset final
-@c FINAL version
 @c Avoid black boxes marking overfull hboxes in TeX output.
 @finalout
-@end ifset
-
-@ifclear final
-@c DRAFT version
-@end ifclear
 
 @c Start of Document
 
@@ -169,9 +162,14 @@ This chapter describes how to customize or modify Daikon.
 
 @cindex compiling Daikon
 
-To compile Daikon, type @command{make} in @file{daikon/java/} or any of its
-subdirectories.  The distribution includes compiled @file{.class} files,
+To compile Daikon, type @command{make} in @file{$DAIKONDIR/java/} or any of its
+subdirectories.  Alternately, type @command{make -C $DAIKONDIR compile}.
+To create the @file{daikon.jar} file, type @command{make -C $DAIKONDIR daikon.jar}.
+
+The distribution includes @file{daikon.jar} and compiled @file{.class} files,
 so you do not need to compile them yourself unless you make changes.
+
+For more information about compiling Daikon, see the comments in the Makefiles.
 
 When you compile Daikon, environment variables @env{DAIKONDIR}
 and @env{JAVA_HOME} should be set.
@@ -190,6 +188,41 @@ export CLASSPATH=.:$CLASSPATH
 
 @cindex .jpp files
 @cindex jpp files
+
+When setting up environment pathname variables under Windows/Cygwin
+(such as @command{JAVA_HOME}) make sure that the
+pathname is specified in Linux format (e.g., @file{/cygdrive/c/daikon}
+rather than @file{C:\daikon}).  However, the
+@env{CLASSPATH} environment variable is a special case;
+as @command{java} is a Windows
+program, it expects @env{CLASSPATH} to be in Windows format.
+This is the only exception to Cygwin looking like Linux.
+Thus @env{CLASSPATH} must
+always be in Windows format; i.e., it should use semicolons (;) rather
+than colons (:) as a path separator.
+Using the wrong filename format or the wrong pathname separator
+is a common source of errors that will result in odd error
+messages and build failures. 
+
+Please note this applies to a @command{-CLASSPATH} argument to
+@command{java} as well: it must have Windows pathnames.
+One easy way to deal with this is to use the @command{cygpath} utility:
+@example
+java -cp "`cygpath -wp linux/path/a:linux/path/b`" <other arguments>
+@end example
+@noindent
+Note both the back quotes (@samp{`}) to force @command{cygpath} to be evaluated
+before calling @command{java} and the double quotes (@samp{"}) to protect against
+special characters and spaces in Windows paths.
+
+
+@menu
+* Requirements for compiling Daikon::
+@end menu
+
+
+@node    Requirements for compiling Daikon
+@subsection Requirements for compiling Daikon
 
 Daikon is written in Java.  In order to
 compile Daikon, you need a Java compiler such as @samp{javac} on your path.
@@ -219,8 +252,6 @@ To make the documentation (via @command{make -C $DAIKONDIR/doc}), you need
 @command{makeinfo} version 4.7 or newer.
 @c version 4.7 was released in April 2004
 
-For more information about compiling Daikon, see the comments in the Makefiles.
-
 @cindex Windows, compiling
 To compile Daikon on Windows, the best approach is to install the Cygwin
 toolset (available at @uref{http://cygwin.com/}), which
@@ -228,32 +259,6 @@ contains everything you need to compile and run Linux programs under
 Windows.  You can install Cygwin by running one of the setup
 programs (based on your machine type) found 
 at @uref{http://cygwin.com/install.html}.
-
-When setting up environment pathname variables under Windows/Cygwin
-(such as @command{JAVA_HOME}) make sure that the
-pathname is specified in Linux format (e.g., @file{/cygdrive/c/daikon}
-rather than @file{C:\daikon}).  However, the
-@env{CLASSPATH} environment variable is a special case;
-as @command{java} is a Windows
-program, it expects @env{CLASSPATH} to be in Windows format.
-This is the only exception to Cygwin looking like Linux.
-Thus @env{CLASSPATH} must
-always be in Windows format; i.e., it should use semicolons (;) rather
-than colons (:) as a path separator.
-Using the wrong filename format or the wrong pathname separator
-is a common source of errors that will result in odd error
-messages and build failures. 
-
-Please note this applies to a @command{-CLASSPATH} argument to
-@command{java} as well: it must have Windows pathnames.
-One easy way to deal with this is to use the @command{cygpath} utility:
-@example
-java -cp "`cygpath -wp linux/path/a:linux/path/b`" <other arguments>
-@end example
-@noindent
-Note both the back quotes (@samp{`}) to force @command{cygpath} to be evaluated
-before calling @command{java} and the double quotes (@samp{"}) to protect against
-special characters and spaces in Windows paths.
 
 
 @node    Version control repository
