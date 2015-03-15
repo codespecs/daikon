@@ -2063,7 +2063,7 @@ Environment variable @env{JAVA_HOME} must be set to your JDK installation.
 @item
 There must be a symbolic link from 
 @file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}.
-If it does not already exist, the @command{rebuild-everything} step below 
+If it does not already exist, the @command{rebuild-everything-clean} step below 
 will create it for you.
 
 @c Why would one ever want to create it manually, if the build process does so?
@@ -2209,7 +2209,7 @@ make update-doc-dist-date-and-version
 Do a clean rebuild of everything.
 
 @example
-make rebuild-everything
+make rebuild-everything-clean
 @end example
 
 @c Time on buffalo as of 12/01/2014
@@ -2588,7 +2588,7 @@ hg revert doc/README
 Verify these changes by doing partial product builds:
 
 @example
-make rebuild-everything-no-clean
+make rebuild-everything
 @end example
 
 [Time: 3 min]

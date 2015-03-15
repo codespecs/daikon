@@ -395,7 +395,7 @@ Daikon with its C/C++ front end (Kvasir), and for other tools.
 
 @example
 cd $DAIKONDIR
-make -C $DAIKONDIR rebuild-everything-no-clean
+make -C $DAIKONDIR rebuild-everything
 @end example
 
 @noindent
@@ -517,7 +517,7 @@ with its Java front end (Chicory).  This step is required for using
 Daikon with its C/C++ front end (Kvasir), and for other tools.
 
 @example
-make -C $DAIKONDIR rebuild-everything-no-clean
+make -C $DAIKONDIR rebuild-everything
 @end example
 
 @noindent

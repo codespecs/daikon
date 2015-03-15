@@ -238,33 +238,41 @@ build-kvasir: kvasir
 
 ### Rebuild everything; used for monthly releases, for example
 
+rebuild-everything-clean:
+	${MAKE} -C $(DAIKONDIR) clean-everything
+	${MAKE} -C $(DAIKONDIR) rebuild-everything
+
+rebuild-everything-but-kvasir-clean:
+	${MAKE} -C $(DAIKONDIR) clean-everything-but-kvasir
+	${MAKE} -C $(DAIKONDIR) rebuild-everything-but-kvasir
+
 rebuild-everything:
+	${MAKE} -C $(DAIKONDIR) rebuild-everything-but-kvasir
+	${MAKE} -C $(DAIKONDIR) rebuild-kvasir
+
+rebuild-everything-but-kvasir:
+	${MAKE} -C $(DAIKONDIR)/java tags compile
+	${MAKE} -C $(DAIKONDIR) daikon.jar
+	${MAKE} -C $(DAIKONDIR)/java dcomp_rt.jar
+	${MAKE} -C $(DAIKONDIR)/java javadoc
+	${MAKE} -C $(DAIKONDIR) doc-all
+
+rebuild-kvasir:
+	${MAKE} kvasir
+
+clean-everything:
+	${MAKE} -C $(DAIKONDIR) clean-everything-but-kvasir
+	${MAKE} -C $(DAIKONDIR) clean-kvasir
+
+clean-everything-but-kvasir:
 	-rm -rf daikon.jar
 	-rm -rf java/java_files.txt
 	${MAKE} -C $(DAIKONDIR)/java very-clean
-	${MAKE} -C $(DAIKONDIR)/java tags compile
-	${MAKE} -C $(DAIKONDIR) daikon.jar
-	${MAKE} -C $(DAIKONDIR)/java dcomp_rt.jar
-	${MAKE} -C $(DAIKONDIR)/java javadoc
 	${MAKE} -C $(DAIKONDIR)/doc clean
-	${MAKE} -C $(DAIKONDIR) doc-all
+
+clean-kvasir:
 	-${MAKE} -C $(DAIKONDIR)/fjalar/valgrind uninstall distclean 
-	${MAKE} kvasir
 
-rebuild-everything-but-kvasir:
-	${MAKE} -C $(DAIKONDIR)/java very-clean
-	${MAKE} -C $(DAIKONDIR)/java tags compile
-	${MAKE} -C $(DAIKONDIR) daikon.jar
-	${MAKE} -C $(DAIKONDIR)/java dcomp_rt.jar
-	${MAKE} -C $(DAIKONDIR)/java javadoc
-	${MAKE} -C $(DAIKONDIR)/doc clean
-	${MAKE} -C $(DAIKONDIR) doc-all
-
-rebuild-everything-no-clean:
-	${MAKE} -C $(DAIKONDIR)/java tags compile
-	${MAKE} -C $(DAIKONDIR) daikon.jar
-	${MAKE} -C $(DAIKONDIR) doc-all
-	${MAKE} kvasir
 
 ### Testing the code
 
