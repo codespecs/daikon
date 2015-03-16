@@ -283,7 +283,7 @@ public class Instrument implements ClassFileTransformer {
       }
 
     } catch (Throwable e) {
-      out.format ("Unexpected error %s in transform", e);
+      out.format ("Unexpected error %s in transform of %s", e, fullClassName);
       e.printStackTrace();
       // No changes to the bytecodes
       return (null);
@@ -1877,6 +1877,7 @@ public class Instrument implements ClassFileTransformer {
 
     int con_index = a.getNameIndex();
     Constant c = pgen.getConstant(con_index);
+//     out.format ("get_attribute_name %s %s %s%n", a, con_index, c);
     String att_name = ((ConstantUtf8) c).getBytes();
     return (att_name);
   }
