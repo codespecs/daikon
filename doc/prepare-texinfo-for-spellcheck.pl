@@ -95,6 +95,7 @@ use constant SKIP_REST    => 4;
 
 # not even close to a complete list, but covers our docs
 my %token_operators = (
+    "\@anchor"           => SKIP_ARG,
     "\@b"                => OUTPUT_ARG,
     "\@c"                => SKIP_REST,
     "\@caption"          => OUTPUT_ARG,
