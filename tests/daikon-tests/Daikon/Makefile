@@ -9,9 +9,9 @@ SOURCES:=$(DAIKONDIR)/java
 
 # Input for daikon under test
 INPUTS_DECLS:=${PWD}/inputs/print_tokens2.decls
-INPUTS_DTRACE1:=${PWD}/inputs/print_tokens2.4.1.dtrace.gz
-INPUTS_DTRACE2:=${PWD}/inputs/print_tokens2.4.2.dtrace.gz
-INPUTS_INVGZ_REL:=inputs/print_tokens2.4.1.inv.gz inputs/print_tokens2.4.2.inv.gz
+INPUTS_DTRACE1:=${PWD}/inputs/print_tokens2.1.dtrace.gz
+INPUTS_DTRACE2:=${PWD}/inputs/print_tokens2.2.dtrace.gz
+INPUTS_INVGZ_REL:=inputs/print_tokens2.1.inv.gz inputs/print_tokens2.2.inv.gz
 
 # Test diff; or test Inference
 ifeq (0,1)

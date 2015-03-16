@@ -4,4 +4,9 @@ echo "kvasir-dtrace --decls-file=print_tokens2.decls --dtrace-file=print_tokens2
 kvasir-dtrace --decls-file=print_tokens2.decls --dtrace-file=print_tokens2.dtrace.gz ./print_tokens2  < tst183 >/dev/null
 echo
 echo "If no errors, then copy print_tokens2.decls and print_tokens2.dtrace.gz to DAIKONDIR/tests/daikon-tests/print_tokens2"
-
+echo
+/usr/bin/cp print_tokens2.dtrace.gz print_tokens2.1.dtrace.gz
+echo "kvasir-dtrace --decls-file=print_tokens2.decls --dtrace-file=print_tokens2.dtrace.gz ./print_tokens2 < tst183 >/dev/null"
+kvasir-dtrace --decls-file=print_tokens2.decls --dtrace-file=print_tokens2.2.dtrace.gz ./print_tokens2  < Makefile >/dev/null
+echo
+echo "If no errors, then copy print_tokens2.decls, print_tokens2.1.dtrace.gz and print_tokens2.2.dtrace.gz to DAIKONDIR/tests/daikon-tests/Daikon/inputs"

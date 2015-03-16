@@ -283,7 +283,7 @@ diffs-w-daikon-if-working:   diffs-w-daikon
 summary-w-daikon-if-working: summary-w-daikon
 
 clean:
-	rm -rf $(NAME) $(DIFF_NAME).*.diff $(NAME).out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts $(NAME).dtrace.gz $(NAME).decls
+	rm -rf $(NAME) $(DIFF_NAME).*.diff $(NAME).out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts $(NAME).dtrace.gz $(NAME).decls $(NAME).[12].dtrace.gz
 	$(CLEAN_SCRIPT)
 
 update-out-goals: $(NAME).out
