@@ -2585,7 +2585,7 @@ hg revert doc/README
 
 
 @item
-Verify these changes by doing partial product builds:
+Verify these changes by doing product builds (no need to clean first):
 
 @example
 make rebuild-everything
