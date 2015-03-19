@@ -515,11 +515,10 @@ guidelines on supporting new VEX instructions.
 
 @menu
 * Overview::
-* Creating the binutil diff files::
+* Creating the binutil patch and diff files::
 * Merging the binutil changes::
 @end menu
 
-@emph{(This section still under construction.)} @*
 
 @node Overview
 @section Overview
@@ -528,7 +527,7 @@ The GNU Binutils (@uref{http://www.gnu.org/software/binutils})
 are a collection of approximately twenty binary tools.
 We are interested only in @command{readelf}, a tool that displays
 information from an ELF format object file.  Fjalar does not use this
-binary directly, rather a large portion of the source code for Fjalar contains 
+binary directly, rather a portion of the source code for Fjalar contains 
 a modified version of the source used to build @command{readelf}.
 
 As noted in the Introduction, the GNU Binutils are completely
@@ -541,46 +540,88 @@ your machine.  After unpacking, you will have a directory structure
 whose root is @file{binutils-<version>}. 
 To complete the update process, you will need a copy of both the current
 version within Fjalar and the version you wish to update to.
-For the example instructions
-that follow, we assume the current version is @file{binutils-2.24} 
-and you are updating to version @file{binutils-2.25}.
+For the example instructions that follow, substitute the current version
+for @file{binutils-old}, e.g. @file{binutils-2.24} 
+and the new version for @file{binutils-new}, e.g. @file{binutils-2.25}.
+Also, the instructions assume that the Binutils directories are at the
+root of your home directory.
 
 
-@node Creating the binutil diff files
-@section Creating the binutil diff files
+@node Creating the binutil patch and diff files
+@section Creating the binutil patch and diff files
 
-First, we create diff files showing what the Binutils maintainers have
+First, we create patch files showing what the Binutils
+maintainers have
 changed since the last time the readelf code was merged into Fjalar.
-There are two diff files: one for the include files and one for the
-readelf files.
-Two sets of diffs
-can use @command{diff -r} for include subdirectory(9 files).  
-patch should work OK
-
-must use individual diffs for 8 specific files.
-patch will probably work on all but @file{dwarf.c} and @file{readelf.c}.
-for these two, a visual merge tool (such as @command{meld}) is very
-helpful.
+There are two patch files: one for the include files and one for the
+actual readelf files.
 
 @example
-diff -urb binutils-2.24/include/elf \
-          binutils-2.25/include/elf > ~/include.patch
-diff -urb binutils-2.24/include binutils-2.25/include >> ~/include.patch
-diff -ub  binutils-2.24/libiberty/dwarfnames.c \
-          binutils-2.25/libiberty/dwarfnames.c >> ~/include.patch
+cd ~
+diff -ur binutils-old/include binutils-new/include >> ~/include.patch
+diff -u  binutils-old/libiberty/dwarfnames.c \
+         binutils-new/libiberty/dwarfnames.c >> ~/include.patch
+diff -ur binutils-old/binutils binutils-new/binutils > ~/binutils.patch
+@end example
 
-diff -urb binutils-2.24/binutils binutils-2.25/binutils > ~/binutils.patch
+Next, we create diff files comparing the old Binutils to the current 
+versions in Fjalar.  These diffs will not be used for automated
+patching, but for visual verification assistance.  As the majority of 
+the files should patch quite well, we prepare diffs for only the two
+largest and most complicated files.
+
+@example
+cd $INV/fjalar/valgrind/fjalar
+diff -ub ~/binutils-old/binutils/dwarf.c dwarf.c > dwarf.diff
+diff -ub ~/binutils-old/binutils/readelf.c readelf.c > readelf.diff
 @end example
 
 
 @node Merging the binutil changes
 @section Merging the binutil changes
 
+Now we can merge the changes by applying the patch files.  @file{include.patch}
+should apply with few, if any, conflicts.
+@file{binutils.patch} will probably work on all but @file{dwarf.c} and
+@file{readelf.c}.
+For these two, a visual merge tool (such as @command{meld}) might be
+helpful.
+
+It can be difficult to undo a patch operation, so you should first attempt
+a dry run. 
+
 @example
 cd $INV/fjalar/valgrind/fjalar
 patch -p1 -lu -f <~/include.patch --dry-run
 patch -p2 -lu -f -F3 <~/binutils.patch --dry-run
 @end example
+
+If the patch fails (other than as noted above), it might be indicative
+of problems in the patch creation.
+
+When you are ready to apply the patch run:
+
+@example
+cd $INV/fjalar/valgrind/fjalar
+patch -p1 -lu -f <~/include.patch
+patch -p2 -lu -f -F3 <~/binutils.patch
+@end example
+
+Handle any conflicts. They are listed in the patch output, or run this
+command:
+
+@example
+find -name '*.rej'
+@end example
+
+For every change in the file you will need to examine both the changed
+code as well as our original code and determine if it needs to be hand
+merged or if the change is not relevant.
+
+As noted above, @file{dwarf.c} and @file{readelf.c} will probably 
+have a lot of conflicts.  As you edit the new files, you may wish to
+review the diffs in the previous versions as the new diffs should be similar.
+Again, a visual merge tool can make this process easier.
 
 
 @node Compiling and Testing
