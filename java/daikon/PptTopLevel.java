@@ -104,8 +104,7 @@ public class PptTopLevel extends Ppt {
    * language point.  It is the default and can be used when the others
    * are not appropriate
    */
-  public enum PptType {POINT, BASIC_BLOCK, COMBINED_BASIC_BLOCK, CLASS, OBJECT,
-                       ENTER, EXIT, SUBEXIT}
+  public enum PptType {POINT, CLASS, OBJECT, ENTER, EXIT, SUBEXIT}
 
   /** Type of this program point **/
   public PptType type;
@@ -273,58 +272,6 @@ public class PptTopLevel extends Ppt {
   public List<ParentRelation> parent_relations;
 
   /**
-   * List of successor program point names.  Later changed into a list
-   * of successor PptTopLevel.  Can be null (not an empty list)
-   * if there are no successors, as for an exit program point.
-   */
-  public /*@Nullable*/ List<String> ppt_successors = null;
-
-  /**
-   * List of predecesor program points. Computed from ppt_successors.
-   * This field is only properly set and used when creating combined program
-   * points.
-   */
-  public /*@Nullable*/ List<PptTopLevel> predecessors = null;
-
-
-  /** Identifier of the function (for basic blocks) **/
-  public /*@Nullable*/ /*@Interned*/ String function_id = null;
-
-  /** Length of basic block (bytes) **/
-  public int bb_length;
-
-  /**
-   * True if this basic block has been combined with other basic blocks
-   * to form combined program points.
-   */
-  public boolean combined_ppts_init = false;
-
-  /**
-   * Combined ppt that should be processed when this ppt is encountered.
-   * Only non-null for basic block ppts.
-   */
-  public /*@MonotonicNonNull*/ PptCombined combined_ppt = null;
-
-  /**
-   * True if this ppt is subsumed by combined_ppt.  A different ppt is the
-   * trigger to the combined_ppt (ie, the ppt whose data is used to
-   * initiate the processing of a sample for the combined ppt
-   */
-  public boolean combined_subsumed = false;
-
-  /**
-   * The ppt whose combined ppt includes this one.  Only non-null for
-   * basic block ppts.
-   */
-  public /*@Nullable*/ PptTopLevel combined_subsumed_by = null;
-
-  /**
-   * The last set of values for this program point.
-   * Only for basic block ppts.
-   */
-  public /*@Nullable*/ ValueTuple last_values = null;
-
-  /**
    *  Flag that indicates whether or not invariants have been merged
    *  from all of this ppts children to form the invariants here.  Necessary
    *  because a ppt can have multiple parents and otherwise we'd needlessly
@@ -367,8 +314,7 @@ public class PptTopLevel extends Ppt {
 
   @SuppressWarnings("fields.uninitialized") // todo: initialization and helper methods
   public PptTopLevel (String name, PptType type, List<ParentRelation> parents,
-                      EnumSet<PptFlags> flags, /*@Nullable*/ List<String> ppt_successors,
-                      /*@Nullable*/ /*@Interned*/ String function_id, int bb_length, VarInfo[] var_infos) {
+                      EnumSet<PptFlags> flags, VarInfo[] var_infos) {
     super(var_infos);
 
     this.name = name;
@@ -379,9 +325,6 @@ public class PptTopLevel extends Ppt {
     this.flags = flags;
     this.type = type;
     this.parent_relations = parents;
-    this.ppt_successors = ppt_successors;
-    this.function_id = function_id;
-    this.bb_length = bb_length;
     init_vars ();
   }
 
@@ -396,8 +339,6 @@ public class PptTopLevel extends Ppt {
         throw new Error ("unexpected error setting name", e);
       }
     }
-    if (function_id != null)
-      function_id = function_id.intern();
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
@@ -4597,11 +4538,6 @@ public class PptTopLevel extends Ppt {
       return ppt_name.isEnterPoint();
   }
 
-  /** Is this a basic block ppt **/
-  /*@Pure*/ public boolean is_basic_block() {
-    return type == PptType.BASIC_BLOCK;
-  }
-
   /** Is this a combined exit point? **/
   /*@Pure*/ public boolean is_combined_exit() {
     if (type != null)
@@ -4636,267 +4572,5 @@ public class PptTopLevel extends Ppt {
   public String var_names() {
     return Arrays.toString (var_infos);
   }
-
-  /** If this is a basic block, returns the offset in the DLL **/
-  public int bb_offset() {
-    assert is_basic_block() : name;
-    String offset_name = name.replaceFirst (".*:0x", "0x");
-    offset_name = offset_name.replace (":::BB", "");
-    return Integer.decode (offset_name);
-  }
-
-  /**
-   * Finds the ppt whose combined ppt subsumes this one.  Combined ppts must
-   * have been initialized
-   */
-  public PptTopLevel find_combined_ppt_leader() {
-    assert combined_ppts_init : name;
-    PptTopLevel ppt = this;
-    // System.out.printf ("looking for combined_ppt leader for %s\n", name());
-    while (ppt.combined_ppt == null) {
-      // System.out.printf ("  ppt %s", ppt.name());
-      if (ppt.combined_subsumed_by == null) {
-        throw new Error(
-          String.format ("ppt %s, combined_subsumed_by null/combined_ppt null",
-                         ppt.name()));
-      }
-      ppt = ppt.combined_subsumed_by;
-    }
-
-    return ppt;
-  }
-
-  /**
-   * Returns true if there is a connection (using successors) from this
-   * ppt to ppt
-   */
-  public boolean connected (PptTopLevel ppt) {
-    assert is_basic_block();
-    assert ppt.is_basic_block();
-
-    System.out.printf ("Checking that ppt %s connects to ppt %s\n", this, ppt);
-
-    Set<PptTopLevel> visited_set = new LinkedHashSet<PptTopLevel>();
-    return connected (ppt, visited_set);
-  }
-
-  static Set<String> conn_map = new LinkedHashSet<String>();
-  static Set<String> noconn_map = new LinkedHashSet<String>();
-
-  /**
-   * Returns true if all successor basic blocks eventually end up at
-   * the specified program point.  All paths must go to ppt for this
-   * to return true.  The visited_set should contain each program
-   * point visited along this path so far.
-   */
-  public boolean connected (PptTopLevel ppt, Set<PptTopLevel> visited_set) {
-
-    if (false) {
-      for (int i = 0; i < visited_set.size(); i++)
-        System.out.printf (" ");
-      System.out.printf ("connected: %04X - %04X [%d]\n", bb_offset() & 0xFFFF,
-                         ppt.bb_offset() & 0xFFFF, succ_map.size());
-    }
-
-    if (conn_map.contains (name() + "-" + ppt.name()))
-      return true;
-
-    if (noconn_map.contains (name() + "-" + ppt.name()))
-      return false;
-
-    if (this == ppt)
-      return true;
-
-    if (visited_set.contains (this))
-      return false;
-
-    if ((ppt_successors == null) || (ppt_successors.size() == 0)) {
-      return false;
-    }
-
-    for (String successor : ppt_successors) {
-      @SuppressWarnings("nullness") // map: sucessor ppt is in the PptMap
-      /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
-      Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
-      path_set.add (this);
-      boolean succ_result = ppt_succ.connected (ppt, path_set);
-      if (succ_result) {
-        conn_map.add (name() + "-" + ppt.name());
-        return true;
-      }
-    }
-
-    // All paths failed
-    noconn_map.add (name() + "-" + ppt.name());
-    return (false);
-  }
-
-
-  /**
-   * Returns true if all successor basic blocks eventually end up at
-   * the specified progrm point.  All paths must go to ppt for this
-   * to return true
-   */
-  public boolean all_successors_goto (PptTopLevel ppt) {
-    assert is_basic_block();
-    assert ppt.is_basic_block();
-
-    System.out.printf ("Checking that ppt %s -> ppt %s\n", this, ppt);
-
-    Set<PptTopLevel> visited_set = new LinkedHashSet<PptTopLevel>();
-    int result = all_successors_goto (ppt, visited_set);
-
-    if (result == 0)
-      return false;
-
-    // If at least one path finds ppt (and the others are loops)
-    // all non loop paths found ppt (note that paths that terminated
-    // before finding ppt are aborted above.
-    if ((result & 1) == 1)
-      return true;
-
-    // All of the paths are loops, very strange
-    throw new Error(String.format ("all paths from %s to %s are loops", name(),
-                                   ppt.name()));
-  }
-
-  static Set<String> succ_map = new LinkedHashSet<String>();
-
-  /**
-   * Returns true if all successor basic blocks eventually end up at
-   * the specified progrm point.  All paths must go to ppt for this
-   * to return true.  The visited_set should contain each program
-   * point visited along this path so far.
-   */
-  public int all_successors_goto (PptTopLevel ppt,
-                                  Set<PptTopLevel> visited_set) {
-    if (false) {
-      for (int i = 0; i < visited_set.size(); i++)
-        System.out.printf (" ");
-      System.out.printf ("succ_goto: %04X - %04X [%d]\n", bb_offset() & 0xFFFF,
-                         ppt.bb_offset() & 0xFFFF, succ_map.size());
-    }
-
-    if (succ_map.contains (name() + "-" + ppt.name()))
-      return 1;
-
-    if (this == ppt)
-      return 1;
-
-    if (visited_set.contains (this))
-      return 2;
-
-    if ((ppt_successors == null) || (ppt_successors.size() == 0)) {
-      String bad_path = "";
-      for (PptTopLevel p : visited_set)
-        bad_path += String.format ("%04X ", p.bb_offset() & 0xFFFF);
-      System.out.printf ("succ path misses %04X: %s%04X\n",
-                         ppt.bb_offset() & 0xFFFF, bad_path,
-                         bb_offset() & 0xFFFF);
-      return 0;
-    }
-
-    int result = 0;
-    for (String successor : ppt_successors) {
-      @SuppressWarnings("nullness") // map: sucessor ppt is in the PptMap
-      /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
-      Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
-      path_set.add (this);
-      int succ_result = ppt_succ.all_successors_goto (ppt, path_set);
-      if (succ_result == 0) {
-        return 0;
-      }
-      result |= succ_result;
-    }
-
-    // System.out.printf ("result from %04X - %04X = %d\n", bb_offset(),
-    //                   ppt.bb_offset(), result);
-    if ((result & 1) == 1)
-      succ_map.add (name() + "-" + ppt.name());
-    return result;
-  }
-
-
-  /**
-   * Returns true if all prececessor basic blocks eventually end up at
-   * the specified program point.  All paths must go to ppt for this
-   * to return true
-   */
-  public boolean all_predecessors_goto (PptTopLevel ppt) {
-    assert is_basic_block();
-    assert ppt.is_basic_block();
-
-    System.out.printf ("Checking that ppt %s <- ppt %s\n", ppt, this);
-
-    Set<PptTopLevel> visited_set = new LinkedHashSet<PptTopLevel>();
-    int result = all_predecessors_goto (ppt, visited_set);
-
-    if (result == 0)
-      return false;
-
-    // If at least one path finds ppt (and the others are loops)
-    // all non loop paths found ppt (note that paths that terminated
-    // before finding ppt are aborted above.
-    if ((result & 1) == 1)
-      return true;
-
-    // All of the paths are loops, very strange
-    throw new Error(String.format ("all paths into %s are loops", name()));
-  }
-
-  static Set<String> pred_map = new LinkedHashSet<String>();
-
-  /**
-   * Returns true if all predecessor basic blocks eventually end up at
-   * the specified progrm point.  All paths must go to ppt for this
-   * to return true.  The visited_set should contain each program
-   * point visited along this path so far.
-   */
-  public int all_predecessors_goto (PptTopLevel ppt,
-                                      Set<PptTopLevel> visited_set) {
-    if (false) {
-      for (int i = 0; i < visited_set.size(); i++)
-        System.out.printf (" ");
-      System.out.printf ("pred_goto: %04X - %04X [%d]\n", bb_offset() & 0xFFFF,
-                         ppt.bb_offset() & 0xFFFF, pred_map.size());
-    }
-
-    if (pred_map.contains (name() + "-" + ppt.name()))
-      return 1;
-
-    if (this == ppt)
-      return 1;
-
-    if (visited_set.contains (this))
-      return 2;
-
-    if ((predecessors == null) || (predecessors.size() == 0)) {
-      String bad_path = "";
-      for (PptTopLevel p : visited_set)
-        bad_path += String.format ("%04X ", p.bb_offset() & 0xFFFF);
-      System.out.printf ("path misses %04X: %s%04X\n",
-                         ppt.bb_offset() & 0xFFFF, bad_path,
-                         bb_offset() & 0xFFFF);
-      return 0;
-    }
-
-    int result = 0;
-    for (PptTopLevel ppt_pred : predecessors) {
-      Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
-      path_set.add (this);
-      int pred_result = ppt_pred.all_predecessors_goto (ppt, path_set);
-      if (pred_result == 0) {
-        return 0;
-      }
-      result |= pred_result;
-    }
-
-    // System.out.printf ("result from %04X - %04X = %d\n", bb_offset(),
-    //                   ppt.bb_offset(), result);
-    if ((result & 1) == 1)
-      pred_map.add (name() + "-" + ppt.name());
-    return result;
-  }
-
 
 }

@@ -164,7 +164,7 @@ This is dfepl, the Daikon front end for Perl. Dfepl is free software;
 it may be distributed under the same terms as Daikon itself or under
 those of Perl itself. For detailed information, see the Daikon manual,
 which appears in the Daikon distribution and also at
-http://pag.csail.mit.edu/daikon/.
+http://plse.cs.washington.edu/daikon/.
 Options summary:
   --absolute/--noabsolute
   --accessor-depth=NUM

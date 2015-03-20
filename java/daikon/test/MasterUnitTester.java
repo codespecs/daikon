@@ -64,10 +64,8 @@ public class MasterUnitTester extends TestCase {
       daikon.test.TestQuant.class,
       daikon.test.TestAnnotate.class,
       daikon.test.DtraceDiffTester.class,
-      daikon.test.AsmFileTest.class,
       daikon.test.InstructionUtilsTest.class,
       daikon.test.KillerInstructionTests.class,
-      daikon.test.PptCombinedTests.class,
       daikon.test.DSForestTest.class,
 
 //       ,
