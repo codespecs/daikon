@@ -22,8 +22,6 @@ import org.apache.bcel.generic.*;
 import org.apache.bcel.verifier.VerificationResult;
 
 import sun.nio.cs.ext.ISCII91;
-// uncomment this and uses of it below, to get bcel verify info
-// import edu.mit.csail.pag.testfactoring.verify.StackVer;
 
 import daikon.util.SimpleLog;
 
