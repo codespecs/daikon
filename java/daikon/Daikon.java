@@ -594,17 +594,8 @@ public final class Daikon {
       processOmissions(all_ppts);
     }
 
-    // Don't write any ValueTuples out
-    for (PptTopLevel ppt : all_ppts.all_ppts()) {
-      ppt.last_values = null;
-    }
-
-    //PptCombined.redundantVarsTest(all_ppts);
-
     // Write serialized output - must be done before guarding invariants
     if (inv_file != null) {
-      nullOutMaps();
-      assert inv_file != null : "@AssumeAssertion(nullness): nullOutMaps() didn't affect inv_file field";
       try {
         FileIO.write_serialized_pptmap(all_ppts, inv_file);
       } catch (IOException e) {
@@ -701,13 +692,6 @@ public final class Daikon {
     if (!Daikon.dkconfig_quiet) {
       System.out.println("Exiting Daikon.");
     }
-  }
-
-  @SuppressWarnings("nullness") // reinitialization
-  private static void nullOutMaps() {
-    PptTopLevel.pred_map = null;
-    PptTopLevel.succ_map = null;
-    PptTopLevel.conn_map = null;
   }
 
   /**
@@ -1473,8 +1457,7 @@ public final class Daikon {
 
         exit_ppt
           = new PptTopLevel(exit_name.getName(), PptTopLevel.PptType.EXIT,
-                            ppt.parent_relations, ppt.flags, null, null, 0,
-                            exit_vars);
+                            ppt.parent_relations, ppt.flags, exit_vars);
 
         // exit_ppt.ppt_name.setVisibility(exitnn_name.getVisibility());
         exit_ppts.add(exit_ppt);

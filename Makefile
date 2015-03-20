@@ -78,7 +78,6 @@ DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/test/varInfoNameTest.testParse.goal \
 	daikon/test/varInfoNameTest.testSubscript \
 	daikon/test/varInfoNameTest.testSubscript.goal \
-	daikon/test/galar.asm \
 	daikon/test/GenericTestClass.java \
 	daikon/test/dtracediff/AllTypes.dtrace.gz \
 	daikon/test/dtracediff/Hanoi-badvar.dtrace.gz \

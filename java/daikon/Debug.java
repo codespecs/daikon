@@ -308,12 +308,6 @@ public final class Debug {
   public static boolean dkconfig_show_stack_trace = false;
 
   /**
-   * If true, check all of the basic blocks that make up a function
-   * to ensure that there is a path from function entry to the block.
-   */
-  public static boolean dkconfig_check_bb_connections = true;
-
-  /**
    * Determines whether or not traceback information is printed for each
    * call to log.
    *

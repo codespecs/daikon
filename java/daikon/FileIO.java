@@ -171,21 +171,6 @@ public final class FileIO {
   // Number of ignored declarations.
   public static int omitted_declarations = 0;
 
-  /**
-   * Map from function id to list of program points in that function.
-   * Valid for basic block program points only.
-   **/
-  private static Map<String,List<PptTopLevel>> func_ppts
-    = new LinkedHashMap<String,List<PptTopLevel>>();
-
-  /**
-   * If true, variables from basic blocks which predominate a basic block X
-   * will be included when X is processed.  This allows Daikon to find
-   * invariants between variables in different program points (basic blocks
-   * in this case).
-   */
-  public static boolean dkconfig_merge_basic_blocks = false;
-
   // Logging Categories
 
   /**
@@ -366,9 +351,6 @@ public final class FileIO {
     List<ParentRelation> ppt_parents = new ArrayList<ParentRelation>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf (PptFlags.class);
     PptType ppt_type = PptType.POINT;
-    List<String> ppt_successors = null;
-    /*@Interned*/ String function_id = null;
-    int bb_length = 0;
 
     // Read the records that define this program point
     while ((line = state.reader.readLine()) != null) {
@@ -393,18 +375,9 @@ public final class FileIO {
             varmap.put (vardef.name, vardef);
         } else if (record == "ppt-type") { // interned
           ppt_type = parse_ppt_type (state, scanner);
-        } else if (record == "ppt-successors") { // interned
-          ppt_successors = parse_ppt_successors (state, scanner);
-        } else if (record == "ppt-func") { // interned
-          function_id = need (state, scanner, "function id");
-          need_eol (state, scanner);
-        } else if (record == "ppt-length") { // interned
-          bb_length = Integer.decode(need (state, scanner, "length"));
-          need_eol (state, scanner);
         } else {
           decl_error (state, "record '%s' found where %s expected", record,
-                      "'parent', 'flags', 'ppt-length', 'ppt-func'"
-                      + " or 'ppt-successors'");
+                      "'parent', 'flags'");
         }
       } else { // there must be a current variable
         if (record == "var-kind") { // interned
@@ -497,23 +470,8 @@ public final class FileIO {
 
     // Build the program point
     PptTopLevel newppt = new PptTopLevel(ppt_name, ppt_type, ppt_parents,
-               ppt_flags, ppt_successors, function_id, bb_length, vi_array);
+               ppt_flags, vi_array);
 
-    // Add this ppt to the list of ppts for this function_id.  If we
-    // are still getting ppts for this function id, they should not yet
-    // have been combined.
-    if (function_id != null) {
-      System.out.printf ("Declaration of ppt %s with %d variables\n",
-                         newppt.name(), newppt.var_infos.length);
-      List<PptTopLevel> f_ppts = func_ppts.get (function_id);
-      if (f_ppts == null) {
-        f_ppts = new ArrayList<PptTopLevel>();
-        func_ppts.put (function_id, f_ppts);
-      }
-      for (PptTopLevel ppt : f_ppts)
-        assert !ppt.combined_ppts_init : ppt.name();
-      f_ppts.add (newppt);
-    }
     return newppt;
   }
 
@@ -551,27 +509,6 @@ public final class FileIO {
     need_eol (state, scanner);
     return (ppt_type);
   }
-
-  /** Parses a ppt-successors record and returns the successors **/
-  private static List<String> parse_ppt_successors (ParseState state,
-                                                    Scanner scanner)
-    throws DeclError {
-
-    List<String> succs = new ArrayList<String>();
-    String succ = need (state, scanner, "name of successor ppt");
-    if (!succ.endsWith (":::BB"))
-      succ = succ + ":::BB";
-    succs.add (succ);
-    while (scanner.hasNext()) {
-      succ = need (state, scanner, "name of successor ppt");
-      if (!succ.endsWith (":::BB"))
-        succ = succ + ":::BB";
-      succs.add (succ);
-    }
-    need_eol (state, scanner);
-    return (succs);
-  }
-
 
   // Read a declaration in the Version 1 format.  For version 2, see
   // read_ppt_decl.
@@ -1912,148 +1849,7 @@ public final class FileIO {
       return;
     }
 
-    // If this is an unitialized basic block ppt that is part of a
-    // function, initialize the relationships between basic blocks
-    // in the same function.  Note that all declarations for basic
-    // block ppts must have been received before data is recieved for
-    // any block in the same function.
-    if (ppt.is_basic_block() && !ppt.combined_ppts_init
-        && (ppt.function_id != null)) {
-      if (!dkconfig_merge_basic_blocks) {
-        @SuppressWarnings("nullness") // map
-        /*@NonNull*/ List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
-        for (PptTopLevel p : ppts) {
-          p.combined_subsumed = false;
-          p.combined_ppts_init = true;
-        }
-      } else {
-        // Sanity check the ppts in this function
-        @SuppressWarnings("nullness") // map
-        /*@NonNull*/ List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
-        assert ppts != null : ppt.name() + " func id " + ppt.function_id;
-        assert ppts.size() > 0 : ppt.name();
-        for (PptTopLevel p : ppts) {
-          assert !p.combined_ppts_init : p.name();
-          if (p.ppt_successors != null) {
-            for (Iterator<String> it = p.ppt_successors.iterator();
-                 it.hasNext(); ) {
-              String successor = it.next();
-              PptTopLevel sp = all_ppts.get (successor);
-              if (sp == null) {
-                System.out.printf ("Warning: successor %s in ppt %s does not "
-                                   + "exist, removing\n", successor, p.name());
-                throw new Error();
-                // it.remove();
-              } else {
-                assert sp != null : successor;
-                boolean same_function_id = (sp.function_id == p.function_id);
-                if (! same_function_id) {
-                  System.out.printf ("Warning: successor %s (func %s) in "
-                            + "ppt %s (func %s) is not in same function\n",
-                            sp.name(), sp.function_id, p.name(), p.function_id);
-                  throw new Error();
-                  // it.remove();
-                } else {
-                  assert same_function_id
-                    : sp.function_id + " " + p.function_id;
-                }
-              }
-            }
-          }
-        }
-        if (true) {
-          System.out.printf ("Building combined ppts for func %s [ppt %s]\n",
-                             ppt.function_id, ppt.name());
-          System.out.println ("Successor graph:");
-          for (PptTopLevel p : ppts) {
-            System.out.printf ("  %s\n", p.name());
-            if (p.ppt_successors != null) {
-              for (String successorName : p.ppt_successors) {
-                @SuppressWarnings("nullness") // map:  successorName is in p.ppt_successors
-                /*@NonNull*/ PptTopLevel successorPpt = all_ppts.get (successorName);
-                System.out.printf ("    %s\n", successorPpt.name());
-              }
-            }
-            p.combined_ppts_init = true;
-          }
-        }
-
-        // Compute predecessors for each basic block.
-        for (PptTopLevel p : ppts) {
-          p.predecessors = new ArrayList<PptTopLevel>();
-        }
-        for (PptTopLevel p : ppts) {
-          if (p.ppt_successors != null) {
-            for (String succName : p.ppt_successors) {
-              @SuppressWarnings("nullness") // map: any successor is in the map
-              /*@NonNull*/ PptTopLevel succPpt = all_ppts.get(succName);
-              assert succPpt.predecessors != null : "@AssumeAssertion(nullness): this is a successor, so the predecessor exists";
-              succPpt.predecessors.add(p);
-            }
-          }
-        }
-        if (Debug.dkconfig_check_bb_connections) {
-          // The function entry should be able should be strongly connected
-          for (int i = 1; i < ppts.size(); i++) {
-            PptTopLevel p = ppts.get(i);
-            if (!ppts.get(0).connected (p))
-              System.out.printf ("ERROR: ppt %s in func %s is not connected\n",
-                                 p, ppts.get(0));
-          }
-          // Every block except the first should have at least one predecessor
-          for (int i = 1; i < ppts.size(); i++) {
-            PptTopLevel p = ppts.get(i);
-            assert p.predecessors != null : "@AssumeAssertion(nullness): dependent: building combined program points";
-            if (p.predecessors.size() == 0)
-              System.out.printf ("ERROR: ppt %s has no predecessors\n", p);
-          }
-        }
-
-        // Build any combined program points and add them to the global map
-        System.out.printf ("Calling combine_func_ppts for function %s:\n",
-                           ppts.get(0).name());
-        PptCombined.combine_func_ppts (all_ppts, ppts);
-
-        System.out.printf ("Basic blocks in function %s:\n",
-                           ppts.get(0).name());
-        PptCombined.dump (ppts);
-        assert PptCombined.check_func_ppts (ppts);
-        // PptCombined.check_func_ppts (ppts);
-        for (PptTopLevel p : ppts) {
-          if (p.combined_subsumed)
-            continue;
-          if (p.combined_ppt == null) {
-            System.out.printf ("ERROR: no combined ppt for %s\n", p);
-            continue;
-          }
-          assert all_ppts.get (p.combined_ppt.name()) == null
-            : p.combined_ppt.name();
-          all_ppts.add (p.combined_ppt);
-          p.combined_ppt.dump();
-          assert p.combined_ppt.check();
-          // p.combined_ppt.check();
-        }
-      }
-    }
-
-    // merging basic blocks
-    if (dkconfig_merge_basic_blocks) {
-
-      // If this is a basic block, remember its values
-      if (ppt.is_basic_block()) {
-        ppt.last_values = vt;
-      }
-
-      // Add the sample to the ppt.  Ppts that are part of a combined ppt
-      // are handled as part of the combined ppt.
-      if ((!ppt.combined_subsumed) && (ppt.combined_ppt != null)) {
-        assert ppt.combined_ppt != null : "@AssumeAssertion(nullness): bug in flow with respect to fields";
-        ppt.combined_ppt.add_combined();
-      }
-    } else {
-      ppt.add_bottom_up (vt, 1);
-    }
-
+    ppt.add_bottom_up (vt, 1);
 
     if (debugVars.isLoggable (Level.FINE))
       debugVars.fine (ppt.name() + " vars: " + Debug.int_vars (ppt, vt));
