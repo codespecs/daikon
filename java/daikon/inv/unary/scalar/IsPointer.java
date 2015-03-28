@@ -25,7 +25,7 @@ import typequals.*;
  *
  * The basic approach is to discard the invariant if any values that are
  * not valid pointers are encountered.  By default values between -100,000
- * and 100,00 (except 0) are considered to be invalid pointers.  This
+ * and 100,000 (except 0) are considered to be invalid pointers.  This
  * approach has been experimentally confirmed on Windows x86 executables.
  */
 public class IsPointer extends SingleScalar {
