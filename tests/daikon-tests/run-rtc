@@ -1,0 +1,44 @@
+make -C BinaryTree CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C CursorList CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C LinkedList CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C redblack CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C BinaryHeap CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C WeightedNodePath CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C StreetNumberSet CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C GeoSegment CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C Graph CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C Vector CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C ArrayList CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C FixedSizeSet CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C TinySet CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C Huffman CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C StackAr CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C QueueAr CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C DisjSets CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C RatNum CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C RatPoly CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C RatPolyStack CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C RatTermVec CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C encapsulate_downcast CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C compar CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C precedence CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C fib CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C hanoi CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C param CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C suppress01 CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C suppress02 CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C StaticInteresting CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+# make -C pine_mdiep # dtrace filed is stored
+make -C purity CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+make -C Smithnosky CHICORY_USER_FLAGS='--std-visibility'  clean rtc
+# make -C print_tokens # dtrace filed is stored
+# make -C print_tokens2 # dtrace filed is stored
+# make -C replace # dtrace filed is stored
+# make -C schedule # dtrace filed is stored
+# make -C schedule2 # dtrace filed is stored
+# make -C tcas # dtrace filed is stored
+# make -C tot_info # dtrace filed is stored
+# make -C space # dtrace filed is stored
+# make -C KnownValues # dtrace filed is stored
+# make -C KnownValuesNewDecls # dtrace filed is stored
+make -C baseline CHICORY_USER_FLAGS='--std-visibility'  clean rtc
