@@ -322,6 +322,11 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             return;
         }
 
+        // skip abstract methods
+        if (Ast.modifierPresent(Ast.getModifiers(method), "abstract")) {
+            return;
+        }
+
         method.accept(new TreeFormatter());
 
         //         System.out.println("@@@0");
@@ -427,8 +432,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Add method to AST.
         String new_method = code.toString();
 
-        MethodDeclaration wrapper = (MethodDeclaration) Ast.copy(
-                                                                 "MethodDeclaration", method);
+        MethodDeclaration wrapper = (MethodDeclaration) Ast.create("MethodDeclaration",
+                                                                   new Class[] { Integer.TYPE },
+                                                                   new Object[] { new Integer(0) },  // modifiers = 0
+                                                                   Ast.format(method));
 
         Block block = (Block) Ast.create("Block", new_method);
 
@@ -436,7 +443,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         wrapper.accept(new TreeFormatter());
 
         Modifiers modifiersOrig = Ast.getModifiers(method);
-        Modifiers modifiers = (Modifiers)Ast.copy("Modifiers", modifiersOrig);
+        Modifiers modifiers = (Modifiers)Ast.create("Modifiers", Ast.format(modifiersOrig));
         modifiers.accept(new TreeFormatter());
 
         @SuppressWarnings("nullness") // application invariant: method node is always in a class or interface
@@ -448,8 +455,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         modifiers_declaration_stringbuffer.append(" ");
         modifiers_declaration_stringbuffer.append(Ast.format(wrapper));
 
-        ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration) Ast.create(
-                                                                                         "ClassOrInterfaceBodyDeclaration",
+        ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
                                                                                          new Class[] { Boolean.TYPE },
                                                                                          new Object[] { Boolean.FALSE },  // isInterface == false
                                                                                          modifiers_declaration_stringbuffer.toString());
