@@ -984,15 +984,6 @@ public class Ast {
   }
 
 
-  // Returns a deep copy of an AST
-  public static Node copy(String type, Node n) {
-    String stringRep = print(n);
-    return create(type, stringRep);
-  }
-
-
-
-
   // returns true if, for some node in the tree, node.tokenImage.equals(s)
   public static boolean contains(Node n, String s) {
     class ContainsVisitor extends DepthFirstVisitor {
@@ -1010,7 +1001,6 @@ public class Ast {
     n.accept(cv);
     return cv.found;
   }
-
 
 
   // Body must begin and end with a brace.
@@ -1103,8 +1093,7 @@ public class Ast {
 //     }
 
     if (isInner((ClassOrInterfaceDeclaration)innerClassNode)
-        && isStatic((ClassOrInterfaceDeclaration)innerClassNode)) {
-      //if (outerClassNode != null && !Modifier.isStatic(getClass(innerClassNode).getModifiers())) {
+        && !isStatic((ClassOrInterfaceDeclaration)innerClassNode)) {
       NodeToken nameToken = ((ClassOrInterfaceDeclaration)outerClassNode).f1;
       Name name = new Name(nameToken, new NodeListOptional());
       jtb.syntaxtree.Type type = new jtb.syntaxtree.Type(new NodeChoice(name, 1));
