@@ -586,6 +586,8 @@ public abstract class RANGE extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EXISTS (p) (EQ %var1% (pow 2 p)))");
+      if (format == OutputFormat.JAVA)
+        return "daikon.tools.runtimechecker.Runtime.isPowerOfTwo(%var1%)";
       if (format == OutputFormat.CSHARPCONTRACT)
         return "%var1%.IsPowerOfTwo()";
       else

@@ -1,0 +1,3 @@
+java -ea -cp .:$DAIKONDIR/java:$CLASSPATH jtb.JavaParserTest $1
+echo diff $1 $1-parsed
+diff $1 $1-parsed

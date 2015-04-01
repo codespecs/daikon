@@ -28,7 +28,3 @@ Longer-term issues
     attribute is not supported by BCEL.  For now we are just removing it
     (because something we are doing makes it inconsistent).  A better
     solution would be to update it correctly.
-
-  - Implement --linked-lists option.
-    This is low-priority, because it's obscure.  In Java, people shouldn't
-    be writing this kind of code anyway.

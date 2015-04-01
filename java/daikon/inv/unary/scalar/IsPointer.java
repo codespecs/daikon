@@ -101,6 +101,9 @@ public class IsPointer extends SingleScalar {
       String varname = var().name_using (format);
       if (format == OutputFormat.SIMPLIFY)
           return "(AND)";       // trivially true
+      if (format == OutputFormat.JAVA)
+          return "daikon.tools.runtimechecker.Runtime.isWithinPointerRange(" +
+                  varname + ")";
       else
           return varname + "  isPointer";
     }

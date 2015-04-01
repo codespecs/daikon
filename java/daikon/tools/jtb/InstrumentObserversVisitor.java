@@ -20,6 +20,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * <b>Be careful</b> with this tool, as it overwrites the files passed
  * on the command line!
  **/
+@SuppressWarnings("rawtypes")
 public class InstrumentObserversVisitor
   extends DepthFirstVisitor
 {
@@ -47,7 +48,10 @@ public class InstrumentObserversVisitor
       String fldname = getFieldNameFor(method);
       String code = "private " + fldtype + " " + fldname + ";" + Global.lineSep;
       ClassOrInterfaceBodyDeclaration decl =
-        (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration", code);
+        (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+                                                     new Class[] { Boolean.TYPE },
+                                                     new Object[] { Boolean.FALSE },  // isInterface == false
+                                                     code);
       Ast.addDeclaration(clazzOrInterface, decl);
     }
 
@@ -63,8 +67,11 @@ public class InstrumentObserversVisitor
     code.append("  }");
     code.append("}");
 
-    ClassOrInterfaceBodyDeclaration decl = (ClassOrInterfaceBodyDeclaration)
-      Ast.create("ClassOrInterfaceBodyDeclaration", code.toString());
+    ClassOrInterfaceBodyDeclaration decl =
+        (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+                                                     new Class[] { Boolean.TYPE },
+                                                     new Object[] { Boolean.FALSE },  // isInterface == false
+                                                     code.toString());
     Ast.addDeclaration(clazzOrInterface, decl);
   }
 
@@ -127,14 +134,19 @@ public class InstrumentObserversVisitor
     };
     for (int i=0; i < new_methods.length; i++) {
       String new_method = new_methods[i];
-      MethodDeclaration wrapper = (MethodDeclaration)
-        Ast.copy("MethodDeclaration", method);
+      MethodDeclaration wrapper = (MethodDeclaration) Ast.create("MethodDeclaration",
+                                                                 new Class[] { Integer.TYPE },
+                                                                 new Object[] { new Integer(0) },  // modifiers = 0
+                                                                 Ast.format(method));
       Ast.setBody(wrapper, new_method);
       wrapper.accept(new TreeFormatter(2, 0));
       @SuppressWarnings("nullness")
       /*@NonNull*/ ClassOrInterfaceBody c = (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
-      ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration)
-        Ast.create("ClassOrInterfaceBodyDeclaration", Ast.format(wrapper));
+      ClassOrInterfaceBodyDeclaration d =
+        (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+                                                     new Class[] { Boolean.TYPE },
+                                                     new Object[] { Boolean.FALSE },  // isInterface == false
+                                                     Ast.format(wrapper));
       Ast.addDeclaration(c, d);
       MethodDeclaration generated_method = (MethodDeclaration) d.f0.choice;
       if (i == 1) {

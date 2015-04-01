@@ -3799,13 +3799,6 @@ One way to create a @file{.pure} file is to run the Purity Analysis Kit
 the @option{--daikon-purity-file} when running the Purity Analysis Kit,
 it writes a file that can be supplied to Chicory.
 
-@item --linked-lists
-@cindex linked lists, in Chicory
-This boolean option (default: true) causes user-defined linked lists to
-be output as sequences, much like Java @samp{List}s and arrays are.
-A user-defined data structure is considered to be a linked list if it
-has one instance field that is of its own type.
-
 @end table
 
 
@@ -7070,7 +7063,11 @@ The @code{instrument} command to runtimechecker creates a new directory
 user-specified Java files, instrumented to check invariants at runtime
 and to record a list of invariant violations in a Java data structure.
 You can compile and run the instrumented version of your program.
-
+Note that by default Chicory outputs all fields in instrumented classes, even
+those that would not be accessible in Java code at the given program point.
+This might cause the instrumented version of the class to fail to compile.
+The @option{--std-visibility} option to Chicory may be used to avoid this
+problem.  See @ref{Variables in Chicory output} for more details.
 
 Here is an example of using the runtime-check instrumenter to 
 create a version of file
@@ -7139,9 +7136,18 @@ by calling @code{daikon.tools.runtimechecker.Runtime.getViolations()}.
 @cindex WriteViolationFile tool
 To obtain a file of all the violations for a program execution, you can use
 program @code{daikon.@/tools.@/runtimechecker.@/WriteViolationFile}.
-If you would ordinarily run your program as @samp{java MyProg arg1 arg2},
-then running @samp{java daikon.@/tools.@/runtimechecker.@/WriteViolationFile
-MyProg arg1 arg2} creates a file called @file{violations.txt} in the
+For example, if you usually run
+@example
+java MyProg arg1 arg2
+@end example
+
+@noindent
+then instead you would run
+@example
+java daikon.tools.runtimechecker.WriteViolationFile MyProg arg1 arg2
+@end example
+
+This will create a file called @file{violations.txt} in the
 current directory, immediately before the program exits normally.
 If the program under test calls @code{System.exit}, then no
 @file{violations.txt} file is created.  (@command{JUnit} is an example of a program
@@ -7203,7 +7209,18 @@ be instrumented includes logical shift operators.
 @subsubsection Problems compiling instrumented code
 
 When compiling the instrumented code, the Java compiler might emit an error
-such as
+such as:
+
+@example
+  error: longitude has private access in GeoPoint
+@end example
+
+If you receive the error above, then a variable in an invariant
+(@var{longitude} in this case) has been declared @code{private}. 
+You will need to rebuild the @file{.dtrace} file by rerunning Chicory
+using the @option{--std-visibility} option.
+
+Another error the Java compiler might emit is:
 
 @example
   error: code too large for try statement
@@ -8304,7 +8321,6 @@ code --- for instance, output @samp{a} and @samp{a.b} but not
 depth.
 @itemize
 @item With Chicory, use the @option{--nesting-depth=@var{N}} option.
-Also see the @option{--linked-lists=false} option.
 @item With Kvasir, use the @option{--struct-depth=@var{N}} or the
 @option{--nesting-depth=@var{N}} option.
 @end itemize
