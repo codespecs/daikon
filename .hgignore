@@ -471,6 +471,7 @@ syntax: regexp
 
 ^tests/daikon-tests/.*/scratch$
 ^tests/daikon-tests/.*/source$
+^tests/parser-tests/.*\.java-parsed$
 ^tests/.*-jaif\.inv\.gz$
 ^tests/.*\.decls-DynComp$
 ^tests/.*\.decls-DynComp\.diff$
