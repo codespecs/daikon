@@ -20,10 +20,31 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.2.1 (April 1, 2015)
+5.2.1 (April 3, 2015)
 
-Renamed LogicalCompare program's --cfg command-line argument to
---config_option, for consistency with other programs in the Daikon suite.
+  Renamed LogicalCompare program's --cfg command-line argument to
+  --config_option, for consistency with other programs in the Daikon suite.
+
+  Updated the Binutils based code in Fjalar/Kvasir from v2.24 to v2.25.
+  Users of Kvasir to analyze C/C++ codes should not see any differences in
+  behavior from the previous version.
+
+  Fixed a problem with creating pointer type disambiguation files when
+  using the --disambig and --disambig-file options to Kvasir.
+
+  Removed documentation for the galar front-end tool as it is no longer
+  supported.
+
+  Improved the documentation for the Daikon runtimechecker tool.
+
+  Fixed an intermittently occurring problem with instrumenting Java methods
+  containing a switch.
+
+  Fixed several Daikon issues:
+  #18: runtimechecker should not instrument abstract classes
+  #19: runtimechecker parser problem with ">" characters
+  #20: runtimechecker problem with 'Is power of 2'
+  #22: runtimechecker fails on inner classes with multiple constructors
 
 ===========================================================================
 
