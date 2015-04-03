@@ -22,23 +22,28 @@ Further documentation can be found in:
 
 5.2.1 (April 3, 2015)
 
+Tools that process invariant files:
+
   Renamed LogicalCompare program's --cfg command-line argument to
   --config_option, for consistency with other programs in the Daikon suite.
 
-  Updated the Binutils based code in Fjalar/Kvasir from v2.24 to v2.25.
-  Users of Kvasir to analyze C/C++ codes should not see any differences in
-  behavior from the previous version.
+  Improved the documentation for the Daikon runtimechecker tool.
+
+Kvasir C/C++ front end:
 
   Fixed a problem with creating pointer type disambiguation files when
   using the --disambig and --disambig-file options to Kvasir.
 
+  Updated the Binutils-based code in Fjalar/Kvasir from v2.24 to v2.25.
+  There should be no user-visible differences in the behavior of Kvasir.
+
   Removed documentation for the galar front-end tool as it is no longer
   supported.
 
-  Improved the documentation for the Daikon runtimechecker tool.
+Bug fixes:
 
-  Fixed an intermittently occurring problem with instrumenting Java methods
-  containing a switch.
+  Fixed an intermittently occurring problem in Chicory with instrumenting
+  Java methods containing a switch.
 
   Fixed several Daikon issues:
   #18: runtimechecker should not instrument abstract classes
