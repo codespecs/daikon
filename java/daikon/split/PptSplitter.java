@@ -205,17 +205,21 @@ public class PptSplitter implements Serializable {
 
   /**
    * Given a pair of conditional program points, form implications from the
-   * invariants true at each one.  The algorithm divides the invariants
-   * into two groups:
+   * invariants true at each one.
+   * <p>
+   *
+   * The algorithm first divides the invariants into two groups:
    * <ol>
-   *   <li>the "same" invariants:  those that are true at both program points, and
+   *   <li>the "same" invariants:  those that are true at both program points.
    *   <li>the "different" invariants:  all other invariants.
    * </ol>
    * The "exclusive" invariants (a subset of the "different" inviariants)
    * are true at one program point, and their negation is true at the other
    * program point.
+   * <p>
+   * 
    * At the first program point, for each exclusive invariant and each
-   * different invariant, create a conditional of the form "exclusive =>
+   * different invariant, create a conditional of the form "exclusive &hArr;
    * different".  Do the same at the second program point.
    * <p>
    *
@@ -422,6 +426,8 @@ public class PptSplitter implements Serializable {
           assert !cond1.splitter_inverse;
           assert cond2.splitter_inverse;
           dummy2.negate();
+          orig_invs.put(dummy1, dummy1);
+          orig_invs.put(dummy2, dummy2);
           @SuppressWarnings("keyfor") // BUG in Daikon, possibly, because these are not keys, I think; need to investigate
           /*@KeyFor("orig_invs")*/ Invariant[] dummy_pair = new /*@KeyFor("orig_invs")*/ Invariant[] {dummy1, dummy2};
           exclusive_invs_vec.add(dummy_pair);
@@ -469,15 +475,20 @@ public class PptSplitter implements Serializable {
     }
 
     // Get the canonical predicate invariants from the exclusive list.
-    // We pick the first one that is neither obvious or suppressed.
+    // We pick the first one that is neither obvious nor suppressed.
     // If all are either obvious or suppressed, we just pick the first
-    // one in the list
+    // one in the list.
+    // TODO: Why do we want canonical predicate invariants?  How will they be used?  It seems that different elements of this list have different semantics.
+    // TODO: After this loop, might the two canonical invariants not be exclusive with one another?
+    // TODO: con_invs should probably be renamed to canon_invs.
     /*NNC:@MonotonicNonNull*/ Invariant[] con_invs = new Invariant[2];
     for (Invariant[] invs : exclusive_invs_vec) {
+      assert invs.length == 2;
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] == null) {
           @SuppressWarnings("nullness") // map
           /*@NonNull*/ Invariant orig = orig_invs.get (invs[jj]);
+          assert orig != null : "Not in orig_invs: " + invs[jj] + " " + invs[jj].getClass();
           if ((orig.isObvious() == null) && !orig.is_ni_suppressed())
             con_invs[jj] = invs[jj];
         }
@@ -580,6 +591,7 @@ public class PptSplitter implements Serializable {
   }
 
 
+  // TODO: Should this only include invariants such that all of their variables are defined everywhere?
   /**
    * Determine which elements of invs1 are mutually exclusive with
    * elements of invs2.  Result elements are pairs of Invariants.
