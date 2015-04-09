@@ -4,13 +4,16 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> "enum"
-// f1 -> <IDENTIFIER>
-// f2 -> [ ImplementsList(false) ]
-// f3 -> EnumBody()
+/**
+ * Grammar production:
+ * f0 -> "enum"
+ * f1 -> <IDENTIFIER>
+ * f2 -> [ ImplementsList(false) ]
+ * f3 -> EnumBody()
+ */
 public class EnumDeclaration implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
    public NodeToken f0;
@@ -55,3 +58,4 @@ public class EnumDeclaration implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

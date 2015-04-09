@@ -48,7 +48,7 @@ public class CheckerClass {
     NodeOptional no = clazzCU.f0;
     String packageName = null;
     if (no.present()) {
-      packageName = Ast.format(((PackageDeclaration)no.node).f1).trim();
+      packageName = Ast.format(((PackageDeclaration)no.node).f2).trim();
     } else {
       packageName = "";
     }

@@ -4,21 +4,24 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> [ "final" ]
-// f1 -> Type()
-// f2 -> VariableDeclarator()
-// f3 -> ( "," VariableDeclarator() )*
+/**
+ * Grammar production:
+ * f0 -> Modifiers()
+ * f1 -> Type()
+ * f2 -> VariableDeclarator()
+ * f3 -> ( "," VariableDeclarator() )*
+ */
 public class LocalVariableDeclaration implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
-   public NodeOptional f0;
+   public Modifiers f0;
    public Type f1;
    public VariableDeclarator f2;
    public NodeListOptional f3;
 
-   public LocalVariableDeclaration(NodeOptional n0, Type n1, VariableDeclarator n2, NodeListOptional n3) {
+   public LocalVariableDeclaration(Modifiers n0, Type n1, VariableDeclarator n2, NodeListOptional n3) {
       f0 = n0;
       if ( f0 != null ) f0.setParent(this);
       f1 = n1;
@@ -44,3 +47,4 @@ public class LocalVariableDeclaration implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

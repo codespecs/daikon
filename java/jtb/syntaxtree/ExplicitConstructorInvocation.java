@@ -4,11 +4,14 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> "this" Arguments() ";"
-//       | [ PrimaryExpression() "." ] "super" Arguments() ";"
+/**
+ * Grammar production:
+ * f0 -> [ TypeArguments() ] ( "this" | "super" ) Arguments() ";"
+ *       | PrimaryExpression() "." [ TypeArguments() ] "super" Arguments() ";"
+ */
 public class ExplicitConstructorInvocation implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
    public NodeChoice f0;
@@ -33,3 +36,4 @@ public class ExplicitConstructorInvocation implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

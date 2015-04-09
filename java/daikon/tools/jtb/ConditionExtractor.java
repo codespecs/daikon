@@ -48,11 +48,12 @@ class ConditionExtractor extends DepthFirstVisitor {
   //// DepthFirstVisitor Methods overridden by ConditionExtractor //////////////
   /////
 
-  // f0 -> "package"
-  // f1 -> Name()
-  // f2 -> ";"
+  // f0 -> Modifiers()
+  // f1 -> "package"
+  // f2 -> Name()
+  // f3 -> ";"
   public void visit(PackageDeclaration n) {
-    packageName = Ast.format(n.f1);
+    packageName = Ast.format(n.f2);
     super.visit(n);
   }
 
@@ -120,7 +121,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     // should reset curMethodName to null here??
   }
 
-  // f0 -> [ "public" | "protected" | "private" ]
+  // f0 -> [ TypeParameters() ]
   // f1 -> <IDENTIFIER>
   // f2 -> FormalParameters()
   // f3 -> [ "throws" NameList() ]

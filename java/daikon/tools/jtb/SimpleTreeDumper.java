@@ -65,6 +65,9 @@ public class SimpleTreeDumper extends DepthFirstVisitor {
     *   before the previous token.
     */
    public void visit(NodeToken n) {
+      // System.out.println("{" + n.kind +"}: " + n.tokenImage);
+      // System.out.println("{" + ((n.getParent()).getClass()).getName() +"}: " + n.tokenImage);
+
       if ( n.beginLine == -1 || n.beginColumn == -1 ) {
          printToken(n.tokenImage);
          return;

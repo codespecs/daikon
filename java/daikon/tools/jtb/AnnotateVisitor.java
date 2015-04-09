@@ -674,6 +674,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     if (n.f0.choice instanceof NodeSequence) {
       NodeSequence ns = (NodeSequence) n.f0.choice;
       PrimaryExpression pe = (PrimaryExpression) ns.elementAt(0);
+      // System.out.println("pe:" + Ast.format(pe));
       // for (int i=0; i<ns.size(); i++) {
       //   System.out.println("ns #" + i + ": " + ns.elementAt(i));
       // }
@@ -687,6 +688,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
           // Name (that's effectively checked below) and has no
           // PrimarySuffix or else its prefix is "this" (check that here).
           String fieldname = null;
+          // System.out.println("pe.f1.size:" + pe.f1.size());
           if (pe.f1.size() == 0) {
             fieldname = Ast.fieldName(pe);
           } else if (pe.f1.size() == 1) {
@@ -699,7 +701,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
             }
           }
 
-          // System.out.printf("In statement, fieldname = %s", fieldname);
+          // System.out.printf("In statement, fieldname = %s%n", fieldname);
           if ((fieldname != null)
               && (isOwned(fieldname)
                   || isNotContainsNull(fieldname)

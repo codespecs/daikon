@@ -8,7 +8,8 @@ package jtb.syntaxtree;
  * Represents an grammar optional node, e.g. ( A )? or [ A ]
  */
 public class NodeOptional implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    public NodeOptional() {
       node = null;
@@ -45,3 +46,4 @@ public class NodeOptional implements Node {
    private Node parent;
    public Node node;
 }
+

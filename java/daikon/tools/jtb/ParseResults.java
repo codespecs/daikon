@@ -109,7 +109,7 @@ public class ParseResults {
       if (packageDeclarationMaybe.present()) {
         PackageDeclaration packageDeclaration =
           (PackageDeclaration) packageDeclarationMaybe.node;
-        Name packageName = packageDeclaration.f1;
+        Name packageName = packageDeclaration.f2;
         StringWriter stringWriter = new StringWriter();
         TreeDumper dumper = new TreeDumper(stringWriter);
         dumper.visit(packageName);

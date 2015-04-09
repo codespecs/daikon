@@ -4,25 +4,32 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> <IDENTIFIER>
-// f1 -> [ Arguments() ]
-// f2 -> [ ClassOrInterfaceBody(false) ]
+/**
+ * Grammar production:
+ * f0 -> Modifiers()
+ * f1 -> <IDENTIFIER>
+ * f2 -> [ Arguments() ]
+ * f3 -> [ ClassOrInterfaceBody(false) ]
+ */
 public class EnumConstant implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
-   public NodeToken f0;
-   public NodeOptional f1;
+   public Modifiers f0;
+   public NodeToken f1;
    public NodeOptional f2;
+   public NodeOptional f3;
 
-   public EnumConstant(NodeToken n0, NodeOptional n1, NodeOptional n2) {
+   public EnumConstant(Modifiers n0, NodeToken n1, NodeOptional n2, NodeOptional n3) {
       f0 = n0;
       if ( f0 != null ) f0.setParent(this);
       f1 = n1;
       if ( f1 != null ) f1.setParent(this);
       f2 = n2;
       if ( f2 != null ) f2.setParent(this);
+      f3 = n3;
+      if ( f3 != null ) f3.setParent(this);
    }
 
    public void accept(jtb.visitor.Visitor v) {
@@ -40,3 +47,4 @@ public class EnumConstant implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

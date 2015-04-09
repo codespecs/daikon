@@ -4,14 +4,17 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> [ TypeParameters() ]
-// f1 -> ResultType()
-// f2 -> MethodDeclarator()
-// f3 -> [ "throws" NameList() ]
-// f4 -> ( Block() | ";" )
+/**
+ * Grammar production:
+ * f0 -> [ TypeParameters() ]
+ * f1 -> ResultType()
+ * f2 -> MethodDeclarator()
+ * f3 -> [ "throws" NameList() ]
+ * f4 -> ( Block() | ";" )
+ */
 public class MethodDeclaration implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
    public NodeOptional f0;
@@ -48,3 +51,4 @@ public class MethodDeclaration implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

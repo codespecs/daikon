@@ -4,46 +4,37 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> "{"
-// f1 -> MemberValue()
-// f2 -> ( "," MemberValue() )*
-// f3 -> [ "," ]
-// f4 -> "}"
+/**
+ * Grammar production:
+ * f0 -> "{"
+ * f1 -> ( MemberValue() ( "," MemberValue() )* [ "," ] )?
+ * f2 -> "}"
+ */
 public class MemberValueArrayInitializer implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
    public NodeToken f0;
-   public MemberValue f1;
-   public NodeListOptional f2;
-   public NodeOptional f3;
-   public NodeToken f4;
+   public NodeOptional f1;
+   public NodeToken f2;
 
-   public MemberValueArrayInitializer(NodeToken n0, MemberValue n1, NodeListOptional n2, NodeOptional n3, NodeToken n4) {
+   public MemberValueArrayInitializer(NodeToken n0, NodeOptional n1, NodeToken n2) {
       f0 = n0;
       if ( f0 != null ) f0.setParent(this);
       f1 = n1;
       if ( f1 != null ) f1.setParent(this);
       f2 = n2;
       if ( f2 != null ) f2.setParent(this);
-      f3 = n3;
-      if ( f3 != null ) f3.setParent(this);
-      f4 = n4;
-      if ( f4 != null ) f4.setParent(this);
    }
 
-   public MemberValueArrayInitializer(MemberValue n0, NodeListOptional n1, NodeOptional n2) {
+   public MemberValueArrayInitializer(NodeOptional n0) {
       f0 = new NodeToken("{");
       if ( f0 != null ) f0.setParent(this);
       f1 = n0;
       if ( f1 != null ) f1.setParent(this);
-      f2 = n1;
+      f2 = new NodeToken("}");
       if ( f2 != null ) f2.setParent(this);
-      f3 = n2;
-      if ( f3 != null ) f3.setParent(this);
-      f4 = new NodeToken("}");
-      if ( f4 != null ) f4.setParent(this);
    }
 
    public void accept(jtb.visitor.Visitor v) {
@@ -61,3 +52,4 @@ public class MemberValueArrayInitializer implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

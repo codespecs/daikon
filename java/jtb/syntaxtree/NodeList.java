@@ -10,7 +10,8 @@ import java.util.*;
  * Represents a grammar list, e.g. ( A )+
  */
 public class NodeList implements NodeListInterface {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    public NodeList() {
       nodes = new Vector<Node>();
@@ -48,3 +49,4 @@ public class NodeList implements NodeListInterface {
    private Node parent;
    public Vector<Node> nodes;
 }
+

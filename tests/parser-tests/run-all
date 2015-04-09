@@ -1,4 +1,5 @@
 ./run-one AnAbstractClass.java
+./run-one ConstructorTest.java
 ./run-one Failure3.java
 ./run-one ForStmt.java
 ./run-one HelloWorld.java

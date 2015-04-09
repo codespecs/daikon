@@ -4,11 +4,14 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> ConditionalExpression()
-// f1 -> [ AssignmentOperator() Expression() ]
+/**
+ * Grammar production:
+ * f0 -> ConditionalExpression()
+ * f1 -> [ AssignmentOperator() Expression() ]
+ */
 public class Expression implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
    public ConditionalExpression f0;

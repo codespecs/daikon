@@ -4,14 +4,17 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> "for"
-// f1 -> "("
-// f2 -> ( Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
-// f3 -> ")"
-// f4 -> Statement()
+/**
+ * Grammar production:
+ * f0 -> "for"
+ * f1 -> "("
+ * f2 -> ( Modifiers() Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
+ * f3 -> ")"
+ * f4 -> Statement()
+ */
 public class ForStatement implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
    public NodeToken f0;
@@ -61,3 +64,4 @@ public class ForStatement implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

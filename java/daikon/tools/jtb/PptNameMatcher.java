@@ -39,7 +39,7 @@ public class PptNameMatcher {
 
   public String getUngenerifiedType(FormalParameter p) {
 
-    Type type = p.f1;
+    Type type = p.f2;
 
     //  Grammar production for type:
     //  f0 -> ReferenceType()
@@ -65,7 +65,7 @@ public class PptNameMatcher {
 
 
 
-        Type type2 = param.f1;
+        Type type2 = param.f2;
         ReferenceType refType2 = (ReferenceType)type2.f0.choice;
 
         // Note the wrapping parentheses in
