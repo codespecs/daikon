@@ -171,7 +171,7 @@ public class Ast {
   }
 
   public static String getName(FormalParameter p) {
-    String name = print(p.f3);
+    String name = print(p.f4);
     int startBrackets = name.indexOf('[');
     if (startBrackets == -1) {
       return name;
@@ -189,8 +189,8 @@ public class Ast {
 
     p.accept(new TreeFormatter());
 
-    String type = print(p.f1);
-    String name = print(p.f3);
+    String type = print(p.f2);
+    String name = print(p.f4);
 
     // print() removes whitespace around brackets, so this test is safe.
     while (name.endsWith("[]")) {
@@ -216,7 +216,7 @@ public class Ast {
     NodeOptional o = u.f0;
     if (o.present()) {
       PackageDeclaration p = (PackageDeclaration) o.node;
-      return print(p.f1);
+      return print(p.f2);
     } else {
       return null;
     }
@@ -387,6 +387,10 @@ public class Ast {
 
     // System.out.println("fieldName(" + pe + ")");
 
+    // PrimaryExpression:
+    // f0 -> PrimaryPrefix()
+    // f1 -> ( PrimarySuffix() )*
+
     // First, try to get a name from the PrimarySuffix.
 
     NodeListOptional pslist = pe.f1;
@@ -394,13 +398,15 @@ public class Ast {
       PrimarySuffix ps = (PrimarySuffix) pslist.elementAt(pslist.size()-1);
       NodeChoice psnc = ps.f0;
       // PrimarySuffix:
-      // f0 -> "." "this"
+      // f0 -> "." "super"
+      //       | "." "this"
       //       | "." AllocationExpression()
+      //       | MemberSelector()
       //       | "[" Expression() "]"
       //       | "." <IDENTIFIER>
       //       | Arguments()
       switch (psnc.which) {
-      case 4:
+      case 5:
         NodeSequence sn = (NodeSequence) psnc.choice;
         assert sn.size() == 2;
         return ((NodeToken) sn.elementAt(1)).tokenImage;
@@ -412,8 +418,9 @@ public class Ast {
 
     // PrimaryPrefix:
     // f0 -> Literal()
-    //       | "this"
+    //       | ( <IDENTIFIER> "." )* "this"
     //       | "super" "." <IDENTIFIER>
+    //       | ClassOrInterfaceType() "." "super" "." <IDENTIFIER>
     //       | "(" Expression() ")"
     //       | AllocationExpression()
     //       | ResultType() "." "class"
@@ -425,7 +432,7 @@ public class Ast {
       NodeSequence sn = (NodeSequence) ppnc.choice;
       assert sn.size() == 3;
       return ((NodeToken) sn.elementAt(2)).tokenImage;
-    case 6:
+    case 7:
       return fieldName((Name) ppnc.choice);
     }
 
@@ -1098,7 +1105,8 @@ public class Ast {
       Name name = new Name(nameToken, new NodeListOptional());
       jtb.syntaxtree.Type type = new jtb.syntaxtree.Type(new NodeChoice(name, 1));
       VariableDeclaratorId blankParamName = new VariableDeclaratorId(new NodeToken(""), new NodeListOptional());
-      FormalParameter implicitOuter = new FormalParameter(new NodeOptional(),
+      FormalParameter implicitOuter = new FormalParameter(new Modifiers(null),
+                                                          new NodeOptional(),
                                                           type,
                                                           new NodeOptional(),
                                                           blankParamName);
