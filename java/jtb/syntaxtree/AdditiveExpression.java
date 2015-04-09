@@ -4,11 +4,14 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> MultiplicativeExpression()
-// f1 -> ( ( "+" | "-" ) MultiplicativeExpression() )*
+/**
+ * Grammar production:
+ * f0 -> MultiplicativeExpression()
+ * f1 -> ( ( "+" | "-" ) MultiplicativeExpression() )*
+ */
 public class AdditiveExpression implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
    public MultiplicativeExpression f0;
@@ -36,3 +39,4 @@ public class AdditiveExpression implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

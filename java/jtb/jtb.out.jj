@@ -172,17 +172,16 @@ SKIP :
 
 MORE :
 {
-   "//" : IN_SINGLE_LINE_COMMENT
-   | <"/**" ~["/"]>
+   <"/**" ~["/"]>
       {
          input_stream.backup(1);
       } : IN_FORMAL_COMMENT
    | "/*" : IN_MULTI_LINE_COMMENT
 }
 
-<IN_SINGLE_LINE_COMMENT> SPECIAL_TOKEN :
+SPECIAL_TOKEN :
 {
-   <SINGLE_LINE_COMMENT: "\n" | "\r" | "\r\n"> : DEFAULT
+   <SINGLE_LINE_COMMENT: "//" (~["\n", "\r"])* ("\n" | "\r" | "\r\n")?>
 }
 
 <IN_FORMAL_COMMENT> SPECIAL_TOKEN :
@@ -195,7 +194,7 @@ MORE :
    <MULTI_LINE_COMMENT: "*/"> : DEFAULT
 }
 
-<IN_SINGLE_LINE_COMMENT, IN_FORMAL_COMMENT, IN_MULTI_LINE_COMMENT> MORE :
+<IN_FORMAL_COMMENT, IN_MULTI_LINE_COMMENT> MORE :
 {
    <~[]>
 }
@@ -263,8 +262,11 @@ TOKEN :
    | <#DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])*>
    | <#HEX_LITERAL: "0" ["x", "X"] (["0"-"9", "a"-"f", "A"-"F"])+>
    | <#OCTAL_LITERAL: "0" (["0"-"7"])*>
-   | <FLOATING_POINT_LITERAL: (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f", "F", "d", "D"])? | "." (["0"-"9"])+ (<EXPONENT>)? (["f", "F", "d", "D"])? | (["0"-"9"])+ <EXPONENT> (["f", "F", "d", "D"])? | (["0"-"9"])+ (<EXPONENT>)? ["f", "F", "d", "D"]>
-   | <#EXPONENT: ["e", "E"] (["+", "-"])? (["0"-"9"])+>
+   | <FLOATING_POINT_LITERAL: <DECIMAL_FLOATING_POINT_LITERAL> | <HEXADECIMAL_FLOATING_POINT_LITERAL>>
+   | <#DECIMAL_FLOATING_POINT_LITERAL: (["0"-"9"])+ "." (["0"-"9"])* (<DECIMAL_EXPONENT>)? (["f", "F", "d", "D"])? | "." (["0"-"9"])+ (<DECIMAL_EXPONENT>)? (["f", "F", "d", "D"])? | (["0"-"9"])+ <DECIMAL_EXPONENT> (["f", "F", "d", "D"])? | (["0"-"9"])+ (<DECIMAL_EXPONENT>)? ["f", "F", "d", "D"]>
+   | <#DECIMAL_EXPONENT: ["e", "E"] (["+", "-"])? (["0"-"9"])+>
+   | <#HEXADECIMAL_FLOATING_POINT_LITERAL: "0" ["x", "X"] (["0"-"9", "a"-"f", "A"-"F"])+ (".")? <HEXADECIMAL_EXPONENT> (["f", "F", "d", "D"])? | "0" ["x", "X"] (["0"-"9", "a"-"f", "A"-"F"])* "." (["0"-"9", "a"-"f", "A"-"F"])+ <HEXADECIMAL_EXPONENT> (["f", "F", "d", "D"])?>
+   | <#HEXADECIMAL_EXPONENT: ["p", "P"] (["+", "-"])? (["0"-"9"])+>
    | <CHARACTER_LITERAL: "'" ((~["'", "\\", "\n", "\r"]) | ("\\" (["n", "t", "b", "r", "f", "\\", "'", "\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"]))) "'">
    | <STRING_LITERAL: "\"" ((~["\"", "\\", "\n", "\r"]) | ("\\" (["n", "t", "b", "r", "f", "\\", "'", "\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"])))* "\"">
 }
@@ -336,12 +338,14 @@ TOKEN :
          matchedToken.kind = GT;
          ((Token.GTToken)matchedToken).realKind = RUNSIGNEDSHIFT;
          input_stream.backup(2);
+         matchedToken.image = ">";
       }
    | <RSIGNEDSHIFT: ">>">
       {
          matchedToken.kind = GT;
          ((Token.GTToken)matchedToken).realKind = RSIGNEDSHIFT;
          input_stream.backup(1);
+         matchedToken.image = ">";
       }
    | <GT: ">">
 }
@@ -354,13 +358,20 @@ CompilationUnit CompilationUnit() :
    ImportDeclaration n3;
    NodeListOptional n4 = new NodeListOptional();
    TypeDeclaration n5;
-   NodeToken n6;
-   Token n7;
+   NodeOptional n6 = new NodeOptional();
+   NodeToken n7;
+   Token n8;
+   NodeOptional n9 = new NodeOptional();
+   NodeToken n10;
+   Token n11;
+   NodeToken n12;
+   Token n13;
 
    
 }
 {
    (
+      LOOKAHEAD(( Annotation() )* "package")
       n1=PackageDeclaration()
       { n0.addNode(n1); }
    )?
@@ -374,30 +385,40 @@ CompilationUnit CompilationUnit() :
       { n4.addNode(n5); }
    )*
    { n4.nodes.trimToSize(); }
-   n7=<EOF> { 
-      n7.beginColumn++; n7.endColumn++;
-      n6 = JTBToolkit.makeNodeToken(n7);
+   (
+      n8=<"\u001a"> { n7 = JTBToolkit.makeNodeToken(n8); }
+      { n6.addNode(n7); }
+   )?
+   (
+      n11=<STUFF_TO_IGNORE:~[]> { n10 = JTBToolkit.makeNodeToken(n11); }
+      { n9.addNode(n10); }
+   )?
+   n13=<EOF> { 
+      n13.beginColumn++; n13.endColumn++;
+      n12 = JTBToolkit.makeNodeToken(n13);
    }
    
-   { return new CompilationUnit(n0,n2,n4,n6); }
+   { return new CompilationUnit(n0,n2,n4,n6,n9,n12); }
 }
 
 PackageDeclaration PackageDeclaration() :
 {
-   NodeToken n0;
-   Token n1;
-   Name n2;
-   NodeToken n3;
-   Token n4;
+   Modifiers n0;
+   NodeToken n1;
+   Token n2;
+   Name n3;
+   NodeToken n4;
+   Token n5;
 
    
 }
 {
-   n1="package" { n0 = JTBToolkit.makeNodeToken(n1); }
-   n2=Name()
-   n4=";" { n3 = JTBToolkit.makeNodeToken(n4); }
+   n0=Modifiers()
+   n2="package" { n1 = JTBToolkit.makeNodeToken(n2); }
+   n3=Name()
+   n5=";" { n4 = JTBToolkit.makeNodeToken(n5); }
    
-   { return new PackageDeclaration(n0,n2,n3); }
+   { return new PackageDeclaration(n0,n1,n3,n4); }
 }
 
 ImportDeclaration ImportDeclaration() :
@@ -848,27 +869,29 @@ EnumBody EnumBody() :
 
 EnumConstant EnumConstant() :
 {
-   NodeToken n0;
-   Token n1;
-   NodeOptional n2 = new NodeOptional();
-   Arguments n3;
-   NodeOptional n4 = new NodeOptional();
-   ClassOrInterfaceBody n5;
+   Modifiers n0;
+   NodeToken n1;
+   Token n2;
+   NodeOptional n3 = new NodeOptional();
+   Arguments n4;
+   NodeOptional n5 = new NodeOptional();
+   ClassOrInterfaceBody n6;
 
    
 }
 {
-   n1=<IDENTIFIER> { n0 = JTBToolkit.makeNodeToken(n1); }
+   n0=Modifiers()
+   n2=<IDENTIFIER> { n1 = JTBToolkit.makeNodeToken(n2); }
    (
-      n3=Arguments()
-      { n2.addNode(n3); }
+      n4=Arguments()
+      { n3.addNode(n4); }
    )?
    (
-      n5=ClassOrInterfaceBody(false)
-      { n4.addNode(n5); }
+      n6=ClassOrInterfaceBody(false)
+      { n5.addNode(n6); }
    )?
    
-   { return new EnumConstant(n0,n2,n4); }
+   { return new EnumConstant(n0,n1,n3,n5); }
 }
 
 TypeParameters TypeParameters() :
@@ -986,8 +1009,9 @@ ClassOrInterfaceBodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterf
    ConstructorDeclaration n7;
    FieldDeclaration n8;
    MethodDeclaration n9;
-   NodeToken n10;
-   Token n11;
+   AnnotationTypeDeclaration n10;
+   NodeToken n11;
+   Token n12;
 
    boolean isNestedInterface = false;int modifiers;
 }
@@ -1029,14 +1053,17 @@ ClassOrInterfaceBodyDeclaration ClassOrInterfaceBodyDeclaration(boolean isInterf
          |
             n9=MethodDeclaration(modifiers)
             { n4 = new NodeChoice(n9, 4); }
+         |
+            n10=AnnotationTypeDeclaration(modifiers)
+            { n4 = new NodeChoice(n10, 5); }
          )
          
       )
       { n2.addNode(n4); }
       { n0 = new NodeChoice(n2, 1); }
    |
-      n11=";" { n10 = JTBToolkit.makeNodeToken(n11); }
-      { n0 = new NodeChoice(n10, 2); }
+      n12=";" { n11 = JTBToolkit.makeNodeToken(n12); }
+      { n0 = new NodeChoice(n11, 2); }
    )
    
    { return new ClassOrInterfaceBodyDeclaration(n0); }
@@ -1315,30 +1342,40 @@ FormalParameters FormalParameters() :
 
 FormalParameter FormalParameter() :
 {
-   NodeOptional n0 = new NodeOptional();
-   NodeToken n1;
-   Token n2;
-   Type n3;
-   NodeOptional n4 = new NodeOptional();
-   NodeToken n5;
-   Token n6;
-   VariableDeclaratorId n7;
+   Modifiers n0;
+   NodeOptional n1 = new NodeOptional();
+   NodeChoice n2;
+   NodeToken n3;
+   Token n4;
+   Annotation n5;
+   Type n6;
+   NodeOptional n7 = new NodeOptional();
+   NodeToken n8;
+   Token n9;
+   VariableDeclaratorId n10;
 
    
 }
 {
+   n0=Modifiers()
    (
-      n2="final" { n1 = JTBToolkit.makeNodeToken(n2); }
-      { n0.addNode(n1); }
+      (
+         n4="final" { n3 = JTBToolkit.makeNodeToken(n4); }
+         { n2 = new NodeChoice(n3, 0); }
+      |
+         n5=Annotation()
+         { n2 = new NodeChoice(n5, 1); }
+      )
+      { n1.addNode(n2); }
    )?
-   n3=Type()
+   n6=Type()
    (
-      n6="..." { n5 = JTBToolkit.makeNodeToken(n6); }
-      { n4.addNode(n5); }
+      n9="..." { n8 = JTBToolkit.makeNodeToken(n9); }
+      { n7.addNode(n8); }
    )?
-   n7=VariableDeclaratorId()
+   n10=VariableDeclaratorId()
    
-   { return new FormalParameter(n0,n3,n4,n7); }
+   { return new FormalParameter(n0,n1,n6,n7,n10); }
 }
 
 ConstructorDeclaration ConstructorDeclaration() :
@@ -1399,55 +1436,74 @@ ExplicitConstructorInvocation ExplicitConstructorInvocation() :
 {
    NodeChoice n0;
    NodeSequence n1;
-   NodeToken n2;
-   Token n3;
-   Arguments n4;
+   NodeOptional n2 = new NodeOptional();
+   TypeArguments n3;
+   NodeChoice n4;
    NodeToken n5;
    Token n6;
-   NodeSequence n7;
-   NodeOptional n8 = new NodeOptional();
-   NodeSequence n9;
-   PrimaryExpression n10;
-   NodeToken n11;
-   Token n12;
-   NodeToken n13;
-   Token n14;
-   Arguments n15;
-   NodeToken n16;
-   Token n17;
+   NodeToken n7;
+   Token n8;
+   Arguments n9;
+   NodeToken n10;
+   Token n11;
+   NodeSequence n12;
+   PrimaryExpression n13;
+   NodeToken n14;
+   Token n15;
+   NodeOptional n16 = new NodeOptional();
+   TypeArguments n17;
+   NodeToken n18;
+   Token n19;
+   Arguments n20;
+   NodeToken n21;
+   Token n22;
 
    
 }
 {
    (
-      LOOKAHEAD("this" Arguments() ";")
-      { n1 = new NodeSequence(4); }
-      n3="this" { n2 = JTBToolkit.makeNodeToken(n3); }
+      LOOKAHEAD(3)
+      { n1 = new NodeSequence(5); }
+      (
+         n3=TypeArguments()
+         { n2.addNode(n3); }
+      )?
       { n1.addNode(n2); }
-      n4=Arguments()
+      (
+         (
+            n6="this" { n5 = JTBToolkit.makeNodeToken(n6); }
+            { n4 = new NodeChoice(n5, 0); }
+         |
+            n8="super" { n7 = JTBToolkit.makeNodeToken(n8); }
+            { n4 = new NodeChoice(n7, 1); }
+         )
+         
+      )
       { n1.addNode(n4); }
-      n6=";" { n5 = JTBToolkit.makeNodeToken(n6); }
-      { n1.addNode(n5); }
+      n9=Arguments()
+      { n1.addNode(n9); }
+      n11=";" { n10 = JTBToolkit.makeNodeToken(n11); }
+      { n1.addNode(n10); }
       { n0 = new NodeChoice(n1, 0); }
    |
-      { n7 = new NodeSequence(4); }
+      LOOKAHEAD(3)
+      { n12 = new NodeSequence(7); }
+      n13=PrimaryExpression()
+      { n12.addNode(n13); }
+      n15="." { n14 = JTBToolkit.makeNodeToken(n15); }
+      { n12.addNode(n14); }
       (
-         LOOKAHEAD(2)
-         { n9 = new NodeSequence(2); }
-         n10=PrimaryExpression()
-         { n9.addNode(n10); }
-         n12="." { n11 = JTBToolkit.makeNodeToken(n12); }
-         { n9.addNode(n11); }
-         { n8.addNode(n9); }
+         n17=TypeArguments()
+         { n16.addNode(n17); }
       )?
-      { n7.addNode(n8); }
-      n14="super" { n13 = JTBToolkit.makeNodeToken(n14); }
-      { n7.addNode(n13); }
-      n15=Arguments()
-      { n7.addNode(n15); }
-      n17=";" { n16 = JTBToolkit.makeNodeToken(n17); }
-      { n7.addNode(n16); }
-      { n0 = new NodeChoice(n7, 1); }
+      { n12.addNode(n16); }
+      n19="super" { n18 = JTBToolkit.makeNodeToken(n19); }
+      { n12.addNode(n18); }
+      n20=Arguments()
+      { n12.addNode(n20); }
+      n22=";" { n21 = JTBToolkit.makeNodeToken(n22); }
+      { n12.addNode(n21); }
+      { n0 = new NodeChoice(n12, 1); }
    )
    
    { return new ExplicitConstructorInvocation(n0); }
@@ -2665,8 +2721,8 @@ PrimaryPrefix PrimaryPrefix() :
 {
    NodeChoice n0;
    Literal n1;
-   NodeToken n2;
-   Token n3;
+   NodeSequence n2;
+   NodeListOptional n3 = new NodeListOptional();
    NodeSequence n4;
    NodeToken n5;
    Token n6;
@@ -2677,17 +2733,34 @@ PrimaryPrefix PrimaryPrefix() :
    NodeSequence n11;
    NodeToken n12;
    Token n13;
-   Expression n14;
-   NodeToken n15;
-   Token n16;
-   AllocationExpression n17;
+   NodeToken n14;
+   Token n15;
+   NodeToken n16;
+   Token n17;
    NodeSequence n18;
-   ResultType n19;
+   ClassOrInterfaceType n19;
    NodeToken n20;
    Token n21;
    NodeToken n22;
    Token n23;
-   Name n24;
+   NodeToken n24;
+   Token n25;
+   NodeToken n26;
+   Token n27;
+   NodeSequence n28;
+   NodeToken n29;
+   Token n30;
+   Expression n31;
+   NodeToken n32;
+   Token n33;
+   AllocationExpression n34;
+   NodeSequence n35;
+   ResultType n36;
+   NodeToken n37;
+   Token n38;
+   NodeToken n39;
+   Token n40;
+   Name n41;
 
    
 }
@@ -2696,42 +2769,69 @@ PrimaryPrefix PrimaryPrefix() :
       n1=Literal()
       { n0 = new NodeChoice(n1, 0); }
    |
-      n3="this" { n2 = JTBToolkit.makeNodeToken(n3); }
+      LOOKAHEAD(( <IDENTIFIER> "." )* "this")
+      { n2 = new NodeSequence(3); }
+      (
+         { n4 = new NodeSequence(2); }
+         n6=<IDENTIFIER> { n5 = JTBToolkit.makeNodeToken(n6); }
+         { n4.addNode(n5); }
+         n8="." { n7 = JTBToolkit.makeNodeToken(n8); }
+         { n4.addNode(n7); }
+         { n3.addNode(n4); }
+      )*
+      { n3.nodes.trimToSize(); }
+      { n2.addNode(n3); }
+      n10="this" { n9 = JTBToolkit.makeNodeToken(n10); }
+      { n2.addNode(n9); }
       { n0 = new NodeChoice(n2, 1); }
    |
-      { n4 = new NodeSequence(3); }
-      n6="super" { n5 = JTBToolkit.makeNodeToken(n6); }
-      { n4.addNode(n5); }
-      n8="." { n7 = JTBToolkit.makeNodeToken(n8); }
-      { n4.addNode(n7); }
-      n10=<IDENTIFIER> { n9 = JTBToolkit.makeNodeToken(n10); }
-      { n4.addNode(n9); }
-      { n0 = new NodeChoice(n4, 2); }
-   |
       { n11 = new NodeSequence(3); }
-      n13="(" { n12 = JTBToolkit.makeNodeToken(n13); }
+      n13="super" { n12 = JTBToolkit.makeNodeToken(n13); }
       { n11.addNode(n12); }
-      n14=Expression()
+      n15="." { n14 = JTBToolkit.makeNodeToken(n15); }
       { n11.addNode(n14); }
-      n16=")" { n15 = JTBToolkit.makeNodeToken(n16); }
-      { n11.addNode(n15); }
-      { n0 = new NodeChoice(n11, 3); }
+      n17=<IDENTIFIER> { n16 = JTBToolkit.makeNodeToken(n17); }
+      { n11.addNode(n16); }
+      { n0 = new NodeChoice(n11, 2); }
    |
-      n17=AllocationExpression()
-      { n0 = new NodeChoice(n17, 4); }
-   |
-      LOOKAHEAD(ResultType() "." "class")
-      { n18 = new NodeSequence(4); }
-      n19=ResultType()
+      LOOKAHEAD(ClassOrInterfaceType() "." "super" "." <IDENTIFIER>)
+      { n18 = new NodeSequence(6); }
+      n19=ClassOrInterfaceType()
       { n18.addNode(n19); }
       n21="." { n20 = JTBToolkit.makeNodeToken(n21); }
       { n18.addNode(n20); }
-      n23="class" { n22 = JTBToolkit.makeNodeToken(n23); }
+      n23="super" { n22 = JTBToolkit.makeNodeToken(n23); }
       { n18.addNode(n22); }
-      { n0 = new NodeChoice(n18, 5); }
+      n25="." { n24 = JTBToolkit.makeNodeToken(n25); }
+      { n18.addNode(n24); }
+      n27=<IDENTIFIER> { n26 = JTBToolkit.makeNodeToken(n27); }
+      { n18.addNode(n26); }
+      { n0 = new NodeChoice(n18, 3); }
    |
-      n24=Name()
-      { n0 = new NodeChoice(n24, 6); }
+      { n28 = new NodeSequence(3); }
+      n30="(" { n29 = JTBToolkit.makeNodeToken(n30); }
+      { n28.addNode(n29); }
+      n31=Expression()
+      { n28.addNode(n31); }
+      n33=")" { n32 = JTBToolkit.makeNodeToken(n33); }
+      { n28.addNode(n32); }
+      { n0 = new NodeChoice(n28, 4); }
+   |
+      n34=AllocationExpression()
+      { n0 = new NodeChoice(n34, 5); }
+   |
+      LOOKAHEAD(ResultType() "." "class")
+      { n35 = new NodeSequence(4); }
+      n36=ResultType()
+      { n35.addNode(n36); }
+      n38="." { n37 = JTBToolkit.makeNodeToken(n38); }
+      { n35.addNode(n37); }
+      n40="class" { n39 = JTBToolkit.makeNodeToken(n40); }
+      { n35.addNode(n39); }
+      { n0 = new NodeChoice(n35, 6); }
+   |
+      n41=Name()
+      { n0 = new NodeChoice(n41, 7); }
    )
    
    { return new PrimaryPrefix(n0); }
@@ -2772,19 +2872,19 @@ PrimarySuffix PrimarySuffix() :
 }
 {
    (
-      LOOKAHEAD(2)
+      LOOKAHEAD("." "super")
       { n1 = new NodeSequence(3); }
       n3="." { n2 = JTBToolkit.makeNodeToken(n3); }
       { n1.addNode(n2); }
-      n5="this" { n4 = JTBToolkit.makeNodeToken(n5); }
+      n5="super" { n4 = JTBToolkit.makeNodeToken(n5); }
       { n1.addNode(n4); }
       { n0 = new NodeChoice(n1, 0); }
    |
-      LOOKAHEAD(2)
+      LOOKAHEAD("." "this")
       { n6 = new NodeSequence(3); }
       n8="." { n7 = JTBToolkit.makeNodeToken(n8); }
       { n6.addNode(n7); }
-      n10="super" { n9 = JTBToolkit.makeNodeToken(n10); }
+      n10="this" { n9 = JTBToolkit.makeNodeToken(n10); }
       { n6.addNode(n9); }
       { n0 = new NodeChoice(n6, 1); }
    |
@@ -3262,7 +3362,7 @@ BlockStatement BlockStatement() :
 }
 {
    (
-      LOOKAHEAD([ "final" ] Type() <IDENTIFIER>)
+      LOOKAHEAD(Modifiers() Type() <IDENTIFIER>)
       { n1 = new NodeSequence(3); }
       n2=LocalVariableDeclaration()
       { n1.addNode(n2); }
@@ -3282,37 +3382,32 @@ BlockStatement BlockStatement() :
 
 LocalVariableDeclaration LocalVariableDeclaration() :
 {
-   NodeOptional n0 = new NodeOptional();
-   NodeToken n1;
-   Token n2;
-   Type n3;
-   VariableDeclarator n4;
-   NodeListOptional n5 = new NodeListOptional();
-   NodeSequence n6;
-   NodeToken n7;
-   Token n8;
-   VariableDeclarator n9;
+   Modifiers n0;
+   Type n1;
+   VariableDeclarator n2;
+   NodeListOptional n3 = new NodeListOptional();
+   NodeSequence n4;
+   NodeToken n5;
+   Token n6;
+   VariableDeclarator n7;
 
    
 }
 {
+   n0=Modifiers()
+   n1=Type()
+   n2=VariableDeclarator()
    (
-      n2="final" { n1 = JTBToolkit.makeNodeToken(n2); }
-      { n0.addNode(n1); }
-   )?
-   n3=Type()
-   n4=VariableDeclarator()
-   (
-      { n6 = new NodeSequence(2); }
-      n8="," { n7 = JTBToolkit.makeNodeToken(n8); }
-      { n6.addNode(n7); }
-      n9=VariableDeclarator()
-      { n6.addNode(n9); }
-      { n5.addNode(n6); }
+      { n4 = new NodeSequence(2); }
+      n6="," { n5 = JTBToolkit.makeNodeToken(n6); }
+      { n4.addNode(n5); }
+      n7=VariableDeclarator()
+      { n4.addNode(n7); }
+      { n3.addNode(n4); }
    )*
-   { n5.nodes.trimToSize(); }
+   { n3.nodes.trimToSize(); }
    
-   { return new LocalVariableDeclaration(n0,n3,n4,n5); }
+   { return new LocalVariableDeclaration(n0,n1,n2,n3); }
 }
 
 EmptyStatement EmptyStatement() :
@@ -3564,26 +3659,27 @@ ForStatement ForStatement() :
    Token n3;
    NodeChoice n4;
    NodeSequence n5;
-   Type n6;
-   NodeToken n7;
-   Token n8;
-   NodeToken n9;
-   Token n10;
-   Expression n11;
-   NodeSequence n12;
-   NodeOptional n13 = new NodeOptional();
-   ForInit n14;
-   NodeToken n15;
-   Token n16;
-   NodeOptional n17 = new NodeOptional();
-   Expression n18;
-   NodeToken n19;
-   Token n20;
-   NodeOptional n21 = new NodeOptional();
-   ForUpdate n22;
-   NodeToken n23;
-   Token n24;
-   Statement n25;
+   Modifiers n6;
+   Type n7;
+   NodeToken n8;
+   Token n9;
+   NodeToken n10;
+   Token n11;
+   Expression n12;
+   NodeSequence n13;
+   NodeOptional n14 = new NodeOptional();
+   ForInit n15;
+   NodeToken n16;
+   Token n17;
+   NodeOptional n18 = new NodeOptional();
+   Expression n19;
+   NodeToken n20;
+   Token n21;
+   NodeOptional n22 = new NodeOptional();
+   ForUpdate n23;
+   NodeToken n24;
+   Token n25;
+   Statement n26;
 
    
 }
@@ -3592,46 +3688,48 @@ ForStatement ForStatement() :
    n3="(" { n2 = JTBToolkit.makeNodeToken(n3); }
    (
       (
-         LOOKAHEAD(Type() <IDENTIFIER> ":")
-         { n5 = new NodeSequence(5); }
-         n6=Type()
+         LOOKAHEAD(Modifiers() Type() <IDENTIFIER> ":")
+         { n5 = new NodeSequence(6); }
+         n6=Modifiers()
          { n5.addNode(n6); }
-         n8=<IDENTIFIER> { n7 = JTBToolkit.makeNodeToken(n8); }
+         n7=Type()
          { n5.addNode(n7); }
-         n10=":" { n9 = JTBToolkit.makeNodeToken(n10); }
-         { n5.addNode(n9); }
-         n11=Expression()
-         { n5.addNode(n11); }
+         n9=<IDENTIFIER> { n8 = JTBToolkit.makeNodeToken(n9); }
+         { n5.addNode(n8); }
+         n11=":" { n10 = JTBToolkit.makeNodeToken(n11); }
+         { n5.addNode(n10); }
+         n12=Expression()
+         { n5.addNode(n12); }
          { n4 = new NodeChoice(n5, 0); }
       |
-         { n12 = new NodeSequence(5); }
+         { n13 = new NodeSequence(5); }
          (
-            n14=ForInit()
-            { n13.addNode(n14); }
+            n15=ForInit()
+            { n14.addNode(n15); }
          )?
-         { n12.addNode(n13); }
-         n16=";" { n15 = JTBToolkit.makeNodeToken(n16); }
-         { n12.addNode(n15); }
+         { n13.addNode(n14); }
+         n17=";" { n16 = JTBToolkit.makeNodeToken(n17); }
+         { n13.addNode(n16); }
          (
-            n18=Expression()
-            { n17.addNode(n18); }
+            n19=Expression()
+            { n18.addNode(n19); }
          )?
-         { n12.addNode(n17); }
-         n20=";" { n19 = JTBToolkit.makeNodeToken(n20); }
-         { n12.addNode(n19); }
+         { n13.addNode(n18); }
+         n21=";" { n20 = JTBToolkit.makeNodeToken(n21); }
+         { n13.addNode(n20); }
          (
-            n22=ForUpdate()
-            { n21.addNode(n22); }
+            n23=ForUpdate()
+            { n22.addNode(n23); }
          )?
-         { n12.addNode(n21); }
-         { n4 = new NodeChoice(n12, 1); }
+         { n13.addNode(n22); }
+         { n4 = new NodeChoice(n13, 1); }
       )
       
    )
-   n24=")" { n23 = JTBToolkit.makeNodeToken(n24); }
-   n25=Statement()
+   n25=")" { n24 = JTBToolkit.makeNodeToken(n25); }
+   n26=Statement()
    
-   { return new ForStatement(n0,n2,n4,n23,n25); }
+   { return new ForStatement(n0,n2,n4,n24,n26); }
 }
 
 ForInit ForInit() :
@@ -3644,7 +3742,7 @@ ForInit ForInit() :
 }
 {
    (
-      LOOKAHEAD([ "final" ] Type() <IDENTIFIER>)
+      LOOKAHEAD(Modifiers() Type() <IDENTIFIER>)
       n1=LocalVariableDeclaration()
       { n0 = new NodeChoice(n1, 0); }
    |
@@ -4070,40 +4168,51 @@ MemberValueArrayInitializer MemberValueArrayInitializer() :
 {
    NodeToken n0;
    Token n1;
-   MemberValue n2;
-   NodeListOptional n3 = new NodeListOptional();
-   NodeSequence n4;
-   NodeToken n5;
-   Token n6;
-   MemberValue n7;
-   NodeOptional n8 = new NodeOptional();
-   NodeToken n9;
-   Token n10;
+   NodeOptional n2 = new NodeOptional();
+   NodeSequence n3;
+   MemberValue n4;
+   NodeListOptional n5;
+   NodeSequence n6;
+   NodeToken n7;
+   Token n8;
+   MemberValue n9;
+   NodeOptional n10;
    NodeToken n11;
    Token n12;
+   NodeToken n13;
+   Token n14;
 
    
 }
 {
    n1="{" { n0 = JTBToolkit.makeNodeToken(n1); }
-   n2=MemberValue()
    (
-      LOOKAHEAD(2)
-      { n4 = new NodeSequence(2); }
-      n6="," { n5 = JTBToolkit.makeNodeToken(n6); }
-      { n4.addNode(n5); }
-      n7=MemberValue()
-      { n4.addNode(n7); }
+      { n5 = new NodeListOptional(); }
+      { n10 = new NodeOptional(); }
+      { n3 = new NodeSequence(3); }
+      n4=MemberValue()
       { n3.addNode(n4); }
-   )*
-   { n3.nodes.trimToSize(); }
-   (
-      n10="," { n9 = JTBToolkit.makeNodeToken(n10); }
-      { n8.addNode(n9); }
+      (
+         LOOKAHEAD(2)
+         { n6 = new NodeSequence(2); }
+         n8="," { n7 = JTBToolkit.makeNodeToken(n8); }
+         { n6.addNode(n7); }
+         n9=MemberValue()
+         { n6.addNode(n9); }
+         { n5.addNode(n6); }
+      )*
+      { n5.nodes.trimToSize(); }
+      { n3.addNode(n5); }
+      (
+         n12="," { n11 = JTBToolkit.makeNodeToken(n12); }
+         { n10.addNode(n11); }
+      )?
+      { n3.addNode(n10); }
+      { n2.addNode(n3); }
    )?
-   n12="}" { n11 = JTBToolkit.makeNodeToken(n12); }
+   n14="}" { n13 = JTBToolkit.makeNodeToken(n14); }
    
-   { return new MemberValueArrayInitializer(n0,n2,n3,n8,n11); }
+   { return new MemberValueArrayInitializer(n0,n2,n13); }
 }
 
 AnnotationTypeDeclaration AnnotationTypeDeclaration(int modifiers) :

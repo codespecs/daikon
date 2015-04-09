@@ -4,10 +4,13 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
+/**
+ * Grammar production:
+ * f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
+ */
 public class Modifiers implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
    public NodeListOptional f0;
@@ -32,3 +35,4 @@ public class Modifiers implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

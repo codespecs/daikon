@@ -1,3 +1,91 @@
+April 9, 2015
+
+I (markro) have rebuilt the parser using a newer version of the input
+grammar file (Java1.5.jj).  The original parser build tools were not
+included in our repository.  I have located what appear to be versions
+of the correct vintage of jtb132 and javacc - I will add them to the
+repository shortly.  I followed the build insturctions below with a
+few modifications.  Here are the details:
+
+I do not recommend building the parser in the jtb directory.  The
+tools will overwrite the existing *.java, syntaxtree/*.java and
+visitor/*.java files.  I built the parser in a temp directory and
+then copied the (modified) files over after verification.
+
+This version of the Java 1.5 grammar (Java1.5.jj) was obtained from:
+https://svn.java.net/svn/javacc~svn/tags/release_41/examples/JavaGrammars/1.5/Java1.5.jj
+
+I have added a modifications (from Jens Palsberg) to avoid a problem
+with version 1.3.2 of jtb.
+I have also modified two productions:
+   ExplicitConstructorInvocation
+   PrimarySuffix
+See the comments at those points in the grammar for more details.
+
+Step 1:
+Run the Java Tree Builder (jtb) tool:
+  java -classpath {path to}jtb132.jar:$CLASSPATH EDU.purdue.jtb.JTB -pp -tk -p jtb -printer Java1.5.jj 
+This will create the syntaxtree/*.java, visitor/*.java and jtb.out.jj files. 
+
+Step 2:
+The created java files need some modifications.  All the files in the syntaxtree
+directory need to have "serialVersionUID"s added to eliminate Java compiler
+warnings. (Except for the two interface definitions: Node.java and
+NodeListInterface.java.)  The "add-UID.pl" perl script can be used to do this.
+Also, the file syntaxtree/ClassOrInterfaceType.java needs to have the member
+"public ClassOrInterfaceType unGenerifiedVersionOfThis = null;" added to 
+support tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java.  All the files
+in the visitor directory are ok, except for TreeFormatter.java.  It needs 
+extensive modifications to turn it into a "pretty-printer"; also it needs
+a few modifications to eliminate Java compiler warnings. You can use a 
+diff of TreeFormatter.java.orig and TreeFormatter.java to see what changes
+were made.
+
+Step 3:
+Run the Java Compiler Compiler (javacc) tool:
+  {path to}javacc jtb.out.jj
+This will create seven java files that constitue the actual parser. You will
+need to add "package jtb;" at the begining of each file.  You don't need
+to edit Token.java, but you must replace it with Token.java.modified.
+There are a few other edits that need to be made to eliminate Java
+compiler warnings - search for '(markro)' in the current files.
+The file 'parser.mods' is diff output showing the changes to JavaParser.java.
+
+Step 4:
+This step is very tricky and doesn't lend itself to automation. As of
+this date, the following files reference parser generated syntax nodes:
+
+split/OrigFixer.java
+split/StatementReplacer.java
+split/Visitors.java
+test/TestAst.java
+test/TestClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/AnnotateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/CollectFieldsVisitor.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/OrigModifier.java
+tools/jtb/ParseResults.java
+tools/jtb/PptNameMatcher.java
+tools/runtimechecker/CheckerClass.java
+tools/runtimechecker/InstrumentVisitor.java
+
+For each of the grammar rules that were modified by your parser update,
+you need to see if any of the files above need to have a corresponding
+modification.  Typically, this means changing the referenced node member;
+they are named f0 to fn - where n is the number of terms in the production.
+For example, perhaps an additonal term has been added to the production
+and you need to change 'f2' to 'f3'.
+
+Sorry this is so vague, some required changes might show up as compile
+errors but some will need to be found by test failures.  Good Luck!
+
+
+(original notes below)
+===========================================================================
+
 The files in this directory were generated using JTB 1.3.2 (the Java
 Tree Builder; look for "java jtb" in google) and javacc (version 3.2),
 as follows:

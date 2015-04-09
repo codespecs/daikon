@@ -1,24 +1,42 @@
+/* Copyright (c) 2006, Sun Microsystems, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Sun Microsystems, Inc. nor the names of its
+ *       contributors may be used to endorse or promote products derived from
+ *       this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 /*
- * Copyright Â© 2002 Sun Microsystems, Inc., 4150 Network Circle, Santa Clara,
- * California 95054, U.S.A. All rights reserved.  Sun Microsystems, Inc. has
- * intellectual property rights relating to technology embodied in the product
- * that is described in this document. In particular, and without limitation,
- * these intellectual property rights may include one or more of the U.S.
- * patents listed at http://www.sun.com/patents and one or more additional
- * patents or pending patent applications in the U.S. and in other countries.
- * U.S. Government Rights - Commercial software. Government users are subject
- * to the Sun Microsystems, Inc. standard license agreement and applicable
- * provisions of the FAR and its supplements.  Use is subject to license terms.
- * Sun,  Sun Microsystems,  the Sun logo and  Java are trademarks or registered
- * trademarks of Sun Microsystems, Inc. in the U.S. and other countries.  This
- * product is covered and controlled by U.S. Export Control laws and may be
- * subject to the export or import laws in other countries.  Nuclear, missile,
- * chemical biological weapons or nuclear maritime end uses or end users,
- * whether direct or indirect, are strictly prohibited.  Export or reexport
- * to countries subject to U.S. embargo or to entities identified on U.S.
- * export exclusion lists, including, but not limited to, the denied persons
- * and specially designated nationals lists is strictly prohibited.
+ * This version of the Java 1.5 grammar was obtained from:
+ * https://svn.java.net/svn/javacc~svn/tags/release_41/examples/JavaGrammars/1.5/Java1.5.jj
+ *
+ * I have added few modifications (from Jens Palsberg) to avoid a problem
+ * with version 1.3.2 of jtb.  (markro)
+ * I have also modified two productions:
+ *    ExplicitConstructorInvocation
+ *    PrimarySuffix
+ * See the comments at those points for more details.  (markro)
+ *
  */
 
 options {
@@ -180,17 +198,14 @@ SKIP :
 
 MORE :
 {
-  "//" : IN_SINGLE_LINE_COMMENT
-|
   <"/**" ~["/"]> { input_stream.backup(1); } : IN_FORMAL_COMMENT
 |
   "/*" : IN_MULTI_LINE_COMMENT
 }
 
-<IN_SINGLE_LINE_COMMENT>
 SPECIAL_TOKEN :
 {
-  <SINGLE_LINE_COMMENT: "\n" | "\r" | "\r\n" > : DEFAULT
+  <SINGLE_LINE_COMMENT: "//" (~["\n", "\r"])* ("\n" | "\r" | "\r\n")?>
 }
 
 <IN_FORMAL_COMMENT>
@@ -205,7 +220,7 @@ SPECIAL_TOKEN :
   <MULTI_LINE_COMMENT: "*/" > : DEFAULT
 }
 
-<IN_SINGLE_LINE_COMMENT,IN_FORMAL_COMMENT,IN_MULTI_LINE_COMMENT>
+<IN_FORMAL_COMMENT,IN_MULTI_LINE_COMMENT>
 MORE :
 {
   < ~[] >
@@ -287,13 +302,25 @@ TOKEN :
   < #OCTAL_LITERAL: "0" (["0"-"7"])* >
 |
   < FLOATING_POINT_LITERAL:
-        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
-      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
-      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
-      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+        <DECIMAL_FLOATING_POINT_LITERAL>
+      | <HEXADECIMAL_FLOATING_POINT_LITERAL>
   >
 |
-  < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+  < #DECIMAL_FLOATING_POINT_LITERAL:
+        (["0"-"9"])+ "." (["0"-"9"])* (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <DECIMAL_EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<DECIMAL_EXPONENT>)? ["f","F","d","D"]
+  >
+|
+  < #DECIMAL_EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+|
+  < #HEXADECIMAL_FLOATING_POINT_LITERAL:
+        "0" ["x", "X"] (["0"-"9","a"-"f","A"-"F"])+ (".")? <HEXADECIMAL_EXPONENT> (["f","F","d","D"])?
+      | "0" ["x", "X"] (["0"-"9","a"-"f","A"-"F"])* "." (["0"-"9","a"-"f","A"-"F"])+ <HEXADECIMAL_EXPONENT> (["f","F","d","D"])?
+  >
+|
+  < #HEXADECIMAL_EXPONENT: ["p","P"] (["+","-"])? (["0"-"9"])+ >
 |
   < CHARACTER_LITERAL:
       "'"
@@ -1037,12 +1064,14 @@ TOKEN :
      matchedToken.kind = GT;
      ((Token.GTToken)matchedToken).realKind = RUNSIGNEDSHIFT;
      input_stream.backup(2);
+     matchedToken.image = ">";
   }
 | < RSIGNEDSHIFT: ">>" >
   {
      matchedToken.kind = GT;
      ((Token.GTToken)matchedToken).realKind = RSIGNEDSHIFT;
      input_stream.backup(1);
+     matchedToken.image = ">";
   }
 | < GT: ">" >
 }
@@ -1059,16 +1088,18 @@ TOKEN :
 void CompilationUnit():
 {}
 {
-  [ PackageDeclaration() ]
+  [ LOOKAHEAD( ( Annotation() )* "package" ) PackageDeclaration() ]
   ( ImportDeclaration() )*
   ( TypeDeclaration() )*
+  ( < "\u001a" > )?
+  ( <STUFF_TO_IGNORE: ~[]> )?
   <EOF>
 }
 
 void PackageDeclaration():
 {}
 {
-  "package" Name() ";"
+  Modifiers() "package" Name() ";"
 }
 
 void ImportDeclaration():
@@ -1194,7 +1225,7 @@ void EnumBody():
 {
    "{"
    [ EnumConstant() ( LOOKAHEAD(2) "," EnumConstant() )* ]
-	[ "," ]
+    [ "," ]
    [ ";" ( ClassOrInterfaceBodyDeclaration(false) )* ]
    "}"
 }
@@ -1202,7 +1233,7 @@ void EnumBody():
 void EnumConstant():
 {}
 {
-  <IDENTIFIER> [ Arguments() ] [ ClassOrInterfaceBody(false) ]
+  Modifiers() <IDENTIFIER> [ Arguments() ] [ ClassOrInterfaceBody(false) ]
 }
 
 void TypeParameters():
@@ -1257,6 +1288,8 @@ void ClassOrInterfaceBodyDeclaration(boolean isInterface):
       FieldDeclaration(modifiers)
     |
       MethodDeclaration(modifiers)
+    |
+      AnnotationTypeDeclaration(modifiers)
   )
 |
   ";"
@@ -1320,7 +1353,10 @@ void FormalParameters():
 void FormalParameter():
 {}
 {
-  [ "final" ] Type() [ "..." ] VariableDeclaratorId()
+  // danson, added
+  //          [ "final" | Annotation() ]
+  // See Java Language Specification, 3rd Edition, section 8.4.1
+  Modifiers() [ "final" | Annotation() ] Type() [ "..." ] VariableDeclaratorId()
 }
 
 void ConstructorDeclaration():
@@ -1330,18 +1366,28 @@ void ConstructorDeclaration():
   // Modifiers matched in the caller
   <IDENTIFIER> FormalParameters() [ "throws" NameList() ]
   "{"
-    [ LOOKAHEAD(ExplicitConstructorInvocation()) ExplicitConstructorInvocation() ]
+    [ LOOKAHEAD(ExplicitConstructorInvocation())
+         ExplicitConstructorInvocation()
+    ]
     ( BlockStatement() )*
   "}"
 }
 
 void ExplicitConstructorInvocation():
+/*
+ * The original production was:
+ *   ( <IDENTIFIER> "." )* [ LOOKAHEAD(2) "this" "." ]
+ *   [ TypeArguments() ] ("this"|"super") Arguments() ";"
+ * This does not parse a valid expression of the form:
+ *   (new Outer()).super();
+ * So I modified the production to agree with the Java Language
+ * Specification, Java SE 7 Edition, section 8.8.7.1.  (markro)
+ */
 {}
 {
-  LOOKAHEAD("this" Arguments() ";")
-  "this" Arguments() ";"
-|
-  [ LOOKAHEAD(2) PrimaryExpression() "." ] "super" Arguments() ";"
+   LOOKAHEAD(3) [ TypeArguments() ] ("this"|"super") Arguments() ";"
+ | 
+   LOOKAHEAD(3) PrimaryExpression() "." [ TypeArguments() ] "super" Arguments() ";"
 }
 
 void Initializer():
@@ -1367,7 +1413,7 @@ void ReferenceType():
 {}
 {
    PrimitiveType() ( LOOKAHEAD(2) "[" "]" )+
-  |
+ |
    ( ClassOrInterfaceType() ) ( LOOKAHEAD(2) "[" "]" )*
 }
 
@@ -1631,9 +1677,17 @@ void PrimaryPrefix():
 {
   Literal()
 |
+  LOOKAHEAD( ( <IDENTIFIER> "." )* "this" )
+  ( <IDENTIFIER> "." )*
   "this"
 |
   "super" "." <IDENTIFIER>
+|
+   // danson, added this part to support a construct like:
+   //   Buffer.super.setDirty(true);
+   // See Java Language Specification, 3rd edition, section 15.11.2.
+   LOOKAHEAD( ClassOrInterfaceType() "." "super" "." <IDENTIFIER> )
+   ClassOrInterfaceType() "." "super" "." <IDENTIFIER>
 |
   "(" Expression() ")"
 |
@@ -1646,13 +1700,20 @@ void PrimaryPrefix():
 }
 
 void PrimarySuffix():
+/*
+ * The original production was:
+ *   LOOKAHEAD("." "super" ".")
+ *   "." "super"
+ * The extra "." at the end of the LOOKAHEAD causes parse failures,
+ * it was not present in previous versions; so I removed it.  (markro)
+ */
 {}
 {
-  LOOKAHEAD(2)
-  "." "this"
-|
-  LOOKAHEAD(2)
+  LOOKAHEAD("." "super")
   "." "super"
+|
+  LOOKAHEAD("." "this")
+  "." "this"
 |
   LOOKAHEAD(2)
   "." AllocationExpression()
@@ -1799,7 +1860,7 @@ void Block():
 void BlockStatement():
 {}
 {
-  LOOKAHEAD([ "final" ] Type() <IDENTIFIER>)
+  LOOKAHEAD( Modifiers() Type() <IDENTIFIER> )
   LocalVariableDeclaration() ";"
 |
   Statement()
@@ -1810,7 +1871,7 @@ void BlockStatement():
 void LocalVariableDeclaration():
 {}
 {
-  [ "final" ] Type() VariableDeclarator() ( "," VariableDeclarator() )*
+  Modifiers() Type() VariableDeclarator() ( "," VariableDeclarator() )*
 }
 
 void EmptyStatement():
@@ -1886,8 +1947,8 @@ void ForStatement():
   "for" "("
 
   (
-      LOOKAHEAD(Type() <IDENTIFIER> ":")
-      Type() <IDENTIFIER> ":" Expression() 
+      LOOKAHEAD(Modifiers() Type() <IDENTIFIER> ":")
+      Modifiers() Type() <IDENTIFIER> ":" Expression()
     |
      [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ]
   )
@@ -1898,7 +1959,7 @@ void ForStatement():
 void ForInit():
 {}
 {
-  LOOKAHEAD( [ "final" ] Type() <IDENTIFIER> )
+  LOOKAHEAD( Modifiers() Type() <IDENTIFIER> )
   LocalVariableDeclaration()
 |
   StatementExpressionList()
@@ -2037,7 +2098,7 @@ void MemberValue():
 void  MemberValueArrayInitializer():
 {}
 {
-  "{" MemberValue() ( LOOKAHEAD(2) "," MemberValue() )* [ "," ] "}"
+  "{" (MemberValue() ( LOOKAHEAD(2) "," MemberValue() )* [ "," ])? "}"
 }
 
 
@@ -2083,4 +2144,3 @@ void DefaultValue():
 {
   "default" MemberValue()
 }
-

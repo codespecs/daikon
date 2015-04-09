@@ -4,14 +4,18 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> <IDENTIFIER>
-// f1 -> [ TypeArguments() ]
-// f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
+/**
+ * Grammar production:
+ * f0 -> <IDENTIFIER>
+ * f1 -> [ TypeArguments() ]
+ * f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
+ */
 public class ClassOrInterfaceType implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
-
+   // Added member variable to suport
+   // tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java.  (markro)
    public ClassOrInterfaceType unGenerifiedVersionOfThis = null;
 
    private Node parent;
@@ -43,3 +47,4 @@ public class ClassOrInterfaceType implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

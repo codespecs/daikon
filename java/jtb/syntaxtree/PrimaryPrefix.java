@@ -4,16 +4,20 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> Literal()
-//       | "this"
-//       | "super" "." <IDENTIFIER>
-//       | "(" Expression() ")"
-//       | AllocationExpression()
-//       | ResultType() "." "class"
-//       | Name()
+/**
+ * Grammar production:
+ * f0 -> Literal()
+ *       | ( <IDENTIFIER> "." )* "this"
+ *       | "super" "." <IDENTIFIER>
+ *       | ClassOrInterfaceType() "." "super" "." <IDENTIFIER>
+ *       | "(" Expression() ")"
+ *       | AllocationExpression()
+ *       | ResultType() "." "class"
+ *       | Name()
+ */
 public class PrimaryPrefix implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
    public NodeChoice f0;
@@ -38,3 +42,4 @@ public class PrimaryPrefix implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

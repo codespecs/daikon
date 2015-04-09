@@ -4,21 +4,26 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> [ "final" ]
-// f1 -> Type()
-// f2 -> [ "..." ]
-// f3 -> VariableDeclaratorId()
+/**
+ * Grammar production:
+ * f0 -> Modifiers()
+ * f1 -> [ "final" | Annotation() ]
+ * f2 -> Type()
+ * f3 -> [ "..." ]
+ * f4 -> VariableDeclaratorId()
+ */
 public class FormalParameter implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
-   public NodeOptional f0;
-   public Type f1;
-   public NodeOptional f2;
-   public VariableDeclaratorId f3;
+   public Modifiers f0;
+   public NodeOptional f1;
+   public Type f2;
+   public NodeOptional f3;
+   public VariableDeclaratorId f4;
 
-   public FormalParameter(NodeOptional n0, Type n1, NodeOptional n2, VariableDeclaratorId n3) {
+   public FormalParameter(Modifiers n0, NodeOptional n1, Type n2, NodeOptional n3, VariableDeclaratorId n4) {
       f0 = n0;
       if ( f0 != null ) f0.setParent(this);
       f1 = n1;
@@ -27,6 +32,8 @@ public class FormalParameter implements Node {
       if ( f2 != null ) f2.setParent(this);
       f3 = n3;
       if ( f3 != null ) f3.setParent(this);
+      f4 = n4;
+      if ( f4 != null ) f4.setParent(this);
    }
 
    public void accept(jtb.visitor.Visitor v) {
@@ -44,3 +51,4 @@ public class FormalParameter implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+

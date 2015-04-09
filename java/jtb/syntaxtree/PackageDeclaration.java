@@ -4,34 +4,43 @@
 
 package jtb.syntaxtree;
 
-// Grammar production:
-// f0 -> "package"
-// f1 -> Name()
-// f2 -> ";"
+/**
+ * Grammar production:
+ * f0 -> Modifiers()
+ * f1 -> "package"
+ * f2 -> Name()
+ * f3 -> ";"
+ */
 public class PackageDeclaration implements Node {
-   static final long serialVersionUID = 20050923L;
+   // This was added after running jtb to remove serializable warning.
+   static final long serialVersionUID = 20150406L;
 
    private Node parent;
-   public NodeToken f0;
-   public Name f1;
-   public NodeToken f2;
+   public Modifiers f0;
+   public NodeToken f1;
+   public Name f2;
+   public NodeToken f3;
 
-   public PackageDeclaration(NodeToken n0, Name n1, NodeToken n2) {
+   public PackageDeclaration(Modifiers n0, NodeToken n1, Name n2, NodeToken n3) {
       f0 = n0;
       if ( f0 != null ) f0.setParent(this);
       f1 = n1;
       if ( f1 != null ) f1.setParent(this);
       f2 = n2;
       if ( f2 != null ) f2.setParent(this);
+      f3 = n3;
+      if ( f3 != null ) f3.setParent(this);
    }
 
-   public PackageDeclaration(Name n0) {
-      f0 = new NodeToken("package");
+   public PackageDeclaration(Modifiers n0, Name n1) {
+      f0 = n0;
       if ( f0 != null ) f0.setParent(this);
-      f1 = n0;
+      f1 = new NodeToken("package");
       if ( f1 != null ) f1.setParent(this);
-      f2 = new NodeToken(";");
+      f2 = n1;
       if ( f2 != null ) f2.setParent(this);
+      f3 = new NodeToken(";");
+      if ( f3 != null ) f3.setParent(this);
    }
 
    public void accept(jtb.visitor.Visitor v) {
@@ -49,3 +58,4 @@ public class PackageDeclaration implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
+
