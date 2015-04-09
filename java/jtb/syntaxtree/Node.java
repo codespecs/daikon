@@ -4,9 +4,7 @@
 
 package jtb.syntaxtree;
 
-/**
- * The interface which all syntax tree classes must implement.
- */
+// The interface which all syntax tree classes must implement.
 public interface Node extends java.io.Serializable {
    public void accept(jtb.visitor.Visitor v);
    public <R,A> R accept(jtb.visitor.GJVisitor<R,A> v, A argu);

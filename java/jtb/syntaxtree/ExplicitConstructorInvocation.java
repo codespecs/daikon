@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> [ TypeArguments() ] ( "this" | "super" ) Arguments() ";"
- *       | PrimaryExpression() "." [ TypeArguments() ] "super" Arguments() ";"
- */
+// Grammar production:
+// f0 -> [ TypeArguments() ] ( "this" | "super" ) Arguments() ";"
+//       | PrimaryExpression() "." [ TypeArguments() ] "super" Arguments() ";"
 public class ExplicitConstructorInvocation implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

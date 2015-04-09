@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "try"
- * f1 -> Block()
- * f2 -> ( "catch" "(" FormalParameter() ")" Block() )*
- * f3 -> [ "finally" Block() ]
- */
+// Grammar production:
+// f0 -> "try"
+// f1 -> Block()
+// f2 -> ( "catch" "(" FormalParameter() ")" Block() )*
+// f3 -> [ "finally" Block() ]
 public class TryStatement implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

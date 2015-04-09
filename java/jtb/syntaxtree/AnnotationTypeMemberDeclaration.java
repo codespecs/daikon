@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> Modifiers() ( Type() <IDENTIFIER> "(" ")" [ DefaultValue() ] ";" | ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) | FieldDeclaration(modifiers) )
- *       | ( ";" )
- */
+// Grammar production:
+// f0 -> Modifiers() ( Type() <IDENTIFIER> "(" ")" [ DefaultValue() ] ";" | ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) | FieldDeclaration(modifiers) )
+//       | ( ";" )
 public class AnnotationTypeMemberDeclaration implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

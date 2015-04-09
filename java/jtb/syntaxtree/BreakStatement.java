@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "break"
- * f1 -> [ <IDENTIFIER> ]
- * f2 -> ";"
- */
+// Grammar production:
+// f0 -> "break"
+// f1 -> [ <IDENTIFIER> ]
+// f2 -> ";"
 public class BreakStatement implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

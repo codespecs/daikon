@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> Initializer()
- *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
- *       | ";"
- */
+// Grammar production:
+// f0 -> Initializer()
+//       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
+//       | ";"
 public class ClassOrInterfaceBodyDeclaration implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

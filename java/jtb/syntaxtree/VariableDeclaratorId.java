@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> <IDENTIFIER>
- * f1 -> ( "[" "]" )*
- */
+// Grammar production:
+// f0 -> <IDENTIFIER>
+// f1 -> ( "[" "]" )*
 public class VariableDeclaratorId implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

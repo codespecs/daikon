@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "@"
- * f1 -> "interface"
- * f2 -> <IDENTIFIER>
- * f3 -> AnnotationTypeBody()
- */
+// Grammar production:
+// f0 -> "@"
+// f1 -> "interface"
+// f2 -> <IDENTIFIER>
+// f3 -> AnnotationTypeBody()
 public class AnnotationTypeDeclaration implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

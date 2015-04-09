@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( "~" | "!" ) UnaryExpression()
- *       | CastExpression()
- *       | PostfixExpression()
- */
+// Grammar production:
+// f0 -> ( "~" | "!" ) UnaryExpression()
+//       | CastExpression()
+//       | PostfixExpression()
 public class UnaryExpressionNotPlusMinus implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> Modifiers()
- * f1 -> Type()
- * f2 -> VariableDeclarator()
- * f3 -> ( "," VariableDeclarator() )*
- */
+// Grammar production:
+// f0 -> Modifiers()
+// f1 -> Type()
+// f2 -> VariableDeclarator()
+// f3 -> ( "," VariableDeclarator() )*
 public class LocalVariableDeclaration implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

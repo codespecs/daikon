@@ -4,14 +4,12 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "import"
- * f1 -> [ "static" ]
- * f2 -> Name()
- * f3 -> [ "." "*" ]
- * f4 -> ";"
- */
+// Grammar production:
+// f0 -> "import"
+// f1 -> [ "static" ]
+// f2 -> Name()
+// f3 -> [ "." "*" ]
+// f4 -> ";"
 public class ImportDeclaration implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

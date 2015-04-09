@@ -4,17 +4,15 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> [ TypeParameters() ]
- * f1 -> <IDENTIFIER>
- * f2 -> FormalParameters()
- * f3 -> [ "throws" NameList() ]
- * f4 -> "{"
- * f5 -> [ ExplicitConstructorInvocation() ]
- * f6 -> ( BlockStatement() )*
- * f7 -> "}"
- */
+// Grammar production:
+// f0 -> [ TypeParameters() ]
+// f1 -> <IDENTIFIER>
+// f2 -> FormalParameters()
+// f3 -> [ "throws" NameList() ]
+// f4 -> "{"
+// f5 -> [ ExplicitConstructorInvocation() ]
+// f6 -> ( BlockStatement() )*
+// f7 -> "}"
 public class ConstructorDeclaration implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

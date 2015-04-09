@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "."
- * f1 -> TypeArguments()
- * f2 -> <IDENTIFIER>
- */
+// Grammar production:
+// f0 -> "."
+// f1 -> TypeArguments()
+// f2 -> <IDENTIFIER>
 public class MemberSelector implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

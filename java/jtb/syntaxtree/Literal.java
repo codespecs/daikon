@@ -4,15 +4,13 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> <INTEGER_LITERAL>
- *       | <FLOATING_POINT_LITERAL>
- *       | <CHARACTER_LITERAL>
- *       | <STRING_LITERAL>
- *       | BooleanLiteral()
- *       | NullLiteral()
- */
+// Grammar production:
+// f0 -> <INTEGER_LITERAL>
+//       | <FLOATING_POINT_LITERAL>
+//       | <CHARACTER_LITERAL>
+//       | <STRING_LITERAL>
+//       | BooleanLiteral()
+//       | NullLiteral()
 public class Literal implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

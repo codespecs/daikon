@@ -4,9 +4,7 @@
 
 package jtb.syntaxtree;
 
-/**
- * Represents an grammar optional node, e.g. ( A )? or [ A ]
- */
+// Represents an grammar optional node, e.g. ( A )? or [ A ]
 public class NodeOptional implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

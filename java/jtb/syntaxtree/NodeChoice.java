@@ -4,9 +4,7 @@
 
 package jtb.syntaxtree;
 
-/**
- * Represents a grammar choice, e.g. ( A | B )
- */
+// Represents a grammar choice, e.g. ( A | B )
 public class NodeChoice implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

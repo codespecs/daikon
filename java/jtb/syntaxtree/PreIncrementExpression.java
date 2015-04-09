@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "++"
- * f1 -> PrimaryExpression()
- */
+// Grammar production:
+// f0 -> "++"
+// f1 -> PrimaryExpression()
 public class PreIncrementExpression implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

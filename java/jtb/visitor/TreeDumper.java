@@ -7,10 +7,8 @@ import jtb.syntaxtree.*;
 import java.util.*;
 import java.io.*;
 
-/**
- * Dumps the syntax tree to a Writer using the location information in
- * each NodeToken.
- */
+// Dumps the syntax tree to a Writer using the location information in
+// each NodeToken.
 public class TreeDumper extends DepthFirstVisitor {
    protected PrintWriter out;
    private int curLine = 1;
@@ -18,49 +16,37 @@ public class TreeDumper extends DepthFirstVisitor {
    private boolean startAtNextToken = false;
    private boolean printSpecials = true;
 
-   /**
-    * The default constructor uses System.out as its output location.
-    * You may specify your own Writer or OutputStream using one of the
-    * other constructors.
-    */
+   // The default constructor uses System.out as its output location.
+   // You may specify your own Writer or OutputStream using one of the
+   // other constructors.
    public TreeDumper()       { out = new PrintWriter(System.out, true); }
    public TreeDumper(Writer o)        { out = new PrintWriter(o, true); }
    public TreeDumper(OutputStream o)  { out = new PrintWriter(o, true); }
 
-   /**
-    * Flushes the OutputStream or Writer that this TreeDumper is using.
-    */
+   // Flushes the OutputStream or Writer that this TreeDumper is using.
    public void flushWriter()        { out.flush(); }
 
-   /**
-    * Allows you to specify whether or not to print special tokens.
-    */
+   // Allows you to specify whether or not to print special tokens.
    public void printSpecials(boolean b)   { printSpecials = b; }
 
-   /**
-    * Starts the tree dumper on the line containing the next token
-    * visited.  For example, if the next token begins on line 50 and the
-    * dumper is currently on line 1 of the file, it will set its current
-    * line to 50 and continue printing from there, as opposed to
-    * printing 49 blank lines and then printing the token.
-    */
+   // Starts the tree dumper on the line containing the next token
+   // visited.  For example, if the next token begins on line 50 and the
+   // dumper is currently on line 1 of the file, it will set its current
+   // line to 50 and continue printing from there, as opposed to
+   // printing 49 blank lines and then printing the token.
    public void startAtNextToken()   { startAtNextToken = true; }
 
-   /**
-    * Resets the position of the output "cursor" to the first line and
-    * column.  When using a dumper on a syntax tree more than once, you
-    * either need to call this method or startAtNextToken() between each
-    * dump.
-    */
+   // Resets the position of the output "cursor" to the first line and
+   // column.  When using a dumper on a syntax tree more than once, you
+   // either need to call this method or startAtNextToken() between each
+   // dump.
    public void resetPosition()      { curLine = curColumn = 1; }
 
-   /**
-    * Dumps the current NodeToken to the output stream being used.
-    *
-    * @throws  IllegalStateException   if the token position is invalid
-    *   relative to the current position, i.e. its location places it
-    *   before the previous token.
-    */
+   // Dumps the current NodeToken to the output stream being used.
+   // 
+   // @throws  IllegalStateException   if the token position is invalid
+   //   relative to the current position, i.e. its location places it
+   //   before the previous token.
    public void visit(NodeToken n) {
       // System.out.println("{" + n.kind +"}: " + n.tokenImage);
       // System.out.println("{" + ((n.getParent()).getClass()).getName() +"}: " + n.tokenImage);

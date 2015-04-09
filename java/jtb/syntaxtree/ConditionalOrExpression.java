@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ConditionalAndExpression()
- * f1 -> ( "||" ConditionalAndExpression() )*
- */
+// Grammar production:
+// f0 -> ConditionalAndExpression()
+// f1 -> ( "||" ConditionalAndExpression() )*
 public class ConditionalOrExpression implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

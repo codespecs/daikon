@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> <IDENTIFIER>
- * f1 -> [ TypeArguments() ]
- * f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
- */
+// Grammar production:
+// f0 -> <IDENTIFIER>
+// f1 -> [ TypeArguments() ]
+// f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
 public class ClassOrInterfaceType implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

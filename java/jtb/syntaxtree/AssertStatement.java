@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "assert"
- * f1 -> Expression()
- * f2 -> [ ":" Expression() ]
- * f3 -> ";"
- */
+// Grammar production:
+// f0 -> "assert"
+// f1 -> Expression()
+// f2 -> [ ":" Expression() ]
+// f3 -> ";"
 public class AssertStatement implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

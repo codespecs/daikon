@@ -5,10 +5,8 @@
 package jtb.syntaxtree;
 
 import java.util.*;
-/**
- * Represents a single token in the grammar.  If the "-tk" option
- * is used, also contains a Vector of preceding special tokens.
- */
+// Represents a single token in the grammar.  If the "-tk" option
+// is used, also contains a Vector of preceding special tokens.
 public class NodeToken implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

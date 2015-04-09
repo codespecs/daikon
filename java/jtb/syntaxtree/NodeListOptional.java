@@ -6,9 +6,7 @@ package jtb.syntaxtree;
 
 import java.util.*;
 
-/**
- * Represents an optional grammar list, e.g. ( A )*
- */
+// Represents an optional grammar list, e.g. ( A )*
 public class NodeListOptional implements NodeListInterface {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

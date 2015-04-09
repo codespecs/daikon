@@ -4,15 +4,13 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> [ PackageDeclaration() ]
- * f1 -> ( ImportDeclaration() )*
- * f2 -> ( TypeDeclaration() )*
- * f3 -> ( <"\u001a"> )?
- * f4 -> ( <STUFF_TO_IGNORE: ~[]> )?
- * f5 -> <EOF>
- */
+// Grammar production:
+// f0 -> [ PackageDeclaration() ]
+// f1 -> ( ImportDeclaration() )*
+// f2 -> ( TypeDeclaration() )*
+// f3 -> ( <"\u001a"> )?
+// f4 -> ( <STUFF_TO_IGNORE: ~[]> )?
+// f5 -> <EOF>
 public class CompilationUnit implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

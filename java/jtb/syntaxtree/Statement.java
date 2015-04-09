@@ -4,25 +4,23 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> LabeledStatement()
- *       | AssertStatement()
- *       | Block()
- *       | EmptyStatement()
- *       | StatementExpression() ";"
- *       | SwitchStatement()
- *       | IfStatement()
- *       | WhileStatement()
- *       | DoStatement()
- *       | ForStatement()
- *       | BreakStatement()
- *       | ContinueStatement()
- *       | ReturnStatement()
- *       | ThrowStatement()
- *       | SynchronizedStatement()
- *       | TryStatement()
- */
+// Grammar production:
+// f0 -> LabeledStatement()
+//       | AssertStatement()
+//       | Block()
+//       | EmptyStatement()
+//       | StatementExpression() ";"
+//       | SwitchStatement()
+//       | IfStatement()
+//       | WhileStatement()
+//       | DoStatement()
+//       | ForStatement()
+//       | BreakStatement()
+//       | ContinueStatement()
+//       | ReturnStatement()
+//       | ThrowStatement()
+//       | SynchronizedStatement()
+//       | TryStatement()
 public class Statement implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

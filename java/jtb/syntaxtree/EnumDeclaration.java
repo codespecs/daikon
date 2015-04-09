@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "enum"
- * f1 -> <IDENTIFIER>
- * f2 -> [ ImplementsList(false) ]
- * f3 -> EnumBody()
- */
+// Grammar production:
+// f0 -> "enum"
+// f1 -> <IDENTIFIER>
+// f2 -> [ ImplementsList(false) ]
+// f3 -> EnumBody()
 public class EnumDeclaration implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

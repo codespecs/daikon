@@ -6,10 +6,8 @@ package jtb.syntaxtree;
 
 import java.util.*;
 
-/**
- * Represents a sequence of nodes nested within a choice, list,
- * optional list, or optional, e.g. ( A B )+ or [ C D E ]
- */
+// Represents a sequence of nodes nested within a choice, list,
+// optional list, or optional, e.g. ( A B )+ or [ C D E ]
 public class NodeSequence implements NodeListInterface {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

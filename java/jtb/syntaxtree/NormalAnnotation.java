@@ -4,14 +4,12 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "@"
- * f1 -> Name()
- * f2 -> "("
- * f3 -> [ MemberValuePairs() ]
- * f4 -> ")"
- */
+// Grammar production:
+// f0 -> "@"
+// f1 -> Name()
+// f2 -> "("
+// f3 -> [ MemberValuePairs() ]
+// f4 -> ")"
 public class NormalAnnotation implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

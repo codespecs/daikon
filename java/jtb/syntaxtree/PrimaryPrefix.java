@@ -4,17 +4,15 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> Literal()
- *       | ( <IDENTIFIER> "." )* "this"
- *       | "super" "." <IDENTIFIER>
- *       | ClassOrInterfaceType() "." "super" "." <IDENTIFIER>
- *       | "(" Expression() ")"
- *       | AllocationExpression()
- *       | ResultType() "." "class"
- *       | Name()
- */
+// Grammar production:
+// f0 -> Literal()
+//       | ( <IDENTIFIER> "." )* "this"
+//       | "super" "." <IDENTIFIER>
+//       | ClassOrInterfaceType() "." "super" "." <IDENTIFIER>
+//       | "(" Expression() ")"
+//       | AllocationExpression()
+//       | ResultType() "." "class"
+//       | Name()
 public class PrimaryPrefix implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

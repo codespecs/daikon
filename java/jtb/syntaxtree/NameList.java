@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> Name()
- * f1 -> ( "," Name() )*
- */
+// Grammar production:
+// f0 -> Name()
+// f1 -> ( "," Name() )*
 public class NameList implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

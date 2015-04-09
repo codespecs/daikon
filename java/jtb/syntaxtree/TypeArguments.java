@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "<"
- * f1 -> TypeArgument()
- * f2 -> ( "," TypeArgument() )*
- * f3 -> ">"
- */
+// Grammar production:
+// f0 -> "<"
+// f1 -> TypeArgument()
+// f2 -> ( "," TypeArgument() )*
+// f3 -> ">"
 public class TypeArguments implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

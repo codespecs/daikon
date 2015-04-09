@@ -6,15 +6,13 @@ package jtb.visitor;
 import jtb.syntaxtree.*;
 import java.util.*;
 
-/**
- * A skeleton output formatter for your language grammar.  Using the
- * add() method along with force(), indent(), and outdent(), you can
- * easily specify how this visitor will format the given syntax tree.
- * See the JTB documentation for more details.
- *
- * Pass your syntax tree to this visitor, and then to the TreeDumper
- * visitor in order to "pretty print" your tree.
- */
+// A skeleton output formatter for your language grammar.  Using the
+// add() method along with force(), indent(), and outdent(), you can
+// easily specify how this visitor will format the given syntax tree.
+// See the JTB documentation for more details.
+// 
+// Pass your syntax tree to this visitor, and then to the TreeDumper
+// visitor in order to "pretty print" your tree.
 
 // Added by hand to eliminate Enumeration warnings.  (markro)
 @SuppressWarnings("rawtypes")
@@ -27,23 +25,19 @@ public class TreeFormatter extends DepthFirstVisitor {
    private int curColumn = 1;
    private int curIndent = 0;
 
-   /**
-    * The default constructor assumes an indentation amount of 3 spaces
-    * and no line-wrap.  You may alternately use the other constructor to
-    * specify your own indentation amount and line width.
-    */
+   // The default constructor assumes an indentation amount of 3 spaces
+   // and no line-wrap.  You may alternately use the other constructor to
+   // specify your own indentation amount and line width.
    public TreeFormatter() { this(3, 0); }
 
-   /**
-    * This constructor accepts an indent amount and a line width which is
-    * used to wrap long lines.  If a token's beginColumn value is greater
-    * than the specified wrapWidth, it will be moved to the next line and
-    * indented one extra level.  To turn off line-wrapping, specify a
-    * wrapWidth of 0.
-    *
-    * @param   indentAmt   Amount of spaces per indentation level.
-    * @param   wrapWidth   Wrap lines longer than wrapWidth.  0 for no wrap.
-    */
+   // This constructor accepts an indent amount and a line width which is
+   // used to wrap long lines.  If a token's beginColumn value is greater
+   // than the specified wrapWidth, it will be moved to the next line and
+   // indented one extra level.  To turn off line-wrapping, specify a
+   // wrapWidth of 0.
+   // 
+   // @param   indentAmt   Amount of spaces per indentation level.
+   // @param   wrapWidth   Wrap lines longer than wrapWidth.  0 for no wrap.
    public TreeFormatter(int indentAmt, int wrapWidth) {
       this.indentAmt = indentAmt;
       this.wrapWidth = wrapWidth;
@@ -54,10 +48,8 @@ public class TreeFormatter extends DepthFirstVisitor {
          lineWrap = false;
    }
 
-   /**
-    * Accepts a NodeListInterface object and performs an optional format
-    * command between each node in the list (but not after the last node).
-    */
+   // Accepts a NodeListInterface object and performs an optional format
+   // command between each node in the list (but not after the last node).
    protected void processList(NodeListInterface n) {
       processList(n, null);
    }
@@ -70,60 +62,48 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * A Force command inserts a line break and indents the next line to
-    * the current indentation level.  Use "add(force());".
-    */
+   // A Force command inserts a line break and indents the next line to
+   // the current indentation level.  Use "add(force());".
    protected FormatCommand force() { return force(1); }
    protected FormatCommand force(int i) {
       return new FormatCommand(FormatCommand.FORCE, i);
    }
 
-   /**
-    * An Indent command increases the indentation level by one (or a
-    * user-specified amount).  Use "add(indent());".
-    */
+   // An Indent command increases the indentation level by one (or a
+   // user-specified amount).  Use "add(indent());".
    protected FormatCommand indent() { return indent(1); }
    protected FormatCommand indent(int i) {
       return new FormatCommand(FormatCommand.INDENT, i);
    }
 
-   /**
-    * An Outdent command is the reverse of the Indent command: it reduces
-    * the indentation level.  Use "add(outdent());".
-    */
+   // An Outdent command is the reverse of the Indent command: it reduces
+   // the indentation level.  Use "add(outdent());".
    protected FormatCommand outdent() { return outdent(1); }
    protected FormatCommand outdent(int i) {
       return new FormatCommand(FormatCommand.OUTDENT, i);
    }
 
-   /**
-    * A Space command simply adds one or a user-specified number of
-    * spaces between tokens.  Use "add(space());".
-    */
+   // A Space command simply adds one or a user-specified number of
+   // spaces between tokens.  Use "add(space());".
    protected FormatCommand space() { return space(1); }
    protected FormatCommand space(int i) {
       return new FormatCommand(FormatCommand.SPACE, i);
    }
 
-   /**
-    * Use this method to add FormatCommands to the command queue to be
-    * executed when the next token in the tree is visited.
-    */
+   // Use this method to add FormatCommands to the command queue to be
+   // executed when the next token in the tree is visited.
    protected void add(FormatCommand cmd) {
       cmdQueue.addElement(cmd);
    }
 
-   /**
-    * Executes the commands waiting in the command queue, then inserts the
-    * proper location information into the current NodeToken.
-    *
-    * If there are any special tokens preceding this token, they will be
-    * given the current location information.  The token will follow on
-    * the next line, at the proper indentation level.  If this is not the
-    * behavior you want from special tokens, feel free to modify this
-    * method.
-    */
+   // Executes the commands waiting in the command queue, then inserts the
+   // proper location information into the current NodeToken.
+   // 
+   // If there are any special tokens preceding this token, they will be
+   // given the current location information.  The token will follow on
+   // the next line, at the proper indentation level.  If this is not the
+   // behavior you want from special tokens, feel free to modify this
+   // method.
    public void visit(NodeToken n) {
       for ( Enumeration<FormatCommand> e = cmdQueue.elements(); e.hasMoreElements(); ) {
          FormatCommand cmd = e.nextElement();
@@ -172,11 +152,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       curColumn = n.endColumn;
    }
 
-   /**
-    * Inserts token location (beginLine, beginColumn, endLine, endColumn)
-    * information into the NodeToken.  Takes into account line-wrap.
-    * Does not update curLine and curColumn.
-    */
+   // Inserts token location (beginLine, beginColumn, endLine, endColumn)
+   // information into the NodeToken.  Takes into account line-wrap.
+   // Does not update curLine and curColumn.
    private void placeToken(NodeToken n, int line, int column) {
       int length = n.tokenImage.length();
 
@@ -219,14 +197,12 @@ public class TreeFormatter extends DepthFirstVisitor {
    // actually occured.  The first possibility is 'which == 0'
    // and the values increase sequentially from left to right.
 
-   /**
-    * f0 -> [ PackageDeclaration() ]
-    * f1 -> ( ImportDeclaration() )*
-    * f2 -> ( TypeDeclaration() )*
-    * f3 -> ( <"\u001a"> )?
-    * f4 -> ( <STUFF_TO_IGNORE: ~[]> )?
-    * f5 -> <EOF>
-    */
+   // f0 -> [ PackageDeclaration() ]
+   // f1 -> ( ImportDeclaration() )*
+   // f2 -> ( TypeDeclaration() )*
+   // f3 -> ( <"\u001a"> )?
+   // f4 -> ( <STUFF_TO_IGNORE: ~[]> )?
+   // f5 -> <EOF>
    public void visit(CompilationUnit n) {
       if ( n.f0.present() ) {
          n.f0.accept(this);
@@ -249,12 +225,10 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f5.accept(this);
    }
 
-   /**
-    * f0 -> Modifiers()
-    * f1 -> "package"
-    * f2 -> Name()
-    * f3 -> ";"
-    */
+   // f0 -> Modifiers()
+   // f1 -> "package"
+   // f2 -> Name()
+   // f3 -> ";"
    public void visit(PackageDeclaration n) {
       n.f0.accept(this);
       n.f1.accept(this);
@@ -263,13 +237,11 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f3.accept(this);
    }
 
-   /**
-    * f0 -> "import"
-    * f1 -> [ "static" ]
-    * f2 -> Name()
-    * f3 -> [ "." "*" ]
-    * f4 -> ";"
-    */
+   // f0 -> "import"
+   // f1 -> [ "static" ]
+   // f2 -> Name()
+   // f3 -> [ "." "*" ]
+   // f4 -> ";"
    public void visit(ImportDeclaration n) {
       n.f0.accept(this);
       add(space());
@@ -284,9 +256,7 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f4.accept(this);
    }
 
-   /**
-    * f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
-    */
+   // f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
    public void visit(Modifiers n) {
       if ( n.f0.present() ) {
          processList(n.f0, space());
@@ -294,22 +264,18 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> ";"
-    *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
-    */
+   // f0 -> ";"
+   //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
    public void visit(TypeDeclaration n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> ( "class" | "interface" )
-    * f1 -> <IDENTIFIER>
-    * f2 -> [ TypeParameters() ]
-    * f3 -> [ ExtendsList(isInterface) ]
-    * f4 -> [ ImplementsList(isInterface) ]
-    * f5 -> ClassOrInterfaceBody(isInterface)
-    */
+   // f0 -> ( "class" | "interface" )
+   // f1 -> <IDENTIFIER>
+   // f2 -> [ TypeParameters() ]
+   // f3 -> [ ExtendsList(isInterface) ]
+   // f4 -> [ ImplementsList(isInterface) ]
+   // f5 -> ClassOrInterfaceBody(isInterface)
    public void visit(ClassOrInterfaceDeclaration n) {
       n.f0.accept(this);
       add(space());
@@ -331,11 +297,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f5.accept(this);
    }
 
-   /**
-    * f0 -> "extends"
-    * f1 -> ClassOrInterfaceType()
-    * f2 -> ( "," ClassOrInterfaceType() )*
-    */
+   // f0 -> "extends"
+   // f1 -> ClassOrInterfaceType()
+   // f2 -> ( "," ClassOrInterfaceType() )*
    public void visit(ExtendsList n) {
       n.f0.accept(this);
       add(space());
@@ -346,11 +310,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "implements"
-    * f1 -> ClassOrInterfaceType()
-    * f2 -> ( "," ClassOrInterfaceType() )*
-    */
+   // f0 -> "implements"
+   // f1 -> ClassOrInterfaceType()
+   // f2 -> ( "," ClassOrInterfaceType() )*
    public void visit(ImplementsList n) {
       n.f0.accept(this);
       add(space());
@@ -361,12 +323,10 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "enum"
-    * f1 -> <IDENTIFIER>
-    * f2 -> [ ImplementsList(false) ]
-    * f3 -> EnumBody()
-    */
+   // f0 -> "enum"
+   // f1 -> <IDENTIFIER>
+   // f2 -> [ ImplementsList(false) ]
+   // f3 -> EnumBody()
    public void visit(EnumDeclaration n) {
       n.f0.accept(this);
       add(space());
@@ -380,13 +340,11 @@ public class TreeFormatter extends DepthFirstVisitor {
       add(space());
    }
 
-   /**
-    * f0 -> "{"
-    * f1 -> [ EnumConstant() ( "," EnumConstant() )* ]
-    * f2 -> [ "," ]
-    * f3 -> [ ";" ( ClassOrInterfaceBodyDeclaration(false) )* ]
-    * f4 -> "}"
-    */
+   // f0 -> "{"
+   // f1 -> [ EnumConstant() ( "," EnumConstant() )* ]
+   // f2 -> [ "," ]
+   // f3 -> [ ";" ( ClassOrInterfaceBodyDeclaration(false) )* ]
+   // f4 -> "}"
    public void visit(EnumBody n) {
       n.f0.accept(this);
       add(space());
@@ -405,12 +363,10 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f4.accept(this);
    }
 
-   /**
-    * f0 -> Modifiers()
-    * f1 -> <IDENTIFIER>
-    * f2 -> [ Arguments() ]
-    * f3 -> [ ClassOrInterfaceBody(false) ]
-    */
+   // f0 -> Modifiers()
+   // f1 -> <IDENTIFIER>
+   // f2 -> [ Arguments() ]
+   // f3 -> [ ClassOrInterfaceBody(false) ]
    public void visit(EnumConstant n) {
       n.f0.accept(this);
       n.f1.accept(this);
@@ -425,12 +381,10 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "<"
-    * f1 -> TypeParameter()
-    * f2 -> ( "," TypeParameter() )*
-    * f3 -> ">"
-    */
+   // f0 -> "<"
+   // f1 -> TypeParameter()
+   // f2 -> ( "," TypeParameter() )*
+   // f3 -> ">"
    public void visit(TypeParameters n) {
       n.f0.accept(this);
       n.f1.accept(this);
@@ -440,10 +394,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f3.accept(this);
    }
 
-   /**
-    * f0 -> <IDENTIFIER>
-    * f1 -> [ TypeBound() ]
-    */
+   // f0 -> <IDENTIFIER>
+   // f1 -> [ TypeBound() ]
    public void visit(TypeParameter n) {
       n.f0.accept(this);
       add(space());
@@ -452,11 +404,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "extends"
-    * f1 -> ClassOrInterfaceType()
-    * f2 -> ( "&" ClassOrInterfaceType() )*
-    */
+   // f0 -> "extends"
+   // f1 -> ClassOrInterfaceType()
+   // f2 -> ( "&" ClassOrInterfaceType() )*
    public void visit(TypeBound n) {
       n.f0.accept(this);
       add(space());
@@ -467,11 +417,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "{"
-    * f1 -> ( ClassOrInterfaceBodyDeclaration(isInterface) )*
-    * f2 -> "}"
-    */
+   // f0 -> "{"
+   // f1 -> ( ClassOrInterfaceBodyDeclaration(isInterface) )*
+   // f2 -> "}"
    public void visit(ClassOrInterfaceBody n) {
       n.f0.accept(this);
       add(indent());
@@ -501,21 +449,17 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> Initializer()
-    *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
-    *       | ";"
-    */
+   // f0 -> Initializer()
+   //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
+   //       | ";"
    public void visit(ClassOrInterfaceBodyDeclaration n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> Type()
-    * f1 -> VariableDeclarator()
-    * f2 -> ( "," VariableDeclarator() )*
-    * f3 -> ";"
-    */
+   // f0 -> Type()
+   // f1 -> VariableDeclarator()
+   // f2 -> ( "," VariableDeclarator() )*
+   // f3 -> ";"
    public void visit(FieldDeclaration n) {
       n.f0.accept(this);
       add(space());
@@ -527,10 +471,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f3.accept(this);
    }
 
-   /**
-    * f0 -> VariableDeclaratorId()
-    * f1 -> [ "=" VariableInitializer() ]
-    */
+   // f0 -> VariableDeclaratorId()
+   // f1 -> [ "=" VariableInitializer() ]
    public void visit(VariableDeclarator n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -539,10 +481,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> <IDENTIFIER>
-    * f1 -> ( "[" "]" )*
-    */
+   // f0 -> <IDENTIFIER>
+   // f1 -> ( "[" "]" )*
    public void visit(VariableDeclaratorId n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -550,20 +490,16 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> ArrayInitializer()
-    *       | Expression()
-    */
+   // f0 -> ArrayInitializer()
+   //       | Expression()
    public void visit(VariableInitializer n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "{"
-    * f1 -> [ VariableInitializer() ( "," VariableInitializer() )* ]
-    * f2 -> [ "," ]
-    * f3 -> "}"
-    */
+   // f0 -> "{"
+   // f1 -> [ VariableInitializer() ( "," VariableInitializer() )* ]
+   // f2 -> [ "," ]
+   // f3 -> "}"
    public void visit(ArrayInitializer n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -580,13 +516,11 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f3.accept(this);
    }
 
-   /**
-    * f0 -> [ TypeParameters() ]
-    * f1 -> ResultType()
-    * f2 -> MethodDeclarator()
-    * f3 -> [ "throws" NameList() ]
-    * f4 -> ( Block() | ";" )
-    */
+   // f0 -> [ TypeParameters() ]
+   // f1 -> ResultType()
+   // f2 -> MethodDeclarator()
+   // f3 -> [ "throws" NameList() ]
+   // f4 -> ( Block() | ";" )
    public void visit(MethodDeclaration n) {
       if ( n.f0.present() ) {
          n.f0.accept(this);
@@ -605,11 +539,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f4.accept(this);
    }
 
-   /**
-    * f0 -> <IDENTIFIER>
-    * f1 -> FormalParameters()
-    * f2 -> ( "[" "]" )*
-    */
+   // f0 -> <IDENTIFIER>
+   // f1 -> FormalParameters()
+   // f2 -> ( "[" "]" )*
    public void visit(MethodDeclarator n) {
       n.f0.accept(this);
       n.f1.accept(this);
@@ -618,11 +550,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "("
-    * f1 -> [ FormalParameter() ( "," FormalParameter() )* ]
-    * f2 -> ")"
-    */
+   // f0 -> "("
+   // f1 -> [ FormalParameter() ( "," FormalParameter() )* ]
+   // f2 -> ")"
    public void visit(FormalParameters n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -634,13 +564,11 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> Modifiers()
-    * f1 -> [ "final" | Annotation() ]
-    * f2 -> Type()
-    * f3 -> [ "..." ]
-    * f4 -> VariableDeclaratorId()
-    */
+   // f0 -> Modifiers()
+   // f1 -> [ "final" | Annotation() ]
+   // f2 -> Type()
+   // f3 -> [ "..." ]
+   // f4 -> VariableDeclaratorId()
    public void visit(FormalParameter n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -656,16 +584,14 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f4.accept(this);
    }
 
-   /**
-    * f0 -> [ TypeParameters() ]
-    * f1 -> <IDENTIFIER>
-    * f2 -> FormalParameters()
-    * f3 -> [ "throws" NameList() ]
-    * f4 -> "{"
-    * f5 -> [ ExplicitConstructorInvocation() ]
-    * f6 -> ( BlockStatement() )*
-    * f7 -> "}"
-    */
+   // f0 -> [ TypeParameters() ]
+   // f1 -> <IDENTIFIER>
+   // f2 -> FormalParameters()
+   // f3 -> [ "throws" NameList() ]
+   // f4 -> "{"
+   // f5 -> [ ExplicitConstructorInvocation() ]
+   // f6 -> ( BlockStatement() )*
+   // f7 -> "}"
    public void visit(ConstructorDeclaration n) {
       if ( n.f0.present() ) {
          n.f0.accept(this);
@@ -693,18 +619,14 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f7.accept(this);
    }
 
-   /**
-    * f0 -> [ TypeArguments() ] ( "this" | "super" ) Arguments() ";"
-    *       | PrimaryExpression() "." [ TypeArguments() ] "super" Arguments() ";"
-    */
+   // f0 -> [ TypeArguments() ] ( "this" | "super" ) Arguments() ";"
+   //       | PrimaryExpression() "." [ TypeArguments() ] "super" Arguments() ";"
    public void visit(ExplicitConstructorInvocation n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> [ "static" ]
-    * f1 -> Block()
-    */
+   // f0 -> [ "static" ]
+   // f1 -> Block()
    public void visit(Initializer n) {
       if ( n.f0.present() ) {
          n.f0.accept(this);
@@ -713,27 +635,21 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f1.accept(this);
    }
 
-   /**
-    * f0 -> ReferenceType()
-    *       | PrimitiveType()
-    */
+   // f0 -> ReferenceType()
+   //       | PrimitiveType()
    public void visit(Type n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> PrimitiveType() ( "[" "]" )+
-    *       | ( ClassOrInterfaceType() ) ( "[" "]" )*
-    */
+   // f0 -> PrimitiveType() ( "[" "]" )+
+   //       | ( ClassOrInterfaceType() ) ( "[" "]" )*
    public void visit(ReferenceType n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> <IDENTIFIER>
-    * f1 -> [ TypeArguments() ]
-    * f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
-    */
+   // f0 -> <IDENTIFIER>
+   // f1 -> [ TypeArguments() ]
+   // f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
    public void visit(ClassOrInterfaceType n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -744,12 +660,10 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "<"
-    * f1 -> TypeArgument()
-    * f2 -> ( "," TypeArgument() )*
-    * f3 -> ">"
-    */
+   // f0 -> "<"
+   // f1 -> TypeArgument()
+   // f2 -> ( "," TypeArgument() )*
+   // f3 -> ">"
    public void visit(TypeArguments n) {
       n.f0.accept(this);
       n.f1.accept(this);
@@ -759,10 +673,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f3.accept(this);
    }
 
-   /**
-    * f0 -> ReferenceType()
-    *       | "?" [ WildcardBounds() ]
-    */
+   // f0 -> ReferenceType()
+   //       | "?" [ WildcardBounds() ]
    public void visit(TypeArgument n) {
       if(n.f0.which == 0)
          n.f0.accept(this);
@@ -770,40 +682,32 @@ public class TreeFormatter extends DepthFirstVisitor {
          processList((NodeSequence)n.f0.choice, space());
    }
 
-   /**
-    * f0 -> "extends" ReferenceType()
-    *       | "super" ReferenceType()
-    */
+   // f0 -> "extends" ReferenceType()
+   //       | "super" ReferenceType()
    public void visit(WildcardBounds n) {
       processList((NodeSequence)n.f0.choice, space());
    }
 
-   /**
-    * f0 -> "boolean"
-    *       | "char"
-    *       | "byte"
-    *       | "short"
-    *       | "int"
-    *       | "long"
-    *       | "float"
-    *       | "double"
-    */
+   // f0 -> "boolean"
+   //       | "char"
+   //       | "byte"
+   //       | "short"
+   //       | "int"
+   //       | "long"
+   //       | "float"
+   //       | "double"
    public void visit(PrimitiveType n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "void"
-    *       | Type()
-    */
+   // f0 -> "void"
+   //       | Type()
    public void visit(ResultType n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> <IDENTIFIER>
-    * f1 -> ( "." <IDENTIFIER> )*
-    */
+   // f0 -> <IDENTIFIER>
+   // f1 -> ( "." <IDENTIFIER> )*
    public void visit(Name n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -811,10 +715,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> Name()
-    * f1 -> ( "," Name() )*
-    */
+   // f0 -> Name()
+   // f1 -> ( "," Name() )*
    public void visit(NameList n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -822,10 +724,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> ConditionalExpression()
-    * f1 -> [ AssignmentOperator() Expression() ]
-    */
+   // f0 -> ConditionalExpression()
+   // f1 -> [ AssignmentOperator() Expression() ]
    public void visit(Expression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -834,28 +734,24 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "="
-    *       | "*="
-    *       | "/="
-    *       | "%="
-    *       | "+="
-    *       | "-="
-    *       | "<<="
-    *       | ">>="
-    *       | ">>>="
-    *       | "&="
-    *       | "^="
-    *       | "|="
-    */
+   // f0 -> "="
+   //       | "*="
+   //       | "/="
+   //       | "%="
+   //       | "+="
+   //       | "-="
+   //       | "<<="
+   //       | ">>="
+   //       | ">>>="
+   //       | "&="
+   //       | "^="
+   //       | "|="
    public void visit(AssignmentOperator n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> ConditionalOrExpression()
-    * f1 -> [ "?" Expression() ":" Expression() ]
-    */
+   // f0 -> ConditionalOrExpression()
+   // f1 -> [ "?" Expression() ":" Expression() ]
    public void visit(ConditionalExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -864,10 +760,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> ConditionalAndExpression()
-    * f1 -> ( "||" ConditionalAndExpression() )*
-    */
+   // f0 -> ConditionalAndExpression()
+   // f1 -> ( "||" ConditionalAndExpression() )*
    public void visit(ConditionalOrExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -877,10 +771,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> InclusiveOrExpression()
-    * f1 -> ( "&&" InclusiveOrExpression() )*
-    */
+   // f0 -> InclusiveOrExpression()
+   // f1 -> ( "&&" InclusiveOrExpression() )*
    public void visit(ConditionalAndExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -890,10 +782,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> ExclusiveOrExpression()
-    * f1 -> ( "|" ExclusiveOrExpression() )*
-    */
+   // f0 -> ExclusiveOrExpression()
+   // f1 -> ( "|" ExclusiveOrExpression() )*
    public void visit(InclusiveOrExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -903,10 +793,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> AndExpression()
-    * f1 -> ( "^" AndExpression() )*
-    */
+   // f0 -> AndExpression()
+   // f1 -> ( "^" AndExpression() )*
    public void visit(ExclusiveOrExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -916,10 +804,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> EqualityExpression()
-    * f1 -> ( "&" EqualityExpression() )*
-    */
+   // f0 -> EqualityExpression()
+   // f1 -> ( "&" EqualityExpression() )*
    public void visit(AndExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -929,10 +815,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> InstanceOfExpression()
-    * f1 -> ( ( "==" | "!=" ) InstanceOfExpression() )*
-    */
+   // f0 -> InstanceOfExpression()
+   // f1 -> ( ( "==" | "!=" ) InstanceOfExpression() )*
    public void visit(EqualityExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -942,10 +826,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> RelationalExpression()
-    * f1 -> [ "instanceof" Type() ]
-    */
+   // f0 -> RelationalExpression()
+   // f1 -> [ "instanceof" Type() ]
    public void visit(InstanceOfExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -954,10 +836,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> ShiftExpression()
-    * f1 -> ( ( "<" | ">" | "<=" | ">=" ) ShiftExpression() )*
-    */
+   // f0 -> ShiftExpression()
+   // f1 -> ( ( "<" | ">" | "<=" | ">=" ) ShiftExpression() )*
    public void visit(RelationalExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -967,10 +847,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> AdditiveExpression()
-    * f1 -> ( ( "<<" | RSIGNEDSHIFT() | RUNSIGNEDSHIFT() ) AdditiveExpression() )*
-    */
+   // f0 -> AdditiveExpression()
+   // f1 -> ( ( "<<" | RSIGNEDSHIFT() | RUNSIGNEDSHIFT() ) AdditiveExpression() )*
    public void visit(ShiftExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -980,10 +858,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> MultiplicativeExpression()
-    * f1 -> ( ( "+" | "-" ) MultiplicativeExpression() )*
-    */
+   // f0 -> MultiplicativeExpression()
+   // f1 -> ( ( "+" | "-" ) MultiplicativeExpression() )*
    public void visit(AdditiveExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -993,10 +869,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> UnaryExpression()
-    * f1 -> ( ( "*" | "/" | "%" ) UnaryExpression() )*
-    */
+   // f0 -> UnaryExpression()
+   // f1 -> ( ( "*" | "/" | "%" ) UnaryExpression() )*
    public void visit(MultiplicativeExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -1006,12 +880,10 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> ( "+" | "-" ) UnaryExpression()
-    *       | PreIncrementExpression()
-    *       | PreDecrementExpression()
-    *       | UnaryExpressionNotPlusMinus()
-    */
+   // f0 -> ( "+" | "-" ) UnaryExpression()
+   //       | PreIncrementExpression()
+   //       | PreDecrementExpression()
+   //       | UnaryExpressionNotPlusMinus()
    public void visit(UnaryExpression n) {
       if(n.f0.which == 0)
          processList((NodeSequence)n.f0.choice, space());
@@ -1019,46 +891,36 @@ public class TreeFormatter extends DepthFirstVisitor {
          n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "++"
-    * f1 -> PrimaryExpression()
-    */
+   // f0 -> "++"
+   // f1 -> PrimaryExpression()
    public void visit(PreIncrementExpression n) {
       n.f0.accept(this);
       n.f1.accept(this);
    }
 
-   /**
-    * f0 -> "--"
-    * f1 -> PrimaryExpression()
-    */
+   // f0 -> "--"
+   // f1 -> PrimaryExpression()
    public void visit(PreDecrementExpression n) {
       n.f0.accept(this);
       n.f1.accept(this);
    }
 
-   /**
-    * f0 -> ( "~" | "!" ) UnaryExpression()
-    *       | CastExpression()
-    *       | PostfixExpression()
-    */
+   // f0 -> ( "~" | "!" ) UnaryExpression()
+   //       | CastExpression()
+   //       | PostfixExpression()
    public void visit(UnaryExpressionNotPlusMinus n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "(" PrimitiveType()
-    *       | "(" Type() "[" "]"
-    *       | "(" Type() ")" ( "~" | "!" | "(" | <IDENTIFIER> | "this" | "super" | "new" | Literal() )
-    */
+   // f0 -> "(" PrimitiveType()
+   //       | "(" Type() "[" "]"
+   //       | "(" Type() ")" ( "~" | "!" | "(" | <IDENTIFIER> | "this" | "super" | "new" | Literal() )
    public void visit(CastLookahead n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> PrimaryExpression()
-    * f1 -> [ "++" | "--" ]
-    */
+   // f0 -> PrimaryExpression()
+   // f1 -> [ "++" | "--" ]
    public void visit(PostfixExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -1066,18 +928,14 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "(" Type() ")" UnaryExpression()
-    *       | "(" Type() ")" UnaryExpressionNotPlusMinus()
-    */
+   // f0 -> "(" Type() ")" UnaryExpression()
+   //       | "(" Type() ")" UnaryExpressionNotPlusMinus()
    public void visit(CastExpression n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> PrimaryPrefix()
-    * f1 -> ( PrimarySuffix() )*
-    */
+   // f0 -> PrimaryPrefix()
+   // f1 -> ( PrimarySuffix() )*
    public void visit(PrimaryExpression n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -1085,76 +943,62 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "."
-    * f1 -> TypeArguments()
-    * f2 -> <IDENTIFIER>
-    */
+   // f0 -> "."
+   // f1 -> TypeArguments()
+   // f2 -> <IDENTIFIER>
    public void visit(MemberSelector n) {
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> Literal()
-    *       | ( <IDENTIFIER> "." )* "this"
-    *       | "super" "." <IDENTIFIER>
-    *       | ClassOrInterfaceType() "." "super" "." <IDENTIFIER>
-    *       | "(" Expression() ")"
-    *       | AllocationExpression()
-    *       | ResultType() "." "class"
-    *       | Name()
-    */
+   // f0 -> Literal()
+   //       | ( <IDENTIFIER> "." )* "this"
+   //       | "super" "." <IDENTIFIER>
+   //       | ClassOrInterfaceType() "." "super" "." <IDENTIFIER>
+   //       | "(" Expression() ")"
+   //       | AllocationExpression()
+   //       | ResultType() "." "class"
+   //       | Name()
    public void visit(PrimaryPrefix n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "." "super"
-    *       | "." "this"
-    *       | "." AllocationExpression()
-    *       | MemberSelector()
-    *       | "[" Expression() "]"
-    *       | "." <IDENTIFIER>
-    *       | Arguments()
-    */
+   // f0 -> "." "super"
+   //       | "." "this"
+   //       | "." AllocationExpression()
+   //       | MemberSelector()
+   //       | "[" Expression() "]"
+   //       | "." <IDENTIFIER>
+   //       | Arguments()
    public void visit(PrimarySuffix n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> <INTEGER_LITERAL>
-    *       | <FLOATING_POINT_LITERAL>
-    *       | <CHARACTER_LITERAL>
-    *       | <STRING_LITERAL>
-    *       | BooleanLiteral()
-    *       | NullLiteral()
-    */
+   // f0 -> <INTEGER_LITERAL>
+   //       | <FLOATING_POINT_LITERAL>
+   //       | <CHARACTER_LITERAL>
+   //       | <STRING_LITERAL>
+   //       | BooleanLiteral()
+   //       | NullLiteral()
    public void visit(Literal n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "true"
-    *       | "false"
-    */
+   // f0 -> "true"
+   //       | "false"
    public void visit(BooleanLiteral n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "null"
-    */
+   // f0 -> "null"
    public void visit(NullLiteral n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "("
-    * f1 -> [ ArgumentList() ]
-    * f2 -> ")"
-    */
+   // f0 -> "("
+   // f1 -> [ ArgumentList() ]
+   // f2 -> ")"
    public void visit(Arguments n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -1163,10 +1007,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> Expression()
-    * f1 -> ( "," Expression() )*
-    */
+   // f0 -> Expression()
+   // f1 -> ( "," Expression() )*
    public void visit(ArgumentList n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -1175,10 +1017,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "new" PrimitiveType() ArrayDimsAndInits()
-    *       | "new" ClassOrInterfaceType() [ TypeArguments() ] ( ArrayDimsAndInits() | Arguments() [ ClassOrInterfaceBody(false) ] )
-    */
+   // f0 -> "new" PrimitiveType() ArrayDimsAndInits()
+   //       | "new" ClassOrInterfaceType() [ TypeArguments() ] ( ArrayDimsAndInits() | Arguments() [ ClassOrInterfaceBody(false) ] )
    public void visit(AllocationExpression n) {
       NodeSequence seq = (NodeSequence)n.f0.choice;
       if(n.f0.which == 0) {
@@ -1195,10 +1035,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> ( "[" Expression() "]" )+ ( "[" "]" )*
-    *       | ( "[" "]" )+ ArrayInitializer()
-    */
+   // f0 -> ( "[" Expression() "]" )+ ( "[" "]" )*
+   //       | ( "[" "]" )+ ArrayInitializer()
    public void visit(ArrayDimsAndInits n) {
       if(n.f0.which == 0)
          n.f0.accept(this);
@@ -1206,34 +1044,30 @@ public class TreeFormatter extends DepthFirstVisitor {
          processList((NodeSequence)n.f0.choice, space());
    }
 
-   /**
-    * f0 -> LabeledStatement()
-    *       | AssertStatement()
-    *       | Block()
-    *       | EmptyStatement()
-    *       | StatementExpression() ";"
-    *       | SwitchStatement()
-    *       | IfStatement()
-    *       | WhileStatement()
-    *       | DoStatement()
-    *       | ForStatement()
-    *       | BreakStatement()
-    *       | ContinueStatement()
-    *       | ReturnStatement()
-    *       | ThrowStatement()
-    *       | SynchronizedStatement()
-    *       | TryStatement()
-    */
+   // f0 -> LabeledStatement()
+   //       | AssertStatement()
+   //       | Block()
+   //       | EmptyStatement()
+   //       | StatementExpression() ";"
+   //       | SwitchStatement()
+   //       | IfStatement()
+   //       | WhileStatement()
+   //       | DoStatement()
+   //       | ForStatement()
+   //       | BreakStatement()
+   //       | ContinueStatement()
+   //       | ReturnStatement()
+   //       | ThrowStatement()
+   //       | SynchronizedStatement()
+   //       | TryStatement()
    public void visit(Statement n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "assert"
-    * f1 -> Expression()
-    * f2 -> [ ":" Expression() ]
-    * f3 -> ";"
-    */
+   // f0 -> "assert"
+   // f1 -> Expression()
+   // f2 -> [ ":" Expression() ]
+   // f3 -> ";"
    public void visit(AssertStatement n) {
       n.f0.accept(this);
       add(space());
@@ -1245,11 +1079,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f3.accept(this);
    }
 
-   /**
-    * f0 -> <IDENTIFIER>
-    * f1 -> ":"
-    * f2 -> Statement()
-    */
+   // f0 -> <IDENTIFIER>
+   // f1 -> ":"
+   // f2 -> Statement()
    public void visit(LabeledStatement n) {
       n.f0.accept(this);
       add(space());
@@ -1258,11 +1090,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> "{"
-    * f1 -> ( BlockStatement() )*
-    * f2 -> "}"
-    */
+   // f0 -> "{"
+   // f1 -> ( BlockStatement() )*
+   // f2 -> "}"
    public void visit(Block n) {
       n.f0.accept(this);
       add(indent());
@@ -1275,21 +1105,17 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> LocalVariableDeclaration() ";"
-    *       | Statement()
-    *       | ClassOrInterfaceDeclaration(0)
-    */
+   // f0 -> LocalVariableDeclaration() ";"
+   //       | Statement()
+   //       | ClassOrInterfaceDeclaration(0)
    public void visit(BlockStatement n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> Modifiers()
-    * f1 -> Type()
-    * f2 -> VariableDeclarator()
-    * f3 -> ( "," VariableDeclarator() )*
-    */
+   // f0 -> Modifiers()
+   // f1 -> Type()
+   // f2 -> VariableDeclarator()
+   // f3 -> ( "," VariableDeclarator() )*
    public void visit(LocalVariableDeclaration n) {
       n.f0.accept(this);
       n.f1.accept(this);
@@ -1301,18 +1127,14 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> ";"
-    */
+   // f0 -> ";"
    public void visit(EmptyStatement n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> PreIncrementExpression()
-    *       | PreDecrementExpression()
-    *       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
-    */
+   // f0 -> PreIncrementExpression()
+   //       | PreDecrementExpression()
+   //       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
    public void visit(StatementExpression n) {
       if(n.f0.which == 0 || n.f0.which == 1) {
           n.f0.accept(this);
@@ -1332,15 +1154,13 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "switch"
-    * f1 -> "("
-    * f2 -> Expression()
-    * f3 -> ")"
-    * f4 -> "{"
-    * f5 -> ( SwitchLabel() ( BlockStatement() )* )*
-    * f6 -> "}"
-    */
+   // f0 -> "switch"
+   // f1 -> "("
+   // f2 -> Expression()
+   // f3 -> ")"
+   // f4 -> "{"
+   // f5 -> ( SwitchLabel() ( BlockStatement() )* )*
+   // f6 -> "}"
    public void visit(SwitchStatement n) {
       n.f0.accept(this);
       add(space());
@@ -1370,22 +1190,18 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f6.accept(this);
    }
 
-   /**
-    * f0 -> "case" Expression() ":"
-    *       | "default" ":"
-    */
+   // f0 -> "case" Expression() ":"
+   //       | "default" ":"
    public void visit(SwitchLabel n) {
       processList((NodeSequence)n.f0.choice, space());
    }
 
-   /**
-    * f0 -> "if"
-    * f1 -> "("
-    * f2 -> Expression()
-    * f3 -> ")"
-    * f4 -> Statement()
-    * f5 -> [ "else" Statement() ]
-    */
+   // f0 -> "if"
+   // f1 -> "("
+   // f2 -> Expression()
+   // f3 -> ")"
+   // f4 -> Statement()
+   // f5 -> [ "else" Statement() ]
    public void visit(IfStatement n) {
       boolean isBlock = n.f4.f0.which == 2;
       n.f0.accept(this);
@@ -1415,13 +1231,11 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> "while"
-    * f1 -> "("
-    * f2 -> Expression()
-    * f3 -> ")"
-    * f4 -> Statement()
-    */
+   // f0 -> "while"
+   // f1 -> "("
+   // f2 -> Expression()
+   // f3 -> ")"
+   // f4 -> Statement()
    public void visit(WhileStatement n) {
       boolean isBlock = n.f4.f0.which == 2;
       n.f0.accept(this);
@@ -1439,15 +1253,13 @@ public class TreeFormatter extends DepthFirstVisitor {
          add(outdent());
    }
 
-   /**
-    * f0 -> "do"
-    * f1 -> Statement()
-    * f2 -> "while"
-    * f3 -> "("
-    * f4 -> Expression()
-    * f5 -> ")"
-    * f6 -> ";"
-    */
+   // f0 -> "do"
+   // f1 -> Statement()
+   // f2 -> "while"
+   // f3 -> "("
+   // f4 -> Expression()
+   // f5 -> ")"
+   // f6 -> ";"
    public void visit(DoStatement n) {
       boolean isBlock = n.f1.f0.which == 2;
       n.f0.accept(this);
@@ -1468,13 +1280,11 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f6.accept(this);
    }
 
-   /**
-    * f0 -> "for"
-    * f1 -> "("
-    * f2 -> ( Modifiers() Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
-    * f3 -> ")"
-    * f4 -> Statement()
-    */
+   // f0 -> "for"
+   // f1 -> "("
+   // f2 -> ( Modifiers() Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
+   // f3 -> ")"
+   // f4 -> Statement()
    public void visit(ForStatement n) {
       boolean isBlock = n.f4.f0.which == 2;
       n.f0.accept(this);
@@ -1491,18 +1301,14 @@ public class TreeFormatter extends DepthFirstVisitor {
          add(outdent());
    }
 
-   /**
-    * f0 -> LocalVariableDeclaration()
-    *       | StatementExpressionList()
-    */
+   // f0 -> LocalVariableDeclaration()
+   //       | StatementExpressionList()
    public void visit(ForInit n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> StatementExpression()
-    * f1 -> ( "," StatementExpression() )*
-    */
+   // f0 -> StatementExpression()
+   // f1 -> ( "," StatementExpression() )*
    public void visit(StatementExpressionList n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -1511,18 +1317,14 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> StatementExpressionList()
-    */
+   // f0 -> StatementExpressionList()
    public void visit(ForUpdate n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "break"
-    * f1 -> [ <IDENTIFIER> ]
-    * f2 -> ";"
-    */
+   // f0 -> "break"
+   // f1 -> [ <IDENTIFIER> ]
+   // f2 -> ";"
    public void visit(BreakStatement n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -1532,11 +1334,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> "continue"
-    * f1 -> [ <IDENTIFIER> ]
-    * f2 -> ";"
-    */
+   // f0 -> "continue"
+   // f1 -> [ <IDENTIFIER> ]
+   // f2 -> ";"
    public void visit(ContinueStatement n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -1546,11 +1346,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> "return"
-    * f1 -> [ Expression() ]
-    * f2 -> ";"
-    */
+   // f0 -> "return"
+   // f1 -> [ Expression() ]
+   // f2 -> ";"
    public void visit(ReturnStatement n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -1560,11 +1358,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> "throw"
-    * f1 -> Expression()
-    * f2 -> ";"
-    */
+   // f0 -> "throw"
+   // f1 -> Expression()
+   // f2 -> ";"
    public void visit(ThrowStatement n) {
       n.f0.accept(this);
       add(space());
@@ -1572,13 +1368,11 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> "synchronized"
-    * f1 -> "("
-    * f2 -> Expression()
-    * f3 -> ")"
-    * f4 -> Block()
-    */
+   // f0 -> "synchronized"
+   // f1 -> "("
+   // f2 -> Expression()
+   // f3 -> ")"
+   // f4 -> Block()
    public void visit(SynchronizedStatement n) {
       n.f0.accept(this);
       add(space());
@@ -1591,12 +1385,10 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f4.accept(this);
    }
 
-   /**
-    * f0 -> "try"
-    * f1 -> Block()
-    * f2 -> ( "catch" "(" FormalParameter() ")" Block() )*
-    * f3 -> [ "finally" Block() ]
-    */
+   // f0 -> "try"
+   // f1 -> Block()
+   // f2 -> ( "catch" "(" FormalParameter() ")" Block() )*
+   // f3 -> [ "finally" Block() ]
    public void visit(TryStatement n) {
       n.f0.accept(this);
       add(force());
@@ -1620,36 +1412,28 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> ( ">" ">" ">" )
-    */
+   // f0 -> ( ">" ">" ">" )
    public void visit(RUNSIGNEDSHIFT n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> ( ">" ">" )
-    */
+   // f0 -> ( ">" ">" )
    public void visit(RSIGNEDSHIFT n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> NormalAnnotation()
-    *       | SingleMemberAnnotation()
-    *       | MarkerAnnotation()
-    */
+   // f0 -> NormalAnnotation()
+   //       | SingleMemberAnnotation()
+   //       | MarkerAnnotation()
    public void visit(Annotation n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "@"
-    * f1 -> Name()
-    * f2 -> "("
-    * f3 -> [ MemberValuePairs() ]
-    * f4 -> ")"
-    */
+   // f0 -> "@"
+   // f1 -> Name()
+   // f2 -> "("
+   // f3 -> [ MemberValuePairs() ]
+   // f4 -> ")"
    public void visit(NormalAnnotation n) {
       n.f0.accept(this);
       n.f1.accept(this);
@@ -1661,22 +1445,18 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f4.accept(this);
    }
 
-   /**
-    * f0 -> "@"
-    * f1 -> Name()
-    */
+   // f0 -> "@"
+   // f1 -> Name()
    public void visit(MarkerAnnotation n) {
       n.f0.accept(this);
       n.f1.accept(this);
    }
 
-   /**
-    * f0 -> "@"
-    * f1 -> Name()
-    * f2 -> "("
-    * f3 -> MemberValue()
-    * f4 -> ")"
-    */
+   // f0 -> "@"
+   // f1 -> Name()
+   // f2 -> "("
+   // f3 -> MemberValue()
+   // f4 -> ")"
    public void visit(SingleMemberAnnotation n) {
       n.f0.accept(this);
       n.f1.accept(this);
@@ -1685,10 +1465,8 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f4.accept(this);
    }
 
-   /**
-    * f0 -> MemberValuePair()
-    * f1 -> ( "," MemberValuePair() )*
-    */
+   // f0 -> MemberValuePair()
+   // f1 -> ( "," MemberValuePair() )*
    public void visit(MemberValuePairs n) {
       n.f0.accept(this);
       if ( n.f1.present() ) {
@@ -1696,31 +1474,25 @@ public class TreeFormatter extends DepthFirstVisitor {
       }
    }
 
-   /**
-    * f0 -> <IDENTIFIER>
-    * f1 -> "="
-    * f2 -> MemberValue()
-    */
+   // f0 -> <IDENTIFIER>
+   // f1 -> "="
+   // f2 -> MemberValue()
    public void visit(MemberValuePair n) {
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> Annotation()
-    *       | MemberValueArrayInitializer()
-    *       | ConditionalExpression()
-    */
+   // f0 -> Annotation()
+   //       | MemberValueArrayInitializer()
+   //       | ConditionalExpression()
    public void visit(MemberValue n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "{"
-    * f1 -> ( MemberValue() ( "," MemberValue() )* [ "," ] )?
-    * f2 -> "}"
-    */
+   // f0 -> "{"
+   // f1 -> ( MemberValue() ( "," MemberValue() )* [ "," ] )?
+   // f2 -> "}"
    public void visit(MemberValueArrayInitializer n) {
       n.f0.accept(this);
       add(space());
@@ -1731,12 +1503,10 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> "@"
-    * f1 -> "interface"
-    * f2 -> <IDENTIFIER>
-    * f3 -> AnnotationTypeBody()
-    */
+   // f0 -> "@"
+   // f1 -> "interface"
+   // f2 -> <IDENTIFIER>
+   // f3 -> AnnotationTypeBody()
    public void visit(AnnotationTypeDeclaration n) {
       n.f0.accept(this);
       n.f1.accept(this);
@@ -1746,11 +1516,9 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f3.accept(this);
    }
 
-   /**
-    * f0 -> "{"
-    * f1 -> ( AnnotationTypeMemberDeclaration() )*
-    * f2 -> "}"
-    */
+   // f0 -> "{"
+   // f1 -> ( AnnotationTypeMemberDeclaration() )*
+   // f2 -> "}"
    public void visit(AnnotationTypeBody n) {
       n.f0.accept(this);
       add(space());
@@ -1760,18 +1528,14 @@ public class TreeFormatter extends DepthFirstVisitor {
       n.f2.accept(this);
    }
 
-   /**
-    * f0 -> Modifiers() ( Type() <IDENTIFIER> "(" ")" [ DefaultValue() ] ";" | ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) | FieldDeclaration(modifiers) )
-    *       | ( ";" )
-    */
+   // f0 -> Modifiers() ( Type() <IDENTIFIER> "(" ")" [ DefaultValue() ] ";" | ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) | FieldDeclaration(modifiers) )
+   //       | ( ";" )
    public void visit(AnnotationTypeMemberDeclaration n) {
       n.f0.accept(this);
    }
 
-   /**
-    * f0 -> "default"
-    * f1 -> MemberValue()
-    */
+   // f0 -> "default"
+   // f1 -> MemberValue()
    public void visit(DefaultValue n) {
       n.f0.accept(this);
       add(space());

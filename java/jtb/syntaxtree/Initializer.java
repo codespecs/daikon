@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> [ "static" ]
- * f1 -> Block()
- */
+// Grammar production:
+// f0 -> [ "static" ]
+// f1 -> Block()
 public class Initializer implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

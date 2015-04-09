@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "default"
- * f1 -> MemberValue()
- */
+// Grammar production:
+// f0 -> "default"
+// f1 -> MemberValue()
 public class DefaultValue implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

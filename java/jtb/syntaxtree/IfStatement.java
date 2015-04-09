@@ -4,15 +4,13 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "if"
- * f1 -> "("
- * f2 -> Expression()
- * f3 -> ")"
- * f4 -> Statement()
- * f5 -> [ "else" Statement() ]
- */
+// Grammar production:
+// f0 -> "if"
+// f1 -> "("
+// f2 -> Expression()
+// f3 -> ")"
+// f4 -> Statement()
+// f5 -> [ "else" Statement() ]
 public class IfStatement implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;

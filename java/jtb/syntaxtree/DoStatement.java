@@ -4,16 +4,14 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "do"
- * f1 -> Statement()
- * f2 -> "while"
- * f3 -> "("
- * f4 -> Expression()
- * f5 -> ")"
- * f6 -> ";"
- */
+// Grammar production:
+// f0 -> "do"
+// f1 -> Statement()
+// f2 -> "while"
+// f3 -> "("
+// f4 -> Expression()
+// f5 -> ")"
+// f6 -> ";"
 public class DoStatement implements Node {
    // This was added after running jtb to remove serializable warning.
    static final long serialVersionUID = 20150406L;
