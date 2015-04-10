@@ -2257,6 +2257,19 @@ make -C $DAIKONDIR/tests/kvasir-tests clean-all nightly-summary-w-daikon
 
 
 @item
+Run the Java parser tests.
+
+@example
+cd $DAIKONDIR/tests/parser-tests
+./run-all
+@end example
+
+Success is indicated by each of the diff comparsions being identical.
+
+[Time: moments]
+
+
+@item
 Check the release documents for spelling errors.
 
 @example
@@ -2585,14 +2598,18 @@ hg revert doc/README
 
 
 @item
-Verify these changes by doing product builds (no need to clean first):
+Verify these changes by doing product builds (no need to clean first) and
+running the installation test.
 
 @example
 make rebuild-everything
+make -f Makefile-dist installation-test
 @end example
 
-[Time: 3 min]
+Success is indicated by invariant output being written to the screen.
  
+[Time: 5 min]
+
 
 @item
 Commit changes back to the repository:
