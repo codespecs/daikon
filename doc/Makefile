@@ -94,7 +94,7 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	mkdir daikon/images
 	cp images/*.png daikon/images
 	cp images/*.jpg daikon/images
-	../plume-lib/bin/add-favicon daikon daikon-favicon.png
+	../plume-lib/bin/add-favicon daikon ../daikon-favicon.png
 
 developer/index.html: developer.texinfo
 	rm -rf developer/*
@@ -106,7 +106,7 @@ developer/index.html: developer.texinfo
 	mkdir developer/images
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images
-	../plume-lib/bin/add-favicon developer daikon-favicon.png
+	../plume-lib/bin/add-favicon developer ../daikon-favicon.png
 
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf valgrind-merge.pdf
 
