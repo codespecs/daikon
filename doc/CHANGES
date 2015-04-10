@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.2.1 (April 3, 2015)
+5.2.2 (April 10, 2015)
 
 Tools that process invariant files:
 
@@ -50,6 +50,7 @@ Bug fixes:
   #19: runtimechecker parser problem with ">" characters
   #20: runtimechecker problem with 'Is power of 2'
   #22: runtimechecker fails on inner classes with multiple constructors
+  #23: runtimechecker crashes when foreach variable has a final modifier
 
 ===========================================================================
 
