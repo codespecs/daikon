@@ -8583,12 +8583,15 @@ commands that, if executed, reproduces your error.  A good way to show
 what happened is a transcript of execution of all of the commands.  (A
 list of commands and a transcript are @strong{much} more useful than a
 vague description; please don't give vague English when you can supply a
-more precise specification instead.)  It is crucial that you not omit
+more precise specification instead.  Also, please don't give screenshots
+of a command terminal, which are hard to read and reproduce; instead, cut
+and paste the contents.)
+It is crucial that you not omit
 steps in your report.  For example, include instructions for installing
 your software and all customizations to the software or your
 environment, including all relevant environment variables.  Please do
 not force the
-developers to speculate about what you did; that is a waste of their
+developers to speculate about what you did; that would be a waste of their
 time, since you already have the knowledge.
 @item
 input files that permit the problem to be replicated (by following the
