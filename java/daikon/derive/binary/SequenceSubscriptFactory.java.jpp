@@ -111,7 +111,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
       return null;
     }
 
-    if (!seqvar.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+    if (!seqvar.aux.hasOrder()) {
       // Indexing doesn't make sense if order doesn't matter
       if (debug != null) debug.log ("Not ordered");
       return null;

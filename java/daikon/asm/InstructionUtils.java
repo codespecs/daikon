@@ -169,6 +169,7 @@ public class InstructionUtils {
    * represents a redundant variable rvar and its leader. If a variable is
    * not in the map, it is not redundant.
    */
+  @SuppressWarnings("unboxing.of.nullable") // CF issue 427: https://code.google.com/p/checker-framework/issues/detail?id=427
   public static Map<String, String> computeRedundantVars(List<IInstruction> path) {
 
     // For the purposes of this code, we will say that an instruction occurs
@@ -217,15 +218,15 @@ public class InstructionUtils {
         for (String var : instr.getBinaryVarNames()) {
 
           // If we've never seen this variable, make it a leader.
-          if (!leaders.keySet().contains(var)) {
+          if (!leaders.containsKey(var)) {
             leaders.put(var, time);
             timeKilled.put(var, -1);
             redundantVars.put("bv:" + instrAddress + ":" + var,
                 new LinkedHashSet<String>());
 
           } else { // If we've seen it, it may be a leader or redundant.
-            assert timeKilled.containsKey(var);
             assert leaders.containsKey(var);
+            assert timeKilled.containsKey(var) : "@AssumeAssertion(keyfor): keys of leaders and timeKilled are the same";
             if (timeKilled.get(var) >= leaders.get(var)) {
               // It was killed by a killer instruction.
               // Make it a leader.

@@ -352,7 +352,7 @@ public final class VarInfoAux
    * @throws NumberFormatException if the value of the key cannot be parsed as an integer.
    * @see #hasValue(String)
    */
-  public int getInt(String key) {
+  public int getInt(/*@KeyFor("this.map")*/ String key) {
     if (!hasValue(key)) {
       throw new RuntimeException(String.format("Key '%s' is not defined", key));
     }
@@ -367,7 +367,7 @@ public final class VarInfoAux
    * @throws RuntimeException if the key is not defined.
    * @see #hasValue(String)
    */
-  public String[] getList(String key) {
+  public String[] getList(/*@KeyFor("this.map")*/ String key) {
     try {
       if (!hasValue(key)) {
         throw new RuntimeException(String.format("Key '%s' is not defined", key));
@@ -395,7 +395,7 @@ public final class VarInfoAux
   /**
    * Returns the value for the given key.
    **/
-  public String getValue(String key) {
+  public String getValue(/*@KeyFor("this.map")*/ String key) {
     assert map.containsKey(key) : "Map contains key " + key;
     return map.get(key);
   }
@@ -408,15 +408,10 @@ public final class VarInfoAux
     return map.containsKey(key);
   }
 
-  public boolean getFlag(String key) {
+  public boolean getFlag(/*@KeyFor("this.map")*/ String key) {
     assert map.containsKey(key);
     Object value = map.get(key);
     return value.equals(TRUE);
-  }
-
-  /** Returns whether or not this is a parameter **/
-  /*@Pure*/ public boolean isParam() {
-    return getFlag (IS_PARAM);
   }
 
   /**
@@ -437,4 +432,70 @@ public final class VarInfoAux
     return setValue(key, Integer.toString(value));
   }
 
+
+
+  /**
+   * @see #HAS_DUPLICATES
+   */
+  @SuppressWarnings("keyfor")   // HAS_DUPLICATES is always a key
+  /*@Pure*/ public boolean hasDuplicates() {
+    return getFlag (HAS_DUPLICATES);
+  }
+  
+  /**
+   * @see #HAS_ORDER
+   */
+  @SuppressWarnings("keyfor")   // HAS_ORDER is always a key
+  /*@Pure*/ public boolean hasOrder() {
+    return getFlag (HAS_ORDER);
+  }
+  
+  /**
+   * @see #HAS_SIZE
+   */
+  @SuppressWarnings("keyfor")   // HAS_SIZE is always a key
+  /*@Pure*/ public boolean hasSize() {
+    return getFlag (HAS_SIZE);
+  }
+  
+  /**
+   * @see #HAS_NULL
+   */
+  @SuppressWarnings("keyfor")   // HAS_NULL is always a key
+  /*@Pure*/ public boolean hasNull() {
+    return getFlag (HAS_NULL);
+  }
+  
+  /**
+   * @see #NULL_TERMINATING
+   */
+  @SuppressWarnings("keyfor")   // NULL_TERMINATING is always a key
+  /*@Pure*/ public boolean nullTerminating() {
+    return getFlag (NULL_TERMINATING);
+  }
+  
+  /**
+   * @see #IS_STRUCT
+   */
+  @SuppressWarnings("keyfor")   // IS_PARAM is always a key
+  /*@Pure*/ public boolean isParam() {
+    return getFlag (IS_PARAM);
+  }
+  
+  /**
+   * @see #PACKAGE_NAME
+   */
+  @SuppressWarnings("keyfor")   // PACKAGE_NAME is always a key
+  /*@Pure*/ public boolean packageName() {
+    return getFlag (PACKAGE_NAME);
+  }
+  
+  /**
+   * @see #IS_STRUCT
+   */
+  @SuppressWarnings("keyfor")   // IS_STRUCT is always a key
+  /*@Pure*/ public boolean isStruct() {
+    return getFlag (IS_STRUCT);
+  }
+ 
 }

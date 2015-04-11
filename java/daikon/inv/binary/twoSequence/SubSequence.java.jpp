@@ -525,10 +525,10 @@ public class CLASSNAME
       return di;
     }
 
-    // JHP: This is not a valid obvious check, since it  doesn't imply that
+    // JHP: This is not a valid obvious check, since it doesn't imply that
     // the invariant is true.
-    if (!subvar.aux.getFlag(VarInfoAux.HAS_ORDER) ||
-        !supervar.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+    if (!subvar.aux.hasOrder() ||
+        !supervar.aux.hasOrder()) {
       // Doesn't make sense to consider subsequence if order doens't matter
       return new DiscardInfo(this, DiscardCode.obvious,
                     "Order doesn't matter, so subsequence is meaningless");

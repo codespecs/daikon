@@ -352,11 +352,11 @@ public class PptSplitter implements Serializable {
         for (Invariant orig_inv : cslice.invs) {
           Invariant inv = orig_inv.clone_and_permute (permute);
           inv.ppt = pslice;
-          invs[childno].add (inv);
           if ((eq_inv != null) && orig_inv.getClass().equals(eq_inv.getClass()))
             orig_inv = eq_inv;
           assert ! orig_invs.containsKey (inv);
           orig_invs.put (inv, orig_inv);
+          invs[childno].add (inv);
         }
       } // children loop
 

@@ -878,6 +878,7 @@ public final class INTEQUAL
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE))
     {
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
       int minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE),
           maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
           minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE),
@@ -895,6 +896,7 @@ public final class INTEQUAL
     if (var1.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE))
     {
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
       int maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
           minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE);
 
@@ -917,6 +919,7 @@ public final class INTEQUAL
     if (var1.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE))
     {
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
       int maxB = var2.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
           minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE);
 

@@ -79,10 +79,6 @@ public abstract class TernaryDerivation
 
   /*@Pure*/ protected boolean isParam() {
     return (base1.isParam() || base2.isParam() || base3.isParam());
-    // VIN
-    // return (base1.aux.getFlag(VarInfoAux.IS_PARAM)
-    //         || base2.aux.getFlag(VarInfoAux.IS_PARAM)
-    //         || base3.aux.getFlag(VarInfoAux.IS_PARAM));
   }
 
 

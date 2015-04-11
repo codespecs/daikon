@@ -179,7 +179,7 @@ public class CLASSNAME
 
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically (VarInfo[] vis) {
-    if (!vis[0].aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
+    if (!vis[0].aux.hasDuplicates()) {
       return new DiscardInfo(this, DiscardCode.obvious, "Obvious statically");
     }
     return super.isObviousStatically (vis);

@@ -97,6 +97,7 @@ public final class SequenceLength
     return new ValueAndModified(Intern.internedLong(len+shift), source_mod);
   }
 
+  @SuppressWarnings("keyfor") // need EnsuresQualifier feature
   protected VarInfo makeVarInfo() {
     VarInfo v = VarInfo.make_scalar_seq_func("size", ProglangType.INT, base,
                                          shift);
