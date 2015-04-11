@@ -57,8 +57,8 @@ public final class CLASSNAME extends BinaryDerivationFactory {
       return null;
     }
 
-    if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
-        !var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+    if (!var1.aux.hasOrder() ||
+        !var2.aux.hasOrder()) {
       // Order doesn't matter, then predication is meaningless
       return null;
     }

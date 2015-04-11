@@ -336,8 +336,8 @@ public class SEQSEQINTEQUAL
         return (false);
 
       // non equality comparisons don't make sense if the arrays aren't ordered
-      if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER)
-        || !var2.aux.getFlag(VarInfoAux.HAS_ORDER))
+      if (!var1.aux.hasOrder()
+        || !var2.aux.hasOrder())
         return (false);
 
     #endif
@@ -347,8 +347,8 @@ public class SEQSEQINTEQUAL
 
   /** Instantiates the invariant on the specified slice **/
   protected SEQSEQINTEQUAL instantiate_dyn (/*>>> @Prototype SEQSEQINTEQUAL this,*/ PptSlice slice) {
-    boolean has_order = slice.var_infos[0].aux.getFlag(VarInfoAux.HAS_ORDER)
-                      && slice.var_infos[1].aux.getFlag(VarInfoAux.HAS_ORDER);
+    boolean has_order = slice.var_infos[0].aux.hasOrder()
+                      && slice.var_infos[1].aux.hasOrder();
     return new SEQSEQINTEQUAL(slice, has_order);
   }
 
@@ -379,7 +379,7 @@ public class SEQSEQINTEQUAL
       String name1 = var1().name_using(format);
       String name2 = var2().name_using(format);
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
-      String lexically = (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
+      String lexically = (var1().aux.hasOrder()
                           ? " (lexically)"
                           : "");
       return name1 + " " + EQUALSstring + " " + name2 + lexically;
@@ -394,7 +394,7 @@ public class SEQSEQINTEQUAL
       String name2 = var2().csharp_collection_string();
 
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
-      if (var1().aux.getFlag(VarInfoAux.HAS_ORDER))
+      if (var1().aux.hasOrder())
       {
         String dbc = "L" + (EQUALSstringDBC).substring(1);
         return name1 + "." + dbc + "(" + name2 + ")";
@@ -416,7 +416,7 @@ public class SEQSEQINTEQUAL
       String name1 = var1().name_using(format);
       String name2 = var2().name_using(format);
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
-      return "daikon.Quant." + (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
+      return "daikon.Quant." + (var1().aux.hasOrder()
                                 ? EQUALSstringDBC
                                 : "setEqual" )
         + "(" + name1 + ", " + name2 + ")";

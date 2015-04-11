@@ -92,7 +92,7 @@ public final class CLASSNAME
     }
 
     // If order doesn't matter
-    if (!vi.aux.getFlag (VarInfoAux.HAS_ORDER)) return false;
+    if (!vi.aux.hasOrder()) return false;
 
     return true;
   }

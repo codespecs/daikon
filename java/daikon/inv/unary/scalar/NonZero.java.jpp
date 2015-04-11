@@ -129,8 +129,8 @@ public class NONZERO
     if (!valid_types(vis))
       return (false);
 
-    if (vis[0].aux.getFlag (VarInfoAux.IS_STRUCT) ||
-        !vis[0].aux.getFlag (VarInfoAux.HAS_NULL))
+    if (vis[0].aux.isStruct() ||
+        !vis[0].aux.hasNull())
       return (false);
 
     return (true);
@@ -279,7 +279,7 @@ public class NONZERO
                                "'this' can never be null in Java");
     }
 
-    if (!var.aux.getFlag(VarInfoAux.HAS_NULL)) {
+    if (!var.aux.hasNull()) {
       // If it's not a number and null doesn't have special meaning...
       return new DiscardInfo(this, DiscardCode.obvious,
                      "'null' has no special meaning for " + var.name());

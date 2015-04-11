@@ -302,7 +302,7 @@ public final class CLASSNAME
 
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
-    if (!vis[0].aux.getFlag(VarInfoAux.HAS_NULL)) {
+    if (!vis[0].aux.hasNull()) {
       // If it's not a number and null doesn't have special meaning...
       return new DiscardInfo(this, DiscardCode.obvious, "'null' has no special meaning for " + vis[0].name());
     }

@@ -1585,7 +1585,9 @@ public String format_csharp_contract() {
           && v.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
           && v.aux.hasValue(VarInfoAux.MAXIMUM_VALUE))
       {
+        @SuppressWarnings("keyfor")   // needs EnsuresQualifier
         int min = v.aux.getInt(VarInfoAux.MINIMUM_VALUE);
+        @SuppressWarnings("keyfor")   // needs EnsuresQualifier
         int max = v.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
         if (min == max && min == elts[0]) {
           return new DiscardInfo(this,
@@ -1597,6 +1599,7 @@ public String format_csharp_contract() {
       // We can check if all values in the list match with the ones we know about
       // (useful for booleans and numeric enumerations).
       if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
+        @SuppressWarnings("keyfor")   // needs EnsuresQualifier
         String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
         Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
         for (String s : vsValidValues) {
@@ -1667,6 +1670,7 @@ public String format_csharp_contract() {
   }
 #elif defined(IS_SEQUENCE)
   /** {@inheritDoc} */
+  @SuppressWarnings("keyfor")   // needs EnsureQualifier
   @Override
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -1693,6 +1697,7 @@ public String format_csharp_contract() {
       #define BASETYPE String
       #endif
 
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
       String[] vsValidValues       = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<BASETYPE> setValidValues = new TreeSet<BASETYPE>();
       for (String s : vsValidValues) {
@@ -1726,6 +1731,7 @@ public String format_csharp_contract() {
     // We can check if all values in the list match with the ones we know about
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
       for (String s : vsValidValues) {
@@ -1774,6 +1780,7 @@ public String format_csharp_contract() {
     // We can check if all values in the list match with the ones we know about
     // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<INT> setValidValues = new TreeSet<INT>();
       for (String s : vsValidValues) {

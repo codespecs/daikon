@@ -310,8 +310,8 @@ public class PAIRWISEINTEQUAL
     }
 
     // Don't instantiate if the variables can't have order
-    if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
-        !var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+    if (!var1.aux.hasOrder() ||
+        !var2.aux.hasOrder()) {
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("Not instantitating for because order has no meaning: " +
                      var1.name() + " and " + var2.name());

@@ -101,7 +101,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
       return null;
     }
 
-    if (!seqvar.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+    if (!seqvar.aux.hasOrder()) {
       // Indexing doesn't make sense if order doesn't matter
       return null;
     }

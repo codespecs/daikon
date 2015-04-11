@@ -31,7 +31,7 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
     if (!vi.is_direct_array())
       return null;
 
-    if (!vi.aux.getFlag(VarInfoAux.HAS_SIZE)) {
+    if (!vi.aux.hasSize()) {
       // Don't derive if auxiliary info says size of this collection
       // has no meaning
       return null;
@@ -46,7 +46,7 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
       debug.fine ("Instantiating for " + vi.name() + " in " + vi.ppt);
     }
 
-    if (vi.aux.getFlag(VarInfoAux.NULL_TERMINATING)) {
+    if (vi.aux.nullTerminating()) {
       return new UnaryDerivation[] { new SequenceLength(vi, 0),
                                      new SequenceLength(vi, -1) };
     } else {

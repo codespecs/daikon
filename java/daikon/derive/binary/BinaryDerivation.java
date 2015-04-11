@@ -90,9 +90,6 @@ public abstract class BinaryDerivation
 
   /*@Pure*/ protected boolean isParam() {
     return (base1.isParam() || base2.isParam());
-    // VIN
-    // return (base1.aux.getFlag(VarInfoAux.IS_PARAM)
-    //        || base2.aux.getFlag(VarInfoAux.IS_PARAM));
   }
 
 

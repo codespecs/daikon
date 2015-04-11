@@ -1258,6 +1258,7 @@ public abstract /*@Interned*/ class VarInfoName
 
       String object = null;
 
+      @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
       String packageName = v.aux.getValue(VarInfoAux.PACKAGE_NAME);
       if (packageName.equals(VarInfoAux.NO_PACKAGE_NAME)) {
         packageName = "";

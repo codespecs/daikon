@@ -638,6 +638,7 @@ public class LOWERBOUND
 
     #if defined(LOWER) || defined(LOWERFLOAT) || defined(UPPER) || defined(UPPERFLOAT)
     if (var.aux.hasValue(VARINFOAUX_MINIMUM_VALUE)) {
+      @SuppressWarnings("keyfor")   // needs EnsuresQualifier
       int minVal = var.aux.getInt(VARINFOAUX_MINIMUM_VALUE);
       if (minVal == MIN1) {
         return new DiscardInfo(this, DiscardCode.obvious,
