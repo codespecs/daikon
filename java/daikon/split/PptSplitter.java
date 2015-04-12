@@ -262,7 +262,7 @@ public class PptSplitter implements Serializable {
 
     // Does not contain anything that is in exclusive_invs_vec.
     // (Those may be added temporarily, but are removed later.)
-    Vector</*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec = new Vector</*@KeyFor("orig_invs")*/ Invariant[]>();
+    Vector</*@Nullable*/ /*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec = new Vector</*@Nullable*/ /*@KeyFor("orig_invs")*/ Invariant[]>();
 
 /// ??? MDE
     // Loop through each possible parent slice
@@ -376,13 +376,19 @@ public class PptSplitter implements Serializable {
                             VarInfo.arrayToString (vis) + " @" + parent.name);
 
       // Add any exclusive conditions for this slice to the list
-      exclusive_invs_vec.addAll(exclusive_conditions(invs[0], invs[1]));
+      @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
+      Vector</*@KeyFor("orig_invs")*/ Invariant[]> ec = exclusive_conditions(invs[0], invs[1]);
+      exclusive_invs_vec.addAll (ec);
 
       // Add any invariants that are the same to the list
-      same_invs_vec.addAll (same_invariants (invs[0], invs[1]));
+      @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
+      Vector</*@KeyFor("orig_invs")*/ Invariant> si = same_invariants(invs[0], invs[1]);
+      same_invs_vec.addAll (si);
 
       // Add any invariants that are different to the list
-      different_invs_vec.addAll (different_invariants (invs[0], invs[1]));
+      @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
+      Vector</*@Nullable*/ /*@KeyFor("orig_invs")*/ Invariant[]> di = different_invariants(invs[0], invs[1]);
+      different_invs_vec.addAll (di);
 
 
     } // slices.iterator() loop
@@ -396,7 +402,7 @@ public class PptSplitter implements Serializable {
         debug.fine ("-- " + invs[0] + " -- " + invs[1]);
       }
       debug.fine ("Found " + different_invs_vec.size() + " different invariants ");
-      for (Invariant[] invs : different_invs_vec) {
+      for (/*@Nullable*/ Invariant[] invs : different_invs_vec) {
         if (invs[0] != null)
           invs[0].log ("%s differs from %s", invs[0], invs[1]);
         if (invs[1] != null)
@@ -449,8 +455,8 @@ public class PptSplitter implements Serializable {
     // Remove exclusive invariants from the different invariants list.
     // It would be better not to have added them in the first place,
     // but this is easier for now.
-    for (Iterator</*@KeyFor("orig_invs")*/ Invariant[]> ii = different_invs_vec.iterator(); ii.hasNext(); ) {
-      Invariant[] diff_invs = ii.next();
+    for (Iterator</*@Nullable*/ /*@KeyFor("orig_invs")*/ Invariant[]> ii = different_invs_vec.iterator(); ii.hasNext(); ) {
+      /*@Nullable*/ Invariant[] diff_invs = ii.next();
       if (diff_invs[0] != null) {
         assert diff_invs[1] == null;
         // debug.fine ("Considering inv0 " + diff_invs[0]);
@@ -514,7 +520,7 @@ public class PptSplitter implements Serializable {
     }
 
     // Create single implication for each different invariant
-    for (Invariant[] invs : different_invs_vec) {
+    for (/*@Nullable*/ Invariant[] invs : different_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (invs[jj] != null)
           add_implication (parent, con_invs[jj], invs[jj], false, orig_invs);
@@ -653,7 +659,7 @@ public class PptSplitter implements Serializable {
    * Result elements are Invariants (from the invs1 list).
    * All the arguments should be over the same program point.
    */
-  Vector</*@Nullable*/ Invariant> same_invariants(Invariants invs1, Invariants invs2) {
+  Vector<Invariant> same_invariants(Invariants invs1, Invariants invs2) {
 
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
@@ -661,7 +667,7 @@ public class PptSplitter implements Serializable {
     ss2.addAll(invs2);
 
     ss1.retainAll(ss2);
-    return new Vector</*@Nullable*/ Invariant>(ss1);
+    return new Vector<Invariant>(ss1);
 
     // // This seems like a rather complicated implementation.  Why can't it
     // // just use set intersection?
