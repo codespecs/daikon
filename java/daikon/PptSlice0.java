@@ -123,7 +123,7 @@ public class PptSlice0
         removeInvariant(trinv);
       }
     } else {
-      invs.removeMany(to_remove);
+      invs.removeAll(to_remove);
       if (to_remove.size() > invariantsSeen.size() / 2) {
         // Faster to throw away and recreate
         reinitInvariantsSeen();

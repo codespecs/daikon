@@ -8,13 +8,15 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-// The downside of this extending Vector is that the operations
-// return Objects rather than Invariants.
 
 /**
- * This is essentially a collection of Invariant objects, but with a few
- * convenience methods.
+ * This is a collection of Invariant objects, which resizes itself as
+ * elements are removed in order to save memory.
  **/
+// A downside of this extending ArrayList<Invariant> is that we cannot
+// write a type annotation on the type parameter.  It might be better to
+// use List<Invariant> and add static helper methods.  Alternately, use
+// type qualifier parameters.
 public final class Invariants
   extends ArrayList<Invariant>
 {
@@ -38,7 +40,8 @@ public final class Invariants
     super(arg);
   }
 
-  // Override superclass implementation
+  // TODO: Does this method actually make any difference in Daikon's memory use or run-time performance?
+  @Override
   public boolean remove(/*@Nullable*/ Object o) {
     boolean result = super.remove(o);
     // Perhaps trim to size.
@@ -51,39 +54,22 @@ public final class Invariants
     return result;
   }
 
-  // Remove all the invariants in toRemove. This is faster than
-  // repeatedly calling remove(), if toRemove is long.
-  // Returns the number of removed elements.
-  public int removeMany(List<Invariant> toRemove) {
-    // System.out.printf ("removeMany in %s\n", this.getClass());
-    HashSet<Invariant> removeSet = new HashSet<Invariant>(toRemove);
-    ArrayList<Invariant> copy = new ArrayList<Invariant>();
-    for (Invariant inv : this) {
-      if (!removeSet.contains(inv)) {
-        copy.add(inv);
-        //System.out.printf ("NOT remove set [%x-%x-%x] %s [%s]\n",
-        //                   System.identityHashCode (inv), inv.hashCode(),
-        //                   ((Object)inv).hashCode(), inv, inv.getClass());
-      } else {
-        // System.out.printf (" in remove set [%x] %s [%s]\n",
-        //                   System.identityHashCode (inv), inv, inv.getClass());
-      }
-    }
-    int numRemoved = size() - copy.size();
-    clear();
-    addAll(copy);
-    return numRemoved;
-  }
-
   // Works for non-negative
   /*@Pure*/ private static final boolean isPowerOfTwo(int x) {
     if (x == 0)
       return true;
-    // If x is a power of two, then x - 1 has no bits in common with x
+    // If x is a power of two, then x - 1 has no bits in common with x.
     // OTOH, if x is not a power of two, then x and x - 1 have the same
     // most-significant bit set, so they have at least one bit in common.
     return (x & (x - 1)) == 0;
   }
+
+  /// A non-portable way to obtain the capacity:
+  // static int getCapacity(ArrayList<?> l) throws Exception {
+  //     Field dataField = ArrayList.class.getDeclaredField("elementData");
+  //     dataField.setAccessible(true);
+  //     return ((Object[]) dataField.get(l)).length;
+  // }
 
   /// For testing
   // private static final boolean isPowerOfTwoSlow(int x) {

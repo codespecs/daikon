@@ -157,11 +157,10 @@ public abstract class PptSlice
         removeInvariant(trinv);
       }
     } else {
-      int removed = invs.removeMany(to_remove);
-      assert removed == to_remove.size()
-        : "removed " + (to_remove.size() - removed)
-            + " invs not in ppt " + name();
-      Global.falsified_invariants += removed;
+      int old_invs_size = invs.size();
+      invs.removeAll(to_remove);
+      assert old_invs_size - invs.size() == to_remove.size();
+      Global.falsified_invariants += to_remove.size();
       if (invs.size() == 0) {
         if (Debug.logDetail())
           log ("last invariant removed");
