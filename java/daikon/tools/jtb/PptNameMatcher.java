@@ -36,7 +36,11 @@ public class PptNameMatcher {
     root.accept(new ClassOrInterfaceTypeDecorateVisitor());
   }
 
-
+  // f0 -> Modifiers()
+  // f1 -> [ "final" | Annotation() ]
+  // f2 -> Type()
+  // f3 -> [ "..." ]
+  // f4 -> VariableDeclaratorId()
   public String getUngenerifiedType(FormalParameter p) {
 
     Type type = p.f2;

@@ -196,21 +196,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     throw new Error("Didn't find ClassFieldInfo for " + fieldname);
   }
 
-  // ClassDeclaration is a top-level (non-nested) construct.  Collect all
-  // the fields in this and any nested class, so that we can recognize
-  // assignments to them later on.
-  // f0 -> ( "abstract" | "final" | "public" )*
-  // f1 -> UnmodifiedClassDeclaration()
-//   public void visit(ClassOrInterfaceDeclaration n) {
-//     super.visit(n);             // call "accept(this)" on each field
-//   }
-
-  // f0 -> ( "static" | "abstract" | "final" | "public" | "protected" | "private" )*
-  // f1 -> UnmodifiedClassDeclaration()
-//   public void visit(NestedClassDeclaration n) {
-//     super.visit(n);             // call "accept(this)" on each field
-//   }
-
   class ClassFieldInfo {
     // List<FieldDeclaration> fieldDecls;
     // List<String> allFieldNames;

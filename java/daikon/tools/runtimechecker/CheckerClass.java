@@ -42,6 +42,18 @@ public class CheckerClass {
     // Since this is going to become a class name, remove them.
     this.name = Ast.getClassName(clazz).replace("$", "_").replace(".", "_") + "_checks";
 
+    // CompilationUnit:
+    // f0 -> [ PackageDeclaration() ]
+    // f1 -> ( ImportDeclaration() )*
+    // f2 -> ( TypeDeclaration() )*
+    // f3 -> ( <"\u001a"> )?
+    // f4 -> ( <STUFF_TO_IGNORE: ~[]> )?
+    // f5 -> <EOF>
+    // PackageDeclaration:
+    // f0 -> Modifiers()
+    // f1 -> "package"
+    // f2 -> Name()
+    // f3 -> ";"
     // Get the package and imports from clazz. We'll include them.
     @SuppressWarnings("nullness") // application invariant: every body is in a compilation unit
     /*@NonNull*/ CompilationUnit clazzCU = (CompilationUnit)Ast.getParent(CompilationUnit.class, clazz);

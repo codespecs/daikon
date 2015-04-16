@@ -47,6 +47,11 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
     allNames = new ArrayList<String>();
     ownedNames = new ArrayList<String>();
     finalNames = new ArrayList<String>();
+    // FieldDeclaration:
+    // * f0 -> Type()
+    // * f1 -> VariableDeclarator()
+    // * f2 -> ( "," VariableDeclarator() )*
+    // * f3 -> ";"
     for (FieldDeclaration fd : fieldDecls) {
       boolean isFinal = hasModifier(fd, "final");
       Type fdtype = fd.f0;
@@ -81,6 +86,9 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
     cached = true;
   }
 
+  // VariableDeclarator:
+  // * f0 -> VariableDeclaratorId()
+  // * f1 -> [ "=" VariableInitializer() ]
   private static String name(VariableDeclarator n) {
     return n.f0.f0.tokenImage;
   }
@@ -88,7 +96,6 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   private static boolean hasModifier(FieldDeclaration n, String mod) {
     return Ast.contains(n.f0, mod);
   }
-
 
   /** Returns a list of all FieldDeclarations declared in this class or in
    * nested/inner classes. **/

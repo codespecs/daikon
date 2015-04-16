@@ -170,6 +170,7 @@ public class Ast {
             s.equals("private"));
   }
 
+  // f4 -> VariableDeclaratorId()
   public static String getName(FormalParameter p) {
     String name = print(p.f4);
     int startBrackets = name.indexOf('[');
@@ -180,6 +181,8 @@ public class Ast {
     }
   }
 
+  // f2 -> Type()
+  // f4 -> VariableDeclaratorId()
   public static String getType(FormalParameter fp) {
 
     StringWriter w = new StringWriter();
@@ -202,10 +205,12 @@ public class Ast {
   }
 
 
+  // f2 -> MethodDeclarator()
   public static String getName(MethodDeclaration m) {
     return m.f2.f0.tokenImage;
   }
 
+  // f1 -> <IDENTIFIER>
   public static String getName(ConstructorDeclaration m) {
     return m.f1.tokenImage;
   }
@@ -216,7 +221,7 @@ public class Ast {
     NodeOptional o = u.f0;
     if (o.present()) {
       PackageDeclaration p = (PackageDeclaration) o.node;
-      return print(p.f2);
+      return print(p.f2); // f2 -> Name()
     } else {
       return null;
     }
@@ -278,8 +283,6 @@ public class Ast {
     String packageName;
     CompilationUnit unit
       = (CompilationUnit)getParent(CompilationUnit.class, n);
-//       = (CompilationUnit) ((n instanceof CompilationUnit) ? n
-//                            : getParent(CompilationUnit.class, n));
     String getPackage = getPackage(unit);
     if (getPackage != null) {
       packageName = getPackage + ".";
@@ -288,23 +291,7 @@ public class Ast {
     }
 
     String className = "";
-    // Need to double-check this logic.
-//     if (n instanceof TypeDeclaration) {
-//       // use the ClassDeclaration, the InterfaceDeclaration, or the ";"
-//       n = ((TypeDeclaration)n).f0.choice;
-//     }
-//     if (n instanceof ClassOrInterfaceDeclaration) {
-      className = (n).f1.tokenImage + ".";
-//    }
-//     if (n instanceof InterfaceDeclaration) {
-//       n = ((InterfaceDeclaration)n).f1; // use the UnmodifiedInterfaceDeclaration
-//     }
-//     if (n instanceof UnmodifiedClassDeclaration) {
-//       className = ((UnmodifiedClassDeclaration)n).f1.tokenImage + ".";
-//     }
-//     if (n instanceof UnmodifiedInterfaceDeclaration) {
-//       className = ((UnmodifiedInterfaceDeclaration)n).f1.tokenImage + ".";
-//     }
+    className = (n).f1.tokenImage + ".";   // f1 -> <IDENTIFIER>
 
     Node currentNode = n;
     while (true) {
@@ -338,11 +325,13 @@ public class Ast {
 
   }
 
+  // f2 -> MethodDeclarator()
   public static void setName(MethodDeclaration m, String name) {
     m.f2.f0.tokenImage = name;
   }
 
 
+  // f1 -> [ AssignmentOperator() Expression() ]
   // Return the primary expression on the left-hand side of an assignment
   public static PrimaryExpression assignment2primaryexpression(Expression n) {
     // All this could perhaps be replaced with an ad-hoc visitor, as is

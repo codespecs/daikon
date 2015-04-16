@@ -1,0 +1,894 @@
+split/OrigFixer.java:59:  public void visit(PrimaryExpression n) {
+split/OrigFixer.java:61:      NodeToken origToken =  ((Name) n.f0.f0.choice).f0;
+split/OrigFixer.java:63:      NodeToken openParen =
+split/OrigFixer.java:64:        ((Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).f0;
+split/OrigFixer.java:76:      NodeToken closeParen =
+split/OrigFixer.java:77:        ((Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).f2;
+split/OrigFixer.java:89:  public void visit(Arguments n) {
+split/OrigFixer.java:103:  /*@Pure*/ private boolean isOrig(PrimaryExpression n) {
+split/OrigFixer.java:104:    return ((n.f0.f0.choice instanceof Name) &&
+split/OrigFixer.java:105:            (((Name) n.f0.f0.choice).f0.tokenImage.equals("orig")) &&
+split/OrigFixer.java:106:            (n.f1.size() > 0) &&
+split/OrigFixer.java:107:            (n.f1.elementAt(0) instanceof PrimarySuffix) &&
+split/OrigFixer.java:108:            (((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof Arguments));
+split/OrigFixer.java:115:  public void visit(NodeToken n) {
+split/OrigFixer.java:131:  /*@Pure*/ private boolean isLastTokenVar(NodeToken n) {
+
+
+split/StatementReplacer.java:102:   * empty string by visit(NodeToken n).
+split/StatementReplacer.java:106:  public void visit(PrimaryExpression n) {
+split/StatementReplacer.java:109:      NodeToken firstToken;
+split/StatementReplacer.java:112:        replaceStatement = statementMap.get(getNonThisName(n));
+split/StatementReplacer.java:113:        firstToken = ((Name) n.f0.f0.choice).f0;
+split/StatementReplacer.java:116:        replaceStatement = statementMap.get(getThisName(n));
+split/StatementReplacer.java:117:        firstToken = (NodeToken) n.f0.f0.choice;
+split/StatementReplacer.java:180:  private String getNonThisName(PrimaryExpression n) {
+split/StatementReplacer.java:181:    Name nameNode = (Name) n.f0.f0.choice;
+split/StatementReplacer.java:190:  private String getThisName(PrimaryExpression n) {
+split/StatementReplacer.java:191:    return Ast.format(n.f0) + Ast.format(n.f1.elementAt(0));
+split/StatementReplacer.java:200:  /*@Pure*/ private boolean isNonThisMethod(PrimaryExpression n) {
+split/StatementReplacer.java:201:    return (n.f0.f0.choice instanceof Name &&
+split/StatementReplacer.java:202:            n.f1.size() > 0 &&
+split/StatementReplacer.java:203:            n.f1.elementAt(0) instanceof PrimarySuffix &&
+split/StatementReplacer.java:204:            ((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof Arguments);
+split/StatementReplacer.java:212:  /*@Pure*/ private boolean isThisDotMethod(PrimaryExpression n) {
+split/StatementReplacer.java:213:    return (n.f0.f0.choice instanceof NodeToken &&
+split/StatementReplacer.java:214:            Visitors.isThis((NodeToken) n.f0.f0.choice) &&
+split/StatementReplacer.java:215:            n.f1.size() == 2 &&
+split/StatementReplacer.java:216:            n.f1.elementAt(1) instanceof PrimarySuffix &&
+split/StatementReplacer.java:217:            ((PrimarySuffix) n.f1.elementAt(1)).f0.choice instanceof Arguments);
+split/StatementReplacer.java:226:  private List<String> getArgs(PrimaryExpression n) {
+split/StatementReplacer.java:228:    int index = n.f1.size()- 1;
+split/StatementReplacer.java:232:    Arguments argumentNode =
+split/StatementReplacer.java:233:      (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;
+split/StatementReplacer.java:234:    if (argumentNode.f1.present()) {
+split/StatementReplacer.java:235:      ArgumentList argListNode = (ArgumentList) argumentNode.f1.node;
+split/StatementReplacer.java:236:      args.add(addParens(Ast.format(argListNode.f0)));
+split/StatementReplacer.java:237:      if (argListNode.f1.present()) {
+split/StatementReplacer.java:238:        NodeListOptional additionalArgsNode = argListNode.f1;
+split/StatementReplacer.java:253:  private List<String> getNonThisArgs(PrimaryExpression n) {
+split/StatementReplacer.java:256:    Arguments argumentNode =
+split/StatementReplacer.java:257:      (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;
+split/StatementReplacer.java:258:    if (argumentNode.f1.present()) {
+split/StatementReplacer.java:259:      ArgumentList argListNode = (ArgumentList) argumentNode.f1.node;
+split/StatementReplacer.java:260:      args.add(Ast.format(argListNode.f0));
+split/StatementReplacer.java:261:      if (argListNode.f1.present()) {
+split/StatementReplacer.java:262:        NodeListOptional additionalArgsNode = argListNode.f1;
+
+
+split/Visitors.java:31:      public void visit(VariableInitializer n) {
+split/Visitors.java:32:        expressionNode = n.f0;
+
+
+test/TestAst.java:29:  public static class MethodDeclarationHarvester extends DepthFirstVisitor {
+test/TestAst.java:30:    List<MethodDeclaration> decls = new ArrayList<MethodDeclaration>();
+test/TestAst.java:31:    public void visit(MethodDeclaration m) {
+test/TestAst.java:35:      m.f0.accept(this);
+test/TestAst.java:36:      m.f1.accept(this);
+test/TestAst.java:37:      m.f2.accept(this);
+test/TestAst.java:38:      m.f3.accept(this);
+test/TestAst.java:39:      m.f4.accept(this);
+test/TestAst.java:44:  public static class ClassOrInterfaceDeclarationHarvester extends DepthFirstVisitor {
+test/TestAst.java:45:    List<ClassOrInterfaceDeclaration> decls = new ArrayList<ClassOrInterfaceDeclaration>();
+test/TestAst.java:46:    public void visit(ClassOrInterfaceDeclaration m) {
+test/TestAst.java:48:      m.f0.accept(this);
+test/TestAst.java:49:      m.f1.accept(this);
+test/TestAst.java:50:      m.f2.accept(this);
+test/TestAst.java:51:      m.f3.accept(this);
+test/TestAst.java:52:      m.f4.accept(this);
+test/TestAst.java:53:      m.f5.accept(this);
+test/TestAst.java:124:    MethodDeclaration decl = null;
+test/TestAst.java:127:    assert decl.f2.f0.tokenImage.equals("foo1") : decl.f2.f0.tokenImage;
+test/TestAst.java:132:    assert decl.f2.f0.tokenImage.equals("foo2") : decl.f2.f0.tokenImage;
+test/TestAst.java:137:    assert decl.f2.f0.tokenImage.equals("foo3") : decl.f2.f0.tokenImage;
+test/TestAst.java:142:    assert decl.f2.f0.tokenImage.equals("foo4") : decl.f2.f0.tokenImage;
+test/TestAst.java:147:    assert decl.f2.f0.tokenImage.equals("foo5") : decl.f2.f0.tokenImage;
+test/TestAst.java:152:    assert decl.f2.f0.tokenImage.equals("foo55") : decl.f2.f0.tokenImage;
+test/TestAst.java:157:    assert decl.f2.f0.tokenImage.equals("foo6") : decl.f2.f0.tokenImage;
+test/TestAst.java:162:    assert decl.f2.f0.tokenImage.equals("foo7") : decl.f2.f0.tokenImage;
+test/TestAst.java:167:    assert decl.f2.f0.tokenImage.equals("foo8") : decl.f2.f0.tokenImage;
+test/TestAst.java:172:    assert decl.f2.f0.tokenImage.equals("foo9") : decl.f2.f0.tokenImage;
+test/TestAst.java:177:    assert decl.f2.f0.tokenImage.equals("foo10") : decl.f2.f0.tokenImage;
+test/TestAst.java:182:    assert decl.f2.f0.tokenImage.equals("foo11") : decl.f2.f0.tokenImage;
+test/TestAst.java:187:    assert decl.f2.f0.tokenImage.equals("foo115") : decl.f2.f0.tokenImage;
+test/TestAst.java:192:    assert decl.f2.f0.tokenImage.equals("foo12") : decl.f2.f0.tokenImage;
+test/TestAst.java:197:    assert decl.f2.f0.tokenImage.equals("foo13") : decl.f2.f0.tokenImage;
+test/TestAst.java:202:    assert decl.f2.f0.tokenImage.equals("foo14") : decl.f2.f0.tokenImage;
+test/TestAst.java:207:    assert decl.f2.f0.tokenImage.equals("foo15") : decl.f2.f0.tokenImage;
+test/TestAst.java:212:    assert decl.f2.f0.tokenImage.equals("foo16") : decl.f2.f0.tokenImage;
+test/TestAst.java:217:    assert decl.f2.f0.tokenImage.equals("foo17") : decl.f2.f0.tokenImage;
+test/TestAst.java:222:    assert decl.f2.f0.tokenImage.equals("foo18") : decl.f2.f0.tokenImage;
+test/TestAst.java:227:    assert decl.f2.f0.tokenImage.equals("foo19") : decl.f2.f0.tokenImage;
+test/TestAst.java:232:    assert decl.f2.f0.tokenImage.equals("foo20") : decl.f2.f0.tokenImage;
+test/TestAst.java:239:    // assert decl.f2.f0.tokenImage.equals("foo1") : decl.f2.f0.tokenImage;
+test/TestAst.java:244:    // assert decl.f2.f0.tokenImage.equals("foo2") : decl.f2.f0.tokenImage;
+
+
+test/TestClassOrInterfaceTypeDecorateVisitor.java:38:        MethodDeclaration m = (MethodDeclaration)Ast.getParent(MethodDeclaration.class, generifieds.get(i));
+test/TestClassOrInterfaceTypeDecorateVisitor.java:41:          m.f0.accept(new TreeFormatter());
+test/TestClassOrInterfaceTypeDecorateVisitor.java:42:          b.append(Ast.format(m.f0));
+test/TestClassOrInterfaceTypeDecorateVisitor.java:43:          m.f1.accept(new TreeFormatter());
+test/TestClassOrInterfaceTypeDecorateVisitor.java:44:          b.append(Ast.format(m.f1));
+test/TestClassOrInterfaceTypeDecorateVisitor.java:45:          m.f2.accept(new TreeFormatter());
+test/TestClassOrInterfaceTypeDecorateVisitor.java:46:          b.append(Ast.format(m.f2));
+
+
+tools/jtb/AnnotateVisitor.java:237:// f0 -> ( "class" | "interface" )
+tools/jtb/AnnotateVisitor.java:238:// f1 -> <IDENTIFIER>
+tools/jtb/AnnotateVisitor.java:239:// f2 -> [ TypeParameters() ]
+tools/jtb/AnnotateVisitor.java:240:// f3 -> [ ExtendsList(isInterface) ]
+tools/jtb/AnnotateVisitor.java:241:// f4 -> [ ImplementsList(isInterface) ]
+tools/jtb/AnnotateVisitor.java:242:// f5 -> ClassOrInterfaceBody(isInterface)
+tools/jtb/AnnotateVisitor.java:243:  public void visit(ClassOrInterfaceDeclaration n) {
+tools/jtb/AnnotateVisitor.java:244:    String classname = Ast.getClassName(n);
+tools/jtb/AnnotateVisitor.java:253:    { // set fieldNames slots
+tools/jtb/AnnotateVisitor.java:256:        cfi = new ClassFieldInfo(cfv.ownedFieldNames(),
+tools/jtb/AnnotateVisitor.java:257:                                 cfv.finalFieldNames(),
+tools/jtb/AnnotateVisitor.java:261:        cfi = new ClassFieldInfo(cfv.ownedFieldNames(),
+tools/jtb/AnnotateVisitor.java:262:                                 cfv.finalFieldNames(),
+tools/jtb/AnnotateVisitor.java:263:                                 not_contains_null_fields(object_ppt, cfv.allFieldNames()),
+tools/jtb/AnnotateVisitor.java:264:                                 element_type_fields(object_ppt, cfv.allFieldNames()));
+tools/jtb/AnnotateVisitor.java:272:      for (int i=cfi.ownedFieldNames.size()-1; i>=0; i--) {
+tools/jtb/AnnotateVisitor.java:273:        addComment(n.f5.f1, javaLineComment("@ invariant" + " " + cfi.ownedFieldNames.get(i) + ".owner == this;"), true);
+tools/jtb/AnnotateVisitor.java:281:      insertInvariants(n.f5.f1, inv_tag, obj_invs);
+tools/jtb/AnnotateVisitor.java:407:      public void visit(MethodDeclaration md) {
+tools/jtb/AnnotateVisitor.java:408:        // System.out.println("InsertBehavior visitor visiting a MethodDeclaration");
+tools/jtb/AnnotateVisitor.java:409:        md.f0.accept(this);
+tools/jtb/AnnotateVisitor.java:412:      public void visit(ConstructorDeclaration cd) {
+tools/jtb/AnnotateVisitor.java:413:        // System.out.println("InsertBehavior visitor visiting a ConstructorDeclaration");
+tools/jtb/AnnotateVisitor.java:414:        cd.f0.accept(this);
+tools/jtb/AnnotateVisitor.java:419:    if (n instanceof MethodDeclaration)
+tools/jtb/AnnotateVisitor.java:420:      ((MethodDeclaration)n).getParent().getParent().accept(v);
+tools/jtb/AnnotateVisitor.java:422:      ((ConstructorDeclaration)n).getParent().getParent().accept(v);
+tools/jtb/AnnotateVisitor.java:426:  public void visit(MethodDeclaration n) {
+tools/jtb/AnnotateVisitor.java:428:// Grammar production for ClassOrInterfaceBodyDeclaration:
+tools/jtb/AnnotateVisitor.java:429:// f0 -> Initializer()
+tools/jtb/AnnotateVisitor.java:430://       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+tools/jtb/AnnotateVisitor.java:464:      addComment(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, JML_END_COMMENT, true);
+tools/jtb/AnnotateVisitor.java:467:      insertInvariants(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, ensures_tag, ensures_invs, lightweight);
+tools/jtb/AnnotateVisitor.java:470:      insertModifies(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, ensures_invs.modifiedVars, ensures_tag, lightweight);
+tools/jtb/AnnotateVisitor.java:474:      insertInvariants(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, requires_tag, requires_invs, lightweight) ||
+tools/jtb/AnnotateVisitor.java:479:        insertJMLWorkaround(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */);
+tools/jtb/AnnotateVisitor.java:484:          || n.f2.f0.toString().equals("clone")) {
+tools/jtb/AnnotateVisitor.java:487:      addComment(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, JML_START_COMMENT, true);
+tools/jtb/AnnotateVisitor.java:492:// f0 -> [ TypeParameters() ]
+tools/jtb/AnnotateVisitor.java:493:// f1 -> <IDENTIFIER>
+tools/jtb/AnnotateVisitor.java:494:// f2 -> FormalParameters()
+tools/jtb/AnnotateVisitor.java:495:// f3 -> [ "throws" NameList() ]
+tools/jtb/AnnotateVisitor.java:496:// f4 -> "{"
+tools/jtb/AnnotateVisitor.java:497:// f5 -> [ ExplicitConstructorInvocation() ]
+tools/jtb/AnnotateVisitor.java:498:// f6 -> ( BlockStatement() )*
+tools/jtb/AnnotateVisitor.java:499:// f7 -> "}"
+tools/jtb/AnnotateVisitor.java:500:  public void visit(ConstructorDeclaration n) {
+tools/jtb/AnnotateVisitor.java:501:    // System.out.println("ConstructorDeclaration: " + n.f1);
+tools/jtb/AnnotateVisitor.java:513:      addComment(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, JML_END_COMMENT, true);
+tools/jtb/AnnotateVisitor.java:517:      insertInvariants(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+tools/jtb/AnnotateVisitor.java:521:      insertModifies(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+tools/jtb/AnnotateVisitor.java:526:      insertInvariants(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+tools/jtb/AnnotateVisitor.java:532:        insertJMLWorkaround(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */);
+tools/jtb/AnnotateVisitor.java:535:      addComment(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, JML_START_COMMENT, true);
+tools/jtb/AnnotateVisitor.java:544:    if (n instanceof MethodDeclaration) {
+tools/jtb/AnnotateVisitor.java:545:      name = ((MethodDeclaration)n).f2.f0.toString();
+tools/jtb/AnnotateVisitor.java:663:  // f0 -> PreIncrementExpression()
+tools/jtb/AnnotateVisitor.java:664:  //       | PreDecrementExpression()
+tools/jtb/AnnotateVisitor.java:665:  //       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
+tools/jtb/AnnotateVisitor.java:666:  public void visit(StatementExpression n) {
+tools/jtb/AnnotateVisitor.java:669:    // System.out.println("Found a statement expression: " + n.f0.choice);
+tools/jtb/AnnotateVisitor.java:674:    if (n.f0.choice instanceof NodeSequence) {
+tools/jtb/AnnotateVisitor.java:675:      NodeSequence ns = (NodeSequence) n.f0.choice;
+tools/jtb/AnnotateVisitor.java:676:      PrimaryExpression pe = (PrimaryExpression) ns.elementAt(0);
+tools/jtb/AnnotateVisitor.java:682:        NodeOptional no = (NodeOptional) ns.elementAt(1);
+tools/jtb/AnnotateVisitor.java:684:        if ((nc != null) && (nc.choice instanceof NodeSequence)) {
+tools/jtb/AnnotateVisitor.java:687:          // Don't take action unless the PrimaryExpression is a simple
+tools/jtb/AnnotateVisitor.java:688:          // Name (that's effectively checked below) and has no
+tools/jtb/AnnotateVisitor.java:689:          // PrimarySuffix or else its prefix is "this" (check that here).
+tools/jtb/AnnotateVisitor.java:691:          // System.out.println("pe.f1.size:" + pe.f1.size());
+tools/jtb/AnnotateVisitor.java:692:          if (pe.f1.size() == 0) {
+tools/jtb/AnnotateVisitor.java:693:            fieldname = Ast.fieldName(pe);
+tools/jtb/AnnotateVisitor.java:694:          } else if (pe.f1.size() == 1) {
+tools/jtb/AnnotateVisitor.java:695:            if (pe.f0.f0.which == 1) { // prefix is "this"
+tools/jtb/AnnotateVisitor.java:696:              PrimarySuffix ps = (PrimarySuffix) pe.f1.elementAt(0);
+tools/jtb/AnnotateVisitor.java:697:              if (ps.f0.which == 3) { // suffix is an identifier
+tools/jtb/AnnotateVisitor.java:698:                NodeSequence ns2 = (NodeSequence) ps.f0.choice;
+tools/jtb/AnnotateVisitor.java:699:                fieldname = ((NodeToken) ns2.elementAt(1)).tokenImage;
+tools/jtb/AnnotateVisitor.java:708:                  || isElementType(fieldname))) {
+tools/jtb/AnnotateVisitor.java:709:            ConstructorDeclaration cd
+tools/jtb/AnnotateVisitor.java:710:              = (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
+tools/jtb/AnnotateVisitor.java:711:            MethodDeclaration md
+tools/jtb/AnnotateVisitor.java:712:              = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
+tools/jtb/AnnotateVisitor.java:714:                || ((md != null) && (! Ast.contains(md.f0, "static")))) {
+tools/jtb/AnnotateVisitor.java:716:              /*@NonNull*/ Node parent = Ast.getParent(Statement.class, n);
+tools/jtb/AnnotateVisitor.java:728:              if (isElementType(fieldname)) {
+tools/jtb/AnnotateVisitor.java:729:                addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".elementType = " + elementType(fieldname) + ";"));
+tools/jtb/AnnotateVisitor.java:738:  // This is an assignment exactly if field f1 is present.
+tools/jtb/AnnotateVisitor.java:739:  // f0 -> ConditionalExpression()
+tools/jtb/AnnotateVisitor.java:740:  // f1 -> [ AssignmentOperator() Expression() ]
+tools/jtb/AnnotateVisitor.java:741:  public void visit(Expression n) {
+tools/jtb/AnnotateVisitor.java:744:    if (n.f1.present()) {
+tools/jtb/AnnotateVisitor.java:747:      PrimaryExpression pe = Ast.assignment2primaryexpression(n);
+tools/jtb/AnnotateVisitor.java:748:      String fieldname = Ast.fieldName(pe);
+tools/jtb/AnnotateVisitor.java:751:      /*@NonNull*/ Node stmt = Ast.getParent(Statement.class, n);
+
+tools/jtb/Ast.java:173:  public static String getName(FormalParameter p) {
+tools/jtb/Ast.java:174:    String name = print(p.f4);
+tools/jtb/Ast.java:183:  public static String getType(FormalParameter fp) {
+tools/jtb/Ast.java:188:    FormalParameter p = (FormalParameter)create("FormalParameter", w.toString());
+tools/jtb/Ast.java:192:    String type = print(p.f2);
+tools/jtb/Ast.java:193:    String name = print(p.f4);
+tools/jtb/Ast.java:205:  public static String getName(MethodDeclaration m) {
+tools/jtb/Ast.java:206:    return m.f2.f0.tokenImage;
+tools/jtb/Ast.java:209:  public static String getName(ConstructorDeclaration m) {
+tools/jtb/Ast.java:210:    return m.f1.tokenImage;
+tools/jtb/Ast.java:215:  public static /*@Nullable*/ String getPackage(CompilationUnit u) {
+tools/jtb/Ast.java:216:    NodeOptional o = u.f0;
+tools/jtb/Ast.java:218:      PackageDeclaration p = (PackageDeclaration) o.node;
+tools/jtb/Ast.java:219:      return print(p.f2);
+tools/jtb/Ast.java:229:  public static String getFullName(MethodDeclaration method) {
+tools/jtb/Ast.java:248:  // ClassOrInterfaceDeclaration. Otherwise returns null.
+tools/jtb/Ast.java:249:  public static /*@Nullable*/ /*@BinaryNameForNonArray*/ String getClassNameForType(TypeDeclaration d) {
+tools/jtb/Ast.java:251:    // Grammar production for TypeDeclaration:
+tools/jtb/Ast.java:252:    // f0 -> ";"
+tools/jtb/Ast.java:253:    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
+tools/jtb/Ast.java:255:    NodeChoice c = d.f0;
+tools/jtb/Ast.java:259:      NodeSequence seq = (NodeSequence)c.choice;
+tools/jtb/Ast.java:261:      if (c2.choice instanceof ClassOrInterfaceDeclaration) {
+tools/jtb/Ast.java:262:        return getClassName(c2.choice);
+tools/jtb/Ast.java:271:  public static /*@BinaryNameForNonArray*/ String getClassName(Node d) {
+tools/jtb/Ast.java:273:    ClassOrInterfaceDeclaration n =
+tools/jtb/Ast.java:274:      (d instanceof ClassOrInterfaceDeclaration)
+tools/jtb/Ast.java:275:      ? (ClassOrInterfaceDeclaration)d
+tools/jtb/Ast.java:276:      : (ClassOrInterfaceDeclaration)Ast.getParent(ClassOrInterfaceDeclaration.class, d);
+tools/jtb/Ast.java:278:    String packageName;
+tools/jtb/Ast.java:279:    CompilationUnit unit
+tools/jtb/Ast.java:280:      = (CompilationUnit)getParent(CompilationUnit.class, n);
+tools/jtb/Ast.java:281://       = (CompilationUnit) ((n instanceof CompilationUnit) ? n
+tools/jtb/Ast.java:282://                            : getParent(CompilationUnit.class, n));
+tools/jtb/Ast.java:285:      packageName = getPackage + ".";
+tools/jtb/Ast.java:287:      packageName = "";
+tools/jtb/Ast.java:290:    String className = "";
+tools/jtb/Ast.java:292://     if (n instanceof TypeDeclaration) {
+tools/jtb/Ast.java:294://       n = ((TypeDeclaration)n).f0.choice;
+tools/jtb/Ast.java:296://     if (n instanceof ClassOrInterfaceDeclaration) {
+tools/jtb/Ast.java:297:      className = (n).f1.tokenImage + ".";
+tools/jtb/Ast.java:300://       n = ((InterfaceDeclaration)n).f1; // use the UnmodifiedInterfaceDeclaration
+tools/jtb/Ast.java:303://       className = ((UnmodifiedClassDeclaration)n).f1.tokenImage + ".";
+tools/jtb/Ast.java:306://       className = ((UnmodifiedInterfaceDeclaration)n).f1.tokenImage + ".";
+tools/jtb/Ast.java:311:      ClassOrInterfaceBody b = (ClassOrInterfaceBody)
+tools/jtb/Ast.java:312:        getParent(ClassOrInterfaceBody.class, currentNode);
+tools/jtb/Ast.java:317:      assert n1 instanceof ClassOrInterfaceDeclaration;
+tools/jtb/Ast.java:318:      if (isInner((ClassOrInterfaceDeclaration)n1)) {
+tools/jtb/Ast.java:321:        className = "$inner" + "." + className;
+tools/jtb/Ast.java:324:        String s = ((ClassOrInterfaceDeclaration) n1).f1.tokenImage;
+tools/jtb/Ast.java:325:        className = s + "." + className;
+tools/jtb/Ast.java:330:    String result = packageName + className;
+tools/jtb/Ast.java:336:    /*@BinaryNameForNonArray*/ String result_bnfna = result;
+tools/jtb/Ast.java:341:  public static void setName(MethodDeclaration m, String name) {
+tools/jtb/Ast.java:342:    m.f2.f0.tokenImage = name;
+tools/jtb/Ast.java:347:  public static PrimaryExpression assignment2primaryexpression(Expression n) {
+tools/jtb/Ast.java:351:    assert n.f1.present();
+tools/jtb/Ast.java:352:    ConditionalExpression ce = n.f0;
+tools/jtb/Ast.java:353:    assert ! ce.f1.present();
+tools/jtb/Ast.java:354:    ConditionalOrExpression coe = ce.f0;
+tools/jtb/Ast.java:355:    assert ! coe.f1.present();
+tools/jtb/Ast.java:356:    ConditionalAndExpression cae = coe.f0;
+tools/jtb/Ast.java:357:    assert ! cae.f1.present();
+tools/jtb/Ast.java:358:    InclusiveOrExpression ioe = cae.f0;
+tools/jtb/Ast.java:359:    assert ! ioe.f1.present();
+tools/jtb/Ast.java:360:    ExclusiveOrExpression eoe = ioe.f0;
+tools/jtb/Ast.java:361:    assert ! eoe.f1.present();
+tools/jtb/Ast.java:362:    AndExpression ande = eoe.f0;
+tools/jtb/Ast.java:363:    assert ! ande.f1.present();
+tools/jtb/Ast.java:364:    EqualityExpression ee = ande.f0;
+tools/jtb/Ast.java:365:    assert ! ee.f1.present();
+tools/jtb/Ast.java:366:    InstanceOfExpression iofe = ee.f0;
+tools/jtb/Ast.java:367:    assert ! iofe.f1.present();
+tools/jtb/Ast.java:368:    RelationalExpression re = iofe.f0;
+tools/jtb/Ast.java:369:    assert ! re.f1.present();
+tools/jtb/Ast.java:370:    ShiftExpression se = re.f0;
+tools/jtb/Ast.java:371:    assert ! se.f1.present();
+tools/jtb/Ast.java:372:    AdditiveExpression adde = se.f0;
+tools/jtb/Ast.java:373:    assert ! adde.f1.present();
+tools/jtb/Ast.java:374:    MultiplicativeExpression me = adde.f0;
+tools/jtb/Ast.java:375:    assert ! me.f1.present();
+tools/jtb/Ast.java:376:    UnaryExpression ue = me.f0;
+tools/jtb/Ast.java:377:    UnaryExpressionNotPlusMinus uenpm
+tools/jtb/Ast.java:378:      = (UnaryExpressionNotPlusMinus) ue.f0.choice;
+tools/jtb/Ast.java:379:    PostfixExpression pfe = (PostfixExpression) uenpm.f0.choice;
+tools/jtb/Ast.java:380:    assert ! pfe.f1.present();
+tools/jtb/Ast.java:381:    PrimaryExpression pe = pfe.f0;
+tools/jtb/Ast.java:386:  public static String fieldName(PrimaryExpression pe) {
+tools/jtb/Ast.java:388:    // System.out.println("fieldName(" + pe + ")");
+tools/jtb/Ast.java:390:    // PrimaryExpression:
+tools/jtb/Ast.java:391:    // f0 -> PrimaryPrefix()
+tools/jtb/Ast.java:392:    // f1 -> ( PrimarySuffix() )*
+tools/jtb/Ast.java:394:    // First, try to get a name from the PrimarySuffix.
+tools/jtb/Ast.java:396:    NodeListOptional pslist = pe.f1;
+tools/jtb/Ast.java:398:      PrimarySuffix ps = (PrimarySuffix) pslist.elementAt(pslist.size()-1);
+tools/jtb/Ast.java:399:      NodeChoice psnc = ps.f0;
+tools/jtb/Ast.java:400:      // PrimarySuffix:
+tools/jtb/Ast.java:401:      // f0 -> "." "super"
+tools/jtb/Ast.java:403:      //       | "." AllocationExpression()
+tools/jtb/Ast.java:404:      //       | MemberSelector()
+tools/jtb/Ast.java:405:      //       | "[" Expression() "]"
+tools/jtb/Ast.java:407:      //       | Arguments()
+tools/jtb/Ast.java:410:        NodeSequence sn = (NodeSequence) psnc.choice;
+tools/jtb/Ast.java:412:        return ((NodeToken) sn.elementAt(1)).tokenImage;
+tools/jtb/Ast.java:416:    // If it was impossible to get a name from the PrimarySuffix,
+tools/jtb/Ast.java:417:    // try the PrimaryPrefix.
+tools/jtb/Ast.java:419:    // PrimaryPrefix:
+tools/jtb/Ast.java:420:    // f0 -> Literal()
+tools/jtb/Ast.java:423:    //       | ClassOrInterfaceType() "." "super" "." <IDENTIFIER>
+tools/jtb/Ast.java:424:    //       | "(" Expression() ")"
+tools/jtb/Ast.java:425:    //       | AllocationExpression()
+tools/jtb/Ast.java:426:    //       | ResultType() "." "class"
+tools/jtb/Ast.java:427:    //       | Name()
+tools/jtb/Ast.java:428:    PrimaryPrefix pp = pe.f0;
+tools/jtb/Ast.java:429:    NodeChoice ppnc = pp.f0;
+tools/jtb/Ast.java:432:      NodeSequence sn = (NodeSequence) ppnc.choice;
+tools/jtb/Ast.java:434:      return ((NodeToken) sn.elementAt(2)).tokenImage;
+tools/jtb/Ast.java:436:      return fieldName((Name) ppnc.choice);
+tools/jtb/Ast.java:442:  public static String fieldName(Name n) {
+tools/jtb/Ast.java:443:    NodeListOptional nlo = n.f1;
+tools/jtb/Ast.java:445:      NodeSequence ns = (NodeSequence) nlo.elementAt(nlo.size()-1);
+tools/jtb/Ast.java:447:      NodeToken nt = (NodeToken) ns.elementAt(1);
+tools/jtb/Ast.java:450:      return n.f0.tokenImage;
+tools/jtb/Ast.java:935:  public static void addDeclaration(ClassOrInterfaceBody c, ClassOrInterfaceBodyDeclaration d) {
+tools/jtb/Ast.java:936:    c.f1.addNode(d);
+tools/jtb/Ast.java:942:  public static void setAccess(MethodDeclaration m, String access) {
+tools/jtb/Ast.java:945:    ClassOrInterfaceBodyDeclaration decl =
+tools/jtb/Ast.java:946:      (ClassOrInterfaceBodyDeclaration)Ast.getParent(ClassOrInterfaceBodyDeclaration.class, m);
+tools/jtb/Ast.java:947:    NodeChoice nc = decl.f0;
+tools/jtb/Ast.java:948:    NodeSequence sequence = (NodeSequence)nc.choice;
+tools/jtb/Ast.java:949:    Modifiers modifiers = (Modifiers)sequence.elementAt(0);
+tools/jtb/Ast.java:950:    NodeListOptional options = modifiers.f0;
+tools/jtb/Ast.java:954:      if (c.choice instanceof NodeToken) {
+tools/jtb/Ast.java:955:        NodeToken t = (NodeToken) c.choice;
+tools/jtb/Ast.java:965:    NodeToken t = new NodeToken(access);
+tools/jtb/Ast.java:970:  public static void removeMethodDeclAnnotations(MethodDeclaration method) {
+tools/jtb/Ast.java:973:    ClassOrInterfaceBodyDeclaration decl =
+tools/jtb/Ast.java:974:      (ClassOrInterfaceBodyDeclaration)Ast.getParent(ClassOrInterfaceBodyDeclaration.class, method);
+tools/jtb/Ast.java:975:    NodeChoice nc = decl.f0;
+tools/jtb/Ast.java:976:    NodeSequence sequence = (NodeSequence)nc.choice;
+tools/jtb/Ast.java:977:    Modifiers modifiers = (Modifiers)sequence.elementAt(0);
+tools/jtb/Ast.java:978:    NodeListOptional options = modifiers.f0;
+tools/jtb/Ast.java:980:    NodeListOptional filteredOptions = new NodeListOptional();
+tools/jtb/Ast.java:985:      if (!(c.choice instanceof jtb.syntaxtree.Annotation)) {
+tools/jtb/Ast.java:990:    modifiers.f0 = filteredOptions;
+tools/jtb/Ast.java:1003:      public void visit(NodeToken node) {
+tools/jtb/Ast.java:1014:  public static void setBody(MethodDeclaration m, String body) {
+tools/jtb/Ast.java:1015:    m.f4.choice = (Block) Ast.create("Block", body);
+tools/jtb/Ast.java:1019:  public static String getBody(MethodDeclaration m) {
+tools/jtb/Ast.java:1020:    return print(m.f4.choice);
+tools/jtb/Ast.java:1024:  public static String getReturnType(MethodDeclaration m) {
+tools/jtb/Ast.java:1025:    Node n = m.f1.f0.choice;
+tools/jtb/Ast.java:1029:  public static String getMethodDeclarator(MethodDeclaration m) {
+tools/jtb/Ast.java:1030:    MethodDeclarator d = m.f2;
+tools/jtb/Ast.java:1036:  // FormalParameter objects.  Returns an empty list if there are no
+tools/jtb/Ast.java:1038:  public static List<FormalParameter> getParameters(MethodDeclaration m) {
+tools/jtb/Ast.java:1040:      public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+tools/jtb/Ast.java:1042:      public void visit(FormalParameter p) {
+tools/jtb/Ast.java:1047:    MethodDeclarator d = m.f2;
+tools/jtb/Ast.java:1053:  // FormalParameter objects. Does not include implicit parameters for
+tools/jtb/Ast.java:1055:  public static List<FormalParameter> getParametersNoImplicit(ConstructorDeclaration cd) {
+tools/jtb/Ast.java:1057:      public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+tools/jtb/Ast.java:1059:      public void visit(FormalParameter p) {
+tools/jtb/Ast.java:1064:    FormalParameters fp = cd.f2;
+tools/jtb/Ast.java:1070:  // FormalParameter objects.  Returns an empty list if there are no
+tools/jtb/Ast.java:1072:  public static List<FormalParameter> getParameters(ConstructorDeclaration cd) {
+tools/jtb/Ast.java:1074:      public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+tools/jtb/Ast.java:1076:      public void visit(FormalParameter p) {
+tools/jtb/Ast.java:1081:    FormalParameters fp = cd.f2;
+tools/jtb/Ast.java:1091:    Node innerClassNode = getParent(ClassOrInterfaceDeclaration.class, cd);
+tools/jtb/Ast.java:1092:    Node outerClassNode = getParent(ClassOrInterfaceDeclaration.class, innerClassNode);
+tools/jtb/Ast.java:1102:    if (isInner((ClassOrInterfaceDeclaration)innerClassNode)
+tools/jtb/Ast.java:1103:        && !isStatic((ClassOrInterfaceDeclaration)innerClassNode)) {
+tools/jtb/Ast.java:1104:      NodeToken nameToken = ((ClassOrInterfaceDeclaration)outerClassNode).f1;
+tools/jtb/Ast.java:1105:      Name name = new Name(nameToken, new NodeListOptional());
+tools/jtb/Ast.java:1106:      jtb.syntaxtree.Type type = new jtb.syntaxtree.Type(new NodeChoice(name, 1));
+tools/jtb/Ast.java:1107:      VariableDeclaratorId blankParamName = new VariableDeclaratorId(new NodeToken(""), new NodeListOptional());
+tools/jtb/Ast.java:1108:      FormalParameter implicitOuter = new FormalParameter(new Modifiers(null),
+tools/jtb/Ast.java:1109:                                                          new NodeOptional(),
+tools/jtb/Ast.java:1111:                                                          new NodeOptional(),
+tools/jtb/Ast.java:1112:                                                          blankParamName);
+tools/jtb/Ast.java:1120:  public static void addImport(CompilationUnit u, ImportDeclaration i) {
+tools/jtb/Ast.java:1121:    u.f1.addNode(i);
+tools/jtb/Ast.java:1128:  public static Set<String> getVariableNames(Node expr) {
+tools/jtb/Ast.java:1130:    class GetSymbolNamesVisitor extends DepthFirstVisitor {
+tools/jtb/Ast.java:1131:      public Set<String> symbolNames = new HashSet<String>();
+tools/jtb/Ast.java:1134:      public void visit(Name n) {
+tools/jtb/Ast.java:1136:        if (gp instanceof PrimaryPrefix) {
+tools/jtb/Ast.java:1137:          PrimaryExpression ggp = (PrimaryExpression) gp.getParent();
+tools/jtb/Ast.java:1138:          for (Enumeration e = getPrimarySuffixes(ggp);
+tools/jtb/Ast.java:1140:            PrimarySuffix s = (PrimarySuffix) e.nextElement();
+tools/jtb/Ast.java:1141:            if (s.f0.choice instanceof Arguments) {
+tools/jtb/Ast.java:1145:          symbolNames.add(print(n));
+tools/jtb/Ast.java:1150:    GetSymbolNamesVisitor v = new GetSymbolNamesVisitor();
+tools/jtb/Ast.java:1152:    return v.symbolNames;
+tools/jtb/Ast.java:1156:   * Returns an Enumeration of PrimarySuffix objects (but the static type
+tools/jtb/Ast.java:1159:  public static Enumeration getPrimarySuffixes(PrimaryExpression p) {
+tools/jtb/Ast.java:1160:    return p.f1.elements();
+tools/jtb/Ast.java:1165:  static boolean typeMatch(String pptTypeString, String astTypeString) {
+tools/jtb/Ast.java:1166:    // System.out.println("Comparing " + pptTypeString + " to " + astTypeString);
+tools/jtb/Ast.java:1167:    if (astTypeString.equals(pptTypeString)) {
+tools/jtb/Ast.java:1170:    // If astTypeString is missing the leading package name, permit a match
+tools/jtb/Ast.java:1171:    if (pptTypeString.endsWith(astTypeString)
+tools/jtb/Ast.java:1172:        && (pptTypeString.charAt(pptTypeString.length() - astTypeString.length() - 1) == '.')) {
+tools/jtb/Ast.java:1180:  public static boolean isMain(MethodDeclaration md) {
+tools/jtb/Ast.java:1181:    if (Ast.getName(md).equals("main")) {
+tools/jtb/Ast.java:1182:      List<FormalParameter> params = Ast.getParameters(md);
+tools/jtb/Ast.java:1184:        FormalParameter fp = params.get(0);
+tools/jtb/Ast.java:1185:        String paramtype = Ast.getType(fp);
+tools/jtb/Ast.java:1258:  public static boolean isStatic(ClassOrInterfaceDeclaration n) {
+tools/jtb/Ast.java:1262:  public static boolean isStatic(MethodDeclaration n) {
+tools/jtb/Ast.java:1266:  public static Modifiers getModifiers(ClassOrInterfaceDeclaration n) {
+tools/jtb/Ast.java:1267:    return getModifiersInternal((Node)n);
+tools/jtb/Ast.java:1270:  public static Modifiers getModifiers(MethodDeclaration n) {
+tools/jtb/Ast.java:1271:    return getModifiersInternal((Node)n);
+tools/jtb/Ast.java:1274:  private static Modifiers getModifiersInternal(Node n) {
+tools/jtb/Ast.java:1276:    assert (n instanceof MethodDeclaration)
+tools/jtb/Ast.java:1277:                      || (n instanceof ClassOrInterfaceDeclaration);
+tools/jtb/Ast.java:1279:    ClassOrInterfaceBodyDeclaration decl =
+tools/jtb/Ast.java:1280:      (ClassOrInterfaceBodyDeclaration)getParent(ClassOrInterfaceBodyDeclaration.class, n);
+tools/jtb/Ast.java:1282:    NodeSequence seq = (NodeSequence)decl.f0.choice;
+tools/jtb/Ast.java:1283:    return (Modifiers)seq.elementAt(0);
+tools/jtb/Ast.java:1288:    // Grammar production for ClassOrInterfaceBodyDeclaration
+tools/jtb/Ast.java:1289:    // f0 -> Initializer()
+tools/jtb/Ast.java:1290:    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+tools/jtb/Ast.java:1292:    assert (n instanceof MethodDeclaration)
+tools/jtb/Ast.java:1293:                      || (n instanceof ClassOrInterfaceDeclaration);
+tools/jtb/Ast.java:1295:    Modifiers modifiers = getModifiersInternal(n);
+tools/jtb/Ast.java:1303:  public static boolean modifierPresent(Modifiers modifiers, String modifierString) {
+tools/jtb/Ast.java:1305:    // f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
+tools/jtb/Ast.java:1307:    NodeListOptional list = modifiers.f0;
+tools/jtb/Ast.java:1311:      if (nodeChoice.choice instanceof NodeToken) {
+tools/jtb/Ast.java:1312:        NodeToken keyword = (NodeToken)nodeChoice.choice;
+tools/jtb/Ast.java:1321:  public static boolean isInner(ClassOrInterfaceDeclaration n) {
+tools/jtb/Ast.java:1322:    if (getParent(ClassOrInterfaceDeclaration.class, n) != null) {
+tools/jtb/Ast.java:1330:    ClassOrInterfaceBody clsbody = (ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, node);
+tools/jtb/Ast.java:1331:    return (!(clsbody.getParent() instanceof ClassOrInterfaceDeclaration));
+tools/jtb/Ast.java:1334:  public static boolean isInterface(ClassOrInterfaceBody n) {
+tools/jtb/Ast.java:1335:    // n.getParent won't be an ClassOrInterfaceDeclaration for anonymous
+tools/jtb/Ast.java:1338:    if (!(n.getParent() instanceof ClassOrInterfaceDeclaration))
+tools/jtb/Ast.java:1341:    return isInterface((ClassOrInterfaceDeclaration)n.getParent());
+tools/jtb/Ast.java:1344:  public static boolean isInterface(ClassOrInterfaceDeclaration n) {
+tools/jtb/Ast.java:1345:    // Grammar production for ClassOrInterfaceDeclaration:
+tools/jtb/Ast.java:1346:    // f0 -> ( "class" | "interface" )
+tools/jtb/Ast.java:1347:    // f1 -> <IDENTIFIER>
+tools/jtb/Ast.java:1348:    // f2 -> [ TypeParameters() ]
+tools/jtb/Ast.java:1349:    // f3 -> [ ExtendsList(isInterface) ]
+tools/jtb/Ast.java:1350:    // f4 -> [ ImplementsList(isInterface) ]
+tools/jtb/Ast.java:1351:    // f5 -> ClassOrInterfaceBody(isInterface)
+tools/jtb/Ast.java:1352:    NodeToken t = (NodeToken) n.f0.choice;
+tools/jtb/Ast.java:1362:  public static boolean isPrimitive(jtb.syntaxtree.Type n) {
+tools/jtb/Ast.java:1364:    // f0 -> ReferenceType()
+tools/jtb/Ast.java:1365:    //       | PrimitiveType()
+tools/jtb/Ast.java:1366:    return (n.f0.choice instanceof PrimitiveType);
+tools/jtb/Ast.java:1369:  public static boolean isReference(jtb.syntaxtree.Type n) {
+tools/jtb/Ast.java:1371:    // f0 -> ReferenceType()
+tools/jtb/Ast.java:1372:    //       | PrimitiveType()
+tools/jtb/Ast.java:1373:    return (n.f0.choice instanceof ReferenceType);
+tools/jtb/Ast.java:1377:  public static boolean isArray(jtb.syntaxtree.Type n) {
+tools/jtb/Ast.java:1379:    // f0 -> PrimitiveType() ( "[" "]" )+
+tools/jtb/Ast.java:1380:    //       | ( ClassOrInterfaceType() ) ( "[" "]" )*
+tools/jtb/Ast.java:1385:    ReferenceType refType = (ReferenceType)n.f0.choice;
+tools/jtb/Ast.java:1386:    NodeSequence seq = (NodeSequence)refType.f0.choice;
+tools/jtb/Ast.java:1387:    if (seq.elementAt(0) instanceof PrimitiveType) {
+tools/jtb/Ast.java:1391:    NodeListOptional opt = (NodeListOptional)seq.elementAt(1);
+tools/jtb/Ast.java:1400:            return c.getName();
+tools/jtb/Ast.java:1402:            return UtilMDE.fieldDescriptorToBinaryName(c.getName());
+tools/jtb/Ast.java:1404:            return c.getName();
+
+
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:42:   // f0 -> [ TypeParameters() ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:43:   // f1 -> ResultType()
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:44:   // f2 -> MethodDeclarator()
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:45:   // f3 -> [ "throws" NameList() ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:46:   // f4 -> ( Block() | ";" )
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:47:   public void visit(MethodDeclaration n) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:50:     HashMap<String,Stack<ClassOrInterfaceType>> oldShadowingMap =
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:53:     if (n.f0.present()) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:54:       augmentShadowingMap((TypeParameters)n.f0.node);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:56:      n.f1.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:57:      n.f2.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:58:      n.f3.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:59:      n.f4.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:62:      // the TypeParameters declared in this method.
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:67:   // f0 -> [ TypeParameters() ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:68:   // f1 -> <IDENTIFIER>
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:69:   // f2 -> FormalParameters()
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:70:   // f3 -> [ "throws" NameList() ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:71:   // f4 -> "{"
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:72:   // f5 -> [ ExplicitConstructorInvocation() ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:73:   // f6 -> ( BlockStatement() )*
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:74:   // f7 -> "}"
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:75:   public void visit(ConstructorDeclaration n) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:78:     HashMap<String,Stack<ClassOrInterfaceType>> oldShadowingMap =
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:81:     if (n.f0.present()) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:82:       augmentShadowingMap((TypeParameters)n.f0.node);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:84:      n.f1.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:85:      n.f2.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:86:      n.f3.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:87:      n.f4.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:88:      n.f5.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:89:      n.f6.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:90:      n.f7.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:93:      // the TypeParameters declared in this method.
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:98:   // f0 -> ( "class" | "interface" )
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:99:   // f1 -> <IDENTIFIER>
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:100:   // f2 -> [ TypeParameters() ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:101:   // f3 -> [ ExtendsList(isInterface) ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:102:   // f4 -> [ ImplementsList(isInterface) ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:103:   // f5 -> ClassOrInterfaceBody(isInterface)
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:104:   public void visit(ClassOrInterfaceDeclaration n) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:107:     HashMap<String,Stack<ClassOrInterfaceType>> oldShadowingMap =
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:110:      n.f0.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:111:      n.f1.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:113:     if (n.f2.present()) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:114:       augmentShadowingMap((TypeParameters)n.f2.node);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:117:      n.f2.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:118:      n.f3.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:119:      n.f4.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:120:      n.f5.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:123:      // the TypeParameters declared in this method.
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:128:  public void augmentShadowingMap(TypeParameters n) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:130:    // f0 -> "<"
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:131:    // f1 -> TypeParameter()
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:132:    // f2 -> ( "," TypeParameter() )*
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:133:    // f3 -> ">"
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:134:    final List<TypeParameter> params = new ArrayList<TypeParameter>();
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:136:        public void visit(TypeParameter n) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:141:    for (TypeParameter t : params) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:146:  // f0 -> <IDENTIFIER>
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:147:  // f1 -> [ TypeBound() ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:148:  public void augmentShadowingMap(TypeParameter n) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:149:    n.f0.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:150:    n.f1.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:151:    TypeBound b = (TypeBound)n.f1.node;
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:153:    if (n.f1.present()) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:155:      // Grammar production for TypeBound:
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:156:      // f0 -> "extends"
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:157:      // f1 -> ClassOrInterfaceType()
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:158:      // f2 -> ( "&" ClassOrInterfaceType() )*
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:160:      // TODO figure out how/whether to handle f2 (currently it's just ignored).
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:162:      assert b.f1.unGenerifiedVersionOfThis != null;
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:164:      Stack<ClassOrInterfaceType> s = shadowingMap.get(n.f0.tokenImage);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:166:        s = new Stack<ClassOrInterfaceType>();
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:167:        shadowingMap.put(n.f0.tokenImage, s);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:169:      s.push(b.f1.unGenerifiedVersionOfThis);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:175:      Stack<ClassOrInterfaceType> s = shadowingMap.get(n.f0.tokenImage);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:177:        s = new Stack<ClassOrInterfaceType>();
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:178:        shadowingMap.put(n.f0.tokenImage, s);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:181:      ClassOrInterfaceType objectType =
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:182:        (ClassOrInterfaceType)Ast.create("ClassOrInterfaceType", "Object");
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:183:      s.push(objectType);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:192:  // ClassOrInterfaceType:
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:193:  // f0 -> <IDENTIFIER>
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:194:  // f1 -> [ TypeArguments() ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:195:  // f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:196:  public void visit(ClassOrInterfaceType t) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:197:    t.f0.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:198:    t.f1.accept(this); // NO NEED TO DO THIS?
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:199:    t.f2.accept(this);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:201:    // Make a copy of the ClassOrInterfaceType.
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:205:    ClassOrInterfaceType n = (ClassOrInterfaceType)Ast.create("ClassOrInterfaceType", w.toString());
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:213:  // ClassOrInterfaceType:
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:214:  // f0 -> <IDENTIFIER>
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:215:  // f1 -> [ TypeArguments() ]
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:216:  // f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:217:  private void ungenerify(ClassOrInterfaceType n) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:220:    n.f1 = new NodeOptional(); // This removes optional node, if present.
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:221:    Vector<Node> nodeSequenceList = (n.f2).nodes;
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:223:      NodeSequence oldSequence = (NodeSequence) nodeSequenceList.get(i);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:224:      NodeSequence newSequence = new NodeSequence(3);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:227:      newSequence.addNode(new NodeOptional()); // get rid of type arguments
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:228:      (n.f2).nodes.set(i, newSequence);
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:234:    for (Map.Entry</*@KeyFor("shadowingMap")*/ String,Stack<ClassOrInterfaceType>> entry : shadowingMap.entrySet()) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:235:      if (entry.getKey().equals(n.f0.tokenImage)) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:236:        ClassOrInterfaceType c = entry.getValue().peek();
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:238:        Vector<Node> cSequence = c.f2.nodes;
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:243:        // Prepend all-but-first identifiers to the list of identifiers in f2.
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:248:        // Set f0 to the first identifier.
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:249:        n.f0 = c.f0;
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:270:  // ClassOrInterfaceType objects are not copied.
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:271:  private static HashMap<String,Stack<ClassOrInterfaceType>> copy(HashMap<String,Stack<ClassOrInterfaceType>> m) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:273:    HashMap<String,Stack<ClassOrInterfaceType>> newMap = new HashMap<String,Stack<ClassOrInterfaceType>>();
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:275:    for (Map.Entry</*@KeyFor("m")*/ String,Stack<ClassOrInterfaceType>> e : m.entrySet()) {
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:277:      Stack<ClassOrInterfaceType> oldStack = e.getValue();
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java:279:      Stack<ClassOrInterfaceType> newStack = (Stack<ClassOrInterfaceType>)oldStack.clone();
+
+
+tools/jtb/CollectFieldsVisitor.java:50:    for (FieldDeclaration fd : fieldDecls) {
+tools/jtb/CollectFieldsVisitor.java:52:      Type fdtype = fd.f0;
+tools/jtb/CollectFieldsVisitor.java:57:        String name = name(fd.f1);
+tools/jtb/CollectFieldsVisitor.java:64:      NodeListOptional fds = fd.f2;
+tools/jtb/CollectFieldsVisitor.java:68:          NodeSequence ns = (NodeSequence) fds.elementAt(j);
+tools/jtb/CollectFieldsVisitor.java:70:            System.out.println("Bad length " + ns.size() + " for NodeSequence");
+tools/jtb/CollectFieldsVisitor.java:72:          String name = name((VariableDeclarator) ns.elementAt(1));
+tools/jtb/CollectFieldsVisitor.java:84:  private static String name(VariableDeclarator n) {
+tools/jtb/CollectFieldsVisitor.java:85:    return n.f0.f0.tokenImage;
+tools/jtb/CollectFieldsVisitor.java:88:  private static boolean hasModifier(FieldDeclaration n, String mod) {
+tools/jtb/CollectFieldsVisitor.java:89:    return Ast.contains(n.f0, mod);
+tools/jtb/CollectFieldsVisitor.java:93:  /** Returns a list of all FieldDeclarations declared in this class or in
+tools/jtb/CollectFieldsVisitor.java:134:  // f0 -> ( "public" | "protected" | "private" | "static" | "final" | "transient" | "volatile" )*
+tools/jtb/CollectFieldsVisitor.java:135:  // f1 -> Type()
+tools/jtb/CollectFieldsVisitor.java:136:  // f2 -> VariableDeclarator()
+tools/jtb/CollectFieldsVisitor.java:137:  // f3 -> ( "," VariableDeclarator() )*
+tools/jtb/CollectFieldsVisitor.java:138:  // f4 -> ";"
+tools/jtb/CollectFieldsVisitor.java:139:  public void visit(FieldDeclaration n) {
+
+
+tools/jtb/ConditionExtractor.java:51:  // f0 -> Modifiers()
+tools/jtb/ConditionExtractor.java:52:  // f1 -> "package"
+tools/jtb/ConditionExtractor.java:53:  // f2 -> Name()
+tools/jtb/ConditionExtractor.java:54:  // f3 -> ";"
+tools/jtb/ConditionExtractor.java:55:  public void visit(PackageDeclaration n) {
+tools/jtb/ConditionExtractor.java:56:    packageName = Ast.format(n.f2);
+tools/jtb/ConditionExtractor.java:60:  // f0 -> "class"
+tools/jtb/ConditionExtractor.java:61:  // f1 -> <IDENTIFIER>
+tools/jtb/ConditionExtractor.java:62:  // f2 -> [ "extends" Name() ]
+tools/jtb/ConditionExtractor.java:63:  // f3 -> [ "implements" NameList() ]
+tools/jtb/ConditionExtractor.java:64:  // f4 -> ClassBody()
+tools/jtb/ConditionExtractor.java:65:  public void visit(ClassOrInterfaceDeclaration n) {
+tools/jtb/ConditionExtractor.java:68:      className = Ast.format(n.f1);
+tools/jtb/ConditionExtractor.java:76:  public void visit(FieldDeclaration n) {
+tools/jtb/ConditionExtractor.java:78:    // f0 -> Type()
+tools/jtb/ConditionExtractor.java:79:    // f1 -> VariableDeclarator()
+tools/jtb/ConditionExtractor.java:80:    // f2 -> ( "," VariableDeclarator() )*
+tools/jtb/ConditionExtractor.java:81:    // f3 -> ";"
+tools/jtb/ConditionExtractor.java:83:    String resultType = Ast.format(n.f0);
+tools/jtb/ConditionExtractor.java:84:    if (resultType.equals("boolean")) {
+tools/jtb/ConditionExtractor.java:85:      addCondition(Ast.format(n.f1.f0) + " ==  true");  // <--
+tools/jtb/ConditionExtractor.java:90:  // f0 -> ( "public" | "protected" | "private" | "static" | "abstract" | "final" | "native" | "synchronized" )*
+tools/jtb/ConditionExtractor.java:91:  // f1 -> ResultType()
+tools/jtb/ConditionExtractor.java:92:  // f2 -> MethodDeclarator()
+tools/jtb/ConditionExtractor.java:93:  // f3 -> [ "throws" NameList() ]
+tools/jtb/ConditionExtractor.java:94:  // f4 -> ( Block() | ";" )
+tools/jtb/ConditionExtractor.java:102:  public void visit(MethodDeclaration n) {
+tools/jtb/ConditionExtractor.java:106:    resultTypes.push(n.f1);
+tools/jtb/ConditionExtractor.java:108:    resultTypes.pop();
+tools/jtb/ConditionExtractor.java:111:  // f0 -> <IDENTIFIER>
+tools/jtb/ConditionExtractor.java:112:  // f1 -> FormalParameters()
+tools/jtb/ConditionExtractor.java:113:  // f2 -> ( "[" "]" )*
+tools/jtb/ConditionExtractor.java:114:  public void visit(MethodDeclarator n) {
+tools/jtb/ConditionExtractor.java:117:    String methName = className + "." + Ast.format(n.f0);
+tools/jtb/ConditionExtractor.java:118:    curMethodName = methName;
+tools/jtb/ConditionExtractor.java:119:    addMethod (Ast.format(n), methName);
+tools/jtb/ConditionExtractor.java:121:    // should reset curMethodName to null here??
+tools/jtb/ConditionExtractor.java:124:  // f0 -> [ TypeParameters() ]
+tools/jtb/ConditionExtractor.java:125:  // f1 -> <IDENTIFIER>
+tools/jtb/ConditionExtractor.java:126:  // f2 -> FormalParameters()
+tools/jtb/ConditionExtractor.java:127:  // f3 -> [ "throws" NameList() ]
+tools/jtb/ConditionExtractor.java:128:  // f4 -> "{"
+tools/jtb/ConditionExtractor.java:129:  // f5 -> [ ExplicitConstructorInvocation() ]
+tools/jtb/ConditionExtractor.java:130:  // f6 -> ( BlockStatement() )*
+tools/jtb/ConditionExtractor.java:131:  // f7 -> "}"
+tools/jtb/ConditionExtractor.java:132:  public void visit(ConstructorDeclaration n) {
+tools/jtb/ConditionExtractor.java:135:    String methName = className + "." + Ast.format(n.f1);
+tools/jtb/ConditionExtractor.java:136:    curMethodName = methName;
+tools/jtb/ConditionExtractor.java:137:    addMethod(className + Ast.format(n), methName);
+tools/jtb/ConditionExtractor.java:138:    resultTypes.push("constructor");
+tools/jtb/ConditionExtractor.java:140:    resultTypes.pop();
+tools/jtb/ConditionExtractor.java:143:  // f0 -> "switch"
+tools/jtb/ConditionExtractor.java:144:  // f1 -> "("
+tools/jtb/ConditionExtractor.java:145:  // f2 -> Expression()
+tools/jtb/ConditionExtractor.java:146:  // f3 -> ")"
+tools/jtb/ConditionExtractor.java:147:  // f4 -> "{"
+tools/jtb/ConditionExtractor.java:148:  // f5 -> ( SwitchLabel() ( BlockStatement() )* )*
+tools/jtb/ConditionExtractor.java:149:  // f6 -> "}"
+tools/jtb/ConditionExtractor.java:155:  public void visit(SwitchStatement n) {
+tools/jtb/ConditionExtractor.java:156:    String switchExpression = Ast.format(n.f2);
+tools/jtb/ConditionExtractor.java:157:    Collection<String> caseValues = getCaseValues(n.f5);
+tools/jtb/ConditionExtractor.java:165:        defaultString.append(switchExpression + " != " + switchValue);
+tools/jtb/ConditionExtractor.java:166:        addCondition(switchExpression + " == " + switchValue);
+tools/jtb/ConditionExtractor.java:177:  public Collection<String> getCaseValues (NodeListOptional n) {
+tools/jtb/ConditionExtractor.java:184:      NodeSequence ns = (NodeSequence) e.nextElement();
+tools/jtb/ConditionExtractor.java:185:      SwitchLabel sl = (SwitchLabel) ns.elementAt(0);
+tools/jtb/ConditionExtractor.java:186:      ns = (NodeSequence) sl.f0.choice;
+tools/jtb/ConditionExtractor.java:192:  // f0 -> "if"
+tools/jtb/ConditionExtractor.java:193:  // f1 -> "("
+tools/jtb/ConditionExtractor.java:194:  // f2 -> Expression()
+tools/jtb/ConditionExtractor.java:195:  // f3 -> ")"
+tools/jtb/ConditionExtractor.java:196:  // f4 -> Statement()
+tools/jtb/ConditionExtractor.java:197:  // f5 -> [ "else" Statement() ]
+tools/jtb/ConditionExtractor.java:199:  public void visit(IfStatement n) {
+tools/jtb/ConditionExtractor.java:200:    addCondition(Ast.format(n.f2));
+tools/jtb/ConditionExtractor.java:204:  // f0 -> "while"
+tools/jtb/ConditionExtractor.java:205:  // f1 -> "("
+tools/jtb/ConditionExtractor.java:206:  // f2 -> Expression()
+tools/jtb/ConditionExtractor.java:207:  // f3 -> ")"
+tools/jtb/ConditionExtractor.java:208:  // f4 -> Statement()
+tools/jtb/ConditionExtractor.java:210:  public void visit(WhileStatement n) {
+tools/jtb/ConditionExtractor.java:212:    addCondition(Ast.format(n.f2));
+tools/jtb/ConditionExtractor.java:215:  // f0 -> "do"
+tools/jtb/ConditionExtractor.java:216:  // f1 -> Statement()
+tools/jtb/ConditionExtractor.java:217:  // f2 -> "while"
+tools/jtb/ConditionExtractor.java:218:  // f3 -> "("
+tools/jtb/ConditionExtractor.java:219:  // f4 -> Expression()
+tools/jtb/ConditionExtractor.java:220:  // f5 -> ")"
+tools/jtb/ConditionExtractor.java:221:  // f6 -> ";"
+tools/jtb/ConditionExtractor.java:222:  /* Extract the condition in an 'DoStatement' statement */
+tools/jtb/ConditionExtractor.java:223:  public void visit(DoStatement n) {
+tools/jtb/ConditionExtractor.java:225:    addCondition(Ast.format(n.f4));
+tools/jtb/ConditionExtractor.java:228:   // f0 -> "for"
+tools/jtb/ConditionExtractor.java:229:   // f1 -> "("
+tools/jtb/ConditionExtractor.java:230:   // f2 -> ( Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
+tools/jtb/ConditionExtractor.java:231:   // f3 -> ")"
+tools/jtb/ConditionExtractor.java:232:   // f4 -> Statement()
+tools/jtb/ConditionExtractor.java:234:  public void visit(ForStatement n) {
+tools/jtb/ConditionExtractor.java:236:    if (n.f2.which == 1) {
+tools/jtb/ConditionExtractor.java:237:      addCondition(Ast.format(((NodeSequence)n.f2.choice).elementAt(2)));
+tools/jtb/ConditionExtractor.java:243:  // f0 -> LabeledStatement()
+tools/jtb/ConditionExtractor.java:244:  //       | Block()
+tools/jtb/ConditionExtractor.java:245:  //       | EmptyStatement()
+tools/jtb/ConditionExtractor.java:246:  //       | StatementExpression() ";"
+tools/jtb/ConditionExtractor.java:247:  //       | SwitchStatement()
+tools/jtb/ConditionExtractor.java:248:  //       | IfStatement()
+tools/jtb/ConditionExtractor.java:249:  //       | WhileStatement()
+tools/jtb/ConditionExtractor.java:250:  //       | DoStatement()
+tools/jtb/ConditionExtractor.java:251:  //       | ForStatement()
+tools/jtb/ConditionExtractor.java:252:  //       | BreakStatement()
+tools/jtb/ConditionExtractor.java:253:  //       | ContinueStatement()
+tools/jtb/ConditionExtractor.java:254:  //       | ReturnStatement()
+tools/jtb/ConditionExtractor.java:255:  //       | ThrowStatement()
+tools/jtb/ConditionExtractor.java:256:  //       | SynchronizedStatement()
+tools/jtb/ConditionExtractor.java:257:  //       | TryStatement()
+tools/jtb/ConditionExtractor.java:267:  public void visit(Statement n) {
+tools/jtb/ConditionExtractor.java:270:    if (n.f0.choice instanceof ReturnStatement) {
+tools/jtb/ConditionExtractor.java:271:      ReturnStatement rs = ((ReturnStatement) n.f0.choice);
+tools/jtb/ConditionExtractor.java:272:      String returnExpression = Ast.format(rs.f1);
+tools/jtb/ConditionExtractor.java:274:        addReplaceStatement( returnExpression );
+tools/jtb/ConditionExtractor.java:277:      if (resultTypes.peek() instanceof ResultType) {
+tools/jtb/ConditionExtractor.java:278:        ResultType resultType = (ResultType) resultTypes.peek();
+tools/jtb/ConditionExtractor.java:279:        if (resultType.f0.choice instanceof Type) {
+tools/jtb/ConditionExtractor.java:280:          Type type = (Type) resultType.f0.choice;
+tools/jtb/ConditionExtractor.java:282:            PrimitiveType primType = (PrimitiveType) type.f0.choice;
+tools/jtb/ConditionExtractor.java:283:            if (((NodeToken) primType.f0.choice).toString().equals("boolean")) {
+tools/jtb/ConditionExtractor.java:284:              addCondition(returnExpression);
+tools/jtb/ConditionExtractor.java:289:    } else if (!(n.f0.choice instanceof EmptyStatement)) {
+
+
+tools/jtb/InstrumentObserversVisitor.java:81:  public void visit(ConstructorDeclaration ctor) {
+tools/jtb/InstrumentObserversVisitor.java:85:    BlockStatement update = (BlockStatement)
+tools/jtb/InstrumentObserversVisitor.java:86:      Ast.create("BlockStatement", code);
+tools/jtb/InstrumentObserversVisitor.java:88:    // f6 -> ( BlockStatement() )*
+tools/jtb/InstrumentObserversVisitor.java:89:    NodeListOptional statements = ctor.f6;
+tools/jtb/InstrumentObserversVisitor.java:95:  private final Set<MethodDeclaration> generated_methods = new HashSet<MethodDeclaration>();
+tools/jtb/InstrumentObserversVisitor.java:99:  public void visit(MethodDeclaration method) {
+tools/jtb/InstrumentObserversVisitor.java:107:    String name = Ast.getName(method);
+tools/jtb/InstrumentObserversVisitor.java:108:    String returnType = Ast.getReturnType(method);
+tools/jtb/InstrumentObserversVisitor.java:109:    String maybeReturn = (returnType.equals("void") ? "" : "return");
+tools/jtb/InstrumentObserversVisitor.java:112:      parameters.add(Ast.getName(param));
+tools/jtb/InstrumentObserversVisitor.java:137:      MethodDeclaration wrapper = (MethodDeclaration) Ast.create("MethodDeclaration",
+tools/jtb/InstrumentObserversVisitor.java:144:      /*@NonNull*/ ClassOrInterfaceBody c = (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
+tools/jtb/InstrumentObserversVisitor.java:145:      ClassOrInterfaceBodyDeclaration d =
+tools/jtb/InstrumentObserversVisitor.java:146:        (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+tools/jtb/InstrumentObserversVisitor.java:151:      MethodDeclaration generated_method = (MethodDeclaration) d.f0.choice;
+tools/jtb/InstrumentObserversVisitor.java:153:        Ast.setName(generated_method, "$" + name);
+tools/jtb/InstrumentObserversVisitor.java:159:    Ast.setName(method, "$" + name + "$");
+
+
+tools/jtb/OrigModifier.java:48:  public void visit(PrimaryExpression n) {
+tools/jtb/OrigModifier.java:58:    if (n.f1.size() == 0) {
+tools/jtb/OrigModifier.java:59:      //checks if the nodeChoice's choice is Name
+tools/jtb/OrigModifier.java:60:      if (n.f0.f0.choice instanceof Name) {
+tools/jtb/OrigModifier.java:61:        //checks if the Name is simple
+tools/jtb/OrigModifier.java:62:        if (((Name) n.f0.f0.choice).f1.size() == 0) {
+tools/jtb/OrigModifier.java:63:          NodeToken variableToken = ((Name) n.f0.f0.choice).f0;
+tools/jtb/OrigModifier.java:78:    if (n.f1.size() == 1) {
+tools/jtb/OrigModifier.java:79:      // System.out.println("if1");
+tools/jtb/OrigModifier.java:80:      if (n.f1.elementAt(0) instanceof PrimarySuffix) {
+tools/jtb/OrigModifier.java:81:        // System.out.println("if2");
+tools/jtb/OrigModifier.java:82:        if (((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof NodeSequence) {
+tools/jtb/OrigModifier.java:83:          if (n.f0.f0.choice instanceof NodeToken) {
+tools/jtb/OrigModifier.java:84:            NodeToken firstToken = (NodeToken) n.f0.f0.choice;
+tools/jtb/OrigModifier.java:87:              ((NodeSequence) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).elements();
+tools/jtb/OrigModifier.java:88:            NodeToken lastToken = firstToken;
+tools/jtb/OrigModifier.java:90:              lastToken = (NodeToken) nodeSequence.nextElement();
+tools/jtb/OrigModifier.java:107:            // of n, all NodeToken effected by the addition of the
+
+
+tools/jtb/ParseResults.java:107:      String packageNameString;
+tools/jtb/ParseResults.java:108:      NodeOptional packageDeclarationMaybe = compilationUnit.f0;
+tools/jtb/ParseResults.java:110:        PackageDeclaration packageDeclaration =
+tools/jtb/ParseResults.java:111:          (PackageDeclaration) packageDeclarationMaybe.node;
+tools/jtb/ParseResults.java:112:        Name packageName = packageDeclaration.f2;
+tools/jtb/ParseResults.java:115:        dumper.visit(packageName);
+tools/jtb/ParseResults.java:116:        packageNameString = stringWriter.toString().trim();
+tools/jtb/ParseResults.java:118:        packageNameString = "";
+tools/jtb/ParseResults.java:121:      ParseResults results = new ParseResults(packageNameString, fileName, compilationUnit);
+tools/jtb/ParseResults.java:124:      NodeListOptional typeDeclarationMaybe = compilationUnit.f2;
+tools/jtb/ParseResults.java:127:        TypeDeclaration typeDeclaration =
+tools/jtb/ParseResults.java:128:          (TypeDeclaration) typeDeclarationMaybe.elementAt(j);
+tools/jtb/ParseResults.java:130:        NodeSequence sequence = (NodeSequence)typeDeclaration.f0.choice;
+tools/jtb/ParseResults.java:132:        ClassOrInterfaceDeclaration decl =
+tools/jtb/ParseResults.java:133:          (ClassOrInterfaceDeclaration)nodeChoice.choice;
+tools/jtb/ParseResults.java:137://                           + "to the instrumenter: " + javaFileName;
+
+
+tools/jtb/PptNameMatcher.java:40:  public String getUngenerifiedType(FormalParameter p) {
+tools/jtb/PptNameMatcher.java:42:    Type type = p.f2;
+tools/jtb/PptNameMatcher.java:45:    //  f0 -> ReferenceType()
+tools/jtb/PptNameMatcher.java:46:    //        | PrimitiveType()
+tools/jtb/PptNameMatcher.java:48:    if (type.f0.which == 0) {
+tools/jtb/PptNameMatcher.java:50:      ReferenceType refType = (ReferenceType)type.f0.choice;
+tools/jtb/PptNameMatcher.java:51:      //  Grammar production for ReferenceType:
+tools/jtb/PptNameMatcher.java:52:      //  f0 -> PrimitiveType() ( "[" "]" )+
+tools/jtb/PptNameMatcher.java:53:      //        | ( ClassOrInterfaceType() ) ( "[" "]" )*
+tools/jtb/PptNameMatcher.java:55:      if (refType.f0.which == 0) {
+tools/jtb/PptNameMatcher.java:57:        return Ast.getType(p);
+tools/jtb/PptNameMatcher.java:64:        FormalParameter param = (FormalParameter)Ast.create("FormalParameter", Ast.format(p));
+tools/jtb/PptNameMatcher.java:68:        Type type2 = param.f2;
+tools/jtb/PptNameMatcher.java:69:        ReferenceType refType2 = (ReferenceType)type2.f0.choice;
+tools/jtb/PptNameMatcher.java:72:        //    ( ClassOrInterfaceType() ) ( "[" "]" )*
+tools/jtb/PptNameMatcher.java:73:        NodeSequence intermediateSequence = (NodeSequence)refType2.f0.choice;
+tools/jtb/PptNameMatcher.java:74:        NodeSequence intermediateSequenceOrig = (NodeSequence)refType.f0.choice;
+tools/jtb/PptNameMatcher.java:75:        NodeSequence seq = (NodeSequence)intermediateSequence.elementAt(0);
+tools/jtb/PptNameMatcher.java:76:        NodeSequence seqOrig = (NodeSequence)intermediateSequenceOrig.elementAt(0);
+tools/jtb/PptNameMatcher.java:81:        // Replace the ClassOrInterfaceType with its ungenerified version.
+tools/jtb/PptNameMatcher.java:87:        // ClassOrInterfaceType t = (ClassOrInterfaceType)singleElementVector.get(0);
+tools/jtb/PptNameMatcher.java:88:        ClassOrInterfaceType tOrig = (ClassOrInterfaceType)singleElementVectorOrig.get(0);
+
+
+tools/runtimechecker/CheckerClass.java:36:  ClassOrInterfaceBody fclassbody;
+tools/runtimechecker/CheckerClass.java:38:  public CheckerClass(ClassOrInterfaceBody clazz) {
+tools/runtimechecker/CheckerClass.java:47:    /*@NonNull*/ CompilationUnit clazzCU = (CompilationUnit)Ast.getParent(CompilationUnit.class, clazz);
+tools/runtimechecker/CheckerClass.java:48:    NodeOptional no = clazzCU.f0;
+tools/runtimechecker/CheckerClass.java:51:      packageName = Ast.format(((PackageDeclaration)no.node).f2).trim();
+tools/runtimechecker/CheckerClass.java:56:    String imports = Ast.format(clazzCU.f1);
+tools/runtimechecker/CheckerClass.java:66:  // See getCompilationUnit().
+tools/runtimechecker/CheckerClass.java:72:  public CompilationUnit getCompilationUnit() {
+tools/runtimechecker/CheckerClass.java:74:      throw new Error("getCompilationUnit should only be called once.");
+tools/runtimechecker/CheckerClass.java:78:    return (CompilationUnit)Ast.create("CompilationUnit", code.toString());
+
+
+tools/runtimechecker/InstrumentVisitor.java:109:    public void visit(FieldDeclaration fd) {
+tools/runtimechecker/InstrumentVisitor.java:115:        // Grammar production for ClassOrInterfaceBodyDeclaration:
+tools/runtimechecker/InstrumentVisitor.java:116:        // f0 -> Initializer()
+tools/runtimechecker/InstrumentVisitor.java:117:        //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers)
+tools/runtimechecker/InstrumentVisitor.java:118:        //                       | ConstructorDeclaration() | FieldDeclaration(modifiers)
+tools/runtimechecker/InstrumentVisitor.java:119:        //                       | MethodDeclaration(modifiers) )
+tools/runtimechecker/InstrumentVisitor.java:123:            NodeSequence seq = (NodeSequence)fd.getParent().getParent();
+tools/runtimechecker/InstrumentVisitor.java:124:            Modifiers modifiers = (Modifiers)seq.elementAt(0);
+tools/runtimechecker/InstrumentVisitor.java:125:            List<Node> modifierList = modifiers.f0.nodes;
+tools/runtimechecker/InstrumentVisitor.java:128:            List<Node> newModifiers = new ArrayList<Node>();
+tools/runtimechecker/InstrumentVisitor.java:131:                NodeToken token = (NodeToken) nc.choice;
+tools/runtimechecker/InstrumentVisitor.java:135:                    newModifiers.add(token);
+tools/runtimechecker/InstrumentVisitor.java:139:            newModifiers.add(new NodeToken("public"));
+tools/runtimechecker/InstrumentVisitor.java:140:            modifiers.f0.nodes = new Vector<Node>(newModifiers);
+tools/runtimechecker/InstrumentVisitor.java:218:    public void visit(ConstructorDeclaration ctor) {
+tools/runtimechecker/InstrumentVisitor.java:228:        List<String> declaredThrowables = getDeclaredThrowables(ctor.f3);
+tools/runtimechecker/InstrumentVisitor.java:234:        NodeListOptional ctorBody = ctor.f6;
+tools/runtimechecker/InstrumentVisitor.java:236:        // Create the code for a new BlockStatement that will be the new
+tools/runtimechecker/InstrumentVisitor.java:294:        BlockStatement newCtorBody = (BlockStatement) Ast.create(
+tools/runtimechecker/InstrumentVisitor.java:295:                "BlockStatement", code.toString());
+tools/runtimechecker/InstrumentVisitor.java:297:        ctor.f6 = new NodeListOptional(newCtorBody);
+tools/runtimechecker/InstrumentVisitor.java:301:    private final Set<MethodDeclaration> generated_methods = new HashSet<MethodDeclaration>();
+tools/runtimechecker/InstrumentVisitor.java:307:    public void visit(MethodDeclaration method) {
+tools/runtimechecker/InstrumentVisitor.java:317:            /*@NonNull*/ ClassOrInterfaceDeclaration clsdecl =
+tools/runtimechecker/InstrumentVisitor.java:318:            (ClassOrInterfaceDeclaration)Ast.getParent(ClassOrInterfaceDeclaration.class, method);
+tools/runtimechecker/InstrumentVisitor.java:326:        if (Ast.modifierPresent(Ast.getModifiers(method), "abstract")) {
+tools/runtimechecker/InstrumentVisitor.java:344:        List<String> declaredThrowables = getDeclaredThrowables(method.f3);
+tools/runtimechecker/InstrumentVisitor.java:349:        String returnType = Ast.getReturnType(method);
+tools/runtimechecker/InstrumentVisitor.java:350:        String maybeReturn = (returnType.equals("void") ? "" : "return");
+tools/runtimechecker/InstrumentVisitor.java:381:            .addDeclaration(method, checkPostconditions_checker_method(matching_ppts, pptmap, name, returnType, typesAndParameters,
+tools/runtimechecker/InstrumentVisitor.java:385:            .addDeclaration(method, checkPostconditions_checker_method(matching_ppts, pptmap, name, returnType, typesAndParameters,
+tools/runtimechecker/InstrumentVisitor.java:393:        if (!returnType.equals("void")) {
+tools/runtimechecker/InstrumentVisitor.java:394:            code.append(returnType + " retval_instrument = ");
+tools/runtimechecker/InstrumentVisitor.java:399:            if (returnType.equals("boolean")) {
+tools/runtimechecker/InstrumentVisitor.java:401:            } else if (returnType.equals("char")) {
+tools/runtimechecker/InstrumentVisitor.java:403:            } else if (returnType.equals("byte") || returnType.equals("double")
+tools/runtimechecker/InstrumentVisitor.java:404:                       || returnType.equals("float") || returnType.equals("int")
+tools/runtimechecker/InstrumentVisitor.java:405:                       || returnType.equals("long") || returnType.equals("short")) {
+tools/runtimechecker/InstrumentVisitor.java:416:        if (!returnType.equals("void")) {
+tools/runtimechecker/InstrumentVisitor.java:426:        if (!returnType.equals("void")) {
+tools/runtimechecker/InstrumentVisitor.java:435:        MethodDeclaration wrapper = (MethodDeclaration) Ast.create("MethodDeclaration",
+tools/runtimechecker/InstrumentVisitor.java:440:        Block block = (Block) Ast.create("Block", new_method);
+tools/runtimechecker/InstrumentVisitor.java:442:        wrapper.f4.choice = block;
+tools/runtimechecker/InstrumentVisitor.java:445:        Modifiers modifiersOrig = Ast.getModifiers(method);
+tools/runtimechecker/InstrumentVisitor.java:446:        Modifiers modifiers = (Modifiers)Ast.create("Modifiers", Ast.format(modifiersOrig));
+tools/runtimechecker/InstrumentVisitor.java:450:            /*@NonNull*/ ClassOrInterfaceBody c =
+tools/runtimechecker/InstrumentVisitor.java:451:            (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
+tools/runtimechecker/InstrumentVisitor.java:458:        ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration) Ast.create("ClassOrInterfaceBodyDeclaration",
+tools/runtimechecker/InstrumentVisitor.java:463:        NodeSequence ns = (NodeSequence) d.f0.choice;
+tools/runtimechecker/InstrumentVisitor.java:465:        MethodDeclaration generated_method = (MethodDeclaration) nc.choice;
+tools/runtimechecker/InstrumentVisitor.java:471:        Ast.removeMethodDeclAnnotations(method);

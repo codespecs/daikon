@@ -57,11 +57,12 @@ class ConditionExtractor extends DepthFirstVisitor {
     super.visit(n);
   }
 
-  // f0 -> "class"
+  // f0 -> ( "class" | "interface" )
   // f1 -> <IDENTIFIER>
-  // f2 -> [ "extends" Name() ]
-  // f3 -> [ "implements" NameList() ]
-  // f4 -> ClassBody()
+  // f2 -> [ TypeParameters() ]
+  // f3 -> [ ExtendsList(isInterface) ]
+  // f4 -> [ ImplementsList(isInterface) ]
+  // f5 -> ClassOrInterfaceBody(isInterface)
   public void visit(ClassOrInterfaceDeclaration n) {
 
     if (!Ast.isInterface(n)) { // Not sure if this is needed; added during JTB udpate.
@@ -87,7 +88,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     super.visit(n);
   }
 
-  // f0 -> ( "public" | "protected" | "private" | "static" | "abstract" | "final" | "native" | "synchronized" )*
+  // f0 -> [ TypeParameters() ]
   // f1 -> ResultType()
   // f2 -> MethodDeclarator()
   // f3 -> [ "throws" NameList() ]
@@ -227,7 +228,7 @@ class ConditionExtractor extends DepthFirstVisitor {
 
    // f0 -> "for"
    // f1 -> "("
-   // f2 -> ( Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
+   // f2 -> ( Modifiers() Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
    // f3 -> ")"
    // f4 -> Statement()
   /* Extract the condition in an 'for' statement */
@@ -241,6 +242,7 @@ class ConditionExtractor extends DepthFirstVisitor {
 
 
   // f0 -> LabeledStatement()
+  //       | AssertStatement()
   //       | Block()
   //       | EmptyStatement()
   //       | StatementExpression() ";"

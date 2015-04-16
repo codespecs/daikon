@@ -1,0 +1,562 @@
+CompilationUnit
+    * f0 -> [ PackageDeclaration() ]
+    * f1 -> ( ImportDeclaration() )*
+    * f2 -> ( TypeDeclaration() )*
+    * f3 -> ( <"\u001a"> )?
+    * f4 -> ( <STUFF_TO_IGNORE: ~[]> )?
+    * f5 -> <EOF>
+
+PackageDeclaration
+    * f0 -> Modifiers()
+    * f1 -> "package"
+    * f2 -> Name()
+    * f3 -> ";"
+
+ImportDeclaration
+    * f0 -> "import"
+    * f1 -> [ "static" ]
+    * f2 -> Name()
+    * f3 -> [ "." "*" ]
+    * f4 -> ";"
+
+Modifiers
+    * f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
+
+TypeDeclaration
+    * f0 -> ";"
+    *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
+
+ClassOrInterfaceDeclaration
+    * f0 -> ( "class" | "interface" )
+    * f1 -> <IDENTIFIER>
+    * f2 -> [ TypeParameters() ]
+    * f3 -> [ ExtendsList(isInterface) ]
+    * f4 -> [ ImplementsList(isInterface) ]
+    * f5 -> ClassOrInterfaceBody(isInterface)
+
+ExtendsList
+    * f0 -> "extends"
+    * f1 -> ClassOrInterfaceType()
+    * f2 -> ( "," ClassOrInterfaceType() )*
+
+ImplementsList
+    * f0 -> "implements"
+    * f1 -> ClassOrInterfaceType()
+    * f2 -> ( "," ClassOrInterfaceType() )*
+
+EnumDeclaration
+    * f0 -> "enum"
+    * f1 -> <IDENTIFIER>
+    * f2 -> [ ImplementsList(false) ]
+    * f3 -> EnumBody()
+
+EnumBody
+    * f0 -> "{"
+    * f1 -> [ EnumConstant() ( "," EnumConstant() )* ]
+    * f2 -> [ "," ]
+    * f3 -> [ ";" ( ClassOrInterfaceBodyDeclaration(false) )* ]
+
+EnumConstant
+    * f0 -> Modifiers()
+    * f1 -> <IDENTIFIER>
+    * f2 -> [ Arguments() ]
+    * f3 -> [ ClassOrInterfaceBody(false) ]
+
+TypeParameters
+    * f0 -> "<"
+    * f1 -> TypeParameter()
+    * f2 -> ( "," TypeParameter() )*
+    * f3 -> ">"
+
+TypeParameter
+    * f0 -> <IDENTIFIER>
+    * f1 -> [ TypeBound() ]
+
+TypeBound
+    * f0 -> "extends"
+    * f1 -> ClassOrInterfaceType()
+    * f2 -> ( "&" ClassOrInterfaceType() )*
+
+ClassOrInterfaceBody
+    * f0 -> "{"
+    * f1 -> ( ClassOrInterfaceBodyDeclaration(isInterface) )*
+
+ClassOrInterfaceBodyDeclaration
+    * f0 -> Initializer()
+    *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
+    *       | ";"
+
+FieldDeclaration
+    * f0 -> Type()
+    * f1 -> VariableDeclarator()
+    * f2 -> ( "," VariableDeclarator() )*
+    * f3 -> ";"
+
+VariableDeclarator
+    * f0 -> VariableDeclaratorId()
+    * f1 -> [ "=" VariableInitializer() ]
+
+VariableDeclaratorId
+    * f0 -> <IDENTIFIER>
+    * f1 -> ( "[" "]" )*
+
+VariableInitializer
+    * f0 -> ArrayInitializer()
+    *       | Expression()
+
+ArrayInitializer
+    * f0 -> "{"
+    * f1 -> [ VariableInitializer() ( "," VariableInitializer() )* ]
+    * f2 -> [ "," ]
+
+MethodDeclaration
+    * f0 -> [ TypeParameters() ]
+    * f1 -> ResultType()
+    * f2 -> MethodDeclarator()
+    * f3 -> [ "throws" NameList() ]
+    * f4 -> ( Block() | ";" )
+
+MethodDeclarator
+    * f0 -> <IDENTIFIER>
+    * f1 -> FormalParameters()
+    * f2 -> ( "[" "]" )*
+
+FormalParameters
+    * f0 -> "("
+    * f1 -> [ FormalParameter() ( "," FormalParameter() )* ]
+    * f2 -> ")"
+
+FormalParameter
+    * f0 -> Modifiers()
+    * f1 -> [ "final" | Annotation() ]
+    * f2 -> Type()
+    * f3 -> [ "..." ]
+    * f4 -> VariableDeclaratorId()
+
+ConstructorDeclaration
+    * f0 -> [ TypeParameters() ]
+    * f1 -> <IDENTIFIER>
+    * f2 -> FormalParameters()
+    * f3 -> [ "throws" NameList() ]
+    * f4 -> "{"
+    * f5 -> [ ExplicitConstructorInvocation() ]
+    * f6 -> ( BlockStatement() )*
+
+ExplicitConstructorInvocation
+    * f0 -> [ TypeArguments() ] ( "this" | "super" ) Arguments() ";"
+    *       | PrimaryExpression() "." [ TypeArguments() ] "super" Arguments() ";"
+
+Initializer
+    * f0 -> [ "static" ]
+    * f1 -> Block()
+
+Type
+    * f0 -> ReferenceType()
+    *       | PrimitiveType()
+
+ReferenceType
+    * f0 -> PrimitiveType() ( "[" "]" )+
+    *       | ( ClassOrInterfaceType() ) ( "[" "]" )*
+
+ClassOrInterfaceType
+    * f0 -> <IDENTIFIER>
+    * f1 -> [ TypeArguments() ]
+    * f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
+
+TypeArguments
+    * f0 -> "<"
+    * f1 -> TypeArgument()
+    * f2 -> ( "," TypeArgument() )*
+    * f3 -> ">"
+
+TypeArgument
+    * f0 -> ReferenceType()
+    *       | "?" [ WildcardBounds() ]
+
+WildcardBounds
+    * f0 -> "extends" ReferenceType()
+    *       | "super" ReferenceType()
+
+PrimitiveType
+    * f0 -> "boolean"
+    *       | "char"
+    *       | "byte"
+    *       | "short"
+    *       | "int"
+    *       | "long"
+    *       | "float"
+    *       | "double"
+
+ResultType
+    * f0 -> "void"
+    *       | Type()
+
+Name
+    * f0 -> <IDENTIFIER>
+    * f1 -> ( "." <IDENTIFIER> )*
+
+NameList
+    * f0 -> Name()
+    * f1 -> ( "," Name() )*
+
+Expression
+    * f0 -> ConditionalExpression()
+    * f1 -> [ AssignmentOperator() Expression() ]
+
+AssignmentOperator
+    * f0 -> "="
+    *       | "*="
+    *       | "/="
+    *       | "%="
+    *       | "+="
+    *       | "-="
+    *       | "<<="
+    *       | ">>="
+    *       | ">>>="
+    *       | "&="
+    *       | "^="
+    *       | "|="
+
+ConditionalExpression
+    * f0 -> ConditionalOrExpression()
+    * f1 -> [ "?" Expression() ":" Expression() ]
+
+ConditionalOrExpression
+    * f0 -> ConditionalAndExpression()
+    * f1 -> ( "||" ConditionalAndExpression() )*
+
+ConditionalAndExpression
+    * f0 -> InclusiveOrExpression()
+    * f1 -> ( "&&" InclusiveOrExpression() )*
+
+InclusiveOrExpression
+    * f0 -> ExclusiveOrExpression()
+    * f1 -> ( "|" ExclusiveOrExpression() )*
+
+ExclusiveOrExpression
+    * f0 -> AndExpression()
+    * f1 -> ( "^" AndExpression() )*
+
+AndExpression
+    * f0 -> EqualityExpression()
+    * f1 -> ( "&" EqualityExpression() )*
+
+EqualityExpression
+    * f0 -> InstanceOfExpression()
+    * f1 -> ( ( "==" | "!=" ) InstanceOfExpression() )*
+
+InstanceOfExpression
+    * f0 -> RelationalExpression()
+    * f1 -> [ "instanceof" Type() ]
+
+RelationalExpression
+    * f0 -> ShiftExpression()
+    * f1 -> ( ( "<" | ">" | "<=" | ">=" ) ShiftExpression() )*
+
+ShiftExpression
+    * f0 -> AdditiveExpression()
+    * f1 -> ( ( "<<" | RSIGNEDSHIFT() | RUNSIGNEDSHIFT() ) AdditiveExpression() )*
+
+AdditiveExpression
+    * f0 -> MultiplicativeExpression()
+    * f1 -> ( ( "+" | "-" ) MultiplicativeExpression() )*
+
+MultiplicativeExpression
+    * f0 -> UnaryExpression()
+    * f1 -> ( ( "*" | "/" | "%" ) UnaryExpression() )*
+
+UnaryExpression
+    * f0 -> ( "+" | "-" ) UnaryExpression()
+    *       | PreIncrementExpression()
+    *       | PreDecrementExpression()
+    *       | UnaryExpressionNotPlusMinus()
+
+PreIncrementExpression
+    * f0 -> "++"
+    * f1 -> PrimaryExpression()
+
+PreDecrementExpression
+    * f0 -> "--"
+    * f1 -> PrimaryExpression()
+
+UnaryExpressionNotPlusMinus
+    * f0 -> ( "~" | "!" ) UnaryExpression()
+    *       | CastExpression()
+    *       | PostfixExpression()
+
+CastLookahead
+    * f0 -> "(" PrimitiveType()
+    *       | "(" Type() "[" "]"
+    *       | "(" Type() ")" ( "~" | "!" | "(" | <IDENTIFIER> | "this" | "super" | "new" | Literal() )
+
+PostfixExpression
+    * f0 -> PrimaryExpression()
+    * f1 -> [ "++" | "--" ]
+
+CastExpression
+    * f0 -> "(" Type() ")" UnaryExpression()
+    *       | "(" Type() ")" UnaryExpressionNotPlusMinus()
+
+PrimaryExpression
+    * f0 -> PrimaryPrefix()
+    * f1 -> ( PrimarySuffix() )*
+
+MemberSelector
+    * f0 -> "."
+    * f1 -> TypeArguments()
+    * f2 -> <IDENTIFIER>
+
+PrimaryPrefix
+    * f0 -> Literal()
+    *       | ( <IDENTIFIER> "." )* "this"
+    *       | "super" "." <IDENTIFIER>
+    *       | ClassOrInterfaceType() "." "super" "." <IDENTIFIER>
+    *       | "(" Expression() ")"
+    *       | AllocationExpression()
+    *       | ResultType() "." "class"
+    *       | Name()
+
+PrimarySuffix
+    * f0 -> "." "super"
+    *       | "." "this"
+    *       | "." AllocationExpression()
+    *       | MemberSelector()
+    *       | "[" Expression() "]"
+    *       | "." <IDENTIFIER>
+    *       | Arguments()
+
+Literal
+    * f0 -> <INTEGER_LITERAL>
+    *       | <FLOATING_POINT_LITERAL>
+    *       | <CHARACTER_LITERAL>
+    *       | <STRING_LITERAL>
+    *       | BooleanLiteral()
+    *       | NullLiteral()
+
+BooleanLiteral
+    * f0 -> "true"
+    *       | "false"
+
+NullLiteral
+    * f0 -> "null"
+
+Arguments
+    * f0 -> "("
+    * f1 -> [ ArgumentList() ]
+    * f2 -> ")"
+
+ArgumentList
+    * f0 -> Expression()
+    * f1 -> ( "," Expression() )*
+
+AllocationExpression
+    * f0 -> "new" PrimitiveType() ArrayDimsAndInits()
+    *       | "new" ClassOrInterfaceType() [ TypeArguments() ] ( ArrayDimsAndInits() | Arguments() [ ClassOrInterfaceBody(false) ] )
+
+ArrayDimsAndInits
+    * f0 -> ( "[" Expression() "]" )+ ( "[" "]" )*
+    *       | ( "[" "]" )+ ArrayInitializer()
+
+Statement
+    * f0 -> LabeledStatement()
+    *       | AssertStatement()
+    *       | Block()
+    *       | EmptyStatement()
+    *       | StatementExpression() ";"
+    *       | SwitchStatement()
+    *       | IfStatement()
+    *       | WhileStatement()
+    *       | DoStatement()
+    *       | ForStatement()
+    *       | BreakStatement()
+    *       | ContinueStatement()
+    *       | ReturnStatement()
+    *       | ThrowStatement()
+    *       | SynchronizedStatement()
+    *       | TryStatement()
+
+AssertStatement
+    * f0 -> "assert"
+    * f1 -> Expression()
+    * f2 -> [ ":" Expression() ]
+    * f3 -> ";"
+
+LabeledStatement
+    * f0 -> <IDENTIFIER>
+    * f1 -> ":"
+    * f2 -> Statement()
+
+Block
+    * f0 -> "{"
+    * f1 -> ( BlockStatement() )*
+
+BlockStatement
+    * f0 -> LocalVariableDeclaration() ";"
+    *       | Statement()
+    *       | ClassOrInterfaceDeclaration(0)
+
+LocalVariableDeclaration
+    * f0 -> Modifiers()
+    * f1 -> Type()
+    * f2 -> VariableDeclarator()
+    * f3 -> ( "," VariableDeclarator() )*
+
+EmptyStatement
+    * f0 -> ";"
+
+StatementExpression
+    * f0 -> PreIncrementExpression()
+    *       | PreDecrementExpression()
+    *       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
+
+SwitchStatement
+    * f0 -> "switch"
+    * f1 -> "("
+    * f2 -> Expression()
+    * f3 -> ")"
+    * f4 -> "{"
+    * f5 -> ( SwitchLabel() ( BlockStatement() )* )*
+
+SwitchLabel
+    * f0 -> "case" Expression() ":"
+    *       | "default" ":"
+
+IfStatement
+    * f0 -> "if"
+    * f1 -> "("
+    * f2 -> Expression()
+    * f3 -> ")"
+    * f4 -> Statement()
+    * f5 -> [ "else" Statement() ]
+
+WhileStatement
+    * f0 -> "while"
+    * f1 -> "("
+    * f2 -> Expression()
+    * f3 -> ")"
+    * f4 -> Statement()
+
+DoStatement
+    * f0 -> "do"
+    * f1 -> Statement()
+    * f2 -> "while"
+    * f3 -> "("
+    * f4 -> Expression()
+    * f5 -> ")"
+    * f6 -> ";"
+
+ForStatement
+    * f0 -> "for"
+    * f1 -> "("
+    * f2 -> ( Modifiers() Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
+    * f3 -> ")"
+    * f4 -> Statement()
+
+    * f0 -> LocalVariableDeclaration()
+    *       | StatementExpressionList()
+ForInit
+
+    * f0 -> StatementExpression()
+    * f1 -> ( "," StatementExpression() )*
+StatementExpressionList
+
+ForUpdate
+    * f0 -> StatementExpressionList()
+
+BreakStatement
+    * f0 -> "break"
+    * f1 -> [ <IDENTIFIER> ]
+    * f2 -> ";"
+
+ContinueStatement
+    * f0 -> "continue"
+    * f1 -> [ <IDENTIFIER> ]
+    * f2 -> ";"
+
+ReturnStatement
+    * f0 -> "return"
+    * f1 -> [ Expression() ]
+    * f2 -> ";"
+
+ThrowStatement
+    * f0 -> "throw"
+    * f1 -> Expression()
+    * f2 -> ";"
+
+SynchronizedStatement
+    * f0 -> "synchronized"
+    * f1 -> "("
+    * f2 -> Expression()
+    * f3 -> ")"
+    * f4 -> Block()
+
+TryStatement
+    * f0 -> "try"
+    * f1 -> Block()
+    * f2 -> ( "catch" "(" FormalParameter() ")" Block() )*
+    * f3 -> [ "finally" Block() ]
+
+RUNSIGNEDSHIFT
+    * f0 -> ( ">" ">" ">" )
+
+RSIGNEDSHIFT
+    * f0 -> ( ">" ">" )
+
+Annotation
+    * f0 -> NormalAnnotation()
+    *       | SingleMemberAnnotation()
+    *       | MarkerAnnotation()
+
+NormalAnnotation
+    * f0 -> "@"
+    * f1 -> Name()
+    * f2 -> "("
+    * f3 -> [ MemberValuePairs() ]
+    * f4 -> ")"
+
+MarkerAnnotation
+    * f0 -> "@"
+    * f1 -> Name()
+
+SingleMemberAnnotation
+    * f0 -> "@"
+    * f1 -> Name()
+    * f2 -> "("
+    * f3 -> MemberValue()
+    * f4 -> ")"
+
+MemberValuePairs
+    * f0 -> MemberValuePair()
+    * f1 -> ( "," MemberValuePair() )*
+
+MemberValuePair
+    * f0 -> <IDENTIFIER>
+    * f1 -> "="
+    * f2 -> MemberValue()
+
+MemberValue
+    * f0 -> Annotation()
+    *       | MemberValueArrayInitializer()
+    *       | ConditionalExpression()
+
+MemberValueArrayInitializer
+    * f0 -> "{"
+    * f1 -> ( MemberValue() ( "," MemberValue() )* [ "," ] )?
+
+AnnotationTypeDeclaration
+    * f0 -> "@"
+    * f1 -> "interface"
+    * f2 -> <IDENTIFIER>
+    * f3 -> AnnotationTypeBody()
+
+AnnotationTypeBody
+    * f0 -> "{"
+    * f1 -> ( AnnotationTypeMemberDeclaration() )*
+
+AnnotationTypeMemberDeclaration
+    * f0 -> Modifiers() ( Type() <IDENTIFIER> "(" ")" [ DefaultValue() ] ";" | ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) | FieldDeclaration(modifiers) )
+    *       | ( ";" )
+
+DefaultValue
+    * f0 -> "default"
+    * f1 -> MemberValue()

@@ -214,6 +214,14 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      * Adds code to check postcontiions, class and object invariants
      * on exit.
      */
+    // ConstructorDeclaration:
+    // f0 -> [ TypeParameters() ]
+    // f1 -> <IDENTIFIER>
+    // f2 -> FormalParameters()
+    // f3 -> [ "throws" NameList() ]
+    // f4 -> "{"
+    // f5 -> [ ExplicitConstructorInvocation() ]
+    // f6 -> ( BlockStatement() )*
     @Override
     public void visit(ConstructorDeclaration ctor) {
 
@@ -303,6 +311,12 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     /**
      *
      */
+    // MethodDeclaration:
+    // f0 -> [ TypeParameters() ]
+    // f1 -> ResultType()
+    // f2 -> MethodDeclarator()
+    // f3 -> [ "throws" NameList() ]
+    // f4 -> ( Block() | ";" )
     @Override
     public void visit(MethodDeclaration method) {
 

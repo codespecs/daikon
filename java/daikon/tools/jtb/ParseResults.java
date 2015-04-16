@@ -105,6 +105,18 @@ public class ParseResults {
 
       // Construct the package name.
       String packageNameString;
+      // CompilationUnit:
+      // f0 -> [ PackageDeclaration() ]
+      // f1 -> ( ImportDeclaration() )*
+      // f2 -> ( TypeDeclaration() )*
+      // f3 -> ( <"\u001a"> )?
+      // f4 -> ( <STUFF_TO_IGNORE: ~[]> )?
+      // f5 -> <EOF>
+      // PackageDeclaration:
+      // f0 -> Modifiers()
+      // f1 -> "package"
+      // f2 -> Name()
+      // f3 -> ";"
       NodeOptional packageDeclarationMaybe = compilationUnit.f0;
       if (packageDeclarationMaybe.present()) {
         PackageDeclaration packageDeclaration =

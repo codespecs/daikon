@@ -1,0 +1,593 @@
+fgrep -rn AdditiveExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn AllocationExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn AndExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn Annotation
+tools/jtb/Ast.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn AnnotationTypeBody
+
+
+fgrep -rn AnnotationTypeDeclaration
+tools/jtb/Ast.java
+
+
+fgrep -rn AnnotationTypeMemberDeclaration
+
+
+fgrep -rn ArgumentList
+split/StatementReplacer.java
+
+
+fgrep -rn Arguments
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+split/StatementReplacer.java
+split/OrigFixer.java
+
+
+fgrep -rn ArrayDimsAndInits
+
+
+fgrep -rn ArrayInitializer
+
+
+fgrep -rn AssertStatement
+
+
+fgrep -rn AssignmentOperator
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn Block
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn BlockStatement
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn BooleanLiteral
+
+
+fgrep -rn BreakStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn CastExpression
+
+
+fgrep -rn CastLookahead
+
+
+fgrep -rn ClassOrInterfaceBody
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+tools/runtimechecker/CheckerClass.java
+
+
+fgrep -rn ClassOrInterfaceBodyDeclaration
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn ClassOrInterfaceDeclaration
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/CollectFieldsVisitor.java
+tools/jtb/ParseResults.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+test/TestAst.java
+
+
+fgrep -rn ClassOrInterfaceType
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/PptNameMatcher.java
+tools/jtb/Ast.java
+test/TestClassOrInterfaceTypeDecorateVisitor.java
+
+
+fgrep -rn CompilationUnit
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/ParseResults.java
+tools/runtimechecker/CheckerClass.java
+test/TestAst.java
+test/TestClassOrInterfaceTypeDecorateVisitor.java
+
+
+fgrep -rn ConditionalAndExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn ConditionalExpression
+tools/jtb/Ast.java
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn ConditionalOrExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn ConstructorDeclaration
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/PptNameMatcher.java
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn ContinueStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn DefaultValue
+
+
+fgrep -rn DoStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn EmptyStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn EnumBody
+
+
+fgrep -rn EnumConstant
+
+
+fgrep -rn EnumDeclaration
+tools/jtb/Ast.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn EqualityExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn ExclusiveOrExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn ExplicitConstructorInvocation
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn Expression
+tools/jtb/Ast.java
+tools/jtb/OrigModifier.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+split/StatementReplacer.java
+split/OrigFixer.java
+
+
+fgrep -rn ExtendsList
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn FieldDeclaration
+tools/jtb/Ast.java
+tools/jtb/CollectFieldsVisitor.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn ForInit
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn FormalParameter
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/PptNameMatcher.java
+tools/jtb/Ast.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn FormalParameters
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn ForStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn ForUpdate
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn IfStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn ImplementsList
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn ImportDeclaration
+tools/jtb/Ast.java
+
+
+fgrep -rn InclusiveOrExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn Initializer
+tools/jtb/Ast.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn InstanceOfExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn LabeledStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn Literal
+tools/jtb/Ast.java
+
+
+fgrep -rn LocalVariableDeclaration
+
+
+fgrep -rn MarkerAnnotation
+
+
+fgrep -rn MemberSelector
+tools/jtb/Ast.java
+
+
+fgrep -rn MemberValue
+
+
+fgrep -rn MemberValueArrayInitializer
+
+
+fgrep -rn MemberValuePair
+
+
+fgrep -rn MemberValuePairs
+
+
+fgrep -rn MethodDeclaration
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/PptNameMatcher.java
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+test/TestAst.java
+test/TestClassOrInterfaceTypeDecorateVisitor.java
+
+
+fgrep -rn MethodDeclarator
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn Modifiers
+tools/jtb/Ast.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn MultiplicativeExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn Name
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/PptNameMatcher.java
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/OrigModifier.java
+tools/jtb/ParseResults.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+split/StatementReplacer.java
+split/OrigFixer.java
+test/TestAst.java
+test/TestClassOrInterfaceTypeDecorateVisitor.java
+
+
+fgrep -rn NameList
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn NodeList
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/CollectFieldsVisitor.java
+tools/jtb/ParseResults.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+split/StatementReplacer.java
+
+
+fgrep -rn NodeListOptional
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/CollectFieldsVisitor.java
+tools/jtb/ParseResults.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+split/StatementReplacer.java
+
+
+fgrep -rn NodeOptional
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/ParseResults.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+tools/runtimechecker/CheckerClass.java
+
+
+fgrep -rn NodeSequence
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/PptNameMatcher.java
+tools/jtb/Ast.java
+tools/jtb/OrigModifier.java
+tools/jtb/CollectFieldsVisitor.java
+tools/jtb/ParseResults.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn NodeToken
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/OrigModifier.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+split/StatementReplacer.java
+split/OrigFixer.java
+
+
+fgrep -rn NormalAnnotation
+
+
+fgrep -rn NullLiteral
+
+
+fgrep -rn PackageDeclaration
+tools/jtb/Ast.java
+tools/jtb/ParseResults.java
+tools/jtb/ConditionExtractor.java
+tools/runtimechecker/CheckerClass.java
+
+
+fgrep -rn PostfixExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn PreDecrementExpression
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn PreIncrementExpression
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn PrimaryExpression
+tools/jtb/Ast.java
+tools/jtb/OrigModifier.java
+tools/jtb/AnnotateVisitor.java
+split/StatementReplacer.java
+split/OrigFixer.java
+
+
+fgrep -rn PrimaryPrefix
+tools/jtb/Ast.java
+
+
+fgrep -rn PrimarySuffix
+tools/jtb/Ast.java
+tools/jtb/OrigModifier.java
+tools/jtb/AnnotateVisitor.java
+split/StatementReplacer.java
+split/OrigFixer.java
+
+
+fgrep -rn PrimitiveType
+tools/jtb/PptNameMatcher.java
+tools/jtb/Ast.java
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn ReferenceType
+tools/jtb/PptNameMatcher.java
+tools/jtb/Ast.java
+
+
+fgrep -rn RelationalExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn ResultType
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn ReturnStatement
+tools/jtb/ConditionExtractor.java
+split/StatementReplacer.java
+
+
+fgrep -rn RSIGNEDSHIFT
+
+
+fgrep -rn RUNSIGNEDSHIFT
+
+
+fgrep -rn ShiftExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn SingleMemberAnnotation
+
+
+fgrep -rn Statement
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn StatementExpression
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn StatementExpressionList
+
+
+fgrep -rn SwitchLabel
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn SwitchStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn SynchronizedStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn ThrowStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn TryStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn Type
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/PptNameMatcher.java
+tools/jtb/Ast.java
+tools/jtb/InstrumentObserversVisitor.java
+tools/jtb/CollectFieldsVisitor.java
+tools/jtb/ParseResults.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+tools/runtimechecker/InstrumentVisitor.java
+test/TestClassOrInterfaceTypeDecorateVisitor.java
+
+
+fgrep -rn TypeArgument
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+
+
+fgrep -rn TypeArguments
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+
+
+fgrep -rn TypeBound
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+
+
+fgrep -rn TypeDeclaration
+tools/jtb/Ast.java
+tools/jtb/ParseResults.java
+tools/runtimechecker/InstrumentVisitor.java
+
+
+fgrep -rn TypeParameter
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn TypeParameters
+tools/jtb/ClassOrInterfaceTypeDecorateVisitor.java
+tools/jtb/Ast.java
+tools/jtb/ConditionExtractor.java
+tools/jtb/AnnotateVisitor.java
+
+
+fgrep -rn UnaryExpression
+tools/jtb/Ast.java
+
+
+fgrep -rn UnaryExpressionNotPlusMinus
+tools/jtb/Ast.java
+
+
+fgrep -rn VariableDeclarator
+tools/jtb/Ast.java
+tools/jtb/CollectFieldsVisitor.java
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn VariableDeclaratorId
+tools/jtb/Ast.java
+
+
+fgrep -rn VariableInitializer
+split/Visitors.java
+
+
+fgrep -rn WhileStatement
+tools/jtb/ConditionExtractor.java
+
+
+fgrep -rn WildcardBounds

@@ -45,6 +45,8 @@ public class OrigModifier extends DepthFirstVisitor {
    *          front of the name and ")" to the end.
    * modifies n, this
    */
+    // f0 -> PrimaryPrefix()
+    // f1 -> ( PrimarySuffix() )*
   public void visit(PrimaryExpression n) {
     // let simple variables be varibles with out "."'s in their names
     // such as x or myList
