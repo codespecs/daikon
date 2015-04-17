@@ -248,7 +248,7 @@ public class ExtractConsequent {
                                               PptMap all_ppts) {
     ppt.simplify_variable_names();
 
-    Invariants invs = new Invariants();
+    List<Invariant> invs = new ArrayList<Invariant>();
     if (invs.size() > 0) {
       String pptname = cleanup_pptname(ppt.name());
       for (Invariant maybe_as_inv : invs) {

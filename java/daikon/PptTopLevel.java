@@ -2745,7 +2745,7 @@ public class PptTopLevel extends Ppt {
       return;
     assert equality_view != null : "ppt = " + ppt_name +" children = " + children;
     assert equality_view != null : "@AssumeAssertion(nullness): application invariant";
-    Invariants equalityInvs = equality_view.invs;
+    List<Invariant> equalityInvs = equality_view.invs;
 
     // Pivot invariants to new equality leaders if needed, if old
     // leaders would prevent printing.

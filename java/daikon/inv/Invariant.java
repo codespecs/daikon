@@ -1660,7 +1660,7 @@ public abstract class Invariant
     // Otherwise, we will return the newly constructed one.
     // This algorithm is inefficient.
     if (guardingPredicate != null) { // equivalently: mustBeGuarded.size() > 1
-      Invariants joinerViewInvs = ppt.parent.joiner_view.invs;
+      List<Invariant> joinerViewInvs = ppt.parent.joiner_view.invs;
       for (Invariant currentInv : joinerViewInvs) {
         if (currentInv.isSameInvariant(guardingPredicate)) {
           return currentInv;

@@ -273,7 +273,8 @@ public class PptSplitter implements Serializable {
       int num_children = ppts.length;
       // Each element is an invariant from the indexth child, permuted to
       // the parent (and with a parent slice as its ppt slot).
-      /*NNC:@MonotonicNonNull*/ Invariants[] invs = new Invariants[num_children];
+      @SuppressWarnings({"unchecked", "rawtypes"})
+      /*NNC:@MonotonicNonNull*/ List<Invariant> invs[] = (ArrayList<Invariant>[]) new /*@Nullable*/ ArrayList[num_children];
 
       // find the parent slice
       PptSlice pslice = parent.get_or_instantiate_slice (vis);
@@ -287,7 +288,7 @@ public class PptSplitter implements Serializable {
         assert child_ppt.equality_view != null : child_ppt.name();
         assert parent.equality_view != null : parent.name();
 
-        invs[childno] = new Invariants(); // permuted to parent
+        invs[childno] = new ArrayList<Invariant>(); // permuted to parent
 
         // Get the child vis in the correct order
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_non_canonical = new VarInfo[vis.length];
@@ -581,7 +582,7 @@ public class PptSplitter implements Serializable {
 
 
   // Could be used in assertion that all invariants are at same point.
-  private boolean at_same_ppt(Invariants invs1, Invariants invs2) {
+  private boolean at_same_ppt(List<Invariant> invs1, List<Invariant> invs2) {
     PptSlice ppt = null;
     Iterator<Invariant> itor = new UtilMDE.MergedIterator2<Invariant>(invs1.iterator(), invs2.iterator());
     for (; itor.hasNext(); ) {
@@ -600,11 +601,11 @@ public class PptSplitter implements Serializable {
   // TODO: Should this only include invariants such that all of their variables are defined everywhere?
   /**
    * Determine which elements of invs1 are mutually exclusive with
-   * elements of invs2.  Result elements are pairs of Invariants.
+   * elements of invs2.  Result elements are pairs of List<Invariant>.
    * All the arguments should be over the same program point.
    */
-  Vector<Invariant[]> exclusive_conditions (Invariants invs1,
-                                                 Invariants invs2) {
+  Vector<Invariant[]> exclusive_conditions (List<Invariant> invs1,
+                                                 List<Invariant> invs2) {
 
     Vector<Invariant[]> result = new Vector<Invariant[]>();
     for (Invariant inv1 : invs1) {
@@ -629,12 +630,12 @@ public class PptSplitter implements Serializable {
 
   /**
    * Determine which elements of invs1 differ from elements of invs2.
-   * Result elements are pairs of Invariants (with one or the other
+   * Result elements are pairs of List<Invariant> (with one or the other
    * always null).
    * All the arguments should be over the same program point.
    */
-  Vector</*@Nullable*/ Invariant[]> different_invariants (Invariants invs1,
-                                                          Invariants invs2) {
+  Vector</*@Nullable*/ Invariant[]> different_invariants (List<Invariant> invs1,
+                                                          List<Invariant> invs2) {
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
     SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
@@ -656,10 +657,10 @@ public class PptSplitter implements Serializable {
 
   /**
    * Determine which elements of invs1 are the same as elements of invs2.
-   * Result elements are Invariants (from the invs1 list).
+   * Result elements are List<Invariant> (from the invs1 list).
    * All the arguments should be over the same program point.
    */
-  Vector<Invariant> same_invariants(Invariants invs1, Invariants invs2) {
+  Vector<Invariant> same_invariants(List<Invariant> invs1, List<Invariant> invs2) {
 
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);

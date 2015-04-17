@@ -63,12 +63,12 @@ public abstract class PptSlice
    * Therefore, it should be manipulated via addInvariant() and
    * removeInvariant().
    **/
-  public Invariants invs;
+  public List<Invariant> invs;
 
   PptSlice(PptTopLevel parent, VarInfo[] var_infos) {
     super(var_infos);
     this.parent = parent;
-    invs = new Invariants();
+    invs = new ArrayList<Invariant>();
     // Ensure that the VarInfo objects are in order (and not duplicated).
     for (int i=0; i<var_infos.length-1; i++) {
       assert var_infos[i].varinfo_index <= var_infos[i+1].varinfo_index;
@@ -78,12 +78,6 @@ public abstract class PptSlice
     if (debugGeneral.isLoggable(Level.FINE)) {
       debugGeneral.fine (ArraysMDE.toString(var_infos));
     }
-  }
-
-  /** Trim the collections used in this PptSlice. **/
-  public void trimToSize() {
-    super.trimToSize();
-    invs.trimToSize();
   }
 
   /*@SideEffectFree*/ public final String name(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/) {
