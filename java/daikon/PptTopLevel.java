@@ -4299,7 +4299,7 @@ public class PptTopLevel extends Ppt {
      * Sets each of the stats from the current info in ppt and the specified
      * time (msecs) and memory (bytes).
      */
-    /*@EnsuresNonNull("ppt")*/
+    /*@EnsuresNonNull("this.ppt")*/
     void set(PptTopLevel ppt, int time, int memory) {
       set_cnt = 0;
       var_cnt = 0;
