@@ -2377,7 +2377,7 @@ int # declaringClassPackageName=javautil,
 int
 4
 return
-javautil.ListIterator
+javautil.ListIterator13
 hashcode
 2
 return.getClass()
@@ -2424,7 +2424,7 @@ int # isParam=true
 int
 2
 return
-javautil.ListIterator
+javautil.ListIterator13
 hashcode
 3
 return.getClass()
@@ -2479,7 +2479,7 @@ int # isParam=true
 int
 6
 return
-javautil.List
+javautil.List13
 hashcode
 3
 return.getClass()

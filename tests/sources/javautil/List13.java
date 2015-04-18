@@ -71,7 +71,7 @@ package javautil;
  * @since 1.2
  */
 
-public interface List extends Collection {
+public interface List13 extends Collection {
     // Query Operations
 
     /**
@@ -443,7 +443,7 @@ public interface List extends Collection {
      * @return a list iterator of the elements in this list (in proper
      * 	       sequence).
      */
-    ListIterator listIterator();
+    ListIterator13 listIterator();
 
     /**
      * Returns a list iterator of the elements in this list (in proper
@@ -460,7 +460,7 @@ public interface List extends Collection {
      * @throws IndexOutOfBoundsException if the index is out of range (index
      *         &lt; 0 || index &gt; size()).
      */
-    ListIterator listIterator(int index);
+    ListIterator13 listIterator(int index);
 
     // View
 
@@ -498,5 +498,5 @@ public interface List extends Collection {
      * @throws IndexOutOfBoundsException for an illegal endpoint index value
      *     (fromIndex &lt; 0 || toIndex &gt; size || fromIndex &gt; toIndex).
      */
-    List subList(int fromIndex, int toIndex);
+    List13 subList(int fromIndex, int toIndex);
 }

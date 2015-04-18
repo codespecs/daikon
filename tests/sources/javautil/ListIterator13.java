@@ -22,7 +22,7 @@ package javautil;
  * @see Enumeration
  * @since   1.2
  */
-public interface ListIterator extends Iterator {
+public interface ListIterator13 extends Iterator {
     // Query Operations
 
     /**

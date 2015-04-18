@@ -54,7 +54,7 @@ import java.util.NoSuchElementException;
  * @since 1.2
  */
 
-public abstract class AbstractList13 extends AbstractCollection implements List {
+public abstract class AbstractList13 extends AbstractCollection implements List13 {
     /**
      * Sole constructor.  (For invocation by subclass constructors, typically
      * implicit.)
@@ -193,7 +193,7 @@ public abstract class AbstractList13 extends AbstractCollection implements List 
      * 	       element, or -1 if the List does not contain this element.
      */
     public int indexOf(Object o) {
-	ListIterator e = listIterator();
+	ListIterator13 e = listIterator();
 	if (o==null) {
 	    while (e.hasNext())
 		if (e.next()==null)
@@ -224,7 +224,7 @@ public abstract class AbstractList13 extends AbstractCollection implements List 
      * 	       element, or -1 if the list does not contain this element.
      */
     public int lastIndexOf(Object o) {
-	ListIterator e = listIterator(size());
+	ListIterator13 e = listIterator(size());
 	if (o==null) {
 	    while (e.hasPrevious())
 		if (e.previous()==null)
@@ -344,7 +344,7 @@ public abstract class AbstractList13 extends AbstractCollection implements List 
      *
      * @see #listIterator(int)
      */
-    public ListIterator listIterator() {
+    public ListIterator13 listIterator() {
 	return listIterator(0);
     }
 
@@ -384,7 +384,7 @@ public abstract class AbstractList13 extends AbstractCollection implements List 
      *
      * @see #modCount
      */
-    public ListIterator listIterator(final int index) {
+    public ListIterator13 listIterator(final int index) {
 	if (index<0 || index>size())
 	  throw new IndexOutOfBoundsException("Index: "+index);
 
@@ -449,7 +449,7 @@ public abstract class AbstractList13 extends AbstractCollection implements List 
 	}
     }
 
-    private class ListItr extends Itr implements ListIterator {
+    private class ListItr extends Itr implements ListIterator13 {
 	ListItr(int index) {
 	    cursor = index;
 	}
@@ -561,7 +561,7 @@ public abstract class AbstractList13 extends AbstractCollection implements List 
      *         <tt>(fromIndex &lt; 0 || toIndex &gt; size)</tt>
      * @throws IllegalArgumentException endpoint indices out of order
      * <tt>(fromIndex &gt; toIndex)</tt> */
-    public List subList(int fromIndex, int toIndex) {
+    public List13 subList(int fromIndex, int toIndex) {
         return new SubList(this, fromIndex, toIndex);
     }
 
@@ -592,11 +592,11 @@ public abstract class AbstractList13 extends AbstractCollection implements List 
     public boolean equals(Object o) {
 	if (o == this)
 	    return true;
-	if (!(o instanceof List))
+	if (!(o instanceof List13))
 	    return false;
 
-	ListIterator e1 = listIterator();
-	ListIterator e2 = ((List) o).listIterator();
+	ListIterator13 e1 = listIterator();
+	ListIterator13 e2 = ((List13) o).listIterator();
 	while(e1.hasNext() && e2.hasNext()) {
 	    Object o1 = e1.next();
 	    Object o2 = e2.next();
@@ -649,7 +649,7 @@ public abstract class AbstractList13 extends AbstractCollection implements List 
      * @param toIndex index after last element to be removed.
      */
     protected void removeRange(int fromIndex, int toIndex) {
-        ListIterator it = listIterator(fromIndex);
+        ListIterator13 it = listIterator(fromIndex);
         for (int i=0, n=toIndex-fromIndex; i<n; i++) {
             it.next();
             it.remove();
@@ -774,14 +774,14 @@ class SubList extends AbstractList13 {
         return listIterator();
     }
 
-    public ListIterator listIterator(final int index) {
+    public ListIterator13 listIterator(final int index) {
         checkForComodification();
         if (index<0 || index>size)
             throw new IndexOutOfBoundsException(
                 "Index: "+index+", Size: "+size);
 
-        return new ListIterator() {
-            private ListIterator i = l.listIterator(index+offset);
+        return new ListIterator13() {
+            private ListIterator13 i = l.listIterator(index+offset);
 
             public boolean hasNext() {
                 return nextIndex() < size;
@@ -833,7 +833,7 @@ class SubList extends AbstractList13 {
         };
     }
 
-    public List subList(int fromIndex, int toIndex) {
+    public List13 subList(int fromIndex, int toIndex) {
         return new SubList(this, fromIndex, toIndex);
     }
 
