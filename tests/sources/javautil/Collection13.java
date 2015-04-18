@@ -53,7 +53,7 @@ package javautil;
  * @since   1.2
  */
 
-public interface Collection {
+public interface Collection13 {
     // Query Operations
 
     /**
@@ -92,7 +92,7 @@ public interface Collection {
      * 
      * @return an <tt>Iterator</tt> over the elements in this collection
      */
-    Iterator iterator();
+    Iterator13 iterator();
 
     /**
      * Returns an array containing all of the elements in this collection.  If
@@ -222,7 +222,7 @@ public interface Collection {
      *	       in the specified collection
      * @see #contains(Object)
      */
-    boolean containsAll(Collection c);
+    boolean containsAll(Collection13 c);
 
     /**
      * Adds all of the elements in the specified collection to this collection
@@ -246,7 +246,7 @@ public interface Collection {
      * 
      * @see #add(Object)
      */
-    boolean addAll(Collection c);
+    boolean addAll(Collection13 c);
 
     /**
      * 
@@ -265,7 +265,7 @@ public interface Collection {
      * @see #remove(Object)
      * @see #contains(Object)
      */
-    boolean removeAll(Collection c);
+    boolean removeAll(Collection13 c);
 
     /**
      * Retains only the elements in this collection that are contained in the
@@ -283,7 +283,7 @@ public interface Collection {
      * @see #remove(Object)
      * @see #contains(Object)
      */
-    boolean retainAll(Collection c);
+    boolean retainAll(Collection13 c);
 
     /**
      * Removes all of the elements from this collection (optional operation).

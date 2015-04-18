@@ -104,9 +104,9 @@ int
 
 
 DECLARE
-javautil.ArrayList13.ArrayList13(javautil.Collection):::ENTER
+javautil.ArrayList13.ArrayList13(javautil.Collection13):::ENTER
 c
-javautil.Collection # isParam=true
+javautil.Collection13 # isParam=true
 hashcode
 2
 c.getClass()
@@ -115,7 +115,7 @@ java.lang.String
 1
 
 DECLARE
-javautil.ArrayList13.ArrayList13(javautil.Collection):::EXIT122
+javautil.ArrayList13.ArrayList13(javautil.Collection13):::EXIT122
 this
 javautil.ArrayList13 # isParam=true
 hashcode
@@ -141,7 +141,7 @@ int # declaringClassPackageName=javautil,
 int
 6
 c
-javautil.Collection # isParam=true
+javautil.Collection13 # isParam=true
 hashcode
 2
 c.getClass()
@@ -1427,7 +1427,7 @@ int
 
 
 DECLARE
-javautil.ArrayList13.addAll(javautil.Collection):::ENTER
+javautil.ArrayList13.addAll(javautil.Collection13):::ENTER
 this
 javautil.ArrayList13 # isParam=true
 hashcode
@@ -1453,7 +1453,7 @@ int # declaringClassPackageName=javautil,
 int
 6
 c
-javautil.Collection # isParam=true
+javautil.Collection13 # isParam=true
 hashcode
 2
 c.getClass()
@@ -1462,7 +1462,7 @@ java.lang.String
 1
 
 DECLARE
-javautil.ArrayList13.addAll(javautil.Collection):::EXIT425
+javautil.ArrayList13.addAll(javautil.Collection13):::EXIT425
 this
 javautil.ArrayList13 # isParam=true
 hashcode
@@ -1488,7 +1488,7 @@ int # declaringClassPackageName=javautil,
 int
 7
 c
-javautil.Collection # isParam=true
+javautil.Collection13 # isParam=true
 hashcode
 2
 c.getClass()
@@ -1502,7 +1502,7 @@ boolean
 
 
 DECLARE
-javautil.ArrayList13.addAll(int, javautil.Collection):::ENTER
+javautil.ArrayList13.addAll(int, javautil.Collection13):::ENTER
 this
 javautil.ArrayList13 # isParam=true
 hashcode
@@ -1532,7 +1532,7 @@ int # isParam=true
 int
 3
 c
-javautil.Collection # isParam=true
+javautil.Collection13 # isParam=true
 hashcode
 2
 c.getClass()
@@ -1541,7 +1541,7 @@ java.lang.String
 1
 
 DECLARE
-javautil.ArrayList13.addAll(int, javautil.Collection):::EXIT460
+javautil.ArrayList13.addAll(int, javautil.Collection13):::EXIT460
 this
 javautil.ArrayList13 # isParam=true
 hashcode
@@ -1571,7 +1571,7 @@ int # isParam=true
 int
 3
 c
-javautil.Collection # isParam=true
+javautil.Collection13 # isParam=true
 hashcode
 2
 c.getClass()
@@ -2250,7 +2250,7 @@ int
 
 
 DECLARE
-javautil.AbstractList13.addAll(int, javautil.Collection):::ENTER
+javautil.AbstractList13.addAll(int, javautil.Collection13):::ENTER
 this
 javautil.AbstractList13 # isParam=true
 hashcode
@@ -2268,7 +2268,7 @@ int # isParam=true
 int
 3
 c
-javautil.Collection # isParam=true
+javautil.Collection13 # isParam=true
 hashcode
 2
 c.getClass()
@@ -2277,7 +2277,7 @@ java.lang.String
 1
 
 DECLARE
-javautil.AbstractList13.addAll(int, javautil.Collection):::EXIT308
+javautil.AbstractList13.addAll(int, javautil.Collection13):::EXIT308
 this
 javautil.AbstractList13 # isParam=true
 hashcode
@@ -2295,7 +2295,7 @@ int # isParam=true
 int
 3
 c
-javautil.Collection # isParam=true
+javautil.Collection13 # isParam=true
 hashcode
 2
 c.getClass()
@@ -2338,7 +2338,7 @@ int # declaringClassPackageName=javautil,
 int
 4
 return
-javautil.Iterator
+javautil.Iterator13
 hashcode
 2
 return.getClass()

@@ -115,7 +115,7 @@ public class ArrayList13 extends AbstractList13 implements List13, Cloneable,
      *
      * @param c the collection whose elements are to be placed into this list.
      */
-    public ArrayList13(Collection c) {
+    public ArrayList13(Collection13 c) {
         size = c.size();
 	elementData = new Object[(size*110)/100]; // Allow 10% room for growth
         c.toArray(elementData);
@@ -413,12 +413,12 @@ public class ArrayList13 extends AbstractList13 implements List13, Cloneable,
      * @throws    IndexOutOfBoundsException if index out of range <tt>(index
      *		  &lt; 0 || index &gt; size())</tt>.
      */
-    public boolean addAll(Collection c) {
+    public boolean addAll(Collection13 c) {
 	modCount++;
 	int numNew = c.size();
 	ensureCapacity(size + numNew);
 
-	Iterator e = c.iterator();
+	Iterator13 e = c.iterator();
 	for (int i=0; i<numNew; i++)
 	    elementData[size++] = e.next();
 
@@ -439,7 +439,7 @@ public class ArrayList13 extends AbstractList13 implements List13, Cloneable,
      * @throws    IndexOutOfBoundsException if index out of range <tt>(index
      *		  &lt; 0 || index &gt; size())</tt>.
      */
-    public boolean addAll(int index, Collection c) {
+    public boolean addAll(int index, Collection13 c) {
 	if (index > size || index < 0)
 	    throw new IndexOutOfBoundsException(
 		"Index: "+index+", Size: "+size);
@@ -452,7 +452,7 @@ public class ArrayList13 extends AbstractList13 implements List13, Cloneable,
 	    System.arraycopy(elementData, index, elementData, index + numNew,
 			     numMoved);
 
-	Iterator e = c.iterator();
+	Iterator13 e = c.iterator();
 	for (int i=0; i<numNew; i++)
 	    elementData[index++] = e.next();
 

@@ -39,12 +39,12 @@ package javautil;
  * @since 1.2
  */
 
-public abstract class AbstractCollection implements Collection {
+public abstract class AbstractCollection13 implements Collection13 {
     /**
      * Sole constructor.  (For invocation by subclass constructors, typically
      * implicit.)
      */
-    protected AbstractCollection() {
+    protected AbstractCollection13() {
     }
 
     // Query Operations
@@ -54,7 +54,7 @@ public abstract class AbstractCollection implements Collection {
      *
      * @return an iterator over the elements contained in this collection.
      */
-    public abstract Iterator iterator();
+    public abstract Iterator13 iterator();
 
     /**
      * Returns the number of elements in this collection.  If the collection
@@ -89,7 +89,7 @@ public abstract class AbstractCollection implements Collection {
      * @return <tt>true</tt> if this collection contains the specified element.
      */
     public boolean contains(Object o) {
-	Iterator e = iterator();
+	Iterator13 e = iterator();
 	if (o==null) {
 	    while (e.hasNext())
 		if (e.next()==null)
@@ -119,7 +119,7 @@ public abstract class AbstractCollection implements Collection {
      */
     public Object[] toArray() {
 	Object[] result = new Object[size()];
-	Iterator e = iterator();
+	Iterator13 e = iterator();
 	for (int i=0; e.hasNext(); i++)
 	    result[i] = e.next();
 	return result;
@@ -168,7 +168,7 @@ public abstract class AbstractCollection implements Collection {
             a = (Object[])java.lang.reflect.Array.newInstance(
                                   a.getClass().getComponentType(), size);
 
-        Iterator it=iterator();
+        Iterator13 it=iterator();
         for (int i=0; i<size; i++)
             a[i] = it.next();
 
@@ -241,7 +241,7 @@ public abstract class AbstractCollection implements Collection {
      * 		  not supported by this collection.
      */
     public boolean remove(Object o) {
-	Iterator e = iterator();
+	Iterator13 e = iterator();
 	if (o==null) {
 	    while (e.hasNext()) {
 		if (e.next()==null) {
@@ -278,8 +278,8 @@ public abstract class AbstractCollection implements Collection {
      * 
      * @see #contains(Object)
      */
-    public boolean containsAll(Collection c) {
-	Iterator e = c.iterator();
+    public boolean containsAll(Collection13 c) {
+	Iterator13 e = c.iterator();
 	while (e.hasNext())
 	    if(!contains(e.next()))
 		return false;
@@ -310,9 +310,9 @@ public abstract class AbstractCollection implements Collection {
      * 
      * @see #add(Object)
      */
-    public boolean addAll(Collection c) {
+    public boolean addAll(Collection13 c) {
 	boolean modified = false;
-	Iterator e = c.iterator();
+	Iterator13 e = c.iterator();
 	while (e.hasNext()) {
 	    if(add(e.next()))
 		modified = true;
@@ -343,9 +343,9 @@ public abstract class AbstractCollection implements Collection {
      * @see #remove(Object)
      * @see #contains(Object)
      */
-    public boolean removeAll(Collection c) {
+    public boolean removeAll(Collection13 c) {
 	boolean modified = false;
-	Iterator e = iterator();
+	Iterator13 e = iterator();
 	while (e.hasNext()) {
 	    if(c.contains(e.next())) {
 		e.remove();
@@ -380,9 +380,9 @@ public abstract class AbstractCollection implements Collection {
      * @see #remove(Object)
      * @see #contains(Object)
      */
-    public boolean retainAll(Collection c) {
+    public boolean retainAll(Collection13 c) {
 	boolean modified = false;
-	Iterator e = iterator();
+	Iterator13 e = iterator();
 	while (e.hasNext()) {
 	    if(!c.contains(e.next())) {
 		e.remove();
@@ -411,7 +411,7 @@ public abstract class AbstractCollection implements Collection {
      * 		  not supported by this collection.
      */
     public void clear() {
-	Iterator e = iterator();
+	Iterator13 e = iterator();
 	while (e.hasNext()) {
 	    e.next();
 	    e.remove();
@@ -440,7 +440,7 @@ public abstract class AbstractCollection implements Collection {
      */
     public String toString() {
 	StringBuffer buf = new StringBuffer();
-	Iterator e = iterator();
+	Iterator13 e = iterator();
 	buf.append("[");
 	int maxIndex = size() - 1;
 	for (int i = 0; i <= maxIndex; i++) {

@@ -71,7 +71,7 @@ package javautil;
  * @since 1.2
  */
 
-public interface List13 extends Collection {
+public interface List13 extends Collection13 {
     // Query Operations
 
     /**
@@ -107,7 +107,7 @@ public interface List13 extends Collection {
      *
      * @return an iterator over the elements in this list in proper sequence.
      */
-    Iterator iterator();
+    Iterator13 iterator();
 
     /**
      * Returns an array containing all of the elements in this list in proper
@@ -193,7 +193,7 @@ public interface List13 extends Collection {
      * 
      * @see #contains(Object)
      */
-    boolean containsAll(Collection c);
+    boolean containsAll(Collection13 c);
 
     /**
      * Appends all of the elements in the specified collection to the end of
@@ -218,7 +218,7 @@ public interface List13 extends Collection {
      * 
      * @see #add(Object)
      */
-    boolean addAll(Collection c);
+    boolean addAll(Collection13 c);
 
     /**
      * Inserts all of the elements in the specified collection into this
@@ -247,7 +247,7 @@ public interface List13 extends Collection {
      * @throws IndexOutOfBoundsException if the index is out of range (index
      *		  &lt; 0 || index &gt; size()).
      */
-    boolean addAll(int index, Collection c);
+    boolean addAll(int index, Collection13 c);
 
     /**
      * Removes from this list all the elements that are contained in the
@@ -263,7 +263,7 @@ public interface List13 extends Collection {
      * @see #remove(Object)
      * @see #contains(Object)
      */
-    boolean removeAll(Collection c);
+    boolean removeAll(Collection13 c);
 
     /**
      * Retains only the elements in this list that are contained in the
@@ -281,7 +281,7 @@ public interface List13 extends Collection {
      * @see #remove(Object)
      * @see #contains(Object)
      */
-    boolean retainAll(Collection c);
+    boolean retainAll(Collection13 c);
 
     /**
      * Removes all of the elements from this list (optional operation).  This

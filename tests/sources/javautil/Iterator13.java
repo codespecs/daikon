@@ -27,7 +27,7 @@ package javautil;
  * @see Enumeration
  * @since 1.2
  */
-public interface Iterator {
+public interface Iterator13 {
     /**
      * Returns <tt>true</tt> if the iteration has more elements. (In other
      * words, returns <tt>true</tt> if <tt>next</tt> would return an element

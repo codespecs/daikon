@@ -54,7 +54,7 @@ import java.util.NoSuchElementException;
  * @since 1.2
  */
 
-public abstract class AbstractList13 extends AbstractCollection implements List13 {
+public abstract class AbstractList13 extends AbstractCollection13 implements List13 {
     /**
      * Sole constructor.  (For invocation by subclass constructors, typically
      * implicit.)
@@ -298,9 +298,9 @@ public abstract class AbstractList13 extends AbstractCollection implements List1
      * @throws IndexOutOfBoundsException index out of range (<tt>index &lt; 0
      *            || index &gt; size()</tt>).
      */
-    public boolean addAll(int index, Collection c) {
+    public boolean addAll(int index, Collection13 c) {
 	boolean modified = false;
-	Iterator e = c.iterator();
+	Iterator13 e = c.iterator();
 	while (e.hasNext()) {
 	    add(index++, e.next());
 	    modified = true;
@@ -332,7 +332,7 @@ public abstract class AbstractList13 extends AbstractCollection implements List1
      *
      * @see #modCount
      */
-    public Iterator iterator() {
+    public Iterator13 iterator() {
 	return new Itr();
     }
 
@@ -391,7 +391,7 @@ public abstract class AbstractList13 extends AbstractCollection implements List1
 	return new ListItr(index);
     }
 
-    private class Itr implements Iterator {
+    private class Itr implements Iterator13 {
 	/**
 	 * Index of element to be returned by subsequent call to next.
 	 */
@@ -617,7 +617,7 @@ public abstract class AbstractList13 extends AbstractCollection implements List1
      */
     public int hashCode() {
 	int hashCode = 1;
-	Iterator i = iterator();
+	Iterator13 i = iterator();
      	while (i.hasNext()) {
 	    Object obj = i.next();
 	    hashCode = 31*hashCode + (obj==null ? 0 : obj.hashCode());
@@ -750,11 +750,11 @@ class SubList extends AbstractList13 {
         modCount++;
     }
 
-    public boolean addAll(Collection c) {
+    public boolean addAll(Collection13 c) {
         return addAll(size, c);
     }
 
-    public boolean addAll(int index, Collection c) {
+    public boolean addAll(int index, Collection13 c) {
         if (index<0 || index>size)
             throw new IndexOutOfBoundsException(
                 "Index: "+index+", Size: "+size);
@@ -770,7 +770,7 @@ class SubList extends AbstractList13 {
         return true;
     }
 
-    public Iterator iterator() {
+    public Iterator13 iterator() {
         return listIterator();
     }
 

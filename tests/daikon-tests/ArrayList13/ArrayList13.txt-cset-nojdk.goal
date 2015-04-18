@@ -18,10 +18,10 @@ Variable sets for javautil.ArrayList13.<init>() exit
   [1] [Class of Field elementData[..]]
   [1] [Field size]
 
-Variable sets for javautil.ArrayList13.<init>(javautil.Collection c) enter
+Variable sets for javautil.ArrayList13.<init>(javautil.Collection13 c) enter
   [1] [Parameter c]
   [1] [Class of c]
-Variable sets for javautil.ArrayList13.<init>(javautil.Collection c) exit
+Variable sets for javautil.ArrayList13.<init>(javautil.Collection13 c) exit
   [1] [Parameter c]
   [1] [Class of c]
   [1] [this]
@@ -331,7 +331,7 @@ Variable sets for javautil.ArrayList13.clear() exit
   [1] [Class of Field elementData[..]]
   [1] [Field size]
 
-Variable sets for javautil.ArrayList13.addAll(javautil.Collection c) enter
+Variable sets for javautil.ArrayList13.addAll(javautil.Collection13 c) enter
   [1] [Parameter c]
   [1] [Class of c]
   [1] [this]
@@ -340,7 +340,7 @@ Variable sets for javautil.ArrayList13.addAll(javautil.Collection c) enter
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
   [1] [Field size]
-Variable sets for javautil.ArrayList13.addAll(javautil.Collection c) exit
+Variable sets for javautil.ArrayList13.addAll(javautil.Collection13 c) exit
   [1] [Parameter c]
   [1] [Class of c]
   [1] [return]
@@ -351,7 +351,7 @@ Variable sets for javautil.ArrayList13.addAll(javautil.Collection c) exit
   [1] [Class of Field elementData[..]]
   [1] [Field size]
 
-Variable sets for javautil.ArrayList13.addAll(int index, javautil.Collection c) enter
+Variable sets for javautil.ArrayList13.addAll(int index, javautil.Collection13 c) enter
   [1] [Parameter c]
   [1] [Class of c]
   [1] [Parameter index]
@@ -361,7 +361,7 @@ Variable sets for javautil.ArrayList13.addAll(int index, javautil.Collection c) 
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
   [1] [Field size]
-Variable sets for javautil.ArrayList13.addAll(int index, javautil.Collection c) exit
+Variable sets for javautil.ArrayList13.addAll(int index, javautil.Collection13 c) exit
   [1] [Parameter c]
   [1] [Class of c]
   [1] [Parameter index]
@@ -545,14 +545,14 @@ Variable sets for javautil.AbstractList13.clear() exit
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList13.addAll(int index, javautil.Collection c) enter
+Variable sets for javautil.AbstractList13.addAll(int index, javautil.Collection13 c) enter
   [1] [Parameter c]
   [1] [Class of c]
   [1] [Parameter index]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList13.addAll(int index, javautil.Collection c) exit
+Variable sets for javautil.AbstractList13.addAll(int index, javautil.Collection13 c) exit
   [1] [Parameter c]
   [1] [Class of c]
   [1] [Parameter index]
