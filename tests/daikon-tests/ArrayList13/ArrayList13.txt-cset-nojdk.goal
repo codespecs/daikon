@@ -443,19 +443,19 @@ Variable sets for javautil.ArrayList13.readObject(java.io.ObjectInputStream s) e
   [1] [Class of Field elementData[..]]
   [1] [Field size]
 
-Variable sets for javautil.AbstractList.<init>() enter
-Variable sets for javautil.AbstractList.<init>() exit
+Variable sets for javautil.AbstractList13.<init>() enter
+Variable sets for javautil.AbstractList13.<init>() exit
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.add(java.lang.Object o) enter
+Variable sets for javautil.AbstractList13.add(java.lang.Object o) enter
   [1] [Parameter o]
   [1] [Class of o]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.add(java.lang.Object o) exit
+Variable sets for javautil.AbstractList13.add(java.lang.Object o) exit
   [1] [Parameter o]
   [1] [Class of o]
   [1] [return]
@@ -463,14 +463,14 @@ Variable sets for javautil.AbstractList.add(java.lang.Object o) exit
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.set(int index, java.lang.Object element) enter
+Variable sets for javautil.AbstractList13.set(int index, java.lang.Object element) enter
   [1] [Parameter element]
   [1] [Class of element]
   [1] [Parameter index]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.set(int index, java.lang.Object element) exit
+Variable sets for javautil.AbstractList13.set(int index, java.lang.Object element) exit
   [1] [Parameter element]
   [1] [Class of element]
   [1] [Parameter index]
@@ -480,14 +480,14 @@ Variable sets for javautil.AbstractList.set(int index, java.lang.Object element)
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.add(int index, java.lang.Object element) enter
+Variable sets for javautil.AbstractList13.add(int index, java.lang.Object element) enter
   [1] [Parameter element]
   [1] [Class of element]
   [1] [Parameter index]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.add(int index, java.lang.Object element) exit
+Variable sets for javautil.AbstractList13.add(int index, java.lang.Object element) exit
   [1] [Parameter element]
   [1] [Class of element]
   [1] [Parameter index]
@@ -495,12 +495,12 @@ Variable sets for javautil.AbstractList.add(int index, java.lang.Object element)
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.remove(int index) enter
+Variable sets for javautil.AbstractList13.remove(int index) enter
   [1] [Parameter index]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.remove(int index) exit
+Variable sets for javautil.AbstractList13.remove(int index) exit
   [1] [Parameter index]
   [1] [return]
   [1] [Class of return]
@@ -508,27 +508,13 @@ Variable sets for javautil.AbstractList.remove(int index) exit
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.indexOf(java.lang.Object o) enter
+Variable sets for javautil.AbstractList13.indexOf(java.lang.Object o) enter
   [1] [Parameter o]
   [1] [Class of o]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.indexOf(java.lang.Object o) exit
-  [1] [Parameter o]
-  [1] [Class of o]
-  [1] [return]
-  [1] [this]
-  [1] [Class of this]
-  [1] [Field modCount]
-
-Variable sets for javautil.AbstractList.lastIndexOf(java.lang.Object o) enter
-  [1] [Parameter o]
-  [1] [Class of o]
-  [1] [this]
-  [1] [Class of this]
-  [1] [Field modCount]
-Variable sets for javautil.AbstractList.lastIndexOf(java.lang.Object o) exit
+Variable sets for javautil.AbstractList13.indexOf(java.lang.Object o) exit
   [1] [Parameter o]
   [1] [Class of o]
   [1] [return]
@@ -536,23 +522,37 @@ Variable sets for javautil.AbstractList.lastIndexOf(java.lang.Object o) exit
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.clear() enter
+Variable sets for javautil.AbstractList13.lastIndexOf(java.lang.Object o) enter
+  [1] [Parameter o]
+  [1] [Class of o]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.clear() exit
+Variable sets for javautil.AbstractList13.lastIndexOf(java.lang.Object o) exit
+  [1] [Parameter o]
+  [1] [Class of o]
+  [1] [return]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.addAll(int index, javautil.Collection c) enter
+Variable sets for javautil.AbstractList13.clear() enter
+  [1] [this]
+  [1] [Class of this]
+  [1] [Field modCount]
+Variable sets for javautil.AbstractList13.clear() exit
+  [1] [this]
+  [1] [Class of this]
+  [1] [Field modCount]
+
+Variable sets for javautil.AbstractList13.addAll(int index, javautil.Collection c) enter
   [1] [Parameter c]
   [1] [Class of c]
   [1] [Parameter index]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.addAll(int index, javautil.Collection c) exit
+Variable sets for javautil.AbstractList13.addAll(int index, javautil.Collection c) exit
   [1] [Parameter c]
   [1] [Class of c]
   [1] [Parameter index]
@@ -561,34 +561,34 @@ Variable sets for javautil.AbstractList.addAll(int index, javautil.Collection c)
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.iterator() enter
+Variable sets for javautil.AbstractList13.iterator() enter
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.iterator() exit
+Variable sets for javautil.AbstractList13.iterator() exit
   [1] [return]
   [1] [Class of return]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.listIterator() enter
+Variable sets for javautil.AbstractList13.listIterator() enter
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.listIterator() exit
+Variable sets for javautil.AbstractList13.listIterator() exit
   [1] [return]
   [1] [Class of return]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.listIterator(int index) enter
+Variable sets for javautil.AbstractList13.listIterator(int index) enter
   [1] [Parameter index]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.listIterator(int index) exit
+Variable sets for javautil.AbstractList13.listIterator(int index) exit
   [1] [Parameter index]
   [1] [return]
   [1] [Class of return]
@@ -596,13 +596,13 @@ Variable sets for javautil.AbstractList.listIterator(int index) exit
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.subList(int fromIndex, int toIndex) enter
+Variable sets for javautil.AbstractList13.subList(int fromIndex, int toIndex) enter
   [1] [Parameter fromIndex]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
   [1] [Parameter toIndex]
-Variable sets for javautil.AbstractList.subList(int fromIndex, int toIndex) exit
+Variable sets for javautil.AbstractList13.subList(int fromIndex, int toIndex) exit
   [1] [Parameter fromIndex]
   [1] [return]
   [1] [Class of return]
@@ -611,13 +611,13 @@ Variable sets for javautil.AbstractList.subList(int fromIndex, int toIndex) exit
   [1] [Field modCount]
   [1] [Parameter toIndex]
 
-Variable sets for javautil.AbstractList.equals(java.lang.Object o) enter
+Variable sets for javautil.AbstractList13.equals(java.lang.Object o) enter
   [1] [Parameter o]
   [1] [Class of o]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.equals(java.lang.Object o) exit
+Variable sets for javautil.AbstractList13.equals(java.lang.Object o) exit
   [1] [Parameter o]
   [1] [Class of o]
   [1] [return]
@@ -625,23 +625,23 @@ Variable sets for javautil.AbstractList.equals(java.lang.Object o) exit
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.hashCode() enter
+Variable sets for javautil.AbstractList13.hashCode() enter
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
-Variable sets for javautil.AbstractList.hashCode() exit
+Variable sets for javautil.AbstractList13.hashCode() exit
   [1] [return]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
 
-Variable sets for javautil.AbstractList.removeRange(int fromIndex, int toIndex) enter
+Variable sets for javautil.AbstractList13.removeRange(int fromIndex, int toIndex) enter
   [1] [Parameter fromIndex]
   [1] [this]
   [1] [Class of this]
   [1] [Field modCount]
   [1] [Parameter toIndex]
-Variable sets for javautil.AbstractList.removeRange(int fromIndex, int toIndex) exit
+Variable sets for javautil.AbstractList13.removeRange(int fromIndex, int toIndex) exit
   [1] [Parameter fromIndex]
   [1] [this]
   [1] [Class of this]

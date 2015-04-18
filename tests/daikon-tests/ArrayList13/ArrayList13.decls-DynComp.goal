@@ -1844,12 +1844,12 @@ hashcode
 2
 
 DECLARE
-javautil.AbstractList:::CLASS
+javautil.AbstractList13:::CLASS
 
 DECLARE
-javautil.AbstractList:::OBJECT
+javautil.AbstractList13:::OBJECT
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 2
 this.getClass()
@@ -1863,12 +1863,12 @@ int
 
 
 DECLARE
-javautil.AbstractList.AbstractList():::ENTER
+javautil.AbstractList13.AbstractList13():::ENTER
 
 DECLARE
-javautil.AbstractList.AbstractList():::EXIT63
+javautil.AbstractList13.AbstractList13():::EXIT63
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 2
 this.getClass()
@@ -1882,9 +1882,9 @@ int
 
 
 DECLARE
-javautil.AbstractList.add(java.lang.Object):::ENTER
+javautil.AbstractList13.add(java.lang.Object):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()
@@ -1905,9 +1905,9 @@ java.lang.String
 1
 
 DECLARE
-javautil.AbstractList.add(java.lang.Object):::EXIT91
+javautil.AbstractList13.add(java.lang.Object):::EXIT91
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -1933,9 +1933,9 @@ boolean
 
 
 DECLARE
-javautil.AbstractList.set(int, java.lang.Object):::ENTER
+javautil.AbstractList13.set(int, java.lang.Object):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -1961,9 +1961,9 @@ java.lang.String
 
 
 DECLARE
-javautil.AbstractList.add(int, java.lang.Object):::ENTER
+javautil.AbstractList13.add(int, java.lang.Object):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -1989,9 +1989,9 @@ java.lang.String
 
 
 DECLARE
-javautil.AbstractList.remove(int):::ENTER
+javautil.AbstractList13.remove(int):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()
@@ -2009,9 +2009,9 @@ int
 
 
 DECLARE
-javautil.AbstractList.indexOf(java.lang.Object):::ENTER
+javautil.AbstractList13.indexOf(java.lang.Object):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()
@@ -2032,36 +2032,9 @@ java.lang.String
 1
 
 DECLARE
-javautil.AbstractList.indexOf(java.lang.Object):::EXIT200
+javautil.AbstractList13.indexOf(java.lang.Object):::EXIT200
 this
-javautil.AbstractList # isParam=true
-hashcode
-4
-this.getClass()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil, 
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-DECLARE
-javautil.AbstractList.indexOf(java.lang.Object):::EXIT204
-this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -2086,60 +2059,9 @@ int
 3
 
 DECLARE
-javautil.AbstractList.indexOf(java.lang.Object):::EXIT206
+javautil.AbstractList13.indexOf(java.lang.Object):::EXIT204
 this
-javautil.AbstractList # isParam=true
-hashcode
-4
-this.getClass()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil, 
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-
-DECLARE
-javautil.AbstractList.lastIndexOf(java.lang.Object):::ENTER
-this
-javautil.AbstractList # isParam=true
-hashcode
-3
-this.getClass()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil, 
-int
-4
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.AbstractList.lastIndexOf(java.lang.Object):::EXIT231
-this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -2164,36 +2086,9 @@ int
 3
 
 DECLARE
-javautil.AbstractList.lastIndexOf(java.lang.Object):::EXIT235
+javautil.AbstractList13.indexOf(java.lang.Object):::EXIT206
 this
-javautil.AbstractList # isParam=true
-hashcode
-4
-this.getClass()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil, 
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-DECLARE
-javautil.AbstractList.lastIndexOf(java.lang.Object):::EXIT237
-this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -2219,9 +2114,114 @@ int
 
 
 DECLARE
-javautil.AbstractList.clear():::ENTER
+javautil.AbstractList13.lastIndexOf(java.lang.Object):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT231
+this
+javautil.AbstractList13 # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+DECLARE
+javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT235
+this
+javautil.AbstractList13 # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+DECLARE
+javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT237
+this
+javautil.AbstractList13 # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+
+DECLARE
+javautil.AbstractList13.clear():::ENTER
+this
+javautil.AbstractList13 # isParam=true
 hashcode
 2
 this.getClass()
@@ -2234,9 +2234,9 @@ int
 3
 
 DECLARE
-javautil.AbstractList.clear():::EXIT260
+javautil.AbstractList13.clear():::EXIT260
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 2
 this.getClass()
@@ -2250,9 +2250,9 @@ int
 
 
 DECLARE
-javautil.AbstractList.addAll(int, javautil.Collection):::ENTER
+javautil.AbstractList13.addAll(int, javautil.Collection):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -2277,9 +2277,9 @@ java.lang.String
 1
 
 DECLARE
-javautil.AbstractList.addAll(int, javautil.Collection):::EXIT308
+javautil.AbstractList13.addAll(int, javautil.Collection):::EXIT308
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 5
 this.getClass()
@@ -2309,9 +2309,9 @@ boolean
 
 
 DECLARE
-javautil.AbstractList.iterator():::ENTER
+javautil.AbstractList13.iterator():::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 2
 this.getClass()
@@ -2324,9 +2324,9 @@ int
 3
 
 DECLARE
-javautil.AbstractList.iterator():::EXIT336
+javautil.AbstractList13.iterator():::EXIT336
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()
@@ -2348,9 +2348,9 @@ java.lang.String
 
 
 DECLARE
-javautil.AbstractList.listIterator():::ENTER
+javautil.AbstractList13.listIterator():::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 2
 this.getClass()
@@ -2363,9 +2363,9 @@ int
 3
 
 DECLARE
-javautil.AbstractList.listIterator():::EXIT348
+javautil.AbstractList13.listIterator():::EXIT348
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()
@@ -2387,9 +2387,9 @@ java.lang.String
 
 
 DECLARE
-javautil.AbstractList.listIterator(int):::ENTER
+javautil.AbstractList13.listIterator(int):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()
@@ -2406,9 +2406,9 @@ int
 2
 
 DECLARE
-javautil.AbstractList.listIterator(int):::EXIT391
+javautil.AbstractList13.listIterator(int):::EXIT391
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -2434,9 +2434,9 @@ java.lang.String
 
 
 DECLARE
-javautil.AbstractList.subList(int, int):::ENTER
+javautil.AbstractList13.subList(int, int):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()
@@ -2457,9 +2457,9 @@ int
 5
 
 DECLARE
-javautil.AbstractList.subList(int, int):::EXIT565
+javautil.AbstractList13.subList(int, int):::EXIT565
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -2489,9 +2489,9 @@ java.lang.String
 
 
 DECLARE
-javautil.AbstractList.equals(java.lang.Object):::ENTER
+javautil.AbstractList13.equals(java.lang.Object):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()
@@ -2512,9 +2512,9 @@ java.lang.String
 1
 
 DECLARE
-javautil.AbstractList.equals(java.lang.Object):::EXIT594
+javautil.AbstractList13.equals(java.lang.Object):::EXIT594
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -2539,9 +2539,9 @@ boolean
 3
 
 DECLARE
-javautil.AbstractList.equals(java.lang.Object):::EXIT596
+javautil.AbstractList13.equals(java.lang.Object):::EXIT596
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -2566,9 +2566,9 @@ boolean
 3
 
 DECLARE
-javautil.AbstractList.equals(java.lang.Object):::EXIT604
+javautil.AbstractList13.equals(java.lang.Object):::EXIT604
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -2593,9 +2593,9 @@ boolean
 3
 
 DECLARE
-javautil.AbstractList.equals(java.lang.Object):::EXIT606
+javautil.AbstractList13.equals(java.lang.Object):::EXIT606
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 4
 this.getClass()
@@ -2621,9 +2621,9 @@ boolean
 
 
 DECLARE
-javautil.AbstractList.hashCode():::ENTER
+javautil.AbstractList13.hashCode():::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 2
 this.getClass()
@@ -2636,9 +2636,9 @@ int
 3
 
 DECLARE
-javautil.AbstractList.hashCode():::EXIT625
+javautil.AbstractList13.hashCode():::EXIT625
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()
@@ -2656,9 +2656,9 @@ int
 
 
 DECLARE
-javautil.AbstractList.removeRange(int, int):::ENTER
+javautil.AbstractList13.removeRange(int, int):::ENTER
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()
@@ -2679,9 +2679,9 @@ int
 5
 
 DECLARE
-javautil.AbstractList.removeRange(int, int):::EXIT657
+javautil.AbstractList13.removeRange(int, int):::EXIT657
 this
-javautil.AbstractList # isParam=true
+javautil.AbstractList13 # isParam=true
 hashcode
 3
 this.getClass()

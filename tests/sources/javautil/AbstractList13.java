@@ -54,12 +54,12 @@ import java.util.NoSuchElementException;
  * @since 1.2
  */
 
-public abstract class AbstractList extends AbstractCollection implements List {
+public abstract class AbstractList13 extends AbstractCollection implements List {
     /**
      * Sole constructor.  (For invocation by subclass constructors, typically
      * implicit.)
      */
-    protected AbstractList() {
+    protected AbstractList13() {
     }
 
     /**
@@ -433,7 +433,7 @@ public abstract class AbstractList extends AbstractCollection implements List {
             checkForComodification();
 
 	    try {
-		AbstractList.this.remove(lastRet);
+		AbstractList13.this.remove(lastRet);
 		if (lastRet < cursor)
 		    cursor--;
 		lastRet = -1;
@@ -484,7 +484,7 @@ public abstract class AbstractList extends AbstractCollection implements List {
             checkForComodification();
 
 	    try {
-		AbstractList.this.set(lastRet, o);
+		AbstractList13.this.set(lastRet, o);
 		expectedModCount = modCount;
 	    } catch(IndexOutOfBoundsException e) {
 		throw new ConcurrentModificationException();
@@ -495,7 +495,7 @@ public abstract class AbstractList extends AbstractCollection implements List {
             checkForComodification();
 
 	    try {
-		AbstractList.this.add(cursor++, o);
+		AbstractList13.this.add(cursor++, o);
 		lastRet = -1;
 		expectedModCount = modCount;
 	    } catch(IndexOutOfBoundsException e) {
@@ -685,13 +685,13 @@ public abstract class AbstractList extends AbstractCollection implements List {
     protected transient int modCount = 0;
 }
 
-class SubList extends AbstractList {
-    private AbstractList l;
+class SubList extends AbstractList13 {
+    private AbstractList13 l;
     private int offset;
     private int size;
     private int expectedModCount;
 
-    SubList(AbstractList list, int fromIndex, int toIndex) {
+    SubList(AbstractList13 list, int fromIndex, int toIndex) {
         if (fromIndex < 0)
             throw new IndexOutOfBoundsException("fromIndex = " + fromIndex);
         if (toIndex > list.size())

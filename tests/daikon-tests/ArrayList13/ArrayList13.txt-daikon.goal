@@ -1,10 +1,10 @@
 ===========================================================================
-javautil.AbstractList:::OBJECT
+javautil.AbstractList13:::OBJECT
 this has only one value
 this.getClass() == javautil.ArrayList13.class
 this.modCount == 0
 ===========================================================================
-javautil.AbstractList.AbstractList():::EXIT
+javautil.AbstractList13.AbstractList13():::EXIT
 ===========================================================================
 javautil.ArrayList13:::OBJECT
 this has only one value

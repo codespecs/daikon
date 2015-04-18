@@ -1,11 +1,11 @@
 ===========================================================================
-javautil.AbstractList:::OBJECT
+javautil.AbstractList13:::OBJECT
     Variables: this this.getClass() this.modCount
 this != null
 this.getClass() == javautil.ArrayList13.class
 this.modCount == 0
 ===========================================================================
-javautil.AbstractList.AbstractList():::EXIT
+javautil.AbstractList13.AbstractList13():::EXIT
     Variables: this this.getClass() this.modCount
 ===========================================================================
 javautil.ArrayList13:::OBJECT

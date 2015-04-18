@@ -3356,19 +3356,19 @@ ppt-type object
     rep-type int
     comparability 22
 
-ppt javautil.AbstractList.AbstractList():::ENTER
+ppt javautil.AbstractList13.AbstractList13():::ENTER
 ppt-type enter
 
-ppt javautil.AbstractList.AbstractList():::EXIT63
+ppt javautil.AbstractList13.AbstractList13():::EXIT63
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3377,25 +3377,25 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
 
-ppt javautil.AbstractList.add(java.lang.Object):::ENTER
+ppt javautil.AbstractList13.add(java.lang.Object):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3404,14 +3404,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -3427,16 +3427,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.add(java.lang.Object):::EXIT91
+ppt javautil.AbstractList13.add(java.lang.Object):::EXIT91
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3445,14 +3445,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -3473,16 +3473,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type boolean
     comparability 22
 
-ppt javautil.AbstractList.set(int,\_java.lang.Object):::ENTER
+ppt javautil.AbstractList13.set(int,\_java.lang.Object):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3491,14 +3491,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable index
     var-kind variable 
     dec-type int
@@ -3520,16 +3520,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.add(int,\_java.lang.Object):::ENTER
+ppt javautil.AbstractList13.add(int,\_java.lang.Object):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3538,14 +3538,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable index
     var-kind variable 
     dec-type int
@@ -3567,16 +3567,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.remove(int):::ENTER
+ppt javautil.AbstractList13.remove(int):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3585,14 +3585,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable index
     var-kind variable 
     dec-type int
@@ -3600,16 +3600,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags is_param
     comparability 22
 
-ppt javautil.AbstractList.indexOf(java.lang.Object):::ENTER
+ppt javautil.AbstractList13.indexOf(java.lang.Object):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3618,14 +3618,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -3641,16 +3641,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.indexOf(java.lang.Object):::EXIT204
+ppt javautil.AbstractList13.indexOf(java.lang.Object):::EXIT204
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3659,14 +3659,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -3687,16 +3687,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type int
     comparability 22
 
-ppt javautil.AbstractList.indexOf(java.lang.Object):::EXIT206
+ppt javautil.AbstractList13.indexOf(java.lang.Object):::EXIT206
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3705,14 +3705,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -3733,16 +3733,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type int
     comparability 22
 
-ppt javautil.AbstractList.indexOf(java.lang.Object):::EXIT200
+ppt javautil.AbstractList13.indexOf(java.lang.Object):::EXIT200
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3751,14 +3751,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -3779,16 +3779,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type int
     comparability 22
 
-ppt javautil.AbstractList.lastIndexOf(java.lang.Object):::ENTER
+ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3797,14 +3797,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -3820,16 +3820,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.lastIndexOf(java.lang.Object):::EXIT237
+ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT237
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3838,14 +3838,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -3866,16 +3866,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type int
     comparability 22
 
-ppt javautil.AbstractList.lastIndexOf(java.lang.Object):::EXIT235
+ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT235
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3884,14 +3884,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -3912,16 +3912,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type int
     comparability 22
 
-ppt javautil.AbstractList.lastIndexOf(java.lang.Object):::EXIT231
+ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT231
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3930,14 +3930,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -3958,16 +3958,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type int
     comparability 22
 
-ppt javautil.AbstractList.clear():::ENTER
+ppt javautil.AbstractList13.clear():::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -3976,25 +3976,25 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
 
-ppt javautil.AbstractList.clear():::EXIT260
+ppt javautil.AbstractList13.clear():::EXIT260
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4003,25 +4003,25 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
 
-ppt javautil.AbstractList.addAll(int,\_javautil.Collection):::ENTER
+ppt javautil.AbstractList13.addAll(int,\_javautil.Collection):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4030,14 +4030,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable index
     var-kind variable 
     dec-type int
@@ -4059,16 +4059,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.addAll(int,\_javautil.Collection):::EXIT308
+ppt javautil.AbstractList13.addAll(int,\_javautil.Collection):::EXIT308
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4077,14 +4077,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable index
     var-kind variable 
     dec-type int
@@ -4111,16 +4111,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type boolean
     comparability 22
 
-ppt javautil.AbstractList.iterator():::ENTER
+ppt javautil.AbstractList13.iterator():::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4129,25 +4129,25 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
 
-ppt javautil.AbstractList.iterator():::EXIT336
+ppt javautil.AbstractList13.iterator():::EXIT336
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4156,14 +4156,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable return
     var-kind return 
     dec-type javautil.Iterator
@@ -4178,16 +4178,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.listIterator():::ENTER
+ppt javautil.AbstractList13.listIterator():::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4196,25 +4196,25 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
 
-ppt javautil.AbstractList.listIterator():::EXIT348
+ppt javautil.AbstractList13.listIterator():::EXIT348
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4223,14 +4223,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable return
     var-kind return 
     dec-type javautil.ListIterator
@@ -4245,16 +4245,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.listIterator(int):::ENTER
+ppt javautil.AbstractList13.listIterator(int):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4263,14 +4263,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable index
     var-kind variable 
     dec-type int
@@ -4278,16 +4278,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags is_param
     comparability 22
 
-ppt javautil.AbstractList.listIterator(int):::EXIT391
+ppt javautil.AbstractList13.listIterator(int):::EXIT391
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4296,14 +4296,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable index
     var-kind variable 
     dec-type int
@@ -4324,16 +4324,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.subList(int,\_int):::ENTER
+ppt javautil.AbstractList13.subList(int,\_int):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4342,14 +4342,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable fromIndex
     var-kind variable 
     dec-type int
@@ -4363,16 +4363,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags is_param
     comparability 22
 
-ppt javautil.AbstractList.subList(int,\_int):::EXIT565
+ppt javautil.AbstractList13.subList(int,\_int):::EXIT565
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4381,14 +4381,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable fromIndex
     var-kind variable 
     dec-type int
@@ -4415,16 +4415,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.equals(java.lang.Object):::ENTER
+ppt javautil.AbstractList13.equals(java.lang.Object):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4433,14 +4433,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -4456,16 +4456,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags synthetic classname
     comparability 22
 
-ppt javautil.AbstractList.equals(java.lang.Object):::EXIT594
+ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT594
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4474,14 +4474,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -4502,16 +4502,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type boolean
     comparability 22
 
-ppt javautil.AbstractList.equals(java.lang.Object):::EXIT596
+ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT596
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4520,14 +4520,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -4548,16 +4548,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type boolean
     comparability 22
 
-ppt javautil.AbstractList.equals(java.lang.Object):::EXIT604
+ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT604
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4566,14 +4566,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -4594,16 +4594,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type boolean
     comparability 22
 
-ppt javautil.AbstractList.equals(java.lang.Object):::EXIT606
+ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT606
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4612,14 +4612,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable o
     var-kind variable 
     dec-type java.lang.Object
@@ -4640,16 +4640,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     rep-type boolean
     comparability 22
 
-ppt javautil.AbstractList.hashCode():::ENTER
+ppt javautil.AbstractList13.hashCode():::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4658,25 +4658,25 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
 
-ppt javautil.AbstractList.hashCode():::EXIT625
+ppt javautil.AbstractList13.hashCode():::EXIT625
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4685,30 +4685,30 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable return
     var-kind return 
     dec-type int
     rep-type int
     comparability 22
 
-ppt javautil.AbstractList.removeRange(int,\_int):::ENTER
+ppt javautil.AbstractList13.removeRange(int,\_int):::ENTER
 ppt-type enter
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4717,14 +4717,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable fromIndex
     var-kind variable 
     dec-type int
@@ -4738,16 +4738,16 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags is_param
     comparability 22
 
-ppt javautil.AbstractList.removeRange(int,\_int):::EXIT657
+ppt javautil.AbstractList13.removeRange(int,\_int):::EXIT657
 ppt-type subexit
-parent parent javautil.AbstractList:::OBJECT 1
+parent parent javautil.AbstractList13:::OBJECT 1
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.getClass()
     var-kind function getClass()
     enclosing-var this
@@ -4756,14 +4756,14 @@ parent parent javautil.AbstractList:::OBJECT 1
     function-args this
     flags synthetic classname
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable this.modCount
     var-kind field modCount
     enclosing-var this
     dec-type int
     rep-type int
     comparability 22
-    parent javautil.AbstractList:::OBJECT 1
+    parent javautil.AbstractList13:::OBJECT 1
   variable fromIndex
     var-kind variable 
     dec-type int
@@ -4777,11 +4777,11 @@ parent parent javautil.AbstractList:::OBJECT 1
     flags is_param
     comparability 22
 
-ppt javautil.AbstractList:::OBJECT
+ppt javautil.AbstractList13:::OBJECT
 ppt-type object
   variable this
     var-kind variable 
-    dec-type javautil.AbstractList
+    dec-type javautil.AbstractList13
     rep-type hashcode
     flags is_param
     comparability 22
@@ -4811,11 +4811,11 @@ initialCapacity
 10
 1
 
-javautil.AbstractList.AbstractList():::ENTER
+javautil.AbstractList13.AbstractList13():::ENTER
 this_invocation_nonce
 2
 
-javautil.AbstractList.AbstractList():::EXIT63
+javautil.AbstractList13.AbstractList13():::EXIT63
 this_invocation_nonce
 2
 this

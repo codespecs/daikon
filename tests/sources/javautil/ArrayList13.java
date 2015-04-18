@@ -70,7 +70,7 @@ package javautil;
  * @since 1.2
  */
 
-public class ArrayList13 extends AbstractList implements List, Cloneable,
+public class ArrayList13 extends AbstractList13 implements List, Cloneable,
 					            java.io.Serializable {
     /**
      * The array buffer into which the elements of the ArrayList are stored.

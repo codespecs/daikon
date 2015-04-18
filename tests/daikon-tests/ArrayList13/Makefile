@@ -7,4 +7,4 @@ MAIN_CLASS:=javautil.ArrayList13Test
 include ../../Makefile.common
 
 instrument-files-revise:
-	echo "javautil/AbstractList.java javautil/ArrayList13.java" >| ${INST_LIST_FILE}
+	echo "javautil/AbstractList13.java javautil/ArrayList13.java" >| ${INST_LIST_FILE}
