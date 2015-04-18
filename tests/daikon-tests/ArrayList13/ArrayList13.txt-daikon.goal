@@ -1,12 +1,12 @@
 ===========================================================================
 javautil.AbstractList:::OBJECT
 this has only one value
-this.getClass() == javautil.ArrayList.class
+this.getClass() == javautil.ArrayList13.class
 this.modCount == 0
 ===========================================================================
 javautil.AbstractList.AbstractList():::EXIT
 ===========================================================================
-javautil.ArrayList:::OBJECT
+javautil.ArrayList13:::OBJECT
 this has only one value
 this.elementData has only one value
 this.elementData.getClass() == java.lang.Object[].class
@@ -21,12 +21,12 @@ this.elementData[0..this.size] == [null]
 this.elementData[0..this.size-1] == []
 this.elementData[] elements == this.elementData[this.size]
 ===========================================================================
-javautil.ArrayList.ArrayList():::EXIT
+javautil.ArrayList13.ArrayList13():::EXIT
 ===========================================================================
-javautil.ArrayList.ArrayList(int):::ENTER
+javautil.ArrayList13.ArrayList13(int):::ENTER
 initialCapacity == 10
 ===========================================================================
-javautil.ArrayList.ArrayList(int):::EXIT
+javautil.ArrayList13.ArrayList13(int):::EXIT
 orig(initialCapacity) == size(this.elementData[])
 this.elementData[this.size] == this.elementData[orig(initialCapacity)-1]
 this.elementData[orig(initialCapacity)..] == []

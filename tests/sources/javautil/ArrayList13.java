@@ -70,7 +70,7 @@ package javautil;
  * @since 1.2
  */
 
-public class ArrayList extends AbstractList implements List, Cloneable,
+public class ArrayList13 extends AbstractList implements List, Cloneable,
 					            java.io.Serializable {
     /**
      * The array buffer into which the elements of the ArrayList are stored.
@@ -92,7 +92,7 @@ public class ArrayList extends AbstractList implements List, Cloneable,
      * @exception IllegalArgumentException if the specified initial capacity
      *            is negative
      */
-    public ArrayList(int initialCapacity) {
+    public ArrayList13(int initialCapacity) {
 	super();
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal Capacity: "+
@@ -103,7 +103,7 @@ public class ArrayList extends AbstractList implements List, Cloneable,
     /**
      * Constructs an empty list.
      */
-    public ArrayList() {
+    public ArrayList13() {
 	this(10);
     }
 
@@ -115,7 +115,7 @@ public class ArrayList extends AbstractList implements List, Cloneable,
      *
      * @param c the collection whose elements are to be placed into this list.
      */
-    public ArrayList(Collection c) {
+    public ArrayList13(Collection c) {
         size = c.size();
 	elementData = new Object[(size*110)/100]; // Allow 10% room for growth
         c.toArray(elementData);
@@ -235,7 +235,7 @@ public class ArrayList extends AbstractList implements List, Cloneable,
      */
     public Object clone() {
 	try { 
-	    ArrayList v = (ArrayList)super.clone();
+	    ArrayList13 v = (ArrayList13)super.clone();
 	    v.elementData = new Object[size];
 	    System.arraycopy(elementData, 0, v.elementData, 0, size);
 	    v.modCount = 0;

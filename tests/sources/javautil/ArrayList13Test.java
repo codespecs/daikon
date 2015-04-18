@@ -1,10 +1,10 @@
 package javautil;
 
-public class ArrayListTest {
+public class ArrayList13Test {
 
   public static void main(String[] argv) {
     System.out.println("Hello, World!");
-    new ArrayList();
+    new ArrayList13();
   }
 
 }

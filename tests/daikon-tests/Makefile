@@ -42,7 +42,7 @@ mapquick-%: do-WeightedNodePath-% do-StreetNumberSet-% do-GeoSegment-% do-Graph-
 	@echo ${HR}
 polycalc-%: do-RatNum-% do-RatPoly-% do-RatPolyStack-% do-RatTermVec-%
 	@echo ${HR}
-javautil-%: do-Vector-% do-ArrayList-%
+javautil-%: do-Vector-% do-ArrayList13-%
 	@echo ${HR}
 6170-%: do-FixedSizeSet-% do-TinySet-% do-Huffman-%
 	@echo ${HR}
