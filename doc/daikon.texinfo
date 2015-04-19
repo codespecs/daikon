@@ -6088,6 +6088,10 @@ see @uref{http://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted}
 Celeriac works under Mono as well as under the Microsoft .NET implementation;
 see @uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono}.
 
+To insert Daikon-inferred invariants in C# source code as Code Contracts,
+use Scout (previously called Contract Inserter):
+@uref{https://bitbucket.org/fmc3/scout}.
+
 
 @node    dfepl
 @section Perl front end dfepl
