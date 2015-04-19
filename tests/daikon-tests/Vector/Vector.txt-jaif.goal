@@ -3,7 +3,7 @@ annotation @Nullable:
 annotation @NonNull:
 
 package javautil:
-class Vector : // 41700/41700 obj/class samples
+class Vector13 : // 41700/41700 obj/class samples
   field serialVersionUID :  // long
   field elementData :  // java.lang.Object[]
   field elementCount :  // int

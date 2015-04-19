@@ -1,19 +1,19 @@
 ===========================================================================
-javautil.Vector:::CLASS
+javautil.Vector13:::CLASS
 ===========================================================================
-javautil.Vector:::OBJECT
+javautil.Vector13:::OBJECT
 (NEQ (hash (select |elementData| |this|)) null)
 (EQ (typeof (select |elementData| |this|)) |T_java.lang.Object[]|)
 (>= (select |elementCount| |this|) 0)
 (>= (select |capacityIncrement| |this|) 0)
 (FORALL (|i|) (IMPLIES (AND (<= (select |elementCount| |this|) |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null)))
-(> (select |elementCount| |this|) (select |serialVersionUID| (select |Vector| |javautil|)))
+(> (select |elementCount| |this|) (select |serialVersionUID| (select |Vector13| |javautil|)))
 (IMPLIES (EQ (arrayLength (select |elementData| |this|)) 0) (EQ (select |elementCount| |this|) 0))
 (<= (select |elementCount| |this|) (arrayLength (select |elementData| |this|)))
-(> (select |capacityIncrement| |this|) (select |serialVersionUID| (select |Vector| |javautil|)))
-(< (select |serialVersionUID| (select |Vector| |javautil|)) (- (arrayLength (select |elementData| |this|)) 1))
+(> (select |capacityIncrement| |this|) (select |serialVersionUID| (select |Vector13| |javautil|)))
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.Vector():::EXIT
+javautil.Vector13.Vector13():::EXIT
 (EQ (select |elementCount| |this|) (select |capacityIncrement| |this|))
 (AND (EQ (arrayLength (select |elementData| |this|)) 10) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|)  null))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null)))
@@ -26,10 +26,10 @@ javautil.Vector.Vector():::EXIT
 (AND (EQ (+ 1 (- (- (select |elementCount| |this|) 1) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|)  null))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |this|)) (select |elementCount| |this|)))))
 ===========================================================================
-javautil.Vector.Vector(int):::ENTER
+javautil.Vector13.Vector13(int):::ENTER
 (>= |initialCapacity| 0)
 ===========================================================================
-javautil.Vector.Vector(int):::EXIT
+javautil.Vector13.Vector13(int):::EXIT
 (EQ (select |elementCount| |this|) (select |capacityIncrement| |this|))
 (EQ |__orig__initialCapacity| (arrayLength (select |elementData| |this|)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null)))
@@ -37,14 +37,14 @@ javautil.Vector.Vector(int):::EXIT
 (EQ (select |elementCount| |this|) 0)
 (AND (EQ (+ 1 (- (- (arrayLength (select |elementData| |this|)) 1) |__orig__initialCapacity|)) 0) (FORALL (|i|) (IMPLIES (AND (<= |__orig__initialCapacity| |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|)  null))))
 (<= (select |elementCount| |this|) |__orig__initialCapacity|)
-(EQ (select |elementCount| |this|) (|java-/| |__orig__initialCapacity| (select |serialVersionUID| (select |Vector| |javautil|))))
-(EQ (select |elementCount| |this|) (|java-/| (- (arrayLength (select |elementData| |this|)) 1) (select |serialVersionUID| (select |Vector| |javautil|))))
+(EQ (select |elementCount| |this|) (|java-/| |__orig__initialCapacity| (select |serialVersionUID| (select |Vector13| |javautil|))))
+(EQ (select |elementCount| |this|) (|java-/| (- (arrayLength (select |elementData| |this|)) 1) (select |serialVersionUID| (select |Vector13| |javautil|))))
 ===========================================================================
-javautil.Vector.Vector(int, int):::ENTER
+javautil.Vector13.Vector13(int, int):::ENTER
 (>= |initialCapacity| 0)
 (>= |capacityIncrement| 0)
 ===========================================================================
-javautil.Vector.Vector(int, int):::EXIT
+javautil.Vector13.Vector13(int, int):::EXIT
 (EQ (select |capacityIncrement| |this|) |__orig__capacityIncrement|)
 (EQ |__orig__initialCapacity| (arrayLength (select |elementData| |this|)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null)))
@@ -53,15 +53,15 @@ javautil.Vector.Vector(int, int):::EXIT
 (AND (EQ (+ 1 (- (- (arrayLength (select |elementData| |this|)) 1) |__orig__initialCapacity|)) 0) (FORALL (|i|) (IMPLIES (AND (<= |__orig__initialCapacity| |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|)  null))))
 (<= (select |elementCount| |this|) (select |capacityIncrement| |this|))
 (<= (select |elementCount| |this|) |__orig__initialCapacity|)
-(EQ (select |elementCount| |this|) (|java-/| (select |capacityIncrement| |this|) (select |serialVersionUID| (select |Vector| |javautil|))))
-(EQ (select |elementCount| |this|) (|java-/| |__orig__initialCapacity| (select |serialVersionUID| (select |Vector| |javautil|))))
-(EQ (select |elementCount| |this|) (|java-/| (- (arrayLength (select |elementData| |this|)) 1) (select |serialVersionUID| (select |Vector| |javautil|))))
+(EQ (select |elementCount| |this|) (|java-/| (select |capacityIncrement| |this|) (select |serialVersionUID| (select |Vector13| |javautil|))))
+(EQ (select |elementCount| |this|) (|java-/| |__orig__initialCapacity| (select |serialVersionUID| (select |Vector13| |javautil|))))
+(EQ (select |elementCount| |this|) (|java-/| (- (arrayLength (select |elementData| |this|)) 1) (select |serialVersionUID| (select |Vector13| |javautil|))))
 ===========================================================================
-javautil.Vector.addElement(java.lang.Object):::ENTER
+javautil.Vector13.addElement(java.lang.Object):::ENTER
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |obj|))
 ===========================================================================
-javautil.Vector.addElement(java.lang.Object):::EXIT
+javautil.Vector13.addElement(java.lang.Object):::EXIT
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (EQ (hash |__orig__obj|) (hash (select (select elems (select |elementData| |this|)) (- (select |elementCount| |this|) 1))))
 (EQ (hash |__orig__obj|) (hash (select (select elems (select |elementData| |this|)) (select |elementCount| |__orig__this|))))
@@ -72,30 +72,30 @@ javautil.Vector.addElement(java.lang.Object):::EXIT
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__obj|))
 warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass()) in this.elementData[].getClass()
 (EQ 0 (+ (+ (select |elementCount| |this|) (* -1 (select |elementCount| |__orig__this|))) -1))
-(< (select |serialVersionUID| (select |Vector| |javautil|)) (select |elementCount| |__orig__this|))
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) (select |elementCount| |__orig__this|))
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ (select |elementCount| |__orig__this|) 0))
 (<= (select |elementCount| |__orig__this|) (- (arrayLength (select |elementData| |this|)) 1))
 (>= (arrayLength (select |elementData| |this|)) (arrayLength (select |elementData| |__orig__this|)))
 (>= (- (arrayLength (select |elementData| |this|)) 1) (- (arrayLength (select |elementData| |__orig__this|)) 1))
 ===========================================================================
-javautil.Vector.clone():::ENTER
+javautil.Vector13.clone():::ENTER
 ===========================================================================
-javautil.Vector.clone():::EXIT
+javautil.Vector13.clone():::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (NEQ (hash |return|) null)
-(EQ (typeof |return|) |T_javautil.Vector|)
+(EQ (typeof |return|) |T_javautil.Vector13|)
 (NEQ (typeof (select |elementData| |this|)) (typeof |return|))
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 ===========================================================================
-javautil.Vector.contains(java.lang.Object):::ENTER
+javautil.Vector13.contains(java.lang.Object):::ENTER
 (NEQ (hash |elem|) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |elem|))
 ===========================================================================
-javautil.Vector.contains(java.lang.Object):::EXIT
+javautil.Vector13.contains(java.lang.Object):::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -107,15 +107,15 @@ javautil.Vector.contains(java.lang.Object):::EXIT
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__elem|))
 ===========================================================================
-javautil.Vector.copyInto(java.lang.Object[]):::ENTER
+javautil.Vector13.copyInto(java.lang.Object[]):::ENTER
 (NEQ (hash |anArray|) null)
 (FORALL (|i| |j|) (IMPLIES (AND (<= (select |elementCount| |this|) |i|) (<= |i| (- (arrayLength |anArray|) 1)) (<= (select |elementCount| |this|) |j|) (<= |j| (- (arrayLength |anArray|) 1)) (EQ (+ |i| 1) |j|)) (EQ (select (select elems |anArray|) |i|) (select (select elems |anArray|) |j|))))
 (EQ (typeof (select |elementData| |this|)) (typeof |anArray|))
 (IMPLIES (EQ (arrayLength |anArray|) 0) (EQ (select |elementCount| |this|) 0))
 (<= (select |elementCount| |this|) (arrayLength |anArray|))
-(< (select |serialVersionUID| (select |Vector| |javautil|)) (- (arrayLength |anArray|) 1))
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) (- (arrayLength |anArray|) 1))
 ===========================================================================
-javautil.Vector.copyInto(java.lang.Object[]):::EXIT
+javautil.Vector13.copyInto(java.lang.Object[]):::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -131,16 +131,16 @@ javautil.Vector.copyInto(java.lang.Object[]):::EXIT
 (EQ (typeof (select |elementData| |this|)) (typeof |__orig__anArray|))
 (IMPLIES (EQ (arrayLength |__orig__anArray|) 0) (EQ (select |elementCount| |this|) 0))
 (<= (select |elementCount| |this|) (arrayLength |__orig__anArray|))
-(< (select |serialVersionUID| (select |Vector| |javautil|)) (- (arrayLength |anArray|) 1))
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) (- (arrayLength |anArray|) 1))
 ===========================================================================
-javautil.Vector.elementAt(int):::ENTER
+javautil.Vector13.elementAt(int):::ENTER
 (>= |index| 0)
 (> (select |elementCount| |this|) |index|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |index|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |index|)
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |index| 0))
 (<= |index| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.elementAt(int):::EXIT
+javautil.Vector13.elementAt(int):::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -156,23 +156,23 @@ warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputForma
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |__orig__index| 0))
 (<= |__orig__index| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.elements():::ENTER
+javautil.Vector13.elements():::ENTER
 ===========================================================================
-javautil.Vector.elements():::EXIT
+javautil.Vector13.elements():::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (NEQ (hash |return|) null)
-(EQ (typeof |return|) |T_javautil.VectorEnumerator|)
+(EQ (typeof |return|) |T_javautil.VectorEnumerator13|)
 (NEQ (typeof (select |elementData| |this|)) (typeof |return|))
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 ===========================================================================
-javautil.Vector.ensureCapacity(int):::ENTER
+javautil.Vector13.ensureCapacity(int):::ENTER
 (>= |minCapacity| 0)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |minCapacity|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |minCapacity|)
 ===========================================================================
-javautil.Vector.ensureCapacity(int):::EXIT
+javautil.Vector13.ensureCapacity(int):::EXIT
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1)) (<= 0 |j|) (<= |j| (- (select |elementCount| |this|) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
@@ -189,13 +189,13 @@ format_simplify can't handle one of these sequences: this.elementData[] is a sup
 (>= (- (arrayLength (select |elementData| |this|)) 1) (- (arrayLength (select |elementData| |__orig__this|)) 1))
 format_simplify disabled
 ===========================================================================
-javautil.Vector.ensureCapacityHelper(int):::ENTER
+javautil.Vector13.ensureCapacityHelper(int):::ENTER
 (>= |minCapacity| 1)
 (< (select |elementCount| |this|) |minCapacity|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |minCapacity|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |minCapacity|)
 (> |minCapacity| (arrayLength (select |elementData| |this|)))
 ===========================================================================
-javautil.Vector.ensureCapacityHelper(int):::EXIT
+javautil.Vector13.ensureCapacityHelper(int):::EXIT
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (EQ (hash (select (select elems (select |elementData| |this|)) (select |elementCount| |this|))) (hash (select (select elems (select |elementData| |this|)) (- |__orig__minCapacity| 1))))
@@ -222,10 +222,10 @@ format_simplify disabled
 format_simplify disabled
 format_simplify disabled
 ===========================================================================
-javautil.Vector.firstElement():::ENTER
+javautil.Vector13.firstElement():::ENTER
 (>= (select |elementCount| |this|) 1)
 ===========================================================================
-javautil.Vector.firstElement():::EXIT
+javautil.Vector13.firstElement():::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -238,12 +238,12 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() in this.elementData[].getClass()
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|) |return|))))
 ===========================================================================
-javautil.Vector.indexOf(java.lang.Object):::ENTER
+javautil.Vector13.indexOf(java.lang.Object):::ENTER
 (NEQ (hash |elem|) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |elem|))
 ===========================================================================
-javautil.Vector.indexOf(java.lang.Object):::EXIT
+javautil.Vector13.indexOf(java.lang.Object):::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -252,17 +252,17 @@ javautil.Vector.indexOf(java.lang.Object):::EXIT
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__elem|))
 (> (select |elementCount| |this|) |return|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |return|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |return|)
 (<= |return| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.indexOf(java.lang.Object, int):::ENTER
+javautil.Vector13.indexOf(java.lang.Object, int):::ENTER
 (NEQ (hash |elem|) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass() is printable
 (>= |index| 0)
 (NEQ (typeof (select |elementData| |this|)) (typeof |elem|))
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |index|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |index|)
 ===========================================================================
-javautil.Vector.indexOf(java.lang.Object, int):::EXIT274
+javautil.Vector13.indexOf(java.lang.Object, int):::EXIT274
 (EQ (hash |__orig__elem|) (hash (select (select elems (select |elementData| |this|)) |return|)))
 (EQ (hash |__orig__elem|) (hash (select (select elems (select |elementData| |__orig__this|)) |return|)))
 (>= (select |elementCount| |this|) 1)
@@ -274,13 +274,13 @@ warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputForma
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |__orig__index| 0))
 (<= |__orig__index| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.indexOf(java.lang.Object, int):::EXIT277
+javautil.Vector13.indexOf(java.lang.Object, int):::EXIT277
 (EQ |return| -1)
 (AND (EQ (+ 1 (- |return| 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| |return|)) (NEQ (select (select elems (select |elementData| |this|)) |i|)  null))))
 (> (select |capacityIncrement| |this|) |return|)
 (< |return| |__orig__index|)
 ===========================================================================
-javautil.Vector.indexOf(java.lang.Object, int):::EXIT
+javautil.Vector13.indexOf(java.lang.Object, int):::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -303,21 +303,21 @@ javautil.Vector.indexOf(java.lang.Object, int):::EXIT
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__elem|))
 (> (select |elementCount| |this|) |return|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |return|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |return|)
 (IMPLIES (EQ |return| 0) (EQ |__orig__index| 0))
 (<= |return| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.insertElementAt(java.lang.Object, int):::ENTER
+javautil.Vector13.insertElementAt(java.lang.Object, int):::ENTER
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass() is printable
 (>= |index| 0)
 (NEQ (typeof (select |elementData| |this|)) (typeof |obj|))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (EQ |index| 0))
 (>= (select |elementCount| |this|) |index|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |index|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |index|)
 (IMPLIES (EQ (arrayLength (select |elementData| |this|)) 0) (EQ |index| 0))
 (<= |index| (arrayLength (select |elementData| |this|)))
 ===========================================================================
-javautil.Vector.insertElementAt(java.lang.Object, int):::EXIT
+javautil.Vector13.insertElementAt(java.lang.Object, int):::EXIT
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (EQ (hash |__orig__obj|) (hash (select (select elems (select |elementData| |this|)) |__orig__index|)))
 (EQ (hash (select (select elems (select |elementData| |this|)) (- (select |elementCount| |this|) 1))) (hash (select (select elems (select |elementData| |this|)) (select |elementCount| |__orig__this|))))
@@ -329,7 +329,7 @@ javautil.Vector.insertElementAt(java.lang.Object, int):::EXIT
 warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass()) in this.elementData[].getClass()
 (EQ 0 (+ (+ (select |elementCount| |this|) (* -1 (select |elementCount| |__orig__this|))) -1))
 (> (select |elementCount| |this|) |__orig__index|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) (select |elementCount| |__orig__this|))
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) (select |elementCount| |__orig__this|))
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ (select |elementCount| |__orig__this|) 0))
 (<= (select |elementCount| |__orig__this|) (- (arrayLength (select |elementData| |this|)) 1))
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |__orig__index| 0))
@@ -337,9 +337,9 @@ warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputForma
 (>= (arrayLength (select |elementData| |this|)) (arrayLength (select |elementData| |__orig__this|)))
 (>= (- (arrayLength (select |elementData| |this|)) 1) (- (arrayLength (select |elementData| |__orig__this|)) 1))
 ===========================================================================
-javautil.Vector.isEmpty():::ENTER
+javautil.Vector13.isEmpty():::ENTER
 ===========================================================================
-javautil.Vector.isEmpty():::EXIT
+javautil.Vector13.isEmpty():::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -347,18 +347,18 @@ javautil.Vector.isEmpty():::EXIT
 (IFF (EQ (select |elementCount| |this|) 0) (EQ |return| |@true|))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (AND))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (<= (select |elementCount| |this|) (select |capacityIncrement| |this|)))
-(IMPLIES (EQ (select |elementCount| |this|) 0) (EQ (select |elementCount| |this|) (|java-/| (arrayLength (select |elementData| |this|)) (select |serialVersionUID| (select |Vector| |javautil|)))))
-(IMPLIES (EQ (select |elementCount| |this|) 0) (EQ (select |elementCount| |this|) (|java-/| (- (arrayLength (select |elementData| |this|)) 1) (select |serialVersionUID| (select |Vector| |javautil|)))))
-(IMPLIES (EQ (select |elementCount| |this|) 0) (EQ (select |elementCount| |this|) (|java-/| (select |capacityIncrement| |this|) (select |serialVersionUID| (select |Vector| |javautil|)))))
+(IMPLIES (EQ (select |elementCount| |this|) 0) (EQ (select |elementCount| |this|) (|java-/| (arrayLength (select |elementData| |this|)) (select |serialVersionUID| (select |Vector13| |javautil|)))))
+(IMPLIES (EQ (select |elementCount| |this|) 0) (EQ (select |elementCount| |this|) (|java-/| (- (arrayLength (select |elementData| |this|)) 1) (select |serialVersionUID| (select |Vector13| |javautil|)))))
+(IMPLIES (EQ (select |elementCount| |this|) 0) (EQ (select |elementCount| |this|) (|java-/| (select |capacityIncrement| |this|) (select |serialVersionUID| (select |Vector13| |javautil|)))))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (AND (EQ (+ 1 (- (- (select |elementCount| |this|) 1) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|)  null)))))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null))))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (typeof (select (select elems (select |elementData| |this|)) |i|)) |T_null|))))
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 ===========================================================================
-javautil.Vector.lastElement():::ENTER
+javautil.Vector13.lastElement():::ENTER
 (>= (select |elementCount| |this|) 1)
 ===========================================================================
-javautil.Vector.lastElement():::EXIT
+javautil.Vector13.lastElement():::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -373,12 +373,12 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() in this.elementData[].getClass()
 ===========================================================================
-javautil.Vector.lastIndexOf(java.lang.Object):::ENTER
+javautil.Vector13.lastIndexOf(java.lang.Object):::ENTER
 (NEQ (hash |elem|) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |elem|))
 ===========================================================================
-javautil.Vector.lastIndexOf(java.lang.Object):::EXIT
+javautil.Vector13.lastIndexOf(java.lang.Object):::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -387,19 +387,19 @@ javautil.Vector.lastIndexOf(java.lang.Object):::EXIT
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__elem|))
 (> (select |elementCount| |this|) |return|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |return|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |return|)
 (<= |return| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.lastIndexOf(java.lang.Object, int):::ENTER
+javautil.Vector13.lastIndexOf(java.lang.Object, int):::ENTER
 (NEQ (hash |elem|) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass() is printable
 (>= |index| -1)
 (NEQ (typeof (select |elementData| |this|)) (typeof |elem|))
 (> (select |elementCount| |this|) |index|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |index|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |index|)
 (<= |index| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.lastIndexOf(java.lang.Object, int):::EXIT307
+javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT307
 (EQ (hash |__orig__elem|) (hash (select (select elems (select |elementData| |this|)) |return|)))
 (EQ (hash |__orig__elem|) (hash (select (select elems (select |elementData| |__orig__this|)) |return|)))
 (>= (select |elementCount| |this|) 1)
@@ -410,12 +410,12 @@ warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputForma
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |return| 0))
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |__orig__index| 0))
 ===========================================================================
-javautil.Vector.lastIndexOf(java.lang.Object, int):::EXIT310
+javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT310
 (EQ |return| -1)
 (AND (EQ (+ 1 (- |return| 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| |return|)) (NEQ (select (select elems (select |elementData| |this|)) |i|)  null))))
 (> (select |capacityIncrement| |this|) |return|)
 ===========================================================================
-javautil.Vector.lastIndexOf(java.lang.Object, int):::EXIT
+javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -438,14 +438,14 @@ javautil.Vector.lastIndexOf(java.lang.Object, int):::EXIT
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__elem|))
 (> (select |elementCount| |this|) |return|)
 (> (select |elementCount| |this|) |__orig__index|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |return|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |return|)
 (<= |return| |__orig__index|)
 (<= |return| (- (arrayLength (select |elementData| |this|)) 1))
 (<= |__orig__index| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.removeAllElements():::ENTER
+javautil.Vector13.removeAllElements():::ENTER
 ===========================================================================
-javautil.Vector.removeAllElements():::EXIT
+javautil.Vector13.removeAllElements():::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (EQ (arrayLength (select |elementData| |this|)) (arrayLength (select |elementData| |__orig__this|)))
@@ -457,20 +457,20 @@ javautil.Vector.removeAllElements():::EXIT
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (<= (select |elementCount| |this|) (select |capacityIncrement| |this|))
 (<= (select |elementCount| |this|) (select |elementCount| |__orig__this|))
-(< (select |serialVersionUID| (select |Vector| |javautil|)) (select |elementCount| |__orig__this|))
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) (select |elementCount| |__orig__this|))
 (IMPLIES (EQ (arrayLength (select |elementData| |this|)) 0) (EQ (select |elementCount| |__orig__this|) 0))
 (<= (select |elementCount| |__orig__this|) (arrayLength (select |elementData| |this|)))
-(EQ (select |elementCount| |this|) (|java-/| (select |capacityIncrement| |this|) (select |serialVersionUID| (select |Vector| |javautil|))))
-(EQ (select |elementCount| |this|) (|java-/| (select |elementCount| |__orig__this|) (select |serialVersionUID| (select |Vector| |javautil|))))
-(EQ (select |elementCount| |this|) (|java-/| (arrayLength (select |elementData| |this|)) (select |serialVersionUID| (select |Vector| |javautil|))))
-(EQ (select |elementCount| |this|) (|java-/| (- (arrayLength (select |elementData| |this|)) 1) (select |serialVersionUID| (select |Vector| |javautil|))))
+(EQ (select |elementCount| |this|) (|java-/| (select |capacityIncrement| |this|) (select |serialVersionUID| (select |Vector13| |javautil|))))
+(EQ (select |elementCount| |this|) (|java-/| (select |elementCount| |__orig__this|) (select |serialVersionUID| (select |Vector13| |javautil|))))
+(EQ (select |elementCount| |this|) (|java-/| (arrayLength (select |elementData| |this|)) (select |serialVersionUID| (select |Vector13| |javautil|))))
+(EQ (select |elementCount| |this|) (|java-/| (- (arrayLength (select |elementData| |this|)) 1) (select |serialVersionUID| (select |Vector13| |javautil|))))
 ===========================================================================
-javautil.Vector.removeElement(java.lang.Object):::ENTER
+javautil.Vector13.removeElement(java.lang.Object):::ENTER
 (NEQ (hash |obj|) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |obj|))
 ===========================================================================
-javautil.Vector.removeElement(java.lang.Object):::EXIT480
+javautil.Vector13.removeElement(java.lang.Object):::EXIT480
 (EQ (hash (select (select elems (select |elementData| |this|)) (select |elementCount| |this|))) (hash (select (select elems (select |elementData| |this|)) (- (select |elementCount| |__orig__this|) 1))))
 (FORALL (|i| |j|) (IMPLIES (AND (<= (+ (select |elementCount| |this|) 1) |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= (+ (select |elementCount| |this|) 1) |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (FORALL (|i| |j|) (IMPLIES (AND (<= (+ (select |elementCount| |this|) 1) |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= (select |elementCount| |__orig__this|) |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ (- |i| (+ (select |elementCount| |this|) 1)) (- |j| (select |elementCount| |__orig__this|)))) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
@@ -486,12 +486,12 @@ warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputForma
 (FORALL (|i|) (IMPLIES (AND (<= (select |elementCount| |this|) |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |this|)) (select |elementCount| |this|)))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (select |elementCount| |this|))(EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))))
 ===========================================================================
-javautil.Vector.removeElement(java.lang.Object):::EXIT482
+javautil.Vector13.removeElement(java.lang.Object):::EXIT482
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ |return| |@false|)
 ===========================================================================
-javautil.Vector.removeElement(java.lang.Object):::EXIT
+javautil.Vector13.removeElement(java.lang.Object):::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (EQ (arrayLength (select |elementData| |this|)) (arrayLength (select |elementData| |__orig__this|)))
@@ -517,20 +517,20 @@ javautil.Vector.removeElement(java.lang.Object):::EXIT
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__obj|))
 (IMPLIES (EQ (select |elementCount| |__orig__this|) 0) (EQ (select |elementCount| |this|) 0))
 (<= (select |elementCount| |this|) (select |elementCount| |__orig__this|))
-(< (select |serialVersionUID| (select |Vector| |javautil|)) (select |elementCount| |__orig__this|))
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) (select |elementCount| |__orig__this|))
 (IMPLIES (EQ (arrayLength (select |elementData| |this|)) 0) (EQ (select |elementCount| |__orig__this|) 0))
 (<= (select |elementCount| |__orig__this|) (arrayLength (select |elementData| |this|)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (select |elementCount| |__orig__this|) 1))(EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))))
 ===========================================================================
-javautil.Vector.removeElementAt(int):::ENTER
+javautil.Vector13.removeElementAt(int):::ENTER
 (>= (select |elementCount| |this|) 1)
 (>= |index| 0)
 (> (select |elementCount| |this|) |index|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |index|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |index|)
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |index| 0))
 (<= |index| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.removeElementAt(int):::EXIT
+javautil.Vector13.removeElementAt(int):::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (EQ (arrayLength (select |elementData| |this|)) (arrayLength (select |elementData| |__orig__this|)))
@@ -546,7 +546,7 @@ javautil.Vector.removeElementAt(int):::EXIT
 (>= (select |elementCount| |this|) |__orig__index|)
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ (select |elementCount| |this|) 0))
 (<= (select |elementCount| |this|) (- (arrayLength (select |elementData| |this|)) 1))
-(< (select |serialVersionUID| (select |Vector| |javautil|)) (select |elementCount| |__orig__this|))
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) (select |elementCount| |__orig__this|))
 (<= (select |elementCount| |__orig__this|) (arrayLength (select |elementData| |this|)))
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |__orig__index| 0))
 (<= |__orig__index| (- (arrayLength (select |elementData| |this|)) 1))
@@ -554,16 +554,16 @@ javautil.Vector.removeElementAt(int):::EXIT
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (select |elementCount| |this|))(EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))))
 format_simplify disabled
 ===========================================================================
-javautil.Vector.setElementAt(java.lang.Object, int):::ENTER
+javautil.Vector13.setElementAt(java.lang.Object, int):::ENTER
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass() is printable
 (>= |index| 0)
 (NEQ (typeof (select |elementData| |this|)) (typeof |obj|))
 (> (select |elementCount| |this|) |index|)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |index|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |index|)
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |index| 0))
 (<= |index| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
-javautil.Vector.setElementAt(java.lang.Object, int):::EXIT
+javautil.Vector13.setElementAt(java.lang.Object, int):::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
@@ -584,17 +584,17 @@ warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputForma
 (<= |__orig__index| (- (arrayLength (select |elementData| |this|)) 1))
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) (- (select |elementCount| |__orig__this|) 1))))))
 ===========================================================================
-javautil.Vector.setSize(int):::ENTER
+javautil.Vector13.setSize(int):::ENTER
 (>= |newSize| 0)
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |newSize|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |newSize|)
 ===========================================================================
-javautil.Vector.setSize(int):::EXIT
+javautil.Vector13.setSize(int):::EXIT
 (EQ (select |elementCount| |this|) |__orig__newSize|)
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (FORALL (|i|) (IMPLIES (AND (<= (select |elementCount| |__orig__this|) |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null)))
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (IMPLIES (EQ (arrayLength (select |elementData| |this|)) 0) (EQ (select |capacityIncrement| |this|) 0))
-(< (select |serialVersionUID| (select |Vector| |javautil|)) (select |elementCount| |__orig__this|))
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) (select |elementCount| |__orig__this|))
 (IMPLIES (EQ (arrayLength (select |elementData| |this|)) 0) (EQ (select |elementCount| |__orig__this|) 0))
 (<= (select |elementCount| |__orig__this|) (arrayLength (select |elementData| |this|)))
 (IMPLIES (EQ (arrayLength (select |elementData| |this|)) 0) (EQ (arrayLength (select |elementData| |__orig__this|)) 0))
@@ -603,9 +603,9 @@ javautil.Vector.setSize(int):::EXIT
 format_simplify disabled
 (EQ (arrayLength (select |elementData| |this|)) (max (select |elementCount| |this|) (arrayLength (select |elementData| |__orig__this|))))
 ===========================================================================
-javautil.Vector.size():::ENTER
+javautil.Vector13.size():::ENTER
 ===========================================================================
-javautil.Vector.size():::EXIT
+javautil.Vector13.size():::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) |return|)
@@ -614,13 +614,13 @@ javautil.Vector.size():::EXIT
 (>= |return| 0)
 (FORALL (|i|) (IMPLIES (AND (<= |return| |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null)))
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
-(< (select |serialVersionUID| (select |Vector| |javautil|)) |return|)
+(< (select |serialVersionUID| (select |Vector13| |javautil|)) |return|)
 (IMPLIES (EQ (arrayLength (select |elementData| |this|)) 0) (EQ |return| 0))
 (<= |return| (arrayLength (select |elementData| |this|)))
 ===========================================================================
-javautil.Vector.toString():::ENTER
+javautil.Vector13.toString():::ENTER
 ===========================================================================
-javautil.Vector.toString():::EXIT
+javautil.Vector13.toString():::EXIT
 (EQ (hash (select |elementData| |this|)) (hash (select |elementData| |__orig__this|)))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
@@ -629,9 +629,9 @@ javautil.Vector.toString():::EXIT
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.toString is printable
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 ===========================================================================
-javautil.Vector.trimToSize():::ENTER
+javautil.Vector13.trimToSize():::ENTER
 ===========================================================================
-javautil.Vector.trimToSize():::EXIT
+javautil.Vector13.trimToSize():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (select |elementCount| |this|) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (select |elementCount| |__orig__this|) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))

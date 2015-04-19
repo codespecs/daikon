@@ -4,7 +4,7 @@ elementData.length
 contains(Object elem)
 indexOf(elem, 0)>= 0
 elements()
-new VectorEnumerator(this)
+new VectorEnumerator13(this)
 indexOf(Object elem)
 indexOf(elem, 0)
 isEmpty()
@@ -14,65 +14,65 @@ lastIndexOf(elem, elementCount-1)
 size()
 elementCount
 
-PPT_NAME javautil.Vector.addElement
+PPT_NAME javautil.Vector13.addElement
 newcount > elementData.length
 orig(newcount > elementData.length)
 
-PPT_NAME javautil.Vector.contains
+PPT_NAME javautil.Vector13.contains
 indexOf(elem, 0)>= 0
 orig(indexOf(elem, 0)>= 0)
 
-PPT_NAME javautil.Vector.copyInto
+PPT_NAME javautil.Vector13.copyInto
 i-- > 0
 orig(i-- > 0)
 
-PPT_NAME javautil.Vector.elementAt
+PPT_NAME javautil.Vector13.elementAt
 index >= elementCount
 orig(index >= elementCount)
 
-PPT_NAME javautil.Vector.ensureCapacity
+PPT_NAME javautil.Vector13.ensureCapacity
 minCapacity > elementData.length
 orig(minCapacity > elementData.length)
 
-PPT_NAME javautil.Vector.ensureCapacityHelper
+PPT_NAME javautil.Vector13.ensureCapacityHelper
 newCapacity < minCapacity
 orig(newCapacity < minCapacity)
 
-PPT_NAME javautil.Vector.firstElement
+PPT_NAME javautil.Vector13.firstElement
 elementCount == 0
 orig(elementCount == 0)
 
-PPT_NAME javautil.Vector.indexOf
+PPT_NAME javautil.Vector13.indexOf
 elem.equals(elementData[i])
 i < elementCount
 orig(elem.equals(elementData[i]))
 orig(i < elementCount)
 
-PPT_NAME javautil.Vector.insertElementAt
+PPT_NAME javautil.Vector13.insertElementAt
 index >= newcount
 newcount > elementData.length
 orig(index >= newcount)
 orig(newcount > elementData.length)
 
-PPT_NAME javautil.Vector.isEmpty
+PPT_NAME javautil.Vector13.isEmpty
 elementCount == 0
 orig(elementCount == 0)
 
-PPT_NAME javautil.Vector.lastElement
+PPT_NAME javautil.Vector13.lastElement
 elementCount == 0
 orig(elementCount == 0)
 
-PPT_NAME javautil.Vector.lastIndexOf
+PPT_NAME javautil.Vector13.lastIndexOf
 elem.equals(elementData[i])
 i >= 0
 orig(elem.equals(elementData[i]))
 orig(i >= 0)
 
-PPT_NAME javautil.Vector.removeAllElements
+PPT_NAME javautil.Vector13.removeAllElements
 i < elementCount
 orig(i < elementCount)
 
-PPT_NAME javautil.Vector.removeElement
+PPT_NAME javautil.Vector13.removeElement
 false
 i >= 0
 orig(false)
@@ -80,7 +80,7 @@ orig(i >= 0)
 orig(true)
 true
 
-PPT_NAME javautil.Vector.removeElementAt
+PPT_NAME javautil.Vector13.removeElementAt
 index < 0
 index >= elementCount
 j > 0
@@ -88,23 +88,23 @@ orig(index < 0)
 orig(index >= elementCount)
 orig(j > 0)
 
-PPT_NAME javautil.Vector.setElementAt
+PPT_NAME javautil.Vector13.setElementAt
 index >= elementCount
 orig(index >= elementCount)
 
-PPT_NAME javautil.Vector.setSize
+PPT_NAME javautil.Vector13.setSize
 (newSize > elementCount)&&(newSize > elementData.length)
 i < elementCount
 orig((newSize > elementCount)&&(newSize > elementData.length))
 orig(i < elementCount)
 
-PPT_NAME javautil.Vector.toString
+PPT_NAME javautil.Vector13.toString
 i < max
 i <= max
 orig(i < max)
 orig(i <= max)
 
-PPT_NAME javautil.Vector.trimToSize
+PPT_NAME javautil.Vector13.trimToSize
 elementCount < oldCapacity
 orig(elementCount < oldCapacity)
 

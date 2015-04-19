@@ -40,7 +40,7 @@ import java.util.NoSuchElementException;
  * @since   JDK1.0
  */
 public
-class Vector implements Cloneable, java.io.Serializable {
+class Vector13 implements Cloneable, java.io.Serializable {
 /*@ invariant this.elementCount >= 0 */
 /*@ invariant this.elementCount <= this.elementData.length */
 /*@ invariant this.capacityIncrement >= 0 */
@@ -85,7 +85,7 @@ class Vector implements Cloneable, java.io.Serializable {
      *                              increased when the vector overflows.
      * @since   JDK1.0
      */
-    public Vector(int initialCapacity, int capacityIncrement) 
+    public Vector13(int initialCapacity, int capacityIncrement) 
 /*@ requires initialCapacity >= 0 */
 /*@ requires capacityIncrement >= 0 */
 /*@ ensures initialCapacity == this.elementData.length */
@@ -105,7 +105,7 @@ class Vector implements Cloneable, java.io.Serializable {
      * @param   initialCapacity   the initial capacity of the vector.
      * @since   JDK1.0
      */
-    public Vector(int initialCapacity) 
+    public Vector13(int initialCapacity) 
 /*@ requires initialCapacity >= 0 */
 /*@ ensures initialCapacity == this.elementData.length */
 /*@ ensures this.elementCount == this.capacityIncrement */
@@ -121,7 +121,7 @@ class Vector implements Cloneable, java.io.Serializable {
      *
      * @since   JDK1.0
      */
-    public Vector() 
+    public Vector13() 
 /*@ ensures this.elementCount == this.capacityIncrement */
 /*@ ensures (this.elementData.length == 10) && ((\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null))) */
 /*@ ensures this.elementCount == 0 */
@@ -139,7 +139,7 @@ class Vector implements Cloneable, java.io.Serializable {
      * @since   JDK1.0
      */
     public final synchronized void copyInto(Object[] anArray) 
-    //@ requires !(\typeof(anArray.owner) <: \type(javautil.Vector))
+    //@ requires !(\typeof(anArray.owner) <: \type(javautil.Vector13))
 /*@ requires \typeof(anArray) == \typeof(this.elementData) */
 /*@ requires anArray != null */
 /*@ requires this.elementCount <= anArray.length */
@@ -313,7 +313,7 @@ class Vector implements Cloneable, java.io.Serializable {
     public final synchronized Enumeration elements() 
 /*@ ensures \result != null */
 {
-	return new VectorEnumerator(this);
+	return new VectorEnumerator13(this);
     }
     
     /**
@@ -677,10 +677,10 @@ class Vector implements Cloneable, java.io.Serializable {
      */
     public synchronized Object clone() 
 /*@ also_ensures \result != null */
-/*# also_ensures \typeof(\result) == \type(javautil.Vector) */
+/*# also_ensures \typeof(\result) == \type(javautil.Vector13) */
 {
 	try { 
-	    Vector v = (Vector)super.clone();
+	    Vector13 v = (Vector13)super.clone();
 	    //@ assume v.elementCount == this.elementCount
 	    //@ assume v.elementData == this.elementData
 	    //@ assume v.capacityIncrement == this.capacityIncrement

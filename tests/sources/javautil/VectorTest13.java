@@ -2,16 +2,16 @@ package javautil;
 
 import junit.framework.*;
 
-public class VectorTest extends TestCase {
+public class VectorTest13 extends TestCase {
 
   public static final int NUM = 5;
 
-  Vector v;
-  Vector[] vectors = new Vector[NUM];
+  Vector13 v;
+  Vector13[] vectors = new Vector13[NUM];
 
   Object[] o = new Object[NUM];
 
-  public VectorTest(String name) {
+  public VectorTest13(String name) {
     super(name);
     o[0] = new Object();
     o[1] = o[0];
@@ -20,7 +20,7 @@ public class VectorTest extends TestCase {
     o[4] = new Integer(1);
     
     for (int i=0; i < NUM; i++) {
-      vectors[i] = new Vector(NUM);
+      vectors[i] = new Vector13(NUM);
       for (int j=0; j < i; j++) {
         vectors[i].addElement(o[j]);
       }
@@ -29,19 +29,19 @@ public class VectorTest extends TestCase {
   }
 
   public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite(VectorTest.class));
+    junit.textui.TestRunner.run(new TestSuite(VectorTest13.class));
   }
 
   public void testConstructorNoArg() {
     for (int i=0; i < NUM; i++) {
-      v = new Vector();
+      v = new Vector13();
     }
   }
 
   public void testConstructorOneArg() {
     for (int j=0; j < 50; j++) {
       for (int i=0; i < NUM; i++) {
-        v = new Vector(i);
+        v = new Vector13(i);
       }
     }
   }
@@ -49,7 +49,7 @@ public class VectorTest extends TestCase {
   public void testConstructorTwoArg() {
     for (int i=0; i < NUM; i++) {
       for (int j=0; j < NUM; j++) {
-        v = new Vector(i, j);
+        v = new Vector13(i, j);
       }
     }
   }
@@ -57,7 +57,7 @@ public class VectorTest extends TestCase {
   
   public void testCopyInto() {
     VectorCommand c = new VectorCommand() {
-        public void run(Vector v, int cap, int inc, int elems) {
+        public void run(Vector13 v, int cap, int inc, int elems) {
           Object[] a;
           a = new Object[elems];
           v.copyInto(a);
@@ -74,7 +74,7 @@ public class VectorTest extends TestCase {
 
   public void testTrimToSize() {
     VectorCommand c = new VectorCommand() {
-        public void run(Vector v, int cap, int inc, int elems) {
+        public void run(Vector13 v, int cap, int inc, int elems) {
           v.trimToSize();
         }
       };
@@ -84,7 +84,7 @@ public class VectorTest extends TestCase {
 
   public void testEnsureCapacity() {
     VectorCommand c = new VectorCommand() {
-        public void run(Vector v, int cap, int inc, int elems) {
+        public void run(Vector13 v, int cap, int inc, int elems) {
           for (int i=0; i < NUM+1; i++) {
             v.ensureCapacity(i);
           }
@@ -102,7 +102,7 @@ public class VectorTest extends TestCase {
   
   public void testSetSize() {
     VectorCommand c = new VectorCommand() {
-        public void run(Vector v, int cap, int inc, int elems) {
+        public void run(Vector13 v, int cap, int inc, int elems) {
           v.setSize((cap + inc) % (NUM+1));
         }
       };
@@ -111,7 +111,7 @@ public class VectorTest extends TestCase {
   
   public void testObservers() {
     VectorCommand c = new VectorCommand() {
-        public void run(Vector v, int cap, int inc, int elems) {
+        public void run(Vector13 v, int cap, int inc, int elems) {
           v.size();
           v.isEmpty();
           v.elements();
@@ -153,7 +153,7 @@ public class VectorTest extends TestCase {
 
   public void testSetElementAt() {
     VectorCommand c = new VectorCommand() {
-        public void run(Vector v, int cap, int inc, int elems) {
+        public void run(Vector13 v, int cap, int inc, int elems) {
           for (int i=0; i < elems; i++) {
             v.setElementAt(o[i], i);
           }
@@ -164,7 +164,7 @@ public class VectorTest extends TestCase {
 
   public void testRemoveElementAt() {
     VectorCommand c = new VectorCommand() {
-        public void run(Vector v, int cap, int inc, int elems) {
+        public void run(Vector13 v, int cap, int inc, int elems) {
           if (elems > 0) {
             v.removeElementAt((cap + inc) % elems);
           }
@@ -175,7 +175,7 @@ public class VectorTest extends TestCase {
 
   public void testInsertElementAt() {
     VectorCommand c = new VectorCommand() {
-        public void run(Vector v, int cap, int inc, int elems) {
+        public void run(Vector13 v, int cap, int inc, int elems) {
           if (elems == 0) {
             v.insertElementAt(o[(cap + inc) % NUM], 0);
           } else {
@@ -191,7 +191,7 @@ public class VectorTest extends TestCase {
     for (int cap=0; cap < NUM; cap++) {
       for (int inc=0; inc < NUM; inc++) {
         for (int elems=0; elems < NUM+1; elems++) {
-          v = new Vector(cap, inc);
+          v = new Vector13(cap, inc);
           for (int elem=0; elem < elems; elem++) {
             // Add the elements in different order sometimes
             v.addElement(o[(elem + cap) % elems]);
@@ -205,7 +205,7 @@ public class VectorTest extends TestCase {
 
   public void testRemoveElement() {
     VectorCommand c = new VectorCommand() {
-        public void run(Vector v, int cap, int inc, int elems) {
+        public void run(Vector13 v, int cap, int inc, int elems) {
           Object obj = o[(cap+inc) % NUM];
           obj = (obj != null) ? obj : new Object();
           v.removeElement(obj);
@@ -216,7 +216,7 @@ public class VectorTest extends TestCase {
 
   public void testRemoveAllElements() {
     VectorCommand c = new VectorCommand() {
-        public void run(Vector v, int cap, int inc, int elems) {
+        public void run(Vector13 v, int cap, int inc, int elems) {
           v.removeAllElements();
         }
       };
@@ -224,7 +224,7 @@ public class VectorTest extends TestCase {
   }
 
   private interface VectorCommand {
-    public abstract void run(Vector v, int cap, int inc, int elems);
+    public abstract void run(Vector13 v, int cap, int inc, int elems);
   }
 
 }

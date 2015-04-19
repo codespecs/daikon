@@ -40,17 +40,17 @@ import java.util.NoSuchElementException;
  * @since   JDK1.0
  */
 public
-class Vector implements Cloneable, java.io.Serializable {
+class Vector13 implements Cloneable, java.io.Serializable {
     /*@ invariant this.elementData != null; */
     /*@ invariant \typeof(this.elementData) == \type(java.lang.Object[]); */
     /*@ invariant this.elementCount >= 0; */
     /*@ invariant this.capacityIncrement >= 0; */
     /*@ invariant (\forall int i; (this.elementCount <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null)); */
-    /*@ invariant this.elementCount > javautil.Vector.serialVersionUID; */
+    /*@ invariant this.elementCount > javautil.Vector13.serialVersionUID; */
     /*@ invariant (this.elementData.length == 0) ==> (this.elementCount == 0); */
     /*@ invariant this.elementCount <= this.elementData.length; */
-    /*@ invariant this.capacityIncrement > javautil.Vector.serialVersionUID; */
-    /*@ invariant javautil.Vector.serialVersionUID < this.elementData.length-1; */
+    /*@ invariant this.capacityIncrement > javautil.Vector13.serialVersionUID; */
+    /*@ invariant javautil.Vector13.serialVersionUID < this.elementData.length-1; */
     /**
      * The array buffer into which the components of the vector are 
      * stored. The capacity of the vector is the length of this array buffer.
@@ -98,7 +98,7 @@ class Vector implements Cloneable, java.io.Serializable {
      *                              increased when the vector overflows.
      * @since   JDK1.0
      */
-    public Vector(int initialCapacity, int capacityIncrement) {
+    public Vector13(int initialCapacity, int capacityIncrement) {
 	super();
 	this.elementData = new Object[initialCapacity];
 	this.capacityIncrement = capacityIncrement;
@@ -118,7 +118,7 @@ class Vector implements Cloneable, java.io.Serializable {
      * @param   initialCapacity   the initial capacity of the vector.
      * @since   JDK1.0
      */
-    public Vector(int initialCapacity) {
+    public Vector13(int initialCapacity) {
 	this(initialCapacity, 0);
     }
 
@@ -138,7 +138,7 @@ class Vector implements Cloneable, java.io.Serializable {
      *
      * @since   JDK1.0
      */
-    public Vector() {
+    public Vector13() {
 	this(10);
     }
 
@@ -147,14 +147,14 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ requires \typeof(this.elementData) == \typeof(anArray); */
     /*@ requires (anArray.length == 0) ==> (this.elementCount == 0); */
     /*@ requires this.elementCount <= anArray.length; */
-    /*@ requires javautil.Vector.serialVersionUID < anArray.length-1; */
+    /*@ requires javautil.Vector13.serialVersionUID < anArray.length-1; */
     /*@ modifies anArray[*], this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1], anArray[this.elementCount], anArray[this.elementCount-1], anArray[this.elementCount+1..], anArray[0..this.elementCount], anArray[0..this.elementCount-1], anArray[this.capacityIncrement], anArray[this.capacityIncrement-1], anArray[this.capacityIncrement..], anArray[this.capacityIncrement+1..], anArray[0..this.capacityIncrement], anArray[0..this.capacityIncrement-1]; */
     /*@ ensures (\forall int i, j; (this.elementCount <= i && i <= anArray.length-1 && this.elementCount <= j && j <= anArray.length-1) ==> (anArray[i] == anArray[j])); */
     /*@ ensures \typeof(this.elementData) == \old(\typeof(this.elementData)); */
     /*@ ensures \typeof(this.elementData) == \old(\typeof(anArray)); */
     /*@ ensures (\old(anArray.length) == 0) ==> (this.elementCount == 0); */
     /*@ ensures this.elementCount <= \old(anArray.length); */
-    /*@ ensures javautil.Vector.serialVersionUID < anArray.length-1; */
+    /*@ ensures javautil.Vector13.serialVersionUID < anArray.length-1; */
     /**
      * Copies the components of this vector into the specified array. 
      * The array must be big enough to hold all the objects in this  vector.
@@ -193,7 +193,7 @@ class Vector implements Cloneable, java.io.Serializable {
     }
 
     /*@ requires minCapacity >= 0; */
-    /*@ requires javautil.Vector.serialVersionUID < minCapacity; */
+    /*@ requires javautil.Vector13.serialVersionUID < minCapacity; */
     /*@ modifies this.elementData, this.elementData[*], this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount..], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
     /*@ ensures \typeof(this.elementData) == \old(\typeof(this.elementData)); */
     /*@ ensures (\old(this.elementData.length) == 0) ==> (this.elementCount == 0); */
@@ -219,7 +219,7 @@ class Vector implements Cloneable, java.io.Serializable {
 
     /*@ requires minCapacity >= 1; */
     /*@ requires this.elementCount < minCapacity; */
-    /*@ requires javautil.Vector.serialVersionUID < minCapacity; */
+    /*@ requires javautil.Vector13.serialVersionUID < minCapacity; */
     /*@ requires minCapacity > this.elementData.length; */
     /*@ modifies this.elementData, this.elementData[*], this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount..], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
     /*@ ensures this.elementData[this.elementCount] == this.elementData[\old(minCapacity)-1]; */
@@ -256,13 +256,13 @@ class Vector implements Cloneable, java.io.Serializable {
     }
     
     /*@ requires newSize >= 0; */
-    /*@ requires javautil.Vector.serialVersionUID < newSize; */
+    /*@ requires javautil.Vector13.serialVersionUID < newSize; */
     /*@ modifies this.elementData, this.elementData[*], this.elementCount, this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount..], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[0..this.elementCount-1], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
     /*@ ensures this.elementCount == \old(newSize); */
     /*@ ensures (\forall int i; (\old(this.elementCount) <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null)); */
     /*@ ensures \typeof(this.elementData) == \old(\typeof(this.elementData)); */
     /*@ ensures (this.elementData.length == 0) ==> (this.capacityIncrement == 0); */
-    /*@ ensures javautil.Vector.serialVersionUID < \old(this.elementCount); */
+    /*@ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount); */
     /*@ ensures (this.elementData.length == 0) ==> (\old(this.elementCount) == 0); */
     /*@ ensures \old(this.elementCount) <= this.elementData.length; */
     /*@ ensures (this.elementData.length == 0) ==> (\old(this.elementData.length) == 0); */
@@ -305,7 +305,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ ensures \result >= 0; */
     /*@ ensures (\forall int i; (\result <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null)); */
     /*@ ensures \typeof(this.elementData) == \old(\typeof(this.elementData)); */
-    /*@ ensures javautil.Vector.serialVersionUID < \result; */
+    /*@ ensures javautil.Vector13.serialVersionUID < \result; */
     /*@ ensures (this.elementData.length == 0) ==> (\result == 0); */
     /*@ ensures \result <= this.elementData.length; */
     /**
@@ -339,7 +339,7 @@ class Vector implements Cloneable, java.io.Serializable {
 
     /*@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
     /*@ ensures \result != null; */
-    /*@ ensures \typeof(\result) == \type(javautil.VectorEnumerator); */
+    /*@ ensures \typeof(\result) == \type(javautil.VectorEnumerator13); */
     /*@ ensures \typeof(this.elementData) != \typeof(\result); */
     /*@ ensures \typeof(this.elementData) == \old(\typeof(this.elementData)); */
     /**
@@ -350,7 +350,7 @@ class Vector implements Cloneable, java.io.Serializable {
      * @since   JDK1.0
      */
     public final synchronized Enumeration elements() {
-	return new VectorEnumerator(this);
+	return new VectorEnumerator13(this);
     }
     
     /*@ requires elem != null; */
@@ -381,7 +381,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ ensures \typeof(this.elementData) == \old(\typeof(this.elementData)); */
     /*@ ensures \typeof(this.elementData) != \old(\typeof(elem)); */
     /*@ ensures this.elementCount > \result; */
-    /*@ ensures javautil.Vector.serialVersionUID < \result; */
+    /*@ ensures javautil.Vector13.serialVersionUID < \result; */
     /*@ ensures \result <= this.elementData.length-1; */
     /**
      * Searches for the first occurence of the given argument, testing 
@@ -400,7 +400,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ requires elem != null; */
     /*@ requires index >= 0; */
     /*@ requires \typeof(this.elementData) != \typeof(elem); */
-    /*@ requires javautil.Vector.serialVersionUID < index; */
+    /*@ requires javautil.Vector13.serialVersionUID < index; */
     /*@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
     /*@ ensures (\result == -1)  ==  (\result < \old(index)); */
     /*@ ensures (\result == -1)  ==>  (this.capacityIncrement > \result); */
@@ -418,7 +418,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ ensures \typeof(this.elementData) == \old(\typeof(this.elementData)); */
     /*@ ensures \typeof(this.elementData) != \old(\typeof(elem)); */
     /*@ ensures this.elementCount > \result; */
-    /*@ ensures javautil.Vector.serialVersionUID < \result; */
+    /*@ ensures javautil.Vector13.serialVersionUID < \result; */
     /*@ ensures (\result == 0) ==> (\old(index) == 0); */
     /*@ ensures \result <= this.elementData.length-1; */
     /**
@@ -450,7 +450,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ ensures \typeof(this.elementData) == \old(\typeof(this.elementData)); */
     /*@ ensures \typeof(this.elementData) != \old(\typeof(elem)); */
     /*@ ensures this.elementCount > \result; */
-    /*@ ensures javautil.Vector.serialVersionUID < \result; */
+    /*@ ensures javautil.Vector13.serialVersionUID < \result; */
     /*@ ensures \result <= this.elementData.length-1; */
     /**
      * Returns the index of the last occurrence of the specified object in
@@ -469,7 +469,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ requires index >= -1; */
     /*@ requires \typeof(this.elementData) != \typeof(elem); */
     /*@ requires this.elementCount > index; */
-    /*@ requires javautil.Vector.serialVersionUID < index; */
+    /*@ requires javautil.Vector13.serialVersionUID < index; */
     /*@ requires index <= this.elementData.length-1; */
     /*@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
     /*@ ensures (\result == -1)  ==>  (\old(index) >= -1); */
@@ -488,7 +488,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ ensures \typeof(this.elementData) != \old(\typeof(elem)); */
     /*@ ensures this.elementCount > \result; */
     /*@ ensures this.elementCount > \old(index); */
-    /*@ ensures javautil.Vector.serialVersionUID < \result; */
+    /*@ ensures javautil.Vector13.serialVersionUID < \result; */
     /*@ ensures \result <= \old(index); */
     /*@ ensures \result <= this.elementData.length-1; */
     /*@ ensures \old(index) <= this.elementData.length-1; */
@@ -514,7 +514,7 @@ class Vector implements Cloneable, java.io.Serializable {
 
     /*@ requires index >= 0; */
     /*@ requires this.elementCount > index; */
-    /*@ requires javautil.Vector.serialVersionUID < index; */
+    /*@ requires javautil.Vector13.serialVersionUID < index; */
     /*@ requires (this.elementData.length-1 == 0) ==> (index == 0); */
     /*@ requires index <= this.elementData.length-1; */
     /*@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
@@ -600,7 +600,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ requires index >= 0; */
     /*@ requires \typeof(this.elementData) != \typeof(obj); */
     /*@ requires this.elementCount > index; */
-    /*@ requires javautil.Vector.serialVersionUID < index; */
+    /*@ requires javautil.Vector13.serialVersionUID < index; */
     /*@ requires (this.elementData.length-1 == 0) ==> (index == 0); */
     /*@ requires index <= this.elementData.length-1; */
     /*@ modifies this.elementData[*], this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[0..this.elementCount-1], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
@@ -638,7 +638,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ requires this.elementCount >= 1; */
     /*@ requires index >= 0; */
     /*@ requires this.elementCount > index; */
-    /*@ requires javautil.Vector.serialVersionUID < index; */
+    /*@ requires javautil.Vector13.serialVersionUID < index; */
     /*@ requires (this.elementData.length-1 == 0) ==> (index == 0); */
     /*@ requires index <= this.elementData.length-1; */
     /*@ modifies this.elementData[*], this.elementCount, this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[0..this.elementCount-1], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
@@ -649,7 +649,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ ensures this.elementCount >= \old(index); */
     /*@ ensures (this.elementData.length-1 == 0) ==> (this.elementCount == 0); */
     /*@ ensures this.elementCount <= this.elementData.length-1; */
-    /*@ ensures javautil.Vector.serialVersionUID < \old(this.elementCount); */
+    /*@ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount); */
     /*@ ensures \old(this.elementCount) <= this.elementData.length; */
     /*@ ensures (this.elementData.length-1 == 0) ==> (\old(index) == 0); */
     /*@ ensures \old(index) <= this.elementData.length-1; */
@@ -688,7 +688,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ requires \typeof(this.elementData) != \typeof(obj); */
     /*@ requires (this.elementCount == 0) ==> (index == 0); */
     /*@ requires this.elementCount >= index; */
-    /*@ requires javautil.Vector.serialVersionUID < index; */
+    /*@ requires javautil.Vector13.serialVersionUID < index; */
     /*@ requires (this.elementData.length == 0) ==> (index == 0); */
     /*@ requires index <= this.elementData.length; */
     /*@ modifies this.elementData, this.elementData[*], this.elementCount, this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount..], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[0..this.elementCount-1], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
@@ -700,7 +700,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ ensures !(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \old(\typeof(obj)))); */
     /*@ ensures this.elementCount - \old(this.elementCount) - 1 == 0; */
     /*@ ensures this.elementCount > \old(index); */
-    /*@ ensures javautil.Vector.serialVersionUID < \old(this.elementCount); */
+    /*@ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount); */
     /*@ ensures (this.elementData.length-1 == 0) ==> (\old(this.elementCount) == 0); */
     /*@ ensures \old(this.elementCount) <= this.elementData.length-1; */
     /*@ ensures (this.elementData.length-1 == 0) ==> (\old(index) == 0); */
@@ -747,7 +747,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ ensures \typeof(this.elementData) != \old(\typeof(obj)); */
     /*@ ensures !(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \old(\typeof(obj)))); */
     /*@ ensures this.elementCount - \old(this.elementCount) - 1 == 0; */
-    /*@ ensures javautil.Vector.serialVersionUID < \old(this.elementCount); */
+    /*@ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount); */
     /*@ ensures (this.elementData.length-1 == 0) ==> (\old(this.elementCount) == 0); */
     /*@ ensures \old(this.elementCount) <= this.elementData.length-1; */
     /*@ ensures this.elementData.length >= \old(this.elementData.length); */
@@ -788,7 +788,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ ensures \typeof(this.elementData) != \old(\typeof(obj)); */
     /*@ ensures (\old(this.elementCount) == 0) ==> (this.elementCount == 0); */
     /*@ ensures this.elementCount <= \old(this.elementCount); */
-    /*@ ensures javautil.Vector.serialVersionUID < \old(this.elementCount); */
+    /*@ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount); */
     /*@ ensures (this.elementData.length == 0) ==> (\old(this.elementCount) == 0); */
     /*@ ensures \old(this.elementCount) <= this.elementData.length; */
     /**
@@ -819,7 +819,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@ ensures \typeof(this.elementData) == \old(\typeof(this.elementData)); */
     /*@ ensures this.elementCount <= this.capacityIncrement; */
     /*@ ensures this.elementCount <= \old(this.elementCount); */
-    /*@ ensures javautil.Vector.serialVersionUID < \old(this.elementCount); */
+    /*@ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount); */
     /*@ ensures (this.elementData.length == 0) ==> (\old(this.elementCount) == 0); */
     /*@ ensures \old(this.elementCount) <= this.elementData.length; */
     /**
@@ -836,7 +836,7 @@ class Vector implements Cloneable, java.io.Serializable {
 
     /*@ also_modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
     /*@ also_ensures \result != null; */
-    /*@ also_ensures \typeof(\result) == \type(javautil.Vector); */
+    /*@ also_ensures \typeof(\result) == \type(javautil.Vector13); */
     /*@ also_ensures \typeof(this.elementData) != \typeof(\result); */
     /*@ also_ensures \typeof(this.elementData) == \old(\typeof(this.elementData)); */
     /**
@@ -847,7 +847,7 @@ class Vector implements Cloneable, java.io.Serializable {
      */
     public synchronized Object clone() {
 	try { 
-	    Vector v = (Vector)super.clone();
+	    Vector13 v = (Vector13)super.clone();
 	    v.elementData = new Object[elementCount];
 	    System.arraycopy(elementData, 0, v.elementData, 0, elementCount);
 	    return v;

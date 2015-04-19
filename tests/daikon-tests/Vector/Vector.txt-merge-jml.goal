@@ -40,16 +40,16 @@ import java.util.NoSuchElementException;
  * @since   JDK1.0
  */
 public
-class Vector implements Cloneable, java.io.Serializable {
+class Vector13 implements Cloneable, java.io.Serializable {
     /*@ invariant this.elementData != null; */
     /*@ invariant this.elementCount >= 0; */
     /*@ invariant this.capacityIncrement >= 0; */
     /*@ invariant daikon.Quant.eltsEqual(daikon.Quant.slice(this.elementData, this.elementCount, daikon.Quant.size(this.elementData)), null); */
-    /*@ invariant this.elementCount > javautil.Vector.serialVersionUID; */
+    /*@ invariant this.elementCount > javautil.Vector13.serialVersionUID; */
     /*@ invariant (!(daikon.Quant.size(this.elementData) == 0)) || (this.elementCount == 0); */
     /*@ invariant this.elementCount <= daikon.Quant.size(this.elementData); */
-    /*@ invariant this.capacityIncrement > javautil.Vector.serialVersionUID; */
-    /*@ invariant javautil.Vector.serialVersionUID < daikon.Quant.size(this.elementData)-1; */
+    /*@ invariant this.capacityIncrement > javautil.Vector13.serialVersionUID; */
+    /*@ invariant javautil.Vector13.serialVersionUID < daikon.Quant.size(this.elementData)-1; */
     /**
      * The array buffer into which the components of the vector are 
      * stored. The capacity of the vector is the length of this array buffer.
@@ -88,9 +88,9 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures this.elementCount == 0;
     @ ensures this.elementCount <= this.capacityIncrement;
     @ ensures this.elementCount <= \old(initialCapacity);
-    @ ensures this.elementCount == (this.capacityIncrement / javautil.Vector.serialVersionUID);
-    @ ensures this.elementCount == (\old(initialCapacity) / javautil.Vector.serialVersionUID);
-    @ ensures this.elementCount == (daikon.Quant.size(this.elementData)-1 / javautil.Vector.serialVersionUID);
+    @ ensures this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID);
+    @ ensures this.elementCount == (\old(initialCapacity) / javautil.Vector13.serialVersionUID);
+    @ ensures this.elementCount == (daikon.Quant.size(this.elementData)-1 / javautil.Vector13.serialVersionUID);
     @*/
     /**
      * Constructs an empty vector with the specified initial capacity and
@@ -101,7 +101,7 @@ class Vector implements Cloneable, java.io.Serializable {
      *                              increased when the vector overflows.
      * @since   JDK1.0
      */
-    public Vector(int initialCapacity, int capacityIncrement) {
+    public Vector13(int initialCapacity, int capacityIncrement) {
 	super();
 	this.elementData = new Object[initialCapacity];
 	this.capacityIncrement = capacityIncrement;
@@ -115,8 +115,8 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures daikon.Quant.eltsEqual(this.elementData, null);
     @ ensures this.elementCount == 0;
     @ ensures this.elementCount <= \old(initialCapacity);
-    @ ensures this.elementCount == (\old(initialCapacity) / javautil.Vector.serialVersionUID);
-    @ ensures this.elementCount == (daikon.Quant.size(this.elementData)-1 / javautil.Vector.serialVersionUID);
+    @ ensures this.elementCount == (\old(initialCapacity) / javautil.Vector13.serialVersionUID);
+    @ ensures this.elementCount == (daikon.Quant.size(this.elementData)-1 / javautil.Vector13.serialVersionUID);
     @*/
     /**
      * Constructs an empty vector with the specified initial capacity.
@@ -124,7 +124,7 @@ class Vector implements Cloneable, java.io.Serializable {
      * @param   initialCapacity   the initial capacity of the vector.
      * @since   JDK1.0
      */
-    public Vector(int initialCapacity) {
+    public Vector13(int initialCapacity) {
 	this(initialCapacity, 0);
     }
 
@@ -141,7 +141,7 @@ class Vector implements Cloneable, java.io.Serializable {
      *
      * @since   JDK1.0
      */
-    public Vector() {
+    public Vector13() {
 	this(10);
     }
 
@@ -151,7 +151,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ requires daikon.Quant.eltwiseEqual(daikon.Quant.slice(anArray, this.elementCount, daikon.Quant.size(anArray)));
     @ requires (!(daikon.Quant.size(anArray) == 0)) || (this.elementCount == 0);
     @ requires this.elementCount <= daikon.Quant.size(anArray);
-    @ requires javautil.Vector.serialVersionUID < daikon.Quant.size(anArray)-1;
+    @ requires javautil.Vector13.serialVersionUID < daikon.Quant.size(anArray)-1;
     @ ensures this.elementData == \old(this.elementData);
     @ ensures daikon.Quant.pairwiseEqual(this.elementData, \old(this.elementData));
     @ ensures this.elementCount == \old(this.elementCount);
@@ -163,7 +163,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures daikon.Quant.eltwiseEqual(daikon.Quant.slice(anArray, this.elementCount, daikon.Quant.size(anArray)));
     @ ensures (!(\old(daikon.Quant.size(anArray)) == 0)) || (this.elementCount == 0);
     @ ensures this.elementCount <= \old(daikon.Quant.size(anArray));
-    @ ensures javautil.Vector.serialVersionUID < daikon.Quant.size(anArray)-1;
+    @ ensures javautil.Vector13.serialVersionUID < daikon.Quant.size(anArray)-1;
     @*/
     /**
      * Copies the components of this vector into the specified array. 
@@ -209,7 +209,7 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@
     @ public normal_behavior // Generated by Daikon
     @ requires minCapacity >= 0;
-    @ requires javautil.Vector.serialVersionUID < minCapacity;
+    @ requires javautil.Vector13.serialVersionUID < minCapacity;
     @ ensures this.elementCount == \old(this.elementCount);
     @ ensures this.capacityIncrement == \old(this.capacityIncrement);
     @ ensures daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.elementData, 0, this.elementCount-1), \old(daikon.Quant.slice(this.elementData, 0, this.elementCount-1)));
@@ -240,7 +240,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ private normal_behavior // Generated by Daikon
     @ requires minCapacity >= 1;
     @ requires this.elementCount < minCapacity;
-    @ requires javautil.Vector.serialVersionUID < minCapacity;
+    @ requires javautil.Vector13.serialVersionUID < minCapacity;
     @ requires minCapacity > daikon.Quant.size(this.elementData);
     @ ensures this.elementCount == \old(this.elementCount);
     @ ensures this.capacityIncrement == \old(this.capacityIncrement);
@@ -284,12 +284,12 @@ class Vector implements Cloneable, java.io.Serializable {
     /*@
     @ public normal_behavior // Generated by Daikon
     @ requires newSize >= 0;
-    @ requires javautil.Vector.serialVersionUID < newSize;
+    @ requires javautil.Vector13.serialVersionUID < newSize;
     @ ensures this.elementCount == \old(newSize);
     @ ensures this.capacityIncrement == \old(this.capacityIncrement);
     @ ensures daikon.Quant.eltsEqual(daikon.Quant.slice(this.elementData, \old(this.elementCount), daikon.Quant.size(this.elementData)), null);
     @ ensures (!(daikon.Quant.size(this.elementData) == 0)) || (this.capacityIncrement == 0);
-    @ ensures javautil.Vector.serialVersionUID < \old(this.elementCount);
+    @ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount);
     @ ensures (!(daikon.Quant.size(this.elementData) == 0)) || (\old(this.elementCount) == 0);
     @ ensures \old(this.elementCount) <= daikon.Quant.size(this.elementData);
     @ ensures (!(daikon.Quant.size(this.elementData) == 0)) || (\old(daikon.Quant.size(this.elementData)) == 0);
@@ -340,7 +340,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures \result == \old(this.elementCount);
     @ ensures \result >= 0;
     @ ensures daikon.Quant.eltsEqual(daikon.Quant.slice(this.elementData, \result, daikon.Quant.size(this.elementData)), null);
-    @ ensures javautil.Vector.serialVersionUID < \result;
+    @ ensures javautil.Vector13.serialVersionUID < \result;
     @ ensures (!(daikon.Quant.size(this.elementData) == 0)) || (\result == 0);
     @ ensures \result <= daikon.Quant.size(this.elementData);
     @*/
@@ -363,9 +363,9 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures (this.elementCount == 0)  <==>  (\result == true);
     @ ensures (this.elementCount == 0)  ==>  (this.elementCount  isPointer);
     @ ensures (this.elementCount == 0)  ==>  (this.elementCount <= this.capacityIncrement);
-    @ ensures (this.elementCount == 0)  ==>  (this.elementCount == (daikon.Quant.size(this.elementData) / javautil.Vector.serialVersionUID));
-    @ ensures (this.elementCount == 0)  ==>  (this.elementCount == (daikon.Quant.size(this.elementData)-1 / javautil.Vector.serialVersionUID));
-    @ ensures (this.elementCount == 0)  ==>  (this.elementCount == (this.capacityIncrement / javautil.Vector.serialVersionUID));
+    @ ensures (this.elementCount == 0)  ==>  (this.elementCount == (daikon.Quant.size(this.elementData) / javautil.Vector13.serialVersionUID));
+    @ ensures (this.elementCount == 0)  ==>  (this.elementCount == (daikon.Quant.size(this.elementData)-1 / javautil.Vector13.serialVersionUID));
+    @ ensures (this.elementCount == 0)  ==>  (this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID));
     @ ensures (this.elementCount == 0)  ==>  (daikon.Quant.eltsEqual(this.elementData, null));
     @*/
     /**
@@ -395,7 +395,7 @@ class Vector implements Cloneable, java.io.Serializable {
      * @since   JDK1.0
      */
     public final synchronized Enumeration elements() {
-	return new VectorEnumerator(this);
+	return new VectorEnumerator13(this);
     }
     
     /*@
@@ -430,7 +430,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures this.capacityIncrement == \old(this.capacityIncrement);
     @ ensures \result >= -1;
     @ ensures this.elementCount > \result;
-    @ ensures javautil.Vector.serialVersionUID < \result;
+    @ ensures javautil.Vector13.serialVersionUID < \result;
     @ ensures \result <= daikon.Quant.size(this.elementData)-1;
     @*/
     /**
@@ -451,7 +451,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ public normal_behavior // Generated by Daikon
     @ requires elem != null;
     @ requires index >= 0;
-    @ requires javautil.Vector.serialVersionUID < index;
+    @ requires javautil.Vector13.serialVersionUID < index;
     @ ensures this.elementData == \old(this.elementData);
     @ ensures daikon.Quant.pairwiseEqual(this.elementData, \old(this.elementData));
     @ ensures this.elementCount == \old(this.elementCount);
@@ -468,7 +468,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures (\result >= 0)  ==>  (daikon.Quant.getElement_Object(this.elementData, \result) != null);
     @ ensures \result >= -1;
     @ ensures this.elementCount > \result;
-    @ ensures javautil.Vector.serialVersionUID < \result;
+    @ ensures javautil.Vector13.serialVersionUID < \result;
     @ ensures (!(\result == 0)) || (\old(index) == 0);
     @ ensures \result <= daikon.Quant.size(this.elementData)-1;
     @*/
@@ -503,7 +503,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures this.capacityIncrement == \old(this.capacityIncrement);
     @ ensures \result >= -1;
     @ ensures this.elementCount > \result;
-    @ ensures javautil.Vector.serialVersionUID < \result;
+    @ ensures javautil.Vector13.serialVersionUID < \result;
     @ ensures \result <= daikon.Quant.size(this.elementData)-1;
     @*/
     /**
@@ -524,7 +524,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ requires elem != null;
     @ requires index >= -1;
     @ requires this.elementCount > index;
-    @ requires javautil.Vector.serialVersionUID < index;
+    @ requires javautil.Vector13.serialVersionUID < index;
     @ requires index <= daikon.Quant.size(this.elementData)-1;
     @ ensures this.elementData == \old(this.elementData);
     @ ensures daikon.Quant.pairwiseEqual(this.elementData, \old(this.elementData));
@@ -542,7 +542,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures \result >= -1;
     @ ensures this.elementCount > \result;
     @ ensures this.elementCount > \old(index);
-    @ ensures javautil.Vector.serialVersionUID < \result;
+    @ ensures javautil.Vector13.serialVersionUID < \result;
     @ ensures \result <= \old(index);
     @ ensures \result <= daikon.Quant.size(this.elementData)-1;
     @ ensures \old(index) <= daikon.Quant.size(this.elementData)-1;
@@ -571,7 +571,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ public normal_behavior // Generated by Daikon
     @ requires index >= 0;
     @ requires this.elementCount > index;
-    @ requires javautil.Vector.serialVersionUID < index;
+    @ requires javautil.Vector13.serialVersionUID < index;
     @ requires (!(daikon.Quant.size(this.elementData)-1 == 0)) || (index == 0);
     @ requires index <= daikon.Quant.size(this.elementData)-1;
     @ ensures this.elementData == \old(this.elementData);
@@ -665,7 +665,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ public normal_behavior // Generated by Daikon
     @ requires index >= 0;
     @ requires this.elementCount > index;
-    @ requires javautil.Vector.serialVersionUID < index;
+    @ requires javautil.Vector13.serialVersionUID < index;
     @ requires (!(daikon.Quant.size(this.elementData)-1 == 0)) || (index == 0);
     @ requires index <= daikon.Quant.size(this.elementData)-1;
     @ ensures this.elementData == \old(this.elementData);
@@ -709,7 +709,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ requires this.elementCount >= 1;
     @ requires index >= 0;
     @ requires this.elementCount > index;
-    @ requires javautil.Vector.serialVersionUID < index;
+    @ requires javautil.Vector13.serialVersionUID < index;
     @ requires (!(daikon.Quant.size(this.elementData)-1 == 0)) || (index == 0);
     @ requires index <= daikon.Quant.size(this.elementData)-1;
     @ ensures this.elementData == \old(this.elementData);
@@ -723,7 +723,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures this.elementCount >= \old(index);
     @ ensures (!(daikon.Quant.size(this.elementData)-1 == 0)) || (this.elementCount == 0);
     @ ensures this.elementCount <= daikon.Quant.size(this.elementData)-1;
-    @ ensures javautil.Vector.serialVersionUID < \old(this.elementCount);
+    @ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount);
     @ ensures \old(this.elementCount) <= daikon.Quant.size(this.elementData);
     @ ensures (!(daikon.Quant.size(this.elementData)-1 == 0)) || (\old(index) == 0);
     @ ensures \old(index) <= daikon.Quant.size(this.elementData)-1;
@@ -764,7 +764,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ requires index >= 0;
     @ requires (!(this.elementCount == 0)) || (index == 0);
     @ requires this.elementCount >= index;
-    @ requires javautil.Vector.serialVersionUID < index;
+    @ requires javautil.Vector13.serialVersionUID < index;
     @ requires (!(daikon.Quant.size(this.elementData) == 0)) || (index == 0);
     @ requires index <= daikon.Quant.size(this.elementData);
     @ ensures this.capacityIncrement == \old(this.capacityIncrement);
@@ -774,7 +774,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures this.elementCount >= 1;
     @ ensures this.elementCount - \old(this.elementCount) - 1 == 0;
     @ ensures this.elementCount > \old(index);
-    @ ensures javautil.Vector.serialVersionUID < \old(this.elementCount);
+    @ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount);
     @ ensures (!(daikon.Quant.size(this.elementData)-1 == 0)) || (\old(this.elementCount) == 0);
     @ ensures \old(this.elementCount) <= daikon.Quant.size(this.elementData)-1;
     @ ensures (!(daikon.Quant.size(this.elementData)-1 == 0)) || (\old(index) == 0);
@@ -821,7 +821,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures this.elementCount >= 1;
     @ ensures daikon.Quant.size(this.elementData) >= 1;
     @ ensures this.elementCount - \old(this.elementCount) - 1 == 0;
-    @ ensures javautil.Vector.serialVersionUID < \old(this.elementCount);
+    @ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount);
     @ ensures (!(daikon.Quant.size(this.elementData)-1 == 0)) || (\old(this.elementCount) == 0);
     @ ensures \old(this.elementCount) <= daikon.Quant.size(this.elementData)-1;
     @ ensures daikon.Quant.size(this.elementData) >= \old(daikon.Quant.size(this.elementData));
@@ -863,7 +863,7 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures (\result == true)  ==>  (daikon.Quant.getElement_Object(this.elementData, this.elementCount) == daikon.Quant.getElement_Object(this.elementData, \old(this.elementCount)-1));
     @ ensures (!(\old(this.elementCount) == 0)) || (this.elementCount == 0);
     @ ensures this.elementCount <= \old(this.elementCount);
-    @ ensures javautil.Vector.serialVersionUID < \old(this.elementCount);
+    @ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount);
     @ ensures (!(daikon.Quant.size(this.elementData) == 0)) || (\old(this.elementCount) == 0);
     @ ensures \old(this.elementCount) <= daikon.Quant.size(this.elementData);
     @ ensures daikon.Quant.subsetOf(daikon.Quant.slice(this.elementData, 0, this.elementCount-1), \old(daikon.Quant.slice(this.elementData, 0, this.elementCount-1)));
@@ -898,13 +898,13 @@ class Vector implements Cloneable, java.io.Serializable {
     @ ensures this.elementCount == 0;
     @ ensures this.elementCount <= this.capacityIncrement;
     @ ensures this.elementCount <= \old(this.elementCount);
-    @ ensures javautil.Vector.serialVersionUID < \old(this.elementCount);
+    @ ensures javautil.Vector13.serialVersionUID < \old(this.elementCount);
     @ ensures (!(daikon.Quant.size(this.elementData) == 0)) || (\old(this.elementCount) == 0);
     @ ensures \old(this.elementCount) <= daikon.Quant.size(this.elementData);
-    @ ensures this.elementCount == (this.capacityIncrement / javautil.Vector.serialVersionUID);
-    @ ensures this.elementCount == (\old(this.elementCount) / javautil.Vector.serialVersionUID);
-    @ ensures this.elementCount == (daikon.Quant.size(this.elementData) / javautil.Vector.serialVersionUID);
-    @ ensures this.elementCount == (daikon.Quant.size(this.elementData)-1 / javautil.Vector.serialVersionUID);
+    @ ensures this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID);
+    @ ensures this.elementCount == (\old(this.elementCount) / javautil.Vector13.serialVersionUID);
+    @ ensures this.elementCount == (daikon.Quant.size(this.elementData) / javautil.Vector13.serialVersionUID);
+    @ ensures this.elementCount == (daikon.Quant.size(this.elementData)-1 / javautil.Vector13.serialVersionUID);
     @*/
     /**
      * Removes all components from this vector and sets its size to zero.
@@ -935,7 +935,7 @@ class Vector implements Cloneable, java.io.Serializable {
      */
     public synchronized Object clone() {
 	try { 
-	    Vector v = (Vector)super.clone();
+	    Vector13 v = (Vector13)super.clone();
 	    v.elementData = new Object[elementCount];
 	    System.arraycopy(elementData, 0, v.elementData, 0, elementCount);
 	    return v;

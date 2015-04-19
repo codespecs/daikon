@@ -20,11 +20,11 @@ import java.util.NoSuchElementException;
 // Split out from Vector.java source
 
 final
-class VectorEnumerator implements Enumeration {
-    Vector vector;
+class VectorEnumerator13 implements Enumeration {
+    Vector13 vector;
     int count;
 
-    VectorEnumerator(Vector v) {
+    VectorEnumerator13(Vector13 v) {
 	vector = v;
 	count = 0;
     }

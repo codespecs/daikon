@@ -40,7 +40,7 @@ import java.util.NoSuchElementException;
  * @since   JDK1.0
  */
 public
-class Vector implements Cloneable, java.io.Serializable {
+class Vector13 implements Cloneable, java.io.Serializable {
     /**
      * The array buffer into which the components of the vector are 
      * stored. The capacity of the vector is the length of this array buffer.
@@ -78,7 +78,7 @@ class Vector implements Cloneable, java.io.Serializable {
      *                              increased when the vector overflows.
      * @since   JDK1.0
      */
-    public Vector(int initialCapacity, int capacityIncrement) {
+    public Vector13(int initialCapacity, int capacityIncrement) {
 	super();
 	this.elementData = new Object[initialCapacity];
 	this.capacityIncrement = capacityIncrement;
@@ -90,7 +90,7 @@ class Vector implements Cloneable, java.io.Serializable {
      * @param   initialCapacity   the initial capacity of the vector.
      * @since   JDK1.0
      */
-    public Vector(int initialCapacity) {
+    public Vector13(int initialCapacity) {
 	this(initialCapacity, 0);
     }
 
@@ -99,7 +99,7 @@ class Vector implements Cloneable, java.io.Serializable {
      *
      * @since   JDK1.0
      */
-    public Vector() {
+    public Vector13() {
 	this(10);
     }
 
@@ -226,7 +226,7 @@ class Vector implements Cloneable, java.io.Serializable {
      * @since   JDK1.0
      */
     public final synchronized Enumeration elements() {
-	return new VectorEnumerator(this);
+	return new VectorEnumerator13(this);
     }
     
     /**
@@ -502,7 +502,7 @@ class Vector implements Cloneable, java.io.Serializable {
      */
     public synchronized Object clone() {
 	try { 
-	    Vector v = (Vector)super.clone();
+	    Vector13 v = (Vector13)super.clone();
 	    v.elementData = new Object[elementCount];
 	    System.arraycopy(elementData, 0, v.elementData, 0, elementCount);
 	    return v;
