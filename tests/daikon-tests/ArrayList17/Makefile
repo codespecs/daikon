@@ -2,8 +2,8 @@
 
 # Read Makefile.common for what all of this means
 
-MAIN_CLASS:=javautil.IteratorMicroBenchmark17
-# MAIN_CLASS:=javautil.ArrayList17Test
+# MAIN_CLASS:=javautil.IteratorMicroBenchmark17
+MAIN_CLASS:=javautil.ArrayList17Test
 
 include ../../Makefile.common
 
