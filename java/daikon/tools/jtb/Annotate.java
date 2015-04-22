@@ -264,7 +264,8 @@ public class Annotate {
         root = parser.CompilationUnit();
       }
       catch (ParseException e) {
-        e.printStackTrace();
+        // e.printStackTrace();
+        System.err.println(javafilename + ": " + e);
         throw new Daikon.TerminationMessage("ParseException in applyVisitorInsertComments");
       }
 
