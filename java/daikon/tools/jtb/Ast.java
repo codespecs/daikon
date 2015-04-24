@@ -87,7 +87,7 @@ public class Ast {
   // intended for direct human consumption.
   public static String format(Node n) {
     StringWriter w = new StringWriter();
-    n.accept(new SimpleTreeDumper(w));
+    n.accept(new TreeDumper(w));
     // This is incorrect. A "//" comment ending in a period, for example, will
     // cause the line after it to become part of the comment as well.
     // If not intended for human consumption, why remove whitespace?
