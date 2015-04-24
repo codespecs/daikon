@@ -20,7 +20,7 @@ public class NodeChoice implements Node {
    }
 
    public void accept(jtb.visitor.Visitor v) {
-      choice.accept(v);
+      v.visit(this);
    }
    public <R,A> R accept(jtb.visitor.GJVisitor<R,A> v, A argu) {
       return choice.accept(v,argu);

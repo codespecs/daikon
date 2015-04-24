@@ -19,6 +19,7 @@ public interface Visitor {
    public void visit(NodeList n);
    public void visit(NodeListOptional n);
    public void visit(NodeOptional n);
+   public void visit(NodeChoice n);
    public void visit(NodeSequence n);
    public void visit(NodeToken n);
 
