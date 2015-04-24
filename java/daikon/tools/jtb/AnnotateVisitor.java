@@ -18,6 +18,9 @@ import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
 import daikon.chicory.DaikonVariableInfo;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -390,7 +393,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     NodeChoice nc = (NodeChoice)(n.getParent());
     NodeSequence ns = (NodeSequence)(nc.getParent());
     Modifiers m = (Modifiers)(ns.elementAt(0));
-    Annotate.debug.fine(Ast.format(m));
+    if (Annotate.debug.isLoggable(Level.FINE)) {
+      System.out.println(Ast.formatEntireTree(m));
+    }
     m.accept(v);
     Annotate.debug.fine("InsertBehavior visitor complete");
   }
