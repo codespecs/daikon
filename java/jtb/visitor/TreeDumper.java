@@ -9,12 +9,15 @@ import java.io.*;
 
 // Dumps the syntax tree to a Writer using the location information in
 // each NodeToken.
+// If 'debug' is set, additionally output all tree nodes, non-terminals
+// terminal tokens alike, to the standard output.
 public class TreeDumper extends DepthFirstVisitor {
    protected PrintWriter out;
    private int curLine = 1;
    private int curColumn = 1;
    private boolean startAtNextToken = false;
    private boolean printSpecials = true;
+   private boolean debug = false;
 
    // The default constructor uses System.out as its output location.
    // You may specify your own Writer or OutputStream using one of the
@@ -22,6 +25,23 @@ public class TreeDumper extends DepthFirstVisitor {
    public TreeDumper()       { out = new PrintWriter(System.out, true); }
    public TreeDumper(Writer o)        { out = new PrintWriter(o, true); }
    public TreeDumper(OutputStream o)  { out = new PrintWriter(o, true); }
+
+   // debug constructors
+   public TreeDumper(boolean debug) {
+      out = new PrintWriter(System.out, true);
+      this.debug = debug;
+      super.debug = debug;
+   }
+   public TreeDumper(Writer o, boolean debug) {
+      out = new PrintWriter(o, true);
+      this.debug = debug;
+      super.debug = debug;
+   }
+   public TreeDumper(OutputStream o, boolean debug) {
+      out = new PrintWriter(o, true);
+      this.debug = debug;
+      super.debug = debug;
+   }
 
    // Flushes the OutputStream or Writer that this TreeDumper is using.
    public void flushWriter()        { out.flush(); }
@@ -48,8 +68,7 @@ public class TreeDumper extends DepthFirstVisitor {
    //   relative to the current position, i.e. its location places it
    //   before the previous token.
    public void visit(NodeToken n) {
-      // System.out.println("{" + n.kind +"}: " + n.tokenImage);
-      // System.out.println("{" + ((n.getParent()).getClass()).getName() +"}: " + n.tokenImage);
+      if (debug) System.out.println(super.indents.substring(0, super.indent) + "Token{" + n.kind +"}: " + n.tokenImage);
 
       if ( n.beginLine == -1 || n.beginColumn == -1 ) {
          printToken(n.tokenImage);

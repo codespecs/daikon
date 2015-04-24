@@ -11,31 +11,60 @@ import java.util.*;
  * order.  Your visitors may extend this class.
  */
 public class DepthFirstVisitor implements Visitor {
+   protected boolean debug = false;
+   protected int indent = 0;
+   protected String indents = "                                                                                                                                                        ";
+
+   private void enterProduction(Node n) {
+      if (debug) System.out.println(indents.substring(0, indent) + n.getClass().getName());
+      indent++;
+   }
+
+   private void exitProduction() {
+      indent--;
+   }
+
    //
    // Auto class visitors--probably don't need to be overridden.
    //
    public void visit(NodeList n) {
+      enterProduction(n);
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); )
          e.nextElement().accept(this);
+      exitProduction();
    }
 
    public void visit(NodeListOptional n) {
+      enterProduction(n);
       if ( n.present() )
          for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); )
             e.nextElement().accept(this);
+      exitProduction();
    }
 
    public void visit(NodeOptional n) {
+      enterProduction(n);
       if ( n.present() )
          n.node.accept(this);
+      exitProduction();
+   }
+
+   public void visit(NodeChoice n) {
+      enterProduction(n);
+      n.choice.accept(this);
+      exitProduction();
    }
 
    public void visit(NodeSequence n) {
+      enterProduction(n);
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); )
          e.nextElement().accept(this);
+      exitProduction();
    }
 
-   public void visit(NodeToken n) { }
+   public void visit(NodeToken n) {
+      if (debug) System.out.println(indents.substring(0, indent) + "Token{" + n.kind +"}: " + n.tokenImage);
+   }
 
    //
    // User-generated visitor methods below
@@ -48,12 +77,14 @@ public class DepthFirstVisitor implements Visitor {
    // f4 -> ( <STUFF_TO_IGNORE: ~[]> )?
    // f5 -> <EOF>
    public void visit(CompilationUnit n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
       n.f5.accept(this);
+      exitProduction();
    }
 
    // f0 -> Modifiers()
@@ -61,10 +92,12 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> Name()
    // f3 -> ";"
    public void visit(PackageDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> "import"
@@ -73,22 +106,28 @@ public class DepthFirstVisitor implements Visitor {
    // f3 -> [ "." "*" ]
    // f4 -> ";"
    public void visit(ImportDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
+      exitProduction();
    }
 
    // f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
    public void visit(Modifiers n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> ";"
    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
    public void visit(TypeDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> ( "class" | "interface" )
@@ -98,30 +137,36 @@ public class DepthFirstVisitor implements Visitor {
    // f4 -> [ ImplementsList(isInterface) ]
    // f5 -> ClassOrInterfaceBody(isInterface)
    public void visit(ClassOrInterfaceDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
       n.f5.accept(this);
+      exitProduction();
    }
 
    // f0 -> "extends"
    // f1 -> ClassOrInterfaceType()
    // f2 -> ( "," ClassOrInterfaceType() )*
    public void visit(ExtendsList n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "implements"
    // f1 -> ClassOrInterfaceType()
    // f2 -> ( "," ClassOrInterfaceType() )*
    public void visit(ImplementsList n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "enum"
@@ -129,10 +174,12 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> [ ImplementsList(false) ]
    // f3 -> EnumBody()
    public void visit(EnumDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> "{"
@@ -141,11 +188,13 @@ public class DepthFirstVisitor implements Visitor {
    // f3 -> [ ";" ( ClassOrInterfaceBodyDeclaration(false) )* ]
    // f4 -> "}"
    public void visit(EnumBody n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
+      exitProduction();
    }
 
    // f0 -> Modifiers()
@@ -153,10 +202,12 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> [ Arguments() ]
    // f3 -> [ ClassOrInterfaceBody(false) ]
    public void visit(EnumConstant n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> "<"
@@ -164,42 +215,52 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> ( "," TypeParameter() )*
    // f3 -> ">"
    public void visit(TypeParameters n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> <IDENTIFIER>
    // f1 -> [ TypeBound() ]
    public void visit(TypeParameter n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> "extends"
    // f1 -> ClassOrInterfaceType()
    // f2 -> ( "&" ClassOrInterfaceType() )*
    public void visit(TypeBound n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "{"
    // f1 -> ( ClassOrInterfaceBodyDeclaration(isInterface) )*
    // f2 -> "}"
    public void visit(ClassOrInterfaceBody n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> Initializer()
    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
    //       | ";"
    public void visit(ClassOrInterfaceBodyDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> Type()
@@ -207,30 +268,38 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> ( "," VariableDeclarator() )*
    // f3 -> ";"
    public void visit(FieldDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> VariableDeclaratorId()
    // f1 -> [ "=" VariableInitializer() ]
    public void visit(VariableDeclarator n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> <IDENTIFIER>
    // f1 -> ( "[" "]" )*
    public void visit(VariableDeclaratorId n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> ArrayInitializer()
    //       | Expression()
    public void visit(VariableInitializer n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "{"
@@ -238,10 +307,12 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> [ "," ]
    // f3 -> "}"
    public void visit(ArrayInitializer n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> [ TypeParameters() ]
@@ -250,29 +321,35 @@ public class DepthFirstVisitor implements Visitor {
    // f3 -> [ "throws" NameList() ]
    // f4 -> ( Block() | ";" )
    public void visit(MethodDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
+      exitProduction();
    }
 
    // f0 -> <IDENTIFIER>
    // f1 -> FormalParameters()
    // f2 -> ( "[" "]" )*
    public void visit(MethodDeclarator n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "("
    // f1 -> [ FormalParameter() ( "," FormalParameter() )* ]
    // f2 -> ")"
    public void visit(FormalParameters n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> Modifiers()
@@ -281,11 +358,13 @@ public class DepthFirstVisitor implements Visitor {
    // f3 -> [ "..." ]
    // f4 -> VariableDeclaratorId()
    public void visit(FormalParameter n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
+      exitProduction();
    }
 
    // f0 -> [ TypeParameters() ]
@@ -297,6 +376,7 @@ public class DepthFirstVisitor implements Visitor {
    // f6 -> ( BlockStatement() )*
    // f7 -> "}"
    public void visit(ConstructorDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -305,40 +385,51 @@ public class DepthFirstVisitor implements Visitor {
       n.f5.accept(this);
       n.f6.accept(this);
       n.f7.accept(this);
+      exitProduction();
    }
 
    // f0 -> [ TypeArguments() ] ( "this" | "super" ) Arguments() ";"
    //       | PrimaryExpression() "." [ TypeArguments() ] "super" Arguments() ";"
    public void visit(ExplicitConstructorInvocation n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> [ "static" ]
    // f1 -> Block()
    public void visit(Initializer n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> ReferenceType()
    //       | PrimitiveType()
    public void visit(Type n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> PrimitiveType() ( "[" "]" )+
    //       | ( ClassOrInterfaceType() ) ( "[" "]" )*
    public void visit(ReferenceType n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> <IDENTIFIER>
    // f1 -> [ TypeArguments() ]
    // f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
    public void visit(ClassOrInterfaceType n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "<"
@@ -346,22 +437,28 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> ( "," TypeArgument() )*
    // f3 -> ">"
    public void visit(TypeArguments n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> ReferenceType()
    //       | "?" [ WildcardBounds() ]
    public void visit(TypeArgument n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "extends" ReferenceType()
    //       | "super" ReferenceType()
    public void visit(WildcardBounds n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "boolean"
@@ -373,34 +470,44 @@ public class DepthFirstVisitor implements Visitor {
    //       | "float"
    //       | "double"
    public void visit(PrimitiveType n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "void"
    //       | Type()
    public void visit(ResultType n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> <IDENTIFIER>
    // f1 -> ( "." <IDENTIFIER> )*
    public void visit(Name n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> Name()
    // f1 -> ( "," Name() )*
    public void visit(NameList n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> ConditionalExpression()
    // f1 -> [ AssignmentOperator() Expression() ]
    public void visit(Expression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> "="
@@ -416,91 +523,117 @@ public class DepthFirstVisitor implements Visitor {
    //       | "^="
    //       | "|="
    public void visit(AssignmentOperator n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> ConditionalOrExpression()
    // f1 -> [ "?" Expression() ":" Expression() ]
    public void visit(ConditionalExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> ConditionalAndExpression()
    // f1 -> ( "||" ConditionalAndExpression() )*
    public void visit(ConditionalOrExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> InclusiveOrExpression()
    // f1 -> ( "&&" InclusiveOrExpression() )*
    public void visit(ConditionalAndExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> ExclusiveOrExpression()
    // f1 -> ( "|" ExclusiveOrExpression() )*
    public void visit(InclusiveOrExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> AndExpression()
    // f1 -> ( "^" AndExpression() )*
    public void visit(ExclusiveOrExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> EqualityExpression()
    // f1 -> ( "&" EqualityExpression() )*
    public void visit(AndExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> InstanceOfExpression()
    // f1 -> ( ( "==" | "!=" ) InstanceOfExpression() )*
    public void visit(EqualityExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> RelationalExpression()
    // f1 -> [ "instanceof" Type() ]
    public void visit(InstanceOfExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> ShiftExpression()
    // f1 -> ( ( "<" | ">" | "<=" | ">=" ) ShiftExpression() )*
    public void visit(RelationalExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> AdditiveExpression()
    // f1 -> ( ( "<<" | RSIGNEDSHIFT() | RUNSIGNEDSHIFT() ) AdditiveExpression() )*
    public void visit(ShiftExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> MultiplicativeExpression()
    // f1 -> ( ( "+" | "-" ) MultiplicativeExpression() )*
    public void visit(AdditiveExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> UnaryExpression()
    // f1 -> ( ( "*" | "/" | "%" ) UnaryExpression() )*
    public void visit(MultiplicativeExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> ( "+" | "-" ) UnaryExpression()
@@ -508,64 +641,82 @@ public class DepthFirstVisitor implements Visitor {
    //       | PreDecrementExpression()
    //       | UnaryExpressionNotPlusMinus()
    public void visit(UnaryExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "++"
    // f1 -> PrimaryExpression()
    public void visit(PreIncrementExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> "--"
    // f1 -> PrimaryExpression()
    public void visit(PreDecrementExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> ( "~" | "!" ) UnaryExpression()
    //       | CastExpression()
    //       | PostfixExpression()
    public void visit(UnaryExpressionNotPlusMinus n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "(" PrimitiveType()
    //       | "(" Type() "[" "]"
    //       | "(" Type() ")" ( "~" | "!" | "(" | <IDENTIFIER> | "this" | "super" | "new" | Literal() )
    public void visit(CastLookahead n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> PrimaryExpression()
    // f1 -> [ "++" | "--" ]
    public void visit(PostfixExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> "(" Type() ")" UnaryExpression()
    //       | "(" Type() ")" UnaryExpressionNotPlusMinus()
    public void visit(CastExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> PrimaryPrefix()
    // f1 -> ( PrimarySuffix() )*
    public void visit(PrimaryExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> "."
    // f1 -> TypeArguments()
    // f2 -> <IDENTIFIER>
    public void visit(MemberSelector n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> Literal()
@@ -577,7 +728,9 @@ public class DepthFirstVisitor implements Visitor {
    //       | ResultType() "." "class"
    //       | Name()
    public void visit(PrimaryPrefix n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "." "super"
@@ -588,7 +741,9 @@ public class DepthFirstVisitor implements Visitor {
    //       | "." <IDENTIFIER>
    //       | Arguments()
    public void visit(PrimarySuffix n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> <INTEGER_LITERAL>
@@ -598,46 +753,60 @@ public class DepthFirstVisitor implements Visitor {
    //       | BooleanLiteral()
    //       | NullLiteral()
    public void visit(Literal n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "true"
    //       | "false"
    public void visit(BooleanLiteral n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "null"
    public void visit(NullLiteral n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "("
    // f1 -> [ ArgumentList() ]
    // f2 -> ")"
    public void visit(Arguments n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> Expression()
    // f1 -> ( "," Expression() )*
    public void visit(ArgumentList n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> "new" PrimitiveType() ArrayDimsAndInits()
    //       | "new" ClassOrInterfaceType() [ TypeArguments() ] ( ArrayDimsAndInits() | Arguments() [ ClassOrInterfaceBody(false) ] )
    public void visit(AllocationExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> ( "[" Expression() "]" )+ ( "[" "]" )*
    //       | ( "[" "]" )+ ArrayInitializer()
    public void visit(ArrayDimsAndInits n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> LabeledStatement()
@@ -657,7 +826,9 @@ public class DepthFirstVisitor implements Visitor {
    //       | SynchronizedStatement()
    //       | TryStatement()
    public void visit(Statement n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "assert"
@@ -665,35 +836,43 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> [ ":" Expression() ]
    // f3 -> ";"
    public void visit(AssertStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> <IDENTIFIER>
    // f1 -> ":"
    // f2 -> Statement()
    public void visit(LabeledStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "{"
    // f1 -> ( BlockStatement() )*
    // f2 -> "}"
    public void visit(Block n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> LocalVariableDeclaration() ";"
    //       | Statement()
    //       | ClassOrInterfaceDeclaration(0)
    public void visit(BlockStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> Modifiers()
@@ -701,22 +880,28 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> VariableDeclarator()
    // f3 -> ( "," VariableDeclarator() )*
    public void visit(LocalVariableDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> ";"
    public void visit(EmptyStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> PreIncrementExpression()
    //       | PreDecrementExpression()
    //       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
    public void visit(StatementExpression n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "switch"
@@ -727,6 +912,7 @@ public class DepthFirstVisitor implements Visitor {
    // f5 -> ( SwitchLabel() ( BlockStatement() )* )*
    // f6 -> "}"
    public void visit(SwitchStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -734,12 +920,15 @@ public class DepthFirstVisitor implements Visitor {
       n.f4.accept(this);
       n.f5.accept(this);
       n.f6.accept(this);
+      exitProduction();
    }
 
    // f0 -> "case" Expression() ":"
    //       | "default" ":"
    public void visit(SwitchLabel n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "if"
@@ -749,12 +938,14 @@ public class DepthFirstVisitor implements Visitor {
    // f4 -> Statement()
    // f5 -> [ "else" Statement() ]
    public void visit(IfStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
       n.f5.accept(this);
+      exitProduction();
    }
 
    // f0 -> "while"
@@ -763,11 +954,13 @@ public class DepthFirstVisitor implements Visitor {
    // f3 -> ")"
    // f4 -> Statement()
    public void visit(WhileStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
+      exitProduction();
    }
 
    // f0 -> "do"
@@ -778,6 +971,7 @@ public class DepthFirstVisitor implements Visitor {
    // f5 -> ")"
    // f6 -> ";"
    public void visit(DoStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
@@ -785,6 +979,7 @@ public class DepthFirstVisitor implements Visitor {
       n.f4.accept(this);
       n.f5.accept(this);
       n.f6.accept(this);
+      exitProduction();
    }
 
    // f0 -> "for"
@@ -793,65 +988,81 @@ public class DepthFirstVisitor implements Visitor {
    // f3 -> ")"
    // f4 -> Statement()
    public void visit(ForStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
+      exitProduction();
    }
 
    // f0 -> LocalVariableDeclaration()
    //       | StatementExpressionList()
    public void visit(ForInit n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> StatementExpression()
    // f1 -> ( "," StatementExpression() )*
    public void visit(StatementExpressionList n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> StatementExpressionList()
    public void visit(ForUpdate n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "break"
    // f1 -> [ <IDENTIFIER> ]
    // f2 -> ";"
    public void visit(BreakStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "continue"
    // f1 -> [ <IDENTIFIER> ]
    // f2 -> ";"
    public void visit(ContinueStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "return"
    // f1 -> [ Expression() ]
    // f2 -> ";"
    public void visit(ReturnStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "throw"
    // f1 -> Expression()
    // f2 -> ";"
    public void visit(ThrowStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "synchronized"
@@ -860,11 +1071,13 @@ public class DepthFirstVisitor implements Visitor {
    // f3 -> ")"
    // f4 -> Block()
    public void visit(SynchronizedStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
+      exitProduction();
    }
 
    // f0 -> "try"
@@ -872,27 +1085,35 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> ( "catch" "(" FormalParameter() ")" Block() )*
    // f3 -> [ "finally" Block() ]
    public void visit(TryStatement n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> ( ">" ">" ">" )
    public void visit(RUNSIGNEDSHIFT n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> ( ">" ">" )
    public void visit(RSIGNEDSHIFT n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> NormalAnnotation()
    //       | SingleMemberAnnotation()
    //       | MarkerAnnotation()
    public void visit(Annotation n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "@"
@@ -901,18 +1122,22 @@ public class DepthFirstVisitor implements Visitor {
    // f3 -> [ MemberValuePairs() ]
    // f4 -> ")"
    public void visit(NormalAnnotation n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
+      exitProduction();
    }
 
    // f0 -> "@"
    // f1 -> Name()
    public void visit(MarkerAnnotation n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> "@"
@@ -921,43 +1146,53 @@ public class DepthFirstVisitor implements Visitor {
    // f3 -> MemberValue()
    // f4 -> ")"
    public void visit(SingleMemberAnnotation n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
       n.f4.accept(this);
+      exitProduction();
    }
 
    // f0 -> MemberValuePair()
    // f1 -> ( "," MemberValuePair() )*
    public void visit(MemberValuePairs n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
    // f0 -> <IDENTIFIER>
    // f1 -> "="
    // f2 -> MemberValue()
    public void visit(MemberValuePair n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> Annotation()
    //       | MemberValueArrayInitializer()
    //       | ConditionalExpression()
    public void visit(MemberValue n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "{"
    // f1 -> ( MemberValue() ( "," MemberValue() )* [ "," ] )?
    // f2 -> "}"
    public void visit(MemberValueArrayInitializer n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> "@"
@@ -965,32 +1200,40 @@ public class DepthFirstVisitor implements Visitor {
    // f2 -> <IDENTIFIER>
    // f3 -> AnnotationTypeBody()
    public void visit(AnnotationTypeDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
       n.f3.accept(this);
+      exitProduction();
    }
 
    // f0 -> "{"
    // f1 -> ( AnnotationTypeMemberDeclaration() )*
    // f2 -> "}"
    public void visit(AnnotationTypeBody n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
       n.f2.accept(this);
+      exitProduction();
    }
 
    // f0 -> Modifiers() ( Type() <IDENTIFIER> "(" ")" [ DefaultValue() ] ";" | ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) | FieldDeclaration(modifiers) )
    //       | ( ";" )
    public void visit(AnnotationTypeMemberDeclaration n) {
+      enterProduction(n);
       n.f0.accept(this);
+      exitProduction();
    }
 
    // f0 -> "default"
    // f1 -> MemberValue()
    public void visit(DefaultValue n) {
+      enterProduction(n);
       n.f0.accept(this);
       n.f1.accept(this);
+      exitProduction();
    }
 
 }
