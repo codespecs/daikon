@@ -80,7 +80,7 @@ public class Ast {
   /// Printing and parsing
   ///
 
-  // Fromats an AST as a String.
+  // Formats an AST as a String.
   // This version does not reformat the tree (which blows away formatting
   // information).  The call to "removeWhitespace" may do the wrong thing
   // for embedded strings, however.  In any event, the result is not
@@ -93,6 +93,16 @@ public class Ast {
     // If not intended for human consumption, why remove whitespace?
     //return removeWhitespace(w.toString());
     return removeWhitespace(quickFixForInternalComment(w.toString()));
+  }
+
+  // Formats an AST as a String.
+  // This is a debugging version that outputs all tree nodes:
+  // terminals and non-terminals alike.
+  public static String formatEntireTree(Node n) {
+    StringWriter w = new StringWriter();
+    n.accept(new TreeDumper(w, true));
+    // delete empty lines, but otherwise leave text alone
+    return (w.toString()).replaceAll("(?m)^[ \t]*\r?\n", "");
   }
 
   // This translates a line that looks like this:
