@@ -100,7 +100,7 @@ public class Annotate {
       "                  will be inserted.",
       "  --dbg CATEGORY",
       "  --debug",
-      "                  Enable one or all logger, analogously to the Daikon optin"
+      "                  Enable one or all loggers, analogously to the Daikon option"
       );
 
   public static void main(String[] args) throws Exception {
@@ -130,7 +130,6 @@ public class Annotate {
     int maxInvariantsPP = -1;
 
     Daikon.output_format = OutputFormat.ESCJAVA;
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -209,6 +208,9 @@ public class Annotate {
       }
     }
 
+    // Set up debug traces; note this comes after reading command line options.
+    LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
+
     // The index of the first non-option argument -- the name of the .inv file
     int argindex = g.getOptind();
 
@@ -248,7 +250,7 @@ public class Annotate {
       // outputFile.getParentFile().mkdirs();
       Writer output = new FileWriter(outputFile);
 
-      debug.fine ("Processing file " + javafilename);
+      debug.fine ("Parsing file " + javafilename);
 
       // Annotate the file
       Reader input = null;
@@ -268,6 +270,8 @@ public class Annotate {
         System.err.println(javafilename + ": " + e);
         throw new Daikon.TerminationMessage("ParseException in applyVisitorInsertComments");
       }
+
+      debug.fine ("Processing file " + javafilename);
 
       try {
         Ast.applyVisitorInsertComments(javafilename, root, output,

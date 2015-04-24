@@ -301,7 +301,6 @@ public final class PrintInvariants {
   public static void mainHelper(String[] args)
     throws FileNotFoundException, StreamCorruptedException,
            OptionalDataException, IOException, ClassNotFoundException {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -409,6 +408,9 @@ public final class PrintInvariants {
         break;
       }
     }
+
+    // Set up debug traces; note this comes after reading command line options.
+    LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
 
     validateGuardNulls();
 
