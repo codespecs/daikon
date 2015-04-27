@@ -35,7 +35,7 @@ endif
 quick: quick-txt-diff diff-tests results
 
 # targets that descend to child direcories
-quick-txt-diff txt-diff update-goals merge spinfo-static txt-suppress inv-checker \
+quick-txt-diff txt-diff update-goals merge spinfo-static txt-suppress inv-checker-diff \
 txt-daikon txt-chicory cross-checker cross-checker-good chicory chicory-diff \
 esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff txt-merge-diff \
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
@@ -73,7 +73,7 @@ BASE?=.
 PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; print "$$1\t$$2\t$$3\n"; if ($$1 > 0) { $$failure++; } END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
 # args to 'find' program, to find files containg results
 RESULTS_PATTERN :=    -name '*.txt-*.diff' \
-                   -o -name '*-checker.diff' \
+                   -o -name '*.checker.diff' \
                    -o -name '*.spinfo-static.diff' \
                    -o -name '*.txt-*-failed' \
                    -o -name '*.txt.diff' \
