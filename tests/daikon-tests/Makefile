@@ -12,7 +12,7 @@ results summary summary2 summary3 help-recurse:
 	@$(MAKE) --no-print-directory BASE?=`pwd` -C .. $@
 
 # Targets that descend to child directories
-clean clean-output txt-diff txt-daikon-suppress-diffed txt-suppress txt-daikon txt-chicory update-goals txt-all merge stats instrument compile diffs inv-checker list-targets chicory chicory-diff esc jml inv txt-daikon-diff txt-chicory-diff spinfo-static dyncomp dyncomp-diff txt-simplify txt-simplify-diff txt-csharpcontract txt-csharpcontract-diff txt-repair-diff txt-esc txt-esc-diff txt-jml-diff txt-merge-diff txt-jaif-diff txt-jaif rtc rtc-diff:
+clean clean-output txt-diff txt-daikon-suppress-diffed txt-suppress txt-daikon txt-chicory update-goals txt-all merge stats instrument compile diffs inv-checker list-targets chicory chicory-diff esc jml inv txt-daikon-diff txt-chicory-diff spinfo-static dyncomp dyncomp-diff txt-simplify txt-simplify-diff txt-csharpcontract txt-csharpcontract-diff txt-repair-diff txt-esc txt-esc-diff txt-jml-diff txt-merge-diff txt-jaif-diff txt-jaif rtc rtc-diff txt-logicalcompare txt-logicalcompare-diff:
 	$(MAKE) everything-$@
 
 cross-checker:

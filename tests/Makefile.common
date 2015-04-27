@@ -46,7 +46,6 @@
 # txt-logicalcompare   |   |   |   |   |   |   |   |   |   |
 # txt-all              |   |   |   |   |   |   |   |   |   |
 # context              |   |   |   |   |   |   |   |   |   |
-# gui                  | X | X | X | X |   |   |   |   |   |
 # merge                |   | X |   |   |   |   |   |   |   |
 # esc                  |   | X |   |   |   |   |   |   |   |
 # stats                |   | X |   |   |   |   |   |   |   |
@@ -1325,10 +1324,10 @@ $(RTC_SCRATCH)/violations.txt: $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
 	@echo
 	@echo "### runtime-check tool "
 	@echo
-	cd scratch && java -ea daikon.tools.runtimechecker.Main instrument --directory $(RTC_SCRATCH) ${INV_FILE} `cat $(INST_LIST_FILE)`
+	cd scratch && java -ea -cp "$(CLASSPATH)" daikon.tools.runtimechecker.Main instrument --directory $(RTC_SCRATCH) ${INV_FILE} `cat $(INST_LIST_FILE)`
 	cd $(RTC_SCRATCH) && ${JAVAC} -g `find . $(FINDARGS) -name '*.java'`
-	cd $(RTC_SCRATCH) && ${JAVA} -ea daikon.tools.runtimechecker.WriteViolationFile $(RTC_USER_FLAGS) \
-		${MAIN_CLASS} ${MAIN_ARGS}
+	cd $(RTC_SCRATCH) && ${JAVA} -ea -cp "$(CLASSPATH)" daikon.tools.runtimechecker.WriteViolationFile $(RTC_USER_FLAGS) \
+		$(subst /,.,${MAIN_CLASS}) ${MAIN_ARGS}
 rtc-diff: rtc-violations.txt.diff
 rtc-violations.txt.diff: rtc-violations.txt.goal rtc-violations.txt
 	-rm -f $@
@@ -1396,16 +1395,6 @@ touch: $(SCRATCH_FOR_DAIKON)/.exists
 	touch ${INV_FILE} ${PROJECT_FILE}.{txt-daikon,txt-esc}
 	([ -e merged ] && touch merged/.merged-esc merged/.merged-jml) || true
 
-PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make gui            : launches the gui on the inv file"
-gui: gui-impl
-
-gui-impl: ${INV_FILE}
-	@echo
-	@echo "### gui (${PROJECT_FILE})"
-	@echo
-	${RUN_JAVA} daikon.gui.treeGUI.InvariantsGUI ${INV_FILE} \
-		2>&1 | grep -v "Font specified in font.properties not found" && exit $${PIPESTATUS[0]}
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make stats          : reports invariant counts"

@@ -35,7 +35,7 @@ endif
 quick: quick-txt-diff diff-tests results
 
 # targets that descend to child direcories
-quick-txt-diff txt-diff update-goals merge spinfo-static txt-suppress \
+quick-txt-diff txt-diff update-goals merge spinfo-static txt-suppress inv-checker \
 txt-daikon txt-chicory cross-checker cross-checker-good chicory chicory-diff \
 esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff txt-merge-diff \
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:

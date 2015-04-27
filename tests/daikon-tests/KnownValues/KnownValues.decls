@@ -1,261 +1,329 @@
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
 # If minvalue == maxvalue == 1 and 'x == 1' is inferred, 'x == 1' is suppressed
-DECLARE
-constantMinMaxMatch:::ENTER
+ppt constantMinMaxMatch:::ENTER
+ppt-type enter
 
-DECLARE
-constantMinMaxMatch:::EXIT1
-return
-int # minvalue=1, maxvalue=1
-int
-1
+ppt constantMinMaxMatch:::EXIT1
+ppt-type exit
+variable return
+var-kind return
+dec-type int
+rep-type int
+min-value 1
+max-value 1
+comparability 1
 
 # If minvalue == maxvalue == 2 and 'x == 1' is inferred, 'x == 1' is NOT suppressed
-DECLARE
-constantMinMaxDifferent:::ENTER
+ppt constantMinMaxDifferent:::ENTER
+ppt-type enter
 
-DECLARE
-constantMinMaxDifferent:::EXIT1
-return
-int # minvalue=2, maxvalue=2
-int
-1
+ppt constantMinMaxDifferent:::EXIT1
+ppt-type exit
+variable return
+var-kind return
+dec-type int
+rep-type int
+min-value 2
+max-value 2
+comparability 1
 
 # If a.maxvalue == a.minvalue == b.maxvalue == b.minvalue, 'a == b' is suppressed
-DECLARE
-constantPairMinMaxMatch:::ENTER
+ppt constantPairMinMaxMatch:::ENTER
+ppt-type enter
 
-DECLARE
-constantPairMinMaxMatch:::EXIT1
-a
-int # minvalue=0, maxvalue=0
-int
-1
-b
-int # minvalue=0, maxvalue=0
-int
-1
+ppt constantPairMinMaxMatch:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int
+rep-type int
+min-value 0
+max-value 0
+comparability 1
+variable b
+var-kind variable
+dec-type int
+rep-type int
+min-value 0
+max-value 0
+comparability 1
 
 # If a.maxvalue == 0 and return.minvalue == 0, 'a <= return' is suppressed
-DECLARE
-variableGreaterEqualSuppressed:::ENTER
+ppt variableGreaterEqualSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-variableGreaterEqualSuppressed:::EXIT1
-a
-int # maxvalue=0
-int
-1
-return
-int # minvalue=0
-int
-1
+ppt variableGreaterEqualSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int
+rep-type int
+max-value 0
+comparability 1
+variable return
+var-kind return
+dec-type int
+rep-type int
+min-value 0
+comparability 1
 
 # If a.minvalue > b.maxvalue, 'a > b' is suppressed
-DECLARE
-variableGreaterSuppressed:::ENTER
+ppt variableGreaterSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-variableGreaterSuppressed:::EXIT1
-a
-int # minvalue=12
-int
-1
-b
-int # maxvalue=11
-int
-1
+ppt variableGreaterSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int
+rep-type int
+min-value 12
+comparability 1
+variable b
+var-kind variable
+dec-type int
+rep-type int
+max-value 11
+comparability 1
 
 # If a.validvalues == [0] and a.minlength == a.maxlength == 1, 'a == [0]'
 # and 'size(a) == 1' are suppressed
-DECLARE
-singletonSequenceOneOfSuppressed:::ENTER
+ppt singletonSequenceOneOfSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-singletonSequenceOneOfSuppressed:::EXIT1
-a
-int[]
-hashcode
-0
-a[]
-int[] # validvalues=[0], minlength=1, maxlength=1
-int[]
-1[2]
+ppt singletonSequenceOneOfSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int[]
+rep-type hashcode
+comparability 1
+variable a[..]
+var-kind array
+array 1
+dec-type int[]
+rep-type int[]
+comparability 1[2]
+valid-values [0]
+min-length 1
+max-length 1
 
 # If a.validavalues == [0, 1], 'a is one of (0, 1)' is suppressed
-DECLARE
-sequenceElementOneOfSuppressed:::ENTER
+ppt sequenceElementOneOfSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-sequenceElementOneOfSuppressed:::EXIT1
-a
-int[]
-hashcode
-0
-a[]
-int[] # validvalues=[0 1]
-int[]
-1[2]
+ppt sequenceElementOneOfSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int[]
+rep-type hashcode
+comparability 1
+variable a[..]
+var-kind array
+array 1
+dec-type int[]
+rep-type int[]
+comparability 1[2]
+valid-values [0 1]
 
 # If a.validavalues == [0, 1] and a.maxlength == a.minlength = 1,
 # 'a[] is one of ([0], [1])' is suppressed.
-DECLARE
-sequenceOneOfSuppressed:::ENTER
+ppt sequenceOneOfSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-sequenceOneOfSuppressed:::EXIT1
-a
-int[]
-hashcode
-0
-a[]
-int[] # validvalues=[0 1], maxlength=1, minlength=1
-int[]
-1[2]
+ppt sequenceOneOfSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int[]
+rep-type hashcode
+comparability 1
+variable a[..]
+var-kind array
+array 1
+dec-type int[]
+rep-type int[]
+comparability 1[2]
+valid-values [0 1]
+min-length 1
+max-length 1
 
 # If a.minvalue == 1, 'a >= 1' is suppressed. Note that the
 # trace repeats 'a = 1' at least five more times than the 
 # next values, ensuring the invariant gets produced (and
 # then suppressed).
-DECLARE
-lowerBoundSuppressed:::ENTER
+ppt lowerBoundSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-lowerBoundSuppressed:::EXIT1
-a
-int # minvalue=1
-int
-1
+ppt lowerBoundSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int
+rep-type int
+min-value 1
+comparability 1
 
 # If a.minvalue == 0, 'a >= 1' is NOT suppressed (stronger invariant than expected)
-DECLARE
-lowerBoundNotSuppressedStronger:::ENTER
+ppt lowerBoundNotSuppressedStronger:::ENTER
+ppt-type enter
 
-DECLARE
-lowerBoundNotSuppressedStronger:::EXIT1
-a
-int # minvalue=0
-int
-1
+ppt lowerBoundNotSuppressedStronger:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int
+rep-type int
+min-value 0
+comparability 1
 
 # If a.minvalue == 2, 'a >= 1' is NOT suppressed (weaker invariant than expected)
-DECLARE
-lowerBoundNotSuppressedWeaker:::ENTER
+ppt lowerBoundNotSuppressedWeaker:::ENTER
+ppt-type enter
 
-DECLARE
-lowerBoundNotSuppressedWeaker:::EXIT1
-a
-int # minvalue=2
-int
-1
+ppt lowerBoundNotSuppressedWeaker:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int
+rep-type int
+min-value 2
+comparability 1
 
 # If a.maxvalue == 2, 'a <= 2' is suppressed.
-DECLARE
-upperBoundSuppressed:::ENTER
+ppt upperBoundSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-upperBoundSuppressed:::EXIT1
-a
-int # maxvalue=2
-int
-1
+ppt upperBoundSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int
+rep-type int
+max-value 2
+comparability 1
 
 # If a.validvalues=['true' 'false'], "a is one of {'true', 'false'}" is suppressed
-DECLARE
-stringValidValuesSuppressed:::ENTER
+ppt stringValidValuesSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-stringValidValuesSuppressed:::EXIT1
-a
-string # validvalues=[true false]
-java.lang.String
-1
+ppt stringValidValuesSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type java.lang.String
+rep-type java.lang.String
+comparability 1
+valid-values [true false]
 
 # If a.validvalues=['true' 'false'], "a is one of {'true', 'false', 'potato'}" is NOT suppressed
-DECLARE
-stringValidValuesNotSuppressed:::ENTER
+ppt stringValidValuesNotSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-stringValidValuesNotSuppressed:::EXIT1
-a
-string # validvalues=[true false]
-java.lang.String
-1
+ppt stringValidValuesNotSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type java.lang.String
+rep-type java.lang.String
+comparability 1
+valid-values [true false]
 
-DECLARE
-sequenceStringValidValuesSuppressed:::ENTER
+ppt sequenceStringValidValuesSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-sequenceStringValidValuesSuppressed:::EXIT1
-a
-java.lang.String[]
-hashcode
-1
-a[]
-java.lang.String[] # validvalues=[true false]
-java.lang.String[]
-2[3]
+ppt sequenceStringValidValuesSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type java.lang.String[]
+rep-type hashcode
+comparability 1
+variable a[..]
+var-kind array
+array 1
+dec-type java.lang.String[]
+rep-type java.lang.String[]
+comparability 2[3]
+valid-values [true false]
 
-DECLARE
-sequenceStringValidValuesNotSuppressed:::ENTER
+ppt sequenceStringValidValuesNotSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-sequenceStringValidValuesNotSuppressed:::EXIT1
-a
-java.lang.String[]
-hashcode
-1
-a[]
-java.lang.String[] # validvalues=[true false]
-java.lang.String[]
-2[3]
+ppt sequenceStringValidValuesNotSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type java.lang.String[]
+rep-type hashcode
+comparability 1
+variable a[..]
+var-kind array
+array 1
+dec-type java.lang.String[]
+rep-type java.lang.String[]
+comparability 2[3]
+valid-values [true false]
 
-DECLARE
-intOneOfSuppressed:::ENTER
+ppt intOneOfSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-intOneOfSuppressed:::EXIT1
-a
-int # validvalues=[0 1]
-int
-1
+ppt intOneOfSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int
+rep-type int
+valid-values [0 1]
+comparability 1
 
-DECLARE
-intOneOfNotSuppressed:::ENTER
+ppt intOneOfNotSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-intOneOfNotSuppressed:::EXIT1
-a
-int # validvalues=[0 1]
-int
-1
+ppt intOneOfNotSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int
+rep-type int
+valid-values [0 1]
+comparability 1
 
-DECLARE
-sequenceIntOneOfSuppressed:::ENTER
+ppt sequenceIntOneOfSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-sequenceIntOneOfSuppressed:::EXIT1
-a
-int[]
-hashcode
-0
-a[]
-int[] # validvalues=[0 1]
-int[]
-1[2]
+ppt sequenceIntOneOfSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int[]
+rep-type hashcode
+comparability 1
+variable a[..]
+var-kind array
+array 1
+dec-type int[]
+rep-type int[]
+comparability 1[2]
+valid-values [0 1]
 
-DECLARE
-sequenceIntOneOfNotSuppressed:::ENTER
+ppt sequenceIntOneOfNotSuppressed:::ENTER
+ppt-type enter
 
-DECLARE
-sequenceIntOneOfNotSuppressed:::EXIT1
-a
-int[]
-hashcode
-0
-a[]
-int[] # validvalues=[0 1]
-int[]
-1[2]
+ppt sequenceIntOneOfNotSuppressed:::EXIT1
+ppt-type exit
+variable a
+var-kind variable
+dec-type int[]
+rep-type hashcode
+comparability 1
+variable a[..]
+var-kind array
+array 1
+dec-type int[]
+rep-type int[]
+comparability 1[2]
+valid-values [0 1]
