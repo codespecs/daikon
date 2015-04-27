@@ -1,59 +1,59 @@
 ===========================================================================
-constantMinMaxDifferent:::EXIT
+constantMinMaxDifferent:::EXIT1
 return == 1
 ===========================================================================
-constantMinMaxMatch:::EXIT
+constantMinMaxMatch:::EXIT1
 ===========================================================================
-constantPairMinMaxMatch:::EXIT
+constantPairMinMaxMatch:::EXIT1
 ===========================================================================
-intOneOfNotSuppressed:::EXIT
+intOneOfNotSuppressed:::EXIT1
 a one of { 0, 1, 2 }
 ===========================================================================
-intOneOfSuppressed:::EXIT
+intOneOfSuppressed:::EXIT1
 ===========================================================================
-lowerBoundNotSuppressedStronger:::EXIT
+lowerBoundNotSuppressedStronger:::EXIT1
 a >= 1
 ===========================================================================
-lowerBoundNotSuppressedWeaker:::EXIT
+lowerBoundNotSuppressedWeaker:::EXIT1
 a >= 1
 ===========================================================================
-lowerBoundSuppressed:::EXIT
+lowerBoundSuppressed:::EXIT1
 ===========================================================================
-sequenceElementOneOfSuppressed:::EXIT
+sequenceElementOneOfSuppressed:::EXIT1
 size(a[]) == 7
 ===========================================================================
-sequenceIntOneOfNotSuppressed:::EXIT
+sequenceIntOneOfNotSuppressed:::EXIT1
 a[] == [0, 1, 0, 2]
 a[] elements one of { 0, 1, 2 }
 size(a[]) == 4
 ===========================================================================
-sequenceIntOneOfSuppressed:::EXIT
+sequenceIntOneOfSuppressed:::EXIT1
 a[] == [0, 1, 0]
 size(a[]) == 3
 ===========================================================================
-sequenceOneOfSuppressed:::EXIT
+sequenceOneOfSuppressed:::EXIT1
 ===========================================================================
-sequenceStringValidValuesNotSuppressed:::EXIT
+sequenceStringValidValuesNotSuppressed:::EXIT1
 a[] == [true, false, potato]
 a[] elements one of { "false", "potato", "true" }
 size(a[]) == 3
 ===========================================================================
-sequenceStringValidValuesSuppressed:::EXIT
+sequenceStringValidValuesSuppressed:::EXIT1
 a[] == [true, false]
 size(a[]) == 2
 ===========================================================================
-singletonSequenceOneOfSuppressed:::EXIT
+singletonSequenceOneOfSuppressed:::EXIT1
 a has only one value
 ===========================================================================
-stringValidValuesNotSuppressed:::EXIT
+stringValidValuesNotSuppressed:::EXIT1
 a one of { "false", "potato", "true" }
 a is printable
 ===========================================================================
-stringValidValuesSuppressed:::EXIT
+stringValidValuesSuppressed:::EXIT1
 a is printable
 ===========================================================================
-upperBoundSuppressed:::EXIT
+upperBoundSuppressed:::EXIT1
 ===========================================================================
-variableGreaterEqualSuppressed:::EXIT
+variableGreaterEqualSuppressed:::EXIT1
 ===========================================================================
-variableGreaterSuppressed:::EXIT
+variableGreaterSuppressed:::EXIT1
