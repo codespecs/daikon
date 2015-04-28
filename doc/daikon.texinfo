@@ -7080,9 +7080,10 @@ The @code{instrument} command to runtimechecker creates a new directory
 user-specified Java files, instrumented to check invariants at runtime
 and to record a list of invariant violations in a Java data structure.
 You can compile and run the instrumented version of your program.
-If you wish to check invariants at run time, you should use the
-@option{--std-visibility} option when you run Chicory
-(@pxref{Variables in Chicory output}).
+If you wish to check invariants at run time, you should either
+use the @option{--make_all_fields_public} option to runtimechecker.Main, or
+alternately you should use the @option{--std-visibility} option when you
+run Chicory (@pxref{Variables in Chicory output}).
 
 Here is an example of using the runtime-check instrumenter to 
 create a version of file
