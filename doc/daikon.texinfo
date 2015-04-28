@@ -3112,6 +3112,7 @@ automatically create splitter info files for use by Daikon.
 * Random selection for splitters::
 @end menu
 
+
 @node       Static analysis for splitters
 @subsection Static analysis for splitters
 
@@ -3124,6 +3125,18 @@ In static analysis, all explicitly stated boolean statements in the program
 source are extracted and used as splitting conditions.  The assumption is that
 conditions that are explicitly tested in the program are likely to affect the
 program's behavior and could lead to useful conditional invariants.
+The simple heuristic of using
+these conditional statements as predicates for conditional invariant
+detection is often quite effective.
+
+@menu
+* Static analysis of Java for splitters::
+* Static analysis of C for splitters::
+@end menu
+
+
+@node       Static analysis of Java for splitters
+@subsubsection Static analysis of Java for splitters
 
 The @command{CreateSpinfo} program takes Java source code as input and creates a
 splitter info file for each input file; for instance,
@@ -3137,11 +3150,7 @@ creates the splitter info files @file{Foo.spinfo} and
 Given an @option{-o @var{filename}} argument, @command{CreateSpinfo} puts all the
 splitters in the specified file instead.
 The resulting splitter info file(s) contains each
-boolean expression that appears in the source code.  The conditional
-statements that the programmer used in the source code are likely to
-have important semantic properties.  This simple heuristic of using
-these conditional statements as predicates for conditional invariant
-detection is often quite effective.
+boolean expression that appears in the source code.
 
 If you get an error such as
 @example
@@ -3154,6 +3163,10 @@ then you may have encountered a bug in the JTB library on which
 @command{CreateSpinfo} is built.  It does not permit empty declarations in a
 class body.  Remove the extra semicolon in your Java file (at the
 indicated position) and re-rerun @command{CreateSpinfo}.
+
+
+@node       Static analysis of C for splitters
+@subsubsection Static analysis of C for splitters
 
 The @command{CreateSpinfoC} program performs the same function, for
 C source code.  It can only be run on postprocessed source
