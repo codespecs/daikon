@@ -25,7 +25,8 @@ import typequals.*;
  * Ordinarily, Daikon uses splitting conditions to split data, then seeks
  * to use that split data to form conditional invariants out of its
  * standard built-in invariants.  If you wish the expression in the .spinfo
- * file to be printed as an invariant, then the configuration option
+ * file to be printed as an invariant, whether or not it is itself discovered
+ * by Daikon during invariant detection, then the configuration option
  * <code>daikon.split.PptSplitter.dummy_invariant_level</code> must be set,
  * and formatting information must be supplied in the splitter info file.
  **/
