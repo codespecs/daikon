@@ -15,11 +15,13 @@ then copied the (modified) files over after verification.
 This version of the Java 1.5 grammar (Java1.5.jj) was obtained from:
 https://svn.java.net/svn/javacc~svn/tags/release_41/examples/JavaGrammars/1.5/Java1.5.jj
 
-I have added a modifications (from Jens Palsberg) to avoid a problem
+I have added modifications (from Jens Palsberg) to avoid a problem
 with version 1.3.2 of jtb.
-I have also modified two productions:
+
+I have also modified the following productions:
    ExplicitConstructorInvocation
    PrimarySuffix
+   AllocationExpression
 See the comments at those points in the grammar for more details.
 
 Step 1:

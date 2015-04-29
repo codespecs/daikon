@@ -32,10 +32,12 @@
  *
  * I have added few modifications (from Jens Palsberg) to avoid a problem
  * with version 1.3.2 of jtb.  (markro)
- * I have also modified two productions:
+ *
+ * I have also modified the following productions:
  *    ExplicitConstructorInvocation
  *    PrimarySuffix
- * See the comments at those points for more details.  (markro)
+ *    AllocationExpression
+ * See the comments at those points in the grammar for more details.  (markro)
  *
  */
 
@@ -1771,12 +1773,20 @@ void ArgumentList():
 }
 
 void AllocationExpression():
+/*
+ * The original second alternative was:
+ *   "new" ClassOrInterfaceType() [ TypeArguments() ]
+ * I have modified it to accept the 'diamond' operator ("<>").
+ * This feature was added in Java7 - and although we do not
+ * support many Java7 features, this one is useful and not too
+ *  hard to add.  (markro)
+ */
 {}
 {
   LOOKAHEAD(2)
   "new" PrimitiveType() ArrayDimsAndInits()
 |
-  "new" ClassOrInterfaceType() [ TypeArguments() ]
+  "new" ClassOrInterfaceType() [ LOOKAHEAD(2) TypeArguments()  | "<" ">" ]
     (
       ArrayDimsAndInits()
     |

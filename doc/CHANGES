@@ -25,6 +25,10 @@ Further documentation can be found in:
 Tools that process invariant files:
   Fixed a problem with Annotate and improved its output
 
+The parser used by several tools (Annotate and RuntimeChecker, for example)
+has been improved to understand the 'diamond operator' ("<>") used for 
+type inference in generic instance creation.
+
 Documentation:
   Improved discussion of splitters
 

@@ -3059,13 +3059,19 @@ AllocationExpression AllocationExpression() :
    Token n8;
    ClassOrInterfaceType n9;
    NodeOptional n10 = new NodeOptional();
-   TypeArguments n11;
-   NodeChoice n12;
-   ArrayDimsAndInits n13;
-   NodeSequence n14;
-   Arguments n15;
-   NodeOptional n16 = new NodeOptional();
-   ClassOrInterfaceBody n17;
+   NodeChoice n11;
+   TypeArguments n12;
+   NodeSequence n13;
+   NodeToken n14;
+   Token n15;
+   NodeToken n16;
+   Token n17;
+   NodeChoice n18;
+   ArrayDimsAndInits n19;
+   NodeSequence n20;
+   Arguments n21;
+   NodeOptional n22 = new NodeOptional();
+   ClassOrInterfaceBody n23;
 
    
 }
@@ -3087,28 +3093,39 @@ AllocationExpression AllocationExpression() :
       n9=ClassOrInterfaceType()
       { n6.addNode(n9); }
       (
-         n11=TypeArguments()
+         (
+            LOOKAHEAD(2)
+            n12=TypeArguments()
+            { n11 = new NodeChoice(n12, 0); }
+         |
+            { n13 = new NodeSequence(2); }
+            n15="<" { n14 = JTBToolkit.makeNodeToken(n15); }
+            { n13.addNode(n14); }
+            n17=">" { n16 = JTBToolkit.makeNodeToken(n17); }
+            { n13.addNode(n16); }
+            { n11 = new NodeChoice(n13, 1); }
+         )
          { n10.addNode(n11); }
       )?
       { n6.addNode(n10); }
       (
          (
-            n13=ArrayDimsAndInits()
-            { n12 = new NodeChoice(n13, 0); }
+            n19=ArrayDimsAndInits()
+            { n18 = new NodeChoice(n19, 0); }
          |
-            { n14 = new NodeSequence(2); }
-            n15=Arguments()
-            { n14.addNode(n15); }
+            { n20 = new NodeSequence(2); }
+            n21=Arguments()
+            { n20.addNode(n21); }
             (
-               n17=ClassOrInterfaceBody(false)
-               { n16.addNode(n17); }
+               n23=ClassOrInterfaceBody(false)
+               { n22.addNode(n23); }
             )?
-            { n14.addNode(n16); }
-            { n12 = new NodeChoice(n14, 1); }
+            { n20.addNode(n22); }
+            { n18 = new NodeChoice(n20, 1); }
          )
          
       )
-      { n6.addNode(n12); }
+      { n6.addNode(n18); }
       { n0 = new NodeChoice(n6, 1); }
    )
    
