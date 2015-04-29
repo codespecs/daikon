@@ -2264,7 +2264,7 @@ cd $DAIKONDIR/tests/parser-tests
 ./run-all
 @end example
 
-Success is indicated by each of the diff comparsions being identical.
+Success is indicated by each of the diff comparisons being identical.
 
 [Time: moments]
 
