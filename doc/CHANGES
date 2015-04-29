@@ -25,10 +25,6 @@ Further documentation can be found in:
 Tools that process invariant files:
   Fixed a problem with Annotate and improved its output
 
-Kvasir C/C++ front end:
-
-Bug fixes:
-
 Documentation:
   Improved discussion of splitters
 
