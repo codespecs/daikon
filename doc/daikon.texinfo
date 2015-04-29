@@ -6946,12 +6946,6 @@ variable, for instance due to @option{--std-visibility}.  It can also happen due
 to a bug in Annotate or Daikon; if that is the case, please report it to
 the Daikon developers.
 
-@strong{Known bug (logical shift in Java).}
-Daikon's Java parser
-may produce illegal Java in the annotated file, if the source file to be
-annotated includes logical shift operators.
-@xref{Parsing logical shift operators}.
-
 
 @node       AnnotateNullable
 @subsection AnnotateNullable
@@ -7213,12 +7207,6 @@ this method to see if the class has been instrumented).
 @item
 @code{getDaikonInvariants()}.  Returns the array of properties being checked.
 @end itemize
-
-@strong{Known bug (logical shift in Java).}
-Daikon's Java parser
-may produce illegal Java in the instrumented file, if the source file to
-be instrumented includes logical shift operators.
-@xref{Parsing logical shift operators}.
 
 
 @node          Problems compiling instrumented code
@@ -7609,7 +7597,6 @@ mailing lists (@pxref{Mailing lists}).
 @menu
 * Daikon problems::
 * Large dtrace files::
-* Parsing logical shift operators::
 * Chicory problems::
 * Reporting problems::
 * Further reading::
@@ -8408,50 +8395,7 @@ rather than every execution.  For example, Chicory's
 @option{--sample-start} command-line option does this (@pxref{Chicory
 miscellaneous options}).
 
-
 @end enumerate
-
-
-@node    Parsing logical shift operators
-@section Parsing logical shift operators such as @code{<<} and @code{<<}
-
-Daikon incorrectly parses Java code that contains logical shift operators
-such as @code{x << y} or @code{x >> y}.
-
-This problem affects @ref{Annotate} and the @ref{Runtime-check
-instrumenter}, which output Java source code.
-
-@c Here are two possible explanations of what goes wrong, which appeared in
-@c different parts of the manual.  I'm not sure which one is correct.  The
-@c correct one should be uncomented.
-
-@c If the Java file to be annotated/instrumented uses logical
-@c shift operators (@code{>>}, @code{<<}, and @code{>>>}), the
-@c annotated/instrumented Java may contain extra angle brackets in these
-@c operators.  For example, the expression @code{x << y} in the input source
-@c file may erroneously be translated as @code{x <<<<<< y} in the
-@c annotated/instrumented file.
-@c 
-@c This error's presence will be immediately apparent if you try to compile
-@c the annotated/instrumented file and it fails to compile because the
-@c extra angle brackets make it syntactically illegal.
-
-@c Therefore, such invariants (along with
-@c a few other invariants that cannot be properly formatted as Java code)
-@c are suppressed from the output of these tools.  (Annotate inserts them
-@c as comments, and runtimechecker silently ignores them.)
-
-The incorrect Java parsing is caused by bugs in the 
-JTB parser generator,
-@uref{http://compilers.cs.ucla.edu/jtb/} that created 
-Daikon's Java parser.
-The bug should be fixed in JTB, or
-the generated Java parser in @file{daikon/java/jtb} could be
-fixed, or
-Daikon could be changed to use a less buggy parser generator.
-Your assistance with any of these tasks would be greatly appreciated.
-Alternately, you can manually fix occurrences of the
-logical shift operator in the output of Daikon's tools that parse Java.
 
 
 @node    Chicory problems
