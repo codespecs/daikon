@@ -20,6 +20,21 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.4 (May 1, 2015)
+
+Tools that process invariant files:
+  Fixed a problem with Annotate and improved its output
+
+Kvasir C/C++ front end:
+
+Bug fixes:
+
+Documentation:
+  Improved discussion of splitters
+
+
+===========================================================================
+
 5.2.2 (April 10, 2015)
 
 Tools that process invariant files:
