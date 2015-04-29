@@ -82,10 +82,10 @@ public class Violation implements Serializable {
             return xmlname;
         }
 
-        public static final Time onEntry = new Time("violated on entry",
+        public static final Time onEntry = new Time("violated on entry ",
                 "<ON_ENTRY>");
 
-        public static final Time onExit = new Time("violated on exit ",
+        public static final Time onExit = new Time("violated on exit  ",
                 "<ON_EXIT>");
 
         // See documentation for Serializable.
@@ -142,7 +142,8 @@ public class Violation implements Serializable {
         return get(anno, t);
     }
 
-    // Maps into all the Violation objects created.
+    // Collection of all the Violation objects created.
+    // The key is the hashCode of the Violation that is the value.
     private static HashMap<Integer, Violation> violationsMap = new HashMap<Integer, Violation>();
 
     // [[[ TODO: ensure args are not null (otherwise hashCode,
