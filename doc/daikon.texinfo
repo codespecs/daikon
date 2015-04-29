@@ -7226,7 +7226,7 @@ If you receive the error above, then a variable in an invariant
 
 There are two ways to fix this.  To check invariants that mention private
 variables, supply the @option{--make_all_fields_public} command-line option
-when running @cmd{java daikon.tools.runtimechecker.Main instrument ...}.
+when running @samp{java daikon.tools.runtimechecker.Main instrument ...}.
 To ignore invariants that mention private variables, rebuild the
 @file{.dtrace} file by rerunning Chicory using the
 @option{--std-visibility} command-line option.
