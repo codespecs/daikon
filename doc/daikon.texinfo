@@ -3907,7 +3907,7 @@ Specifies arguments to be passed to Daikon if the @option{--daikon} or
 @item --premain=@var{path}
 Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
 Chicory requires this jar file in order to execute.  By default Chicory
-looks for the jar file in the classpath and in @file{$@{DAIKONDIR@}/java}
+looks for the jar file in the classpath and in @file{$DAIKONDIR/java}
 (where @env{DAIKONDIR} is an environment variable that points to the
 complete installation of Daikon).
 
@@ -4185,6 +4185,7 @@ turned on with @option{--abridged-vars}.
 * Instrumenting the JDK with DynComp::
 * DynComp for Java options::
 * Instrumentation of Object methods::
+* Known bugs and limitations::
 * DynComp for Java known bugs::
 @end menu
 
@@ -4394,6 +4395,29 @@ method.  In the case of @code{clone}, the methods are invoked via
 reflection.  In either case, the object being cloned and the resulting
 clone are made comparable to each other.  Again, we will provide a
 switch to customize this behavior in a future release.
+
+
+@node       Troubleshooting DynComp for Java
+@subsection Troubleshooting DynComp for Java
+
+If DynComp crashes the JVM, then the most likely problem is that you are
+running with a wrong version of the JDK@.  Re-instrument the JDK as
+described in @ref{Instrumenting the JDK with DynComp}.
+
+Examples of errors that you may obtain when using the wrong version of the
+JDK include the following:
+
+@example
+Error occurred during initialization of VM
+java.lang.UnsatisfiedLinkError:
+@end example
+
+@c This one has not been verified yet; reinstate it if it is verified.
+@c @example
+@c A fatal error has been detected by the Java Runtime Environment:
+@c #
+@c #  EXCEPTION_ACCESS_VIOLATION
+@c @end example
 
 
 @node       DynComp for Java known bugs
