@@ -3,8 +3,8 @@
 #
 
 # Add the basic jars to the classpath if they aren't already there
-ifeq "$(wildcard $(DAIKONDIR)/java/lib/plume.jar)" "$(DAIKONDIR)/java/lib/plume.jar"
-    CLASSPATH_JARS = :$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/plume.jar
+ifeq "$(wildcard ${DAIKONDIR}/java/lib/plume.jar)" "${DAIKONDIR}/java/lib/plume.jar"
+    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/plume.jar
 endif
 
 # Add necessary items to the classpath if they are not already there
@@ -12,7 +12,7 @@ ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
   CLASSPATH := .:$(CLASSPATH)
 endif
 ifneq (daikon/java:,$(findstring daikon/java:,$(CLASSPATH)))
-    CLASSPATH := $(CLASSPATH):$(DAIKONDIR)/java
+    CLASSPATH := $(CLASSPATH):${DAIKONDIR}/java
 endif
 ifdef CLASSPATH_JARS
   ifneq (plume.jar,$(findstring plume.jar,$(CLASSPATH)))

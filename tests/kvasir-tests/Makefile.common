@@ -9,19 +9,19 @@ endif
 CC := gcc
 CXX := g++
 CFLAGS += -gdwarf-2
-VALGRIND = $(DAIKONDIR)/fjalar/valgrind/inst/bin/valgrind
-KVASIR_SKIN = $(DAIKONDIR)/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
-KVASIR_SCRIPT = $(DAIKONDIR)/scripts/kvasir-dtrace
+VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
+KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
+KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
 KVASIR_OPTIONS := $(KVASIR_OPTIONS)
 KVASIR_DECLS_2 := $(KVASIR_DECLS_@)
 CLEAN_OUTPUT := ../clean-output.pl
 CLEAN_DECLS := ../clean-decls.pl
 REMOVE_TIMING := ../remove-timing.pl
-DECLS_2_COMP ?= $(DAIKONDIR)/scripts/decls2comp.py
+DECLS_2_COMP ?= ${DAIKONDIR}/scripts/decls2comp.py
 RUN_MANY := ../run-many.pl
 DTRACE_DIFF ?= dtrace-diff.pl
-SORT_DTRACE_INPLACE := perl -Si $(DAIKONDIR)/scripts/sort-dtrace.pl
-SORT_DECLS := $(DAIKONDIR)/scripts/sort-decls-2.py
+SORT_DTRACE_INPLACE := perl -Si ${DAIKONDIR}/scripts/sort-dtrace.pl
+SORT_DECLS := ${DAIKONDIR}/scripts/sort-decls-2.py
 INCLUDES ?=
 LIBS ?=
 LIBFLAGS ?=
@@ -180,7 +180,7 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 else
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out | $(DAIKONDIR)/scripts/dtrace-count.pl >$(NAME).counts
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out | ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -197,7 +197,7 @@ endif
 
 ifeq ($(COUNTS_ONLY),)
 $(NAME).counts: daikon-output/$(NAME)$(DTRACE_EXT)
-	$(ZCAT) $< | $(DAIKONDIR)/scripts/dtrace-count.pl >$@
+	$(ZCAT) $< | ${DAIKONDIR}/scripts/dtrace-count.pl >$@
 else
 $(NAME).counts: ran-kvasir
 	@
@@ -314,9 +314,9 @@ kvasir-DC:
 	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS)
 
 $(VALGRIND):
-	$(MAKE) -C $(DAIKONDIR) kvasir
+	$(MAKE) -C ${DAIKONDIR} kvasir
 
 trace: $(NAME)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --with-dyncomp --decls-only --dyncomp-trace --no-var-leader --no-val-leader --no-path-compression ./$(NAME) $(PROGRAM_ARGS) 2>&1 | $(DAIKONDIR)/scripts/merge_tracker.py - $(NAME).db
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --with-dyncomp --decls-only --dyncomp-trace --no-var-leader --no-val-leader --no-path-compression ./$(NAME) $(PROGRAM_ARGS) 2>&1 | ${DAIKONDIR}/scripts/merge_tracker.py - $(NAME).db
 	$(AFTER_RUN)

@@ -255,7 +255,7 @@ public class Chicory {
           }
       }
 
-    // If not on the classpath look in $(DAIKONDIR)/java
+    // If not on the classpath look in ${DAIKONDIR}/java
     if (premain == null) {
       String daikon_dir = System.getenv ("DAIKONDIR");
       if (daikon_dir != null) {
