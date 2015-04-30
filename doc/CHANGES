@@ -32,6 +32,9 @@ type inference in generic instance creation.
 Documentation:
   Improved discussion of splitters
 
+The location of the Celeriac front end has changed:
+  https://github.com/melonhead901/daikon-dot-net-front-end	
+
 
 ===========================================================================
 
