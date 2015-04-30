@@ -220,7 +220,6 @@ ifndef SCRATCH_BASE
 endif
 SCRATCH_FOR_DAIKON_BASE?=${SCRATCH_BASE}/${USER}/tests
 SCRATCH_FOR_DAIKON?=${SCRATCH_FOR_DAIKON_BASE}/${PROJECT}
-#CHICORY_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_chicory
 RTC_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_rtc
 ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 
@@ -372,7 +371,7 @@ clean-output:
 	@echo "### clean-output (${PROJECT_FILE})"
 	@echo
 	rm -f *.bak *.diff ${PROJECT_FILE}.{inv{,.gz},decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon,simplify,logicalcompare,csharpcontract,esc,jml,repair,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,context,stats,linecov,spinfo-static}
-	rm -rf merged *txt-chicory.dtrace
+	rm -rf merged *txt-chicory.dtrace rtc-violations.txt
 	rm -f *.bak *.diff ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
 ifeq (csv,${STORED_TRACE_FORMAT})
 	rm -f ${PROJECT_FILE}.dtrace.gz ${PROJECT_FILE}.decls
@@ -390,8 +389,6 @@ clean-scratch:
 	@echo "### clean-scratch (${PROJECT_FILE})"
 	@echo
 	rm -rf ${SCRATCH_FOR_DAIKON}
-	# continue to remove old chicory dir until everyone's is gone (Dec 2005)
-	rm -rf $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_chicory
 	rm -rf ${ECLAT_SCRATCH}
 	@[ ! -e scratch ] || [ -L scratch ] # must be symlink if it exists
 	rm -rf scratch
