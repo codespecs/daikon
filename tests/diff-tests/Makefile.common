@@ -10,14 +10,14 @@ DAIKONDIR ?= ${DAIKONDIR}
 
 # Standard setting of classpath to include everything be correct
 # for both Windows, Mac, and Linux
-include $(DAIKONDIR)/tests/Makefile.classpath
+include ${DAIKONDIR}/tests/Makefile.classpath
 
 
 PROGRAM := $(notdir $(shell pwd))
 DAIKON := java -Xmx800m daikon.Daikon
 INV_DIFF := java -Xmx800m daikon.diff.Diff
-DAIKON_CLASS?=$(DAIKONDIR)/java/daikon/Daikon.class
-DIFF_CLASS?=$(DAIKONDIR)/java/daikon/diff/Diff.class
+DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
+DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 
 INV_FILES := $(PROGRAM)-1.inv.gz $(PROGRAM)-2.inv.gz
 # An output file must satisfy the pattern program%.txt, where the % is

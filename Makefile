@@ -238,39 +238,39 @@ build-kvasir: kvasir
 ### Rebuild everything; used for monthly releases, for example
 
 rebuild-everything-clean:
-	${MAKE} -C $(DAIKONDIR) clean-everything
-	${MAKE} -C $(DAIKONDIR) rebuild-everything
+	${MAKE} -C ${DAIKONDIR} clean-everything
+	${MAKE} -C ${DAIKONDIR} rebuild-everything
 
 rebuild-everything-but-kvasir-clean:
-	${MAKE} -C $(DAIKONDIR) clean-everything-but-kvasir
-	${MAKE} -C $(DAIKONDIR) rebuild-everything-but-kvasir
+	${MAKE} -C ${DAIKONDIR} clean-everything-but-kvasir
+	${MAKE} -C ${DAIKONDIR} rebuild-everything-but-kvasir
 
 rebuild-everything:
-	${MAKE} -C $(DAIKONDIR) rebuild-everything-but-kvasir
-	${MAKE} -C $(DAIKONDIR) rebuild-kvasir
+	${MAKE} -C ${DAIKONDIR} rebuild-everything-but-kvasir
+	${MAKE} -C ${DAIKONDIR} rebuild-kvasir
 
 rebuild-everything-but-kvasir:
-	${MAKE} -C $(DAIKONDIR)/java tags compile
-	${MAKE} -C $(DAIKONDIR) daikon.jar
-	${MAKE} -C $(DAIKONDIR)/java dcomp_rt.jar
-	${MAKE} -C $(DAIKONDIR)/java javadoc
-	${MAKE} -C $(DAIKONDIR) doc-all
+	${MAKE} -C ${DAIKONDIR}/java tags compile
+	${MAKE} -C ${DAIKONDIR} daikon.jar
+	${MAKE} -C ${DAIKONDIR}/java dcomp_rt.jar
+	${MAKE} -C ${DAIKONDIR}/java javadoc
+	${MAKE} -C ${DAIKONDIR} doc-all
 
 rebuild-kvasir:
 	${MAKE} kvasir
 
 clean-everything:
-	${MAKE} -C $(DAIKONDIR) clean-everything-but-kvasir
-	${MAKE} -C $(DAIKONDIR) clean-kvasir
+	${MAKE} -C ${DAIKONDIR} clean-everything-but-kvasir
+	${MAKE} -C ${DAIKONDIR} clean-kvasir
 
 clean-everything-but-kvasir:
 	-rm -rf daikon.jar
 	-rm -rf java/java_files.txt
-	${MAKE} -C $(DAIKONDIR)/java very-clean
-	${MAKE} -C $(DAIKONDIR)/doc clean
+	${MAKE} -C ${DAIKONDIR}/java very-clean
+	${MAKE} -C ${DAIKONDIR}/doc clean
 
 clean-kvasir:
-	-${MAKE} -C $(DAIKONDIR)/fjalar/valgrind uninstall distclean 
+	-${MAKE} -C ${DAIKONDIR}/fjalar/valgrind uninstall distclean 
 
 
 ### Testing the code
@@ -332,7 +332,7 @@ repository-test:
 # vars for Daikon
 	export DAIKONDIR=${MYTESTDIR}/daikon
 	export JAVA_HOME=/usr/lib/jvm/java
-	source $(DAIKONDIR)/scripts/daikon.bashrc
+	source ${DAIKONDIR}/scripts/daikon.bashrc
 	cd daikon && make 
 
 
@@ -437,7 +437,7 @@ CUR_VER := $(shell unzip -p /cse/web/research/plse/daikon/download/daikon.zip da
 HISTORY_DIR := /cse/web/research/plse/daikon/history
 
 check-for-broken-doc-links:
-	checklink -q -r `grep -v '^#' $(DAIKONDIR)/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon/staging-daikon >check.log 2>&1
+	checklink -q -r `grep -v '^#' ${DAIKONDIR}/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon/staging-daikon >check.log 2>&1
 
 save-current-release:
 	@echo Saving $(CUR_VER) to history directory.

@@ -14,7 +14,7 @@ DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
 
 # Test that the directory exists.  There must be a better way to do this.
-DAIKONDIR:=$(wildcard $(DAIKONDIR))
+DAIKONDIR:=$(wildcard ${DAIKONDIR})
 ifndef DAIKONDIR
   $(error Environment variable DAIKONDIR is not set to an existing directory)
 endif
@@ -104,15 +104,15 @@ JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx1024m
 # These jar files only exist for the development version, not the
 # distributed version, of Daikon.  The if clause avoids a (harmless but
 # annoying) javac error message that they don't exist.
-ifeq "$(wildcard $(DAIKONDIR)/java/lib/plume.jar)" "$(DAIKONDIR)/java/lib/plume.jar"
-    CLASSPATH_JARS = :$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/plume.jar
+ifeq "$(wildcard ${DAIKONDIR}/java/lib/plume.jar)" "${DAIKONDIR}/java/lib/plume.jar"
+    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/plume.jar
 endif
 ifeq "$(wildcard ${CHECKERJAR})" "${CHECKERJAR}"
     CLASSPATH_JARS2 = ${CHECKERJAR}
 endif
 
 # This probably shouldn't be unconditional??
-CLASSPATH := :$(DAIKONDIR)/java:$(CLASSPATH)
+CLASSPATH := :${DAIKONDIR}/java:$(CLASSPATH)
 
 # Add necessary items to the classpath if they are not already there
 ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
@@ -1105,14 +1105,14 @@ junit-all: junit
 CLOVER := $(HOME)/clover
 CLOVER_CMD := ${JAVA} -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
-CLOVER_CP := $(subst $(DAIKONDIR)/java,$(CLOVER)/java,$(CLASSPATH))
+CLOVER_CP := $(subst ${DAIKONDIR}/java,$(CLOVER)/java,$(CLASSPATH))
 CLOVER_CP := $(CLOVER_CP):$(CLOVER)/clover-1.3.1/lib/clover.jar
 
 clover: all_directly
 	/bin/rm -rf $(CLOVER)/java
 	mkdir $(CLOVER)/java
-	cd $(CLOVER)/java; ln -s $(DAIKONDIR)/java/jtb
-	cd $(CLOVER)/java; ln -s $(DAIKONDIR)/java/lib
+	cd $(CLOVER)/java; ln -s ${DAIKONDIR}/java/jtb
+	cd $(CLOVER)/java; ln -s ${DAIKONDIR}/java/lib
 	cp Makefile $(CLOVER)/java
 	mkdir $(CLOVER)/java/daikon
 	(cd daikon; tar cf - .) | (cd $(CLOVER)/java/daikon; tar xfBp -)
@@ -1130,13 +1130,13 @@ clover: all_directly
 ###
 
 JAVADOC_DEST  = api
-# $(DAIKONDIR)/java should not be in classpath, to avoid Javadoc error
+# ${DAIKONDIR}/java should not be in classpath, to avoid Javadoc error
 # "Multiple sources of package comments found for package"
 JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
                 -linkoffline http://docs.oracle.com/javase/8/docs/api/ http://docs.oracle.com/javase/8/docs/api/ \
                 -docletpath "${CLASSPATH}" \
-                -classpath "$(subst $(DAIKONDIR)/java:,${CLASSPATH_JARS}:${CLASSPATH_JARS2}:,${CLASSPATH})"
+                -classpath "$(subst ${DAIKONDIR}/java:,${CLASSPATH_JARS}:${CLASSPATH_JARS2}:,${CLASSPATH})"
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | ${SORT_DIRECTORY_ORDER})
 
