@@ -3907,7 +3907,7 @@ Specifies arguments to be passed to Daikon if the @option{--daikon} or
 @item --premain=@var{path}
 Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
 Chicory requires this jar file in order to execute.  By default Chicory
-looks for the jar file in the classpath and in @file{${DAIKONDIR}/java}
+looks for the jar file in the classpath and in @file{$@{DAIKONDIR@}/java}
 (where @env{DAIKONDIR} is an environment variable that points to the
 complete installation of Daikon).
 
