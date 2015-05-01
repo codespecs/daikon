@@ -1,0 +1,430 @@
+REPLACE
+addAll(Collection<? extends E> c)
+addAll(size, c)
+hasNext()
+nextIndex()< size
+hasPrevious()
+previousIndex()>= 0
+iterator()
+listIterator()
+listIterator()
+listIterator(0)
+nextIndex()
+i.nextIndex()- offset
+outOfBoundsMsg(int index)
+"Index: "+index+", Size: "+size
+previousIndex()
+i.previousIndex()- offset
+subList(int fromIndex, int toIndex)
+new RandomAccessSubList17<>(this, fromIndex, toIndex)
+
+PPT_NAME javautil.AbstractList17.add
+orig(true)
+true
+
+PPT_NAME javautil.AbstractList17.addAll
+modified
+orig(modified)
+
+PPT_NAME javautil.AbstractList17.indexOf
+it.hasNext()
+it.hasNext()
+it.next()==null
+o.equals(it.next())
+o==null
+orig(it.hasNext())
+orig(it.hasNext())
+orig(it.next()==null)
+orig(o.equals(it.next()))
+orig(o==null)
+
+PPT_NAME javautil.AbstractList17.lastIndexOf
+it.hasPrevious()
+it.hasPrevious()
+it.previous()==null
+o.equals(it.previous())
+o==null
+orig(it.hasPrevious())
+orig(it.hasPrevious())
+orig(it.previous()==null)
+orig(o.equals(it.previous()))
+orig(o==null)
+
+PPT_NAME javautil.Itr.checkForComodification
+modCount != expectedModCount
+orig(modCount != expectedModCount)
+
+PPT_NAME javautil.Itr.hasNext
+cursor != size()
+orig(cursor != size())
+
+PPT_NAME javautil.Itr.remove
+lastRet < 0
+lastRet < cursor
+orig(lastRet < 0)
+orig(lastRet < cursor)
+
+PPT_NAME javautil.ListItr.equals
+!(e1.hasNext()|| e2.hasNext())
+!(o instanceof List)
+!(o1==null ? o2==null : o1.equals(o2))
+e1.hasNext()&& e2.hasNext()
+false
+false
+o == this
+orig(!(e1.hasNext()|| e2.hasNext()))
+orig(!(o instanceof List))
+orig(!(o1==null ? o2==null : o1.equals(o2)))
+orig(e1.hasNext()&& e2.hasNext())
+orig(false)
+orig(false)
+orig(o == this)
+orig(true)
+true
+
+PPT_NAME javautil.ListItr.hasPrevious
+cursor != 0
+orig(cursor != 0)
+
+PPT_NAME javautil.ListItr.rangeCheckForAdd
+index < 0 || index > size()
+orig(index < 0 || index > size())
+
+PPT_NAME javautil.ListItr.removeRange
+i<n
+orig(i<n)
+
+PPT_NAME javautil.ListItr.set
+lastRet < 0
+orig(lastRet < 0)
+
+PPT_NAME javautil.SubList.SubList
+fromIndex < 0
+fromIndex > toIndex
+orig(fromIndex < 0)
+orig(fromIndex > toIndex)
+orig(toIndex > list.size())
+toIndex > list.size()
+
+PPT_NAME javautil.SubList.addAll
+addAll(size, c)
+cSize==0
+false
+orig(addAll(size, c))
+orig(cSize==0)
+orig(false)
+orig(true)
+true
+
+PPT_NAME javautil.SubList.checkForComodification
+orig(this.modCount != l.modCount)
+this.modCount != l.modCount
+
+PPT_NAME javautil.SubList.hasNext
+nextIndex()< size
+orig(nextIndex()< size)
+
+PPT_NAME javautil.SubList.hasPrevious
+orig(previousIndex()>= 0)
+previousIndex()>= 0
+
+PPT_NAME javautil.SubList.next
+hasNext()
+orig(hasNext())
+
+PPT_NAME javautil.SubList.previous
+hasPrevious()
+orig(hasPrevious())
+
+PPT_NAME javautil.SubList.rangeCheck
+index < 0 || index >= size
+orig(index < 0 || index >= size)
+
+PPT_NAME javautil.SubList.rangeCheckForAdd
+index < 0 || index > size
+orig(index < 0 || index > size)
+
+REPLACE
+addAll(Collection<? extends E> c)
+addAll(this.size, c)
+contains(Object o)
+indexOf(o)>= 0
+elementData(int index)
+(E)elementData[index]
+hasNext()
+cursor != SubList.this.size
+hasPrevious()
+cursor != 0
+isEmpty()
+size == 0
+iterator()
+listIterator()
+listIterator()
+new ListItr(0)
+nextIndex()
+cursor
+outOfBoundsMsg(int index)
+"Index: "+index+", Size: "+this.size
+previousIndex()
+cursor - 1
+removeAll(Collection<?> c)
+batchRemove(c, false)
+retainAll(Collection<?> c)
+batchRemove(c, true)
+size()
+size
+toArray()
+Arrays.copyOf(elementData, size)
+
+PPT_NAME javautil.ArrayList17.ArrayList17
+elementData.getClass()!= Object[].class
+initialCapacity < 0
+orig(elementData.getClass()!= Object[].class)
+orig(initialCapacity < 0)
+
+PPT_NAME javautil.ArrayList17.add
+orig(true)
+true
+
+PPT_NAME javautil.ArrayList17.addAll
+numMoved > 0
+numNew != 0
+numNew != 0
+orig(numMoved > 0)
+orig(numNew != 0)
+orig(numNew != 0)
+
+PPT_NAME javautil.ArrayList17.batchRemove
+c.contains(elementData[r])== complement
+i < size
+modified
+orig(c.contains(elementData[r])== complement)
+orig(i < size)
+orig(modified)
+orig(r != size)
+orig(r < size)
+orig(w != size)
+r != size
+r < size
+w != size
+
+PPT_NAME javautil.ArrayList17.clear
+i < size
+orig(i < size)
+
+PPT_NAME javautil.ArrayList17.contains
+indexOf(o)>= 0
+orig(indexOf(o)>= 0)
+
+PPT_NAME javautil.ArrayList17.ensureCapacity
+minCapacity > minExpand
+orig(minCapacity > minExpand)
+
+PPT_NAME javautil.ArrayList17.ensureCapacityInternal
+elementData == EMPTY_ELEMENTDATA
+orig(elementData == EMPTY_ELEMENTDATA)
+
+PPT_NAME javautil.ArrayList17.ensureExplicitCapacity
+minCapacity - elementData.length > 0
+orig(minCapacity - elementData.length > 0)
+
+PPT_NAME javautil.ArrayList17.fastRemove
+numMoved > 0
+orig(numMoved > 0)
+
+PPT_NAME javautil.ArrayList17.grow
+newCapacity - MAX_ARRAY_SIZE > 0
+newCapacity - minCapacity < 0
+orig(newCapacity - MAX_ARRAY_SIZE > 0)
+orig(newCapacity - minCapacity < 0)
+
+PPT_NAME javautil.ArrayList17.hugeCapacity
+minCapacity < 0
+orig(minCapacity < 0)
+
+PPT_NAME javautil.ArrayList17.indexOf
+elementData[i]==null
+i < size
+i < size
+o == null
+o.equals(elementData[i])
+orig(elementData[i]==null)
+orig(i < size)
+orig(i < size)
+orig(o == null)
+orig(o.equals(elementData[i]))
+
+PPT_NAME javautil.ArrayList17.isEmpty
+orig(size == 0)
+size == 0
+
+PPT_NAME javautil.ArrayList17.lastIndexOf
+elementData[i]==null
+i >= 0
+i >= 0
+o == null
+o.equals(elementData[i])
+orig(elementData[i]==null)
+orig(i >= 0)
+orig(i >= 0)
+orig(o == null)
+orig(o.equals(elementData[i]))
+
+PPT_NAME javautil.ArrayList17.listIterator
+index < 0 || index > size
+orig(index < 0 || index > size)
+
+PPT_NAME javautil.ArrayList17.rangeCheck
+index >= size
+orig(index >= size)
+
+PPT_NAME javautil.ArrayList17.rangeCheckForAdd
+index > size || index < 0
+orig(index > size || index < 0)
+
+PPT_NAME javautil.ArrayList17.readObject
+i<size
+orig(i<size)
+orig(size > 0)
+size > 0
+
+PPT_NAME javautil.ArrayList17.remove
+elementData[index] == null
+false
+index < size
+index < size
+numMoved > 0
+o == null
+o.equals(elementData[index])
+orig(elementData[index] == null)
+orig(false)
+orig(index < size)
+orig(index < size)
+orig(numMoved > 0)
+orig(o == null)
+orig(o.equals(elementData[index]))
+orig(true)
+orig(true)
+true
+true
+
+PPT_NAME javautil.ArrayList17.removeAll
+batchRemove(c, false)
+orig(batchRemove(c, false))
+
+PPT_NAME javautil.ArrayList17.removeRange
+i < size
+orig(i < size)
+
+PPT_NAME javautil.ArrayList17.retainAll
+batchRemove(c, true)
+orig(batchRemove(c, true))
+
+PPT_NAME javautil.ArrayList17.toArray
+a.length < size
+a.length > size
+orig(a.length < size)
+orig(a.length > size)
+
+PPT_NAME javautil.ArrayList17.trimToSize
+orig(size < elementData.length)
+size < elementData.length
+
+PPT_NAME javautil.ArrayList17.writeObject
+i<size
+modCount != expectedModCount
+orig(i<size)
+orig(modCount != expectedModCount)
+
+PPT_NAME javautil.Itr.checkForComodification
+modCount != expectedModCount
+orig(modCount != expectedModCount)
+
+PPT_NAME javautil.Itr.hasNext
+cursor != size
+orig(cursor != size)
+
+PPT_NAME javautil.Itr.next
+i >= elementData.length
+i >= size
+orig(i >= elementData.length)
+orig(i >= size)
+
+PPT_NAME javautil.Itr.remove
+lastRet < 0
+orig(lastRet < 0)
+
+PPT_NAME javautil.ListItr.hasPrevious
+cursor != 0
+orig(cursor != 0)
+
+PPT_NAME javautil.ListItr.previous
+i < 0
+i >= elementData.length
+orig(i < 0)
+orig(i >= elementData.length)
+
+PPT_NAME javautil.ListItr.set
+lastRet < 0
+orig(lastRet < 0)
+
+PPT_NAME javautil.ListItr.subListRangeCheck
+fromIndex < 0
+fromIndex > toIndex
+orig(fromIndex < 0)
+orig(fromIndex > toIndex)
+orig(toIndex > size)
+toIndex > size
+
+PPT_NAME javautil.SubList.addAll
+addAll(this.size, c)
+cSize==0
+false
+orig(addAll(this.size, c))
+orig(cSize==0)
+orig(false)
+orig(true)
+true
+
+PPT_NAME javautil.SubList.checkForComodification
+ArrayList17.this.modCount != this.modCount
+expectedModCount != ArrayList17.this.modCount
+orig(ArrayList17.this.modCount != this.modCount)
+orig(expectedModCount != ArrayList17.this.modCount)
+
+PPT_NAME javautil.SubList.hasNext
+cursor != SubList.this.size
+orig(cursor != SubList.this.size)
+
+PPT_NAME javautil.SubList.hasPrevious
+cursor != 0
+orig(cursor != 0)
+
+PPT_NAME javautil.SubList.next
+i >= SubList.this.size
+offset + i >= elementData.length
+orig(i >= SubList.this.size)
+orig(offset + i >= elementData.length)
+
+PPT_NAME javautil.SubList.previous
+i < 0
+offset + i >= elementData.length
+orig(i < 0)
+orig(offset + i >= elementData.length)
+
+PPT_NAME javautil.SubList.rangeCheck
+index < 0 || index >= this.size
+orig(index < 0 || index >= this.size)
+
+PPT_NAME javautil.SubList.rangeCheckForAdd
+index < 0 || index > this.size
+orig(index < 0 || index > this.size)
+
+PPT_NAME javautil.SubList.remove
+lastRet < 0
+orig(lastRet < 0)
+
+PPT_NAME javautil.SubList.set
+lastRet < 0
+orig(lastRet < 0)
+
