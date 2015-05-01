@@ -2770,13 +2770,16 @@ appears in this manual, see its source code.
 
 
 @node    Conditional invariants
-@section Conditional invariants and implications
+@section Conditional invariants (disjunctions) and implications
 @cindex splitting
 @cindex splitting condition
 @cindex conditional invariant
 @cindex invariant, conditional
 @cindex implication invariant
 @cindex invariant, implication
+@cindex disjunction
+@cindex disjunctive invariant
+@cindex invariant, disjunctive
 
 Conditional invariants are invariants that are true only part of the time.
 For instance, the postcondition for the absolute value procedure is
