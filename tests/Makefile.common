@@ -1289,7 +1289,7 @@ esc:
 	echo "Nothing to do for esc target, because NO_MERGE is set"
 endif # ifndef NO_MERGE
 
-ifdef ESC_ON
+ifeq (java,${SOURCE_LANGUAGE})
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make spinfo-static  : create a .spinfo file from conditionals in source code"
 spinfo-static: ${PROJECT_FILE}.spinfo-static
@@ -1305,7 +1305,7 @@ ${PROJECT_FILE}.spinfo-static: ${INST_LIST_FILE} ${CREATESPINFO_CLASS}
 else
 spinfo-static:
 	@echo "nothing to do for spinfo-static because ESC_ON is not set"
-endif # ifdef ESC_ON
+endif # ifeq (java,${SOURCE_LANGUAGE})
 
 
 
