@@ -3582,8 +3582,8 @@ the @file{StackAr.java} program
 
 @smallexample
 ppt DataStructures.StackAr.push(java.lang.Object):::ENTER
-ppt-type enter
-parent parent DataStructures.StackAr:::OBJECT 1
+  ppt-type enter
+  parent parent DataStructures.StackAr:::OBJECT 1
   variable this
     var-kind variable 
     dec-type DataStructures.StackAr
@@ -3645,8 +3645,8 @@ parent parent DataStructures.StackAr:::OBJECT 1
     comparability 22
 
 ppt DataStructures.StackAr.push(java.lang.Object):::EXIT99
-ppt-type subexit
-parent parent DataStructures.StackAr:::OBJECT 1
+  ppt-type subexit
+  parent parent DataStructures.StackAr:::OBJECT 1
   variable this
     var-kind variable 
     dec-type DataStructures.StackAr
@@ -3708,7 +3708,7 @@ parent parent DataStructures.StackAr:::OBJECT 1
     comparability 22
 
 ppt DataStructures.StackAr:::OBJECT
-ppt-type object
+  ppt-type object
   variable this
     var-kind variable 
     dec-type DataStructures.StackAr
