@@ -4705,8 +4705,11 @@ class DCInstrument {
     if (!mg.isStatic())
       il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
 
+    //System.out.printf ("%s: atc = %d, anc = %d%n", mg.getName(), arg_types.length, arg_names.length);
+
     // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
     if (mg.getName().equals("getCallerClass")
+        && (arg_types.length == 1)
         && gen.getClassName().equals("sun.reflect.Reflection")) {
 
       // The call returns the class realFramesToSkip up on the stack. Since we
@@ -4800,6 +4803,7 @@ class DCInstrument {
 
     // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
     if (mg.getName().equals("getCallerClass")
+        && (arg_types.length == 1)
         && gen.getClassName().equals("sun.reflect.Reflection")) {
 
       // The call returns the class realFramesToSkip up on the stack. Since we
