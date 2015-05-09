@@ -43,16 +43,12 @@ arg.isNaN()
 orig(arg.isNaN())
 
 PPT_NAME PolyCalc.RatNum.equals
-false
 obj instanceof RatNum
-orig(false)
 orig(obj instanceof RatNum)
 orig(this.isNaN()&& rn.isNaN())
 orig(this.numer == rn.numer && this.denom == rn.denom)
-orig(true)
 this.isNaN()&& rn.isNaN()
 this.numer == rn.numer && this.denom == rn.denom
-true
 
 PPT_NAME PolyCalc.RatNum.gcd
 b != 0

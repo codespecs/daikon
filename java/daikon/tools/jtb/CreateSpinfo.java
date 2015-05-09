@@ -19,7 +19,8 @@ import org.checkerframework.checker.nullness.qual.*;
  * <p>
  *
  * The argument is a list of .java files.  The original .java files are
- * left unmodified.  A .spinfo file is written for every .java file.
+ * left unmodified.  A .spinfo file is written for every .java file, or
+ * in the single file indicated as the -o command-line argument..
  */
 
 public class CreateSpinfo {
@@ -142,7 +143,7 @@ public class CreateSpinfo {
   }
 
   /**
-   * Returns the default name for a spinfo file create from
+   * Returns the default name for a spinfo file created from
    * a java file named javaFileName.
    * @param javaFileName the name of the java file from which
    *  this spinfo file is being created.
@@ -191,8 +192,23 @@ public class CreateSpinfo {
     // replaceStatements: method declaration (String) to method body (String)
     Map<String,String> replaceStatements = extractor.getReplaceStatements();
     String packageName = extractor.getPackageName();
+    filterConditions(conditions);
     addOrigConditions(conditions);
     printSpinfoFile(output, conditions, replaceStatements, packageName);
+  }
+
+  /**
+   * Remove redundant and trivial conditions from conditionMap.
+   * Side-effects conditionMap.
+   */
+  private static void filterConditions(Map<String,List<String>> conditionMap) {
+    for (String key : conditionMap.keySet()) {
+      List<String> conditions = conditionMap.get(key);
+      conditions = UtilMDE.removeDuplicates(conditions);
+      conditions.remove("true");
+      conditions.remove("false");
+      conditionMap.put(key, conditions);
+    }
   }
 
   /**
@@ -251,7 +267,10 @@ public class CreateSpinfo {
           = (packageName == null) ? method : packageName + "." + method;
         output.println("PPT_NAME " + qualifiedMethod);
         for (int i = 0; i < method_conds.size(); i++) {
-          output.println(removeNewlines(method_conds.get(i)));
+          String cond = removeNewlines(method_conds.get(i));
+          if (! (cond.equals("true") || cond.equals("false"))) {
+            output.println(cond);
+          }
         }
         output.println();
       }

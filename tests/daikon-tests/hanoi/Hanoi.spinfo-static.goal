@@ -29,14 +29,12 @@ orig((pegA == 2)&&(pegB == 1))
 PPT_NAME six170.Hanoi.showTowers
 !noOutput
 (diskLocation[i] == j)&&(k <= i)
-(diskLocation[i] == j)&&(k <= i)
 i<((height*2+2)*3)
 i<height
 j<3
 k<height
 k>=0
 orig(!noOutput)
-orig((diskLocation[i] == j)&&(k <= i))
 orig((diskLocation[i] == j)&&(k <= i))
 orig(i<((height*2+2)*3))
 orig(i<height)

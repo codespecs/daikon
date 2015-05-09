@@ -37,14 +37,10 @@ orig(t.expt == deg)
 t.expt == deg
 
 PPT_NAME PolyCalc.RatPoly.containsNaN
-false
 i<vec.size()
-orig(false)
 orig(i<vec.size())
 orig(term.coeff.equals(RatNum.parse("NaN")))
-orig(true)
 term.coeff.equals(RatNum.parse("NaN"))
-true
 
 PPT_NAME PolyCalc.RatPoly.degree
 orig(terms.size()> 0)
@@ -91,14 +87,10 @@ i<vec.size()
 orig(i<vec.size())
 
 PPT_NAME PolyCalc.RatPoly.isNaN
-false
 i<terms.size()
-orig(false)
 orig(i<terms.size())
 orig(terms.get(i).coeff.isNaN())
-orig(true)
 terms.get(i).coeff.isNaN()
-true
 
 PPT_NAME PolyCalc.RatPoly.mul
 i<this.terms.size()
@@ -113,13 +105,9 @@ PPT_NAME PolyCalc.RatPoly.parse
 c1.equals("x")
 nextTermIsNegative
 numberStrings.hasMoreTokens()
-numberStrings.hasMoreTokens()
-numberStrings.hasMoreTokens()
 orig(!coeff.equals(new RatNum(0)))
 orig(c1.equals("x"))
 orig(nextTermIsNegative)
-orig(numberStrings.hasMoreTokens())
-orig(numberStrings.hasMoreTokens())
 orig(numberStrings.hasMoreTokens())
 orig(termStrings.hasMoreTokens())
 orig(termToken.equals("+"))
@@ -130,11 +118,7 @@ termToken.equals("-")
 
 PPT_NAME PolyCalc.RatPoly.replaceExpt
 !term.coeff.equals(new RatNum(0))
-!term.coeff.equals(new RatNum(0))
-!term.coeff.equals(new RatNum(0))
 index < ts.size()
-orig(!term.coeff.equals(new RatNum(0)))
-orig(!term.coeff.equals(new RatNum(0)))
 orig(!term.coeff.equals(new RatNum(0)))
 orig(index < ts.size())
 orig(t.expt == term.expt)
@@ -146,10 +130,8 @@ orig(i<vec.size())
 
 PPT_NAME PolyCalc.RatPoly.sortedAdd
 !newTerm.coeff.equals(new RatNum(0))
-!newTerm.coeff.equals(new RatNum(0))
 i<vec.size()
 newCoeffValue.equals(new RatNum(0))
-orig(!newTerm.coeff.equals(new RatNum(0)))
 orig(!newTerm.coeff.equals(new RatNum(0)))
 orig(i<vec.size())
 orig(newCoeffValue.equals(new RatNum(0)))
@@ -195,9 +177,7 @@ toString()
 debugPrint()
 
 PPT_NAME PolyCalc.RatTerm.equals
-false
 obj instanceof RatTerm
-orig(false)
 orig(obj instanceof RatTerm)
 orig(this.expt == rt.expt && this.coeff.equals(rt.coeff))
 this.expt == rt.expt && this.coeff.equals(rt.coeff)
@@ -247,16 +227,12 @@ arg.isNaN()
 orig(arg.isNaN())
 
 PPT_NAME PolyCalc.RatNum.equals
-false
 obj instanceof RatNum
-orig(false)
 orig(obj instanceof RatNum)
 orig(this.isNaN()&& rn.isNaN())
 orig(this.numer == rn.numer && this.denom == rn.denom)
-orig(true)
 this.isNaN()&& rn.isNaN()
 this.numer == rn.numer && this.denom == rn.denom
-true
 
 PPT_NAME PolyCalc.RatNum.gcd
 b != 0
