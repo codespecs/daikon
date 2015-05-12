@@ -1,12 +1,5 @@
 #!/usr/bin/env perl
 
-# prepare-texinfo-for-spellcheck.pl
-# argument: .texinfo file
-# Reads the input .texinfo file and outputs a filtered
-# version that elides the texinfo commands.  It also
-# removes other text that is not appropriate as input
-# to spellcheckx such as examples and comments.
-
 use v5.14;    #to get given/when
 
 # Turn off warnings (dangerous, but reduces output)
@@ -19,7 +12,6 @@ my @tokens;
 my $index;
 my $found_class = 0;
 my ($sec, $min, $hour, $mday, $mon, $year, $wday, $ydar, $isdst);
-
 
 while (<>) {
 
