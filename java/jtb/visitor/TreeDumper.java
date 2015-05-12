@@ -68,7 +68,7 @@ public class TreeDumper extends DepthFirstVisitor {
    //   relative to the current position, i.e. its location places it
    //   before the previous token.
    public void visit(NodeToken n) {
-      if (debug) System.out.println(super.indents.substring(0, super.indent) + "Token{" + n.kind +"}: ");
+      if (debug) System.out.println(super.indents.substring(0, super.indent) + "Token{" + n.kind +"}: " + n.tokenImage);
 
       if ( n.beginLine == -1 || n.beginColumn == -1 ) {
          printToken(n.tokenImage);
