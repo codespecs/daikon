@@ -51,12 +51,6 @@ SCRIPT_FILES := Makefile \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
 PLUME_SCRIPT_FILES := java-cpp lines-from
 
-## These are now in plume-lib:
-# 	cygwin-runner java-cygwin \
-# 	javac-xlint javac-xlint-prune \
-# 	checkargs.pm
-# 	sort-directory-order
-
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) \
                 $(addprefix plume-lib/bin/,$(PLUME_SCRIPT_FILES))
 
@@ -539,7 +533,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cp -pR doc/daikon ${TMPDIR}/daikon/doc
 
 	# Plume-lib library
-	(cd plume-lib; hg archive ${TMPDIR}/daikon/plume-lib)
+	(cd plume-lib; git archive ${TMPDIR}/daikon/plume-lib)
 
 	# Auxiliary programs
 	mkdir ${TMPDIR}/daikon/scripts
@@ -640,11 +634,12 @@ showvars:
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
-	hg clone ${HG_OPTIONS} https://code.google.com/p/plume-lib/ plume-lib
+#	hg clone ${HG_OPTIONS} https://code.google.com/p/plume-lib/ plume-lib
+	git clone ${GIT_OPTIONS} https://github.com/mernst/plume-lib.git plume-lib
 
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib
 ifndef NONETWORK
-	(cd plume-lib; ${HG_PULL_U} ${HG_OPTIONS})
+	(cd plume-lib; git pull ${GIT_OPTIONS})
 endif
 

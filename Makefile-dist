@@ -57,12 +57,12 @@ kvasir:
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
-	hg clone https://code.google.com/p/plume-lib/ plume-lib
+	git clone https://github.com/mernst/plume-lib.git plume-lib
 
 # the plume-lib in the distribution is an archive and can't be updated
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib
-	#(cd plume-lib; hg pull -u)
+	#(cd plume-lib && git pull)
 
 # The file is real, but the commands should always be re-run even if it exists.
 .PHONY: plume-lib/java/plume.jar

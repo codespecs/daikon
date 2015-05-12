@@ -20,6 +20,15 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.6 (June 1, 2015)
+
+  Non-user-visible changes  
+
+    The plume-lib library's version control repository has moved to
+    https://github.com/mernst/plume-lib.git
+
+===========================================================================
+
 5.2.4 (May 1, 2015)
 
 Tools that process invariant files:

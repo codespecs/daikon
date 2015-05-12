@@ -6554,9 +6554,9 @@ but it should always be safe to use this option.
 Before running @command{convertcsv.pl}, you may need to install
 @command{Text::CSV}, a Perl package that @command{convertcsv.pl} uses.
 You also need the
-@uref{http://plume-lib.googlecode.com/hg/bin/checkargs.pm,
+@uref{https://raw.githubusercontent.com/mernst/plume-lib/master/bin/checkargs.pm,
 @file{checkargs.pm}} file, which is part of the plume-lib library
-(@url{http://code.google.com/p/plume-lib/}).
+(@url{https://github.com/mernst/plume-lib.git}).
 
 
 @node    Other front ends

@@ -20,7 +20,7 @@ GNU getopt 1.0.8 (java-getopt.jar)
 
 plume-lib (plume.jar)
 - A library of useful abstractions for programming.
-- http://code.google.com/p/plume-lib/
+- https://github.com/mernst/plume-lib.git
 - Note to Daikon developers: you manually have to update plume.jar
   with the correct build; this file is not automatically rebuilt from
   the plume-lib source in the Daikon root directory!
