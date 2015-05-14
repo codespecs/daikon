@@ -137,7 +137,8 @@ public abstract class DaikonVariableInfo
         this.typeName = typeName.intern();
         this.repTypeName = repTypeName.intern();
 
-        debug_vars.log ("Construct DaikonVariableInfo: %s : %s : %s", this, name, typeName);
+        debug_vars.log ("Construct DaikonVariableInfo: %s : %s : %s",
+                         this.getClass().getName(), name, typeName);
 
         children = new ArrayList<DaikonVariableInfo> ();
         isArray = arr;
