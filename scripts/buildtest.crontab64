@@ -12,7 +12,7 @@ CRONIC=/afs/csail.mit.edu/u/d/daikonuser/research/daikon/plume-lib/bin/cronic
 AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
 
 01 5 * * * cd $HOME/research/daikon/scripts; $AFS cvs -Q up
-02 5 * * * cd $HOME/research/daikon/plume-lib; $AFS $CRONIC hg pull -u
+02 5 * * * cd $HOME/research/daikon/plume-lib; $AFS $CRONIC git pull
 03 5 * * * $AFS crontab $HOME/research/daikon/scripts/buildtest.crontab64
 55 5 * * * $AFS $HOME/research/daikon/scripts/buildtest-remove-old
 # TEMPORARILY disabled -- runs nightly on 32-bit, but 64-bit fails at present

@@ -54,7 +54,7 @@ java/daikon/dcomp/std_dcomp_out.txt
 java/debug
 java/Test.decls-DynComp
 
-# Obtained via Mercurial
+# Obtained via Git
 plume-lib
 # Generated from plume-lib
 java/daikon/util

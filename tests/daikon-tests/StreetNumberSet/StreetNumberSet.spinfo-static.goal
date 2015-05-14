@@ -24,69 +24,45 @@ parityOf(b)== parityOf(b2)
 
 PPT_NAME MapQuick1.StreetNumberSet.contains
 (b <= n)&&(n <= e)
-false
 i < begins.length
 orig((b <= n)&&(n <= e))
-orig(false)
 orig(i < begins.length)
 orig(parity == parityOf(b))
-orig(true)
 parity == parityOf(b)
-true
 
 PPT_NAME MapQuick1.StreetNumberSet.equals
 (o instanceof StreetNumberSet)&& equals((StreetNumberSet)o)
 (other.begins.length == 0)
 begins.length == 0
-false
-false
-false
-false
 max != other.max()
 min != other.min()
 n <= max
 orig((o instanceof StreetNumberSet)&& equals((StreetNumberSet)o))
 orig((other.begins.length == 0))
 orig(begins.length == 0)
-orig(false)
-orig(false)
-orig(false)
-orig(false)
 orig(max != other.max())
 orig(min != other.min())
 orig(n <= max)
 orig(other == null)
 orig(other == this)
 orig(this.contains(n)!= other.contains(n))
-orig(true)
-orig(true)
 other == null
 other == this
 this.contains(n)!= other.contains(n)
-true
-true
 
 PPT_NAME MapQuick1.StreetNumberSet.intersects
-false
-false
-false
 isEmpty()
 max2 < max
 min2 > min
 n <= max
-orig(false)
-orig(false)
-orig(false)
 orig(isEmpty())
 orig(max2 < max)
 orig(min2 > min)
 orig(n <= max)
 orig(other.isEmpty())
 orig(this.contains(n)&& other.contains(n))
-orig(true)
 other.isEmpty()
 this.contains(n)&& other.contains(n)
-true
 
 PPT_NAME MapQuick1.StreetNumberSet.isEmpty
 (begins.length == 0)

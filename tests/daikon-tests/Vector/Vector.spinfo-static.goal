@@ -73,12 +73,8 @@ i < elementCount
 orig(i < elementCount)
 
 PPT_NAME javautil.Vector13.removeElement
-false
 i >= 0
-orig(false)
 orig(i >= 0)
-orig(true)
-true
 
 PPT_NAME javautil.Vector13.removeElementAt
 index < 0

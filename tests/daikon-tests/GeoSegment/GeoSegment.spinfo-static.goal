@@ -16,9 +16,7 @@ toString()
 
 PPT_NAME MapQuick1.GeoSegment.equals
 !(o instanceof GeoSegment)
-false
 orig(!(o instanceof GeoSegment))
-orig(false)
 orig(this.p1.equals(other.p1)&& this.p2.equals(other.p2)&& this.name.equals(other.name))
 this.p1.equals(other.p1)&& this.p2.equals(other.p2)&& this.name.equals(other.name)
 
@@ -31,10 +29,8 @@ toString()
 PPT_NAME MapQuick1.GeoPoint.equals
 !(o instanceof GeoPoint)
 (this.latitude == other.latitude)&&(this.longitude == other.longitude)
-false
 orig(!(o instanceof GeoPoint))
 orig((this.latitude == other.latitude)&&(this.longitude == other.longitude))
-orig(false)
 
 PPT_NAME MapQuick1.GeoPoint.headingTo
 angle < 0

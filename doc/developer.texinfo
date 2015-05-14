@@ -2053,7 +2053,7 @@ A clone of
 
 @item
 A clone of 
-@uref{https://code.google.com/p/plume-lib/} must be in
+@uref{https://github.com/mernst/plume-lib.git} must be in
 @file{$DAIKONDIR/@/plume-lib}.
 
 @item

@@ -12,9 +12,7 @@ size <= index
 
 PPT_NAME PolyCalc.RatPolyStack.getCons
 curr == null
-curr == null
 index > 0
-orig(curr == null)
 orig(curr == null)
 orig(index > 0)
 

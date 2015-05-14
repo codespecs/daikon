@@ -1,7 +1,7 @@
 COPIES OF PLUME-LIB IN DAIKON
 
 Daikon contains three copies of plume-lib
-(https://plume-lib.googlecode.com/).
+(http://code.google.com/p/plume-lib/).
 
 1. When Daikon runs, it uses daikon/java/lib/plume.jar .
 That file is checked into version control, so to make Daikon use a
