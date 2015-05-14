@@ -114,6 +114,7 @@ public class SplitterFactory {
           String ppt_name = splitterObjects[i][0].getPptName();
     Global.debugSplit.fine("          load_splitters: " + ppt_name + ", " + ppt);
           if (matchPpt(ppt_name, ppt)) {
+            int numGood = 0;
             // Writes, compiles, and loads the splitter .java files.
             loadSplitters(splitterObjects[i], ppt, statementReplacer);
             Vector<Splitter> sp = new Vector<Splitter>();
@@ -122,10 +123,12 @@ public class SplitterFactory {
                 @SuppressWarnings("nullness") // dependent: because splitterExists() = true
                 /*@NonNull*/ Splitter splitter = splitterObjects[i][k].getSplitter();
                 sp.addElement(splitter);
+                numGood++;
               } else if (! PptSplitter.dkconfig_suppressSplitterErrors) {
                 System.out.println(splitterObjects[i][k].getError());
               }
             }
+            System.out.printf("%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
             if (sp.size() >= 1) {
               SplitterList.put (ppt_name, sp.toArray(new Splitter[0]));
             }
