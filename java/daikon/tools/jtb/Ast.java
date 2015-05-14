@@ -1100,15 +1100,22 @@ public class Ast {
 
     if (isInner((ClassOrInterfaceDeclaration)innerClassNode)
         && !isStatic((ClassOrInterfaceDeclaration)innerClassNode)) {
-      NodeToken nameToken = ((ClassOrInterfaceDeclaration)outerClassNode).f1;
-      Name name = new Name(nameToken, new NodeListOptional());
-      jtb.syntaxtree.Type type = new jtb.syntaxtree.Type(new NodeChoice(name, 1));
-      VariableDeclaratorId blankParamName = new VariableDeclaratorId(new NodeToken(""), new NodeListOptional());
-      FormalParameter implicitOuter = new FormalParameter(new Modifiers(null),
+      NodeToken classNameToken = ((ClassOrInterfaceDeclaration)outerClassNode).f1;
+      ClassOrInterfaceType name = new ClassOrInterfaceType(classNameToken, new NodeOptional(), new NodeListOptional());
+      NodeSequence n10 = new NodeSequence(name);
+      NodeSequence n9 = new NodeSequence(n10);
+      n9.addNode(new NodeListOptional());
+      ReferenceType refType = new ReferenceType(new NodeChoice(n9, 1));
+      jtb.syntaxtree.Type type = new jtb.syntaxtree.Type(new NodeChoice(refType, 1));
+      // Setting all the line and column info on the NodeTokens is a hassle.
+      // So we sidestep and 'cheat' by putting a blank as the first character of the name.
+      // This works because we are going to re-parse it in the node Create method.
+      VariableDeclaratorId dummyOuterParamName = new VariableDeclaratorId(new NodeToken(" outer$this"), new NodeListOptional());
+      FormalParameter implicitOuter = new FormalParameter(new Modifiers(new NodeListOptional()),
                                                           new NodeOptional(),
                                                           type,
                                                           new NodeOptional(),
-                                                          blankParamName);
+                                                          dummyOuterParamName);
       v.parameters.add(0, implicitOuter);
     }
 
