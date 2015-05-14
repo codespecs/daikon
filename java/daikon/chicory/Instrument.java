@@ -533,7 +533,8 @@ public class Instrument implements ClassFileTransformer {
         if (debug) {
           Type[] arg_types = mg.getArgumentTypes();
           String[] arg_names = mg.getArgumentNames();
-          String types = "", names = "";
+          LocalVariableGen[] local_vars = mg.getLocalVariables();
+          String types = "", names = "", locals = "";
 
           for (int j = 0; j < arg_types.length; j++) {
               types = types + arg_types[j] + " ";
@@ -541,9 +542,13 @@ public class Instrument implements ClassFileTransformer {
           for (int j = 0; j < arg_names.length; j++) {
               names = names + arg_names[j] + " ";
           }
+          for (int j = 0; j < local_vars.length; j++) {
+              locals = locals + local_vars[j].getName() + " ";
+          }
           out.format ("%nMethod = %s%n", mg);
           out.format ("arg_types(%d): %s%n", arg_types.length, types);
           out.format ("arg_names(%d): %s%n", arg_names.length, names);
+          out.format ("localvars(%d): %s%n", local_vars.length, locals);
           out.format ("Original code: %s%n", mg.getMethod().getCode());
           out.format ("ClassInfo: %s%n", class_info);
           out.format ("MethodGen: %s%n", mg);
@@ -575,7 +580,7 @@ public class Instrument implements ClassFileTransformer {
         if (mi == null)  // method filtered out!
           continue;
 
-        if (!shouldInclude && ChicoryPremain.debug) {
+        if (!shouldInclude && debug) {
           out.format ("Class %s included [%s]%n", cg.getClassName(), mi);
         }
         shouldInclude = true; // at least one method not filtered out
@@ -1592,8 +1597,6 @@ public class Instrument implements ClassFileTransformer {
         //   2: putfield      #1
 
         lv_start++;
-        param_offset--;
-
         arg_names[0] = mgen.getArgumentType(0).toString() + ".this";
       }
     }
@@ -1771,7 +1774,7 @@ public class Instrument implements ClassFileTransformer {
             || (offset != locals[loc_index].getIndex())) {
 
           // Create a local variable to describe the missing argument
-          new_lvg = mg.addLocalVariable (mg.getArgumentName(ii), arg_types[ii],
+          new_lvg = mg.addLocalVariable ("$hidden$" + offset, arg_types[ii],
                                          offset, null, null);
         } else {
           l = locals[loc_index];

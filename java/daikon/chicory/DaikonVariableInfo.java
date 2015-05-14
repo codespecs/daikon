@@ -137,6 +137,8 @@ public abstract class DaikonVariableInfo
         this.typeName = typeName.intern();
         this.repTypeName = repTypeName.intern();
 
+        debug_vars.log ("Construct DaikonVariableInfo: %s : %s : %s", this, name, typeName);
+
         children = new ArrayList<DaikonVariableInfo> ();
         isArray = arr;
 
@@ -176,7 +178,7 @@ public abstract class DaikonVariableInfo
         assert info.repTypeName != null : "Child's representation type name should not be null";
         assert info.compareInfoString != null : "Child's comparability information should not be null";
 
-        debug_vars.log ("Adding %s to %s\n", info, this);
+        debug_vars.log ("Adding %s to %s", info, this);
         children.add(info);
     }
 
@@ -424,6 +426,7 @@ public abstract class DaikonVariableInfo
             ? ((Constructor<?>) method).getParameterTypes()
             : ((Method) method).getParameterTypes();
 
+        debug_vars.log ("enter addParameters%n");
         Iterator<String> argnamesiter = argnames.iterator();
         int param_offset = 0;
         for (int i = 0; (i < arguments.length) && argnamesiter.hasNext(); i++)
@@ -444,6 +447,7 @@ public abstract class DaikonVariableInfo
             theChild.addChildNodes(cinfo, type, name, offset, depth);
             debug_vars.exdent();
         }
+        debug_vars.log ("exit addParameters%n");
     }
 
     /**
@@ -457,6 +461,8 @@ public abstract class DaikonVariableInfo
 
         //DaikonVariableInfo corresponding to the "this" object
         DaikonVariableInfo thisInfo;
+
+        debug_vars.log ("addClassVars: %s : %s : %s: [%s]%n", this, cinfo, type, offset);
 
         //must be at the first level of recursion (not lower) to print "this" field
         if (!dontPrintInstanceVars && offset.equals(""))
@@ -495,12 +501,17 @@ public abstract class DaikonVariableInfo
         for (Field classField : fields) {
             boolean is_static = Modifier.isStatic (classField.getModifiers());
 
-            // Skip created variables (they were probably created by us)
-            if (skip_synthetic && classField.isSynthetic())
-                continue;
+            debug_vars.log ("considering field %s -> %s%n", offset, classField);
 
-            debug_vars.log ("considering field %s -> %s%n", offset,
-                            classField);
+            // It turns out that the only synthetic field I've seen so far
+            // is 'this$0'.  This is a field in an inner class that contains
+            // a pointer to the instance of the outer class. And, we would like
+            // to expose the outer class fields of an inner class to allow
+            // Daikon to find related invariants. So we will no longer 
+            // exclude synthetic fields.
+            // I will try more testing to see if there are other synthetic
+            // fields that should be skipped.  But for now, there are none.
+            // markro 05/13/2015
 
             if (!is_static && dontPrintInstanceVars)
             {
@@ -651,6 +662,7 @@ public abstract class DaikonVariableInfo
                 }
             }
         }
+        debug_vars.log ("exit addClassVars%n");
     }
 
     /**
@@ -664,6 +676,7 @@ public abstract class DaikonVariableInfo
     protected DaikonVariableInfo addDeclVar(ClassInfo cinfo, Class<?> type,
            String name, String offset, int depth, int argNum, int param_offset)
     {
+        debug_vars.log ("enter addDeclVar(param)%n");
         // add this variable to the tree as a child of curNode
         DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum,
                                                         type, param_offset);
@@ -674,6 +687,7 @@ public abstract class DaikonVariableInfo
         if (!ignore)
             newChild.checkForDerivedVariables(type, name, offset);
 
+        debug_vars.log ("exit addDeclVar(param)%n");
         return newChild;
     }
 
@@ -759,6 +773,7 @@ public abstract class DaikonVariableInfo
     protected DaikonVariableInfo addDeclVar(Field field, String offset,
                                 StringBuffer buf)
     {
+        debug_vars.log ("enter addDeclVar(field)%n");
         String arr_str = "";
         if (isArray)
             arr_str = "[]";
@@ -775,6 +790,12 @@ public abstract class DaikonVariableInfo
         Class<?> type = field.getType();
         String theName = field.getName();
         int modifiers = field.getModifiers();
+
+        // Convert the internal reflection name for an outer class
+        // 'this' field to the Java language format.
+        if (theName == "this$0") {
+            theName = type.getName() + ".this";
+        }
 
         if (Modifier.isStatic(modifiers)) {
             offset = field.getDeclaringClass().getName() + ".";
@@ -848,6 +869,7 @@ public abstract class DaikonVariableInfo
             field.setAccessible(false);
         }
 
+        debug_vars.log ("exit addDeclVar(field)%n");
         return newField;
     }
 
@@ -1182,9 +1204,18 @@ public abstract class DaikonVariableInfo
    protected void addChildNodes(ClassInfo cinfo, Class<?> type, String theName,
                                 String offset, int depthRemaining) {
 
+       debug_vars.log ("enter addChildNodes%n");
+
        if (type.isPrimitive())
            return;
-       else if (type.isArray())
+
+        // Convert the internal reflection name for an outer class
+        // 'this' field to the Java language format.
+        if (theName == "this$0") {
+            theName = type.getName() + ".this";
+        }
+
+       if (type.isArray())
        {
            // don't go into more than one dimension of a multi-dimensional array
            if (isArray)
@@ -1255,6 +1286,7 @@ public abstract class DaikonVariableInfo
            if (!systemClass (type))
                addClassVars(cinfo, false, type, offset + theName + ".", depthRemaining - 1);
        }
+       debug_vars.log ("exit addChildNodes%n");
    }
 
    /**
@@ -1442,7 +1474,7 @@ public abstract class DaikonVariableInfo
             debug_vars.log ("ignoring already included variable %s [%s]",
                             name, getClass());
             if (false && !isStatic())
-                System.out.printf ("ignoring already included variable %s [%s]\n",
+                System.out.printf ("ignoring already included variable %s [%s]",
                                    name, getClass());
             declShouldPrint = false;
             dtraceShouldPrint = false;
