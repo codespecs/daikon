@@ -225,15 +225,17 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     @Override
     public void visit(ConstructorDeclaration ctor) {
 
-        visitedConstructors.add(Ast.getConstructor(ctor));
-
         // Fix any line/col inconsistencies first
         ctor.accept(new TreeFormatter());
+
+        visitedConstructors.add(Ast.getConstructor(ctor));
 
         super.visit(ctor);
 
         // Find declared throwables.
         List<String> declaredThrowables = getDeclaredThrowables(ctor.f3);
+
+        //System.out.println(Ast.formatEntireTree(ctor));
 
         List<PptTopLevel> matching_ppts = pptMatcher.getMatches(pptmap, ctor);
 
@@ -369,6 +371,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             typesAndParameters.add(Ast.format(param));
         }
 
+        InstrumentHandler.debug.fine("Method: " + name);
+
         StringBuffer code = new StringBuffer();
 
         code.append("{");
@@ -492,11 +496,17 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             StringBuffer code, String vioTime) {
         for (Invariant inv : invs) {
 
+            InstrumentHandler.debug.fine("inv type: " + inv.getClass().getName());
+
             String javarep = inv.format_using(OutputFormat.JAVA);
+
+            InstrumentHandler.debug.fine("javarep: " + javarep);
 
             Property property = toProperty(inv);
 
             String xmlString = property.xmlString();
+
+            InstrumentHandler.debug.fine("xmlString: " + xmlString);
 
             // [[ TODO : explain this. ]]
             // [[ TODO : move this to filterInvariants method. ]]
@@ -513,6 +523,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             if (javarep.indexOf("\\result") != -1) {
                 javarep = javarep.replaceAll("\\\\result", "retval_instrument");
             }
+
+            InstrumentHandler.debug.fine("xmlStringToIndex: " + xmlStringToIndex.get(xmlString));
 
             String addViolationToListCode =
                 "daikon.tools.runtimechecker.Runtime.violationsAdd" +

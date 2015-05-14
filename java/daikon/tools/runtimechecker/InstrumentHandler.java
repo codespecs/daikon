@@ -54,7 +54,7 @@ public class InstrumentHandler extends CommandHandler {
     // invariant-checking methods outside the instrumented class).
     private static boolean createCheckerClasses = false;
 
-    private static final Logger debug = Logger.getLogger("daikon.tools.runtimechecker.InstrumentHandler");
+    public static final Logger debug = Logger.getLogger("daikon.tools.runtimechecker.InstrumentHandler");
 
     // If the --max_invariants_pp option is given, this variable is set
     // to the maximum number of invariants out annotate per program point.
@@ -66,8 +66,6 @@ public class InstrumentHandler extends CommandHandler {
     private static final String create_checker_classes_SWITCH = "create_checker_classes";
     private static final String directory_SWITCH = "directory";
     private static final String checkers_directory_SWITCH = "checker_classes_directory";
-    // Whether should print debugging information as it is executing.
-    private static String debug_SWITCH = "debug";
 
     // Default values; can be overridden by the command-line switches above.
     private String instrumented_directory = "instrumented-classes";
@@ -94,6 +92,9 @@ public class InstrumentHandler extends CommandHandler {
         if (arguments == errorWhileReadingArguments) {
             return false;
         }
+
+        // Set up debug traces; note this comes after reading command line options.
+        LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
 
         // Create instrumented-classes dir.
         File outputDir = new File(instrumented_directory);
@@ -220,9 +221,7 @@ public class InstrumentHandler extends CommandHandler {
                 new LongOpt(directory_SWITCH,
                             LongOpt.REQUIRED_ARGUMENT, null, 0),
                 new LongOpt(checkers_directory_SWITCH,
-                            LongOpt.REQUIRED_ARGUMENT, null, 0),
-                new LongOpt(debug_SWITCH,
-                            LongOpt.NO_ARGUMENT, null, 0) };
+                            LongOpt.REQUIRED_ARGUMENT, null, 0) };
         Getopt g = new Getopt("daikon.tools.runtimechecker.InstrumentHandler", args, "hs", longopts);
         int c;
         while ((c = g.getopt()) != -1) {
@@ -231,9 +230,7 @@ public class InstrumentHandler extends CommandHandler {
                 // got a long option
                 String option_name = longopts[g.getLongind()].getName();
 
-                if (debug_SWITCH.equals(option_name)) {
-                    LogHelper.setLevel(debug, Level.FINE);
-                } else if (create_checker_classes_SWITCH.equals(option_name)) {
+                if (create_checker_classes_SWITCH.equals(option_name)) {
                     createCheckerClasses = true;
                 } else if (output_only_high_conf_invariants_SWITCH.equals(option_name)) {
                     InstrumentVisitor.outputOnlyHighConfInvariants = true;
