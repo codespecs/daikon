@@ -85,6 +85,7 @@ public class ChicoryPremain {
     Runtime.ppt_select_pattern  = Chicory.ppt_select_pattern;
     Runtime.sample_start        = Chicory.sample_start;
     DaikonVariableInfo.std_visibility = Chicory.std_visibility;
+    DaikonVariableInfo.debug_vars.enabled = Chicory.debug;
     if (Chicory.comparability_file != null) {
       Runtime.comp_info = new DeclReader();
       castNonNull(Runtime.comp_info).read (castNonNull(Chicory.comparability_file));      // @SuppressWarnings("nullness") // bug: flow should figure this out (mark DeclReader constructor as pure?

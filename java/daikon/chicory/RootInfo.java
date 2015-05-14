@@ -31,12 +31,9 @@ public class RootInfo extends DaikonVariableInfo
      */
     public static RootInfo enter_process (MethodInfo mi, int depth)
     {
+        debug_vars.clear ("Building enter tree for %s:%s%n", mi.method_name, mi);
+
         RootInfo root = new RootInfo();
-
-        // System.out.println ("Entering method " + mi);
-        // debug_vars.enabled = mi.toString().contains ("Job.<init>");
-
-        debug_vars.clear ("building enter tree for %s:%s%n", mi.method_name, mi);
 
         // Don't build a tree for class initializers.
         if (mi.is_class_init())
@@ -61,6 +58,8 @@ public class RootInfo extends DaikonVariableInfo
                            Arrays.<String>asList(mi.arg_names), /*offset = */ "",
                            depth);
 
+        debug_vars.log ("exit enter_process%n");
+
         return root;
     }
 
@@ -69,11 +68,9 @@ public class RootInfo extends DaikonVariableInfo
      */
     public static RootInfo exit_process(MethodInfo mi, int depth)
     {
+        debug_vars.clear ("Building exit tree for %s%n", mi);
+
         RootInfo root = new RootInfo();
-
-        // debug_vars.enabled = mi.toString().contains ("Job.<init>");
-
-        debug_vars.clear ("building exit tree for %s%n", mi);
 
         // Don't build a tree for class initializers.
         if (mi.is_class_init())
@@ -117,6 +114,8 @@ public class RootInfo extends DaikonVariableInfo
             }
         }
 
+        debug_vars.log ("exit exit_process%n");
+
         return root;
     }
 
@@ -126,6 +125,8 @@ public class RootInfo extends DaikonVariableInfo
      */
     public static RootInfo getObjectPpt(ClassInfo cinfo, int depth)
     {
+        debug_vars.clear ("enter getObjectPpt: %s%n", cinfo);
+
         RootInfo root = new RootInfo();
 
         // Clear the set of static variables
@@ -133,6 +134,8 @@ public class RootInfo extends DaikonVariableInfo
 
         root.addClassVars(cinfo, /*dontPrintInstanceVars = */ false,
                 cinfo.clazz, /*offset = */ "", depth);
+
+        debug_vars.log ("exit getObjectPpt%n");
 
         return root;
     }
@@ -143,6 +146,8 @@ public class RootInfo extends DaikonVariableInfo
      */
     public static RootInfo getClassPpt(ClassInfo cinfo, int depth)
     {
+        debug_vars.clear ("enter getClassPpt: %s%n", cinfo);
+
         RootInfo root = new RootInfo();
 
         // Clear the set of static variables
@@ -150,6 +155,8 @@ public class RootInfo extends DaikonVariableInfo
 
         root.addClassVars(cinfo, /*dontPrintInstanceVars = */ true,
                 cinfo.clazz, /*offset = */ "", depth);
+
+        debug_vars.log ("exit getClassPpt%n");
 
         return root;
     }
