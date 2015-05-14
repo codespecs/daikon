@@ -277,6 +277,8 @@ public class DeclWriter extends DaikonWriter {
      */
     public void print_decl_class (ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
 
+      if (debug) System.out.println("Enter print_decl_class: " + cinfo);
+
       // Print all methods and constructors
       for (MethodInfo mi : cinfo.get_method_infos()) {
 
@@ -311,6 +313,8 @@ public class DeclWriter extends DaikonWriter {
 
       print_class_ppt (cinfo, cinfo.class_name + ":::CLASS", comp_info);
       print_object_ppt (cinfo, classObjectName(cinfo.clazz), comp_info);
+
+      if (debug) System.out.println("Exit print_decl_class");
     }
 
     /**
@@ -328,9 +332,9 @@ public class DeclWriter extends DaikonWriter {
     private void print_method (MethodInfo mi, RootInfo root, String name,
                                PptType ppt_type, /*@Nullable*/ DeclReader comp_info) {
 
+      if (debug) System.out.println("Enter print_method: " + name);
+
       outFile.println ("ppt " + escape(name));
-      if (debug)
-        System.out.println("print_method " + name);
 
       outFile.println ("ppt-type " + ppt_type.name().toLowerCase());
 
@@ -344,13 +348,14 @@ public class DeclWriter extends DaikonWriter {
 
       // Print each variable
       for (DaikonVariableInfo childOfRoot: root) {
+        if (debug) System.out.println("method var: " + childOfRoot.getName());
         traverse_decl (null, mi.is_static(),null, childOfRoot, null, relations,
                     ((comp_info == null) ? null : comp_info.find_ppt (name)));
       }
 
       outFile.println();
-      if (debug)
-        System.out.println("end print_method ");
+
+      if (debug) System.out.println("Exit print_method ");
     }
 
     /**
@@ -360,21 +365,26 @@ public class DeclWriter extends DaikonWriter {
      */
     private void print_class_ppt (ClassInfo cinfo, String name,
                                   DeclReader comp_info) {
-      // System.out.printf ("print_class_ppt on cinfo %s%n", cinfo);
-      if (num_class_vars (cinfo) == 0)
-        return;
 
-      outFile.println ("ppt " + escape (name));
-      outFile.println ("ppt-type class");
+      if (debug) System.out.println("Enter print_class_ppt: " + cinfo);
 
-      // Print out the static fields
-      for (DaikonVariableInfo childOfRoot
+      if (num_class_vars (cinfo) > 0) {
+
+        outFile.println ("ppt " + escape (name));
+        outFile.println ("ppt-type class");
+
+        // Print out the static fields
+        for (DaikonVariableInfo childOfRoot
              : RootInfo.getClassPpt (cinfo, Runtime.nesting_depth)) {
-        traverse_decl (null, false, null, childOfRoot, null, null,
-                     ((comp_info == null) ? null : comp_info.find_ppt (name)));
+          if (debug) System.out.println("class var: " + childOfRoot.getName());
+          traverse_decl (null, false, null, childOfRoot, null, null,
+                       ((comp_info == null) ? null : comp_info.find_ppt (name)));
+        }
+
+        outFile.println();
       }
 
-      outFile.println();
+      if (debug) System.out.println("Exit print_class_ppt");
     }
 
     /**
@@ -383,6 +393,8 @@ public class DeclWriter extends DaikonWriter {
      */
     private void print_object_ppt(ClassInfo cinfo, String name,
                                   DeclReader comp_info) {
+
+      if (debug) System.out.println("Enter print_object_ppt: " + cinfo);
 
       outFile.println ("ppt " + escape (name));
       outFile.println ("ppt-type object");
@@ -407,11 +419,14 @@ public class DeclWriter extends DaikonWriter {
 
       // Write out the variables
       for (DaikonVariableInfo childOfRoot: root) {
+        if (debug) System.out.println("object var: " + childOfRoot.getName());
         traverse_decl (cinfo, false, null, childOfRoot, null, relations,
                      ((comp_info == null) ? null : comp_info.find_ppt(name)));
       }
 
       outFile.println();
+
+      if (debug) System.out.println("Exit print_object_ppt");
     }
 
   /**
@@ -526,48 +541,50 @@ public class DeclWriter extends DaikonWriter {
                                 List<VarRelation> relations,
                                 DeclReader.DeclPpt compare_ppt) {
 
+      if (debug) System.out.println("Enter traverse_decl: " + cinfo + ", " + var);
+
       if (!var.declShouldPrint()) {
         ; // don't do anything
       } else if (!(var instanceof StaticObjInfo)) {
 
         // Write out the variable and its name
-        outFile.println ("  variable " + escape (var.getName()));
+        outFile.println ("variable " + escape (var.getName()));
 
         // Write out the kind of variable and its relative name
         VarKind kind = var.get_var_kind();
         String relative_name = var.get_relative_name();
         if (relative_name == null)
           relative_name = "";
-        outFile.println ("    var-kind " + out_name (kind) + " "
+        outFile.println ("  var-kind " + out_name (kind) + " "
                          + relative_name);
 
         // Write out the enclosing variable
         if ((parent != null) && !var.isStatic())
-          outFile.println ("    enclosing-var " + escape (parent.getName()));
+          outFile.println ("  enclosing-var " + escape (parent.getName()));
 
         // If this variable has multiple value, indicate it is an array
         if (var.isArray())
-          outFile.println ("    array 1");
+          outFile.println ("  array 1");
 
         // Write out the declared and representation types
-        outFile.println ("    dec-type " + escape (var.getTypeNameOnly()));
-        outFile.println ("    rep-type " + escape (var.getRepTypeNameOnly()));
+        outFile.println ("  dec-type " + escape (var.getTypeNameOnly()));
+        outFile.println ("  rep-type " + escape (var.getRepTypeNameOnly()));
 
         // Write out the constant value (if present)
         String const_val = var.get_const_val();
         if (const_val != null)
-          outFile.println ("    constant " + const_val);
+          outFile.println ("  constant " + const_val);
 
         // Write out the arguments used to create (if present) the variable if it is a function
         String function_args = var.get_function_args();
         if (function_args != null)
-          outFile.println("    function-args " + function_args);
+          outFile.println("  function-args " + function_args);
 
 
         // Write out the variable flags if any are set
         EnumSet<VarFlags> var_flags = var.get_var_flags();
         if (var_flags.size() > 0) {
-          outFile.print ("    flags");
+          outFile.print ("  flags");
           for (Enum<?> e : var_flags) {
             outFile.print (" " + out_name (e));
           }
@@ -582,7 +599,7 @@ public class DeclWriter extends DaikonWriter {
           if (varinfo != null)
             comp_str = varinfo.get_comparability();
         }
-        outFile.println("    comparability " + comp_str);
+        outFile.println("  comparability " + comp_str);
 
         // Determine if there is a ppt for variables of this type
         // If found this should match one of the previously found relations
@@ -603,7 +620,7 @@ public class DeclWriter extends DaikonWriter {
 
         // Put out the variable relation (if one exists).
         if (relation != null) {
-          outFile.println ("    parent " + relation.relation_str(var));
+          outFile.println ("  parent " + relation.relation_str(var));
         }
 
       } else { // this is the dummy root for class statics
@@ -626,10 +643,12 @@ public class DeclWriter extends DaikonWriter {
       // Go through all of the current node's children
       // and recurse
       for (DaikonVariableInfo child : var) {
+        if (debug) System.out.println("traverse var: " + child.getName());
         traverse_decl (cinfo, is_static_method, var, child, relation,
                        relations, compare_ppt);
       }
 
+      if (debug) System.out.println("Exit traverse_decl");
     }
 
   /**
@@ -750,6 +769,5 @@ public class DeclWriter extends DaikonWriter {
     DaikonVariableInfo static_root = class_root.children.get(0);
     return static_root.children.size();
   }
-
 
 }
