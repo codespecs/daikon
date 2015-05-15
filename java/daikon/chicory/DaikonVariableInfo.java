@@ -513,6 +513,8 @@ public abstract class DaikonVariableInfo
             // I will try more testing to see if there are other synthetic
             // fields that should be skipped.  But for now, there are none.
             // markro 05/13/2015
+            // 'this$1' for an inner inner class and so on.
+            // markro 05/14/2015
 
             if (!is_static && dontPrintInstanceVars)
             {
@@ -794,7 +796,7 @@ public abstract class DaikonVariableInfo
 
         // Convert the internal reflection name for an outer class
         // 'this' field to the Java language format.
-        if (theName == "this$0") {
+        if (theName.startsWith("this$")) {
             theName = type.getName() + ".this";
         }
 
@@ -1212,7 +1214,7 @@ public abstract class DaikonVariableInfo
 
         // Convert the internal reflection name for an outer class
         // 'this' field to the Java language format.
-        if (theName == "this$0") {
+        if (theName.startsWith("this$")) {
             theName = type.getName() + ".this";
         }
 
