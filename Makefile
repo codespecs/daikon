@@ -640,6 +640,6 @@ plume-lib:
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib
 ifndef NONETWORK
-	(cd plume-lib; git pull ${GIT_OPTIONS})
+	(cd plume-lib; git pull -q ${GIT_OPTIONS})
 endif
 
