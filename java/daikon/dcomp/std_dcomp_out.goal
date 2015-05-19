@@ -826,6 +826,7 @@ Variable sets for daikon.dcomp.Test$ObjSub.equals(java.lang.Object obj) exit
 
 Variable sets for daikon.dcomp.Test$G.<init>() enter
 Variable sets for daikon.dcomp.Test$G.<init>() exit
+  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test$G.$assertionsDisabled]
   [1] [daikon.chicory.ThisObjInfo:this]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
   [2] [daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
@@ -834,6 +835,7 @@ Variable sets for daikon.dcomp.Test$G.<init>() exit
   [1] [daikon.chicory.FieldInfo:this.u2]
 
 Variable sets for daikon.dcomp.Test$G.compare() enter
+  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test$G.$assertionsDisabled]
   [1] [daikon.chicory.ThisObjInfo:this]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
   [2] [daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
@@ -841,6 +843,7 @@ Variable sets for daikon.dcomp.Test$G.compare() enter
   [1] [daikon.chicory.FieldInfo:this.u1]
   [1] [daikon.chicory.FieldInfo:this.u2]
 Variable sets for daikon.dcomp.Test$G.compare() exit
+  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test$G.$assertionsDisabled]
   [1] [daikon.chicory.ThisObjInfo:this]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
   [2] [daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
@@ -849,6 +852,7 @@ Variable sets for daikon.dcomp.Test$G.compare() exit
   [1] [daikon.chicory.FieldInfo:this.u2]
 
 Variable sets for daikon.dcomp.Test$G.equals(java.lang.Object obj) enter
+  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test$G.$assertionsDisabled]
   [1] [daikon.chicory.ParameterInfo:obj]
   [1] [daikon.chicory.DaikonClassInfo:obj.getClass()]
   [1] [daikon.chicory.ThisObjInfo:this]
@@ -858,6 +862,7 @@ Variable sets for daikon.dcomp.Test$G.equals(java.lang.Object obj) enter
   [1] [daikon.chicory.FieldInfo:this.u1]
   [1] [daikon.chicory.FieldInfo:this.u2]
 Variable sets for daikon.dcomp.Test$G.equals(java.lang.Object obj) exit
+  [1] [daikon.chicory.FieldInfo:daikon.dcomp.Test$G.$assertionsDisabled]
   [1] [daikon.chicory.ParameterInfo:obj]
   [1] [daikon.chicory.DaikonClassInfo:obj.getClass()]
   [1] [daikon.chicory.ReturnInfo:return]
