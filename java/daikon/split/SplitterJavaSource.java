@@ -1,7 +1,7 @@
 package daikon.split;
 
 import daikon.*;
-import daikon.util.ArraysMDE;
+import plume.ArraysMDE;
 import jtb.syntaxtree.*;
 import jtb.ParseException;
 import java.util.*;

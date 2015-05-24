@@ -511,7 +511,7 @@ chicory-test : ChicoryPremain.jar
 	  daikon.chicory.Test
 
 #
-# Dynamic Comparability (DynComp/Java)
+# Dynamic Comparability (DynComp/Java; also Chicory)
 #
 DCOMP_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java daikon/util/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
@@ -637,6 +637,7 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	touch daikon/util/.timestamp-daikonutil
 
 # Checks that daikon.util, rather than plume, is imported by DynComp source files.
+# Should also check that daikon.util is never imported by non-DynComp files.
 .PHONY: plume-import-check
 plume-import-check :
 	@echo -n "Checking that imports of plume and daikon.util are correct..."
