@@ -12,13 +12,14 @@ DAIKONDIR ?= ${DAIKONDIR}
 
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.'  --no_text_output
 DAIKON = ${DAIKONDIR}/java/daikon/Daikon.class
+CP     = $(DAIKONDIR)/java:$(CLASSPATH)
 
 include ${DAIKONDIR}/tests/Makefile.classpath
 
 diffs: daikon.txt.diff
 daikon.txt.diff: drawlet.inv.gz merge.inv.gz
-	java -ea -Xmx1500m daikon.PrintInvariants drawlet.inv.gz > drawlet.txt
-	java -ea -Xmx1500m daikon.PrintInvariants merge.inv.gz > merge.txt
+	java -cp $(CP) -ea -Xmx1500m daikon.PrintInvariants drawlet.inv.gz > drawlet.txt
+	java -cp $(CP) -ea -Xmx1500m daikon.PrintInvariants merge.inv.gz > merge.txt
 	diff -u drawlet.txt merge.txt > daikon.txt.diff
 	@cat daikon.txt.diff
 
@@ -26,7 +27,7 @@ daikon.txt.diff: drawlet.inv.gz merge.inv.gz
 merge: merge.inv.gz
 merge.inv.gz: $(DAIKON) TS_AllDrawletUnitTests.inv.gz \
 	          TS_DrawletFunctionalTest.inv.gz TS_InputEventHandlerTests.inv.gz
-	java -ea -Xmx1500m daikon.MergeInvariants -o merge.inv.gz \
+	java -cp $(CP) -ea -Xmx1500m daikon.MergeInvariants -o merge.inv.gz \
 	  TS_AllDrawletUnitTests.inv.gz TS_DrawletFunctionalTest.inv.gz \
 	  TS_InputEventHandlerTests.inv.gz \
 
@@ -35,21 +36,21 @@ merge.inv.gz: $(DAIKON) TS_AllDrawletUnitTests.inv.gz \
 daikon : drawlet.inv.gz
 drawlet.inv.gz : $(DAIKON) TS_AllDrawletUnitTests.dtrace.gz \
 	TS_DrawletFunctionalTest.dtrace.gz TS_InputEventHandlerTests.dtrace.gz
-	java -ea -Xmx1500m daikon.Daikon -o drawlet.inv.gz $(DAIKON_ARGS) \
+	java -cp $(CP) -ea -Xmx1500m daikon.Daikon -o drawlet.inv.gz $(DAIKON_ARGS) \
 	  TS_AllDrawletUnitTests.dtrace.gz \
 	  TS_DrawletFunctionalTest.dtrace.gz \
 	  TS_InputEventHandlerTests.dtrace.gz
 
 TS_AllDrawletUnitTests.inv.gz: $(DAIKON) TS_AllDrawletUnitTests.dtrace.gz
-	java -ea -Xmx1500m daikon.Daikon $(DAIKON_ARGS) \
+	java -cp $(CP) -ea -Xmx1500m daikon.Daikon $(DAIKON_ARGS) \
 	  TS_AllDrawletUnitTests.dtrace.gz
 
 TS_DrawletFunctionalTest.inv.gz: $(DAIKON) TS_DrawletFunctionalTest.dtrace.gz
-	java -ea -Xmx1500m daikon.Daikon $(DAIKON_ARGS) \
+	java -cp $(CP) -ea -Xmx1500m daikon.Daikon $(DAIKON_ARGS) \
 	  TS_DrawletFunctionalTest.dtrace.gz
 
 TS_InputEventHandlerTests.inv.gz: $(DAIKON) TS_InputEventHandlerTests.dtrace.gz
-	java -ea -Xmx1500m daikon.Daikon $(DAIKON_ARGS) \
+	java -cp $(CP) -ea -Xmx1500m daikon.Daikon $(DAIKON_ARGS) \
 	  TS_InputEventHandlerTests.dtrace.gz
 
 #
@@ -67,7 +68,7 @@ TS_InputEventHandlerTests.inv.gz: $(DAIKON) TS_InputEventHandlerTests.dtrace.gz
 # Note that this puts the output invariant file in test.inv.gz so it doesn't
 # overwrite the correct invariant file
 test_d:
-	java -ea -Xmx1500m daikon.Daikon \
+	java -cp $(CP) -ea -Xmx1500m daikon.Daikon \
 	  $(PPT_OPTION) \
 	  $(DEBUG_OPTION) \
 	  $(TRACK_OPTION) \
@@ -78,7 +79,7 @@ test_d:
 
 # run PrintInvariants on the merge invariant file
 test_pm:
-	java -ea -Xmx1500m daikon.PrintInvariants \
+	java -cp $(CP) -ea -Xmx1500m daikon.PrintInvariants \
 	  $(PPT_OPTION) \
 	  $(DEBUG_OPTION) \
 	  $(TRACK_OPTION) \
@@ -86,14 +87,14 @@ test_pm:
 
 # run MergeInvariants on the three inv files
 test_m:
-	java -ea -Xmx1500m daikon.MergeInvariants \
+	java -cp $(CP) -ea -Xmx1500m daikon.MergeInvariants \
 	  $(DEBUG_OPTION) \
 	  TS_AllDrawletUnitTests.inv.gz TS_DrawletFunctionalTest.inv.gz \
 	  TS_InputEventHandlerTests.inv.gz \
 
 # run Daikon on the first dtrace file
 test_d1:
-	java -ea -Xmx1500m daikon.PrintInvariants \
+	java -cp $(CP) -ea -Xmx1500m daikon.PrintInvariants \
 	  $(PPT_OPTION) \
 	  $(DEBUG_OPTION) \
 	  $(TRACK_OPTION) \
@@ -101,7 +102,7 @@ test_d1:
 
 # run Daikon on the second dtrace file
 test_d2:
-	java -ea -Xmx1500m daikon.Daikon
+	java -cp $(CP) -ea -Xmx1500m daikon.Daikon
 	  $(PPT_OPTION) \
 	  $(DEBUG_OPTION) \
 	  $(TRACK_OPTION) \

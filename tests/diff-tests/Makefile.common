@@ -12,10 +12,10 @@ DAIKONDIR ?= ${DAIKONDIR}
 # for both Windows, Mac, and Linux
 include ${DAIKONDIR}/tests/Makefile.classpath
 
-
+CP      := $(DAIKONDIR)/java:$(CLASSPATH)
 PROGRAM := $(notdir $(shell pwd))
-DAIKON := java -Xmx800m daikon.Daikon
-INV_DIFF := java -Xmx800m daikon.diff.Diff
+DAIKON := java -cp $(CP) -Xmx800m daikon.Daikon
+INV_DIFF := java -cp $(CP) -Xmx800m daikon.diff.Diff
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 
