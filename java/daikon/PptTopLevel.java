@@ -1386,7 +1386,7 @@ public class PptTopLevel extends Ppt {
             + slice.var_infos[0].name()
             + " <= "
             + ubf.max());
-      } else {
+      } else if ((lb != null) || (ub != null) || (lbf != null) || (ubf != null)) {
         throw new Error("This can't happen");
       }
     }
@@ -1457,9 +1457,11 @@ public class PptTopLevel extends Ppt {
     assert lower == upper;
     assert upper == var_infos.length;
 
-    if (debug.isLoggable(Level.FINE))
+    if (debug.isLoggable(Level.FINE)) {
       debug.fine(
         "Done with create_derived_variables, " + var_infos.length + " vars");
+      //System.out.println(Arrays.toString(var_infos));
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////
