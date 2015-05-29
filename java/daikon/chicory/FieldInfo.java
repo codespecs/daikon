@@ -175,8 +175,15 @@ public class FieldInfo extends DaikonVariableInfo
     public /*@Nullable*/ String get_relative_name() {
       if (isStatic())
         return null;
-      else
-        return field.getName();
+      else {
+        String theName = field.getName();
+        // Convert the internal reflection name for an outer class
+        // 'this' field to the Java language format.
+        if (theName.startsWith("this$")) {
+            theName = field.getType().getName() + ".this";
+        }
+        return theName;
+      }
     }
 
     /* Don't include 'this' in instance variable names

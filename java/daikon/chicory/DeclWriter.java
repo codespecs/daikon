@@ -541,7 +541,7 @@ public class DeclWriter extends DaikonWriter {
                                 List<VarRelation> relations,
                                 DeclReader.DeclPpt compare_ppt) {
 
-      if (debug) System.out.println("Enter traverse_decl: " + cinfo + ", " + var);
+      if (debug) System.out.println("Enter traverse_decl: " + cinfo + ", " + var + ", " + parent);
 
       if (!var.declShouldPrint()) {
         ; // don't do anything
@@ -559,8 +559,15 @@ public class DeclWriter extends DaikonWriter {
                          + relative_name);
 
         // Write out the enclosing variable
-        if ((parent != null) && !var.isStatic())
+        // If we are in an inner class, we need to special case the
+        // 'hidden' field that holds the outer class 'this' pointer.
+        // While 'this.Outer.this' reads well, it is not legal Java.
+        // If the field name ends with ".this", it can only be this
+        // special case and we need to not output the enclosing-var.
+        if ((parent != null) && !var.isStatic() && !relative_name.endsWith(".this")) {
+          if (debug) System.out.println("traverse var parent: " + parent.getName());
           outFile.println ("  enclosing-var " + escape (parent.getName()));
+        }  
 
         // If this variable has multiple value, indicate it is an array
         if (var.isArray())

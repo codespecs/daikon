@@ -776,7 +776,8 @@ public abstract class DaikonVariableInfo
     protected DaikonVariableInfo addDeclVar(Field field, String offset,
                                 StringBuffer buf)
     {
-        debug_vars.log ("enter addDeclVar(field)%n");
+        debug_vars.log ("enter addDeclVar(field):%n");
+        debug_vars.log ("  field: %s, offset: %s%n", field, offset);
         String arr_str = "";
         if (isArray)
             arr_str = "[]";
@@ -794,16 +795,17 @@ public abstract class DaikonVariableInfo
         String theName = field.getName();
         int modifiers = field.getModifiers();
 
-        // Convert the internal reflection name for an outer class
-        // 'this' field to the Java language format.
-        if (theName.startsWith("this$")) {
-            theName = type.getName() + ".this";
-        }
-
         if (Modifier.isStatic(modifiers)) {
             offset = field.getDeclaringClass().getName() + ".";
         } else if (offset.length() == 0) {// instance fld, 1st recursion step
             offset = "this.";
+        }
+
+        // Convert the internal reflection name for an outer class
+        // 'this' field to the Java language format.
+        if (theName.startsWith("this$")) {
+            theName = type.getName() + ".this";
+            offset = "";
         }
 
         String type_name = stdClassName (type) + arr_str;
@@ -1207,7 +1209,8 @@ public abstract class DaikonVariableInfo
    protected void addChildNodes(ClassInfo cinfo, Class<?> type, String theName,
                                 String offset, int depthRemaining) {
 
-       debug_vars.log ("enter addChildNodes%n");
+       debug_vars.log ("enter addChildNodes:%n");
+       debug_vars.log ("  name: %s, offset: %s%n", theName, offset);
 
        if (type.isPrimitive())
            return;
@@ -1216,6 +1219,7 @@ public abstract class DaikonVariableInfo
         // 'this' field to the Java language format.
         if (theName.startsWith("this$")) {
             theName = type.getName() + ".this";
+            offset = "";
         }
 
        if (type.isArray())
