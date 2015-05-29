@@ -841,7 +841,7 @@ trace file to disk.
 
 If you wish to have more control over the invariant detection process,
 you can split the second step above into multiple steps.  Then, the
-whole process would be as follows:
+whole process is as follows:
 
 @enumerate
 @item
@@ -943,7 +943,7 @@ For more information about the Annotate program, see @ref{Annotate}.
 DynComp can help to filter Daikon's output by omitting invariants
 involving unrelated variables (see @ref{DynComp for Java}).  To do so, run
 DynComp on the target program first, then pass the resulting
-@file{.decls} file to Chicory.  The process would be as follows:
+@file{.decls} file to Chicory.  The process is as follows:
 
 @exampleindent 1
 @enumerate
@@ -2042,9 +2042,9 @@ tool.
 @cindex output format, Java
 @item Java format
 Write output as Java expressions.  This means that each invariant
-would be a valid Java expression, if inserted at the correct program
+is a valid Java expression, if inserted at the correct program
 point: right after method entry, for method entry invariants;
-right before method exit, for method exit invariants;, or anywhere in
+right before method exit, for method exit invariants; or anywhere in
 the code, for object invariants.
 
 There are two exceptions.  Method exit invariants that refer to

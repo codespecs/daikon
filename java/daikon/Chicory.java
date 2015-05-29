@@ -93,6 +93,7 @@ public class Chicory {
   @Option ("Directory in which to find configuration files")
   public static /*@Nullable*/ File config_dir = null;
 
+  // Daikon is run in a separate process
   @Option ("Run Daikon on the generated data trace file")
   public static boolean daikon = false;
 

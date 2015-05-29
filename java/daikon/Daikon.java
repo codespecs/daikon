@@ -34,9 +34,10 @@ import java.util.regex.PatternSyntaxException;
 
 import plume.EntryReader;
 import plume.FileIOException;
+import plume.Pair;
+import plume.RegexUtil;
 import plume.Stopwatch;
 import plume.UtilMDE;
-import plume.RegexUtil;
 import daikon.config.Configuration;
 import daikon.derive.Derivation;
 import daikon.inv.Equality;
@@ -56,7 +57,6 @@ import daikon.inv.unary.stringsequence.*;
 import daikon.split.*;
 import daikon.suppress.NIS;
 import daikon.suppress.NIS.SuppressionProcessor;
-import daikon.util.Pair;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

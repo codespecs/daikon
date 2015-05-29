@@ -2082,7 +2082,7 @@ You can create this clone with the commands:
 
 @example
 cd
-hg clone https://code.google.com/p/plume-bib/ bib
+git clone https://github.com/mernst/plume-bib.git bib
 export BIBDIR=`pwd`/bib
 @end example
 
@@ -2127,7 +2127,7 @@ then you need to perform the following steps to update @file{plume.jar}.
 
 @example
 cd $DAIKONDIR/plume-lib/java
-hg fetch
+git pull
 make check-all && make clean && make
 cp plume.jar ../../java/lib
 @end example
