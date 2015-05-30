@@ -500,7 +500,9 @@ public class ChicoryPremain {
           String entry_name = classname_to_resource_name (name);
           @SuppressWarnings("nullness") // bcel_jar should be properly set
           JarEntry entry = bcel_jar.getJarEntry (entry_name);
-          assert entry != null : "Can't find " + entry_name;
+          if (entry == null) {
+            throw new Error("Can't find " + entry_name);
+          }
           is = bcel_jar.getInputStream (entry);
         }
         int available = is.available();
