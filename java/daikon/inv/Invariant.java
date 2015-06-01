@@ -760,7 +760,6 @@ public abstract class Invariant
           || (s.indexOf("\\new") != -1)
           || (s.indexOf(".toString ") != -1)
           || (s.endsWith(".toString"))
-          || (s.indexOf(".getClass") != -1)
           || (s.indexOf(".typeArray") != -1)
           || (s.indexOf("warning: method") != -1)
           || (s.indexOf("inexpressible") != -1)

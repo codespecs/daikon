@@ -23,6 +23,7 @@ public class StackAr
 {
 
     /*@ invariant this.theArray != null; */
+    /*@ invariant this.theArray.getClass() == java.lang.Object[].class; */
     /*@ invariant this.topOfStack >= -1; */
     /*@ invariant this.theArray.length() == 18; */
     /*@ invariant daikon.Quant.eltsEqual(daikon.Quant.slice(this.theArray, this.topOfStack+1, daikon.Quant.size(this.theArray)), null); */
@@ -59,6 +60,7 @@ public class StackAr
     @ ensures (this.topOfStack == -1)  ==>  (this.topOfStack < this.theArray.length());
     @ ensures (this.topOfStack >= 0)  <==>  (\result == false);
     @ ensures (this.topOfStack >= 0)  ==>  ((!(daikon.Quant.size(this.theArray)-1 == 0)) || (this.topOfStack == 0));
+    @ ensures this.theArray.getClass() == \old(this.theArray.getClass());
     @*/
     /**
      * Test if the stack is logically empty.
@@ -82,6 +84,7 @@ public class StackAr
     @ ensures (\result == true)  <==>  (this.topOfStack == daikon.Quant.size(this.theArray)-1);
     @ ensures (\result == true)  ==>  (daikon.Quant.eltsNotEqual(this.theArray, null));
     @ ensures (\result == true)  ==>  (this.topOfStack != this.theArray.length());
+    @ ensures this.theArray.getClass() == \old(this.theArray.getClass());
     @*/
     /**
      * Test if the stack is logically full.
@@ -104,6 +107,7 @@ public class StackAr
     @ ensures daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.theArray, \old(this.topOfStack)+1, daikon.Quant.size(this.theArray)), \old(daikon.Quant.slice(this.theArray, this.topOfStack+1, daikon.Quant.size(this.theArray))));
     @ ensures daikon.Quant.eltsEqual(this.theArray, null);
     @ ensures this.topOfStack == -1;
+    @ ensures this.theArray.getClass() == \old(this.theArray.getClass());
     @ ensures this.topOfStack <= \old(this.topOfStack);
     @ ensures \old(this.topOfStack) < this.theArray.length();
     @ ensures (!(\old(this.topOfStack) == 0)) || (daikon.Quant.size(this.theArray)-1 == 0);
@@ -137,9 +141,12 @@ public class StackAr
     @ ensures (this.topOfStack >= 0)  ==>  (\result.length() == 16 || \result.length() == 22 || \result.length() == 24);
     @ ensures (this.topOfStack >= 0)  ==>  (daikon.Quant.size(this.theArray) != \result.length());
     @ ensures (this.topOfStack >= 0)  ==>  (daikon.Quant.size(this.theArray)-1 != \result.length());
+    @ ensures (this.topOfStack >= 0)  ==>  (this.theArray.getClass() != \result.getClass());
     @ ensures (this.topOfStack >= 0)  ==>  (this.theArray.length() != \result.length());
     @ ensures \result.length() == 16 || \result.length() == 22 || \result.length() == 24;
     @ ensures \result.length() % 2 == 0;
+    @ ensures this.theArray.getClass() != \result.getClass();
+    @ ensures this.theArray.getClass() == \old(this.theArray.getClass());
     @ ensures this.theArray.length() != \result.length();
     @ ensures (!(daikon.Quant.size(this.theArray) == 0)) || (\result.length() == 0);
     @ ensures daikon.Quant.size(this.theArray) != \result.length();
@@ -169,6 +176,7 @@ public class StackAr
     @ ensures daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.theArray, \old(this.topOfStack)+1, daikon.Quant.size(this.theArray)), \old(daikon.Quant.slice(this.theArray, this.topOfStack+1, daikon.Quant.size(this.theArray))));
     @ ensures daikon.Quant.getElement_Object(this.theArray, \old(this.topOfStack)) == null;
     @ ensures daikon.Quant.noDups(daikon.Quant.slice(this.theArray, 0, \old(this.topOfStack)));
+    @ ensures this.theArray.getClass() == \old(this.theArray.getClass());
     @ ensures this.topOfStack - \old(this.topOfStack) + 1 == 0;
     @ ensures this.topOfStack <= this.theArray.length();
     @ ensures this.topOfStack < daikon.Quant.size(this.theArray)-1;
@@ -191,6 +199,7 @@ public class StackAr
     @ requires x != null;
     @ requires x.length() == 16 || x.length() == 22 || x.length() == 24;
     @ requires x.length() % 2 == 0;
+    @ requires this.theArray.getClass() != x.getClass();
     @ requires this.topOfStack <= this.theArray.length();
     @ requires this.topOfStack < daikon.Quant.size(this.theArray)-1;
     @ requires this.theArray.length() != x.length();
@@ -205,6 +214,8 @@ public class StackAr
     @ ensures this.topOfStack >= 0;
     @ ensures x.length() == 16 || x.length() == 22 || x.length() == 24;
     @ ensures x.length() % 2 == 0;
+    @ ensures this.theArray.getClass() == \old(this.theArray.getClass());
+    @ ensures this.theArray.getClass() != \old(x.getClass());
     @ ensures this.topOfStack - \old(this.topOfStack) - 1 == 0;
     @ ensures (!(daikon.Quant.size(this.theArray)-1 == 0)) || (this.topOfStack == 0);
     @ ensures \old(this.topOfStack) <= this.theArray.length();
@@ -240,6 +251,7 @@ public class StackAr
     @ ensures (\old(this.topOfStack) >= 0)  ==>  (\result.length() == 16 || \result.length() == 24);
     @ ensures (\old(this.topOfStack) >= 0)  ==>  (daikon.Quant.size(this.theArray) != \result.length());
     @ ensures (\old(this.topOfStack) >= 0)  ==>  (daikon.Quant.size(this.theArray)-1 != \result.length());
+    @ ensures (\old(this.topOfStack) >= 0)  ==>  (this.theArray.getClass() != \result.getClass());
     @ ensures (\old(this.topOfStack) >= 0)  ==>  (this.theArray.length() != \result.length());
     @ ensures (\old(this.topOfStack) >= 0)  ==>  (daikon.Quant.pairwiseEqual(daikon.Quant.slice(this.theArray, 0, this.topOfStack), \old(daikon.Quant.slice(this.theArray, 0, this.topOfStack-1))));
     @ ensures (\old(this.topOfStack) >= 0)  ==>  (daikon.Quant.eltsEqual(daikon.Quant.slice(this.theArray, \old(this.topOfStack), daikon.Quant.size(this.theArray)), null));
@@ -263,6 +275,8 @@ public class StackAr
     @ ensures \result.length() == 16 || \result.length() == 24;
     @ ensures \result.length() % 8 == 0;
     @ ensures daikon.Quant.noDups(daikon.Quant.slice(this.theArray, 0, \old(this.topOfStack)));
+    @ ensures this.theArray.getClass() != \result.getClass();
+    @ ensures this.theArray.getClass() == \old(this.theArray.getClass());
     @ ensures this.topOfStack <= \old(this.topOfStack);
     @ ensures this.topOfStack <= this.theArray.length();
     @ ensures \old(this.topOfStack) <= daikon.Quant.size(this.theArray)-1;

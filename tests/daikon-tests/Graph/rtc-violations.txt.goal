@@ -1,0 +1,7 @@
+# Times an invariant was evaluated ----------- 10905
+# Entry program points traversed ------------- 2812
+# Normal-exit program points traversed ------- 2812
+# Exceptional-exit program points traversed -- 0
+# Total exit program points traversed -------- 2812
+
+# Violations: none.

@@ -55,6 +55,7 @@ public class LinkedList
   @ ensures (this.header.next != null)  ==>  (this.header.next.element != null);
   @ ensures (this.header.next == null)  <==>  (\result == true);
   @ ensures (this.header.next == null)  ==>  (this.header.element == this.header.next);
+  @ ensures this.header.next.element.getClass() == \old(this.header.next.element.getClass());
   @*/
   /**
    * Test if the list is logically empty.
@@ -92,6 +93,7 @@ public class LinkedList
   @ ensures this.header.next.element == \old(this.header.next.element);
   @ ensures this.header.next.next == \old(this.header.next.next);
   @ ensures \result != null;
+  @ ensures this.header.next.element.getClass() == \old(this.header.next.element.getClass());
   @*/
   /**
    * Return an iterator representing the header node.
@@ -113,6 +115,8 @@ public class LinkedList
   @ ensures \result.current.next == \old(this.header.next.next);
   @ ensures \result != null;
   @ ensures \result.current.element != null;
+  @ ensures this.header.next.element.getClass() == \result.current.element.getClass();
+  @ ensures \result.current.element.getClass() == \old(this.header.next.element.getClass());
   @*/
   /**
    * Return an iterator representing the first node in the list.
@@ -135,6 +139,7 @@ public class LinkedList
   @ ensures this.header.next != null;
   @ ensures p.current != null;
   @ ensures p.current.next != null;
+  @ ensures p.current.element.getClass() == \old(p.current.element.getClass());
   @*/
   /**
    * Insert after p.
@@ -159,6 +164,8 @@ public class LinkedList
   @ ensures this.header.next != null;
   @ ensures \result != null;
   @ ensures \result.current.element != null;
+  @ ensures this.header.next.element.getClass() == \old(this.header.next.element.getClass());
+  @ ensures \result.current.element.getClass() == \old(x.getClass());
   @*/
   /**
    * Return iterator corresponding to the first node containing an item.
@@ -185,6 +192,7 @@ public class LinkedList
   @ ensures this.header.next.next == \old(this.header.next.next);
   @ ensures \result != null;
   @ ensures \result.current != null;
+  @ ensures this.header.next.element.getClass() == \old(this.header.next.element.getClass());
   @*/
   /**
    * Return iterator prior to the first node containing an item.
@@ -207,6 +215,7 @@ public class LinkedList
   @ requires this.header.next != null;
   @ requires this.header.next.next != null;
   @ requires x != null;
+  @ requires this.header.next.element.getClass() == x.getClass();
   @ ensures this.header == \old(this.header);
   @ ensures this.header.element == \old(this.header.element);
   @ ensures this.header.next != null;
@@ -285,6 +294,10 @@ public class LinkedListItr
   @ ensures theNode.next.element == \old(theNode.next.element);
   @ ensures theNode.next.next == \old(theNode.next.next);
   @ ensures theNode.next.element != null;
+  @ ensures this.current.element.getClass() == theNode.element.getClass();
+  @ ensures this.current.next.element.getClass() == theNode.next.element.getClass();
+  @ ensures theNode.element.getClass() == \old(theNode.element.getClass());
+  @ ensures theNode.next.element.getClass() == \old(theNode.next.element.getClass());
   @*/
   /**
    * Construct the list iterator
@@ -305,6 +318,8 @@ public class LinkedListItr
   @ ensures (this.current != null)  <==>  (\result == false);
   @ ensures (this.current != null)  ==>  (this.current.next.element != null);
   @ ensures (this.current == null)  <==>  (\result == true);
+  @ ensures this.current.element.getClass() == \old(this.current.element.getClass());
+  @ ensures this.current.next.element.getClass() == \old(this.current.next.element.getClass());
   @*/
   /**
    * Test if the current position is past the end of the list.
@@ -323,6 +338,9 @@ public class LinkedListItr
   @ ensures this.current.next == \old(this.current.next);
   @ ensures this.current.next.element == \old(this.current.next.element);
   @ ensures this.current.next.next == \old(this.current.next.next);
+  @ ensures this.current.element.getClass() == \result.getClass();
+  @ ensures this.current.next.element.getClass() == \old(this.current.next.element.getClass());
+  @ ensures \result.getClass() == \old(this.current.element.getClass());
   @*/
   /**
    * Return the item stored in the current position.
@@ -341,6 +359,7 @@ public class LinkedListItr
   @ ensures this.current.element == \old(this.current.next.element);
   @ ensures this.current.next == \old(this.current.next.next);
   @ ensures this.current.element != null;
+  @ ensures this.current.element.getClass() == \old(this.current.next.element.getClass());
   @*/
   /**
    * Advance the current position to the next node in the list.
@@ -398,6 +417,11 @@ class ListNode
   @ ensures n.next.next == \old(n.next.next);
   @ ensures n.element != null;
   @ ensures n.next.element != null;
+  @ ensures this.element.getClass() == \old(theElement.getClass());
+  @ ensures this.next.element.getClass() == n.element.getClass();
+  @ ensures this.next.next.element.getClass() == n.next.element.getClass();
+  @ ensures n.element.getClass() == \old(n.element.getClass());
+  @ ensures n.next.element.getClass() == \old(n.next.element.getClass());
   @*/
   ListNode( Object theElement, ListNode n )
   {
