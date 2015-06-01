@@ -22,10 +22,26 @@ Further documentation can be found in:
 
 5.2.6 (June 1, 2015)
 
-  Non-user-visible changes  
+Daikon:
+  Improved support for nested classes.  Outer class fields are now
+  properly included as accessible from inner class methods.
+  
+DynComp:
+  Fixed a problem with DynComp not working properly with JDK 8.
+  
+Tools that process invariant files:
+  Fixed a problem with the generation of ASTs for formal parameter lists.
+  Changed default value of suppressSplitterErrors to true.
 
-    The plume-lib library's version control repository has moved to
-    https://github.com/mernst/plume-lib.git
+Non-user-visible changes:
+  The plume-lib library's version control repository has moved to
+  https://github.com/mernst/plume-lib.git
+  Note: If you are currently building Daikon from a clone of our repository
+  you will need to update your tree.  The simplest fix is probably to:
+   * update your daikon clone (via "hg fetch" or "hg pull -u")
+   * remove or rename $DAIKONDIR/plume-lib
+   * make -C $DAIKONDIR compile
+
 
 ===========================================================================
 
