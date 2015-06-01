@@ -23,25 +23,26 @@ Further documentation can be found in:
 5.2.6 (June 1, 2015)
 
 Daikon:
-  Improved support for nested classes.  Outer class fields are now
-  properly included as accessible from inner class methods.
+  Changed default value of --suppressSplitterErrors command-line option to true.
+
+Chicory:
+  Improved support for nested classes.  When processing an object of inner
+  class type, Chicory outputs outer class fields just like inner class fields.
   
 DynComp:
   Fixed a problem with DynComp not working properly with JDK 8.
   
+[[Mark: what tool does this apply to?  How does a user know whether it is relevant to him/her?]]
 Tools that process invariant files:
   Fixed a problem with the generation of ASTs for formal parameter lists.
-  Changed default value of suppressSplitterErrors to true.
 
-Non-user-visible changes:
-  The plume-lib library's version control repository has moved to
-  https://github.com/mernst/plume-lib.git
-  Note: If you are currently building Daikon from a clone of our repository
-  you will need to update your tree.  The simplest fix is probably to:
-   * update your daikon clone (via "hg fetch" or "hg pull -u")
-   * remove or rename $DAIKONDIR/plume-lib
-   * make -C $DAIKONDIR compile
-
+Changes relevant to building from source:
+  The plume-lib library's version control repository has moved.
+  If you are currently building Daikon from a clone of our repository, run:
+     cd $DAIKONDIR
+     hg pull -u
+     rm -rf $DAIKONDIR/plume-lib
+     make -C $DAIKONDIR compile
 
 ===========================================================================
 
