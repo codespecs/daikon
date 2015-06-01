@@ -89,7 +89,7 @@ public class SplitterFactory {
       tempdir = createTempDir();
     }
     if (! dkconfig_delete_splitters_on_exit) {
-      System.out.println("Splitters for this run created in " + tempdir);
+      System.out.println("\rSplitters for this run created in " + tempdir);
     }
     return new SpinfoFileParser(infofile, tempdir);
   }
@@ -124,7 +124,7 @@ public class SplitterFactory {
                 /*@NonNull*/ Splitter splitter = splitterObjects[i][k].getSplitter();
                 sp.addElement(splitter);
                 numGood++;
-              } else if (! PptSplitter.dkconfig_suppressSplitterErrors) {
+              } else {
                 System.out.println(splitterObjects[i][k].getError());
               }
             }
@@ -203,7 +203,7 @@ public class SplitterFactory {
         if (dkconfig_delete_splitters_on_exit) {
           (new File (fileAddress + ".java")).deleteOnExit();
           (new File (fileAddress + ".class")).deleteOnExit();
-          }
+        }
         writer.write(file.toString());
         writer.flush();
       } catch (IOException ioe) {
@@ -225,7 +225,7 @@ public class SplitterFactory {
     }
     // Forrest - added a checked below for the non-empty string. Splitter files were
     // compiling correctly for me despite errorOutput being an empty string.
-    if (errorOutput != null && !errorOutput.equals("")) {
+    if (errorOutput != null && !errorOutput.equals("") && (! PptSplitter.dkconfig_suppressSplitterErrors)) {
       System.out.println("\nErrors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }

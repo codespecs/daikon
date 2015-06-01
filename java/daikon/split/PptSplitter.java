@@ -60,7 +60,7 @@ public class PptSplitter implements Serializable {
    * When true compilation errors during splitter file generation
    * will not be reported to the user.
    */
-  public static boolean dkconfig_suppressSplitterErrors = false;
+  public static boolean dkconfig_suppressSplitterErrors = true;
 
   /** General debug tracer. **/
   public static final Logger debug = Logger.getLogger ("daikon.split.PptSplitter");

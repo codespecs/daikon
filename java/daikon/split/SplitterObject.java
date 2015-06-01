@@ -78,7 +78,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       errorMessage = "Splitter exists " + this.toString();
       exists = true;
     } else {
-      errorMessage = "No class data for " + this.toString() + ", to be loaded from " + directory + className + ".class";
+      errorMessage = "\rNo class data for " + this.toString() + ", to be loaded from " + directory + className + ".class";
       exists = false;
     }
   }
