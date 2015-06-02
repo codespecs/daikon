@@ -391,7 +391,7 @@ Optionally, compile Daikon and build other tools.
 Note that this step is @emph{not} required if you only want to use Daikon
 with its Java front end (Chicory) or its .NET front end (Celeriac).
 This step is required for using
-Daikon with its C/C++ front end (Kvasir), and for other tools.
+Daikon with its C/C++ front end (Kvasir), and for other tools such as DynComp.
 
 @example
 make -C $DAIKONDIR rebuild-everything
@@ -4413,6 +4413,12 @@ JDK include the following:
 @example
 Error occurred during initialization of VM
 java.lang.UnsatisfiedLinkError:
+@end example
+
+@example
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV
 @end example
 
 @c This one has not been verified yet; reinstate it if it is verified.
