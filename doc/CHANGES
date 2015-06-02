@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.2.6 (June 1, 2015)
+5.2.6 (June 2, 2015)
 
 Daikon:
   Changed default value of --suppressSplitterErrors command-line option to true.
@@ -32,10 +32,6 @@ Chicory:
 DynComp:
   Fixed a problem with DynComp not working properly with JDK 8.
   
-[[Mark: what tool does this apply to?  How does a user know whether it is relevant to him/her?]]
-Tools that process invariant files:
-  Fixed a problem with the generation of ASTs for formal parameter lists.
-
 Changes relevant to building from source:
   The plume-lib library's version control repository has moved.
   If you are currently building Daikon from a clone of our repository, run:
