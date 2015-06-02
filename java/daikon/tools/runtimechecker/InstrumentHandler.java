@@ -162,6 +162,8 @@ public class InstrumentHandler extends CommandHandler {
                 debug.fine("instrumented file name: " + instrumentedFile.getPath());
                 System.out.println("Writing " + instrumentedFile);
                 Writer output = new FileWriter(instrumentedFile);
+                // Bug: JTB seems to order the modifiers in a non-standard way,
+                // such as "static final public" instead of "public static final".
                 oneFile.compilationUnit.accept(new TreeFormatter());
                 TreeDumper dumper = new TreeDumper(output);
                 dumper.printSpecials(false);
