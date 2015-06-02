@@ -533,7 +533,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cp -pR doc/daikon ${TMPDIR}/daikon/doc
 
 	# Plume-lib library
-	(cd plume-lib; git archive ${TMPDIR}/daikon/plume-lib)
+	(cd plume-lib; git archive --prefix=plume-lib/ HEAD | (cd ${TMPDIR}/daikon/ && tar xf -))
 
 	# Auxiliary programs
 	mkdir ${TMPDIR}/daikon/scripts
