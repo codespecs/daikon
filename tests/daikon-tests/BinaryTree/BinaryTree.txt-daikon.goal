@@ -8,20 +8,20 @@ DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::ENTER
 ===========================================================================
 DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT
 this.root == orig(this.root)
-return.getClass() == DataStructures.MyInteger.class
+return.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable):::ENTER
 x != null
-x.getClass() == DataStructures.MyInteger.class
+x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT
 this.root == orig(this.root)
-return.getClass() == DataStructures.MyInteger.class
-return.getClass() == orig(x.getClass())
+return.getClass().getName() == DataStructures.MyInteger.class
+return.getClass().getName() == orig(x.getClass().getName())
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
 x != null
-x.getClass() == DataStructures.MyInteger.class
+x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196
 return == orig(t)
@@ -47,7 +47,7 @@ DataStructures.BinarySearchTree.findMax():::ENTER
 ===========================================================================
 DataStructures.BinarySearchTree.findMax():::EXIT
 this.root == orig(this.root)
-return.getClass() == DataStructures.MyInteger.class
+return.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::ENTER
 this.root == t
@@ -60,7 +60,7 @@ DataStructures.BinarySearchTree.findMin():::ENTER
 ===========================================================================
 DataStructures.BinarySearchTree.findMin():::EXIT
 this.root == orig(this.root)
-return.getClass() == DataStructures.MyInteger.class
+return.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::ENTER
 ===========================================================================
@@ -85,14 +85,14 @@ this.root == orig(this.root)
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
 x != null
-x.getClass() == DataStructures.MyInteger.class
+x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT
 this.root != null
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
 x != null
-x.getClass() == DataStructures.MyInteger.class
+x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
 this.root == orig(this.root)
@@ -120,13 +120,13 @@ this.root == null
 ===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::ENTER
 x != null
-x.getClass() == DataStructures.MyInteger.class
+x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::EXIT
 ===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
 x != null
-x.getClass() == DataStructures.MyInteger.class
+x.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144
 return == orig(t)

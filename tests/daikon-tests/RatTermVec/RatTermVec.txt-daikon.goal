@@ -2,11 +2,11 @@
 PolyCalc.RatTermVec:::OBJECT
 this.wrapped != null
 this.wrapped[] elements != null
-this.wrapped[].getClass() elements == PolyCalc.RatTerm.class
+this.wrapped[].getClass().getName() elements == PolyCalc.RatTerm.class
 ===========================================================================
 PolyCalc.RatTermVec.RatTermVec():::EXIT
 this.wrapped[] == []
-this.wrapped[].getClass() == []
+this.wrapped[].getClass().getName() == []
 ===========================================================================
 PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::ENTER
 this.wrapped[] contains no duplicates

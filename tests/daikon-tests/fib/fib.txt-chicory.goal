@@ -1,5 +1,5 @@
 // Declarations for misc.Fib
-// Declarations written Sat May 14 07:48:35 PDT 2011
+// Declarations written Thu Jun 04 13:31:58 PDT 2015
 
 decl-version 2.0
 var-comparability none
@@ -10,303 +10,303 @@ ppt-type enter
 ppt misc.Fib.Fib():::EXIT5
 ppt-type subexit
 parent parent misc.Fib:::OBJECT 1
-  variable this
-    var-kind variable 
-    dec-type misc.Fib
-    rep-type hashcode
-    flags is_param
-    comparability 22
-    parent misc.Fib:::OBJECT 1
-  variable misc.Fib.STEPS
-    var-kind variable 
-    dec-type int
-    rep-type int
-    constant 20
-    flags nomod
-    comparability 22
-    parent misc.Fib:::OBJECT 1
-  variable misc.Fib.a
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::OBJECT 1
-  variable misc.Fib.b
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::OBJECT 1
-  variable misc.Fib.c
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type misc.Fib
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent misc.Fib:::OBJECT 1
+variable misc.Fib.STEPS
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 20
+  flags nomod
+  comparability 22
+  parent misc.Fib:::OBJECT 1
+variable misc.Fib.a
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::OBJECT 1
+variable misc.Fib.b
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::OBJECT 1
+variable misc.Fib.c
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::OBJECT 1
 
 ppt misc.Fib.main(java.lang.String[]):::ENTER
 ppt-type enter
 parent parent misc.Fib:::CLASS 1
-  variable misc.Fib.STEPS
-    var-kind variable 
-    dec-type int
-    rep-type int
-    constant 20
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.a
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.b
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.c
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable args
-    var-kind variable 
-    dec-type java.lang.String[]
-    rep-type hashcode
-    flags is_param nomod
-    comparability 22
-  variable args.getClass()
-    var-kind function getClass()
-    enclosing-var args
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    function-args args
-    flags nomod synthetic classname
-    comparability 22
-  variable args[..]
-    var-kind array 
-    enclosing-var args
-    array 1
-    dec-type java.lang.String[]
-    rep-type hashcode[]
-    flags nomod
-    comparability 22
-  variable args[..].toString
-    var-kind function toString()
-    enclosing-var args[..]
-    array 1
-    dec-type java.lang.String[]
-    rep-type java.lang.String[]
-    function-args args[]
-    flags nomod synthetic to_string
-    comparability 22
+variable misc.Fib.STEPS
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 20
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.a
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.b
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.c
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable args
+  var-kind variable 
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags nomod synthetic classname
+  comparability 22
+variable args[..]
+  var-kind array 
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags nomod synthetic to_string
+  comparability 22
 
 ppt misc.Fib.main(java.lang.String[]):::EXIT18
 ppt-type subexit
 parent parent misc.Fib:::CLASS 1
-  variable misc.Fib.STEPS
-    var-kind variable 
-    dec-type int
-    rep-type int
-    constant 20
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.a
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.b
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.c
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable args
-    var-kind variable 
-    dec-type java.lang.String[]
-    rep-type hashcode
-    flags is_param nomod
-    comparability 22
-  variable args.getClass()
-    var-kind function getClass()
-    enclosing-var args
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    function-args args
-    flags nomod synthetic classname
-    comparability 22
-  variable args[..]
-    var-kind array 
-    enclosing-var args
-    array 1
-    dec-type java.lang.String[]
-    rep-type hashcode[]
-    flags nomod
-    comparability 22
-  variable args[..].toString
-    var-kind function toString()
-    enclosing-var args[..]
-    array 1
-    dec-type java.lang.String[]
-    rep-type java.lang.String[]
-    function-args args[]
-    flags nomod synthetic to_string
-    comparability 22
+variable misc.Fib.STEPS
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 20
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.a
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.b
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.c
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable args
+  var-kind variable 
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags nomod synthetic classname
+  comparability 22
+variable args[..]
+  var-kind array 
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags nomod synthetic to_string
+  comparability 22
 
 ppt misc.Fib.increment():::ENTER
 ppt-type enter
 parent parent misc.Fib:::CLASS 1
-  variable misc.Fib.STEPS
-    var-kind variable 
-    dec-type int
-    rep-type int
-    constant 20
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.a
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.b
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.c
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
+variable misc.Fib.STEPS
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 20
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.a
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.b
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.c
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
 
 ppt misc.Fib.increment():::EXIT25
 ppt-type subexit
 parent parent misc.Fib:::CLASS 1
-  variable misc.Fib.STEPS
-    var-kind variable 
-    dec-type int
-    rep-type int
-    constant 20
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.a
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.b
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.c
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
+variable misc.Fib.STEPS
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 20
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.a
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.b
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.c
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
 
 ppt misc.Fib:::CLASS
 ppt-type class
-  variable misc.Fib.STEPS
-    var-kind variable 
-    dec-type int
-    rep-type int
-    constant 20
-    flags nomod
-    comparability 22
-  variable misc.Fib.a
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-  variable misc.Fib.b
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-  variable misc.Fib.c
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
+variable misc.Fib.STEPS
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 20
+  flags nomod
+  comparability 22
+variable misc.Fib.a
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+variable misc.Fib.b
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+variable misc.Fib.c
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
 
 ppt misc.Fib:::OBJECT
 ppt-type object
 parent parent misc.Fib:::CLASS 1
-  variable this
-    var-kind variable 
-    dec-type misc.Fib
-    rep-type hashcode
-    flags is_param nomod
-    comparability 22
-  variable misc.Fib.STEPS
-    var-kind variable 
-    dec-type int
-    rep-type int
-    constant 20
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.a
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.b
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
-  variable misc.Fib.c
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags nomod
-    comparability 22
-    parent misc.Fib:::CLASS 1
+variable this
+  var-kind variable 
+  dec-type misc.Fib
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+variable misc.Fib.STEPS
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 20
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.a
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.b
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
+variable misc.Fib.c
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent misc.Fib:::CLASS 1
 
 misc.Fib.main(java.lang.String[]):::ENTER
 this_invocation_nonce
@@ -321,9 +321,9 @@ misc.Fib.c
 0
 1
 args
-23738841
+269432253
 1
-args.getClass()
+args.getClass().getName()
 "java.lang.String[]"
 1
 args[..]
@@ -866,9 +866,9 @@ misc.Fib.c
 17711
 1
 args
-23738841
+269432253
 1
-args.getClass()
+args.getClass().getName()
 "java.lang.String[]"
 1
 args[..]

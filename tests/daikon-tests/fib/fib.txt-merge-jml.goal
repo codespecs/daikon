@@ -14,7 +14,7 @@ public class Fib
   @ requires misc.Fib.a == misc.Fib.c;
   @ requires misc.Fib.a == daikon.Quant.size(args);
   @ requires args != null;
-  @ requires args.getClass() == java.lang.String[].class;
+  @ requires args.getClass().getName() == java.lang.String[].class.getName();
   @ requires daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  });
   @ ensures daikon.Quant.pairwiseEqual(args, \old(args));
   @ ensures misc.Fib.a == 6765;

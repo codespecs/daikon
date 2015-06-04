@@ -15,7 +15,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 4
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -31,7 +31,7 @@ symbol
 java.lang.Object # isParam=true
 hashcode
 3
-symbol.getClass()
+symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -50,7 +50,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 3
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -62,7 +62,7 @@ symbol
 java.lang.Object # isParam=true
 hashcode
 3
-symbol.getClass()
+symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -82,7 +82,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 4
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -101,7 +101,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 2
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -113,7 +113,7 @@ return
 java.lang.Object
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -129,7 +129,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 4
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -148,7 +148,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 4
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -172,7 +172,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 4
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -191,7 +191,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 4
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -211,7 +211,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 5
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -223,7 +223,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -238,7 +238,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 6
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -250,7 +250,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -270,7 +270,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 5
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -282,7 +282,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -297,7 +297,7 @@ this.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 6
-this.symbol.getClass()
+this.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -309,7 +309,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -331,7 +331,7 @@ this.encodingMap
 java.util.Map # declaringClassPackageName=six170, 
 hashcode
 15
-this.encodingMap.getClass()
+this.encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -347,7 +347,7 @@ this.decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 14
-this.decodingTree.symbol.symbol.getClass()
+this.decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -399,11 +399,11 @@ huffmanSymbols[..]
 java.util.List
 hashcode[]
 3
-huffmanSymbols[..].getClass()
+huffmanSymbols[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-huffmanSymbols.getClass()
+huffmanSymbols.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -418,7 +418,7 @@ this.encodingMap
 java.util.Map # declaringClassPackageName=six170, 
 hashcode
 17
-this.encodingMap.getClass()
+this.encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -434,7 +434,7 @@ this.decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 16
-this.decodingTree.symbol.symbol.getClass()
+this.decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -482,11 +482,11 @@ huffmanSymbols[..]
 java.util.List
 hashcode[]
 3
-huffmanSymbols[..].getClass()
+huffmanSymbols[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-huffmanSymbols.getClass()
+huffmanSymbols.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -502,11 +502,11 @@ huffmanSymbols[..]
 java.util.List
 hashcode[]
 3
-huffmanSymbols[..].getClass()
+huffmanSymbols[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-huffmanSymbols.getClass()
+huffmanSymbols.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -521,11 +521,11 @@ huffmanSymbols[..]
 java.util.List
 hashcode[]
 3
-huffmanSymbols[..].getClass()
+huffmanSymbols[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-huffmanSymbols.getClass()
+huffmanSymbols.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -541,7 +541,7 @@ return.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 15
-return.symbol.symbol.getClass()
+return.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -593,11 +593,11 @@ nodeList[..]
 java.util.List
 hashcode[]
 3
-nodeList[..].getClass()
+nodeList[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-nodeList.getClass()
+nodeList.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -612,11 +612,11 @@ nodeList[..]
 java.util.List
 hashcode[]
 3
-nodeList[..].getClass()
+nodeList[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-nodeList.getClass()
+nodeList.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -632,7 +632,7 @@ return.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 15
-return.symbol.symbol.getClass()
+return.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -688,7 +688,7 @@ decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 13
-decodingTree.symbol.symbol.getClass()
+decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -743,7 +743,7 @@ decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 13
-decodingTree.symbol.symbol.getClass()
+decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -787,7 +787,7 @@ return
 java.util.Map
 hashcode
 14
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -799,7 +799,7 @@ encodingMap
 java.util.Map # isParam=true
 hashcode
 4
-encodingMap.getClass()
+encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -815,7 +815,7 @@ subTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 16
-subTree.symbol.symbol.getClass()
+subTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -863,11 +863,11 @@ bitStack[..]
 java.util.List
 hashcode[]
 3
-bitStack[..].getClass()
+bitStack[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-bitStack.getClass()
+bitStack.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -878,7 +878,7 @@ encodingMap
 java.util.Map # isParam=true
 hashcode
 4
-encodingMap.getClass()
+encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -894,7 +894,7 @@ subTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 16
-subTree.symbol.symbol.getClass()
+subTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -942,11 +942,11 @@ bitStack[..]
 java.util.List
 hashcode[]
 3
-bitStack[..].getClass()
+bitStack[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-bitStack.getClass()
+bitStack.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -962,7 +962,7 @@ this.encodingMap
 java.util.Map # declaringClassPackageName=six170, 
 hashcode
 17
-this.encodingMap.getClass()
+this.encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -978,7 +978,7 @@ this.decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 16
-this.decodingTree.symbol.symbol.getClass()
+this.decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1026,11 +1026,11 @@ inputStream[..]
 java.util.List
 hashcode[]
 3
-inputStream[..].getClass()
+inputStream[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-inputStream.getClass()
+inputStream.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1045,7 +1045,7 @@ this.encodingMap
 java.util.Map # declaringClassPackageName=six170, 
 hashcode
 19
-this.encodingMap.getClass()
+this.encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1061,7 +1061,7 @@ this.decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 18
-this.decodingTree.symbol.symbol.getClass()
+this.decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1109,11 +1109,11 @@ inputStream[..]
 java.util.List
 hashcode[]
 3
-inputStream[..].getClass()
+inputStream[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-inputStream.getClass()
+inputStream.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1125,11 +1125,11 @@ return[..]
 java.util.List
 hashcode[]
 5
-return[..].getClass()
+return[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1145,7 +1145,7 @@ this.encodingMap
 java.util.Map # declaringClassPackageName=six170, 
 hashcode
 17
-this.encodingMap.getClass()
+this.encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1161,7 +1161,7 @@ this.decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 16
-this.decodingTree.symbol.symbol.getClass()
+this.decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1209,11 +1209,11 @@ inputBitStream[..]
 java.util.List
 hashcode[]
 3
-inputBitStream[..].getClass()
+inputBitStream[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-inputBitStream.getClass()
+inputBitStream.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1228,7 +1228,7 @@ this.encodingMap
 java.util.Map # declaringClassPackageName=six170, 
 hashcode
 19
-this.encodingMap.getClass()
+this.encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1244,7 +1244,7 @@ this.decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 18
-this.decodingTree.symbol.symbol.getClass()
+this.decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1292,11 +1292,11 @@ inputBitStream[..]
 java.util.List
 hashcode[]
 3
-inputBitStream[..].getClass()
+inputBitStream[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-inputBitStream.getClass()
+inputBitStream.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1308,11 +1308,11 @@ return[..]
 java.util.List
 hashcode[]
 5
-return[..].getClass()
+return[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1328,7 +1328,7 @@ this.encodingMap
 java.util.Map # declaringClassPackageName=six170, 
 hashcode
 16
-this.encodingMap.getClass()
+this.encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1344,7 +1344,7 @@ this.decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 15
-this.decodingTree.symbol.symbol.getClass()
+this.decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1388,7 +1388,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1403,7 +1403,7 @@ this.encodingMap
 java.util.Map # declaringClassPackageName=six170, 
 hashcode
 17
-this.encodingMap.getClass()
+this.encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1419,7 +1419,7 @@ this.decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 16
-this.decodingTree.symbol.symbol.getClass()
+this.decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1463,7 +1463,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1483,7 +1483,7 @@ this.encodingMap
 java.util.Map # declaringClassPackageName=six170, 
 hashcode
 16
-this.encodingMap.getClass()
+this.encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1499,7 +1499,7 @@ this.decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 15
-this.decodingTree.symbol.symbol.getClass()
+this.decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1543,7 +1543,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1558,7 +1558,7 @@ this.encodingMap
 java.util.Map # declaringClassPackageName=six170, 
 hashcode
 17
-this.encodingMap.getClass()
+this.encodingMap.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1574,7 +1574,7 @@ this.decodingTree.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 16
-this.decodingTree.symbol.symbol.getClass()
+this.decodingTree.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1618,7 +1618,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1644,7 +1644,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1664,7 +1664,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 14
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1716,7 +1716,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1768,7 +1768,7 @@ symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 4
-symbol.symbol.getClass()
+symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1791,7 +1791,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 4
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1811,7 +1811,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 16
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1863,7 +1863,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1911,7 +1911,7 @@ symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 4
-symbol.symbol.getClass()
+symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1935,7 +1935,7 @@ left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 13
-left.symbol.symbol.getClass()
+left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1987,7 +1987,7 @@ right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 24
-right.symbol.symbol.getClass()
+right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2042,7 +2042,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2062,7 +2062,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 13
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2114,7 +2114,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 24
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2166,7 +2166,7 @@ left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 13
-left.symbol.symbol.getClass()
+left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2218,7 +2218,7 @@ right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 24
-right.symbol.symbol.getClass()
+right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2274,7 +2274,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2294,7 +2294,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 14
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2346,7 +2346,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2401,7 +2401,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2421,7 +2421,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 14
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2473,7 +2473,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2532,7 +2532,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2552,7 +2552,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 14
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2604,7 +2604,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2664,7 +2664,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2684,7 +2684,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 14
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2736,7 +2736,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2791,7 +2791,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 2
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2811,7 +2811,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 15
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2863,7 +2863,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 26
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2907,7 +2907,7 @@ return
 java.lang.Object
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2926,7 +2926,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 2
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2946,7 +2946,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 15
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2998,7 +2998,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 26
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3042,7 +3042,7 @@ return
 java.lang.Object
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3062,7 +3062,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3082,7 +3082,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 14
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3134,7 +3134,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3189,7 +3189,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3209,7 +3209,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 13
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3261,7 +3261,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3313,7 +3313,7 @@ return.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 13
-return.symbol.symbol.getClass()
+return.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3369,7 +3369,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3389,7 +3389,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 14
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3441,7 +3441,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3496,7 +3496,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3516,7 +3516,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3568,7 +3568,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 13
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3620,7 +3620,7 @@ return.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 13
-return.symbol.symbol.getClass()
+return.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3676,7 +3676,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3696,7 +3696,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 14
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3748,7 +3748,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3803,7 +3803,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3823,7 +3823,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 14
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3875,7 +3875,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 25
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3931,7 +3931,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 28
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3951,7 +3951,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 15
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4003,7 +4003,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 26
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4047,7 +4047,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4066,7 +4066,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 29
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4086,7 +4086,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 16
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4138,7 +4138,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4182,7 +4182,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4206,7 +4206,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 28
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4226,7 +4226,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 15
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4278,7 +4278,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 26
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4322,7 +4322,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4341,7 +4341,7 @@ this.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 29
-this.symbol.symbol.getClass()
+this.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4361,7 +4361,7 @@ this.left.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 16
-this.left.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4413,7 +4413,7 @@ this.right.symbol.symbol
 java.lang.Object # declaringClassPackageName=six170, 
 hashcode
 27
-this.right.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4457,7 +4457,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1

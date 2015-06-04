@@ -947,7 +947,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -970,7 +970,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -997,7 +997,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1024,7 +1024,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1172,7 +1172,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1195,7 +1195,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1225,7 +1225,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1252,7 +1252,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1287,7 +1287,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 7
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1315,7 +1315,7 @@ rt.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-rt.wrapped[..].getClass()
+rt.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1338,7 +1338,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1354,7 +1354,7 @@ rt.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-rt.wrapped[..].getClass()
+rt.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1378,7 +1378,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1401,7 +1401,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1428,7 +1428,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1456,7 +1456,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1479,7 +1479,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1506,7 +1506,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1534,7 +1534,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1561,7 +1561,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 8
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1600,7 +1600,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 8
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1640,7 +1640,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1663,7 +1663,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 7
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1694,7 +1694,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 7
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1808,7 +1808,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 2
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1851,7 +1851,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1891,7 +1891,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1911,7 +1911,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1942,7 +1942,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1974,7 +1974,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1997,7 +1997,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2021,7 +2021,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 2
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2060,7 +2060,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 2
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2099,7 +2099,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 2
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2138,7 +2138,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 2
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2177,7 +2177,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 2
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2217,7 +2217,7 @@ v.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-v.wrapped[..].getClass()
+v.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2236,7 +2236,7 @@ v.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-v.wrapped[..].getClass()
+v.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2260,7 +2260,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2280,7 +2280,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2303,7 +2303,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2323,7 +2323,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2343,7 +2343,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2366,7 +2366,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2386,7 +2386,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2406,7 +2406,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2429,7 +2429,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2449,7 +2449,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2469,7 +2469,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2493,7 +2493,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2513,7 +2513,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2536,7 +2536,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2556,7 +2556,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2576,7 +2576,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2599,7 +2599,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2619,7 +2619,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2639,7 +2639,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2662,7 +2662,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2682,7 +2682,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2702,7 +2702,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2726,7 +2726,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2746,7 +2746,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2769,7 +2769,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2789,7 +2789,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2809,7 +2809,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2832,7 +2832,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2852,7 +2852,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2872,7 +2872,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2895,7 +2895,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2915,7 +2915,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2935,7 +2935,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2959,7 +2959,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -2979,7 +2979,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3002,7 +3002,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3022,7 +3022,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3042,7 +3042,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 9
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3065,7 +3065,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3085,7 +3085,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3105,7 +3105,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 9
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3129,7 +3129,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 9
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3149,7 +3149,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3172,7 +3172,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 12
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3192,7 +3192,7 @@ p.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-p.terms.wrapped[..].getClass()
+p.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3200,7 +3200,7 @@ return
 PolyCalc.RatPoly[]
 hashcode
 6
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3232,7 +3232,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3251,7 +3251,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3274,7 +3274,7 @@ vec.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-vec.wrapped[..].getClass()
+vec.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3298,7 +3298,7 @@ ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-ts.wrapped[..].getClass()
+ts.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3321,7 +3321,7 @@ ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-ts.wrapped[..].getClass()
+ts.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3348,7 +3348,7 @@ ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-ts.wrapped[..].getClass()
+ts.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3375,7 +3375,7 @@ ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-ts.wrapped[..].getClass()
+ts.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3403,7 +3403,7 @@ ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-ts.wrapped[..].getClass()
+ts.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3430,7 +3430,7 @@ ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-ts.wrapped[..].getClass()
+ts.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3477,7 +3477,7 @@ ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-ts.wrapped[..].getClass()
+ts.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3545,7 +3545,7 @@ ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
 3
-ts.wrapped[..].getClass()
+ts.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3588,7 +3588,7 @@ ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
 3
-ts.wrapped[..].getClass()
+ts.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3616,7 +3616,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3639,7 +3639,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 8
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3659,7 +3659,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3683,7 +3683,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3710,7 +3710,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 7
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3761,7 +3761,7 @@ return.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 7
-return.terms.wrapped[..].getClass()
+return.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3785,7 +3785,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3808,7 +3808,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3832,7 +3832,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3840,7 +3840,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3863,7 +3863,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 7
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3871,7 +3871,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3899,7 +3899,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3907,7 +3907,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3930,7 +3930,7 @@ this.terms.wrapped[..]
 java.util.ArrayList
 hashcode[]
 7
-this.terms.wrapped[..].getClass()
+this.terms.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3938,7 +3938,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -3964,7 +3964,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -3987,7 +3987,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4007,7 +4007,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4026,7 +4026,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4050,7 +4050,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4073,7 +4073,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 3
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4117,7 +4117,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 2
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4156,7 +4156,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 2
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4196,7 +4196,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 3
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4239,7 +4239,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 3
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4283,7 +4283,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4306,7 +4306,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4330,7 +4330,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 3
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4373,7 +4373,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 3
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4417,7 +4417,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4436,7 +4436,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4452,7 +4452,7 @@ return.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-return.wrapped[..].getClass()
+return.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4472,7 +4472,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 4
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4491,7 +4491,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4519,7 +4519,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4527,7 +4527,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4546,7 +4546,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4554,7 +4554,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4578,7 +4578,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 5
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4586,7 +4586,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4605,7 +4605,7 @@ this.wrapped[..]
 java.util.ArrayList
 hashcode[]
 6
-this.wrapped[..].getClass()
+this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -4613,7 +4613,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4734,7 +4734,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4765,7 +4765,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4800,7 +4800,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4891,7 +4891,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -4922,7 +4922,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1

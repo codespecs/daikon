@@ -78,7 +78,7 @@ size(this.theArray2[])-1 >= orig(size(this.theArray2[]))
 ===========================================================================
 misc.Suppress01.main(java.lang.String[]):::ENTER
 args has only one value
-args.getClass() == java.lang.String[].class
+args.getClass().getName() == java.lang.String[].class
 args[].toString == []
 ===========================================================================
 misc.Suppress01.main(java.lang.String[]):::EXIT

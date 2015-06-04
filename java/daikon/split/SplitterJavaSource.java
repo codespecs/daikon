@@ -377,10 +377,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Determines if the variable represented by varInfo is
-   * a ".getClass()" variable.
+   * Determines if the variable represented by varInfo contains
+   * a CLASSNAME variable.
    * @param varInfo the VarInfo of the variable being tested.
-   * @return true iff varInfo is a ".getClass()" variable.
+   * @return true iff varInfo is a CLASSNAME variable.
    */
   /*@Pure*/ private static boolean isTypeOfVar(VarInfo varInfo) {
     return varInfo.has_typeof();

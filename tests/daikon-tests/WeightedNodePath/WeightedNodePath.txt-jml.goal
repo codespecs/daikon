@@ -74,7 +74,7 @@ MapQuick.WeightedNodePath.elements():::ENTER
 (this.path != null)  ==>  ((this.cost >> this.path.cost == 0))
 ===========================================================================
 MapQuick.WeightedNodePath.elements():::EXIT
-    Variables: this this.node this.path this.path.node this.path.path this.path.path.node this.path.path.path this.path.path.cost this.path.cost this.cost return return.getClass() orig(this) orig(this.node) orig(this.path) orig(this.path.node) orig(this.path.path) orig(this.path.path.node) orig(this.path.path.path) orig(this.path.path.cost) orig(this.path.cost) orig(this.cost)
+    Variables: this this.node this.path this.path.node this.path.path this.path.path.node this.path.path.path this.path.path.cost this.path.cost this.cost return return.getClass().getName() orig(this) orig(this.node) orig(this.path) orig(this.path.node) orig(this.path.path) orig(this.path.path.node) orig(this.path.path.path) orig(this.path.path.cost) orig(this.path.cost) orig(this.cost)
 this.node == \old(this.node)
 this.path == \old(this.path)
 ((this.path != null) && (\old(this.path) != null))  ==>  (this.path.node == \old(this.path.node))
@@ -85,7 +85,7 @@ this.path == \old(this.path)
 ((this.path != null) && (\old(this.path) != null))  ==>  (this.path.cost == \old(this.path.cost))
 this.cost == \old(this.cost)
 \result != null
-\result.getClass() == java.util.Collections$UnmodifiableCollection$1.class
+\result.getClass().getName() == java.util.Collections$UnmodifiableCollection$1.class.getName()
 (this.path != null)  ==>  ((this.cost >> this.path.cost == 0))
 ===========================================================================
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER
@@ -93,7 +93,7 @@ MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER
 node != null
 ===========================================================================
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT
-    Variables: this this.node this.path this.path.node this.path.path this.path.path.node this.path.path.path this.path.path.cost this.path.cost this.cost node return return.getClass() orig(this) orig(this.node) orig(this.path) orig(this.path.node) orig(this.path.path) orig(this.path.path.node) orig(this.path.path.path) orig(this.path.path.cost) orig(this.path.cost) orig(this.cost) orig(node)
+    Variables: this this.node this.path this.path.node this.path.path this.path.path.node this.path.path.path this.path.path.cost this.path.cost this.cost node return return.getClass().getName() orig(this) orig(this.node) orig(this.path) orig(this.path.node) orig(this.path.path) orig(this.path.path.node) orig(this.path.path.path) orig(this.path.path.cost) orig(this.path.cost) orig(this.cost) orig(node)
 this.node == \old(this.node)
 this.path == \old(this.path)
 ((this.path != null) && (\old(this.path) != null))  ==>  (this.path.node == \old(this.path.node))
@@ -104,15 +104,15 @@ this.path == \old(this.path)
 ((this.path != null) && (\old(this.path) != null))  ==>  (this.path.cost == \old(this.path.cost))
 this.cost == \old(this.cost)
 \result != null
-\result.getClass() == MapQuick.WeightedNodePath.class
+\result.getClass().getName() == MapQuick.WeightedNodePath.class.getName()
 ===========================================================================
 MapQuick.WeightedNodePath.extend(java.lang.Object):::ENTER
-    Variables: this this.node this.path this.path.node this.path.path this.path.path.node this.path.path.path this.path.path.cost this.path.cost this.cost o o.getClass()
+    Variables: this this.node this.path this.path.node this.path.path this.path.path.node this.path.path.path this.path.path.cost this.path.cost this.cost o o.getClass().getName()
 o != null
-o.getClass() == MapQuick.WeightedNode.class
+o.getClass().getName() == MapQuick.WeightedNode.class.getName()
 ===========================================================================
 MapQuick.WeightedNodePath.extend(java.lang.Object):::EXIT
-    Variables: this this.node this.path this.path.node this.path.path this.path.path.node this.path.path.path this.path.path.cost this.path.cost this.cost o o.getClass() return return.getClass() orig(this) orig(this.node) orig(this.path) orig(this.path.node) orig(this.path.path) orig(this.path.path.node) orig(this.path.path.path) orig(this.path.path.cost) orig(this.path.cost) orig(this.cost) orig(o) orig(o.getClass())
+    Variables: this this.node this.path this.path.node this.path.path this.path.path.node this.path.path.path this.path.path.cost this.path.cost this.cost o o.getClass().getName() return return.getClass().getName() orig(this) orig(this.node) orig(this.path) orig(this.path.node) orig(this.path.path) orig(this.path.path.node) orig(this.path.path.path) orig(this.path.path.cost) orig(this.path.cost) orig(this.cost) orig(o) orig(o.getClass().getName())
 this.node == \old(this.node)
 this.path == \old(this.path)
 ((this.path != null) && (\old(this.path) != null))  ==>  (this.path.node == \old(this.path.node))
@@ -123,9 +123,9 @@ this.path == \old(this.path)
 ((this.path != null) && (\old(this.path) != null))  ==>  (this.path.cost == \old(this.path.cost))
 this.cost == \old(this.cost)
 \result != null
-\result.getClass() == MapQuick.WeightedNodePath.class
-\result.getClass().contains(\old(o.getClass()))
-\result.getClass() != \old(o.getClass())
+\result.getClass().getName() == MapQuick.WeightedNodePath.class.getName()
+\result.getClass().getName().contains(\old(o.getClass().getName()))
+\result.getClass().getName() != \old(o.getClass().getName())
 ===========================================================================
 MapQuick.WeightedNodePath.hashCode():::ENTER
     Variables: this this.node this.path this.path.node this.path.path this.path.path.node this.path.path.path this.path.path.cost this.path.cost this.cost

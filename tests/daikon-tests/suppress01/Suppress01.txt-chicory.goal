@@ -1,170 +1,170 @@
 // Declarations for misc.Suppress01
-// Declarations written Sat May 14 07:51:03 PDT 2011
+// Declarations written Thu Jun 04 13:33:19 PDT 2015
 
 decl-version 2.0
 var-comparability none
 
 ppt misc.Suppress01.main(java.lang.String[]):::ENTER
 ppt-type enter
-  variable args
-    var-kind variable 
-    dec-type java.lang.String[]
-    rep-type hashcode
-    flags is_param
-    comparability 22
-  variable args.getClass()
-    var-kind function getClass()
-    enclosing-var args
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    function-args args
-    flags synthetic classname
-    comparability 22
-  variable args[..]
-    var-kind array 
-    enclosing-var args
-    array 1
-    dec-type java.lang.String[]
-    rep-type hashcode[]
-    comparability 22
-  variable args[..].toString
-    var-kind function toString()
-    enclosing-var args[..]
-    array 1
-    dec-type java.lang.String[]
-    rep-type java.lang.String[]
-    function-args args[]
-    flags synthetic to_string
-    comparability 22
+variable args
+  var-kind variable 
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname
+  comparability 22
+variable args[..]
+  var-kind array 
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 22
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 22
 
 ppt misc.Suppress01.main(java.lang.String[]):::EXIT24
 ppt-type subexit
-  variable args
-    var-kind variable 
-    dec-type java.lang.String[]
-    rep-type hashcode
-    flags is_param
-    comparability 22
-  variable args.getClass()
-    var-kind function getClass()
-    enclosing-var args
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    function-args args
-    flags synthetic classname
-    comparability 22
-  variable args[..]
-    var-kind array 
-    enclosing-var args
-    array 1
-    dec-type java.lang.String[]
-    rep-type hashcode[]
-    comparability 22
-  variable args[..].toString
-    var-kind function toString()
-    enclosing-var args[..]
-    array 1
-    dec-type java.lang.String[]
-    rep-type java.lang.String[]
-    function-args args[]
-    flags synthetic to_string
-    comparability 22
+variable args
+  var-kind variable 
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname
+  comparability 22
+variable args[..]
+  var-kind array 
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 22
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 22
 
 ppt misc.Suppress01.f():::ENTER
 ppt-type enter
 parent parent misc.Suppress01:::OBJECT 1
-  variable this
-    var-kind variable 
-    dec-type misc.Suppress01
-    rep-type hashcode
-    flags is_param
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray
-    var-kind field theArray
-    enclosing-var this
-    dec-type int[]
-    rep-type hashcode
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray[..]
-    var-kind array 
-    enclosing-var this.theArray
-    array 1
-    dec-type int[]
-    rep-type int[]
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray2
-    var-kind field theArray2
-    enclosing-var this
-    dec-type int[]
-    rep-type hashcode
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray2[..]
-    var-kind array 
-    enclosing-var this.theArray2
-    array 1
-    dec-type int[]
-    rep-type int[]
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.b
-    var-kind field b
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray
+  var-kind field theArray
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray[..]
+  var-kind array 
+  enclosing-var this.theArray
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray2
+  var-kind field theArray2
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray2[..]
+  var-kind array 
+  enclosing-var this.theArray2
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.b
+  var-kind field b
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
 
 ppt misc.Suppress01.f():::EXIT35
 ppt-type subexit
 parent parent misc.Suppress01:::OBJECT 1
-  variable this
-    var-kind variable 
-    dec-type misc.Suppress01
-    rep-type hashcode
-    flags is_param
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray
-    var-kind field theArray
-    enclosing-var this
-    dec-type int[]
-    rep-type hashcode
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray[..]
-    var-kind array 
-    enclosing-var this.theArray
-    array 1
-    dec-type int[]
-    rep-type int[]
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray2
-    var-kind field theArray2
-    enclosing-var this
-    dec-type int[]
-    rep-type hashcode
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray2[..]
-    var-kind array 
-    enclosing-var this.theArray2
-    array 1
-    dec-type int[]
-    rep-type int[]
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.b
-    var-kind field b
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray
+  var-kind field theArray
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray[..]
+  var-kind array 
+  enclosing-var this.theArray
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray2
+  var-kind field theArray2
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray2[..]
+  var-kind array 
+  enclosing-var this.theArray2
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.b
+  var-kind field b
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
 
 ppt misc.Suppress01.Suppress01():::ENTER
 ppt-type enter
@@ -172,99 +172,99 @@ ppt-type enter
 ppt misc.Suppress01.Suppress01():::EXIT43
 ppt-type subexit
 parent parent misc.Suppress01:::OBJECT 1
-  variable this
-    var-kind variable 
-    dec-type misc.Suppress01
-    rep-type hashcode
-    flags is_param
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray
-    var-kind field theArray
-    enclosing-var this
-    dec-type int[]
-    rep-type hashcode
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray[..]
-    var-kind array 
-    enclosing-var this.theArray
-    array 1
-    dec-type int[]
-    rep-type int[]
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray2
-    var-kind field theArray2
-    enclosing-var this
-    dec-type int[]
-    rep-type hashcode
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.theArray2[..]
-    var-kind array 
-    enclosing-var this.theArray2
-    array 1
-    dec-type int[]
-    rep-type int[]
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
-  variable this.b
-    var-kind field b
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
-    parent misc.Suppress01:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray
+  var-kind field theArray
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray[..]
+  var-kind array 
+  enclosing-var this.theArray
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray2
+  var-kind field theArray2
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.theArray2[..]
+  var-kind array 
+  enclosing-var this.theArray2
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
+variable this.b
+  var-kind field b
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent misc.Suppress01:::OBJECT 1
 
 ppt misc.Suppress01:::OBJECT
 ppt-type object
-  variable this
-    var-kind variable 
-    dec-type misc.Suppress01
-    rep-type hashcode
-    flags is_param
-    comparability 22
-  variable this.theArray
-    var-kind field theArray
-    enclosing-var this
-    dec-type int[]
-    rep-type hashcode
-    comparability 22
-  variable this.theArray[..]
-    var-kind array 
-    enclosing-var this.theArray
-    array 1
-    dec-type int[]
-    rep-type int[]
-    comparability 22
-  variable this.theArray2
-    var-kind field theArray2
-    enclosing-var this
-    dec-type int[]
-    rep-type hashcode
-    comparability 22
-  variable this.theArray2[..]
-    var-kind array 
-    enclosing-var this.theArray2
-    array 1
-    dec-type int[]
-    rep-type int[]
-    comparability 22
-  variable this.b
-    var-kind field b
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
+variable this
+  var-kind variable 
+  dec-type misc.Suppress01
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable this.theArray
+  var-kind field theArray
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 22
+variable this.theArray[..]
+  var-kind array 
+  enclosing-var this.theArray
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 22
+variable this.theArray2
+  var-kind field theArray2
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 22
+variable this.theArray2[..]
+  var-kind array 
+  enclosing-var this.theArray2
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 22
+variable this.b
+  var-kind field b
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
 
 misc.Suppress01.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-26164421
+215922271
 1
-args.getClass()
+args.getClass().getName()
 "java.lang.String[]"
 1
 args[..]
@@ -282,16 +282,16 @@ misc.Suppress01.Suppress01():::EXIT43
 this_invocation_nonce
 1
 this
-14606772
+1905728914
 1
 this.theArray
-14320460
+170425952
 1
 this.theArray[..]
 [0]
 1
 this.theArray2
-4353837
+1649854604
 1
 this.theArray2[..]
 [0 1]
@@ -304,16 +304,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 2
 this
-14606772
+1905728914
 1
 this.theArray
-14320460
+170425952
 1
 this.theArray[..]
 [0]
 1
 this.theArray2
-4353837
+1649854604
 1
 this.theArray2[..]
 [0 1]
@@ -326,16 +326,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 2
 this
-14606772
+1905728914
 1
 this.theArray
-31096859
+1353728499
 1
 this.theArray[..]
 [0 0]
 1
 this.theArray2
-1078725
+1673126375
 1
 this.theArray2[..]
 [0 1 0 0]
@@ -348,16 +348,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 3
 this
-14606772
+1905728914
 1
 this.theArray
-31096859
+1353728499
 1
 this.theArray[..]
 [0 0]
 1
 this.theArray2
-1078725
+1673126375
 1
 this.theArray2[..]
 [0 1 0 0]
@@ -370,16 +370,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 3
 this
-14606772
+1905728914
 1
 this.theArray
-10742005
+1084110807
 1
 this.theArray[..]
 [0 1 0]
 1
 this.theArray2
-18037110
+1399072101
 1
 this.theArray2[..]
 [0 1 2 0 0]
@@ -392,16 +392,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 4
 this
-14606772
+1905728914
 1
 this.theArray
-10742005
+1084110807
 1
 this.theArray[..]
 [0 1 0]
 1
 this.theArray2
-18037110
+1399072101
 1
 this.theArray2[..]
 [0 1 2 0 0]
@@ -414,16 +414,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 4
 this
-14606772
+1905728914
 1
 this.theArray
-18975525
+1406350504
 1
 this.theArray[..]
 [0 1 2 0]
 1
 this.theArray2
-20340225
+1327901846
 1
 this.theArray2[..]
 [0 1 2 3 0 0]
@@ -436,16 +436,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 5
 this
-14606772
+1905728914
 1
 this.theArray
-18975525
+1406350504
 1
 this.theArray[..]
 [0 1 2 0]
 1
 this.theArray2
-20340225
+1327901846
 1
 this.theArray2[..]
 [0 1 2 3 0 0]
@@ -458,16 +458,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 5
 this
-14606772
+1905728914
 1
 this.theArray
-5624799
+1396266098
 1
 this.theArray[..]
 [0 1 2 3 0]
 1
 this.theArray2
-13178174
+1490498317
 1
 this.theArray2[..]
 [0 1 2 3 4 0 0]
@@ -480,16 +480,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 6
 this
-14606772
+1905728914
 1
 this.theArray
-5624799
+1396266098
 1
 this.theArray[..]
 [0 1 2 3 0]
 1
 this.theArray2
-13178174
+1490498317
 1
 this.theArray2[..]
 [0 1 2 3 4 0 0]
@@ -502,16 +502,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 6
 this
-14606772
+1905728914
 1
 this.theArray
-26332714
+408471564
 1
 this.theArray[..]
 [0 1 2 3 4 0]
 1
 this.theArray2
-24524170
+1823840336
 1
 this.theArray2[..]
 [0 1 2 3 4 5 0 0]
@@ -524,16 +524,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 7
 this
-14606772
+1905728914
 1
 this.theArray
-26332714
+408471564
 1
 this.theArray[..]
 [0 1 2 3 4 0]
 1
 this.theArray2
-24524170
+1823840336
 1
 this.theArray2[..]
 [0 1 2 3 4 5 0 0]
@@ -546,16 +546,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 7
 this
-14606772
+1905728914
 1
 this.theArray
-28637125
+102949874
 1
 this.theArray[..]
 [0 1 2 3 4 5 0]
 1
 this.theArray2
-32957417
+1554196483
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 0 0]
@@ -568,16 +568,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 8
 this
-14606772
+1905728914
 1
 this.theArray
-28637125
+102949874
 1
 this.theArray[..]
 [0 1 2 3 4 5 0]
 1
 this.theArray2
-32957417
+1554196483
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 0 0]
@@ -590,16 +590,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 8
 this
-14606772
+1905728914
 1
 this.theArray
-32299803
+1536691320
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 0]
 1
 this.theArray2
-19194417
+1532676418
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 0 0]
@@ -612,16 +612,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 9
 this
-14606772
+1905728914
 1
 this.theArray
-32299803
+1536691320
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 0]
 1
 this.theArray2
-19194417
+1532676418
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 0 0]
@@ -634,16 +634,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 9
 this
-14606772
+1905728914
 1
 this.theArray
-8270814
+626211561
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 0]
 1
 this.theArray2
-25118608
+2067835427
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 0 0]
@@ -656,16 +656,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 10
 this
-14606772
+1905728914
 1
 this.theArray
-8270814
+626211561
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 0]
 1
 this.theArray2
-25118608
+2067835427
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 0 0]
@@ -678,16 +678,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 10
 this
-14606772
+1905728914
 1
 this.theArray
-20140850
+1382162188
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 0]
 1
 this.theArray2
-10158717
+669284117
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 0 0]
@@ -700,16 +700,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 11
 this
-14606772
+1905728914
 1
 this.theArray
-20140850
+1382162188
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 0]
 1
 this.theArray2
-10158717
+669284117
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 0 0]
@@ -722,16 +722,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 11
 this
-14606772
+1905728914
 1
 this.theArray
-12618762
+138811433
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 0]
 1
 this.theArray2
-19531721
+836513789
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 0 0]
@@ -744,16 +744,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 12
 this
-14606772
+1905728914
 1
 this.theArray
-12618762
+138811433
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 0]
 1
 this.theArray2
-19531721
+836513789
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 0 0]
@@ -766,16 +766,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 12
 this
-14606772
+1905728914
 1
 this.theArray
-6634622
+1859298461
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 0]
 1
 this.theArray2
-6716833
+1194686530
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 0 0]
@@ -788,16 +788,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 13
 this
-14606772
+1905728914
 1
 this.theArray
-6634622
+1859298461
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 0]
 1
 this.theArray2
-6716833
+1194686530
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 0 0]
@@ -810,16 +810,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 13
 this
-14606772
+1905728914
 1
 this.theArray
-12709863
+124410260
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 0]
 1
 this.theArray2
-7160256
+1461651289
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 0 0]
@@ -832,16 +832,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 14
 this
-14606772
+1905728914
 1
 this.theArray
-12709863
+124410260
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 0]
 1
 this.theArray2
-7160256
+1461651289
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 0 0]
@@ -854,16 +854,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 14
 this
-14606772
+1905728914
 1
 this.theArray
-16234748
+907776190
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 0]
 1
 this.theArray2
-26326847
+1270597042
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 0 0]
@@ -876,16 +876,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 15
 this
-14606772
+1905728914
 1
 this.theArray
-16234748
+907776190
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 0]
 1
 this.theArray2
-26326847
+1270597042
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 0 0]
@@ -898,16 +898,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 15
 this
-14606772
+1905728914
 1
 this.theArray
-26587099
+347099126
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 0]
 1
 this.theArray2
-5011873
+1129425430
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0 0]
@@ -920,16 +920,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 16
 this
-14606772
+1905728914
 1
 this.theArray
-26587099
+347099126
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 0]
 1
 this.theArray2
-5011873
+1129425430
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0 0]
@@ -942,16 +942,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 16
 this
-14606772
+1905728914
 1
 this.theArray
-12935734
+645246177
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0]
 1
 this.theArray2
-11726490
+2007563136
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 0]
@@ -964,16 +964,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 17
 this
-14606772
+1905728914
 1
 this.theArray
-12935734
+645246177
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0]
 1
 this.theArray2
-11726490
+2007563136
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 0]
@@ -986,16 +986,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 17
 this
-14606772
+1905728914
 1
 this.theArray
-21944951
+1998048735
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0]
 1
 this.theArray2
-32029516
+1003301006
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 0 0]
@@ -1008,16 +1008,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 18
 this
-14606772
+1905728914
 1
 this.theArray
-21944951
+1998048735
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0]
 1
 this.theArray2
-32029516
+1003301006
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 0 0]
@@ -1030,16 +1030,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 18
 this
-14606772
+1905728914
 1
 this.theArray
-6335429
+438411598
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 0]
 1
 this.theArray2
-11347768
+367334729
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 0 0]
@@ -1052,16 +1052,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 19
 this
-14606772
+1905728914
 1
 this.theArray
-6335429
+438411598
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 0]
 1
 this.theArray2
-11347768
+367334729
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 0 0]
@@ -1074,16 +1074,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 19
 this
-14606772
+1905728914
 1
 this.theArray
-32112676
+1926788825
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 0]
 1
 this.theArray2
-28272524
+1633868662
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 0 0]
@@ -1096,16 +1096,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 20
 this
-14606772
+1905728914
 1
 this.theArray
-32112676
+1926788825
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 0]
 1
 this.theArray2
-28272524
+1633868662
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 0 0]
@@ -1118,16 +1118,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 20
 this
-14606772
+1905728914
 1
 this.theArray
-12014768
+557208045
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 0]
 1
 this.theArray2
-1644335
+1966911395
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 0 0]
@@ -1140,16 +1140,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 21
 this
-14606772
+1905728914
 1
 this.theArray
-12014768
+557208045
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 0]
 1
 this.theArray2
-1644335
+1966911395
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 0 0]
@@ -1162,16 +1162,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 21
 this
-14606772
+1905728914
 1
 this.theArray
-21054214
+1664037494
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 0]
 1
 this.theArray2
-26705179
+798626777
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 0 0]
@@ -1184,16 +1184,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 22
 this
-14606772
+1905728914
 1
 this.theArray
-21054214
+1664037494
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 0]
 1
 this.theArray2
-26705179
+798626777
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 0 0]
@@ -1206,16 +1206,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 22
 this
-14606772
+1905728914
 1
 this.theArray
-9866744
+747447289
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 0]
 1
 this.theArray2
-4376934
+1714734920
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 0 0]
@@ -1228,16 +1228,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 23
 this
-14606772
+1905728914
 1
 this.theArray
-9866744
+747447289
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 0]
 1
 this.theArray2
-4376934
+1714734920
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 0 0]
@@ -1250,16 +1250,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 23
 this
-14606772
+1905728914
 1
 this.theArray
-11819817
+319257700
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 0]
 1
 this.theArray2
-13440889
+1350013694
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 0 0]
@@ -1272,16 +1272,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 24
 this
-14606772
+1905728914
 1
 this.theArray
-11819817
+319257700
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 0]
 1
 this.theArray2
-13440889
+1350013694
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 0 0]
@@ -1294,16 +1294,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 24
 this
-14606772
+1905728914
 1
 this.theArray
-12598697
+1515424503
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 0]
 1
 this.theArray2
-17839121
+583568501
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 0 0]
@@ -1316,16 +1316,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 25
 this
-14606772
+1905728914
 1
 this.theArray
-12598697
+1515424503
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 0]
 1
 this.theArray2
-17839121
+583568501
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 0 0]
@@ -1338,16 +1338,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 25
 this
-14606772
+1905728914
 1
 this.theArray
-13272885
+477980458
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 0]
 1
 this.theArray2
-7527493
+1828717826
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 0 0]
@@ -1360,16 +1360,16 @@ misc.Suppress01.f():::ENTER
 this_invocation_nonce
 26
 this
-14606772
+1905728914
 1
 this.theArray
-13272885
+477980458
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 0]
 1
 this.theArray2
-7527493
+1828717826
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 0 0]
@@ -1382,16 +1382,16 @@ misc.Suppress01.f():::EXIT35
 this_invocation_nonce
 26
 this
-14606772
+1905728914
 1
 this.theArray
-14372047
+474545718
 1
 this.theArray[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 0]
 1
 this.theArray2
-26197757
+2083101115
 1
 this.theArray2[..]
 [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 0 0]
@@ -1404,9 +1404,9 @@ misc.Suppress01.main(java.lang.String[]):::EXIT24
 this_invocation_nonce
 0
 args
-26164421
+215922271
 1
-args.getClass()
+args.getClass().getName()
 "java.lang.String[]"
 1
 args[..]

@@ -1,82 +1,82 @@
 ===========================================================================
 DataStructures.StackAr:::OBJECT
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
 this.theArray != null
 \typeof(this.theArray) == \type(java.lang.Object[])
 this.topOfStack >= -1
-this.theArray.length() == 18
+\typeof(this.theArray).length() == 18
 (\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))
 this.topOfStack <= this.theArray.length-1
-(this.theArray.length >> this.theArray.length() == 0)
-this.theArray.length() != this.theArray.length
-this.theArray.length() != this.theArray.length-1
+(this.theArray.length >> \typeof(this.theArray).length() == 0)
+\typeof(this.theArray).length() != this.theArray.length
+\typeof(this.theArray).length() != this.theArray.length-1
 ===========================================================================
 DataStructures.StackAr.StackAr(int):::ENTER
     Variables: capacity
 capacity >= 0
 ===========================================================================
 DataStructures.StackAr.StackAr(int):::EXIT
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack capacity orig(capacity) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[capacity] this.theArray[capacity-1] this.theArray[capacity..] this.theArray[capacity+1..] this.theArray[0..capacity] this.theArray[0..capacity-1] this.theArray[orig(capacity)] this.theArray[orig(capacity)-1] this.theArray[orig(capacity)..] this.theArray[orig(capacity)+1..] this.theArray[0..orig(capacity)] this.theArray[0..orig(capacity)-1] this.theArray[this.topOfStack+1..capacity] this.theArray[this.topOfStack..capacity-1] this.theArray[this.topOfStack+1..capacity-1] this.theArray[capacity+1..this.topOfStack] this.theArray[capacity..this.topOfStack-1] this.theArray[capacity+1..this.topOfStack-1] this.theArray[this.topOfStack+1..orig(capacity)] this.theArray[this.topOfStack..orig(capacity)-1] this.theArray[this.topOfStack+1..orig(capacity)-1] this.theArray[orig(capacity)+1..this.topOfStack] this.theArray[orig(capacity)..this.topOfStack-1] this.theArray[orig(capacity)+1..this.topOfStack-1] this.theArray[capacity+1..orig(capacity)] this.theArray[capacity..orig(capacity)-1] this.theArray[capacity+1..orig(capacity)-1] this.theArray[orig(capacity)+1..capacity] this.theArray[orig(capacity)..capacity-1] this.theArray[orig(capacity)+1..capacity-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack capacity orig(capacity) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[capacity] this.theArray[capacity-1] this.theArray[capacity..] this.theArray[capacity+1..] this.theArray[0..capacity] this.theArray[0..capacity-1] this.theArray[orig(capacity)] this.theArray[orig(capacity)-1] this.theArray[orig(capacity)..] this.theArray[orig(capacity)+1..] this.theArray[0..orig(capacity)] this.theArray[0..orig(capacity)-1] this.theArray[this.topOfStack+1..capacity] this.theArray[this.topOfStack..capacity-1] this.theArray[this.topOfStack+1..capacity-1] this.theArray[capacity+1..this.topOfStack] this.theArray[capacity..this.topOfStack-1] this.theArray[capacity+1..this.topOfStack-1] this.theArray[this.topOfStack+1..orig(capacity)] this.theArray[this.topOfStack..orig(capacity)-1] this.theArray[this.topOfStack+1..orig(capacity)-1] this.theArray[orig(capacity)+1..this.topOfStack] this.theArray[orig(capacity)..this.topOfStack-1] this.theArray[orig(capacity)+1..this.topOfStack-1] this.theArray[capacity+1..orig(capacity)] this.theArray[capacity..orig(capacity)-1] this.theArray[capacity+1..orig(capacity)-1] this.theArray[orig(capacity)+1..capacity] this.theArray[orig(capacity)..capacity-1] this.theArray[orig(capacity)+1..capacity-1]
       Unmodified variables: capacity
 \old(capacity) == this.theArray.length
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
 this.topOfStack == -1
 (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))
-(\old(capacity) >> this.theArray.length() == 0)
-\old(capacity) != this.theArray.length()
+(\old(capacity) >> \typeof(this.theArray).length() == 0)
+\old(capacity) != \typeof(this.theArray).length()
 ===========================================================================
 DataStructures.StackAr.isEmpty():::ENTER
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
 ===========================================================================
 DataStructures.StackAr.isEmpty():::EXIT
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack return orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
       Modified variables: this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[0..this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
 modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 (this.topOfStack == -1)  ==  (\result == true)
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)))
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)))
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))))
-(this.topOfStack == -1)  ==>  (this.topOfStack < this.theArray.length())
+(this.topOfStack == -1)  ==>  (this.topOfStack < \typeof(this.theArray).length())
 (this.topOfStack >= 0)  ==  (\result == false)
 (this.topOfStack >= 0)  ==>  ((this.theArray.length-1 == 0) ==> (this.topOfStack == 0))
-(this.topOfStack >= 0)  ==>  ((this.theArray.length-1 >> this.theArray.length() == 0))
-(this.topOfStack >= 0)  ==>  ((this.topOfStack >> this.theArray.length() == 0))
+(this.topOfStack >= 0)  ==>  ((this.theArray.length-1 >> \typeof(this.theArray).length() == 0))
+(this.topOfStack >= 0)  ==>  ((this.topOfStack >> \typeof(this.theArray).length() == 0))
 (this.topOfStack >= 0)  ==>  ((\forall int i; (\old(this.topOfStack) <= i && i <= this.topOfStack+1) ==> (this.theArray[i] != null)))
 (this.topOfStack >= 0)  ==>  ((\forall int i; (this.topOfStack <= i && i <= \old(this.topOfStack)+1) ==> (this.theArray[i] != null)))
 (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null))
 \typeof(this.theArray) == \old(\typeof(this.theArray))
 ===========================================================================
 DataStructures.StackAr.isFull():::ENTER
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
 ===========================================================================
 DataStructures.StackAr.isFull():::EXIT
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack return orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
       Modified variables: this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[0..this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
 modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 (\result == false)  ==  ((\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)))
 (\result == false)  ==  (this.topOfStack < this.theArray.length-1)
-(\result == false)  ==>  ((this.theArray.length-1 >> this.theArray.length() == 0))
-(\result == false)  ==>  (this.topOfStack <= this.theArray.length())
+(\result == false)  ==>  ((this.theArray.length-1 >> \typeof(this.theArray).length() == 0))
+(\result == false)  ==>  (this.topOfStack <= \typeof(this.theArray).length())
 (\result == true)  ==  (this.topOfStack == this.theArray.length-1)
 (\result == true)  ==>  (\nonnullelements(this.theArray))
 (\result == true)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != null)))
-(\result == true)  ==>  (this.topOfStack != this.theArray.length())
+(\result == true)  ==>  (this.topOfStack != \typeof(this.theArray).length())
 (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null))
 \typeof(this.theArray) == \old(\typeof(this.theArray))
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::ENTER
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
-this.topOfStack < this.theArray.length()
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+this.topOfStack < \typeof(this.theArray).length()
 (this.topOfStack == 0) ==> (this.theArray.length-1 == 0)
 ===========================================================================
 DataStructures.StackAr.makeEmpty():::EXIT
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
-      Modified variables: this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() size(this.theArray[]) this.theArray[this.topOfStack+1..]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+      Modified variables: this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() size(this.theArray[]) this.theArray[this.topOfStack+1..]
 modifies this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack], this.theArray[0..this.topOfStack-1]
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
@@ -85,20 +85,20 @@ this.topOfStack == -1
 (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))
 \typeof(this.theArray) == \old(\typeof(this.theArray))
 this.topOfStack <= \old(this.topOfStack)
-\old(this.topOfStack) < this.theArray.length()
+\old(this.topOfStack) < \typeof(this.theArray).length()
 (\old(this.topOfStack) == 0) ==> (this.theArray.length-1 == 0)
 \old(this.topOfStack) <= this.theArray.length-1
 ===========================================================================
 DataStructures.StackAr.pop():::ENTER
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
 this.topOfStack >= 0
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..this.topOfStack] contains no duplicates
-(this.topOfStack >> this.theArray.length() == 0)
+(this.topOfStack >> \typeof(this.theArray).length() == 0)
 ===========================================================================
 DataStructures.StackAr.pop():::EXIT
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
-      Modified variables: this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() size(this.theArray[])
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+      Modified variables: this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() size(this.theArray[])
 modifies this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[this.topOfStack+1..], this.theArray[0..this.topOfStack], this.theArray[0..this.topOfStack-1]
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..this.topOfStack] == orig(this.theArray[0..this.topOfStack-1])
@@ -109,67 +109,67 @@ warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/J
 (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)+1) ==> (this.theArray[i] != null))
 \typeof(this.theArray) == \old(\typeof(this.theArray))
 this.topOfStack - \old(this.topOfStack) + 1 == 0
-this.topOfStack <= this.theArray.length()
+this.topOfStack <= \typeof(this.theArray).length()
 this.topOfStack < this.theArray.length-1
-(\old(this.topOfStack) >> this.theArray.length() == 0)
+(\old(this.topOfStack) >> \typeof(this.theArray).length() == 0)
 \old(this.topOfStack) <= this.theArray.length-1
 (\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[\old(this.topOfStack)]))
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::ENTER
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack x x.getClass() this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 x.getClass().length() this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack x x.getClass().getName() this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 x.getClass().getName().length() this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
 x != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: x.getClass() is printable
-x.length() == 16 || x.length() == 22 || x.length() == 24
-warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: x.getClass().length() == 0  (mod 2)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: x.getClass().getName() is printable
+\typeof(x).length() == 16 || \typeof(x).length() == 22 || \typeof(x).length() == 24
+warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: x.getClass().getName().length() == 0  (mod 2)
 \typeof(this.theArray) != \typeof(x)
-this.topOfStack <= this.theArray.length()
+this.topOfStack <= \typeof(this.theArray).length()
 this.topOfStack < this.theArray.length-1
-(this.theArray.length-1 >> this.theArray.length() == 0)
-this.theArray.length() != x.length()
-(this.theArray.length >> x.length() == 0)
-this.theArray.length != x.length()
-(this.theArray.length-1 >> x.length() == 0)
-this.theArray.length-1 != x.length()
+(this.theArray.length-1 >> \typeof(this.theArray).length() == 0)
+\typeof(this.theArray).length() != \typeof(x).length()
+(this.theArray.length >> \typeof(x).length() == 0)
+this.theArray.length != \typeof(x).length()
+(this.theArray.length-1 >> \typeof(x).length() == 0)
+this.theArray.length-1 != \typeof(x).length()
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack x x.getClass() orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) orig(x) orig(x.getClass()) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 x.getClass().length() orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 orig(x.getClass()).length() this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
-      Modified variables: this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() x x.getClass() size(this.theArray[]) this.theArray[0..this.topOfStack]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack x x.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) orig(x) orig(x.getClass().getName()) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 x.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 orig(x.getClass().getName()).length() this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+      Modified variables: this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack-1]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() x x.getClass().getName() size(this.theArray[]) this.theArray[0..this.topOfStack]
 modifies this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[this.topOfStack+1..], this.theArray[0..this.topOfStack-1]
 \old(x) == this.theArray[this.topOfStack]
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[this.topOfStack+1..] == orig(this.theArray[post(this.topOfStack)+1..])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..post(this.topOfStack)-1])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..this.topOfStack])
 this.topOfStack >= 0
-x.length() == 16 || x.length() == 22 || x.length() == 24
-warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: x.getClass().length() == 0  (mod 2)
+\typeof(x).length() == 16 || \typeof(x).length() == 22 || \typeof(x).length() == 24
+warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: x.getClass().getName().length() == 0  (mod 2)
 (\forall int i; (this.topOfStack <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) == null))
 (\forall int i; (\old(this.topOfStack)+1 <= i && i <= this.topOfStack+1) ==> (this.theArray[i] != null))
 \typeof(this.theArray) == \old(\typeof(this.theArray))
 \typeof(this.theArray) != \old(\typeof(x))
 !(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \old(\typeof(x))))
 this.topOfStack - \old(this.topOfStack) - 1 == 0
-(this.topOfStack >> this.theArray.length() == 0)
+(this.topOfStack >> \typeof(this.theArray).length() == 0)
 (this.theArray.length-1 == 0) ==> (this.topOfStack == 0)
-(this.topOfStack >> x.length() == 0)
-\old(this.topOfStack) <= this.theArray.length()
+(this.topOfStack >> \typeof(x).length() == 0)
+\old(this.topOfStack) <= \typeof(this.theArray).length()
 \old(this.topOfStack) < this.theArray.length-1
 (\forall int i; (\old(this.topOfStack)+1 <= i && i <= this.topOfStack) ==> (this.theArray[i] == \old(x)))
-(this.theArray.length-1 >> this.theArray.length() == 0)
-this.theArray.length() != x.length()
-(this.theArray.length >> x.length() == 0)
-this.theArray.length != x.length()
-(this.theArray.length-1 >> x.length() == 0)
-this.theArray.length-1 != x.length()
+(this.theArray.length-1 >> \typeof(this.theArray).length() == 0)
+\typeof(this.theArray).length() != \typeof(x).length()
+(this.theArray.length >> \typeof(x).length() == 0)
+this.theArray.length != \typeof(x).length()
+(this.theArray.length-1 >> \typeof(x).length() == 0)
+this.theArray.length-1 != \typeof(x).length()
 (\forall int i; (this.topOfStack <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) == \old(this.theArray[\new(this.topOfStack)])))
 ===========================================================================
 DataStructures.StackAr.top():::ENTER
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
 ===========================================================================
 DataStructures.StackAr.top():::EXIT74
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack return return.getClass() orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().length() orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return return.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
       Modified variables: this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[0..this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
 modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
@@ -179,34 +179,34 @@ this.topOfStack == -1
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result))
 ===========================================================================
 DataStructures.StackAr.top():::EXIT75
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack return return.getClass() orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().length() orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return return.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
       Modified variables: this.theArray[this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
 modifies this.theArray[this.topOfStack-1]
 \result == this.theArray[this.topOfStack]
 \result == this.theArray[\old(this.topOfStack)]
 \result == \old(this.theArray[\new(this.topOfStack)])
 \result == \old(this.theArray[this.topOfStack])
 this.topOfStack >= 0
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass() is printable
-\result.length() == 16 || \result.length() == 22 || \result.length() == 24
-warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().length() == 0  (mod 2)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable
+\typeof(\result).length() == 16 || \typeof(\result).length() == 22 || \typeof(\result).length() == 24
+warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName().length() == 0  (mod 2)
 \typeof(this.theArray) != \typeof(\result)
 !(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \typeof(\result)))
-(this.topOfStack >> this.theArray.length() == 0)
+(this.topOfStack >> \typeof(this.theArray).length() == 0)
 (this.theArray.length-1 == 0) ==> (this.topOfStack == 0)
-(this.topOfStack >> \result.length() == 0)
-(this.theArray.length-1 >> this.theArray.length() == 0)
-this.theArray.length() != \result.length()
-(this.theArray.length >> \result.length() == 0)
-this.theArray.length != \result.length()
-(this.theArray.length-1 >> \result.length() == 0)
-this.theArray.length-1 != \result.length()
+(this.topOfStack >> \typeof(\result).length() == 0)
+(this.theArray.length-1 >> \typeof(this.theArray).length() == 0)
+\typeof(this.theArray).length() != \typeof(\result).length()
+(this.theArray.length >> \typeof(\result).length() == 0)
+this.theArray.length != \typeof(\result).length()
+(this.theArray.length-1 >> \typeof(\result).length() == 0)
+this.theArray.length-1 != \typeof(\result).length()
 ===========================================================================
 DataStructures.StackAr.top():::EXIT
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack return return.getClass() orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().length() orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return return.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
       Modified variables: this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[0..this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
 modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 (this.topOfStack == -1)  ==  (\result == null)
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)))
@@ -214,50 +214,50 @@ modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result)))
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))))
 (this.topOfStack == -1)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result)))
-(this.topOfStack == -1)  ==>  (this.topOfStack < this.theArray.length())
-(this.topOfStack >= 0)  ==>  ((this.theArray.length >> \result.length() == 0))
+(this.topOfStack == -1)  ==>  (this.topOfStack < \typeof(this.theArray).length())
+(this.topOfStack >= 0)  ==>  ((this.theArray.length >> \typeof(\result).length() == 0))
 (this.topOfStack >= 0)  ==>  ((this.theArray.length-1 == 0) ==> (this.topOfStack == 0))
-(this.topOfStack >= 0)  ==>  ((this.theArray.length-1 >> \result.length() == 0))
-(this.topOfStack >= 0)  ==>  ((this.theArray.length-1 >> this.theArray.length() == 0))
-(this.topOfStack >= 0)  ==>  ((this.topOfStack >> \result.length() == 0))
-(this.topOfStack >= 0)  ==>  ((this.topOfStack >> this.theArray.length() == 0))
+(this.topOfStack >= 0)  ==>  ((this.theArray.length-1 >> \typeof(\result).length() == 0))
+(this.topOfStack >= 0)  ==>  ((this.theArray.length-1 >> \typeof(this.theArray).length() == 0))
+(this.topOfStack >= 0)  ==>  ((this.topOfStack >> \typeof(\result).length() == 0))
+(this.topOfStack >= 0)  ==>  ((this.topOfStack >> \typeof(this.theArray).length() == 0))
 (this.topOfStack >= 0)  ==>  (\result == \old(this.theArray[\new(this.topOfStack)]))
 (this.topOfStack >= 0)  ==>  (\result == \old(this.theArray[this.topOfStack]))
 (this.topOfStack >= 0)  ==>  (\result == this.theArray[\old(this.topOfStack)])
 (this.topOfStack >= 0)  ==>  (\result == this.theArray[this.topOfStack])
 (this.topOfStack >= 0)  ==>  (!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \typeof(\result))))
-(this.topOfStack >= 0)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass() is printable)
-(this.topOfStack >= 0)  ==>  (warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().length() == 0  (mod 2))
-(this.topOfStack >= 0)  ==>  (\result.length() == 16 || \result.length() == 22 || \result.length() == 24)
-(this.topOfStack >= 0)  ==>  (this.theArray.length != \result.length())
-(this.topOfStack >= 0)  ==>  (this.theArray.length-1 != \result.length())
+(this.topOfStack >= 0)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable)
+(this.topOfStack >= 0)  ==>  (warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName().length() == 0  (mod 2))
+(this.topOfStack >= 0)  ==>  (\typeof(\result).length() == 16 || \typeof(\result).length() == 22 || \typeof(\result).length() == 24)
+(this.topOfStack >= 0)  ==>  (this.theArray.length != \typeof(\result).length())
+(this.topOfStack >= 0)  ==>  (this.theArray.length-1 != \typeof(\result).length())
 (this.topOfStack >= 0)  ==>  (\typeof(this.theArray) != \typeof(\result))
-(this.topOfStack >= 0)  ==>  (this.theArray.length() != \result.length())
+(this.topOfStack >= 0)  ==>  (\typeof(this.theArray).length() != \typeof(\result).length())
 (this.topOfStack >= 0)  ==>  ((\forall int i; (\old(this.topOfStack) <= i && i <= this.topOfStack+1) ==> (this.theArray[i] != null)))
 (this.topOfStack >= 0)  ==>  ((\forall int i; (this.topOfStack <= i && i <= \old(this.topOfStack)+1) ==> (this.theArray[i] != null)))
-(\result != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass() is printable)
-(\result != null)  ==>  (\result.length() == 16 || \result.length() == 22 || \result.length() == 24)
-(\result != null)  ==>  (warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().length() == 0  (mod 2))
+(\result != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable)
+(\result != null)  ==>  (\typeof(\result).length() == 16 || \typeof(\result).length() == 22 || \typeof(\result).length() == 24)
+(\result != null)  ==>  (warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName().length() == 0  (mod 2))
 (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null))
 (\result != null)  ==>  (\typeof(this.theArray) != \typeof(\result))
 \typeof(this.theArray) == \old(\typeof(this.theArray))
 (\result != null)  ==>  (!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \typeof(\result))))
-(\result != null)  ==>  ((this.topOfStack >> \result.length() == 0))
-(\result != null)  ==>  (this.theArray.length() != \result.length())
-(\result != null)  ==>  ((this.theArray.length == 0) ==> (\result.length() == 0))
-(\result != null)  ==>  ((this.theArray.length >> \result.length() == 0))
-(\result != null)  ==>  (this.theArray.length != \result.length())
-(\result != null)  ==>  ((this.theArray.length-1 >> \result.length() == 0))
-(\result != null)  ==>  (this.theArray.length-1 != \result.length())
+(\result != null)  ==>  ((this.topOfStack >> \typeof(\result).length() == 0))
+(\result != null)  ==>  (\typeof(this.theArray).length() != \typeof(\result).length())
+(\result != null)  ==>  ((this.theArray.length == 0) ==> (\typeof(\result).length() == 0))
+(\result != null)  ==>  ((this.theArray.length >> \typeof(\result).length() == 0))
+(\result != null)  ==>  (this.theArray.length != \typeof(\result).length())
+(\result != null)  ==>  ((this.theArray.length-1 >> \typeof(\result).length() == 0))
+(\result != null)  ==>  (this.theArray.length-1 != \typeof(\result).length())
 ===========================================================================
 DataStructures.StackAr.topAndPop():::ENTER
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..this.topOfStack] contains no duplicates
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT108
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack return return.getClass() orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().length() orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return return.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
       Modified variables: this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[0..this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
 modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
@@ -267,16 +267,16 @@ this.topOfStack == -1
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result))
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT111
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack return return.getClass() orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().length() orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
-      Modified variables: this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() size(this.theArray[])
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return return.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+      Modified variables: this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() size(this.theArray[])
 modifies this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[this.topOfStack+1..], this.theArray[0..this.topOfStack], this.theArray[0..this.topOfStack-1]
 \result == \old(this.theArray[this.topOfStack])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..this.topOfStack] == orig(this.theArray[0..this.topOfStack-1])
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable
 \old(this.topOfStack) >= 0
-\result.length() == 16 || \result.length() == 24
-warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().length() == 0  (mod 8)
+\typeof(\result).length() == 16 || \typeof(\result).length() == 24
+warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName().length() == 0  (mod 8)
 this.theArray[\old(this.topOfStack)] == null
 (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] == null))
 (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)+1) ==> (this.theArray[i] != null))
@@ -284,40 +284,40 @@ this.theArray[\old(this.topOfStack)] == null
 this.topOfStack - \old(this.topOfStack) + 1 == 0
 this.topOfStack < this.theArray.length-1
 !(\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) != \typeof(\result)))
-(\old(this.topOfStack) >> this.theArray.length() == 0)
+(\old(this.topOfStack) >> \typeof(this.theArray).length() == 0)
 (this.theArray.length-1 == 0) ==> (\old(this.topOfStack) == 0)
-(\old(this.topOfStack) >> \result.length() == 0)
-\old(this.topOfStack) != \result.length()
-this.theArray.length() != \result.length()
-(this.theArray.length >> \result.length() == 0)
-this.theArray.length != \result.length()
-(this.theArray.length-1 >> \result.length() == 0)
-this.theArray.length-1 != \result.length()
+(\old(this.topOfStack) >> \typeof(\result).length() == 0)
+\old(this.topOfStack) != \typeof(\result).length()
+\typeof(this.theArray).length() != \typeof(\result).length()
+(this.theArray.length >> \typeof(\result).length() == 0)
+this.theArray.length != \typeof(\result).length()
+(this.theArray.length-1 >> \typeof(\result).length() == 0)
+this.theArray.length-1 != \typeof(\result).length()
 (\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[\old(this.topOfStack)]))
 ===========================================================================
 DataStructures.StackAr.topAndPop():::EXIT
-    Variables: this this.theArray this.theArray.getClass() this.theArray[] this.theArray[].getClass() this.topOfStack return return.getClass() orig(this) orig(this.theArray) orig(this.theArray.getClass()) orig(this.theArray[]) orig(this.theArray[].getClass()) orig(this.topOfStack) this.theArray.getClass().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().length() orig(this.theArray.getClass()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
-      Modified variables: this.theArray[] this.theArray[].getClass() this.topOfStack this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
-      Unmodified variables: this this.theArray this.theArray.getClass() size(this.theArray[])
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack return return.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 return.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+      Modified variables: this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]
+      Unmodified variables: this this.theArray this.theArray.getClass().getName() size(this.theArray[])
 modifies this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[this.topOfStack+1..], this.theArray[0..this.topOfStack], this.theArray[0..this.topOfStack-1]
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
 (\old(this.topOfStack) >= 0)  ==  ((\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] == null)))
-(\old(this.topOfStack) >= 0)  ==>  ((\old(this.topOfStack) >> \result.length() == 0))
-(\old(this.topOfStack) >= 0)  ==>  ((\old(this.topOfStack) >> this.theArray.length() == 0))
-(\old(this.topOfStack) >= 0)  ==>  ((this.theArray.length >> \result.length() == 0))
+(\old(this.topOfStack) >= 0)  ==>  ((\old(this.topOfStack) >> \typeof(\result).length() == 0))
+(\old(this.topOfStack) >= 0)  ==>  ((\old(this.topOfStack) >> \typeof(this.theArray).length() == 0))
+(\old(this.topOfStack) >= 0)  ==>  ((this.theArray.length >> \typeof(\result).length() == 0))
 (\old(this.topOfStack) >= 0)  ==>  ((this.theArray.length-1 == 0) ==> (\old(this.topOfStack) == 0))
-(\old(this.topOfStack) >= 0)  ==>  ((this.theArray.length-1 >> \result.length() == 0))
-(\old(this.topOfStack) >= 0)  ==>  (\old(this.topOfStack) != \result.length())
+(\old(this.topOfStack) >= 0)  ==>  ((this.theArray.length-1 >> \typeof(\result).length() == 0))
+(\old(this.topOfStack) >= 0)  ==>  (\old(this.topOfStack) != \typeof(\result).length())
 (\old(this.topOfStack) >= 0)  ==>  (\result == \old(this.theArray[this.topOfStack]))
 (\old(this.topOfStack) >= 0)  ==>  (!(\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) != \typeof(\result))))
-(\old(this.topOfStack) >= 0)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass() is printable)
-(\old(this.topOfStack) >= 0)  ==>  (warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().length() == 0  (mod 8))
-(\old(this.topOfStack) >= 0)  ==>  (\result.length() == 16 || \result.length() == 24)
-(\old(this.topOfStack) >= 0)  ==>  (this.theArray.length != \result.length())
-(\old(this.topOfStack) >= 0)  ==>  (this.theArray.length-1 != \result.length())
+(\old(this.topOfStack) >= 0)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable)
+(\old(this.topOfStack) >= 0)  ==>  (warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName().length() == 0  (mod 8))
+(\old(this.topOfStack) >= 0)  ==>  (\typeof(\result).length() == 16 || \typeof(\result).length() == 24)
+(\old(this.topOfStack) >= 0)  ==>  (this.theArray.length != \typeof(\result).length())
+(\old(this.topOfStack) >= 0)  ==>  (this.theArray.length-1 != \typeof(\result).length())
 (\old(this.topOfStack) >= 0)  ==>  (\typeof(this.theArray) != \typeof(\result))
-(\old(this.topOfStack) >= 0)  ==>  (this.theArray.length() != \result.length())
+(\old(this.topOfStack) >= 0)  ==>  (\typeof(this.theArray).length() != \typeof(\result).length())
 (\old(this.topOfStack) >= 0)  ==>  (warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..this.topOfStack] == orig(this.theArray[0..this.topOfStack-1]))
 (\old(this.topOfStack) >= 0)  ==>  ((\forall int i; (\old(this.topOfStack) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)))
 (\old(this.topOfStack) >= 0)  ==>  ((\forall int i; (\old(this.topOfStack) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[\old(this.topOfStack)])))
@@ -335,7 +335,7 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat
 (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) == \typeof(null))))
 (\result == null)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) == null)))
 (\result == null)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) == \result)))
-(\result == null)  ==>  (\old(this.topOfStack) < this.theArray.length())
+(\result == null)  ==>  (\old(this.topOfStack) < \typeof(this.theArray).length())
 (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null)))
 (\result == null)  ==>  ((\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)))
 (\result == null)  ==>  (warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[] == orig(this.theArray[]))
@@ -345,23 +345,23 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat
 (\result == null)  ==>  ((\forall int i; (\old(this.topOfStack)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result)))
 (\result == null)  ==>  ((\forall int i; (\old(this.topOfStack)+1 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)))
 (\result == null)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result)))
-(\result == null)  ==>  (this.topOfStack < this.theArray.length())
+(\result == null)  ==>  (this.topOfStack < \typeof(this.theArray).length())
 (\result == null)  ==>  (this.topOfStack == -1)
-(\result != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass() is printable)
-(\result != null)  ==>  (\result.length() == 16 || \result.length() == 24)
-(\result != null)  ==>  (warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().length() == 0  (mod 8))
+(\result != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName() is printable)
+(\result != null)  ==>  (\typeof(\result).length() == 16 || \typeof(\result).length() == 24)
+(\result != null)  ==>  (warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:ESC/Java) needs to be implemented: return.getClass().getName().length() == 0  (mod 8))
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[0..orig(this.topOfStack)] contains no duplicates
 (\result != null)  ==>  (\typeof(this.theArray) != \typeof(\result))
 \typeof(this.theArray) == \old(\typeof(this.theArray))
 this.topOfStack <= \old(this.topOfStack)
-this.topOfStack <= this.theArray.length()
+this.topOfStack <= \typeof(this.theArray).length()
 (\result != null)  ==>  (!(\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) != \typeof(\result))))
 \old(this.topOfStack) <= this.theArray.length-1
-(\result != null)  ==>  ((\old(this.topOfStack) >> \result.length() == 0))
-(\result != null)  ==>  (\old(this.topOfStack) != \result.length())
-(\result != null)  ==>  (this.theArray.length() != \result.length())
-(\result != null)  ==>  ((this.theArray.length == 0) ==> (\result.length() == 0))
-(\result != null)  ==>  ((this.theArray.length >> \result.length() == 0))
-(\result != null)  ==>  (this.theArray.length != \result.length())
-(\result != null)  ==>  ((this.theArray.length-1 >> \result.length() == 0))
-(\result != null)  ==>  (this.theArray.length-1 != \result.length())
+(\result != null)  ==>  ((\old(this.topOfStack) >> \typeof(\result).length() == 0))
+(\result != null)  ==>  (\old(this.topOfStack) != \typeof(\result).length())
+(\result != null)  ==>  (\typeof(this.theArray).length() != \typeof(\result).length())
+(\result != null)  ==>  ((this.theArray.length == 0) ==> (\typeof(\result).length() == 0))
+(\result != null)  ==>  ((this.theArray.length >> \typeof(\result).length() == 0))
+(\result != null)  ==>  (this.theArray.length != \typeof(\result).length())
+(\result != null)  ==>  ((this.theArray.length-1 >> \typeof(\result).length() == 0))
+(\result != null)  ==>  (this.theArray.length-1 != \typeof(\result).length())

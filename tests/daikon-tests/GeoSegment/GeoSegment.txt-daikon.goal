@@ -41,7 +41,7 @@ gp.latitude > gp.longitude
 ===========================================================================
 MapQuick1.GeoPoint.equals(java.lang.Object):::ENTER
 o != null
-o.getClass() == MapQuick1.GeoPoint.class
+o.getClass().getName() == MapQuick1.GeoPoint.class
 ===========================================================================
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69
 ===========================================================================
@@ -163,7 +163,7 @@ this.p1.longitude  isPointer
 this.p2.latitude  isPointer
 this.p2.longitude  isPointer
 o != null
-o.getClass() == MapQuick1.GeoSegment.class
+o.getClass().getName() == MapQuick1.GeoSegment.class
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================

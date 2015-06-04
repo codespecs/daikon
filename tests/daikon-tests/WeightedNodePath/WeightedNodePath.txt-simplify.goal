@@ -111,7 +111,7 @@ MapQuick.WeightedNodePath.extend(java.lang.Object):::EXIT
 (EQ (select |cost| |this|) (select |cost| |__orig__this|))
 (NEQ (hash |return|) null)
 (EQ (typeof |return|) |T_MapQuick.WeightedNodePath|)
-warning: method daikon.inv.binary.twoString.StdString$SubString.format(OutputFormat:Simplify) needs to be implemented: orig(o.getClass()) is a substring of return.getClass()
+warning: method daikon.inv.binary.twoString.StdString$SubString.format(OutputFormat:Simplify) needs to be implemented: orig(o.getClass().getName()) is a substring of return.getClass().getName()
 (NEQ (typeof |return|) (typeof |__orig__o|))
 ===========================================================================
 MapQuick.WeightedNodePath.hashCode():::ENTER

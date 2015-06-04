@@ -61,8 +61,9 @@ public abstract class DaikonVariableInfo
     protected static final String classClassName = "java.lang.Class";
     protected static final String stringClassName = "java.lang.String";
 
-    /** Suffix for "typeOf" variables that represent a class, eg, "foo.getClass()". **/
-    public static final String class_suffix = ".getClass()";
+    // Suffix for "typeOf" (CLASSNAME) variables that represent a class,
+    // eg, "foo.getClass().getName()".
+    public static final String class_suffix = ".getClass().getName()";
 
     /** Determines whether or not synthetic variables should be ignored **/
     private static boolean skip_synthetic = true;
@@ -475,7 +476,8 @@ public abstract class DaikonVariableInfo
             //.class variable
             if (shouldAddRuntimeClass(type))
             {
-                DaikonVariableInfo thisClass = new DaikonClassInfo("this.getClass()", classClassName, stringClassName, "this", false);
+                DaikonVariableInfo thisClass = new DaikonClassInfo("this" + class_suffix,
+                                               classClassName, stringClassName, "this", false);
                 thisInfo.addChild(thisClass);
             }
         }
@@ -1104,7 +1106,7 @@ public abstract class DaikonVariableInfo
 
            boolean ignore = child.check_for_dup_names();
 
-           // .getClass() var
+           // CLASSNAME var
            if (!ignore) {
                DaikonVariableInfo childClass
                    = new DaikonClassInfo(offset + theName + "[]" + class_suffix, classClassName + "[]", stringClassName + "[]", offset + theName + "[]", true);

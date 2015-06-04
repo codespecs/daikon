@@ -399,7 +399,7 @@ public class StreetNumberSet
   @ ensures daikon.Quant.pairwiseEqual(this.ends, \old(this.ends));
   @ ensures daikon.Quant.size(this.begins) == \old(daikon.Quant.size(this.ends));
   @ ensures (\result == true)  ==>  (\old(o) != null);
-  @ ensures (\result == true)  ==>  (\old(o.getClass()) == MapQuick1.StreetNumberSet.class);
+  @ ensures (\result == true)  ==>  (\old(o.getClass().getName()) == MapQuick1.StreetNumberSet.class.getName());
   @*/
   public boolean equals(Object o)
   {

@@ -2350,8 +2350,8 @@ public final class DCRuntime {
     else if (type.equals("ReturnInfo")) { dvtxt = "return"; }
     else if (type.endsWith("Info")) {
       type = type.substring(0, type.length() - 4);
-      if (name.endsWith(".getClass()")) {
-        name = name.substring(0, name.length() - 11);
+      if (name.endsWith(DaikonVariableInfo.class_suffix)) {
+        name = name.substring(0, name.length() - DaikonVariableInfo.class_suffix.length());
         type = "Class of";
       }
       if (name.startsWith("this.")) {

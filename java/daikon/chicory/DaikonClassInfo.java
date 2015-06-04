@@ -9,8 +9,9 @@ import java.util.*;
 
 /**
  * The DaikonClassInfo class is a subtype of DaikonVariableInfo used
- * for variables which represent the runtime type of a variable (ie,
- * ".getClass()" variables).
+ * for variables which represent the runtime type of a variable.
+ * They will have a VarType of CLASSNAME and their VarInfoName
+ * will end with the class_suffix: ".getClass().getName()".
  */
 public class DaikonClassInfo extends DaikonVariableInfo
 {
@@ -85,7 +86,8 @@ public class DaikonClassInfo extends DaikonVariableInfo
 
   /** Returns the name of this field **/
   public String get_relative_name() {
-    return "getClass()";
+    // need to skip the leading "."
+    return DaikonVariableInfo.class_suffix.substring(1);
   }
 
   public EnumSet<VarFlags> get_var_flags() {

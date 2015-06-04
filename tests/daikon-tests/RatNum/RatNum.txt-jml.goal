@@ -178,22 +178,22 @@ arg.denom >= 0
 (!(arg.denom == 0)) || (\result.denom == 0)
 ===========================================================================
 PolyCalc.RatNum.equals(java.lang.Object):::ENTER
-    Variables: this this.numer this.denom obj obj.getClass()
+    Variables: this this.numer this.denom obj obj.getClass().getName()
 obj != null
-obj.getClass() == PolyCalc.RatNum.class
+obj.getClass().getName() == PolyCalc.RatNum.class.getName()
 ===========================================================================
 PolyCalc.RatNum.equals(java.lang.Object):::EXIT230
-    Variables: this this.numer this.denom obj obj.getClass() return orig(this) orig(this.numer) orig(this.denom) orig(obj) orig(obj.getClass())
+    Variables: this this.numer this.denom obj obj.getClass().getName() return orig(this) orig(this.numer) orig(this.denom) orig(obj) orig(obj.getClass().getName())
 this.denom == 0
 \result == true
 this.numer != this.denom
 ===========================================================================
 PolyCalc.RatNum.equals(java.lang.Object):::EXIT232
-    Variables: this this.numer this.denom obj obj.getClass() return orig(this) orig(this.numer) orig(this.denom) orig(obj) orig(obj.getClass())
+    Variables: this this.numer this.denom obj obj.getClass().getName() return orig(this) orig(this.numer) orig(this.denom) orig(obj) orig(obj.getClass().getName())
 (\result == true)  ==>  (this.denom >= 1)
 ===========================================================================
 PolyCalc.RatNum.equals(java.lang.Object):::EXIT
-    Variables: this this.numer this.denom obj obj.getClass() return orig(this) orig(this.numer) orig(this.denom) orig(obj) orig(obj.getClass())
+    Variables: this this.numer this.denom obj obj.getClass().getName() return orig(this) orig(this.numer) orig(this.denom) orig(obj) orig(obj.getClass().getName())
 this.numer == \old(this.numer)
 this.denom == \old(this.denom)
 ===========================================================================

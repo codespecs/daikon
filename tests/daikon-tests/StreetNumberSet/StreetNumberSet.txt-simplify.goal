@@ -114,7 +114,7 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (EQ |i| |j|)) (<= (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: o.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: o.getClass().getName() is printable
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT
 (EQ (hash (select |begins| |this|)) (hash (select |begins| |__orig__this|)))

@@ -754,7 +754,7 @@ public abstract /*@Interned*/ class VarInfoName
       // elems (ignoring anthing outside of the elems (like additional
       // fields or typeof)).  This allows this code to work correctly
       // for variables such as a[].b.c (returns size(a[])) or
-      // a[].getClass() (returns size(a[]))
+      // a[].getClass().getName() (returns size(a[]))
       if (this instanceof Prestate) {
         VarInfoName size = (new SizeOf (elems)).intern();
         return (new Prestate (size)).intern();
@@ -1325,13 +1325,13 @@ public abstract /*@Interned*/ class VarInfoName
 
   /**
    * Returns a name for the type of this object; form is like
-   * "this.getClass()" or "\typeof(this)".
+   * "this.getClass().getName()" or "\typeof(this)".
    **/
   public VarInfoName applyTypeOf(/*>>> @Interned VarInfoName this*/) {
     return (new TypeOf(this)).intern();
   }
 
-  /** The type of the term, like "term.getClass()" or "\typeof(term)". **/
+  /** The type of the term, like "term.getClass().getName()" or "\typeof(term)". **/
   public static /*@Interned*/ class TypeOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or

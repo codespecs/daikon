@@ -36,7 +36,7 @@ misc.Fib.a == misc.Fib.b
 misc.Fib.a == misc.Fib.c
 misc.Fib.a == size(args[])
 args has only one value
-args.getClass() == java.lang.String[].class
+args.getClass().getName() == java.lang.String[].class
 args[] == []
 args[].toString == []
 ===========================================================================

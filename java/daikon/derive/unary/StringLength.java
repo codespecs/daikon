@@ -55,25 +55,25 @@ public final class StringLength extends UnaryDerivation
   /** Returns the ESC name **/
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/ public String csharp_name (String index) {
-    return String.format ("%s.Length", base.enclosing_var.csharp_name());
+    return String.format ("%s.Length", base.csharp_name());
   }
 
   /** Returns the ESC name **/
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/ public String esc_name(String index) {
-    return String.format ("%s.length()", base.enclosing_var.esc_name());
+    return String.format ("%s.length()", base.esc_name());
   }
 
   /** Returns the JML name **/
   @SuppressWarnings("nullness")
   public String jml_name (String index) {
-    return String.format ("%s.length()", base.enclosing_var.jml_name());
+    return String.format ("%s.length()", base.jml_name());
   }
 
   /** Returns the simplify name **/
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/ public String simplify_name() {
-    return String.format ("(stringLength %s)", base.enclosing_var.simplify_name());
+    return String.format ("(stringLength %s)", base.simplify_name());
   }
 
 }
