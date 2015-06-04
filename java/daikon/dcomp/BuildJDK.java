@@ -204,7 +204,7 @@ public class BuildJDK {
       pw.flush();
       pw.close();
 
-      // Print out any methods that could not be instrumetned
+      // Print out any methods that could not be instrumented
       print_skipped_methods();
 
     }
@@ -452,19 +452,20 @@ public class BuildJDK {
     if (all_known) {
       System.out.printf
         ("Warning, the following JDK methods could not be instrumented.%n"
-         + "These are known problems.  Dyncomp will still work as long as%n"
+         + "These are known problems.  DynComp will still work as long as%n"
          + "these methods are not called by your applications.%n"
-         + "If one is called, A NoSuchMethodException will be generated.%n");
+         + "If your application calls one, it will throw a NoSuchMethodException.%n");
       for (String method : skipped_methods) {
         System.out.printf ("  %s%n", method);
       }
     } else { // some methods have not been previously seen
       System.out.printf
-        ("Warning: the following JDK methods could not be instrumetned.%n"
+        ("Warning: the following JDK methods could not be instrumented.%n"
          + "Please report any line that starts with [unexpected] so we can look into them.%n"
-         + "Dyncomp will still work as long as these methods are not called%n"
+         + "Please give sufficient details; see \"Reporting problems\" in the Daikon manual.%n"
+         + "DynComp will still work as long as these methods are not called%n"
          + "by your applications.%n"
-         + "If one is called, A NoSuchMethodException will be generated.%n");
+         + "If your application calls one, it will throw a NoSuchMethodException.%n");
       for (String method : skipped_methods) {
         if (known_bad_list.contains (method))
           System.out.printf ("  %s%n", method);

@@ -1,4 +1,4 @@
-Dyncomp Todo
+DynComp Todo
 
   - Since DCRuntime is called from instrumented methods in the JDK, it
     must be in the boot classpath.  Since DCRuntime refers to many other

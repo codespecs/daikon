@@ -4,7 +4,7 @@
 // so that we can display arrays within structs?
 
 // TODO: This is another test case that fails on AMD64 due to the
-// Dyncomp single tag per register issue.  If (when) we fix this,
+// DynComp single tag per register issue.  If (when) we fix this,
 // change the size of 'staticString' back to 10. (markro)
 
 #include <stdlib.h>

@@ -1,5 +1,5 @@
 // TODO: This is another test case that fails on AMD64 due to the
-// Dyncomp single tag per register issue.  If (when) we fix this,
+// DynComp single tag per register issue.  If (when) we fix this,
 // restore the three items below to their original values. (markro)
 
 #include <stdio.h>

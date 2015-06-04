@@ -1050,7 +1050,7 @@ Daikon
 
 4.3.4 (December 1, 2007)
 
-Dyncomp (Java) was enhanced with a number of new options.  It has a
+DynComp (Java) was enhanced with a number of new options.  It has a
 new significantly faster mode where it only tracks references (and
 not primitives).  It also has additional output that makes it easier
 to determine where interactions occurred.
@@ -1061,7 +1061,7 @@ DynComp (Java)
 
     DynComp can now be directed, with the --no-primitives switch, to
     only track the comparability of object references, i.e. it will
-    ignore primitive values.  Dyncomp runs significantly faster when
+    ignore primitive values.  DynComp runs significantly faster when
     only tracking references.
 
     DynComp has a number of new command line options that provide
@@ -1844,7 +1844,7 @@ Kvasir
      Re-factored all of the Kvasir and DynComp code to use the Fjalar
      framework.  Fjalar is a C/C++ dynamic analysis framework.  The
      new directory structure reflects the separation between the
-     Fjalar framework and the Kvasir and Dyncomp tools that are built
+     Fjalar framework and the Kvasir and DynComp tools that are built
      upon the framework.
 
   Documentation changes
