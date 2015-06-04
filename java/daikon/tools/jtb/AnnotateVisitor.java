@@ -841,7 +841,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       // et_varname variable represents the types of the elements.
       String et_varname = elt_varname + DaikonVariableInfo.class_suffix;
       // System.out.printf("Found %s, seeking %s%n", elt_varname, et_varname);
-      // We found variable "a[]".  Now find "a[].getClass()".
+      // We found variable "a[]".  Now find "a[].getClass().getName()".
       // (Why might it not be present?)
       // It might not be present if DaikonVariableInfo.shouldAddRuntimeClass would return false.
       assert elt_vi.rep_type.isArray();

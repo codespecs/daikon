@@ -1158,7 +1158,8 @@ public String format_csharp_contract() {
           }
           // ".class" (which is a suffix for a type name) and not
           // getClassSuffix (which is a suffix for an expression).
-          result += varname + " == " + str + ".class";
+          // we need ".class.getName()" to make result a string
+          result += varname + " == " + str + ".class.getName()";
         }
       }
     }

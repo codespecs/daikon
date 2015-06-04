@@ -1,5 +1,6 @@
 package daikon;
 
+import daikon.chicory.DaikonVariableInfo;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
@@ -3185,7 +3186,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           return String.format ("daikon.Quant.typeArray(%s)",
                                 enclosing_var.jml_name(index));
         else
-          return enclosing_var.jml_name(index) + ".getClass()";
+          return enclosing_var.jml_name(index) + DaikonVariableInfo.class_suffix;
       }
       if (var_flags.contains (VarFlags.TO_STRING))
         return enclosing_var.jml_name(index) + ".toString()";
@@ -3690,8 +3691,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns whether or not this variable represents the type of a variable
-   * (eg, a.getClass()).  Note that this will miss prestate variables such
-   * as 'orig(a.getClass())'.
+   * (eg, a.getClass().getName()).  Note that this will miss prestate variables such
+   * as 'orig(a.getClass().getName())'.
    */
   /*@Pure*/ public boolean is_typeof() {
     if (!FileIO.new_decl_format)
@@ -3704,8 +3705,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns whether or not this variable represents the type of a variable
-   * (eg, a.getClass()).  This version finds prestate variable such as
-   * 'org(a.getClass())'.
+   * (eg, a.getClass().getName()).  This version finds prestate variable such as
+   * 'org(a.getClass().getName())'.
    */
   public boolean has_typeof() {
     if (!FileIO.new_decl_format)
