@@ -1,7 +1,7 @@
 ===========================================================================
 DataStructures.StackAr:::OBJECT
 this.theArray != null
-this.theArray.getClass() == java.lang.Object[].class
+this.theArray.getClass().getName() == java.lang.Object[].class
 this.topOfStack >= -1
 this.theArray[this.topOfStack+1..] elements == null
 this.theArray[0..this.topOfStack] elements != null
@@ -19,7 +19,7 @@ this.theArray[0..this.topOfStack] == orig(this.theArray[0..this.topOfStack-1])
 this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
 this.theArray[orig(this.topOfStack)] == null
 this.theArray[0..orig(this.topOfStack)] contains no duplicates
-this.theArray.getClass() == orig(this.theArray.getClass())
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
 this.topOfStack - orig(this.topOfStack) + 1 == 0
 this.topOfStack < size(this.theArray[])-1
 orig(this.topOfStack) <= size(this.theArray[])-1
@@ -27,7 +27,7 @@ this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStac
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::ENTER
 x != null
-this.theArray.getClass() != x.getClass()
+this.theArray.getClass().getName() != x.getClass().getName()
 this.topOfStack < size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT
@@ -39,9 +39,9 @@ this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..post(this.topOfStac
 this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..this.topOfStack])
 this.topOfStack >= 0
 orig(this.theArray[post(this.topOfStack)..]) elements == null
-this.theArray.getClass() == orig(this.theArray.getClass())
-this.theArray.getClass() != orig(x.getClass())
-orig(x.getClass()) in this.theArray[].getClass()
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
+this.theArray.getClass().getName() != orig(x.getClass().getName())
+orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 this.topOfStack - orig(this.topOfStack) - 1 == 0
 (size(this.theArray[])-1 == 0) ==> (this.topOfStack == 0)
 orig(this.topOfStack) < size(this.theArray[])-1
@@ -50,7 +50,7 @@ orig(this.theArray[post(this.topOfStack)..]) elements == orig(this.theArray[post
 DataStructures.StackArTester:::CLASS
 DataStructures.StackArTester.s != null
 DataStructures.StackArTester.s.theArray != null
-DataStructures.StackArTester.s.theArray.getClass() == java.lang.Object[].class
+DataStructures.StackArTester.s.theArray.getClass().getName() == java.lang.Object[].class
 DataStructures.StackArTester.s.topOfStack >= -1
 DataStructures.StackArTester.rnd has only one value
 DataStructures.StackArTester.rnd != null
@@ -73,7 +73,7 @@ DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfS
 DataStructures.StackArTester.s.topOfStack >= 0
 orig(DataStructures.StackArTester.s.theArray[post(DataStructures.StackArTester.s.topOfStack)..]) elements == null
 orig(DataStructures.StackArTester.s.theArray[0..post(DataStructures.StackArTester.s.topOfStack)]) contains no duplicates
-DataStructures.StackArTester.s.theArray.getClass() == orig(DataStructures.StackArTester.s.theArray.getClass())
+DataStructures.StackArTester.s.theArray.getClass().getName() == orig(DataStructures.StackArTester.s.theArray.getClass().getName())
 DataStructures.StackArTester.s.topOfStack - orig(DataStructures.StackArTester.s.topOfStack) - 1 == 0
 (size(DataStructures.StackArTester.s.theArray[])-1 == 0) ==> (DataStructures.StackArTester.s.topOfStack == 0)
 orig(DataStructures.StackArTester.s.topOfStack) < size(DataStructures.StackArTester.s.theArray[])-1

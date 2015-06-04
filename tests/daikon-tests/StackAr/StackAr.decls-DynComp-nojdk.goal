@@ -15,7 +15,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -23,7 +23,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -50,7 +50,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 3
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -58,7 +58,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 4[2]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -82,7 +82,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -90,7 +90,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -109,7 +109,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 5
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -117,7 +117,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 3[4]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -141,7 +141,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -149,7 +149,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -168,7 +168,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 5
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -176,7 +176,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 3[4]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -200,7 +200,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -208,7 +208,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -227,7 +227,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -235,7 +235,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -255,7 +255,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -263,7 +263,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -282,7 +282,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -290,7 +290,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -302,7 +302,7 @@ return
 java.lang.Object
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -317,7 +317,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -325,7 +325,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -337,7 +337,7 @@ return
 java.lang.Object
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -353,7 +353,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -361,7 +361,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -380,7 +380,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -388,7 +388,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -408,7 +408,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -416,7 +416,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -428,7 +428,7 @@ x
 java.lang.Object # isParam=true
 hashcode
 2
-x.getClass()
+x.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -443,7 +443,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -451,7 +451,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -463,7 +463,7 @@ x
 java.lang.Object # isParam=true
 hashcode
 2
-x.getClass()
+x.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -479,7 +479,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 4
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -487,7 +487,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 2[3]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -506,7 +506,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 5
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -514,7 +514,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 3[4]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -526,7 +526,7 @@ return
 java.lang.Object
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -541,7 +541,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 5
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -549,7 +549,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 3[4]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -561,7 +561,7 @@ return
 java.lang.Object
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -577,7 +577,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 5
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -585,7 +585,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 3[4]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -597,7 +597,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -612,7 +612,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 6
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -620,7 +620,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 4[5]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -632,7 +632,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -652,7 +652,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 5
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -660,7 +660,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 3[4]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -672,7 +672,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -687,7 +687,7 @@ this.theArray
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode
 6
-this.theArray.getClass()
+this.theArray.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -695,7 +695,7 @@ this.theArray[..]
 java.lang.Object[]
 hashcode[]
 4[5]
-this.theArray[..].getClass()
+this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -707,7 +707,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 2
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1

@@ -25,12 +25,12 @@ public class StackAr
     /*@ invariant this.theArray != null; */
     /*@ invariant \typeof(this.theArray) == \type(java.lang.Object[]); */
     /*@ invariant this.topOfStack >= -1; */
-    /*@ invariant this.theArray.length() == 18; */
+    /*@ invariant \typeof(this.theArray).length() == 18; */
     /*@ invariant (\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
     /*@ invariant (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)); */
     /*@ invariant this.topOfStack <= this.theArray.length-1; */
-    /*@ invariant this.theArray.length() != this.theArray.length; */
-    /*@ invariant this.theArray.length() != this.theArray.length-1; */
+    /*@ invariant \typeof(this.theArray).length() != this.theArray.length; */
+    /*@ invariant \typeof(this.theArray).length() != this.theArray.length-1; */
     /*@ invariant theArray.owner == this; */
     /*@ requires capacity >= 0; */
     /*@ ensures \old(capacity) == this.theArray.length; */
@@ -38,7 +38,7 @@ public class StackAr
     /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))); */
     /*@ ensures this.topOfStack == -1; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)); */
-    /*@ ensures \old(capacity) != this.theArray.length(); */
+    /*@ ensures \old(capacity) != \typeof(this.theArray).length(); */
     /**
      * Construct the stack.
      * @param capacity the capacity.
@@ -55,7 +55,7 @@ public class StackAr
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))); */
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))); */
-    /*@ ensures (this.topOfStack == -1)  ==>  (this.topOfStack < this.theArray.length()); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (this.topOfStack < \typeof(this.theArray).length()); */
     /*@ ensures (this.topOfStack >= 0)  ==  (\result == false); */
     /*@ ensures (this.topOfStack >= 0)  ==>  ((this.theArray.length-1 == 0) ==> (this.topOfStack == 0)); */
     /*@ ensures (this.topOfStack >= 0)  ==>  ((\forall int i; (\old(this.topOfStack) <= i && i <= this.topOfStack+1) ==> (this.theArray[i] != null))); */
@@ -75,11 +75,11 @@ public class StackAr
     /*@ modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]; */
     /*@ ensures (\result == false)  ==  ((\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
     /*@ ensures (\result == false)  ==  (this.topOfStack < this.theArray.length-1); */
-    /*@ ensures (\result == false)  ==>  (this.topOfStack <= this.theArray.length()); */
+    /*@ ensures (\result == false)  ==>  (this.topOfStack <= \typeof(this.theArray).length()); */
     /*@ ensures (\result == true)  ==  (this.topOfStack == this.theArray.length-1); */
     /*@ ensures (\result == true)  ==>  (\nonnullelements(this.theArray)); */
     /*@ ensures (\result == true)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != null))); */
-    /*@ ensures (\result == true)  ==>  (this.topOfStack != this.theArray.length()); */
+    /*@ ensures (\result == true)  ==>  (this.topOfStack != \typeof(this.theArray).length()); */
     /*@ ensures (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null)); */
     /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /**
@@ -93,7 +93,7 @@ public class StackAr
     }
 
 
-    /*@ requires this.topOfStack < this.theArray.length(); */
+    /*@ requires this.topOfStack < \typeof(this.theArray).length(); */
     /*@ requires (this.topOfStack == 0) ==> (this.theArray.length-1 == 0); */
     /*@ modifies this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack], this.theArray[0..this.topOfStack-1]; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
@@ -102,7 +102,7 @@ public class StackAr
     /*@ ensures (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)); */
     /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /*@ ensures this.topOfStack <= \old(this.topOfStack); */
-    /*@ ensures \old(this.topOfStack) < this.theArray.length(); */
+    /*@ ensures \old(this.topOfStack) < \typeof(this.theArray).length(); */
     /*@ ensures (\old(this.topOfStack) == 0) ==> (this.theArray.length-1 == 0); */
     /*@ ensures \old(this.topOfStack) <= this.theArray.length-1; */
     /**
@@ -121,28 +121,28 @@ public class StackAr
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result))); */
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))); */
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result))); */
-    /*@ ensures (this.topOfStack == -1)  ==>  (this.topOfStack < this.theArray.length()); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (this.topOfStack < \typeof(this.theArray).length()); */
     /*@ ensures (this.topOfStack >= 0)  ==>  ((this.theArray.length-1 == 0) ==> (this.topOfStack == 0)); */
     /*@ ensures (this.topOfStack >= 0)  ==>  (\result == \old(this.theArray[this.topOfStack])); */
     /*@ ensures (this.topOfStack >= 0)  ==>  (\result == this.theArray[\old(this.topOfStack)]); */
     /*@ ensures (this.topOfStack >= 0)  ==>  (\result == this.theArray[this.topOfStack]); */
     /*@ ensures (this.topOfStack >= 0)  ==>  (!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \typeof(\result)))); */
-    /*@ ensures (this.topOfStack >= 0)  ==>  (\result.length() == 16 || \result.length() == 22 || \result.length() == 24); */
-    /*@ ensures (this.topOfStack >= 0)  ==>  (this.theArray.length != \result.length()); */
-    /*@ ensures (this.topOfStack >= 0)  ==>  (this.theArray.length-1 != \result.length()); */
+    /*@ ensures (this.topOfStack >= 0)  ==>  (\typeof(\result).length() == 16 || \typeof(\result).length() == 22 || \typeof(\result).length() == 24); */
+    /*@ ensures (this.topOfStack >= 0)  ==>  (this.theArray.length != \typeof(\result).length()); */
+    /*@ ensures (this.topOfStack >= 0)  ==>  (this.theArray.length-1 != \typeof(\result).length()); */
     /*@ ensures (this.topOfStack >= 0)  ==>  (\typeof(this.theArray) != \typeof(\result)); */
-    /*@ ensures (this.topOfStack >= 0)  ==>  (this.theArray.length() != \result.length()); */
+    /*@ ensures (this.topOfStack >= 0)  ==>  (\typeof(this.theArray).length() != \typeof(\result).length()); */
     /*@ ensures (this.topOfStack >= 0)  ==>  ((\forall int i; (\old(this.topOfStack) <= i && i <= this.topOfStack+1) ==> (this.theArray[i] != null))); */
     /*@ ensures (this.topOfStack >= 0)  ==>  ((\forall int i; (this.topOfStack <= i && i <= \old(this.topOfStack)+1) ==> (this.theArray[i] != null))); */
-    /*@ ensures \result.length() == 16 || \result.length() == 22 || \result.length() == 24; */
+    /*@ ensures \typeof(\result).length() == 16 || \typeof(\result).length() == 22 || \typeof(\result).length() == 24; */
     /*@ ensures (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null)); */
     /*@ ensures \typeof(this.theArray) != \typeof(\result); */
     /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /*@ ensures !(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \typeof(\result))); */
-    /*@ ensures this.theArray.length() != \result.length(); */
-    /*@ ensures (this.theArray.length == 0) ==> (\result.length() == 0); */
-    /*@ ensures this.theArray.length != \result.length(); */
-    /*@ ensures this.theArray.length-1 != \result.length(); */
+    /*@ ensures \typeof(this.theArray).length() != \typeof(\result).length(); */
+    /*@ ensures (this.theArray.length == 0) ==> (\typeof(\result).length() == 0); */
+    /*@ ensures this.theArray.length != \typeof(\result).length(); */
+    /*@ ensures this.theArray.length-1 != \typeof(\result).length(); */
     /**
      * Get the most recently inserted item in the stack.
      * Does not alter the stack.
@@ -163,7 +163,7 @@ public class StackAr
     /*@ ensures (\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)+1) ==> (this.theArray[i] != null)); */
     /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /*@ ensures this.topOfStack - \old(this.topOfStack) + 1 == 0; */
-    /*@ ensures this.topOfStack <= this.theArray.length(); */
+    /*@ ensures this.topOfStack <= \typeof(this.theArray).length(); */
     /*@ ensures this.topOfStack < this.theArray.length-1; */
     /*@ ensures \old(this.topOfStack) <= this.theArray.length-1; */
     /*@ ensures (\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[\old(this.topOfStack)])); */
@@ -179,17 +179,17 @@ public class StackAr
     }
 
     /*@ requires x != null; */
-    /*@ requires x.length() == 16 || x.length() == 22 || x.length() == 24; */
+    /*@ requires \typeof(x).length() == 16 || \typeof(x).length() == 22 || \typeof(x).length() == 24; */
     /*@ requires \typeof(this.theArray) != \typeof(x); */
-    /*@ requires this.topOfStack <= this.theArray.length(); */
+    /*@ requires this.topOfStack <= \typeof(this.theArray).length(); */
     /*@ requires this.topOfStack < this.theArray.length-1; */
-    /*@ requires this.theArray.length() != x.length(); */
-    /*@ requires this.theArray.length != x.length(); */
-    /*@ requires this.theArray.length-1 != x.length(); */
+    /*@ requires \typeof(this.theArray).length() != \typeof(x).length(); */
+    /*@ requires this.theArray.length != \typeof(x).length(); */
+    /*@ requires this.theArray.length-1 != \typeof(x).length(); */
     /*@ modifies this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[this.topOfStack+1..], this.theArray[0..this.topOfStack-1]; */
     /*@ ensures \old(x) == this.theArray[this.topOfStack]; */
     /*@ ensures this.topOfStack >= 0; */
-    /*@ ensures x.length() == 16 || x.length() == 22 || x.length() == 24; */
+    /*@ ensures \typeof(x).length() == 16 || \typeof(x).length() == 22 || \typeof(x).length() == 24; */
     /*@ ensures (\forall int i; (this.topOfStack <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) == null)); */
     /*@ ensures (\forall int i; (\old(this.topOfStack)+1 <= i && i <= this.topOfStack+1) ==> (this.theArray[i] != null)); */
     /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
@@ -197,12 +197,12 @@ public class StackAr
     /*@ ensures !(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) != \old(\typeof(x)))); */
     /*@ ensures this.topOfStack - \old(this.topOfStack) - 1 == 0; */
     /*@ ensures (this.theArray.length-1 == 0) ==> (this.topOfStack == 0); */
-    /*@ ensures \old(this.topOfStack) <= this.theArray.length(); */
+    /*@ ensures \old(this.topOfStack) <= \typeof(this.theArray).length(); */
     /*@ ensures \old(this.topOfStack) < this.theArray.length-1; */
     /*@ ensures (\forall int i; (\old(this.topOfStack)+1 <= i && i <= this.topOfStack) ==> (this.theArray[i] == \old(x))); */
-    /*@ ensures this.theArray.length() != x.length(); */
-    /*@ ensures this.theArray.length != x.length(); */
-    /*@ ensures this.theArray.length-1 != x.length(); */
+    /*@ ensures \typeof(this.theArray).length() != \typeof(x).length(); */
+    /*@ ensures this.theArray.length != \typeof(x).length(); */
+    /*@ ensures this.theArray.length-1 != \typeof(x).length(); */
     /**
      * Insert a new item into the stack, if not already full.
      * @param x the item to insert.
@@ -218,14 +218,14 @@ public class StackAr
     /*@ modifies this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[this.topOfStack+1..], this.theArray[0..this.topOfStack], this.theArray[0..this.topOfStack-1]; */
     /*@ ensures (\old(this.topOfStack) >= 0)  ==  ((\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] == null))); */
     /*@ ensures (\old(this.topOfStack) >= 0)  ==>  ((this.theArray.length-1 == 0) ==> (\old(this.topOfStack) == 0)); */
-    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (\old(this.topOfStack) != \result.length()); */
+    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (\old(this.topOfStack) != \typeof(\result).length()); */
     /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (\result == \old(this.theArray[this.topOfStack])); */
     /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (!(\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) != \typeof(\result)))); */
-    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (\result.length() == 16 || \result.length() == 24); */
-    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (this.theArray.length != \result.length()); */
-    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (this.theArray.length-1 != \result.length()); */
+    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (\typeof(\result).length() == 16 || \typeof(\result).length() == 24); */
+    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (this.theArray.length != \typeof(\result).length()); */
+    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (this.theArray.length-1 != \typeof(\result).length()); */
     /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (\typeof(this.theArray) != \typeof(\result)); */
-    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (this.theArray.length() != \result.length()); */
+    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (\typeof(this.theArray).length() != \typeof(\result).length()); */
     /*@ ensures (\old(this.topOfStack) >= 0)  ==>  ((\forall int i; (\old(this.topOfStack) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
     /*@ ensures (\old(this.topOfStack) >= 0)  ==>  ((\forall int i; (\old(this.topOfStack) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[\old(this.topOfStack)]))); */
     /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (this.theArray[\old(this.topOfStack)] == null); */
@@ -242,7 +242,7 @@ public class StackAr
     /*@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) == \typeof(null)))); */
     /*@ ensures (\result == null)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) == null))); */
     /*@ ensures (\result == null)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) == \result))); */
-    /*@ ensures (\result == null)  ==>  (\old(this.topOfStack) < this.theArray.length()); */
+    /*@ ensures (\result == null)  ==>  (\old(this.topOfStack) < \typeof(this.theArray).length()); */
     /*@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null))); */
     /*@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))); */
     /*@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
@@ -251,20 +251,20 @@ public class StackAr
     /*@ ensures (\result == null)  ==>  ((\forall int i; (\old(this.topOfStack)+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result))); */
     /*@ ensures (\result == null)  ==>  ((\forall int i; (\old(this.topOfStack)+1 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))); */
     /*@ ensures (\result == null)  ==>  ((\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result))); */
-    /*@ ensures (\result == null)  ==>  (this.topOfStack < this.theArray.length()); */
+    /*@ ensures (\result == null)  ==>  (this.topOfStack < \typeof(this.theArray).length()); */
     /*@ ensures (\result == null)  ==>  (this.topOfStack == -1); */
-    /*@ ensures \result.length() == 16 || \result.length() == 24; */
+    /*@ ensures \typeof(\result).length() == 16 || \typeof(\result).length() == 24; */
     /*@ ensures \typeof(this.theArray) != \typeof(\result); */
     /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
     /*@ ensures this.topOfStack <= \old(this.topOfStack); */
-    /*@ ensures this.topOfStack <= this.theArray.length(); */
+    /*@ ensures this.topOfStack <= \typeof(this.theArray).length(); */
     /*@ ensures !(\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) != \typeof(\result))); */
     /*@ ensures \old(this.topOfStack) <= this.theArray.length-1; */
-    /*@ ensures \old(this.topOfStack) != \result.length(); */
-    /*@ ensures this.theArray.length() != \result.length(); */
-    /*@ ensures (this.theArray.length == 0) ==> (\result.length() == 0); */
-    /*@ ensures this.theArray.length != \result.length(); */
-    /*@ ensures this.theArray.length-1 != \result.length(); */
+    /*@ ensures \old(this.topOfStack) != \typeof(\result).length(); */
+    /*@ ensures \typeof(this.theArray).length() != \typeof(\result).length(); */
+    /*@ ensures (this.theArray.length == 0) ==> (\typeof(\result).length() == 0); */
+    /*@ ensures this.theArray.length != \typeof(\result).length(); */
+    /*@ ensures this.theArray.length-1 != \typeof(\result).length(); */
     /**
      * Return and remove most recently inserted item from the stack.
      * @return most recently inserted item, or null, if stack is empty.

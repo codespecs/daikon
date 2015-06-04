@@ -1,22 +1,22 @@
 ===========================================================================
 PolyCalc.RatTermVec:::OBJECT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() size(this.wrapped[]) size(this.wrapped[])-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
 this.wrapped != null
 daikon.Quant.eltsNotEqual(this.wrapped, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(this.wrapped), "PolyCalc.RatTerm")
 ===========================================================================
 PolyCalc.RatTermVec.RatTermVec():::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() size(this.wrapped[]) size(this.wrapped[])-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.wrapped), new String[] {  })
 ===========================================================================
 PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() t size(this.wrapped[]) size(this.wrapped[])-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t size(this.wrapped[]) size(this.wrapped[])-1
 daikon.Quant.noDups(this.wrapped)
 t != null
 ===========================================================================
 PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() t orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass()) orig(t) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(t) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
 assignable this.wrapped[*]
 this.wrapped == \old(this.wrapped)
 daikon.Quant.size(this.wrapped)-1 == \old(daikon.Quant.size(this.wrapped))
@@ -27,11 +27,11 @@ daikon.Quant.subsetOf(\old(this.wrapped), this.wrapped)
 daikon.Quant.memberOf(\old(t) , this.wrapped )
 ===========================================================================
 PolyCalc.RatTermVec.copy():::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() size(this.wrapped[]) size(this.wrapped[])-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
 daikon.Quant.noDups(this.wrapped)
 ===========================================================================
 PolyCalc.RatTermVec.copy():::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() return return.wrapped return.wrapped[] return.wrapped[].getClass() orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass()) size(this.wrapped[]) size(this.wrapped[])-1 size(return.wrapped[]) size(return.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() return return.wrapped return.wrapped[] return.wrapped[].getClass().getName() orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) size(this.wrapped[]) size(this.wrapped[])-1 size(return.wrapped[]) size(return.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
 this.wrapped == \old(this.wrapped)
 daikon.Quant.pairwiseEqual(this.wrapped, \result.wrapped)
 daikon.Quant.pairwiseEqual(this.wrapped, \old(this.wrapped))
@@ -40,7 +40,7 @@ daikon.Quant.noDups(this.wrapped)
 \result.wrapped != null
 ===========================================================================
 PolyCalc.RatTermVec.get(int):::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
 index >= 0
 daikon.Quant.size(this.wrapped) >= 1
 daikon.Quant.noDups(daikon.Quant.slice(this.wrapped, index+1, daikon.Quant.size(this.wrapped)))
@@ -49,7 +49,7 @@ daikon.Quant.noDups(daikon.Quant.slice(this.wrapped, 0, index))
 index <= daikon.Quant.size(this.wrapped)-1
 ===========================================================================
 PolyCalc.RatTermVec.get(int):::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() index return orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass()) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index return orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
 this.wrapped == \old(this.wrapped)
 daikon.Quant.pairwiseEqual(this.wrapped, \old(this.wrapped))
 \result == daikon.Quant.getElement_Object(this.wrapped, \old(index))
@@ -64,7 +64,7 @@ daikon.Quant.memberOf(\result , daikon.Quant.slice(this.wrapped, 0, \old(index))
 \old(index) <= daikon.Quant.size(this.wrapped)-1
 ===========================================================================
 PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() t index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
 t != null
 index >= 0
 daikon.Quant.noDups(daikon.Quant.slice(this.wrapped, 0, index-1))
@@ -72,7 +72,7 @@ daikon.Quant.noDups(daikon.Quant.slice(this.wrapped, 0, index-1))
 index <= daikon.Quant.size(this.wrapped)
 ===========================================================================
 PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() t index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass()) orig(t) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(t) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
 assignable this.wrapped[*]
 this.wrapped == \old(this.wrapped)
 \old(t) == daikon.Quant.getElement_Object(this.wrapped, \old(index))
@@ -90,17 +90,17 @@ daikon.Quant.memberOf(\old(t) , daikon.Quant.slice(this.wrapped, 0, \old(index))
 \old(index) <= daikon.Quant.size(this.wrapped)-1
 ===========================================================================
 PolyCalc.RatTermVec.printDebug():::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() size(this.wrapped[]) size(this.wrapped[])-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.printDebug():::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() return return.toString orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass()) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() return return.toString orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
 this.wrapped == \old(this.wrapped)
 daikon.Quant.pairwiseEqual(this.wrapped, \old(this.wrapped))
 \result != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: return.toString is printable
 ===========================================================================
 PolyCalc.RatTermVec.remove(int):::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
 daikon.Quant.noDups(this.wrapped)
 index >= 0
 daikon.Quant.size(this.wrapped) >= 1
@@ -108,7 +108,7 @@ daikon.Quant.size(this.wrapped) >= 1
 index <= daikon.Quant.size(this.wrapped)-1
 ===========================================================================
 PolyCalc.RatTermVec.remove(int):::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass()) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
 assignable this.wrapped[*]
 this.wrapped == \old(this.wrapped)
 daikon.Quant.size(this.wrapped) == \old(daikon.Quant.size(this.wrapped))-1
@@ -122,7 +122,7 @@ daikon.Quant.subsetOf(this.wrapped, \old(this.wrapped))
 \old(index) <= daikon.Quant.size(this.wrapped)
 ===========================================================================
 PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() t index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index size(this.wrapped[]) size(this.wrapped[])-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1]
 daikon.Quant.noDups(this.wrapped)
 t != null
 index >= 0
@@ -131,7 +131,7 @@ daikon.Quant.size(this.wrapped) >= 1
 index <= daikon.Quant.size(this.wrapped)-1
 ===========================================================================
 PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() t index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass()) orig(t) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t index orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) orig(t) orig(index) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[index] this.wrapped[index-1] this.wrapped[index..] this.wrapped[index+1..] this.wrapped[0..index] this.wrapped[0..index-1] this.wrapped[orig(index)] this.wrapped[orig(index)-1] this.wrapped[orig(index)..] this.wrapped[orig(index)+1..] this.wrapped[0..orig(index)] this.wrapped[0..orig(index)-1] orig(this.wrapped[post(index)]) orig(this.wrapped[post(index)-1]) orig(this.wrapped[post(index)..]) orig(this.wrapped[post(index)+1..]) orig(this.wrapped[0..post(index)]) orig(this.wrapped[0..post(index)-1]) orig(this.wrapped[index]) orig(this.wrapped[index-1]) orig(this.wrapped[index..]) orig(this.wrapped[index+1..]) orig(this.wrapped[0..index]) orig(this.wrapped[0..index-1])
 assignable this.wrapped[*]
 this.wrapped == \old(this.wrapped)
 \old(t) == daikon.Quant.getElement_Object(this.wrapped, \old(index))
@@ -149,11 +149,11 @@ daikon.Quant.memberOf(\old(t) , daikon.Quant.slice(this.wrapped, 0, \old(index))
 \old(index) <= daikon.Quant.size(this.wrapped)-1
 ===========================================================================
 PolyCalc.RatTermVec.size():::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() size(this.wrapped[]) size(this.wrapped[])-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
 daikon.Quant.noDups(this.wrapped)
 ===========================================================================
 PolyCalc.RatTermVec.size():::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() return orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass()) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[return] this.wrapped[return-1] this.wrapped[return..] this.wrapped[return+1..] this.wrapped[0..return] this.wrapped[0..return-1] orig(this.wrapped[post(return)]) orig(this.wrapped[post(return)-1]) orig(this.wrapped[post(return)..]) orig(this.wrapped[post(return)+1..]) orig(this.wrapped[0..post(return)]) orig(this.wrapped[0..post(return)-1])
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() return orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1 this.wrapped[return] this.wrapped[return-1] this.wrapped[return..] this.wrapped[return+1..] this.wrapped[0..return] this.wrapped[0..return-1] orig(this.wrapped[post(return)]) orig(this.wrapped[post(return)-1]) orig(this.wrapped[post(return)..]) orig(this.wrapped[post(return)+1..]) orig(this.wrapped[0..post(return)]) orig(this.wrapped[0..post(return)-1])
 this.wrapped == \old(this.wrapped)
 daikon.Quant.pairwiseEqual(this.wrapped, \old(this.wrapped))
 \result == daikon.Quant.size(this.wrapped)
@@ -162,10 +162,10 @@ daikon.Quant.noDups(this.wrapped)
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 ===========================================================================
 PolyCalc.RatTermVec.toString():::ENTER
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() size(this.wrapped[]) size(this.wrapped[])-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.toString():::EXIT
-    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass() return return.toString orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass()) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
+    Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() return return.toString orig(this) orig(this.wrapped) orig(this.wrapped[]) orig(this.wrapped[].getClass().getName()) size(this.wrapped[]) size(this.wrapped[])-1 orig(size(this.wrapped[])) orig(size(this.wrapped[]))-1
 this.wrapped == \old(this.wrapped)
 daikon.Quant.pairwiseEqual(this.wrapped, \old(this.wrapped))
 \result != null

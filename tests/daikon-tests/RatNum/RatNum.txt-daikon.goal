@@ -154,7 +154,7 @@ return.denom >= 0
 ===========================================================================
 PolyCalc.RatNum.equals(java.lang.Object):::ENTER
 obj != null
-obj.getClass() == PolyCalc.RatNum.class
+obj.getClass().getName() == PolyCalc.RatNum.class
 ===========================================================================
 PolyCalc.RatNum.equals(java.lang.Object):::EXIT230
 this.denom == 0

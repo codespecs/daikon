@@ -76,7 +76,7 @@ this.path.path.cost == orig(this.path.path.cost)
 this.path.cost == orig(this.path.cost)
 this.cost == orig(this.cost)
 return != null
-return.getClass() == java.util.Collections$UnmodifiableCollection$1.class
+return.getClass().getName() == java.util.Collections$UnmodifiableCollection$1.class
 (this.cost >> this.path.cost == 0)
 ===========================================================================
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER
@@ -93,11 +93,11 @@ this.path.path.cost == orig(this.path.path.cost)
 this.path.cost == orig(this.path.cost)
 this.cost == orig(this.cost)
 return != null
-return.getClass() == MapQuick.WeightedNodePath.class
+return.getClass().getName() == MapQuick.WeightedNodePath.class
 ===========================================================================
 MapQuick.WeightedNodePath.extend(java.lang.Object):::ENTER
 o != null
-o.getClass() == MapQuick.WeightedNode.class
+o.getClass().getName() == MapQuick.WeightedNode.class
 ===========================================================================
 MapQuick.WeightedNodePath.extend(java.lang.Object):::EXIT
 this.node == orig(this.node)
@@ -110,9 +110,9 @@ this.path.path.cost == orig(this.path.path.cost)
 this.path.cost == orig(this.path.cost)
 this.cost == orig(this.cost)
 return != null
-return.getClass() == MapQuick.WeightedNodePath.class
-orig(o.getClass()) is a substring of return.getClass()
-return.getClass() != orig(o.getClass())
+return.getClass().getName() == MapQuick.WeightedNodePath.class
+orig(o.getClass().getName()) is a substring of return.getClass().getName()
+return.getClass().getName() != orig(o.getClass().getName())
 ===========================================================================
 MapQuick.WeightedNodePath.hashCode():::ENTER
 this.path == null

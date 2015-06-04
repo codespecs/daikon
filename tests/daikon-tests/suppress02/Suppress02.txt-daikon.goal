@@ -186,7 +186,7 @@ this.theArray[this.j] != this.theArray[orig(this.j)]
 ===========================================================================
 misc.Suppress02.main(java.lang.String[]):::ENTER
 args has only one value
-args.getClass() == java.lang.String[].class
+args.getClass().getName() == java.lang.String[].class
 args[].toString == []
 ===========================================================================
 misc.Suppress02.main(java.lang.String[]):::EXIT

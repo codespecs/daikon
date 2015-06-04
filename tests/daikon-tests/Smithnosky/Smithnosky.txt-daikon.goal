@@ -9,7 +9,7 @@ this.s has only one value
 this.s != null
 this.s[] elements has only one value
 this.s[] elements != null
-this.s[].getClass() elements == java.lang.String.class
+this.s[].getClass().getName() elements == java.lang.String.class
 this.s[this.size..] == []
 (this.a == 0) ==> (this.b == 0)
 this.a >= this.b
@@ -49,7 +49,7 @@ this.a == size(this.s[])
 this.aXb == 6
 this.aXc == 8
 this.s[] == []
-this.s[].getClass() == []
+this.s[].getClass().getName() == []
 ===========================================================================
 misc.Smithnosky.add(java.lang.Object):::ENTER
 this.a == this.b
@@ -58,9 +58,9 @@ this.aXb == this.aXc
 this.a == 3
 this.aXb == 9
 this.size one of { 0, 1 }
-this.s[].getClass() one of { [], [java.lang.String] }
+this.s[].getClass().getName() one of { [], [java.lang.String] }
 o has only one value
-o.getClass() == java.lang.String.class
+o.getClass().getName() == java.lang.String.class
 this.s[] elements == o
 ===========================================================================
 misc.Smithnosky.add(java.lang.Object):::EXIT
@@ -80,10 +80,10 @@ orig(o) == this.s[orig(this.size)]
 this.a == 3
 this.aXb == 9
 this.size one of { 1, 2 }
-this.s[].getClass() one of { [java.lang.String], [java.lang.String, java.lang.String] }
+this.s[].getClass().getName() one of { [java.lang.String], [java.lang.String, java.lang.String] }
 this.s[orig(this.size)..] contains no nulls and has only one value, of length 1
 this.s[] elements == orig(o)
-orig(o.getClass()) in this.s[].getClass()
+orig(o.getClass().getName()) in this.s[].getClass().getName()
 ===========================================================================
 misc.Smithnosky.incA():::ENTER
 this.a == this.b
@@ -92,7 +92,7 @@ this.a one of { 0, 1, 2 }
 this.aXb one of { 1, 4, 6 }
 this.aXc one of { 1, 4, 8 }
 this.s[] == []
-this.s[].getClass() == []
+this.s[].getClass().getName() == []
 ===========================================================================
 misc.Smithnosky.incA():::EXIT
 this.b == this.c
@@ -109,7 +109,7 @@ this.b one of { 0, 1, 2 }
 this.aXb one of { 0, 2, 6 }
 this.aXc one of { 1, 4, 8 }
 this.s[] == []
-this.s[].getClass() == []
+this.s[].getClass().getName() == []
 ===========================================================================
 misc.Smithnosky.incB():::ENTER
 this.b == this.c
@@ -118,7 +118,7 @@ this.b one of { 0, 1, 2 }
 this.aXb one of { 0, 2, 6 }
 this.aXc one of { 1, 4, 8 }
 this.s[] == []
-this.s[].getClass() == []
+this.s[].getClass().getName() == []
 ===========================================================================
 misc.Smithnosky.incB():::EXIT
 this.a == this.b
@@ -135,7 +135,7 @@ this.c one of { 0, 1, 2 }
 this.aXb one of { 1, 4, 9 }
 this.aXc one of { 1, 4, 8 }
 this.s[] == []
-this.s[].getClass() == []
+this.s[].getClass().getName() == []
 ===========================================================================
 misc.Smithnosky.incC():::ENTER
 this.a == this.b
@@ -144,7 +144,7 @@ this.c one of { 0, 1, 2 }
 this.aXb one of { 1, 4, 9 }
 this.aXc one of { 1, 4, 8 }
 this.s[] == []
-this.s[].getClass() == []
+this.s[].getClass().getName() == []
 ===========================================================================
 misc.Smithnosky.incC():::EXIT
 this.a == this.b
@@ -160,11 +160,11 @@ this.s[] == orig(this.s[])
 this.a one of { 1, 2, 3 }
 this.aXb one of { 1, 4, 9 }
 this.s[] == []
-this.s[].getClass() == []
+this.s[].getClass().getName() == []
 ===========================================================================
 misc.Smithnosky.main(java.lang.String[]):::ENTER
 args has only one value
-args.getClass() == java.lang.String[].class
+args.getClass().getName() == java.lang.String[].class
 args[] == []
 args[].toString == []
 ===========================================================================

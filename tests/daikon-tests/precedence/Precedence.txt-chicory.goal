@@ -1,5 +1,5 @@
 // Declarations for misc.Precedence
-// Declarations written Sat May 14 07:47:36 PDT 2011
+// Declarations written Thu Jun 04 13:31:33 PDT 2015
 
 decl-version 2.0
 var-comparability none
@@ -10,162 +10,162 @@ ppt-type enter
 ppt misc.Precedence.Precedence():::EXIT3
 ppt-type subexit
 parent parent misc.Precedence:::OBJECT 1
-  variable this
-    var-kind variable 
-    dec-type misc.Precedence
-    rep-type hashcode
-    flags is_param
-    comparability 22
-    parent misc.Precedence:::OBJECT 1
-  variable this.i
-    var-kind field i
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
-    parent misc.Precedence:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type misc.Precedence
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent misc.Precedence:::OBJECT 1
+variable this.i
+  var-kind field i
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent misc.Precedence:::OBJECT 1
 
 ppt misc.Precedence.main(java.lang.String[]):::ENTER
 ppt-type enter
-  variable args
-    var-kind variable 
-    dec-type java.lang.String[]
-    rep-type hashcode
-    flags is_param
-    comparability 22
-  variable args.getClass()
-    var-kind function getClass()
-    enclosing-var args
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    function-args args
-    flags synthetic classname
-    comparability 22
-  variable args[..]
-    var-kind array 
-    enclosing-var args
-    array 1
-    dec-type java.lang.String[]
-    rep-type hashcode[]
-    comparability 22
-  variable args[..].toString
-    var-kind function toString()
-    enclosing-var args[..]
-    array 1
-    dec-type java.lang.String[]
-    rep-type java.lang.String[]
-    function-args args[]
-    flags synthetic to_string
-    comparability 22
+variable args
+  var-kind variable 
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname
+  comparability 22
+variable args[..]
+  var-kind array 
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 22
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 22
 
 ppt misc.Precedence.main(java.lang.String[]):::EXIT10
 ppt-type subexit
-  variable args
-    var-kind variable 
-    dec-type java.lang.String[]
-    rep-type hashcode
-    flags is_param
-    comparability 22
-  variable args.getClass()
-    var-kind function getClass()
-    enclosing-var args
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    function-args args
-    flags synthetic classname
-    comparability 22
-  variable args[..]
-    var-kind array 
-    enclosing-var args
-    array 1
-    dec-type java.lang.String[]
-    rep-type hashcode[]
-    comparability 22
-  variable args[..].toString
-    var-kind function toString()
-    enclosing-var args[..]
-    array 1
-    dec-type java.lang.String[]
-    rep-type java.lang.String[]
-    function-args args[]
-    flags synthetic to_string
-    comparability 22
+variable args
+  var-kind variable 
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname
+  comparability 22
+variable args[..]
+  var-kind array 
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 22
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 22
 
 ppt misc.Precedence.lets_calculate(int):::ENTER
 ppt-type enter
 parent parent misc.Precedence:::OBJECT 1
-  variable this
-    var-kind variable 
-    dec-type misc.Precedence
-    rep-type hashcode
-    flags is_param
-    comparability 22
-    parent misc.Precedence:::OBJECT 1
-  variable this.i
-    var-kind field i
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
-    parent misc.Precedence:::OBJECT 1
-  variable j
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags is_param
-    comparability 22
+variable this
+  var-kind variable 
+  dec-type misc.Precedence
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent misc.Precedence:::OBJECT 1
+variable this.i
+  var-kind field i
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent misc.Precedence:::OBJECT 1
+variable j
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
 
 ppt misc.Precedence.lets_calculate(int):::EXIT18
 ppt-type subexit
 parent parent misc.Precedence:::OBJECT 1
-  variable this
-    var-kind variable 
-    dec-type misc.Precedence
-    rep-type hashcode
-    flags is_param
-    comparability 22
-    parent misc.Precedence:::OBJECT 1
-  variable this.i
-    var-kind field i
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
-    parent misc.Precedence:::OBJECT 1
-  variable j
-    var-kind variable 
-    dec-type int
-    rep-type int
-    flags is_param
-    comparability 22
-  variable return
-    var-kind return 
-    dec-type int
-    rep-type int
-    comparability 22
+variable this
+  var-kind variable 
+  dec-type misc.Precedence
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent misc.Precedence:::OBJECT 1
+variable this.i
+  var-kind field i
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent misc.Precedence:::OBJECT 1
+variable j
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
 
 ppt misc.Precedence:::OBJECT
 ppt-type object
-  variable this
-    var-kind variable 
-    dec-type misc.Precedence
-    rep-type hashcode
-    flags is_param
-    comparability 22
-  variable this.i
-    var-kind field i
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
+variable this
+  var-kind variable 
+  dec-type misc.Precedence
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable this.i
+  var-kind field i
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
 
 misc.Precedence.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-8167849
+790733029
 1
-args.getClass()
+args.getClass().getName()
 "java.lang.String[]"
 1
 args[..]
@@ -183,7 +183,7 @@ misc.Precedence.Precedence():::EXIT3
 this_invocation_nonce
 1
 this
-5857945
+1221210767
 1
 this.i
 0
@@ -193,7 +193,7 @@ misc.Precedence.lets_calculate(int):::ENTER
 this_invocation_nonce
 2
 this
-5857945
+1221210767
 1
 this.i
 10
@@ -206,7 +206,7 @@ misc.Precedence.lets_calculate(int):::EXIT18
 this_invocation_nonce
 2
 this
-5857945
+1221210767
 1
 this.i
 2
@@ -222,9 +222,9 @@ misc.Precedence.main(java.lang.String[]):::EXIT10
 this_invocation_nonce
 0
 args
-8167849
+790733029
 1
-args.getClass()
+args.getClass().getName()
 "java.lang.String[]"
 1
 args[..]

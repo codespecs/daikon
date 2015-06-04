@@ -34,7 +34,7 @@ this.gs1.a == 110
 ===========================================================================
 misc.Param.main(java.lang.String[]):::ENTER
 args has only one value
-args.getClass() == java.lang.String[].class
+args.getClass().getName() == java.lang.String[].class
 args[] == []
 args[].toString == []
 ===========================================================================

@@ -15,7 +15,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -23,7 +23,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 4
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -50,7 +50,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -58,7 +58,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5[2]
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -85,7 +85,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -93,7 +93,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 4
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -109,7 +109,7 @@ c
 javautil.Collection13 # isParam=true
 hashcode
 2
-c.getClass()
+c.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -124,7 +124,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -132,7 +132,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -144,7 +144,7 @@ c
 javautil.Collection13 # isParam=true
 hashcode
 2
-c.getClass()
+c.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -160,7 +160,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -168,7 +168,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 4
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -187,7 +187,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -195,7 +195,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 4
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -215,7 +215,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -223,7 +223,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -246,7 +246,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -254,7 +254,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -278,7 +278,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -286,7 +286,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 4
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -305,7 +305,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -313,7 +313,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -337,7 +337,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -345,7 +345,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 4
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -364,7 +364,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -372,7 +372,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -396,7 +396,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -404,7 +404,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -416,7 +416,7 @@ elem
 java.lang.Object # isParam=true
 hashcode
 2
-elem.getClass()
+elem.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -431,7 +431,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -439,7 +439,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -451,7 +451,7 @@ elem
 java.lang.Object # isParam=true
 hashcode
 2
-elem.getClass()
+elem.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -471,7 +471,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -479,7 +479,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -491,7 +491,7 @@ elem
 java.lang.Object # isParam=true
 hashcode
 2
-elem.getClass()
+elem.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -506,7 +506,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -514,7 +514,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -526,7 +526,7 @@ elem
 java.lang.Object # isParam=true
 hashcode
 2
-elem.getClass()
+elem.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -545,7 +545,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -553,7 +553,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -565,7 +565,7 @@ elem
 java.lang.Object # isParam=true
 hashcode
 2
-elem.getClass()
+elem.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -584,7 +584,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -592,7 +592,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -604,7 +604,7 @@ elem
 java.lang.Object # isParam=true
 hashcode
 2
-elem.getClass()
+elem.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -624,7 +624,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -632,7 +632,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -644,7 +644,7 @@ elem
 java.lang.Object # isParam=true
 hashcode
 2
-elem.getClass()
+elem.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -659,7 +659,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -667,7 +667,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -679,7 +679,7 @@ elem
 java.lang.Object # isParam=true
 hashcode
 2
-elem.getClass()
+elem.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -698,7 +698,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -706,7 +706,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -718,7 +718,7 @@ elem
 java.lang.Object # isParam=true
 hashcode
 2
-elem.getClass()
+elem.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -737,7 +737,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -745,7 +745,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -757,7 +757,7 @@ elem
 java.lang.Object # isParam=true
 hashcode
 2
-elem.getClass()
+elem.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -777,7 +777,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -785,7 +785,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 4
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -804,7 +804,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -812,7 +812,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -824,7 +824,7 @@ return
 java.lang.Object
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -840,7 +840,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -848,7 +848,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 4
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -867,7 +867,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -875,7 +875,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -887,7 +887,7 @@ return
 java.lang.Object[]
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -907,7 +907,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -915,7 +915,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -927,7 +927,7 @@ a
 java.lang.Object[] # isParam=true
 hashcode
 2
-a.getClass()
+a.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -946,7 +946,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 7
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -954,7 +954,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 8
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -966,7 +966,7 @@ a
 java.lang.Object[] # isParam=true
 hashcode
 2
-a.getClass()
+a.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -978,7 +978,7 @@ return
 java.lang.Object[]
 hashcode
 4
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -998,7 +998,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1006,7 +1006,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1029,7 +1029,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1037,7 +1037,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1053,7 +1053,7 @@ return
 java.lang.Object
 hashcode
 3
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1069,7 +1069,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1077,7 +1077,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1093,7 +1093,7 @@ element
 java.lang.Object # isParam=true
 hashcode
 2
-element.getClass()
+element.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1108,7 +1108,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 6
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1116,7 +1116,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 7
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1132,7 +1132,7 @@ element
 java.lang.Object # isParam=true
 hashcode
 2
-element.getClass()
+element.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1140,7 +1140,7 @@ return
 java.lang.Object
 hashcode
 4
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1156,7 +1156,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1164,7 +1164,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1176,7 +1176,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1191,7 +1191,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1199,7 +1199,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1211,7 +1211,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1231,7 +1231,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1239,7 +1239,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1255,7 +1255,7 @@ element
 java.lang.Object # isParam=true
 hashcode
 2
-element.getClass()
+element.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1270,7 +1270,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1278,7 +1278,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1294,7 +1294,7 @@ element
 java.lang.Object # isParam=true
 hashcode
 2
-element.getClass()
+element.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1310,7 +1310,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1318,7 +1318,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1341,7 +1341,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1349,7 +1349,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1365,7 +1365,7 @@ return
 java.lang.Object
 hashcode
 3
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1381,7 +1381,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1389,7 +1389,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 4
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1408,7 +1408,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 3
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1416,7 +1416,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 4
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1436,7 +1436,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1444,7 +1444,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1456,7 +1456,7 @@ c
 javautil.Collection13 # isParam=true
 hashcode
 2
-c.getClass()
+c.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1471,7 +1471,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1479,7 +1479,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1491,7 +1491,7 @@ c
 javautil.Collection13 # isParam=true
 hashcode
 2
-c.getClass()
+c.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1511,7 +1511,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 5
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1519,7 +1519,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 6
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1535,7 +1535,7 @@ c
 javautil.Collection13 # isParam=true
 hashcode
 2
-c.getClass()
+c.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1550,7 +1550,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 6
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1558,7 +1558,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 7
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1574,7 +1574,7 @@ c
 javautil.Collection13 # isParam=true
 hashcode
 2
-c.getClass()
+c.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1594,7 +1594,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1602,7 +1602,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1629,7 +1629,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1637,7 +1637,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1665,7 +1665,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1673,7 +1673,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1696,7 +1696,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1704,7 +1704,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1728,7 +1728,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1736,7 +1736,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1759,7 +1759,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1767,7 +1767,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1791,7 +1791,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1799,7 +1799,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1822,7 +1822,7 @@ this.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
 4
-this.elementData.getClass()
+this.elementData.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1830,7 +1830,7 @@ this.elementData[..]
 java.lang.Object[]
 hashcode[]
 5
-this.elementData[..].getClass()
+this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
 1
@@ -1852,7 +1852,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 2
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1871,7 +1871,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 2
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1887,7 +1887,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1899,7 +1899,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1910,7 +1910,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1922,7 +1922,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1938,7 +1938,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1954,7 +1954,7 @@ element
 java.lang.Object # isParam=true
 hashcode
 2
-element.getClass()
+element.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1966,7 +1966,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1982,7 +1982,7 @@ element
 java.lang.Object # isParam=true
 hashcode
 2
-element.getClass()
+element.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -1994,7 +1994,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2014,7 +2014,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2026,7 +2026,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2037,7 +2037,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2049,7 +2049,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2064,7 +2064,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2076,7 +2076,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2091,7 +2091,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2103,7 +2103,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2119,7 +2119,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2131,7 +2131,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2142,7 +2142,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2154,7 +2154,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2169,7 +2169,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2181,7 +2181,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2196,7 +2196,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2208,7 +2208,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2224,7 +2224,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 2
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2239,7 +2239,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 2
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2255,7 +2255,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2271,7 +2271,7 @@ c
 javautil.Collection13 # isParam=true
 hashcode
 2
-c.getClass()
+c.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2282,7 +2282,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 5
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2298,7 +2298,7 @@ c
 javautil.Collection13 # isParam=true
 hashcode
 2
-c.getClass()
+c.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2314,7 +2314,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 2
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2329,7 +2329,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2341,7 +2341,7 @@ return
 javautil.Iterator13
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2353,7 +2353,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 2
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2368,7 +2368,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2380,7 +2380,7 @@ return
 javautil.ListIterator13
 hashcode
 2
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2392,7 +2392,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2411,7 +2411,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2427,7 +2427,7 @@ return
 javautil.ListIterator13
 hashcode
 3
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2439,7 +2439,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2462,7 +2462,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2482,7 +2482,7 @@ return
 javautil.List13
 hashcode
 3
-return.getClass()
+return.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2494,7 +2494,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2506,7 +2506,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2517,7 +2517,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2529,7 +2529,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2544,7 +2544,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2556,7 +2556,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2571,7 +2571,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2583,7 +2583,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2598,7 +2598,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 4
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2610,7 +2610,7 @@ o
 java.lang.Object # isParam=true
 hashcode
 2
-o.getClass()
+o.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2626,7 +2626,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 2
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2641,7 +2641,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2661,7 +2661,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -2684,7 +2684,7 @@ this
 javautil.AbstractList13 # isParam=true
 hashcode
 3
-this.getClass()
+this.getClass().getName()
 java.lang.Class
 java.lang.String
 1

@@ -55,7 +55,7 @@ args
 java.lang.String[] # isParam=true
 hashcode
 2
-args.getClass()
+args.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -78,7 +78,7 @@ args
 java.lang.String[] # isParam=true
 hashcode
 2
-args.getClass()
+args.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -240,7 +240,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 3
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -283,7 +283,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 3
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -331,7 +331,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 3
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -374,7 +374,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 3
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -436,7 +436,7 @@ args
 java.lang.String[] # isParam=true
 hashcode
 2
-args.getClass()
+args.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -459,7 +459,7 @@ args
 java.lang.String[] # isParam=true
 hashcode
 2
-args.getClass()
+args.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -621,7 +621,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 3
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -664,7 +664,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 3
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -712,7 +712,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 3
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1
@@ -755,7 +755,7 @@ obj
 java.lang.Object # isParam=true
 hashcode
 3
-obj.getClass()
+obj.getClass().getName()
 java.lang.Class
 java.lang.String
 1

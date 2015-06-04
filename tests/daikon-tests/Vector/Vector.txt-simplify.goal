@@ -58,7 +58,7 @@ javautil.Vector13.Vector13(int, int):::EXIT
 (EQ (select |elementCount| |this|) (|java-/| (- (arrayLength (select |elementData| |this|)) 1) (select |serialVersionUID| (select |Vector13| |javautil|))))
 ===========================================================================
 javautil.Vector13.addElement(java.lang.Object):::ENTER
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass().getName() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |obj|))
 ===========================================================================
 javautil.Vector13.addElement(java.lang.Object):::EXIT
@@ -70,7 +70,7 @@ javautil.Vector13.addElement(java.lang.Object):::EXIT
 (>= (arrayLength (select |elementData| |this|)) 1)
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__obj|))
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass()) in this.elementData[].getClass()
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass().getName()) in this.elementData[].getClass().getName()
 (EQ 0 (+ (+ (select |elementCount| |this|) (* -1 (select |elementCount| |__orig__this|))) -1))
 (< (select |serialVersionUID| (select |Vector13| |javautil|)) (select |elementCount| |__orig__this|))
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ (select |elementCount| |__orig__this|) 0))
@@ -92,7 +92,7 @@ javautil.Vector13.clone():::EXIT
 ===========================================================================
 javautil.Vector13.contains(java.lang.Object):::ENTER
 (NEQ (hash |elem|) null)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass().getName() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |elem|))
 ===========================================================================
 javautil.Vector13.contains(java.lang.Object):::EXIT
@@ -102,7 +102,7 @@ javautil.Vector13.contains(java.lang.Object):::EXIT
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (IMPLIES (EQ |return| |@true|) (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|) |__orig__elem|)))))
 (IMPLIES (EQ |return| |@true|) (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|) |__orig__elem|)))))
-(IMPLIES (EQ |return| |@true|) warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass()) in this.elementData[].getClass())
+(IMPLIES (EQ |return| |@true|) warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass().getName()) in this.elementData[].getClass().getName())
 (IMPLIES (EQ |return| |@true|) (>= (select |elementCount| |this|) 1))
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__elem|))
@@ -148,10 +148,10 @@ javautil.Vector13.elementAt(int):::EXIT
 (EQ (hash |return|) (hash (select (select elems (select |elementData| |this|)) |__orig__index|)))
 (EQ (hash |return|) (hash (select (select elems (select |elementData| |__orig__this|)) |index|)))
 (EQ (hash |return|) (hash (select (select elems (select |elementData| |__orig__this|)) |__orig__index|)))
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |return|))
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() in this.elementData[].getClass()
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() in this.elementData[].getClass().getName()
 (> (select |elementCount| |this|) |__orig__index|)
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |__orig__index| 0))
 (<= |__orig__index| (- (arrayLength (select |elementData| |this|)) 1))
@@ -231,16 +231,16 @@ javautil.Vector13.firstElement():::EXIT
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (>= (select |elementCount| |this|) 1)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |return|))
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|) |return|))))
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() in this.elementData[].getClass()
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() in this.elementData[].getClass().getName()
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|) |return|))))
 ===========================================================================
 javautil.Vector13.indexOf(java.lang.Object):::ENTER
 (NEQ (hash |elem|) null)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass().getName() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |elem|))
 ===========================================================================
 javautil.Vector13.indexOf(java.lang.Object):::EXIT
@@ -257,7 +257,7 @@ javautil.Vector13.indexOf(java.lang.Object):::EXIT
 ===========================================================================
 javautil.Vector13.indexOf(java.lang.Object, int):::ENTER
 (NEQ (hash |elem|) null)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass().getName() is printable
 (>= |index| 0)
 (NEQ (typeof (select |elementData| |this|)) (typeof |elem|))
 (< (select |serialVersionUID| (select |Vector13| |javautil|)) |index|)
@@ -267,7 +267,7 @@ javautil.Vector13.indexOf(java.lang.Object, int):::EXIT274
 (EQ (hash |__orig__elem|) (hash (select (select elems (select |elementData| |__orig__this|)) |return|)))
 (>= (select |elementCount| |this|) 1)
 (>= |return| 0)
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass()) in this.elementData[].getClass()
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass().getName()) in this.elementData[].getClass().getName()
 (> (select |elementCount| |this|) |__orig__index|)
 (>= |return| |__orig__index|)
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |return| 0))
@@ -293,7 +293,7 @@ javautil.Vector13.indexOf(java.lang.Object, int):::EXIT
 (IMPLIES (>= |return| 0) (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |return| 0)))
 (IMPLIES (>= |return| 0) (EQ (hash |__orig__elem|) (hash (select (select elems (select |elementData| |__orig__this|)) |return|))))
 (IMPLIES (>= |return| 0) (EQ (hash |__orig__elem|) (hash (select (select elems (select |elementData| |this|)) |return|))))
-(IMPLIES (>= |return| 0) warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass()) in this.elementData[].getClass())
+(IMPLIES (>= |return| 0) warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass().getName()) in this.elementData[].getClass().getName())
 (IMPLIES (>= |return| 0) (<= |__orig__index| (- (arrayLength (select |elementData| |this|)) 1)))
 (IMPLIES (>= |return| 0) (NEQ (hash (select (select elems (select |elementData| |__orig__this|)) |return|)) null))
 (IMPLIES (>= |return| 0) (> (select |elementCount| |this|) |__orig__index|))
@@ -308,7 +308,7 @@ javautil.Vector13.indexOf(java.lang.Object, int):::EXIT
 (<= |return| (- (arrayLength (select |elementData| |this|)) 1))
 ===========================================================================
 javautil.Vector13.insertElementAt(java.lang.Object, int):::ENTER
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass().getName() is printable
 (>= |index| 0)
 (NEQ (typeof (select |elementData| |this|)) (typeof |obj|))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (EQ |index| 0))
@@ -326,7 +326,7 @@ javautil.Vector13.insertElementAt(java.lang.Object, int):::EXIT
 (>= (select |elementCount| |this|) 1)
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__obj|))
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass()) in this.elementData[].getClass()
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass().getName()) in this.elementData[].getClass().getName()
 (EQ 0 (+ (+ (select |elementCount| |this|) (* -1 (select |elementCount| |__orig__this|))) -1))
 (> (select |elementCount| |this|) |__orig__index|)
 (< (select |serialVersionUID| (select |Vector13| |javautil|)) (select |elementCount| |__orig__this|))
@@ -368,14 +368,14 @@ javautil.Vector13.lastElement():::EXIT
 (EQ (hash |return|) (hash (select (select elems (select |elementData| |__orig__this|)) (- (select |elementCount| |this|) 1))))
 (EQ (hash |return|) (hash (select (select elems (select |elementData| |__orig__this|)) (- (select |elementCount| |__orig__this|) 1))))
 (>= (select |elementCount| |this|) 1)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |return|))
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() in this.elementData[].getClass()
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() in this.elementData[].getClass().getName()
 ===========================================================================
 javautil.Vector13.lastIndexOf(java.lang.Object):::ENTER
 (NEQ (hash |elem|) null)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass().getName() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |elem|))
 ===========================================================================
 javautil.Vector13.lastIndexOf(java.lang.Object):::EXIT
@@ -392,7 +392,7 @@ javautil.Vector13.lastIndexOf(java.lang.Object):::EXIT
 ===========================================================================
 javautil.Vector13.lastIndexOf(java.lang.Object, int):::ENTER
 (NEQ (hash |elem|) null)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: elem.getClass().getName() is printable
 (>= |index| -1)
 (NEQ (typeof (select |elementData| |this|)) (typeof |elem|))
 (> (select |elementCount| |this|) |index|)
@@ -405,7 +405,7 @@ javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT307
 (>= (select |elementCount| |this|) 1)
 (>= |return| 0)
 (>= |__orig__index| 0)
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass()) in this.elementData[].getClass()
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass().getName()) in this.elementData[].getClass().getName()
 (IMPLIES (EQ |__orig__index| 0) (EQ |return| 0))
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |return| 0))
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |__orig__index| 0))
@@ -428,7 +428,7 @@ javautil.Vector13.lastIndexOf(java.lang.Object, int):::EXIT
 (IMPLIES (>= |return| 0) (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |return| 0)))
 (IMPLIES (>= |return| 0) (EQ (hash |__orig__elem|) (hash (select (select elems (select |elementData| |__orig__this|)) |return|))))
 (IMPLIES (>= |return| 0) (EQ (hash |__orig__elem|) (hash (select (select elems (select |elementData| |this|)) |return|))))
-(IMPLIES (>= |return| 0) warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass()) in this.elementData[].getClass())
+(IMPLIES (>= |return| 0) warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass().getName()) in this.elementData[].getClass().getName())
 (IMPLIES (>= |return| 0) (>= |__orig__index| 0))
 (IMPLIES (>= |return| 0) (NEQ (hash (select (select elems (select |elementData| |__orig__this|)) |return|)) null))
 (IMPLIES (>= |return| 0) (>= (select |elementCount| |this|) 1))
@@ -467,7 +467,7 @@ javautil.Vector13.removeAllElements():::EXIT
 ===========================================================================
 javautil.Vector13.removeElement(java.lang.Object):::ENTER
 (NEQ (hash |obj|) null)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass().getName() is printable
 (NEQ (typeof (select |elementData| |this|)) (typeof |obj|))
 ===========================================================================
 javautil.Vector13.removeElement(java.lang.Object):::EXIT480
@@ -481,7 +481,7 @@ javautil.Vector13.removeElement(java.lang.Object):::EXIT480
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ (select |elementCount| |this|) 0))
 (<= (select |elementCount| |this|) (- (arrayLength (select |elementData| |this|)) 1))
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |__orig__this|)) 1))) (NEQ (select (select elems (select |elementData| |__orig__this|)) |i|) |__orig__obj|))))
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass()) in orig(this.elementData[].getClass())
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass().getName()) in orig(this.elementData[].getClass().getName())
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |elementCount| |this|))) (NEQ (select (select elems (select |elementData| |__orig__this|)) |i|) |__orig__obj|))))
 (FORALL (|i|) (IMPLIES (AND (<= (select |elementCount| |this|) |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |this|)) (select |elementCount| |this|)))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (select |elementCount| |this|))(EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))))
@@ -504,7 +504,7 @@ javautil.Vector13.removeElement(java.lang.Object):::EXIT
 (IMPLIES (EQ |return| |@true|) (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |elementCount| |this|))) (NEQ (select (select elems (select |elementData| |__orig__this|)) |i|) |__orig__obj|)))))
 (IMPLIES (EQ |return| |@true|) (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |__orig__this|) 1))) (NEQ (select (select elems (select |elementData| |__orig__this|)) |i|) |__orig__obj|)))))
 (IMPLIES (EQ |return| |@true|) (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |__orig__this|)) 1))) (NEQ (select (select elems (select |elementData| |__orig__this|)) |i|) |__orig__obj|)))))
-(IMPLIES (EQ |return| |@true|) warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass()) in orig(this.elementData[].getClass()))
+(IMPLIES (EQ |return| |@true|) warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass().getName()) in orig(this.elementData[].getClass().getName()))
 (IMPLIES (EQ |return| |@true|) (>= (select |elementCount| |__orig__this|) 1))
 (IMPLIES (EQ |return| |@true|) (EQ (hash (select (select elems (select |elementData| |__orig__this|)) (select |elementCount| |this|))) (hash (select (select elems (select |elementData| |__orig__this|)) (- (select |elementCount| |__orig__this|) 1)))))
 (IMPLIES (EQ |return| |@true|) (<= (select |elementCount| |this|) (- (arrayLength (select |elementData| |this|)) 1)))
@@ -555,7 +555,7 @@ javautil.Vector13.removeElementAt(int):::EXIT
 format_simplify disabled
 ===========================================================================
 javautil.Vector13.setElementAt(java.lang.Object, int):::ENTER
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: obj.getClass().getName() is printable
 (>= |index| 0)
 (NEQ (typeof (select |elementData| |this|)) (typeof |obj|))
 (> (select |elementCount| |this|) |index|)
@@ -578,7 +578,7 @@ javautil.Vector13.setElementAt(java.lang.Object, int):::EXIT
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__obj|))
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) (- (select |elementCount| |__orig__this|) 1))))))
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass()) in this.elementData[].getClass()
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(obj.getClass().getName()) in this.elementData[].getClass().getName()
 (> (select |elementCount| |this|) |__orig__index|)
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ |__orig__index| 0))
 (<= |__orig__index| (- (arrayLength (select |elementData| |this|)) 1))

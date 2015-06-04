@@ -40,7 +40,7 @@ this.sum - orig(this.sum) - orig(element) == 0
 ===========================================================================
 Main.main(java.lang.String[]):::ENTER
 args has only one value
-args.getClass() == java.lang.String[].class
+args.getClass().getName() == java.lang.String[].class
 args[] == []
 args[].toString == []
 ===========================================================================

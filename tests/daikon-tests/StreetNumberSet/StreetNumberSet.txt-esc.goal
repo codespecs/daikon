@@ -162,12 +162,12 @@ this.begins.length == \old(this.ends.length)
 ((other != null) && (other.begins != null) && (other.ends != null))  ==>  ((\forall int i, j; (0 <= i && i <= other.begins.length-1 && 0 <= j && j <= other.ends.length-1 && i == j) ==> (other.begins[i] <= other.ends[j])))
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
-    Variables: this this.begins this.begins[] this.ends this.ends[] o o.getClass() size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1
-(o != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: o.getClass() is printable)
+    Variables: this this.begins this.begins[] this.ends this.ends[] o o.getClass().getName() size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1
+(o != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: o.getClass().getName() is printable)
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT
-    Variables: this this.begins this.begins[] this.ends this.ends[] o o.getClass() return orig(this) orig(this.begins) orig(this.begins[]) orig(this.ends) orig(this.ends[]) orig(o) orig(o.getClass()) size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1 orig(size(this.begins[])) orig(size(this.begins[]))-1 orig(size(this.ends[])) orig(size(this.ends[]))-1
-      Unmodified variables: this this.begins this.begins[] this.ends this.ends[] o o.getClass() size(this.begins[]) size(this.ends[])
+    Variables: this this.begins this.begins[] this.ends this.ends[] o o.getClass().getName() return orig(this) orig(this.begins) orig(this.begins[]) orig(this.ends) orig(this.ends[]) orig(o) orig(o.getClass().getName()) size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1 orig(size(this.begins[])) orig(size(this.begins[]))-1 orig(size(this.ends[])) orig(size(this.ends[]))-1
+      Unmodified variables: this this.begins this.begins[] this.ends this.ends[] o o.getClass().getName() size(this.begins[]) size(this.ends[])
 this.begins.length == \old(this.ends.length)
 (\result == true)  ==>  (\old(o) != null)
 (\result == true)  ==>  (\old(\typeof(o)) == \type(MapQuick1.StreetNumberSet))

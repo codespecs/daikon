@@ -46,15 +46,15 @@ this.longitude < gp.latitude
 gp.latitude > gp.longitude
 ===========================================================================
 MapQuick1.GeoPoint.equals(java.lang.Object):::ENTER
-    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude o o.getClass()
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude o o.getClass().getName()
 o != null
-o.getClass() == MapQuick1.GeoPoint.class
+o.getClass().getName() == MapQuick1.GeoPoint.class.getName()
 ===========================================================================
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69
-    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude o o.getClass() return orig(this) orig(this.latitude) orig(this.longitude) orig(o) orig(o.getClass())
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude o o.getClass().getName() return orig(this) orig(this.latitude) orig(this.longitude) orig(o) orig(o.getClass().getName())
 ===========================================================================
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT
-    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude o o.getClass() return orig(this) orig(this.latitude) orig(this.longitude) orig(o) orig(o.getClass())
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude o o.getClass().getName() return orig(this) orig(this.latitude) orig(this.longitude) orig(o) orig(o.getClass().getName())
 this.latitude == \old(this.latitude)
 this.longitude == \old(this.longitude)
 ===========================================================================
@@ -156,25 +156,25 @@ p1.longitude < p2.latitude
 p2.latitude > p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
-    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass()
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass().getName()
 this.p1.latitude  isPointer
 this.p1.longitude  isPointer
 this.p2.latitude  isPointer
 this.p2.longitude  isPointer
 o != null
-o.getClass() == MapQuick1.GeoSegment.class
+o.getClass().getName() == MapQuick1.GeoSegment.class.getName()
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
-    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass() return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude) orig(o) orig(o.getClass())
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass().getName() return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude) orig(o) orig(o.getClass().getName())
 this.p1.latitude  isPointer
 this.p1.longitude  isPointer
 this.p2.latitude  isPointer
 this.p2.longitude  isPointer
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT
-    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass() return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude) orig(o) orig(o.getClass())
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass().getName() return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude) orig(o) orig(o.getClass().getName())
 this.name == \old(this.name)
 this.p1 == \old(this.p1)
 this.p1.latitude == \old(this.p1.latitude)

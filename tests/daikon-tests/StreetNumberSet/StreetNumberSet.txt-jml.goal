@@ -178,18 +178,18 @@ daikon.Quant.size(this.begins) == \old(daikon.Quant.size(this.ends))
 ((other != null) && (other.begins != null) && (other.ends != null))  ==>  (daikon.Quant.pairwiseLTE(other.begins, other.ends))
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
-    Variables: this this.begins this.begins[] this.ends this.ends[] o o.getClass() size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1
-(o != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: o.getClass() is printable)
+    Variables: this this.begins this.begins[] this.ends this.ends[] o o.getClass().getName() size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1
+(o != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: o.getClass().getName() is printable)
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT
-    Variables: this this.begins this.begins[] this.ends this.ends[] o o.getClass() return orig(this) orig(this.begins) orig(this.begins[]) orig(this.ends) orig(this.ends[]) orig(o) orig(o.getClass()) size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1 orig(size(this.begins[])) orig(size(this.begins[]))-1 orig(size(this.ends[])) orig(size(this.ends[]))-1
+    Variables: this this.begins this.begins[] this.ends this.ends[] o o.getClass().getName() return orig(this) orig(this.begins) orig(this.begins[]) orig(this.ends) orig(this.ends[]) orig(o) orig(o.getClass().getName()) size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1 orig(size(this.begins[])) orig(size(this.begins[]))-1 orig(size(this.ends[])) orig(size(this.ends[]))-1
 this.begins == \old(this.begins)
 daikon.Quant.pairwiseEqual(this.begins, \old(this.begins))
 this.ends == \old(this.ends)
 daikon.Quant.pairwiseEqual(this.ends, \old(this.ends))
 daikon.Quant.size(this.begins) == \old(daikon.Quant.size(this.ends))
 (\result == true)  ==>  (\old(o) != null)
-(\result == true)  ==>  (\old(o.getClass()) == MapQuick1.StreetNumberSet.class)
+(\result == true)  ==>  (\old(o.getClass().getName()) == MapQuick1.StreetNumberSet.class.getName())
 ===========================================================================
 MapQuick1.StreetNumberSet.hashCode():::ENTER
     Variables: this this.begins this.begins[] this.ends this.ends[] size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1

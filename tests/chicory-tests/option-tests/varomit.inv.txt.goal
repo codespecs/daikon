@@ -113,19 +113,19 @@ DataStructures.StackArTester.createItem(int):::ENTER
 phase >= 0
 ===========================================================================
 DataStructures.StackArTester.createItem(int):::EXIT20
-return.getClass() == DataStructures.MyInteger.class
+return.getClass().getName() == DataStructures.MyInteger.class
 orig(phase) == 0
 ===========================================================================
 DataStructures.StackArTester.createItem(int):::EXIT22
-return.getClass() == java.lang.Object.class
+return.getClass().getName() == java.lang.Object.class
 orig(phase) == 1
 ===========================================================================
 DataStructures.StackArTester.createItem(int):::EXIT24
-return.getClass() == DataStructures.MyInteger.class
+return.getClass().getName() == DataStructures.MyInteger.class
 orig(phase) == 2
 ===========================================================================
 DataStructures.StackArTester.createItem(int):::EXIT26
-return.getClass() == java.lang.Object.class
+return.getClass().getName() == java.lang.Object.class
 orig(phase) == 3
 ===========================================================================
 DataStructures.StackArTester.createItem(int):::EXIT
@@ -159,7 +159,7 @@ DataStructures.StackArTester.main(java.lang.String[]):::ENTER
 DataStructures.StackArTester.s.topOfStack == size(args[])-1
 DataStructures.StackArTester.s has only one value
 args has only one value
-args.getClass() == java.lang.String[].class
+args.getClass().getName() == java.lang.String[].class
 args[] == []
 args[].toString == []
 ===========================================================================

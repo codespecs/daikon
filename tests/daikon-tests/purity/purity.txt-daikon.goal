@@ -11,14 +11,14 @@ this.shift one of { 0, 5, 10 }
 this.list1 != null
 this.list1[] contains no duplicates
 this.list1[] elements != null
-this.list1[].getClass() == [java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer]
-this.list1[].getClass() elements == java.lang.Integer.class
+this.list1[].getClass().getName() == [java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer]
+this.list1[].getClass().getName() elements == java.lang.Integer.class
 this.list2 != null
 this.list2[] contains no duplicates
 this.list2[] elements != null
-this.list2.getClass() == java.util.ArrayList.class
+this.list2.getClass().getName() == java.util.ArrayList.class
 this.getNum() != null
-this.getNum().getClass() == java.lang.Integer.class
+this.getNum().getClass().getName() == java.lang.Integer.class
 this.getJWrap() != null
 this.sum(this.getNum()) == 0  (mod 2)
 size(this.list1[]) == 11
@@ -29,8 +29,8 @@ this.value <= this.scale(this.shift)
 (this.value == 0) ==> (this.sum(this.getNum()) == 0)
 2 * this.value - this.sum(this.getNum()) == 0
 this.shift <= size(this.list1[])-1
-this.getNum().getClass() in this.list1[].getClass()
-this.list2.getClass() != this.getNum().getClass()
+this.getNum().getClass().getName() in this.list1[].getClass().getName()
+this.list2.getClass().getName() != this.getNum().getClass().getName()
 (this.scale(this.value) == 0) ==> (this.sum(this.getNum()) == 0)
 (this.sum(this.getNum()) == 0) ==> (this.scale(this.value) == 0)
 this.sum(this.getNum()) != size(this.list1[])
@@ -64,8 +64,8 @@ this.sum(this.getNum()) == orig(this.sum(this.getJWrap()))
 size(this.list1[]) == orig(size(this.list2[]))
 this.shift == 0  (mod 5)
 return != null
-this.list2.getClass() == orig(this.list2.getClass())
-this.getNum().getClass() == orig(this.getNum().getClass())
+this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
 ===========================================================================
 misc.Purity.getNum():::ENTER
 this.shift == 0  (mod 5)
@@ -87,12 +87,12 @@ this.sum(this.getNum()) == orig(this.sum(this.getJWrap()))
 size(this.list1[]) == orig(size(this.list2[]))
 this.shift == 0  (mod 5)
 return != null
-return.getClass() == java.lang.Integer.class
-return.getClass() in this.list1[].getClass()
-this.list2.getClass() != return.getClass()
-this.list2.getClass() == orig(this.list2.getClass())
-this.getNum().getClass() == return.getClass()
-return.getClass() == orig(this.getNum().getClass())
+return.getClass().getName() == java.lang.Integer.class
+return.getClass().getName() in this.list1[].getClass().getName()
+this.list2.getClass().getName() != return.getClass().getName()
+this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getNum().getClass().getName() == return.getClass().getName()
+return.getClass().getName() == orig(this.getNum().getClass().getName())
 ===========================================================================
 misc.Purity.getShift():::ENTER
 this.shift == 0  (mod 5)
@@ -118,8 +118,8 @@ return == orig(this.retrieve(this.list2))
 size(this.list1[]) == orig(size(this.list2[]))
 return one of { 0, 5, 10 }
 return == 0  (mod 5)
-this.list2.getClass() == orig(this.list2.getClass())
-this.getNum().getClass() == orig(this.getNum().getClass())
+this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
 return <= size(this.list1[])-1
 ===========================================================================
 misc.Purity.getValue():::ENTER
@@ -143,8 +143,8 @@ return == orig(this.value)
 return == orig(this.getValue())
 size(this.list1[]) == orig(size(this.list2[]))
 this.shift == 0  (mod 5)
-this.list2.getClass() == orig(this.list2.getClass())
-this.getNum().getClass() == orig(this.getNum().getClass())
+this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
 (return == 0) ==> (this.scale(this.value) == 0)
 (this.scale(this.value) == 0) ==> (return == 0)
 this.scale(this.shift) >= return
@@ -190,8 +190,8 @@ size(this.list1[]) == orig(size(this.list2[]))
 (this.shift one of { 5, 10 })  ==>  (this.shift != this.scale(this.value))
 (this.shift one of { 5, 10 })  ==>  (this.shift == 0  (mod 5))
 (this.shift one of { 5, 10 })  ==>  (this.value + 15 * this.shift - this.scale(this.shift) - 50 == 0)
-this.list2.getClass() == orig(this.list2.getClass())
-this.getNum().getClass() == orig(this.getNum().getClass())
+this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
 ===========================================================================
 misc.Purity.isHeavy():::EXIT;condition="return == true"
 this.shift one of { 5, 10 }
@@ -224,12 +224,12 @@ this.shift == 0  (mod 5)
 l != null
 l[] contains no duplicates
 l[] elements != null
-l[].getClass() == [java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer]
-l[].getClass() elements == java.lang.Integer.class
+l[].getClass().getName() == [java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer]
+l[].getClass().getName() elements == java.lang.Integer.class
 size(l[]) == 20
 this.shift < size(l[])-1
-this.list2.getClass() == l.getClass()
-this.getNum().getClass() in l[].getClass()
+this.list2.getClass().getName() == l.getClass().getName()
+this.getNum().getClass().getName() in l[].getClass().getName()
 this.sum(this.getNum()) != size(l[])-1
 ===========================================================================
 misc.Purity.retrieve(java.util.List):::EXIT
@@ -254,14 +254,14 @@ return == orig(this.retrieve(this.list2))
 size(this.list1[]) == orig(size(this.list2[]))
 l[] contains no duplicates
 l[] elements != null
-l[].getClass() == [java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer]
-l[].getClass() elements == java.lang.Integer.class
+l[].getClass().getName() == [java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer]
+l[].getClass().getName() elements == java.lang.Integer.class
 return one of { 0, 5, 10 }
 return == 0  (mod 5)
-this.list2.getClass() == orig(this.list2.getClass())
-this.list2.getClass() == orig(l.getClass())
-this.getNum().getClass() in l[].getClass()
-this.getNum().getClass() == orig(this.getNum().getClass())
+this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.list2.getClass().getName() == orig(l.getClass().getName())
+this.getNum().getClass().getName() in l[].getClass().getName()
+this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
 this.sum(this.getNum()) != size(l[])-1
 return <= size(this.list1[])-1
 return < size(l[])-1
@@ -293,15 +293,15 @@ size(this.list1[]) == orig(size(this.list2[]))
 this.shift == 0  (mod 5)
 (return == 0) ==> (this.value == 0)
 (this.value == 0) ==> (return == 0)
-this.list2.getClass() == orig(this.list2.getClass())
-this.getNum().getClass() == orig(this.getNum().getClass())
+this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
 (return == 0) ==> (this.sum(this.getNum()) == 0)
 (this.sum(this.getNum()) == 0) ==> (return == 0)
 ===========================================================================
 misc.Purity.sum(java.lang.Number):::ENTER
 this.shift == 0  (mod 5)
 n != null
-this.getNum().getClass() == n.getClass()
+this.getNum().getClass().getName() == n.getClass().getName()
 ===========================================================================
 misc.Purity.sum(java.lang.Number):::EXIT
 this.value == orig(this.value)
@@ -326,9 +326,9 @@ return == 0  (mod 2)
 (return == 0) ==> (this.value == 0)
 (this.value == 0) ==> (return == 0)
 2 * this.value - return == 0
-this.list2.getClass() == orig(this.list2.getClass())
-this.getNum().getClass() == orig(this.getNum().getClass())
-this.getNum().getClass() == orig(n.getClass())
+this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
+this.getNum().getClass().getName() == orig(n.getClass().getName())
 (return == 0) ==> (this.scale(this.value) == 0)
 (this.scale(this.value) == 0) ==> (return == 0)
 return != size(this.list1[])

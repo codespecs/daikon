@@ -16,7 +16,7 @@ return == 6
 ===========================================================================
 misc.Precedence.main(java.lang.String[]):::ENTER
 args has only one value
-args.getClass() == java.lang.String[].class
+args.getClass().getName() == java.lang.String[].class
 args[] == []
 args[].toString == []
 ===========================================================================

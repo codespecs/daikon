@@ -43,14 +43,14 @@ DataStructures.QueueAr.dequeue():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |front| |__orig__this|) 1)) (<= 0 |j|) (<= |j| (- (select |front| |__orig__this|) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))
 (EQ (hash (select (select elems (select |theArray| |__orig__this|)) (select |currentSize| |this|))) (hash (select (select elems (select |theArray| |__orig__this|)) (- (select |currentSize| |__orig__this|) 1))))
 (NEQ (hash |return|) null)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() is printable
 (EQ (hash (select (select elems (select |theArray| |this|)) (select |front| |__orig__this|))) null)
 (NEQ (typeof (select |theArray| |this|)) (typeof |return|))
 (EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (EQ 0 (+ (+ (select |currentSize| |this|) (* -1 (select |currentSize| |__orig__this|))) 1))
 (IMPLIES (EQ (- (arrayLength (select |theArray| |this|)) 1) 0) (EQ (select |currentSize| |this|) 0))
 (<= (select |currentSize| |this|) (- (arrayLength (select |theArray| |this|)) 1))
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() in orig(this.theArray[].getClass())
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() in orig(this.theArray[].getClass().getName())
 (<= (select |currentSize| |__orig__this|) (arrayLength (select |theArray| |this|)))
 (IMPLIES (EQ (- (arrayLength (select |theArray| |this|)) 1) 0) (EQ (select |front| |__orig__this|) 0))
 (<= (select |front| |__orig__this|) (- (arrayLength (select |theArray| |this|)) 1))
@@ -86,7 +86,7 @@ DataStructures.QueueAr.dequeueAll():::EXIT
 ===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
 (NEQ (hash |x|) null)
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: x.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: x.getClass().getName() is printable
 (NEQ (typeof (select |theArray| |this|)) (typeof |x|))
 (IMPLIES (EQ (select |currentSize| |this|) 0) (EQ (select |front| |this|) 0))
 (IMPLIES (EQ (- (arrayLength (select |theArray| |this|)) 1) 0) (EQ (select |currentSize| |this|) 0))
@@ -106,7 +106,7 @@ DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT
 (EQ (hash (select (select elems (select |theArray| |__orig__this|)) (select |back| |this|))) null)
 (EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
 (NEQ (typeof (select |theArray| |this|)) (typeof |__orig__x|))
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(x.getClass()) in this.theArray[].getClass()
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(x.getClass().getName()) in this.theArray[].getClass().getName()
 (EQ (|java->>| (select |front| |this|) (select |currentSize| |this|)) 0)
 (EQ (|java->>| (select |back| |this|) (select |currentSize| |this|)) 0)
 (EQ 0 (+ (+ (select |currentSize| |this|) (* -1 (select |currentSize| |__orig__this|))) -1))
@@ -193,10 +193,10 @@ DataStructures.QueueAr.getFront():::EXIT
 (IMPLIES (EQ (select |currentSize| |this|) 0) (FORALL (|i|) (IMPLIES (AND (<= (select |currentSize| |this|) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) (select |back| |this|))))))
 (IMPLIES (EQ (select |currentSize| |this|) 0) (FORALL (|i|) (IMPLIES (AND (<= (select |currentSize| |this|) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) (select |currentSize| |this|))))))
 (IMPLIES (EQ (select |currentSize| |this|) 0) (EQ (hash (select (select elems (select |theArray| |this|)) (select |currentSize| |this|))) null))
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() is printable
 (NEQ (typeof (select |theArray| |this|)) (typeof |return|))
 (EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
-warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass() in this.theArray[].getClass()
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: return.getClass().getName() in this.theArray[].getClass().getName()
 ===========================================================================
 DataStructures.QueueAr.isEmpty():::ENTER
 ===========================================================================

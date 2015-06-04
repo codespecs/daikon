@@ -143,7 +143,7 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT;condition="no
 return == false
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
-o.getClass() is printable
+o.getClass().getName() is printable
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT
 this.begins == orig(this.begins)
@@ -152,12 +152,12 @@ this.ends == orig(this.ends)
 this.ends[] == orig(this.ends[])
 size(this.begins[]) == orig(size(this.ends[]))
 (return == true)  ==>  (orig(o) != null)
-(return == true)  ==>  (orig(o.getClass()) == MapQuick1.StreetNumberSet.class)
+(return == true)  ==>  (orig(o.getClass().getName()) == MapQuick1.StreetNumberSet.class)
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT;condition="return == true"
 return == true
 orig(o) != null
-orig(o.getClass()) == MapQuick1.StreetNumberSet.class
+orig(o.getClass().getName()) == MapQuick1.StreetNumberSet.class
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT;condition="not(return == true)"
 return == false
