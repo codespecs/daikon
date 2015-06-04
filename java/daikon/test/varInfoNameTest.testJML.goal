@@ -41,7 +41,7 @@ field_of_var1 = var1.var1_field
 field_of_var1.jml_name() = no format when testCall.
 ;# Test TypeOf formatting
 ; typeof type_of_var1 var1
-type_of_var1 = var1.getClass()
+type_of_var1 = var1.getClass().getName()
 ; jml_name type_of_var1
 type_of_var1.jml_name() = no format when testCall.
 ;# Test Prestate formatting

@@ -10,13 +10,13 @@ parse p x[]
 quantify_esc_name p
 quantify_simplify_name p
 
-;# x.getClass()
-parse p x.getClass()
+;# x.getClass().getName()
+parse p x.getClass().getName()
 esc_name p
 simplify_name p
 
-;# x[].getClass()
-parse p x[].getClass()
+;# x[].getClass().getName()
+parse p x[].getClass().getName()
 quantify_esc_name p
 quantify_simplify_name p
 
@@ -40,14 +40,14 @@ parse p this.field.again[]
 quantify_esc_name p
 quantify_simplify_name p
 
-;# this.field.getClass()
-parse p this.field.getClass()
+;# this.field.getClass().getName()
+parse p this.field.getClass().getName()
 esc_name p
 simplify_name p
 postPreConverter p
 
-;# this.field[].getClass()
-parse p this.field[].getClass()
+;# this.field[].getClass().getName()
+parse p this.field[].getClass().getName()
 quantify_esc_name p
 quantify_simplify_name p
 

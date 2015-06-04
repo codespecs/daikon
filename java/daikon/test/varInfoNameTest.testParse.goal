@@ -17,16 +17,16 @@ p = x[]
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |x|) 1))) 
 	(select (select elems |x|) |i|)
 ))
-;# x.getClass()
-; parse p x.getClass()
-p = x.getClass()
+;# x.getClass().getName()
+; parse p x.getClass().getName()
+p = x.getClass().getName()
 ; esc_name p
 \typeof(x)
 ; simplify_name p
 (typeof |x|)
-;# x[].getClass()
-; parse p x[].getClass()
-p = x[].getClass()
+;# x[].getClass().getName()
+; parse p x[].getClass().getName()
+p = x[].getClass().getName()
 ; quantify_esc_name p
 (\forall int i; (0 <= i && i <= x.length-1) ==> 
 	\typeof(x[i])
@@ -71,18 +71,18 @@ p = this.field.again[]
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |again| (select |field| |this|))) 1))) 
 	(select (select elems (select |again| (select |field| |this|))) |i|)
 ))
-;# this.field.getClass()
-; parse p this.field.getClass()
-p = this.field.getClass()
+;# this.field.getClass().getName()
+; parse p this.field.getClass().getName()
+p = this.field.getClass().getName()
 ; esc_name p
 \typeof(this.field)
 ; simplify_name p
 (typeof (select |field| |this|))
 ; postPreConverter p
-p = post(this).field.getClass()
-;# this.field[].getClass()
-; parse p this.field[].getClass()
-p = this.field[].getClass()
+p = post(this).field.getClass().getName()
+;# this.field[].getClass().getName()
+; parse p this.field[].getClass().getName()
+p = this.field[].getClass().getName()
 ; quantify_esc_name p
 (\forall int i; (0 <= i && i <= this.field.length-1) ==> 
 	\typeof(this.field[i])
