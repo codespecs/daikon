@@ -1500,6 +1500,7 @@ public final class FileIO {
                                     data_trace_state.vt,
                                     data_trace_state.nonce);
         } catch (Error e) {
+          //e.printStackTrace();
           if (! dkconfig_continue_after_file_exception) {
             throw new Daikon.TerminationMessage (e, data_trace_state);
           } else {

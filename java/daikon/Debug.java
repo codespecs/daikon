@@ -700,7 +700,7 @@ public final class Debug {
         continue;
       if (v.file_rep_type != ProglangType.INT)
         continue;
-      out += v.name() + "=" + toString (v.getValue(vt))
+      out += v.name() + "=" + toString (v.getValueOrNull(vt))
         + " [" + vt.getModified(v) + "]: ";
     }
     return out;
