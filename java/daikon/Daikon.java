@@ -394,10 +394,7 @@ public final class Daikon {
       "  Each file is a declaration file or a data trace file; the file type",
       "  is determined by the file name (containing \".decls\" or \".dtrace\").",
       "  For a list of flags, see the Daikon manual, which appears in the ",
-      "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.",
-      "  --"+server_SWITCH+" dir",
-      "  Server mode for Daikon in which it reads files from <dir> as they appear",
-      "  (sorted lexicographically) until it finds a file ending in '.end'"
+      "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/."
       );
 
   /**
