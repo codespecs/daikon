@@ -369,7 +369,7 @@ Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=@var{daikonparent}/daikon
 # The full pathname of the directory that contains the Java JDK
-export JAVA_HOME=/usr/lib/jvm/java
+export JAVA_HOME=/usr/lib/jvm/default-java
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
