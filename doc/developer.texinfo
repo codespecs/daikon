@@ -272,6 +272,8 @@ at @uref{http://cygwin.com/install.html}.
 The Daikon Mercurial repository is located on the Google Code site;
 see @w{@uref{http://code.google.com/p/daikon/}.}
 
+@xref{Compiling Daikon}, for instructions for compiling Daikon.
+
 
 @node    Using Eclipse
 @section Using Eclipse
