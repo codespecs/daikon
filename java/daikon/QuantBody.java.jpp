@@ -1781,32 +1781,38 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * COLLECT_TYPE accepts an object and a list of fields (one of which is
    * of array type, and the rest of which are not), and produces an array in
    * which the original object has had the given fields accessed.
+   * <p>
    *
    * Daikon creates invariants over "variables" such as the following.
    *
-   * x.arr[].z   The result of collecting all elements y.z for all y's
-   *             in array x.arr.
-   * arr[].y.z   The result of collecting all elements x.y.z for all x's
-   *             in array arr.
-   * x.y.z[]     The result of collecting all elements in array x.y.z[]
+   * <dl>
+   * <dt>x.arr[].z</dt> <dd>The result of collecting all elements y.z
+   *              for all y's in array x.arr.</dd>
+   * <dt>arr[].y.z</dt> <dd>The result of collecting all elements x.y.z
+   *              for all x's in array arr.</dd>
+   * <dt>x.y.z[]</dt>   <dd>The result of collecting all elements in array x.y.z[]</dd>
+   * </dl>
    *
    * The COLLECT_TYPE() method does this collecting work.
+   * <p>
    *
    * Given an object (x, arr, or x, correspondingly, in the above examples)
    * and a "field string" (arr.z, y.z, or y.z, correspondingly, in the
-   * above example), the collect method collects the elements the result
+   * above example), the collect method collects the elements that result
    * from following the fields, one of which is assumed to be an array.
+   * <p>
    *
    * requires: fieldStr.length() &gt; 0 and object != null
+   * <p>
    * requires: fieldStr contains only field names, no "[]" strings.
-   *
+   * <p>
    * requires: the method only works for field sequences with exactly
    * one field representing an array. For example, the collection
    * a[].b[].c will fail.
-   *
-   * If the resulting collection is of non-primitive type, then collect
+   * <p>
+   * 
+   * @return If the resulting collection is of non-primitive type, then
    * returns an array of type Object[].
-   *
    * Returns null if any array or field access causes an exception.
    */
   @SuppressWarnings("interning") // reflection
@@ -1824,13 +1830,13 @@ The "defined(INT)" test ensures that it only appears once in the output.
 
   @SuppressWarnings("interning") // reflection
   /** Helper method for COLLECT_TYPE(Object, String).
-   * Operates on the fields specified in fields[fieldsStartIdx..].
+   * Operates on a subset of the fields: those in fields[fieldsStartIdx..].
    * @see COLLECT_TYPE(Object, String)
    */
+  // @PolyNull does not work for return type, because null is returned on error.
   /*@SideEffectFree*/ private static _TYPE_NAME /*@Nullable*/ [] COLLECT_TYPE (/*@Nullable*/ Object object,
                                                    String[] fields, int fieldsStartIdx) {
 
-    // @PolyNull does not work for return type, because null is returned elsewhere.
     if (object == null) { return null; }
     assert (fields != null);
     assert (fieldsStartIdx >= 0 && fieldsStartIdx < fields.length);
@@ -1930,9 +1936,14 @@ The "defined(INT)" test ensures that it only appears once in the output.
     }
   }
 
-  // Returns the results of dereferencing the fields specified in
-  // fields[fieldsStartIdx..] for 'object'.
-  // Returns a default value if any field access causes an exception.
+  /**
+   * Returns the results of dereferencing the fields for 'object'.
+   * For example, the call
+   *   <code>COLLECT_TYPE_FIELD(x, "f.g.h")</code>
+   * has the same value as
+   *   <code>x.f.g.h</code>.
+   * Returns a default value if any field access causes an exception.
+   */
   @SuppressWarnings("interning") // reflection
   /*@SideEffectFree*/ public static BAD_VALUE_QUALIFIER _TYPE_NAME COLLECT_TYPE_FIELD (Object object, String fieldStr) {
 
