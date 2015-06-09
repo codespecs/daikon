@@ -219,22 +219,20 @@ you may send mail to the list asking to be added.
 Shortcut for the impatient:  skip directly to the installation instructions
 for @ref{Unix/Linux/MacOSX installation}, or @ref{Windows installation}.
 
-There are two main ways to install Daikon.
-@xref{Complete installation}, for a complete
+There are three ways to install Daikon.
+@itemize @bullet
+@item @xref{Complete installation}, for a complete
 installation, in 4 easy steps, that permits you to use all of the
 functionality in the Daikon distribution.
-@xref{Simple installation},
-for an even simpler 2-step installation process that is adequate for the needs
-of many users.
-
-Use the complete installation instructions
-if you wish to detect invariants in C or Perl
-programs, if you wish to run certain other programs distributed with
-Daikon in its @file{scripts/} directory, or if you wish to edit and
-recompile the source code of Daikon itself.
-Use the simple installation instructions if you only wish to detect
+@item @xref{Simple installation},
+for an even simpler 2-step installation process.
+The simple installation instructions are adequate if you only wish to detect
 invariants in Java programs, and you don't want to set any environment
-variables in your startup file.
+variables in your startup file nor run any additional programs distributed
+with Daikon such as DynComp.
+@item @xref{Version control repository,,,developer,Daikon Developer Manual},
+to obtain the latest Daikon source code from its version control repository.
+@end itemize
 
 Differences from previous versions of Daikon appear
 in the file @file{doc/CHANGES} in the distribution.
@@ -7680,7 +7678,8 @@ Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
 @end example
 
 @noindent
-then you have not put @file{daikon.jar} on your classpath; @pxref{Simple installation}.
+then you have not put @file{daikon.jar} on your classpath;
+@pxref{Installing Daikon}.
 
 More generally, an error such as
 @example
