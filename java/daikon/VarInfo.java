@@ -2997,11 +2997,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     case FIELD:
       assert relative_name != null : this;
 
-      if (isStatic(str_name, enclosing_var.name()))
-        return str_name;
-
-      if (enclosing_var != null)
+      if (enclosing_var != null) {
+        if (isStatic(str_name, enclosing_var.name()))
+          return str_name;
         return enclosing_var.csharp_name(index) + "." + relative_name;
+      }  
 
       return str_name;
 
