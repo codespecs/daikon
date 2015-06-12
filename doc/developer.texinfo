@@ -3196,7 +3196,7 @@ variable block.
 @item @code{rep-type <daikon-type>}
 
 This describes what will appear in the data
-trace file.  For instance, the declared type might be @code{char[]} but
+trace file.  For instance, the declared type might be @code{char[..]} but
 the representation type might be @code{java.lang.String}.  Or, the declared
 type might be @code{Object} but the representation type might be
 @code{hashcode}, if the address of the object is written to the data trace
@@ -3208,7 +3208,7 @@ variable block.
 
 The representation type should be one of @code{boolean}, @code{int},
 @code{hashcode}, @code{double}, or @code{java.lang.String}; or an
-array of one of those (indicated by a @code{[]} suffix, as in Java).
+array of one of those (indicated by a @code{[..]} suffix).
 
 @code{hashcode} is intended for unique object identifiers like memory
 addresses (pointers) or the return value of Java's
@@ -3584,174 +3584,225 @@ the @file{StackAr.java} program
 
 @smallexample
 ppt DataStructures.StackAr.push(java.lang.Object):::ENTER
-  ppt-type enter
-  parent parent DataStructures.StackAr:::OBJECT 1
-  variable this
-    var-kind variable 
-    dec-type DataStructures.StackAr
-    rep-type hashcode
-    flags is_param
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable this.theArray
-    var-kind field theArray
-    enclosing-var this
-    dec-type java.lang.Object[]
-    rep-type hashcode
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable this.theArray.getClass()
-    var-kind function getClass()
-    enclosing-var this.theArray
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    flags synthetic classname
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable this.theArray[..]
-    var-kind array 
-    enclosing-var this.theArray
-    array 1
-    dec-type java.lang.Object[]
-    rep-type hashcode[]
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable this.theArray[..].getClass()
-    var-kind function getClass()
-    enclosing-var this.theArray[..]
-    array 1
-    dec-type java.lang.Class[]
-    rep-type java.lang.String[]
-    flags synthetic classname
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable this.topOfStack
-    var-kind field topOfStack
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable x
-    var-kind variable 
-    dec-type java.lang.Object
-    rep-type hashcode
-    flags is_param
-    comparability 22
-  variable x.getClass()
-    var-kind function getClass()
-    enclosing-var x
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    flags synthetic classname
-    comparability 22
+ppt-type enter
+parent parent DataStructures.StackAr:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable this.theArray
+  var-kind field theArray
+  enclosing-var this
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.theArray
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags nomod synthetic classname
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable this.theArray[..]
+  var-kind array 
+  enclosing-var this.theArray
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.theArray[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags nomod synthetic classname
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable this.topOfStack
+  var-kind field topOfStack
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable DataStructures.StackAr.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable x
+  var-kind variable 
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var x
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags nomod synthetic classname
+  comparability 22
 
-ppt DataStructures.StackAr.push(java.lang.Object):::EXIT99
-  ppt-type subexit
-  parent parent DataStructures.StackAr:::OBJECT 1
-  variable this
-    var-kind variable 
-    dec-type DataStructures.StackAr
-    rep-type hashcode
-    flags is_param
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable this.theArray
-    var-kind field theArray
-    enclosing-var this
-    dec-type java.lang.Object[]
-    rep-type hashcode
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable this.theArray.getClass()
-    var-kind function getClass()
-    enclosing-var this.theArray
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    flags synthetic classname
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable this.theArray[..]
-    var-kind array 
-    enclosing-var this.theArray
-    array 1
-    dec-type java.lang.Object[]
-    rep-type hashcode[]
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable this.theArray[..].getClass()
-    var-kind function getClass()
-    enclosing-var this.theArray[..]
-    array 1
-    dec-type java.lang.Class[]
-    rep-type java.lang.String[]
-    flags synthetic classname
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable this.topOfStack
-    var-kind field topOfStack
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
-    parent DataStructures.StackAr:::OBJECT 1
-  variable x
-    var-kind variable 
-    dec-type java.lang.Object
-    rep-type hashcode
-    flags is_param
-    comparability 22
-  variable x.getClass()
-    var-kind function getClass()
-    enclosing-var x
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    flags synthetic classname
-    comparability 22
+ppt DataStructures.StackAr.push(java.lang.Object):::EXIT103
+ppt-type subexit
+parent parent DataStructures.StackAr:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable this.theArray
+  var-kind field theArray
+  enclosing-var this
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.theArray
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags nomod synthetic classname
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable this.theArray[..]
+  var-kind array 
+  enclosing-var this.theArray
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.theArray[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags nomod synthetic classname
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable this.topOfStack
+  var-kind field topOfStack
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable DataStructures.StackAr.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent DataStructures.StackAr:::OBJECT 1
+variable x
+  var-kind variable 
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var x
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags nomod synthetic classname
+  comparability 22
+
+ppt DataStructures.StackAr:::CLASS
+ppt-type class
+variable DataStructures.StackAr.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
 
 ppt DataStructures.StackAr:::OBJECT
-  ppt-type object
-  variable this
-    var-kind variable 
-    dec-type DataStructures.StackAr
-    rep-type hashcode
-    flags is_param
-    comparability 22
-  variable this.theArray
-    var-kind field theArray
-    enclosing-var this
-    dec-type java.lang.Object[]
-    rep-type hashcode
-    comparability 22
-  variable this.theArray.getClass()
-    var-kind function getClass()
-    enclosing-var this.theArray
-    dec-type java.lang.Class
-    rep-type java.lang.String
-    flags synthetic classname
-    comparability 22
-  variable this.theArray[..]
-    var-kind array 
-    enclosing-var this.theArray
-    array 1
-    dec-type java.lang.Object[]
-    rep-type hashcode[]
-    comparability 22
-  variable this.theArray[..].getClass()
-    var-kind function getClass()
-    enclosing-var this.theArray[..]
-    array 1
-    dec-type java.lang.Class[]
-    rep-type java.lang.String[]
-    flags synthetic classname
-    comparability 22
-  variable this.topOfStack
-    var-kind field topOfStack
-    enclosing-var this
-    dec-type int
-    rep-type int
-    comparability 22
-
+ppt-type object
+parent parent DataStructures.StackAr:::CLASS 1
+variable this
+  var-kind variable 
+  dec-type DataStructures.StackAr
+  rep-type hashcode
+  flags is_param nomod
+  comparability 22
+variable this.theArray
+  var-kind field theArray
+  enclosing-var this
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags nomod
+  comparability 22
+variable this.theArray.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.theArray
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.theArray
+  flags nomod synthetic classname
+  comparability 22
+variable this.theArray[..]
+  var-kind array 
+  enclosing-var this.theArray
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  flags nomod
+  comparability 22
+variable this.theArray[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this.theArray[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.theArray[]
+  flags nomod synthetic classname
+  comparability 22
+variable this.topOfStack
+  var-kind field topOfStack
+  enclosing-var this
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 22
+variable DataStructures.StackAr.DEFAULT_CAPACITY
+  var-kind variable 
+  dec-type int
+  rep-type int
+  constant 10
+  flags nomod
+  comparability 22
+  parent DataStructures.StackAr:::CLASS 1
 @end smallexample
 
 
@@ -3769,139 +3820,129 @@ by ellipses.
 
 
 @smallexample
+
 ...
 
-StackAr.push(java.lang.Object):::ENTER
+DataStructures.StackAr.push(java.lang.Object):::ENTER
 this_invocation_nonce
-55
-x
-1217030
-1
-x.getClass()
-"DataStructures.MyInteger"
+104
+this
+812272602
 1
 this.theArray
-3852104
+312077835
 1
-this.theArray.getClass()
+this.theArray.getClass().getName()
 "java.lang.Object[]"
 1
-this.theArray[]
+this.theArray[..]
 [null]
 1
-this.theArray[].getClass()
+this.theArray[..].getClass().getName()
 [null]
 1
 this.topOfStack
 -1
 1
-
-StackAr:::OBJECT
-this.theArray
-3852104
+x
+1367164551
 1
-this.theArray.getClass()
-"java.lang.Object[]"
-1
-this.theArray[]
-[null]
-1
-this.theArray[].getClass()
-[null]
-1
-this.topOfStack
--1
+x.getClass().getName()
+"DataStructures.MyInteger"
 1
 
 ...
 
-StackAr.push(java.lang.Object):::EXIT96
+DataStructures.StackAr.push(java.lang.Object):::EXIT103
 this_invocation_nonce
-55
-x
-1217030
-1
-x.getClass()
-"DataStructures.MyInteger"
+104
+this
+812272602
 1
 this.theArray
-3852104
+312077835
 1
-this.theArray.getClass()
+this.theArray.getClass().getName()
 "java.lang.Object[]"
 1
-this.theArray[]
-[1217030]
+this.theArray[..]
+[1367164551]
 1
-this.theArray[].getClass()
+this.theArray[..].getClass().getName()
 ["DataStructures.MyInteger"]
 1
 this.topOfStack
 0
 1
-
-StackAr:::OBJECT
-this.theArray
-3852104
+x
+1367164551
 1
-this.theArray.getClass()
+x.getClass().getName()
+"DataStructures.MyInteger"
+1
+
+...
+
+DataStructures.StackAr.push(java.lang.Object):::ENTER
+this_invocation_nonce
+159
+this
+2007069404
+1
+this.theArray
+142345952
+1
+this.theArray.getClass().getName()
 "java.lang.Object[]"
 1
-this.theArray[]
-[1217030]
+this.theArray[..]
+[null]
 1
-this.theArray[].getClass()
+this.theArray[..].getClass().getName()
+[null]
+1
+this.topOfStack
+-1
+1
+x
+111632506
+1
+x.getClass().getName()
+"DataStructures.MyInteger"
+1
+
+...
+
+DataStructures.StackAr.push(java.lang.Object):::EXIT103
+this_invocation_nonce
+159
+this
+2007069404
+1
+this.theArray
+142345952
+1
+this.theArray.getClass().getName()
+"java.lang.Object[]"
+1
+this.theArray[..]
+[111632506]
+1
+this.theArray[..].getClass().getName()
 ["DataStructures.MyInteger"]
 1
 this.topOfStack
 0
 1
-
-...
-
-StackAr.push(java.lang.Object):::ENTER
-this_invocation_nonce
-94
 x
-1482257
+111632506
 1
-x.getClass()
-"DataStructures.StackAr"
-1
-this.theArray
-350965
-1
-this.theArray.getClass()
-"java.lang.Object[]"
-1
-this.theArray[]
-[null]
-1
-this.theArray[].getClass()
-[null]
-1
-this.topOfStack
--1
-1
-
-StackAr:::OBJECT
-this.theArray
-350965
-1
-this.theArray.getClass()
-"java.lang.Object[]"
-1
-this.theArray[]
-[null]
-1
-this.theArray[].getClass()
-[null]
-1
-this.topOfStack
--1
+x.getClass().getName()
+"DataStructures.MyInteger"
 1
 
 ...
+
 @end smallexample
 
 

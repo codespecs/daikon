@@ -2078,7 +2078,7 @@ public final class DCRuntime {
 
     // Initial comparability values
     int class_comp = 1;
-    int comp = 2;
+    int base_comp = 2;
 
     // Loop through each set of comparable variables
     for (DVSet set : sets) {
@@ -2115,23 +2115,23 @@ public final class DCRuntime {
         if (dv instanceof DaikonClassInfo) {
           dv_comp_map.put (dv, class_comp);
           assert set.size() == 1 : "odd set " + set;
-          comp--;   // negate increment of comp below
+          base_comp--;   // negate increment of base_comp below
         } else if (dv.isHashcode() && non_hashcode_vars) {
-          assert !dv_comp_map.containsKey (dv) : dv + " " + comp;
-          dv_comp_map.put (dv, comp+1);
+          assert !dv_comp_map.containsKey (dv) : dv + " " + base_comp;
+          dv_comp_map.put (dv, base_comp+1);
           DaikonVariableInfo array_child = dv.array_child();
           if (array_child != null)
-            arr_index_map.put (array_child.getName(), comp);
+            arr_index_map.put (array_child.getName(), base_comp);
         } else {
-          assert !dv_comp_map.containsKey (dv) : dv + " " + comp;
-          dv_comp_map.put (dv, comp);
+          assert !dv_comp_map.containsKey (dv) : dv + " " + base_comp;
+          dv_comp_map.put (dv, base_comp);
         }
       }
 
       // Increment the comparability number to the next valid number
-      comp++;
+      base_comp++;
       if (hashcode_vars && non_hashcode_vars)
-        comp++;
+        base_comp++;
     }
 
     time_decl.log_time ("finished filling maps%n");
@@ -2151,13 +2151,23 @@ public final class DCRuntime {
       ps.println(dv.getName());
       ps.println (dv.getTypeName());
       ps.println (dv.getRepTypeName());
-      comp = dv_comp_map.get (dv);
+      int comp = dv_comp_map.get (dv);
       if (dv.isArray()) {
-        Integer index_comp = arr_index_map.get (dv.getName());
+        String name = dv.getName();  
+        // If we an array of CLASSNAME or TO_STRING get the index
+        // comparability from the base array.
+        if (name.endsWith(DaikonVariableInfo.class_suffix)) {
+          name = name.substring(0, name.length() - DaikonVariableInfo.class_suffix.length());
+        } else if (name.endsWith(".toString")) {
+          name = name.substring(0, name.length() - ".toString".length());
+        }
+        Integer index_comp = arr_index_map.get (name);
+        // System.out.printf ("array dv: %s, index_comp: %s%n", dv.getName(), index_comp);
         if (index_comp != null) {
           ps.println (comp + "[" + index_comp + "]");
         } else
-          ps.println (comp);
+          // There is no index comparability, so just set it to a unique value.
+          ps.println (comp + "[" + base_comp++ + "]");
       } else
         ps.println (comp);
     }
