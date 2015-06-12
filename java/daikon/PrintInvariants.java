@@ -127,7 +127,7 @@ public final class PrintInvariants {
   public static boolean dkconfig_remove_post_vars = false;
 
   /**
-   * In the new decl format, print array names without as 'a[]' as
+   * In the new decl format, print array names as 'a[]' as
    * opposed to 'a[..]'  This creates names that are more compatible
    * with the old output.  This option has no effect in the old decl
    * format.
