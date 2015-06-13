@@ -3305,15 +3305,17 @@ end).  Daikon uses this information to suppress obvious invariants.
 
 The @var{comparability-key} indicates which other variables are
 comparable to this one.  The information specified here might have been
-obtained dynamically, via
-type-inference based analysis, or in some other manner.
+obtained dynamically, or via
+type-inference-based static analysis, or in some other manner.
 
 A comparability for a non-array type is a signed integer.  Two
 variables at the same program point are considered comparable if both
 integers are the same, or if either integer is negative (that is, a
 negative number means ``comparable to every other variable'').  A
-comparability for an array type must contain an integer for each index
-and for the contents; for instance, @samp{5[22][17]} for a
+comparability for an array type contains an integer for each index
+and for the contents; for instance, @samp{8[5]} means that the array
+elements have comparability @samp{8} and the array indices have
+comparability @samp{5}.  Similarly, @samp{5[22][17]} is a comparability for a
 two-dimensional array.  An array comparison succeeds if comparisons over each
 component succeed.
 
