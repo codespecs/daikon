@@ -18,11 +18,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-4
+4[5]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[6]
 
 
 DECLARE
@@ -41,11 +41,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-4
+4[5]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[6]
 
 
 DECLARE
@@ -61,11 +61,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-4
+4[5]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[6]
 
 DECLARE
 PolyCalc.RatTermVec.size():::EXIT30
@@ -80,11 +80,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-5
+5[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 return
 int
 int
@@ -104,11 +104,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-5
+5[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 index
 int # isParam=true
 int
@@ -127,11 +127,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-3
+3[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 index
 int # isParam=true
 int
@@ -155,11 +155,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-2
+2[5]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[6]
 t
 PolyCalc.RatTerm # isParam=true
 hashcode
@@ -178,11 +178,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-2
+2[5]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[6]
 t
 PolyCalc.RatTerm # isParam=true
 hashcode
@@ -202,11 +202,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-3
+3[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 t
 PolyCalc.RatTerm # isParam=true
 hashcode
@@ -229,11 +229,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-3
+3[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 t
 PolyCalc.RatTerm # isParam=true
 hashcode
@@ -257,11 +257,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-5
+5[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 index
 int # isParam=true
 int
@@ -280,11 +280,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-5
+5[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 index
 int # isParam=true
 int
@@ -304,11 +304,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-3
+3[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 t
 PolyCalc.RatTerm # isParam=true
 hashcode
@@ -331,11 +331,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-3
+3[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 t
 PolyCalc.RatTerm # isParam=true
 hashcode
@@ -359,11 +359,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-4
+4[5]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[6]
 
 DECLARE
 PolyCalc.RatTermVec.copy():::EXIT100
@@ -378,11 +378,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-4
+4[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 return
 PolyCalc.RatTermVec
 hashcode
@@ -394,11 +394,11 @@ hashcode
 return.wrapped[..]
 java.util.ArrayList
 hashcode[]
-4
+4[8]
 return.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 
 
 DECLARE
@@ -414,11 +414,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-4
+4[5]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[6]
 
 DECLARE
 PolyCalc.RatTermVec.printDebug():::EXIT105
@@ -433,11 +433,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-6
+6[7]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 return
 java.lang.String
 hashcode
@@ -461,11 +461,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-5
+5[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 obj
 java.lang.Object # isParam=true
 hashcode
@@ -488,11 +488,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-6
+6[7]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 obj
 java.lang.Object # isParam=true
 hashcode
@@ -520,11 +520,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-5
+5[6]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 obj
 java.lang.Object # isParam=true
 hashcode
@@ -547,11 +547,11 @@ hashcode
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
-6
+6[7]
 this.wrapped[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 obj
 java.lang.Object # isParam=true
 hashcode

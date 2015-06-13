@@ -42,11 +42,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-5
+5[7]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 
 
 DECLARE
@@ -101,11 +101,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-5
+5[7]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 a
 int # isParam=true
 int
@@ -157,11 +157,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-5
+5[7]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 
 DECLARE
 misc.Smithnosky.incA():::EXIT29
@@ -200,11 +200,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-5
+5[7]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 
 
 DECLARE
@@ -244,11 +244,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-5
+5[7]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 
 DECLARE
 misc.Smithnosky.incB():::EXIT34
@@ -287,11 +287,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-5
+5[7]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 
 
 DECLARE
@@ -331,11 +331,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-5
+5[7]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 
 DECLARE
 misc.Smithnosky.incC():::EXIT39
@@ -374,11 +374,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-5
+5[7]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 
 
 DECLARE
@@ -418,11 +418,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-2
+2[7]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 o
 java.lang.Object # isParam=true
 hashcode
@@ -469,11 +469,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-2
+2[7]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 o
 java.lang.Object # isParam=true
 hashcode
@@ -497,11 +497,11 @@ java.lang.String
 args[..]
 java.lang.String[]
 hashcode[]
-3
+3[5]
 args[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[6]
 
 DECLARE
 misc.Smithnosky.main(java.lang.String[]):::EXIT59
@@ -516,11 +516,11 @@ java.lang.String
 args[..]
 java.lang.String[]
 hashcode[]
-3
+3[5]
 args[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[6]
 
 
 DECLARE
@@ -560,11 +560,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-6
+6[8]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 obj
 java.lang.Object # isParam=true
 hashcode
@@ -611,11 +611,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-7
+7[9]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 obj
 java.lang.Object # isParam=true
 hashcode
@@ -667,11 +667,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-6
+6[8]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 obj
 java.lang.Object # isParam=true
 hashcode
@@ -718,11 +718,11 @@ hashcode
 this.s[..]
 java.util.Vector
 hashcode[]
-7
+7[9]
 this.s[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 obj
 java.lang.Object # isParam=true
 hashcode

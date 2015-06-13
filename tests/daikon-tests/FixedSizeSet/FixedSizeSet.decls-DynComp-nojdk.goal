@@ -18,7 +18,7 @@ hashcode
 this.bits[..]
 boolean[]
 boolean[]
-4
+4[5]
 
 
 DECLARE
@@ -37,7 +37,7 @@ hashcode
 this.bits[..]
 boolean[]
 boolean[]
-4
+4[5]
 
 
 DECLARE
@@ -174,7 +174,7 @@ hashcode
 this.bits[..]
 boolean[]
 boolean[]
-6
+6[7]
 other
 six170.FixedSizeSet # isParam=true
 hashcode
@@ -186,7 +186,7 @@ hashcode
 other.bits[..]
 boolean[]
 boolean[]
-4
+4[8]
 
 DECLARE
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT62
@@ -201,7 +201,7 @@ hashcode
 this.bits[..]
 boolean[]
 boolean[]
-6
+6[7]
 other
 six170.FixedSizeSet # isParam=true
 hashcode
@@ -213,7 +213,7 @@ hashcode
 other.bits[..]
 boolean[]
 boolean[]
-4
+4[8]
 
 
 DECLARE
@@ -229,7 +229,7 @@ hashcode
 this.bits[..]
 boolean[]
 boolean[]
-6
+6[7]
 other
 six170.FixedSizeSet # isParam=true
 hashcode
@@ -241,7 +241,7 @@ hashcode
 other.bits[..]
 boolean[]
 boolean[]
-4
+4[8]
 
 DECLARE
 six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT74
@@ -256,7 +256,7 @@ hashcode
 this.bits[..]
 boolean[]
 boolean[]
-6
+6[7]
 other
 six170.FixedSizeSet # isParam=true
 hashcode
@@ -268,7 +268,7 @@ hashcode
 other.bits[..]
 boolean[]
 boolean[]
-4
+4[8]
 
 
 DECLARE
@@ -284,7 +284,7 @@ hashcode
 this.bits[..]
 boolean[]
 boolean[]
-5
+5[6]
 obj
 java.lang.Object # isParam=true
 hashcode
@@ -307,7 +307,7 @@ hashcode
 this.bits[..]
 boolean[]
 boolean[]
-6
+6[7]
 obj
 java.lang.Object # isParam=true
 hashcode
@@ -335,7 +335,7 @@ hashcode
 this.bits[..]
 boolean[]
 boolean[]
-5
+5[6]
 obj
 java.lang.Object # isParam=true
 hashcode
@@ -358,7 +358,7 @@ hashcode
 this.bits[..]
 boolean[]
 boolean[]
-6
+6[7]
 obj
 java.lang.Object # isParam=true
 hashcode

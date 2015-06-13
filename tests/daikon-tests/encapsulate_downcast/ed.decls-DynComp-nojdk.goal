@@ -97,11 +97,11 @@ hashcode
 list[..]
 java.util.Vector
 hashcode[]
-3
+3[8]
 list[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 
 DECLARE
 misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT34
@@ -128,11 +128,11 @@ hashcode
 list[..]
 java.util.Vector
 hashcode[]
-3
+3[8]
 list[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 
 
 DECLARE
@@ -164,11 +164,11 @@ java.lang.String
 argv[..]
 java.lang.String[]
 hashcode[]
-3
+3[9]
 argv[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[10]
 
 DECLARE
 misc.EncapsulateDowncast.main(java.lang.String[]):::EXIT52
@@ -199,11 +199,11 @@ java.lang.String
 argv[..]
 java.lang.String[]
 hashcode[]
-3
+3[9]
 argv[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[10]
 
 
 DECLARE

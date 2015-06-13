@@ -19,19 +19,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[7]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[9]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -62,19 +62,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -98,19 +98,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[7]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[9]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -133,19 +133,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[7]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[9]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -173,19 +173,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[7]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[9]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -212,19 +212,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[7]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[9]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -263,19 +263,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -307,19 +307,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -350,19 +350,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[11]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -398,19 +398,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -441,19 +441,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -485,19 +485,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -528,19 +528,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[11]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -580,19 +580,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -623,19 +623,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[11]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -675,19 +675,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[11]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -734,19 +734,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[11]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -794,19 +794,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -845,19 +845,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[11]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -905,19 +905,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -956,19 +956,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[11]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -1016,19 +1016,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -1067,19 +1067,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -1111,19 +1111,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -1154,19 +1154,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[8]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[10]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -1206,19 +1206,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[11]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -1257,19 +1257,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[10]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[11]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[12]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -1313,19 +1313,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[9]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[11]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int
@@ -1364,19 +1364,19 @@ hashcode[]
 DataStructures.CursorList.cursorSpace[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 DataStructures.CursorList.cursorSpace[..].element
 java.lang.Object[] # declaringClassPackageName=DataStructures, 
 hashcode[]
-6
+6[10]
 DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[11]
 DataStructures.CursorList.cursorSpace[..].next
 int[] # declaringClassPackageName=DataStructures, 
 int[]
-3
+3[12]
 DataStructures.CursorList.SPACE_SIZE
 int # declaringClassPackageName=DataStructures, 
 int

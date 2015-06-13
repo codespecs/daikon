@@ -46,11 +46,11 @@ java.lang.String
 args[..]
 java.lang.String[]
 hashcode[]
-3
+3[5]
 args[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[6]
 
 DECLARE
 misc.Suppress01.main(java.lang.String[]):::EXIT24
@@ -65,11 +65,11 @@ java.lang.String
 args[..]
 java.lang.String[]
 hashcode[]
-3
+3[5]
 args[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[6]
 
 
 DECLARE

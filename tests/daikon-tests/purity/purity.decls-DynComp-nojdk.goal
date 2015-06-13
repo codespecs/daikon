@@ -30,11 +30,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-5
+5[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -42,11 +42,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-7
+7[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -89,11 +89,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-6
+6[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -101,11 +101,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-8
+8[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -145,11 +145,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-5
+5[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -157,11 +157,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-7
+7[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -192,11 +192,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-6
+6[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -204,11 +204,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-8
+8[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -244,11 +244,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-5
+5[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -256,11 +256,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-7
+7[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -291,11 +291,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-6
+6[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -303,11 +303,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-8
+8[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -343,11 +343,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-5
+5[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -355,11 +355,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-7
+7[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -390,11 +390,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-5
+5[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -402,11 +402,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-7
+7[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -442,11 +442,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-5
+5[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -454,11 +454,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-7
+7[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -489,11 +489,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-6
+6[10]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[11]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -501,11 +501,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-8
+8[12]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[13]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -545,11 +545,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-5
+5[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -557,11 +557,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-7
+7[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -592,11 +592,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-6
+6[10]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[11]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -604,11 +604,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-8
+8[12]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[13]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -644,11 +644,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-6
+6[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -656,11 +656,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-8
+8[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -695,11 +695,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-6
+6[9]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -707,11 +707,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-8
+8[11]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -751,11 +751,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-6
+6[10]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[11]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -763,11 +763,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-8
+8[12]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[13]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -806,11 +806,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-7
+7[10]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[11]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -818,11 +818,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-9
+9[12]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[13]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -866,11 +866,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-7
+7[11]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -878,11 +878,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-9
+9[13]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[14]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -894,11 +894,11 @@ hashcode
 l[..]
 java.util.List
 hashcode[]
-3
+3[15]
 l[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[16]
 l.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -929,11 +929,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-8
+8[12]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[13]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -941,11 +941,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-10
+10[14]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[15]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -957,11 +957,11 @@ hashcode
 l[..]
 java.util.List
 hashcode[]
-3
+3[16]
 l[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[17]
 l.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -997,11 +997,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-6
+6[10]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[11]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -1009,11 +1009,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-8
+8[12]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[13]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -1052,11 +1052,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-7
+7[11]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -1064,11 +1064,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-9
+9[13]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[14]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -1112,11 +1112,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-6
+6[10]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[11]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -1124,11 +1124,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-8
+8[12]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[13]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -1167,11 +1167,11 @@ hashcode
 this.list1[..]
 java.util.LinkedList
 hashcode[]
-7
+7[11]
 this.list1[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[12]
 this.list2
 java.util.List # declaringClassPackageName=misc, 
 hashcode
@@ -1179,11 +1179,11 @@ hashcode
 this.list2[..]
 java.util.List
 hashcode[]
-9
+9[13]
 this.list2[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[14]
 this.list2.getClass().getName()
 java.lang.Class
 java.lang.String

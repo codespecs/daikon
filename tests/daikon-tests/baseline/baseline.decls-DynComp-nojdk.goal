@@ -37,11 +37,11 @@ java.lang.String
 args[..]
 java.lang.String[]
 hashcode[]
-3
+3[5]
 args[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[6]
 
 DECLARE
 Main.main(java.lang.String[]):::EXIT10
@@ -56,11 +56,11 @@ java.lang.String
 args[..]
 java.lang.String[]
 hashcode[]
-3
+3[5]
 args[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[6]
 
 
 DECLARE
@@ -167,11 +167,11 @@ java.lang.String
 args[..]
 java.lang.String[]
 hashcode[]
-3
+3[5]
 args[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[6]
 
 DECLARE
 TestScores.main(java.lang.String[]):::EXIT9
@@ -186,11 +186,11 @@ java.lang.String
 args[..]
 java.lang.String[]
 hashcode[]
-3
+3[5]
 args[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[6]
 
 
 DECLARE
@@ -202,7 +202,7 @@ hashcode
 scores[..]
 int[]
 int[]
-3
+3[4]
 
 DECLARE
 TestScores.classAve(int[]):::EXIT17
@@ -213,7 +213,7 @@ hashcode
 scores[..]
 int[]
 int[]
-2
+2[4]
 return
 int
 int

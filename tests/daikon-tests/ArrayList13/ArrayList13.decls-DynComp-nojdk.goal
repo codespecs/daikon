@@ -22,11 +22,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-4
+4[6]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -61,7 +61,7 @@ hashcode[]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[2]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -92,11 +92,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-4
+4[6]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -131,11 +131,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -167,11 +167,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-4
+4[6]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -194,11 +194,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-4
+4[6]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -222,11 +222,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -253,11 +253,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -285,11 +285,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-4
+4[6]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -312,11 +312,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -344,11 +344,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-4
+4[6]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -371,11 +371,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -403,11 +403,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -438,11 +438,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -478,11 +478,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -513,11 +513,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -552,11 +552,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -591,11 +591,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -631,11 +631,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -666,11 +666,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -705,11 +705,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -744,11 +744,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -784,11 +784,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-4
+4[6]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -811,11 +811,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -847,11 +847,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-4
+4[6]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -874,11 +874,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -894,7 +894,7 @@ java.lang.String
 return[..]
 java.lang.Object[]
 hashcode[]
-3
+3[10]
 
 
 DECLARE
@@ -914,11 +914,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -934,7 +934,7 @@ java.lang.String
 a[..]
 java.lang.Object[]
 hashcode[]
-3
+3[10]
 
 DECLARE
 javautil.ArrayList13.toArray(java.lang.Object[]):::EXIT293
@@ -953,11 +953,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-8
+8[10]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[11]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -973,7 +973,7 @@ java.lang.String
 a[..]
 java.lang.Object[]
 hashcode[]
-3
+3[12]
 return
 java.lang.Object[]
 hashcode
@@ -985,7 +985,7 @@ java.lang.String
 return[..]
 java.lang.Object[]
 hashcode[]
-5
+5[13]
 
 
 DECLARE
@@ -1005,11 +1005,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1036,11 +1036,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1076,11 +1076,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1115,11 +1115,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-7
+7[9]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1163,11 +1163,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1198,11 +1198,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1238,11 +1238,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1277,11 +1277,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1317,11 +1317,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1348,11 +1348,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1388,11 +1388,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-4
+4[6]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1415,11 +1415,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-4
+4[6]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[7]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1443,11 +1443,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1478,11 +1478,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1518,11 +1518,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-6
+6[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1557,11 +1557,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-7
+7[9]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[10]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1601,11 +1601,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1636,11 +1636,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[8]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[9]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1672,11 +1672,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1703,11 +1703,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1735,11 +1735,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1766,11 +1766,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1798,11 +1798,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int
@@ -1829,11 +1829,11 @@ java.lang.String
 this.elementData[..]
 java.lang.Object[]
 hashcode[]
-5
+5[7]
 this.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[8]
 this.size
 int # declaringClassPackageName=javautil, 
 int

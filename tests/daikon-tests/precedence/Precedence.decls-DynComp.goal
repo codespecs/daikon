@@ -45,11 +45,11 @@ java.lang.String
 args[..]
 java.lang.String[]
 hashcode[]
-3
+3[5]
 args[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[6]
 
 DECLARE
 misc.Precedence.main(java.lang.String[]):::EXIT10
@@ -64,11 +64,11 @@ java.lang.String
 args[..]
 java.lang.String[]
 hashcode[]
-3
+3[5]
 args[..].toString
 java.lang.String[]
 java.lang.String[]
-4
+4[6]
 
 
 DECLARE

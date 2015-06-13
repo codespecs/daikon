@@ -26,7 +26,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -69,7 +69,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[2]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -109,7 +109,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -144,7 +144,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[4]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -184,7 +184,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -219,7 +219,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[4]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -259,7 +259,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -294,7 +294,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -330,7 +330,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -365,7 +365,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[4]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -408,7 +408,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[4]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -452,7 +452,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -487,7 +487,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[4]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -530,7 +530,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[4]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -574,7 +574,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -617,7 +617,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -661,7 +661,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -696,7 +696,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[3]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -732,7 +732,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[4]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -775,7 +775,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[5]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -823,7 +823,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[4]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
@@ -866,7 +866,7 @@ hashcode[]
 this.theArray[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1
+1[5]
 this.currentSize
 int # declaringClassPackageName=DataStructures, 
 int
