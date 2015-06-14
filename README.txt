@@ -6,7 +6,9 @@ website, then most everything is setup and ready to go.  See the 'doc'
 subdirectory for additional information, including installation instructions.
 You should start out with the file:
   doc/index.html
+The documentation also appears on the Daikon homepage:
+  http://plse.cs.washington.edu/daikon/
 
-However, if you are working with source cloned from the Google Code
-repository https://code.google.com/p/daikon/, then please review the file
+If you are working with source cloned from the source code repository
+https://github.com/codespecs/daikon, then please review the file
 README.source.
