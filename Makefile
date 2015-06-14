@@ -106,7 +106,7 @@ DIST_DIR := $(WWW_DIR)/download
 # the following is only used in show-vars 
 DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
 
-REPOSITORY := https://code.google.com/p/daikon
+REPOSITORY := https://github.com/codespecs/daikon.git
 
 ## These seem to be used only by the test-staged-dist target.
 # It would be nicer to automatically set JAVA_HOME, or to not need it to be set.
@@ -118,13 +118,7 @@ TOOLSJAR := $(JAVA_HOME)/lib/tools.jar
 
 RSYNC_AR := rsync -aR
 
-# A good alternative for Makefile.user is: hg fetch
-# When disconnected from network, change this to a no-op, or (better) just
-# set NONETWORK to true.
-# HG_PULL_U ?= hg pull -u
-HG_PULL_U ?= hg pull; hg merge --tool internal:merge; hg update
-# Example Makefile.user line, on cygwin: HG_OPTIONS=--insecure
-HG_OPTIONS ?=
+GIT_OPTIONS ?=
 
 # JUNIT_VERSION := junit3.8.1
 
@@ -200,7 +194,7 @@ VALGRIND_ARCH := x86
 endif
 
 ../fjalar/auto-everything.sh:
-	cd .. && hg clone ${HG_OPTIONS} https://code.google.com/p/fjalar/ fjalar
+	cd .. && git clone ${GIT_OPTIONS} https://github.com/codespecs/fjalar.git fjalar
 	touch $@
 
 fjalar/valgrind/Makefile.am: ../fjalar/auto-everything.sh
@@ -322,7 +316,7 @@ repository-test:
 	-rm -rf $(MYTESTDIR)
 	mkdir -p $(MYTESTDIR)
 	cd $(MYTESTDIR)
-	hg clone -q $(REPOSITORY) daikon
+	git clone $(REPOSITORY) daikon
 # vars for Daikon
 	export DAIKONDIR=${MYTESTDIR}/daikon
 	export JAVA_HOME=/usr/lib/jvm/java
@@ -586,8 +580,8 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# Kvasir C front end
 # We use the --filter option twice with rsync to exclude unneeded files.
 # The first attempts to ignore all files indicated by the contents
-# of the .hgignore file.  The second ignores the .hg files.
-	rsync -rp -L --filter=':- .hgignore' --filter='. rsync.ignore' fjalar ${TMPDIR}/daikon
+# of the .gitignore file.  The second ignores the version control files.
+	rsync -rp -L --filter=':- .gitignore' --filter='. rsync.ignore' fjalar ${TMPDIR}/daikon
 
 	@# Internal developer documentation
 	rm -rf ${TMPDIR}/daikon/fjalar/valgrind/fjalar/notes
@@ -634,7 +628,6 @@ showvars:
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
-#	hg clone ${HG_OPTIONS} https://code.google.com/p/plume-lib/ plume-lib
 	git clone ${GIT_OPTIONS} https://github.com/mernst/plume-lib.git plume-lib
 
 .PHONY: plume-lib-update

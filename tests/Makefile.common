@@ -145,7 +145,7 @@ ifdef ESC_ON
 endif
 
 
-# DAIKONDIR is where the 'daikon' project is checked out from Mercurial
+# DAIKONDIR is where the 'daikon' project is cloned
 DAIKONDIR?=${DAIKONDIR}
 DAIKONDIR?=$(HOME)/research/invariants
 # Test that the directory exists.  There must be a better way to do this.

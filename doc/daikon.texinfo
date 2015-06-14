@@ -5946,7 +5946,7 @@ You will need to make a clone of Fjalar's version control repository, named
 @example
 cd $DAIKONDIR
 cd ..
-hg clone https://code.google.com/p/fjalar/
+git clone https://github.com/codespecs/fjalar.git
 @end example
 
 You may now build Fjalar (which includes Kvasir).  The following commands build

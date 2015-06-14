@@ -20,6 +20,18 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.8 (July 1, 2015)
+
+The Daikon and Fjalar version control repositories have moved from Google
+Code to GitHub, and from the Mercurial version control system to Git.  You
+should not use any old clone of the Mercurial repositories.  You can obtain
+the new version control repositories by running:
+
+  git clone https://github.com/codespecs/daikon.git
+  git clone https://github.com/codespecs/fjalar.git
+
+===========================================================================
+
 5.2.6 (June 2, 2015)
 
 Daikon:

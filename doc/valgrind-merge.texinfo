@@ -101,13 +101,13 @@ target of the last upgrade.)
 
 (You may skip this step if you already have local clones of these repositories.)
 
-Clone a copy of Daikon and Fjalar from our Google Code Mercurial
+Clone a copy of Daikon and Fjalar from our GitHub
 repositories:
 
 @example
 export $INV=`pwd`
-hg clone https://code.google.com/p/daikon/
-hg clone https://code.google.com/p/fjalar/
+git clone https://github.com/codespecs/daikon.git
+git clone https://github.com/codespecs/fjalar.git
 @end example
 
 
@@ -120,18 +120,18 @@ Update your enlistment to the latest versions:
 
 @example
 cd $INV/daikon
-hg fetch
+git pull
 cd $INV/fjalar
-hg fetch
+git pull
 @end example
 
 Ensure there are no local changes:
 
 @example
 cd $INV/daikon
-hg -q diff 
+git diff 
 cd $INV/fjalar
-hg -q diff 
+git diff 
 @end example
 
 The diff commands should produce no output. If there are any differences,
@@ -141,9 +141,9 @@ Ensure there are no outgoing changes:
 
 @example
 cd $INV/daikon
-hg outgoing
+git log --branches --not --remotes
 cd $INV/fjalar
-hg outgoing
+git log --branches --not --remotes
 @end example
 
 The outgoing commands should say "no changes found". If there are outgoing changes,
@@ -186,7 +186,7 @@ you will want to delete the file(s).
 
 @example
 cd $INV/fjalar
-hg status -u
+git ls-files --others --exclude-standard
 @end example
 
 
@@ -344,9 +344,9 @@ verification later.
 @example
 cd $INV
 rm -f coregrind-PLSE.diff memcheck-PLSE.diff
-diff -ur -x.hg -xinst -x.svn -xfjalar -xMakefile.in  \
+diff -ur -x.git -x.hg -xinst -x.svn -xfjalar -xMakefile.in  \
      valgrind-old fjalar/valgrind > coregrind-PLSE.diff
-diff -ur -x.hg -xinst -x.svn -xMakefile.in -xhtml -xdocs -xtests \
+diff -ur -x.git -x.hg -xinst -x.svn -xMakefile.in -xhtml -xdocs -xtests \
      valgrind-old/memcheck fjalar/valgrind/fjalar > memcheck-PLSE.diff
 @end example
 
@@ -715,26 +715,26 @@ character at the beginning of the line.
 @chapter Committing
 
 Once the test suite passes without errors and all changes are documented,
-the changes should be committed to the Mercurial repository.
+the changes should be committed to the version control repository.
 
 @menu
-* Tell Mercurial about files that were added or removed::
+* Tell Git about files that were added or removed::
 * Commit commands::
 @end menu
 
 
-@node Tell Mercurial about files that were added or removed
-@section Tell Mercurial about files that were added or removed
+@node Tell Git about files that were added or removed
+@section Tell Git about files that were added or removed
 
-The @samp{hg-update} target below searches through the two patch files 
+The @samp{git-update} target below searches through the two patch files 
 looking for files that were added or deleted.  It then does a
-@code{hg add} or @code{hg remove} as appropriate.
+@code{git add} or @code{git remove} as appropriate.
 
 @example
 cd $INV/fjalar
-make hg-update > hg.script
-# Double-check that it looks ok
-bash -v ./hg.script
+make git-update > git.script
+# Double-check that it looks OK, then run it:
+bash -v ./git.script
 @end example
 
 
@@ -747,9 +747,9 @@ to the repository.
 @example
 cd $INV/fjalar
 # Double-check the diffs - standard practice before committing
-hg diff -b | more
+git diff -b | more
 # If looks OK, proceed with commit.
-hg commit -m "Valgrind merge from revision $@{VALGRIND_REVISION@}\
+git commit -a -m "Valgrind merge from revision $@{VALGRIND_REVISION@}\
    to $@{VALGRIND_REVISION_NEW@}.  VEX IR merge from $@{VEX_REVISION@} \
    to $@{VEX_REVISION_NEW@}."
 @end example

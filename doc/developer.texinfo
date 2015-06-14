@@ -265,12 +265,11 @@ at @uref{http://cygwin.com/install.html}.
 @section Version control repository
 
 @cindex repository
-@cindex Hg repository
-@cindex Mercurial repository
+@cindex Git repository
 @cindex version control repository
 
-The Daikon Mercurial repository is located on the Google Code site;
-see @w{@uref{http://code.google.com/p/daikon/}.}
+The Daikon git repository is located on GitHub;
+see @w{@uref{https://github.com/codespecs/daikon/}.}
 
 @xref{Compiling Daikon}, for instructions for compiling Daikon.
 
@@ -1744,7 +1743,7 @@ PDF version either electronically or on paper.
 * Existing projects::
 * External tools::
 * Eclipse debugger::
-* Using Mercurial with Eclipse::
+* Using Git with Eclipse::
 @end menu
 
 @node       Start up Eclipse
@@ -1912,8 +1911,8 @@ put a semi-colon at the end of your expression!).
 @end itemize
 
 
-@node       Using Mercurial with Eclipse
-@subsection Using Mercurial with Eclipse
+@node       Using Git with Eclipse
+@subsection Using Git with Eclipse
 
 This section has yet to be completed, although you can just do all the editing,
 compiling, and
@@ -2046,11 +2045,11 @@ and that you are using the Bash shell.
 
 @item
 Environment variable @env{DAIKONDIR} must be set to a clone of 
-@uref{https://code.google.com/p/daikon/}.
+@uref{https://github.com/codespecs/daikon.git}.
 
 @item
 A clone of 
-@uref{https://code.google.com/p/fjalar/} must be a sibling of
+@uref{https://github.com/codespecs/fjalar.git} must be a sibling of
 @file{$DAIKONDIR}.
 
 @item
@@ -2079,7 +2078,7 @@ will create it for you.
 
 @item
 Environment variable @env{BIBDIR} must be set to a clone of 
-@uref{https://code.google.com/p/plume-bib/}.
+@uref{https://github.com/mernst/plume-bib.git}.
 You can create this clone with the commands:
 
 @example
@@ -2103,13 +2102,13 @@ of the bibliography you wish to use.
 Update the Daikon source files to their most recent version. 
 
 @example
-(cd $DAIKONDIR && hg fetch && hg outgoing && hg status)
-(cd $DAIKONDIR/../fjalar && hg fetch && hg outgoing && hg status)
+set -o pipefail
+(cd $DAIKONDIR && git pull && git log --branches --not --remotes && git status)
+(cd $DAIKONDIR/../fjalar && git pull && git log --branches --not --remotes && git status)
 @end example
 
-@c No need to check output from "hg outgoing" because
-@c "hg outgoing" returns 0 if there are outgoing changes.
 For each command, the last line printed should be @samp{no changes found}.
+You also need to make sure that the "git log" command didn't produce any output.
 
 [Time: moments]
 
@@ -2142,7 +2141,7 @@ cp plume.jar ../../java/lib
 Update the bibliography.
 
 @example
-(cd $BIBDIR; hg fetch)
+(cd $BIBDIR; git pull)
 @end example
 
 [Time: moments]
@@ -2323,21 +2322,22 @@ Another good source of information are the repository logs since the
 last release:
 
 @example
-hg log -v -r "tag(5.0.2)::"  (substitute last release number for 5.0.2)
+git log v5.0.2..HEAD    (substitute last release number for 5.0.2)
 @end example
 
-As we normally only tag the repository when we make a release, this can
-usually be simplified to:
-
-@example
-hg log -v -r "last(tagged())::"
-@end example
+@c TODO: How can this be done for Git?
+@c As we normally only tag the repository when we make a release, this can
+@c usually be simplified to:
+@c 
+@c @example
+@c git log  -v -r "last(tagged())::"
+@c @end example
 
 In addition, you should run the same command in your Fjalar clone:
 
 @example
 cd $DAIKONDIR/fjalar
-hg log -v -r "last(tagged())::"
+git log v5.0.2..HEAD
 @end example
 
 [Time: a few minutes]
@@ -2548,11 +2548,11 @@ Commit changes back to the repository:
 @emph{Could this and the following step be done with @command{cat $DAIKONDIR/doc/VERSION}?}
 
 @example
-hg -q commit -m "Change version to @emph{X.Y.Z}"
-hg push
+git commit -a -m "Change version to @emph{X.Y.Z}"
+git push
 cd fjalar
-hg -q commit -m "Change version to @emph{X.Y.Z}"
-hg push
+git commit -a -m "Change version to @emph{X.Y.Z}"
+git push
 @end example
 
 [Time: moments]
@@ -2562,11 +2562,11 @@ hg push
 Add a version label to the repository:
 
 @example
-hg tag @emph{X.Y.Z}
-hg push
+git tag -a v@emph{X.Y.Z}
+git push --tags
 cd fjalar
-hg tag @emph{X.Y.Z}
-hg push
+git tag -a v@emph{X.Y.Z}
+git push --tags
 @end example
 
 [Time: moments]
@@ -2593,7 +2593,7 @@ want it to reflect the most recent actual release.)
 
 @example
 make update-doc-dist-date-and-version
-hg revert doc/README
+git checkout doc/README
 @end example
 
 [Time: moments]
@@ -2617,11 +2617,11 @@ Success is indicated by invariant output being written to the screen.
 Commit changes back to the repository:
 
 @example
-hg -q commit -m "Bump version number for ongoing development."
-hg push
+git commit -a -m "Bump version number for ongoing development."
+git push
 cd fjalar
-hg -q commit -m "Bump version number for ongoing development."
-hg push
+git commit -a -m "Bump version number for ongoing development."
+git push
 @end example
 
 [Time: moments]
@@ -2640,20 +2640,19 @@ This list is located at @samp{daikon-announce@@googlegroups.com}.
 @chapter Analyzing historical versions of Daikon
 
 @cindex repository
-@cindex Mercurial repository
-@cindex Hg repository
+@cindex Git repository
 @cindex Version control repository
 
 @c Old info about how to create a distribution of the repository was
 @c removed from this file on 12 Nov 2010.
 
-Daikon's Mercurial repository, available at
-@uref{http://code.google.com/p/daikon/}, contains complete development
+Daikon's version control repository, available at
+@uref{https://github.com/codespecs/daikon.git}, contains complete development
 history starting from October 1, 2010, and partial development history
 before that time.  The reason for this is that converting the full CVS
-repository to Mercurial would create a repository that would be too
+repository would create a repository that would be too
 large for convenient use, and that would also be too large to upload to
-Google Code.  The original CVS repository is available for download from
+Google Code or GitHub.  The original CVS repository is available for download from
 @uref{http://plse.cs.washington.edu/daikon/download/inv-cvs/}, as files
 @file{inv-cvsaa} through @file{inv-cvsai}.  Download
 all 9 files, and then run the following commands to re-create the CVS
@@ -2665,7 +2664,7 @@ unzip inv-cvs-full.zip
 @end example
 
 
-Developers can usually make do with the Mercurial repository, which has
+Developers can usually make do with the Git repository, which has
 complete history for the Java source code.
 
 The CVS repository is most often used by researchers --- for example, in

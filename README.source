@@ -7,7 +7,7 @@ Daikon's version control repository.
 this the daikonparent directory.  In this directory, make a clone of
 Daikon's version control repository, named "daikon":
 
-hg clone https://code.google.com/p/daikon/
+git clone https://github.com/codespecs/daikon.git
 
 2.  Set your envirenment variables according to the instructions in 
 list item 2, of section 2.2.2 of the Daikon manual:
@@ -33,7 +33,7 @@ as a sibling of the daikon clone.
 
 cd $DAIKONDIR
 cd ..
-hg clone https://code.google.com/p/fjalar/
+git clone https://github.com/codespecs/fjalar.git
 
 6.  Build Fjalar (which includes Kvasir).  The following commands build
 the Fjalar/Kvasir shared library, install it locally, and make a symbolic
