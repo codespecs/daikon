@@ -1,3 +1,9 @@
+#!/bin/sh
+
+# Generate the patch and diff files needed as part of the valgrind
+# update process.  See the valgrind-merge document in daikon/doc/
+# for more information.
+
 diff -urb --unidirectional-new-file -x.svn valgrind-old valgrind-new > coregrind.patch
 
 diff -urb --unidirectional-new-file -x.svn -xdocs -xtests valgrind-old/memcheck valgrind-new/memcheck > memcheck.patch
