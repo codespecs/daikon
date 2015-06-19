@@ -1567,7 +1567,6 @@ instrumenter) to produce a @file{.dtrace} file (and optionally
 @file{.decls} and @file{.spinfo} files); to learn more about that
 process, @pxref{Example usage}, and @pxref{Front ends (instrumentation)}.
 
-
 Run the Daikon invariant detector via the command
 @example
 java daikon.Daikon @i{[@var{flags}]} @var{dtrace-files...} \
@@ -1591,6 +1590,11 @@ declarations may also appear in @file{.dtrace} files.  For instance, the
 Chicory front end for Java (@pxref{Chicory}) produces only @file{.dtrace}
 files.  If there are no @file{.decls} files, then it is not necessary to
 include them on the command line to Daikon.
+
+Note that combining input files from Chicory and (Java) DynComp can lead to
+a decl format error. The preferred usage is to use the DynComp generated
+@file{.decls} file(s) as input to Chicory. 
+See @ref{Using DynComp with Java programs} for more details.
 
 @item
 The @var{spinfo-files} are splitter info (@file{.spinfo}) files that
@@ -3450,7 +3454,8 @@ Daikon is typically used to find invariants over variable values in
 running programs.  A front end is a tool that converts data from some
 other format into Daikon's input format.  The most common type of front
 end is an instrumenter, which causes your program to output a
-@file{.dtrace} file that Daikon can process, or that you can process (@pxref{Reading dtrace files,,,developer,Daikon Developer Manual}).
+@file{.dtrace} file that Daikon can process, or that you can process
+(@pxref{Reading dtrace files,,,developer,Daikon Developer Manual}).
 
 This chapter describes several front ends (instrumenters) that are part
 of Daikon.  It
@@ -3869,6 +3874,9 @@ that contains comparability information.  This information will be
 incorporated in the output of Chicory.  Any variables not included in
 the comparability file will have their comparability set so that they
 are comparable to all other variables of the same type.
+Note that the Java DynComp tool is the most common source for such a
+file.  By default, DynComp writes comparability information to a file
+with the @file{.decls-DynComp} extension.
 
 @item --output-dir=@var{directory}
 Write the @file{.dtrace} trace output file to the specified directory.
@@ -4037,7 +4045,7 @@ java daikon.DynComp mypackage.MyClass arg1 arg2 arg3
 This runs your program and creates the file @file{MyClass.decls-DynComp}
 in the current directory.  DynComp also creates @file{MyClass.txt-cset},
 which contains the same information and a further level of detail in an
-easier-to-read format.  The @file{.decls} file may be passed to Chicory,
+easier-to-read format.  The @file{.decls-DynComp} file may be passed to Chicory,
 as described in @ref{Using DynComp with Java programs}.
 @example
 java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
@@ -7652,6 +7660,8 @@ understand Daikon's operation; @pxref{Daikon debugging options}.
 
 @menu
 * Can't run Daikon::
+* File input errors::
+* decl format errors::
 * Too much output::
 * Missing output invariants::
 * True invariants are not reported due to output filters::
@@ -7693,6 +7703,65 @@ classpath.  To debug such a problem, you need to determine your
 classpath (it's your @env{CLASSPATH} environment variable under
 Mac/Linux), and the location of file @file{plume/FuzzyFloat.class} or of
 the jar file that contains it.
+
+
+@node       File input errors
+@subsection File input errors
+@cindex file input errors
+
+@exampleindent 1
+If Daikon terminates with an error such as
+@example
+Error at line 530 in file test.dtrace
+@end example
+
+@noindent
+and inspection of the indicated file at the indicated line number does
+not help you to discern what is wrong, you may wish to re-run Daikon with
+the @option{show_stack_trace} option.  The exact syntax for this is:
+@example
+--config_option daikon.Debug.show_stack_trace=true
+@end example
+The additional information in the resulting exception stack trace 
+should indicate where the problem is occurring.
+@exampleindent 4
+
+
+@node       decl format errors
+@subsection decl format errors
+@cindex decl format errors
+
+@exampleindent 1
+If Daikon terminates with an error such as
+@example
+decl format '2.0' does not match previous setting at line 4 in file test.dtrace
+@end example
+
+@noindent
+it means you are using multiple @file{.dtrace} and/or @file{.decls} files
+and they are not all in the same format. 
+(See @ref{Declaration version,,,developer,Daikon Developer Manual}
+for information about how to determine a data file's format.)
+
+The most probable cause is you are using at least one Java DynComp
+generated @file{.decls} file
+(which defaults to version 1) and at least one @file{.dtrace} file (which
+defaults to version 2) as input to Daikon.
+(Note that the C/C++ front end Kvasir generates a version 2 file @file{.decls}
+with the option @option{--with-dyncomp}.)
+The way to 
+avoid this problem is to use your Java DynComp generated @file{.decls} files
+as input to Chicory. The resulting @file{.dtrace} file will contain the
+comparability values from the @file{.decls} file(s) and can then be used
+as input to Daikon.
+Passing a @file{.decls} file to Chicory is
+described in @ref{Using DynComp with Java programs}, for example:
+
+@example
+java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
+     mypackage.MyClass arg1 arg2 arg3
+@end example
+@exampleindent 4
 
 
 @node       Too much output
