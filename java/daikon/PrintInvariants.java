@@ -197,8 +197,8 @@ public final class PrintInvariants {
    * information about the invariant.  For example, if this switch is
    * true and if the output format is JAVA, and the invariant prints
    * as "x == null", the results of print_invariant would look
-   * something like:<pre>
-   *
+   * something like:
+   * <pre>
    * &lt;INVINFO&gt;
    * &lt;INV&gt; x == null &lt;/INV&gt;
    * &lt;SAMPLES&gt; 100 &lt;/SAMPLES&gt;

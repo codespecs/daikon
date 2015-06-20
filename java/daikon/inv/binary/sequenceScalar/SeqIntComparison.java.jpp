@@ -222,8 +222,8 @@ public final class SEQINTEQUAL
 
   /**
    * Checks to see if the comparison is obvious statically.  Makes the
-   * following checks <pre>
-   *
+   * following checks:
+   * <pre>
    *    max(A[]) op A[]
    *    min(A[]) op A[]
    * </pre>
@@ -370,8 +370,8 @@ public final class SEQINTEQUAL
 
   /**
    * Checks to see if this is obvious over the specified variables.
-   * Implements the following checks: <pre>
-   *
+   * Implements the following checks:
+   * <pre>
    *  (x op B[]) ^ (B[] subsequence A[]) &rArr; (x op A[])
    *  (A[] == [])                        &rArr; (x op A[])
    * </pre>

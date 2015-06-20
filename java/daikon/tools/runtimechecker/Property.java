@@ -173,9 +173,6 @@ public class Property implements Serializable {
      * the String representation of an property is:
      *
      * <pre>
-     *
-     *
-     *
      *     &lt;INVINFO&gt;
      *     &lt;INV&gt; this.topOfStack &lt;= this.theArray.length-1 &lt;/INV&gt;
      *     &lt;ENTER&gt;
@@ -183,9 +180,6 @@ public class Property implements Serializable {
      *     &lt;DAIKONCLASS&gt;class daikon.inv.binary.twoScalar.IntLessEqual&lt;/DAIKONCLASS&gt;
      *     &lt;METHOD&gt;  isEmpty()  &lt;/METHOD&gt;
      *     &lt;/INVINFO&gt;
-     *
-     *
-     *
      * </pre>
      *
      * <p>

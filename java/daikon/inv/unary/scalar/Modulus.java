@@ -265,8 +265,8 @@ public class Modulus
 
   /**
    * Checks to see if this is obvious over the specified variables.
-   * Implements the following checks: <pre>
-   *
+   * Implements the following checks:
+   * <pre>
    *    size(x[]) = r (mod m) &rArr; size(x[])-1 = (r-1) (mod m)
    * </pre>
    **/

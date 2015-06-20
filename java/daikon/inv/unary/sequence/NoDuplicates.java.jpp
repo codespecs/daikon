@@ -187,8 +187,8 @@ public class CLASSNAME
 
   /**
    * Checks to see if this is obvious over the specified variables
-   * Implements the following checks: <pre>
-   *
+   * Implements the following checks:
+   * <pre>
    *    (A[] subsequence B[]) ^ (B[] has nodups) &rArr; A[] has nodups
    *    (A[] sorted by &gt;) v (A[] sorted by &lt;)    &rArr; A[] has nodups
    * </pre>

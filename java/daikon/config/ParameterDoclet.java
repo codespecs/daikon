@@ -265,21 +265,7 @@ public class ParameterDoclet
         // @item [field]
         //  [desc]
         out.println("@item " + field);
-        // Remove leading spaces, which throw off Info.
-        desc = UtilMDE.replaceString (desc, lineSep + " ", lineSep);
-        // Hmmm, causes trouble with embedded @refs!
-        //desc = UtilMDE.replaceString (desc, "{", "@{");
-        //desc = UtilMDE.replaceString (desc, "}", "@}");
-        desc = UtilMDE.replaceString (desc, "<br>", "@*");
-        desc = UtilMDE.replaceString (desc, "<p>", "@*@*");
-        desc = UtilMDE.replaceString (desc, "<samp>", "@samp{");
-        desc = UtilMDE.replaceString (desc, "</samp>", "}");
-        desc = UtilMDE.replaceString (desc, "<code>", "@code{");
-        desc = UtilMDE.replaceString (desc, "</code>", "}");
-        // Catch-all for parameters, filenames, etc. for which there
-        // is no specific HTML formatting.
-        desc = UtilMDE.replaceString (desc, "<tt>", "@code{");
-        desc = UtilMDE.replaceString (desc, "</tt>", "}");
+        desc = HtmlToTexinfo.htmlToTexinfo(desc);
         out.println(desc);
         if (! desc.contains("The default value is")) {
           out.println(defstr);

@@ -196,6 +196,7 @@ public final class Daikon {
    * If "never", then invariants are never guarded.
    * If "missing", then invariants are guarded only for variables that
    * were missing ("can be missing") in the dtrace (the observed executions).
+   * If "default", then use "missing" mode for Java output and "never" mode otherwise.
    * <p>
    * Guarding means adding predicates that ensure that variables can be
    * dereferenced.  For instance, if <code>a</code> can be null --- that is,

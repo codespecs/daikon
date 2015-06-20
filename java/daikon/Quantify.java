@@ -361,7 +361,8 @@ public class Quantify {
 
     /**
      * Returns the quantification string.  For example, if there is one
-     * array variable (a[]) that is not a slice, it will return<pre>
+     * array variable (a[]) that is not a slice, it will return
+     * <pre>
      * '(\forall int i; (0 &lt;= i &lt;= size(a[]) ==&gt; '
      * </pre>
      **/

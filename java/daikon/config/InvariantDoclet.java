@@ -16,7 +16,11 @@ import org.checkerframework.checker.signature.qual.*;
  * InvariantDoclet is a JavaDoc doclet that collects information about
  * the invariants defined within Daikon.  Class documentation is collected
  * about each class that is derived (either directly or indirectly) from
- * daikon.inv.Invariant
+ * daikon.inv.Invariant.
+ * To specify the output format, use one of the following:
+ *   --texinfo FILENAME   Texinfo format, for inclusion in the manual.
+ *   --text FILENAME      Text format, with each name preceded by "+"
+ *                        characters to indicate depth in the tree.
  **/
 public class InvariantDoclet
 {
@@ -26,7 +30,7 @@ public class InvariantDoclet
   /**
    * Invariants that match any of the specified regular expressions
    * are purposefully missing enable variables.  Any others will
-   * throw an exception
+   * throw an exception.
    */
   private static /*@Regex*/ String[] invs_without_enables = new /*@Regex*/ String[]
     {
@@ -61,9 +65,6 @@ public class InvariantDoclet
       return 2; // == 1 tag + 1 argument
 
     if ("--text".equals(opt))
-      return 2; // == 1 tag + 1 argument
-
-    if ("--list".equals(opt))
       return 2; // == 1 tag + 1 argument
 
     return 0;   // unknown option
@@ -147,12 +148,6 @@ public class InvariantDoclet
         process_class_tree_txt (outf, inv, 0);
         outf.close();
 
-      } else if ("--list".equals(opt)) {
-
-        String fname = optset[1];
-        System.out.println("Opening " + fname + " for output...");
-        PrintStream outf = new PrintStream(new FileOutputStream (fname));
-        outf.close();
       }
     }
   }
@@ -193,11 +188,11 @@ public class InvariantDoclet
 
   /**
    * Prints a class and all of its derived classes with their documentation
-   * in a simple sorted (by name) list in texinfo format.  Suitable for
+   * in a simple sorted (by name) list in Texinfo format.  Suitable for
    * inclusion in the manual.
    *
    * @param out     stream to which write output
-   * @param cd      Starting class
+   * @param cd      Class to process
    */
   public void process_class_sorted_texinfo (PrintStream out, /*@KeyFor("this.cmap")*/ ClassDoc cd) {
 
@@ -222,21 +217,8 @@ public class InvariantDoclet
 
       // setup the comment for info
       String comment = dc.commentText();
-      // Remove leading spaces, which throw off Info.
-      comment = UtilMDE.replaceString (comment, lineSep + " ", lineSep);
-      comment = UtilMDE.replaceString (comment, "{", "@{");
-      comment = UtilMDE.replaceString (comment, "}", "@}");
-      comment = UtilMDE.replaceString (comment, "<br>", "@*");
-      comment = UtilMDE.replaceString (comment, "<p>", "@*@*");
-      comment = UtilMDE.replaceString (comment, "<samp>", "@samp{");
-      comment = UtilMDE.replaceString (comment, "</samp>", "}");
-      comment = UtilMDE.replaceString (comment, "<code>", "@code{");
-      comment = UtilMDE.replaceString (comment, "</code>", "}");
-      // Catch-all for parameters, filenames, etc. for which there
-      // is no specific HTML formatting.
-      comment = UtilMDE.replaceString (comment, "<tt>", "@code{");
-      comment = UtilMDE.replaceString (comment, "</tt>", "}");
 
+      comment = HtmlToTexinfo.htmlToTexinfo(comment);
 
       if (dc.name().startsWith ("FunctionBinary")) {
         String[] parts = dc.name().split ("[._]");

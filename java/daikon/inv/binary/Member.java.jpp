@@ -370,8 +370,8 @@ public final class CLASSNAME
 
   /**
    * Checks to see if this is obvious over the specified variables.
-   * Implements the following checks: <pre>
-   *
+   * Implements the following checks:
+   * <pre>
    *   (0 &le; i &le; j) ^ (A[] == B[]) &rArr; A[i] in B[0..j]
    *   (0 &le; i &le; j) ^ (A[] == B[]) &rArr; A[j] in B[i..]
    *   (A subset B)                       &rArr; A[i] in B
@@ -403,9 +403,9 @@ public final class CLASSNAME
 
   /*
    * Checks to see if this is obvious over the specified variables.
-   * Implements the following check: <pre>
-   *
-   * (A subset B) &rArr; (A[i] member B)
+   * Implements the following check:
+   * <pre>
+   *   (A subset B) &rArr; (A[i] member B)
    * </pre>
    */
   private /*@Nullable*/ DiscardInfo subset_in_subsequence (VarInfo[] vis) {
@@ -442,8 +442,8 @@ public final class CLASSNAME
 
   /*
    * Checks to see if this is obvious over the specified variables.
-   * Implements the following checks: <pre>
-   *
+   * Implements the following checks:
+   * <pre>
    *   (0 <= i &le; j) ^ (a[] == b[]) &rArr; a[i] in b[0..j]
    *   (0 <= i &le; j) ^ (a[] == b[]) &rArr; a[j] in b[i..]
    * </pre>

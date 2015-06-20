@@ -423,8 +423,8 @@ public class CLASSNAME extends SUPERCLASS {
 
   /**
    * Checks to see if this is obvious over the specified variables
-   * Implements the following checks: <pre>
-   *
+   * Implements the following checks:
+   * <pre>
    *    (A[] subsequence B[]) ^ (B[i] op i) &rArr; A[i] op i
    * </pre>
    *

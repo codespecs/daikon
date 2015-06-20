@@ -1,4 +1,4 @@
-all: config-options invariants-doc html-chap html pdf
+all: config-options.texinfo invariants-doc.texinfo html-chap html pdf
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 # Large split size fixes an apparent bug in makeinfo 4.11:
@@ -17,19 +17,19 @@ ifdef SKIP_JAVA
 # the code-derived texinfo, which in turn avoids recompiling all of
 # Daikon, regenerating the splitter tests, and running the Daikon unit
 # tests.
-config-options:
-invariants-doc:
+config-options.texinfo:
+invariants-doc.texinfo:
 else
-config-options: ../java/daikon/util/SimpleLog.class
+config-options.texinfo: ../java/daikon/util/SimpleLog.class
 	cd ../java && $(MAKE) ../doc/config-options.texinfo
 
-invariants-doc:
+invariants-doc.texinfo:
 	cd ../java && $(MAKE) ../doc/invariants-doc.texinfo
 
 # Always remake config-options.texinfo
-# (We delegate to ../java/Makefile, which more discerning)
-.PHONY : config-options
-.PHONY : invariants-doc
+# (We delegate to ../java/Makefile, which is more discerning)
+.PHONY : config-options.texinfo
+.PHONY : invariants-doc.texinfo
 endif
 
 ../java/daikon/util/SimpleLog.class: ../java/daikon/util/SimpleLog.java

@@ -1179,25 +1179,28 @@ api-private: ../plume-lib $(AUTO_GENERATED_FILES)
 # 	find api -name '*.html' | xargs -n 100 ${PLUMEBIN}/jdk-add-munged-anchor-names
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
-../doc/invariants-doc.texinfo: ../plume-lib ${JDOC_FILES}
+../doc/invariants-doc.texinfo: ../plume-lib ${JDOC_FILES} daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
-# This must depend on daikon/config/ParameterDoclet.class.
-## I'm trying again to depend just on ParameterDoclet.class
-# # Instead, it depends on "all", which forces compilation.  (An experiment
-# # with not depending on "all" showed that ParameterDoclet.class was needed.)
-# # It depends on "all", which forces compilation, to avoid errors like
-# #   "java.lang.ClassFormatError: Truncated class file".
 
-../doc/config-options.texinfo: ../plume-lib ${JDOC_FILES} daikon/config/ParameterDoclet.class
+../doc/config-options.texinfo: ../plume-lib ${JDOC_FILES} daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
+
+daikon/config/InvariantDoclet.class: daikon/config/InvariantDoclet.java
+	${MAKE} compile
+
+daikon/config/ParameterDoclet.class: daikon/config/ParameterDoclet.java
+	${MAKE} compile
+
+daikon/config/HtmlToTexinfo.class: daikon/config/HtmlToTexinfo.java
+	${MAKE} compile
 
 
 # This file is no longer used; there's no point in keeping it around.
