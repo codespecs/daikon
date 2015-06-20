@@ -2482,6 +2482,7 @@ configuration options}).
 * Redundant invariants::
 * Equal variables::
 * Has only one value variables::
+* Object inequality::
 @end menu
 
 @node       Redundant invariants
@@ -2526,7 +2527,8 @@ You can control which variables are in an equality set;
 The output @samp{@var{var} has only one value} in Daikon's output means
 that every time that variable @var{var} was encountered, it had the same
 value.  Daikon ordinarily reports the actual value, as in
-@samp{@var{var} == 22}.  Typically this means that the variable is a
+@samp{@var{var} == 22}.
+Typically, the ``has only one value'' output means that the variable is a
 hashcode or address --- that is, its declared type is @samp{hashcode}
 (@pxref{Variable declarations,,,developer,Daikon Developer Manual}). 
 For example, @samp{@var{var} == 0x38E8A} is not very illuminating,
@@ -2544,6 +2546,16 @@ because the variable is never modified during any execution of the
 procedure, but has different values on different invocations of the
 procedure.
 
+
+@node       Object inequality
+@subsection Object inequality
+
+Daikon may report @samp{x < y} where the operator @samp{<} is not
+applicable to the type of @samp{x} and @samp{y}, as in @samp{myString <
+otherString}.
+
+In this case, the invariant means that the first expression is always less
+than the second, according to the @samp{Comparable.compareTo} method.
 
 
 
