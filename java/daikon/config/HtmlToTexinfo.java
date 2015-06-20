@@ -19,6 +19,7 @@ public class HtmlToTexinfo {
     s = s.replaceAll("(@p?x?ref)@\\{(.*)@\\}", "$1{$2}");
     s = UtilMDE.replaceString (s, "<br>", "@*");
     s = UtilMDE.replaceString (s, "<p>", "@*@*");
+    // Sadly, Javadoc prohibits the <samp> tag.  Use <tt> instead.
     s = UtilMDE.replaceString (s, "<samp>", "@samp{");
     s = UtilMDE.replaceString (s, "</samp>", "}");
     s = UtilMDE.replaceString (s, "<code>", "@code{");

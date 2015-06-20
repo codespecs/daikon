@@ -203,7 +203,7 @@ import typequals.*;
 
 #if defined (IS_SCALAR)
   /**
-   * Represents the invariant <samp>x GTEHTML c</samp>, where <code>c</code>
+   * Represents the invariant <tt>x GTEHTML c</tt>, where <code>c</code>
    * is a constant and <code>x</code> is a LONG scalar.
    **/
 #else
