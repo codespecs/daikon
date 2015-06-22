@@ -2859,7 +2859,7 @@ input a target program to be analyzed, and produces two outputs:  a
 @file{.decls} file and an instrumented program.  Executing the
 instrumented program produces a @file{.dtrace} file containing data
 trace records for all the program points that appear in the
-@file{.dtrace} file.  This approach works fine and is easier to
+@file{.decls} file.  This approach works fine and is easier to
 implement in certain situations, but has a few disadvantages.  It
 requires the user to perform at least two steps --- instrumentation and
 execution --- and the existence of two versions of the program
