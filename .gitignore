@@ -36,8 +36,8 @@ java/bin
 java/.classpath
 
 # Release files
-daikon.tar
-daikon.zip
+daikon*.tar
+daikon*.zip
 
 # DynComp
 java/dcomp-rt/dcomp_jdk_static_map
