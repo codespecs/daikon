@@ -2045,11 +2045,11 @@ and that you are using the Bash shell.
 
 @item
 Environment variable @env{DAIKONDIR} must be set to a clone of 
-@uref{https://github.com/codespecs/daikon.git}.
+@uref{https://github.com/codespecs/daikon}.
 
 @item
 A clone of 
-@uref{https://github.com/codespecs/fjalar.git} must be a sibling of
+@uref{https://github.com/codespecs/fjalar} must be a sibling of
 @file{$DAIKONDIR}.
 
 @item
@@ -2078,7 +2078,7 @@ will create it for you.
 
 @item
 Environment variable @env{BIBDIR} must be set to a clone of 
-@uref{https://github.com/mernst/plume-bib.git}.
+@uref{https://github.com/mernst/plume-bib}.
 You can create this clone with the commands:
 
 @example
@@ -2647,7 +2647,7 @@ This list is located at @samp{daikon-announce@@googlegroups.com}.
 @c removed from this file on 12 Nov 2010.
 
 Daikon's version control repository, available at
-@uref{https://github.com/codespecs/daikon.git}, contains complete development
+@uref{https://github.com/codespecs/daikon}, contains complete development
 history starting from October 1, 2010, and partial development history
 before that time.  The reason for this is that converting the full CVS
 repository would create a repository that would be too

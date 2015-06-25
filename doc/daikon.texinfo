@@ -1359,7 +1359,7 @@ Please see its documentation at
 @ifnothtml
 : @* @ @ @ @ @ @ 
 @end ifnothtml
-@url{https://github.com/melonhead901/@/daikon-dot-net-front-end}.
+@url{https://github.com/codespecs/@/daikon-dot-net-front-end}.
 
 
 @node    Detecting invariants in Perl programs
@@ -3395,7 +3395,7 @@ The Celeriac front-end for .NET programs can compute variable
 comparability.  It does so statically by examining the program text, rather
 than dynamically by running the program as DynComp does.
 For full details about variable comparability in Celeriac, see
-@uref{https://github.com/melonhead901/@/daikon-dot-net-front-end}.
+@uref{https://github.com/codespecs/@/daikon-dot-net-front-end}.
 
 @end itemize
 
@@ -6147,7 +6147,7 @@ Since Celeriac instruments class files directly as they are loaded into .NET,
 you do not need to perform separate instrumentation and recompilation steps.
 
 For more details about how to download and use Celeriac, please
-see @uref{https://github.com/melonhead901/@/daikon-dot-net-front-end}.
+see @uref{https://github.com/codespecs/@/daikon-dot-net-front-end}.
 
 It should be noted that Celeriac works under Mono as well as under the
 Microsoft .NET implementation.
@@ -6549,7 +6549,7 @@ including external commands invoked.
 
 Daikon can process data from spreadsheets such as Excel.  In order to
 use such files, first save them in
-@uref{http://en.wikipedia.org/wiki/Comma-separated_values, ,comma-separated-value format},
+@uref{https://en.wikipedia.org/wiki/Comma-separated_values, ,comma-separated-value format},
 also known as @dfn{csv} or comma-delimited or comma-separated-list, format.
 Then, convert the @file{.csv} file into a @file{.dtrace} file (and a
 @file{.decls} file) to be used by Daikon by running the
