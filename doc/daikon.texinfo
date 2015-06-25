@@ -1592,7 +1592,7 @@ files.  If there are no @file{.decls} files, then it is not necessary to
 include them on the command line to Daikon.
 
 Note that combining input files from Chicory and (Java) DynComp can lead to
-a decl format error. The preferred usage is to use the DynComp generated
+a @nospellcheck{decl} format error. The preferred usage is to use the DynComp generated
 @file{.decls} file(s) as input to Chicory. 
 See @ref{Using DynComp with Java programs} for more details.
 
