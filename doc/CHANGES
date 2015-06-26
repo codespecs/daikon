@@ -30,6 +30,9 @@ the new version control repositories by running:
   git clone https://github.com/codespecs/daikon.git
   git clone https://github.com/codespecs/fjalar.git
 
+The location of the Celeriac front end has changed:
+  https://github.com/codespecs/daikon-dot-net-front-end	
+
 ===========================================================================
 
 5.2.6 (June 2, 2015)
