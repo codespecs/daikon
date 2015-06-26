@@ -8628,7 +8628,8 @@ option:
 
 If you have any questions, can suggest ways to improve the
 documentation, find bugs in the system, or have suggestions for its
-improvement, please send email to
+improvement, please file a bug report at
+@uref{https://github.com/codespecs/daikon/issues} or send email to
 @email{daikon-developers@@googlegroups.com}.  (If you can't figure
 out how to do something or do not understand why Daikon works the way it
 does, that is a bug, too --- in the Daikon documentation.  Please report
@@ -8682,6 +8683,10 @@ most important thing is the original, uninstrumented source files (e.g.,
 @file{.java}), and any inputs/tests used when you ran the program.
 It is also helpful to include instrumented source files,
 @file{.decl} files, and @file{.dtrace} files.
+You may include @file{.inv} files, but as an adjunct rather than a
+replacement for other files:  @file{.inv} files are binary in
+format, hard to inspect, and the format may change from one version of
+Daikon to another.
 @item
 the JDK or JRE version (e.g., the complete output of @samp{java
 -version}), and operating system and revision you are using (e.g.,

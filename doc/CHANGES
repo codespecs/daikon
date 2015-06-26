@@ -30,10 +30,12 @@ the new version control repositories by running:
   git clone https://github.com/codespecs/daikon.git
   git clone https://github.com/codespecs/fjalar.git
 
-The Daikon tar and zip release files have been renamed to include the
-version number in the name. E.g., daikon.zip is now daikon-5.2.8.zip.
-The same renaming is true of the top level directory within these archive
-files.
+The location of the Celeriac front end has changed:
+  https://github.com/codespecs/daikon-dot-net-front-end	
+
+The Daikon .tar and .zip release file names include the version number;
+e.g., daikon-5.2.8.zip instead of daikon.zip.  The same renaming is true
+of the top-level directory within these archive files.
 
 Documentation:
 - The developer manual has an improved discussion of comparability values.
@@ -42,10 +44,6 @@ Documentation:
   files.  This includes some clarification of how to use the output(s) of
   Chicory and DynComp with Daikon.
 - Improved formatting of Javadoc.
-
-The location of the Celeriac front end has changed:
-  https://github.com/codespecs/daikon-dot-net-front-end
-
 
 ===========================================================================
 
