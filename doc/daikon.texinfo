@@ -1592,7 +1592,7 @@ files.  If there are no @file{.decls} files, then it is not necessary to
 include them on the command line to Daikon.
 
 Note that combining input files from Chicory and (Java) DynComp can lead to
-a decl format error. The preferred usage is to use the DynComp generated
+a @nospellcheck{decl} format error. The preferred usage is to use the DynComp generated
 @file{.decls} file(s) as input to Chicory. 
 See @ref{Using DynComp with Java programs} for more details.
 
@@ -6549,7 +6549,7 @@ including external commands invoked.
 
 Daikon can process data from spreadsheets such as Excel.  In order to
 use such files, first save them in
-@uref{http://en.wikipedia.org/wiki/Comma-separated_values, ,comma-separated-value format},
+@uref{https://en.wikipedia.org/wiki/Comma-separated_values, ,comma-separated-value format},
 also known as @dfn{csv} or comma-delimited or comma-separated-list, format.
 Then, convert the @file{.csv} file into a @file{.dtrace} file (and a
 @file{.decls} file) to be used by Daikon by running the

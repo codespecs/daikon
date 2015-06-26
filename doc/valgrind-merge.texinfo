@@ -64,8 +64,8 @@ in Fjalar. The more frequent the merges are, the easier they will be to
 do. Semiannually, at the very least, is recommended. 
 
 The GNU Binutils are completely independent of Valgrind and have their
-own home page (@uref{http://www.gnu.org/software/binutils})
-and release site (@uref{http://ftp.gnu.org/gnu/binutils}).
+own home page (@uref{http://www.gnu.org/software/binutils/})
+and release site (@uref{http://ftp.gnu.org/gnu/binutils/}).
 While the majority of this document discusses how to update Valgrind,
 there is a later chapter on updating the @command{readelf} code from Binutils.
 For ease of verification, it is recommended that you do not update Valgrind
@@ -282,7 +282,7 @@ svn co svn://svn.valgrind.org/valgrind/tags/VALGRIND_3_10_1 valgrind-new
 
 We may wish to consider changing our approach to use the branch, or,
 perhaps simpler, use the actual release tar ball from
-@uref{http://www.valgrind.org/downloads.html}.
+@uref{http://www.valgrind.org/downloads/current.html}.
 
 
 
@@ -523,7 +523,7 @@ guidelines on supporting new VEX instructions.
 @node Overview
 @section Overview
 
-The GNU Binutils (@uref{http://www.gnu.org/software/binutils})
+The GNU Binutils (@uref{http://www.gnu.org/software/binutils/})
 are a collection of approximately twenty binary tools.
 We are interested only in @command{readelf}, a tool that displays
 information from an ELF format object file.  Fjalar does not use this
@@ -532,7 +532,7 @@ a modified version of the source used to build @command{readelf}.
 
 As noted in the Introduction, the GNU Binutils are completely
 independent of Valgrind and have their own release site
-(@uref{http://ftp.gnu.org/gnu/binutils}).
+(@uref{http://ftp.gnu.org/gnu/binutils/}).
 This site lists all the versions of Binutils that are available. If you
 click on @command{Last modified} you will see the releases sorted by
 date. Select the most recent version and download the tar file to

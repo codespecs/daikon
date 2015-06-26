@@ -1,3 +1,6 @@
 # Need to ignore Git directory and associated files
 - .gitignore
 - .git/
+# ignore result files from valgrind testing
+- *.diff
+- *.out

@@ -31,7 +31,7 @@ DOC_FILES_USER := daikon.pdf daikon.html developer.html developer.pdf \
                   daikon.texinfo developer.texinfo config-options.texinfo \
                   invariants-doc.texinfo CHANGES daikon-favicon.png \
                   valgrind-merge.pdf valgrind-merge.html valgrind-merge.texinfo
-README_PATHS := README.txt README.html doc/README fjalar/README
+README_PATHS := README doc/README fjalar/README
 # Files that contain the (automatically updated) version number and date.
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
                       doc/index.html doc/www/download/index.html
@@ -103,9 +103,6 @@ WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
 
 DIST_DIR := $(WWW_DIR)/download
 
-# the following is only used in show-vars 
-DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
-
 REPOSITORY := https://github.com/codespecs/daikon.git
 
 ## These seem to be used only by the test-staged-dist target.
@@ -153,9 +150,9 @@ help:
 	@echo " very-clean               -- remove (most) all generated files"
 	@echo "Creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
-	@echo " staging                  -- moves all release file to staging-dist/"
-	@echo " test-staged-dist         -- tests the distribution in staging-dist/"
-	@echo " staging-to-www           -- copies staging-dist/ to website"
+	@echo " staging                  -- moves all release file to staging-daikon/"
+	@echo " test-staged-dist         -- tests the distribution in staging-daikon/"
+	@echo " staging-to-www           -- copies staging-daikon/ to website"
 	@echo " "
 	@echo "This Makefile is for manipulating the entire Daikon system."
 	@echo "Daikon source code is in the java/daikon subdirectory (but you"
@@ -177,7 +174,7 @@ very-clean:
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
 	-rm -rf examples/java-examples/StackAr/DataStructures/*.class
 	-rm -rf tests/sources/DataStructures/*.class
-	-rm -rf daikon.jar daikon.tar daikon.zip
+	-rm -rf daikon.jar daikon-*.tar daikon-*.zip
 
 clean-java:
 	cd java && $(MAKE) clean
@@ -288,8 +285,9 @@ DISTTESTDIRJAVA := ${TMPDIR}/daikon.dist/daikon/java
 test-staged-dist: $(STAGING_DIR)
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
-	(cd $(DISTTESTDIR); tar xzf $(STAGING_DIR)/download/daikon.tar.gz)
+	(cd $(DISTTESTDIR); tar xzf $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz)
 	## First, test daikon.jar.
+	(cd $(DISTTESTDIR); mv $(NEW_RELEASE_NAME) daikon)
 	(cd $(DISTTESTDIR)/daikon/java && \
 	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
 	## Make sure that all of the class files are 1.7 (version 51) or earlier
@@ -345,8 +343,8 @@ staging: doc/CHANGES
 	@echo "]2;Building daikon.tar"
 	# make daikon.tar has side effect of making 'finalout' version of documents
 	$(MAKE) daikon.tar
-	gzip -c ${TMPDIR}/daikon.tar > $(STAGING_DIR)/download/daikon.tar.gz
-	cp -pf ${TMPDIR}/daikon.zip $(STAGING_DIR)/download/daikon.zip
+	gzip -c ${TMPDIR}/$(NEW_RELEASE_NAME).tar > $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz
+	cp -pf ${TMPDIR}/$(NEW_RELEASE_NAME).zip $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).zip
 	cp -pf daikon.jar $(STAGING_DIR)/download
 	# Build javadoc
 	@echo "]2;Building Javadoc"
@@ -371,11 +369,12 @@ staging: doc/CHANGES
 	# compare new list of files in tarfile to previous list
 	@echo "]2;New or removed files"
 	@echo "***** New or removed files:"
-	tar tzf $(WWW_DIR)/download/daikon.tar.gz | sort > ${TMPDIR}/old_tar.txt
-	tar tzf $(STAGING_DIR)/download/daikon.tar.gz | sort > ${TMPDIR}/new_tar.txt
+	# need to remove the leading "daikon-<version>/" before we can compare old and new
+	tar tzf $(WWW_DIR)/download/$(CUR_RELEASE_NAME).tar.gz | perl -p -e 's/^(.*?)\///' | sort > ${TMPDIR}/old_tar.txt
+	tar tzf $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz | perl -p -e 's/^(.*?)\///' | sort > ${TMPDIR}/new_tar.txt
 	-diff -u ${TMPDIR}/old_tar.txt ${TMPDIR}/new_tar.txt
 	# Delete the tmp files
-	cd ${TMPDIR} && /bin/rm -rf daikon daikon.dist daikon.tar daikon.zip \
+	cd ${TMPDIR} && /bin/rm -rf daikon daikon.dist daikon*.tar daikon*.zip \
 							old_tar.txt new_tar.txt
 
 # Copy the files in the staging area to the website.  This will copy
@@ -421,18 +420,20 @@ doc-all:
 	cd doc && $(MAKE) all
 
 # Get the current release version
-CUR_VER := $(shell unzip -p /cse/web/research/plse/daikon/download/daikon.zip daikon/README.txt |head -2|tail -1|perl -p -e 's/ version /\./' |perl -p -e 's/,.*//')
-HISTORY_DIR := /cse/web/research/plse/daikon/history
+CUR_VER := $(shell unzip -p /cse/web/research/plse/daikon/download/daikon-*.zip daikon-*/README.txt |head -2|tail -1|perl -p -e 's/^.* version //' |perl -p -e 's/,.*//')
+CUR_RELEASE_NAME := daikon-$(CUR_VER)
+NEW_RELEASE_NAME := daikon-$(shell cat doc/VERSION)
 
 check-for-broken-doc-links:
 	checklink -q -r `grep -v '^#' ${DAIKONDIR}/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon/staging-daikon >check.log 2>&1
 
+HISTORY_DIR := /cse/web/research/plse/daikon/history
 save-current-release:
 	@echo Saving $(CUR_VER) to history directory.
 	chmod +w $(HISTORY_DIR)
-	mkdir $(HISTORY_DIR)/$(CUR_VER)
+	mkdir $(HISTORY_DIR)/$(CUR_RELEASE_NAME)
 	chmod -w $(HISTORY_DIR)
-	cd $(HISTORY_DIR)/$(CUR_VER) && cp /cse/web/research/plse/daikon/download/daikon.zip . && unzip -p daikon.zip daikon/doc/CHANGES >CHANGES && chmod -w CHANGES .
+	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp /cse/web/research/plse/daikon/download/$(CUR_RELEASE_NAME).zip . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod -w CHANGES .
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 ifeq ($(origin TODAY), undefined)
@@ -458,9 +459,10 @@ update-doc-dist-date:
 # is invoked at the beginning of a make.
 update-doc-dist-version:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/((Daikon|Fjalar) version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' ${DIST_VERSION_FILES}
+	# update the version number in the release archive file names
+	perl -wpi -e 's/(\-)[0-9]+(\.[0-9]+)+/$$1 . "$(shell cat doc/VERSION)"/eg;' doc/www/download/index.html
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
 	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' fjalar/valgrind/fjalar/mc_main.c
-#	cvs ci -m "Update version number for new Daikon distribution" fjalar/valgrind/fjalar/mc_main.c
 	touch doc/CHANGES
 
 # Update the version number.
@@ -513,18 +515,18 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 # checkout.
 daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 
-	-rm -rf ${TMPDIR}/daikon
+	-rm -rf ${TMPDIR}/daikon-* ${TMPDIR}/daikon-*.tar ${TMPDIR}/daikon-*.zip
 	mkdir ${TMPDIR}/daikon
 
 	mkdir ${TMPDIR}/daikon/doc
-	cp -p README.txt ${TMPDIR}/daikon/README.txt
-	cp -p README.html ${TMPDIR}/daikon/README.html
+	cp -p README ${TMPDIR}/daikon/README
 	cp -p README.source ${TMPDIR}/daikon/README.source
 	cp -p doc/README ${TMPDIR}/daikon/doc/README
 	cd doc && cp -p $(DOC_FILES_NO_IMAGES) ${TMPDIR}/daikon/doc
 	mkdir ${TMPDIR}/daikon/doc/images
 	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) ${TMPDIR}/daikon/doc/images
 	cp -pR doc/daikon ${TMPDIR}/daikon/doc
+	cp -pR doc/developer ${TMPDIR}/daikon/doc
 
 	# Plume-lib library
 	(cd plume-lib; git archive --prefix=plume-lib/ HEAD | (cd ${TMPDIR}/daikon/ && tar xf -))
@@ -581,7 +583,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 # We use the --filter option twice with rsync to exclude unneeded files.
 # The first attempts to ignore all files indicated by the contents
 # of the .gitignore file.  The second ignores the version control files.
-	rsync -rp -L --filter=':- .gitignore' --filter='. rsync.ignore' fjalar ${TMPDIR}/daikon
+	rsync -rptg -L --filter=':- fjalar/.gitignore' --filter='. scripts/rsync.ignore' fjalar ${TMPDIR}/daikon
 
 	@# Internal developer documentation
 	rm -rf ${TMPDIR}/daikon/fjalar/valgrind/fjalar/notes
@@ -600,16 +602,11 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 
 	## Make the source distribution proper
 	(cd ${TMPDIR} && chmod -R a+rX daikon)
-	(cd ${TMPDIR}; tar cf daikon.tar daikon)
-	cp -pf ${TMPDIR}/daikon.tar .
-	rm -f ${TMPDIR}/daikon.zip
-	(cd ${TMPDIR}; zip -r daikon daikon)
-	cp -pf ${TMPDIR}/daikon.zip .
-
-# Rule for daikon.tar.gz
-%.gz : %
-	-rm -rf $@
-	gzip -c $< > $@
+	(cd ${TMPDIR}; mv daikon $(NEW_RELEASE_NAME))
+	(cd ${TMPDIR}; tar cf $(NEW_RELEASE_NAME).tar $(NEW_RELEASE_NAME))
+	cp -pf ${TMPDIR}/$(NEW_RELEASE_NAME).tar .
+	(cd ${TMPDIR}; zip -r $(NEW_RELEASE_NAME).zip $(NEW_RELEASE_NAME))
+	cp -pf ${TMPDIR}/$(NEW_RELEASE_NAME).zip .
 
 
 ### Front end binaries
@@ -622,9 +619,10 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 ###
 
 showvars:
-	@echo "DAIKON_JAVA_FILES = " $(DAIKON_JAVA_FILES)
-	@echo "WWW_FILES = " $(WWW_FILES)
-	@echo "DIST_DIR_PATHS = " $(DIST_DIR_PATHS)
+	@echo "DAIKON_JAVA_FILES =" $(DAIKON_JAVA_FILES)
+	@echo "WWW_FILES =" $(WWW_FILES)
+	@echo "CUR_RELEASE_NAME =" $(CUR_RELEASE_NAME)
+	@echo "NEW_RELEASE_NAME =" $(NEW_RELEASE_NAME)
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
