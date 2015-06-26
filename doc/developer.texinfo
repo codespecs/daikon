@@ -2380,6 +2380,16 @@ This means correcting the file, most likely located beneath either
 need to repeat the previous step (@command{make staging}) prior to re-running
 the broken link tool.
 
+Here is a workflow that may be used to deal with broken links:
+@itemize
+@item
+Use the Wayback Machine, http://archive.org/web/, to see what the old content was.
+@item
+Do a web search to see if the page has relocated elsewhere.
+@item
+If the web search is not successful, email the maintainer of the old content.
+@end itemize
+
 If the URL is correct but cannot be checked (for example, because the website
 prohibits spiders or because the URL  redirects to another URL but you prefer
 to keep the first URL in your document), then you may need to add lines to
