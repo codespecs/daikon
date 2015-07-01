@@ -33,7 +33,7 @@ the new version control repositories by running:
 The location of the Celeriac front end has changed:
   https://github.com/codespecs/daikon-dot-net-front-end	
 
-The Daikon .tar and .zip release file names include the version number;
+The Daikon .tar and .zip release file names now include the version number;
 e.g., daikon-5.2.8.zip instead of daikon.zip.  The same renaming is true
 of the top-level directory within these archive files.
 

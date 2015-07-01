@@ -35,14 +35,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.2.7
+@center Daikon version 5.2.8
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.2.7 release date
-@center June 2, 2015
+@c Print out the Daikon version 5.2.8 release date
+@center July 1, 2015
 @end ifset
 
 @ifclear final
@@ -90,7 +90,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.2.7, released June 2, 2015.
+It describes Daikon version 5.2.8, released July 1, 2015.
 
 @menu
 * Introduction::
@@ -269,7 +269,7 @@ at @uref{http://cygwin.com/install.html}.
 @cindex version control repository
 
 The Daikon git repository is located on GitHub;
-see @w{@uref{https://github.com/codespecs/daikon/}.}
+see @w{@uref{https://github.com/@/codespecs/daikon/}.}
 
 @xref{Compiling Daikon}, for instructions for compiling Daikon.
 
@@ -2101,11 +2101,11 @@ of the bibliography you wish to use.
 @item
 Update the Daikon source files to their most recent version. 
 
-@example
+@smallexample
 set -o pipefail
 (cd $DAIKONDIR && git pull && git log --branches --not --remotes && git status)
-(cd $DAIKONDIR/../fjalar && git pull && git log --branches --not --remotes && git status)
-@end example
+(cd $DAIKONDIR/fjalar && git pull && git log --branches --not --remotes && git status)
+@end smallexample
 
 For each command, the last line printed should be @samp{no changes found}.
 You also need to make sure that the "git log" command didn't produce any output.
@@ -2383,7 +2383,7 @@ the broken link tool.
 Here is a workflow that may be used to deal with broken links:
 @itemize
 @item
-Use the Wayback Machine, http://archive.org/web/, to see what the old content was.
+Use the @samp{Wayback Machine}, http://archive.org/web/, to see what the old content was.
 @item
 Do a web search to see if the page has relocated elsewhere.
 @item
