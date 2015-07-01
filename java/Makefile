@@ -8,9 +8,6 @@ DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-# Note about CHECKER_ARGS: if this contains any -Alint option, it will
-# override (not augment) any other use of -Alint in this Makefile.
-
 DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
 
 # Test that the directory exists.  There must be a better way to do this.
@@ -71,7 +68,7 @@ endif
 
 # Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
@@ -809,7 +806,10 @@ audit:
 ### Pluggable type qualifier checkers
 # (Don't run these until after you have compiled Daikon at least once.)
 
-# Add proc:only to not generate .class files (so don't change version 7 to version 8).
+# Note about CHECKER_ARGS: if this contains any -Alint option, it will
+# override (not augment) any other use of -Alint in this Makefile.
+# "-proc:only" prevents generation of .class files (so generated classfiles are
+# version 7 rather than version 8).
 CHECKER_ARGS ?= -AsuppressWarnings=flowexpr.parameter.not.final -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only
 
 ## All of the following targets need to depend on "compile".
