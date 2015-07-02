@@ -35,14 +35,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.2.7
+@center Daikon version 5.2.9
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.2.7 release date
-@center June 2, 2015
+@c Print out the Daikon version 5.2.9 release date
+@center July 1, 2015
 @end ifset
 
 @ifclear final
@@ -90,7 +90,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.2.7, released June 2, 2015.
+It describes Daikon version 5.2.9, released July 1, 2015.
 
 @menu
 * Introduction::
@@ -269,7 +269,7 @@ at @uref{http://cygwin.com/install.html}.
 @cindex version control repository
 
 The Daikon git repository is located on GitHub;
-see @w{@uref{https://github.com/codespecs/daikon/}.}
+see @w{@uref{https://github.com/@/codespecs/daikon/}.}
 
 @xref{Compiling Daikon}, for instructions for compiling Daikon.
 
@@ -2101,11 +2101,11 @@ of the bibliography you wish to use.
 @item
 Update the Daikon source files to their most recent version. 
 
-@example
+@smallexample
 set -o pipefail
 (cd $DAIKONDIR && git pull && git log --branches --not --remotes && git status)
-(cd $DAIKONDIR/../fjalar && git pull && git log --branches --not --remotes && git status)
-@end example
+(cd $DAIKONDIR/fjalar && git pull && git log --branches --not --remotes && git status)
+@end smallexample
 
 For each command, the last line printed should be @samp{no changes found}.
 You also need to make sure that the "git log" command didn't produce any output.
@@ -2383,7 +2383,7 @@ the broken link tool.
 Here is a workflow that may be used to deal with broken links:
 @itemize
 @item
-Use the Wayback Machine, http://archive.org/web/, to see what the old content was.
+Use the @samp{Wayback Machine}, http://archive.org/web/, to see what the old content was.
 @item
 Do a web search to see if the page has relocated elsewhere.
 @item
@@ -2421,21 +2421,26 @@ make test-staged-dist
 Test the distribution on a 32-bit machine. 
 This is probably best done on a virtual machine running a current version
 of Fedora.  The instructions below assume you are running on such a machine.
-They will download the staged @file{daikon.tar.gz} file, extract the files, set
+They will download the staged release archive, extract the files, set
 the appropriate environment variables and run the top level Makefile.
 Finally, a short verification test is run;
 success is indicated by invariant output being written to the screen.
 
+@noindent
+NOTE: For this example and the next few that involve downloading the Daikon release
+tar file we use @file{#.#.#} as a placeholder for the release number you are
+currently working on. For example, @file{daikon-5.2.8.tar.gz}.
+
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-rm -rf daikon.tar.gz daikon
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
-tar xzf daikon.tar.gz
+rm -rf daikon*
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
+tar xzf daikon-*.tar.gz
+cd daikon-*
 export JAVA_HOME=/usr/lib/jvm/java
-export DAIKONDIR=`pwd`/daikon
-source daikon/scripts/daikon.bashrc
-cd daikon
+export DAIKONDIR=`pwd`
+source scripts/daikon.bashrc
 make
 make installation-test
 @end smallexample
@@ -2456,13 +2461,13 @@ available and upgrade your test bed as necessary.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-rm -rf daikon.tar.gz daikon
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
-tar xzf daikon.tar.gz
+rm -rf daikon*
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
+tar xzf daikon-*.tar.gz
+cd daikon-*
 export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-export DAIKONDIR=`pwd`/daikon
-source daikon/scripts/daikon.bashrc
-cd daikon
+export DAIKONDIR=`pwd`
+source scripts/daikon.bashrc
 make
 make installation-test
 @end smallexample
@@ -2474,7 +2479,7 @@ make installation-test
 Test the distribution on a Windows machine.  On a Windows
 machine with Cygwin installed, as a guest user (or at least one without
 environment variables such as @env{$DAIKONDIR} defined!), download the staged
-@file{daikon.tar.gz}
+@file{daikon-#.#.#.tar.gz}
 file, extract the files, set the appropriate environment variables
 and run the top level Makefile.
 The last line of output from the first make should indicate that Kvasir was
@@ -2485,15 +2490,15 @@ written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-rm -rf daikon.tar.gz daikon
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
-tar xzf daikon.tar.gz
+rm -rf daikon*
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
+tar xzf daikon-*.tar.gz
+cd daikon-*
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
 export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_45"
-export DAIKONDIR=`pwd`/daikon
-source daikon/scripts/daikon.bashrc
-cd daikon
+export DAIKONDIR=`pwd`
+source scripts/daikon.bashrc
 make
 make installation-test
 @end smallexample
@@ -2503,7 +2508,7 @@ make installation-test
 
 @item
 Test the distribution on a MacOSX machine.  On a MacOSX machine
-with the development tools installed, download the staged @file{daikon.tar.gz}
+with the development tools installed, download the staged @file{daikon-#.#.#.tar.gz}
 file, extract the files, set the appropriate environment variables and
 run the top level Makefile.
 The last line of output from the first make should indicate that Kvasir was
@@ -2514,16 +2519,16 @@ written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-rm -rf daikon.tar.gz daikon
-curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
-# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
-tar xzf daikon.tar.gz
+rm -rf daikon*
+curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
+# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
+tar xzf daikon-*.tar.gz
+cd daikon-*
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
-export DAIKONDIR=`pwd`/daikon
-source daikon/scripts/daikon.bashrc
-cd daikon
+export DAIKONDIR=`pwd`
+source scripts/daikon.bashrc
 make
 make installation-test
 @end smallexample

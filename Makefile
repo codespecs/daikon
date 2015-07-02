@@ -374,8 +374,7 @@ staging: doc/CHANGES
 	tar tzf $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz | perl -p -e 's/^(.*?)\///' | sort > ${TMPDIR}/new_tar.txt
 	-diff -u ${TMPDIR}/old_tar.txt ${TMPDIR}/new_tar.txt
 	# Delete the tmp files
-	cd ${TMPDIR} && /bin/rm -rf daikon daikon.dist daikon*.tar daikon*.zip \
-							old_tar.txt new_tar.txt
+	cd ${TMPDIR} && /bin/rm -rf daikon daikon.dist old_tar.txt new_tar.txt
 
 # Copy the files in the staging area to the website.  This will copy
 # all of the files in staging, but will not delete any files in the website
