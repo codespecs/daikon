@@ -58,7 +58,7 @@ public final class VarComparabilityNone
    * lets us compare integers to longs, but not integers to arrays.
    **/
   static /*@Pure*/ boolean comparable(VarComparabilityNone vcomp1,
-                                       VarComparabilityNone vcomp2) {
+                                      VarComparabilityNone vcomp2) {
     return true;
   }
 
