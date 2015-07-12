@@ -569,7 +569,7 @@ public abstract class Invariant
    * in an invariant must be comparable, this can usually be the
    * comparability information for any variable.  The exception is
    * when one or more variables is always comparable (comparable to
-   * everythign else).  An always comparable VarComparability is
+   * everything else).  An always comparable VarComparability is
    * returned only if all of the variables involved are always
    * comparable.  Otherwise the comparability information from one
    * of the non always-comparable variables is returned.
