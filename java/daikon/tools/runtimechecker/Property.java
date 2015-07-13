@@ -53,7 +53,7 @@ public class Property implements Serializable {
     }
 
     /** JML representation of this property. */
-    public String invRep;
+    public String jmlRep;
 
     /**
      * A measure of a property's universality: whether it captures the general
@@ -67,11 +67,11 @@ public class Property implements Serializable {
 
 
     // Creates a new property with the given attributes.
-    private Property(Kind kind, String daikonRep, String method, String invRep, String daikonClass, double confidence) {
+    private Property(Kind kind, String daikonRep, String method, String jmlRep, String daikonClass, double confidence) {
         this.kind = kind;
         this.daikonRep = daikonRep;
         this.method = method;
-        this.invRep = invRep;
+        this.jmlRep = jmlRep;
         this.daikonClass = daikonClass;
         this.confidence = confidence;
     }
@@ -245,7 +245,7 @@ public class Property implements Serializable {
             + kind.xmlString()
             + "<DAIKON>" + daikonRep + " </DAIKON> "
             + "<METHOD> " + method + " </METHOD>"
-            + "<INV>" + invRep + "</INV>"
+            + "<INV>" + jmlRep + "</INV>"
             + " <CONFIDENCE>" + confidence + " </CONFIDENCE>"
             + " <DAIKONCLASS>" + daikonClass + " </DAIKONCLASS>"
             + "</INVINFO>";
@@ -318,10 +318,10 @@ public class Property implements Serializable {
      * <p>
      * Get the property with the given attributes.
      */
-    private static Property get(Kind kind, String daikonRep, String method, String invRep, String daikonClass, double confidence)
+    private static Property get(Kind kind, String daikonRep, String method, String jmlRep, String daikonClass, double confidence)
             throws MalformedPropertyException {
 
-        Property anno = new Property(kind, daikonRep, method, invRep, daikonClass, confidence);
+        Property anno = new Property(kind, daikonRep, method, jmlRep, daikonClass, confidence);
         Integer key = new Integer(anno.hashCode());
         if (propertiesMap.containsKey(key)) {
             return propertiesMap.get(key);
@@ -508,14 +508,14 @@ public class Property implements Serializable {
 
     // [[ TODO: first, you need to check that immutability and
     // uniqueness even hold. Then, you need to figoure out a better
-    // way to do the stuff below (it seems to me like invRep,
+    // way to do the stuff below (it seems to me like jmlRep,
     // daikonClass and confidence should be given to the constructor
     // of the object). ]]
     private Object readResolve() throws ObjectStreamException {
         try {
 
-            Property anno = get(kind(), daikonRep(), method(), invRep, daikonClass, confidence);
-            assert anno.invRep == null || anno.invRep.equals(this.invRep) : "anno.invRep==" + anno.invRep + " this.invRep==" + this.invRep;
+            Property anno = get(kind(), daikonRep(), method(), jmlRep, daikonClass, confidence);
+            assert anno.jmlRep == null || anno.jmlRep.equals(this.jmlRep) : "anno.jmlRep==" + anno.jmlRep + " this.jmlRep==" + this.jmlRep;
             assert anno.daikonClass == null || anno.daikonClass.equals(this.daikonClass) : "anno.daikonClass==" + anno.daikonClass + " this.daikonClass==" + this.daikonClass;
             assert anno.confidence == 0 || anno.confidence == this.confidence : "anno.confidence==" + anno.confidence + " this.confidence==" + this.confidence;
             return anno;
