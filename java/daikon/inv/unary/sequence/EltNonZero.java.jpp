@@ -193,7 +193,6 @@ public final class CLASSNAME
            + (is_pointer() ? "null" : "0") + ")" + form[2];
   }
 
-  /* modeled after format_jml, kind of */
   public String format_java_family(OutputFormat format) {
     String retval =
       "daikon.Quant.eltsNotEqual(" + var().name_using(format)

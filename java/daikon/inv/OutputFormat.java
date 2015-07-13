@@ -13,20 +13,22 @@ import org.checkerframework.dataflow.qual.*;
  **/
 public enum OutputFormat {
 
-  /** The standard, concise Daikon output format */
+  /** The standard, concise Daikon output format.
+   * Intended to be read by humans.  */
   DAIKON("Daikon"),
   /** Design-By-Contract for Java (used by Parasoft JContract) */
   DBCJAVA("DBC") {
     public String ensures_tag() { return "@post"; }
     public String requires_tag() { return "@pre"; }
   },
-  /** ESC/Java's annotation language */
+  /** ESC/Java's annotation language -- a variant of JML. */
   ESCJAVA("ESC/Java"),
   /** Java boolean expression */
   JAVA("Java"),
   /** Java Modeling Language */
   JML("JML"),
-  /** Simplify theorem prover */
+  /** Simplify theorem prover.
+   * First order logical expressions, expressed in Lisp-style parens. */
   SIMPLIFY("Simplify"),
   /** C# Code Contract */
   CSHARPCONTRACT("CSharpContract");

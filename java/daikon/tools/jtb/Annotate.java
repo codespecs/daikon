@@ -48,11 +48,8 @@ public class Annotate {
   //  * add object invariant "invariant field.owner == this"
   //  * whenever the field is set, "set field.owner = this"
 
-  // JML format: The formatting of invariants is different (we use
-  // Invariant.OutputFormat.JML instead of
-  // Invariant.OutputFormat.ESC).  Other than that, the format is
-  // almost the same as ESC (heavyweight) format, but "modifies"
-  // clauses are omitted.
+  // JML format: The formatting is similar to ESC (heavyweight) format,
+  // but "modifies" clauses are omitted.
 
   // DBC format: same as ESC format, but "requires" becomes "@pre",
   // "ensures" becomes "@post", and we omit everything but invariants,

@@ -245,13 +245,7 @@ public final class Daikon {
   // redundant, so that they are removed from the printed output.
   public static boolean suppress_redundant_invariants_with_simplify = false;
 
-  // Set what output style to use.  DAIKON is the default; ESC style
-  // is based on JML; SIMPLIFY style uses first order logical
-  // expressions with lots of parens
   public static OutputFormat output_format = OutputFormat.DAIKON;
-  // public static OutputFormat output_format = OutputFormat.ESCJAVA;
-  // public static OutputFormat output_format = OutputFormat.DBCJAVA;
-  // public static OutputFormat output_format = OutputFormat.SIMPLIFY;
 
   // When true, output numbers of values and samples (also names of variables)
   public static boolean output_num_samples = false;
