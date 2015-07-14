@@ -89,7 +89,7 @@ JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac
 
 JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 # When running the checkers, it is important not to pass in "-source 5".
-# Also avoid -Xlint that activates warnings about failure to use == for interned values.
+# Also avoid unqualified "-Xlint" that activates warnings about failure to use == for interned values.
 JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx1024m
 
 
@@ -1096,7 +1096,7 @@ junit-all: junit
 	@# but I'm having trouble with that, apparently due to hard-coded
 	@# directory paths.  And these tests are slow, so we want them to
 	@# be separate anyway.
-	@echo java daikon.test.split.SplitterFactoryTest
+	@echo ${JAVA} daikon.test.split.SplitterFactoryTest
 	@${JAVA} daikon.test.split.SplitterFactoryTest
 
 ###
