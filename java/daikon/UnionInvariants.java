@@ -78,7 +78,7 @@ public final class UnionInvariants {
         System.out.println(usage);
         throw new Daikon.TerminationMessage();
       case 'o':
-          String inv_filename = g.getOptarg();
+          String inv_filename = Daikon.getOptarg(g);
 
           if (inv_file != null) {
             throw new Daikon.TerminationMessage("multiple serialization output files supplied on command line: " + inv_file + " " + inv_filename);

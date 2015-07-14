@@ -116,7 +116,7 @@ public class DtraceDiff {
             throw new Error("multiple --"
                             + Daikon.ppt_regexp_SWITCH
                             + " regular expressions supplied on command line");
-          String regexp_string = g.getOptarg();
+          String regexp_string = Daikon.getOptarg(g);
           if (!RegexUtil.isRegex(regexp_string)) {
             throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
@@ -127,7 +127,7 @@ public class DtraceDiff {
             throw new Error("multiple --"
                             + Daikon.ppt_omit_regexp_SWITCH
                             + " regular expressions supplied on command line");
-          String regexp_string = g.getOptarg();
+          String regexp_string = Daikon.getOptarg(g);
           if (!RegexUtil.isRegex(regexp_string)) {
             throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_omit_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
@@ -138,7 +138,7 @@ public class DtraceDiff {
             throw new Error("multiple --"
                             + Daikon.var_regexp_SWITCH
                             + " regular expressions supplied on command line");
-          String regexp_string = g.getOptarg();
+          String regexp_string = Daikon.getOptarg(g);
           if (!RegexUtil.isRegex(regexp_string)) {
             throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.var_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
@@ -149,14 +149,14 @@ public class DtraceDiff {
             throw new Error("multiple --"
                             + Daikon.var_omit_regexp_SWITCH
                             + " regular expressions supplied on command line");
-          String regexp_string = g.getOptarg();
+          String regexp_string = Daikon.getOptarg(g);
           if (!RegexUtil.isRegex(regexp_string)) {
             throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.var_omit_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
           Daikon.var_omit_regexp = Pattern.compile(regexp_string);
           break;
         } else if (Daikon.config_SWITCH.equals(option_name)) {
-          String config_file = g.getOptarg();
+          String config_file = Daikon.getOptarg(g);
           try {
             InputStream stream =
               new FileInputStream(config_file);
@@ -167,7 +167,7 @@ public class DtraceDiff {
           }
           break;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
-          String item = g.getOptarg();
+          String item = Daikon.getOptarg(g);
           Configuration.getInstance().apply(item);
           break;
         } else {

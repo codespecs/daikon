@@ -211,7 +211,7 @@ public final class Diff {
                             " classnames supplied on command line");
           }
           @SuppressWarnings("signature") // user input, should be checked
-          /*@ClassGetName*/ String cgn = g.getOptarg();
+          /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
           invSortComparator1Classname = cgn;
         } else if (INV_SORT_COMPARATOR2_SWITCH.equals(optionName)) {
           if (invSortComparator2Classname != null) {
@@ -219,7 +219,7 @@ public final class Diff {
                             " classnames supplied on command line");
           }
           @SuppressWarnings("signature") // user input, should be checked
-          /*@ClassGetName*/ String cgn = g.getOptarg();
+          /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
           invSortComparator2Classname = cgn;
         } else if (INV_PAIR_COMPARATOR_SWITCH.equals(optionName)) {
           if (invPairComparatorClassname != null) {
@@ -227,7 +227,7 @@ public final class Diff {
                             " classnames supplied on command line");
           }
           @SuppressWarnings("signature") // user input, should be checked
-          /*@ClassGetName*/ String cgn = g.getOptarg();
+          /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
           invPairComparatorClassname = cgn;
         } else if (IGNORE_UNJUSTIFIED_SWITCH.equals(optionName)) {
           optionSelected = true;
@@ -287,7 +287,7 @@ public final class Diff {
           throw new Error
             ("multiple output files supplied on command line");
         }
-        String outputFilename = g.getOptarg();
+        String outputFilename = Daikon.getOptarg(g);
         outputFile = new File(outputFilename);
         if (! UtilMDE.canCreateAndWrite(outputFile)) {
           throw new Error("Cannot write to file " + outputFile);

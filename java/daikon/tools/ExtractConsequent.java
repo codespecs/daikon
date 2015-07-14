@@ -110,13 +110,13 @@ public class ExtractConsequent {
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
           Daikon.suppress_redundant_invariants_with_simplify = true;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
-          String item = g.getOptarg();
+          String item = Daikon.getOptarg(g);
           daikon.config.Configuration.getInstance().apply(item);
           break;
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
+          LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);

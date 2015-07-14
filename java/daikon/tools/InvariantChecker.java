@@ -132,27 +132,27 @@ public class InvariantChecker {
         } else if (verbose_SWITCH.equals (option_name)) {
           quiet = false;
         } else if (dir_SWITCH.equals (option_name)) {
-          dir_file = new File (g.getOptarg());
+          dir_file = new File (Daikon.getOptarg(g));
           if (!dir_file.exists() || !dir_file.isDirectory())
              throw new Daikon.TerminationMessage ("Error reading the directory "+dir_file);
 
         } else if (output_SWITCH.equals (option_name)) {
-          File output_file = new File (g.getOptarg());
+          File output_file = new File (Daikon.getOptarg(g));
           output_stream = new PrintStream (new FileOutputStream (output_file));
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
-          String item = g.getOptarg();
+          String item = Daikon.getOptarg(g);
           daikon.config.Configuration.getInstance().apply(item);
           break;
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
+          LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
         } else if (Daikon.track_SWITCH.equals (option_name)) {
           LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
-          String error = Debug.add_track (g.getOptarg());
+          String error = Debug.add_track (Daikon.getOptarg(g));
           if (error != null) {
             throw new Daikon.TerminationMessage ("Error parsing track argument '"
-                                + g.getOptarg() + "' - " + error);
+                                + Daikon.getOptarg(g) + "' - " + error);
           }
         } else {
           throw new RuntimeException("Unknown long option received: " +

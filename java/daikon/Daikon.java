@@ -813,7 +813,7 @@ public final class Daikon {
           } else if (no_text_output_SWITCH.equals(option_name)) {
             no_text_output = true;
           } else if (format_SWITCH.equals(option_name)) {
-            String format_name = g.getOptarg();
+            String format_name = getOptarg(g);
             Daikon.output_format = OutputFormat.get(format_name);
             if (Daikon.output_format == null) {
               throw new Daikon.TerminationMessage(
@@ -829,7 +829,7 @@ public final class Daikon {
           } else if (output_num_samples_SWITCH.equals(option_name)) {
             output_num_samples = true;
           } else if (files_from_SWITCH.equals(option_name)) {
-            String files_from_filename = g.getOptarg();
+            String files_from_filename = getOptarg(g);
             try {
               for (String filename : new EntryReader(files_from_filename)) {
                 // Ignore blank lines in file.
@@ -863,7 +863,7 @@ public final class Daikon {
             }
             break;
           } else if (omit_from_output_SWITCH.equals(option_name)) {
-            String f = g.getOptarg();
+            String f = getOptarg(g);
             for (int i = 0; i < f.length(); i++) {
               if ("0rs".indexOf(f.charAt(i)) == -1)
                 throw new Daikon.TerminationMessage(
@@ -876,7 +876,7 @@ public final class Daikon {
           }
           // Control invariant detection
           else if (conf_limit_SWITCH.equals(option_name)) {
-            double limit = Double.parseDouble(g.getOptarg());
+            double limit = Double.parseDouble(getOptarg(g));
             if ((limit < 0.0) || (limit > 1.0)) {
               throw new Daikon.TerminationMessage(
                 conf_limit_SWITCH + " must be between [0..1]");
@@ -886,7 +886,7 @@ public final class Daikon {
               String.valueOf(limit));
           } else if (list_type_SWITCH.equals(option_name)) {
             try {
-              String list_type_string = g.getOptarg();
+              String list_type_string = getOptarg(g);
               ProglangType.list_implementors.add(
                 list_type_string);
             } catch (Exception e) {
@@ -907,7 +907,7 @@ public final class Daikon {
                 "multiple --"
                   + ppt_regexp_SWITCH
                   + " regular expressions supplied on command line");
-            String regexp_string = g.getOptarg();
+            String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
@@ -919,7 +919,7 @@ public final class Daikon {
                 "multiple --"
                   + ppt_omit_regexp_SWITCH
                   + " regular expressions supplied on command line");
-            String regexp_string = g.getOptarg();
+            String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_omit_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
@@ -931,7 +931,7 @@ public final class Daikon {
                 "multiple --"
                   + var_regexp_SWITCH
                   + " regular expressions supplied on command line");
-            String regexp_string = g.getOptarg();
+            String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
@@ -943,7 +943,7 @@ public final class Daikon {
                 "multiple --"
                   + var_omit_regexp_SWITCH
                   + " regular expressions supplied on command line");
-            String regexp_string = g.getOptarg();
+            String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_omit_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
@@ -951,7 +951,7 @@ public final class Daikon {
             break;
           }
           else if (server_SWITCH.equals(option_name)) {
-            String input_dir = g.getOptarg();
+            String input_dir = getOptarg(g);
             server_dir = new File(input_dir);
             if (!server_dir.isDirectory() || !server_dir.canRead() || !server_dir.canWrite())
               throw new RuntimeException(
@@ -961,7 +961,7 @@ public final class Daikon {
           // Configuration options
 
           } else if (config_SWITCH.equals(option_name)) {
-            String config_file = g.getOptarg();
+            String config_file = getOptarg(g);
             try {
               InputStream stream =
                 new FileInputStream(config_file);
@@ -973,7 +973,7 @@ public final class Daikon {
             }
             break;
           } else if (config_option_SWITCH.equals(option_name)) {
-            String item = g.getOptarg();
+            String item = getOptarg(g);
             try {
               Configuration.getInstance().apply(item);
             } catch (daikon.config.Configuration.ConfigException e) {
@@ -984,20 +984,20 @@ public final class Daikon {
           else if (debugAll_SWITCH.equals(option_name)) {
             Global.debugAll = true;
           } else if (debug_SWITCH.equals(option_name)) {
-            LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
+            LogHelper.setLevel(getOptarg(g), LogHelper.FINE);
           } else if (track_SWITCH.equals(option_name)) {
             LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
-            String error = Debug.add_track(g.getOptarg());
+            String error = Debug.add_track(getOptarg(g));
             if (error != null) {
               throw new Daikon.TerminationMessage(
                 "Error parsing track argument '"
-                  + g.getOptarg()
+                  + getOptarg(g)
                   + "' - "
                   + error);
             }
           } else if (disc_reason_SWITCH.equals(option_name)) {
             try {
-              PrintInvariants.discReasonSetup(g.getOptarg());
+              PrintInvariants.discReasonSetup(getOptarg(g));
             } catch (IllegalArgumentException e) {
               throw new Daikon.TerminationMessage(e);
             }
@@ -1012,7 +1012,7 @@ public final class Daikon {
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
         case 'o' :
-          String inv_filename = g.getOptarg();
+          String inv_filename = getOptarg(g);
 
           if (inv_file != null) {
             throw new Daikon.TerminationMessage("multiple serialization output files supplied on command line: " + inv_file + " " + inv_filename);
@@ -1097,6 +1097,18 @@ public final class Daikon {
     PrintInvariants.validateGuardNulls();
 
     return new FileOptions(decl_files, dtrace_files, spinfo_files, map_files);
+  }
+
+  /**
+   * Just like g.getOptarg(), but only to be called in circumstances when
+   * the programmer knows that the return value is non-null.
+   */
+  public static String getOptarg(Getopt g) {
+    String result = g.getOptarg();
+    if (result == null) {
+      throw new Error("getOptarg returned null for " + g);
+    }
+    return result;
   }
 
   /**

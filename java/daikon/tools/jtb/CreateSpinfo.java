@@ -96,14 +96,14 @@ public class CreateSpinfo {
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel (g.getOptarg(), LogHelper.FINE);
+          LogHelper.setLevel (Daikon.getOptarg(g), LogHelper.FINE);
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);
         }
         break;
       case 'o':
-        outputfilename = g.getOptarg();
+        outputfilename = Daikon.getOptarg(g);
         break;
       case 'h':
         System.out.println(usage);

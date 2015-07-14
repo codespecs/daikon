@@ -151,7 +151,7 @@ public class Annotate {
           useReflection = false;
         } else if (max_invariants_pp_SWITCH.equals(option_name)) {
           try {
-            maxInvariantsPP = Integer.parseInt(g.getOptarg());
+            maxInvariantsPP = Integer.parseInt(Daikon.getOptarg(g));
           } catch (NumberFormatException e) {
             System.err.println("Annotate: found the --max_invariants_pp option " +
                                "followed by an invalid numeric argument. Annotate " +
@@ -163,9 +163,9 @@ public class Annotate {
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel (g.getOptarg(), LogHelper.FINE);
+          LogHelper.setLevel (Daikon.getOptarg(g), LogHelper.FINE);
         } else if (Daikon.format_SWITCH.equals(option_name)) {
-          String format_name = g.getOptarg();
+          String format_name = Daikon.getOptarg(g);
           Daikon.output_format = OutputFormat.get(format_name);
           if (Daikon.output_format == null) {
             throw new Daikon.TerminationMessage("Bad argument:  --format "

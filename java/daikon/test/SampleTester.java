@@ -79,7 +79,7 @@ public class SampleTester extends TestCase {
           throw new Daikon.TerminationMessage();
 
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
-          String item = g.getOptarg();
+          String item = Daikon.getOptarg(g);
           daikon.config.Configuration.getInstance().apply(item);
           break;
 
@@ -87,13 +87,13 @@ public class SampleTester extends TestCase {
           Global.debugAll = true;
 
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
+          LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
         } else if (Daikon.track_SWITCH.equals(option_name)) {
           LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
-          String error = Debug.add_track (g.getOptarg());
+          String error = Debug.add_track (Daikon.getOptarg(g));
           if (error != null) {
             throw new Daikon.TerminationMessage ("Error parsing track argument '"
-                                + g.getOptarg() + "' - " + error);
+                                + Daikon.getOptarg(g) + "' - " + error);
           }
         } else {
           throw new RuntimeException("Unknown long option received: " +

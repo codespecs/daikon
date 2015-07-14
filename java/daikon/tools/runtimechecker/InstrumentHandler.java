@@ -239,13 +239,13 @@ public class InstrumentHandler extends CommandHandler {
                 } else if (make_all_fields_public_SWITCH.equals(option_name)) {
                     InstrumentVisitor.makeAllFieldsPublic = true;
                 } else if (directory_SWITCH.equals(option_name)) {
-                    instrumented_directory = g.getOptarg();
+                    instrumented_directory = Daikon.getOptarg(g);
                 } else if (checkers_directory_SWITCH.equals(option_name)) {
-                    checkersOutputDirName = g.getOptarg();
+                    checkersOutputDirName = Daikon.getOptarg(g);
                 } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
                     Global.debugAll = true;
                 } else if (Daikon.debug_SWITCH.equals(option_name)) {
-                    LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
+                    LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
                 } else {
                     System.err.println("Unknown long option received: "
                                        + option_name);

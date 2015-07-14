@@ -331,14 +331,14 @@ public final class PrintInvariants {
           if (ppt_regexp != null)
             throw new Error("multiple --" + Daikon.ppt_regexp_SWITCH
                   + " regular expressions supplied on command line");
-          String regexp_string = g.getOptarg();
+          String regexp_string = Daikon.getOptarg(g);
           if (!RegexUtil.isRegex(regexp_string)) {
             throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
           regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
           ppt_regexp = Pattern.compile(regexp_string);
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
-          try { PrintInvariants.discReasonSetup(g.getOptarg()); }
+          try { PrintInvariants.discReasonSetup(Daikon.getOptarg(g)); }
           catch (IllegalArgumentException e) {
             assert e.getMessage() != null : "@AssumeAssertion(nullness):  application invariant:  if discReasonSetup throws IllegalArgumentException, its message is non-null";
             throw new Daikon.TerminationMessage(e.getMessage());
@@ -346,7 +346,7 @@ public final class PrintInvariants {
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
           Daikon.suppress_redundant_invariants_with_simplify = true;
         } else if (Daikon.format_SWITCH.equals(option_name)) {
-          String format_name = g.getOptarg();
+          String format_name = Daikon.getOptarg(g);
           Daikon.output_format = OutputFormat.get(format_name);
           if (Daikon.output_format == null) {
             throw new Daikon.TerminationMessage(
@@ -357,7 +357,7 @@ public final class PrintInvariants {
         } else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
           Daikon.output_num_samples = true;
         } else if (Daikon.config_SWITCH.equals(option_name)) {
-          String config_file = g.getOptarg();
+          String config_file = Daikon.getOptarg(g);
           try {
             InputStream stream = new FileInputStream(config_file);
             Configuration.getInstance().apply(stream);
@@ -367,7 +367,7 @@ public final class PrintInvariants {
           }
           break;
         } else if (PrintInvariants.output_SWITCH.equals(option_name)) {
-            String output_file = g.getOptarg();
+            String output_file = Daikon.getOptarg(g);
             try {
               out_stream = new FileOutputStream(output_file);
             } catch (IOException e) {
@@ -377,19 +377,19 @@ public final class PrintInvariants {
             }
             break;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
-          String item = g.getOptarg();
+          String item = Daikon.getOptarg(g);
           daikon.config.Configuration.getInstance().apply(item);
           break;
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
+          LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
         } else if (Daikon.track_SWITCH.equals (option_name)) {
           LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
-          String error = Debug.add_track (g.getOptarg());
+          String error = Debug.add_track (Daikon.getOptarg(g));
           if (error != null) {
             throw new Daikon.TerminationMessage ("Error parsing track argument '"
-                                + g.getOptarg() + "' - " + error);
+                                + Daikon.getOptarg(g) + "' - " + error);
           }
         } else if (Daikon.wrap_xml_SWITCH.equals (option_name)) {
             wrap_xml = true;

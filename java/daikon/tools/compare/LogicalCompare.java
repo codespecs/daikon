@@ -634,7 +634,7 @@ public class LogicalCompare {
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
         } else if (option_name.equals("config-file")) {
-          String config_file = g.getOptarg();
+          String config_file = Daikon.getOptarg(g);
           try {
             InputStream stream = new FileInputStream(config_file);
             Configuration.getInstance().apply(stream);
@@ -643,12 +643,12 @@ public class LogicalCompare {
                                        + config_file);
           }
         } else if (option_name.equals("config_option")) {
-          String item = g.getOptarg();
+          String item = Daikon.getOptarg(g);
           Configuration.getInstance().apply(item);
         } else if (option_name.equals("debug")) {
           Global.debugAll = true;
         } else if (option_name.equals("dbg")) {
-          LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
+          LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
         } else if (option_name.equals("proofs")) {
           opt_proofs = true;
         } else if (option_name.equals("show-count")) {
@@ -666,13 +666,13 @@ public class LogicalCompare {
         } else if (option_name.equals("timing")) {
           opt_timing = true;
         } else if (option_name.equals("filters")) {
-          String f = g.getOptarg();
+          String f = Daikon.getOptarg(g);
           for (int i = 0; i < f.length(); i++) {
             filters[f.charAt(i)] = true;
           }
           user_filters = true;
         } else if (option_name.equals("assume")) {
-          readExtraAssumptions(g.getOptarg());
+          readExtraAssumptions(Daikon.getOptarg(g));
         } else if (option_name.equals("minimize-classes")) {
           opt_minimize_classes = true;
         } else {
