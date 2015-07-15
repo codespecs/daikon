@@ -3995,7 +3995,7 @@ all times.
 The DynComp dynamic comparability analysis tool performs dynamic type
 inference to group variables at each program point into comparability sets
 (see @ref{Program point declarations,,,developer,Daikon Developer Manual}
-for the numeric representation format of these sets).  All variables in each
+for the numeric representation format of these sets.)  All variables in each
 comparability set belong to the same ``abstract type'' of data that the
 programmer likely intended to represent, which is a richer set of types
 than the few basic declared types (e.g., int, float) provided by the
@@ -5004,7 +5004,7 @@ performs dynamic type inference to group variables at each program point
 into comparability sets.
 (@xref{Program point declarations,,,developer,Daikon Developer Manual},
 for the
-numeric representation format of these sets).  All variables in each
+numeric representation format of these sets.)  All variables in each
 comparability set belong to the same ``abstract type'' of data that the
 programmer likely intended to represent, which is a richer set of types
 than the few basic declared types (e.g., int, float) provided by the
