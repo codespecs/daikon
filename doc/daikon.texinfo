@@ -1278,7 +1278,8 @@ For help understanding the invariants, see @ref{Interpreting output}.
 @node       Using DynComp with C programs
 @subsection Using DynComp with C programs
 
-Optionally, the DynComp tool can be used along with Kvasir and Daikon.
+DynComp can help to filter Daikon's output by omitting invariants
+involving unrelated variables (see @ref{DynComp for C/C++}).
 DynComp uses a dynamic analysis to infer which program variables can
 meaningfully be used together; Daikon can then use this information to
 restrict the invariants it considers, potentially improving both its
@@ -4867,26 +4868,23 @@ file.
 This option may also be used with @option{--decls-only} to only generate
 a @file{.decls} file without a @file{.dtrace}.
 
-@item --no-dyncomp-gc
+@item --dyncomp-dataflow-only
 
-By default, DynComp runs with a garbage collector for the tag metadata
-that it uses, but this can cause your program to slow down if it runs
-too often.  This option turns off the garbage collector.  This is not
-recommended for long program runs, because without the garbage
-collector, it will likely run out of memory.
+When DynComp is operating in this mode, no binary operations qualify as
+interactions between values.  Thus, DynComp only tracks dataflow.
 
-@item --gc-num-tags=@var{N}
+@item --dyncomp-dataflow-comp
 
-The DynComp garbage collector runs once after every 10,000,000 tags have
-been assigned.  This option tells the garbage collector to run once
-after every @var{N} tags have been assigned.  Making the value of
-@var{N} larger allows your program to run faster (because the garbage
-collector runs less frequently), but may cause your program to run out
-of memory as well.  Making the value of @var{N} too small may cause your
-program to never terminate if @var{N} is smaller than the total number
-of tags that your program uses in steady state.  You will probably need
-to experiment with tweaking this value in order to get DynComp to work
-properly.
+When DynComp is operating in this mode, the only binary operations that
+qualify as interactions are comparisons between values (e.g., @code{x <=
+y} or @code{x != y}).
+
+@item --dyncomp-units
+
+When DynComp is operating in this mode, the only binary operations that
+qualify as interactions are comparisons, addition, subtraction.
+This ensures that the variables that DynComp groups together into one
+set all have the same units (e.g., physics units).
 
 @item --dyncomp-fast-mode
 
@@ -4917,23 +4915,26 @@ comparability separately for function entrances and exits, which can
 lead to more accurate results, but sometimes generates output @file{.decls}
 files that Daikon cannot accept.
 
-@item --dyncomp-dataflow-only
+@item --no-dyncomp-gc
 
-When DynComp is operating in this mode, no binary operations qualify as
-interactions between values.  Thus, DynComp only tracks dataflow.
+By default, DynComp runs with a garbage collector for the tag metadata
+that it uses, but this can cause your program to slow down if it runs
+too often.  This option turns off the garbage collector.  This is not
+recommended for long program runs, because without the garbage
+collector, it will likely run out of memory.
 
-@item --dyncomp-dataflow-comp
+@item --gc-num-tags=@var{N}
 
-When DynComp is operating in this mode, the only binary operations that
-qualify as interactions are comparisons between values (e.g., @code{x <=
-y} or @code{x != y}).
-
-@item --dyncomp-units
-
-When DynComp is operating in this mode, the only binary operations that
-qualify as interactions are comparisons, addition, subtraction.
-This ensures that the variables that DynComp groups together into one
-set all have the same units (e.g., physics units).
+The DynComp garbage collector runs once after every 10,000,000 tags have
+been assigned.  This option tells the garbage collector to run once
+after every @var{N} tags have been assigned.  Making the value of
+@var{N} larger allows your program to run faster (because the garbage
+collector runs less frequently), but may cause your program to run out
+of memory as well.  Making the value of @var{N} too small may cause your
+program to never terminate if @var{N} is smaller than the total number
+of tags that your program uses in steady state.  You will probably need
+to experiment with tweaking this value in order to get DynComp to work
+properly.
 
 @end table
 
@@ -5053,8 +5054,12 @@ the usual value trace in the @file{.dtrace} file.  Using
 @option{--decls-only} will only generate the @file{.decls} file without
 the extra slowdown of writing the @file{.dtrace} file to disk (however,
 because DynComp must execute the entire program to perform its analysis,
-the only time saved is I/O time).  Other DynComp options are listed in
-the @ref{Kvasir options} section.  Running Kvasir with DynComp takes
+the only time saved is I/O time).
+@c It would be better to cross-reference directly to the DynComp options
+@c rather than to the beginning of the "Kvasir options" section, but I
+@c don't see how to do that in Texinfo.
+Other DynComp options are listed in the @ref{Kvasir options} section.
+Running Kvasir with DynComp takes
 more memory and longer time than running Kvasir alone, but remember that
 DynComp only needs to be run once to generate a @file{.decls} file with
 comparability information.  That one file can be passed into Daikon along
