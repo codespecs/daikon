@@ -20,6 +20,18 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.10 (August ?, 2015)
+
+Chicory:
+- Modified generation of comparability values when using input from DynComp
+  .decls file via --comparability-file option.  When the resulting .dtrace
+  file is fed to Daikon, the number of uninteresting invariants is reduced.
+
+Changes relevant to building from source:
+- Now support gcc 5.1.1 and Fedora 22.
+
+===========================================================================
+
 5.2.8 (July 1, 2015)
 
 The Daikon and Fjalar version control repositories have moved from Google

@@ -155,3 +155,6 @@ dist:
 # www:
 # 	cd .. && $(MAKE) www
 
+find-changes:
+	diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
+
