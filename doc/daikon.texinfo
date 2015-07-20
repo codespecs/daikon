@@ -7452,7 +7452,7 @@ have the same format as one passed to Daikon's @option{--config}
 option, though because the invariants have already been generated,
 some will have no effect.
 
-@item --debug-all
+@item --debug
 @itemx --dbg @var{category}
 These options have the same effect as the @option{--debug} and
 @option{--dbg} options to Daikon, causing debugging logs to be
