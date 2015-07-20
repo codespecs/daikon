@@ -781,7 +781,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       + ",derivees="
       + derivees()
       + ",ppt="
-      + ppt.name()
+   // This method is only called for debugging  - so let's
+   // protect ourselves from a mistake somewhere else.
+   // + ppt.name()
+      + ppt
       + ",canBeMissing="
       + canBeMissing
       + (",equal_to="
@@ -851,6 +854,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Return all derived variables that build off this one. **/
   public List<Derivation> derivees() {
     ArrayList<Derivation> result = new ArrayList<Derivation>();
+    // This method is only called from the debugging routine 'repr()'.
+    // So let's protect ourselves from a mistake somewhere else.
+    if (ppt == null) return result;
     VarInfo[] vis = ppt.var_infos;
     for (int i = 0; i < vis.length; i++) {
       VarInfo vi = vis[i];
