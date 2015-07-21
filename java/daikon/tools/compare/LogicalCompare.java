@@ -1,6 +1,7 @@
 package daikon.tools.compare;
 
 import java.util.*;
+import java.util.logging.Logger;
 import java.io.*;
 import plume.UtilMDE;
 import daikon.*;
@@ -35,6 +36,8 @@ import org.checkerframework.checker.nullness.qual.*;
 public class LogicalCompare {
   private LogicalCompare() { throw new Error("do not instantiate"); }
 
+  public static final Logger debug = Logger.getLogger("daikon.tools.compare.LogicalCompare");
+
   // Options corresponding to command-line flags
   private static boolean opt_proofs         = false;
   private static boolean opt_show_count     = false;
@@ -57,16 +60,16 @@ public class LogicalCompare {
     UtilMDE.joinLines(
       "Usage: java daikon.tools.compare.LogicalCompare [options ...]",
       "           WEAK-INVS STRONG-INVS [ENTER-PPT [EXIT-PPT]]",
-      "  -h, --help",
+      "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
       "  --config-file FILE",
       "      Read configuration option file",
       "  --config_option OPTION=VALUE",
       "      Set individual configuration option",
-      "  --debug-all",
-      "      Enable all debugging logs",
-      "  --dbg CATEGORY",
-      "      Enable a single category of debug log",
+      "  --" + Daikon.debugAll_SWITCH,
+      "      Turns on all debug flags (voluminous output)",
+      "  --" + Daikon.debug_SWITCH + " logger",
+      "      Turns on the specified debug logger",
       "  --proofs",
       "      Show minimal sufficient conditions for valid invariants",
       "  --show-count",
@@ -599,8 +602,8 @@ public class LogicalCompare {
       new LongOpt("assume",              LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("config_option",       LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("config-file",         LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("dbg",                 LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("debug-all",                 LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.debugAll_SWITCH,      LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.debug_SWITCH,   LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("filters",             LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("help",                      LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("minimize-classes"      ,    LongOpt.NO_ARGUMENT, null, 0),
@@ -630,7 +633,7 @@ public class LogicalCompare {
       case 0:
         // got a long option
         String option_name = longopts[g.getLongind()].getName();
-        if (option_name.equals("help")) {
+        if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
         } else if (option_name.equals("config-file")) {
@@ -645,9 +648,9 @@ public class LogicalCompare {
         } else if (option_name.equals("config_option")) {
           String item = Daikon.getOptarg(g);
           Configuration.getInstance().apply(item);
-        } else if (option_name.equals("debug")) {
+        } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
-        } else if (option_name.equals("dbg")) {
+        } else if (Daikon.debug_SWITCH.equals(option_name)) {
           LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
         } else if (option_name.equals("proofs")) {
           opt_proofs = true;
@@ -692,6 +695,7 @@ public class LogicalCompare {
       filters['i'] = filters['j'] = filters['m'] = filters['p'] = true;
     }
 
+    // Set up debug traces; note this comes after reading command line options.
     LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
 
     int num_args = args.length - g.getOptind();
