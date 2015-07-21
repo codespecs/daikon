@@ -33,6 +33,19 @@ public class DeclWriter extends DaikonWriter {
 
   public static boolean debug = false;
 
+  // If the --comparability-file option is active, there might be
+  // variables for which DynComp saw no interactions and did not
+  // generate a comparability value. In order to reduce the number
+  // of useless invariants (when running Daikon on the output of
+  // Chicory), we generate a unique, dummy comparability value in
+  // these cases.  We start at the maximum integer and decrement
+  // for each use.  At the start of each method, object or class
+  // we reset the value back - though it's hard to imagine a case
+  // where there would be a collision with DynComp's values which
+  // increment up from an initial value of 1.
+  private static int initial_compare_value = Integer.MAX_VALUE;
+  private static int unique_compare_value;
+
   /** Stream to write to **/
   private PrintStream outFile;
 
@@ -334,6 +347,9 @@ public class DeclWriter extends DaikonWriter {
 
       if (debug) System.out.println("Enter print_method: " + name);
 
+      // reset dummy comparability value
+      unique_compare_value = initial_compare_value;
+
       outFile.println ("ppt " + escape(name));
 
       outFile.println ("ppt-type " + ppt_type.name().toLowerCase());
@@ -368,6 +384,9 @@ public class DeclWriter extends DaikonWriter {
 
       if (debug) System.out.println("Enter print_class_ppt: " + cinfo);
 
+      // reset dummy comparability value
+      unique_compare_value = initial_compare_value;
+
       if (num_class_vars (cinfo) > 0) {
 
         outFile.println ("ppt " + escape (name));
@@ -395,6 +414,9 @@ public class DeclWriter extends DaikonWriter {
                                   DeclReader comp_info) {
 
       if (debug) System.out.println("Enter print_object_ppt: " + cinfo);
+
+      // reset dummy comparability value
+      unique_compare_value = initial_compare_value;
 
       outFile.println ("ppt " + escape (name));
       outFile.println ("ppt-type object");
@@ -599,12 +621,29 @@ public class DeclWriter extends DaikonWriter {
         }
 
         // Determine comparability and write it out
+        // Currently, the value returned by getCompareString() is always 22.
         String comp_str = var.getCompareString();
         if (compare_ppt != null) {
           comp_str = "-1";
           DeclReader.DeclVarInfo varinfo = compare_ppt.find_var (var.getName());
           if (varinfo != null)
             comp_str = varinfo.get_comparability();
+        } else {
+          // Check to see if DynComp data is present.
+          if (Runtime.comp_info != null) {
+            // There is no comparability value for this variable as DynComp
+            // saw no interactions. In order to reduce the number of useless
+            // invariants, we will generate a unique, dummy comparability value.
+            comp_str = Integer.toString(unique_compare_value--);
+            if (var.isArray()) {
+              // Should output n index values to match number of dimensions.
+              // However, that value is hard to obtain at this point, so just
+              // always do one.  May cause some multi-dimension variables to
+              // be put into incorrect comparability set.  This is certainly
+              // no worse than previous algorithm. (markro)
+              comp_str = comp_str + "[" + Integer.toString(unique_compare_value--) + "]";
+            }
+          }
         }
         outFile.println("  comparability " + comp_str);
 
