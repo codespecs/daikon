@@ -494,7 +494,7 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
 
 ifndef INST_FILES
   INST_FILES = $(shell echo `cat $(INST_LIST_FILE)` \
-			   | sed -e 's/\.java/$$/g;s/  */|/g;s|/|.|g')
+			   | sed -e 's/\.java/($$|\\$$)/g;s/  */|/g;s|/|.|g')
 endif
 
 chicory: $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
@@ -503,7 +503,7 @@ $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-ti
 	@echo
 	@echo "### compile source and run Chicory "
 	@echo
-	@echo inst_Files: "$(INST_FILES)"
+	@echo inst_Files: '$(INST_FILES)'
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 	  --dtrace-file=$(PROJECT_FILE).dtrace.gz \

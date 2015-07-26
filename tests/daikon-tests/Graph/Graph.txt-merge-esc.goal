@@ -171,8 +171,11 @@ public class Graph
   public abstract class GraphException
     extends RuntimeException
   {
+    /*@ modifies MapQuick1.Graph.this, MapQuick1.Graph.this.adjMap; */
     public GraphException() { }
+    /*@ modifies MapQuick1.Graph.this, MapQuick1.Graph.this.adjMap, s.toString; */
     public GraphException(String s) { super(s); }
+    /*@ modifies MapQuick1.Graph.this, MapQuick1.Graph.this.adjMap; */
     /** @return the Graph which caused this exception */
     public Graph getGraph() { return Graph.this; }
   }
@@ -180,21 +183,27 @@ public class Graph
   public class DuplicateNodeException
     extends GraphException
   {
+    /*@ modifies MapQuick1.Graph.this, MapQuick1.Graph.this.adjMap; */
     public DuplicateNodeException() { }
+    /*@ modifies MapQuick1.Graph.this, MapQuick1.Graph.this.adjMap, s.toString; */
     public DuplicateNodeException(String s) { super(s); }
   }
 
   public class NoNodeException
     extends GraphException
   {
+    /*@ modifies MapQuick1.Graph.this, MapQuick1.Graph.this.adjMap; */
     public NoNodeException() { }
+    /*@ modifies MapQuick1.Graph.this, MapQuick1.Graph.this.adjMap, s.toString; */
     public NoNodeException(String s) { super(s); }
   }
 
   public class DuplicateEdgeException
     extends GraphException
   {
+    /*@ modifies MapQuick1.Graph.this, MapQuick1.Graph.this.adjMap; */
     public DuplicateEdgeException() { }
+    /*@ modifies MapQuick1.Graph.this, MapQuick1.Graph.this.adjMap, s.toString; */
     public DuplicateEdgeException(String s) { super(s); }
   }
 }
