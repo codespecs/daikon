@@ -180,7 +180,7 @@ public class SplitterFactory {
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
       String fileName = getFileName(splitObj.getPptName());
-      StringBuffer file;
+      StringBuffer fileContents;
       try {
         SplitterJavaSource splitterWriter =
           new SplitterJavaSource(splitObj,
@@ -188,7 +188,7 @@ public class SplitterFactory {
                                  fileName,
                                  ppt.var_infos,
                                  statementReplacer);
-        file = splitterWriter.getFileText();
+        fileContents = splitterWriter.getFileText();
       } catch (ParseException e) {
         System.out.println("Error in SplitterFactory while writing splitter java file for: ");
         System.out.println(splitObj.condition() + " cannot be parsed.");
@@ -204,7 +204,7 @@ public class SplitterFactory {
           (new File (fileAddress + ".java")).deleteOnExit();
           (new File (fileAddress + ".class")).deleteOnExit();
         }
-        writer.write(file.toString());
+        writer.write(fileContents.toString());
         writer.flush();
       } catch (IOException ioe) {
         System.out.println("Error while writing Splitter file: " +
