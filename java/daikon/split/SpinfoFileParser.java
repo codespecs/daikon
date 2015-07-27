@@ -172,8 +172,10 @@ public class SpinfoFileParser {
 
   /**
    * Reads a group of Ppt statements (statements following the line "PPT_NAME...").
-   * All the lines between firstLine and the first empty line are placed into a
-   * list and then this list is placed in to pptSections.
+   * Makes a list whose first element is the name on the PPT_NAME line (but
+   * without the "PPT_NAME" prefix), and whose additional elements are all
+   * the non-empty lines up to the next empty line.
+   * Puts this list in pptSections.
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed.
    * @param pptSections the List into which the List of lines
    *  for this pptSection are to be added.
@@ -188,7 +190,7 @@ public class SpinfoFileParser {
     pptSection.add(pptName);
     String line = spinfoFile.readLine();
     while ((line != null) && (! line.trim().equals(""))) {
-      pptSection.add(line);
+      pptSection.add(line.trim());
       line = spinfoFile.readLine();
     }
     pptSections.add(pptSection);
@@ -198,7 +200,7 @@ public class SpinfoFileParser {
    * Creates the SplitterObjects for the Ppt section in pptSections.
    * @param pptSections is a List of Lists of Strings. Each list
    *  should include all the lines from a single Ppt Section.
-   *  The prefix "PPT_NAME" should not be included in the first line.
+   *  This includes the first line, but without the prefix "PPT_NAME"
    * @return an array of arrays with each array containing the
    *  SplitterObjects for one of lists of ppt statements found in pptSections.
    */
