@@ -80,10 +80,10 @@ public class SplitterFactory {
   /**
    * Parses the Splitter info.
    * @param infofile filename.spinfo
-   * @return a SpinfoFileParser encapsulating the parsed splitter info file.
+   * @return a SpinfoFile encapsulating the parsed splitter info file.
    */
 
-  public static SpinfoFileParser parse_spinfofile (File infofile)
+  public static SpinfoFile parse_spinfofile (File infofile)
     throws IOException, FileNotFoundException {
     if (tempdir == null) {
       tempdir = createTempDir();
@@ -91,23 +91,23 @@ public class SplitterFactory {
     if (! dkconfig_delete_splitters_on_exit) {
       System.out.println("\rSplitters for this run created in " + tempdir);
     }
-    return new SpinfoFileParser(infofile, tempdir);
+    return new SpinfoFile(infofile, tempdir);
   }
 
   /**
    * Finds the splitters that apply to a given Ppt and loads them.
    * @param ppt the Ppt
-   * @param splitters a list of SpinfoFileParsers
+   * @param spfiles a list of SpinfoFiles
    */
   /*@RequiresNonNull("tempdir")*/
   public static void load_splitters (PptTopLevel ppt,
-                                     List<SpinfoFileParser> splitters)
+                                     List<SpinfoFile> spfiles)
   {
     Global.debugSplit.fine("<<enter>> load_splitters");
 
-    for (SpinfoFileParser spfileParser : splitters) {
-      SplitterObject[][] splitterObjects = spfileParser.getSplitterObjects();
-      StatementReplacer statementReplacer = spfileParser.getReplacer();
+    for (SpinfoFile spfile : spfiles) {
+      SplitterObject[][] splitterObjects = spfile.getSplitterObjects();
+      StatementReplacer statementReplacer = spfile.getReplacer();
       for (int i = 0; i < splitterObjects.length; i++) {
         int numsplitters = splitterObjects[i].length;
         if (numsplitters != 0) {

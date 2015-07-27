@@ -14,15 +14,21 @@ import org.checkerframework.dataflow.qual.*;
 
 
 /**
- * SpinfoFileParser parses a .spinfo file.  This file uses the term "ppt
+ * SpinfoFile stores information parsed from a .spinfo file.
+ * The constructor parses the file; then clients can make calls to
+ * retrieve the parsed information.
+ * <p>
+ *
+ * This file uses the term "ppt
  * section" and "replace section" to describe what is refered to as a
- * "Program Point Section" and "replacement sections" in Daikon User's
+ * "Program Point Section" and "replacement sections" in the Daikon User
  * Manual, respectively.  A "ppt statement" is a single line from a
  * "ppt section."
  */
-public class SpinfoFileParser {
+public class SpinfoFile {
 
-  /** The path of the file being parsed.
+  /**
+   * The path of the file being parsed.
    * This is used only for debugging output.
    **/
   private String spinfoFileName;
@@ -53,11 +59,11 @@ public class SpinfoFileParser {
   private static String lineSep = System.getProperty("line.separator");
 
   /**
-   * Creates a new SpinfoFileParser to parse spinfoFileName.
+   * Parses file spinfoFile.
    * @param spinfoFile the file to be parsed.
    * @param tempDir the directory in which the splitters' java files are created.
    */
-  SpinfoFileParser(File spinfoFile, String tempDir) {
+  SpinfoFile(File spinfoFile, String tempDir) {
     this.tempDir = tempDir;
     this.spinfoFileName = spinfoFile.toString();
     try {
@@ -89,16 +95,14 @@ public class SpinfoFileParser {
   }
 
   /**
-   * parseFile uses a LineNumberReader of the spinfoFile
-   * to read the file, parse it, then set the member fields
-   * of this, to the apporiate values.  The member fields
-   * set are statementReplacer and splitterObjects.
+   * parseFile sets the member fields statementReplacer and splitterObjects,
+   * from the spinfoFile.
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed.
    * @throws IOException if an I/O error occurs
    */
   /*@RequiresNonNull("tempDir")*/
   /*@EnsuresNonNull({"statementReplacer", "splitterObjects"})*/
-  public void parseFile(/*>>> @UnknownInitialization @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile) throws IOException {
+  public void parseFile(/*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile) throws IOException {
     List<ReplaceStatement> replaceStatements = new ArrayList<ReplaceStatement>();
     List<List<String>> pptSections = new ArrayList<List<String>>();
     try {
@@ -150,7 +154,7 @@ public class SpinfoFileParser {
    *  are added.
    */
   @SuppressWarnings("nullness") // bug exposed by test case Asserts.assertTwice().
-  private void readReplaceStatements(/*>>> @UnknownInitialization @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile,
+  private void readReplaceStatements(/*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile,
                                      List<ReplaceStatement> replaceStatements)
     throws IOException, ParseException {
     String methodDeclaration = spinfoFile.readLine();
@@ -182,7 +186,7 @@ public class SpinfoFileParser {
    * @param pptName name of the ppt.
    * @throws IOException if an I/O error occurs.
    */
-  private void readPptStatements(/*>>> @UnknownInitialization @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile,
+  private void readPptStatements(/*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile,
                                  List<List<String>> pptSections,
                                  String pptName)
     throws IOException {
@@ -205,7 +209,7 @@ public class SpinfoFileParser {
    *  SplitterObjects for one of lists of ppt statements found in pptSections.
    */
   /*@RequiresNonNull("tempDir")*/
-  private SplitterObject[][] createSplitterObjects(/*>>> @UnknownInitialization @Raw SpinfoFileParser this,*/ List<List<String>> pptSections) {
+  private SplitterObject[][] createSplitterObjects(/*>>> @UnknownInitialization @Raw SpinfoFile this,*/ List<List<String>> pptSections) {
     List<SplitterObject[]> splittersForAllPpts = new ArrayList<SplitterObject[]>();
     for (List<String> pptSection : pptSections) {
       List<SplitterObject> splittersForThisPpt = new ArrayList<SplitterObject>();
