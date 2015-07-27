@@ -105,9 +105,9 @@ public class SplitterFactory {
   {
     Global.debugSplit.fine("<<enter>> load_splitters");
 
-    for (SpinfoFileParser fileParser : splitters) {
-      SplitterObject[][] splitterObjects = fileParser.getSplitterObjects();
-      StatementReplacer statementReplacer = fileParser.getReplacer();
+    for (SpinfoFileParser spfileParser : splitters) {
+      SplitterObject[][] splitterObjects = spfileParser.getSplitterObjects();
+      StatementReplacer statementReplacer = spfileParser.getReplacer();
       for (int i = 0; i < splitterObjects.length; i++) {
         int numsplitters = splitterObjects[i].length;
         if (numsplitters != 0) {
@@ -223,9 +223,8 @@ public class SplitterFactory {
       System.out.println("Error while compiling Splitter files (Daikon will continue):");
       debug.fine(ioe.toString());
     }
-    // Forrest - added a checked below for the non-empty string. Splitter files were
-    // compiling correctly for me despite errorOutput being an empty string.
-    if (errorOutput != null && !errorOutput.equals("") && (! PptSplitter.dkconfig_suppressSplitterErrors)) {
+    boolean errorOutputExists = errorOutput != null && !errorOutput.equals("");
+    if (errorOutputExists && (! PptSplitter.dkconfig_suppressSplitterErrors)) {
       System.out.println("\nErrors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
