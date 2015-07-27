@@ -181,7 +181,7 @@ public class SpinfoFileParser {
    * @throws IOException if an I/O error occurs.
    */
   private void readPptStatements(/*>>> @UnknownInitialization @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile,
-                                   List<List<String>> pptSections,
+                                 List<List<String>> pptSections,
                                  String pptName)
     throws IOException {
     List<String> pptSection = new ArrayList<String>();
