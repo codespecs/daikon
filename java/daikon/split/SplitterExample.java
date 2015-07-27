@@ -52,7 +52,7 @@ public final class SplitterExample
   }
 
   /*@EnsuresNonNull("dummyInvFactory")*/
-  public void makeDummyInvariant(DummyInvariant inv) {
+  public void makeDummyInvariantFactory(DummyInvariant inv) {
     assert dummyInvFactory == null;
     dummyInvFactory = inv;
   }

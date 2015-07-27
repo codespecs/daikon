@@ -53,6 +53,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
+   * Sets the "splitter" field of this object to a newly-instantiated object.
    * @param loader The SplitterLoader used to load the compiled source.
    * Must not be null.
    */
@@ -74,7 +75,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       DummyInvariant dummy = new /*@Prototype*/ DummyInvariant(
          daikonFormat, javaFormat, escFormat, simplifyFormat,
                        jmlFormat, dbcFormat, csharpFormat, dummyDesired);
-      splitter.makeDummyInvariant(dummy);
+      splitter.makeDummyInvariantFactory(dummy);
       errorMessage = "Splitter exists " + this.toString();
       exists = true;
     } else {
