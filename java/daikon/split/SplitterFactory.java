@@ -34,15 +34,15 @@ public class SplitterFactory {
   private static /*@MonotonicNonNull*/ String tempdir;
 
   /**
-   * Boolean. Specifies whether or not the temporary Splitter files
-   * should be deleted on exit.
+   * Boolean.  If true, the temporary Splitter files are deleted on exit.
+   * Set it to "false" if you are debugging splitters.
    **/
   public static boolean dkconfig_delete_splitters_on_exit = true;
 
   /**
    * String.  Specifies which Java compiler is used to compile
    * Splitters.  This can be the full path name or whatever is used on
-   * the commandline.
+   * the command line.
    * <p>
    *
    * By default, $DAIKONDIR/java is part of the classpath. This is useful
