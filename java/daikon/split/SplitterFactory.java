@@ -228,9 +228,8 @@ public class SplitterFactory {
       System.out.println("\nErrors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
-    SplitterLoader loader = new SplitterLoader();
     for (int i = 0; i < splitterObjects.length; i++) {
-      splitterObjects[i].load(loader);
+      splitterObjects[i].load();
     }
 
     Global.debugSplit.fine("<<exit>>  loadSplitters");

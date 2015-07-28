@@ -1,7 +1,9 @@
 package daikon.split;
 
+import daikon.Daikon;
 import daikon.inv.*;
 import java.io.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -53,12 +55,32 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
+   * @param full_pathname the pathname of a .class file
+   * @return a Java Class corresponding to the .class file, or null
+   **/
+  static /*@Nullable*/ Class<?> defineSplitterClass(/*@BinaryName*/ String className, String fileName) {
+    try {
+      return UtilMDE.defineClassFromFile(className, fileName);
+    } catch (FileNotFoundException e) {
+      if (! PptSplitter.dkconfig_suppressSplitterErrors) {
+        System.out.println("File "
+                           + fileName.substring(0, fileName.length()-6)
+                           + ".java did not compile");
+      }
+      return null;
+    } catch (IOException ioe) {
+      System.out.println("IO Error while reading class data " + fileName);
+      return null;
+    } catch (UnsupportedClassVersionError ucve) { // should be more general?
+      throw new Daikon.TerminationMessage("Wrong Java version while reading file " + fileName + ": " + ucve.getMessage() + "\n" + "This indicates a possible problem with configuration option\ndaikon.split.SplitterFactory.compiler whose value is: " + SplitterFactory.dkconfig_compiler);
+    }
+  }
+
+  /**
    * Sets the "splitter" field of this object to a newly-instantiated object.
-   * @param loader The SplitterLoader used to load the compiled source.
-   * Must not be null.
    */
-  public void load (SplitterLoader loader) {
-    Class<?> tempClass = loader.load_Class(className, directory + className + ".class");
+  public void load () {
+    Class<?> tempClass = defineSplitterClass(className, directory + className + ".class");
     if (tempClass != null) {
       try {
         splitter = (Splitter) tempClass.newInstance();
@@ -79,7 +101,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       errorMessage = "Splitter exists " + this.toString();
       exists = true;
     } else {
-      errorMessage = "\rNo class data for " + this.toString() + ", to be loaded from " + directory + className + ".class";
+      errorMessage = "\nNo class data for " + this.toString() + ", to be loaded from " + directory + className + ".class";
       exists = false;
     }
   }
