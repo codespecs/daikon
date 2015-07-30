@@ -27,6 +27,10 @@ Chicory:
   .decls file via --comparability-file option.  When the resulting .dtrace
   file is fed to Daikon, the number of uninteresting invariants is reduced.
 
+DynComp:
+- Correctly identify methods that are in the Java SE Development Kit (JDK).
+- Fix problems with non-local field access.
+
 LogicalCompare:
 - The "debug-all" option has been changed to "debug" to be consistent with
   the other Daikon tools.
