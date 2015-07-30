@@ -18,7 +18,6 @@ import java.io.*;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.verifier.*;
 import org.apache.bcel.verifier.structurals.*;
-import daikon.util.BCELUtil;
 
 import org.apache.commons.io.*;
 

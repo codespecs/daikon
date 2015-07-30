@@ -12,7 +12,6 @@ import org.apache.bcel.generic.*;
 import org.apache.bcel.verifier.*;
 import org.apache.bcel.verifier.structurals.*;
 import org.apache.bcel.verifier.exc.AssertionViolatedException;
-import daikon.util.BCELUtil;
 
 import daikon.util.*;
 import org.apache.commons.io.*;
@@ -42,6 +41,7 @@ class DCInstrument {
   protected boolean in_jdk;
   protected InstructionFactory ifact;
   protected /*@Nullable*/ ClassLoader loader;
+  protected boolean constructor_is_initialized;
 
   /** Local that stores the tag frame for the current method **/
   protected LocalVariableGen tag_frame_local;
@@ -409,7 +409,7 @@ class DCInstrument {
   }
 
   /**
-   * We need to locate and remember any NEW instructions that create 
+   * We need to locate and remember any NEW instructions that create
    * uninitialized objects.  Their offset may be contained in a StackMap
    * entry and will probably need to be updated as we add instrumentation
    * code.  Note that these instructions are fairly rare.
@@ -427,16 +427,16 @@ class DCInstrument {
                frame_type <= Constants.APPEND_FRAME_MAX) ||
               (frame_type == Constants.FULL_FRAME)) {
 
-              if (smte.getNumberOfLocals() > 0) { 
-                  for (StackMapType smt : smte.getTypesOfLocals()) { 
+              if (smte.getNumberOfLocals() > 0) {
+                  for (StackMapType smt : smte.getTypesOfLocals()) {
                       if (smt.getType() == Constants.ITEM_NewObject) {
                           int i = smt.getIndex();
                           uninitialized_NEW_map.put(il.findHandle(i), new Integer(i));
                       }
                   }
               }
-              if (smte.getNumberOfStackItems() > 0) { 
-                  for (StackMapType smt : smte.getTypesOfStackItems()) { 
+              if (smte.getNumberOfStackItems() > 0) {
+                  for (StackMapType smt : smte.getTypesOfStackItems()) {
                       if (smt.getType() == Constants.ITEM_NewObject) {
                           int i = smt.getIndex();
                           uninitialized_NEW_map.put(il.findHandle(i), new Integer(i));
@@ -444,7 +444,7 @@ class DCInstrument {
                   }
               }
 
-          }    
+          }
       }
   }
 
@@ -463,8 +463,8 @@ class DCInstrument {
                frame_type <= Constants.APPEND_FRAME_MAX) ||
               (frame_type == Constants.FULL_FRAME)) {
 
-              if (smte.getNumberOfLocals() > 0) { 
-                  for (StackMapType smt : smte.getTypesOfLocals()) { 
+              if (smte.getNumberOfLocals() > 0) {
+                  for (StackMapType smt : smte.getTypesOfLocals()) {
                       if (smt.getType() == Constants.ITEM_NewObject) {
                           if (old_offset == smt.getIndex()) {
                               smt.setIndex(new_offset);
@@ -472,8 +472,8 @@ class DCInstrument {
                       }
                   }
               }
-              if (smte.getNumberOfStackItems() > 0) { 
-                  for (StackMapType smt : smte.getTypesOfStackItems()) { 
+              if (smte.getNumberOfStackItems() > 0) {
+                  for (StackMapType smt : smte.getTypesOfStackItems()) {
                       if (smt.getType() == Constants.ITEM_NewObject) {
                           if (old_offset == smt.getIndex()) {
                               smt.setIndex(new_offset);
@@ -482,7 +482,7 @@ class DCInstrument {
                   }
               }
 
-          }    
+          }
       }
   }
 
@@ -747,7 +747,7 @@ class DCInstrument {
     // add in the new local variable type.
     update_full_frame_stack_map_entries (new_offset, type, locals);
 
-    debug_instrument.log ("New LocalVariableTable: %s%n",
+    debug_instrument_inst.log ("New LocalVariableTable: %s%n",
                           mg.getLocalVariableTable(pool));
     return lv_new;
   }
@@ -773,8 +773,8 @@ class DCInstrument {
           }
           stack_map_table = new_stack_map_table;
 
-          debug_instrument.log ("Original StackMap: %s%n", smta);
-          debug_instrument.log ("Attribute tag: %s length: %d nameIndex: %d%n",
+          debug_instrument_inst.log ("Original StackMap: %s%n", smta);
+          debug_instrument_inst.log ("Attribute tag: %s length: %d nameIndex: %d%n",
                          smta.getTag(), smta.getLength(), smta.getNameIndex());
           // Delete existing stack map - we'll add a new one later.
           mg.removeCodeAttribute(smta);
@@ -783,7 +783,7 @@ class DCInstrument {
           if (gen.getMajor() > Constants.MAJOR_1_6) {
               needStackMap = true;
           }
-          debug_instrument.log ("Original StackMap: (none)%n");
+          debug_instrument_inst.log ("Original StackMap: (none)%n");
       }
   }
 
@@ -792,13 +792,13 @@ class DCInstrument {
   private void
   print_stack_map_table (String prefix) {
 
-      debug_instrument.log ("StackMap(%s) %s items:%n", prefix, stack_map_table.length);
+      debug_instrument_inst.log ("StackMap(%s) %s items:%n", prefix, stack_map_table.length);
 
       running_offset = -1; // no +1 on first entry
       for (int i=0; i < stack_map_table.length; i++) {
         running_offset = stack_map_table[i].getByteCodeOffsetDelta()
                                             + running_offset + 1;
-        debug_instrument.log ("@%03d %s %n", running_offset, stack_map_table[i]);
+        debug_instrument_inst.log ("@%03d %s %n", running_offset, stack_map_table[i]);
       }
   }
 
@@ -809,16 +809,16 @@ class DCInstrument {
 
       if (stack_map_table.length == 0)
           return;
-      debug_instrument.log ("New StackMap %s items:%n", stack_map_table.length);
+      debug_instrument_inst.log ("New StackMap %s items:%n", stack_map_table.length);
 
       // Build new StackMapTable attribute
       int map_table_size = 2;  // space for the number_of_entries
       for (int i=0; i < stack_map_table.length; i++) {
         map_table_size += stack_map_table[i].getEntryByteSize();
-        debug_instrument.log ("  %s, %d%n", stack_map_table[i],
+        debug_instrument_inst.log ("  %s, %d%n", stack_map_table[i],
                                stack_map_table[i].getEntryByteSize());
       }
-      debug_instrument.log ("New StackMap size: %d%n", map_table_size);
+      debug_instrument_inst.log ("New StackMap size: %d%n", map_table_size);
 
       StackMapTable map_table = new StackMapTable(pool.addUtf8("StackMapTable"),
                                 map_table_size, stack_map_table, pool.getConstantPool());
@@ -938,6 +938,7 @@ class DCInstrument {
     gen = new ClassGen (orig_class);
     pool = gen.getConstantPool();
     ifact = new InstructionFactory (gen);
+    constructor_is_initialized = false;
     if (jdk_instrumented)
       dcomp_marker = new ObjectType ("java.lang.DCompMarker");
     else
@@ -1026,7 +1027,7 @@ class DCInstrument {
 
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         mgen = mg;  // copy to global
-        debug_instrument.log ("%n  Processing method %s, track=%b\n", m, track);
+        debug_instrument.log ("  Processing method %s, track=%b", m, track);
         debug_instrument.indent();
 
         // Skip methods defined in Object
@@ -1123,16 +1124,7 @@ class DCInstrument {
 
     String classname = gen.getClassName();
 
-    // Removed this check (1/20/06) as we are already doing this in premain.
-    // Probably a better solution is needed.
-    // Don't instrument classes in the JDK.  They are already instrumented.
-    // Do instrument javac (its not in the JDK)
-    // TODO: crosscheck the class for instrumentation rather than by name.
-    //if (BCELUtil.in_jdk (gen)
-    //    && !classname.startsWith ("com.sun.tools.javac")) {
-    //  debug_instrument.log ("Skipping jdk class %s%n", gen.getClassName());
-    //  return (null);
-    // }
+    // Don't need to check for JDK classes, that is done in the caller
 
     // Don't instrument DynComp classes. (But DO instrument Daikon classes.)
     if (classname.startsWith ("daikon.chicory") ||
@@ -1198,7 +1190,7 @@ class DCInstrument {
 
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         mgen = mg;  // copy to global
-        debug_instrument.log ("%n  Processing method %s, track=%b\n", m, track);
+        debug_instrument.log ("  Processing method %s, track=%b", m, track);
         debug_instrument.indent();
 
         // Skip methods defined in Object
@@ -1332,7 +1324,7 @@ class DCInstrument {
         if (BCELUtil.is_clinit (m))
           continue;
 
-        debug_instrument.log ("%n  Processing method %s%n", m);
+        debug_instrument.log ("  Processing method %s", m);
 
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         mgen = mg;  // copy to global
@@ -1455,7 +1447,7 @@ class DCInstrument {
         if (BCELUtil.is_clinit (m))
           continue;
 
-        debug_instrument.log ("%n  Processing method %s%n", m);
+        debug_instrument.log ("  Processing method %s", m);
 
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         mgen = mg;  // copy to global
@@ -1727,7 +1719,7 @@ class DCInstrument {
 
     int exc_offset = exc.getPosition();
 
-    debug_instrument.log ("New ExceptionHandler: %x %x %x %n", start.getPosition(),
+    debug_instrument_inst.log ("New ExceptionHandler: %x %x %x %n", start.getPosition(),
                            end.getPosition(), exc_offset);
 
     // This is a trick to get running_offset set to
@@ -2765,10 +2757,10 @@ class DCInstrument {
    */
   InstructionList handle_invoke (InvokeInstruction invoke) {
     boolean callee_instrumented;
-    String classname = null;
 
     // Get information about the call
     String method_name = invoke.getMethodName(pool);
+    String classname = invoke.getClassName(pool);
     Type ret_type = invoke.getReturnType(pool);
     Type[] arg_types = invoke.getArgumentTypes(pool);
 
@@ -2777,9 +2769,14 @@ class DCInstrument {
     if (invoke instanceof INVOKEDYNAMIC) {
         // we don't instrument lambda methods
         callee_instrumented = false;
-    } else {  
-        classname = invoke.getClassName (pool);
+    } else {
         callee_instrumented = callee_instrumented (classname);
+    }
+
+    if (invoke instanceof INVOKESPECIAL) {
+        if (classname.equals(gen.getSuperclassName()) &&
+            method_name.equals("<init>") )
+          constructor_is_initialized = true;
     }
 
     if (is_object_method (method_name, invoke.getArgumentTypes(pool)))
@@ -2862,7 +2859,7 @@ class DCInstrument {
 
     // System.out.printf ("Checking callee instrumented on %s\n", classname);
 
-    // Out copy of daikon.util is not instrumented.  It would be odd, though,
+    // Our copy of daikon.util is not instrumented.  It would be odd, though,
     // to see calls to this.
     if (classname.startsWith ("daikon.util"))
       return false;
@@ -2969,27 +2966,6 @@ class DCInstrument {
       ifeq_branch.setTarget (else_target);
       goto_branch.setTarget (endif_target);
 
-      /* Old version which tries to check at instrumentation time.  This
-         fails because the superclass is not necessarily instrumented
-         before the subclass
-      // If there is an instrumented version to call
-      if (has_instrumented (method_name, ret_type, arg_types, classname)) {
-        il.append (new ACONST_NULL());
-        il.append (ifact.createInvoke (classname, method_name, ret_type,
-                                       new_arg_types, invoke.getOpcode()));
-      } else { // no instrumented method to call
-
-        // Make the normal call and then call into DCR with the original
-        // object and teh result of the normal call.  This allows appropriate
-        // processing to take place.  Note that the 'super' call must take
-        // place inline, it can't take place in DCRuntime (which would be easier)
-        il.append (new DUP());
-        il.append (invoke);
-        il.append (dcr_call (dcr_method_name , ret_type,
-                             new Type[] {Type.OBJECT, ret_type}));
-      }
-      */
-
     } else { // a regular (non-super) clone() call
 
       // If the object has an instrumented clone method, call it
@@ -3028,108 +3004,6 @@ class DCInstrument {
     return (il);
   }
 
-  // I believe that this method is dead (never called) and can be removed.
-  // See method DCRuntime.has_instrumented().
-  /**
-   * Determine if the specified method is instrumented in the
-   * specified class or any of its superclasses.
-   * We can safely use reflection here because all superclasses must
-   * have been loaded before this class was loaded.
-   *
-   * The above statement is NOT true.  Calling this routine will change
-   * the order of loading and cause other problems.
-   **/
-  protected boolean has_instrumented (String method_name, Type return_type,
-                                      Type[] arg_types,
-                                      /*@BinaryNameForNonArray*/ String classname) {
-
-    // Since we can't instrument Object, it never has an instrumented method
-    if (classname.equals ("java.lang.Object"))
-      return false;
-
-    // Loop through this class and each of its superclasses. If the
-    // method is found in a class that is instrumented, return true.
-    while (classname != null) {
-      ClassGen gen = null; // instrumented_classes.get (classname);
-      if (gen == null) {
-        System.out.printf ("can't find superclass %s%n", classname);
-        return false;
-      }
-      String signature = Type.getMethodSignature (return_type, arg_types);
-      Method method = gen.containsMethod (method_name, signature);
-      System.out.printf ("looking for %s %s in %s : ;%s%n", method_name,
-                         signature, gen.getClassName(), method);
-      if (method != null)
-        return true;
-      classname = gen.getSuperclassName();
-    }
-    if (true)
-      return (false);
-
-    // Turn the arg_types into an array of classes
-    Class<?>[] arg_classes = new Class<?>[arg_types.length];
-    for (int ii = 0; ii < arg_types.length; ii++)
-      arg_classes[ii] = BCELUtil.type_to_class (arg_types[ii]);
-
-    // Loop through this class and each of its superclasses.  If the
-    // method is found in a class that is instrumented, return true.
-    try {
-      for (Class<?> c = Class.forName (classname, false,
-                                       this.getClass().getClassLoader());
-           !c.getName().equals ("java.lang.Object");
-           c = c.getSuperclass()) {
-
-        // If the class is not instrumented, the method cannot be instrumented
-        // We presume here that an uninstrumented class does not have
-        // any instrumented superclasses
-        if (!is_instrumented (c))
-          return false;
-
-        // Look for the method.  If there is one, we should have
-        // instrumented it.
-        java.lang.reflect.Method m = null;
-        try {
-          m = c.getDeclaredMethod(method_name, arg_classes);
-        } catch (Exception e) {
-        }
-        if (m != null)
-          return true;
-      }
-    } catch (Exception e) {
-      System.out.printf ("Unexpected exception in Class.forName (%s): %s%n",
-                         classname, e);
-      return false;
-    }
-
-    return false;
-  }
-
-  /**
-   * Returns whether or not the specified class is instrumented.  Object
-   * is never instrumented and returns false.  Otherwise true is returned
-   * unless the class in in the JDK and we are using an uninstrumented JDK
-   */
-  /*@Pure*/ protected boolean is_instrumented (Class<?> c) {
-
-    if (c.equals (java.lang.Object.class))
-      return false;
-
-    // If we are instrumenting the JDK, presume any class other than
-    // object is instrumented.
-    if (in_jdk)
-      return true;
-
-    // If the class is part of the JDK
-    if (BCELUtil.in_jdk (c.getName())) {
-      if (DynComp.no_jdk)
-        return false;
-      else
-        return true;
-    } else { // not part of the jdk
-      return true;
-    }
-  }
-
   /**
    * Similar to handle_invoke, but doesn't perform special handling
    * for primitives. (That is, it does just about nothing.)
@@ -3149,14 +3023,9 @@ class DCInstrument {
     if (invoke instanceof INVOKEDYNAMIC) {
         // we don't instrument lambda methods
         callee_instrumented = false;
-    } else {  
+    } else {
         classname = invoke.getClassName (pool);
-        callee_instrumented = !BCELUtil.in_jdk (classname)
-          || (jdk_instrumented // && classname.startsWith ("java")
-              && (exclude_object && !classname.equals ("java.lang.Object")));
-        // Don't instrument daikon.util (our copy of plume)
-        if (classname.startsWith ("daikon.util"))
-            callee_instrumented = false;
+        callee_instrumented = callee_instrumented (classname);
     }
 
     // We don't instrument any of the Object methods
@@ -3235,7 +3104,6 @@ class DCInstrument {
     return (il);
   }
 
-
   /**
    * Create the instructions that replace the object eq or ne branch
    * instruction.  They are replaced by a call to the specified
@@ -3258,47 +3126,10 @@ class DCInstrument {
   /**
    * Handles load and store field instructions.  The instructions must
    * be augmented to either push (load) or pop (store) the tag on the
-   * tag stack.  This is accomplished by calling the specified method
-   * in DCRuntime and passing that method the object containing the
-   * the field and the offset of that field within the object
+   * tag stack.  This is accomplished by calling the tag get/set method
+   * for this field.
    */
-  InstructionList old_load_store_field (FieldInstruction f, String method) {
-
-    Type field_type = f.getFieldType (pool);
-    if (field_type instanceof ReferenceType)
-      return (null);
-    ObjectType obj_type = (ObjectType) f.getReferenceType (pool);
-    InstructionList il = new InstructionList();
-
-    if (f instanceof GETFIELD) {
-      il.append (InstructionFactory.createDup (obj_type.getSize()));
-    } else {
-      il.append (new SWAP());
-      il.append (InstructionFactory.createDup (obj_type.getSize()));
-    }
-
-    int field_num = get_field_num (f.getFieldName(pool), obj_type);
-    il.append (ifact.createConstant (field_num));
-    il.append (ifact.createInvoke (DCRuntime.class.getName(), method,
-                                  Type.VOID, object_int,
-                                  Constants.INVOKESTATIC));
-    if (f instanceof PUTFIELD)
-      il.append (new SWAP());
-    il.append (f);
-    return (il);
-  }
-
-  /**
-   * Handles load and store field instructions.  The instructions must
-   * be augmented to either push (load) or pop (store) the tag on the
-   * tag stack.  If tag storage is supported for the class that contains
-   * the field, this is accomplished by loading/storing from the tag
-   * field of the specified field.
-   *
-   * If tag storage is not supported, then (for now) we just discard stores
-   * and push constant tags for loads.  This may miss some comparability
-   */
-  InstructionList load_store_field_tag_fields (FieldInstruction f) {
+  InstructionList load_store_field  (MethodGen mg, FieldInstruction f) {
 
     Type field_type = f.getFieldType (pool);
     if (field_type instanceof ReferenceType)
@@ -3315,58 +3146,11 @@ class DCInstrument {
         il.append (ifact.createConstant (1));
         il.append (dcr_call ("discard_tag", Type.VOID, integer_arg));
       }
+
+      // Perform the normal field command
       il.append (f);
       return (il);
     }
-
-    if (f instanceof GETFIELD) {
-      // Dup the object ref on the top of stack
-      il.append (InstructionFactory.createDup (obj_type.getSize()));
-
-      // Get the tag value from the tag field
-      il.append (ifact.createGetField (classname,
-               DCRuntime.tag_field_name (f.getFieldName(pool)), Type.OBJECT));
-
-      // Push the tag on the tag stack
-      il.append (dcr_call ("push_tag", Type.VOID, object_arg));
-
-    } else { // Must be putfield
-
-      // Put the object ref on the stop of stack and dup it
-      il.append (new SWAP());
-      il.append (InstructionFactory.createDup (obj_type.getSize()));
-
-      // Get the tag from the top of the tag stack
-      il.append (dcr_call ("pop_tag", Type.OBJECT, Type.NO_ARGS));
-
-      // Store the tag in the tag field for this field
-      il.append (ifact.createPutField (classname,
-               DCRuntime.tag_field_name (f.getFieldName(pool)), Type.OBJECT));
-
-      // Restore the original order of the items on the stack
-      il.append (new SWAP());
-    }
-
-    // Perform the normal field command
-    il.append (f);
-
-    return (il);
-  }
-
-  /**
-   * Handles load and store field instructions.  The instructions must
-   * be augmented to either push (load) or pop (store) the tag on the
-   * tag stack.  This is accomplished by calling the tag get/set method
-   * for this field.
-   */
-  InstructionList load_store_field  (MethodGen mg, FieldInstruction f) {
-
-    Type field_type = f.getFieldType (pool);
-    if (field_type instanceof ReferenceType)
-      return (null);
-    ObjectType obj_type = (ObjectType) f.getReferenceType (pool);
-    InstructionList il = new InstructionList();
-    String classname = obj_type.getClassName();
 
     if (f instanceof GETSTATIC) {
       il.append (ifact.createInvoke (classname,
@@ -3884,8 +3668,7 @@ class DCInstrument {
       return (false);
 
     // Don't track any JDK classes
-    if (classname.startsWith ("java.") || classname.startsWith ("com.")
-        || classname.startsWith ("sun.")) {
+    if (BCELUtil.in_jdk (classname)) {
       debug_track.log ("  jdk class, return false%n");
       return (false);
     }
@@ -4545,7 +4328,7 @@ class DCInstrument {
           for (InstructionTargeter it : new_end.getTargeters()) {
             System.out.println ("Targeter has type " + it.getClass().getName());
           }
-        }  
+        }
         new_end = new_end.getNext();
       }
     }
@@ -4850,19 +4633,24 @@ class DCInstrument {
    */
   public boolean tag_fields_ok (String classname) {
 
-    if (true)
-      return (false);
+    if (BCELUtil.is_constructor(mgen))
+      if (!constructor_is_initialized)
+        return false;
 
-    if (classname.startsWith ("java.lang"))
-      return false;
+    if (!jdk_instrumented)
+      if (BCELUtil.in_jdk (classname))
+        return false;
+
+    if (!classname.startsWith ("java.lang"))
+      return true;
 
     if (classname.equals ("java.lang.String")
         || classname.equals ("java.lang.Class")
         || classname.equals ("java.lang.Object")
         || classname.equals ("java.lang.ClassLoader"))
-      return (false);
+      return false;
 
-    return (true);
+    return true;
   }
 
   /**
@@ -4910,6 +4698,7 @@ class DCInstrument {
    * If tag_fields_ok is true for the class, then tag fields are created
    * and the accessor uses the tag fields.  If not, tag storage is created
    * separately and accessed via the field number.
+   * ISSUE? This flag is not currently tested.  (markro)
    *
    * Accessors are also created for each visible superclass field that is
    * not hidden by a field in this class.  These accessors just call the
