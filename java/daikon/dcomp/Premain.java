@@ -81,10 +81,10 @@ public class Premain {
     }
 
     // Find out what classes are already loaded
-    Class<?>[] loaded_classes = inst.getAllLoadedClasses();
-    for (Class<?> loaded_class : loaded_classes) {
+    //Class<?>[] loaded_classes = inst.getAllLoadedClasses();
+    //for (Class<?> loaded_class : loaded_classes) {
       // System.out.printf ("loaded class = %s\n", loaded_class.getName());
-    }
+    //}
 
     // Setup the shutdown hook
     Thread shutdown_thread = new ShutdownThread();
@@ -124,22 +124,31 @@ public class Premain {
 
       // System.out.printf ("transform on %s%n", className);
 
-      // Don't instrument JDK classes (but allow instrumentation of the java
-      // compiler)
-      if ((className.startsWith ("java/") || className.startsWith ("com/")
-           || className.startsWith ("sun/"))
-          && !className.startsWith ("com/sun/tools/javac")) {
-        if (DynComp.no_jdk || pre_instrumented.contains (className))
+      // If already instrumented, nothing to do
+      // (This set will be empty if --no-jdk)
+      if (pre_instrumented.contains (className))
+        return null;
+
+      boolean in_jdk = false;
+
+      // Check if class is in JDK
+      if (BCELUtil.in_jdk (className.replace('/', '.'))) {
+        // If --no-jdk option is active, then skip it.
+        if (DynComp.no_jdk)
           return (null);
+
+        in_jdk = true;
         if (DynComp.verbose)
           System.out.printf ("Instrumenting JDK class %s%n", className);
-      }
+      } else {
 
-      // Don't instrument our own classes
-      if ((className.startsWith ("daikon/dcomp/")
-           && !className.startsWith ("daikon/dcomp/Test"))
-          || className.startsWith ("daikon/chicory/"))
-        return (null);
+        // We're not in a JDK class
+        // Don't instrument our own classes
+        if ((className.startsWith ("daikon/dcomp/")
+             && !className.startsWith ("daikon/dcomp/Test"))
+            || className.startsWith ("daikon/chicory/"))
+          return (null);
+      }
 
       if (DynComp.verbose)
         System.out.format ("In dcomp.Premain.Transform(): class = %s\n", className);
@@ -158,9 +167,9 @@ public class Premain {
         // Transform the file
         DCInstrument dci;
         if (DynComp.branch != null) {
-          dci = new DFInstrument (c, false, loader);
+          dci = new DFInstrument (c, in_jdk, loader);
         } else
-          dci = new DCInstrument (c, false, loader);
+          dci = new DCInstrument (c, in_jdk, loader);
         JavaClass njc;
         if (DynComp.no_primitives)
           njc = dci.instrument_refs_only();
