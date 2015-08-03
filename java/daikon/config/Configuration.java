@@ -155,7 +155,9 @@ public final class Configuration
     assert value != null;
 
     int dot = name.lastIndexOf('.');
-    assert dot >= 0 : "Name must contain a period (.)";
+    if (dot == -1) {
+      throw new daikon.Daikon.TerminationMessage("Configuration option name must contain a period (.): " + name);
+    }
 
     @SuppressWarnings("signature") // substring operation
     /*@ClassGetName*/ String classname = name.substring(0, dot);
