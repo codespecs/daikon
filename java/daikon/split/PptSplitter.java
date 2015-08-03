@@ -102,11 +102,12 @@ public class PptSplitter implements Serializable {
       new PptConditional (parent, splitter, true) };
 
     if (debug.isLoggable (Level.FINE)) {
-      debug.fine ("VarInfos for " + parent.name());
+      debug.fine ("PptSplitter(" + parent.name() + ", " + splitter.condition() + "): " + parent.var_infos.length + " VarInfos");
       for (int ii = 0; ii < parent.var_infos.length; ii++)
-        debug.fine (parent.var_infos[ii].name() + " "
-                            + ppts[0].var_infos[ii].name() + " "
-                            + ppts[1].var_infos[ii].name());
+        debug.fine ("  VarInfo #" + ii + ": "
+                    + parent.var_infos[ii].name() + " "
+                    + ppts[0].var_infos[ii].name() + " "
+                    + ppts[1].var_infos[ii].name());
     }
   }
 
