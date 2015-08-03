@@ -94,6 +94,32 @@ public class SpinfoFile {
     return splitterObjects;
   }
 
+
+  /**
+   * Return the number of splitters (SplitterObject objects) represented by
+   * this file.
+   */
+  public int numSplittterObjects() {
+    int result = 0;
+    for (SplitterObject[] spa : splitterObjects) {
+      result += spa.length;
+    }
+    return result;
+  }
+      
+  /**
+   * Return the number of splitters (SplitterObject objects) represented by
+   * all the files in the list.
+   */
+  static public int numSplittterObjects(List<SpinfoFile> spinfoFiles) {
+    int result = 0;
+    for (SpinfoFile spf : spinfoFiles) {
+      result += spf.numSplittterObjects();
+    }
+    return result;
+  }
+
+
   /**
    * parseFile sets the member fields statementReplacer and splitterObjects,
    * from the spinfoFile.

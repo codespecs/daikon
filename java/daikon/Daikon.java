@@ -1650,7 +1650,7 @@ public final class Daikon {
       System.out.print("\r(read ");
       System.out.print(UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
       System.out.print(" , ");
-      System.out.print(UtilMDE.nplural(spinfoFiles.size(), "splitter"));
+      System.out.print(UtilMDE.nplural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
       System.out.println(")");
     } catch (IOException e) {
       System.out.println();
@@ -2111,12 +2111,12 @@ public final class Daikon {
     ppt.equality_view.instantiate_invariants();
   }
 
-  /**
-   * Create user-defined splitters
-   */
-
   private static List<SpinfoFile> spinfoFiles = new ArrayList<SpinfoFile>();
 
+  /**
+   * Create user-defined splitters.  For each file in the input,
+   * add a SpinfoFile to the spinfoFiles variable.
+   */
   public static void create_splitters(Set<File> spinfo_files)
     throws IOException {
     for (File filename : spinfo_files) {
