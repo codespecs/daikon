@@ -2736,9 +2736,9 @@ branch (named @samp{ENGINE_V2_PATCHES}) for version 2 of Daikon.
 
 The CVS manual
 (see section
-@c This URL is intermittently unavailable, but it's the official source
-@c  for the manual since it is linked from the GNU CVS webpage.
-@uref{http://ximbiot.com/cvs/@/manual/cvs-1.11.18/cvs_5.html,
+@c This is the official source for the manual since it is linked from the
+@c GNU CVS webpage (http://www.nongnu.org/cvs/).
+@uref{https://web.archive.org/web/20140619100950/http://ximbiot.com/cvs/manual/cvs-1.11.23/cvs_5.html,
 ``Branching and merging''} of the manual @emph{CVS --- Concurrent Versions System})
 describes CVS branches:
 
