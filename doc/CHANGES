@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.2.10 (August ?, 2015)
+5.2.10 (August 4, 2015)
 
 Chicory:
 - Modified generation of comparability values when using input from DynComp
@@ -30,6 +30,7 @@ Chicory:
 DynComp:
 - Correctly identify methods that are in the Java SE Development Kit (JDK).
 - Fix problems with non-local field access.
+- Fix problems with use of some javax classes.
 
 LogicalCompare:
 - The "debug-all" option has been changed to "debug" to be consistent with
