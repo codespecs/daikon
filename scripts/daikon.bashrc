@@ -80,6 +80,10 @@ export PATH=$JAVA_HOME/bin:$PATH
 export PATH=${DAIKONBIN}:${PLUMEBIN}:${PATH}
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
+if [ $PERL5LIB ]; then
+  export PERL5LIB=${DAIKONBIN}:${PLUMEBIN}:${PERL5LIB}
+fi
+
 if [ $PERLLIB ]; then
   export PERLLIB=${DAIKONBIN}:${PLUMEBIN}:${PERLLIB}
 else
