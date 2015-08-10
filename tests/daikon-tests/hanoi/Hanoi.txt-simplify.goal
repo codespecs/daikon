@@ -44,6 +44,7 @@ six170.Hanoi.moveTower(int, int, int):::ENTER
 (EQ (select |noOutput| |this|) |@true|)
 (OR (EQ |fromPeg| 0) (EQ |fromPeg| 1) (EQ |fromPeg| 2))
 (OR (EQ |toPeg| 0) (EQ |toPeg| 1) (EQ |toPeg| 2))
+(>= |towerHeight| 1)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |towerHeight| 1)) (<= 0 |j|) (<= |j| (- |towerHeight| 1)) (EQ (+ |i| 1) |j|)) (EQ (select (select elems (select |diskLocation| |this|)) |i|) (select (select elems (select |diskLocation| |this|)) |j|))))
 (>= (select |height| |this|) |towerHeight|)
 (FORALL (|i|) (IMPLIES (AND (<= |towerHeight| |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (<= (select (select elems (select |diskLocation| |this|)) |i|) (select |height| |this|))))

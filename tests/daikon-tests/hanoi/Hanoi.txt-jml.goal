@@ -53,6 +53,7 @@ fromPeg == daikon.Quant.getElement_int(this.diskLocation, towerHeight-1)
 this.noOutput == true
 fromPeg == 0 || fromPeg == 1 || fromPeg == 2
 toPeg == 0 || toPeg == 1 || toPeg == 2
+towerHeight >= 1
 daikon.Quant.eltwiseEqual(daikon.Quant.slice(this.diskLocation, 0, towerHeight-1))
 this.height >= towerHeight
 daikon.Quant.eltsLTE(daikon.Quant.slice(this.diskLocation, towerHeight, daikon.Quant.size(this.diskLocation)), this.height)

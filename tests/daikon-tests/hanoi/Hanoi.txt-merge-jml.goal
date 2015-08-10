@@ -128,6 +128,7 @@ public class Hanoi {
   @ requires this.noOutput == true;
   @ requires fromPeg == 0 || fromPeg == 1 || fromPeg == 2;
   @ requires toPeg == 0 || toPeg == 1 || toPeg == 2;
+  @ requires towerHeight >= 1;
   @ requires daikon.Quant.eltwiseEqual(daikon.Quant.slice(this.diskLocation, 0, towerHeight-1));
   @ requires this.height >= towerHeight;
   @ requires daikon.Quant.eltsLTE(daikon.Quant.slice(this.diskLocation, towerHeight, daikon.Quant.size(this.diskLocation)), this.height);

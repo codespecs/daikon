@@ -112,6 +112,7 @@ public class Hanoi {
   /*@ requires this.noOutput == true; */
   /*@ requires fromPeg == 0 || fromPeg == 1 || fromPeg == 2; */
   /*@ requires toPeg == 0 || toPeg == 1 || toPeg == 2; */
+  /*@ requires towerHeight >= 1; */
   /*@ requires (\forall int i, j; (0 <= i && i <= towerHeight-1 && 0 <= j && j <= towerHeight-1) ==> (this.diskLocation[i] == this.diskLocation[j])); */
   /*@ requires this.height >= towerHeight; */
   /*@ requires (\forall int i; (towerHeight <= i && i <= this.diskLocation.length-1) ==> (this.diskLocation[i] <= this.height)); */

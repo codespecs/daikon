@@ -18,6 +18,8 @@ public class HanoiMain {
                 problem with a tower of height 3.
   */
   public static void main(String argv[]) {
+    moveAndShow(6, true, 3);
+    moveAndShow(5, true, 3);
     moveAndShow(4, true, 3);
     moveAndShow(3, true, 3);
     moveAndShow(2, true, 3);

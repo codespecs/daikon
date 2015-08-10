@@ -55,6 +55,7 @@ fromPeg == this.diskLocation[towerHeight-1]
 this.noOutput == true
 fromPeg == 0 || fromPeg == 1 || fromPeg == 2
 toPeg == 0 || toPeg == 1 || toPeg == 2
+towerHeight >= 1
 (\forall int i, j; (0 <= i && i <= towerHeight-1 && 0 <= j && j <= towerHeight-1) ==> (this.diskLocation[i] == this.diskLocation[j]))
 this.height >= towerHeight
 (\forall int i; (towerHeight <= i && i <= this.diskLocation.length-1) ==> (this.diskLocation[i] <= this.height))

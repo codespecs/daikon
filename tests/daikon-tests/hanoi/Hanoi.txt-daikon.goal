@@ -44,6 +44,7 @@ fromPeg == this.diskLocation[towerHeight-1]
 this.noOutput == true
 fromPeg one of { 0, 1, 2 }
 toPeg one of { 0, 1, 2 }
+towerHeight >= 1
 this.diskLocation[0..towerHeight-1] elements are equal
 this.height >= towerHeight
 this.diskLocation[towerHeight..] elements <= this.height
