@@ -94,7 +94,7 @@ public class Instrument implements ClassFileTransformer {
 
         if (mPpt.find() || mClass.find() || mMethod.find())
           {
-            log("not instrumenting %s, it matches regex %s%n", pptName, pattern);
+            log("not instrumenting %s, it matches ppt_omit regex %s%n", pptName, pattern);
 
             // System.out.println("filtering 1 true on --- " + pptName);
 
@@ -118,7 +118,7 @@ public class Instrument implements ClassFileTransformer {
 
             if (mPpt.find() || mClass.find() || mMethod.find())
               {
-                log("instrumenting %s, it matches regex %s%n", pptName, pattern);
+                log("instrumenting %s, it matches ppt_select regex %s%n", pptName, pattern);
 
                 // System.out.println("filtering 2 false on --- " + pptName);
                 return false; // don't filter out

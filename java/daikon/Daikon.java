@@ -1649,8 +1649,8 @@ public final class Daikon {
       create_splitters(spinfo_files);
       System.out.print("\r(read ");
       System.out.print(UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
-      System.out.print(" , ");
-      System.out.print(UtilMDE.nplural(parsedSplitters.size(), "splitter"));
+      System.out.print(", ");
+      System.out.print(UtilMDE.nplural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
       System.out.println(")");
     } catch (IOException e) {
       System.out.println();
@@ -1690,7 +1690,7 @@ public final class Daikon {
 
     Global.debugSplit.fine("<<enter>> setup_splitters");
 
-    SplitterFactory.load_splitters(ppt, parsedSplitters);
+    SplitterFactory.load_splitters(ppt, spinfoFiles);
 
     Splitter[] pconds = null;
     if (SplitterList.dkconfig_all_splitters) {
@@ -2111,17 +2111,17 @@ public final class Daikon {
     ppt.equality_view.instantiate_invariants();
   }
 
+  private static List<SpinfoFile> spinfoFiles = new ArrayList<SpinfoFile>();
+
   /**
-   * Create user-defined splitters
+   * Create user-defined splitters.  For each file in the input,
+   * add a SpinfoFile to the spinfoFiles variable.
    */
-
-  private static List<SpinfoFileParser> parsedSplitters = new ArrayList<SpinfoFileParser>();
-
   public static void create_splitters(Set<File> spinfo_files)
     throws IOException {
     for (File filename : spinfo_files) {
-      SpinfoFileParser p = SplitterFactory.parse_spinfofile (filename);
-      parsedSplitters.add(p);
+      SpinfoFile sf = SplitterFactory.parse_spinfofile (filename);
+      spinfoFiles.add(sf);
     }
   }
 

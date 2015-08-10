@@ -114,7 +114,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     writeReprBody();
     add("  } ");
     skipLine();
-    add("  public void makeDummyInvariant(DummyInvariant inv) { ");
+    add("  public void makeDummyInvariantFactory(DummyInvariant inv) { ");
     add("    dummyInvFactory = inv; ");
     add("  } " );
     skipLine();
