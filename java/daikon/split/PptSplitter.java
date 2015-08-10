@@ -35,8 +35,8 @@ public class PptSplitter implements Serializable {
   static final long serialVersionUID = 20031031L;
 
   /**
-   * Boolean.  Controls whether or not splitting based on the built-in
-   * splitting rules is disabled.  The built-in rules look for implications
+   * Boolean.  If set, the built-in
+   * splitting rules are disabled.  The built-in rules look for implications
    * based on boolean return values and also when there are exactly two
    * exit points from a method.
    **/
@@ -52,12 +52,13 @@ public class PptSplitter implements Serializable {
   public static int dkconfig_dummy_invariant_level = 0;
 
   /**
-   * Split bi-implications into two separate invariants.
+   * Split bi-implications ("a &lt;==&gt; b") into two separate implications
+   * ("a ==&gt; b" and "b ==&gt; a").
    **/
   public static boolean dkconfig_split_bi_implications = false;
 
   /**
-   * When true compilation errors during splitter file generation
+   * When true, compilation errors during splitter file generation
    * will not be reported to the user.
    */
   public static boolean dkconfig_suppressSplitterErrors = true;
@@ -101,11 +102,12 @@ public class PptSplitter implements Serializable {
       new PptConditional (parent, splitter, true) };
 
     if (debug.isLoggable (Level.FINE)) {
-      debug.fine ("VarInfos for " + parent.name());
+      debug.fine ("PptSplitter(" + parent.name() + ", " + splitter.condition() + "): " + parent.var_infos.length + " VarInfos");
       for (int ii = 0; ii < parent.var_infos.length; ii++)
-        debug.fine (parent.var_infos[ii].name() + " "
-                            + ppts[0].var_infos[ii].name() + " "
-                            + ppts[1].var_infos[ii].name());
+        debug.fine ("  VarInfo #" + ii + ": "
+                    + parent.var_infos[ii].name() + " "
+                    + ppts[0].var_infos[ii].name() + " "
+                    + ppts[1].var_infos[ii].name());
     }
   }
 

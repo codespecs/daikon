@@ -3,6 +3,49 @@ annotation @Nullable:
 annotation @NonNull:
 
 package MapQuick1:
+class Graph$DuplicateEdgeException : // 0/- obj/class samples
+  field MapQuick1.Graph.this :  // MapQuick1.Graph
+  method <init>(LMapQuick1/Graph;)V : // 0 samples
+    return: 
+  method <init>(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
+    return: 
+    parameter #0 :  // s
+
+
+package MapQuick1:
+class Graph$DuplicateNodeException : // 0/- obj/class samples
+  field MapQuick1.Graph.this :  // MapQuick1.Graph
+  method <init>(LMapQuick1/Graph;)V : // 0 samples
+    return: 
+  method <init>(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
+    return: 
+    parameter #0 :  // s
+
+
+package MapQuick1:
+class Graph$GraphException : // 0/- obj/class samples
+  field getClass().getName() :  // java.lang.Class
+  field MapQuick1.Graph.this :  // MapQuick1.Graph
+  method <init>(LMapQuick1/Graph;)V : // 0 samples
+    return: 
+  method <init>(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
+    return: 
+    parameter #0 :  // s
+  method getGraph()LMapQuick1/Graph; : // 0 samples
+    return: 
+
+
+package MapQuick1:
+class Graph$NoNodeException : // 0/- obj/class samples
+  field MapQuick1.Graph.this :  // MapQuick1.Graph
+  method <init>(LMapQuick1/Graph;)V : // 0 samples
+    return: 
+  method <init>(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
+    return: 
+    parameter #0 :  // s
+
+
+package MapQuick1:
 class Graph : // 5621/- obj/class samples
   field adjMap :  // java.util.LinkedHashMap
   method <init>()V : // 3 samples

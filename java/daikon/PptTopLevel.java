@@ -2639,7 +2639,6 @@ public class PptTopLevel extends Ppt {
   // This static region can't appear in PptConditional, lest it never get
   // called.  PptConditional isn't instantiated unless it needs to be, but
   // it doesn't need to be unless we run this static region!
-
   static {
     if (! PptSplitter.dkconfig_disable_splitting) {
       SplitterList.put(".*", new Splitter[] {

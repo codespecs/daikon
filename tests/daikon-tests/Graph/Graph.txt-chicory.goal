@@ -1,5 +1,5 @@
 // Declarations for MapQuick1.Graph
-// Declarations written Thu Jun 04 13:20:31 PDT 2015
+// Declarations written Sun Jul 26 18:05:39 EDT 2015
 
 decl-version 2.0
 var-comparability none
@@ -500,6 +500,613 @@ variable this
 variable this.adjMap
   var-kind field adjMap
   enclosing-var this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+
+ppt MapQuick1.Graph$DuplicateNodeException.Graph$DuplicateNodeException(MapQuick1.Graph):::ENTER
+ppt-type enter
+variable MapQuick1.Graph.this
+  var-kind variable 
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+
+ppt MapQuick1.Graph$DuplicateNodeException.Graph$DuplicateNodeException(MapQuick1.Graph):::EXIT163
+ppt-type subexit
+parent parent MapQuick1.Graph$DuplicateNodeException:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$DuplicateNodeException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent MapQuick1.Graph$DuplicateNodeException:::OBJECT 1
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$DuplicateNodeException:::OBJECT 1
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$DuplicateNodeException:::OBJECT 1
+
+ppt MapQuick1.Graph$DuplicateNodeException.Graph$DuplicateNodeException(MapQuick1.Graph,\_java.lang.String):::ENTER
+ppt-type enter
+variable MapQuick1.Graph.this
+  var-kind variable 
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+variable s
+  var-kind variable 
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 22
+
+ppt MapQuick1.Graph$DuplicateNodeException.Graph$DuplicateNodeException(MapQuick1.Graph,\_java.lang.String):::EXIT164
+ppt-type subexit
+parent parent MapQuick1.Graph$DuplicateNodeException:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$DuplicateNodeException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent MapQuick1.Graph$DuplicateNodeException:::OBJECT 1
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$DuplicateNodeException:::OBJECT 1
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$DuplicateNodeException:::OBJECT 1
+variable s
+  var-kind variable 
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 22
+
+ppt MapQuick1.Graph$DuplicateNodeException:::OBJECT
+ppt-type object
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$DuplicateNodeException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+
+ppt MapQuick1.Graph$GraphException.Graph$GraphException(MapQuick1.Graph):::ENTER
+ppt-type enter
+variable MapQuick1.Graph.this
+  var-kind variable 
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+
+ppt MapQuick1.Graph$GraphException.Graph$GraphException(MapQuick1.Graph):::EXIT154
+ppt-type subexit
+parent parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$GraphException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+
+ppt MapQuick1.Graph$GraphException.Graph$GraphException(MapQuick1.Graph,\_java.lang.String):::ENTER
+ppt-type enter
+variable MapQuick1.Graph.this
+  var-kind variable 
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+variable s
+  var-kind variable 
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 22
+
+ppt MapQuick1.Graph$GraphException.Graph$GraphException(MapQuick1.Graph,\_java.lang.String):::EXIT155
+ppt-type subexit
+parent parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$GraphException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable s
+  var-kind variable 
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 22
+
+ppt MapQuick1.Graph$GraphException.getGraph():::ENTER
+ppt-type enter
+parent parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$GraphException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+
+ppt MapQuick1.Graph$GraphException.getGraph():::EXIT157
+ppt-type subexit
+parent parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$GraphException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$GraphException:::OBJECT 1
+variable return
+  var-kind return 
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+variable return.adjMap
+  var-kind field adjMap
+  enclosing-var return
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+
+ppt MapQuick1.Graph$GraphException:::OBJECT
+ppt-type object
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$GraphException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var this
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname
+  comparability 22
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+
+ppt MapQuick1.Graph$NoNodeException.Graph$NoNodeException(MapQuick1.Graph):::ENTER
+ppt-type enter
+variable MapQuick1.Graph.this
+  var-kind variable 
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+
+ppt MapQuick1.Graph$NoNodeException.Graph$NoNodeException(MapQuick1.Graph):::EXIT170
+ppt-type subexit
+parent parent MapQuick1.Graph$NoNodeException:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$NoNodeException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent MapQuick1.Graph$NoNodeException:::OBJECT 1
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$NoNodeException:::OBJECT 1
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$NoNodeException:::OBJECT 1
+
+ppt MapQuick1.Graph$NoNodeException.Graph$NoNodeException(MapQuick1.Graph,\_java.lang.String):::ENTER
+ppt-type enter
+variable MapQuick1.Graph.this
+  var-kind variable 
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+variable s
+  var-kind variable 
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 22
+
+ppt MapQuick1.Graph$NoNodeException.Graph$NoNodeException(MapQuick1.Graph,\_java.lang.String):::EXIT171
+ppt-type subexit
+parent parent MapQuick1.Graph$NoNodeException:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$NoNodeException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent MapQuick1.Graph$NoNodeException:::OBJECT 1
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$NoNodeException:::OBJECT 1
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$NoNodeException:::OBJECT 1
+variable s
+  var-kind variable 
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 22
+
+ppt MapQuick1.Graph$NoNodeException:::OBJECT
+ppt-type object
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$NoNodeException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+
+ppt MapQuick1.Graph$DuplicateEdgeException.Graph$DuplicateEdgeException(MapQuick1.Graph):::ENTER
+ppt-type enter
+variable MapQuick1.Graph.this
+  var-kind variable 
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+
+ppt MapQuick1.Graph$DuplicateEdgeException.Graph$DuplicateEdgeException(MapQuick1.Graph):::EXIT177
+ppt-type subexit
+parent parent MapQuick1.Graph$DuplicateEdgeException:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$DuplicateEdgeException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent MapQuick1.Graph$DuplicateEdgeException:::OBJECT 1
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$DuplicateEdgeException:::OBJECT 1
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$DuplicateEdgeException:::OBJECT 1
+
+ppt MapQuick1.Graph$DuplicateEdgeException.Graph$DuplicateEdgeException(MapQuick1.Graph,\_java.lang.String):::ENTER
+ppt-type enter
+variable MapQuick1.Graph.this
+  var-kind variable 
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+variable s
+  var-kind variable 
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 22
+
+ppt MapQuick1.Graph$DuplicateEdgeException.Graph$DuplicateEdgeException(MapQuick1.Graph,\_java.lang.String):::EXIT178
+ppt-type subexit
+parent parent MapQuick1.Graph$DuplicateEdgeException:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$DuplicateEdgeException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent MapQuick1.Graph$DuplicateEdgeException:::OBJECT 1
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$DuplicateEdgeException:::OBJECT 1
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
+  dec-type java.util.LinkedHashMap
+  rep-type hashcode
+  comparability 22
+  parent MapQuick1.Graph$DuplicateEdgeException:::OBJECT 1
+variable s
+  var-kind variable 
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 22
+
+ppt MapQuick1.Graph$DuplicateEdgeException:::OBJECT
+ppt-type object
+variable this
+  var-kind variable 
+  dec-type MapQuick1.Graph$DuplicateEdgeException
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable MapQuick1.Graph.this
+  var-kind field MapQuick1.Graph.this
+  dec-type MapQuick1.Graph
+  rep-type hashcode
+  comparability 22
+variable MapQuick1.Graph.this.adjMap
+  var-kind field adjMap
+  enclosing-var MapQuick1.Graph.this
   dec-type java.util.LinkedHashMap
   rep-type hashcode
   comparability 22

@@ -86,7 +86,7 @@ public abstract class Splitter
   /** Set up the static ('factory') DummyInvariant for this kind of
    * splitter. This only modifies static data, but it can't be static
    * because subclasses must override it. */
-  public void makeDummyInvariant(DummyInvariant inv) { }
+  public void makeDummyInvariantFactory(DummyInvariant inv) { }
 
   /** Make an instance DummyInvariant for this instance of the
    * splitter, if possible on an appropriate slice from ppt. */

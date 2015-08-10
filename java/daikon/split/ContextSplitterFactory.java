@@ -32,7 +32,9 @@ public class ContextSplitterFactory
   // daikon.config.Configuration interface.
   /**
    * Enumeration (integer).  Specifies the granularity to use for
-   * callsite splitter processing.  0 is line-level granularity; 1 is
+   * callsite splitter processing.  (That is, for creating
+   * invariants for a method that are dependent on where the method
+   * was called from.)  0 is line-level granularity; 1 is
    * method-level granularity; 2 is class-level granularity.
    **/
   public static int dkconfig_granularity = GRAIN_METHOD;
