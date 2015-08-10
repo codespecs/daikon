@@ -948,6 +948,7 @@ class DCInstrument {
     debug_add_dcomp.enabled = DynComp.debug;
     debug_instrument.enabled = DynComp.debug;
     debug_instrument_inst.enabled = DynComp.debug;
+    debug_native.enabled = DynComp.debug;
   }
 
   /** Returns true if we are instrumenting for dataflow **/
@@ -1371,7 +1372,12 @@ class DCInstrument {
           mg.removeCodeAttributes();
           mg.removeLocalVariables();
         }
+
+        // Remove any LVTT tables
+        BCELUtil.remove_local_variable_type_tables (mg);
+
         gen.addMethod (mg.getMethod());
+
       } catch (Throwable t) {
           skipped_methods.add(gen.getClassName() + "." + m.getName());
           if (!DynComp.quit_if_error) {
@@ -1492,7 +1498,12 @@ class DCInstrument {
           mg.removeCodeAttributes();
           mg.removeLocalVariables();
         }
+
+        // Remove any LVTT tables
+        BCELUtil.remove_local_variable_type_tables (mg);
+
         gen.addMethod (mg.getMethod());
+
       } catch (Throwable t) {
           System.out.printf ("Unexpected error processing %s.%s: %s%n", gen.getClassName(),
                               m.getName(), t);
@@ -3140,7 +3151,7 @@ class DCInstrument {
 
     // If this class doesn't support tag fields, don't load/store them
     if (!tag_fields_ok (classname)) {
-      if (f instanceof GETFIELD) {
+      if ((f instanceof GETFIELD) || (f instanceof GETSTATIC)) {
         il.append (dcr_call ("push_const", Type.VOID, Type.NO_ARGS));
       } else {
         il.append (ifact.createConstant (1));
@@ -4992,9 +5003,9 @@ class DCInstrument {
    */
   public void add_equals_method (ClassGen gen) {
     InstructionList il = new InstructionList();
-    int flags = Constants.ACC_PROTECTED;
+    int flags = Constants.ACC_PUBLIC;
     if (gen.isInterface())
-      flags = Constants.ACC_PUBLIC | Constants.ACC_ABSTRACT;
+      flags = flags | Constants.ACC_ABSTRACT;
     MethodGen method = new MethodGen(flags, Type.BOOLEAN,
                                      new Type[] { Type.OBJECT },
                                      new String[] { "obj" }, "equals",

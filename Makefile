@@ -382,6 +382,8 @@ staging: doc/CHANGES
 staging-to-www: $(STAGING_DIR)
 #copy the files
 	chmod -R u+w,g+w $(WWW_DIR)
+# remove previous release archive files
+	rm -f /cse/web/research/plse/daikon/download/daikon-*
 # don't trash existing history directory
 	(cd $(STAGING_DIR) && tar cf - --exclude=history .) | (cd $(WWW_DIR) && tar xfBp -)
 	chmod -R u-w,g-w $(WWW_DIR)
@@ -419,7 +421,7 @@ doc-all:
 	cd doc && $(MAKE) all
 
 # Get the current release version
-CUR_VER := $(shell unzip -p /cse/web/research/plse/daikon/download/daikon-*.zip daikon-*/README.txt |head -2|tail -1|perl -p -e 's/^.* version //' |perl -p -e 's/,.*//')
+CUR_VER := $(shell /usr/bin/ls /cse/web/research/plse/daikon/download/daikon-*.zip |perl -p -e 's/^.*download.daikon.//' |perl -p -e 's/.zip//')
 CUR_RELEASE_NAME := daikon-$(CUR_VER)
 NEW_RELEASE_NAME := daikon-$(shell cat doc/VERSION)
 
@@ -432,7 +434,7 @@ save-current-release:
 	chmod +w $(HISTORY_DIR)
 	mkdir $(HISTORY_DIR)/$(CUR_RELEASE_NAME)
 	chmod -w $(HISTORY_DIR)
-	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp /cse/web/research/plse/daikon/download/$(CUR_RELEASE_NAME).zip . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod -w CHANGES .
+	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp -p /cse/web/research/plse/daikon/download/$(CUR_RELEASE_NAME).zip . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod -w CHANGES .
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 ifeq ($(origin TODAY), undefined)

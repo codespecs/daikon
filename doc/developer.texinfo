@@ -35,14 +35,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.2.9
+@center Daikon version 5.2.11
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.2.9 release date
-@center July 1, 2015
+@c Print out the Daikon version 5.2.11 release date
+@center August 5, 2015
 @end ifset
 
 @ifclear final
@@ -90,7 +90,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.2.9, released July 1, 2015.
+It describes Daikon version 5.2.11, released August 5, 2015.
 
 @menu
 * Introduction::
@@ -2736,9 +2736,9 @@ branch (named @samp{ENGINE_V2_PATCHES}) for version 2 of Daikon.
 
 The CVS manual
 (see section
-@c This URL is intermittently unavailable, but it's the official source
-@c  for the manual since it is linked from the GNU CVS webpage.
-@uref{http://ximbiot.com/cvs/@/manual/cvs-1.11.18/cvs_5.html,
+@c This is the official source for the manual since it is linked from the
+@c GNU CVS webpage (http://www.nongnu.org/cvs/).
+@uref{https://web.archive.org/web/20140619100950/http://ximbiot.com/cvs/manual/cvs-1.11.23/cvs_5.html,
 ``Branching and merging''} of the manual @emph{CVS --- Concurrent Versions System})
 describes CVS branches:
 
