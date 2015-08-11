@@ -58,7 +58,7 @@ public class SplitterFactory {
     // a -Java 6 or Java 7 runtime.  A better solution would be to add
     // these command-line arguments only when running
     // SplitterFactoryTestUpdater, but that program does not support that.
-    = "javac -source 6 -target 6 -classpath " + new File(System.getenv("DAIKONDIR"), "daikon.jar") + File.pathSeparatorChar + new File(System.getenv("DAIKONDIR"), "java");
+    = "javac -source 6 -target 6 -classpath " + new File(System.getenv("DAIKONDIR"), "java")  + File.pathSeparatorChar + new File(System.getenv("DAIKONDIR"), "daikon.jar");
 
   /**
    * Positive integer.  Specifies the Splitter compilation timeout, in
@@ -112,7 +112,7 @@ public class SplitterFactory {
         int numsplitters = splitterObjects[i].length;
         if (numsplitters != 0) {
           String ppt_name = splitterObjects[i][0].getPptName();
-          Global.debugSplit.fine("          load_splitters: " + ppt_name + ", " + ppt);
+          Global.debugSplit.fine("          load_splitters: " + ppt_name + ", " + ppt + "; match=" + matchPpt(ppt_name, ppt));
           if (matchPpt(ppt_name, ppt)) {
             int numGood = 0;
             // Writes, compiles, and loads the splitter .java files.
@@ -235,6 +235,14 @@ public class SplitterFactory {
     Global.debugSplit.fine("<<exit>>  loadSplitters");
   }
 
+  /**
+   * Compiles the files given by fileNames.
+   * Return the error output.
+   * @return the error output from compiling the files
+   * @param fileNames paths to the files to be compiled as Strings
+   * @throws IOException if there is a problem reading a file
+   * @see plume.FileCompiler#compileFiles
+   */
   private static String compileFiles(List<String> fileNames) throws IOException {
     // We delay setting fileCompiler until now because we want to permit
     // the user to set the dkconfig_compiler variable.  Note that our
@@ -250,7 +258,6 @@ public class SplitterFactory {
   /**
    * Determine whether a Ppt's name matches the given pattern.
    */
-
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
     if (ppt.name.equals(ppt_name))
       return true;
