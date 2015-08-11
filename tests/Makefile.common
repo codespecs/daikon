@@ -38,7 +38,6 @@
 # instrument-from-root | X | X |   |   | X |   |   |   |   |
 # instrument-specific  |   |   |   | X |   |   |   |   |   |
 # compile /scratch     | X | X |   | X | X |   |   |   |   |
-# data (run)           | X | X |   | X | X |   |   |   |   |
 # inv (daikon)         | X | X | X | X |   |   |   |   |   |
 # txt-daikon           | X | X | X | X |   |   |   |   |   |
 # txt-esc              |   | X |   |   |   |   |   |   |   |
@@ -62,7 +61,7 @@
 # This suggests the following aspects for configuration:
 
 # PROJECT_FILE = < name >               ; optional
-# TRACE_SOURCE = { stored | generated | jtrace }
+# TRACE_SOURCE = { stored | generated }
 # STORED_TRACE_FORMAT = { dtrace | csv }; only relevant if 'stored'
 # LANGUAGE     = { java | c }           ; only relevant if 'generated'
 # INSTRUMENT   = { explicit | infer }   ; only relevant if 'generated'
@@ -110,9 +109,6 @@ ifeq (stored,${TRACE_SOURCE})
     endif
   endif
 else
-ifeq (jtrace,${TRACE_SOURCE})
-  # jtrace
-else
 ifeq (generated,${TRACE_SOURCE})
   # generated
   ifeq (infer,${INSTRUMENT})
@@ -134,8 +130,7 @@ ifeq (generated,${TRACE_SOURCE})
     endif
   endif
 else
-$(error TRACE_SOURCE muse be set to one of { stored, generated, jtrace } before including this file)
-endif
+$(error TRACE_SOURCE muse be set to one of { stored, generated } before including this file)
 endif
 endif
 ifdef ESC_ON
@@ -324,8 +319,6 @@ CONVERTCSV?=$(SCRIPTS)/convertcsv.pl
 
 #JAVA_COMPILER?=$(shell which javac)
 
-JTRACE_LIBPATH?=${DAIKONDIR}/front-end/jtrace
-
 ifndef GZCAT
   GZCAT = gunzip -c
 endif
@@ -342,6 +335,7 @@ PROJECT_HELP:=\
 
 # Name of the invariant output file.
 INV_FILE ?= ${CWD}/$(PROJECT_FILE).inv.gz
+SPINFO_INV_FILE ?= ${CWD}/$(PROJECT_FILE).spinfo.inv.gz
 
 # Needed because otherwise, these files are deleted automatically by make
 .PRECIOUS: %.txt-merge-esc %.txt-merge-jml
@@ -370,7 +364,7 @@ clean-output:
 	@echo
 	@echo "### clean-output (${PROJECT_FILE})"
 	@echo
-	rm -f *.bak *.diff ${PROJECT_FILE}.{inv{,.gz},decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon,simplify,logicalcompare,csharpcontract,esc,jml,repair,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,context,stats,linecov,spinfo-static}
+	rm -f *.bak *.diff ${PROJECT_FILE}.{inv.gz,spinfo.inv.gz,decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon{,-spinfo},simplify,logicalcompare,csharpcontract,esc,jml,repair,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,context,stats,linecov,spinfo-static}
 	rm -rf merged *txt-chicory.dtrace rtc-violations.txt
 	rm -f *.bak *.diff ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
 ifeq (csv,${STORED_TRACE_FORMAT})
@@ -501,7 +495,7 @@ chicory: $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
 $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
 									$(INST_LIST_FILE) $(CHICORY_EXEC)
 	@echo
-	@echo "### compile source and run Chicory "
+	@echo "### compile source and run Chicory (${PROJECT_FILE})"
 	@echo
 	@echo inst_Files: '$(INST_FILES)'
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
@@ -543,8 +537,6 @@ endif
 ifndef DCOMP_RT
   $(info dcomp_rt.jar is not in ${DAIKONDIR}/java; it must be on the classpath.)
 endif
-JAVA_DCOMP := $(RUN_JAVA) -esa -ea \
-			  "-Xbootclasspath:$(DCOMP_RT):$(CLASSPATH):$(SCRATCH_FOR_DAIKON)"
 
 dyncomp: $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 		 $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk
@@ -578,50 +570,6 @@ dyncomp:
 	@echo "Can't run DynComp/Java, trace file is stored not generated"
 dyncomp-diff:
 	@echo "Nothing to diff, trace file is stored not generated"
-endif
-
-
-# instrument files under detection
-
-PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make instrument     : instruments the source under test, creates .decls"
-
-
-dataflow.txt: ${DAIKON_CLASS} $(SCRATCH_FOR_DAIKON)/.instrument-timestamp
-	java -ea daikon.Dataflow `find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name '*.decls'` || rm -f Dataflow_testing.txt
-	mv Dataflow_testing.txt $@
-
-# run the program under inspection from /scratch
-
-ifeq (generated,${TRACE_SOURCE})
-# generated
-PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make data           : runs the source under test"
-data: $(SCRATCH_FOR_DAIKON)/.run-timestamp
-$(SCRATCH_FOR_DAIKON)/.run-timestamp: $(SCRATCH_FOR_DAIKON)/.compile-timestamp ${DAIKONDIR}/java/daikon/Runtime.class
-	@echo
-	@echo "### data (${PROJECT_FILE})"
-	@echo
-	${RUN_JAVA} \
-		-DDTRACEFILE=$(SCRATCH_FOR_DAIKON)/${PROJECT_FILE}.dtrace.gz \
-		${JAVA_ARGS} \
-		${MAIN_CLASS} ${MAIN_ARGS}
-#	modbit-munge.pl `find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name '*.dtrace'`
-	touch $(SCRATCH_FOR_DAIKON)/.run-timestamp
-
-PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make accept-aborted : untruncates trace file and marks as 'ok' for inference"
-accept-aborted accept-aborted-data:
-	@echo
-	@echo "### accept-aborted-data (${PROJECT_FILE})"
-	@echo
-	gunzip `find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name '*.dtrace.gz'`
-	$(TRACE_UNTRUNCATE) `find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name '*.dtrace'`
-	gzip `find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name '*.dtrace'`
-	touch $(SCRATCH_FOR_DAIKON)/.run-timestamp
-
-${DAIKONDIR}/java/daikon/Runtime.class: ${DAIKONDIR}/java/daikon/Runtime.java
-	${JAVA_COMPILER} -g @^
 endif
 
 ifeq (csv,${STORED_TRACE_FORMAT})
@@ -665,39 +613,6 @@ inv: ${INV_FILE}
 
 ${INV_FILE}: ${DAIKON_CLASS}
 
-ifeq (${TRACE_SOURCE},jtrace)
-JTRACE_FLAGS_FILE:=$(SCRATCH_FOR_DAIKON)/.jtrace-flags
-JTRACE_ACL_FILE:=$(SCRATCH_FOR_DAIKON)/.jtrace-tracelist
-${INV_FILE}: ${ALL_LIST_FILE}
-	@echo
-	@echo "### inv (${PROJECT_FILE}) with jtrace"
-	@echo
-	@echo "ALL_LIST_FILE contents =" `cat ${ALL_LIST_FILE}`
-	@echo
-	rm -rf $(SCRATCH_FOR_DAIKON)/jtrace-compiled
-	mkdir $(SCRATCH_FOR_DAIKON)/jtrace-compiled
-	tar -cf - -C $(SOURCES) `cat $(ALL_LIST_FILE)` \
-		| tar xf - -C $(SCRATCH_FOR_DAIKON)/jtrace-compiled
-	cd $(SCRATCH_FOR_DAIKON)/jtrace-compiled && ${JAVA_COMPILER} -g -d . `find . $(FINDARGS) -name '*.java'`
-	cd $(SCRATCH_FOR_DAIKON)/jtrace-compiled && find . $(FINDARGS) -name '*.class' -exec ${JTRACE_LIBPATH}/jt-return {} \;
-	@rm -f ${JTRACE_FLAGS_FILE}
-	@echo "-v" >> ${JTRACE_FLAGS_FILE} # ++verbose
-	@echo "-v" >> ${JTRACE_FLAGS_FILE} # ++verbose
-	@echo "-f" >> ${JTRACE_FLAGS_FILE} # log file:
-	@echo "" >> ${JTRACE_FLAGS_FILE}   #   none
-	@echo "-c" >> ${JTRACE_FLAGS_FILE} # acl file:
-	@echo "${JTRACE_ACL_FILE}" >> ${JTRACE_FLAGS_FILE}
-	@echo "-.*" > ${JTRACE_ACL_FILE}   # omit all by default, then inclue what we want
-	@perl -ne 'for (split(/\s+/)) { s:\.java::g; s:^(.*)$$:+L$$1;\n:; print; }' \
-		${INST_LIST_FILE} >> ${JTRACE_ACL_FILE}
-	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${JTRACE_LIBPATH} && \
-		java -ea -Xdebug -Xnoagent -Djava.compiler=NONE \
-		-XrunJTrace:${JTRACE_FLAGS_FILE} \
-		${JAVA_ARGS} \
-		 -classpath $(SCRATCH_FOR_DAIKON)/jtrace-compiled:${CLASSPATH} \
-		daikon.JTrace ${MAIN_CLASS} ${MAIN_ARGS}
-	[ -e temp.inv ] && (gzip -c temp.inv > $@) && rm temp.inv
-else
 ifeq (${TRACE_SOURCE},stored)
 DECLS_FILES?=${PROJECT_FILE}.decls
 DTRACE_FILES:=${PROJECT_FILE}.dtrace.gz
@@ -721,9 +636,10 @@ SPINFO_FILES_W := $(shell $(WIN_CONVERT) "$(SPINFO_FILES)")
 MAP_FILES_W	   := $(shell $(WIN_CONVERT) "$(MAP_FILES)")
 INV_FILE_W	   := $(shell $(WIN_CONVERT) "$(INV_FILE)")
 endif
+
 ${INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES} ${MAP_FILES}
 	@echo
-	@echo "### inv (${PROJECT_FILE})"
+	@echo "### run Daikon (${PROJECT_FILE})"
 	@echo
 	@echo "Number of lines in dtrace file(s):"
 	@-${GZCAT} ${DTRACE_FILES} | wc -l
@@ -738,8 +654,24 @@ ${INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES} ${MAP_FILES}
 		${SPINFO_FILES} \
 		${MAP_FILES}) \
 		|| (rm -f $@ && false)
-endif
 
+${SPINFO_INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${PROJECT_FILE}.spinfo-static ${MAP_FILES}
+	@echo
+	@echo "### run Daikon with static splitter file (${PROJECT_FILE})"
+	@echo
+	@echo "Number of lines in dtrace file(s):"
+	@-${GZCAT} ${DTRACE_FILES} | wc -l
+	@echo
+	(${DAIKON} -o $(SPINFO_INV_FILE) \
+		${DAIKON_OPTIONS} \
+		${USER_DAIKON_OPTIONS} \
+		${PERSONAL_DAIKON_OPTIONS} \
+		--no_text_output \
+		${DTRACE_FILES} \
+		${DECLS_FILES} \
+		${CWD}/${PROJECT_FILE}.spinfo-static \
+		${MAP_FILES}) \
+		|| (rm -f $@ && false)
 
 # Chicory trace file tests
 ifeq (generated,${TRACE_SOURCE})
@@ -751,7 +683,7 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
 
 ${PROJECT_FILE}.txt-chicory.dtrace : $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
 	@echo
-	@echo "### txt-chicory (${PROJECT_FILE} (first 100,000 lines of dtrace)"
+	@echo "### create txt-chicory (${PROJECT_FILE}) (first 100,000 lines of dtrace)"
 	@echo
 # zcat into head that truncates causes a non-zero status, so ignore failures
 	${GZCAT} ${DTRACE_FILES} | head -n 100000 \
@@ -764,10 +696,6 @@ txt-chicory-diff: ${PROJECT_FILE}.txt-chicory.diff
 
 ${PROJECT_FILE}.txt-chicory.diff: $(call goal_name,${PROJECT_FILE}.txt-chicory) \
 								  ${PROJECT_FILE}.txt-chicory.dtrace
-#ifeq (new,${DECL_FORMAT})
-#	@echo "Not diffing chicory, goal is setup for old format"
-#	cat /dev/null > $@
-#else
 	@echo
 	@echo "### dtrace diff (${PROJECT_FILE})"
 	@echo
@@ -776,7 +704,6 @@ ${PROJECT_FILE}.txt-chicory.diff: $(call goal_name,${PROJECT_FILE}.txt-chicory) 
 		$(call goal_name,${PROJECT_FILE}.txt-chicory) \
 	    ${PROJECT_FILE}.txt-chicory.dtrace > $@ 2>&1
 	cat $@
-#endif
 else
 txt-chicory:
 	@echo "Can't run chicory, trace file is stored, not generated"
@@ -792,7 +719,7 @@ PROJECT_HELP := $(PROJECT_HELP) ;\
 txt-jaif: $(PROJECT_FILE).txt-jaif
 %.txt-jaif: $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
 	@echo
-	@echo "### AnnotateNullable (${PROJECT_FILE})"
+	@echo "### run AnnotateNullable (${PROJECT_FILE})"
 	@echo
 	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.Daikon --no_text_output \
 	  $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz \
@@ -833,54 +760,34 @@ dtrace-ppts-sz dtrace-ppts-size:
 		END { for (keys %x) { print $$x{$$_}, " ", $$_, "\n"; } }\
 		' | sort -n
 
-
-PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make dtrace-trunc   : truncate dtrace file to 1M lines"
-dtrace-trunc:
-	@echo
-	@echo "### dtrace-trunc (${PROJECT_FILE})"
-	@echo
-	${GZCAT} ${DTRACE_FILES} | head -1000000 | ${TRACE_UNTRUNCATE} | gzip > $(SCRATCH_FOR_DAIKON)/trunc.dtrace.gz
-	find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name 'trunc.dtrace.gz' -prune -o -name '*.dtrace.gz' -exec rm {} \;
-
-.PHONY: txt-daikon
 txt-daikon: ${PROJECT_FILE}.txt-daikon
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-daikon     : creates daikon-style output from the inv file"
 %.txt-daikon: ${INV_FILE} ${PRINT_INVARIANTS_CLASS}
 	@echo
-	@echo "### txt-daikon (${PROJECT_FILE})"
+	@echo "### create txt-daikon (${PROJECT_FILE})"
 	@echo
 	-rm -f $@-failed
 	(${PRINT_INVARIANTS} ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
 
-# Also see script ~jhp/bin/daikon
-txt-daikon-direct: ${PROJECT_FILE}.txt-daikon-direct
+txt-daikon-spinfo: ${PROJECT_FILE}.txt-daikon-spinfo
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make txt-daikon-direct : creates daikon-style output without making an inv file"
-%.txt-daikon-direct: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES} ${MAP_FILES}
-%.txt-daikon-direct:
+  echo "  make txt-daikon-spinfo     : creates daikon-style output from the spinfo inv file"
+%.txt-daikon-spinfo: ${SPINFO_INV_FILE} ${PRINT_INVARIANTS_CLASS}
 	@echo
-	@echo "### txt-daikon-direct (${PROJECT_FILE})"
+	@echo "### create txt-daikon-spinfo (${PROJECT_FILE})"
 	@echo
 	-rm -f $@-failed
-	(${DAIKON} \
-		${DAIKON_OPTIONS}  \
-		${USER_DAIKON_OPTIONS} ${PERSONAL_DAIKON_OPTIONS} \
-		${PRINT_INVARIANTS_OPTIONS} \
-		${DTRACE_FILES} \
-		${DECLS_FILES} \
-		${SPINFO_FILES} \
-		${MAP_FILES} > $@ 2>&1 && cp $@ ${DAIKONDIR}/tests/daikon-direct-output.txt) || (cp $@ ${DAIKONDIR}/tests/daikon-direct-output.txt && mv $@ $@-failed && false)
+	(${PRINT_INVARIANTS} ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-simplify   : creates simplify-style output from the inv file"
 txt-simplify: ${PROJECT_FILE}.txt-simplify
 %.txt-simplify: ${INV_FILE} ${PRINT_INVARIANTS_CLASS}
 	@echo
-	@echo "### txt-simplify (${PROJECT_FILE})"
+	@echo "### create txt-simplify (${PROJECT_FILE})"
 	@echo
 	-rm -f $@-failed
 	(${PRINT_INVARIANTS} --format simplify \
@@ -892,7 +799,7 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
 txt-logicalcompare: ${PROJECT_FILE}.txt-logicalcompare
 %.txt-logicalcompare: ${INV_FILE}
 	@echo
-	@echo "### txt-logicalcompare (${PROJECT_FILE})"
+	@echo "### create txt-logicalcompare (${PROJECT_FILE})"
 	@echo
 	-rm -f $@-failed
 	($(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.tools.compare.LogicalCompare $< $< > $@ 2>&1) || (mv $@ $@-failed && false)
@@ -903,7 +810,7 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
 txt-csharpcontract: ${PROJECT_FILE}.txt-csharpcontract
 %.txt-csharpcontract: ${INV_FILE} ${PRINT_INVARIANTS_CLASS}
 	@echo
-	@echo "### txt-csharpcontract (${PROJECT_FILE})"
+	@echo "### create txt-csharpcontract (${PROJECT_FILE})"
 	@echo
 	-touch ${PROJECT_FILE}.txt-csharpcontract.goal
 	-rm -f $@-failed
@@ -917,7 +824,7 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
 txt-jml: ${PROJECT_FILE}.txt-jml
 %.txt-jml: ${INV_FILE} ${PRINT_INVARIANTS_CLASS}
 	@echo
-	@echo "### txt-jml (${PROJECT_FILE})"
+	@echo "### create txt-jml (${PROJECT_FILE})"
 	@echo
 	-rm -f $@-failed
 	(${PRINT_INVARIANTS} --format jml ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
@@ -930,7 +837,7 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
 txt-esc: ${PROJECT_FILE}.txt-esc
 %.txt-esc: ${INV_FILE} ${PRINT_INVARIANTS_CLASS}
 	@echo
-	@echo "### txt-esc (${PROJECT_FILE})"
+	@echo "### create txt-esc (${PROJECT_FILE})"
 	@echo
 	-rm -f $@-failed
 	(${PRINT_INVARIANTS} --format esc ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
@@ -960,56 +867,72 @@ diffs: txt-diff results
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-diff       : makes .diff files (from diff -u $$.goal)"
+
 ifdef ESC_ON
 ifndef NO_MERGE
 ifndef NO_CSHARP
+# ESC  MERGE  CSHARP
 txt-diff: txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
 		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-chicory-diff \
 		  dyncomp-diff txt-simplify-diff txt-csharpcontract-diff txt-jaif-diff
 else
+# ESC  MERGE  !CSHARP
 txt-diff: txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
 		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-chicory-diff \
 		  dyncomp-diff txt-simplify-diff txt-jaif-diff
 endif
 
 # txt-daikon-suppress-diff;
+# ESC  MERGE
 # txt-diff: txt-daikon-diff txt-esc-diff
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-merge-diff : makes .diff files for merge ESC and JML targets (from diff -u $$.goal)"
 txt-merge-diff: merge ${PROJECT_FILE}.txt-merge-esc.diff ${PROJECT_FILE}.txt-merge-jml.diff;
 else
+# ESC  !MERGE
 txt-merge-diff:
 	@echo 'Nothing to do for merge'
 ifndef NO_CSHARP
+# ESC  !MERGE  CSHARP
 txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-esc-diff txt-csharpcontract-diff txt-chicory-diff \
 		  inv-checker-diff dyncomp-diff
 else
+# ESC  !MERGE  !CSHARP
 txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-esc-diff txt-chicory-diff inv-checker-diff dyncomp-diff
 endif
 # txt-daikon-suppress-diff;
 endif # ifndef NO_MERGE
 else
+# !ESC
 ifdef NO_JML
+# !ESC !JML
 txt-merge-diff:
 	@echo 'Nothing to do for merge'
 txt-diff: txt-daikon-diff;
 else
+# !ESC JML
 ifndef NO_MERGE
 ifndef NO_CSHARP
+# !ESC JML MERGE CSHARP
 txt-diff: txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff txt-csharpcontract-diff inv-checker-diff dyncomp-diff
 else
+# !ESC JML MERGE !CSHARP
 txt-diff: txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff inv-checker-diff dyncomp-diff
 endif
+# !ESC JML MERGE
 # txt-daikon-suppress-diff;
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-merge-diff : makes .diff files for merge JML target (from diff -u $$.goal)"
 txt-merge-diff: merge ${PROJECT_FILE}.txt-merge-jml.diff;
 else
+# !ESC JML !MERGE
 txt-merge-diff:
 	@echo 'Nothing to do for merge'
 ifndef NO_CSHARP
+# !ESC JML !MERGE CSHARP
 txt-diff: txt-daikon-diff txt-jml-diff txt-csharpcontract-diff
 else
+# !ESC JML !MERGE !CSHARP
 txt-diff: txt-daikon-diff txt-jml-diff
 endif
 # txt-daikon-suppress-diff;
@@ -1018,6 +941,7 @@ endif # ifdef NO_JML
 endif # ifdef ESC_ON
 
 txt-daikon-diff: ${PROJECT_FILE}.txt-daikon.diff;
+txt-daikon-spinfo-diff: ${PROJECT_FILE}.txt-daikon-spinfo.diff;
 txt-daikon-suppress-diff: ${PROJECT_FILE}.txt-daikon-suppress.diff;
 inv-checker-diff: ${PROJECT_FILE}.checker.diff;
 ifdef ESC_ON
@@ -1032,7 +956,7 @@ txt-jml-diff:
 else
 txt-jml-diff: ${PROJECT_FILE}.txt-jml.diff;
 endif
-spinfo-static-diff: ${PROJECT_FILE}.spinfo-static.diff
+spinfo-static-diff: ${PROJECT_FILE}.spinfo-static.diff  txt-daikon-spinfo-diff
 txt-simplify-diff: ${PROJECT_FILE}.txt-simplify.diff;
 txt-logicalcompare-diff: ${PROJECT_FILE}.txt-logicalcompare.diff;
 ifndef NO_CSHARP
@@ -1089,9 +1013,11 @@ update-goal-impl:
 	rm -f ${PROJECT_FILE}.txt-daikon.diff
 
 ifeq (generated,$(TRACE_SOURCE))
-	if test -e ${PROJECT_FILE}.txt-chicory.dtrace ; then \
-	  cp -pf ${PROJECT_FILE}.txt-chicory.dtrace \
-	  $(call goal_name,${PROJECT_FILE}.txt-chicory); fi
+	if test -e ${PROJECT_FILE}.txt-daikon-spinfo ; then cp -pf \
+	  ${PROJECT_FILE}.txt-daikon-spinfo $(call goal_name,${PROJECT_FILE}.txt-daikon-spinfo) fi
+	rm -f ${PROJECT_FILE}.txt-daikon-spinfo.diff
+	if test -e ${PROJECT_FILE}.txt-chicory.dtrace ; then cp -pf \
+	  ${PROJECT_FILE}.txt-chicory.dtrace $(call goal_name,${PROJECT_FILE}.txt-chicory); fi
 	rm -f ${PROJECT_FILE}.txt-chicory.diff
 	if test -e ${PROJECT_FILE}.decls-DynComp ; then cp -pf \
 	  $(PROJECT_FILE).decls-DynComp $(call goal_name,$(PROJECT_FILE).decls-DynComp); fi
@@ -1182,7 +1108,7 @@ ${PROJECT_FILE}.txt-merge-esc: merged/.merged-esc
 merged/.merged-esc: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_VISITOR_CLASS}
 	@[ ! -e merged/.nomerge ] || (echo "Merging diasabled; rm merged/.nomerge if you want to enable it." && false)
 	@echo
-	@echo "### merge-esc (${PROJECT_FILE})"
+	@echo "### create merge-esc (${PROJECT_FILE})"
 	@echo
 	mkdir -p merged
 	tar cf - -C ${SOURCES} `cat ${ALL_LIST_FILE}` | tar -xf - -C $(CWD)/merged
@@ -1209,7 +1135,7 @@ ${PROJECT_FILE}.txt-merge-jml: merged/.merged-jml
 merged/.merged-jml: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_VISITOR_CLASS}
 	@[ ! -e merged/.nomerge ] || (echo "Merging diasabled; rm merged/.nomerge if you want to enable it." && false)
 	@echo
-	@echo "### merge-jml (${PROJECT_FILE})"
+	@echo "### create merge-jml (${PROJECT_FILE})"
 	@echo
 	mkdir -p merged
 	tar -cf - -C ${SOURCES} `cat ${ALL_LIST_FILE}`  | tar xf - -C $(CWD)/merged
@@ -1296,7 +1222,7 @@ spinfo-static: ${PROJECT_FILE}.spinfo-static
 # We should depend on the source files, too, but we'd have to re-invoke make
 ${PROJECT_FILE}.spinfo-static: ${INST_LIST_FILE} ${CREATESPINFO_CLASS}
 	@echo
-	@echo "### spinfo-static (${PROJECT_FILE})"
+	@echo "### create spinfo-static (${PROJECT_FILE})"
 	@echo
 	rm -f ${PROJECT_FILE}.spinfo-static
 	cd ${SOURCES} && ${CREATESPINFO} \
@@ -1321,7 +1247,7 @@ rtc-violations.txt: $(RTC_SCRATCH)/violations.txt
 $(RTC_SCRATCH)/violations.txt: $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
                                       ${INV_FILE} $(INST_LIST_FILE) $(RTC_EXEC)
 	@echo
-	@echo "### runtime-check tool "
+	@echo "### run runtime-check tool (${PROJECT_FILE})"
 	@echo
 	cd scratch && java -ea -cp "$(CLASSPATH)" daikon.tools.runtimechecker.Main instrument --directory $(RTC_SCRATCH) \
 		--make_all_fields_public ${INV_FILE} `cat $(INST_LIST_FILE)`
@@ -1425,6 +1351,9 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make inv-checker    : checks generated invariants over the trace files/"
 inv-checker: ${PROJECT_FILE}.checker.diff
 ${PROJECT_FILE}.checker.diff: ${INV_FILE}
+	@echo
+	@echo "### run InvariantChecker (${PROJECT_FILE})"
+	@echo
 	$(RUN_JAVA) $(USER_JAVA_FLAGS) \
 		daikon.tools.InvariantChecker $^ $(DTRACE_FILES) \
 		--output $@ \
@@ -1525,15 +1454,6 @@ results summary:
 
 ###########################################################################
 # Utilities
-
-# Count dynamic and static calls in instrumented files
-
-PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make calls          : counts entry ppts in the dtrace (does make clean first)"
-calls:
-	$(MAKE) clean data
-	@echo "****************************************************************************************** #"
-	${GZCAT} ${DTRACE_FILES} | grep ':::ENTER' | wc -l
 
 # Measure line coverage
 

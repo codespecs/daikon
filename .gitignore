@@ -491,6 +491,8 @@ tests/**/*.txt-csharpcontract-failed
 tests/**/*.txt-csharpcontract.diff
 tests/**/*.txt-daikon
 tests/**/*.txt-daikon.diff
+tests/**/*.txt-daikon-spinfo
+tests/**/*.txt-daikon-spinfo.diff
 tests/**/*.txt-esc
 tests/**/*.txt-esc.diff
 tests/**/*.txt-jaif
