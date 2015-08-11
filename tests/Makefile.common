@@ -44,7 +44,6 @@
 # txt-simplify         |   |   |   |   |   |   |   |   |   |
 # txt-logicalcompare   |   |   |   |   |   |   |   |   |   |
 # txt-all              |   |   |   |   |   |   |   |   |   |
-# context              |   |   |   |   |   |   |   |   |   |
 # merge                |   | X |   |   |   |   |   |   |   |
 # esc                  |   | X |   |   |   |   |   |   |   |
 # stats                |   | X |   |   |   |   |   |   |   |
@@ -312,8 +311,6 @@ MERGE_ESC?=$(RUN_JAVA) daikon.tools.jtb.Annotate
 # USER_MERGE_ESC_OPTIONS is for others (using Makefiles, user) to set
 CREATESPINFO_CLASS?=${DAIKONDIR}/java/daikon/tools/jtb/CreateSpinfo.class
 CREATESPINFO?=$(RUN_JAVA) daikon.tools.jtb.CreateSpinfo
-CONTEXT_SPINFO_PL:=$(SCRIPTS)/context-spinfo.pl
-CONTEXT_REMAP_PL:=$(SCRIPTS)/context-remap.pl
 TRACE_UNTRUNCATE?=$(SCRIPTS)/trace-untruncate
 CONVERTCSV?=$(SCRIPTS)/convertcsv.pl
 
@@ -364,7 +361,7 @@ clean-output:
 	@echo
 	@echo "### clean-output (${PROJECT_FILE})"
 	@echo
-	rm -f *.bak *.diff ${PROJECT_FILE}.{inv.gz,spinfo.inv.gz,decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon{,-spinfo},simplify,logicalcompare,csharpcontract,esc,jml,repair,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,context,stats,linecov,spinfo-static}
+	rm -f *.bak *.diff ${PROJECT_FILE}.{inv.gz,spinfo.inv.gz,decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon{,-end2end},simplify,logicalcompare,csharpcontract,esc,jml,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,stats,spinfo-static}
 	rm -rf merged *txt-chicory.dtrace rtc-violations.txt
 	rm -f *.bak *.diff ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
 ifeq (csv,${STORED_TRACE_FORMAT})
@@ -655,20 +652,23 @@ ${INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES} ${MAP_FILES}
 		${MAP_FILES}) \
 		|| (rm -f $@ && false)
 
-${SPINFO_INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${PROJECT_FILE}.spinfo-static ${MAP_FILES}
+${SPINFO_INV_FILE}: ${PROJECT_FILE}.decls-DynComp ${PROJECT_FILE}.spinfo-static ${MAP_FILES}
 	@echo
-	@echo "### run Daikon with static splitter file (${PROJECT_FILE})"
+	@echo "### run Chicory with DynComp input (${PROJECT_FILE})"
 	@echo
-	@echo "Number of lines in dtrace file(s):"
-	@-${GZCAT} ${DTRACE_FILES} | wc -l
+	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
+		--dtrace-file=$(PROJECT_FILE)-dyncomp.dtrace.gz \
+		--comparability-file=${CWD}/$(PROJECT_FILE).decls-DynComp \
+		--ppt-select-pattern='$(INST_FILES)' ${MAIN_CLASS} ${MAIN_ARGS}
+	@echo
+	@echo "### run Daikon with DynComp dtrace and splitter file (${PROJECT_FILE})"
 	@echo
 	(${DAIKON} -o $(SPINFO_INV_FILE) \
 		${DAIKON_OPTIONS} \
 		${USER_DAIKON_OPTIONS} \
 		${PERSONAL_DAIKON_OPTIONS} \
 		--no_text_output \
-		${DTRACE_FILES} \
-		${DECLS_FILES} \
+		$(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE)-dyncomp.dtrace.gz \
 		${CWD}/${PROJECT_FILE}.spinfo-static \
 		${MAP_FILES}) \
 		|| (rm -f $@ && false)
@@ -771,13 +771,13 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
 	-rm -f $@-failed
 	(${PRINT_INVARIANTS} ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
 
-txt-daikon-spinfo: ${PROJECT_FILE}.txt-daikon-spinfo
+txt-daikon-end2end: ${PROJECT_FILE}.txt-daikon-end2end
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make txt-daikon-spinfo     : creates daikon-style output from the spinfo inv file"
-%.txt-daikon-spinfo: ${SPINFO_INV_FILE} ${PRINT_INVARIANTS_CLASS}
+  echo "  make txt-daikon-end2end     : creates daikon output from spinfo and dtrace from dyncomp file"
+%.txt-daikon-end2end: ${SPINFO_INV_FILE} ${PRINT_INVARIANTS_CLASS}
 	@echo
-	@echo "### create txt-daikon-spinfo (${PROJECT_FILE})"
+	@echo "### create txt-daikon-end2end (${PROJECT_FILE})"
 	@echo
 	-rm -f $@-failed
 	(${PRINT_INVARIANTS} ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
@@ -873,12 +873,12 @@ ifndef NO_MERGE
 ifndef NO_CSHARP
 # ESC  MERGE  CSHARP
 txt-diff: txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
-		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-chicory-diff \
+		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-daikon-end2end-diff txt-chicory-diff \
 		  dyncomp-diff txt-simplify-diff txt-csharpcontract-diff txt-jaif-diff
 else
 # ESC  MERGE  !CSHARP
 txt-diff: txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
-		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-chicory-diff \
+		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-daikon-end2end-diff txt-chicory-diff \
 		  dyncomp-diff txt-simplify-diff txt-jaif-diff
 endif
 
@@ -894,11 +894,12 @@ txt-merge-diff:
 	@echo 'Nothing to do for merge'
 ifndef NO_CSHARP
 # ESC  !MERGE  CSHARP
-txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-esc-diff txt-csharpcontract-diff txt-chicory-diff \
-		  inv-checker-diff dyncomp-diff
+txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-daikon-end2end-diff txt-esc-diff \
+		  txt-csharpcontract-diff txt-chicory-diff inv-checker-diff dyncomp-diff
 else
 # ESC  !MERGE  !CSHARP
-txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-esc-diff txt-chicory-diff inv-checker-diff dyncomp-diff
+txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-daikon-end2end-diff txt-esc-diff \
+		  txt-chicory-diff inv-checker-diff dyncomp-diff
 endif
 # txt-daikon-suppress-diff;
 endif # ifndef NO_MERGE
@@ -941,7 +942,7 @@ endif # ifdef NO_JML
 endif # ifdef ESC_ON
 
 txt-daikon-diff: ${PROJECT_FILE}.txt-daikon.diff;
-txt-daikon-spinfo-diff: ${PROJECT_FILE}.txt-daikon-spinfo.diff;
+txt-daikon-end2end-diff: ${PROJECT_FILE}.txt-daikon-end2end.diff;
 txt-daikon-suppress-diff: ${PROJECT_FILE}.txt-daikon-suppress.diff;
 inv-checker-diff: ${PROJECT_FILE}.checker.diff;
 ifdef ESC_ON
@@ -956,7 +957,7 @@ txt-jml-diff:
 else
 txt-jml-diff: ${PROJECT_FILE}.txt-jml.diff;
 endif
-spinfo-static-diff: ${PROJECT_FILE}.spinfo-static.diff  txt-daikon-spinfo-diff
+spinfo-static-diff: ${PROJECT_FILE}.spinfo-static.diff
 txt-simplify-diff: ${PROJECT_FILE}.txt-simplify.diff;
 txt-logicalcompare-diff: ${PROJECT_FILE}.txt-logicalcompare.diff;
 ifndef NO_CSHARP
@@ -1013,9 +1014,9 @@ update-goal-impl:
 	rm -f ${PROJECT_FILE}.txt-daikon.diff
 
 ifeq (generated,$(TRACE_SOURCE))
-	if test -e ${PROJECT_FILE}.txt-daikon-spinfo ; then cp -pf \
-	  ${PROJECT_FILE}.txt-daikon-spinfo $(call goal_name,${PROJECT_FILE}.txt-daikon-spinfo) fi
-	rm -f ${PROJECT_FILE}.txt-daikon-spinfo.diff
+	if test -e ${PROJECT_FILE}.txt-daikon-end2end ; then cp -pf \
+	  ${PROJECT_FILE}.txt-daikon-end2end $(call goal_name,${PROJECT_FILE}.txt-daikon-end2end) fi
+	rm -f ${PROJECT_FILE}.txt-daikon-end2end.diff
 	if test -e ${PROJECT_FILE}.txt-chicory.dtrace ; then cp -pf \
 	  ${PROJECT_FILE}.txt-chicory.dtrace $(call goal_name,${PROJECT_FILE}.txt-chicory); fi
 	rm -f ${PROJECT_FILE}.txt-chicory.diff
@@ -1269,49 +1270,6 @@ rtc-diff:
 	echo "No run-time-checking to diff;  trace file is stored, not generated."
 endif
 
-###CP
-
-ifeq (generated,${TRACE_SOURCE})
-# generated
-PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make eclat          : runs Eclat to generate test inputs."
-
-$(PROJECT_FILE).inputs.xml: $(ECLAT_SCRATCH)/$(PROJECT_FILE).inputs.xml
-	cp $(ECLAT_SCRATCH)/$(PROJECT_FILE).inputs.xml $(PROJECT_FILE).inputs.xml
-
-$(ECLAT_SCRATCH)/$(PROJECT_FILE).inputs.xml: $(ECLAT_SCRATCH)/.copy-timestamp $(INST_LIST_FILE)
-ifeq (Hanoi,${PROJECT_FILE})
-	@echo "### Eclat: skipping this program"
-	touch $(ECLAT_SCRATCH)/$(PROJECT_FILE)EclatTest.java
-else
-	@echo
-	@echo "### Eclat "
-	@echo
-	-cd $(ECLAT_SCRATCH) && rm -r eclat-src eclat-misc
-	cd $(ECLAT_SCRATCH) && ${JAVAC} -g `find . $(FINDARGS) -name '*.java'`
-	cd $(ECLAT_SCRATCH)  && ${JAVA} -ea eclat.textui.Main generate-inputs \
-	    $(foreach x, $(shell cat ${INST_LIST_FILE}), --test $x) \
-	    --verbose \
-	    --create-regression-suite \
-	    ${MAIN_CLASS} ${MAIN_ARGS}
-	cd $(ECLAT_SCRATCH) && find eclat-src $(FINDARGS) -name "*.java" | xargs  ${JAVAC}
-	cd $(ECLAT_SCRATCH) && ${JAVA} -ea -classpath eclat-src:$$CLASSPATH eclatgen.regression.EclatRegressionSuite
-	touch $(ECLAT_SCRATCH)/$(PROJECT_FILE).inputs.xml
-
-endif
-
-eclat: $(PROJECT_FILE).inputs.xml
-
-endif
-
-ifeq (stored,${TRACE_SOURCE})
-# stored
-eclat:
-	echo "trace file is stored, not generated."
-eclat-diff:
-	echo "trace file is stored, not generated."
-endif
-###CP
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make touch          : touches all depended-on files to prevent re-running anything (dangerous)"
@@ -1334,15 +1292,6 @@ stats-impl:
 	@${SCRIPTS}/esc-stats.pl ${STATS_FILES} > ${PROJECT_FILE}.stats
 	@cat ${PROJECT_FILE}.stats
 
-PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make esc-probs      : list unverifiable and missing invariants in merged/"
-esc-probs:
-	@echo
-	@echo "### esc-probs (${PROJECT_FILE})"
-	@echo
-	@fgrep -rn -e '/*# ' merged/ | fgrep '.java:'
-	@fgrep -rn -e '//@ ' merged/ | fgrep '.java:' | fgrep -v '// dumb'
-
 
 list-targets:
 	@echo daikon_tests/${PROJECT_FILE}
@@ -1361,7 +1310,7 @@ ${PROJECT_FILE}.checker.diff: ${INV_FILE}
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make cross-checker  : cross checks Daikon's optimizations by comparing its output with DaikonSimple"
-cross-checker-good cross-checker: ${PROJECT_FILE}-xcheck.diff
+cross-checker: ${PROJECT_FILE}-xcheck.diff
 ifeq (${TRACE_SOURCE},stored)
 ${PROJECT_FILE}-xcheck.diff: ${DECLS_FILES} ${DTRACE_FILES} \
 							 $(SCRATCH_FOR_DAIKON)/.exists
@@ -1416,8 +1365,6 @@ showvars:
 	@echo "PRINT_INVARIANTS_CLASS =" ${PRINT_INVARIANTS_CLASS}
 	@echo "PRINT_INVARIANTS_OPTIONS =" ${PRINT_INVARIANTS_OPTIONS}
 	@echo "MERGE_ESC           =" ${MERGE_ESC}
-	@echo "CONTEXT_SPINFO_PL   =" ${CONTEXT_SPINFO_PL}
-	@echo "CONTEXT_REMAP_PL    =" ${CONTEXT_REMAP_PL}
 	@echo "SOURCES             =" ${SOURCES}
 	@echo "PROJECT             =" ${PROJECT}
 	@echo "PROJECT_FILE        =" ${PROJECT_FILE}
@@ -1450,76 +1397,6 @@ endif
 
 results summary:
 	@$(MAKE) --no-print-directory BASE?=`/bin/pwd` -C ../.. $@
-
-
-###########################################################################
-# Utilities
-
-# Measure line coverage
-
-GRETEL?=/g4/projects/invariants/tools/Gretel/current
-
-PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make linecov        : measures line coverage of code under test"
-linecov: ${PROJECT_FILE}.linecov
-DOT_GRETEL_FILE:=$(SCRATCH_FOR_DAIKON)/linecov/$(strip $(subst .,/,${MAIN_CLASS})).gretel
-${PROJECT_FILE}.linecov: ${ALL_LIST_FILE} ${INST_LIST_FILE}
-	@echo
-	@echo "### linecov (${PROJECT_FILE})"
-	@echo
-	rm -rf $(SCRATCH_FOR_DAIKON)/linecov
-	mkdir $(SCRATCH_FOR_DAIKON)/linecov
-	cd ${SOURCES} && ${CP_PARENTS} `cat ${ALL_LIST_FILE}` ${SCRATCH_FOR_DAIKON}/linecov
-	cd $(SCRATCH_FOR_DAIKON)/linecov && ${JAVAC} -g -d . `find . $(FINDARGS) -name '*.java'`
-	cd $(SCRATCH_FOR_DAIKON)/linecov && ${GRETEL}/bin/gretel instrument ${SCRATCH_FOR_DAIKON}/linecov `find . $(FINDARGS) -name '*.class'`
-	${RUN_JAVA} -classpath $(SCRATCH_FOR_DAIKON)/linecov:${GRETEL}/lib/Gretel-runtime.jar:${CLASSPATH} ${JAVA_ARGS} ${MAIN_CLASS} ${MAIN_ARGS}
-	${RUN_JAVA} -classpath ${GRETEL}/lib/Gretel.jar residue.ListHits ${DOT_GRETEL_FILE} > $@
-	${RUN_JAVA} -classpath ${GRETEL}/lib/Gretel.jar residue.ListHits -m ${DOT_GRETEL_FILE} >> $@
-	@echo "" >> $@
-	${RUN_JAVA} -classpath ${GRETEL}/lib/Gretel.jar:${CLASSPATH} \
-		daikon.tools.gretel.CoverageStats \
-		${DOT_GRETEL_FILE} \
-		`cat ${INST_LIST_FILE}` \
-		>> $@
-	cat $@
-
-# Measure branch coverage
-
-INST_CLASSES_LIST_FILE:=$(SCRATCH_FOR_DAIKON)/.instrument-classes
-
-${INST_CLASSES_LIST_FILE}: ${INST_LIST_FILE}
-	perl -p -e 's|\.java||g; s|/|.|g;' $< > $@
-
-GLASSJARTOOLKIT_BIN?=/g4/projects/invariants/tools/GlassJarToolkit/current/bin
-
-PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make brcov          : measures branch coverage of code under test"
-brcov: ${INST_CLASSES_LIST_FILE} ${ALL_LIST_FILE}
-	@echo ""
-	cat ${INST_CLASSES_LIST_FILE}
-	@echo ""
-	rm -rf $(SCRATCH_FOR_DAIKON)/brcov
-	mkdir $(SCRATCH_FOR_DAIKON)/brcov
-	cd ${SOURCES} && ${CP_PARENTS} `cat ${ALL_LIST_FILE}` ${SCRATCH_FOR_DAIKON}/brcov
-	cd $(SCRATCH_FOR_DAIKON)/brcov && ${JAVAC} -g -d . `find . $(FINDARGS) -name '*.java'`
-	cd ${GLASSJARTOOLKIT_BIN}/.. && ./bin/iclass \
-		-classpath ${SCRATCH_FOR_DAIKON}/brcov:${CLASSPATH} \
-		-file ${SCRATCH_FOR_DAIKON}/brcov.jar \
-		$(shell cat ${INST_CLASSES_LIST_FILE})
-	${RUN_JAVA} \
-		-classpath ${SCRATCH_FOR_DAIKON}/brcov.jar:${SCRATCH_FOR_DAIKON}/brcov:${CLASSPATH} \
-		${JAVA_ARGS} \
-		${MAIN_CLASS} ${MAIN_ARGS}
-	cd ${GLASSJARTOOLKIT_BIN} && ./gjreport \
-		-jar  ${SCRATCH_FOR_DAIKON}/brcov.jar \
-		-method \
-		-html ./coverage
-	rm -rf ${HOME}/gjtk
-	rm -rf $(SCRATCH_FOR_DAIKON)/brcov
-
-#	I wish this command line option worked:
-#		-cvg ${PROJECT_FILE}.cvg \
-
 
 
 ###########################################################################

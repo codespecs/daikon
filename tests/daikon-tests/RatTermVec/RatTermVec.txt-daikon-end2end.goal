@@ -19,63 +19,39 @@ this.wrapped[] contains no duplicates
 size(this.wrapped[]) >= 1
 orig(this.wrapped[]) is a subsequence of this.wrapped[]
 this.wrapped[] is a superset of orig(this.wrapped[])
-orig(t) in this.wrapped[]
 ===========================================================================
 PolyCalc.RatTermVec.copy():::ENTER
 this.wrapped[] contains no duplicates
 ===========================================================================
 PolyCalc.RatTermVec.copy():::EXIT
 this.wrapped == orig(this.wrapped)
-this.wrapped[] == return.wrapped[]
 this.wrapped[] == orig(this.wrapped[])
 this.wrapped[] contains no duplicates
 return != null
 return.wrapped != null
+return.wrapped[] contains no duplicates
+return.wrapped[] elements != null
+return.wrapped[].getClass().getName() elements == PolyCalc.RatTerm.class
 ===========================================================================
 PolyCalc.RatTermVec.get(int):::ENTER
 index >= 0
 size(this.wrapped[]) >= 1
-this.wrapped[index+1..] contains no duplicates
-this.wrapped[0..index] contains no duplicates
-(size(this.wrapped[])-1 == 0) ==> (index == 0)
-index <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.get(int):::EXIT
 this.wrapped == orig(this.wrapped)
 this.wrapped[] == orig(this.wrapped[])
-return == this.wrapped[orig(index)]
 return != null
 size(this.wrapped[]) >= 1
-this.wrapped[orig(index)+1..] contains no duplicates
-this.wrapped[0..orig(index)] contains no duplicates
-return in this.wrapped[]
-return in this.wrapped[orig(index)..]
-return in this.wrapped[0..orig(index)]
-(size(this.wrapped[])-1 == 0) ==> (orig(index) == 0)
-orig(index) <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::ENTER
 t != null
 index >= 0
-this.wrapped[0..index-1] contains no duplicates
-(size(this.wrapped[]) == 0) ==> (index == 0)
-index <= size(this.wrapped[])
 ===========================================================================
 PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::EXIT
 this.wrapped == orig(this.wrapped)
-orig(t) == this.wrapped[orig(index)]
 size(this.wrapped[])-1 == orig(size(this.wrapped[]))
-this.wrapped[orig(index)+1..] == orig(this.wrapped[index..])
-this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..post(index)-1])
-this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..index-1])
 size(this.wrapped[]) >= 1
-this.wrapped[0..orig(index)-1] contains no duplicates
 this.wrapped[] is a superset of orig(this.wrapped[])
-orig(t) in this.wrapped[]
-orig(t) in this.wrapped[orig(index)..]
-orig(t) in this.wrapped[0..orig(index)]
-(size(this.wrapped[])-1 == 0) ==> (orig(index) == 0)
-orig(index) <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.printDebug():::ENTER
 ===========================================================================
@@ -89,44 +65,24 @@ PolyCalc.RatTermVec.remove(int):::ENTER
 this.wrapped[] contains no duplicates
 index >= 0
 size(this.wrapped[]) >= 1
-(size(this.wrapped[])-1 == 0) ==> (index == 0)
-index <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.remove(int):::EXIT
 this.wrapped == orig(this.wrapped)
 size(this.wrapped[]) == orig(size(this.wrapped[]))-1
-this.wrapped[orig(index)..] == orig(this.wrapped[post(index)+1..])
-this.wrapped[orig(index)..] == orig(this.wrapped[index+1..])
-this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..post(index)-1])
-this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..index-1])
 this.wrapped[] contains no duplicates
 this.wrapped[] is a subset of orig(this.wrapped[])
-(size(this.wrapped[]) == 0) ==> (orig(index) == 0)
-orig(index) <= size(this.wrapped[])
 ===========================================================================
 PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::ENTER
 this.wrapped[] contains no duplicates
 t != null
 index >= 0
 size(this.wrapped[]) >= 1
-(size(this.wrapped[])-1 == 0) ==> (index == 0)
-index <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::EXIT
 this.wrapped == orig(this.wrapped)
-orig(t) == this.wrapped[orig(index)]
 size(this.wrapped[]) == orig(size(this.wrapped[]))
-this.wrapped[orig(index)+1..] == orig(this.wrapped[post(index)+1..])
-this.wrapped[orig(index)+1..] == orig(this.wrapped[index+1..])
-this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..post(index)-1])
-this.wrapped[0..orig(index)-1] == orig(this.wrapped[0..index-1])
 this.wrapped[] contains no duplicates
 size(this.wrapped[]) >= 1
-orig(t) in this.wrapped[]
-orig(t) in this.wrapped[orig(index)..]
-orig(t) in this.wrapped[0..orig(index)]
-(size(this.wrapped[])-1 == 0) ==> (orig(index) == 0)
-orig(index) <= size(this.wrapped[])-1
 ===========================================================================
 PolyCalc.RatTermVec.size():::ENTER
 this.wrapped[] contains no duplicates
@@ -134,10 +90,8 @@ this.wrapped[] contains no duplicates
 PolyCalc.RatTermVec.size():::EXIT
 this.wrapped == orig(this.wrapped)
 this.wrapped[] == orig(this.wrapped[])
-return == size(this.wrapped[])
-return == orig(size(this.wrapped[]))
 this.wrapped[] contains no duplicates
-this.wrapped[return..] == []
+return >= 0
 ===========================================================================
 PolyCalc.RatTermVec.toString():::ENTER
 ===========================================================================

@@ -18,9 +18,6 @@ clean clean-output txt-diff txt-daikon-suppress-diffed txt-suppress txt-daikon t
 cross-checker:
 	$(MAKE) everything-cross-checker
 
-cross-checker-good:
-	$(MAKE) cross-checker-good-$@
-
 ###########################################################################
 # Useful groupings of projects (everything, default, by source, etc.)
 # e.g. "make siemens-txt-diff" or "make dsaa-inv"

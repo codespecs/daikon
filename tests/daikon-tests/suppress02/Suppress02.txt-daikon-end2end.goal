@@ -1,0 +1,41 @@
+===========================================================================
+misc.Suppress02:::OBJECT
+this has only one value
+this.theArray has only one value
+this.theArray != null
+this.theArray[] elements >= 0
+this.i <= 49
+this.i >= 0
+size(this.theArray[]) == 1000
+this.theArray[] elements < size(this.theArray[])-1
+(this.j == 0) ==> (this.i == 0)
+this.i <= this.j
+===========================================================================
+misc.Suppress02.Suppress02():::EXIT
+this.i == 0
+this.j == 5
+===========================================================================
+misc.Suppress02.Suppress02():::EXIT;condition="i < theArray.length"
+===========================================================================
+misc.Suppress02.f(int):::ENTER
+(n == 0) ==> (this.i == 0)
+this.i <= n
+===========================================================================
+misc.Suppress02.f(int):::EXIT
+this.theArray == orig(this.theArray)
+this.theArray[] == orig(this.theArray[])
+(orig(n) == 0) ==> (this.i == 0)
+this.i <= orig(n)
+(this.j == 0) ==> (orig(this.i) == 0)
+this.j != orig(this.j)
+(orig(n) == 0) ==> (this.j == 0)
+(this.j == 0) ==> (orig(n) == 0)
+===========================================================================
+misc.Suppress02.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass().getName() == java.lang.String[].class
+args[].toString == []
+===========================================================================
+misc.Suppress02.main(java.lang.String[]):::EXIT
+args[] == orig(args[])
+args[].toString == []

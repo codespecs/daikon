@@ -34,7 +34,6 @@ this.latitude  isPointer
 this.longitude  isPointer
 gp.latitude  isPointer
 gp.longitude  isPointer
-MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
 this.latitude > gp.longitude
 this.longitude < gp.latitude
 gp.latitude > gp.longitude
@@ -77,9 +76,6 @@ this.longitude == orig(this.longitude)
 this.latitude  isPointer
 this.longitude  isPointer
 return  isPointer
-this.latitude < return
-this.longitude < return
-7 * this.latitude + 41 * this.longitude - return + 4.294967296E9 == 0
 ===========================================================================
 MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
 this.latitude  isPointer
@@ -102,7 +98,6 @@ this.latitude  isPointer
 this.longitude  isPointer
 gp.latitude  isPointer
 gp.longitude  isPointer
-MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
 this.latitude != gp.latitude
 this.latitude > gp.longitude
 this.longitude < gp.latitude
@@ -150,7 +145,6 @@ p1.latitude  isPointer
 p1.longitude  isPointer
 p2.latitude  isPointer
 p2.longitude  isPointer
-this.name.toString == name.toString
 name.toString == orig(name.toString)
 p1.latitude > p1.longitude
 p1.latitude > p2.longitude
@@ -223,10 +217,6 @@ this.p2.longitude  isPointer
 return  isPointer
 return != 0
 this.name.toString == orig(this.name.toString)
-this.p1.latitude != return
-this.p1.longitude != return
-this.p2.latitude != return
-this.p2.longitude != return
 ===========================================================================
 MapQuick1.GeoSegment.heading():::ENTER
 this.p1.latitude  isPointer
@@ -249,7 +239,6 @@ this.p1.longitude  isPointer
 this.p2.latitude  isPointer
 this.p2.longitude  isPointer
 this.name.toString == orig(this.name.toString)
-MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -273,7 +262,6 @@ this.p1.longitude  isPointer
 this.p2.latitude  isPointer
 this.p2.longitude  isPointer
 this.name.toString == orig(this.name.toString)
-MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.name():::ENTER
@@ -299,10 +287,9 @@ this.p2.latitude  isPointer
 this.p2.longitude  isPointer
 return != null
 return.toString is printable
-this.name.toString == return.toString
+this.name.toString == orig(this.name.toString)
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
-return.toString == orig(this.name.toString)
 ===========================================================================
 MapQuick1.GeoSegment.p1():::ENTER
 this.p1.latitude  isPointer

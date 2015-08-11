@@ -52,24 +52,18 @@ six170.FixedSizeSet.contains(int):::EXIT;condition="not(return == true)"
 return == false
 ===========================================================================
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::ENTER
-size(this.bits[]) == size(other.bits[])
 other != null
 other.bits != null
-this.bits[] is a subset of other.bits[]
-this.bits[] is a superset of other.bits[]
+size(other.bits[]) == 8
 ===========================================================================
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT
 this.bits == orig(this.bits)
 other.bits == orig(other.bits)
 other.bits[] == orig(other.bits[])
-size(this.bits[]) == size(other.bits[])
 size(this.bits[]) == orig(size(this.bits[]))
-size(this.bits[]) == orig(size(other.bits[]))
 other.bits != null
-this.bits[] is a subset of other.bits[]
+size(other.bits[]) == 8
 this.bits[] is a subset of orig(this.bits[])
-other.bits[] is a subset of orig(this.bits[])
-other.bits[] is a superset of orig(this.bits[])
 ===========================================================================
 six170.FixedSizeSet.remove(int):::ENTER
 this has only one value
@@ -93,21 +87,15 @@ orig(n) <= size(this.bits[])-1
 orig(n) is a bitwise subset of size(this.bits[])-1
 ===========================================================================
 six170.FixedSizeSet.union(six170.FixedSizeSet):::ENTER
-size(this.bits[]) == size(other.bits[])
 other != null
 other.bits != null
-this.bits[] is a subset of other.bits[]
-this.bits[] is a superset of other.bits[]
+size(other.bits[]) == 8
 ===========================================================================
 six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT
 this.bits == orig(this.bits)
 other.bits == orig(other.bits)
 other.bits[] == orig(other.bits[])
-size(this.bits[]) == size(other.bits[])
 size(this.bits[]) == orig(size(this.bits[]))
-size(this.bits[]) == orig(size(other.bits[]))
 other.bits != null
-this.bits[] is a subset of other.bits[]
+size(other.bits[]) == 8
 this.bits[] is a subset of orig(this.bits[])
-other.bits[] is a subset of orig(this.bits[])
-other.bits[] is a superset of orig(this.bits[])

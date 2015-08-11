@@ -10,11 +10,6 @@ this.gs2 has only one value
 this.gs2 != null
 this.gs2.a == 20
 this.gs2.b == 25
-this.gi1 < this.gs1.a
-this.gi2 < this.gs1.a
-(this.gs1.a >> this.gs1.b == 0)
-(this.gs1.a >> this.gs2.a == 0)
-(this.gs1.a >> this.gs2.b == 0)
 ===========================================================================
 misc.Param.Param():::EXIT
 this.gs1.a == 10
@@ -49,9 +44,10 @@ this.gi2 == pi2
 this.gs1 == ps1
 this.gs1.a == ps1.a
 this.gs1.b == ps1.b
-this.gs2 == ps2
-this.gs2.a == ps2.a
-this.gs2.b == ps2.b
+ps2 has only one value
+ps2 != null
+ps2.a == 20
+ps2.b == 25
 ===========================================================================
 misc.Param.work(int, int, misc.ParamType, misc.ParamType):::EXIT
 this.gi1 == orig(this.gi1)
@@ -63,28 +59,15 @@ this.gs1 == orig(ps1)
 this.gs1.a == ps1.a
 this.gs1.b == ps1.b
 this.gs2 == orig(this.gs2)
-this.gs2 == orig(ps2)
 this.gs2.a == orig(this.gs2.a)
-this.gs2.a == orig(ps2.a)
 this.gs2.b == orig(this.gs2.b)
-this.gs2.b == orig(ps2.b)
 ps1.b == orig(this.gs1.b)
 ps1.b == orig(ps1.b)
 ps1.b == 15
-this.gi1 < ps1.a
-this.gi1 < orig(ps1.a)
-this.gi2 < ps1.a
-this.gi2 < orig(ps1.a)
-(ps1.a >> this.gs2.a == 0)
-(orig(ps1.a) >> this.gs2.a == 0)
-(ps1.a >> this.gs2.b == 0)
-(orig(ps1.a) >> this.gs2.b == 0)
-(ps1.a >> ps1.b == 0)
 ps1.a - orig(ps1.a) - 1 == 0
-(orig(ps1.a) >> ps1.b == 0)
 ===========================================================================
 misc.ParamType:::OBJECT
-this.a == this.b
 this.a == 0
+this.b == 0
 ===========================================================================
 misc.ParamType.ParamType():::EXIT
