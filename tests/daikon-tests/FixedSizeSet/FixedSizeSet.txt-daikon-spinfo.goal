@@ -1,0 +1,113 @@
+===========================================================================
+six170.FixedSizeSet:::OBJECT
+this.bits != null
+size(this.bits[]) == 8
+===========================================================================
+six170.FixedSizeSet.FixedSizeSet():::EXIT
+this.bits[] == [0, 0, 0, 0, 0, 0, 0, 0]
+this.bits[] elements == false
+===========================================================================
+six170.FixedSizeSet.add(int):::ENTER
+n >= 0
+(n & size(this.bits[])) == 0
+n <= size(this.bits[])-1
+n is a bitwise subset of size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.add(int):::EXIT
+this.bits == orig(this.bits)
+size(this.bits[]) == orig(size(this.bits[]))
+this.bits[orig(n)+1..] == orig(this.bits[post(n)+1..])
+this.bits[orig(n)+1..] == orig(this.bits[n+1..])
+this.bits[0..orig(n)-1] == orig(this.bits[0..post(n)-1])
+this.bits[0..orig(n)-1] == orig(this.bits[0..n-1])
+this.bits[orig(n)] == true
+(orig(n) & size(this.bits[])) == 0
+orig(n) <= size(this.bits[])-1
+orig(n) is a bitwise subset of size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.contains(int):::ENTER
+n >= 0
+(n & size(this.bits[])) == 0
+n <= size(this.bits[])-1
+n is a bitwise subset of size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.contains(int):::EXIT
+this.bits == orig(this.bits)
+this.bits[] == orig(this.bits[])
+return == this.bits[orig(n)]
+return == orig(this.bits[post(n)])
+return == orig(this.bits[n])
+(return == true)  ==>  (orig(this) has only one value)
+(return == true)  ==>  (this.bits has only one value)
+(orig(n) & size(this.bits[])) == 0
+orig(n) <= size(this.bits[])-1
+orig(n) is a bitwise subset of size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.contains(int):::EXIT;condition="return == true"
+this.bits has only one value
+return == true
+orig(this) has only one value
+===========================================================================
+six170.FixedSizeSet.contains(int):::EXIT;condition="not(return == true)"
+return == false
+===========================================================================
+six170.FixedSizeSet.intersect(six170.FixedSizeSet):::ENTER
+size(this.bits[]) == size(other.bits[])
+other != null
+other.bits != null
+this.bits[] is a subset of other.bits[]
+this.bits[] is a superset of other.bits[]
+===========================================================================
+six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT
+this.bits == orig(this.bits)
+other.bits == orig(other.bits)
+other.bits[] == orig(other.bits[])
+size(this.bits[]) == size(other.bits[])
+size(this.bits[]) == orig(size(this.bits[]))
+size(this.bits[]) == orig(size(other.bits[]))
+other.bits != null
+this.bits[] is a subset of other.bits[]
+this.bits[] is a subset of orig(this.bits[])
+other.bits[] is a subset of orig(this.bits[])
+other.bits[] is a superset of orig(this.bits[])
+===========================================================================
+six170.FixedSizeSet.remove(int):::ENTER
+this has only one value
+this.bits has only one value
+n >= 0
+(n & size(this.bits[])) == 0
+n <= size(this.bits[])-1
+n is a bitwise subset of size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.remove(int):::EXIT
+this.bits == orig(this.bits)
+size(this.bits[]) == orig(size(this.bits[]))
+this.bits[orig(n)+1..] == orig(this.bits[post(n)+1..])
+this.bits[orig(n)+1..] == orig(this.bits[n+1..])
+this.bits[0..orig(n)-1] == orig(this.bits[0..post(n)-1])
+this.bits[0..orig(n)-1] == orig(this.bits[0..n-1])
+this.bits has only one value
+this.bits[orig(n)] == false
+(orig(n) & size(this.bits[])) == 0
+orig(n) <= size(this.bits[])-1
+orig(n) is a bitwise subset of size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.union(six170.FixedSizeSet):::ENTER
+size(this.bits[]) == size(other.bits[])
+other != null
+other.bits != null
+this.bits[] is a subset of other.bits[]
+this.bits[] is a superset of other.bits[]
+===========================================================================
+six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT
+this.bits == orig(this.bits)
+other.bits == orig(other.bits)
+other.bits[] == orig(other.bits[])
+size(this.bits[]) == size(other.bits[])
+size(this.bits[]) == orig(size(this.bits[]))
+size(this.bits[]) == orig(size(other.bits[]))
+other.bits != null
+this.bits[] is a subset of other.bits[]
+this.bits[] is a subset of orig(this.bits[])
+other.bits[] is a subset of orig(this.bits[])
+other.bits[] is a superset of orig(this.bits[])

@@ -1,0 +1,26 @@
+===========================================================================
+misc.Precedence:::OBJECT
+this has only one value
+this.i one of { 0, 2, 10 }
+===========================================================================
+misc.Precedence.Precedence():::EXIT
+this.i == 0
+===========================================================================
+misc.Precedence.lets_calculate(int):::ENTER
+this.i == 10
+j == 4
+===========================================================================
+misc.Precedence.lets_calculate(int):::EXIT
+this.i == 2
+return == 6
+===========================================================================
+misc.Precedence.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass().getName() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+misc.Precedence.main(java.lang.String[]):::EXIT
+args[] == orig(args[])
+args[] == []
+args[].toString == []

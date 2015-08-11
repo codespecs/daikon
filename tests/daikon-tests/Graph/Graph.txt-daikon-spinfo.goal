@@ -1,0 +1,59 @@
+===========================================================================
+MapQuick1.Graph:::OBJECT
+this.adjMap != null
+===========================================================================
+MapQuick1.Graph.Graph():::EXIT
+===========================================================================
+MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::ENTER
+from != null
+from.getClass().getName() == MapQuick1.GeoSegment.class
+to != null
+from.getClass().getName() == to.getClass().getName()
+===========================================================================
+MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::EXIT
+this.adjMap == orig(this.adjMap)
+===========================================================================
+MapQuick1.Graph.addNode(java.lang.Object):::ENTER
+node != null
+node.getClass().getName() == MapQuick1.GeoSegment.class
+===========================================================================
+MapQuick1.Graph.addNode(java.lang.Object):::EXIT
+this.adjMap == orig(this.adjMap)
+===========================================================================
+MapQuick1.Graph.adjTo(java.lang.Object):::ENTER
+node != null
+node.getClass().getName() == MapQuick1.GeoSegment.class
+===========================================================================
+MapQuick1.Graph.adjTo(java.lang.Object):::EXIT
+this.adjMap == orig(this.adjMap)
+return != null
+return.getClass().getName() == java.util.LinkedHashSet.class
+return.getClass().getName() != orig(node.getClass().getName())
+===========================================================================
+MapQuick1.Graph.checkRep():::ENTER
+===========================================================================
+MapQuick1.Graph.checkRep():::EXIT
+this.adjMap == orig(this.adjMap)
+===========================================================================
+MapQuick1.Graph.childrenOf(java.lang.Object):::ENTER
+node != null
+node.getClass().getName() == MapQuick1.GeoSegment.class
+===========================================================================
+MapQuick1.Graph.childrenOf(java.lang.Object):::EXIT
+this.adjMap == orig(this.adjMap)
+return != null
+return.getClass().getName() == java.util.LinkedHashSet.class
+return.getClass().getName() != orig(node.getClass().getName())
+===========================================================================
+MapQuick1.Graph.containsNode(java.lang.Object):::ENTER
+node != null
+node.getClass().getName() == MapQuick1.GeoSegment.class
+===========================================================================
+MapQuick1.Graph.containsNode(java.lang.Object):::EXIT
+this.adjMap == orig(this.adjMap)
+===========================================================================
+MapQuick1.Graph.containsNode(java.lang.Object):::EXIT;condition="return == true"
+return == true
+===========================================================================
+MapQuick1.Graph.containsNode(java.lang.Object):::EXIT;condition="not(return == true)"
+return == false
