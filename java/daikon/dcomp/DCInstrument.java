@@ -1383,6 +1383,7 @@ class DCInstrument {
           if (!DynComp.quit_if_error) {
               System.out.printf ("Unexpected error processing %s.%s: %s%n", gen.getClassName(),
                                   m.getName(), t);
+              // t.printStackTrace();
               System.out.printf ("Method is NOT instrumented%n");
           } else {
               throw new Error ("Unexpected error processing " + gen.getClassName()
@@ -2771,7 +2772,7 @@ class DCInstrument {
 
     // Get information about the call
     String method_name = invoke.getMethodName(pool);
-    String classname = invoke.getClassName(pool);
+    String classname = null;
     Type ret_type = invoke.getReturnType(pool);
     Type[] arg_types = invoke.getArgumentTypes(pool);
 
@@ -2779,8 +2780,11 @@ class DCInstrument {
 
     if (invoke instanceof INVOKEDYNAMIC) {
         // we don't instrument lambda methods
+        // BUG: BCEL doesn't know how to get classname from an
+        // INVOKEDYNAMIC instruction.
         callee_instrumented = false;
     } else {
+        classname = invoke.getClassName(pool);
         callee_instrumented = callee_instrumented (classname);
     }
 
