@@ -589,7 +589,7 @@ public class DeclReader {
    * is -, writes to stdout.
    */
   public void write_decl (String filename, String comparability)
-    throws IOException{
+    throws IOException {
 
     // Get the output stream
     PrintStream decl_file;
