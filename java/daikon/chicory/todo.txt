@@ -14,6 +14,7 @@ Longer-term issues
     To handle exceptional exits, Chicory would need to put a catch statement
     around every method body in the subject program, and add a new program
     point for each thrown exception.
+    [Philipp (phirch@tzi.de)]
 
   - Consider choosing a new file representation that would be both more
     compact and faster to read and write.  For instance, there is no need
