@@ -512,3 +512,5 @@ tests/diff-tests/schedule2/schedule2*.txt
 tests/chicory-tests/option-tests/*.txt
 tests/**/merged/
 
+# Coverity intermediate files
+java/cov-int/
