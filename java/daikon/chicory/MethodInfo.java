@@ -47,6 +47,9 @@ public class MethodInfo {
   public Class<?>[] arg_types;
 
   /** exit locations for this method **/
+  public List<Integer> throw_locations;
+
+  /** exit locations for this method **/
   public List<Integer> exit_locations;
 
   /**
@@ -67,6 +70,13 @@ public class MethodInfo {
    * Set by DeclWriter and read by DTraceWriter.
    **/
   public /*@MonotonicNonNull*/ RootInfo traversalExit = null;
+
+  /**
+   * The root of the variable tree for the method throw program point(s).
+   *
+   * Set by DeclWriter and read by DTraceWriter.
+   **/
+  public /*@MonotonicNonNull*/ RootInfo traversalThrow = null;
 
   /** The number of times this method has been called **/
   public int call_cnt = 0;
@@ -100,6 +110,23 @@ public class MethodInfo {
     this.arg_type_strings = arg_type_strings;
     this.exit_locations = exit_locations;
     this.is_included = is_included;
+  }
+
+  /**
+   * Creates a MethodInfo with the specified class, arg_names, and
+   * exit locations
+   */
+  public MethodInfo(
+      ClassInfo class_info,
+      String method_name,
+      String[] arg_names,
+      /*@ClassGetName*/ String[] arg_type_strings,
+      List<Integer> exit_locations,
+      List<Integer> throw_locations,
+      List<Boolean> is_included) {
+
+    this(class_info, method_name, arg_names, arg_type_strings, exit_locations, is_included);
+    this.throw_locations = throw_locations;
   }
 
   // Use reserved keyword for basic type rather than signature to

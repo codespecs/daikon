@@ -113,6 +113,12 @@ public class Chicory {
   @Option("Number of calls after which sampling will begin")
   public static int sample_start = 0;
 
+  @Option("Should Exception Handling be taken care of?")
+  public static boolean exception_handling = false;
+
+  @Option("RemoteDebug Test")
+  public static boolean rDebug = false;
+
   /**
    * Daikon port number.  Daikon writes this to stdout when it is started
    * in online mode.
@@ -138,7 +144,7 @@ public class Chicory {
   /** flag to use if we want to turn on the static initialization checks **/
   public static final boolean checkStaticInit = true;
 
-  private static final boolean RemoteDebug = false;
+  private static /*final*/ boolean RemoteDebug = false;
 
   /** Flag to initiate a purity analysis and use results to create add vars **/
   private static boolean purityAnalysis = false;
@@ -163,6 +169,7 @@ public class Chicory {
 
     // Turn on basic logging if the debug was selected
     basic.enabled = debug;
+    RemoteDebug = rDebug;
     basic.log("target_args = %s%n", Arrays.toString(target_args));
 
     // Start the target.  Pass the same options to the premain as
@@ -340,7 +347,8 @@ public class Chicory {
 
     if (RemoteDebug) {
       //-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
-      cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
+      cmdlist.add("-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=y");
+      //cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
       //cmdlist.add("-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
     }
 
@@ -465,6 +473,11 @@ public class Chicory {
               dtrace_file);
     }
 
+    if (RemoteDebug) {
+      cmdstr =
+          cmdstr.replace(
+              "java", "java -agentlib:jdwp=transport=dt_socket,server=y,address=8001,suspend=y");
+    }
     //System.out.println("daikon command is " + daikon_cmd);
     //System.out.println("daikon command cmdstr " + cmdstr);
 
