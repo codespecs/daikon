@@ -35,7 +35,7 @@ public final class DataStructures_QueueAr_enqueue_31 extends Splitter {
       ;
   } 
 
-  public void makeDummyInvariant(DummyInvariant inv) { 
+  public void makeDummyInvariantFactory(DummyInvariant inv) { 
     dummyInvFactory = inv; 
   } 
 

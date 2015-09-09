@@ -2,22 +2,22 @@ import daikon.*;
 import daikon.inv.*; 
 import daikon.split.*; 
 
-public final class MapQuick1_StreetNumberSet_contains_7 extends Splitter { 
+public final class Math__BigFloat_bmul__54 extends Splitter { 
 
   public String condition() { 
-    return "i<sets.length"; 
+    return "!orig($y._a.is_defined)"; 
   } 
 
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
-  public MapQuick1_StreetNumberSet_contains_7() { } 
-  public MapQuick1_StreetNumberSet_contains_7(Ppt ppt) { 
+  public Math__BigFloat_bmul__54() { } 
+  public Math__BigFloat_bmul__54(Ppt ppt) { 
   }
 
   public Splitter instantiate(Ppt ppt) { 
-    return new MapQuick1_StreetNumberSet_contains_7(ppt); 
+    return new Math__BigFloat_bmul__54(ppt); 
   } 
 
   public boolean valid() { 
@@ -27,11 +27,11 @@ public final class MapQuick1_StreetNumberSet_contains_7 extends Splitter {
 
   public boolean test(ValueTuple vt) { 
     /* writeTestBody: 0 declarations */
-    return(i<sets.length); 
+    return(!orig_$y__a_is_defined); 
   } 
 
   public String repr() { 
-    return "MapQuick1_StreetNumberSet_contains_7: "
+    return "Math__BigFloat_bmul__54: "
       ;
   } 
 
