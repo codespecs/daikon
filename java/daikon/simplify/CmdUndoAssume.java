@@ -16,7 +16,7 @@ public class CmdUndoAssume
   /** For documentation, read the class overview. */
   public void apply(Session s) {
 
-    synchronized(s) {
+    synchronized (s) {
       // send out the (BG_POP)
       s.sendLine("(BG_POP)");
       if (Session.dkconfig_verbose_progress > 1) {

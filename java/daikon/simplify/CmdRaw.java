@@ -22,7 +22,7 @@ public class CmdRaw
   /** For documentation, read the class overview. */
   public void apply(Session s) {
 
-    synchronized(s) {
+    synchronized (s) {
       // send out the command
       s.sendLine(cmd);
       // there is no output from Simplify
