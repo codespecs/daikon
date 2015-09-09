@@ -57,7 +57,7 @@ public class SplitterFactoryTestUpdater {
     generateSplitters("StreetNumberSet.spinfo", "StreetNumberSet.decls");
     generateSplitters("Fib.spinfo", "Fib.decls");
     generateSplitters("QueueAr.spinfo", "QueueAr.decls");
-    generateSplitters("muldiv.spinfo", "BigFloat.decls");
+    generateSplitters("BigFloat.spinfo", "BigFloat.decls");
     moveFiles();
     writeTestClass();
   }
