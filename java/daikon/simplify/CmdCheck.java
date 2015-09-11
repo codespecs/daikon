@@ -36,7 +36,7 @@ public class CmdCheck
     try {
 
       String result;
-      synchronized(s) {
+      synchronized (s) {
         // send out the proposition
         s.sendLine(proposition);
         if (Session.dkconfig_verbose_progress > 0) {
