@@ -4894,7 +4894,7 @@ This option applies an approximation for handling literal values which
 greatly speeds up the performance of DynComp and drastically lowers its
 memory usage, but at the expense of a slight loss in precision of the
 generated comparability sets.  If you cannot get DynComp to successfully
-run on a large program, even after tweaking @option{--gc-num-vars}, try
+run on a large program, even after tweaking @option{--gc-num-tags}, try
 turning on this option.
 
 @item --dyncomp-detailed-mode
