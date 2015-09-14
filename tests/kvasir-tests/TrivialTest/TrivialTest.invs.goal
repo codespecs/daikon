@@ -4,6 +4,7 @@ cp[]->basic1.char_val == cp[]->footer
 cp[]->basic1.int_val == cp[]->footer
 cp[]->basic1.short_val == cp[]->footer
 cp[]->next == cp[]->prev
+::cpg == null
 ::globalDouble == 12345.67890123
 ::globalInt == 5555
 ::globalLong == 6969696969696969L
@@ -34,6 +35,31 @@ e == 1234567890123456789L
 f == 30000
 ===========================================================================
 ..initBasicTypesStruct():::EXIT
+::cpg == orig(cp)
+::cpg[] == cp[]
+::cpg[] == return[][0]
+::cpg[] == orig(cp[])
+::cpg[]->basic1.char_val == bp[]->char_val
+::cpg[]->basic1.int_val == bp[]->int_val
+::cpg[]->basic1.short_val == bp[]->short_val
+::cpg[]->basic1.uchar_val == bp[]->uchar_val
+::cpg[]->basic1.ushort_val == bp[]->ushort_val
+::cpg[]->basic2 == bp[]
+::cpg[]->day_of_week == cp[]->day_of_week
+::cpg[]->day_of_week == return[][0]->day_of_week
+::cpg[]->footer == cp[]->footer
+::cpg[]->footer == return[][0]->footer
+::cpg[]->myString == cp[]->myString
+::cpg[]->myString == return[][0]->myString
+::cpg[]->myString[0] == cp[]->myString[0]
+::cpg[]->myString[0] == return[][0]->myString[0]
+::cpg[]->next == ::cpg[]->prev
+::cpg[]->next == cp[]->next
+::cpg[]->next == cp[]->prev
+::cpg[]->next == return[][0]->next
+::cpg[]->next == return[][0]->prev
+::cpg[]->next == orig(cp[]->next)
+::cpg[]->next == orig(cp[]->prev)
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
@@ -52,19 +78,23 @@ bp[]->uchar_val == return[][0]->basic1.uchar_val
 bp[]->ushort_val == cp[]->basic1.ushort_val
 bp[]->ushort_val == return[][0]->basic1.ushort_val
 bp[][0] == orig(bp[][0])
-cp[] == return[][0]
-cp[] == orig(cp[])
 cp[]->basic1 == orig(cp[]->basic1)
-cp[]->day_of_week == return[][0]->day_of_week
-cp[]->footer == return[][0]->footer
-cp[]->myString == return[][0]->myString
-cp[]->myString[0] == return[][0]->myString[0]
-cp[]->next == cp[]->prev
-cp[]->next == return[][0]->next
-cp[]->next == return[][0]->prev
-cp[]->next == orig(cp[]->next)
-cp[]->next == orig(cp[]->prev)
 cp[][0] == orig(cp[][0])
+::cpg has only one value
+::cpg[] contains no nulls and has only one value, of length 1
+::cpg[]->basic1 contains no nulls and has only one value, of length 1
+::cpg[]->basic2[0] contains no nulls and has only one value, of length 1
+::cpg[]->day_of_week == [3]
+::cpg[]->footer == [-123456]
+::cpg[]->myString contains no nulls and has only one value, of length 1
+::cpg[]->myString[0] contains no nulls and has only one value, of length 1
+::cpg[]->myString[0][0] == [MR FURLEY	
+is a good manhello	world	
+
+
+\   a  \b \c]
+::cpg[]->next == [null]
+::cpg[][0] contains no nulls and has only one value, of length 1
 ::globalDouble == 12345.67890123
 ::globalInt == 5555
 ::globalLong == 6969696969696969L
@@ -77,19 +107,8 @@ bp[]->short_val == [-28000]
 bp[]->uchar_val == [42]
 bp[]->ushort_val == [28000]
 bp[][0] contains no nulls and has only one value, of length 1
-cp[] contains no nulls and has only one value, of length 1
 cp[]->basic1 contains no nulls and has only one value, of length 1
 cp[]->basic2[0] contains no nulls and has only one value, of length 1
-cp[]->day_of_week == [3]
-cp[]->footer == [-123456]
-cp[]->myString contains no nulls and has only one value, of length 1
-cp[]->myString[0] contains no nulls and has only one value, of length 1
-cp[]->myString[0][0] == [MR FURLEY	
-is a good manhello	world	
-
-
-\   a  \b \c]
-cp[]->next == [null]
 cp[][0] contains no nulls and has only one value, of length 1
 return has only one value
 return[] contains no nulls and has only one value, of length 1
@@ -99,6 +118,7 @@ return[][0][0] contains no nulls and has only one value, of length 1
 ::globalStr == orig(::globalStr)
 ===========================================================================
 ..main():::ENTER
+::cpg == null
 ::globalDouble == 12345.67890123
 ::globalInt == 5555
 ::globalLong == 6969696969696969L
@@ -106,10 +126,32 @@ return[][0][0] contains no nulls and has only one value, of length 1
 ::globalWkdayA == 4
 ===========================================================================
 ..main():::EXIT
+::cpg[]->next == ::cpg[]->prev
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
 ::globalWkdayA == orig(::globalWkdayA)
+::cpg has only one value
+::cpg[] contains no nulls and has only one value, of length 1
+::cpg[]->basic1 contains no nulls and has only one value, of length 1
+::cpg[]->basic1.char_val == [-42]
+::cpg[]->basic1.int_val == [1234567890]
+::cpg[]->basic1.short_val == [-28000]
+::cpg[]->basic1.uchar_val == [42]
+::cpg[]->basic1.ushort_val == [28000]
+::cpg[]->basic2 contains no nulls and has only one value, of length 1
+::cpg[]->basic2[0] contains no nulls and has only one value, of length 1
+::cpg[]->day_of_week == [3]
+::cpg[]->footer == [-123456]
+::cpg[]->myString contains no nulls and has only one value, of length 1
+::cpg[]->myString[0] contains no nulls and has only one value, of length 1
+::cpg[]->myString[0][0] == [MR FURLEY	
+is a good manhello	world	
+
+
+\   a  \b \c]
+::cpg[]->next == [null]
+::cpg[][0] contains no nulls and has only one value, of length 1
 ::globalDouble == 12345.67890123
 ::globalInt == 5555
 ::globalLong == 6969696969696969L
@@ -119,6 +161,28 @@ return == 0
 ::globalStr == orig(::globalStr)
 ===========================================================================
 ..returnWeekday():::ENTER
+::cpg[]->next == ::cpg[]->prev
+::cpg has only one value
+::cpg[] contains no nulls and has only one value, of length 1
+::cpg[]->basic1 contains no nulls and has only one value, of length 1
+::cpg[]->basic1.char_val == [-42]
+::cpg[]->basic1.int_val == [1234567890]
+::cpg[]->basic1.short_val == [-28000]
+::cpg[]->basic1.uchar_val == [42]
+::cpg[]->basic1.ushort_val == [28000]
+::cpg[]->basic2 contains no nulls and has only one value, of length 1
+::cpg[]->basic2[0] contains no nulls and has only one value, of length 1
+::cpg[]->day_of_week == [3]
+::cpg[]->footer == [-123456]
+::cpg[]->myString contains no nulls and has only one value, of length 1
+::cpg[]->myString[0] contains no nulls and has only one value, of length 1
+::cpg[]->myString[0][0] == [MR FURLEY	
+is a good manhello	world	
+
+
+\   a  \b \c]
+::cpg[]->next == [null]
+::cpg[][0] contains no nulls and has only one value, of length 1
 ::globalDouble == 12345.67890123
 ::globalInt == 5555
 ::globalLong == 6969696969696969L
@@ -127,10 +191,49 @@ return == 0
 day == 5
 ===========================================================================
 ..returnWeekday():::EXIT
+::cpg == orig(::cpg)
+::cpg[] == orig(::cpg[])
+::cpg[]->basic1 == orig(::cpg[]->basic1)
+::cpg[]->basic1.char_val == orig(::cpg[]->basic1.char_val)
+::cpg[]->basic1.int_val == orig(::cpg[]->basic1.int_val)
+::cpg[]->basic1.short_val == orig(::cpg[]->basic1.short_val)
+::cpg[]->basic1.uchar_val == orig(::cpg[]->basic1.uchar_val)
+::cpg[]->basic1.ushort_val == orig(::cpg[]->basic1.ushort_val)
+::cpg[]->basic2 == orig(::cpg[]->basic2)
+::cpg[]->basic2[0] == orig(::cpg[]->basic2[0])
+::cpg[]->day_of_week == orig(::cpg[]->day_of_week)
+::cpg[]->footer == orig(::cpg[]->footer)
+::cpg[]->myString == orig(::cpg[]->myString)
+::cpg[]->myString[0] == orig(::cpg[]->myString[0])
+::cpg[]->next == ::cpg[]->prev
+::cpg[]->next == orig(::cpg[]->next)
+::cpg[]->next == orig(::cpg[]->prev)
+::cpg[][0] == orig(::cpg[][0])
 ::globalDouble == orig(::globalDouble)
 ::globalInt == orig(::globalInt)
 ::globalLong == orig(::globalLong)
 ::globalWkdayA == orig(::globalWkdayA)
+::cpg has only one value
+::cpg[] contains no nulls and has only one value, of length 1
+::cpg[]->basic1 contains no nulls and has only one value, of length 1
+::cpg[]->basic1.char_val == [-42]
+::cpg[]->basic1.int_val == [1234567890]
+::cpg[]->basic1.short_val == [-28000]
+::cpg[]->basic1.uchar_val == [42]
+::cpg[]->basic1.ushort_val == [28000]
+::cpg[]->basic2 contains no nulls and has only one value, of length 1
+::cpg[]->basic2[0] contains no nulls and has only one value, of length 1
+::cpg[]->day_of_week == [3]
+::cpg[]->footer == [-123456]
+::cpg[]->myString contains no nulls and has only one value, of length 1
+::cpg[]->myString[0] contains no nulls and has only one value, of length 1
+::cpg[]->myString[0][0] == [MR FURLEY	
+is a good manhello	world	
+
+
+\   a  \b \c]
+::cpg[]->next == [null]
+::cpg[][0] contains no nulls and has only one value, of length 1
 ::globalDouble == 12345.67890123
 ::globalInt == 5555
 ::globalLong == 6969696969696969L

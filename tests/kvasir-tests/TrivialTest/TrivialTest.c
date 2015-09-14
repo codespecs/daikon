@@ -93,6 +93,7 @@ weekdays returnWeekday(int day)
     return (weekdays)0;
 }
 
+                          complexStruct** cpg;
 const complexStruct*** initBasicTypesStruct(double a,
                           int b,
                           char c,
@@ -107,6 +108,7 @@ const complexStruct*** initBasicTypesStruct(double a,
   char** localPtr = &globalStr;
   int wkdayA = 5;
   basicTypesStruct localB = {0, 0, 0, 0, 0};
+  cpg = cp;
   //  printf("&localA=%d, &localPtr=%d, &localB=%d\n", &localA, &localPtr, &localB);
   //  localAAddr = &localA; // DON'T DO THIS - Kvasir gets confused by ptrs. to local vars
   //  printf("bp=%d *bp=%d\n", bp, *bp);
@@ -147,7 +149,7 @@ const complexStruct*** initBasicTypesStruct(double a,
   returnWeekday(wkdayA);
   //  printf("bp=%d *bp=%d\n", bp, *bp);
   //  printf("&globalInt=%d\n", &globalInt);
-  return (const complexStruct***)&cp;
+  return (const complexStruct***)&cpg;
 }
 
 /*
