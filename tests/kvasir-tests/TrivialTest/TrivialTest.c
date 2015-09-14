@@ -93,7 +93,7 @@ weekdays returnWeekday(int day)
     return (weekdays)0;
 }
 
-                          complexStruct** cpg;
+complexStruct** cpg;
 const complexStruct*** initBasicTypesStruct(double a,
                           int b,
                           char c,
