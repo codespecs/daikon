@@ -5,6 +5,69 @@ var-comparability none
 ..main():::ENTER
 this_invocation_nonce
 0
+::cpg
+0x0
+1
+::cpg[..]
+nonsensical
+2
+::cpg[..]->basic1
+nonsensical
+2
+::cpg[..]->basic1.char_val
+nonsensical
+2
+::cpg[..]->basic1.int_val
+nonsensical
+2
+::cpg[..]->basic1.short_val
+nonsensical
+2
+::cpg[..]->basic1.uchar_val
+nonsensical
+2
+::cpg[..]->basic1.ushort_val
+nonsensical
+2
+::cpg[..]->basic2
+nonsensical
+2
+::cpg[..]->basic2->char_val
+nonsensical
+2
+::cpg[..]->basic2->int_val
+nonsensical
+2
+::cpg[..]->basic2->short_val
+nonsensical
+2
+::cpg[..]->basic2->uchar_val
+nonsensical
+2
+::cpg[..]->basic2->ushort_val
+nonsensical
+2
+::cpg[..]->basic2[0]
+nonsensical
+2
+::cpg[..]->day_of_week
+nonsensical
+2
+::cpg[..]->footer
+nonsensical
+2
+::cpg[..]->myString
+nonsensical
+2
+::cpg[..]->myString[0]
+nonsensical
+2
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+nonsensical
+2
 ::globalDouble
 12345.67890123
 1
@@ -21,6 +84,69 @@ this_invocation_nonce
 ..initBasicTypesStruct():::ENTER
 this_invocation_nonce
 1
+::cpg
+0x0
+1
+::cpg[..]
+nonsensical
+2
+::cpg[..]->basic1
+nonsensical
+2
+::cpg[..]->basic1.char_val
+nonsensical
+2
+::cpg[..]->basic1.int_val
+nonsensical
+2
+::cpg[..]->basic1.short_val
+nonsensical
+2
+::cpg[..]->basic1.uchar_val
+nonsensical
+2
+::cpg[..]->basic1.ushort_val
+nonsensical
+2
+::cpg[..]->basic2
+nonsensical
+2
+::cpg[..]->basic2->char_val
+nonsensical
+2
+::cpg[..]->basic2->int_val
+nonsensical
+2
+::cpg[..]->basic2->short_val
+nonsensical
+2
+::cpg[..]->basic2->uchar_val
+nonsensical
+2
+::cpg[..]->basic2->ushort_val
+nonsensical
+2
+::cpg[..]->basic2[0]
+nonsensical
+2
+::cpg[..]->day_of_week
+nonsensical
+2
+::cpg[..]->footer
+nonsensical
+2
+::cpg[..]->myString
+nonsensical
+2
+::cpg[..]->myString[0]
+nonsensical
+2
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+nonsensical
+2
 ::globalDouble
 12345.67890123
 1
@@ -142,6 +268,69 @@ f
 ..readStruct():::ENTER
 this_invocation_nonce
 2
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ 0 ]
+1
+::cpg[..]->basic1.int_val
+[ 0 ]
+1
+::cpg[..]->basic1.short_val
+[ 0 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 0 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 0 ]
+1
+::cpg[..]->basic2
+[ 0x0 ]
+1
+::cpg[..]->basic2->char_val
+nonsensical
+2
+::cpg[..]->basic2->int_val
+nonsensical
+2
+::cpg[..]->basic2->short_val
+nonsensical
+2
+::cpg[..]->basic2->uchar_val
+nonsensical
+2
+::cpg[..]->basic2->ushort_val
+nonsensical
+2
+::cpg[..]->basic2[0]
+nonsensical
+2
+::cpg[..]->day_of_week
+[ 0 ]
+1
+::cpg[..]->footer
+[ 0 ]
+1
+::cpg[..]->myString
+[ 0x0 ]
+1
+::cpg[..]->myString[0]
+nonsensical
+2
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -176,6 +365,69 @@ a.ushort_val
 ..readStruct():::EXIT0
 this_invocation_nonce
 2
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ 0 ]
+1
+::cpg[..]->basic1.int_val
+[ 0 ]
+1
+::cpg[..]->basic1.short_val
+[ 0 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 0 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 0 ]
+1
+::cpg[..]->basic2
+[ 0x0 ]
+1
+::cpg[..]->basic2->char_val
+nonsensical
+2
+::cpg[..]->basic2->int_val
+nonsensical
+2
+::cpg[..]->basic2->short_val
+nonsensical
+2
+::cpg[..]->basic2->uchar_val
+nonsensical
+2
+::cpg[..]->basic2->ushort_val
+nonsensical
+2
+::cpg[..]->basic2[0]
+nonsensical
+2
+::cpg[..]->day_of_week
+[ 0 ]
+1
+::cpg[..]->footer
+[ 0 ]
+1
+::cpg[..]->myString
+[ 0x0 ]
+1
+::cpg[..]->myString[0]
+nonsensical
+2
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -228,6 +480,69 @@ return.ushort_val
 ..returnWeekday():::ENTER
 this_invocation_nonce
 3
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -247,6 +562,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 3
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -268,6 +646,69 @@ return
 
 ..initBasicTypesStruct():::EXIT0
 this_invocation_nonce
+1
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
 1
 ::globalDouble
 12345.67890123
@@ -387,7 +828,7 @@ f
 30000
 1
 return
-<STACK_ADDR>
+<STATIC_ADDR>
 1
 return[..]
 [ <STACK_ADDR> ]
@@ -456,6 +897,69 @@ return[..][0][0]
 ..copyComplexStruct():::ENTER
 this_invocation_nonce
 4
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -532,6 +1036,69 @@ nonsensical
 ..copyComplexStruct():::EXIT0
 this_invocation_nonce
 4
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -665,6 +1232,69 @@ nonsensical
 ..printHelloWorld():::ENTER
 this_invocation_nonce
 5
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -687,6 +1317,69 @@ turnip
 ..printHelloWorld():::EXIT0
 this_invocation_nonce
 5
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -712,6 +1405,69 @@ turnip
 ..returnFooString():::ENTER
 this_invocation_nonce
 6
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -743,6 +1499,69 @@ ushortValue
 ..returnFooString():::EXIT0
 this_invocation_nonce
 6
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -777,6 +1596,69 @@ ushortValue
 ..returnDoublePtr():::ENTER
 this_invocation_nonce
 7
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -805,6 +1687,69 @@ uintPtrVar[..]
 ..returnDoublePtr():::EXIT0
 this_invocation_nonce
 7
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -839,6 +1784,69 @@ uintPtrVar[..]
 ..valueAt():::ENTER
 this_invocation_nonce
 8
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -864,6 +1872,69 @@ myArray[..]
 ..valueAt():::EXIT0
 this_invocation_nonce
 8
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -892,6 +1963,69 @@ return
 ..returnWeekday():::ENTER
 this_invocation_nonce
 9
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -911,6 +2045,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 9
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -933,6 +2130,69 @@ return
 ..valueAt():::ENTER
 this_invocation_nonce
 10
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -958,6 +2218,69 @@ myArray[..]
 ..valueAt():::EXIT0
 this_invocation_nonce
 10
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -986,6 +2309,69 @@ return
 ..returnWeekday():::ENTER
 this_invocation_nonce
 11
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1005,6 +2391,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 11
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1027,6 +2476,69 @@ return
 ..valueAt():::ENTER
 this_invocation_nonce
 12
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1052,6 +2564,69 @@ myArray[..]
 ..valueAt():::EXIT0
 this_invocation_nonce
 12
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1080,6 +2655,69 @@ return
 ..returnWeekday():::ENTER
 this_invocation_nonce
 13
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1099,6 +2737,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 13
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1121,6 +2822,69 @@ return
 ..valueAt():::ENTER
 this_invocation_nonce
 14
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1146,6 +2910,69 @@ myArray[..]
 ..valueAt():::EXIT0
 this_invocation_nonce
 14
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1174,6 +3001,69 @@ return
 ..returnWeekday():::ENTER
 this_invocation_nonce
 15
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1193,6 +3083,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 15
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1215,6 +3168,69 @@ return
 ..valueAt():::ENTER
 this_invocation_nonce
 16
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1240,6 +3256,69 @@ myArray[..]
 ..valueAt():::EXIT0
 this_invocation_nonce
 16
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1268,6 +3347,69 @@ return
 ..returnWeekday():::ENTER
 this_invocation_nonce
 17
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1287,6 +3429,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 17
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1309,6 +3514,69 @@ return
 ..valueAt():::ENTER
 this_invocation_nonce
 18
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1334,6 +3602,69 @@ myArray[..]
 ..valueAt():::EXIT0
 this_invocation_nonce
 18
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1362,6 +3693,69 @@ return
 ..returnWeekday():::ENTER
 this_invocation_nonce
 19
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1381,6 +3775,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 19
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1403,6 +3860,69 @@ return
 ..valueAt():::ENTER
 this_invocation_nonce
 20
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1428,6 +3948,69 @@ myArray[..]
 ..valueAt():::EXIT0
 this_invocation_nonce
 20
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1456,6 +4039,69 @@ return
 ..returnWeekday():::ENTER
 this_invocation_nonce
 21
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1475,6 +4121,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 21
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1497,6 +4206,69 @@ return
 ..valueAt():::ENTER
 this_invocation_nonce
 22
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1522,6 +4294,69 @@ myArray[..]
 ..valueAt():::EXIT0
 this_invocation_nonce
 22
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1550,6 +4385,69 @@ return
 ..returnWeekday():::ENTER
 this_invocation_nonce
 23
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1569,6 +4467,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 23
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1591,6 +4552,69 @@ return
 ..valueAt():::ENTER
 this_invocation_nonce
 24
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1616,6 +4640,69 @@ myArray[..]
 ..valueAt():::EXIT0
 this_invocation_nonce
 24
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1644,6 +4731,69 @@ return
 ..returnWeekday():::ENTER
 this_invocation_nonce
 25
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1663,6 +4813,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 25
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1685,6 +4898,69 @@ return
 ..valueAt():::ENTER
 this_invocation_nonce
 26
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1710,6 +4986,69 @@ myArray[..]
 ..valueAt():::EXIT0
 this_invocation_nonce
 26
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1738,6 +5077,69 @@ return
 ..returnWeekday():::ENTER
 this_invocation_nonce
 27
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1757,6 +5159,69 @@ day
 ..returnWeekday():::EXIT0
 this_invocation_nonce
 27
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1
@@ -1779,6 +5244,69 @@ return
 ..main():::EXIT0
 this_invocation_nonce
 0
+::cpg
+<STACK_ADDR>
+1
+::cpg[..]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic1.char_val
+[ -42 ]
+1
+::cpg[..]->basic1.int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic1.short_val
+[ -28000 ]
+1
+::cpg[..]->basic1.uchar_val
+[ 42 ]
+1
+::cpg[..]->basic1.ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2
+[ <STACK_ADDR> ]
+1
+::cpg[..]->basic2->char_val
+[ -42 ]
+1
+::cpg[..]->basic2->int_val
+[ 1234567890 ]
+1
+::cpg[..]->basic2->short_val
+[ -28000 ]
+1
+::cpg[..]->basic2->uchar_val
+[ 42 ]
+1
+::cpg[..]->basic2->ushort_val
+[ 28000 ]
+1
+::cpg[..]->basic2[0]
+[ <STACK_ADDR> ]
+1
+::cpg[..]->day_of_week
+[ 3 ]
+1
+::cpg[..]->footer
+[ -123456 ]
+1
+::cpg[..]->myString
+[ <STATIC_ADDR> ]
+1
+::cpg[..]->myString[0]
+[ 0x676e69727453796d ]
+1
+::cpg[..]->myString[0][0]
+nonsensical
+2
+::cpg[..][0]
+[ <STACK_ADDR> ]
+1
 ::globalDouble
 12345.67890123
 1

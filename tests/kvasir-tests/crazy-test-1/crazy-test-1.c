@@ -99,6 +99,7 @@ weekdays returnWeekday(int day)
     return (weekdays)0;
 }
 
+complexStruct** cpg;
 complexStruct*** initBasicTypesStruct(double a,
                           int b,
                           char c,
@@ -112,6 +113,7 @@ complexStruct*** initBasicTypesStruct(double a,
   int uninitB;
   char** localPtr = &globalStr;
   basicTypesStruct localB = {0, 0, 0, 0, 0};
+  cpg = cp;
   //  printf("&localA=%d, &localPtr=%d, &localB=%d\n", &localA, &localPtr, &localB);
 
   //  localAAddr = &localA; // BAD!!! This causes the tests to bonk out and fail
@@ -151,7 +153,7 @@ complexStruct*** initBasicTypesStruct(double a,
   returnWeekday(5);
   //  printf("bp=%d *bp=%d\n", bp, *bp);
   //  printf("&globalInt=%d\n", &globalInt);
-  return &cp;
+  return &cpg;
 }
 
 /*
