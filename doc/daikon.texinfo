@@ -3022,7 +3022,7 @@ The disadvantage of indiscriminate splitting is that it slows Daikon down.
 
 Daikon uses a condition only where it can be used.  For example, the
 condition @code{myArray.length == x} is applicable only at program points
-where that have variables named @code{myArray} and @code{x}.  To see
+that have variables named @code{myArray} and @code{x}.  To see
 warnings about places a splitting condition cannot be used (reported as
 failure to compile splitters at those locations), place the following line
 in a file that is passed to Daikon via the @option{--config} flag
