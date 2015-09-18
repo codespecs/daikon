@@ -22,7 +22,7 @@ public class CmdAssume
   /** For documentation, read the class overview. */
   public void apply(Session s) {
 
-    synchronized(s) {
+    synchronized (s) {
       // send out the (BG_PUSH proposition)
       s.sendLine("(BG_PUSH " + proposition + ")");
       if (Session.dkconfig_verbose_progress > 1) {

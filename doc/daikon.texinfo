@@ -56,14 +56,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.2.11
+@center Daikon version 5.2.13
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.2.11 release date
-@center August 5, 2015
+@c Print out the Daikon version 5.2.13 release date
+@center September 3, 2015
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.2.11, released August 5, 2015.
+It describes Daikon version 5.2.13, released September 3, 2015.
 
 @menu
 * Introduction::
@@ -3026,7 +3026,7 @@ The disadvantage of indiscriminate splitting is that it slows Daikon down.
 
 Daikon uses a condition only where it can be used.  For example, the
 condition @code{myArray.length == x} is applicable only at program points
-where that have variables named @code{myArray} and @code{x}.  To see
+that have variables named @code{myArray} and @code{x}.  To see
 warnings about places a splitting condition cannot be used (reported as
 failure to compile splitters at those locations), place the following line
 in a file that is passed to Daikon via the @option{--config} flag
@@ -4898,7 +4898,7 @@ This option applies an approximation for handling literal values which
 greatly speeds up the performance of DynComp and drastically lowers its
 memory usage, but at the expense of a slight loss in precision of the
 generated comparability sets.  If you cannot get DynComp to successfully
-run on a large program, even after tweaking @option{--gc-num-vars}, try
+run on a large program, even after tweaking @option{--gc-num-tags}, try
 turning on this option.
 
 @item --dyncomp-detailed-mode
@@ -8052,7 +8052,7 @@ JVM-specific; see your JVM documentation for details.  For instance,
 its name in JDK versions 1.2 and earlier is @option{-mx}.)
 However, the value you use should be less than your system's total amount
 of physical memory.
-Some implementations of Java use a suprisingly small default, such as 64
+Some implementations of Java use a surprisingly small default, such as 64
 megabytes; to permit use of up to 2048
 megabytes, you would run Java like so:
 @example
@@ -8774,7 +8774,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.2.11, released August 5, 2015.
+This manual describes Daikon version 5.2.13, released September 3, 2015.
 A more detailed list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -8788,7 +8788,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.2.11
+@cindex Daikon version 5.2.13
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited

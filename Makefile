@@ -148,6 +148,7 @@ help:
 	@echo " tags TAGS                -- make TAGS file for Emacs"
 	@echo " kvasir                   -- make Kvasir, the C front end"
 	@echo " very-clean               -- remove (most) all generated files"
+	@echk " dyncomp-jdk              -- Make file java/dcomp_rt.jar"
 	@echo "Creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
 	@echo " staging                  -- moves all release file to staging-daikon/"
@@ -181,6 +182,13 @@ clean-java:
 
 javadoc:
 	cd java && $(MAKE) javadoc
+
+dyncomp-jdk:
+	cd java && $(MAKE) dyncomp-jdk
+
+dcomp-jdk:
+	cd java && $(MAKE) dcomp-jdk
+
 
 ### Kvasir (C/C++ front end)
 
@@ -421,9 +429,14 @@ doc-all:
 	cd doc && $(MAKE) all
 
 # Get the current release version
-CUR_VER := $(shell /usr/bin/ls /cse/web/research/plse/daikon/download/daikon-*.zip |perl -p -e 's/^.*download.daikon.//' |perl -p -e 's/.zip//')
-CUR_RELEASE_NAME := daikon-$(CUR_VER)
-NEW_RELEASE_NAME := daikon-$(shell cat doc/VERSION)
+ifneq ($(shell ls /cse/web/research/plse/daikon/download/daikon-*.zip 2>/dev/null),)
+    CUR_VER := $(shell ls /cse/web/research/plse/daikon/download/daikon-*.zip |perl -p -e 's/^.*download.daikon.//' |perl -p -e 's/.zip//');
+    CUR_RELEASE_NAME := daikon-$(CUR_VER)
+    NEW_RELEASE_NAME := daikon-$(shell cat doc/VERSION)
+else
+    CUR_RELEASE_NAME := UNKNOWN
+    NEW_RELEASE_NAME := UNKNOWN
+endif
 
 check-for-broken-doc-links:
 	checklink -q -r `grep -v '^#' ${DAIKONDIR}/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon/staging-daikon >check.log 2>&1

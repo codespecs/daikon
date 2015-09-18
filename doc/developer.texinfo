@@ -35,14 +35,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.2.11
+@center Daikon version 5.2.13
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.2.11 release date
-@center August 5, 2015
+@c Print out the Daikon version 5.2.13 release date
+@center September 3, 2015
 @end ifset
 
 @ifclear final
@@ -90,7 +90,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.2.11, released August 5, 2015.
+It describes Daikon version 5.2.13, released September 3, 2015.
 
 @menu
 * Introduction::
@@ -2025,7 +2025,21 @@ the entire process
 will take at least two hours --- but could be much more depending on the number of
 different platforms on which you test the release.
 
-Each of the steps below assumes that the current working directory is @file{$DAIKONDIR} 
+@noindent
+NOTE: The default version of the Java JDK on the majority of the CSE
+machines is now JDK 8.  However, for the time being, we wish to continue
+to use JDK 7 for our distribution process; the intention is to maximize
+compatibility with our existing code base.  You will find a suitable
+version (for an AMD64 based machine) at @file{/homes/gws/markro/jdk7}.
+In addition, if you have used @command{source $DAIKONDIR/scripts/daikon.bashrc}
+to set your environment (@env{CLASS_PATH}
+and @env{PATH} in particular), it is recommended that you get a fresh
+copy of your Bash shell (e.g., log out and log back in); set @env{DAIKONDIR}
+as you would normally; set @env{JAVA_HOME} to the JDK 7 path noted above;
+and, finally, run @command{source $DAIKONDIR/scripts/daikon.bashrc}.
+This should fulfill most of the directory layout requirements noted below.
+
+Each of the steps below assumes that the current working directory is @file{$DAIKONDIR}
 and that you are using the Bash shell.
 
 @c maximize line size for all example command lists
@@ -2044,40 +2058,41 @@ and that you are using the Bash shell.
 @itemize
 
 @item
-Environment variable @env{DAIKONDIR} must be set to a clone of 
+Environment variable @env{DAIKONDIR} must be set to a clone of
 @uref{https://github.com/codespecs/daikon}.
 
 @item
-A clone of 
+A clone of
 @uref{https://github.com/codespecs/fjalar} must be a sibling of
 @file{$DAIKONDIR}.
 
 @item
-A clone of 
+A clone of
 @uref{https://github.com/mernst/plume-lib} must be in
 @file{$DAIKONDIR/@/plume-lib}.
 
 @item
 Environment variable @env{JAVA_HOME} must be set to your JDK installation.
-@c Example:  export JAVA_HOME=/usr/lib/jvm/java-1.7.0
+@c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
+@c or:       export JAVA_HOME=/usr/lib/jvm/java
 
 @item
-There must be a symbolic link from 
+There must be a symbolic link from
 @file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}.
-If it does not already exist, the @command{rebuild-everything-clean} step below 
+If it does not already exist, the @command{rebuild-everything-clean} step below
 will create it for you.
 
 @c Why would one ever want to create it manually, if the build process does so?
 @c Otherwise, you must make this link yourself.
 @c For example, if your Fjalar directory is named @file{myfjalar}:
-@c 
+@c
 @c @example
 @c cd @@DAIKONDIR
 @c ln -nsf ../myfjalar fjalar
 @c @end example
 
 @item
-Environment variable @env{BIBDIR} must be set to a clone of 
+Environment variable @env{BIBDIR} must be set to a clone of
 @uref{https://github.com/mernst/plume-bib}.
 You can create this clone with the commands:
 
@@ -2099,7 +2114,7 @@ of the bibliography you wish to use.
 @enumerate
 
 @item
-Update the Daikon source files to their most recent version. 
+Update the Daikon source files to their most recent version.
 
 @smallexample
 set -o pipefail
@@ -2115,8 +2130,8 @@ You also need to make sure that the "git log" command didn't produce any output.
 
 @item
 Download the latest version of the Checker Framework Java compiler from
-@uref{http://checkerframework.org/}. 
-Set the @env{CHECKERFRAMEWORK} environment 
+@uref{http://checkerframework.org/}.
+Set the @env{CHECKERFRAMEWORK} environment
 variable to the location of the Checker Framework directory.
 
 [Time: moments]
@@ -2174,6 +2189,13 @@ newer versions of Valgrind into Fjalar}.
 @node    Distribution steps
 @section Steps for making the distribution
 
+@noindent
+NOTE: While the majority of the distribution process is currently run
+with JDK 7; we need to ensure that our system runs on JDK 8 as well.
+This means you will need to repeat steps 2-5 below in a separate shell
+with @command{export JAVA_HOME=/usr/lib/jvm/java}. (In addition to the
+other normal environment settings.)
+
 @enumerate
 
 @item
@@ -2206,6 +2228,7 @@ make update-doc-dist-date-and-version
 [Time: moments]
 
 
+@need 1000
 @item
 Do a clean rebuild of everything.
 
@@ -2220,8 +2243,9 @@ make rebuild-everything-clean
 [Time: 20 min]
 
 
+@need 1000
 @item
-Run the Nullness Checker.  This is to verify that the Checker Framework 
+Run the Nullness Checker.  This is to verify that the Checker Framework
 Java compiler was correctly used to build Daikon.  There should be no
 errors output.
 
@@ -2233,6 +2257,7 @@ make -C $DAIKONDIR/java check-nullness
 [Time: 30 min]
 
 
+@need 1000
 @item
 Run the Daikon regression tests.
 The last line printed should be "All tests succeeded."
@@ -2245,6 +2270,7 @@ make -C $DAIKONDIR/tests clean diffs
 [Time: 25 min]
 
 
+@need 1000
 @item
 Run the Kvasir regression tests.
 There should be no diff files marked FAILED.
@@ -2257,6 +2283,7 @@ make -C $DAIKONDIR/tests/kvasir-tests clean-all nightly-summary-w-daikon
 [Time: 20 min]
 
 
+@need 1000
 @item
 Run the Java parser tests.
 
@@ -2270,6 +2297,7 @@ Success is indicated by each of the diff comparisons being identical.
 [Time: moments]
 
 
+@need 1000
 @item
 Check the release documents for spelling errors.
 
@@ -2296,7 +2324,7 @@ add the new word, keeping the list in alphabetical order.
 @item
 If the word is some sort of technical information
 then it should be marked as such with the correct Texinfo command.
-@code{@@nospellcheck} is appropriate for a person's or company's name.  For the 
+@code{@@nospellcheck} is appropriate for a person's or company's name.  For the
 proper input of technical information, see "Chapter 9: Marking Text,
 Words and Phrases" of the
 @uref{http://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, GNU Texinfo Manual}.
@@ -2306,6 +2334,7 @@ Words and Phrases" of the
 [Time: moments]
 
 
+@need 1000
 @item
 Edit the @file{doc/CHANGES} file to indicate what has changed
 in this version.  A good way to determine what has changed is to diff
@@ -2328,7 +2357,7 @@ git log v5.0.2..HEAD    (substitute last release number for 5.0.2)
 @c TODO: How can this be done for Git?
 @c As we normally only tag the repository when we make a release, this can
 @c usually be simplified to:
-@c 
+@c
 @c @example
 @c git log  -v -r "last(tagged())::"
 @c @end example
@@ -2343,6 +2372,7 @@ git log v5.0.2..HEAD
 [Time: a few minutes]
 
 
+@need 1000
 @item
 Build everything to be distributed and copy it to the temporary staging area
 @c not @uref{...} because we don't want robots to notice and crawl the link
@@ -2373,7 +2403,7 @@ make check-for-broken-doc-links
 Review @file{check.log} and make corrections as appropriate.
 
 In most cases (and for most 404 errors), you should fix the document with
-the incorrect link.  Note that you must fix it in the original repository, 
+the incorrect link.  Note that you must fix it in the original repository,
 not in the drop directories.
 This means correcting the file, most likely located beneath either
 @file{$DAIKONDIR/doc} or @file{$BIBDIR} and then committing the changes. You will then
@@ -2414,11 +2444,11 @@ by invariant output being written to the screen.
 make test-staged-dist
 @end example
 
-[Time: 9 min]
+[Time: 20 min; runs Checker Framework tests]
 
 
 @item
-Test the distribution on a 32-bit machine. 
+Test the distribution on a 32-bit machine.
 This is probably best done on a virtual machine running a current version
 of Fedora.  The instructions below assume you are running on such a machine.
 They will download the staged release archive, extract the files, set
@@ -2451,10 +2481,10 @@ make installation-test
 @item
 Test the distribution on a 64-bit, Ubuntu based system.  The 64-bit test
 run above is normally run on one of our local machines; therefore, it was
-probably done on a Fedora (Red Hat) based system. 
+probably done on a Fedora (Red Hat) based system.
 Ubuntu is another distributor of Linux based systems and we have run into
 some differences with Fedora in the past.  This test is
-probably best done on a virtual machine running a current version. It is 
+probably best done on a virtual machine running a current version. It is
 important to regularly check to see if a new major release of Ubuntu is
 available and upgrade your test bed as necessary.
 
@@ -2547,6 +2577,7 @@ make save-current-release
 [Time: moments]
 
 
+@need 1000
 @item
 Update the website.
 
@@ -2557,6 +2588,7 @@ make staging-to-www
 [Time: 1 min]
 
 
+@need 1000
 @item
 Commit changes back to the repository:
 
@@ -2573,6 +2605,7 @@ git push
 [Time: moments]
 
 
+@need 1000
 @item
 Add a version label to the repository:
 
@@ -2587,6 +2620,7 @@ git push --tags
 [Time: moments]
 
 
+@need 1000
 @item
 At this point the distribution has been completed; however, we now need to
 bump up the version number in file @file{$DAIKONDIR/doc/VERSION}
@@ -2614,6 +2648,7 @@ git checkout doc/README
 [Time: moments]
 
 
+@need 1000
 @item
 Verify these changes by doing product builds (no need to clean first) and
 running the installation test.
@@ -2628,6 +2663,7 @@ Success is indicated by invariant output being written to the screen.
 [Time: 5 min]
 
 
+@need 1000
 @item
 Commit changes back to the repository:
 
@@ -2642,6 +2678,7 @@ git push
 [Time: moments]
 
 
+@need 1000
 @item
 Send mail to the @samp{daikon-announce} mailing list.
 This list is located at @samp{daikon-announce@@googlegroups.com}.
