@@ -2941,8 +2941,8 @@ typical entry is
 PPT_NAME @var{pptname}
 @var{condition1}
 @var{condition2}
-    DAIKON_FORMAT @var{output string}
-    ESC_FORMAT @var{output string}
+    DAIKON_FORMAT @var{string}
+    ESC_FORMAT @var{string}
 @var{condition3}
 ...
 @end example
@@ -2966,13 +2966,17 @@ is intended to operate.)  The automatically generated Splitter source
 code fails to compile (but Daikon proceeds without it) if a variable
 name in a condition is not found at the matching program point.
 
-Indented lines beginning with @samp{DAIKON_FORMAT},
+An indented lines beginning with @samp{DAIKON_FORMAT},
 @samp{JAVA_FORMAT}, @samp{ESC_FORMAT}, or @samp{SIMPLIFY_FORMAT}
 @c UNDONE is there a @samp{CSHARPCONTRACT_FORMAT}?
-may be used to specify how to represent the
-condition specified by the splitter in each of Daikon's output
-formats, to allow the splitting condition to be used as a dummy
-invariant.
+specifies how to print the condition.
+These are optional; for any Daikon output format that is ommitted,
+the Java condition itself is used.
+The alternate printed representation is used when the
+splitting condition is used as a dummy
+invariant; see configuration option
+@option{daikon.split.PptSplitter.dummy_invariant_level}.
+
 
 @node          Replacement sections
 @subsubsection Replacement sections
