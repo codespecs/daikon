@@ -148,7 +148,7 @@ help:
 	@echo " tags TAGS                -- make TAGS file for Emacs"
 	@echo " kvasir                   -- make Kvasir, the C front end"
 	@echo " very-clean               -- remove (most) all generated files"
-	@echk " dyncomp-jdk              -- Make file java/dcomp_rt.jar"
+	@echo " dyncomp-jdk              -- Make file java/dcomp_rt.jar"
 	@echo "Creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
 	@echo " staging                  -- moves all release file to staging-daikon/"
