@@ -15,13 +15,13 @@ int fun_none_filtered(int x){
 }
 
 int fun_some_filtered(int x){
-  return array[3];
+  return array[2];
 }
 
 int main(){
   printf("%d %d %d\n",fun_all_filtered(2),
-	 fun_some_filtered(scalar),
-	 fun_none_filtered(1));
+        fun_some_filtered(scalar),
+        fun_none_filtered(1));
   return 0;
 }
 

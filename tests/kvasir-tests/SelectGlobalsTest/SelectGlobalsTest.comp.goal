@@ -12,20 +12,18 @@ x
 
 ..fun_none_filtered():::ENTER
 ::array
-::array[..]
+::array[..] ::scalar_common
 ::array_common
 ::array_common[..]
 ::scalar
-::scalar_common
 x
 
 ..fun_none_filtered():::EXIT0
 ::array
-::array[..]
+::array[..] ::scalar_common return
 ::array_common
 ::array_common[..]
 ::scalar
-::scalar_common return
 x
 
 ..fun_some_filtered():::ENTER
@@ -39,8 +37,7 @@ x
 ::array
 ::array_common
 ::array_common[..]
-::scalar_common
-return
+::scalar_common return
 x
 
 ..main():::ENTER
