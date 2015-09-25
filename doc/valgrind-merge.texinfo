@@ -350,6 +350,9 @@ diff -ur -x.git -x.hg -xinst -x.svn -xMakefile.in -xhtml -xdocs -xtests \
      valgrind-old/memcheck fjalar/valgrind/fjalar > memcheck-PLSE.diff
 @end example
 
+Note: As we have completed that transition from Mercurial to Git, the
+@option{-x.hg} terms in the above commands should no longer be needed.
+
 
 @node Merging the changes
 @chapter Merging the changes
@@ -394,7 +397,7 @@ executable scripts (typically named @file{filter_<test>}) are copied or updated,
 but lose the execute file mode bit.  
 
 While this is documented @command{patch} behavior, we need to add additional
-steps to correct these problems.
+steps to correct these problems. (documentation UNDONE)
 
 
 @node Coregrind Conflicts
@@ -498,7 +501,7 @@ cd $inv/valgrind-new
 svn log -r $@{VEX_REVISION@}:HEAD VEX/pub/libvex_ir.h
 @end example
 
-The files with all the VEX IR code for DynComp is located in
+The files with all the VEX IR code for DynComp are located in
 @file{dyncomp_translate.[ch]}. @file{dyncomp_translate.c} is structured primarily
 into functions of the form @code{expr2tags_[EXPRESSION_TYPE]()}.
 These functions will contain a switch for all VEX IR instructions
