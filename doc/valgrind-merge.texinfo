@@ -170,10 +170,11 @@ push them, then start over from the beginning.
 Re-compile Fjalar, then run the tests. (The tests take about 20 minutes.) 
 
 @example
-cd $INV/fjalar
-make build
-cd $INV/daikon/tests/kvasir-tests 
-make nightly-summary-w-daikon
+# Optional, to verify Daikon 
+make -C $DAIKONDIR compile test
+
+make -C $INV/fjalar build
+make -C $INV/daikon/tests/kvasir-tests nightly-summary-w-daikon
 @end example
 
 The tests should pass. If any tests fail, fix them, then start over from
@@ -322,52 +323,24 @@ of the patch and diff files.
 @node Creating the diffs
 @chapter Creating the diffs
 
-Create patches and diffs showing what the Valgrind maintainers have
-changed since
-the last time Valgrind code was merged into Fjalar. Two sets of diffs
-will be created: one for Memcheck and one for everything else (which
-we'll call "Coregrind", and which includes VEX). The commands below
-may be found in @file{fjalar/generate-patch-file.sh}.
-
-@menu
-* Coregrind and Memcheck patch files::
-* Fjalar Coregrind and Memcheck diff files::
-@end menu
-
-
-@node Coregrind and Memcheck patch files
-@section Coregrind and Memcheck patch files 
-
-Create diff files to be used as input to the patch program.
+Run:
 
 @example
-cd $INV
-rm -f coregrind.patch memcheck.patch
-diff -ur --unidirectional-new-file -x.svn valgrind-old valgrind-new \
-     > coregrind.patch
-diff -ur --unidirectional-new-file -x.svn -xdocs -xtests \
-     valgrind-old/memcheck valgrind-new/memcheck > memcheck.patch
+$INV/fjalar/generate-patch-files.sh
 @end example
 
+This creates patch files showing what the Valgrind maintainers have
+changed since
+the last time Valgrind code was merged into Fjalar.
+File @file{$INV/memcheck.patch} is for Memcheck, and
+file @file{$INV/coregrind.patch} is for everything else (which
+we'll call "Coregrind", and which includes VEX).
 
-@node Fjalar Coregrind and Memcheck diff files
-@section Fjalar Coregrind and Memcheck diff files
-
-Generate diff files containing Fjalar changes to Coregrind and Memcheck.
+It also creates files
+@file{memcheck-Fjalar.diff} and @file{coregrind-Fjalar.diff}
+that show the Fjalar changes to Coregrind and Memcheck.
 These will not be used for any automated patching, but for visual
 verification later.
-
-@example
-cd $INV
-rm -f coregrind-Fjalar.diff memcheck-Fjalar.diff
-diff -ur -x.git -x.hg -xinst -x.svn -xfjalar -xMakefile.in  \
-     valgrind-old fjalar/valgrind > coregrind-Fjalar.diff
-diff -ur -x.git -x.hg -xinst -x.svn -xMakefile.in -xhtml -xdocs -xtests \
-     valgrind-old/memcheck fjalar/valgrind/fjalar > memcheck-Fjalar.diff
-@end example
-
-Note: As we have completed that transition from Mercurial to Git, the
-@option{-x.hg} terms in the above commands should no longer be needed.
 
 
 @node Merging the changes
@@ -407,7 +380,7 @@ patch -p1 -lu < $INV/coregrind.patch
 
 @strong{IMPORTANT NOTE} @*
 This process fails for two different kinds of files,
-both in the Valgrind test directories. First, zero-length goal files
+both in the Valgrind test directories. First, new zero-length goal files
 (@file{*.exp}) are not copied from valgrind-new to fjalar.  Second, 
 executable scripts (typically named @file{filter_<test>}) are copied or updated,
 but lose the execute file mode bit.  
@@ -437,7 +410,7 @@ command produces no output.
 @node Memcheck Merge
 @section Memcheck Merge
 
-We use the @file{memcheck.patch} file to update Fjalar as it's code is
+We use the @file{memcheck.patch} file to update Fjalar as its code is
 derived from Valgrind/Memcheck.
 
 @example
@@ -446,7 +419,9 @@ patch -p2 -lu < $INV/memcheck.patch --dry-run
 @end example
 
 You should experiment with the fuzz factor option.  I find
-that @option{-F3} often increases the success rate.
+that @option{-F3} often increases the success rate, but this is
+dangerous as it ignores all the context in the patch file, which
+increases the odds of a faulty patch.
 
 If the patch output looks sane, continue with the actual merge:
 
@@ -658,6 +633,9 @@ As noted above, @file{dwarf.c} and @file{readelf.c} will probably
 have a lot of conflicts.  As you edit the new files, you may wish to
 review the diffs in the previous versions as the new diffs should be similar.
 Again, a visual merge tool can make this process easier.
+
+
+Update ``export BINUTILS_VERSION='' line in @file{fjalar/valgrind/REVISION}.
 
 
 @node Compiling and Testing
