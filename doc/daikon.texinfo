@@ -4226,11 +4226,10 @@ turned on with @option{--abridged-vars}.
 
 If you did not already do so when installing Daikon
 (@pxref{Complete installation}), follow the instructions here to build an
-instrumented copy of the JDK@.  Use the following command in
-@file{$DAIKONDIR}:
+instrumented copy of the JDK@.  Use the following command:
 
 @example
-make -C java dcomp_rt.jar
+make -C $DAIKONDIR/java dcomp_rt.jar
 @end example
 
 Make sure the @env{JAVA_HOME} environment variable is set to the directory
