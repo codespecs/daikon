@@ -100,7 +100,7 @@ contains both the Daikon and Fjalar source trees.
 * Verify current sources pass the regression tests::
 * Obtain a copy of the base Valgrind and VEX source trees::
 * Obtain a copy of the target Valgrind and VEX source trees::
-* Reduce potential diff size::
+* Remove files that have been removed upstream::
 @end menu
 
 
