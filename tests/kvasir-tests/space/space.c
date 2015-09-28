@@ -1365,7 +1365,7 @@ answer(char domanda[EMSGSLEN])
 	char            s[2];
 
 	printf("\n%s (Y/N): ", domanda);
-	gets(s);
+	fgets(s, 2, stdin);
 	if ((s[0] == 'N') || (s[0] == 'n'))
 		return 0;
 	else
