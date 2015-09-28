@@ -43,9 +43,7 @@ with newer versions of Valgrind and VEX.
 @chapter Introduction
 
 Fjalar is built as a tool on top of the Valgrind instrumentation framework.
-It also contains a sizable amount of code from Memcheck, another Valgrind tool.
-In addition, it contains a large amount of code derived from the GNU Binutils
-tool @command{readelf}.  When new
+It incorporates code from the Valgrind tool Memcheck.  When new
 versions of Valgrind and Memcheck are released, Fjalar (and Kvasir)
 should be updated
 to incorporate the Valgrind/Memcheck changes. This document tells you
@@ -62,14 +60,30 @@ automatically. Updating the Memcheck code often involves manual work,
 due to substantial modifications to the Memcheck code that are incorporated
 in Fjalar. The more frequent the merges are, the easier they will be to
 do. Semiannually, at the very least, is recommended. 
+(However, we are currently experimenting with merging only when an official
+release is made.  This has the advantage of ensuring that the tool is more
+stable, but the disadvantages of going longer between bug fixes and making
+each merge larger and more difficult.)
 
-The GNU Binutils are completely independent of Valgrind and have their
-own home page (@uref{http://www.gnu.org/software/binutils/})
-and release site (@uref{http://ftp.gnu.org/gnu/binutils/}).
-While the majority of this document discusses how to update Valgrind,
-there is a later chapter on updating the @command{readelf} code from Binutils.
-For ease of verification, it is recommended that you do not update Valgrind
-and Binutils at the same time.
+Fjalar also contains code derived from the GNU Binutils
+tool @command{readelf}.  @xref{Updating Readelf from Binutils} tells how
+to update Fjalar when a new version of Binutils is released.
+
+@menu
+* Determining whether a merge is necessary::
+@end menu
+
+
+@node Determining whether a merge is necessary
+@section Determining whether a merge is necessary
+
+To determine whether a newer version of Valgrind is available, compare file
+@file{fjalar/valgrind/REVISION} to URL
+@url{http://valgrind.org/downloads/current.html}.
+
+To determine whether a newer version of binutils is available, compare file
+@file{fjalar/valgrind/REVISION} to URL
+@url{http://ftp.gnu.org/gnu/binutils/?C=M;O=D}.
 
 
 @node Getting Started
@@ -80,19 +94,13 @@ If you use a different shell, you will need to adjust the instructions
 accordingly.  Also, we assume @env{$INV} points to a parent directory that
 contains both the Daikon and Fjalar source trees.
 
-After you update and verify your Daikon and Fjalar trees, you will need
-to obtain two copies of Valgrind: the latest upstream version (or perhaps
-the latest upstream release version), and the one
-that the current version of Fjalar is based on. (The version that was the 
-target of the last upgrade.)
-
 @menu
 * Obtain a copy of Daikon and Fjalar::
 * Ensure your source is up to date::
 * Verify current sources pass the regression tests::
 * Obtain a copy of the base Valgrind and VEX source trees::
 * Obtain a copy of the target Valgrind and VEX source trees::
-* Reduce potential diff size::
+* Remove files that have been removed upstream::
 @end menu
 
 
@@ -109,6 +117,12 @@ export $INV=`pwd`
 git clone https://github.com/codespecs/daikon.git
 git clone https://github.com/codespecs/fjalar.git
 @end example
+
+If your operating system is Ubuntu, run
+@example
+sudo apt-get install binutils-dev
+@end example
+@c (but, the Kvasir tests do not pass on Ubuntu as of 9/2015!)
 
 
 @node Ensure your source is up to date 
@@ -146,7 +160,7 @@ cd $INV/fjalar
 git log --branches --not --remotes
 @end example
 
-The outgoing commands should say "no changes found". If there are outgoing changes,
+The log commands should say "no changes found". If there are outgoing changes,
 push them, then start over from the beginning. 
 
 
@@ -163,10 +177,10 @@ make nightly-summary-w-daikon
 @end example
 
 The tests should pass. If any tests fail, fix them, then start over from
-the beginning.
+the beginning.  Or, run on a system, such as UW CSE, where all tests pass.
 
 At this point, the source trees are ready for the merge.
-However, the PLSE repositories contain 
+However, the Fjalar repository contains
 @command{automake/autoconf} generated files to simplify things for the end user;
 also, there are many other build and test generated files that
 need to be omitted to
@@ -193,16 +207,18 @@ git ls-files --others --exclude-standard
 @node Obtain a copy of the base Valgrind and VEX source trees
 @section Obtain a copy of the base Valgrind and VEX source trees
 
-First, we will get a copy of the source tree that was used the
-last time a Valgrind merge was performed.  If you have saved
-the @file{valgrind-old} and @file{valgrind-new} directories from
-the last merge, this step is quite easy: delete @file{valgrind-old}
-and rename @file{valgrind-new} as @file{valgrind-old}.
+First, make directory @file{valgrind-old} contain a copy of the Valgrind
+source tree that was used the last time a Valgrind merge was performed.
 
-If you need to recreate the base source tree, then we will use the values
-captured in the @file{REVISION} file the 
-previous time Valgrind was merged into Fjalar.  We will call this
-tree @file{valgrind-old}.
+If you performed the last merge and saved the
+@file{valgrind-old} and @file{valgrind-new} directories, then just run:
+
+@example
+rm -rf valgrind-old
+mv valgrind-new valgrind-old
+@end example
+
+Otherwise, run the following commands.
 
 @example
 cd $INV
@@ -222,15 +238,14 @@ However, we want the version associated with the previous merge base.
 @node Obtain a copy of the target Valgrind and VEX source trees
 @section Obtain a copy of the target Valgrind and VEX source trees
 
-Next, we will get a copy of the target source tree and call it
-@file{valgrind-new}.  As mentioned above, you need to decide whether to
-get the current
-upstream version or the most recent release version.
-Additional information about working with the Valgrind repository can be
-found at: @uref{http://www.valgrind.org/downloads/repository.html,
-Valgrind: Code Repository}
+Obtain a copy of the Valgrind source tree and call it
+@file{valgrind-new}.
 
-To get the current upstream sources:
+Decide on the version you will obtain, such as 
+the most recent revision in the @uref{http://www.valgrind.org/downloads/repository.html,
+Valgrind source code repository} or the most recent released version.
+
+To obtain the most recent revision in the Valgrind source code repository:
 
 @example
 cd $INV
@@ -277,7 +292,7 @@ particular release (3.10.1 for example) is:
 @example
 cd $INV
 svn co svn://svn.valgrind.org/valgrind/tags/VALGRIND_3_10_1 valgrind-new
-(No need to update VEX in this case.)
+# (No need to update VEX in this case.)
 @end example
 
 We may wish to consider changing our approach to use the branch, or,
@@ -286,18 +301,19 @@ perhaps simpler, use the actual release tar ball from
 
 
 
-@node Reduce potential diff size
-@section Reduce potential diff size
+@node Remove files that have been removed upstream
+@section Remove files that have been removed upstream
 
-Now that we have the old and new Valgrind trees, we can check for any
+The following command lists
 files that have been removed by the Valgrind developers since our last
-merge.  Use the following
-command to get the list, if any, and then remove the indicated files.
+merge:
 
 @example
 cd $INV
 diff -qrb -x.svn valgrind-old valgrind-new |grep "Only in valgrind-old"
 @end example
+
+Remove these files.
 
 This step could be done later, but we do it now to reduce the size
 of the patch and diff files.
@@ -315,7 +331,7 @@ may be found in @file{fjalar/generate-patch-file.sh}.
 
 @menu
 * Coregrind and Memcheck patch files::
-* PLSE Coregrind and Memcheck diff files::
+* Fjalar Coregrind and Memcheck diff files::
 @end menu
 
 
@@ -334,20 +350,20 @@ diff -ur --unidirectional-new-file -x.svn -xdocs -xtests \
 @end example
 
 
-@node PLSE Coregrind and Memcheck diff files
-@section PLSE Coregrind and Memcheck diff files
+@node Fjalar Coregrind and Memcheck diff files
+@section Fjalar Coregrind and Memcheck diff files
 
-Generate diff files containing PLSE changes to Coregrind and Memcheck.
+Generate diff files containing Fjalar changes to Coregrind and Memcheck.
 These will not be used for any automated patching, but for visual
 verification later.
 
 @example
 cd $INV
-rm -f coregrind-PLSE.diff memcheck-PLSE.diff
+rm -f coregrind-Fjalar.diff memcheck-Fjalar.diff
 diff -ur -x.git -x.hg -xinst -x.svn -xfjalar -xMakefile.in  \
-     valgrind-old fjalar/valgrind > coregrind-PLSE.diff
+     valgrind-old fjalar/valgrind > coregrind-Fjalar.diff
 diff -ur -x.git -x.hg -xinst -x.svn -xMakefile.in -xhtml -xdocs -xtests \
-     valgrind-old/memcheck fjalar/valgrind/fjalar > memcheck-PLSE.diff
+     valgrind-old/memcheck fjalar/valgrind/fjalar > memcheck-Fjalar.diff
 @end example
 
 Note: As we have completed that transition from Mercurial to Git, the
@@ -413,7 +429,7 @@ find -name '*.rej'
 For every change in the file you will need to examine both the changed
 code as well as our original code and determine if it needs to be hand
 merged or if the change is not relevant. It may help to refer to
-@code{coregrind-PLSE.diff} during this process. Remove the @code{.rej}
+@code{coregrind-Fjalar.diff} during this process. Remove the @code{.rej}
 and @code{.orig} files as you go, so that finally the @code{find}
 command produces no output.
 
@@ -526,6 +542,16 @@ guidelines on supporting new VEX instructions.
 @node Overview
 @section Overview
 
+[TODO: incorporate this text.]
+The GNU Binutils are completely independent of Valgrind and have their
+own home page (@uref{http://www.gnu.org/software/binutils/})
+and release site (@uref{http://ftp.gnu.org/gnu/binutils/}).
+While the majority of this document discusses how to update Valgrind,
+there is a later chapter on updating the @command{readelf} code from Binutils.
+For ease of verification, it is recommended that you do not update Valgrind
+and Binutils at the same time.
+
+
 The GNU Binutils (@uref{http://www.gnu.org/software/binutils/})
 are a collection of approximately twenty binary tools.
 We are interested only in @command{readelf}, a tool that displays
@@ -535,7 +561,9 @@ a modified version of the source used to build @command{readelf}.
 
 As noted in the Introduction, the GNU Binutils are completely
 independent of Valgrind and have their own release site
-(@uref{http://ftp.gnu.org/gnu/binutils/}).
+Browse to @uref{http://ftp.gnu.org/gnu/binutils/?C=M;O=D} to see the most
+recent release.
+
 This site lists all the versions of Binutils that are available. If you
 click on @command{Last modified} you will see the releases sorted by
 date. Select the most recent version and download the tar file to
@@ -543,9 +571,6 @@ your machine.  After unpacking, you will have a directory structure
 whose root is @file{binutils-<version>}. 
 To complete the update process, you will need a copy of both the current
 version within Fjalar and the version you wish to update to.
-For the example instructions that follow, substitute the current version
-for @file{binutils-old}, e.g. @file{binutils-2.24} 
-and the new version for @file{binutils-new}, e.g. @file{binutils-2.25}.
 Also, the instructions assume that the Binutils directories are at the
 root of your home directory.
 
@@ -559,12 +584,20 @@ changed since the last time the readelf code was merged into Fjalar.
 There are two patch files: one for the include files and one for the
 actual readelf files.
 
+For the example instructions that follow, substitute the current version
+for @file{binutils-old}, e.g. @file{binutils-2.24} 
+and the new version for @file{binutils-new}, e.g. @file{binutils-2.25}.
+
+
 @example
+# Adjust these first two lines as necessary
+export BUOLD=$HOME/binutils-2.24
+export BUNEW=$HOME/binutils-2.25
 cd ~
-diff -ur binutils-old/include binutils-new/include >> ~/include.patch
-diff -u  binutils-old/libiberty/dwarfnames.c \
-         binutils-new/libiberty/dwarfnames.c >> ~/include.patch
-diff -ur binutils-old/binutils binutils-new/binutils > ~/binutils.patch
+diff -ur $BUOLD/include $BUNEW/include >> ~/include.patch
+diff -u  $BUOLD/libiberty/dwarfnames.c \
+         $BUNEW/libiberty/dwarfnames.c >> ~/include.patch
+diff -ur $BUOLD/binutils $BUNEW/binutils > ~/binutils.patch
 @end example
 
 Next, we create diff files comparing the old Binutils to the current 
@@ -575,8 +608,8 @@ largest and most complicated files.
 
 @example
 cd $INV/fjalar/valgrind/fjalar
-diff -ub ~/binutils-old/binutils/dwarf.c dwarf.c > dwarf.diff
-diff -ub ~/binutils-old/binutils/readelf.c readelf.c > readelf.diff
+diff -ub $BUOLD/binutils/dwarf.c dwarf.c > dwarf.diff
+diff -ub $BUOLD/binutils/readelf.c readelf.c > readelf.diff
 @end example
 
 
@@ -765,8 +798,8 @@ the process.
 @appendix Valgrind modifications
 
 In an effort to aid in determining the appropriate measures to take
-when merging conflicted files, this section will provide a list of
-Valgrind files we have modified and a brief explanation of the changes. 
+when merging conflicted files, this section briefly explains our
+modifications to Valgrind files. 
 
 The most important set of changes is the addition of extra shadow
 state in Coregrind and VEX. The shadow area is an area of memory that
@@ -783,7 +816,7 @@ contains both the Daikon and Fjalar source trees.)
 
 @table @asis
 @item $INV/fjalar/valgrind/configure.ac
-Change id to PLSE; add fjalar/Makefile to list of targets
+Change id to Fjalar; add fjalar/Makefile to list of targets
 @item $INV/fjalar/valgrind/coregrind/m_libcbase.c
 Add VG_ version of strnlen
 @item $INV/fjalar/valgrind/coregrind/m_libcfile.c
