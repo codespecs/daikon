@@ -224,11 +224,19 @@ else
 $(DIFF_NAME).dtrace.diff: daikon-output/$(NAME)$(DTRACE_EXT)
 endif
 
+ifeq ($(SKIP_OUT_DIFF),)
 $(DIFF_NAME).out.diff: $(NAME).out $(call goal_name,$(NAME).out)
 	-diff --text -u $(call goal_name,$(NAME).out) $(NAME).out  >$@ 2>&1
+else
+$(DIFF_NAME).out.diff: $(NAME).out
+endif
 
+ifeq ($(SKIP_INVS_DIFF),)
 $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt $(call goal_name,$(NAME).invs)
 	-diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1
+else
+$(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt
+endif
 
 $(DIFF_NAME).comp.diff: $(NAME).comp $(call goal_name,$(NAME).comp)
 	-diff --text -F::: -u $(call goal_name,$(NAME).comp) $(NAME).comp >$@ 2>&1

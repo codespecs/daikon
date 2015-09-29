@@ -89,7 +89,8 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -197,7 +198,8 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -301,7 +303,8 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -403,7 +406,8 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -622,9 +626,10 @@ verbosity
 ::zSuffix
 ::zSuffix[..]
 action
-strm strm[..].avail_out
+strm
 strm[..]
 strm[..].avail_in
+strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -668,9 +673,10 @@ strm[..].total_in_hi32 strm[..].total_in_lo32 strm[..].total_out_hi32 strm[..].t
 ::zSuffix[..]
 action
 return
-strm strm[..].avail_out
+strm
 strm[..]
 strm[..].avail_in
+strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -712,9 +718,10 @@ strm[..].total_in_hi32 strm[..].total_in_lo32 strm[..].total_out_hi32 strm[..].t
 ::workFactor
 ::zSuffix
 ::zSuffix[..]
-strm strm[..].avail_out
+strm
 strm[..]
 strm[..].avail_in
+strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -758,9 +765,10 @@ strm[..].total_in_hi32 strm[..].total_in_lo32 strm[..].total_out_hi32 strm[..].t
 ::zSuffix
 ::zSuffix[..]
 return
-strm strm[..].avail_out
+strm
 strm[..]
 strm[..].avail_in
+strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -2604,7 +2612,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -2685,7 +2694,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -3368,10 +3378,9 @@ return
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -3419,10 +3428,9 @@ mode
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -3472,10 +3480,9 @@ return[..]
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -3523,10 +3530,9 @@ argc argv
 ::deleteOutputOnInterrupt
 ::exitValue return
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -4216,10 +4222,9 @@ bzip2.c.addFlagsFromEnvVar():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -4279,10 +4284,9 @@ bzip2.c.addFlagsFromEnvVar():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -4342,10 +4346,9 @@ bzip2.c.applySavedMetaInfoToOutputFile():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -4392,10 +4395,9 @@ bzip2.c.applySavedMetaInfoToOutputFile():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -4443,10 +4445,9 @@ bzip2.c.cadvise():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -4500,10 +4501,9 @@ bzip2.c.cadvise():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -4557,10 +4557,9 @@ bzip2.c.cleanUpAndFail():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -4615,10 +4614,9 @@ bzip2.c.cleanUpAndFail():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -4672,10 +4670,9 @@ bzip2.c.compress():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -4722,10 +4719,9 @@ bzip2.c.compress():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -4772,10 +4768,9 @@ bzip2.c.compressStream():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -4824,10 +4819,9 @@ bzip2.c.compressStream():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -4877,10 +4871,9 @@ bzip2.c.compressedStreamEOF():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -4934,10 +4927,9 @@ bzip2.c.compressedStreamEOF():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -4991,10 +4983,9 @@ bzip2.c.configError():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -5048,10 +5039,9 @@ bzip2.c.configError():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -5104,10 +5094,9 @@ bzip2.c.containsDubiousChars():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -5154,10 +5143,9 @@ bzip2.c.containsDubiousChars():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -5205,10 +5193,9 @@ bzip2.c.copyFileName():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -5254,10 +5241,9 @@ bzip2.c.copyFileName():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -5303,10 +5289,9 @@ bzip2.c.countHardLinks():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -5353,10 +5338,9 @@ bzip2.c.countHardLinks():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -5405,10 +5389,9 @@ bzip2.c.crcError():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -5462,10 +5445,9 @@ bzip2.c.crcError():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -5518,10 +5500,9 @@ bzip2.c.fileExists():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -5568,10 +5549,9 @@ bzip2.c.fileExists():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -5619,10 +5599,9 @@ bzip2.c.hasSuffix():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -5669,10 +5648,9 @@ bzip2.c.hasSuffix():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -5721,10 +5699,9 @@ bzip2.c.ioError():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -5778,10 +5755,9 @@ bzip2.c.ioError():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -5835,10 +5811,9 @@ bzip2.c.license():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -5892,10 +5867,9 @@ bzip2.c.license():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -5949,10 +5923,9 @@ bzip2.c.mapSuffix():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -6009,10 +5982,9 @@ bzip2.c.mapSuffix():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -6069,10 +6041,9 @@ bzip2.c.mkCell():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -6119,10 +6090,9 @@ bzip2.c.mkCell():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -6180,10 +6150,9 @@ bzip2.c.myMalloc():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -6231,10 +6200,9 @@ bzip2.c.myMalloc():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -6285,10 +6253,9 @@ bzip2.c.mySIGSEGVorSIGBUScatcher():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -6343,10 +6310,9 @@ bzip2.c.mySIGSEGVorSIGBUScatcher():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -6401,10 +6367,9 @@ bzip2.c.mySignalCatcher():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -6459,10 +6424,9 @@ bzip2.c.mySignalCatcher():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -6516,10 +6480,9 @@ bzip2.c.myfeof():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -6567,10 +6530,9 @@ bzip2.c.myfeof():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -6619,10 +6581,9 @@ bzip2.c.notAStandardFile():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -6669,10 +6630,9 @@ bzip2.c.notAStandardFile():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -6721,10 +6681,9 @@ bzip2.c.outOfMemory():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -6778,10 +6737,9 @@ bzip2.c.outOfMemory():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -6834,10 +6792,9 @@ bzip2.c.pad():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -6884,10 +6841,9 @@ bzip2.c.pad():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -6935,10 +6891,9 @@ bzip2.c.panic():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -6993,10 +6948,9 @@ bzip2.c.panic():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7051,10 +7005,9 @@ bzip2.c.redundant():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7109,10 +7062,9 @@ bzip2.c.redundant():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7166,10 +7118,9 @@ bzip2.c.saveInputFileMetaInfo():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -7216,10 +7167,9 @@ bzip2.c.saveInputFileMetaInfo():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -7267,10 +7217,9 @@ bzip2.c.setExit():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7325,10 +7274,9 @@ bzip2.c.setExit():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7383,10 +7331,9 @@ bzip2.c.showFileNames():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7440,10 +7387,9 @@ bzip2.c.showFileNames():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7496,10 +7442,9 @@ bzip2.c.snocString():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -7554,10 +7499,9 @@ bzip2.c.snocString():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -7619,10 +7563,9 @@ bzip2.c.testStream():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7678,10 +7621,9 @@ bzip2.c.testStream():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7738,10 +7680,9 @@ bzip2.c.testf():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7796,10 +7737,9 @@ bzip2.c.testf():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -7853,10 +7793,9 @@ bzip2.c.uInt64_from_UInt32s():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -7914,10 +7853,9 @@ bzip2.c.uInt64_from_UInt32s():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -7975,10 +7913,9 @@ bzip2.c.uInt64_isZero():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -8036,10 +7973,9 @@ bzip2.c.uInt64_isZero():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -8098,10 +8034,9 @@ bzip2.c.uInt64_qrm10():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -8159,10 +8094,9 @@ bzip2.c.uInt64_qrm10():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -8220,10 +8154,9 @@ bzip2.c.uInt64_toAscii():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -8281,10 +8214,9 @@ bzip2.c.uInt64_toAscii():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -8342,10 +8274,9 @@ bzip2.c.uInt64_to_double():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -8403,10 +8334,9 @@ bzip2.c.uInt64_to_double():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo ::fileMetaInfo.st_dev
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim ::fileMetaInfo.st_atim.tv_sec
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_blksize
@@ -8465,10 +8395,9 @@ bzip2.c.uncompress():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -8523,10 +8452,9 @@ bzip2.c.uncompress():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -8581,10 +8509,9 @@ bzip2.c.uncompressStream():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -8642,10 +8569,9 @@ bzip2.c.uncompressStream():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -8704,10 +8630,9 @@ bzip2.c.usage():::ENTER
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -8762,10 +8687,9 @@ bzip2.c.usage():::EXIT0
 ::deleteOutputOnInterrupt
 ::exitValue
 ::fileMetaInfo
-::fileMetaInfo.__pad1
-::fileMetaInfo.__pad2
-::fileMetaInfo.__unused4
-::fileMetaInfo.__unused5
+::fileMetaInfo.__glibc_reserved
+::fileMetaInfo.__glibc_reserved[..]
+::fileMetaInfo.__pad0
 ::fileMetaInfo.st_atim
 ::fileMetaInfo.st_atim.tv_nsec
 ::fileMetaInfo.st_atim.tv_sec
@@ -8813,9 +8737,10 @@ fullProgName
 
 bzlib.c.add_pair_to_block():::ENTER
 ::BZ2_crc32Table
-::BZ2_crc32Table[..] ::blockSize100k s s[..].arr1 s[..].arr2 s[..].arr2[0] s[..].block s[..].blockCRC s[..].blockSize100k s[..].block[0] s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_in_ch s[..].state_in_len s[..].state_out_pos s[..].strm->next_in s[..].strm->state
+::BZ2_crc32Table[..] s s[..].arr2[0] s[..].blockCRC s[..].block[0] s[..].state_in_ch s[..].state_in_len s[..].strm->next_in s[..].strm->state
 ::BZ2_rNums
 ::BZ2_rNums[..]
+::blockSize100k s[..].arr1 s[..].arr2 s[..].block s[..].blockSize100k s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_out_pos
 ::bzerrorstrings
 ::bzerrorstrings[..]
 ::deleteOutputOnInterrupt
@@ -8904,7 +8829,8 @@ s[..].selectorMtf
 s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -8922,9 +8848,10 @@ s[..].zbits[0]
 
 bzlib.c.add_pair_to_block():::EXIT0
 ::BZ2_crc32Table
-::BZ2_crc32Table[..] ::blockSize100k s s[..].arr1 s[..].arr2 s[..].arr2[0] s[..].block s[..].blockCRC s[..].blockSize100k s[..].block[0] s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_in_ch s[..].state_in_len s[..].state_out_pos s[..].strm->next_in s[..].strm->state
+::BZ2_crc32Table[..] s s[..].arr2[0] s[..].blockCRC s[..].block[0] s[..].state_in_ch s[..].state_in_len s[..].strm->next_in s[..].strm->state
 ::BZ2_rNums
 ::BZ2_rNums[..]
+::blockSize100k s[..].arr1 s[..].arr2 s[..].block s[..].blockSize100k s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_out_pos
 ::bzerrorstrings
 ::bzerrorstrings[..]
 ::deleteOutputOnInterrupt
@@ -9013,7 +8940,8 @@ s[..].selectorMtf
 s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9268,7 +9196,8 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9379,7 +9308,8 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9462,7 +9392,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9545,7 +9476,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9795,7 +9727,8 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9906,7 +9839,8 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9954,9 +9888,10 @@ bzlib.c.handle_compress():::ENTER
 ::workFactor
 ::zSuffix
 ::zSuffix[..]
-strm strm[..].avail_out
+strm
 strm[..]
 strm[..].avail_in
+strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -9999,9 +9934,10 @@ bzlib.c.handle_compress():::EXIT0
 ::zSuffix
 ::zSuffix[..]
 return
-strm strm[..].avail_out
+strm
 strm[..]
 strm[..].avail_in
+strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -10106,7 +10042,8 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -10217,7 +10154,8 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -10301,7 +10239,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -10384,7 +10323,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11525,7 +11465,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11605,7 +11546,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11685,7 +11627,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11765,7 +11708,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11845,7 +11789,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -11925,7 +11870,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12005,7 +11951,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12085,7 +12032,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12184,7 +12132,8 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12283,7 +12232,8 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12384,7 +12334,8 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12485,7 +12436,8 @@ s[..].selector[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12565,7 +12517,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -12645,7 +12598,8 @@ s[..].selectorMtf[0]
 s[..].state
 s[..].state_in_ch
 s[..].state_in_len
-s[..].strm s[..].strm->avail_out
+s[..].strm
+s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
