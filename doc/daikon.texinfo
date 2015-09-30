@@ -199,12 +199,12 @@ The following mailing lists (and their archives) are available:
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
 To subscribe, visit
-@uref{http://groups.google.com/forum/#!forum/daikon-announce}.
+@uref{https://groups.google.com/forum/#!forum/daikon-announce}.
 @item daikon-discuss@@googlegroups.com
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
-@uref{http://groups.google.com/forum/#!forum/daikon-discuss}.
+@uref{https://groups.google.com/forum/#!forum/daikon-discuss}.
 @item daikon-developers@@googlegroups.com
 This list goes to the Daikon maintainers.  Use it for bug reports,
 suggestions, and the like.  If you are an active contributor to Daikon,
