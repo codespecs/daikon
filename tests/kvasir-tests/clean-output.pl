@@ -60,7 +60,7 @@ while (<>) {
     s/([0-9]+ ms)/<TIMING>/;
     s/([0-9]+ ms total)/<TIMING>/;
 
-    s/libc-2.\d\d.so/libc-2.VER.so/;
+    s/: __write_nocancel .*/: __write_nocancel/;
     s/Copyright \(C\) .*$/COPYRIGHT/;
     s/kvasir-[\d.]+,/kvasir-VERSION/;
     s[Using Valgrind-.* and LibVEX; rerun with \-h for copyright info]
