@@ -50,19 +50,11 @@ digest[] == [53, 5, 72, 212, 59, 104, 133, 112, 166, 76, 143, 219, 214, 21, 102,
 ctx has only one value
 ===========================================================================
 ..MD5Init():::EXIT
-ctx[].bits[0][0] == ctx[].bits[1][0]
-ctx[] contains no nulls and has only one value, of length 1
-ctx[].bits[0] contains no nulls and has only one value, of length 1
-ctx[].bits[0][0] == [0]
-ctx[].bits[1] contains no nulls and has only one value, of length 1
-ctx[].buf[0] contains no nulls and has only one value, of length 1
-ctx[].buf[0][0] == [1732584193]
-ctx[].buf[1] contains no nulls and has only one value, of length 1
-ctx[].buf[1][0] == [4023233417]
-ctx[].buf[2] contains no nulls and has only one value, of length 1
-ctx[].buf[2][0] == [2562383102]
-ctx[].buf[3] contains no nulls and has only one value, of length 1
-ctx[].buf[3][0] == [271733878]
+ctx->bits has only one value
+ctx->bits[] == [0, 0]
+ctx->buf has only one value
+ctx->buf[] == [1732584193, 4023233417, 2562383102, 271733878]
+ctx[0] has only one value
 ===========================================================================
 ..MD5Transform():::ENTER
 buf has only one value
@@ -80,81 +72,27 @@ in[] elements >= 0
 ..MD5Update():::ENTER
 buf has only one value
 ctx has only one value
-ctx[] contains no nulls and has only one value, of length 1
-ctx[].bits[0] contains no nulls and has only one value, of length 1
-ctx[i].bits[0][0] >= i
-ctx[].bits[1] contains no nulls and has only one value, of length 1
-ctx[].bits[1][0] == [0]
-ctx[].buf[0] contains no nulls and has only one value, of length 1
-ctx[i].buf[0][0] > i
-ctx[].buf[1] contains no nulls and has only one value, of length 1
-ctx[i].buf[1][0] > i
-ctx[].buf[2] contains no nulls and has only one value, of length 1
-ctx[i].buf[2][0] > i
-ctx[].buf[3] contains no nulls and has only one value, of length 1
-ctx[i].buf[3][0] > i
-ctx[].in contains no nulls and has only one value, of length 1
-ctx[].in elements has only one value
+ctx->bits has only one value
+ctx->bits[] elements >= 0
+ctx->buf has only one value
+ctx->buf[i] > i
+ctx->in has only one value
+ctx[0] has only one value
 len one of { 4096, 16384 }
-ctx[].in[0] is a subsequence of buf[]
-ctx[].bits[1][0] is a bitwise subset of ctx[].bits[0][0] (elementwise)
-ctx[].bits[1][0] % ctx[].buf[0][0] == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of ctx[].buf[0][0] (elementwise)
-ctx[].bits[1][0] % ctx[].buf[1][0] == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of ctx[].buf[1][0] (elementwise)
-ctx[].bits[1][0] % ctx[].buf[2][0] == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of ctx[].buf[2][0] (elementwise)
-ctx[].bits[1][0] % ctx[].buf[3][0] == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of ctx[].buf[3][0] (elementwise)
 ===========================================================================
 ..MD5Update():::EXIT
 buf[] == orig(buf[])
-ctx[] == orig(ctx[])
-ctx[].bits[0] == orig(ctx[].bits[0])
-ctx[].bits[1] == orig(ctx[].bits[1])
-ctx[].bits[1][0] == orig(ctx[].bits[1][0])
-ctx[].buf[0] == orig(ctx[].buf[0])
-ctx[].buf[1] == orig(ctx[].buf[1])
-ctx[].buf[2] == orig(ctx[].buf[2])
-ctx[].buf[3] == orig(ctx[].buf[3])
-ctx[] contains no nulls and has only one value, of length 1
-ctx[].bits[0] contains no nulls and has only one value, of length 1
-ctx[i].bits[0][0] > i
-ctx[].bits[1] contains no nulls and has only one value, of length 1
-ctx[].bits[1][0] == [0]
-ctx[].buf[0] contains no nulls and has only one value, of length 1
-ctx[i].buf[0][0] > i
-ctx[].buf[1] contains no nulls and has only one value, of length 1
-ctx[i].buf[1][0] > i
-ctx[].buf[2] contains no nulls and has only one value, of length 1
-ctx[i].buf[2][0] > i
-ctx[].buf[3] contains no nulls and has only one value, of length 1
-ctx[i].buf[3][0] > i
-ctx[].in contains no nulls and has only one value, of length 1
-ctx[i].in[0] > i
-ctx[].in[0] is a subsequence of buf[]
-orig(ctx[].in[0]) is a subsequence of buf[]
-ctx[].bits[1][0] % ctx[].bits[0][0] == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of ctx[].bits[0][0] (elementwise)
-ctx[].bits[1][0] % ctx[].buf[0][0] == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of ctx[].buf[0][0] (elementwise)
-ctx[].bits[1][0] % ctx[].buf[1][0] == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of ctx[].buf[1][0] (elementwise)
-ctx[].bits[1][0] % ctx[].buf[2][0] == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of ctx[].buf[2][0] (elementwise)
-ctx[].bits[1][0] % ctx[].buf[3][0] == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of ctx[].buf[3][0] (elementwise)
-ctx[].bits[1][0] is a bitwise subset of orig(ctx[].bits[0][0]) (elementwise)
-ctx[].bits[1][0] % orig(ctx[].buf[0][0]) == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of orig(ctx[].buf[0][0]) (elementwise)
-ctx[].bits[1][0] % orig(ctx[].buf[1][0]) == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of orig(ctx[].buf[1][0]) (elementwise)
-ctx[].bits[1][0] % orig(ctx[].buf[2][0]) == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of orig(ctx[].buf[2][0]) (elementwise)
-ctx[].bits[1][0] % orig(ctx[].buf[3][0]) == 0 (elementwise)
-ctx[].bits[1][0] is a bitwise subset of orig(ctx[].buf[3][0]) (elementwise)
-ctx[].in == orig(ctx[].in) (elementwise)
-ctx[].in is the reverse of orig(ctx[].in)
+ctx->bits == orig(ctx->bits)
+ctx->buf == orig(ctx->buf)
+ctx->in == orig(ctx->in)
+ctx[0] == orig(ctx[0])
+ctx->bits has only one value
+ctx->bits[] elements >= 0
+ctx->buf has only one value
+ctx->buf[i] > i
+ctx->in has only one value
+ctx[0] has only one value
+ctx->in[] is a subsequence of buf[]
 ===========================================================================
 ..main():::ENTER
 argc == 2
