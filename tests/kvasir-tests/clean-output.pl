@@ -10,15 +10,26 @@ while (<>) {
     s/==\d+==/==PID==/;
 
     if ($machine_type eq "x86_64") {
+
         # Valgrind AMD64/Linux locations
+
         s/0xff([0-9a-f]{7,10})(?![0-9a-f])/<STACK_ADDR>/ig;  # stack
-        s/0x8[01]([0-9a-f]{7})(?![0-9a-f])/<STATIC_ADDR>/ig; # r/w data
-        s/0x4[cd]([0-9a-f]{5})(?![0-9a-f])/<HEAP_ADDR>/ig;   # heap: ArrayTest because so much allocated?
-        s/0x5[1-5]([0-9a-f]{5})(?![0-9a-f])/<HEAP_ADDR>/ig;  # heap
-        s/0x3([0-9a-f]{9})(?![0-9a-f])/<DYNAMIC_LOAD_ADDR>/ig;
-        s/0x4[ef]([0-9a-f]{5})(?![0-9a-f])/<DYNAMIC_LOAD_ADDR>/ig;
+
+        # These addresses are reported by kvasir when it gets confused
+        # about structs being passed by value (in regs or on the stack).
+        # We pretend they're statics just to get consistent results.
+        s/0x8[01]([0-9a-f]{7})(?![0-9a-f])/<STATIC_ADDR>/ig;
+
+        # There is no easy way to differentiate between dynamically
+        # allocated data (re malloc) and dynamically loaded code and data.
+        # Hence, we will just call it all 'HEAP'.
+        s/0x[45]([0-9a-f]{6})(?![0-9a-f])/<HEAP_ADDR>/ig;
+        s/0x3([0-9a-f]{9})(?![0-9a-f])/<HEAP_ADDR>/ig;
+
+        # The originally loaded executable - our test case.
         s/0x[45]([0-9a-f]{5})(?![0-9a-f])/<STATIC_ADDR>/ig;  # r/o data
         s/0x6[01]([0-9a-f]{4})(?![0-9a-f])/<STATIC_ADDR>/ig; # r/w data
+
     } else {
         # we just assume ...
         # Valgrind X86/Linux locations
