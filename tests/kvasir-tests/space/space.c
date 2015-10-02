@@ -5782,7 +5782,7 @@ parserro(struct charac * err_ptr, int errcode, char *s)
 		};
 
 
-		printf("\n%    \t");
+		printf("\n    \t");
 		for (i = 1; i <= n; i++) {
 			printf(" ");
 
