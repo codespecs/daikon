@@ -34,16 +34,15 @@ while (<>) {
         # we just assume ...
         # Valgrind X86/Linux locations
         s/0xb[ef]([0-9a-f]{6})/<STACK_ADDR>/ig;  # stack
+
+        s/0x38([0-9a-f]{6})/<HEAP_ADDR>/ig;      # heap
+        s/0x4b[678]([0-9a-f]{5})/<HEAP_ADDR>/ig; # heap
+        s/0x40([0-9a-f]{5})/<HEAP_ADDR>/ig;      # heap
+
+        # The originally loaded executable - our test case.
         s/0x6[123]([0-9a-f]{6})/<STATIC_ADDR>/ig;# r/w data
-        s/0x4[0-8]([0-9a-f]{5})/<HEAP_ADDR>/ig;  # heap
         s/0x8[01]([0-9a-f]{5})/<STATIC_ADDR>/ig; # r/o and r/w data
     }    
-
-# old/unused address substitutions
-#        s/0xf[ef]([0-9a-f]{6})/<STACK_ADDR>/ig;  # Valgrind 32-on-64/Linux location
-#        s/0x6[0-3]([0-9a-f]{5})/<HEAP_ADDR>/ig;  # Valgrind 32-on-64/Linux location
-#        s/0x5[01]([0-9a-f]{4})/<STATIC_ADDR>/ig; # Valgrind AMD64/Linux data
-
 
     s/[0-9]:[0-9]{2}:[0-9]{2}/<TIME>/g;      
     s/(.+)Time:(.*)seconds(.*)/<TIME>/g;  
@@ -61,7 +60,7 @@ while (<>) {
     s/([0-9]+ ms)/<TIMING>/;
     s/([0-9]+ ms total)/<TIMING>/;
 
-    s/libc-2.\d\d.so/libc-2.VER.so/;
+    s/: __write_nocancel .*/: __write_nocancel/;
     s/Copyright \(C\) .*$/COPYRIGHT/;
     s/kvasir-[\d.]+,/kvasir-VERSION/;
     s[Using Valgrind-.* and LibVEX; rerun with \-h for copyright info]

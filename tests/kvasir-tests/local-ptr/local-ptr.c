@@ -14,7 +14,7 @@ void leaf(void) {
 int *nonleaf_global1, *nonleaf_global2, *nonleaf_global3, *nonleaf_global4;
 void nonleaf(void) {
   int local1 = 1, local2 = 2;
-  printf("");
+  //printf("");
   nonleaf_global1 = nonleaf_global2 = &local1;
   nonleaf_global3 = &local2;
   nonleaf_global4 = &local1;

@@ -2,12 +2,9 @@
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val cp[..].basic1.char_val cp[..].basic1.short_val cp[..].basic1.uchar_val cp[..].basic2->char_val cp[..].basic2->short_val cp[..].basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val cp[..].basic1.int_val cp[..].basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val cp[..].basic1.ushort_val cp[..].basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week cp[..].basic1.char_val cp[..].basic1.int_val cp[..].basic1.short_val cp[..].basic1.uchar_val cp[..].basic1.ushort_val cp[..].basic2->char_val cp[..].basic2->int_val cp[..].basic2->short_val cp[..].basic2->uchar_val cp[..].basic2->ushort_val cp[..].day_of_week
 ::cpg[..]->basic2 cp[..].basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week cp[..].day_of_week
 ::cpg[..]->footer cp[..].footer
 ::cpg[..]->myString cp[..].myString
 ::cpg[..]->myString[0] cp[..].myString[0]
@@ -27,12 +24,9 @@ cp[..].myString[0][0]
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val cp[..].basic1.char_val cp[..].basic1.short_val cp[..].basic1.uchar_val cp[..].basic2->char_val cp[..].basic2->short_val cp[..].basic2->uchar_val return.basic1 return.basic1.char_val return.basic1.short_val return.basic1.uchar_val return.basic2[..].char_val return.basic2[..].short_val return.basic2[..].uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val cp[..].basic1.int_val cp[..].basic2->int_val return.basic1.int_val return.basic2[..].int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val cp[..].basic1.ushort_val cp[..].basic2->ushort_val return.basic1.ushort_val return.basic2[..].ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week cp[..].basic1.char_val cp[..].basic1.int_val cp[..].basic1.short_val cp[..].basic1.uchar_val cp[..].basic1.ushort_val cp[..].basic2->char_val cp[..].basic2->int_val cp[..].basic2->short_val cp[..].basic2->uchar_val cp[..].basic2->ushort_val cp[..].day_of_week return return.basic1 return.basic1.char_val return.basic1.int_val return.basic1.short_val return.basic1.uchar_val return.basic1.ushort_val return.basic2[..].char_val return.basic2[..].int_val return.basic2[..].short_val return.basic2[..].uchar_val return.basic2[..].ushort_val return.day_of_week
 ::cpg[..]->basic2 cp[..].basic2 return.basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week cp[..].day_of_week return return.day_of_week
 ::cpg[..]->footer cp[..].footer return.footer
 ::cpg[..]->myString cp[..].myString return.myString
 ::cpg[..]->myString[0] cp[..].myString[0] return.myString[..]
@@ -117,11 +111,7 @@ return[..][0][0]
 ::cpg[..]->basic1.uchar_val
 ::cpg[..]->basic1.ushort_val
 ::cpg[..]->basic2
-::cpg[..]->basic2->char_val
-::cpg[..]->basic2->int_val
-::cpg[..]->basic2->short_val
-::cpg[..]->basic2->uchar_val
-::cpg[..]->basic2->ushort_val
+::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val
 ::cpg[..]->basic2[0]
 ::cpg[..]->day_of_week
 ::cpg[..]->footer
@@ -144,11 +134,7 @@ return[..][0][0]
 ::cpg[..]->basic1.uchar_val
 ::cpg[..]->basic1.ushort_val
 ::cpg[..]->basic2
-::cpg[..]->basic2->char_val
-::cpg[..]->basic2->int_val
-::cpg[..]->basic2->short_val
-::cpg[..]->basic2->uchar_val
-::cpg[..]->basic2->ushort_val
+::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val
 ::cpg[..]->basic2[0]
 ::cpg[..]->day_of_week
 ::cpg[..]->footer
@@ -166,12 +152,9 @@ return
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week
 ::cpg[..]->basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week
 ::cpg[..]->footer
 ::cpg[..]->myString
 ::cpg[..]->myString[0]
@@ -188,12 +171,9 @@ turnip
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week
 ::cpg[..]->basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week
 ::cpg[..]->footer
 ::cpg[..]->myString
 ::cpg[..]->myString[0]
@@ -225,9 +205,7 @@ turnip
 ::globalInt
 ::globalLong
 ::globalStr
-a a.char_val a.short_val a.uchar_val
-a.int_val
-a.ushort_val
+a a.char_val a.int_val a.short_val a.uchar_val a.ushort_val
 
 ..readStruct():::EXIT0
 ::cpg
@@ -247,20 +225,15 @@ a.ushort_val
 ::globalInt
 ::globalLong
 ::globalStr
-a a.char_val a.short_val a.uchar_val return return.char_val return.short_val return.uchar_val
-a.int_val return.int_val
-a.ushort_val return.ushort_val
+a a.char_val a.int_val a.short_val a.uchar_val a.ushort_val return return.char_val return.int_val return.short_val return.uchar_val return.ushort_val
 
 ..returnDoublePtr():::ENTER
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week
 ::cpg[..]->basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week
 ::cpg[..]->footer
 ::cpg[..]->myString
 ::cpg[..]->myString[0]
@@ -278,12 +251,9 @@ uintPtrVar
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week
 ::cpg[..]->basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week
 ::cpg[..]->footer
 ::cpg[..]->myString
 ::cpg[..]->myString[0]
@@ -302,12 +272,9 @@ uintPtrVar
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week
 ::cpg[..]->basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week
 ::cpg[..]->footer
 ::cpg[..]->myString
 ::cpg[..]->myString[0]
@@ -325,12 +292,9 @@ doubleIntPtr[..]
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week
 ::cpg[..]->basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week
 ::cpg[..]->footer
 ::cpg[..]->myString
 ::cpg[..]->myString[0]
@@ -348,12 +312,9 @@ doubleIntPtr[..]
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week
 ::cpg[..]->basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week
 ::cpg[..]->footer
 ::cpg[..]->myString
 ::cpg[..]->myString[0]
@@ -369,12 +330,9 @@ day
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week
 ::cpg[..]->basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week
 ::cpg[..]->footer
 ::cpg[..]->myString
 ::cpg[..]->myString[0]
@@ -390,12 +348,9 @@ day return
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week
 ::cpg[..]->basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week
 ::cpg[..]->footer
 ::cpg[..]->myString
 ::cpg[..]->myString[0]
@@ -412,12 +367,9 @@ myArray[..]
 ::cpg
 ::cpg[..]
 ::cpg[..]->basic1
-::cpg[..]->basic1.char_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val
-::cpg[..]->basic1.int_val ::cpg[..]->basic2->int_val
-::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->ushort_val
+::cpg[..]->basic1.char_val ::cpg[..]->basic1.int_val ::cpg[..]->basic1.short_val ::cpg[..]->basic1.uchar_val ::cpg[..]->basic1.ushort_val ::cpg[..]->basic2->char_val ::cpg[..]->basic2->int_val ::cpg[..]->basic2->short_val ::cpg[..]->basic2->uchar_val ::cpg[..]->basic2->ushort_val ::cpg[..]->day_of_week
 ::cpg[..]->basic2
 ::cpg[..]->basic2[0]
-::cpg[..]->day_of_week
 ::cpg[..]->footer
 ::cpg[..]->myString
 ::cpg[..]->myString[0]

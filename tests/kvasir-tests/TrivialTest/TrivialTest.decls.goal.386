@@ -4,6 +4,328 @@ var-comparability none
 
 ppt ..initBasicTypesStruct():::ENTER
   ppt-type enter
+  variable ::cpg
+    var-kind variable
+    rep-type hashcode
+    dec-type _complexStruct**
+  variable ::cpg[..]
+    var-kind array
+    enclosing-var ::cpg
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next
+    var-kind field next
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->basic2->char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic2->int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic2->short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic2->uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic2->ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
   variable ::globalDouble
     var-kind variable
     rep-type double
@@ -427,6 +749,328 @@ ppt ..initBasicTypesStruct():::ENTER
 
 ppt ..initBasicTypesStruct():::EXIT0
   ppt-type subexit
+  variable ::cpg
+    var-kind variable
+    rep-type hashcode
+    dec-type _complexStruct**
+  variable ::cpg[..]
+    var-kind array
+    enclosing-var ::cpg
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next
+    var-kind field next
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->basic2->char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic2->int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic2->short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic2->uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic2->ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
   variable ::globalDouble
     var-kind variable
     rep-type double
@@ -1178,6 +1822,328 @@ ppt ..initBasicTypesStruct():::EXIT0
 
 ppt ..main():::ENTER
   ppt-type enter
+  variable ::cpg
+    var-kind variable
+    rep-type hashcode
+    dec-type _complexStruct**
+  variable ::cpg[..]
+    var-kind array
+    enclosing-var ::cpg
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next
+    var-kind field next
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->basic2->char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic2->int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic2->short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic2->uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic2->ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
   variable ::globalDouble
     var-kind variable
     rep-type double
@@ -1201,6 +2167,328 @@ ppt ..main():::ENTER
 
 ppt ..main():::EXIT0
   ppt-type subexit
+  variable ::cpg
+    var-kind variable
+    rep-type hashcode
+    dec-type _complexStruct**
+  variable ::cpg[..]
+    var-kind array
+    enclosing-var ::cpg
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next
+    var-kind field next
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->basic2->char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic2->int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic2->short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic2->uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic2->ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
   variable ::globalDouble
     var-kind variable
     rep-type double
@@ -1228,6 +2516,328 @@ ppt ..main():::EXIT0
 
 ppt ..readStruct():::ENTER
   ppt-type enter
+  variable ::cpg
+    var-kind variable
+    rep-type hashcode
+    dec-type _complexStruct**
+  variable ::cpg[..]
+    var-kind array
+    enclosing-var ::cpg
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next
+    var-kind field next
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->basic2->char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic2->int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic2->short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic2->uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic2->ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
   variable ::globalDouble
     var-kind variable
     rep-type double
@@ -1281,6 +2891,328 @@ ppt ..readStruct():::ENTER
 
 ppt ..readStruct():::EXIT0
   ppt-type subexit
+  variable ::cpg
+    var-kind variable
+    rep-type hashcode
+    dec-type _complexStruct**
+  variable ::cpg[..]
+    var-kind array
+    enclosing-var ::cpg
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next
+    var-kind field next
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->basic2->char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic2->int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic2->short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic2->uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic2->ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
   variable ::globalDouble
     var-kind variable
     rep-type double
@@ -1363,6 +3295,328 @@ ppt ..readStruct():::EXIT0
 
 ppt ..returnWeekday():::ENTER
   ppt-type enter
+  variable ::cpg
+    var-kind variable
+    rep-type hashcode
+    dec-type _complexStruct**
+  variable ::cpg[..]
+    var-kind array
+    enclosing-var ::cpg
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next
+    var-kind field next
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->basic2->char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic2->int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic2->short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic2->uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic2->ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
   variable ::globalDouble
     var-kind variable
     rep-type double
@@ -1391,6 +3645,328 @@ ppt ..returnWeekday():::ENTER
 
 ppt ..returnWeekday():::EXIT0
   ppt-type subexit
+  variable ::cpg
+    var-kind variable
+    rep-type hashcode
+    dec-type _complexStruct**
+  variable ::cpg[..]
+    var-kind array
+    enclosing-var ::cpg
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next
+    var-kind field next
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->basic1.char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic1.int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic1.short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic1.uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic1.ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic1
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->basic2->char_val
+    var-kind field char_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable ::cpg[..]->next->basic2->int_val
+    var-kind field int_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->basic2->short_val
+    var-kind field short_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type short[]
+  variable ::cpg[..]->next->basic2->uchar_val
+    var-kind field uchar_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_char[]
+  variable ::cpg[..]->next->basic2->ushort_val
+    var-kind field ushort_val
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable ::cpg[..]->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->basic1
+    var-kind field basic1
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->basic2
+    var-kind field basic2
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct*[]
+  variable ::cpg[..]->next->next->basic2[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->basic2
+    array 1
+    rep-type hashcode[]
+    dec-type _basicTypesStruct[]
+  variable ::cpg[..]->next->next->day_of_week
+    var-kind field day_of_week
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type weekdays[]
+  variable ::cpg[..]->next->next->footer
+    var-kind field footer
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::cpg[..]->next->next->myString
+    var-kind field myString
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type char***[]
+  variable ::cpg[..]->next->next->myString[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable ::cpg[..]->next->next->myString[0][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->myString[0]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::cpg[..]->next->next->next
+    var-kind field next
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->next->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->next[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->next
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..]->prev
+    var-kind field prev
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct*[]
+  variable ::cpg[..]->prev[0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]->prev
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
+  variable ::cpg[..][0]
+    var-kind field [0]
+    enclosing-var ::cpg[..]
+    array 1
+    rep-type hashcode[]
+    dec-type _complexStruct[]
   variable ::globalDouble
     var-kind variable
     rep-type double
