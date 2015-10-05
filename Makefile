@@ -430,7 +430,7 @@ doc-all:
 
 # Get the current release version
 ifneq ($(shell ls /cse/web/research/plse/daikon/download/daikon-*.zip 2>/dev/null),)
-    CUR_VER := $(shell ls /cse/web/research/plse/daikon/download/daikon-*.zip |perl -p -e 's/^.*download.daikon.//' |perl -p -e 's/.zip//');
+    CUR_VER := $(shell ls /cse/web/research/plse/daikon/download/daikon-*.zip |perl -p -e 's/^.*download.daikon.//' |perl -p -e 's/.zip//')
     CUR_RELEASE_NAME := daikon-$(CUR_VER)
     NEW_RELEASE_NAME := daikon-$(shell cat doc/VERSION)
 else
