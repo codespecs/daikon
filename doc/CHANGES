@@ -20,6 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.14 (October 5, 2015)
+
+Daikon:
+  We have improved splitter verification testing.
+
+Documentation:
+  Improved discussion of splitters
+
+===========================================================================
+
 5.2.12 (September 3, 2015)
 
 Daikon:
