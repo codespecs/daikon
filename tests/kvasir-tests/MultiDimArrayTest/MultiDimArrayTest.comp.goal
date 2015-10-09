@@ -35,8 +35,7 @@ p[..]
 booParam.c
 booParam.d
 booParam.d[..]
-param
-param[..]
+param param[..]
 param[..][0]
 
 ..fcrashint():::EXIT0
@@ -50,8 +49,7 @@ param[..][0]
 booParam.c
 booParam.d
 booParam.d[..]
-param
-param[..]
+param param[..]
 param[..][0]
 
 ..ffixedint():::ENTER
