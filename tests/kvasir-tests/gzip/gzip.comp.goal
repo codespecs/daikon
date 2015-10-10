@@ -36,9 +36,9 @@
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -152,9 +152,9 @@
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -266,9 +266,9 @@
 ::inptr
 ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -374,9 +374,9 @@ env
 ::inptr
 ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -481,9 +481,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -575,9 +575,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -669,9 +669,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -764,9 +764,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -855,9 +855,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -942,9 +942,9 @@ code
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -1028,9 +1028,9 @@ code return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -1113,9 +1113,9 @@ code return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -1207,9 +1207,9 @@ code return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -1322,9 +1322,9 @@ in
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -1433,9 +1433,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -1528,9 +1528,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -1628,9 +1628,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -1744,9 +1744,9 @@ out
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -1863,9 +1863,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -1983,9 +1983,9 @@ len
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -2150,9 +2150,9 @@ len
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -2317,9 +2317,9 @@ len
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -2473,9 +2473,9 @@ len
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -2621,9 +2621,9 @@ len
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -2728,9 +2728,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -2818,9 +2818,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -2881,7 +2881,7 @@ return
 ::bb
 ::bk
 ::block_mode
-::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix den num
+::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix den file num
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -2903,9 +2903,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -2959,7 +2959,6 @@ return
 ::work
 ::work[..]
 ::z_len
-file
 file[..]
 
 ..display_ratio():::EXIT0
@@ -2969,7 +2968,7 @@ file[..]
 ::bb
 ::bk
 ::block_mode
-::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix den num
+::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix den file num
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -2991,9 +2990,9 @@ file[..]
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -3047,7 +3046,6 @@ file[..]
 ::work
 ::work[..]
 ::z_len
-file
 file[..]
 
 ..error():::ENTER
@@ -3088,9 +3086,9 @@ file[..]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -3203,9 +3201,9 @@ m
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -3310,9 +3308,9 @@ m
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -3396,9 +3394,9 @@ m
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -3490,9 +3488,9 @@ m
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -3605,9 +3603,9 @@ eof_ok
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -3759,9 +3757,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -3908,9 +3906,9 @@ pad
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -4010,9 +4008,9 @@ pad
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -4095,9 +4093,9 @@ pad
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -4189,9 +4187,9 @@ pad
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -4303,9 +4301,9 @@ pad
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -4417,9 +4415,9 @@ pad
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -4535,9 +4533,9 @@ width
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -4663,9 +4661,9 @@ width
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -4809,9 +4807,9 @@ t[..][0]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -4956,9 +4954,9 @@ t[..][0]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -5091,9 +5089,9 @@ t[..].v.t[0]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -5227,9 +5225,9 @@ t[..].v.t[0]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -5351,9 +5349,9 @@ t[..].v.t[0]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -5476,9 +5474,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -5602,9 +5600,9 @@ e[..]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -5729,9 +5727,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -5877,9 +5875,9 @@ tl[..].v.t[0]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -6026,9 +6024,9 @@ tl[..].v.t[0]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -6150,9 +6148,9 @@ tl[..].v.t[0]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -6275,9 +6273,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -6399,9 +6397,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -6524,9 +6522,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -6648,9 +6646,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -6763,9 +6761,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -6861,9 +6859,9 @@ flags
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -6955,9 +6953,9 @@ flags
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -7045,9 +7043,9 @@ flags
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -7139,9 +7137,9 @@ flags
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -7256,9 +7254,9 @@ out
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -7372,9 +7370,9 @@ return
 ::inptr
 ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -7480,9 +7478,9 @@ argv[..]
 ::inptr
 ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -7591,9 +7589,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -7706,9 +7704,9 @@ name
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -7821,9 +7819,9 @@ name
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -7935,9 +7933,9 @@ name
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -8040,9 +8038,9 @@ name
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -8125,9 +8123,9 @@ name
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -8216,9 +8214,9 @@ name
 ::inptr
 ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -8313,9 +8311,9 @@ name
 ::inptr
 ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -8417,9 +8415,9 @@ name
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -8543,9 +8541,9 @@ out
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -8666,9 +8664,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -8782,9 +8780,9 @@ out
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -8900,9 +8898,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -9029,9 +9027,9 @@ out
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -9158,9 +9156,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -9274,9 +9272,9 @@ out
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -9385,9 +9383,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -9479,9 +9477,9 @@ s
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -9579,9 +9577,9 @@ s
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -9694,9 +9692,9 @@ m
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -9800,9 +9798,9 @@ m
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -9887,9 +9885,9 @@ buf[..]
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -9983,9 +9981,9 @@ buf[..]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -10097,9 +10095,9 @@ buf[..]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -10211,9 +10209,9 @@ buf[..]
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -10326,9 +10324,9 @@ size
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -10434,9 +10432,9 @@ size
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -10520,9 +10518,9 @@ size
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -10616,9 +10614,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -10730,9 +10728,9 @@ return
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -10836,9 +10834,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -10922,9 +10920,9 @@ return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -11014,9 +11012,9 @@ deflate.c.deflate_fast():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -11104,9 +11102,9 @@ deflate.c.deflate_fast():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -11194,9 +11192,9 @@ deflate.c.fill_window():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -11284,9 +11282,9 @@ deflate.c.fill_window():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -11387,9 +11385,9 @@ deflate.c.rsync_roll():::ENTER
 ::ins_h
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -11516,9 +11514,9 @@ deflate.c.rsync_roll():::EXIT0
 ::ins_h
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -11630,9 +11628,9 @@ gzip.c.check_ofname():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -11726,9 +11724,9 @@ gzip.c.check_ofname():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -11820,9 +11818,9 @@ gzip.c.copy_stat():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev ifstat[..].st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..] ifstat[..].__glibc_reserved[0][0] ifstat[..].__glibc_reserved[1][0] ifstat[..].__glibc_reserved[2][0]
 ::istat.__pad0 ifstat[..].__pad0
-::istat.__unused
-::istat.__unused[..] ifstat[..].__unused[0][0] ifstat[..].__unused[1][0] ifstat[..].__unused[2][0]
 ::istat.st_atim ::istat.st_atim.tv_sec ifstat[..].st_atim.tv_sec
 ::istat.st_atim.tv_nsec ifstat[..].st_atim.tv_nsec
 ::istat.st_blksize ifstat[..].st_blksize
@@ -11880,9 +11878,9 @@ gzip.c.copy_stat():::ENTER
 ::z_len
 ifstat
 ifstat[..]
-ifstat[..].__unused[0]
-ifstat[..].__unused[1]
-ifstat[..].__unused[2]
+ifstat[..].__glibc_reserved[0]
+ifstat[..].__glibc_reserved[1]
+ifstat[..].__glibc_reserved[2]
 ifstat[..].st_atim
 ifstat[..].st_ctim
 ifstat[..].st_mtim
@@ -11916,9 +11914,9 @@ gzip.c.copy_stat():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev ifstat[..].st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..] ifstat[..].__glibc_reserved[0][0] ifstat[..].__glibc_reserved[1][0] ifstat[..].__glibc_reserved[2][0]
 ::istat.__pad0 ifstat[..].__pad0
-::istat.__unused
-::istat.__unused[..] ifstat[..].__unused[0][0] ifstat[..].__unused[1][0] ifstat[..].__unused[2][0]
 ::istat.st_atim ::istat.st_atim.tv_sec ifstat[..].st_atim.tv_sec
 ::istat.st_atim.tv_nsec ifstat[..].st_atim.tv_nsec
 ::istat.st_blksize ifstat[..].st_blksize
@@ -11976,9 +11974,9 @@ gzip.c.copy_stat():::EXIT0
 ::z_len
 ifstat
 ifstat[..]
-ifstat[..].__unused[0]
-ifstat[..].__unused[1]
-ifstat[..].__unused[2]
+ifstat[..].__glibc_reserved[0]
+ifstat[..].__glibc_reserved[1]
+ifstat[..].__glibc_reserved[2]
 ifstat[..].st_atim
 ifstat[..].st_ctim
 ifstat[..].st_mtim
@@ -12015,9 +12013,9 @@ gzip.c.create_outfile():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -12111,9 +12109,9 @@ gzip.c.create_outfile():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -12206,9 +12204,9 @@ gzip.c.do_exit():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -12295,9 +12293,9 @@ gzip.c.do_exit():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -12393,9 +12391,9 @@ gzip.c.do_list():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -12514,9 +12512,9 @@ gzip.c.do_list():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -12631,9 +12629,9 @@ gzip.c.do_stat():::ENTER
 ::inptr
 ::insize
 ::istat ::istat.st_dev sbuf[..].st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..] sbuf[..].__glibc_reserved[0][0] sbuf[..].__glibc_reserved[1][0] sbuf[..].__glibc_reserved[2][0]
 ::istat.__pad0 sbuf[..].__pad0
-::istat.__unused
-::istat.__unused[..] sbuf[..].__unused[0][0] sbuf[..].__unused[1][0] sbuf[..].__unused[2][0]
 ::istat.st_atim ::istat.st_atim.tv_sec sbuf[..].st_atim.tv_sec
 ::istat.st_atim.tv_nsec sbuf[..].st_atim.tv_nsec
 ::istat.st_blksize sbuf[..].st_blksize
@@ -12699,9 +12697,9 @@ gzip.c.do_stat():::ENTER
 ::z_len
 sbuf
 sbuf[..]
-sbuf[..].__unused[0]
-sbuf[..].__unused[1]
-sbuf[..].__unused[2]
+sbuf[..].__glibc_reserved[0]
+sbuf[..].__glibc_reserved[1]
+sbuf[..].__glibc_reserved[2]
 sbuf[..].st_atim
 sbuf[..].st_ctim
 sbuf[..].st_mtim
@@ -12741,9 +12739,9 @@ gzip.c.do_stat():::EXIT0
 ::inptr
 ::insize
 ::istat ::istat.st_dev sbuf[..].st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..] sbuf[..].__glibc_reserved[0][0] sbuf[..].__glibc_reserved[1][0] sbuf[..].__glibc_reserved[2][0]
 ::istat.__pad0 sbuf[..].__pad0
-::istat.__unused
-::istat.__unused[..] sbuf[..].__unused[0][0] sbuf[..].__unused[1][0] sbuf[..].__unused[2][0]
 ::istat.st_atim ::istat.st_atim.tv_sec sbuf[..].st_atim.tv_sec
 ::istat.st_atim.tv_nsec sbuf[..].st_atim.tv_nsec
 ::istat.st_blksize sbuf[..].st_blksize
@@ -12810,9 +12808,9 @@ gzip.c.do_stat():::EXIT0
 return
 sbuf
 sbuf[..]
-sbuf[..].__unused[0]
-sbuf[..].__unused[1]
-sbuf[..].__unused[2]
+sbuf[..].__glibc_reserved[0]
+sbuf[..].__glibc_reserved[1]
+sbuf[..].__glibc_reserved[2]
 sbuf[..].st_atim
 sbuf[..].st_ctim
 sbuf[..].st_mtim
@@ -12853,9 +12851,9 @@ gzip.c.get_istat():::ENTER
 ::inptr
 ::insize
 ::istat ::istat.st_dev sbuf[..].st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..] sbuf[..].__glibc_reserved[0][0] sbuf[..].__glibc_reserved[1][0] sbuf[..].__glibc_reserved[2][0]
 ::istat.__pad0 sbuf[..].__pad0
-::istat.__unused
-::istat.__unused[..] sbuf[..].__unused[0][0] sbuf[..].__unused[1][0] sbuf[..].__unused[2][0]
 ::istat.st_atim ::istat.st_atim.tv_sec sbuf[..].st_atim.tv_sec
 ::istat.st_atim.tv_nsec sbuf[..].st_atim.tv_nsec
 ::istat.st_blksize sbuf[..].st_blksize
@@ -12922,9 +12920,9 @@ gzip.c.get_istat():::ENTER
 ::work[..]
 sbuf
 sbuf[..]
-sbuf[..].__unused[0]
-sbuf[..].__unused[1]
-sbuf[..].__unused[2]
+sbuf[..].__glibc_reserved[0]
+sbuf[..].__glibc_reserved[1]
+sbuf[..].__glibc_reserved[2]
 sbuf[..].st_atim
 sbuf[..].st_ctim
 sbuf[..].st_mtim
@@ -12965,9 +12963,9 @@ gzip.c.get_istat():::EXIT0
 ::inptr
 ::insize
 ::istat ::istat.st_dev sbuf[..].st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..] sbuf[..].__glibc_reserved[0][0] sbuf[..].__glibc_reserved[1][0] sbuf[..].__glibc_reserved[2][0]
 ::istat.__pad0 sbuf[..].__pad0
-::istat.__unused
-::istat.__unused[..] sbuf[..].__unused[0][0] sbuf[..].__unused[1][0] sbuf[..].__unused[2][0]
 ::istat.st_atim ::istat.st_atim.tv_sec sbuf[..].st_atim.tv_sec
 ::istat.st_atim.tv_nsec sbuf[..].st_atim.tv_nsec
 ::istat.st_blksize sbuf[..].st_blksize
@@ -13035,9 +13033,9 @@ gzip.c.get_istat():::EXIT0
 return
 sbuf
 sbuf[..]
-sbuf[..].__unused[0]
-sbuf[..].__unused[1]
-sbuf[..].__unused[2]
+sbuf[..].__glibc_reserved[0]
+sbuf[..].__glibc_reserved[1]
+sbuf[..].__glibc_reserved[2]
 sbuf[..].st_atim
 sbuf[..].st_ctim
 sbuf[..].st_mtim
@@ -13080,9 +13078,9 @@ gzip.c.get_method():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -13197,9 +13195,9 @@ gzip.c.get_method():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -13312,9 +13310,9 @@ gzip.c.get_suffix():::ENTER
 ::inptr
 ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -13412,9 +13410,9 @@ gzip.c.get_suffix():::EXIT0
 ::inptr
 ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -13518,9 +13516,9 @@ gzip.c.help():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -13636,9 +13634,9 @@ gzip.c.help():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -13743,9 +13741,9 @@ gzip.c.input_eof():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -13831,9 +13829,9 @@ gzip.c.input_eof():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -13929,9 +13927,9 @@ gzip.c.license():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -14045,9 +14043,9 @@ gzip.c.license():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -14158,9 +14156,9 @@ gzip.c.make_ofname():::ENTER
 ::inptr
 ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -14257,9 +14255,9 @@ gzip.c.make_ofname():::EXIT0
 ::inptr
 ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -14354,9 +14352,9 @@ gzip.c.name_too_long():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -14419,13 +14417,13 @@ gzip.c.name_too_long():::ENTER
 ::z_len
 statb
 statb[..]
+statb[..].__glibc_reserved[0]
+statb[..].__glibc_reserved[0][0]
+statb[..].__glibc_reserved[1]
+statb[..].__glibc_reserved[1][0]
+statb[..].__glibc_reserved[2]
+statb[..].__glibc_reserved[2][0]
 statb[..].__pad0 statb[..].st_gid
-statb[..].__unused[0]
-statb[..].__unused[0][0]
-statb[..].__unused[1]
-statb[..].__unused[1][0]
-statb[..].__unused[2]
-statb[..].__unused[2][0]
 statb[..].st_atim
 statb[..].st_atim.tv_nsec
 statb[..].st_atim.tv_sec
@@ -14476,9 +14474,9 @@ gzip.c.name_too_long():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -14542,13 +14540,13 @@ gzip.c.name_too_long():::EXIT0
 return
 statb
 statb[..]
+statb[..].__glibc_reserved[0]
+statb[..].__glibc_reserved[0][0]
+statb[..].__glibc_reserved[1]
+statb[..].__glibc_reserved[1][0]
+statb[..].__glibc_reserved[2]
+statb[..].__glibc_reserved[2][0]
 statb[..].__pad0 statb[..].st_gid
-statb[..].__unused[0]
-statb[..].__unused[0][0]
-statb[..].__unused[1]
-statb[..].__unused[1][0]
-statb[..].__unused[2]
-statb[..].__unused[2][0]
 statb[..].st_atim
 statb[..].st_atim.tv_nsec
 statb[..].st_atim.tv_sec
@@ -14605,9 +14603,9 @@ gzip.c.progerror():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -14722,9 +14720,9 @@ gzip.c.progerror():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -14830,9 +14828,9 @@ gzip.c.reset_times():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev statb[..].st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..] statb[..].__glibc_reserved[0][0] statb[..].__glibc_reserved[1][0] statb[..].__glibc_reserved[2][0]
 ::istat.__pad0 statb[..].__pad0
-::istat.__unused
-::istat.__unused[..] statb[..].__unused[0][0] statb[..].__unused[1][0] statb[..].__unused[2][0]
 ::istat.st_atim ::istat.st_atim.tv_sec statb[..].st_atim.tv_sec
 ::istat.st_atim.tv_nsec statb[..].st_atim.tv_nsec
 ::istat.st_blksize statb[..].st_blksize
@@ -14890,9 +14888,9 @@ gzip.c.reset_times():::ENTER
 ::z_len
 statb
 statb[..]
-statb[..].__unused[0]
-statb[..].__unused[1]
-statb[..].__unused[2]
+statb[..].__glibc_reserved[0]
+statb[..].__glibc_reserved[1]
+statb[..].__glibc_reserved[2]
 statb[..].st_atim
 statb[..].st_ctim
 statb[..].st_mtim
@@ -14926,9 +14924,9 @@ gzip.c.reset_times():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev statb[..].st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..] statb[..].__glibc_reserved[0][0] statb[..].__glibc_reserved[1][0] statb[..].__glibc_reserved[2][0]
 ::istat.__pad0 statb[..].__pad0
-::istat.__unused
-::istat.__unused[..] statb[..].__unused[0][0] statb[..].__unused[1][0] statb[..].__unused[2][0]
 ::istat.st_atim ::istat.st_atim.tv_sec statb[..].st_atim.tv_sec
 ::istat.st_atim.tv_nsec statb[..].st_atim.tv_nsec
 ::istat.st_blksize statb[..].st_blksize
@@ -14986,9 +14984,9 @@ gzip.c.reset_times():::EXIT0
 ::z_len
 statb
 statb[..]
-statb[..].__unused[0]
-statb[..].__unused[1]
-statb[..].__unused[2]
+statb[..].__glibc_reserved[0]
+statb[..].__glibc_reserved[1]
+statb[..].__glibc_reserved[2]
 statb[..].st_atim
 statb[..].st_ctim
 statb[..].st_mtim
@@ -15031,9 +15029,9 @@ gzip.c.same_file():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -15110,13 +15108,13 @@ gzip.c.same_file():::ENTER
 ::z_suffix
 stat1
 stat1[..]
+stat1[..].__glibc_reserved[0]
+stat1[..].__glibc_reserved[0][0]
+stat1[..].__glibc_reserved[1]
+stat1[..].__glibc_reserved[1][0]
+stat1[..].__glibc_reserved[2]
+stat1[..].__glibc_reserved[2][0]
 stat1[..].__pad0
-stat1[..].__unused[0]
-stat1[..].__unused[0][0]
-stat1[..].__unused[1]
-stat1[..].__unused[1][0]
-stat1[..].__unused[2]
-stat1[..].__unused[2][0]
 stat1[..].st_atim
 stat1[..].st_atim.tv_nsec
 stat1[..].st_atim.tv_sec
@@ -15138,13 +15136,13 @@ stat1[..].st_size
 stat1[..].st_uid
 stat2
 stat2[..]
+stat2[..].__glibc_reserved[0]
+stat2[..].__glibc_reserved[0][0]
+stat2[..].__glibc_reserved[1]
+stat2[..].__glibc_reserved[1][0]
+stat2[..].__glibc_reserved[2]
+stat2[..].__glibc_reserved[2][0]
 stat2[..].__pad0
-stat2[..].__unused[0]
-stat2[..].__unused[0][0]
-stat2[..].__unused[1]
-stat2[..].__unused[1][0]
-stat2[..].__unused[2]
-stat2[..].__unused[2][0]
 stat2[..].st_atim
 stat2[..].st_atim.tv_nsec
 stat2[..].st_atim.tv_sec
@@ -15203,9 +15201,9 @@ gzip.c.same_file():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -15283,13 +15281,13 @@ gzip.c.same_file():::EXIT0
 return
 stat1
 stat1[..]
+stat1[..].__glibc_reserved[0]
+stat1[..].__glibc_reserved[0][0]
+stat1[..].__glibc_reserved[1]
+stat1[..].__glibc_reserved[1][0]
+stat1[..].__glibc_reserved[2]
+stat1[..].__glibc_reserved[2][0]
 stat1[..].__pad0
-stat1[..].__unused[0]
-stat1[..].__unused[0][0]
-stat1[..].__unused[1]
-stat1[..].__unused[1][0]
-stat1[..].__unused[2]
-stat1[..].__unused[2][0]
 stat1[..].st_atim
 stat1[..].st_atim.tv_nsec
 stat1[..].st_atim.tv_sec
@@ -15311,13 +15309,13 @@ stat1[..].st_size
 stat1[..].st_uid
 stat2
 stat2[..]
+stat2[..].__glibc_reserved[0]
+stat2[..].__glibc_reserved[0][0]
+stat2[..].__glibc_reserved[1]
+stat2[..].__glibc_reserved[1][0]
+stat2[..].__glibc_reserved[2]
+stat2[..].__glibc_reserved[2][0]
 stat2[..].__pad0
-stat2[..].__unused[0]
-stat2[..].__unused[0][0]
-stat2[..].__unused[1]
-stat2[..].__unused[1][0]
-stat2[..].__unused[2]
-stat2[..].__unused[2][0]
 stat2[..].st_atim
 stat2[..].st_atim.tv_nsec
 stat2[..].st_atim.tv_sec
@@ -15376,9 +15374,9 @@ gzip.c.shorten_name():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -15493,9 +15491,9 @@ gzip.c.shorten_name():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -15610,9 +15608,9 @@ gzip.c.treat_dir():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -15727,9 +15725,9 @@ gzip.c.treat_dir():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -15835,9 +15833,9 @@ gzip.c.treat_file():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -15923,9 +15921,9 @@ gzip.c.treat_file():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -16020,9 +16018,9 @@ gzip.c.treat_stdin():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -16136,9 +16134,9 @@ gzip.c.treat_stdin():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -16252,9 +16250,9 @@ gzip.c.usage():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -16368,9 +16366,9 @@ gzip.c.usage():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -16484,9 +16482,9 @@ gzip.c.version():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -16600,9 +16598,9 @@ gzip.c.version():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -16754,9 +16752,9 @@ trees.c.build_bl_tree():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -16903,9 +16901,9 @@ trees.c.build_bl_tree():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -17050,9 +17048,9 @@ trees.c.build_tree():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -17204,9 +17202,9 @@ trees.c.build_tree():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -17360,9 +17358,9 @@ trees.c.compress_block():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -17515,9 +17513,9 @@ trees.c.compress_block():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -17668,9 +17666,9 @@ trees.c.gen_bitlen():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -17822,9 +17820,9 @@ trees.c.gen_bitlen():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -17979,9 +17977,9 @@ trees.c.gen_codes():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -18131,9 +18129,9 @@ trees.c.gen_codes():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -18283,9 +18281,9 @@ trees.c.init_block():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -18432,9 +18430,9 @@ trees.c.init_block():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -18580,9 +18578,9 @@ trees.c.pqdownheap():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -18731,9 +18729,9 @@ trees.c.pqdownheap():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -18882,9 +18880,9 @@ trees.c.scan_tree():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -19034,9 +19032,9 @@ trees.c.scan_tree():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -19186,9 +19184,9 @@ trees.c.send_all_trees():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -19335,9 +19333,9 @@ trees.c.send_all_trees():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -19484,9 +19482,9 @@ trees.c.send_tree():::ENTER
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -19636,9 +19634,9 @@ trees.c.send_tree():::EXIT0
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim ::istat.st_atim.tv_sec
 ::istat.st_atim.tv_nsec
 ::istat.st_blksize
@@ -19848,9 +19846,9 @@ trees.c.set_file_type():::ENTER
 ::input_len
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -20106,9 +20104,9 @@ trees.c.set_file_type():::EXIT0
 ::input_len
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -20271,9 +20269,9 @@ unlzh.c.decode():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -20399,9 +20397,9 @@ unlzh.c.decode():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -20527,9 +20525,9 @@ unlzh.c.decode_c():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -20651,9 +20649,9 @@ unlzh.c.decode_c():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -20776,9 +20774,9 @@ unlzh.c.decode_p():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -20900,9 +20898,9 @@ unlzh.c.decode_p():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -21025,9 +21023,9 @@ unlzh.c.decode_start():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -21149,9 +21147,9 @@ unlzh.c.decode_start():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -21273,9 +21271,9 @@ unlzh.c.fillbuf():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -21398,9 +21396,9 @@ unlzh.c.fillbuf():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -21523,9 +21521,9 @@ unlzh.c.getbits():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -21648,9 +21646,9 @@ unlzh.c.getbits():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -21774,9 +21772,9 @@ unlzh.c.huf_decode_start():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -21898,9 +21896,9 @@ unlzh.c.huf_decode_start():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -22022,9 +22020,9 @@ unlzh.c.init_getbits():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -22146,9 +22144,9 @@ unlzh.c.init_getbits():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -22270,9 +22268,9 @@ unlzh.c.make_table():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -22400,9 +22398,9 @@ unlzh.c.make_table():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -22530,9 +22528,9 @@ unlzh.c.read_c_len():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -22654,9 +22652,9 @@ unlzh.c.read_c_len():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -22778,9 +22776,9 @@ unlzh.c.read_pt_len():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -22905,9 +22903,9 @@ unlzh.c.read_pt_len():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -23029,9 +23027,9 @@ unpack.c.build_tree():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -23156,9 +23154,9 @@ unpack.c.build_tree():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -23283,9 +23281,9 @@ unpack.c.read_tree():::ENTER
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
@@ -23410,9 +23408,9 @@ unpack.c.read_tree():::EXIT0
 ::inptr
 ::insize
 ::istat
+::istat.__glibc_reserved
+::istat.__glibc_reserved[..]
 ::istat.__pad0
-::istat.__unused
-::istat.__unused[..]
 ::istat.st_atim
 ::istat.st_atim.tv_nsec
 ::istat.st_atim.tv_sec
