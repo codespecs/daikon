@@ -2,10 +2,15 @@
 
 # prepare-texinfo-for-spellcheck.pl
 # argument: .texinfo file
+# 
 # Reads the input .texinfo file and outputs a filtered
 # version that elides the texinfo commands.  It also
 # removes other text that is not appropriate as input
 # to spellcheckx such as examples and comments.
+# 
+# The resulting file can be spell-checked in batch mode
+# to output misspelled words; then the user can correct
+# those misspellings in the original version.
 
 use v5.14;    #to get given/when
 
