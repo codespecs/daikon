@@ -65,8 +65,8 @@ public class DynComp {
   @Option("variable nesting depth")
   public static int nesting_depth = 2;
 
-  @Option("Shiny element output")
-  public static boolean shiny_print = false;
+  @Option("Display abridged variable names")
+  public static boolean abridged_vars = false;
 
   @Option("Don't continue after instrumentation error")
   public static boolean quit_if_error = false;
