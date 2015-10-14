@@ -526,7 +526,7 @@ DCOMP_ARGS  = '--ppt-select-pattern=$(INST_FILES)' \
 			  --compare-sets-file=$(PROJECT_FILE).txt-cset \
 			  --decl_file $(PROJECT_FILE).decls-DynComp \
               --trace-sets-file=$(PROJECT_FILE).txt-trace \
-			  --shiny-print=$(SHINY_PRINT)
+			  --abridged-vars=$(SHINY_PRINT)
 DCOMP_RT ?= $(wildcard ${DAIKONDIR}/java/dcomp_rt.jar)
 ifeq ($(DCOMP_RT),)
   DCOMP_RT := $(wildcard $(pag)/software/pkg/DynComp/dcomp_rt.jar)
@@ -560,7 +560,7 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 		--compare-sets-file=$(PROJECT_FILE).txt-cset-nojdk \
 		--decl_file $(PROJECT_FILE).decls-DynComp-nojdk \
 		--trace-sets-file=$(PROJECT_FILE).txt-trace-nojdk \
-		--shiny-print=$(SHINY_PRINT) --no-jdk $(MAIN_CLASS) $(MAIN_ARGS)
+		--abridged-vars=$(SHINY_PRINT) --no-jdk $(MAIN_CLASS) $(MAIN_ARGS)
 
 else
 dyncomp:
