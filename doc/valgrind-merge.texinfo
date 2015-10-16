@@ -563,6 +563,9 @@ For the example instructions that follow, substitute the current version
 for @file{binutils-old}, e.g. @file{binutils-2.24} 
 and the new version for @file{binutils-new}, e.g. @file{binutils-2.25}.
 
+@c Alternately, could work from the binutils git repository:
+@c   git clone git://sourceware.org/git/binutils-gdb.git
+
 
 @example
 # Adjust these first two lines as necessary
