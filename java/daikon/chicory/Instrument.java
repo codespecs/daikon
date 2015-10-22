@@ -1023,7 +1023,7 @@ public class Instrument implements ClassFileTransformer {
           assert (ih != null) : " no InstructionHandle for offset";
           InstructionHandle ih2 = offset_map[offset];
           if (ih2 != null) {
-            assert (ih == ih2) : " InstructionHandles don't match";
+            assert (ih.equals(ih2)) : " InstructionHandles don't match";
           } else {
             offset_map[offset] = ih;
           }
