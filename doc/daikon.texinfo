@@ -3584,7 +3584,6 @@ This section lists options that control which program points appear in
 Chicory's output.
 
 
-
 @table @option
 @item --ppt-select-pattern=@var{regexp}
 Only produce trace output for classes/procedures/program points whose
@@ -3604,13 +3603,6 @@ traces only @code{bar}, you could match the method name (in any class)
 with regular expression
 @samp{bar$}, or you could match the program point name with @samp{C\.bar\(}.
 
-Using Linux shell syntax, you would execute
-@example
-java daikon.Chicory --ppt-select-pattern='bar$' ...
-java daikon.Chicory --ppt-select-pattern='C\.bar\(' ...
-@end example
-
-From the Windows command line, you would execute
 @example
 java daikon.Chicory --ppt-select-pattern='bar$' ...
 java daikon.Chicory --ppt-select-pattern='C\.bar\(' ...
@@ -3625,12 +3617,6 @@ instrumented program run faster, since it need not output those variables.
 
 This option works just like @option{--ppt-select-pattern} does, except
 that matching program points are excluded, not included.
-
-The @option{--ppt-omit-pattern} argument may be supplied multiple times, in
-order to specify multiple omitting criteria.  A program point is omitted
-if its fully qualified class, procedure name, or
-complete program point name matches one of the omitting criteria.
-
 
 The @option{--ppt-omit-pattern} argument may be supplied multiple times, in
 order to specify multiple omitting criteria.  A program point is omitted
