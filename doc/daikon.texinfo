@@ -2022,7 +2022,7 @@ programmers.
 @cindex output format, Jtest DBC
 @item DBC format
 This format produces output in the design-by-contract (@dfn{DBC}) format
-expected by @nospellcheck{Parasoft's} @command{Jtest} tool (@uref{http://www.parasoft.com}).
+expected by @nospellcheck{Parasoft's} @command{Jtest} tool (@uref{https://www.parasoft.com}).
 
 @c This implementation detail is not relevant to users
 @c Like the Java output format, this output format makes extensive use of
