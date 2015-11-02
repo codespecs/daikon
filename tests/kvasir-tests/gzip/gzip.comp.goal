@@ -2881,7 +2881,7 @@ return
 ::bb
 ::bk
 ::block_mode
-::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix den file num
+::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix den num
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -2959,6 +2959,7 @@ return
 ::work
 ::work[..]
 ::z_len
+file
 file[..]
 
 ..display_ratio():::EXIT0
@@ -2968,7 +2969,7 @@ file[..]
 ::bb
 ::bk
 ::block_mode
-::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix den file num
+::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix den num
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -3046,6 +3047,7 @@ file[..]
 ::work
 ::work[..]
 ::z_len
+file
 file[..]
 
 ..error():::ENTER
