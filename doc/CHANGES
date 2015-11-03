@@ -20,6 +20,24 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.16 (November 2, 2015)
+
+Chicory:
+- Improved handling of Java code containing synchronized locks.
+- Improved handling of Java initialization methods containing calls
+  to other initialization methods.
+
+Daikon:
+- The --shiny-print option was renamed --abridged-vars to match the
+  documentation.
+
+Kvasir:
+- We made some changes to the DynComp tool to improve the accuracy of the
+  comparability information. Occasionally, the system loader was causing
+  unrelated items to be placed in the same comparability set.  
+
+===========================================================================
+
 5.2.14 (October 5, 2015)
 
 Daikon:
