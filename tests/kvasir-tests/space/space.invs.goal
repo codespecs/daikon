@@ -791,8 +791,10 @@ group_ptr[].ELEM_PTR->PDIM == group_ptr[].GRID_PTR->PSTEP
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GRID_PTR->QSTEP
 group_ptr[].ELEM_PTR->PHEPOL == group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL
 group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].PSIZE
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].PSIZE
 group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].PSIZE
 group_ptr[].GRAMPEXC_PTR->P1_ET == group_ptr[].GRAMPEXC_PTR->Q2_ET
+group_ptr[].GRID_PTR->ROT_ANGLE == group_ptr[].PSIZE
 group_ptr[].PSIZE == group_ptr[].QSIZE
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
@@ -836,7 +838,6 @@ group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -863,7 +864,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
@@ -922,11 +922,11 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == orig(group_ptr[].ELEM_PTR->PORT_PTR->NEX
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == orig(group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL)
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT)
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == orig(group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].PSIZE)
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT)
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC)
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT)
-group_ptr[].ELEM_PTR->PORT_PTR->PSH == orig(group_ptr[].PSIZE)
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT)
 group_ptr[].ELEM_PTR->PORT_PTR[0] == orig(group_ptr[].ELEM_PTR->PORT_PTR[0])
 group_ptr[].ELEM_PTR->PQDIM_UNIT == orig(group_ptr[].ELEM_PTR->PQDIM_UNIT)
@@ -936,6 +936,16 @@ group_ptr[].ELEM_PTR->TYPE == orig(group_ptr[].ELEM_PTR->TYPE)
 group_ptr[].ELEM_PTR[0] == orig(group_ptr[].ELEM_PTR[0])
 group_ptr[].ERR_PTR == orig(group_ptr[].ERR_PTR)
 group_ptr[].FAIL_PTR == orig(group_ptr[].FAIL_PTR)
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->PSEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->THEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->ZA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GRID_PTR->ROT_ANGLE
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GRID_PTR->ROT_ANGLE)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].PSIZE)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].QSIZE)
 group_ptr[].GRAMPEXC_PTR == orig(group_ptr[].GRAMPEXC_PTR)
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == orig(group_ptr[].GRAMPEXC_PTR->AMP_UNIT)
 group_ptr[].GRAMPEXC_PTR->CENTRE == orig(group_ptr[].GRAMPEXC_PTR->CENTRE)
@@ -953,7 +963,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == orig(group_ptr[].GRID_PTR->ANGLE_UNIT)
 group_ptr[].GRID_PTR->LEVEL == orig(group_ptr[].GRID_PTR->LEVEL)
 group_ptr[].GRID_PTR->PQSTEP_UNIT == orig(group_ptr[].GRID_PTR->PQSTEP_UNIT)
 group_ptr[].GRID_PTR->PQXY_UNIT == orig(group_ptr[].GRID_PTR->PQXY_UNIT)
-group_ptr[].GRID_PTR->ROT_ANGLE == orig(group_ptr[].GRID_PTR->ROT_ANGLE)
 group_ptr[].GRID_PTR->TYPE == orig(group_ptr[].GRID_PTR->TYPE)
 group_ptr[].GRPHAEXC_PTR == orig(group_ptr[].GRPHAEXC_PTR)
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == orig(group_ptr[].GRPHAEXC_PTR->PHASE_UNIT)
@@ -1004,7 +1013,6 @@ group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -1021,13 +1029,10 @@ group_ptr[].GEOMNODE_PTR->LOC_Q == [2]
 group_ptr[].GEOMNODE_PTR->NEXT contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->NEXT[0] contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->PHEA == [0.0]
-group_ptr[].GEOMNODE_PTR->PSEA == [0.0]
 group_ptr[].GEOMNODE_PTR->SHAPE == [2]
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == [null]
-group_ptr[].GEOMNODE_PTR->THEA == [0.0]
 group_ptr[].GEOMNODE_PTR->XA == [773.9999999796324]
 group_ptr[].GEOMNODE_PTR->YA == [148.95636946268272]
-group_ptr[].GEOMNODE_PTR->ZA == [0.0]
 group_ptr[].GEOMNODE_PTR[0] contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == [0]
@@ -1044,7 +1049,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
@@ -2289,6 +2293,7 @@ return == 0
 ===========================================================================
 ..fixport():::ENTER
 elem_ptr[].PHEPOL == elem_ptr[].PORT_PTR->PHEPOL
+elem_ptr[].PORT_PTR->PPA == elem_ptr[].PORT_PTR->PSC
 elem_ptr[].PORT_PTR->PPA == elem_ptr[].PORT_PTR->PSH
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
@@ -2317,7 +2322,6 @@ elem_ptr[].PORT_PTR->PHEPOL_UNIT == [0]
 elem_ptr[].PORT_PTR->PORTNUM == [1]
 elem_ptr[].PORT_PTR->PPA == [0.0]
 elem_ptr[].PORT_PTR->PPA_UNIT == [0]
-elem_ptr[].PORT_PTR->PSC == [0.0]
 elem_ptr[].PORT_PTR->PSC_UNIT == [0]
 elem_ptr[].PORT_PTR->PSH_UNIT == [0]
 elem_ptr[].PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -2346,11 +2350,12 @@ elem_ptr[].PORT_PTR->NEXT == orig(elem_ptr[].PORT_PTR->NEXT)
 elem_ptr[].PORT_PTR->OMIT_POL == orig(elem_ptr[].PORT_PTR->OMIT_POL)
 elem_ptr[].PORT_PTR->PHEPOL_UNIT == orig(elem_ptr[].PORT_PTR->PHEPOL_UNIT)
 elem_ptr[].PORT_PTR->PORTNUM == orig(elem_ptr[].PORT_PTR->PORTNUM)
+elem_ptr[].PORT_PTR->PPA == elem_ptr[].PORT_PTR->PSC
 elem_ptr[].PORT_PTR->PPA == elem_ptr[].PORT_PTR->PSH
 elem_ptr[].PORT_PTR->PPA == orig(elem_ptr[].PORT_PTR->PPA)
+elem_ptr[].PORT_PTR->PPA == orig(elem_ptr[].PORT_PTR->PSC)
 elem_ptr[].PORT_PTR->PPA == orig(elem_ptr[].PORT_PTR->PSH)
 elem_ptr[].PORT_PTR->PPA_UNIT == orig(elem_ptr[].PORT_PTR->PPA_UNIT)
-elem_ptr[].PORT_PTR->PSC == orig(elem_ptr[].PORT_PTR->PSC)
 elem_ptr[].PORT_PTR->PSC_UNIT == orig(elem_ptr[].PORT_PTR->PSC_UNIT)
 elem_ptr[].PORT_PTR->PSH_UNIT == orig(elem_ptr[].PORT_PTR->PSH_UNIT)
 elem_ptr[].PORT_PTR[0] == orig(elem_ptr[].PORT_PTR[0])
@@ -2383,7 +2388,6 @@ elem_ptr[].PORT_PTR->PHEPOL_UNIT == [0]
 elem_ptr[].PORT_PTR->PORTNUM == [1]
 elem_ptr[].PORT_PTR->PPA == [0.0]
 elem_ptr[].PORT_PTR->PPA_UNIT == [0]
-elem_ptr[].PORT_PTR->PSC == [0.0]
 elem_ptr[].PORT_PTR->PSC_UNIT == [0]
 elem_ptr[].PORT_PTR->PSH_UNIT == [0]
 elem_ptr[].PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -2434,6 +2438,7 @@ elem_ptr[].PHEPOL == elem_ptr[].PORT_PTR->PHEPOL
 elem_ptr[].PHEPOL == orig(elem_ptr[].PHEPOL)
 elem_ptr[].PHEPOL_UNIT == orig(elem_ptr[].PHEPOL_UNIT)
 elem_ptr[].POLARIZATION == orig(elem_ptr[].POLARIZATION)
+elem_ptr[].PORT_PTR->PPA == elem_ptr[].PORT_PTR->PSC
 elem_ptr[].PORT_PTR->PPA == elem_ptr[].PORT_PTR->PSH
 elem_ptr[].RADIUS == orig(elem_ptr[].RADIUS)
 elem_ptr[].RADIUS_UNIT == orig(elem_ptr[].RADIUS_UNIT)
@@ -2465,7 +2470,6 @@ elem_ptr[].PORT_PTR->PHEPOL_UNIT == [0]
 elem_ptr[].PORT_PTR->PORTNUM == [1]
 elem_ptr[].PORT_PTR->PPA == [0.0]
 elem_ptr[].PORT_PTR->PPA_UNIT == [0]
-elem_ptr[].PORT_PTR->PSC == [0.0]
 elem_ptr[].PORT_PTR->PSC_UNIT == [0]
 elem_ptr[].PORT_PTR->PSH_UNIT == [0]
 elem_ptr[].PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -2581,9 +2585,9 @@ group_ptr[].ELEM_PTR->PHEPOL == group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL
 group_ptr[].ELEM_PTR->PHEPOL == orig(group_ptr[].ELEM_PTR->PHEPOL)
 group_ptr[].ELEM_PTR->PHEPOL_UNIT == orig(group_ptr[].ELEM_PTR->PHEPOL_UNIT)
 group_ptr[].ELEM_PTR->POLARIZATION == orig(group_ptr[].ELEM_PTR->POLARIZATION)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].ELEM_PTR->PORT_PTR->PSH
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].GRID_PTR->PSTEP)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].GRID_PTR->QSTEP)
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GRID_PTR->ROT_ANGLE
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GRID_PTR->ROT_ANGLE
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GRID_PTR->ROT_ANGLE
 group_ptr[].ELEM_PTR->RADIUS == orig(group_ptr[].ELEM_PTR->RADIUS)
 group_ptr[].ELEM_PTR->RADIUS_UNIT == orig(group_ptr[].ELEM_PTR->RADIUS_UNIT)
 group_ptr[].ELEM_PTR->TYPE == orig(group_ptr[].ELEM_PTR->TYPE)
@@ -2605,6 +2609,8 @@ group_ptr[].GRAMPEXC_PTR[0] == orig(group_ptr[].GRAMPEXC_PTR[0])
 group_ptr[].GRID_PTR == orig(group_ptr[].GRID_PTR)
 group_ptr[].GRID_PTR->LEVEL == orig(group_ptr[].GRID_PTR->LEVEL)
 group_ptr[].GRID_PTR->PQSTEP_UNIT == orig(group_ptr[].GRID_PTR->PQSTEP_UNIT)
+group_ptr[].GRID_PTR->ROT_ANGLE == orig(group_ptr[].GRID_PTR->PSTEP)
+group_ptr[].GRID_PTR->ROT_ANGLE == orig(group_ptr[].GRID_PTR->QSTEP)
 group_ptr[].GRID_PTR->TYPE == orig(group_ptr[].GRID_PTR->TYPE)
 group_ptr[].GRPHAEXC_PTR == orig(group_ptr[].GRPHAEXC_PTR)
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == orig(group_ptr[].GRPHAEXC_PTR->PHASE_UNIT)
@@ -2657,9 +2663,7 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == [null]
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -3897,10 +3901,16 @@ group_ptr[].ELEM_PTR->PDIM == group_ptr[].GRID_PTR->PSTEP
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GRID_PTR->QSTEP
 group_ptr[].ELEM_PTR->PHEPOL == group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL
 group_ptr[].ELEM_PTR->PHEPOL == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PHEPOL
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].ELEM_PTR->PORT_PTR->PSH
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSH == group_ptr[].GRPHAEXC_PTR->UNIF_VAL
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->PSEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->THEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->ZA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GRID_PTR->ROT_ANGLE
 group_ptr[].GRAMPEXC_PTR->P1_ET == group_ptr[].GRAMPEXC_PTR->Q2_ET
 group_ptr[].PSIZE == group_ptr[].QSIZE
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -3944,9 +3954,7 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == [null]
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -3967,13 +3975,10 @@ group_ptr[].GEOMNODE_PTR->LOC_Q == [2]
 group_ptr[].GEOMNODE_PTR->NEXT contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->NEXT[0] contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->PHEA == [0.0]
-group_ptr[].GEOMNODE_PTR->PSEA == [0.0]
 group_ptr[].GEOMNODE_PTR->SHAPE == [2]
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == [null]
-group_ptr[].GEOMNODE_PTR->THEA == [0.0]
 group_ptr[].GEOMNODE_PTR->XA == [773.9999999796324]
 group_ptr[].GEOMNODE_PTR->YA == [148.95636946268272]
-group_ptr[].GEOMNODE_PTR->ZA == [0.0]
 group_ptr[].GEOMNODE_PTR[0] contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == [0]
@@ -3990,7 +3995,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
@@ -4054,16 +4058,11 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == orig(group_ptr[].ELEM_PTR->PORT_PTR->NEX
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == orig(group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL)
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT)
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == orig(group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].ELEM_PTR->PORT_PTR->PSH
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA)
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT)
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC)
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC)
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT)
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT)
 group_ptr[].ELEM_PTR->PORT_PTR[0] == orig(group_ptr[].ELEM_PTR->PORT_PTR[0])
 group_ptr[].ELEM_PTR->PQDIM_UNIT == orig(group_ptr[].ELEM_PTR->PQDIM_UNIT)
@@ -4077,20 +4076,32 @@ group_ptr[].GEOMNODE_PTR == orig(group_ptr[].GEOMNODE_PTR)
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR)
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->AMP == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->AMP)
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->NEXT == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->NEXT)
+group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSH == group_ptr[].GRPHAEXC_PTR->UNIF_VAL
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR[0] == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR[0])
 group_ptr[].GEOMNODE_PTR->LOC_P == orig(group_ptr[].GEOMNODE_PTR->LOC_P)
 group_ptr[].GEOMNODE_PTR->LOC_Q == orig(group_ptr[].GEOMNODE_PTR->LOC_Q)
 group_ptr[].GEOMNODE_PTR->NEXT == orig(group_ptr[].GEOMNODE_PTR->NEXT)
 group_ptr[].GEOMNODE_PTR->NEXT[0] == orig(group_ptr[].GEOMNODE_PTR->NEXT[0])
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->PSEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->THEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->ZA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GRID_PTR->ROT_ANGLE
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC)
 group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->PHEA)
-group_ptr[].GEOMNODE_PTR->PSEA == orig(group_ptr[].GEOMNODE_PTR->PSEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->PSEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->THEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->ZA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GRID_PTR->ROT_ANGLE)
 group_ptr[].GEOMNODE_PTR->SHAPE == orig(group_ptr[].GEOMNODE_PTR->SHAPE)
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == orig(group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR)
-group_ptr[].GEOMNODE_PTR->THEA == orig(group_ptr[].GEOMNODE_PTR->THEA)
 group_ptr[].GEOMNODE_PTR->XA == orig(group_ptr[].GEOMNODE_PTR->XA)
 group_ptr[].GEOMNODE_PTR->YA == orig(group_ptr[].GEOMNODE_PTR->YA)
-group_ptr[].GEOMNODE_PTR->ZA == orig(group_ptr[].GEOMNODE_PTR->ZA)
 group_ptr[].GEOMNODE_PTR[0] == orig(group_ptr[].GEOMNODE_PTR[0])
 group_ptr[].GRAMPEXC_PTR == orig(group_ptr[].GRAMPEXC_PTR)
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == orig(group_ptr[].GRAMPEXC_PTR->AMP_UNIT)
@@ -4109,7 +4120,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == orig(group_ptr[].GRID_PTR->ANGLE_UNIT)
 group_ptr[].GRID_PTR->LEVEL == orig(group_ptr[].GRID_PTR->LEVEL)
 group_ptr[].GRID_PTR->PQSTEP_UNIT == orig(group_ptr[].GRID_PTR->PQSTEP_UNIT)
 group_ptr[].GRID_PTR->PQXY_UNIT == orig(group_ptr[].GRID_PTR->PQXY_UNIT)
-group_ptr[].GRID_PTR->ROT_ANGLE == orig(group_ptr[].GRID_PTR->ROT_ANGLE)
 group_ptr[].GRID_PTR->TYPE == orig(group_ptr[].GRID_PTR->TYPE)
 group_ptr[].GRPHAEXC_PTR == orig(group_ptr[].GRPHAEXC_PTR)
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == orig(group_ptr[].GRPHAEXC_PTR->PHASE_UNIT)
@@ -4164,9 +4174,7 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == [null]
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -4187,13 +4195,10 @@ group_ptr[].GEOMNODE_PTR->LOC_Q == [2]
 group_ptr[].GEOMNODE_PTR->NEXT contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->NEXT[0] contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->PHEA == [0.0]
-group_ptr[].GEOMNODE_PTR->PSEA == [0.0]
 group_ptr[].GEOMNODE_PTR->SHAPE == [2]
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == [null]
-group_ptr[].GEOMNODE_PTR->THEA == [0.0]
 group_ptr[].GEOMNODE_PTR->XA == [773.9999999796324]
 group_ptr[].GEOMNODE_PTR->YA == [148.95636946268272]
-group_ptr[].GEOMNODE_PTR->ZA == [0.0]
 group_ptr[].GEOMNODE_PTR[0] contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == [0]
@@ -4210,7 +4215,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
@@ -4719,14 +4723,29 @@ addrem_ptr[].NODE_PTR->THEA == orig(addrem_ptr[].NODE_PTR->THEA)
 first_node_ptr[]->LOC_Q == first_node_ptr[]->NEXT->LOC_Q
 first_node_ptr[]->NEXT->LOC_P == last_node_ptr[]->LOC_P
 first_node_ptr[]->NEXT->NEXT->LOC_Q == last_node_ptr[]->LOC_Q
+first_node_ptr[]->NEXT->NEXT->PHEA == first_node_ptr[]->PHEA
+first_node_ptr[]->NEXT->NEXT->PSEA == first_node_ptr[]->PHEA
 first_node_ptr[]->NEXT->NEXT->PSIZE == first_node_ptr[]->PSIZE
 first_node_ptr[]->NEXT->NEXT->QSIZE == first_node_ptr[]->PSIZE
 first_node_ptr[]->NEXT->NEXT->SHAPE == first_node_ptr[]->SHAPE
+first_node_ptr[]->NEXT->NEXT->THEA == first_node_ptr[]->PHEA
 first_node_ptr[]->NEXT->NEXT->YA == last_node_ptr[]->YA
+first_node_ptr[]->NEXT->NEXT->ZA == first_node_ptr[]->PHEA
+first_node_ptr[]->NEXT->PHEA == first_node_ptr[]->PHEA
+first_node_ptr[]->NEXT->PSEA == first_node_ptr[]->PHEA
 first_node_ptr[]->NEXT->PSIZE == first_node_ptr[]->PSIZE
 first_node_ptr[]->NEXT->QSIZE == first_node_ptr[]->PSIZE
 first_node_ptr[]->NEXT->SHAPE == first_node_ptr[]->SHAPE
+first_node_ptr[]->NEXT->THEA == first_node_ptr[]->PHEA
 first_node_ptr[]->NEXT->YA == first_node_ptr[]->YA
+first_node_ptr[]->NEXT->ZA == first_node_ptr[]->PHEA
+first_node_ptr[]->PHEA == first_node_ptr[]->PSEA
+first_node_ptr[]->PHEA == first_node_ptr[]->THEA
+first_node_ptr[]->PHEA == first_node_ptr[]->ZA
+first_node_ptr[]->PHEA == last_node_ptr[]->PHEA
+first_node_ptr[]->PHEA == last_node_ptr[]->PSEA
+first_node_ptr[]->PHEA == last_node_ptr[]->THEA
+first_node_ptr[]->PHEA == last_node_ptr[]->ZA
 first_node_ptr[]->PSIZE == first_node_ptr[]->QSIZE
 first_node_ptr[]->PSIZE == last_node_ptr[]->PSIZE
 first_node_ptr[]->PSIZE == last_node_ptr[]->QSIZE
@@ -4756,41 +4775,26 @@ first_node_ptr[]->NEXT->NEXT contains no nulls and has only one value, of length
 first_node_ptr[]->NEXT->NEXT->LOC_P == [10]
 first_node_ptr[]->NEXT->NEXT->NEXT contains no nulls and has only one value, of length 1
 first_node_ptr[]->NEXT->NEXT->NEXT[0] contains no nulls and has only one value, of length 1
-first_node_ptr[]->NEXT->NEXT->PHEA == [0.0]
-first_node_ptr[]->NEXT->NEXT->PSEA == [0.0]
 first_node_ptr[]->NEXT->NEXT->SUBGROUP_PTR == [null]
-first_node_ptr[]->NEXT->NEXT->THEA == [0.0]
 first_node_ptr[]->NEXT->NEXT->XA == [902.9999999898162]
-first_node_ptr[]->NEXT->NEXT->ZA == [0.0]
 first_node_ptr[]->NEXT->NEXT[0] contains no nulls and has only one value, of length 1
-first_node_ptr[]->NEXT->PHEA == [0.0]
-first_node_ptr[]->NEXT->PSEA == [0.0]
 first_node_ptr[]->NEXT->SUBGROUP_PTR == [null]
-first_node_ptr[]->NEXT->THEA == [0.0]
 first_node_ptr[]->NEXT->XA == [859.9999999796324]
-first_node_ptr[]->NEXT->ZA == [0.0]
 first_node_ptr[]->NEXT[0] contains no nulls and has only one value, of length 1
 first_node_ptr[]->PHEA == [0.0]
-first_node_ptr[]->PSEA == [0.0]
 first_node_ptr[]->PSIZE == [86.0]
 first_node_ptr[]->SHAPE == [2]
 first_node_ptr[]->SUBGROUP_PTR == [null]
-first_node_ptr[]->THEA == [0.0]
 first_node_ptr[]->XA == [773.9999999796324]
 first_node_ptr[]->YA == [148.95636946268272]
-first_node_ptr[]->ZA == [0.0]
 first_node_ptr[][0] contains no nulls and has only one value, of length 1
 last_node_ptr[] contains no nulls and has only one value, of length 1
 last_node_ptr[]->LOC_P == [9]
 last_node_ptr[]->LOC_Q == [1]
 last_node_ptr[]->NEXT == [null]
-last_node_ptr[]->PHEA == [0.0]
-last_node_ptr[]->PSEA == [0.0]
 last_node_ptr[]->SUBGROUP_PTR == [null]
-last_node_ptr[]->THEA == [0.0]
 last_node_ptr[]->XA == [816.9999999898162]
 last_node_ptr[]->YA == [74.47818473134136]
-last_node_ptr[]->ZA == [0.0]
 last_node_ptr[][0] contains no nulls and has only one value, of length 1
 nodes_num_ptr[] == [7]
 return == 0
@@ -6279,16 +6283,29 @@ return != orig(y)
 ===========================================================================
 ..sgramp2n():::ENTER
 geomnode_ptr[].LOC_Q == geomnode_ptr[].NEXT->LOC_Q
+geomnode_ptr[].NEXT->NEXT->PHEA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->NEXT->PSEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->NEXT->PSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->NEXT->QSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->NEXT->SHAPE == geomnode_ptr[].SHAPE
+geomnode_ptr[].NEXT->NEXT->THEA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->NEXT->ZA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->PHEA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->PSEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->PSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->QSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->SHAPE == geomnode_ptr[].SHAPE
+geomnode_ptr[].NEXT->THEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->YA == geomnode_ptr[].YA
+geomnode_ptr[].NEXT->ZA == geomnode_ptr[].PHEA
+geomnode_ptr[].PHEA == geomnode_ptr[].PSEA
+geomnode_ptr[].PHEA == geomnode_ptr[].THEA
+geomnode_ptr[].PHEA == geomnode_ptr[].ZA
+geomnode_ptr[].PHEA == port_ptr[].PPA
+geomnode_ptr[].PHEA == port_ptr[].PSC
+geomnode_ptr[].PHEA == port_ptr[].PSH
 geomnode_ptr[].PSIZE == geomnode_ptr[].QSIZE
 grampexc_ptr[].P1_ET == grampexc_ptr[].Q2_ET
-port_ptr[].PPA == port_ptr[].PSH
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
@@ -6305,30 +6322,19 @@ geomnode_ptr[].NEXT->NEXT->LOC_P == [10]
 geomnode_ptr[].NEXT->NEXT->LOC_Q == [1]
 geomnode_ptr[].NEXT->NEXT->NEXT contains no nulls and has only one value, of length 1
 geomnode_ptr[].NEXT->NEXT->NEXT[0] contains no nulls and has only one value, of length 1
-geomnode_ptr[].NEXT->NEXT->PHEA == [0.0]
-geomnode_ptr[].NEXT->NEXT->PSEA == [0.0]
 geomnode_ptr[].NEXT->NEXT->SUBGROUP_PTR == [null]
-geomnode_ptr[].NEXT->NEXT->THEA == [0.0]
 geomnode_ptr[].NEXT->NEXT->XA == [902.9999999898162]
 geomnode_ptr[].NEXT->NEXT->YA == [74.47818473134136]
-geomnode_ptr[].NEXT->NEXT->ZA == [0.0]
 geomnode_ptr[].NEXT->NEXT[0] contains no nulls and has only one value, of length 1
-geomnode_ptr[].NEXT->PHEA == [0.0]
-geomnode_ptr[].NEXT->PSEA == [0.0]
 geomnode_ptr[].NEXT->SUBGROUP_PTR == [null]
-geomnode_ptr[].NEXT->THEA == [0.0]
 geomnode_ptr[].NEXT->XA == [859.9999999796324]
-geomnode_ptr[].NEXT->ZA == [0.0]
 geomnode_ptr[].NEXT[0] contains no nulls and has only one value, of length 1
 geomnode_ptr[].PHEA == [0.0]
-geomnode_ptr[].PSEA == [0.0]
 geomnode_ptr[].PSIZE == [86.0]
 geomnode_ptr[].SHAPE == [2]
 geomnode_ptr[].SUBGROUP_PTR == [null]
-geomnode_ptr[].THEA == [0.0]
 geomnode_ptr[].XA == [773.9999999796324]
 geomnode_ptr[].YA == [148.95636946268272]
-geomnode_ptr[].ZA == [0.0]
 grampexc_ptr has only one value
 grampexc_ptr[] contains no nulls and has only one value, of length 1
 grampexc_ptr[].AMP_UNIT == [0]
@@ -6348,9 +6354,7 @@ port_ptr[].OMIT_POL == [1]
 port_ptr[].PHEPOL == [90.0]
 port_ptr[].PHEPOL_UNIT == [0]
 port_ptr[].PORTNUM == [1]
-port_ptr[].PPA == [0.0]
 port_ptr[].PPA_UNIT == [0]
-port_ptr[].PSC == [0.0]
 port_ptr[].PSC_UNIT == [0]
 port_ptr[].PSH_UNIT == [0]
 ===========================================================================
@@ -6367,30 +6371,49 @@ geomnode_ptr[].NEXT->NEXT->LOC_P == orig(geomnode_ptr[].NEXT->NEXT->LOC_P)
 geomnode_ptr[].NEXT->NEXT->LOC_Q == orig(geomnode_ptr[].NEXT->NEXT->LOC_Q)
 geomnode_ptr[].NEXT->NEXT->NEXT == orig(geomnode_ptr[].NEXT->NEXT->NEXT)
 geomnode_ptr[].NEXT->NEXT->NEXT[0] == orig(geomnode_ptr[].NEXT->NEXT->NEXT[0])
-geomnode_ptr[].NEXT->NEXT->PHEA == orig(geomnode_ptr[].NEXT->NEXT->PHEA)
-geomnode_ptr[].NEXT->NEXT->PSEA == orig(geomnode_ptr[].NEXT->NEXT->PSEA)
+geomnode_ptr[].NEXT->NEXT->PHEA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->NEXT->PSEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->NEXT->PSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->NEXT->QSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->NEXT->SHAPE == geomnode_ptr[].SHAPE
 geomnode_ptr[].NEXT->NEXT->SUBGROUP_PTR == orig(geomnode_ptr[].NEXT->NEXT->SUBGROUP_PTR)
-geomnode_ptr[].NEXT->NEXT->THEA == orig(geomnode_ptr[].NEXT->NEXT->THEA)
+geomnode_ptr[].NEXT->NEXT->THEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->NEXT->XA == orig(geomnode_ptr[].NEXT->NEXT->XA)
 geomnode_ptr[].NEXT->NEXT->YA == orig(geomnode_ptr[].NEXT->NEXT->YA)
-geomnode_ptr[].NEXT->NEXT->ZA == orig(geomnode_ptr[].NEXT->NEXT->ZA)
+geomnode_ptr[].NEXT->NEXT->ZA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->NEXT[0] == orig(geomnode_ptr[].NEXT->NEXT[0])
-geomnode_ptr[].NEXT->PHEA == orig(geomnode_ptr[].NEXT->PHEA)
-geomnode_ptr[].NEXT->PSEA == orig(geomnode_ptr[].NEXT->PSEA)
+geomnode_ptr[].NEXT->PHEA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->PSEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->PSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->QSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->SHAPE == geomnode_ptr[].SHAPE
 geomnode_ptr[].NEXT->SUBGROUP_PTR == orig(geomnode_ptr[].NEXT->SUBGROUP_PTR)
-geomnode_ptr[].NEXT->THEA == orig(geomnode_ptr[].NEXT->THEA)
+geomnode_ptr[].NEXT->THEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->XA == orig(geomnode_ptr[].NEXT->XA)
 geomnode_ptr[].NEXT->YA == geomnode_ptr[].YA
-geomnode_ptr[].NEXT->ZA == orig(geomnode_ptr[].NEXT->ZA)
+geomnode_ptr[].NEXT->ZA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT[0] == orig(geomnode_ptr[].NEXT[0])
+geomnode_ptr[].PHEA == geomnode_ptr[].PSEA
+geomnode_ptr[].PHEA == geomnode_ptr[].THEA
+geomnode_ptr[].PHEA == geomnode_ptr[].ZA
+geomnode_ptr[].PHEA == port_ptr[].PPA
+geomnode_ptr[].PHEA == port_ptr[].PSC
+geomnode_ptr[].PHEA == port_ptr[].PSH
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->NEXT->PHEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->NEXT->PSEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->NEXT->THEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->NEXT->ZA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->PHEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->PSEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->THEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->ZA)
 geomnode_ptr[].PHEA == orig(geomnode_ptr[].PHEA)
-geomnode_ptr[].PSEA == orig(geomnode_ptr[].PSEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].PSEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].THEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].ZA)
+geomnode_ptr[].PHEA == orig(port_ptr[].PPA)
+geomnode_ptr[].PHEA == orig(port_ptr[].PSC)
+geomnode_ptr[].PHEA == orig(port_ptr[].PSH)
 geomnode_ptr[].PSIZE == geomnode_ptr[].QSIZE
 geomnode_ptr[].PSIZE == orig(geomnode_ptr[].NEXT->NEXT->PSIZE)
 geomnode_ptr[].PSIZE == orig(geomnode_ptr[].NEXT->NEXT->QSIZE)
@@ -6402,11 +6425,9 @@ geomnode_ptr[].SHAPE == orig(geomnode_ptr[].NEXT->NEXT->SHAPE)
 geomnode_ptr[].SHAPE == orig(geomnode_ptr[].NEXT->SHAPE)
 geomnode_ptr[].SHAPE == orig(geomnode_ptr[].SHAPE)
 geomnode_ptr[].SUBGROUP_PTR == orig(geomnode_ptr[].SUBGROUP_PTR)
-geomnode_ptr[].THEA == orig(geomnode_ptr[].THEA)
 geomnode_ptr[].XA == orig(geomnode_ptr[].XA)
 geomnode_ptr[].YA == orig(geomnode_ptr[].NEXT->YA)
 geomnode_ptr[].YA == orig(geomnode_ptr[].YA)
-geomnode_ptr[].ZA == orig(geomnode_ptr[].ZA)
 grampexc_ptr[] == orig(grampexc_ptr[])
 grampexc_ptr[].AMP_UNIT == orig(grampexc_ptr[].AMP_UNIT)
 grampexc_ptr[].CENTRE == orig(grampexc_ptr[].CENTRE)
@@ -6425,11 +6446,7 @@ port_ptr[].OMIT_POL == orig(port_ptr[].OMIT_POL)
 port_ptr[].PHEPOL == orig(port_ptr[].PHEPOL)
 port_ptr[].PHEPOL_UNIT == orig(port_ptr[].PHEPOL_UNIT)
 port_ptr[].PORTNUM == orig(port_ptr[].PORTNUM)
-port_ptr[].PPA == port_ptr[].PSH
-port_ptr[].PPA == orig(port_ptr[].PPA)
-port_ptr[].PPA == orig(port_ptr[].PSH)
 port_ptr[].PPA_UNIT == orig(port_ptr[].PPA_UNIT)
-port_ptr[].PSC == orig(port_ptr[].PSC)
 port_ptr[].PSC_UNIT == orig(port_ptr[].PSC_UNIT)
 port_ptr[].PSH_UNIT == orig(port_ptr[].PSH_UNIT)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -6457,30 +6474,19 @@ geomnode_ptr[].NEXT->NEXT->LOC_P == [10]
 geomnode_ptr[].NEXT->NEXT->LOC_Q == [1]
 geomnode_ptr[].NEXT->NEXT->NEXT contains no nulls and has only one value, of length 1
 geomnode_ptr[].NEXT->NEXT->NEXT[0] contains no nulls and has only one value, of length 1
-geomnode_ptr[].NEXT->NEXT->PHEA == [0.0]
-geomnode_ptr[].NEXT->NEXT->PSEA == [0.0]
 geomnode_ptr[].NEXT->NEXT->SUBGROUP_PTR == [null]
-geomnode_ptr[].NEXT->NEXT->THEA == [0.0]
 geomnode_ptr[].NEXT->NEXT->XA == [902.9999999898162]
 geomnode_ptr[].NEXT->NEXT->YA == [74.47818473134136]
-geomnode_ptr[].NEXT->NEXT->ZA == [0.0]
 geomnode_ptr[].NEXT->NEXT[0] contains no nulls and has only one value, of length 1
-geomnode_ptr[].NEXT->PHEA == [0.0]
-geomnode_ptr[].NEXT->PSEA == [0.0]
 geomnode_ptr[].NEXT->SUBGROUP_PTR == [null]
-geomnode_ptr[].NEXT->THEA == [0.0]
 geomnode_ptr[].NEXT->XA == [859.9999999796324]
-geomnode_ptr[].NEXT->ZA == [0.0]
 geomnode_ptr[].NEXT[0] contains no nulls and has only one value, of length 1
 geomnode_ptr[].PHEA == [0.0]
-geomnode_ptr[].PSEA == [0.0]
 geomnode_ptr[].PSIZE == [86.0]
 geomnode_ptr[].SHAPE == [2]
 geomnode_ptr[].SUBGROUP_PTR == [null]
-geomnode_ptr[].THEA == [0.0]
 geomnode_ptr[].XA == [773.9999999796324]
 geomnode_ptr[].YA == [148.95636946268272]
-geomnode_ptr[].ZA == [0.0]
 grampexc_ptr[] contains no nulls and has only one value, of length 1
 grampexc_ptr[].AMP_UNIT == [0]
 grampexc_ptr[].CENTRE == [29.0]
@@ -6497,9 +6503,7 @@ port_ptr[].OMIT_POL == [1]
 port_ptr[].PHEPOL == [90.0]
 port_ptr[].PHEPOL_UNIT == [0]
 port_ptr[].PORTNUM == [1]
-port_ptr[].PPA == [0.0]
 port_ptr[].PPA_UNIT == [0]
-port_ptr[].PSC == [0.0]
 port_ptr[].PSC_UNIT == [0]
 port_ptr[].PSH_UNIT == [0]
 return == 0
@@ -6511,15 +6515,28 @@ return == 0
 ===========================================================================
 ..sgrphaun():::ENTER
 geomnode_ptr[].LOC_Q == geomnode_ptr[].NEXT->LOC_Q
+geomnode_ptr[].NEXT->NEXT->PHEA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->NEXT->PSEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->NEXT->PSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->NEXT->QSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->NEXT->SHAPE == geomnode_ptr[].SHAPE
+geomnode_ptr[].NEXT->NEXT->THEA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->NEXT->ZA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->PHEA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->PSEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->PSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->QSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->SHAPE == geomnode_ptr[].SHAPE
+geomnode_ptr[].NEXT->THEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->YA == geomnode_ptr[].YA
+geomnode_ptr[].NEXT->ZA == geomnode_ptr[].PHEA
+geomnode_ptr[].PHEA == geomnode_ptr[].PSEA
+geomnode_ptr[].PHEA == geomnode_ptr[].THEA
+geomnode_ptr[].PHEA == geomnode_ptr[].ZA
+geomnode_ptr[].PHEA == port_ptr[].PPA
+geomnode_ptr[].PHEA == port_ptr[].PSC
+geomnode_ptr[].PHEA == port_ptr[].PSH
 geomnode_ptr[].PSIZE == geomnode_ptr[].QSIZE
-port_ptr[].PPA == port_ptr[].PSH
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == "PLANE"
@@ -6546,30 +6563,19 @@ geomnode_ptr[].NEXT->NEXT->LOC_P == [10]
 geomnode_ptr[].NEXT->NEXT->LOC_Q == [1]
 geomnode_ptr[].NEXT->NEXT->NEXT contains no nulls and has only one value, of length 1
 geomnode_ptr[].NEXT->NEXT->NEXT[0] contains no nulls and has only one value, of length 1
-geomnode_ptr[].NEXT->NEXT->PHEA == [0.0]
-geomnode_ptr[].NEXT->NEXT->PSEA == [0.0]
 geomnode_ptr[].NEXT->NEXT->SUBGROUP_PTR == [null]
-geomnode_ptr[].NEXT->NEXT->THEA == [0.0]
 geomnode_ptr[].NEXT->NEXT->XA == [902.9999999898162]
 geomnode_ptr[].NEXT->NEXT->YA == [74.47818473134136]
-geomnode_ptr[].NEXT->NEXT->ZA == [0.0]
 geomnode_ptr[].NEXT->NEXT[0] contains no nulls and has only one value, of length 1
-geomnode_ptr[].NEXT->PHEA == [0.0]
-geomnode_ptr[].NEXT->PSEA == [0.0]
 geomnode_ptr[].NEXT->SUBGROUP_PTR == [null]
-geomnode_ptr[].NEXT->THEA == [0.0]
 geomnode_ptr[].NEXT->XA == [859.9999999796324]
-geomnode_ptr[].NEXT->ZA == [0.0]
 geomnode_ptr[].NEXT[0] contains no nulls and has only one value, of length 1
 geomnode_ptr[].PHEA == [0.0]
-geomnode_ptr[].PSEA == [0.0]
 geomnode_ptr[].PSIZE == [86.0]
 geomnode_ptr[].SHAPE == [2]
 geomnode_ptr[].SUBGROUP_PTR == [null]
-geomnode_ptr[].THEA == [0.0]
 geomnode_ptr[].XA == [773.9999999796324]
 geomnode_ptr[].YA == [148.95636946268272]
-geomnode_ptr[].ZA == [0.0]
 grphaexc_ptr has only one value
 grphaexc_ptr[] contains no nulls and has only one value, of length 1
 grphaexc_ptr[].PHASE_UNIT == [0]
@@ -6585,9 +6591,7 @@ port_ptr[].OMIT_POL == [1]
 port_ptr[].PHEPOL == [90.0]
 port_ptr[].PHEPOL_UNIT == [0]
 port_ptr[].PORTNUM == [1]
-port_ptr[].PPA == [0.0]
 port_ptr[].PPA_UNIT == [0]
-port_ptr[].PSC == [0.0]
 port_ptr[].PSC_UNIT == [0]
 port_ptr[].PSH_UNIT == [0]
 ===========================================================================
@@ -6596,8 +6600,8 @@ geomnode_ptr[] == orig(geomnode_ptr[])
 geomnode_ptr[].GEOMPORT_PTR == orig(geomnode_ptr[].GEOMPORT_PTR)
 geomnode_ptr[].GEOMPORT_PTR->AMP == orig(geomnode_ptr[].GEOMPORT_PTR->AMP)
 geomnode_ptr[].GEOMPORT_PTR->NEXT == orig(geomnode_ptr[].GEOMPORT_PTR->NEXT)
-geomnode_ptr[].GEOMPORT_PTR->PPA == port_ptr[].PPA
-geomnode_ptr[].GEOMPORT_PTR->PSC == port_ptr[].PSC
+geomnode_ptr[].GEOMPORT_PTR->PPA == geomnode_ptr[].PHEA
+geomnode_ptr[].GEOMPORT_PTR->PSC == geomnode_ptr[].PHEA
 geomnode_ptr[].GEOMPORT_PTR->PSH == grphaexc_ptr[].UNIF_VAL
 geomnode_ptr[].GEOMPORT_PTR[0] == orig(geomnode_ptr[].GEOMPORT_PTR[0])
 geomnode_ptr[].LOC_P == orig(geomnode_ptr[].LOC_P)
@@ -6608,8 +6612,8 @@ geomnode_ptr[].NEXT == orig(geomnode_ptr[].NEXT)
 geomnode_ptr[].NEXT->GEOMPORT_PTR == orig(geomnode_ptr[].NEXT->GEOMPORT_PTR)
 geomnode_ptr[].NEXT->GEOMPORT_PTR->AMP == orig(geomnode_ptr[].NEXT->GEOMPORT_PTR->AMP)
 geomnode_ptr[].NEXT->GEOMPORT_PTR->NEXT == orig(geomnode_ptr[].NEXT->GEOMPORT_PTR->NEXT)
-geomnode_ptr[].NEXT->GEOMPORT_PTR->PPA == port_ptr[].PPA
-geomnode_ptr[].NEXT->GEOMPORT_PTR->PSC == port_ptr[].PSC
+geomnode_ptr[].NEXT->GEOMPORT_PTR->PPA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->GEOMPORT_PTR->PSC == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->GEOMPORT_PTR->PSH == grphaexc_ptr[].UNIF_VAL
 geomnode_ptr[].NEXT->GEOMPORT_PTR[0] == orig(geomnode_ptr[].NEXT->GEOMPORT_PTR[0])
 geomnode_ptr[].NEXT->LOC_P == orig(geomnode_ptr[].NEXT->LOC_P)
@@ -6620,30 +6624,49 @@ geomnode_ptr[].NEXT->NEXT->LOC_P == orig(geomnode_ptr[].NEXT->NEXT->LOC_P)
 geomnode_ptr[].NEXT->NEXT->LOC_Q == orig(geomnode_ptr[].NEXT->NEXT->LOC_Q)
 geomnode_ptr[].NEXT->NEXT->NEXT == orig(geomnode_ptr[].NEXT->NEXT->NEXT)
 geomnode_ptr[].NEXT->NEXT->NEXT[0] == orig(geomnode_ptr[].NEXT->NEXT->NEXT[0])
-geomnode_ptr[].NEXT->NEXT->PHEA == orig(geomnode_ptr[].NEXT->NEXT->PHEA)
-geomnode_ptr[].NEXT->NEXT->PSEA == orig(geomnode_ptr[].NEXT->NEXT->PSEA)
+geomnode_ptr[].NEXT->NEXT->PHEA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->NEXT->PSEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->NEXT->PSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->NEXT->QSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->NEXT->SHAPE == geomnode_ptr[].SHAPE
 geomnode_ptr[].NEXT->NEXT->SUBGROUP_PTR == orig(geomnode_ptr[].NEXT->NEXT->SUBGROUP_PTR)
-geomnode_ptr[].NEXT->NEXT->THEA == orig(geomnode_ptr[].NEXT->NEXT->THEA)
+geomnode_ptr[].NEXT->NEXT->THEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->NEXT->XA == orig(geomnode_ptr[].NEXT->NEXT->XA)
 geomnode_ptr[].NEXT->NEXT->YA == orig(geomnode_ptr[].NEXT->NEXT->YA)
-geomnode_ptr[].NEXT->NEXT->ZA == orig(geomnode_ptr[].NEXT->NEXT->ZA)
+geomnode_ptr[].NEXT->NEXT->ZA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->NEXT[0] == orig(geomnode_ptr[].NEXT->NEXT[0])
-geomnode_ptr[].NEXT->PHEA == orig(geomnode_ptr[].NEXT->PHEA)
-geomnode_ptr[].NEXT->PSEA == orig(geomnode_ptr[].NEXT->PSEA)
+geomnode_ptr[].NEXT->PHEA == geomnode_ptr[].PHEA
+geomnode_ptr[].NEXT->PSEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->PSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->QSIZE == geomnode_ptr[].PSIZE
 geomnode_ptr[].NEXT->SHAPE == geomnode_ptr[].SHAPE
 geomnode_ptr[].NEXT->SUBGROUP_PTR == orig(geomnode_ptr[].NEXT->SUBGROUP_PTR)
-geomnode_ptr[].NEXT->THEA == orig(geomnode_ptr[].NEXT->THEA)
+geomnode_ptr[].NEXT->THEA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT->XA == orig(geomnode_ptr[].NEXT->XA)
 geomnode_ptr[].NEXT->YA == geomnode_ptr[].YA
-geomnode_ptr[].NEXT->ZA == orig(geomnode_ptr[].NEXT->ZA)
+geomnode_ptr[].NEXT->ZA == geomnode_ptr[].PHEA
 geomnode_ptr[].NEXT[0] == orig(geomnode_ptr[].NEXT[0])
+geomnode_ptr[].PHEA == geomnode_ptr[].PSEA
+geomnode_ptr[].PHEA == geomnode_ptr[].THEA
+geomnode_ptr[].PHEA == geomnode_ptr[].ZA
+geomnode_ptr[].PHEA == port_ptr[].PPA
+geomnode_ptr[].PHEA == port_ptr[].PSC
+geomnode_ptr[].PHEA == port_ptr[].PSH
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->NEXT->PHEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->NEXT->PSEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->NEXT->THEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->NEXT->ZA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->PHEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->PSEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->THEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].NEXT->ZA)
 geomnode_ptr[].PHEA == orig(geomnode_ptr[].PHEA)
-geomnode_ptr[].PSEA == orig(geomnode_ptr[].PSEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].PSEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].THEA)
+geomnode_ptr[].PHEA == orig(geomnode_ptr[].ZA)
+geomnode_ptr[].PHEA == orig(port_ptr[].PPA)
+geomnode_ptr[].PHEA == orig(port_ptr[].PSC)
+geomnode_ptr[].PHEA == orig(port_ptr[].PSH)
 geomnode_ptr[].PSIZE == geomnode_ptr[].QSIZE
 geomnode_ptr[].PSIZE == orig(geomnode_ptr[].NEXT->NEXT->PSIZE)
 geomnode_ptr[].PSIZE == orig(geomnode_ptr[].NEXT->NEXT->QSIZE)
@@ -6655,11 +6678,9 @@ geomnode_ptr[].SHAPE == orig(geomnode_ptr[].NEXT->NEXT->SHAPE)
 geomnode_ptr[].SHAPE == orig(geomnode_ptr[].NEXT->SHAPE)
 geomnode_ptr[].SHAPE == orig(geomnode_ptr[].SHAPE)
 geomnode_ptr[].SUBGROUP_PTR == orig(geomnode_ptr[].SUBGROUP_PTR)
-geomnode_ptr[].THEA == orig(geomnode_ptr[].THEA)
 geomnode_ptr[].XA == orig(geomnode_ptr[].XA)
 geomnode_ptr[].YA == orig(geomnode_ptr[].NEXT->YA)
 geomnode_ptr[].YA == orig(geomnode_ptr[].YA)
-geomnode_ptr[].ZA == orig(geomnode_ptr[].ZA)
 grphaexc_ptr[] == orig(grphaexc_ptr[])
 grphaexc_ptr[].PHASE_UNIT == orig(grphaexc_ptr[].PHASE_UNIT)
 grphaexc_ptr[].PQEXP_PTR == orig(grphaexc_ptr[].PQEXP_PTR)
@@ -6673,11 +6694,7 @@ port_ptr[].OMIT_POL == orig(port_ptr[].OMIT_POL)
 port_ptr[].PHEPOL == orig(port_ptr[].PHEPOL)
 port_ptr[].PHEPOL_UNIT == orig(port_ptr[].PHEPOL_UNIT)
 port_ptr[].PORTNUM == orig(port_ptr[].PORTNUM)
-port_ptr[].PPA == port_ptr[].PSH
-port_ptr[].PPA == orig(port_ptr[].PPA)
-port_ptr[].PPA == orig(port_ptr[].PSH)
 port_ptr[].PPA_UNIT == orig(port_ptr[].PPA_UNIT)
-port_ptr[].PSC == orig(port_ptr[].PSC)
 port_ptr[].PSC_UNIT == orig(port_ptr[].PSC_UNIT)
 port_ptr[].PSH_UNIT == orig(port_ptr[].PSH_UNIT)
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -6705,30 +6722,19 @@ geomnode_ptr[].NEXT->NEXT->LOC_P == [10]
 geomnode_ptr[].NEXT->NEXT->LOC_Q == [1]
 geomnode_ptr[].NEXT->NEXT->NEXT contains no nulls and has only one value, of length 1
 geomnode_ptr[].NEXT->NEXT->NEXT[0] contains no nulls and has only one value, of length 1
-geomnode_ptr[].NEXT->NEXT->PHEA == [0.0]
-geomnode_ptr[].NEXT->NEXT->PSEA == [0.0]
 geomnode_ptr[].NEXT->NEXT->SUBGROUP_PTR == [null]
-geomnode_ptr[].NEXT->NEXT->THEA == [0.0]
 geomnode_ptr[].NEXT->NEXT->XA == [902.9999999898162]
 geomnode_ptr[].NEXT->NEXT->YA == [74.47818473134136]
-geomnode_ptr[].NEXT->NEXT->ZA == [0.0]
 geomnode_ptr[].NEXT->NEXT[0] contains no nulls and has only one value, of length 1
-geomnode_ptr[].NEXT->PHEA == [0.0]
-geomnode_ptr[].NEXT->PSEA == [0.0]
 geomnode_ptr[].NEXT->SUBGROUP_PTR == [null]
-geomnode_ptr[].NEXT->THEA == [0.0]
 geomnode_ptr[].NEXT->XA == [859.9999999796324]
-geomnode_ptr[].NEXT->ZA == [0.0]
 geomnode_ptr[].NEXT[0] contains no nulls and has only one value, of length 1
 geomnode_ptr[].PHEA == [0.0]
-geomnode_ptr[].PSEA == [0.0]
 geomnode_ptr[].PSIZE == [86.0]
 geomnode_ptr[].SHAPE == [2]
 geomnode_ptr[].SUBGROUP_PTR == [null]
-geomnode_ptr[].THEA == [0.0]
 geomnode_ptr[].XA == [773.9999999796324]
 geomnode_ptr[].YA == [148.95636946268272]
-geomnode_ptr[].ZA == [0.0]
 grphaexc_ptr[] contains no nulls and has only one value, of length 1
 grphaexc_ptr[].PHASE_UNIT == [0]
 grphaexc_ptr[].PQEXP_PTR == [null]
@@ -6742,9 +6748,7 @@ port_ptr[].OMIT_POL == [1]
 port_ptr[].PHEPOL == [90.0]
 port_ptr[].PHEPOL_UNIT == [0]
 port_ptr[].PORTNUM == [1]
-port_ptr[].PPA == [0.0]
 port_ptr[].PPA_UNIT == [0]
-port_ptr[].PSC == [0.0]
 port_ptr[].PSC_UNIT == [0]
 port_ptr[].PSH_UNIT == [0]
 return == 0
@@ -6761,7 +6765,13 @@ group_ptr[].ELEM_PTR->PDIM == group_ptr[].GEOMNODE_PTR->QSIZE
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GRID_PTR->PSTEP
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GRID_PTR->QSTEP
 group_ptr[].ELEM_PTR->PHEPOL == group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].ELEM_PTR->PORT_PTR->PSH
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->PSEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->THEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->ZA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GRID_PTR->ROT_ANGLE
 group_ptr[].GRAMPEXC_PTR->P1_ET == group_ptr[].GRAMPEXC_PTR->Q2_ET
 group_ptr[].PSIZE == group_ptr[].QSIZE
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -6805,9 +6815,7 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == [null]
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -6824,13 +6832,10 @@ group_ptr[].GEOMNODE_PTR->LOC_Q == [2]
 group_ptr[].GEOMNODE_PTR->NEXT contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->NEXT[0] contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->PHEA == [0.0]
-group_ptr[].GEOMNODE_PTR->PSEA == [0.0]
 group_ptr[].GEOMNODE_PTR->SHAPE == [2]
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == [null]
-group_ptr[].GEOMNODE_PTR->THEA == [0.0]
 group_ptr[].GEOMNODE_PTR->XA == [773.9999999796324]
 group_ptr[].GEOMNODE_PTR->YA == [148.95636946268272]
-group_ptr[].GEOMNODE_PTR->ZA == [0.0]
 group_ptr[].GEOMNODE_PTR[0] contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == [0]
@@ -6847,7 +6852,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
@@ -6908,12 +6912,11 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == orig(group_ptr[].ELEM_PTR->PORT_PTR->NEX
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == orig(group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL)
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT)
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == orig(group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].ELEM_PTR->PORT_PTR->PSH
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH)
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT)
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC)
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT)
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT)
 group_ptr[].ELEM_PTR->PORT_PTR[0] == orig(group_ptr[].ELEM_PTR->PORT_PTR[0])
 group_ptr[].ELEM_PTR->PQDIM_UNIT == orig(group_ptr[].ELEM_PTR->PQDIM_UNIT)
@@ -6928,14 +6931,22 @@ group_ptr[].GEOMNODE_PTR->LOC_P == orig(group_ptr[].GEOMNODE_PTR->LOC_P)
 group_ptr[].GEOMNODE_PTR->LOC_Q == orig(group_ptr[].GEOMNODE_PTR->LOC_Q)
 group_ptr[].GEOMNODE_PTR->NEXT == orig(group_ptr[].GEOMNODE_PTR->NEXT)
 group_ptr[].GEOMNODE_PTR->NEXT[0] == orig(group_ptr[].GEOMNODE_PTR->NEXT[0])
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->PSEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->THEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->ZA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GRID_PTR->ROT_ANGLE
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH)
 group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->PHEA)
-group_ptr[].GEOMNODE_PTR->PSEA == orig(group_ptr[].GEOMNODE_PTR->PSEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->PSEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->THEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->ZA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GRID_PTR->ROT_ANGLE)
 group_ptr[].GEOMNODE_PTR->SHAPE == orig(group_ptr[].GEOMNODE_PTR->SHAPE)
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == orig(group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR)
-group_ptr[].GEOMNODE_PTR->THEA == orig(group_ptr[].GEOMNODE_PTR->THEA)
 group_ptr[].GEOMNODE_PTR->XA == orig(group_ptr[].GEOMNODE_PTR->XA)
 group_ptr[].GEOMNODE_PTR->YA == orig(group_ptr[].GEOMNODE_PTR->YA)
-group_ptr[].GEOMNODE_PTR->ZA == orig(group_ptr[].GEOMNODE_PTR->ZA)
 group_ptr[].GEOMNODE_PTR[0] == orig(group_ptr[].GEOMNODE_PTR[0])
 group_ptr[].GRAMPEXC_PTR == orig(group_ptr[].GRAMPEXC_PTR)
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == orig(group_ptr[].GRAMPEXC_PTR->AMP_UNIT)
@@ -6954,7 +6965,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == orig(group_ptr[].GRID_PTR->ANGLE_UNIT)
 group_ptr[].GRID_PTR->LEVEL == orig(group_ptr[].GRID_PTR->LEVEL)
 group_ptr[].GRID_PTR->PQSTEP_UNIT == orig(group_ptr[].GRID_PTR->PQSTEP_UNIT)
 group_ptr[].GRID_PTR->PQXY_UNIT == orig(group_ptr[].GRID_PTR->PQXY_UNIT)
-group_ptr[].GRID_PTR->ROT_ANGLE == orig(group_ptr[].GRID_PTR->ROT_ANGLE)
 group_ptr[].GRID_PTR->TYPE == orig(group_ptr[].GRID_PTR->TYPE)
 group_ptr[].GRPHAEXC_PTR == orig(group_ptr[].GRPHAEXC_PTR)
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == orig(group_ptr[].GRPHAEXC_PTR->PHASE_UNIT)
@@ -7008,9 +7018,7 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == [null]
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -7031,13 +7039,10 @@ group_ptr[].GEOMNODE_PTR->LOC_Q == [2]
 group_ptr[].GEOMNODE_PTR->NEXT contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->NEXT[0] contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->PHEA == [0.0]
-group_ptr[].GEOMNODE_PTR->PSEA == [0.0]
 group_ptr[].GEOMNODE_PTR->SHAPE == [2]
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == [null]
-group_ptr[].GEOMNODE_PTR->THEA == [0.0]
 group_ptr[].GEOMNODE_PTR->XA == [773.9999999796324]
 group_ptr[].GEOMNODE_PTR->YA == [148.95636946268272]
-group_ptr[].GEOMNODE_PTR->ZA == [0.0]
 group_ptr[].GEOMNODE_PTR[0] contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == [0]
@@ -7054,7 +7059,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
@@ -7177,14 +7181,23 @@ group_ptr[].ELEM_PTR->PHEPOL == group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL
 group_ptr[].ELEM_PTR->PHEPOL == orig(group_ptr[].ELEM_PTR->PHEPOL)
 group_ptr[].ELEM_PTR->PHEPOL_UNIT == orig(group_ptr[].ELEM_PTR->PHEPOL_UNIT)
 group_ptr[].ELEM_PTR->POLARIZATION == orig(group_ptr[].ELEM_PTR->POLARIZATION)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].PSIZE)
-group_ptr[].ELEM_PTR->PORT_PTR->PSH == orig(group_ptr[].PSIZE)
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->RADIUS == orig(group_ptr[].ELEM_PTR->RADIUS)
 group_ptr[].ELEM_PTR->RADIUS_UNIT == orig(group_ptr[].ELEM_PTR->RADIUS_UNIT)
 group_ptr[].ELEM_PTR->TYPE == orig(group_ptr[].ELEM_PTR->TYPE)
 group_ptr[].ELEM_PTR[0] == orig(group_ptr[].ELEM_PTR[0])
 group_ptr[].ERR_PTR == orig(group_ptr[].ERR_PTR)
 group_ptr[].FAIL_PTR == orig(group_ptr[].FAIL_PTR)
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->PSEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->THEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->ZA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GRID_PTR->ROT_ANGLE
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GRID_PTR->PSTEP)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GRID_PTR->QSTEP)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].PSIZE)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].QSIZE)
 group_ptr[].GRAMPEXC_PTR == orig(group_ptr[].GRAMPEXC_PTR)
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == orig(group_ptr[].GRAMPEXC_PTR->AMP_UNIT)
 group_ptr[].GRAMPEXC_PTR->CENTRE == orig(group_ptr[].GRAMPEXC_PTR->CENTRE)
@@ -7249,7 +7262,6 @@ group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -7266,13 +7278,10 @@ group_ptr[].GEOMNODE_PTR->LOC_Q == [2]
 group_ptr[].GEOMNODE_PTR->NEXT contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->NEXT[0] contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->PHEA == [0.0]
-group_ptr[].GEOMNODE_PTR->PSEA == [0.0]
 group_ptr[].GEOMNODE_PTR->SHAPE == [2]
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == [null]
-group_ptr[].GEOMNODE_PTR->THEA == [0.0]
 group_ptr[].GEOMNODE_PTR->XA == [773.9999999796324]
 group_ptr[].GEOMNODE_PTR->YA == [148.95636946268272]
-group_ptr[].GEOMNODE_PTR->ZA == [0.0]
 group_ptr[].GEOMNODE_PTR[0] contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == [0]
@@ -7289,7 +7298,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
@@ -7316,7 +7324,13 @@ group_ptr[].ELEM_PTR->PDIM == group_ptr[].GEOMNODE_PTR->QSIZE
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GRID_PTR->PSTEP
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GRID_PTR->QSTEP
 group_ptr[].ELEM_PTR->PHEPOL == group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].ELEM_PTR->PORT_PTR->PSH
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->PSEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->THEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->ZA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GRID_PTR->ROT_ANGLE
 group_ptr[].GRAMPEXC_PTR->P1_ET == group_ptr[].GRAMPEXC_PTR->Q2_ET
 group_ptr[].PSIZE == group_ptr[].QSIZE
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -7360,9 +7374,7 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == [null]
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -7383,13 +7395,10 @@ group_ptr[].GEOMNODE_PTR->LOC_Q == [2]
 group_ptr[].GEOMNODE_PTR->NEXT contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->NEXT[0] contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->PHEA == [0.0]
-group_ptr[].GEOMNODE_PTR->PSEA == [0.0]
 group_ptr[].GEOMNODE_PTR->SHAPE == [2]
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == [null]
-group_ptr[].GEOMNODE_PTR->THEA == [0.0]
 group_ptr[].GEOMNODE_PTR->XA == [773.9999999796324]
 group_ptr[].GEOMNODE_PTR->YA == [148.95636946268272]
-group_ptr[].GEOMNODE_PTR->ZA == [0.0]
 group_ptr[].GEOMNODE_PTR[0] contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == [0]
@@ -7406,7 +7415,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
@@ -7467,14 +7475,11 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == orig(group_ptr[].ELEM_PTR->PORT_PTR->NEX
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == orig(group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL)
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT)
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == orig(group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].ELEM_PTR->PORT_PTR->PSH
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH)
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT)
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC)
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT)
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT)
 group_ptr[].ELEM_PTR->PORT_PTR[0] == orig(group_ptr[].ELEM_PTR->PORT_PTR[0])
 group_ptr[].ELEM_PTR->PQDIM_UNIT == orig(group_ptr[].ELEM_PTR->PQDIM_UNIT)
@@ -7488,20 +7493,30 @@ group_ptr[].GEOMNODE_PTR == orig(group_ptr[].GEOMNODE_PTR)
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR)
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->AMP == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->AMP)
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->NEXT == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->NEXT)
+group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSH == group_ptr[].GRPHAEXC_PTR->UNIF_VAL
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR[0] == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR[0])
 group_ptr[].GEOMNODE_PTR->LOC_P == orig(group_ptr[].GEOMNODE_PTR->LOC_P)
 group_ptr[].GEOMNODE_PTR->LOC_Q == orig(group_ptr[].GEOMNODE_PTR->LOC_Q)
 group_ptr[].GEOMNODE_PTR->NEXT == orig(group_ptr[].GEOMNODE_PTR->NEXT)
 group_ptr[].GEOMNODE_PTR->NEXT[0] == orig(group_ptr[].GEOMNODE_PTR->NEXT[0])
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->PSEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->THEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->ZA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GRID_PTR->ROT_ANGLE
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH)
 group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->PHEA)
-group_ptr[].GEOMNODE_PTR->PSEA == orig(group_ptr[].GEOMNODE_PTR->PSEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->PSEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->THEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->ZA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GRID_PTR->ROT_ANGLE)
 group_ptr[].GEOMNODE_PTR->SHAPE == orig(group_ptr[].GEOMNODE_PTR->SHAPE)
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == orig(group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR)
-group_ptr[].GEOMNODE_PTR->THEA == orig(group_ptr[].GEOMNODE_PTR->THEA)
 group_ptr[].GEOMNODE_PTR->XA == orig(group_ptr[].GEOMNODE_PTR->XA)
 group_ptr[].GEOMNODE_PTR->YA == orig(group_ptr[].GEOMNODE_PTR->YA)
-group_ptr[].GEOMNODE_PTR->ZA == orig(group_ptr[].GEOMNODE_PTR->ZA)
 group_ptr[].GEOMNODE_PTR[0] == orig(group_ptr[].GEOMNODE_PTR[0])
 group_ptr[].GRAMPEXC_PTR == orig(group_ptr[].GRAMPEXC_PTR)
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == orig(group_ptr[].GRAMPEXC_PTR->AMP_UNIT)
@@ -7520,7 +7535,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == orig(group_ptr[].GRID_PTR->ANGLE_UNIT)
 group_ptr[].GRID_PTR->LEVEL == orig(group_ptr[].GRID_PTR->LEVEL)
 group_ptr[].GRID_PTR->PQSTEP_UNIT == orig(group_ptr[].GRID_PTR->PQSTEP_UNIT)
 group_ptr[].GRID_PTR->PQXY_UNIT == orig(group_ptr[].GRID_PTR->PQXY_UNIT)
-group_ptr[].GRID_PTR->ROT_ANGLE == orig(group_ptr[].GRID_PTR->ROT_ANGLE)
 group_ptr[].GRID_PTR->TYPE == orig(group_ptr[].GRID_PTR->TYPE)
 group_ptr[].GRPHAEXC_PTR == orig(group_ptr[].GRPHAEXC_PTR)
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == orig(group_ptr[].GRPHAEXC_PTR->PHASE_UNIT)
@@ -7574,9 +7588,7 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == [null]
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -7597,13 +7609,10 @@ group_ptr[].GEOMNODE_PTR->LOC_Q == [2]
 group_ptr[].GEOMNODE_PTR->NEXT contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->NEXT[0] contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->PHEA == [0.0]
-group_ptr[].GEOMNODE_PTR->PSEA == [0.0]
 group_ptr[].GEOMNODE_PTR->SHAPE == [2]
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == [null]
-group_ptr[].GEOMNODE_PTR->THEA == [0.0]
 group_ptr[].GEOMNODE_PTR->XA == [773.9999999796324]
 group_ptr[].GEOMNODE_PTR->YA == [148.95636946268272]
-group_ptr[].GEOMNODE_PTR->ZA == [0.0]
 group_ptr[].GEOMNODE_PTR[0] contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == [0]
@@ -7620,7 +7629,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
@@ -7647,10 +7655,16 @@ group_ptr[].ELEM_PTR->PDIM == group_ptr[].GEOMNODE_PTR->QSIZE
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GRID_PTR->PSTEP
 group_ptr[].ELEM_PTR->PDIM == group_ptr[].GRID_PTR->QSTEP
 group_ptr[].ELEM_PTR->PHEPOL == group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].ELEM_PTR->PORT_PTR->PSH
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSH == group_ptr[].GRPHAEXC_PTR->UNIF_VAL
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->PSEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->THEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->ZA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GRID_PTR->ROT_ANGLE
 group_ptr[].GRAMPEXC_PTR->P1_ET == group_ptr[].GRAMPEXC_PTR->Q2_ET
 group_ptr[].PSIZE == group_ptr[].QSIZE
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -7694,9 +7708,7 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == [null]
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -7717,13 +7729,10 @@ group_ptr[].GEOMNODE_PTR->LOC_Q == [2]
 group_ptr[].GEOMNODE_PTR->NEXT contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->NEXT[0] contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->PHEA == [0.0]
-group_ptr[].GEOMNODE_PTR->PSEA == [0.0]
 group_ptr[].GEOMNODE_PTR->SHAPE == [2]
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == [null]
-group_ptr[].GEOMNODE_PTR->THEA == [0.0]
 group_ptr[].GEOMNODE_PTR->XA == [773.9999999796324]
 group_ptr[].GEOMNODE_PTR->YA == [148.95636946268272]
-group_ptr[].GEOMNODE_PTR->ZA == [0.0]
 group_ptr[].GEOMNODE_PTR[0] contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == [0]
@@ -7740,7 +7749,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
@@ -7802,16 +7810,11 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == orig(group_ptr[].ELEM_PTR->PORT_PTR->NEX
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == orig(group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL)
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT)
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == orig(group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].ELEM_PTR->PORT_PTR->PSH
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH)
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA)
+group_ptr[].ELEM_PTR->PORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT)
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC)
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC)
+group_ptr[].ELEM_PTR->PORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT)
+group_ptr[].ELEM_PTR->PORT_PTR->PSH == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT)
 group_ptr[].ELEM_PTR->PORT_PTR[0] == orig(group_ptr[].ELEM_PTR->PORT_PTR[0])
 group_ptr[].ELEM_PTR->PQDIM_UNIT == orig(group_ptr[].ELEM_PTR->PQDIM_UNIT)
@@ -7825,20 +7828,32 @@ group_ptr[].GEOMNODE_PTR == orig(group_ptr[].GEOMNODE_PTR)
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR)
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->AMP == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->AMP)
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->NEXT == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->NEXT)
+group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA == group_ptr[].GEOMNODE_PTR->PHEA
+group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC == group_ptr[].GEOMNODE_PTR->PHEA
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSH == group_ptr[].GRPHAEXC_PTR->UNIF_VAL
 group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR[0] == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR[0])
 group_ptr[].GEOMNODE_PTR->LOC_P == orig(group_ptr[].GEOMNODE_PTR->LOC_P)
 group_ptr[].GEOMNODE_PTR->LOC_Q == orig(group_ptr[].GEOMNODE_PTR->LOC_Q)
 group_ptr[].GEOMNODE_PTR->NEXT == orig(group_ptr[].GEOMNODE_PTR->NEXT)
 group_ptr[].GEOMNODE_PTR->NEXT[0] == orig(group_ptr[].GEOMNODE_PTR->NEXT[0])
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->PSEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->THEA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GEOMNODE_PTR->ZA
+group_ptr[].GEOMNODE_PTR->PHEA == group_ptr[].GRID_PTR->ROT_ANGLE
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PPA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSC)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].ELEM_PTR->PORT_PTR->PSH)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PPA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->GEOMPORT_PTR->PSC)
 group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->PHEA)
-group_ptr[].GEOMNODE_PTR->PSEA == orig(group_ptr[].GEOMNODE_PTR->PSEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->PSEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->THEA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GEOMNODE_PTR->ZA)
+group_ptr[].GEOMNODE_PTR->PHEA == orig(group_ptr[].GRID_PTR->ROT_ANGLE)
 group_ptr[].GEOMNODE_PTR->SHAPE == orig(group_ptr[].GEOMNODE_PTR->SHAPE)
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == orig(group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR)
-group_ptr[].GEOMNODE_PTR->THEA == orig(group_ptr[].GEOMNODE_PTR->THEA)
 group_ptr[].GEOMNODE_PTR->XA == orig(group_ptr[].GEOMNODE_PTR->XA)
 group_ptr[].GEOMNODE_PTR->YA == orig(group_ptr[].GEOMNODE_PTR->YA)
-group_ptr[].GEOMNODE_PTR->ZA == orig(group_ptr[].GEOMNODE_PTR->ZA)
 group_ptr[].GEOMNODE_PTR[0] == orig(group_ptr[].GEOMNODE_PTR[0])
 group_ptr[].GRAMPEXC_PTR == orig(group_ptr[].GRAMPEXC_PTR)
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == orig(group_ptr[].GRAMPEXC_PTR->AMP_UNIT)
@@ -7857,7 +7872,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == orig(group_ptr[].GRID_PTR->ANGLE_UNIT)
 group_ptr[].GRID_PTR->LEVEL == orig(group_ptr[].GRID_PTR->LEVEL)
 group_ptr[].GRID_PTR->PQSTEP_UNIT == orig(group_ptr[].GRID_PTR->PQSTEP_UNIT)
 group_ptr[].GRID_PTR->PQXY_UNIT == orig(group_ptr[].GRID_PTR->PQXY_UNIT)
-group_ptr[].GRID_PTR->ROT_ANGLE == orig(group_ptr[].GRID_PTR->ROT_ANGLE)
 group_ptr[].GRID_PTR->TYPE == orig(group_ptr[].GRID_PTR->TYPE)
 group_ptr[].GRPHAEXC_PTR == orig(group_ptr[].GRPHAEXC_PTR)
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == orig(group_ptr[].GRPHAEXC_PTR->PHASE_UNIT)
@@ -7912,9 +7926,7 @@ group_ptr[].ELEM_PTR->PORT_PTR->NEXT == [null]
 group_ptr[].ELEM_PTR->PORT_PTR->OMIT_POL == [1]
 group_ptr[].ELEM_PTR->PORT_PTR->PHEPOL_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PORTNUM == [1]
-group_ptr[].ELEM_PTR->PORT_PTR->PPA == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PPA_UNIT == [0]
-group_ptr[].ELEM_PTR->PORT_PTR->PSC == [0.0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSC_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR->PSH_UNIT == [0]
 group_ptr[].ELEM_PTR->PORT_PTR[0] contains no nulls and has only one value, of length 1
@@ -7935,13 +7947,10 @@ group_ptr[].GEOMNODE_PTR->LOC_Q == [2]
 group_ptr[].GEOMNODE_PTR->NEXT contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->NEXT[0] contains no nulls and has only one value, of length 1
 group_ptr[].GEOMNODE_PTR->PHEA == [0.0]
-group_ptr[].GEOMNODE_PTR->PSEA == [0.0]
 group_ptr[].GEOMNODE_PTR->SHAPE == [2]
 group_ptr[].GEOMNODE_PTR->SUBGROUP_PTR == [null]
-group_ptr[].GEOMNODE_PTR->THEA == [0.0]
 group_ptr[].GEOMNODE_PTR->XA == [773.9999999796324]
 group_ptr[].GEOMNODE_PTR->YA == [148.95636946268272]
-group_ptr[].GEOMNODE_PTR->ZA == [0.0]
 group_ptr[].GEOMNODE_PTR[0] contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRAMPEXC_PTR->AMP_UNIT == [0]
@@ -7958,7 +7967,6 @@ group_ptr[].GRID_PTR->ANGLE_UNIT == [0]
 group_ptr[].GRID_PTR->LEVEL == [1]
 group_ptr[].GRID_PTR->PQSTEP_UNIT == [0]
 group_ptr[].GRID_PTR->PQXY_UNIT == [0]
-group_ptr[].GRID_PTR->ROT_ANGLE == [0.0]
 group_ptr[].GRID_PTR->TYPE == [2]
 group_ptr[].GRPHAEXC_PTR contains no nulls and has only one value, of length 1
 group_ptr[].GRPHAEXC_PTR->PHASE_UNIT == [0]
