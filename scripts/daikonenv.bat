@@ -9,8 +9,10 @@ REM   DAIKONDIR      absolute pathname of the "daikon" directory
 REM   JAVA_HOME      absolute pathname of the directory containing the JDK
 REM Optionally, you may set the following environment variables:
 REM   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
-REM        files, instead of the default, which is to use daikon.jar.
-REM You should not need to edit this file directly.
+REM        files, instead of the default, which is to use daikon.jar.  This is
+REM        useful if you have made changes to Daikon and compiled the .java
+REM        files to .class files but have not re-made the daikon.jar file.
+REM You should not need to edit this file.
 
 if "%JAVA_HOME%"=="" (
   echo JAVA_HOME environment variable is not set.
