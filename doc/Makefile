@@ -52,7 +52,7 @@ images/dfepl-flow.jpg: images/dfepl-flow.eps
 images/%.pdf: images/%.eps
 	epstopdf $< --outfile=$@
 
-html: daikon.html developer.html valgrind-merge.html
+html: daikon.html developer.html
 
 daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
 	$(MAKE) daikon-html
@@ -71,12 +71,6 @@ daikon-html:
 	../plume-lib/bin/add-favicon . daikon-favicon.png
 
 developer.html: developer.texinfo 
-	makeinfo --html --no-split $<
-	# Fixup 'bad' href inserted by makeinfo.
-	perl -pi -e 's|dir.html#Top|index.html|;' $@
-	../plume-lib/bin/add-favicon . daikon-favicon.png
-
-valgrind-merge.html: valgrind-merge.texinfo
 	makeinfo --html --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' $@
@@ -101,22 +95,17 @@ developer/index.html: developer.texinfo
 	makeinfo --html --split=chapter -o developer $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' developer/index.html
-	# Fixup 'bad' href inserted by makeinfo.
-	perl -pi -e 's|../valgrind-merge/index.html|../valgrind-merge.html|;' developer/Distribution.html
 	mkdir developer/images
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images
 	../plume-lib/bin/add-favicon developer ../daikon-favicon.png
 
-pdf: daikon.pdf images/dfepl-flow.eps developer.pdf valgrind-merge.pdf
+pdf: daikon.pdf images/dfepl-flow.eps developer.pdf 
 
 daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	makeinfo --pdf $<
 
 developer.pdf: developer.texinfo
-	makeinfo --pdf $<
-
-valgrind-merge.pdf: valgrind-merge.texinfo
 	makeinfo --pdf $<
 
 # Note that the clean target does not remove invariants-doc.texinfo or
