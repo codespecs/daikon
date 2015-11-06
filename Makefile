@@ -90,8 +90,11 @@ INV_DIR := $(shell pwd)
 ifeq (cygwin,$(OSTYPE))
 #JAVA tools need Windows path on Windows
 JAR_DIR := $(shell cygpath -m $(INV_DIR))
+# for install-test target
+IT_PATH:=`cygpath -wp ../../../daikon.jar:.`
 else
 JAR_DIR := $(INV_DIR)
+IT_PATH:=../../../daikon.jar:.
 endif
 
 # Staging area for the distribution
@@ -139,7 +142,22 @@ TMPDIR ?= $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/$(USER)
 
 ### Default tag
 help:
-	@echo "Targets:"
+	@echo
+	@echo "This is the primary Makefile for both an archive file based setup"
+	@echo "(i.e. created from daikon-<version>.zip) and for a repository"
+	@echo "based setup (i.e. git cloned from //github.com/codespecs/daikon)."
+	@echo "This is primarily for users who wish to customize or extend DAIKON."
+	@echo
+	@echo "These first two targets are only for the archive version:"
+	@echo " install                  -- build additional tools and kvasir"
+	@echo " install-test             -- simple verification of installtion"
+	@echo
+	@echo "This target is shared; it is for building a modified version"
+	@echo "of the java runtimes needed by the DynComp tool:"
+	@echo " dyncomp-jdk              -- Make file java/dcomp_rt.jar"
+	@echo
+	@echo "The rest of the targets listed below are for a full"
+	@echo "repository based installation. For building:"
 	@echo " compile compile-java     -- compile Java files"
 	@echo " junit                    -- run unit tests"
 	@echo " test                     -- run system tests"
@@ -148,16 +166,67 @@ help:
 	@echo " tags TAGS                -- make TAGS file for Emacs"
 	@echo " kvasir                   -- make Kvasir, the C front end"
 	@echo " very-clean               -- remove (most) all generated files"
-	@echo " dyncomp-jdk              -- Make file java/dcomp_rt.jar"
-	@echo "Creating the Daikon distribution:"
+	@echo
+	@echo "Targets for creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
 	@echo " staging                  -- moves all release file to staging-daikon/"
 	@echo " test-staged-dist         -- tests the distribution in staging-daikon/"
 	@echo " staging-to-www           -- copies staging-daikon/ to website"
 	@echo " "
-	@echo "This Makefile is for manipulating the entire Daikon system."
 	@echo "Daikon source code is in the java/daikon subdirectory (but you"
 	@echo "can perform basic operations like compiling it from here)."
+
+
+### Simple (archive file based) targets
+
+install:
+	$(MAKE) -C scripts
+ifdef DAIKONCLASS_SOURCES
+	$(MAKE) -C java
+endif
+	$(MAKE) java/dcomp_rt.jar
+ifeq (Linux i686,$(shell uname -sm))
+	$(MAKE) kvasir-simple
+else
+ifeq (Linux i586,$(shell uname -sm))
+	$(MAKE) kvasir-simple
+else
+ifeq (Linux i486,$(shell uname -sm))
+	$(MAKE) kvasir-simple
+else
+ifeq (Linux i386,$(shell uname -sm))
+	$(MAKE) kvasir-simple
+else
+ifeq (Linux x86_64,$(shell uname -sm))
+	$(MAKE) kvasir-simple
+else
+	@echo "Not building Kvasir: it's only for Linux x86 and x86-64"
+	@echo "and this appears to be" `uname -sm`
+endif
+endif
+endif
+endif
+endif
+
+install-test:
+	cd examples/java-examples/StackAr; \
+	javac -g DataStructures/*.java; \
+	java -cp $(CP) daikon.Chicory --daikon DataStructures.StackArTester
+
+install-clean:
+	$(MAKE) -C scripts clean
+ifdef DAIKONCLASS_SOURCES
+	$(MAKE) -C java clean
+endif
+	$(MAKE) -C fjalar/valgrind clean
+
+kvasir-simple:
+	cd fjalar && ./auto-everything.sh
+
+.PHONY: kvasir-simple
+
+
+### Targets for the repository based installation.
 
 ### Compiling the code
 
@@ -571,7 +640,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	## Now make the daikon distribution
 	# First add some more files to the distribution
 
-	cp -p Makefile-dist ${TMPDIR}/daikon/Makefile
+	cp -p Makefile ${TMPDIR}/daikon/Makefile
 
 	# Daikon itself
 	(cd java; tar chf ${TMPDIR}/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon)
