@@ -4,6 +4,8 @@ import java.util.*;
 
 public class StackArTester
 {
+  private static Random rnd = new Random(1000);
+
   private StackAr s = new StackAr(0);
 
   private StackArTester() { }
@@ -71,7 +73,7 @@ public class StackArTester
   public void repPush(int n)
   {
     for (int i=0; i < n; i++) {
-      int x = (int)(1000 * Math.random());
+      int x = r.nextInt(1000);
       push(x);
     }
   }
@@ -79,14 +81,14 @@ public class StackArTester
   public void repPush_noobserve(int n)
   {
     for (int i=0; i < n; i++) {
-      int x = (int)(1000 * Math.random());
+      int x = r.nextInt(1000);
       push_noobserve(x);
     }
   }
 
   public void repPushOne()
   {
-    int x = (int)(1000 * Math.random());
+    int x = r.nextInt(1000);
     push(x);
   }
 
