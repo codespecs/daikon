@@ -73,7 +73,7 @@ public class StackArTester
   public void repPush(int n)
   {
     for (int i=0; i < n; i++) {
-      int x = r.nextInt(1000);
+      int x = rnd.nextInt(1000);
       push(x);
     }
   }
@@ -81,14 +81,14 @@ public class StackArTester
   public void repPush_noobserve(int n)
   {
     for (int i=0; i < n; i++) {
-      int x = r.nextInt(1000);
+      int x = rnd.nextInt(1000);
       push_noobserve(x);
     }
   }
 
   public void repPushOne()
   {
-    int x = r.nextInt(1000);
+    int x = rnd.nextInt(1000);
     push(x);
   }
 
