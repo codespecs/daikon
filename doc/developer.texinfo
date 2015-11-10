@@ -2489,8 +2489,7 @@ cd daikon-*
 export JAVA_HOME=/usr/lib/jvm/java
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
-make
-make install-test
+make distribution-check
 @end smallexample
 
 [Time: 10 min]
@@ -2516,8 +2515,7 @@ cd daikon-*
 export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
-make
-make install-test
+make distribution-check
 @end smallexample
 
 [Time: ?? min]
@@ -2547,8 +2545,7 @@ export OSTYPE
 export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_45"
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
-make
-make install-test
+make distribution-check
 @end smallexample
 
 [Time: 10 min]
@@ -2577,8 +2574,7 @@ export OSTYPE
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
-make
-make install-test
+make distribution-check
 @end smallexample
 
 [Time: 4 min]
@@ -2669,11 +2665,11 @@ git checkout doc/README
 @need 1000
 @item
 Verify these changes by doing product builds (no need to clean first) and
-running the installation test.
+running a short verification test.
 
 @example
 make rebuild-everything
-make install-test
+make quick-test
 @end example
 
 Success is indicated by invariant output being written to the screen.

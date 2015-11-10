@@ -20,7 +20,7 @@ IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
 DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo \
                        config-options.texinfo invariants-doc.texinfo \
                        daikon.pdf daikon.html developer.texinfo \
-                       developer.html CHANGES
+                       developer.html CHANGES VERSION
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 
@@ -91,10 +91,10 @@ ifeq (cygwin,$(OSTYPE))
 #JAVA tools need Windows path on Windows
 JAR_DIR := $(shell cygpath -m $(INV_DIR))
 # for install-test target
-IT_PATH:=`cygpath -wp ../../../daikon.jar:.`
+QT_PATH:=`cygpath -wp ../../../daikon.jar:.`
 else
 JAR_DIR := $(INV_DIR)
-IT_PATH:=../../../daikon.jar:.
+QT_PATH:=../../../daikon.jar:.
 endif
 
 # Staging area for the distribution
@@ -143,21 +143,7 @@ TMPDIR ?= $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/$(USER)
 ### Default tag
 help:
 	@echo
-	@echo "This is the primary Makefile for both an archive file based setup"
-	@echo "(i.e. created from daikon-<version>.zip) and for a repository"
-	@echo "based setup (i.e. git cloned from //github.com/codespecs/daikon)."
-	@echo "This is primarily for users who wish to customize or extend DAIKON."
-	@echo
-	@echo "These first two targets are only for the archive version:"
-	@echo " install                  -- build additional tools and kvasir"
-	@echo " install-test             -- simple verification of installtion"
-	@echo
-	@echo "This target is shared; it is for building a modified version"
-	@echo "of the java runtimes needed by the DynComp tool:"
-	@echo " dyncomp-jdk              -- Make file java/dcomp_rt.jar"
-	@echo
-	@echo "The rest of the targets listed below are for a full"
-	@echo "repository based installation. For building:"
+	@echo "Targets:"
 	@echo " compile compile-java     -- compile Java files"
 	@echo " junit                    -- run unit tests"
 	@echo " test                     -- run system tests"
@@ -166,6 +152,8 @@ help:
 	@echo " tags TAGS                -- make TAGS file for Emacs"
 	@echo " kvasir                   -- make Kvasir, the C front end"
 	@echo " very-clean               -- remove (most) all generated files"
+	@echo " dyncomp-jdk              -- Make file java/dcomp_rt.jar"
+	@echo " quick-test               -- simple verification of system"
 	@echo
 	@echo "Targets for creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
@@ -176,42 +164,19 @@ help:
 	@echo "Daikon source code is in the java/daikon subdirectory (but you"
 	@echo "can perform basic operations like compiling it from here)."
 
-
-### Simple (archive file based) targets
-
-install:
+distribution-check:
 	$(MAKE) -C scripts
 ifdef DAIKONCLASS_SOURCES
 	$(MAKE) -C java
 endif
-	$(MAKE) java/dcomp_rt.jar
-ifeq (Linux i686,$(shell uname -sm))
-	$(MAKE) kvasir-simple
-else
-ifeq (Linux i586,$(shell uname -sm))
-	$(MAKE) kvasir-simple
-else
-ifeq (Linux i486,$(shell uname -sm))
-	$(MAKE) kvasir-simple
-else
-ifeq (Linux i386,$(shell uname -sm))
-	$(MAKE) kvasir-simple
-else
-ifeq (Linux x86_64,$(shell uname -sm))
-	$(MAKE) kvasir-simple
-else
-	@echo "Not building Kvasir: it's only for Linux x86 and x86-64"
-	@echo "and this appears to be" `uname -sm`
-endif
-endif
-endif
-endif
-endif
+	$(MAKE) -C java dcomp_rt.jar
+	$(MAKE) kvasir
+	$(MAKE) quick-test
 
-install-test:
+quick-test:
 	cd examples/java-examples/StackAr; \
 	javac -g DataStructures/*.java; \
-	java -cp $(CP) daikon.Chicory --daikon DataStructures.StackArTester
+	java -cp $(QT_PATH) daikon.Chicory --daikon DataStructures.StackArTester
 
 install-clean:
 	$(MAKE) -C scripts clean
@@ -220,13 +185,6 @@ ifdef DAIKONCLASS_SOURCES
 endif
 	$(MAKE) -C fjalar/valgrind clean
 
-kvasir-simple:
-	cd fjalar && ./auto-everything.sh
-
-.PHONY: kvasir-simple
-
-
-### Targets for the repository based installation.
 
 ### Compiling the code
 
@@ -275,7 +233,9 @@ fjalar/valgrind/Makefile.am: ../fjalar/auto-everything.sh
 	ln -nsf ../fjalar fjalar
 	touch $@
 
-fjalar/valgrind/Makefile.in: fjalar/valgrind/Makefile.am
+fjalar/valgrind/Makefile.in:
+	if ! test -e fjalar/valgrind/Makefile.am ; then \
+		${MAKE} fjalar/valgrind/Makefile.am ; fi
 	cd fjalar/valgrind && ./autogen.sh
 
 fjalar/valgrind/Makefile: fjalar/valgrind/Makefile.in 
@@ -295,7 +255,29 @@ fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux: fjalar/valgrind
 
 kvasir: fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux fjalar/valgrind/inst/bin/valgrind
 
-build-kvasir: kvasir
+build-kvasir:
+ifeq (Linux i686,$(shell uname -sm))
+	$(MAKE) kvasir
+else
+ifeq (Linux i586,$(shell uname -sm))
+	$(MAKE) kvasir
+else
+ifeq (Linux i486,$(shell uname -sm))
+	$(MAKE) kvasir
+else
+ifeq (Linux i386,$(shell uname -sm))
+	$(MAKE) kvasir
+else
+ifeq (Linux x86_64,$(shell uname -sm))
+	$(MAKE) kvasir
+else
+	@echo "Not building Kvasir: it's only for Linux x86 and x86-64"
+	@echo "and this appears to be" `uname -sm`
+endif
+endif
+endif
+endif
+endif
 
 ### Rebuild everything; used for monthly releases, for example
 
@@ -413,7 +395,7 @@ staging: doc/CHANGES
 	chmod -R +w $(STAGING_DIR)
 	chmod +w $(STAGING_DIR)/..
 	/bin/rm -rf $(STAGING_DIR)
-    # dummy history directory to remove checklink warnings
+	# dummy history directory to remove checklink warnings
 	install -d $(STAGING_DIR)/history
 	install -d $(STAGING_DIR)/download
 	# Build the main tarfile for daikon
@@ -602,6 +584,8 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir ${TMPDIR}/daikon
 
 	mkdir ${TMPDIR}/daikon/doc
+	# dummy www directory to remove end user Make warnings
+	mkdir ${TMPDIR}/daikon/doc/www
 	cp -p README ${TMPDIR}/daikon/README
 	cp -p README.source ${TMPDIR}/daikon/README.source
 	cp -p doc/README ${TMPDIR}/daikon/doc/README
@@ -643,7 +627,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cp -p Makefile ${TMPDIR}/daikon/Makefile
 
 	# Daikon itself
-	(cd java; tar chf ${TMPDIR}/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon)
+	(cd java; tar chf ${TMPDIR}/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon jtb lib)
 	(mkdir ${TMPDIR}/daikon/java; cd ${TMPDIR}/daikon/java; tar xf ${TMPDIR}/daikon-java.tar; rm ${TMPDIR}/daikon-java.tar)
 	cp -p java/README.txt ${TMPDIR}/daikon/java/README.txt
 	cp -p java/Makefile ${TMPDIR}/daikon/java/Makefile
@@ -714,6 +698,9 @@ plume-lib:
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib
 ifndef NONETWORK
-	(cd plume-lib; git pull -q ${GIT_OPTIONS})
+	# if plume-lib.git does not exist, then directory was created
+	# from a daikon archive file - cannot do a git pull.
+	if test -e plume-lib/.git ; then \
+		(cd plume-lib; git pull -q ${GIT_OPTIONS}) ; fi
 endif
 

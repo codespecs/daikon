@@ -353,7 +353,7 @@ tar zxf daikon-#.#.#.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-#.#.#/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:  
@@ -365,7 +365,7 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon
+export DAIKONDIR=@var{daikonparent}/daikon-#.#.#
 # The full pathname of the directory that contains the Java JDK
 export JAVA_HOME=/usr/lib/jvm/java
 source $DAIKONDIR/scripts/daikon.bashrc
