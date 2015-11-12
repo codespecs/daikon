@@ -1,10 +1,12 @@
+// [[ This is an edited version compared to the DSAA book.  Jeremy has
+// removed the no-arg constructor, inlined the increment method, and
+// updated the makeEmpty method. ]]
+
 package DataStructures;
 
 // QueueAr class
 //
 
-// CONSTRUCTION: with or without a capacity; default is 10
-//
 // ******************PUBLIC OPERATIONS*********************
 // void enqueue( x )      --> Insert x
 // Object getFront( )     --> Return least recently inserted item
@@ -21,13 +23,6 @@ package DataStructures;
  */
 public class QueueAr
 {
-  /**
-   * Construct the queue.
-   **/
-  public QueueAr( )
-  {
-    this( DEFAULT_CAPACITY );
-  }
 
   /**
    * Construct the queue.
@@ -35,7 +30,9 @@ public class QueueAr
   public QueueAr( int capacity )
   {
     theArray = new Object[ capacity ];
-    makeEmpty( );
+    currentSize = 0;
+    front = 0;
+    back = theArray.length-1;
   }
 
   /**
@@ -63,7 +60,8 @@ public class QueueAr
   {
     currentSize = 0;
     front = 0;
-    back = -1;
+    back = theArray.length-1;
+    java.util.Arrays.fill(theArray, 0, theArray.length, null);
   }
 
   /**
@@ -90,7 +88,8 @@ public class QueueAr
 
     Object frontItem = theArray[ front ];
     theArray[ front ] = null;
-    front = increment( front );
+    if ( ++front == theArray.length )
+      front = 0;
     return frontItem;
   }
 
@@ -103,101 +102,22 @@ public class QueueAr
   {
     if( isFull( ) )
       throw new Overflow( );
-    back = increment( back );
+    if ( ++back == theArray.length )
+      back = 0;
     theArray[ back ] = x;
     currentSize++;
   }
 
-  /**
-   * Internal method to increment with wraparound.
-   * @param x any index in theArray's range.
-   * @return x+1, or 0, if x is at the end of theArray.
-   **/
-  private int increment( int x )
+  public void dequeueAll()
   {
-    if( ++x == theArray.length )
-      x = 0;
-    return x;
+    while( !isEmpty() ) {
+      dequeue();
+    }
   }
 
   private Object [ ] theArray;
   private int        currentSize;
   private int        front;
   private int        back;
-
-  static final int DEFAULT_CAPACITY = 10;
-
-  public static void main( String [ ] args )
-  {
-    QueueAr q = new QueueAr( );
-
-    try
-      {
-        for( int i = 0; i < 10; i++ )
-          q.enqueue( new MyInteger( i ) );
-
-        while( !q.isEmpty( ) )
-          System.out.println( q.dequeue( ) );
-
-        int num = 68;
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        // 6
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        // 2
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        // 5
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        // 3
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        // 5
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        // 2
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        // 10
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        // 1
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        // 4
-        System.out.println( q.dequeue( ) );
-        System.out.println( q.dequeue( ) );
-        // 2
-        q.enqueue(new MyInteger(num++));
-        q.enqueue(new MyInteger(num++));
-        // 4
-        System.out.println( q.dequeue( ) );
-      }
-    catch( Overflow e ) { System.out.println( "Unexpected overflow" ); }
-  }
 
 }
