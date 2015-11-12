@@ -2303,8 +2303,7 @@ Check the release documents for spelling errors.
 
 @example
 cd $DAIKONDIR/doc
-./texinfo-spellcheck daikon
-./texinfo-spellcheck developer
+make spell-check
 @end example
 
 Any words that may be spelled incorrectly are output to standard out.  There are three

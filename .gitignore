@@ -438,6 +438,7 @@ tools/kmeans/*.o
 
 examples/**/*.class
 examples/**/*.dtrace.gz
+examples/**/*.inv.gz
 
 tests/**/*.class
 tests/**/*.comp
