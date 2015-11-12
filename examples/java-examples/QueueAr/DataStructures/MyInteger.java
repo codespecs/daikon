@@ -67,7 +67,7 @@
          */
         public boolean equals( Object rhs )
         {
-            return rhs != null && value == ((MyInteger)rhs).value;
+            return (rhs instanceof MyInteger) && value == ((MyInteger)rhs).value;
         }
 
         /**

@@ -21,13 +21,6 @@ package DataStructures;
  */
 public class StackAr
 {
-    /**
-     * Construct the stack.
-     */
-    public StackAr( )
-    {
-        this( DEFAULT_CAPACITY );
-    }
 
     /**
      * Construct the stack.
@@ -42,6 +35,7 @@ public class StackAr
     /**
      * Test if the stack is logically empty.
      * @return true if empty, false otherwise.
+     * @observer // annotation added by Jeremy
      */
     public boolean isEmpty( )
     {
@@ -51,6 +45,7 @@ public class StackAr
     /**
      * Test if the stack is logically full.
      * @return true if full, false otherwise.
+     * @observer // annotation added by Jeremy
      */
     public boolean isFull( )
     {
@@ -71,6 +66,7 @@ public class StackAr
      * Get the most recently inserted item in the stack.
      * Does not alter the stack.
      * @return the most recently inserted item in the stack, or null, if empty.
+     * @observer // annotation added by Jeremy
      */
     public Object top( )
     {
@@ -118,20 +114,4 @@ public class StackAr
     private Object [ ] theArray;
     private int        topOfStack;
 
-    static final int DEFAULT_CAPACITY = 10;
-
-    public static void main( String [ ] args )
-    {
-        StackAr s = new StackAr( 12 );
-
-        try
-        {
-            for( int i = 0; i < 10; i++ )
-                s.push( new MyInteger( i ) );
-        }
-        catch( Overflow e ) { System.out.println( "Unexpected overflow" ); }
-
-        while( !s.isEmpty( ) )
-            System.out.println( s.topAndPop( ) );
-    }
 }

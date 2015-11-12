@@ -1,7 +1,9 @@
 ###########################################################################
 # Read Makefile in parent directory to see what this all means
 
-DAIKONDIR?=$(HOME)/research/invariants
+DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+# DAIKONDIR is where the 'daikon' project is cloned
+DAIKONDIR?=${DAIKONDIR_DEFAULT}
 SCRIPTS?=$(DAIKONDIR)/scripts
 
 # Help system

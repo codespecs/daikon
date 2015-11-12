@@ -139,9 +139,9 @@ ifdef ESC_ON
 endif
 
 
+DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 # DAIKONDIR is where the 'daikon' project is cloned
-DAIKONDIR?=${DAIKONDIR}
-DAIKONDIR?=$(HOME)/research/invariants
+DAIKONDIR?=${DAIKONDIR_DEFAULT}
 # Test that the directory exists.  There must be a better way to do this.
 DAIKONDIR:=$(wildcard ${DAIKONDIR})
 ifndef DAIKONDIR

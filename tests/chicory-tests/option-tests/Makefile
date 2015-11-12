@@ -3,7 +3,6 @@
 #
 
 # StackAr sources are used for option testing
-DAIKONDIR ?= $(DAIKONDIR)
 SRC_DIR = $(DAIKONDIR)/tests/sources
 SRC_FILES = DataStructures/Comparable.java \
 			DataStructures/Hashable.java \
@@ -33,8 +32,6 @@ endif
 TESTS		= online pptsel pptomit nesting stdvis varomit samples misc
 
 HERE := $(shell /bin/pwd)
-
-DAIKONDIR ?= $(DAIKONDIR)
 
 # Standard setup of CLASSPATH that works for Linux, Windows, and MacOSX
 include $(DAIKONDIR)/tests/Makefile.classpath
