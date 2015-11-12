@@ -6,8 +6,6 @@
 # of Diff.
 
 
-DAIKONDIR ?= ${DAIKONDIR}
-
 # Standard setting of classpath to include everything be correct
 # for both Windows, Mac, and Linux
 include ${DAIKONDIR}/tests/Makefile.classpath
