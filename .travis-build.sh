@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ROOT=$TRAVIS_BUILD_DIR/..
-cd $ROOT
+# ROOT=$TRAVIS_BUILD_DIR
+# cd $ROOT
 
 # Same as in Jenkins; should abstract out
 make all-dist
