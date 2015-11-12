@@ -18,6 +18,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1813,9 +1814,14 @@ public final class Daikon {
           "Used memory: "
             + (java.lang.Runtime.getRuntime().totalMemory()
               - java.lang.Runtime.getRuntime().freeMemory()));
-        if (FileIO.data_trace_state != null)
-          debugTrace.fine("Active slices: " +
-                          FileIO.data_trace_state.all_ppts.countSlices());
+        try {
+          if (FileIO.data_trace_state != null)
+            debugTrace.fine("Active slices: " +
+                            FileIO.data_trace_state.all_ppts.countSlices());
+        } catch (ConcurrentModificationException e) {
+          // Because this code is a separate thread, the number of ppts
+          // could change during countSlices.  Just ignore and continue.
+        }
       }
     }
   }

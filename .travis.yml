@@ -10,3 +10,4 @@ jdk:
 notifications:
   email:
     - mernst@cs.washington.edu
+    - markro@cs.washington.edu
