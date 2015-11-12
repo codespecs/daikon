@@ -8,6 +8,10 @@
 # to recreate them.  If we should need to recreate them, the source
 # files are in drawlet_src.zip in this directory
 
+DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
+# DAIKONDIR is where the 'daikon' project is cloned
+DAIKONDIR?=${DAIKONDIR_DEFAULT}
+
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.'  --no_text_output
 DAIKON = ${DAIKONDIR}/java/daikon/Daikon.class
 CP     = $(DAIKONDIR)/java:$(CLASSPATH)
