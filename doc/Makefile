@@ -144,6 +144,11 @@ dist:
 # www:
 # 	cd .. && $(MAKE) www
 
+.PHONY: find-changes spell-check
 find-changes:
 	diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
+
+spell-check:
+	perl prepare-texinfo-for-spellcheck.pl < daikon.texinfo | hunspell -u -p daikon.dict
+	perl prepare-texinfo-for-spellcheck.pl < developer.texinfo | hunspell -u -p daikon.dict
 
