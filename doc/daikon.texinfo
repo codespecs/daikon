@@ -807,7 +807,7 @@ following steps after installing Daikon (@pxref{Installing Daikon}).
 @item
 Compile the program with the @option{-g} switch to enable debugging
 symbols.  (The program and test suite appear in the
-@file{DataStructures} subdirectory directory.)
+@file{DataStructures} subdirectory.)
 @example
 cd examples/java-examples/StackAr
 javac -g DataStructures/*.java
@@ -845,7 +845,7 @@ whole process is as follows:
 @item
 Compile the program with the @option{-g} switch to enable debugging
 symbols.  (The program and test suite appear in the
-@file{DataStructures} subdirectory directory.)
+@file{DataStructures} subdirectory.)
 @example
 cd examples/java-examples/StackAr
 javac -g DataStructures/*.java

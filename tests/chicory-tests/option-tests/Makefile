@@ -2,6 +2,10 @@
 # Makefile that runs tests that checks various chicory options.
 #
 
+DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
+# DAIKONDIR is where the 'daikon' project is cloned
+DAIKONDIR?=${DAIKONDIR_DEFAULT}
+
 # StackAr sources are used for option testing
 SRC_DIR = $(DAIKONDIR)/tests/sources
 SRC_FILES = DataStructures/Comparable.java \
@@ -31,6 +35,8 @@ endif
 
 TESTS		= online pptsel pptomit nesting stdvis varomit samples misc
 
+# This is the working directory, but not necessarily the directory in
+# which this Makefile is found.
 HERE := $(shell /bin/pwd)
 
 # Standard setup of CLASSPATH that works for Linux, Windows, and MacOSX
