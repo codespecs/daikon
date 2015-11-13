@@ -224,9 +224,28 @@ special characters and spaces in Windows paths.
 @node    Requirements for compiling Daikon
 @subsection Requirements for compiling Daikon
 
-Daikon is written in Java.  In order to
-compile Daikon, you need a Java compiler such as @samp{javac} on your path.
-@cindex Jikes compiler
+You need the following software on your path.
+
+To install all these dependencies under Ubuntu, run the command:
+@example
+sudo apt-get install openjdk-8-jdk gcc texinfo dos2unix
+@end example
+Other commands would be used on other operating systems.
+
+@cindex Windows, compiling
+To compile Daikon on Windows, the best approach is to first install the Cygwin
+toolset (available at @uref{http://cygwin.com/}), which
+contains everything you need to compile and run Linux programs under
+Windows.  You can install Cygwin by running one of the setup
+programs (based on your machine type) found 
+at @uref{http://cygwin.com/install.html}.
+Then, install any necessary programs such as those below.
+
+@itemize @bullet
+
+@item
+a Java compiler such as @samp{javac}.  This is needed because Daikon is
+written in Java.
 @cindex @samp{javac} compiler, overriding
 @cindex Java compiler, specifying
 To override the default Java compiler (@samp{javac}), create a
@@ -236,8 +255,9 @@ like the following.
 JAVAC ?= jikes -g +E +F
 @end example
 
-In order to compile Daikon, you need the C preprocessor
-@command{cpp}, which is used to convert each @file{.jpp} file in the
+@item
+the C preprocessor
+@command{cpp}.  This is needed to convert each @file{.jpp} file in the
 distribution into multiple @file{.java} files, which are then compiled.
 If you have a C compiler, you almost certainly have @command{cpp}.
 If you do not have @command{cpp} (or @command{gcc}, which can emulate
@@ -248,17 +268,16 @@ of the @file{.jpp} files is to avoid code duplication by placing
 common code in a single file, then generating other files that need to
 include that common code.)
 
-To make the documentation (via @command{make -C $DAIKONDIR/doc}), you need
-@command{makeinfo} version 4.7 or newer.
-@c version 4.7 was released in April 2004
+@item
+@c needs version 4.7 or newer; version 4.7 was released in April 2004
+@command{makeinfo}.
+This is needed to make the documentation (via @command{make -C $DAIKONDIR/doc}).
 
-@cindex Windows, compiling
-To compile Daikon on Windows, the best approach is to install the Cygwin
-toolset (available at @uref{http://cygwin.com/}), which
-contains everything you need to compile and run Linux programs under
-Windows.  You can install Cygwin by running one of the setup
-programs (based on your machine type) found 
-at @uref{http://cygwin.com/install.html}.
+@item
+@command{dos2unix} or @command{perl}.
+This is used to ensure that the output is the same under Unix and Windows.
+
+@end itemize
 
 
 @node    Version control repository
