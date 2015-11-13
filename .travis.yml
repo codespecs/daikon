@@ -1,10 +1,14 @@
 language: java
 
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install texinfo dos2unix
-
 script: ./.travis-build.sh
+
+addons:
+  apt:
+    packages:
+    - texinfo
+    - dos2unix
+
+sudo: false
 
 jdk:
   - oraclejdk8
