@@ -89,9 +89,9 @@ INV_DIR := $(shell pwd)
 
 ifeq (cygwin,$(OSTYPE))
 #JAVA tools need Windows path on Windows
-JAR_DIR := $(shell cygpath -m $(INV_DIR))
+JAR_DIR :=`cygpath -wp $(INV_DIR)`
 # for install-test target
-QT_PATH:=`cygpath -wp ../../../daikon.jar:.`
+QT_PATH :=`cygpath -wp ../../../daikon.jar:.`
 else
 JAR_DIR := $(INV_DIR)
 QT_PATH:=../../../daikon.jar:.
@@ -153,7 +153,6 @@ help:
 	@echo " kvasir                   -- make Kvasir, the C front end"
 	@echo " very-clean               -- remove (most) all generated files"
 	@echo " dyncomp-jdk              -- Make file java/dcomp_rt.jar"
-	@echo " quick-test               -- simple verification of system"
 	@echo
 	@echo "Targets for creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
@@ -163,27 +162,6 @@ help:
 	@echo " "
 	@echo "Daikon source code is in the java/daikon subdirectory (but you"
 	@echo "can perform basic operations like compiling it from here)."
-
-distribution-check:
-	$(MAKE) -C scripts
-ifdef DAIKONCLASS_SOURCES
-	$(MAKE) -C java
-endif
-	$(MAKE) -C java dcomp_rt.jar
-	$(MAKE) kvasir
-	$(MAKE) quick-test
-
-quick-test:
-	cd examples/java-examples/StackAr; \
-	javac -g DataStructures/*.java; \
-	java -cp $(QT_PATH) daikon.Chicory --daikon DataStructures.StackArTester
-
-install-clean:
-	$(MAKE) -C scripts clean
-ifdef DAIKONCLASS_SOURCES
-	$(MAKE) -C java clean
-endif
-	$(MAKE) -C fjalar/valgrind clean
 
 
 ### Compiling the code
@@ -325,6 +303,13 @@ test:
 junit:
 	cd java && $(MAKE) junit
 
+# A quick test used to verify that Chicory and Diakon
+# are working properly.
+quick-test:
+	cd examples/java-examples/StackAr; \
+	javac -g DataStructures/*.java; \
+	java -cp $(QT_PATH) daikon.Chicory --daikon DataStructures.StackArTester
+
 ### Tags
 
 tags: TAGS
@@ -336,6 +321,17 @@ TAGS:
 ### Test the distribution
 ###
 
+# This is the target we use to verify that the software we about about
+# to distribute runs correctly. Typically, this is repeated for
+# Windows(Cygwin), Fedora and Ubuntu client machines.
+distribution-check:
+	$(MAKE) -C scripts
+ifdef DAIKONCLASS_SOURCES
+	$(MAKE) -C java
+endif
+	$(MAKE) -C java dcomp_rt.jar
+	$(MAKE) kvasir
+	$(MAKE) quick-test
 
 DISTTESTDIR := ${TMPDIR}/daikon.dist
 DISTTESTDIRJAVA := ${TMPDIR}/daikon.dist/daikon/java
@@ -584,8 +580,6 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir ${TMPDIR}/daikon
 
 	mkdir ${TMPDIR}/daikon/doc
-	# dummy www directory to remove end user Make warnings
-	mkdir ${TMPDIR}/daikon/doc/www
 	cp -p README ${TMPDIR}/daikon/README
 	cp -p README.source ${TMPDIR}/daikon/README.source
 	cp -p doc/README ${TMPDIR}/daikon/doc/README
@@ -594,6 +588,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) ${TMPDIR}/daikon/doc/images
 	cp -pR doc/daikon ${TMPDIR}/daikon/doc
 	cp -pR doc/developer ${TMPDIR}/daikon/doc
+	cp -pR doc/www ${TMPDIR}/daikon/doc
 
 	# Plume-lib library
 	(cd plume-lib; git archive --prefix=plume-lib/ HEAD | (cd ${TMPDIR}/daikon/ && tar xf -))

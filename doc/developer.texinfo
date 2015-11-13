@@ -224,7 +224,8 @@ special characters and spaces in Windows paths.
 @node    Requirements for compiling Daikon
 @subsection Requirements for compiling Daikon
 
-The list below identifies the software you will need to have on your path.
+The list at the end of this section identifies the software you will
+need to have on your path.
 
 To install all these dependencies under Ubuntu, run the command:
 @example
