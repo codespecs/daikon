@@ -380,7 +380,7 @@ Optionally, customize other variables.  The customizable variables are
 listed in the Daikon startup file: @file{$DAIKONDIR/scripts/daikon.bashrc}.
 
 You may customize them by setting environment variables, or by adding a
-@code{Makefile.user} file to directory @code{$DAIKONDIR/java} (it is
+@file{Makefile.user} file to directory @file{$DAIKONDIR/java} (it is
 automatically read at the beginning of the main Makefile, and prevents
 you from having to edit the main Makefile directly).
 
@@ -410,7 +410,6 @@ depending on your computer.
 
 Optionally, download other executables, such as
 the Simplify theorem prover (@pxref{Installing Simplify}).
-
 
 @end enumerate
 @exampleindent 4
@@ -447,7 +446,7 @@ tar zxf daikon-#.#.#.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-#.#.#/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{~/.bashrc}:  
@@ -457,7 +456,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon
+export DAIKONDIR=@var{daikonparent}/daikon-#.#.#
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -510,19 +509,19 @@ OSTYPE = cygwin
 @item
 Optionally, compile Daikon and build other tools.
 Note that this step is @emph{not} required if you only want to use Daikon
-with its Java front end (Chicory).  This step is required for using
-Daikon with its C/C++ front end (Kvasir), and for other tools.
+with its Java front end (Chicory) or its .NET front end (Celeriac).
+This step is required for using other tools such as DynComp.
 
 @example
 make -C $DAIKONDIR rebuild-everything
 @end example
 
 @noindent
-This builds the various executables used by Daikon, such as the 
+This builds the various executables used by Daikon, such as the
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 If you need more
-information about compiling Daikon,
-see @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
+information about compiling Daikon, see
+@ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 If you have trouble compiling the C/C++ front end Kvasir, see
 @xref{Installing Kvasir}.  Note that
 Kvasir does not work under Cygwin.
@@ -533,8 +532,7 @@ On Windows, running @command{make} requires
 that @uref{http://www.cygwin.com/,Cygwin} be installed.
 
 Optionally, download other executables, such as
-the Simplify theorem
-prover (@pxref{Installing Simplify}).
+the Simplify theorem prover (@pxref{Installing Simplify}).
 
 @end enumerate
 @exampleindent 4
