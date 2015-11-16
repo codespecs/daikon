@@ -89,12 +89,12 @@ INV_DIR := $(shell pwd)
 
 ifeq (cygwin,$(OSTYPE))
 #JAVA tools need Windows path on Windows
-JAR_DIR :=`cygpath -wp $(INV_DIR)`
+JAR_DIR := `cygpath -wp $(INV_DIR)`
 # for install-test target
-QT_PATH :=`cygpath -wp ../../../daikon.jar:.`
+QT_PATH := `cygpath -wp ../../../daikon.jar:.`
 else
 JAR_DIR := $(INV_DIR)
-QT_PATH:=../../../daikon.jar:.
+QT_PATH := ../../../daikon.jar:.
 endif
 
 # Staging area for the distribution
