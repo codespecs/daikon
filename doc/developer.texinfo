@@ -2569,7 +2569,8 @@ mkdir -p ~/tmp
 cd ~/tmp
 rm -rf daikon*
 curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
-# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
+# or:
+# wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
 tar xzf daikon-*.tar.gz
 cd daikon-*
 # Convert OSTYPE from a shell variable to a system environment variable.

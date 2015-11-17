@@ -762,6 +762,7 @@ and the Daikon output is written to the terminal.
 
 @menu
 * StackAr example::
+* Detecting invariants when running a Java program from a jar file::
 * Using DynComp with Java programs::
 * Understanding the invariants::
 * Understanding DynComp::
@@ -932,6 +933,37 @@ For more information about the Annotate program, see @ref{Annotate}.
 
 @end itemize
 @end enumerate
+@exampleindent 4
+
+
+@node Detecting invariants when running a Java program from a jar file
+@subsection Detecting invariants when running a Java program from a jar file
+
+If your Java program is run directly from a @file{jar} file,
+such as either of:
+
+@exampleindent 1
+@example
+java mypackage.jar arguments
+java -cp <originalclasspath> mypackage.jar arguments
+@end example
+
+@noindent
+then to detect invariants in that Java program,
+run one of these commands:
+
+@smallexample
+java -cp mypackage.jar daikon.Chicory --daikon <MyMain> arguments
+java -cp mypackage.jar:<original classpath> daikon.Chicory --daikon <MyMain> arguments
+@end smallexample
+
+@noindent
+where @command{<MyMain>} is the Main-class of the @file{jar} file, which you
+can determine by running the command:
+
+@example
+unzip -p mypackage.jar META-INF/MANIFEST.MF | grep '^Main-Class:'
+@end example
 @exampleindent 4
 
 
