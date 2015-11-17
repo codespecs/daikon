@@ -212,6 +212,9 @@ fjalar/valgrind/Makefile.am: ../fjalar/auto-everything.sh
 	touch $@
 
 fjalar/valgrind/Makefile.in:
+	# If fjalar/valgrind/Makefile.am already exists, then we don't want to
+	# check for ../fjalar/auto-everything.sh (timestamps don't matter)
+	# as this test will fail if we are building from a daikon archive file.
 	if ! test -e fjalar/valgrind/Makefile.am ; then \
 		${MAKE} fjalar/valgrind/Makefile.am ; fi
 	cd fjalar/valgrind && ./autogen.sh
