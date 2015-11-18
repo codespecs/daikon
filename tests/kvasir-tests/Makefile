@@ -96,8 +96,14 @@ pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
 	@
 
 ifeq (x86_64,$(shell uname -m))
+ifeq (tern,$(findstring tern,$(shell uname -n)))
+# gtest won't run on tern do to old software
+gtest-tests__%:
+	@
+else
 gtest-tests__%: do-gtest__%
 	@
+endif
 else
 # gtest is too big to run on 32 bits
 gtest-tests__%:
