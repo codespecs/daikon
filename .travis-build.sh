@@ -8,4 +8,4 @@
 make showvars compile daikon.jar javadoc
 make -C doc
 make -C java dcomp_rt.jar
-make -C tests
+make -C tests all
