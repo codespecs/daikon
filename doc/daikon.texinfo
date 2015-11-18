@@ -260,7 +260,7 @@ There are two additional requirements.  You must have a Java 7 (or later) JVM
 The @file{tools.jar} file that comes with your JVM must also be on your
 classpath.
 
-@xref{Installing Daikon}, for situations where you should
+See bullet point two above (@ref{Installing Daikon}), for situations where you should
 follow the complete installation instructions of
 @ref{Complete installation}.  (Also, if you do not know how to add a jar file to your
 classpath, then use the complete installation instructions, which walks
@@ -344,16 +344,16 @@ If you wish to edit the Daikon source code and re-compile Daikon,
 @item
 Choose the directory where you want to install Daikon; we'll call this
 the @var{daikonparent} directory.  In this directory, download and
-unpack Daikon.
+unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon.tar.gz
-tar zxf daikon.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-#.#.#.tar.gz
+tar zxf daikon-#.#.#.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-#.#.#/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:  
@@ -365,9 +365,9 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon
+export DAIKONDIR=@var{daikonparent}/daikon-#.#.#
 # The full pathname of the directory that contains the Java JDK
-export JAVA_HOME=/usr/lib/jvm/default-java
+export JAVA_HOME=/usr/lib/jvm/java
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
@@ -377,10 +377,10 @@ effect.
 
 @item
 Optionally, customize other variables.  The customizable variables are
-listed in the Daikon startup file: @file{daikon.bashrc}.
+listed in the Daikon startup file: @file{$DAIKONDIR/scripts/daikon.bashrc}.
 
 You may customize them by setting environment variables, or by adding a
-@code{Makefile.user} file to directory @code{$DAIKONDIR/java} (it is
+@file{Makefile.user} file to directory @file{$DAIKONDIR/java} (it is
 automatically read at the beginning of the main Makefile, and prevents
 you from having to edit the main Makefile directly).
 
@@ -411,7 +411,6 @@ depending on your computer.
 Optionally, download other executables, such as
 the Simplify theorem prover (@pxref{Installing Simplify}).
 
-
 @end enumerate
 @exampleindent 4
 
@@ -438,16 +437,16 @@ The default installation of Cygwin is sufficient for installing Daikon.
 @item
 Choose the directory where you want to install Daikon; we'll call this
 the @var{daikonparent} directory.  In this directory, download and
-unpack Daikon.
+unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon.tar.gz
-tar zxf daikon.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-#.#.#.tar.gz
+tar zxf daikon-#.#.#.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-#.#.#/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{~/.bashrc}:  
@@ -457,7 +456,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon
+export DAIKONDIR=@var{daikonparent}/daikon-#.#.#
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -494,7 +493,7 @@ effect.
 
 @item
 Optionally, customize other variables.  The customizable variables are
-listed in the Daikon startup file: @file{daikon.bashrc}.
+listed in the Daikon startup file: @file{$DAIKONDIR/scripts/daikon.bashrc}.
 
 You may customize them by setting environment variables, or by adding a
 @file{Makefile.user} file to directory @file{$DAIKONDIR/java} (it is
@@ -510,19 +509,19 @@ OSTYPE = cygwin
 @item
 Optionally, compile Daikon and build other tools.
 Note that this step is @emph{not} required if you only want to use Daikon
-with its Java front end (Chicory).  This step is required for using
-Daikon with its C/C++ front end (Kvasir), and for other tools.
+with its Java front end (Chicory) or its .NET front end (Celeriac).
+This step is required for using other tools such as DynComp.
 
 @example
 make -C $DAIKONDIR rebuild-everything
 @end example
 
 @noindent
-This builds the various executables used by Daikon, such as the 
+This builds the various executables used by Daikon, such as the
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 If you need more
-information about compiling Daikon,
-see @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
+information about compiling Daikon, see
+@ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 If you have trouble compiling the C/C++ front end Kvasir, see
 @xref{Installing Kvasir}.  Note that
 Kvasir does not work under Cygwin.
@@ -533,8 +532,7 @@ On Windows, running @command{make} requires
 that @uref{http://www.cygwin.com/,Cygwin} be installed.
 
 Optionally, download other executables, such as
-the Simplify theorem
-prover (@pxref{Installing Simplify}).
+the Simplify theorem prover (@pxref{Installing Simplify}).
 
 @end enumerate
 @exampleindent 4
@@ -762,6 +760,7 @@ and the Daikon output is written to the terminal.
 
 @menu
 * StackAr example::
+* Detecting invariants when running a Java program from a jar file::
 * Using DynComp with Java programs::
 * Understanding the invariants::
 * Understanding DynComp::
@@ -932,6 +931,37 @@ For more information about the Annotate program, see @ref{Annotate}.
 
 @end itemize
 @end enumerate
+@exampleindent 4
+
+
+@node Detecting invariants when running a Java program from a jar file
+@subsection Detecting invariants when running a Java program from a jar file
+
+If your Java program is run directly from a @file{jar} file,
+such as either of:
+
+@exampleindent 1
+@example
+java mypackage.jar arguments
+java -cp <originalclasspath> mypackage.jar arguments
+@end example
+
+@noindent
+then to detect invariants in that Java program,
+run one of these commands:
+
+@smallexample
+java -cp mypackage.jar daikon.Chicory --daikon <MyMain> arguments
+java -cp mypackage.jar:<original classpath> daikon.Chicory --daikon <MyMain> arguments
+@end smallexample
+
+@noindent
+where @command{<MyMain>} is the Main-class of the @file{jar} file, which you
+can determine by running the command:
+
+@example
+unzip -p mypackage.jar META-INF/MANIFEST.MF | grep '^Main-Class:'
+@end example
 @exampleindent 4
 
 
