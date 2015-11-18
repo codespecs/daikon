@@ -42,6 +42,7 @@ my %line_operators = (
     "\@appendix"          => SKIP_LINE,
     "\@bye"               => SKIP_LINE,
     "\@c"                 => SKIP_LINE,
+    "\@cartouche"         => SKIP_LINE,
     "\@chapter"           => SKIP_LINE,
     "\@cindex"            => SKIP_LINE,
     "\@clear"             => SKIP_LINE,
