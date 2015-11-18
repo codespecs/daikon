@@ -172,16 +172,16 @@ so you do not need to compile them yourself unless you make changes.
 For more information about compiling Daikon, see the comments in the Makefiles.
 
 When you compile Daikon, environment variables @env{DAIKONDIR}
-and @env{JAVA_HOME} should be set.
-This is already done if you source the @file{daikon.bashrc},
-as recommended in the installation instructions
-(@pxref{Complete installation,,,daikon,Daikon User Manual}).
+and @env{JAVA_HOME} must be set.
+See the installation instructions
+(@ref{Complete installation,,,daikon,Daikon User Manual}) for details.
 Thus, a complete @file{.bashrc} or @file{.bash_profile} shell setup file
+(for Fedora or Ubuntu)
 that would enable you to compile Daikon might look like the following:
 
 @example
 export DAIKONDIR=$HOME/daikon
-export JAVA_HOME=/usr/java/current
+export JAVA_HOME=/usr/lib/jvm/java
 source $DAIKONDIR/scripts/daikon.bashrc
 export CLASSPATH=.:$CLASSPATH
 @end example
@@ -224,13 +224,15 @@ special characters and spaces in Windows paths.
 @node    Requirements for compiling Daikon
 @subsection Requirements for compiling Daikon
 
-You need the following software on your path.
+The list at the end of this section identifies the software you will
+need to have on your path.
 
 To install all these dependencies under Ubuntu, run the command:
 @example
 sudo apt-get install openjdk-8-jdk gcc texinfo dos2unix
 @end example
-Other commands would be used on other operating systems.
+Similar commands would be used with other package management systems
+on other operating systems.
 
 @cindex Windows, compiling
 To compile Daikon on Windows, the best approach is to first install the Cygwin
@@ -249,7 +251,7 @@ written in Java.
 @cindex @samp{javac} compiler, overriding
 @cindex Java compiler, specifying
 To override the default Java compiler (@samp{javac}), create a
-@file{Makefile.user} file in the @file{daikon/} directory and add a line
+@file{Makefile.user} file in the @file{daikon} (@env{$DAIKONDIR}) directory and add a line
 like the following.
 @example
 JAVAC ?= jikes -g +E +F
@@ -261,7 +263,8 @@ the C preprocessor
 distribution into multiple @file{.java} files, which are then compiled.
 If you have a C compiler, you almost certainly have @command{cpp}.
 If you do not have @command{cpp} (or @command{gcc}, which can emulate
-@command{cpp} via @command{gcc -E}), you may run @command{make avoid-jpp}, in
+@command{cpp} via @command{gcc -E}), you may run
+@command{make -C $DAIKONDIR/java avoid-jpp}, in
 which case changes to @code{.jpp} files will not be reflected in the
 @file{.java} files or the compiled @file{.class} files.  (The purpose
 of the @file{.jpp} files is to avoid code duplication by placing
@@ -290,7 +293,8 @@ This is used to ensure that the output is the same under Unix and Windows.
 The Daikon git repository is located on GitHub;
 see @w{@uref{https://github.com/@/codespecs/daikon/}.}
 
-@xref{Compiling Daikon}, for instructions for compiling Daikon.
+After making a local clone, @pxref{Compiling Daikon}, for instructions
+on how to compile Daikon.
 
 
 @node    Using Eclipse
@@ -2045,7 +2049,9 @@ will take at least two hours --- but could be much more depending on the number 
 different platforms on which you test the release.
 
 @noindent
-NOTE: The default version of the Java JDK on the majority of the CSE
+@cartouche
+IMPORTANT:
+The default version of the Java JDK on the majority of the CSE
 machines is now JDK 8.  However, for the time being, we wish to continue
 to use JDK 7 for our distribution process; the intention is to maximize
 compatibility with our existing code base.  You will find a suitable
@@ -2057,6 +2063,7 @@ copy of your Bash shell (e.g., log out and log back in); set @env{DAIKONDIR}
 as you would normally; set @env{JAVA_HOME} to the JDK 7 path noted above;
 and, finally, run @command{source $DAIKONDIR/scripts/daikon.bashrc}.
 This should fulfill most of the directory layout requirements noted below.
+@end cartouche
 
 Each of the steps below assumes that the current working directory is @file{$DAIKONDIR}
 and that you are using the Bash shell.
@@ -2163,7 +2170,7 @@ then you need to perform the following steps to update @file{plume.jar}.
 @example
 cd $DAIKONDIR/plume-lib/java
 git pull
-make check-all && make clean && make
+make clean && make
 cp plume.jar ../../java/lib
 @end example
 
@@ -2209,11 +2216,14 @@ newer versions of Valgrind into Fjalar}.
 @section Steps for making the distribution
 
 @noindent
-NOTE: While the majority of the distribution process is currently run
+@cartouche
+IMPORTANT:
+While the majority of the distribution process is currently run
 with JDK 7; we need to ensure that our system runs on JDK 8 as well.
 This means you will need to repeat steps 2-5 below in a separate shell
 with @command{export JAVA_HOME=/usr/lib/jvm/java}. (In addition to the
 other normal environment settings.)
+@end cartouche
 
 @enumerate
 
@@ -2489,8 +2499,7 @@ cd daikon-*
 export JAVA_HOME=/usr/lib/jvm/java
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
-make
-make installation-test
+make distribution-check
 @end smallexample
 
 [Time: 10 min]
@@ -2516,8 +2525,7 @@ cd daikon-*
 export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
-make
-make installation-test
+make distribution-check
 @end smallexample
 
 [Time: ?? min]
@@ -2547,8 +2555,7 @@ export OSTYPE
 export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_45"
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
-make
-make installation-test
+make distribution-check
 @end smallexample
 
 [Time: 10 min]
@@ -2578,8 +2585,7 @@ export OSTYPE
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
-make
-make installation-test
+make distribution-check
 @end smallexample
 
 [Time: 4 min]
@@ -2670,11 +2676,11 @@ git checkout doc/README
 @need 1000
 @item
 Verify these changes by doing product builds (no need to clean first) and
-running the installation test.
+running a short verification test.
 
 @example
 make rebuild-everything
-make -f Makefile-dist installation-test
+make quick-test
 @end example
 
 Success is indicated by invariant output being written to the screen.
