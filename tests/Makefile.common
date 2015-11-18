@@ -262,12 +262,16 @@ DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
 
 # This test should use "command -v" instead of "which"
-DOS2UNIX ?= $(shell which dos2unix)
-ifeq ($(DOS2UNIX),)
-  ifeq ($(shell which perl),)
-    $(error Install either dos2unix or perl)
+ifndef DOS2UNIX
+  WHICHDOS2UNIX := $(shell which dos2unix)
+  ifneq ($(WHICHDOS2UNIX),)
+    DOS2UNIX = $(WHICHDOS2UNIX) --quiet
   else
-    DOS2UNIX ?= perl -pi -e 's/\r\n|\n|\r/\n/g'
+    ifneq ($(shell which perl),)
+      DOS2UNIX = perl -pi -e 's/\r\n|\n|\r/\n/g'
+    else
+      $(error Install either dos2unix or perl)
+    endif
   endif
 endif
 
