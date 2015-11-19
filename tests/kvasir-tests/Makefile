@@ -64,7 +64,7 @@ clean-all:
 	$(MAKE) nightly-tests__clean
 
 
-default-projects__%: pgbovine-tests__% gtest-tests__% smcc-tests__% small-crypto-tests__% \
+default-projects__%: pgbovine-tests__% test-gtest__% smcc-tests__% small-crypto-tests__% \
 	             tiny-real-tests__% tws-tests__% 
 	@
 
@@ -98,15 +98,33 @@ pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
 ifeq (x86_64,$(shell uname -m))
 ifeq (tern,$(findstring tern,$(shell uname -n)))
 # gtest won't run on tern do to old software
-gtest-tests__%:
+test-gtest__%:
 	@
 else
-gtest-tests__%: do-gtest__%
+test-gtest__%: do-gtest__%
 	@
 endif
 else
 # gtest is too big to run on 32 bits
-gtest-tests__%:
+test-gtest__%:
+	@
+endif
+
+ifeq (tern,$(findstring tern,$(shell uname -n)))
+# bc won't run on tern do to old software
+test-bc__%:
+	@
+else
+test-bc__%: do-bc__%
+	@
+endif
+
+ifeq (tern,$(findstring tern,$(shell uname -n)))
+# gzip won't run on tern do to old software
+test-gzip__%:
+	@
+else
+test-gzip__%: do-gzip__%
 	@
 endif
 
@@ -133,18 +151,18 @@ decls-2-large:
 rothermel-tests__%: do-flex-rothermel__%
 	@
 
-tiny-real-tests__%: do-wordplay__% do-bc__%
+tiny-real-tests__%: do-wordplay__% test-bc__%
 	@
 
 small-real-tests__%:
 	@
 
-medium-real-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-povray__% \
+medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-povray__% \
                       do-tcas__%
 	@
 
 # Omits povray and perl
-medium-real-easy-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-tcas__%
+medium-real-easy-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-tcas__%
 	@
 
 small-crypto-tests__%: do-md5__%
