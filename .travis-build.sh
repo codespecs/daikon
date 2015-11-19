@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # ROOT=$TRAVIS_BUILD_DIR
 # cd $ROOT
@@ -7,6 +7,9 @@
 # make -C java very-clean
 
 # temp changes while debugging
+
+export DAIKONDIR=`pwd`
+env|sort
 
 # make showvars compile daikon.jar javadoc
 make showvars compile daikon.jar
