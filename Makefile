@@ -203,38 +203,25 @@ else
 VALGRIND_ARCH := x86
 endif
 
-../fjalar/auto-everything.sh:
-	cd .. && git clone ${GIT_OPTIONS} https://github.com/codespecs/fjalar.git fjalar
-	touch $@
-
-fjalar/valgrind/Makefile.am: ../fjalar/auto-everything.sh
+fjalar/valgrind/Makefile.am:
+	# If fjalar/valgrind/Makefile.am does not exist, then this must be a fresh
+	# daikon repository and we need to create the parallel fjalar repository.
+	(cd .. && git clone ${GIT_OPTIONS} https://github.com/codespecs/fjalar.git fjalar)
 	ln -nsf ../fjalar fjalar
+	# force a build
 	touch $@
 
-fjalar/valgrind/Makefile.in:
-	# If fjalar/valgrind/Makefile.am already exists, then we don't want to
-	# check for ../fjalar/auto-everything.sh (timestamps don't matter)
-	# as this test will fail if we are building from a daikon archive file.
-	if ! test -e fjalar/valgrind/Makefile.am ; then \
-		${MAKE} fjalar/valgrind/Makefile.am ; fi
+fjalar/valgrind/Makefile.in: fjalar/valgrind/Makefile.am
 	cd fjalar/valgrind && ./autogen.sh
 
 fjalar/valgrind/Makefile: fjalar/valgrind/Makefile.in 
 	cd fjalar/valgrind && ./configure --prefix=`pwd`/inst
 
-fjalar/valgrind/coregrind/valgrind: fjalar/valgrind/Makefile
-	cd fjalar/valgrind && $(MAKE) --no-print-directory
-
-fjalar/valgrind/fjalar/fjalar-$(VALGRIND_ARCH)-linux: fjalar/valgrind/coregrind/valgrind
-	cd fjalar/valgrind/fjalar && $(MAKE) --no-print-directory
-
-fjalar/valgrind/inst/bin/valgrind: fjalar/valgrind/coregrind/valgrind
-	cd fjalar/valgrind && $(MAKE) install >/dev/null
-
-fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux: fjalar/valgrind/fjalar/fjalar-$(VALGRIND_ARCH)-linux
-	cd fjalar/valgrind/fjalar && $(MAKE) install >/dev/null
-
-kvasir: fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux fjalar/valgrind/inst/bin/valgrind
+.PHONY: kvasir
+kvasir:
+	$(MAKE) fjalar/valgrind/Makefile
+	$(MAKE) -C fjalar/valgrind --no-print-directory
+	$(MAKE) -C fjalar/valgrind install >/dev/null
 
 build-kvasir:
 ifeq (Linux i686,$(shell uname -sm))
