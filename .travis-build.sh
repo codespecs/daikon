@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/bin/bash -v
 
 # ROOT=$TRAVIS_BUILD_DIR
 # cd $ROOT
+
+export DAIKONDIR=`pwd`
 
 # Same as in Jenkins; should abstract out
 # make -C java very-clean
