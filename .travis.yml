@@ -13,7 +13,7 @@ addons:
   apt:
     packages:
     - texinfo
- 
+
 sudo: false
 
 jdk:
