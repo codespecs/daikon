@@ -66,7 +66,9 @@ public final class Configuration
     }
     return instance;
   }
-  private static volatile /*@MonotonicNonNull*/ Configuration instance = null;
+  // TODO: annotate as @GuardedByName("Configuration.class") once @GuardedByName is
+  // implemented.  This is due to the initialization of 'instance' in getInstance().
+  private static volatile /*@MonotonicNonNull*/ Configuration instance = null; 
 
   /**
    * This used to read a file containing all of the configurable

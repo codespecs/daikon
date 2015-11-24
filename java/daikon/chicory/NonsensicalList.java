@@ -3,6 +3,7 @@ package daikon.chicory;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -27,12 +28,12 @@ public class NonsensicalList extends AbstractList<Object>
         return theList;
     }
 
-    /*@Pure*/ public Object get(int index)
+    /*@Pure*/ public Object get(/*>>>@GuardSatisfied NonsensicalList this,*/ int index)
     {
         return NonsensicalObject.getInstance();
     }
 
-    /*@Pure*/ public int size()
+    /*@Pure*/ public int size(/*>>>@GuardSatisfied NonsensicalList this*/)
     {
         return -1;
     }

@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
@@ -176,7 +177,7 @@ public class SessionManager
     private SessionManager mgr = SessionManager.this; // just sugar
 
     /** The associated session, or null if the thread should shutdown. */
-    private /*@Nullable*/ Session session = new Session();
+    private /*@Nullable*/ /*@GuardedBy("itself")*/ Session session = new Session();
 
     private boolean finished = false;
 
@@ -208,9 +209,11 @@ public class SessionManager
     /*@RequiresNonNull("session")*/
     private void session_done() {
       finished = true;
-      Session tmp = session;
+      /*@GuardedBy("itself")*/ Session tmp = session;
       session = null;
-      tmp.kill();
+      synchronized(tmp) {
+          tmp.kill();
+      }
     }
   }
 

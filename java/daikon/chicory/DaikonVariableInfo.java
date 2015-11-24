@@ -9,6 +9,7 @@ import daikon.Chicory;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -227,7 +228,7 @@ public abstract class DaikonVariableInfo
      * Don't modify the list of children through the iterator,
      * as an unmodifiable list is used to generate the iterator.
      */
-    public Iterator<DaikonVariableInfo> iterator()
+    public Iterator<DaikonVariableInfo> iterator(/*>>>@GuardSatisfied DaikonVariableInfo this*/)
     {
         return Collections.unmodifiableList(children).iterator();
     }

@@ -1,12 +1,13 @@
 package daikon.simplify;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
 /**
  * A Raw command provides no additional structure, allowing arbitrary
- * commands (as long as they have no ouput) to be sent to the
+ * commands (as long as they have no output) to be sent to the
  * prover. It will not block.
  **/
 public class CmdRaw
@@ -20,7 +21,7 @@ public class CmdRaw
   }
 
   /** For documentation, read the class overview. */
-  public void apply(Session s) {
+  public void apply(/*@GuardedBy("itself")*/ Session s) {
 
     synchronized (s) {
       // send out the command

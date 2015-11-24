@@ -4,11 +4,11 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 import java.io.*;
 import java.net.*;
-import java.net.Socket;
 import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -43,18 +43,18 @@ public class Runtime
      * each enter/exit and the decl information for any new classes are
      * printed out and the class is then removed from the list.
      */
-    public static final List<ClassInfo> new_classes
+    public static final /*@GuardedBy("itself")*/ List<ClassInfo> new_classes
       = new LinkedList<ClassInfo>();
 
     /** List of all instrumented classes **/
-    public static final List<ClassInfo> all_classes
+    public static final /*@GuardedBy("itself")*/ List<ClassInfo> all_classes
       = new ArrayList<ClassInfo>();
 
     /** flag that indicates when the first class has been processed**/
     static boolean first_class = true;
 
     /** List of all instrumented methods **/
-    public static final List<MethodInfo> methods = new ArrayList<MethodInfo>();
+    public static final /*@GuardedBy("Runtime.class")*/ List<MethodInfo> methods = new ArrayList<MethodInfo>();
 
     //
     // Control over what classes (ppts) are instrumented
@@ -93,7 +93,7 @@ public class Runtime
     // Not annotated *@MonotonicNonNull* because initialization and use
     // happen in generated instrumentation code that cannot be type-checked
     // by a source code checker.
-    static PrintStream dtrace;
+    static /*@GuardedBy("itself")*/ PrintStream dtrace;
 
     /** Set to true when the dtrace stream is closed **/
     static boolean dtrace_closed = false;
@@ -109,7 +109,7 @@ public class Runtime
 
     /** Dtrace writer setup for writing to the trace file **/
     // Set in ChicoryPremain.premain().
-    static DTraceWriter dtrace_writer;
+    static /*@GuardedBy("Runtime.class")*/ DTraceWriter dtrace_writer;
 
     /**
      * Which static initializers have been run.
@@ -129,7 +129,9 @@ public class Runtime
     }
 
     /** Stack of active methods. **/
-    private static Map<Thread,Stack<CallInfo>> thread_to_callstack
+    // /*@GuardedBy("Runtime.class")*/ Map<Thread, /*@GuardedBy("Runtime.class")*/ Stack</*@GuardedBy("Runtime.class")*/ CallInfo>> is the ideal annotated type,
+    // however this is not possible since Map is not a proper parameterized type. 
+    private static /*@GuardedBy("Runtime.class")*/ Map<Thread, Stack<CallInfo>> thread_to_callstack
         = new LinkedHashMap<Thread,Stack<CallInfo>>();
 
   /**
@@ -144,43 +146,6 @@ public class Runtime
     private Runtime()
     {
         throw new Error("Do not create instances of Runtime");
-    }
-
-    /** Printf to dtrace file. **/
-    /*@FormatMethod*/
-    @SuppressWarnings("formatter") // call to format method is correct because of @FormatMethod annotation
-    final private static void printf(String format, /*@Nullable*/ Object... args)
-    {
-        if (!dtrace_closed)
-            dtrace.printf(format, args);
-    }
-
-    /** Println to dtrace file. **/
-    final private static void println(String msg)
-    {
-        if (!dtrace_closed)
-            dtrace.println(msg);
-    }
-
-    /** Println to dtrace file. **/
-    final private static void println(int val)
-    {
-        if (!dtrace_closed)
-            dtrace.println(val);
-    }
-
-    /** Println to dtrace file. **/
-    final private static void println(Object obj)
-    {
-        if (!dtrace_closed)
-            dtrace.println(obj);
-    }
-
-    /** Println to dtrace file. **/
-    final private static void println()
-    {
-        if (!dtrace_closed)
-            dtrace.println();
     }
 
     /**
@@ -209,6 +174,7 @@ public class Runtime
     // method is a pure method that is being called to create a value for
     // the trace file, don't record it.
     private static boolean invokingPure = false;
+    /*@Holding("Runtime.class")*/
     public static boolean dontProcessPpts()
     {
         return invokingPure;
@@ -314,7 +280,7 @@ public class Runtime
      */
     public static synchronized void exit(/*@Nullable*/ Object obj, int nonce, int mi_index,
                             Object[] args, Object ret_val, int exitLineNum) {
-      
+
       if (debug) {
           MethodInfo mi = methods.get(mi_index);
           method_indent = method_indent.substring(2);
@@ -361,7 +327,7 @@ public class Runtime
           }
         }
 
-        // Write out the infromation for this method
+        // Write out the information for this method
         MethodInfo mi = methods.get(mi_index);
         // long start = System.currentTimeMillis();
         dtrace_writer.methodExit(mi, nonce, obj, args, ret_val,
@@ -431,6 +397,7 @@ public class Runtime
      * Writes out decl information for any new classes and removes
      * them from the list.
      */
+    /*@Holding("Runtime.class")*/
     public static void process_new_classes() {
 
       // Processing of the new_classes list must be
@@ -664,6 +631,7 @@ public class Runtime
 
         java.lang.Runtime.getRuntime().addShutdownHook(new Thread()
         {
+            @SuppressWarnings("lock") // TODO: Fix Checker Framework issue 523.
             public void run()
             {
                 if (!dtrace_closed)

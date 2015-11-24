@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -32,7 +33,7 @@ public class CmdCheck
   }
 
   /** For documentation, read the class overview. */
-  public void apply(Session s) {
+  public void apply(/*@GuardedBy("itself")*/ Session s) {
     try {
 
       String result;
