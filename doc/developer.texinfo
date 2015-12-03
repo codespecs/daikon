@@ -2296,7 +2296,9 @@ make -C $DAIKONDIR/tests clean diffs
 @end example
 
 @c Time on godwit as of 11/27/2014
-[Time: 25 min]
+@c Time has increased significantly with additon of
+@c more tests.  Time below is on buffalo as of 12/03/2015
+[Time: 80 min]
 
 
 @need 1000
