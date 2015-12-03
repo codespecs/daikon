@@ -172,15 +172,14 @@ compile-java:
 	cd java && $(MAKE) all
 
 very-clean:
-	cd doc && $(MAKE) very-clean
-	cd java && $(MAKE) very-clean
+	${MAKE} -C ${DAIKONDIR} clean-everything
 	cd plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
 	cd tests && $(MAKE) very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
 	-rm -rf examples/java-examples/StackAr/DataStructures/*.class
 	-rm -rf tests/sources/DataStructures/*.class
-	-rm -rf daikon.jar daikon-*.tar daikon-*.zip
+	-rm -rf daikon-*.tar daikon-*.zip
 
 clean-java:
 	cd java && $(MAKE) clean
@@ -279,7 +278,7 @@ clean-everything-but-kvasir:
 	-rm -rf daikon.jar
 	-rm -rf java/java_files.txt
 	${MAKE} -C ${DAIKONDIR}/java very-clean
-	${MAKE} -C ${DAIKONDIR}/doc clean
+	${MAKE} -C ${DAIKONDIR}/doc very-clean
 
 clean-kvasir:
 	-${MAKE} -C ${DAIKONDIR}/fjalar/valgrind uninstall distclean 
