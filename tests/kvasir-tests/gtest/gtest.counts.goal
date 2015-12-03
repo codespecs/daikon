@@ -214,7 +214,6 @@
 ../src/gtest_all.cc.testing::internal::GetUnitTestImpl() ENTER/414: 75 EXIT0/1152: 75
 ../src/gtest_all.cc.testing::internal::Int32FromEnvOrDie(char\_const*,\_int) ENTER/420: 4 EXIT0/423: 4
 ../src/gtest_all.cc.testing::internal::Int32FromGTestEnv(char\_const*,\_int) ENTER/420: 3 EXIT0/423: 3
-../src/gtest_all.cc.testing::internal::IsPathSeparator(char) ENTER/417: 81 EXIT0/420: 81
 ../src/gtest_all.cc.testing::internal::IsTrue(bool) ENTER/417: 43 EXIT0/420: 43
 ../src/gtest_all.cc.testing::internal::MakeAndRegisterTestInfo(char\_const*,\_char\_const*,\_char\_const*,\_char\_const*,\_void\_const*,\_void\_(*)(),\_void\_(*)(),\_testing::internal::TestFactoryBase*) ENTER/450: 6 EXIT0/549: 6
 ../src/gtest_all.cc.testing::internal::ParseGoogleTestFlagsOnly(int*,\_char**) ENTER/426: 1 EXIT0/426: 1
@@ -383,8 +382,6 @@ PrettyUnitTestResultPrinter.PrettyUnitTestResultPrinter() ENTER/429: 1 EXIT0/429
 PrettyUnitTestResultPrinter.PrintTestName(char\_const*,\_char\_const*) ENTER/420: 12 EXIT0/420: 12
 PrettyUnitTestResultPrinter.~PrettyUnitTestResultPrinter() ENTER/429: 1 EXIT0/429: 1
 Random.Random(unsigned\_int) ENTER/426: 1 EXIT0/426: 1
-String.CStringEquals(char\_const*,\_char\_const*) ENTER/420: 2 EXIT0/423: 2
-String.CaseInsensitiveCStringEquals(char\_const*,\_char\_const*) ENTER/420: 1 EXIT0/423: 1
 String.Compare(testing::internal::String\_const&)\_const ENTER/435: 3 EXIT0/438: 3
 String.ConstructNonNull(char\_const*,\_unsigned\_long) ENTER/666: 207 EXIT0/666: 207
 String.Format(char\_const*,\_...) ENTER/417: 15 EXIT0/426: 15
