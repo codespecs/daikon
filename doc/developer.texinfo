@@ -2307,7 +2307,7 @@ Run the Kvasir regression tests.
 There should be no diff files marked FAILED.
 
 @example
-make -C $DAIKONDIR/tests/kvasir-tests clean-all nightly-summary-w-daikon
+make -C $DAIKONDIR/tests/kvasir-tests clean-all regression-tests
 @end example
 
 @c Time on godwit as of 11/27/2014
