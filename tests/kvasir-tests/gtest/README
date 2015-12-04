@@ -3,18 +3,12 @@ It is a sample program provided with the release.
 The version used was gtest-1.6.0.
 
 It will always fail the dtrace compare due to program variables
-containing elapsed time. So we just ignore the dtrace file.
+containing elapsed time. So we ignore the dtrace file diff.
 
-Also, the results of running the test depend upon the path name of
-the directory the test is run in.  The goal files were run on:
-/homes/gws/markro/invariants/daikon/tests/kvasir-tests/gtest.
+Similarly, the invs output contains timing values and some of the
+invariants are dependent on the current directory.
+Hence, we ignore the invs file diff.
 
-If you run the test elsewhere you may get a single line diff
-in gtest.counts of the form:
--../src/gtest_all.cc.testing::internal::IsPathSeparator(char) ENTER/348: 76 EXIT0/351: 76
-+../src/gtest_all.cc.testing::internal::IsPathSeparator(char) ENTER/348: 81 EXIT0/351: 81
-The different numbers are a reflection of the difference in
-the length of the path names.
-
-You might also see two diffs of about 210 lines in gtest.comp.diff.
-This one is harder to characterize.
+Finally, the counts file has a few lines that also are dependent
+on the current directory.  We run a small script to remove these
+lines prior to the diff.

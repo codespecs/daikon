@@ -15,6 +15,9 @@ CFLAGS += -gdwarf-2
 ifeq (2015, $(findstring 2015, $(shell gcc --version)))
 CFLAGS += -std=gnu89
 endif
+# Ubuntu sets -fstack-protector-strong on by default
+# we turn if back off to get baseline results to match Fedora.
+CFLAGS += -fno-stack-protector
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
 KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
@@ -23,6 +26,7 @@ KVASIR_DECLS_2 := $(KVASIR_DECLS_@)
 CLEAN_OUTPUT := ../clean-output.pl
 CLEAN_DECLS := ../clean-decls.pl
 REMOVE_TIMING := ../remove-timing.pl
+REMOVE_VARIABLE_COUNT := ../remove-variable-count.pl
 DECLS_2_COMP ?= ${DAIKONDIR}/scripts/decls2comp.py
 RUN_MANY := ../run-many.pl
 DTRACE_DIFF ?= dtrace-diff.pl
@@ -215,6 +219,9 @@ $(DIFF_NAME).decls.diff: daikon-output/$(NAME).decls $(call goal_name,$(NAME).de
 	-diff -u -F::: $(call goal_name,$(NAME).decls) daikon-output/$(NAME).decls >$@ 2>&1
 
 $(DIFF_NAME).counts.diff: $(NAME).counts $(call goal_name,$(NAME).counts)
+ifneq ($(REMOVE_VARIABLE_COUNTS),)
+	perl -i $(REMOVE_VARIABLE_COUNT) $(NAME).counts
+endif
 	-diff -u $(call goal_name,$(NAME).counts) $(NAME).counts >$@ 2>&1
 
 ifeq ($(SKIP_DTRACE_DIFF),)

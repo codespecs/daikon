@@ -2108,7 +2108,7 @@ Environment variable @env{JAVA_HOME} must be set to your JDK installation.
 @item
 There must be a symbolic link from
 @file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}.
-If it does not already exist, the @command{rebuild-everything-clean} step below
+If it does not already exist, the @command{rebuild-everything} step below
 will create it for you.
 
 @c Why would one ever want to create it manually, if the build process does so?
@@ -2262,10 +2262,11 @@ make update-doc-dist-date-and-version
 
 @need 1000
 @item
-Do a clean rebuild of everything.
+Do a very clean rebuild of everything.
 
 @example
-make rebuild-everything-clean
+make very-clean
+make rebuild-everything
 @end example
 
 @c Time on buffalo as of 12/01/2014
@@ -2299,7 +2300,9 @@ make -C $DAIKONDIR/tests clean diffs
 @end example
 
 @c Time on godwit as of 11/27/2014
-[Time: 25 min]
+@c Time has increased significantly with additon of
+@c more tests.  Time below is on buffalo as of 12/03/2015
+[Time: 80 min]
 
 
 @need 1000
@@ -2308,7 +2311,7 @@ Run the Kvasir regression tests.
 There should be no diff files marked FAILED.
 
 @example
-make -C $DAIKONDIR/tests/kvasir-tests clean-all nightly-summary-w-daikon
+make -C $DAIKONDIR/tests/kvasir-tests clean-all regression-tests
 @end example
 
 @c Time on godwit as of 11/27/2014
