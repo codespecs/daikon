@@ -2058,10 +2058,13 @@ compatibility with our existing code base.  You will find a suitable
 version (for an AMD64 based machine) at @file{/homes/gws/markro/jdk7}.
 In addition, if you have used @command{source $DAIKONDIR/scripts/daikon.bashrc}
 to set your environment (@env{CLASS_PATH}
-and @env{PATH} in particular), it is recommended that you get a fresh
-copy of your Bash shell (e.g., log out and log back in); set @env{DAIKONDIR}
-as you would normally; set @env{JAVA_HOME} to the JDK 7 path noted above;
-and, finally, run @command{source $DAIKONDIR/scripts/daikon.bashrc}.
+and @env{PATH} in particular), it is recommended that you:
+@itemize
+@item get a fresh copy of your Bash shell (e.g., log out and log back in)
+@item set @env{DAIKONDIR} as you would normally
+@item @command{export JAVA_HOME=/homes/gws/markro/jdk7}
+@item @command{source $DAIKONDIR/scripts/daikon.bashrc}
+@end itemize
 This should fulfill most of the directory layout requirements noted below.
 @end cartouche
 
