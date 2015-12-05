@@ -52,6 +52,7 @@ images/dfepl-flow.jpg: images/dfepl-flow.eps
 images/%.pdf: images/%.eps
 	epstopdf $< --outfile=$@
 
+.PHONY: html
 html: daikon.html developer.html
 
 daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
