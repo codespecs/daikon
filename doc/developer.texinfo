@@ -2106,11 +2106,12 @@ Environment variable @env{JAVA_HOME} must be set to your JDK installation.
 @c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
 @c or:       export JAVA_HOME=/usr/lib/jvm/java
 
-@item
-There must be a symbolic link from
-@file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}.
-If it does not already exist, the @command{rebuild-everything} step below
-will create it for you.
+@c If it's created automatically, there is no need to mention it as a requirement.
+@c @item
+@c There must be a symbolic link from
+@c @file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}.
+@c If it does not already exist, the @command{rebuild-everything} step below
+@c will create it for you.
 
 @c Why would one ever want to create it manually, if the build process does so?
 @c Otherwise, you must make this link yourself.
@@ -2149,7 +2150,7 @@ Update the Daikon source files to their most recent version.
 @smallexample
 set -o pipefail
 (cd $DAIKONDIR && git pull && git log --branches --not --remotes && git status)
-(cd $DAIKONDIR/fjalar && git pull && git log --branches --not --remotes && git status)
+(cd $DAIKONDIR/../fjalar && git pull && git log --branches --not --remotes && git status)
 @end smallexample
 
 @noindent
