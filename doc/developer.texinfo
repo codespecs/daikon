@@ -2182,8 +2182,7 @@ then you need to perform the following steps to update @file{plume.jar}.
 @example
 make -C $DAIKONDIR plume-lib-update
 cd $DAIKONDIR/plume-lib/java
-make clean && make
-cp plume.jar ../../java/lib
+make clean && make && make verify-plume-jar-classfile-version && cp -pf plume.jar ../../java/lib
 @end example
 
 @c Time on buffalo as of 12/01/2014
