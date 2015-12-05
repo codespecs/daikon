@@ -15,6 +15,9 @@ CFLAGS += -gdwarf-2
 ifeq (2015, $(findstring 2015, $(shell gcc --version)))
 CFLAGS += -std=gnu89
 endif
+# Ubuntu sets -fstack-protector-strong on by default
+# we turn if back off to get baseline results to match Fedora.
+CFLAGS += -fno-stack-protector
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
 KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
