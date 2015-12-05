@@ -2092,10 +2092,11 @@ A clone of
 @uref{https://github.com/codespecs/fjalar} must be a sibling of
 @file{$DAIKONDIR}.
 
-@item
-A clone of
-@uref{https://github.com/mernst/plume-lib} must be in
-@file{$DAIKONDIR/@/plume-lib}.
+@c Not necessary because the commands handle this for you.
+@c @item
+@c A clone of
+@c @uref{https://github.com/mernst/plume-lib} must be in
+@c @file{$DAIKONDIR/@/plume-lib}.
 
 @item
 Environment variable @env{JAVA_HOME} must be set to your JDK installation.
@@ -2148,8 +2149,15 @@ set -o pipefail
 (cd $DAIKONDIR/fjalar && git pull && git log --branches --not --remotes && git status)
 @end smallexample
 
-For each command, the last line printed should be @samp{no changes found}.
-You also need to make sure that the "git log" command didn't produce any output.
+@noindent
+Each of the two commands should print exactly 4 lines:
+
+@example
+Already up-to-date.
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working directory clean
+@end example
 
 [Time: moments]
 
@@ -2168,8 +2176,8 @@ If the Checker Framework has been released since the last distribution,
 then you need to perform the following steps to update @file{plume.jar}.
 
 @example
+make -C $DAIKONDIR plume-lib-update
 cd $DAIKONDIR/plume-lib/java
-git pull
 make clean && make
 cp plume.jar ../../java/lib
 @end example
