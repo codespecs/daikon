@@ -536,6 +536,8 @@ ifeq ($(DCOMP_RT),)
   DCOMP_RT := $(wildcard $(pag)/software/pkg/DynComp/dcomp_rt.jar)
 endif
 ifndef DCOMP_RT
+# Some targets, such as clean, don't really need dcomp_rt.jar.
+# It would be nice for them not to issue this warning.
   $(info dcomp_rt.jar is not in ${DAIKONDIR}/java; it must be on the classpath.)
 endif
 

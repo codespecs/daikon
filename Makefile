@@ -100,7 +100,7 @@ endif
 # Staging area for the distribution
 STAGING_DIR := $(WWW_DIR)/staging-daikon
 
-# Files to copy to the website
+# Files to copy to the website, from $DAIKONDIR/doc/www/
 WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
                     download/index.html download/doc/index.html
 
@@ -175,6 +175,7 @@ very-clean:
 	${MAKE} -C ${DAIKONDIR} clean-everything
 	cd plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
+# tests Makefile warns if dcomp_rt.jar is not present; ignore the warning
 	cd tests && $(MAKE) very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
 	-rm -rf examples/java-examples/StackAr/DataStructures/*.class
@@ -402,6 +403,7 @@ staging: doc/CHANGES
 	cp -pR doc/daikon $(STAGING_DIR)/download/doc
 	cp -pR doc/developer $(STAGING_DIR)/download/doc
 	cd doc/www && ${RSYNC_AR} $(WWW_DAIKON_FILES) $(STAGING_DIR)
+	cd doc/www && ${RSYNC_AR} $(DAIKONDIR)/doc/VERSION $(STAGING_DIR)
 	# Build pubs and copy the results
 	@echo "]2;Building Pubs"
 	cd doc/www && make pubs
@@ -426,8 +428,8 @@ staging: doc/CHANGES
 staging-to-www: $(STAGING_DIR)
 #copy the files
 	chmod -R u+w,g+w $(WWW_DIR)
-# remove previous release archive files
-	rm -f /cse/web/research/plse/daikon/download/daikon-*
+# # remove previous release archive files
+# 	rm -f /cse/web/research/plse/daikon/download/daikon-*
 # don't trash existing history directory
 	(cd $(STAGING_DIR) && tar cf - --exclude=history .) | (cd $(WWW_DIR) && tar xfBp -)
 	chmod -R u-w,g-w $(WWW_DIR)

@@ -149,7 +149,12 @@ dist:
 find-changes:
 	diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 
+# -u switch to hunspell is undocumented and subject to change,
+# but gives a line number whereas -l does not.
 spell-check:
 	perl prepare-texinfo-for-spellcheck.pl < daikon.texinfo | hunspell -u -p daikon.dict
 	perl prepare-texinfo-for-spellcheck.pl < developer.texinfo | hunspell -u -p daikon.dict
-
+# For CHANGES file, only recent lines (top 100), and not text starting with
+# 4+ spaces (assumed to be literal code or commands.  Permit some failures.
+	echo "Following command is allowed to have some failures not in daikon.dict"
+	head -100 CHANGES | sed 's/^    .*/ /' | hunspell -u -p daikon.dict
