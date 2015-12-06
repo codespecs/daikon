@@ -2106,11 +2106,12 @@ Environment variable @env{JAVA_HOME} must be set to your JDK installation.
 @c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
 @c or:       export JAVA_HOME=/usr/lib/jvm/java
 
-@item
-There must be a symbolic link from
-@file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}.
-If it does not already exist, the @command{rebuild-everything} step below
-will create it for you.
+@c If it's created automatically, there is no need to mention it as a requirement.
+@c @item
+@c There must be a symbolic link from
+@c @file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}.
+@c If it does not already exist, the @command{rebuild-everything} step below
+@c will create it for you.
 
 @c Why would one ever want to create it manually, if the build process does so?
 @c Otherwise, you must make this link yourself.
@@ -2149,7 +2150,7 @@ Update the Daikon source files to their most recent version.
 @smallexample
 set -o pipefail
 (cd $DAIKONDIR && git pull && git log --branches --not --remotes && git status)
-(cd $DAIKONDIR/fjalar && git pull && git log --branches --not --remotes && git status)
+(cd $DAIKONDIR/../fjalar && git pull && git log --branches --not --remotes && git status)
 @end smallexample
 
 @noindent
@@ -2181,8 +2182,7 @@ then you need to perform the following steps to update @file{plume.jar}.
 @example
 make -C $DAIKONDIR plume-lib-update
 cd $DAIKONDIR/plume-lib/java
-make clean && make
-cp plume.jar ../../java/lib
+make clean && make && make verify-plume-jar-classfile-version && \cp -pf plume.jar ../../java/lib
 @end example
 
 @c Time on buffalo as of 12/01/2014
@@ -2316,7 +2316,8 @@ make -C $DAIKONDIR/tests clean diffs
 @need 1000
 @item
 Run the Kvasir regression tests.
-There should be no diff files marked FAILED.
+The last line printed should be ``All tests succeeded.'',
+indicating that there are no diff files marked FAILED.
 
 @example
 make -C $DAIKONDIR/tests/kvasir-tests clean-all regression-tests
@@ -2336,42 +2337,6 @@ cd $DAIKONDIR/tests/parser-tests
 @end example
 
 Success is indicated by each of the diff comparisons being identical.
-
-[Time: moments]
-
-
-@need 1000
-@item
-Check the release documents for spelling errors.
-
-@example
-cd $DAIKONDIR/doc
-make spell-check
-@end example
-
-Any words that may be spelled incorrectly are output to standard out.  There are three
-basic ways to remove items from the misspelled list:
-
-@itemize
-
-@item
-If the word is misspelled, correct it in the source (@file{.texinfo}) file.
-
-@item
-If the word is spelled correctly, and if it is not a person's name or part
-of a computer command or filename or similar construct, it should be
-added to our local dictionary.  Edit the file @file{daikon.dict} and
-add the new word, keeping the list in alphabetical order.
-
-@item
-If the word is some sort of technical information
-then it should be marked as such with the correct Texinfo command.
-@code{@@nospellcheck} is appropriate for a person's or company's name.  For the
-proper input of technical information, see "Chapter 9: Marking Text,
-Words and Phrases" of the
-@uref{http://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, GNU Texinfo Manual}.
-
-@end itemize
 
 [Time: moments]
 
@@ -2416,6 +2381,42 @@ git log v5.0.2..HEAD
 
 @need 1000
 @item
+Check the release documents for spelling errors.
+
+@example
+cd $DAIKONDIR/doc
+make spell-check
+@end example
+
+Any words that may be spelled incorrectly are output to standard out.  There are three
+basic ways to remove items from the misspelled list:
+
+@itemize
+
+@item
+If the word is misspelled, correct it in the source (@file{.texinfo}) file.
+
+@item
+If the word is spelled correctly, and if it is not a person's name or part
+of a computer command or filename or similar construct, it should be
+added to our local dictionary.  Edit the file @file{daikon.dict} and
+add the new word, keeping the list in alphabetical order.
+
+@item
+If the word is some sort of technical information
+then it should be marked as such with the correct Texinfo command.
+@code{@@nospellcheck} is appropriate for a person's or company's name.  For the
+proper input of technical information, see "Chapter 9: Marking Text,
+Words and Phrases" of the
+@uref{http://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, GNU Texinfo Manual}.
+
+@end itemize
+
+[Time: moments]
+
+
+@need 1000
+@item
 Build everything to be distributed and copy it to the temporary staging area
 @c not @uref{...} because we don't want robots to notice and crawl the link
 (http://plse.cs.washington.edu/daikon/staging-daikon/).
@@ -2424,6 +2425,7 @@ output will be a list of files that were added/removed since the
 last release.
 
 @example
+cd $DAIKONDIR
 make staging
 @end example
 
@@ -2444,14 +2446,16 @@ make check-for-broken-doc-links
 
 Review @file{check.log} and make corrections as appropriate.
 
-In most cases (and for most 404 errors), you should fix the document with
-the incorrect link.  Note that you must fix it in the original repository,
-not in the drop directories.
-This means correcting the file, most likely located beneath either
-@file{$DAIKONDIR/doc} or @file{$BIBDIR} and then committing the changes. You will then
-need to repeat the previous step (@command{make staging}) prior to re-running
-the broken link tool.
+In some cases a "403 Forbidden" error is transient, due to the website
+being down.  You can check such links by hand.
 
+If the URL is correct but cannot be checked (for example, because the website
+prohibits spiders or because the URL  redirects to another URL but you prefer
+to keep the first URL in your document), then you may need to add lines to
+an appropriate part of file @file{$DAIKONDIR/plume-lib/bin/checklink-args.txt}.
+
+In most cases (and for most 404 errors), you should fix the document with
+the incorrect link.
 Here is a workflow that may be used to deal with broken links:
 @itemize
 @item
@@ -2462,15 +2466,12 @@ Do a web search to see if the page has relocated elsewhere.
 If the web search is not successful, email the maintainer of the old content.
 @end itemize
 
-If the URL is correct but cannot be checked (for example, because the website
-prohibits spiders or because the URL  redirects to another URL but you prefer
-to keep the first URL in your document), then you may need to add lines to
-file @file{$DAIKONDIR/plume-lib/bin/checklink-args.txt}.
-
-In some cases a "403 Forbidden" error is transient, due to the website
-being down.  You can check such links by hand.
-
-If you made changes, re-run the tool.
+Note that you must fix it in the original repository,
+not in the drop directories.
+This means correcting the file, most likely located beneath either
+@file{$DAIKONDIR/doc} or @file{$BIBDIR}, committing the changes, and
+returning to the previous step (@command{make staging}) prior to re-running
+the broken link tool.
 
 [Time: 3 min]
 
@@ -2498,18 +2499,15 @@ the appropriate environment variables and run the top level Makefile.
 Finally, a short verification test is run;
 success is indicated by invariant output being written to the screen.
 
-@noindent
-NOTE: For this example and the next few that involve downloading the Daikon release
-tar file we use @file{#.#.#} as a placeholder for the release number you are
-currently working on. For example, @file{daikon-5.2.8.tar.gz}.
-
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-rm -rf daikon*
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
-tar xzf daikon-*.tar.gz
-cd daikon-*
+wget http://plse.cs.washington.edu/daikon/download/doc/VERSION
+DAIKONVERSION=`cat VERSION | xargs echo -n`
+rm -rf daikon-${DAIKONVERSION}.tar.gz daikon-${DAIKONVERSION}
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-${DAIKONVERSION}.tar.gz
+tar xzf daikon-${DAIKONVERSION}.tar.gz
+cd daikon-${DAIKONVERSION}
 export JAVA_HOME=/usr/lib/jvm/java
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
@@ -2527,15 +2525,17 @@ Ubuntu is another distributor of Linux based systems and we have run into
 some differences with Fedora in the past.  This test is
 probably best done on a virtual machine running a current version. It is
 important to regularly check to see if a new major release of Ubuntu is
-available and upgrade your test bed as necessary.
+available and upgrade your testbed as necessary.
 
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-rm -rf daikon*
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
-tar xzf daikon-*.tar.gz
-cd daikon-*
+wget http://plse.cs.washington.edu/daikon/download/doc/VERSION
+DAIKONVERSION=`cat VERSION | xargs echo -n`
+rm -rf daikon-${DAIKONVERSION}.tar.gz daikon-${DAIKONVERSION}
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-${DAIKONVERSION}.tar.gz
+tar xzf daikon-${DAIKONVERSION}.tar.gz
+cd daikon-${DAIKONVERSION}
 export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
@@ -2546,12 +2546,10 @@ make distribution-check
 
 
 @item
-Test the distribution on a Windows machine.  On a Windows
-machine with Cygwin installed, as a guest user (or at least one without
-environment variables such as @env{$DAIKONDIR} defined!), download the staged
-@file{daikon-#.#.#.tar.gz}
-file, extract the files, set the appropriate environment variables
-and run the top level Makefile.
+Test the distribution on a Windows machine
+with Cygwin installed, as a guest user (or at least one without
+environment variables such as @env{$DAIKONDIR} defined!).
+
 The last line of output from the first make should indicate that Kvasir was
 not built because this is not a Linux platform. After running the second
 make command, success is indicated by invariant output being
@@ -2560,10 +2558,12 @@ written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-rm -rf daikon*
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
-tar xzf daikon-*.tar.gz
-cd daikon-*
+wget http://plse.cs.washington.edu/daikon/download/doc/VERSION
+DAIKONVERSION=`cat VERSION | xargs echo -n`
+rm -rf daikon-${DAIKONVERSION}.tar.gz daikon-${DAIKONVERSION}
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-${DAIKONVERSION}.tar.gz
+tar xzf daikon-${DAIKONVERSION}.tar.gz
+cd daikon-${DAIKONVERSION}
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
 export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_45"
@@ -2576,10 +2576,9 @@ make distribution-check
 
 
 @item
-Test the distribution on a MacOSX machine.  On a MacOSX machine
-with the development tools installed, download the staged @file{daikon-#.#.#.tar.gz}
-file, extract the files, set the appropriate environment variables and
-run the top level Makefile.
+Test the distribution on a MacOSX machine
+with the development tools installed.
+
 The last line of output from the first make should indicate that Kvasir was
 not built because this is not a Linux platform. After running the second
 make command, success is indicated by invariant output being
@@ -2588,12 +2587,13 @@ written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-rm -rf daikon*
-curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
-# or:
-# wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-#.#.#.tar.gz
-tar xzf daikon-*.tar.gz
-cd daikon-*
+wget http://plse.cs.washington.edu/daikon/download/doc/VERSION
+DAIKONVERSION=`cat VERSION | xargs echo -n`
+rm -rf daikon-${DAIKONVERSION}.tar.gz daikon-${DAIKONVERSION}
+curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-${DAIKONVERSION}.tar.gz
+# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-${DAIKONVERSION}.tar.gz
+tar xzf daikon-${DAIKONVERSION}.tar.gz
+cd daikon-${DAIKONVERSION}
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
