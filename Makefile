@@ -29,7 +29,7 @@ DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 # visible to the user.
 DOC_FILES_USER := daikon.pdf daikon.html developer.html developer.pdf \
                   daikon.texinfo developer.texinfo config-options.texinfo \
-                  invariants-doc.texinfo CHANGES daikon-favicon.png
+                  invariants-doc.texinfo CHANGES daikon-favicon.png VERSION
 README_PATHS := README doc/README fjalar/README
 # Files that contain the (automatically updated) version number and date.
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
@@ -403,7 +403,6 @@ staging: doc/CHANGES
 	cp -pR doc/daikon $(STAGING_DIR)/download/doc
 	cp -pR doc/developer $(STAGING_DIR)/download/doc
 	cd doc/www && ${RSYNC_AR} $(WWW_DAIKON_FILES) $(STAGING_DIR)
-	cd doc/www && ${RSYNC_AR} $(DAIKONDIR)/doc/VERSION $(STAGING_DIR)
 	# Build pubs and copy the results
 	@echo "]2;Building Pubs"
 	cd doc/www && make pubs
