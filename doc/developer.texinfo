@@ -2358,7 +2358,9 @@ Another good source of information are the repository logs since the
 last release:
 
 @example
-git log v5.0.2..HEAD    (substitute last release number for 5.0.2)
+cd $DAIKONDIR
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
+git log v${DAIKONVERSION}..HEAD
 @end example
 
 @c TODO: How can this be done for Git?
@@ -2373,7 +2375,8 @@ In addition, you should run the same command in your Fjalar clone:
 
 @example
 cd $DAIKONDIR/fjalar
-git log v5.0.2..HEAD
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
+git log v${DAIKONVERSION}..HEAD
 @end example
 
 [Time: a few minutes]
@@ -2507,8 +2510,7 @@ success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION
-DAIKONVERSION=`cat VERSION | xargs echo -n`
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
@@ -2535,8 +2537,7 @@ available and upgrade your testbed as necessary.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION
-DAIKONVERSION=`cat VERSION | xargs echo -n`
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
@@ -2563,8 +2564,7 @@ written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION
-DAIKONVERSION=`cat VERSION | xargs echo -n`
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
@@ -2592,8 +2592,8 @@ written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION
-DAIKONVERSION=`cat VERSION | xargs echo -n`
+# Might need to be adjusted to use curl instead of wget
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 # or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
