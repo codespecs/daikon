@@ -2388,8 +2388,7 @@ cd $DAIKONDIR/doc
 make spell-check
 @end example
 
-Any words that may be spelled incorrectly are output to standard out.  There are three
-basic ways to remove items from the misspelled list:
+Any words that may be spelled incorrectly are output to standard out.
 
 @itemize
 
@@ -2397,18 +2396,21 @@ basic ways to remove items from the misspelled list:
 If the word is misspelled, correct it in the source (@file{.texinfo}) file.
 
 @item
-If the word is spelled correctly, and if it is not a person's name or part
-of a computer command or filename or similar construct, it should be
-added to our local dictionary.  Edit the file @file{daikon.dict} and
-add the new word, keeping the list in alphabetical order.
+If the word is spelled correctly and is a normal English word, add it to
+@file{daikon.dict}, keeping the list in alphabetical order.
 
 @item
-If the word is some sort of technical information
-then it should be marked as such with the correct Texinfo command.
-@code{@@nospellcheck} is appropriate for a person's or company's name.  For the
-proper input of technical information, see "Chapter 9: Marking Text,
-Words and Phrases" of the
-@uref{http://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, GNU Texinfo Manual}.
+If the word is spelled correctly and is a proper name, such as a person's
+or company's name, then either add it to @file{daikon.dict} or 
+write @code{@@nospellcheck} around it.
+
+@item
+If the word is technical information, such as part
+of a computer command or filename, then mark it with a Texinfo command;
+see ``Chapter 9: Marking Text,
+Words and Phrases'' of the
+GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, PDF},
+@uref{https://www.gnu.org/software/texinfo/manual/texinfo/texinfo.html#Marking-Text,, HTML}).
 
 @end itemize
 
@@ -2423,6 +2425,8 @@ Build everything to be distributed and copy it to the temporary staging area
 The final
 output will be a list of files that were added/removed since the
 last release.
+If any of these differences is unexpected, then investigate and correct the
+difference, and redo the step.
 
 @example
 cd $DAIKONDIR
