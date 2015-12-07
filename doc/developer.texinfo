@@ -2359,8 +2359,8 @@ last release:
 
 @example
 cd $DAIKONDIR
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
-git log v${DAIKONVERSION}..HEAD
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION -O - | xargs echo -n`
+git log v$DAIKONVERSION..HEAD
 @end example
 
 @c TODO: How can this be done for Git?
@@ -2375,8 +2375,8 @@ In addition, you should run the same command in your Fjalar clone:
 
 @example
 cd $DAIKONDIR/fjalar
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
-git log v${DAIKONVERSION}..HEAD
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION -O - | xargs echo -n`
+git log v$DAIKONVERSION..HEAD
 @end example
 
 [Time: a few minutes]
