@@ -2638,7 +2638,7 @@ Commit changes back to the repository:
 
 @emph{The changeset should only have the change in version number, nothing
 else, so this should come right after changing daikon/doc/VERSION which
-should come just before ``make staging-to-www''.}
+should come just before ``make staging''.}
 
 @example
 cd $DAIKONDIR
