@@ -26,11 +26,10 @@ DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 
 # The texinfo files are included so we can diff to see what has changed from
 # release to release.  They are in the dist/doc directory, but not
-# visible to the user
+# visible to the user.
 DOC_FILES_USER := daikon.pdf daikon.html developer.html developer.pdf \
                   daikon.texinfo developer.texinfo config-options.texinfo \
-                  invariants-doc.texinfo CHANGES daikon-favicon.png \
-                  valgrind-merge.pdf valgrind-merge.html valgrind-merge.texinfo
+                  invariants-doc.texinfo CHANGES daikon-favicon.png
 README_PATHS := README doc/README fjalar/README
 # Files that contain the (automatically updated) version number and date.
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
@@ -175,7 +174,7 @@ very-clean:
 	${MAKE} -C ${DAIKONDIR} clean-everything
 	cd plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
-# tests Makefile warns if dcomp_rt.jar is not present; ignore the warning
+# You can ignore the warning from tests/Makefile that dcomp_rt.jar is not present.
 	cd tests && $(MAKE) very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
 	-rm -rf examples/java-examples/StackAr/DataStructures/*.class
@@ -378,8 +377,9 @@ repository-test:
 # daikon.tar.gz, daikon.zip, daikon.jar, javadoc, and the documentation.
 # See the dist target for moving these files to the website.
 staging: doc/CHANGES
-	chmod -R +w $(STAGING_DIR)
-	chmod +w $(STAGING_DIR)/..
+# Commented out chmod commands because I get "Operation not permitted". -MDE
+# 	chmod -R +w $(STAGING_DIR)
+#	chmod +w $(STAGING_DIR)/..
 	/bin/rm -rf $(STAGING_DIR)
 	# dummy history directory to remove checklink warnings
 	install -d $(STAGING_DIR)/history
@@ -428,8 +428,8 @@ staging: doc/CHANGES
 staging-to-www: $(STAGING_DIR)
 #copy the files
 	chmod -R u+w,g+w $(WWW_DIR)
-# # remove previous release archive files
-# 	rm -f /cse/web/research/plse/daikon/download/daikon-*
+# remove previous release archive files
+	rm -f /cse/web/research/plse/daikon/download/daikon-*
 # don't trash existing history directory
 	(cd $(STAGING_DIR) && tar cf - --exclude=history .) | (cd $(WWW_DIR) && tar xfBp -)
 	chmod -R u-w,g-w $(WWW_DIR)
