@@ -2636,13 +2636,17 @@ make staging-to-www
 @item
 Commit changes back to the repository:
 
-@emph{Could this and the following step be done with @command{cat $DAIKONDIR/doc/VERSION}?}
+@emph{The changeset should only have the change in version number, nothing
+else, so this should come right after changing daikon/doc/VERSION which
+should come just before ``make staging-to-www''.}
 
 @example
-git commit -a -m "Change version to @emph{X.Y.Z}"
+cd $DAIKONDIR
+DAIKONVERSION=`cat $DAIKONDIR/doc/VERSION | xargs echo -n`
+git commit -a -m "Change version to $DAIKONDIR"
 git push
 cd fjalar
-git commit -a -m "Change version to @emph{X.Y.Z}"
+git commit -a -m "Change version to $DAIKONDIR"
 git push
 @end example
 
@@ -2654,10 +2658,12 @@ git push
 Add a version label to the repository:
 
 @example
-git tag -a v@emph{X.Y.Z}
+cd $DAIKONDIR
+DAIKONVERSION=`cat $DAIKONDIR/doc/VERSION | xargs echo -n`
+git tag -a v$DAIKONDIR
 git push --tags
 cd fjalar
-git tag -a v@emph{X.Y.Z}
+git tag -a v$DAIKONDIR
 git push --tags
 @end example
 
