@@ -2430,6 +2430,7 @@ difference, and redo the step.
 
 @example
 cd $DAIKONDIR
+\rm -f `find . -type f -name '*~'`
 make staging
 @end example
 
@@ -2506,7 +2507,7 @@ success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-wget http://plse.cs.washington.edu/daikon/download/doc/VERSION
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION
 DAIKONVERSION=`cat VERSION | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
@@ -2534,7 +2535,7 @@ available and upgrade your testbed as necessary.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-wget http://plse.cs.washington.edu/daikon/download/doc/VERSION
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION
 DAIKONVERSION=`cat VERSION | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
@@ -2562,7 +2563,7 @@ written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-wget http://plse.cs.washington.edu/daikon/download/doc/VERSION
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION
 DAIKONVERSION=`cat VERSION | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
@@ -2591,7 +2592,7 @@ written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-wget http://plse.cs.washington.edu/daikon/download/doc/VERSION
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION
 DAIKONVERSION=`cat VERSION | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
