@@ -268,7 +268,7 @@ rebuild-everything-but-kvasir:
 	${MAKE} -C ${DAIKONDIR} doc-all
 
 rebuild-kvasir:
-	${MAKE} kvasir
+	${MAKE} build-kvasir
 
 clean-everything:
 	${MAKE} -C ${DAIKONDIR} clean-everything-but-kvasir
@@ -319,7 +319,7 @@ ifdef DAIKONCLASS_SOURCES
 	$(MAKE) -C java
 endif
 	$(MAKE) -C java dcomp_rt.jar
-	$(MAKE) kvasir
+	$(MAKE) build-kvasir
 	$(MAKE) quick-test
 
 DISTTESTDIR := ${TMPDIR}/daikon.dist
@@ -377,16 +377,21 @@ repository-test:
 # daikon.tar.gz, daikon.zip, daikon.jar, javadoc, and the documentation.
 # See the dist target for moving these files to the website.
 staging: doc/CHANGES
-# Commented out chmod commands because I get "Operation not permitted". -MDE
-# 	chmod -R +w $(STAGING_DIR)
-#	chmod +w $(STAGING_DIR)/..
+# Our intention is that members of the plse_www group will always have
+# write permission on the release directories; however, if you happen
+# to be the owner of an existing file, the permissions system gives
+# that priority and we must set the write bit.  These two chmod commands
+# will fail if you are not the owner, but the remainder of the commands
+# should work fine.
+	-chmod -R u+w $(STAGING_DIR)
+	-chmod u+w $(WWW_DIR)
 	/bin/rm -rf $(STAGING_DIR)
 	# dummy history directory to remove checklink warnings
 	install -d $(STAGING_DIR)/history
 	install -d $(STAGING_DIR)/download
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
-	# make daikon.tar has side effect of making 'finalout' version of documents
+	# make daikon.tar has side effect of making documents
 	$(MAKE) daikon.tar
 	gzip -c ${TMPDIR}/$(NEW_RELEASE_NAME).tar > $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz
 	cp -pf ${TMPDIR}/$(NEW_RELEASE_NAME).zip $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).zip
@@ -409,8 +414,12 @@ staging: doc/CHANGES
 	install -d $(STAGING_DIR)/pubs
 	cp -pR doc/www/pubs/* $(STAGING_DIR)/pubs
 	cp -p doc/images/daikon-logo.gif $(STAGING_DIR)
-	# all distributed files should be readonly
-	chmod -R -w $(STAGING_DIR)
+	# all distributed files should belong to the group plse_www and be group writable.
+	# set the owner and other permissions to readonly
+	chgrp -R plse_www $(STAGING_DIR)
+	chmod -R g+w $(STAGING_DIR)
+	-chmod -R u-w $(STAGING_DIR)
+	chmod -R o-w $(STAGING_DIR)
 	# compare new list of files in tarfile to previous list
 	@echo "]2;New or removed files"
 	@echo "***** New or removed files:"
@@ -426,19 +435,20 @@ staging: doc/CHANGES
 # that are not in staging.
 staging-to-www: $(STAGING_DIR)
 #copy the files
-	chmod -R u+w,g+w $(WWW_DIR)
+	-chmod -R u+w $(WWW_DIR)
 # remove previous release archive files
 	rm -f /cse/web/research/plse/daikon/download/daikon-*
 # don't trash existing history directory
 	(cd $(STAGING_DIR) && tar cf - --exclude=history .) | (cd $(WWW_DIR) && tar xfBp -)
-	chmod -R u-w,g-w $(WWW_DIR)
+	-chmod -R u-w $(WWW_DIR)
 	@echo "**Update the dates and sizes in the various index files**"
+# shouldn't need these chmod commands any more as always have group permission
 # need to allow write so html-update can update	
-	chmod +w $(DIST_DIR)
-	chmod +w $(DIST_DIR)/index.html
+#	chmod +w $(DIST_DIR)
+#	chmod +w $(DIST_DIR)/index.html
 	html-update-link-dates $(DIST_DIR)/index.html
-	chmod -w $(DIST_DIR)
-	chmod -w $(DIST_DIR)/index.html
+#	chmod -w $(DIST_DIR)
+#	chmod -w $(DIST_DIR)/index.html
 # with new version number system, this is now done manually
 #	$(MAKE) update-dist-version-file
 	@echo "*****"
@@ -481,10 +491,10 @@ check-for-broken-doc-links:
 HISTORY_DIR := /cse/web/research/plse/daikon/history
 save-current-release:
 	@echo Saving $(CUR_VER) to history directory.
-	chmod +w $(HISTORY_DIR)
+	-chmod u+w $(HISTORY_DIR)
 	mkdir $(HISTORY_DIR)/$(CUR_RELEASE_NAME)
-	chmod -w $(HISTORY_DIR)
-	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp -p /cse/web/research/plse/daikon/download/$(CUR_RELEASE_NAME).zip . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod -w CHANGES .
+	-chmod u-w $(HISTORY_DIR)
+	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp -p /cse/web/research/plse/daikon/download/$(CUR_RELEASE_NAME).zip . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod o-w CHANGES .
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 ifeq ($(origin TODAY), undefined)
