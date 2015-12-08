@@ -291,7 +291,7 @@ This is used to ensure that the output is the same under Unix and Windows.
 @cindex version control repository
 
 The Daikon git repository is located on GitHub;
-see @w{@uref{https://github.com/@/codespecs/daikon/}.}
+see @uref{https://github.com/@/codespecs/daikon/}.
 
 After making a local clone, @pxref{Compiling Daikon}, for instructions
 on how to compile Daikon.
@@ -2182,7 +2182,8 @@ then you need to perform the following steps to update @file{plume.jar}.
 @example
 make -C $DAIKONDIR plume-lib-update
 cd $DAIKONDIR/plume-lib/java
-make clean && make && make verify-plume-jar-classfile-version && \cp -pf plume.jar ../../java/lib
+make clean && make && make verify-plume-jar-classfile-version && \
+    \cp -pf plume.jar ../../java/lib
 @end example
 
 @c Time on buffalo as of 12/01/2014
@@ -2357,11 +2358,12 @@ diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 Another good source of information are the repository logs since the
 last release:
 
-@example
+@smallexample
 cd $DAIKONDIR
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION -O - | xargs echo -n`
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
+    -O - | xargs echo -n`
 git log v$DAIKONVERSION..HEAD
-@end example
+@end smallexample
 
 @c TODO: How can this be done for Git?
 @c As we normally only tag the repository when we make a release, this can
@@ -2373,11 +2375,12 @@ git log v$DAIKONVERSION..HEAD
 
 In addition, you should run the same command in your Fjalar clone:
 
-@example
+@smallexample
 cd $DAIKONDIR/fjalar
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION -O - | xargs echo -n`
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
+    -O - | xargs echo -n`
 git log v$DAIKONVERSION..HEAD
-@end example
+@end smallexample
 
 [Time: a few minutes]
 
@@ -2510,7 +2513,8 @@ success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+    -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
@@ -2532,12 +2536,18 @@ Ubuntu is another distributor of Linux based systems and we have run into
 some differences with Fedora in the past.  This test is
 probably best done on a virtual machine running a current version. It is
 important to regularly check to see if a new major release of Ubuntu is
-available and upgrade your testbed as necessary.
+available and upgrade your test bed as necessary.
+
+The instructions below download the staged release archive, extract the files, set
+the appropriate environment variables and run the top level Makefile.
+Finally, a short verification test is run;
+success is indicated by invariant output being written to the screen.
 
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+    -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
@@ -2556,15 +2566,17 @@ Test the distribution on a Windows machine
 with Cygwin installed, as a guest user (or at least one without
 environment variables such as @env{$DAIKONDIR} defined!).
 
-The last line of output from the first make should indicate that Kvasir was
-not built because this is not a Linux platform. After running the second
-make command, success is indicated by invariant output being
-written to the screen.
+The output from the make command should show a number of lines beginning with
+"Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
+Kvasir was not built because this is not a Linux platform.  Then execution will
+continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
+Success is indicated by invariant output being written to the screen.
 
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+    -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
@@ -2584,16 +2596,17 @@ make distribution-check
 Test the distribution on a MacOSX machine
 with the development tools installed.
 
-The last line of output from the first make should indicate that Kvasir was
-not built because this is not a Linux platform. After running the second
-make command, success is indicated by invariant output being
-written to the screen.
+The output from the make command should show a number of lines beginning with
+"Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
+Kvasir was not built because this is not a Linux platform.  Then execution will
+continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
+Success is indicated by invariant output being written to the screen.
 
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-# Might need to be adjusted to use curl instead of wget
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
+DAIKONVERSION=`curl -s http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+    | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 # or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
@@ -2643,10 +2656,10 @@ should come just before ``make staging''.}
 @example
 cd $DAIKONDIR
 DAIKONVERSION=`cat $DAIKONDIR/doc/VERSION | xargs echo -n`
-git commit -a -m "Change version to $DAIKONDIR"
+git commit -a -m "Change version to $DAIKONVERSION"
 git push
 cd fjalar
-git commit -a -m "Change version to $DAIKONDIR"
+git commit -a -m "Change version to $DAIKONVERSION"
 git push
 @end example
 
@@ -2660,10 +2673,10 @@ Add a version label to the repository:
 @example
 cd $DAIKONDIR
 DAIKONVERSION=`cat $DAIKONDIR/doc/VERSION | xargs echo -n`
-git tag -a v$DAIKONDIR
+git tag -a v$DAIKONVERSION
 git push --tags
 cd fjalar
-git tag -a v$DAIKONDIR
+git tag -a v$DAIKONVERSION
 git push --tags
 @end example
 
