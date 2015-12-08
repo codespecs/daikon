@@ -2398,7 +2398,6 @@ public final class FileIO {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20060905L;
 
-    @SuppressWarnings("assignment.type.incompatible") // bug in initialization checker
     /*@RequiresNonNull("FileIO.new_decl_format")*/
     public SerialFormat(PptMap map, Configuration config) {
       this.map = map;
