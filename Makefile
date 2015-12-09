@@ -426,7 +426,7 @@ staging: doc/CHANGES
 	# need to remove the leading "daikon-<version>/" before we can compare old and new
 	tar tzf $(WWW_DIR)/download/$(CUR_RELEASE_NAME).tar.gz | perl -p -e 's/^(.*?)\///' | sort > ${TMPDIR}/old_tar.txt
 	tar tzf $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz | perl -p -e 's/^(.*?)\///' | sort > ${TMPDIR}/new_tar.txt
-	-diff -u ${TMPDIR}/old_tar.txt ${TMPDIR}/new_tar.txt
+	diff -u ${TMPDIR}/old_tar.txt ${TMPDIR}/new_tar.txt || true
 	# Delete the tmp files
 	cd ${TMPDIR} && /bin/rm -rf daikon daikon.dist old_tar.txt new_tar.txt
 
@@ -436,19 +436,17 @@ staging: doc/CHANGES
 staging-to-www: $(STAGING_DIR)
 #copy the files
 	-chmod -R u+w $(WWW_DIR)
-# remove previous release archive files
-	rm -f /cse/web/research/plse/daikon/download/daikon-*
-# don't trash existing history directory
-	(cd $(STAGING_DIR) && tar cf - --exclude=history .) | (cd $(WWW_DIR) && tar xfBp -)
-	-chmod -R u-w $(WWW_DIR)
-	@echo "**Update the dates and sizes in the various index files**"
-# shouldn't need these chmod commands any more as always have group permission
-# need to allow write so html-update can update	
-#	chmod +w $(DIST_DIR)
-#	chmod +w $(DIST_DIR)/index.html
+# # remove previous release archive files
+# 	\rm -f /cse/web/research/plse/daikon/download/daikon-*
+# # don't trash existing history directory
+# #	(cd $(STAGING_DIR) && tar cf - --exclude=history .) | (cd $(WWW_DIR) && tar xfBp -)
+# Remove previous files, except history and staging-daikon
+	(cd $(STAGING_DIR) && \ls | grep -v history | grep -v staging-daikon | xargs \rm -rf
+# Copy directory
+	rsync -Cavz --quiet $(STAGING_DIR) $(WWW_DIR)
+#	-chmod -R u-w $(WWW_DIR)
+# This command updates the dates and sizes in the various index files
 	html-update-link-dates $(DIST_DIR)/index.html
-#	chmod -w $(DIST_DIR)
-#	chmod -w $(DIST_DIR)/index.html
 # with new version number system, this is now done manually
 #	$(MAKE) update-dist-version-file
 	@echo "*****"
