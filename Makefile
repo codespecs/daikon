@@ -202,10 +202,13 @@ else
 VALGRIND_ARCH := x86
 endif
 
+../fjalar:
+	(cd .. && git clone ${GIT_OPTIONS} https://github.com/codespecs/fjalar.git fjalar)
+
 fjalar/valgrind/Makefile.am:
 	# If fjalar/valgrind/Makefile.am does not exist, then this must be a fresh
 	# daikon repository and we need to create the parallel fjalar repository.
-	(cd .. && git clone ${GIT_OPTIONS} https://github.com/codespecs/fjalar.git fjalar)
+	$(MAKE) ../fjalar
 	ln -nsf ../fjalar fjalar
 	# force a build
 	touch $@
