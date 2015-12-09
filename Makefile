@@ -302,6 +302,14 @@ quick-test:
 	javac -g DataStructures/*.java; \
 	java -cp $(QT_PATH) daikon.Chicory --daikon DataStructures.StackArTester
 
+# Sanity check, suitable for continuous integration such as Jenkins or Travis.
+nightly-test:
+	$(MAKE) showvars compile daikon.jar
+	$(MAKE) javadoc doc-all
+	$(MAKE) dyncomp-jdk
+	$(MAKE) junit test
+
+
 ### Tags
 
 tags: TAGS
