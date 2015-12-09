@@ -2,17 +2,10 @@ language: java
 
 script: travis_wait 120 ./.travis-build.sh
 
-## Travis legacy version (used because Travis does not permit
-## dos2unix to be installed via the "addons:" mechanism):
-#before_install:
-#  - sudo apt-get update -qq
-#  - sudo apt-get install texinfo dos2unix
-
-# Travis container version:
 addons:
   apt:
     packages:
-    - texinfo
+      - texinfo
 
 sudo: false
 
