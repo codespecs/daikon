@@ -8,7 +8,7 @@ help-here:
 	@echo "make options for all tests"
 	@echo "  make quick        : run subset of regression tests and display results"
 	@echo ""
-	@echo "  make all          : run all regression tests and display results"
+	@echo "  make all          : run all regression tests (except Kvasir), display results"
 	@echo "  make diffs        : same as 'make all'"
 	@echo "  make results      : don't run tests, just display last results"
 	@echo "  make summary      : don't run tests, just display summary of last results"
