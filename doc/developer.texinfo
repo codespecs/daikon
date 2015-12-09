@@ -2671,6 +2671,7 @@ git push
 Add a version label to the repository:
 
 @example
+# TODO: The "git tag" commands ask for a commit message.  Pass it it on the command line.
 cd $DAIKONDIR
 DAIKONVERSION=`cat $DAIKONDIR/doc/VERSION | xargs echo -n`
 git tag -a v$DAIKONVERSION
@@ -2685,25 +2686,16 @@ git push --tags
 
 @need 1000
 @item
-At this point the distribution has been completed; however, we now need to
-bump up the version number in file @file{$DAIKONDIR/doc/VERSION}
-to an odd value for continuing development.
+At this point the distribution has been completed.
+Bump the version number to an odd value for continuing development.
+Update files that mention the version number, but
+revert the change to @file{doc/README} as we
+want it to reflect the most recent actual release.
 
 @example
-make update-dist-version-file
-@end example
-
-If you previously set the environment variable TODAY, you need to reset it:
-
-@example
+cd $DAIKONDIR
 export -n TODAY
-@end example
-
-Now, update the appropriate files with the date and version number
-for ongoing development. (We revert the change to @file{doc/README} as we
-want it to reflect the most recent actual release.)
-
-@example
+make update-dist-version-file
 make update-doc-dist-date-and-version
 git checkout doc/README
 @end example
@@ -2731,6 +2723,7 @@ Success is indicated by invariant output being written to the screen.
 Commit changes back to the repository:
 
 @example
+cd $DAIKONDIR
 git commit -a -m "Bump version number for ongoing development."
 git push
 cd fjalar
