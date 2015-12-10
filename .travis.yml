@@ -2,7 +2,7 @@ language: java
 
 ## Version for Ubuntu 14.04 Trusty.
 ## Problem: The job times out on travis-ci.org.
-# script: travis_wait 120 make DAIKONDIR=`pwd` nightly-test
+# script: make DAIKONDIR=`pwd` nightly-test
 # sudo: required
 # dist: trusty
 # before_install:
@@ -12,7 +12,7 @@ language: java
 ## Version for container-based infrastructure.
 ## Skip generating the manual because the version of makeinfo installed
 ## on Ubuntu 12.04 Precise doesn't take the --pdf command-line option.
-script: travis_wait 120 make DAIKONDIR=`pwd` nightly-test-except-doc-all
+script: make DAIKONDIR=`pwd` nightly-test-except-doc-all
 sudo: false
 addons:
   apt:
