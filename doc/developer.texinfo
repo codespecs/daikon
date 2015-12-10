@@ -218,6 +218,7 @@ special characters and spaces in Windows paths.
 
 @menu
 * Requirements for compiling Daikon::
+* Requirements for compiling Kvasir::
 @end menu
 
 
@@ -228,9 +229,11 @@ The list at the end of this section identifies the software you will
 need to have on your path.
 
 To install all these dependencies under Ubuntu, run the command:
+@exampleindent 2
 @example
-sudo apt-get install openjdk-8-jdk gcc texinfo dos2unix
+sudo apt-get install openjdk-8-jdk gcc ctags graphviz netpbm texlive texinfo
 @end example
+@exampleindent 5
 Similar commands would be used with other package management systems
 on other operating systems.
 
@@ -281,6 +284,23 @@ This is needed to make the documentation (via @command{make -C $DAIKONDIR/doc}).
 This is used to ensure that the output is the same under Unix and Windows.
 
 @end itemize
+
+
+@node    Requirements for compiling Kvasir
+@subsection Requirements for compiling Kvasir
+
+In order to compile Kvasir, the Daikon front end for the C language
+(@pxref{Kvasir,,,daikon,Daikon User Manual}), you will need some
+additional tools beyond those required to compile Daikon.
+
+To install these dependencies under Ubuntu, run the command:
+@exampleindent 2
+@example
+sudo apt-get install m4 automake autoconf binutils-dev
+@end example
+@exampleindent 5
+Similar commands would be used with other package management systems
+on other operating systems.
 
 
 @node    Version control repository
@@ -2429,12 +2449,15 @@ GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/tex
 Build everything to be distributed and copy it to the temporary staging area
 @c not @uref{...} because we don't want robots to notice and crawl the link
 (http://plse.cs.washington.edu/daikon/staging-daikon/).
-The final
-output will be a list of files that were added/removed since the
+Part of this step is to build a set of publication abstracts.  If there are
+any failures, then investigate and correct as necessary.
+The final output of this step
+will be a list of files that were added/removed since the
 last release.
 If any of these differences is unexpected, then investigate and correct the
 difference, and redo the step.
 
+@need 1000
 @example
 cd $DAIKONDIR
 \rm -f `find . -type f -name '*~'`
