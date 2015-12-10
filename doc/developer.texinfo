@@ -218,6 +218,7 @@ special characters and spaces in Windows paths.
 
 @menu
 * Requirements for compiling Daikon::
+* Requirements for compiling Kvasir::
 @end menu
 
 
@@ -228,9 +229,11 @@ The list at the end of this section identifies the software you will
 need to have on your path.
 
 To install all these dependencies under Ubuntu, run the command:
+@exampleindent 2
 @example
-sudo apt-get install openjdk-8-jdk gcc texinfo dos2unix
+sudo apt-get install openjdk-8-jdk gcc ctags graphviz netpbm texlive texinfo
 @end example
+@exampleindent 5
 Similar commands would be used with other package management systems
 on other operating systems.
 
@@ -281,6 +284,23 @@ This is needed to make the documentation (via @command{make -C $DAIKONDIR/doc}).
 This is used to ensure that the output is the same under Unix and Windows.
 
 @end itemize
+
+
+@node    Requirements for compiling Kvasir
+@subsection Requirements for compiling Kvasir
+
+In order to compile Kvasir, the Daikon front end for the C language
+(@pxref{Kvasir,,,daikon,Daikon User Manual}), you will need some
+additional tools beyond those required to compile Daikon.
+
+To install these dependencies under Ubuntu, run the command:
+@exampleindent 2
+@example
+sudo apt-get install m4 automake autoconf binutils-dev
+@end example
+@exampleindent 5
+Similar commands would be used with other package management systems
+on other operating systems.
 
 
 @node    Version control repository
