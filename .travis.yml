@@ -2,14 +2,26 @@ language: java
 
 script: travis_wait 120 ./.travis-build.sh
 
-addons:
-  apt:
-    packages:
-      - graphviz
-      - texi2html
-      - texinfo
+# Version for Ubuntu 14.04 Trusty.
+sudo: required
+dist: trusty
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq graphviz texinfo
 
-sudo: false
+## Version for container-based infrastructure.
+## Commented out because Ubuntu 12.04 Precise is too old and its makeinfo
+## doesn't take the --pdf command-line option.
+# sudo: false
+# addons:
+#   apt:
+#     packages:
+#       - graphviz
+#       - texi2html
+#       - texinfo
+# # On Travis-CI's Ubuntu 12.04 infrastructure, makeinfo does not take the
+# # --split=chapter command-line argument but texi2html does.
+# env: TEXI2HTML=texi2html
 
 jdk:
   - oraclejdk8
