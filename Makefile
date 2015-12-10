@@ -309,6 +309,11 @@ nightly-test:
 	$(MAKE) dyncomp-jdk
 	$(MAKE) junit test
 
+nightly-test-except-doc-all:
+	$(MAKE) showvars compile daikon.jar
+	$(MAKE) javadoc doc-all
+	$(MAKE) dyncomp-jdk
+	$(MAKE) junit test
 
 ### Tags
 
