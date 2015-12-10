@@ -1,4 +1,5 @@
-all: config-options.texinfo invariants-doc.texinfo html-chap html pdf
+all: all-except-pdf pdf
+all-except-pdf: config-options.texinfo invariants-doc.texinfo html-chap html
 
 TEXI2HTML ?= makeinfo --html
 

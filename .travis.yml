@@ -12,7 +12,7 @@ language: java
 ## Version for container-based infrastructure.
 ## Skip generating the manual because the version of makeinfo installed
 ## on Ubuntu 12.04 Precise doesn't take the --pdf command-line option.
-script: make DAIKONDIR=`pwd` nightly-test-except-doc-all
+script: make DAIKONDIR=`pwd` nightly-test-except-doc-pdf
 sudo: false
 addons:
   apt:

@@ -309,10 +309,11 @@ nightly-test:
 	$(MAKE) dyncomp-jdk
 	$(MAKE) junit test
 
-# 
-nightly-test-except-doc-all:
+# For systems such as Ubuntu 12.04 where makeinfo does not take the --pdf
+# command-line option, don't build the PDF manual.
+nightly-test-except-doc-pdf:
 	$(MAKE) showvars compile daikon.jar
-	$(MAKE) javadoc
+	$(MAKE) javadoc doc-all-except-pdf
 	$(MAKE) dyncomp-jdk
 	$(MAKE) junit test
 
@@ -489,6 +490,8 @@ doc/CHANGES: doc/daikon.texinfo
 
 doc-all:
 	cd doc && $(MAKE) all
+doc-all-except-pdf:
+	cd doc && $(MAKE) all-except-pdf
 
 # Get the current release version
 ifneq ($(shell ls /cse/web/research/plse/daikon/download/daikon-*.zip 2>/dev/null),)
