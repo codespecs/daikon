@@ -6,6 +6,7 @@ addons:
   apt:
     packages:
       - graphviz
+      - texi2html
       - texinfo
 
 sudo: false
