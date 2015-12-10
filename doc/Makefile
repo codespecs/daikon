@@ -1,5 +1,7 @@
 all: config-options.texinfo invariants-doc.texinfo html-chap html pdf
 
+TEXI2HTML ?= makeinfo --html
+
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 # Large split size fixes an apparent bug in makeinfo 4.11:
 # failing searches say
@@ -66,13 +68,13 @@ daikon-fast: daikon.texinfo
 .PHONY: daikon-html
 # Does the actual work
 daikon-html:
-	makeinfo --html --no-split daikon.texinfo
+	${TEXI2HTML} --no-split daikon.texinfo
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' daikon.html
 	../plume-lib/bin/add-favicon . daikon-favicon.png
 
 developer.html: developer.texinfo 
-	makeinfo --html --no-split $<
+	${TEXI2HTML} --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' $@
 	../plume-lib/bin/add-favicon . daikon-favicon.png
@@ -83,7 +85,7 @@ html-chap: daikon/index.html developer/index.html
 # pathnames become incorrect.  We need to copy them over ourselves.
 daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
 	rm -rf daikon/*
-	makeinfo --html --split=chapter -o daikon $<
+	${TEXI2HTML} --split=chapter -o daikon $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' daikon/index.html
 	mkdir daikon/images
@@ -93,7 +95,7 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 
 developer/index.html: developer.texinfo
 	rm -rf developer/*
-	makeinfo --html --split=chapter -o developer $<
+	${TEXI2HTML} --split=chapter -o developer $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' developer/index.html
 	mkdir developer/images
