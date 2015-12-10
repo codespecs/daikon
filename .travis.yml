@@ -5,6 +5,7 @@ script: travis_wait 120 ./.travis-build.sh
 addons:
   apt:
     packages:
+      - graphviz
       - texinfo
 
 sudo: false
