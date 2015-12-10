@@ -7,7 +7,7 @@ sudo: required
 dist: trusty
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq graphviz texinfo
+  - sudo apt-get install -qq graphviz texinfo texlive
 
 ## Version for container-based infrastructure.
 ## Commented out because Ubuntu 12.04 Precise is too old and its makeinfo
