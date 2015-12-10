@@ -2220,8 +2220,9 @@ version on his or her own?]
 
 If a newer version of either of these projects is
 available, you should update the Fjalar source tree as soon as practical.
-For details, see the separate document @ref{Top,,,valgrind-merge,Merging
-newer versions of Valgrind into Fjalar}.
+For details, see the separate document ``Merging
+newer versions of Valgrind into Fjalar'', which appears in the @file{fjalar}
+repository.
 
 
 @node    Distribution steps
