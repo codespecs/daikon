@@ -51,11 +51,13 @@ nightly-summary-w-daikon: nightly-tests__diffs-w-daikon-if-working
 	$(MAKE) nightly-summary-only-w-daikon
 
 TEMP-nightly-summary-w-daikon: TEMP-nightly-tests__diffs-w-daikon-if-working
-	$(MAKE) nightly-summary-only-w-daikon
+	$(MAKE) TEMP-nightly-summary-only-w-daikon
 
 nightly-summary-only: nightly-tests__summary-if-working__quietly
 
 nightly-summary-only-w-daikon: nightly-tests__summary-w-daikon-if-working__quietly
+
+TEMP-nightly-summary-only-w-daikon: TEMP-nightly-tests__summary-w-daikon-if-working__quietly
 
 clean diffs invs update-goals:
 	$(MAKE) default-projects__$@
@@ -207,9 +209,16 @@ PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S
 # args to 'find' program, to find files containg results
 RESULTS_PATTERN :=    -name '*.diff'
 
-results:
+results_header:
 	@echo ""
 	@echo "=== RESULTS ==="
+
+results_cat:
+	@find . $(RESULTS_PATTERN) | xargs cat
+
+results: results_header results_cat summary_list
+
+summary_list:
 	@ls -l `find . $(RESULTS_PATTERN)` \
 	  | perl -pe 's|\Q${BASE}|.|;' \
 	  | ${PERL_CLEANUP_LS_OUTPUT}
