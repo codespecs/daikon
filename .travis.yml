@@ -27,7 +27,7 @@ env: TEXI2HTML=texi2html
 
 jdk:
   - oraclejdk8
-  - oraclejdk7
+#  - oraclejdk7
   - openjdk7
 
 notifications:
