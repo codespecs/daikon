@@ -209,9 +209,16 @@ PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S
 # args to 'find' program, to find files containg results
 RESULTS_PATTERN :=    -name '*.diff'
 
-results:
+results_header:
 	@echo ""
 	@echo "=== RESULTS ==="
+
+results_cat:
+	@find . $(RESULTS_PATTERN) | xargs cat
+
+results: results_header results_cat summary_list
+
+summary_list:
 	@ls -l `find . $(RESULTS_PATTERN)` \
 	  | perl -pe 's|\Q${BASE}|.|;' \
 	  | ${PERL_CLEANUP_LS_OUTPUT}
