@@ -1,7 +1,8 @@
 language: java
 
 ## Version for Ubuntu 14.04 Trusty.
-## Problem: The job times out on travis-ci.org.
+## Problem: The job times out on travis-ci.org, but the container-based version
+## does not.
 # script: travis_wait 120 make DAIKONDIR=`pwd` nightly-test
 # sudo: required
 # dist: trusty
