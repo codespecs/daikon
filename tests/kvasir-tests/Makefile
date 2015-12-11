@@ -76,22 +76,23 @@ clean-all:
 	$(MAKE) nightly-tests__clean
 
 
-default-projects__%: pgbovine-tests__% test-gtest__% smcc-tests__% \
-	             tiny-real-tests__% tws-tests__% 
+default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
 	@
 
+# This target is not used in standard test runs.
+# The tests are duplicated in the pgbovine-tests target.
 cpp-tests__%: do-CppFunctionTest__% do-SimpleClassesTest__% \
               do-Dstr__% do-CppInlineTest__% do-ArrayTest-cpp__% \
               do-StackCppTest__%  do-StackCppTestInline__% do-StackArrayCppTest__%
 	@
 
 medium-tests__%: rothermel-tests__% medium-real-tests__% medium-crypto-tests__% \
-                 missing-tests__% small-crypto-tests__% do-space__%
+                 missing-tests__% small-crypto-tests__% do-space__% test-gtest__% do-Dstr__% do-partial-init__%
 	@
 
 # Omits povray and perl
 medium-easy-tests__%: rothermel-tests__% medium-real-easy-tests__% medium-crypto-tests__% \
-                 missing-tests__% small-crypto-tests__% do-space__%
+                 missing-tests__% small-crypto-tests__% do-space__% test-gtest__% do-Dstr__% do-partial-init__%
 	@
 
 # Omits povray and perl
@@ -107,12 +108,12 @@ pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
 		   do-StaticArraysTest__% do-StructPtrTest__% do-TypedefTest__% \
 		   do-small-test__% do-DisambigTest__% do-SimpleDisambigStructTest__% \
 		   do-StackCppTest__%  do-StackCppTestInline__% do-StackArrayCppTest__% \
-		   do-Dstr__% do-MultiDimArrayTest__% do-ArraysInStructTest__% \
+		   do-MultiDimArrayTest__% do-ArraysInStructTest__% \
 		   do-FunctionNamesTest__% do-CoercePointerTest__% \
 		   do-CppFunctionTest__% do-SimpleClassesTest__% \
 		   do-CppInlineTest__% do-ArrayTest-cpp__% do-FloatTest__% \
 		   do-print_tokens__% do-print_tokens2__% do-replace__% do-tot_info__% \
-		   do-NestedStructVarList__% 
+		   do-NestedStructVarList__%
 	@
 
 ifeq (x86_64,$(shell uname -m))
@@ -149,8 +150,8 @@ test-gzip__%: do-gzip__%
 endif
 
 missing-tests__%: do-ConstantTest__% do-ConstMergeTest__% do-ExceptionTest__% \
-		   do-partial-init__%  do-pthread-test__% do-rdtsc__% do-setjmp-test__% \
-		   do-shared-lib__%  do-UnionComp__% do-virtual-method__% 
+		   do-pthread-test__% do-rdtsc__% do-setjmp-test__% \
+		   do-shared-lib__%  do-UnionComp__% do-virtual-method__%
 	@
 
 tws-tests__%: do-SelectGlobalsTest__%
