@@ -34,3 +34,7 @@ notifications:
   email:
     - mernst@cs.washington.edu
     - markro@cs.washington.edu
+
+after_success:
+  - curl -s https://raw.githubusercontent.com/mernst/plume-lib/master/bin/trigger-travis.sh > trigger-travis.sh  
+  - bin/trigger-travis.sh codespecs daikon-typecheck $TRAVISTOKEN
