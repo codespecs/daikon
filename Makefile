@@ -451,7 +451,7 @@ staging: doc/CHANGES
 # Copy the files in the staging area to the website.  This will copy
 # all of the files in staging, but will not delete any files in the website
 # that are not in staging.
-staging-to-www: $(STAGING_DIR)
+staging-to-www: $(STAGING_DIR) save-current-release
 #copy the files
 	-chmod -R u+w $(WWW_DIR)
 # # remove previous release archive files
@@ -461,7 +461,7 @@ staging-to-www: $(STAGING_DIR)
 # Remove previous files, except history and staging-daikon
 	(cd $(STAGING_DIR) && \ls | grep -v history | grep -v staging-daikon | xargs \rm -rf
 # Copy directory
-	rsync -Cavz --quiet $(STAGING_DIR) $(WWW_DIR)
+	rsync -Caz --quiet $(STAGING_DIR) $(WWW_DIR)
 #	-chmod -R u-w $(WWW_DIR)
 # This command updates the dates and sizes in the various index files
 	html-update-link-dates $(DIST_DIR)/index.html
@@ -512,7 +512,7 @@ save-current-release:
 	-chmod u+w $(HISTORY_DIR)
 	mkdir $(HISTORY_DIR)/$(CUR_RELEASE_NAME)
 	-chmod u-w $(HISTORY_DIR)
-	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp -p /cse/web/research/plse/daikon/download/$(CUR_RELEASE_NAME).zip . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod o-w CHANGES .
+	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp -p /cse/web/research/plse/daikon/download/$(CUR_RELEASE_NAME).* . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod o-w CHANGES .
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 ifeq ($(origin TODAY), undefined)
