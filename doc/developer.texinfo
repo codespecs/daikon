@@ -7,6 +7,13 @@
 @c To update all the nodes and menus all at once:   C-u C-c C-u m
 @c You shouldn't need to do that, though; makeinfo does it for you.
 
+@c Tex magic to reduce the margins for the pdf version;
+@c these values have no effect on the html output.
+@tex
+\global\hsize = 6.5in
+\global\normaloffset = 0in
+@end tex
+
 @macro daikonemail{}
 @email{daikon-developers@@googlegroups.com}
 @end macro
@@ -2037,14 +2044,13 @@ If you only want to
 create the @file{daikon.tar} or @file{daikon.tar.gz} file in your own
 directory, then simply run @command{make daikon.tar} or @command{make daikon.tar.gz}.
 
-
 Official releases have even version numbers (e.g., 4.6.4) and
 intermediate work has odd version numbers (e.g., 4.7.3).  This means
 as you prepare for a release the current version number is probably odd.  It will
-be updated as one of the first steps in the release process.  After making the
+be updated as one of the steps in the release process.  After making the
 distribution, one of the final steps is to increment the version number again to
 prepare for subsequent development.  This system has the useful side effect
-of allowing the build and test process to be repeated to fix a problem (steps 2--8
+of allowing the build and test process to be repeated to fix a problem (steps 1--7
 of @ref{Distribution steps} below)
 without having to worry about updating or resetting the version number.
 Another advantage is to reinforce, to people who are working from the
@@ -2254,7 +2260,7 @@ repository.
 IMPORTANT:
 While the majority of the distribution process is currently run
 with JDK@tie{}7; we need to ensure that our system runs on JDK@tie{}8 as well.
-This means you will need to repeat steps 2-5 below in a separate shell
+This means you will need to repeat steps 1-4 below in a separate shell
 with @command{export JAVA_HOME=/usr/lib/jvm/java}. (In addition to the
 other normal environment settings.)
 @end cartouche
@@ -2262,36 +2268,12 @@ other normal environment settings.)
 Each of the steps below assumes that the current working directory is @file{$DAIKONDIR}
 and that you are using the Bash shell.
 
+@strong{Caution:} Any problems encountered in the next 7 steps
+need to be corrected immediately and the release process restarted with
+step 1 below.
+
+
 @enumerate
-
-@item
-Set the version number in file @file{$DAIKONDIR/doc/VERSION}
-to an even number.
-You may do this manually, or if the value just needs to be incremented
-by 1 (to go from odd to even) you may use:
-
-@c "cd $DAIKONDIR" because the previous commands changed the working directory
-@example
-make update-dist-version-file
-@end example
-
-@need 1000
-Optionally, override the distribution date (default: today) by
-redefining the environment variable @command{TODAY}:
-
-@example
-export TODAY='November 1, 2013'
-@end example
-
-Now, update the appropriate files with the date and version number
-of the release.
-
-@example
-make update-doc-dist-date-and-version
-@end example
-
-[Time: moments]
-
 
 @need 1000
 @item
@@ -2446,33 +2428,62 @@ GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/tex
 
 [Time: moments]
 
-@end enumerate
-
 
 @need 1000
-Once you have successfully reached this point, you are ready to make a release
-candidate and begin testing it.
-@strong{Caution:} If somewhere above you made a change to correct a problem you should have repeated
-steps 2-8 until you arrive at this point with no additional changes.
-In this stage of the release process we will:
-@exampleindent 2
-@indentedblock
-Check in any outstanding source corrections.@*
-Check in the version number changes.@*
-Make a fresh clone of the repository.@*
-Build a release candidate.@*
-Test the release candidate on a variety of platforms.@*
-@end indentedblock
-@exampleindent 0
-
-
-@need 1000
-@enumerate
 @item
-If any source changes were required to fix problems, they should be committed
-to the repository now.  Please save the version number updates for a separate
-commit as described in the next step.
+Once you have successfully reached this point, you are ready to make a release
+candidate and begin testing it. Any source changes required to fix a problem
+encountered above must be committed to the repository now.
+Verify there are no uncommitted files.
 
+@example
+git status -uno
+@end example
+
+@noindent
+The result of the git query above should be:
+
+@example
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit (use -u to show untracked files)
+@end example
+
+UNDONE: need to check doc/CHANGES time stamp.
+
+[Time: moments]
+
+
+@need 1000
+@item
+Set the version number in file @file{$DAIKONDIR/doc/VERSION}
+to an even number.
+You may do this manually, or if the value just needs to be incremented
+by 1 (to go from odd to even) you may use:
+
+@c "cd $DAIKONDIR" because the previous commands changed the working directory
+@example
+make update-dist-version-file
+@end example
+
+Optionally, override the distribution date (default: today) by
+redefining the environment variable @command{TODAY}:
+
+@example
+export TODAY='November 1, 2013'
+@end example
+
+Now, update the appropriate files with the date and version number
+of the release.
+
+@example
+make update-doc-dist-date-and-version
+@end example
+
+[Time: moments]
+
+UNDONE: we should combine and automate the step above and the
+step below.
 
 @need 1000
 @item
@@ -2493,35 +2504,16 @@ git push
 
 @need 1000
 @item
-Verify there are no outstanding files.
-
-@example
-git status -uno
-@end example
-
-@noindent
-The result of the git query above should be:
-
-@example
-On branch master
-Your branch is up-to-date with 'origin/master'.
-nothing to commit (use -u to show untracked files)
-@end example
-
-[Time: moments]
-
-
-@need 1000
-@item
 It is important to build the release candidate from a clean enlistment.
 This is to ensure we are testing only the files intended for release and
 that those files are the same as a user would receive with a clone of
-the repository. We also recommend doing this step on the your system's
-@file{scratch} or @file{tmp} directory. (We will use @file{tmp} in the
+the repository. It is also recommend doing this step on your system's
+@file{scratch} or @file{tmp} directory. (@file{tmp} is used in the
 example commands below.)
 
 @example
 mkdir -p /tmp/$USER
+rm -rf /tmp/$USER/daikon
 git clone https://github.com/codespecs/daikon /tmp/$USER/daikon
 @end example
 
@@ -2530,12 +2522,12 @@ git clone https://github.com/codespecs/daikon /tmp/$USER/daikon
 
 @need 1000
 @item
-You now need to get a fresh copy of your Bash shell and set @env{DAIKONDIR}
-to be the clone you just created. The following commands may need to be modified
+You now need to create a separate, new Bash command shell and set the 
+appropriate environment variables.
+The following commands may need to be modified
 for your particular system.
 
 @example
-[get a fresh copy of your Bash shell (e.g., log out and log back in)]
 cd /tmp/$USER/daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk7
@@ -2545,8 +2537,8 @@ source $DAIKONDIR/scripts/daikon.bashrc
 [Time: moments]
 
 @noindent
-Each of the steps below assumes that the current working directory is the
-@file{$DAIKONDIR} we just set.
+Each of the steps below assumes that the current working directory is
+@file{$DAIKONDIR}.
 
 
 @need 1000
@@ -2555,17 +2547,7 @@ Build everything to be distributed and copy it to the temporary staging area
 @c not @uref{...} because we don't want robots to notice and crawl the link
 (http://plse.cs.washington.edu/daikon/staging-daikon/).
 
-The final output of this step
-will be a list of files that were added/removed since the
-last release.
-If any of these differences is unexpected, then investigate and correct the
-difference, and redo the step.
-
-@i{and go back to which step?}
-
-
 @example
-touch doc/CHANGES
 make staging
 @end example
 
@@ -2575,15 +2557,21 @@ If the command immediately stops with the error message:
 ** doc/CHANGES file is not up-to-date with respect to doc files.
 @end example
 @noindent
-Make sure you have properly completed step (7) above.  If so,
-you may simply:
+You may simply:
 @example
 touch doc/CHANGES
 @end example
 
+The final output of this step
+will be a list of files that were added/removed since the
+last release.
+If any of these differences is unexpected, then investigate and correct the
+difference. You must then repeat this step.
+
 [Time: 4 min]
 
 
+@need 1000
 @item
 Check the website to see if it has any broken links.
 
@@ -2619,17 +2607,27 @@ If the web search is not successful, email the maintainer of the old content.
 @end itemize
 
 Note that you must fix it in the original repository,
-not in the drop directories.
-This means correcting the file, most likely located beneath either
-@file{$DAIKONDIR/doc} or @file{$BIBDIR}, committing the changes, and
-returning to the previous step (@command{make staging}) prior to re-running
-the broken link tool.
-
-@i{and go back to which step?}
+not in the drop directories. This means:
+@itemize
+@item
+Switch back to your original Bash shell.
+@item
+Correct the file. (Most likely located beneath either
+@file{$DAIKONDIR/doc} or @file{$BIBDIR}.)
+@item
+Commit the changes.
+@item
+Switch to the Bash shell created in step 12.
+@item
+Do a @command{git pull}.
+@item
+Return to step 13.
+@end itemize
 
 [Time: 3 min]
 
 
+@need 1000
 @item
 Test the distribution on a 64-bit machine.
 Since the machine you are using to build the release is probably
@@ -2644,6 +2642,7 @@ make test-staged-dist
 [Time: 20 min; runs Checker Framework tests]
 
 
+@need 1000
 @item
 Test the distribution on a 32-bit machine.
 This is probably best done on a virtual machine running a current version
@@ -2675,7 +2674,7 @@ make distribution-check
 Test the distribution on a 64-bit, Ubuntu based system.  The 64-bit test
 run above is normally run on one of our local machines; therefore, it was
 probably done on a Fedora (Red Hat) based system.
-Ubuntu is another distributor of Linux based systems and we have run into
+Ubuntu is another distributor of Linux based systems and there have been
 some differences with Fedora in the past.  This test is
 probably best done on a virtual machine running a current version. It is
 important to regularly check to see if a new major release of Ubuntu is
@@ -2765,25 +2764,18 @@ make distribution-check
 
 [Time: 4 min]
 
-@end enumerate
 
 @need 1000
+@item
 Once you have successfully reached this point, you have a valid release candidate
 and are ready to make the actual release.
 @strong{Caution:} If somewhere above you made a change to correct a problem you should have
 restarted the release process.
-Now we need to:
-@exampleindent 2
-@indentedblock
-Copy the release candidate to the public share point.@*
-Add version labels to the repositories.@*
-Update the version number for ongoing development.@*
-Test and commit those changes.@*
-Send mail to the @samp{daikon-announce} mailing list.@*
-@end indentedblock
-@exampleindent 0
 
-@enumerate
+At this point we are done building and testing the release candidate and you
+should exit the Bash command shell created in step 12 and return to your
+original Bash shell.
+
 
 @need 1000
 @item
@@ -2791,6 +2783,7 @@ Update the website by moving the current release to the history
 archives and then making the staged version the current release.
 
 @example
+cd $DAIKONDIR
 make staging-to-www
 @end example
 
@@ -2802,13 +2795,12 @@ make staging-to-www
 Add a version label to the repository:
 
 @example
-# TODO: The "git tag" commands ask for a commit message.  Pass it it on the command line.
 cd $DAIKONDIR
 DAIKONVERSION=`cat $DAIKONDIR/doc/VERSION | xargs echo -n`
-git tag -a v$DAIKONVERSION
+git tag -a v$DAIKONVERSION -m $DAIKONVERSION
 git push --tags
 cd fjalar
-git tag -a v$DAIKONVERSION
+git tag -a v$DAIKONVERSION -m $DAIKONVERSION
 git push --tags
 @end example
 
