@@ -72,13 +72,13 @@ daikon-html:
 	${TEXI2HTML} --no-split daikon.texinfo
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' daikon.html
-	../plume-lib/bin/add-favicon . daikon-favicon.png
+	../plume-lib/bin/html-add-favicon daikon-favicon.png daikon.html
 
 developer.html: developer.texinfo 
 	${TEXI2HTML} --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' $@
-	../plume-lib/bin/add-favicon . daikon-favicon.png
+	../plume-lib/bin/html-add-favicon daikon-favicon.png developer.html
 
 html-chap: daikon/index.html developer/index.html
 
