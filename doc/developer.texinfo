@@ -1675,7 +1675,7 @@ Java source code that appears in that directory.
 
 @item
 It is expedient to copy a Makefile from another subdirectory, such as
-@file{$DAIKONDIR/tests/daikon-tests/StackAr/}, then modify it.
+@file{$DAIKONDIR/tests/@/daikon-tests/@/StackAr/}, then modify it.
 
 The @file{Makefile} must contain at least the following entries.
 
@@ -2065,7 +2065,7 @@ In order to be able to write to the distribution site, your CSE user id must be
 a member of the @samp{plse_www} Unix group.
 
 For each of the major steps below, an
-approximate elapsed time is listed.  These timings are up to date as of November 2014.
+approximate elapsed time is listed.  These timings are up to date as of December 2015.
 They were measured on a quad x86-64 based
 machine at @nospellcheck{3.4GHz} with @nospellcheck{16GB} of memory
 (buffalo.cs.washington.edu).
@@ -2284,8 +2284,8 @@ make very-clean
 make rebuild-everything
 @end example
 
-@c Time on buffalo as of 12/01/2014
-@c only 13 minutes.
+@c Time on buffalo as of 12/16/2015
+@c [Time: 18 min]
 @c buffalo has twice the memory of godwit.
 @c Time on godwit as of 11/27/2014
 [Time: 20 min]
@@ -2301,6 +2301,8 @@ errors output.
 make -C $DAIKONDIR/java check-nullness
 @end example
 
+@c Time on buffalo as of 12/16/2015
+@c [Time: 25 min]
 @c Time on godwit as of 11/27/2014
 [Time: 30 min]
 
@@ -2315,9 +2317,10 @@ make -C $DAIKONDIR/tests clean diffs
 @end example
 
 @c Time on godwit as of 11/27/2014
+@c [Time: 25 min]
 @c Time has increased significantly with additon of
-@c more tests.  Time below is on buffalo as of 12/03/2015
-[Time: 80 min]
+@c more tests.  Time below is on buffalo as of 12/16/2015
+[Time: 83 min]
 
 
 @need 1000
@@ -2331,7 +2334,9 @@ make -C $DAIKONDIR/tests/kvasir-tests clean-all regression-tests
 @end example
 
 @c Time on godwit as of 11/27/2014
-[Time: 20 min]
+@c [Time: 20 min]
+@c Time on buffalo as of 12/16/2015
+[Time: 23 min]
 
 
 @need 1000
@@ -2545,7 +2550,7 @@ Each of the steps below assumes that the current working directory is
 @item
 Build everything to be distributed and copy it to the temporary staging area
 @c not @uref{...} because we don't want robots to notice and crawl the link
-(http://plse.cs.washington.edu/daikon/staging-daikon/).
+(http://plse.cs.washington.edu/staging-daikon/).
 
 @example
 make staging
@@ -2568,6 +2573,9 @@ last release.
 If any of these differences is unexpected, then investigate and correct the
 difference. You must then repeat this step.
 
+@c Time on buffalo as of 12/16/2015
+@c [Time: 34 min]
+@c I've notified mernst about this 10x slow down.
 [Time: 4 min]
 
 
@@ -2624,7 +2632,8 @@ Do a @command{git pull}.
 Return to step 13.
 @end itemize
 
-[Time: 3 min]
+@c Time on buffalo as of 12/16/2015
+[Time: 6 min]
 
 
 @need 1000
@@ -2639,7 +2648,8 @@ by invariant output being written to the screen.
 make test-staged-dist
 @end example
 
-[Time: 20 min; runs Checker Framework tests]
+@c Time on buffalo as of 12/16/2015
+[Time: 10 min; runs Checker Framework tests]
 
 
 @need 1000
@@ -2655,10 +2665,10 @@ success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
     -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
 export JAVA_HOME=/usr/lib/jvm/java
@@ -2688,10 +2698,10 @@ success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
     -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
 export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
@@ -2700,7 +2710,7 @@ source scripts/daikon.bashrc
 make distribution-check
 @end smallexample
 
-[Time: ?? min]
+[Time: 20 min]
 
 
 @item
@@ -2717,10 +2727,10 @@ Success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
     -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
 # Convert OSTYPE from a shell variable to a system environment variable.
@@ -2747,11 +2757,11 @@ Success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`curl -s http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+DAIKONVERSION=`curl -s http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
     | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+curl -O http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+# or: wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
 # Convert OSTYPE from a shell variable to a system environment variable.

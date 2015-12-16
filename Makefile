@@ -97,13 +97,11 @@ QT_PATH := ../../../daikon.jar:.
 endif
 
 # Staging area for the distribution
-STAGING_DIR := $(WWW_DIR)/staging-daikon
+STAGING_DIR := $(WWW_PARENT)/staging-daikon
 
 # Files to copy to the website, from $DAIKONDIR/doc/www/
 WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
                     download/index.html download/doc/index.html
-
-DIST_DIR := $(WWW_DIR)/download
 
 REPOSITORY := https://github.com/codespecs/daikon.git
 
@@ -401,8 +399,8 @@ staging: doc/CHANGES
 # that priority and we must set the write bit.  These two chmod commands
 # will fail if you are not the owner, but the remainder of the commands
 # should work fine.
+	-chmod u+w $(WWW_PARENT)
 	-chmod -R u+w $(STAGING_DIR)
-	-chmod u+w $(WWW_DIR)
 	/bin/rm -rf $(STAGING_DIR)
 	# dummy history directory to remove checklink warnings
 	install -d $(STAGING_DIR)/history
@@ -431,6 +429,7 @@ staging: doc/CHANGES
 	cd doc/www && make pubs
 	install -d $(STAGING_DIR)/pubs
 	cp -pR doc/www/pubs/* $(STAGING_DIR)/pubs
+	cp -p doc/daikon-favicon.png $(STAGING_DIR)
 	cp -p doc/images/daikon-logo.gif $(STAGING_DIR)
 	# all distributed files should belong to the group plse_www and be group writable.
 	# set the owner and other permissions to readonly
@@ -438,6 +437,7 @@ staging: doc/CHANGES
 	chmod -R g+w $(STAGING_DIR)
 	-chmod -R u-w $(STAGING_DIR)
 	chmod -R o-w $(STAGING_DIR)
+	-chmod u-w $(WWW_PARENT)
 	# compare new list of files in tarfile to previous list
 	@echo "]2;New or removed files"
 	@echo "***** New or removed files:"
@@ -448,25 +448,27 @@ staging: doc/CHANGES
 	# Delete the tmp files
 	cd ${TMPDIR} && /bin/rm -rf daikon daikon.dist old_tar.txt new_tar.txt
 
-# Copy the files in the staging area to the website.  This will copy
-# all of the files in staging, but will not delete any files in the website
-# that are not in staging.
+# Copy the files in the staging area to the website.
+# We do this by deleting the previous release directory and
+# renaming the staging directory to be the release directory.
 staging-to-www: $(STAGING_DIR) save-current-release
-#copy the files
+	@echo "staging-to-www is disabled while we test new layout."
+	@exit 1
+	-chmod u+w $(WWW_PARENT)
 	-chmod -R u+w $(WWW_DIR)
-# # remove previous release archive files
-# 	\rm -f /cse/web/research/plse/daikon/download/daikon-*
-# # don't trash existing history directory
-# #	(cd $(STAGING_DIR) && tar cf - --exclude=history .) | (cd $(WWW_DIR) && tar xfBp -)
-# Remove previous files, except history and staging-daikon
-	(cd $(STAGING_DIR) && \ls | grep -v history | grep -v staging-daikon | xargs \rm -rf
-# Copy directory
-	rsync -Caz --quiet $(STAGING_DIR) $(WWW_DIR)
-#	-chmod -R u-w $(WWW_DIR)
+	-chmod -R u+w $(STAGING_DIR)
+# Move 'permanent' directories that were not included in staging
+	\mv $(WWW_DIR)/history $(STAGING_DIR)/history
+	\mv $(WWW_DIR)/download/cvs $(STAGING_DIR)/download/cvs
+# Remove previous release
+	\rm -rf $(WWW_DIR)
+# Rename staging
+	\mv $(STAGING_DIR) $(WWW_DIR)
 # This command updates the dates and sizes in the various index files
-	html-update-link-dates $(DIST_DIR)/index.html
-# with new version number system, this is now done manually
-#	$(MAKE) update-dist-version-file
+	html-update-link-dates $(WWW_DIR)/download/index.html
+# and we're done
+	-chmod -R u-w $(WWW_DIR)
+	-chmod u-w $(WWW_PARENT)
 	@echo "*****"
 	@echo "Don't forget to send mail to daikon-announce and commit changes."
 	@echo "(See sample messages in ~mernst/research/invariants/mail/daikon-lists.mail.)"
