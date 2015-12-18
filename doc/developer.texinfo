@@ -2098,7 +2098,7 @@ Each of the steps below assumes that the current working directory is @file{$DAI
 and that you are using the Bash shell.
 
 @c maximize line size for all example command lists
-@exampleindent 0
+@exampleindent 1
 
 @menu
 * Directory layout::
@@ -2439,22 +2439,20 @@ GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/tex
 Once you have successfully reached this point, you are ready to make a release
 candidate and begin testing it. Any source changes required to fix a problem
 encountered above must be committed to the repository now.
-Verify there are no uncommitted files.
+Verify doc/CHANGES is up-to-date and there are no uncommitted files.
 
 @example
-git status -uno
+make check-repo
 @end example
 
 @noindent
-The result of the git query above should be:
+The result of the command above should be:
 
 @example
 On branch master
 Your branch is up-to-date with 'origin/master'.
 nothing to commit (use -u to show untracked files)
 @end example
-
-UNDONE: need to check doc/CHANGES time stamp.
 
 [Time: moments]
 
@@ -2478,30 +2476,12 @@ redefining the environment variable @command{TODAY}:
 export TODAY='November 1, 2013'
 @end example
 
-Now, update the appropriate files with the date and version number
-of the release.
-
-@example
-make update-doc-dist-date-and-version
-@end example
-
-[Time: moments]
-
-UNDONE: we should combine and automate the step above and the
-step below.
-
 @need 1000
-@item
-Commit the version number changes back to the repository:
+Now, update the appropriate files with the date and version number
+of the release and commit these changes back to the repository:
 
 @example
-cd $DAIKONDIR
-DAIKONVERSION=`cat $DAIKONDIR/doc/VERSION | xargs echo -n`
-git commit -a -m "Change version to $DAIKONVERSION"
-git push
-cd fjalar
-git commit -a -m "Change version to $DAIKONVERSION"
-git push
+make update-and-commit-version
 @end example
 
 [Time: moments]
@@ -2512,43 +2492,22 @@ git push
 It is important to build the release candidate from a clean enlistment.
 This is to ensure we are testing only the files intended for release and
 that those files are the same as a user would receive with a clone of
-the repository. It is also recommend doing this step on your system's
-@file{scratch} or @file{tmp} directory. (@file{tmp} is used in the
-example commands below.)
+the repository. This needs to be done in a separate, new Bash command
+shell.
 
 @example
 mkdir -p /tmp/$USER
 rm -rf /tmp/$USER/daikon
 git clone https://github.com/codespecs/daikon /tmp/$USER/daikon
-@end example
-
-[Time: 1 minute]
-
-
-@need 1000
-@item
-You now need to create a separate, new Bash command shell and set the 
-appropriate environment variables.
-The following commands may need to be modified
-for your particular system.
-
-@example
 cd /tmp/$USER/daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk7
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
-[Time: moments]
+@c [Time: 1 minute]
 
-@noindent
-Each of the steps below assumes that the current working directory is
-@file{$DAIKONDIR}.
-
-
-@need 1000
-@item
-Build everything to be distributed and copy it to the temporary staging area
+Next, build everything to be distributed and copy it to the temporary staging area
 @c not @uref{...} because we don't want robots to notice and crawl the link
 (http://plse.cs.washington.edu/staging-daikon/).
 
@@ -2556,37 +2515,20 @@ Build everything to be distributed and copy it to the temporary staging area
 make staging
 @end example
 
-@noindent
-If the command immediately stops with the error message:
-@example
-** doc/CHANGES file is not up-to-date with respect to doc files.
-@end example
-@noindent
-You may simply:
-@example
-touch doc/CHANGES
-@end example
-
-The final output of this step
+The final output of this command
 will be a list of files that were added/removed since the
 last release.
-If any of these differences is unexpected, then investigate and correct the
-difference. You must then repeat this step.
+If any of these differences is unexpected, then investigate.
+If any corrections are required, do so back in the main
+repository, commit the changes and
+then repeat this step.
 
 @c Time on buffalo as of 12/16/2015
 @c [Time: 34 min]
 @c I've notified mernst about this 10x slow down.
-[Time: 4 min]
+@c [Time: 4 min]
 
-
-@need 1000
-@item
-Check the website to see if it has any broken links.
-
-@c missing software has been loaded onto buffalo.  (12/2/2014)
-@c Do not run this step on
-@c @samp{buffalo}.  For some reason the system software is not up to date.  Both
-@c @samp{bicycle} and @samp{tricycle} have been verified to work properly.
+Next, check the staging website to see if it has any broken links.
 
 @example
 make check-for-broken-doc-links
@@ -2614,7 +2556,7 @@ Do a web search to see if the page has relocated elsewhere.
 If the web search is not successful, email the maintainer of the old content.
 @end itemize
 
-Note that you must fix it in the original repository,
+Note that you must fix problems in the original repository,
 not in the drop directories. This means:
 @itemize
 @item
@@ -2625,16 +2567,13 @@ Correct the file. (Most likely located beneath either
 @item
 Commit the changes.
 @item
-Switch to the Bash shell created in step 12.
-@item
-Do a @command{git pull}.
-@item
-Return to step 13.
+Repeat this step.
 @end itemize
 
-@c Time on buffalo as of 12/16/2015
-[Time: 6 min]
-
+@c total time should be about:
+[Time: 12 min]
+@c However, time on buffalo as of 12/16/2015
+@c is 40 minutes.
 
 @need 1000
 @item
@@ -2789,8 +2728,8 @@ original Bash shell.
 
 @need 1000
 @item
-Update the website by moving the current release to the history
-archives and then making the staged version the current release.
+Update the website by deleting the current release
+and then making the staged version the (new) current release.
 
 @example
 cd $DAIKONDIR
