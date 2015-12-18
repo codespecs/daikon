@@ -408,10 +408,10 @@ staging:
 	-chmod u+w $(WWW_PARENT)
 	-chmod -R u+w $(STAGING_DIR)
 	/bin/rm -rf $(STAGING_DIR)
-	install -d $(STAGING_DIR)/history
+	mkdir $(STAGING_DIR)
 	cp -pR $(WWW_DIR)/history $(STAGING_DIR)
 	$(MAKE) save-current-release
-	install -d $(STAGING_DIR)/download/inv-cvs
+	mkdir $(STAGING_DIR)/download
 	cp -pR $(WWW_DIR)/download/inv-cvs $(STAGING_DIR)/download
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
@@ -422,11 +422,11 @@ staging:
 	cp -pf daikon.jar $(STAGING_DIR)/download
 	# Build javadoc
 	@echo "]2;Building Javadoc"
-	install -d $(STAGING_DIR)/download/api
+	mkdir $(STAGING_DIR)/download/api
 	cd java; make 'JAVADOC_DEST=$(STAGING_DIR)/download/api' javadoc
 	# Copy the documentation
 	@echo "]2;Copying documentation"
-	install -d $(STAGING_DIR)/download/doc
+	mkdir $(STAGING_DIR)/download/doc
 	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIR)/download/doc
 	cp -pR doc/images $(STAGING_DIR)/download/doc
 	cp -pR doc/daikon $(STAGING_DIR)/download/doc
@@ -435,7 +435,7 @@ staging:
 	# Build pubs and copy the results
 	@echo "]2;Building Pubs"
 	cd doc/www && make pubs
-	install -d $(STAGING_DIR)/pubs
+	mkdir $(STAGING_DIR)/pubs
 	cp -pR doc/www/pubs/* $(STAGING_DIR)/pubs
 	cp -p doc/daikon-favicon.png $(STAGING_DIR)
 	cp -p doc/images/daikon-logo.gif $(STAGING_DIR)
