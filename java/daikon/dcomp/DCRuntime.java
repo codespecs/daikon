@@ -16,7 +16,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-@SuppressWarnings("nullness")
+@SuppressWarnings({"nullness","interning"}) // tricky code, skip for now
 public final class DCRuntime {
 
   /** List of all instrumented methods **/
