@@ -388,6 +388,9 @@ repository-test:
 
 # Main distribution
 
+# A couple of checks to see if we can proceed with staging.
+# Verify that doc/CHANGES is newer than doc/daikon.texinfo - error out if not.
+# Report any uncommited files - users responsibility to act on results.
 check-repo: doc/CHANGES
 	git status -uno
 
@@ -461,12 +464,8 @@ staging:
 staging-to-www: $(STAGING_DIR)
 	-chmod u+w $(WWW_PARENT)
 	-chmod -R u+w $(WWW_DIR)
-	-chmod -R u+w $(STAGING_DIR)
-	# Remove previous release
 	\rm -rf $(WWW_DIR)
-	# Rename staging
 	\mv $(STAGING_DIR) $(WWW_DIR)
-	# and we're done
 	-chmod -R u-w $(WWW_DIR)
 	-chmod u-w $(WWW_PARENT)
 	@echo "*****"

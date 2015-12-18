@@ -2437,9 +2437,9 @@ GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/tex
 @need 1000
 @item
 Once you have successfully reached this point, you are ready to make a release
-candidate and begin testing it. Any source changes required to fix a problem
-encountered above must be committed to the repository now.
-Verify doc/CHANGES is up-to-date and there are no uncommitted files.
+candidate and begin testing it.
+The following command will verify that doc/CHANGES is up-to-date and then list
+any uncommitted files.
 
 @example
 make check-repo
@@ -2453,6 +2453,10 @@ On branch master
 Your branch is up-to-date with 'origin/master'.
 nothing to commit (use -u to show untracked files)
 @end example
+
+@noindent
+If the command output lists any files, they need to be
+committed to the repository now.
 
 [Time: moments]
 
@@ -2494,6 +2498,11 @@ This is to ensure we are testing only the files intended for release and
 that those files are the same as a user would receive with a clone of
 the repository. This needs to be done in a separate, new Bash command
 shell.
+The following commands get a fresh clone of Daikon, set some
+environment variables and then
+build everything to be distributed and copy it to the temporary staging area
+@c not @uref{...} because we don't want robots to notice and crawl the link
+(http://plse.cs.washington.edu/staging-daikon/).
 
 @example
 mkdir -p /tmp/$USER
@@ -2503,15 +2512,6 @@ cd /tmp/$USER/daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk7
 source $DAIKONDIR/scripts/daikon.bashrc
-@end example
-
-@c [Time: 1 minute]
-
-Next, build everything to be distributed and copy it to the temporary staging area
-@c not @uref{...} because we don't want robots to notice and crawl the link
-(http://plse.cs.washington.edu/staging-daikon/).
-
-@example
 make staging
 @end example
 
@@ -2781,7 +2781,7 @@ make rebuild-everything quick-test
 @end example
 
 Success is indicated by invariant output being written to the screen.
- 
+
 [Time: 5 min]
 
 
