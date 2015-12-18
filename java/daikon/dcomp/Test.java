@@ -9,7 +9,8 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-@SuppressWarnings("nullness") // uninitialized fields default to null
+@SuppressWarnings({"nullness", // uninitialized fields default to null
+                   "interning"})
 class Test {
 
   A at;

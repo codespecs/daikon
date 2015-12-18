@@ -20,6 +20,7 @@ import org.checkerframework.dataflow.qual.*;
  * Class used in dataflow that creates a tree the defines the way that
  * each value is created.
  */
+@SuppressWarnings("interning")
 public class ValueSource {
 
   /** Description of the value, includes its source if it is a constant **/

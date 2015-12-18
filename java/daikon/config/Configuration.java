@@ -59,7 +59,7 @@ public final class Configuration
   public static Configuration getInstance() {
     return instance;
   }
-  private static volatile /*@MonotonicNonNull*/ Configuration instance = new Configuration();
+  private static volatile /*@NonNull*/ Configuration instance = new Configuration();
 
   /**
    * This used to read a file containing all of the configurable
