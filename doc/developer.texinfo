@@ -7,6 +7,13 @@
 @c To update all the nodes and menus all at once:   C-u C-c C-u m
 @c You shouldn't need to do that, though; makeinfo does it for you.
 
+@c Tex magic to reduce the margins for the pdf version;
+@c these values have no effect on the html output.
+@tex
+\global\hsize = 6.5in
+\global\normaloffset = 0in
+@end tex
+
 @macro daikonemail{}
 @email{daikon-developers@@googlegroups.com}
 @end macro
@@ -1668,7 +1675,7 @@ Java source code that appears in that directory.
 
 @item
 It is expedient to copy a Makefile from another subdirectory, such as
-@file{$DAIKONDIR/tests/daikon-tests/StackAr/}, then modify it.
+@file{$DAIKONDIR/tests/@/daikon-tests/@/StackAr/}, then modify it.
 
 The @file{Makefile} must contain at least the following entries.
 
@@ -2032,20 +2039,19 @@ it twice) in order to generate formatted versions of the manual
 @chapter Making a distribution
 
 This section provides the instructions for publishing a Daikon distribution,
-a.k.a.@ making a release. 
+a.k.a.@ making a release.
 If you only want to
 create the @file{daikon.tar} or @file{daikon.tar.gz} file in your own
 directory, then simply run @command{make daikon.tar} or @command{make daikon.tar.gz}.
 
-
 Official releases have even version numbers (e.g., 4.6.4) and
 intermediate work has odd version numbers (e.g., 4.7.3).  This means
 as you prepare for a release the current version number is probably odd.  It will
-be updated as one of the first steps in the release process.  After making the
+be updated as one of the steps in the release process.  After making the
 distribution, one of the final steps is to increment the version number again to
 prepare for subsequent development.  This system has the useful side effect
-of allowing the build and test process to be repeated to fix a problem (steps 2--14
-of @ref{Distribution steps} below) 
+of allowing the build and test process to be repeated to fix a problem (steps 1--7
+of @ref{Distribution steps} below)
 without having to worry about updating or resetting the version number.
 Another advantage is to reinforce, to people who are working from the
 version control repository, that they are not using the released version,
@@ -2055,11 +2061,11 @@ The Daikon distribution site is located at
 @uref{http://plse.cs.washington.edu/daikon/} and is served from the UW CSE
 file system at
 @file{/cse/web/research/plse/daikon}.
-In order to be able to write to the distribution site, your CSE user id must be 
+In order to be able to write to the distribution site, your CSE user id must be
 a member of the @samp{plse_www} Unix group.
 
 For each of the major steps below, an
-approximate elapsed time is listed.  These timings are up to date as of November 2014.
+approximate elapsed time is listed.  These timings are up to date as of December 2015.
 They were measured on a quad x86-64 based
 machine at @nospellcheck{3.4GHz} with @nospellcheck{16GB} of memory
 (buffalo.cs.washington.edu).
@@ -2092,7 +2098,7 @@ Each of the steps below assumes that the current working directory is @file{$DAI
 and that you are using the Bash shell.
 
 @c maximize line size for all example command lists
-@exampleindent 0
+@exampleindent 1
 
 @menu
 * Directory layout::
@@ -2101,6 +2107,7 @@ and that you are using the Bash shell.
 @end menu
 
 
+@need 1000
 @node    Directory layout
 @section Directory layout
 
@@ -2252,43 +2259,21 @@ repository.
 @cartouche
 IMPORTANT:
 While the majority of the distribution process is currently run
-with JDK 7; we need to ensure that our system runs on JDK 8 as well.
-This means you will need to repeat steps 2-5 below in a separate shell
+with JDK@tie{}7; we need to ensure that our system runs on JDK@tie{}8 as well.
+This means you will need to repeat steps 1-4 below in a separate shell
 with @command{export JAVA_HOME=/usr/lib/jvm/java}. (In addition to the
 other normal environment settings.)
 @end cartouche
 
+Each of the steps below assumes that the current working directory is @file{$DAIKONDIR}
+and that you are using the Bash shell.
+
+@strong{Caution:} Any problems encountered in the next 7 steps
+need to be corrected immediately and the release process restarted with
+step 1 below.
+
+
 @enumerate
-
-@item
-Set the version number in file @file{$DAIKONDIR/doc/VERSION}
-to an even number.
-You may do this manually, or if the value just needs to be incremented
-by 1 (to go from odd to even) you may use:
-
-@c "cd $DAIKONDIR" because the previous commands changed the working directory
-@example
-cd $DAIKONDIR
-make update-dist-version-file
-@end example
-
-@need 1000
-Optionally, override the distribution date (default: today) by
-redefining the environment variable @command{TODAY}:
-
-@example
-export TODAY='November 1, 2013'
-@end example
-
-Now, update the appropriate files with the date and version number
-of the release.
-
-@example
-make update-doc-dist-date-and-version
-@end example
-
-[Time: moments]
-
 
 @need 1000
 @item
@@ -2299,8 +2284,8 @@ make very-clean
 make rebuild-everything
 @end example
 
-@c Time on buffalo as of 12/01/2014
-@c only 13 minutes.
+@c Time on buffalo as of 12/16/2015
+@c [Time: 18 min]
 @c buffalo has twice the memory of godwit.
 @c Time on godwit as of 11/27/2014
 [Time: 20 min]
@@ -2316,6 +2301,8 @@ errors output.
 make -C $DAIKONDIR/java check-nullness
 @end example
 
+@c Time on buffalo as of 12/16/2015
+@c [Time: 25 min]
 @c Time on godwit as of 11/27/2014
 [Time: 30 min]
 
@@ -2330,9 +2317,10 @@ make -C $DAIKONDIR/tests clean diffs
 @end example
 
 @c Time on godwit as of 11/27/2014
+@c [Time: 25 min]
 @c Time has increased significantly with additon of
-@c more tests.  Time below is on buffalo as of 12/03/2015
-[Time: 80 min]
+@c more tests.  Time below is on buffalo as of 12/16/2015
+[Time: 83 min]
 
 
 @need 1000
@@ -2346,7 +2334,9 @@ make -C $DAIKONDIR/tests/kvasir-tests clean-all regression-tests
 @end example
 
 @c Time on godwit as of 11/27/2014
-[Time: 20 min]
+@c [Time: 20 min]
+@c Time on buffalo as of 12/16/2015
+[Time: 23 min]
 
 
 @need 1000
@@ -2428,7 +2418,7 @@ If the word is spelled correctly and is a normal English word, add it to
 
 @item
 If the word is spelled correctly and is a proper name, such as a person's
-or company's name, then either add it to @file{daikon.dict} or 
+or company's name, then either add it to @file{daikon.dict} or
 write @code{@@nospellcheck} around it.
 
 @item
@@ -2446,34 +2436,99 @@ GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/tex
 
 @need 1000
 @item
-Build everything to be distributed and copy it to the temporary staging area
-@c not @uref{...} because we don't want robots to notice and crawl the link
-(http://plse.cs.washington.edu/daikon/staging-daikon/).
-Part of this step is to build a set of publication abstracts.  If there are
-any failures, then investigate and correct as necessary.
-The final output of this step
-will be a list of files that were added/removed since the
-last release.
-If any of these differences is unexpected, then investigate and correct the
-difference, and redo the step.
+Once you have successfully reached this point, you are ready to make a release
+candidate and begin testing it.
+The following command will verify that doc/CHANGES is up-to-date and then list
+any uncommitted files.
+
+@example
+make check-repo
+@end example
+
+@noindent
+The result of the command above should be:
+
+@example
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit (use -u to show untracked files)
+@end example
+
+@noindent
+If the command output lists any files, they need to be
+committed to the repository now.
+
+[Time: moments]
+
 
 @need 1000
+@item
+Set the version number in file @file{$DAIKONDIR/doc/VERSION}
+to an even number.
+You may do this manually, or if the value just needs to be incremented
+by 1 (to go from odd to even) you may use:
+
+@c "cd $DAIKONDIR" because the previous commands changed the working directory
 @example
-cd $DAIKONDIR
-\rm -f `find . -type f -name '*~'`
+make update-dist-version-file
+@end example
+
+Optionally, override the distribution date (default: today) by
+redefining the environment variable @command{TODAY}:
+
+@example
+export TODAY='November 1, 2013'
+@end example
+
+@need 1000
+Now, update the appropriate files with the date and version number
+of the release and commit these changes back to the repository:
+
+@example
+make update-and-commit-version
+@end example
+
+[Time: moments]
+
+
+@need 1000
+@item
+It is important to build the release candidate from a clean enlistment.
+This is to ensure we are testing only the files intended for release and
+that those files are the same as a user would receive with a clone of
+the repository. This needs to be done in a separate, new Bash command
+shell.
+The following commands get a fresh clone of Daikon, set some
+environment variables and then
+build everything to be distributed and copy it to the temporary staging area
+@c not @uref{...} because we don't want robots to notice and crawl the link
+(http://plse.cs.washington.edu/staging-daikon/).
+
+@example
+mkdir -p /tmp/$USER
+rm -rf /tmp/$USER/daikon
+git clone https://github.com/codespecs/daikon /tmp/$USER/daikon
+cd /tmp/$USER/daikon
+export DAIKONDIR=`pwd`
+export JAVA_HOME=/homes/gws/markro/jdk7
+source $DAIKONDIR/scripts/daikon.bashrc
 make staging
 @end example
 
-[Time: 4 min]
+The final output of this command
+will be a list of files that were added/removed since the
+last release.
+If any of these differences is unexpected, then investigate.
+If any corrections are required, do so back in the main
+repository, commit the changes and
+then repeat this step.
 
+@c Time on buffalo as of 12/16/2015
+@c [Time: 34 min]
+@c I've notified mernst about this 10x slow down.
+@c [Time: 4 min]
 
-@item
-Check the website to see if it has any broken links.
-
-@c missing software has been loaded onto buffalo.  (12/2/2014)
-@c Do not run this step on
-@c @samp{buffalo}.  For some reason the system software is not up to date.  Both
-@c @samp{bicycle} and @samp{tricycle} have been verified to work properly.
+Next, check the staging website to see if it has any broken links.
 
 @example
 make check-for-broken-doc-links
@@ -2501,16 +2556,26 @@ Do a web search to see if the page has relocated elsewhere.
 If the web search is not successful, email the maintainer of the old content.
 @end itemize
 
-Note that you must fix it in the original repository,
-not in the drop directories.
-This means correcting the file, most likely located beneath either
-@file{$DAIKONDIR/doc} or @file{$BIBDIR}, committing the changes, and
-returning to the previous step (@command{make staging}) prior to re-running
-the broken link tool.
+Note that you must fix problems in the original repository,
+not in the drop directories. This means:
+@itemize
+@item
+Switch back to your original Bash shell.
+@item
+Correct the file. (Most likely located beneath either
+@file{$DAIKONDIR/doc} or @file{$BIBDIR}.)
+@item
+Commit the changes.
+@item
+Repeat this step.
+@end itemize
 
-[Time: 3 min]
+@c total time should be about:
+[Time: 12 min]
+@c However, time on buffalo as of 12/16/2015
+@c is 40 minutes.
 
-
+@need 1000
 @item
 Test the distribution on a 64-bit machine.
 Since the machine you are using to build the release is probably
@@ -2522,9 +2587,11 @@ by invariant output being written to the screen.
 make test-staged-dist
 @end example
 
-[Time: 20 min; runs Checker Framework tests]
+@c Time on buffalo as of 12/16/2015
+[Time: 10 min; runs Checker Framework tests]
 
 
+@need 1000
 @item
 Test the distribution on a 32-bit machine.
 This is probably best done on a virtual machine running a current version
@@ -2537,10 +2604,10 @@ success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
     -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
 export JAVA_HOME=/usr/lib/jvm/java
@@ -2556,7 +2623,7 @@ make distribution-check
 Test the distribution on a 64-bit, Ubuntu based system.  The 64-bit test
 run above is normally run on one of our local machines; therefore, it was
 probably done on a Fedora (Red Hat) based system.
-Ubuntu is another distributor of Linux based systems and we have run into
+Ubuntu is another distributor of Linux based systems and there have been
 some differences with Fedora in the past.  This test is
 probably best done on a virtual machine running a current version. It is
 important to regularly check to see if a new major release of Ubuntu is
@@ -2570,10 +2637,10 @@ success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
     -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
 export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
@@ -2582,7 +2649,7 @@ source scripts/daikon.bashrc
 make distribution-check
 @end smallexample
 
-[Time: ?? min]
+[Time: 20 min]
 
 
 @item
@@ -2599,10 +2666,10 @@ Success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
     -O - | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
 # Convert OSTYPE from a shell variable to a system environment variable.
@@ -2629,11 +2696,11 @@ Success is indicated by invariant output being written to the screen.
 @smallexample
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`curl -s http://plse.cs.washington.edu/daikon/staging-daikon/download/doc/VERSION \
+DAIKONVERSION=`curl -s http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
     | xargs echo -n`
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+curl -O http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+# or: wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
 # Convert OSTYPE from a shell variable to a system environment variable.
@@ -2649,20 +2716,23 @@ make distribution-check
 
 @need 1000
 @item
-Save the previous release in the history archives.
+Once you have successfully reached this point, you have a valid release candidate
+and are ready to make the actual release.
+@strong{Caution:} If somewhere above you made a change to correct a problem you should have
+restarted the release process.
 
-@example
-make save-current-release
-@end example
-
-[Time: moments]
+At this point we are done building and testing the release candidate and you
+should exit the Bash command shell created in step 12 and return to your
+original Bash shell.
 
 
 @need 1000
 @item
-Update the website.
+Update the website by deleting the current release
+and then making the staged version the (new) current release.
 
 @example
+cd $DAIKONDIR
 make staging-to-www
 @end example
 
@@ -2671,37 +2741,15 @@ make staging-to-www
 
 @need 1000
 @item
-Commit changes back to the repository:
-
-@emph{The changeset should only have the change in version number, nothing
-else, so this should come right after changing daikon/doc/VERSION which
-should come just before ``make staging''.}
-
-@example
-cd $DAIKONDIR
-DAIKONVERSION=`cat $DAIKONDIR/doc/VERSION | xargs echo -n`
-git commit -a -m "Change version to $DAIKONVERSION"
-git push
-cd fjalar
-git commit -a -m "Change version to $DAIKONVERSION"
-git push
-@end example
-
-[Time: moments]
-
-
-@need 1000
-@item
 Add a version label to the repository:
 
 @example
-# TODO: The "git tag" commands ask for a commit message.  Pass it it on the command line.
 cd $DAIKONDIR
 DAIKONVERSION=`cat $DAIKONDIR/doc/VERSION | xargs echo -n`
-git tag -a v$DAIKONVERSION
+git tag -a v$DAIKONVERSION -m $DAIKONVERSION
 git push --tags
 cd fjalar
-git tag -a v$DAIKONVERSION
+git tag -a v$DAIKONVERSION -m $DAIKONVERSION
 git push --tags
 @end example
 
@@ -2712,16 +2760,12 @@ git push --tags
 @item
 At this point the distribution has been completed.
 Bump the version number to an odd value for continuing development.
-Update files that mention the version number, but
-revert the change to @file{doc/README} as we
-want it to reflect the most recent actual release.
 
 @example
 cd $DAIKONDIR
 export -n TODAY
 make update-dist-version-file
 make update-doc-dist-date-and-version
-git checkout doc/README
 @end example
 
 [Time: moments]
@@ -2733,12 +2777,11 @@ Verify these changes by doing product builds (no need to clean first) and
 running a short verification test.
 
 @example
-make rebuild-everything
-make quick-test
+make rebuild-everything quick-test
 @end example
 
 Success is indicated by invariant output being written to the screen.
- 
+
 [Time: 5 min]
 
 
@@ -2762,6 +2805,20 @@ git push
 @item
 Send mail to the @samp{daikon-announce} mailing list.
 This list is located at @samp{daikon-announce@@googlegroups.com}.
+Here is a suggested template:
+
+@example
+Daikon version <version number> is now available.
+
+Please see the entry from the doc/CHANGES file that appears below for more details.
+
+You can download the latest version of Daikon at:
+http://plse.cs.washington.edu/daikon/download/
+
+  <your name>
+
+<a copy of the current entry from the doc/CHANGES> file>
+@end example
 
 @end enumerate
 

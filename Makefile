@@ -97,13 +97,11 @@ QT_PATH := ../../../daikon.jar:.
 endif
 
 # Staging area for the distribution
-STAGING_DIR := $(WWW_DIR)/staging-daikon
+STAGING_DIR := $(WWW_PARENT)/staging-daikon
 
 # Files to copy to the website, from $DAIKONDIR/doc/www/
 WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
                     download/index.html download/doc/index.html
-
-DIST_DIR := $(WWW_DIR)/download
 
 REPOSITORY := https://github.com/codespecs/daikon.git
 
@@ -390,23 +388,31 @@ repository-test:
 
 # Main distribution
 
+# A couple of checks to see if we can proceed with staging.
+# Verify that doc/CHANGES is newer than doc/daikon.texinfo - error out if not.
+# Report any uncommited files - users responsibility to act on results.
+check-repo: doc/CHANGES
+	git status -uno
+
 # The staging target builds all of the files that will be distributed
 # to the website in the directory $(STAGING_DIR).  This includes:
 # daikon.tar.gz, daikon.zip, daikon.jar, javadoc, and the documentation.
 # See the dist target for moving these files to the website.
-staging: doc/CHANGES
+staging:
 # Our intention is that members of the plse_www group will always have
 # write permission on the release directories; however, if you happen
 # to be the owner of an existing file, the permissions system gives
 # that priority and we must set the write bit.  These two chmod commands
 # will fail if you are not the owner, but the remainder of the commands
 # should work fine.
+	-chmod u+w $(WWW_PARENT)
 	-chmod -R u+w $(STAGING_DIR)
-	-chmod u+w $(WWW_DIR)
 	/bin/rm -rf $(STAGING_DIR)
-	# dummy history directory to remove checklink warnings
-	install -d $(STAGING_DIR)/history
-	install -d $(STAGING_DIR)/download
+	mkdir $(STAGING_DIR)
+	cp -pR $(WWW_DIR)/history $(STAGING_DIR)
+	$(MAKE) save-current-release
+	mkdir $(STAGING_DIR)/download
+	cp -pR $(WWW_DIR)/download/inv-cvs $(STAGING_DIR)/download
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
 	# make daikon.tar has side effect of making documents
@@ -416,11 +422,11 @@ staging: doc/CHANGES
 	cp -pf daikon.jar $(STAGING_DIR)/download
 	# Build javadoc
 	@echo "]2;Building Javadoc"
-	install -d $(STAGING_DIR)/download/api
+	mkdir $(STAGING_DIR)/download/api
 	cd java; make 'JAVADOC_DEST=$(STAGING_DIR)/download/api' javadoc
 	# Copy the documentation
 	@echo "]2;Copying documentation"
-	install -d $(STAGING_DIR)/download/doc
+	mkdir $(STAGING_DIR)/download/doc
 	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIR)/download/doc
 	cp -pR doc/images $(STAGING_DIR)/download/doc
 	cp -pR doc/daikon $(STAGING_DIR)/download/doc
@@ -429,15 +435,19 @@ staging: doc/CHANGES
 	# Build pubs and copy the results
 	@echo "]2;Building Pubs"
 	cd doc/www && make pubs
-	install -d $(STAGING_DIR)/pubs
+	mkdir $(STAGING_DIR)/pubs
 	cp -pR doc/www/pubs/* $(STAGING_DIR)/pubs
+	cp -p doc/daikon-favicon.png $(STAGING_DIR)
 	cp -p doc/images/daikon-logo.gif $(STAGING_DIR)
+	# This command updates the dates and sizes in the various index files
+	html-update-link-dates $(STAGING_DIR)/download/index.html
 	# all distributed files should belong to the group plse_www and be group writable.
 	# set the owner and other permissions to readonly
 	chgrp -R plse_www $(STAGING_DIR)
 	chmod -R g+w $(STAGING_DIR)
 	-chmod -R u-w $(STAGING_DIR)
 	chmod -R o-w $(STAGING_DIR)
+	-chmod u-w $(WWW_PARENT)
 	# compare new list of files in tarfile to previous list
 	@echo "]2;New or removed files"
 	@echo "***** New or removed files:"
@@ -448,28 +458,19 @@ staging: doc/CHANGES
 	# Delete the tmp files
 	cd ${TMPDIR} && /bin/rm -rf daikon daikon.dist old_tar.txt new_tar.txt
 
-# Copy the files in the staging area to the website.  This will copy
-# all of the files in staging, but will not delete any files in the website
-# that are not in staging.
+# Convert the staging area to the live release.
+# We do this by deleting the previous release directory and
+# renaming the staging directory to be the release directory.
 staging-to-www: $(STAGING_DIR)
-#copy the files
+	-chmod u+w $(WWW_PARENT)
 	-chmod -R u+w $(WWW_DIR)
-# # remove previous release archive files
-# 	\rm -f /cse/web/research/plse/daikon/download/daikon-*
-# # don't trash existing history directory
-# #	(cd $(STAGING_DIR) && tar cf - --exclude=history .) | (cd $(WWW_DIR) && tar xfBp -)
-# Remove previous files, except history and staging-daikon
-	(cd $(STAGING_DIR) && \ls | grep -v history | grep -v staging-daikon | xargs \rm -rf
-# Copy directory
-	rsync -Cavz --quiet $(STAGING_DIR) $(WWW_DIR)
-#	-chmod -R u-w $(WWW_DIR)
-# This command updates the dates and sizes in the various index files
-	html-update-link-dates $(DIST_DIR)/index.html
-# with new version number system, this is now done manually
-#	$(MAKE) update-dist-version-file
+	\rm -rf $(WWW_DIR)
+	\mv $(STAGING_DIR) $(WWW_DIR)
+	-chmod -R u-w $(WWW_DIR)
+	-chmod u-w $(WWW_PARENT)
 	@echo "*****"
 	@echo "Don't forget to send mail to daikon-announce and commit changes."
-	@echo "(See sample messages in ~mernst/research/invariants/mail/daikon-lists.mail.)"
+	@echo "(See sample message in the 'Making a distribution' chapter of the Developer Manual.)"
 	@echo "*****"
 
 
@@ -482,7 +483,7 @@ doc/CHANGES: doc/daikon.texinfo
 	@echo "** doc/CHANGES file is not up-to-date with respect to doc files."
 	@echo "** doc/CHANGES must be modified by hand."
 	@echo "** Try:"
-	@echo "     diff -u -s --from-file   $(WWW_DIR)/dist/doc doc/*.texinfo"
+	@echo "     diff -b -u -s --from-file $(WWW_DIR)/download/doc doc/*.texinfo"
 	@echo "** (or maybe  touch doc/CHANGES )."
 	@echo "******************************************************************"
 	@exit 1
@@ -494,30 +495,36 @@ doc-all-except-pdf:
 	cd doc && $(MAKE) all-except-pdf
 
 # Get the current release version
-ifneq ($(shell ls /cse/web/research/plse/daikon/download/daikon-*.zip 2>/dev/null),)
-    CUR_VER := $(shell ls /cse/web/research/plse/daikon/download/daikon-*.zip |perl -p -e 's/^.*download.daikon.//' |perl -p -e 's/.zip//')
+ifneq ($(shell ls $(WWW_DIR)/download/daikon-*.zip 2>/dev/null),)
+    CUR_VER := $(shell ls $(WWW_DIR)/download/daikon-*.zip |perl -p -e 's/^.*download.daikon.//' |perl -p -e 's/.zip//')
     CUR_RELEASE_NAME := daikon-$(CUR_VER)
-    NEW_RELEASE_NAME := daikon-$(shell cat doc/VERSION)
+    NEW_VER := $(shell cat doc/VERSION)
+    NEW_RELEASE_NAME := daikon-$(NEW_VER)
 else
     CUR_RELEASE_NAME := UNKNOWN
     NEW_RELEASE_NAME := UNKNOWN
 endif
 
 check-for-broken-doc-links:
-	checklink -q -r `grep -v '^#' ${DAIKONDIR}/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon/staging-daikon >check.log 2>&1
+	checklink -q -r `grep -v '^#' ${DAIKONDIR}/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >check.log 2>&1
 
-HISTORY_DIR := /cse/web/research/plse/daikon/history
+HISTORY_DIR := $(STAGING_DIR)/history
 save-current-release:
 	@echo Saving $(CUR_VER) to history directory.
 	-chmod u+w $(HISTORY_DIR)
 	mkdir $(HISTORY_DIR)/$(CUR_RELEASE_NAME)
 	-chmod u-w $(HISTORY_DIR)
-	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp -p /cse/web/research/plse/daikon/download/$(CUR_RELEASE_NAME).zip . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod o-w CHANGES .
+	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp -p $(WWW_DIR)/download/$(CUR_RELEASE_NAME).* . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod o-w CHANGES .
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 ifeq ($(origin TODAY), undefined)
 TODAY := $(shell date "+%B %e, %Y" | perl -p -e 's/  / /')
 endif
+
+update-and-commit-version: update-doc-dist-date-and-version
+	git commit -a -m "Change version to $(NEW_VER)"
+	git push
+	cd fjalar && git commit -a -m "Change version to $(NEW_VER)" && git push
 
 update-doc-dist-date-and-version:
 	$(MAKE) update-doc-dist-date
@@ -537,11 +544,11 @@ update-doc-dist-date:
 # I removed the dependence on "update-dist-version-file" because this rule
 # is invoked at the beginning of a make.
 update-doc-dist-version:
-	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/((Daikon|Fjalar) version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' ${DIST_VERSION_FILES}
+	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/((Daikon|Fjalar) version )[0-9]+(\.[0-9]+)*/$$1 . "$(NEW_VER)"/e;' ${DIST_VERSION_FILES}
 	# update the version number in the release archive file names
-	perl -wpi -e 's/(\-)[0-9]+(\.[0-9]+)+/$$1 . "$(shell cat doc/VERSION)"/eg;' doc/www/download/index.html
-	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
-	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' fjalar/valgrind/fjalar/mc_main.c
+	perl -wpi -e 's/(\-)[0-9]+(\.[0-9]+)+/$$1 . "$(NEW_VER)"/eg;' doc/www/download/index.html
+	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(NEW_VER)" . $$3/e;' java/daikon/Daikon.java
+	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(NEW_VER)" . $$3/e' fjalar/valgrind/fjalar/mc_main.c
 	touch doc/CHANGES
 
 # Update the version number in file doc/VERSION

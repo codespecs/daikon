@@ -159,5 +159,5 @@ spell-check:
 	perl prepare-texinfo-for-spellcheck.pl < developer.texinfo | hunspell -u -p daikon.dict
 # For CHANGES file, only recent lines (top 100), and not text starting with
 # 4+ spaces (assumed to be literal code or commands.  Permit some failures.
-	echo "Following command is allowed to have some failures not in daikon.dict"
+	@echo "The following command is allowed to have some failures not in daikon.dict"
 	head -100 CHANGES | sed 's/^    .*/ /' | hunspell -u -p daikon.dict
