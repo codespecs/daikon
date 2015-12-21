@@ -544,15 +544,14 @@ update-doc-dist-version:
 	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' fjalar/valgrind/fjalar/mc_main.c
 	touch doc/CHANGES
 
-# Update the version number.
+# Update the version number in file doc/VERSION
 # This is done immediately after releasing a new version; thus, VERSION
 # refers to the next version to be released, not the previously-released one.
-# This isn't a part of the "update-dist-version" target because if it is,
-# the "shell cat" command gets the old VERSION file.
-# (Note that the last element of VERSION may be negative, such as "-1".
-# This is useful in order to make the next version end with ".0".)
+# (Tip: If you want the next version to end with ".0", then before running
+# this target you can set the the last element of VERSION to "-1".)
 update-dist-version-file:
 	@perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
+	@echo -n "doc/VERSION now contains: "
 	@cat doc/VERSION
 
 JAR_FILES = \
