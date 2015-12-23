@@ -20,6 +20,26 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.18 (December 5, 2015)
+
+Daikon:
+- Avoid ConcurrentModificationException in the FileIOProgress thread.
+- Makefile in distribution is now the same as in a cloned repository.
+
+Kvasir:
+- Eliminated OS-specific regression test failures.
+
+Documentation:
+- New manual section "Detecting invariants when running a Java program from
+  a jar file"
+- Restructured developer manual section "Requirements for compiling Daikon"
+
+Distribution:
+- The distribution contains new directories doc/www, java/jtb, and java/lib,
+  which makes the directory layout more like the repository's.
+
+===========================================================================
+
 5.2.16 (November 2, 2015)
 
 Chicory:

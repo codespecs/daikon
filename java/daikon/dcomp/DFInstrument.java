@@ -29,7 +29,7 @@ import org.checkerframework.checker.nullness.qual.*;
 /**
  * Instruments a class file to perform Data Flow.
  */
-@SuppressWarnings("nullness")
+@SuppressWarnings({"nullness", "interning"})
 class DFInstrument extends DCInstrument {
 
   public static SimpleLog debug = new SimpleLog (false);

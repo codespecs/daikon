@@ -31,7 +31,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * Instruments a class file to perform Dynamic Comparability.
  */
-@SuppressWarnings("nullness")   //
+@SuppressWarnings({"nullness","interning"})   //
 class DCInstrument {
 
   protected JavaClass orig_class;

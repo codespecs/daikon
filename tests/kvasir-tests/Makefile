@@ -15,6 +15,10 @@
 
 default: summary
 
+regression-tests: nightly-summary-w-daikon results
+
+TEMP-regression-tests: TEMP-nightly-summary-w-daikon results
+
 summary: default-projects__diffs
 	$(MAKE) summary-only
 
@@ -46,15 +50,23 @@ nightly-summary: nightly-tests__diffs-if-working
 nightly-summary-w-daikon: nightly-tests__diffs-w-daikon-if-working
 	$(MAKE) nightly-summary-only-w-daikon
 
+TEMP-nightly-summary-w-daikon: TEMP-nightly-tests__diffs-w-daikon-if-working
+	$(MAKE) TEMP-nightly-summary-only-w-daikon
+
 nightly-summary-only: nightly-tests__summary-if-working__quietly
 
 nightly-summary-only-w-daikon: nightly-tests__summary-w-daikon-if-working__quietly
+
+TEMP-nightly-summary-only-w-daikon: TEMP-nightly-tests__summary-w-daikon-if-working__quietly
 
 clean diffs invs update-goals:
 	$(MAKE) default-projects__$@
 
 # nightly-tests__%: default-projects__% medium-tests__%
+#	@
 nightly-tests__%: default-projects__% medium-easy-tests__%
+	@
+TEMP-nightly-tests__%: default-projects__% TEMP-medium-easy-tests__%
 	@
 
 update-all:
@@ -64,20 +76,29 @@ clean-all:
 	$(MAKE) nightly-tests__clean
 
 
-default-projects__%: pgbovine-tests__% test-gtest__% smcc-tests__% small-crypto-tests__% \
-	             tiny-real-tests__% tws-tests__% 
+default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
 	@
 
+# This target is not used in standard test runs.
+# The tests are duplicated in the pgbovine-tests target.
 cpp-tests__%: do-CppFunctionTest__% do-SimpleClassesTest__% \
               do-Dstr__% do-CppInlineTest__% do-ArrayTest-cpp__% \
               do-StackCppTest__%  do-StackCppTestInline__% do-StackArrayCppTest__%
 	@
 
 medium-tests__%: rothermel-tests__% medium-real-tests__% medium-crypto-tests__% \
-                 missing-tests__%
+                 missing-tests__% small-crypto-tests__% do-space__% test-gtest__% do-Dstr__% do-partial-init__%
 	@
 
+# Omits povray and perl
 medium-easy-tests__%: rothermel-tests__% medium-real-easy-tests__% medium-crypto-tests__% \
+                 missing-tests__% small-crypto-tests__% do-space__% test-gtest__% do-Dstr__% do-partial-init__%
+	@
+
+# Omits povray and perl
+# Omits flex-pristine and bzip2
+# Omits flex-rothermel, md5 and space
+TEMP-medium-easy-tests__%: TEMP-medium-real-easy-tests__% medium-crypto-tests__% \
                  missing-tests__%
 	@
 
@@ -87,12 +108,12 @@ pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
 		   do-StaticArraysTest__% do-StructPtrTest__% do-TypedefTest__% \
 		   do-small-test__% do-DisambigTest__% do-SimpleDisambigStructTest__% \
 		   do-StackCppTest__%  do-StackCppTestInline__% do-StackArrayCppTest__% \
-		   do-Dstr__% do-MultiDimArrayTest__% do-ArraysInStructTest__% \
+		   do-MultiDimArrayTest__% do-ArraysInStructTest__% \
 		   do-FunctionNamesTest__% do-CoercePointerTest__% \
 		   do-CppFunctionTest__% do-SimpleClassesTest__% \
 		   do-CppInlineTest__% do-ArrayTest-cpp__% do-FloatTest__% \
-		   do-print_tokens__% do-print_tokens2__% do-replace__% do-space__% do-tot_info__% \
-		   do-NestedStructVarList__% 
+		   do-print_tokens__% do-print_tokens2__% do-replace__% do-tot_info__% \
+		   do-NestedStructVarList__%
 	@
 
 ifeq (x86_64,$(shell uname -m))
@@ -129,8 +150,8 @@ test-gzip__%: do-gzip__%
 endif
 
 missing-tests__%: do-ConstantTest__% do-ConstMergeTest__% do-ExceptionTest__% \
-		   do-partial-init__%  do-pthread-test__% do-rdtsc__% do-setjmp-test__% \
-		   do-shared-lib__%  do-UnionComp__% do-virtual-method__% 
+		   do-pthread-test__% do-rdtsc__% do-setjmp-test__% \
+		   do-shared-lib__%  do-UnionComp__% do-virtual-method__%
 	@
 
 tws-tests__%: do-SelectGlobalsTest__%
@@ -165,6 +186,11 @@ medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  d
 medium-real-easy-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-tcas__%
 	@
 
+# Omits povray and perl
+# Omits flex-pristine and bzip2
+TEMP-medium-real-easy-tests__%: test-gzip__% do-tcas__%
+	@
+
 small-crypto-tests__%: do-md5__%
 	@
 
@@ -178,3 +204,22 @@ do-%__quietly:
 
 do-%:
 	@$(MAKE) -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
+
+# removes fields before the size (ie, permissions, owner, group).
+PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; if ($$1 > 0) { $$failure++; print "$$1\t$$2\t$$3\n";} END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
+# args to 'find' program, to find files containg results
+RESULTS_PATTERN :=    -name '*.diff'
+
+results_header:
+	@echo ""
+	@echo "=== RESULTS ==="
+
+results_cat:
+	@find . $(RESULTS_PATTERN) | xargs cat
+
+results: results_header results_cat summary_list
+
+summary_list:
+	@ls -l `find . $(RESULTS_PATTERN)` \
+	  | perl -pe 's|\Q${BASE}|.|;' \
+	  | ${PERL_CLEANUP_LS_OUTPUT}

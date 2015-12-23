@@ -19,6 +19,7 @@ import org.checkerframework.checker.initialization.qual.*;
 //  look at get targeters...
 //  use any targeter as the "parent" stack
 //  copy stack, modify it, add to map
+@SuppressWarnings("interning")
 public final class TypeStack
 {
     private final ConstantPoolGen pool;

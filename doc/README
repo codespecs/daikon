@@ -1,5 +1,5 @@
 This directory contains documentation for the Daikon invariant detector,
-Daikon version 5.2.16, released November 2, 2015.
+Daikon version 5.2.19, released December 9, 2015.
 
 See file
   index.html
@@ -7,6 +7,6 @@ for a list of the documentation available in this directory.
 
 Javadoc for the Daikon implementation appears in directory ../java/api/.
 
-File VERSION contains the current version of Daikon system.  Most often
-it is one greater than the last distributed release - the number at the
-top of this file.
+Note that version number at the top of this file, as well as the contents
+of the file VERSION, contain the current active version number of the Daikon
+system.  Most often it is one greater than the last distributed release.

@@ -57,18 +57,9 @@ public final class Configuration
    * @return singleton instance of this class
    **/
   public static Configuration getInstance() {
-    if (instance == null) {
-      synchronized (Configuration.class) {
-        if (instance == null) {
-          instance = new Configuration();
-        }
-      }
-    }
     return instance;
   }
-  // TODO: annotate as @GuardedByName("Configuration.class") once @GuardedByName is
-  // implemented.  This is due to the initialization of 'instance' in getInstance().
-  private static volatile /*@MonotonicNonNull*/ Configuration instance = null; 
+  private static volatile /*@NonNull*/ Configuration instance = new Configuration();
 
   /**
    * This used to read a file containing all of the configurable
@@ -82,7 +73,7 @@ public final class Configuration
    * date and it seemed that the random results were better than no
    * attempt at all.  The file has thus been removed.  If a
    * configuration is changed it only contains those items specified,
-   * not the default values of unspecified options
+   * not the default values of unspecified options.
    */
   private Configuration() {
   }
