@@ -2619,6 +2619,7 @@ make distribution-check
 [Time: 10 min]
 
 
+@need 1000
 @item
 Test the distribution on a 64-bit, Ubuntu based system.  The 64-bit test
 run above is normally run on one of our local machines; therefore, it was
@@ -2643,7 +2644,7 @@ rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
 wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
-export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64  # or java-8 as appropriate
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
 make distribution-check
@@ -2652,6 +2653,7 @@ make distribution-check
 [Time: 20 min]
 
 
+@need 1000
 @item
 Test the distribution on a Windows machine
 with Cygwin installed, as a guest user (or at least one without
@@ -2674,7 +2676,7 @@ tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
-export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_45"
+export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.7.0_45"
 export DAIKONDIR=`pwd`
 source scripts/daikon.bashrc
 make distribution-check
@@ -2683,6 +2685,7 @@ make distribution-check
 [Time: 10 min]
 
 
+@need 1000
 @item
 Test the distribution on a MacOSX machine
 with the development tools installed.
