@@ -416,6 +416,9 @@ staging:
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
 	# make daikon.tar has side effect of making documents
+	# it also causes doc/CHANGES time stamp to be checked; which
+	# we do not care about at this point.
+	touch doc/CHANGES
 	$(MAKE) daikon.tar
 	gzip -c ${TMPDIR}/$(NEW_RELEASE_NAME).tar > $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz
 	cp -pf ${TMPDIR}/$(NEW_RELEASE_NAME).zip $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).zip
@@ -598,7 +601,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 # careful about not including extraneous files in the distribution, and one
 # could make a distribution even if there were diffs in the current
 # checkout.
-daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
+daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 
 	-rm -rf ${TMPDIR}/daikon-* ${TMPDIR}/daikon-*.tar ${TMPDIR}/daikon-*.zip
 	mkdir ${TMPDIR}/daikon
