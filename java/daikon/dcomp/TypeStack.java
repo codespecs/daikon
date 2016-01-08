@@ -1,11 +1,11 @@
 package daikon.dcomp;
 
 import java.util.*;
-import org.apache.bcel.classfile.*;
-import org.apache.bcel.generic.*;
-import org.apache.bcel.generic.FieldOrMethod;
-import org.apache.bcel.util.*;
-import org.apache.bcel.verifier.structurals.*;
+import org.apache.commons.bcel6.classfile.*;
+import org.apache.commons.bcel6.generic.*;
+import org.apache.commons.bcel6.generic.FieldOrMethod;
+import org.apache.commons.bcel6.util.*;
+import org.apache.commons.bcel6.verifier.structurals.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

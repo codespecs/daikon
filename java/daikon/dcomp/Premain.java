@@ -6,9 +6,9 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.bcel.*;
-import org.apache.bcel.classfile.*;
-import org.apache.bcel.generic.*;
+import org.apache.commons.bcel6.*;
+import org.apache.commons.bcel6.classfile.*;
+import org.apache.commons.bcel6.generic.*;
 
 import daikon.util.*;
 import daikon.chicory.DaikonVariableInfo;

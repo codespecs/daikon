@@ -15,11 +15,11 @@ import static java.lang.System.out;
 // import com.sun.org.apache.bcel.internal.generic.InstructionFactory;
 // import com.sun.org.apache.bcel.internal.generic.*;
 
-import org.apache.bcel.*;
-import org.apache.bcel.classfile.*;
-import org.apache.bcel.generic.InstructionFactory;
-import org.apache.bcel.generic.*;
-import org.apache.bcel.verifier.VerificationResult;
+import org.apache.commons.bcel6.*;
+import org.apache.commons.bcel6.classfile.*;
+import org.apache.commons.bcel6.generic.InstructionFactory;
+import org.apache.commons.bcel6.generic.*;
+import org.apache.commons.bcel6.verifier.VerificationResult;
 
 import sun.nio.cs.ext.ISCII91;
 
@@ -385,12 +385,12 @@ public class Instrument implements ClassFileTransformer {
 
     switch (inst.getOpcode()) {
 
-    case Constants.ARETURN:
-    case Constants.DRETURN:
-    case Constants.FRETURN:
-    case Constants.IRETURN:
-    case Constants.LRETURN:
-    case Constants.RETURN:
+    case Const.ARETURN:
+    case Const.DRETURN:
+    case Const.FRETURN:
+    case Const.IRETURN:
+    case Const.LRETURN:
+    case Const.RETURN:
       break;
 
     default:
@@ -457,7 +457,7 @@ public class Instrument implements ClassFileTransformer {
 
     invokeList.append(new PUSH(cp, fullClassName));
     invokeList.append(factory.createInvoke(runtime_classname, "initNotify",
-                               Type.VOID, new Type[] {Type.STRING}, Constants.INVOKESTATIC));
+                               Type.VOID, new Type[] {Type.STRING}, Const.INVOKESTATIC));
 
     // System.out.println(fullClassName + " --- " + invokeList.size());
     return invokeList;
@@ -471,13 +471,13 @@ public class Instrument implements ClassFileTransformer {
   // Set by instrument_all_methods
   // Used by instrument_all_methods, find_stack_map_equal, find_stack_map_after,
   // update_stack_map_offset, add_entry_instrumentation
-  private StackMapTableEntry[] stack_map_table;
-  private StackMapTableEntry[] empty_stack_map_table = {};
+  private StackMapEntry[] stack_map_table;
+  private StackMapEntry[] empty_stack_map_table = {};
   // kind of a hack since no pointers in Java and not
   // worth making a container object.
   private int running_offset;
   // original stack map table
-  private Attribute smta;
+  private StackMap smta;
 
 
  /**
@@ -518,7 +518,7 @@ public class Instrument implements ClassFileTransformer {
           }
 
         // If method is synthetic...
-        if ((Constants.ACC_SYNTHETIC & mg.getAccessFlags()) > 0)
+        if ((Const.ACC_SYNTHETIC & mg.getAccessFlags()) > 0)
           {
             continue;
           }
@@ -556,9 +556,10 @@ public class Instrument implements ClassFileTransformer {
         }
 
         // Get existing StackMapTable (if present)
-        smta = get_stack_map_table_attribute(mg);
+        smta = (StackMap)get_stack_map_table_attribute(mg);
         if (smta != null) {
-            stack_map_table = ((StackMapTable)smta).getStackMapTable();
+            // get a deep copy of the original StackMapTable.
+            stack_map_table = ((StackMap)(smta.copy(smta.getConstantPool()))).getStackMap();
             if (debug) {
                 out.format ("Attribute tag: %s length: %d nameIndex: %d%n",
                        smta.getTag(), smta.getLength(), smta.getNameIndex());
@@ -647,8 +648,8 @@ public class Instrument implements ClassFileTransformer {
                       }
 
                       // find stack map for current location
-                      StackMapTableEntry stack_map = find_stack_map_equal(current_offset);
-                      modify_stack_map_offset(stack_map, len);
+                      StackMapEntry stack_map = find_stack_map_equal(current_offset);
+                      stack_map.updateByteCodeOffset(len);
                   }
               }
 
@@ -674,14 +675,10 @@ public class Instrument implements ClassFileTransformer {
           ih = next_ih;
         }
 
-
         // Build new StackMapTable attribute
-        int map_table_size = 2;  // space for the number_of_entries
-        for (int j = 0; j < stack_map_table.length; j++) {
-            map_table_size += stack_map_table[j].getEntryByteSize();
-        }
-        StackMapTable map_table = new StackMapTable(pgen.addUtf8("StackMapTable"),
-                                  map_table_size, stack_map_table, pgen.getConstantPool());
+        StackMap map_table = new StackMap(pgen.addUtf8("StackMapTable"),
+                                                    0, null, pgen.getConstantPool());
+        map_table.setStackMap(stack_map_table);
         mg.addCodeAttribute(map_table);
 
         // UNDONE: not sure this is necessary anymore?
@@ -766,12 +763,12 @@ public class Instrument implements ClassFileTransformer {
 
     switch (inst.getOpcode()) {
 
-    case Constants.ARETURN:
-    case Constants.DRETURN:
-    case Constants.FRETURN:
-    case Constants.IRETURN:
-    case Constants.LRETURN:
-    case Constants.RETURN:
+    case Const.ARETURN:
+    case Const.DRETURN:
+    case Const.FRETURN:
+    case Const.IRETURN:
+    case Const.LRETURN:
+    case Const.RETURN:
       break;
 
     default:
@@ -863,11 +860,11 @@ public class Instrument implements ClassFileTransformer {
 
     running_offset = -1; // no +1 on first entry
     for (int i = 0; i < stack_map_table.length; i++) {
-        running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+        running_offset = stack_map_table[i].getByteCodeOffset()
                                             + running_offset + 1;
 
         if (running_offset > offset) {
-            modify_stack_map_offset(stack_map_table[i], 1);
+            stack_map_table[i].updateByteCodeOffset(1);
             // Only update the first StackMap that occurs after the given
             // offset as map offsets are relative to previous map entry.
             return;
@@ -879,12 +876,12 @@ public class Instrument implements ClassFileTransformer {
   /**
    * Find the StackMap entry who's offset matches the input argument
    */
-  private StackMapTableEntry
+  private StackMapEntry
   find_stack_map_equal (int offset) {
 
     running_offset = -1; // no +1 on first entry
     for (int i = 0; i < stack_map_table.length; i++) {
-      running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+      running_offset = stack_map_table[i].getByteCodeOffset()
                                           + running_offset + 1;
 
       if (running_offset > offset) {
@@ -906,12 +903,12 @@ public class Instrument implements ClassFileTransformer {
    * Find the StackMap entry who's offset is the first one after
    * the input argument.  Only called when there must be one.
    */
-  private StackMapTableEntry
+  private StackMapEntry
   find_stack_map_after (int offset) {
 
     running_offset = -1; // no +1 on first entry
     for (int i = 0; i < stack_map_table.length; i++) {
-      running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+      running_offset = stack_map_table[i].getByteCodeOffset()
                                           + running_offset + 1;
 
       if (running_offset > offset) {
@@ -923,45 +920,6 @@ public class Instrument implements ClassFileTransformer {
 
     // no such entry found
     throw new RuntimeException("Invalid StackMap offset 2");
-  }
-
-
-  private void
-  modify_stack_map_offset (StackMapTableEntry stack_map, int delta) {
-
-      int frame_type = stack_map.getFrameType();
-      int new_delta = stack_map.getByteCodeOffsetDelta() + delta;
-
-      if (new_delta < 0 || new_delta > 32767) {
-          throw new RuntimeException("Invalid StackMap offset_delta");
-      }
-
-      if (frame_type >= Constants.SAME_FRAME &&
-          frame_type <= Constants.SAME_FRAME_MAX) {
-          if (new_delta > Constants.SAME_FRAME_MAX) {
-              stack_map.setFrameType(Constants.SAME_FRAME_EXTENDED);
-          } else {
-              stack_map.setFrameType(new_delta);
-          }
-      } else if (frame_type >= Constants.SAME_LOCALS_1_STACK_ITEM_FRAME &&
-                 frame_type <= Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_MAX) {
-          if (new_delta > Constants.SAME_FRAME_MAX) {
-              stack_map.setFrameType(Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED);
-          } else {
-              stack_map.setFrameType(Constants.SAME_LOCALS_1_STACK_ITEM_FRAME + new_delta);
-          }
-      } else if (frame_type == Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED) {
-      } else if (frame_type >= Constants.CHOP_FRAME &&
-                 frame_type <= Constants.CHOP_FRAME_MAX) {
-      } else if (frame_type == Constants.SAME_FRAME_EXTENDED) {
-      } else if (frame_type >= Constants.APPEND_FRAME &&
-                 frame_type <= Constants.APPEND_FRAME_MAX) {
-      } else if (frame_type == Constants.FULL_FRAME) {
-      } else {
-          throw new RuntimeException("Invalid StackMap frame_type");
-      }
-
-      stack_map.setByteCodeOffsetDelta(new_delta);
   }
 
 
@@ -989,12 +947,12 @@ public class Instrument implements ClassFileTransformer {
           inst = ih.getInstruction();
           opcode = inst.getOpcode();
 
-          if ( opcode == Constants.TABLESWITCH || opcode == Constants.LOOKUPSWITCH ) {
+          if ( opcode == Const.TABLESWITCH || opcode == Const.LOOKUPSWITCH ) {
               int current_offset = ih.getPosition();
-              StackMapTableEntry stack_map = find_stack_map_after(current_offset);
+              StackMapEntry stack_map = find_stack_map_after(current_offset);
               int delta = (current_offset + inst.getLength()) - running_offset;
               if (delta != 0) {
-                  modify_stack_map_offset(stack_map, delta);
+                  stack_map.updateByteCodeOffset(delta);
               }
               // Since StackMap offsets are relative to the previous one
               // we only have to do the first one after a switch.
@@ -1014,7 +972,7 @@ public class Instrument implements ClassFileTransformer {
           out.format ("%nStackMap(%s) %s items:%n", prefix, stack_map_table.length);
           running_offset = -1; // no +1 on first entry
           for (int i=0; i < stack_map_table.length; i++) {
-              running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+              running_offset = stack_map_table[i].getByteCodeOffset()
                                                   + running_offset + 1;
               out.format ("@%03d %s %n", running_offset, stack_map_table[i]);
           }
@@ -1043,70 +1001,70 @@ public class Instrument implements ClassFileTransformer {
 
       switch (opcode) {
 
-      case Constants.RET:
+      case Const.RET:
           operand = ((IndexedInstruction)inst).getIndex();
           if (operand >= nonce_offset) {
               ((IndexedInstruction)inst).setIndex(operand + 1);
           }
           break;
 
-      case Constants.IINC:
+      case Const.IINC:
           operand = ((LocalVariableInstruction)inst).getIndex();
           if (operand >= nonce_offset) {
               ((LocalVariableInstruction)inst).setIndex(operand + 1);
           }
           break;
 
-      case Constants.ILOAD:
-      case Constants.ILOAD_0:
-      case Constants.ILOAD_1:
-      case Constants.ILOAD_2:
-      case Constants.ILOAD_3:
-      case Constants.LLOAD:
-      case Constants.LLOAD_0:
-      case Constants.LLOAD_1:
-      case Constants.LLOAD_2:
-      case Constants.LLOAD_3:
-      case Constants.FLOAD:
-      case Constants.FLOAD_0:
-      case Constants.FLOAD_1:
-      case Constants.FLOAD_2:
-      case Constants.FLOAD_3:
-      case Constants.DLOAD:
-      case Constants.DLOAD_0:
-      case Constants.DLOAD_1:
-      case Constants.DLOAD_2:
-      case Constants.DLOAD_3:
-      case Constants.ALOAD:
-      case Constants.ALOAD_0:
-      case Constants.ALOAD_1:
-      case Constants.ALOAD_2:
-      case Constants.ALOAD_3:
-      case Constants.ISTORE:
-      case Constants.ISTORE_0:
-      case Constants.ISTORE_1:
-      case Constants.ISTORE_2:
-      case Constants.ISTORE_3:
-      case Constants.LSTORE:
-      case Constants.LSTORE_0:
-      case Constants.LSTORE_1:
-      case Constants.LSTORE_2:
-      case Constants.LSTORE_3:
-      case Constants.FSTORE:
-      case Constants.FSTORE_0:
-      case Constants.FSTORE_1:
-      case Constants.FSTORE_2:
-      case Constants.FSTORE_3:
-      case Constants.DSTORE:
-      case Constants.DSTORE_0:
-      case Constants.DSTORE_1:
-      case Constants.DSTORE_2:
-      case Constants.DSTORE_3:
-      case Constants.ASTORE:
-      case Constants.ASTORE_0:
-      case Constants.ASTORE_1:
-      case Constants.ASTORE_2:
-      case Constants.ASTORE_3:
+      case Const.ILOAD:
+      case Const.ILOAD_0:
+      case Const.ILOAD_1:
+      case Const.ILOAD_2:
+      case Const.ILOAD_3:
+      case Const.LLOAD:
+      case Const.LLOAD_0:
+      case Const.LLOAD_1:
+      case Const.LLOAD_2:
+      case Const.LLOAD_3:
+      case Const.FLOAD:
+      case Const.FLOAD_0:
+      case Const.FLOAD_1:
+      case Const.FLOAD_2:
+      case Const.FLOAD_3:
+      case Const.DLOAD:
+      case Const.DLOAD_0:
+      case Const.DLOAD_1:
+      case Const.DLOAD_2:
+      case Const.DLOAD_3:
+      case Const.ALOAD:
+      case Const.ALOAD_0:
+      case Const.ALOAD_1:
+      case Const.ALOAD_2:
+      case Const.ALOAD_3:
+      case Const.ISTORE:
+      case Const.ISTORE_0:
+      case Const.ISTORE_1:
+      case Const.ISTORE_2:
+      case Const.ISTORE_3:
+      case Const.LSTORE:
+      case Const.LSTORE_0:
+      case Const.LSTORE_1:
+      case Const.LSTORE_2:
+      case Const.LSTORE_3:
+      case Const.FSTORE:
+      case Const.FSTORE_0:
+      case Const.FSTORE_1:
+      case Const.FSTORE_2:
+      case Const.FSTORE_3:
+      case Const.DSTORE:
+      case Const.DSTORE_0:
+      case Const.DSTORE_1:
+      case Const.DSTORE_2:
+      case Const.DSTORE_3:
+      case Const.ASTORE:
+      case Const.ASTORE_0:
+      case Const.ASTORE_1:
+      case Const.ASTORE_2:
+      case Const.ASTORE_3:
           // BCEL handles all the details of which opcode and if index
           // is implicit or explicit; also, and if needs to be WIDE.
           operand = ((LocalVariableInstruction)inst).getIndex();
@@ -1304,30 +1262,30 @@ public class Instrument implements ClassFileTransformer {
         // we must delete it as it will be replaced by the new frames
         // we are adding.  (did you get all of that? - markro)
 
-        if (stack_map_table[0].getByteCodeOffsetDelta() == 0) {
+        if (stack_map_table[0].getByteCodeOffset() == 0) {
             skipFirst = true;
         } else {
-            modify_stack_map_offset(stack_map_table[0], -1);
+            stack_map_table[0].updateByteCodeOffset(-1);
         }
     }
 
     int new_table_length = stack_map_table.length + ((len_part2 > 0) ? 2 : 1)
                                                   - (skipFirst ? 1 : 0);
-    StackMapTableEntry[] new_map = new StackMapTableEntry[new_table_length];
-    StackMapType nonce_type = new StackMapType(Constants.ITEM_Integer, -1,
+    StackMapEntry[] new_map = new StackMapEntry[new_table_length];
+    StackMapType nonce_type = new StackMapType(Const.ITEM_Integer, -1,
                                                pgen.getConstantPool());
     StackMapType[] old_nonce_type = {nonce_type};
-    new_map[0] = new StackMapTableEntry(Constants.APPEND_FRAME, len_part1, 1,
-                                        old_nonce_type, 0, null, pgen.getConstantPool());
+    new_map[0] = new StackMapEntry(Const.APPEND_FRAME, len_part1,
+                                        old_nonce_type, null, pgen.getConstantPool());
 
     int new_index = 1;
     if (len_part2 > 0) {
         // We need to check for len_part2 being too large,
         // Daikon issue #30.
-        new_map[1] = new StackMapTableEntry(
-            ((len_part2-1) > Constants.SAME_FRAME_MAX ?
-            Constants.SAME_FRAME_EXTENDED : Constants.SAME_FRAME+len_part2-1),
-            len_part2-1, 0, null, 0, null, pgen.getConstantPool());
+        new_map[1] = new StackMapEntry(
+            ((len_part2-1) > Const.SAME_FRAME_MAX ?
+            Const.SAME_FRAME_EXTENDED : Const.SAME_FRAME+len_part2-1),
+            len_part2-1, null, null, pgen.getConstantPool());
         new_index++;
     }
 
@@ -1335,7 +1293,7 @@ public class Instrument implements ClassFileTransformer {
 // are FULL_FAME we need to add our 'nonce' variable to the local table.
 
     for (int i = (skipFirst ? 1 : 0); i < stack_map_table.length; i++) {
-        if (stack_map_table[i].getFrameType() == Constants.FULL_FRAME) {
+        if (stack_map_table[i].getFrameType() == Const.FULL_FRAME) {
 
             // need to add our 'nonce' variable into the list of locals
             // We must account for the args and this pointer which
@@ -1356,7 +1314,7 @@ public class Instrument implements ClassFileTransformer {
                     new_local_types[j-1] = old_local_types[j-1];
                 }
 
-                stack_map_table[i].setNumberOfLocals(num_locals+1);
+                //stack_map_table[i].setNumberOfLocals(num_locals+1);
                 stack_map_table[i].setTypesOfLocals(new_local_types);
             }
         }
@@ -1458,7 +1416,7 @@ public class Instrument implements ClassFileTransformer {
       method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT,
                                 object_arr_typ};
     il.append(c.ifact.createInvoke(runtime_classname, method_name,
-                                     Type.VOID, method_args, Constants.INVOKESTATIC));
+                                     Type.VOID, method_args, Const.INVOKESTATIC));
 
     return (il);
   }
@@ -1478,14 +1436,14 @@ public class Instrument implements ClassFileTransformer {
 
     String wrapper = null;
     switch (prim_type.getType()) {
-    case Constants.T_BOOLEAN: wrapper = "BooleanWrap"; break;
-    case Constants.T_BYTE:    wrapper = "ByteWrap"; break;
-    case Constants.T_CHAR:    wrapper = "CharWrap"; break;
-    case Constants.T_DOUBLE:  wrapper = "DoubleWrap"; break;
-    case Constants.T_FLOAT:   wrapper = "FloatWrap"; break;
-    case Constants.T_INT:     wrapper = "IntWrap"; break;
-    case Constants.T_LONG:    wrapper = "LongWrap"; break;
-    case Constants.T_SHORT:   wrapper = "ShortWrap"; break;
+    case Const.T_BOOLEAN: wrapper = "BooleanWrap"; break;
+    case Const.T_BYTE:    wrapper = "ByteWrap"; break;
+    case Const.T_CHAR:    wrapper = "CharWrap"; break;
+    case Const.T_DOUBLE:  wrapper = "DoubleWrap"; break;
+    case Const.T_FLOAT:   wrapper = "FloatWrap"; break;
+    case Const.T_INT:     wrapper = "IntWrap"; break;
+    case Const.T_LONG:    wrapper = "LongWrap"; break;
+    case Const.T_SHORT:   wrapper = "ShortWrap"; break;
     default: throw new Error("unexpected type " + prim_type);
     }
 
@@ -1495,7 +1453,7 @@ public class Instrument implements ClassFileTransformer {
     il.append(InstructionFactory.createDup(Type.OBJECT.getSize()));
     il.append(InstructionFactory.createLoad(prim_type, var_index));
     il.append(c.ifact.createInvoke(classname, "<init>", Type.VOID,
-                                     new Type[] {prim_type}, Constants.INVOKESPECIAL));
+                                     new Type[] {prim_type}, Const.INVOKESPECIAL));
 
     return (il);
   }
@@ -1669,12 +1627,12 @@ public class Instrument implements ClassFileTransformer {
 
         switch (ih.getInstruction().getOpcode())
           {
-          case Constants.ARETURN :
-          case Constants.DRETURN :
-          case Constants.FRETURN :
-          case Constants.IRETURN :
-          case Constants.LRETURN :
-          case Constants.RETURN :
+          case Const.ARETURN :
+          case Const.DRETURN :
+          case Const.FRETURN :
+          case Const.IRETURN :
+          case Const.LRETURN :
+          case Const.RETURN :
             // log ("Exit at line %d%n", line_number);
 
             // only do incremental lines if we don't have the line generator
@@ -1734,6 +1692,11 @@ public class Instrument implements ClassFileTransformer {
     LocalVariableGen[] locals = mg.getLocalVariables();
     LocalVariableGen l;
     LocalVariableGen new_lvg;
+
+    // We need a deep copy
+    for (int ii = 0; ii < locals.length; ii++) {
+       locals[ii] = (LocalVariableGen)(locals[ii].clone());
+    }
 
     // The arg types are correct and include all parameters.
     Type[] arg_types = mg.getArgumentTypes();

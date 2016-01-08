@@ -319,7 +319,7 @@ public class ChicoryPremain {
    * get resolved by this classloader).
    *
    * The PLSE version of BCEL is identified by the presence of the
-   * PLSE marker class (org.apache.bcel.PLSEMarker).  Other versions of
+   * PLSE marker class (org.apache.commons.bcel6.PLSEMarker).  Other versions of
    * BCEL will not contain this class.  If other versions of BCEL are
    * present, they must appear before the PLSE versions in the classpath
    * (so that the users application will see them first).  If only the
@@ -335,8 +335,8 @@ public class ChicoryPremain {
 
     public ChicoryLoader() throws IOException {
 
-      String bcel_classname = "org.apache.bcel.Constants";
-      String plse_marker_classname = "org.apache.bcel.PLSEMarker";
+      String bcel_classname = "org.apache.commons.bcel6.Const";
+      String plse_marker_classname = "org.apache.commons.bcel6.PLSEMarker";
 
       List<URL> bcel_urls = get_resource_list (bcel_classname);
       List<URL> plse_urls = get_resource_list (plse_marker_classname);
@@ -415,9 +415,9 @@ public class ChicoryPremain {
         String jar2 = extract_jar_path (url2);
         return (jar1.equals (jar2));
       } else if (url1.getProtocol().equals ("file")) {
-        String loc1 = url1.getFile().replaceFirst ("org\\.apache\\.bcel\\..*$",
+        String loc1 = url1.getFile().replaceFirst ("org\\.apache\\.commons.bcel6\\..*$",
                                                    "");
-        String loc2 = url2.getFile().replaceFirst ("org\\.apache\\.bcel\\..*$",
+        String loc2 = url2.getFile().replaceFirst ("org\\.apache\\.commons.bcel6\\..*$",
                                                    "");
         return (loc1.equals (loc2));
       } else {
@@ -443,7 +443,7 @@ public class ChicoryPremain {
     /**
      * Get all of the URLs that match the specified name in the
      * classpath.  The name should be in normal classname format (eg,
-     * org.apache.bcel.Constants).  An empty list is returned if no
+     * org.apache.commons.bcel6.Const).  An empty list is returned if no
      * names match.
      */
     static List<URL> get_resource_list (String classname) throws IOException {
@@ -458,8 +458,8 @@ public class ChicoryPremain {
     }
 
     /**
-     * Changs a class name in the normal format (eg, org.apache.bcel.Constants)
-     * to that used to lookup resources (eg. org/apache/bcel/Constants.class)
+     * Changs a class name in the normal format (eg, org.apache.commons.bcel6.Const)
+     * to that used to lookup resources (eg. org/apache/commons.bcel6/Const.class)
      */
     private static String classname_to_resource_name (String name) {
       return (name.replace (".", "/") + ".class");
@@ -473,7 +473,7 @@ public class ChicoryPremain {
         return super.loadClass (name, resolve);
 
       // Load non-bcel files via the normal mechanism
-      if (!name.startsWith ("org.apache.bcel")
+      if (!name.startsWith ("org.apache.commons.bcel6")
           && (!name.startsWith ("daikon.chicory.Instrument"))) {
         // System.out.printf ("loading standard %s%n", name);
         return super.loadClass (name, resolve);

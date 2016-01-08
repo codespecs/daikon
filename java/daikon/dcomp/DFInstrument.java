@@ -6,11 +6,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.io.*;
 
-import org.apache.bcel.*;
-import org.apache.bcel.classfile.*;
-import org.apache.bcel.generic.*;
-import org.apache.bcel.verifier.*;
-import org.apache.bcel.verifier.structurals.*;
+import org.apache.commons.bcel6.*;
+import org.apache.commons.bcel6.classfile.*;
+import org.apache.commons.bcel6.generic.*;
+import org.apache.commons.bcel6.verifier.*;
+import org.apache.commons.bcel6.verifier.structurals.*;
 import daikon.util.BCELUtil;
 
 import daikon.util.*;
@@ -158,8 +158,8 @@ class DFInstrument extends DCInstrument {
 
     // if this is a frontier branch, remember the DF of the objects being
     // compared, otherwise do nothing
-    case Constants.IF_ACMPEQ:
-    case Constants.IF_ACMPNE: {
+    case Const.IF_ACMPEQ:
+    case Const.IF_ACMPNE: {
       if ((branch_cr != null) && branch_cr.contains (ih.getPosition())) {
         return build_il (new DUP2(),
                          dcr_call ("ref2_branch_df", Type.VOID, two_objects),
@@ -172,12 +172,12 @@ class DFInstrument extends DCInstrument {
     // These instructions compare the integer on the top of the stack
     // to zero.  There is no dataflow here, so we need only
     // discard the tag on the top of the stack.
-    case Constants.IFEQ:
-    case Constants.IFNE:
-    case Constants.IFLT:
-    case Constants.IFGE:
-    case Constants.IFGT:
-    case Constants.IFLE: {
+    case Const.IFEQ:
+    case Const.IFNE:
+    case Const.IFLT:
+    case Const.IFGE:
+    case Const.IFGT:
+    case Const.IFLE: {
       if ((branch_cr != null) && branch_cr.contains (ih.getPosition())) {
         debug.log ("generating code for branch at %s:%s", mg.getName(), inst);
         return build_il (ifact.createConstant (0),
@@ -191,8 +191,8 @@ class DFInstrument extends DCInstrument {
     // These instructions compare the top of stack to Null.  There is
     // no work to do unless this is branch of interest, in which
     // case we want to note the dataflow at the branch.
-    case Constants.IFNONNULL:
-    case Constants.IFNULL: {
+    case Const.IFNONNULL:
+    case Const.IFNULL: {
       if ((branch_cr != null) && branch_cr.contains (ih.getPosition())) {
         debug.log ("generating code for branch at %s:%s", mg.getName(), inst);
         return build_il (dcr_call ("ref_cmp_null_df", Type.OBJECT, object_arg),
@@ -207,7 +207,7 @@ class DFInstrument extends DCInstrument {
     // boolean's tag should take on the dataflow value of the object being
     // checked.  We duplicate the object on the top of the stack and call
     // dup_obj_tag_val to push a new tag that points to the same values
-    case Constants.INSTANCEOF: {
+    case Const.INSTANCEOF: {
       return build_il (InstructionFactory.createDup (1),
                        dcr_call ("dup_obj_tag_val", Type.VOID, object_arg),
                        inst);
@@ -216,7 +216,7 @@ class DFInstrument extends DCInstrument {
     // Duplicates the item on the top of stack.  If the value on the
     // top of the stack is a primitive, we need to do the same on the
     // tag stack.  Otherwise, we need do nothing.
-    case Constants.DUP: {
+    case Const.DUP: {
       return dup_tag (inst, stack);
     }
 
@@ -225,50 +225,50 @@ class DFInstrument extends DCInstrument {
     // is not a primitive, there is nothing to do here.  If the second
     // value is not a primitive, then we need only to insert the duped
     // value down 1 on the tag stack (which contains only primitives)
-    case Constants.DUP_X1: {
+    case Const.DUP_X1: {
       return dup_x1_tag (inst, stack);
     }
 
     // Duplicates either the top 2 category 1 values or a single
     // category 2 value and inserts it 2 or 3 values down on the
     // stack.
-    case Constants.DUP2_X1: {
+    case Const.DUP2_X1: {
       return dup2_x1_tag (inst, stack);
     }
 
     // Duplicate either one category 2 value or two category 1 values.
-    case Constants.DUP2: {
+    case Const.DUP2: {
       return dup2_tag (inst, stack);
     }
 
     // Dup the category 1 value on the top of the stack and insert it either
     // two or three values down on the stack.
-    case Constants.DUP_X2: {
+    case Const.DUP_X2: {
       return dup_x2 (inst, stack);
     }
 
-    case Constants.DUP2_X2: {
+    case Const.DUP2_X2: {
       return dup2_x2 (inst, stack);
     }
 
     // Pop instructions discard the top of the stack.  We want to discard
     // the top of the tag stack iff the item on the top of the stack is a
     // primitive.
-    case Constants.POP: {
+    case Const.POP: {
       return pop_tag (inst, stack);
     }
 
     // Pops either the top 2 category 1 values or a single category 2 value
     // from the top of the stack.  We must do the same to the tag stack
     // if the values are primitives.
-    case Constants.POP2: {
+    case Const.POP2: {
       return pop2_tag (inst, stack);
     }
 
     // Swaps the two category 1 types on the top of the stack.  We need
     // to swap the top of the tag stack if the two top elements on the
     // real stack are primitives.
-    case Constants.SWAP: {
+    case Const.SWAP: {
       return swap_tag (inst, stack);
     }
 
@@ -277,12 +277,12 @@ class DFInstrument extends DCInstrument {
     // two tags on the tag stack unless this is the branch of interest
     // If it is the branch of interest, we want to dump the DF for each
     // primitive in the comparison
-    case Constants.IF_ICMPEQ:
-    case Constants.IF_ICMPGE:
-    case Constants.IF_ICMPGT:
-    case Constants.IF_ICMPLE:
-    case Constants.IF_ICMPLT:
-    case Constants.IF_ICMPNE: {
+    case Const.IF_ICMPEQ:
+    case Const.IF_ICMPGE:
+    case Const.IF_ICMPGT:
+    case Const.IF_ICMPLE:
+    case Const.IF_ICMPLT:
+    case Const.IF_ICMPNE: {
       if ((branch_cr != null) && branch_cr.contains (ih.getPosition())) {
         debug.log ("generating code for branch at %s:%s", mg.getName(), inst);
         return build_il (new DUP2(),
@@ -293,66 +293,66 @@ class DFInstrument extends DCInstrument {
       }
     }
 
-    case Constants.GETFIELD: {
+    case Const.GETFIELD: {
       return load_store_field (mg, (GETFIELD) inst);
     }
 
-    case Constants.PUTFIELD: {
+    case Const.PUTFIELD: {
       return load_store_field (mg, (PUTFIELD) inst);
     }
 
-    case Constants.GETSTATIC: {
+    case Const.GETSTATIC: {
       return load_store_field (mg, ((GETSTATIC) inst));
     }
 
-    case Constants.PUTSTATIC: {
+    case Const.PUTSTATIC: {
       return load_store_field (mg, ((PUTSTATIC) inst));
     }
 
-    case Constants.DLOAD:
-    case Constants.DLOAD_0:
-    case Constants.DLOAD_1:
-    case Constants.DLOAD_2:
-    case Constants.DLOAD_3:
-    case Constants.FLOAD:
-    case Constants.FLOAD_0:
-    case Constants.FLOAD_1:
-    case Constants.FLOAD_2:
-    case Constants.FLOAD_3:
-    case Constants.ILOAD:
-    case Constants.ILOAD_0:
-    case Constants.ILOAD_1:
-    case Constants.ILOAD_2:
-    case Constants.ILOAD_3:
-    case Constants.LLOAD:
-    case Constants.LLOAD_0:
-    case Constants.LLOAD_1:
-    case Constants.LLOAD_2:
-    case Constants.LLOAD_3: {
+    case Const.DLOAD:
+    case Const.DLOAD_0:
+    case Const.DLOAD_1:
+    case Const.DLOAD_2:
+    case Const.DLOAD_3:
+    case Const.FLOAD:
+    case Const.FLOAD_0:
+    case Const.FLOAD_1:
+    case Const.FLOAD_2:
+    case Const.FLOAD_3:
+    case Const.ILOAD:
+    case Const.ILOAD_0:
+    case Const.ILOAD_1:
+    case Const.ILOAD_2:
+    case Const.ILOAD_3:
+    case Const.LLOAD:
+    case Const.LLOAD_0:
+    case Const.LLOAD_1:
+    case Const.LLOAD_2:
+    case Const.LLOAD_3: {
       return load_store_local ((LoadInstruction)inst, tag_frame_local,
                                "push_local_tag");
     }
 
-    case Constants.DSTORE:
-    case Constants.DSTORE_0:
-    case Constants.DSTORE_1:
-    case Constants.DSTORE_2:
-    case Constants.DSTORE_3:
-    case Constants.FSTORE:
-    case Constants.FSTORE_0:
-    case Constants.FSTORE_1:
-    case Constants.FSTORE_2:
-    case Constants.FSTORE_3:
-    case Constants.ISTORE:
-    case Constants.ISTORE_0:
-    case Constants.ISTORE_1:
-    case Constants.ISTORE_2:
-    case Constants.ISTORE_3:
-    case Constants.LSTORE:
-    case Constants.LSTORE_0:
-    case Constants.LSTORE_1:
-    case Constants.LSTORE_2:
-    case Constants.LSTORE_3: {
+    case Const.DSTORE:
+    case Const.DSTORE_0:
+    case Const.DSTORE_1:
+    case Const.DSTORE_2:
+    case Const.DSTORE_3:
+    case Const.FSTORE:
+    case Const.FSTORE_0:
+    case Const.FSTORE_1:
+    case Const.FSTORE_2:
+    case Const.FSTORE_3:
+    case Const.ISTORE:
+    case Const.ISTORE_0:
+    case Const.ISTORE_1:
+    case Const.ISTORE_2:
+    case Const.ISTORE_3:
+    case Const.LSTORE:
+    case Const.LSTORE_0:
+    case Const.LSTORE_1:
+    case Const.LSTORE_2:
+    case Const.LSTORE_3: {
       if (test_sequence)
         return load_store_local ((StoreInstruction) inst, tag_frame_local,
                                  "pop_local_tag_df");
@@ -361,37 +361,37 @@ class DFInstrument extends DCInstrument {
                                  "pop_local_tag");
     }
 
-    case Constants.LDC:
-    case Constants.LDC_W:
-    case Constants.LDC2_W: {
+    case Const.LDC:
+    case Const.LDC_W:
+    case Const.LDC2_W: {
       return ldc_tag_df (mg, inst, stack);
     }
 
     // Push the tag for the array onto the tag stack.  This causes
     // anything comparable to the length to be comparable to the array
     // as an index.
-    case Constants.ARRAYLENGTH: {
+    case Const.ARRAYLENGTH: {
       return array_length_df (inst);
     }
 
     // These instructions push a constant on the stack.  We push a
     // tag on the tag stack the refers to the constant location
-    case Constants.BIPUSH:
-    case Constants.SIPUSH:
-    case Constants.DCONST_0:
-    case Constants.DCONST_1:
-    case Constants.FCONST_0:
-    case Constants.FCONST_1:
-    case Constants.FCONST_2:
-    case Constants.ICONST_0:
-    case Constants.ICONST_1:
-    case Constants.ICONST_2:
-    case Constants.ICONST_3:
-    case Constants.ICONST_4:
-    case Constants.ICONST_5:
-    case Constants.ICONST_M1:
-    case Constants.LCONST_0:
-    case Constants.LCONST_1: {
+    case Const.BIPUSH:
+    case Const.SIPUSH:
+    case Const.DCONST_0:
+    case Const.DCONST_1:
+    case Const.FCONST_0:
+    case Const.FCONST_1:
+    case Const.FCONST_2:
+    case Const.ICONST_0:
+    case Const.ICONST_1:
+    case Const.ICONST_2:
+    case Const.ICONST_3:
+    case Const.ICONST_4:
+    case Const.ICONST_5:
+    case Const.ICONST_M1:
+    case Const.LCONST_0:
+    case Const.LCONST_1: {
       ConstantPushInstruction cpi = (ConstantPushInstruction) inst;
       String descr = String.format ("%s.%s:constant@%d:%s", mg.getClassName(),
                                mg.getName(), ih.getPosition(), cpi.getValue());
@@ -404,113 +404,113 @@ class DFInstrument extends DCInstrument {
     // DCRuntime.binary_tag_df that pops the operand tags from the tag
     // stack and creates and pushes a new tag that refers to the union
     // of the operand tags
-    case Constants.DADD:
-    case Constants.DCMPG:
-    case Constants.DCMPL:
-    case Constants.DDIV:
-    case Constants.DMUL:
-    case Constants.DREM:
-    case Constants.DSUB:
-    case Constants.FADD:
-    case Constants.FCMPG:
-    case Constants.FCMPL:
-    case Constants.FDIV:
-    case Constants.FMUL:
-    case Constants.FREM:
-    case Constants.FSUB:
-    case Constants.IADD:
-    case Constants.IAND:
-    case Constants.IDIV:
-    case Constants.IMUL:
-    case Constants.IOR:
-    case Constants.IREM:
-    case Constants.ISHL:
-    case Constants.ISHR:
-    case Constants.ISUB:
-    case Constants.IUSHR:
-    case Constants.IXOR:
-    case Constants.LADD:
-    case Constants.LAND:
-    case Constants.LCMP:
-    case Constants.LDIV:
-    case Constants.LMUL:
-    case Constants.LOR:
-    case Constants.LREM:
-    case Constants.LSHL:
-    case Constants.LSHR:
-    case Constants.LSUB:
-    case Constants.LUSHR:
-    case Constants.LXOR:
+    case Const.DADD:
+    case Const.DCMPG:
+    case Const.DCMPL:
+    case Const.DDIV:
+    case Const.DMUL:
+    case Const.DREM:
+    case Const.DSUB:
+    case Const.FADD:
+    case Const.FCMPG:
+    case Const.FCMPL:
+    case Const.FDIV:
+    case Const.FMUL:
+    case Const.FREM:
+    case Const.FSUB:
+    case Const.IADD:
+    case Const.IAND:
+    case Const.IDIV:
+    case Const.IMUL:
+    case Const.IOR:
+    case Const.IREM:
+    case Const.ISHL:
+    case Const.ISHR:
+    case Const.ISUB:
+    case Const.IUSHR:
+    case Const.IXOR:
+    case Const.LADD:
+    case Const.LAND:
+    case Const.LCMP:
+    case Const.LDIV:
+    case Const.LMUL:
+    case Const.LOR:
+    case Const.LREM:
+    case Const.LSHL:
+    case Const.LSHR:
+    case Const.LSUB:
+    case Const.LUSHR:
+    case Const.LXOR:
       return build_il (dcr_call ("binary_tag_df", Type.VOID, Type.NO_ARGS),
                        inst);
 
     // Computed jump based on the int on the top of stack.  Since that int
     // doesn't contribute directly to dataflow its tag is just discarded.
-    case Constants.LOOKUPSWITCH:
-    case Constants.TABLESWITCH:
+    case Const.LOOKUPSWITCH:
+    case Const.TABLESWITCH:
       return discard_tag_code (inst, 1);
 
     // Allocates arrays of a single dimension.  The tag of the array size
     // is on the tag stack.  The array size does not contribute to the
     // returned array, but it does contribute to any calls to arraylength.
     // We thus remember that as a special field of the array.
-    case Constants.ANEWARRAY:
-    case Constants.NEWARRAY: {
+    case Const.ANEWARRAY:
+    case Const.NEWARRAY: {
       return new_array_df (mg, inst);
     }
 
     // For each allocated array, associate the DF of its size with its
     // arraylength and the array itself with its allocation point
-    case Constants.MULTIANEWARRAY: {
+    case Const.MULTIANEWARRAY: {
       return multiarray_df(mg, inst);
     }
 
     // Do nothing for new, the entry for the allocated object is created
     // with the call to the constructor
-    case Constants.NEW: {
+    case Const.NEW: {
       return null;
     }
 
     // Mark the array and its index as comparable.  Also for primitives,
     // push the tag of the array element on the tag stack
-    case Constants.AALOAD:
-    case Constants.BALOAD:
-    case Constants.CALOAD:
-    case Constants.DALOAD:
-    case Constants.FALOAD:
-    case Constants.IALOAD:
-    case Constants.LALOAD:
-    case Constants.SALOAD: {
+    case Const.AALOAD:
+    case Const.BALOAD:
+    case Const.CALOAD:
+    case Const.DALOAD:
+    case Const.FALOAD:
+    case Const.IALOAD:
+    case Const.LALOAD:
+    case Const.SALOAD: {
       return array_load_df (inst);
     }
 
     // Handle array store instruction.  The DF of the array element is
     // set to the union of the value being stored and the index
-    case Constants.AASTORE:
+    case Const.AASTORE:
       return array_store (inst, "aastore_df", Type.OBJECT);
-    case Constants.BASTORE:
+    case Const.BASTORE:
       return array_store (inst, "bastore_df", Type.BYTE);
-    case Constants.CASTORE:
+    case Const.CASTORE:
       return array_store (inst, "castore_df", Type.CHAR);
-    case Constants.DASTORE:
+    case Const.DASTORE:
       return array_store (inst, "dastore_df", Type.DOUBLE);
-    case Constants.FASTORE:
+    case Const.FASTORE:
       return array_store (inst, "fastore_df", Type.FLOAT);
-    case Constants.IASTORE:
+    case Const.IASTORE:
       return array_store (inst, "iastore_df", Type.INT);
-    case Constants.LASTORE:
+    case Const.LASTORE:
       return array_store (inst, "lastore_df", Type.LONG);
-    case Constants.SASTORE:
+    case Const.SASTORE:
       return array_store (inst, "sastore_df", Type.SHORT);
 
     // Prefix the return with a call to the correct normal_exit method
     // to handle the tag stack
-    case Constants.ARETURN:
-    case Constants.DRETURN:
-    case Constants.FRETURN:
-    case Constants.IRETURN:
-    case Constants.LRETURN:
-    case Constants.RETURN: {
+    case Const.ARETURN:
+    case Const.DRETURN:
+    case Const.FRETURN:
+    case Const.IRETURN:
+    case Const.LRETURN:
+    case Const.RETURN: {
       return return_tag (mg, inst);
     }
 
@@ -518,18 +518,18 @@ class DFInstrument extends DCInstrument {
     // to call the instrumented version (with the DCompMarker argument).
     // Calls to uninstrumented code (rare) discard primitive arguments
     // from the tag stack and produce an arbitrary return tag.
-    case Constants.INVOKESTATIC:
-    case Constants.INVOKEVIRTUAL:
-    case Constants.INVOKESPECIAL:
-    case Constants.INVOKEINTERFACE: {
+    case Const.INVOKESTATIC:
+    case Const.INVOKEVIRTUAL:
+    case Const.INVOKESPECIAL:
+    case Const.INVOKEINTERFACE: {
       InstructionHandle prev = ih.getPrev();
       boolean prev_new = false;
       if (prev != null) {
         // System.out.printf ("previous instruction = %s\n", prev);
         InstructionHandle prev_prev = prev.getPrev();
         if (prev_prev != null) {
-          prev_new = (prev.getInstruction().getOpcode() == Constants.DUP)
-            && (prev_prev.getInstruction().getOpcode() == Constants.NEW);
+          prev_new = (prev.getInstruction().getOpcode() == Const.DUP)
+            && (prev_prev.getInstruction().getOpcode() == Const.NEW);
         }
       }
       return handle_invoke_df (mg, (InvokeInstruction) inst, stack,
@@ -538,17 +538,17 @@ class DFInstrument extends DCInstrument {
 
     // Throws an exception.  This clears the operand stack of the current
     // frame.  We need to clear the tag stack as well.
-    case Constants.ATHROW:
+    case Const.ATHROW:
       return build_il (dcr_call ("throw_op", Type.VOID, Type.NO_ARGS), inst);
 
     // Stores of references into a local.  If this is the test sequence we
     // want to include a reference to this local in the dataflow for the
     // object
-    case Constants.ASTORE:
-    case Constants.ASTORE_0:
-    case Constants.ASTORE_1:
-    case Constants.ASTORE_2:
-    case Constants.ASTORE_3: {
+    case Const.ASTORE:
+    case Const.ASTORE_0:
+    case Const.ASTORE_1:
+    case Const.ASTORE_2:
+    case Const.ASTORE_3: {
       if (test_sequence) {
         LocalVariableInstruction lvi = (LocalVariableInstruction)inst;
         return build_il (new DUP(),
@@ -561,43 +561,43 @@ class DFInstrument extends DCInstrument {
     }
 
     // Opcodes that don't need any modifications.  Here for reference
-    case Constants.ACONST_NULL:
-    case Constants.ALOAD:
-    case Constants.ALOAD_0:
-    case Constants.ALOAD_1:
-    case Constants.ALOAD_2:
-    case Constants.ALOAD_3:
-    case Constants.CHECKCAST:
-    case Constants.D2F:     // double to float
-    case Constants.D2I:     // double to integer
-    case Constants.D2L:     // double to long
-    case Constants.DNEG:    // Negate double on top of stack
-    case Constants.F2D:     // float to double
-    case Constants.F2I:     // float to integer
-    case Constants.F2L:     // float to long
-    case Constants.FNEG:    // Negate float on top of stack
-    case Constants.GOTO:
-    case Constants.GOTO_W:
-    case Constants.I2B:     // integer to byte
-    case Constants.I2C:     // integer to char
-    case Constants.I2D:     // integer to double
-    case Constants.I2F:     // integer to float
-    case Constants.I2L:     // integer to long
-    case Constants.I2S:     // integer to short
-    case Constants.IINC:    // increment local variable by a constant
-    case Constants.INEG:    // negate integer on top of stack
-    case Constants.JSR:     // pushes return address on the stack, but that
+    case Const.ACONST_NULL:
+    case Const.ALOAD:
+    case Const.ALOAD_0:
+    case Const.ALOAD_1:
+    case Const.ALOAD_2:
+    case Const.ALOAD_3:
+    case Const.CHECKCAST:
+    case Const.D2F:     // double to float
+    case Const.D2I:     // double to integer
+    case Const.D2L:     // double to long
+    case Const.DNEG:    // Negate double on top of stack
+    case Const.F2D:     // float to double
+    case Const.F2I:     // float to integer
+    case Const.F2L:     // float to long
+    case Const.FNEG:    // Negate float on top of stack
+    case Const.GOTO:
+    case Const.GOTO_W:
+    case Const.I2B:     // integer to byte
+    case Const.I2C:     // integer to char
+    case Const.I2D:     // integer to double
+    case Const.I2F:     // integer to float
+    case Const.I2L:     // integer to long
+    case Const.I2S:     // integer to short
+    case Const.IINC:    // increment local variable by a constant
+    case Const.INEG:    // negate integer on top of stack
+    case Const.JSR:     // pushes return address on the stack, but that
                             // is thought of as an object, so we don't need
                             // a tag for it.
-    case Constants.JSR_W:
-    case Constants.L2D:     // long to double
-    case Constants.L2F:     // long to float
-    case Constants.L2I:     // long to int
-    case Constants.LNEG:    // negate long on top of stack
-    case Constants.MONITORENTER:
-    case Constants.MONITOREXIT:
-    case Constants.NOP:
-    case Constants.RET:     // this is the internal JSR return
+    case Const.JSR_W:
+    case Const.L2D:     // long to double
+    case Const.L2F:     // long to float
+    case Const.L2I:     // long to int
+    case Const.LNEG:    // negate long on top of stack
+    case Const.MONITORENTER:
+    case Const.MONITOREXIT:
+    case Const.NOP:
+    case Const.RET:     // this is the internal JSR return
       return (null);
 
     // Make sure we didn't miss anything
@@ -864,11 +864,11 @@ class DFInstrument extends DCInstrument {
 
       // If there is a replacement method, call that method instead and return
       if (replacement_method != null) {
-        if (invoke.getOpcode() == Constants.INVOKEVIRTUAL) {
+        if (invoke.getOpcode() == Const.INVOKEVIRTUAL) {
           Type invoke_class = invoke.getReferenceType(pool);
           arg_types = BCELUtil.insert_type (invoke_class, arg_types);
           il.append (dcr_call (replacement_method, ret_type, arg_types));
-        } else if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
+        } else if (invoke.getOpcode() == Const.INVOKESPECIAL) {
           constructor_summary (il, invoke, replacement_method);
         } else { // static call
           il.append (dcr_call (replacement_method, ret_type, arg_types));
@@ -882,7 +882,7 @@ class DFInstrument extends DCInstrument {
       // and delegates appropriately
       if (is_object_equals (method_name, ret_type, arg_types)) {
 
-        if (invoke.getOpcode() == Constants.INVOKEVIRTUAL) {
+        if (invoke.getOpcode() == Const.INVOKEVIRTUAL) {
           il.append (dcr_call ("equals_df", ret_type, two_objects));
           return (il);
         } else { // super call
@@ -928,7 +928,7 @@ class DFInstrument extends DCInstrument {
     // Note that you can't just look for an immediately preceeding 'new' and
     // 'dup' because any arguments to the constructor (including other
     // allocations) will occur after the 'new/dup' combination.
-    if ((invoke.getOpcode() == Constants.INVOKESPECIAL)
+    if ((invoke.getOpcode() == Const.INVOKESPECIAL)
         && method_name.equals ("<init>")) {
       // System.out.printf ("is (non-super) constructor\n");
       int call_size = arg_types.length + 1;

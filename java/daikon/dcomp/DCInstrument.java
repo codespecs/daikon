@@ -6,12 +6,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.io.*;
 
-import org.apache.bcel.*;
-import org.apache.bcel.classfile.*;
-import org.apache.bcel.generic.*;
-import org.apache.bcel.verifier.*;
-import org.apache.bcel.verifier.structurals.*;
-import org.apache.bcel.verifier.exc.AssertionViolatedException;
+import org.apache.commons.bcel6.*;
+import org.apache.commons.bcel6.classfile.*;
+import org.apache.commons.bcel6.generic.*;
+import org.apache.commons.bcel6.verifier.*;
+import org.apache.commons.bcel6.verifier.structurals.*;
+import org.apache.commons.bcel6.verifier.exc.AssertionViolatedException;
 
 import daikon.util.*;
 import org.apache.commons.io.*;
@@ -197,14 +197,14 @@ class DCInstrument {
    * similar to LineNumberTable and LocalVariableTable.  However, for
    * now we'll do it ourselves.
    */
-  private StackMapTableEntry[] stack_map_table;
-  private StackMapTableEntry[] empty_stack_map_table = {};
-  private StackMapTableEntry[] new_stack_map_table;
+  private StackMapEntry[] stack_map_table;
+  private StackMapEntry[] empty_stack_map_table = {};
+  private StackMapEntry[] new_stack_map_table;
   private Map<InstructionHandle,Integer> uninitialized_NEW_map =
                new HashMap<InstructionHandle,Integer>();
 
   // original stack map table attribute
-  private Attribute smta;
+  private StackMap smta;
   private int running_offset;
   private boolean needStackMap = false;
   private int compiler_temp_count;
@@ -220,11 +220,11 @@ class DCInstrument {
 
     running_offset = -1; // no +1 on first entry
     for (int i = 0; i < stack_map_table.length; i++) {
-        running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+        running_offset = stack_map_table[i].getByteCodeOffset()
                                             + running_offset + 1;
 
         if (running_offset > position) {
-            modify_stack_map_offset(stack_map_table[i], delta);
+            stack_map_table[i].updateByteCodeOffset(delta);
             // Only update the first StackMap that occurs after the given
             // offset as map offsets are relative to previous map entry.
             return;
@@ -235,12 +235,12 @@ class DCInstrument {
   /**
    * Find the StackMap entry who's offset matches the input argument
    */
-  private StackMapTableEntry
+  private StackMapEntry
   find_stack_map_equal (int offset) {
 
     running_offset = -1; // no +1 on first entry
     for (int i = 0; i < stack_map_table.length; i++) {
-      running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+      running_offset = stack_map_table[i].getByteCodeOffset()
                                           + running_offset + 1;
 
       if (running_offset > offset) {
@@ -267,7 +267,7 @@ class DCInstrument {
     running_offset = -1; // no +1 on first entry
     for (int i = 0; i < stack_map_table.length; i++) {
       running_offset = running_offset +
-                       stack_map_table[i].getByteCodeOffsetDelta() + 1;
+                       stack_map_table[i].getByteCodeOffset() + 1;
       if (running_offset >= offset) {
           if (i == 0) {
               // reset offset to previous
@@ -276,7 +276,7 @@ class DCInstrument {
           } else {
               // back up offset to previous
               running_offset = running_offset -
-                               stack_map_table[i].getByteCodeOffsetDelta() - 1;
+                               stack_map_table[i].getByteCodeOffset() - 1;
               // return previous
               return (i-1);
           }
@@ -300,7 +300,7 @@ class DCInstrument {
 
     running_offset = -1; // no +1 on first entry
     for (int i = 0; i < stack_map_table.length; i++) {
-      running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+      running_offset = stack_map_table[i].getByteCodeOffset()
                                           + running_offset + 1;
       if (running_offset > offset) {
           // also note that running_offset has been set
@@ -317,7 +317,7 @@ class DCInstrument {
    * Find the StackMap entry who's offset is the first one after
    * the input argument.  Return null if there isn't one.
    */
-  private StackMapTableEntry
+  private StackMapEntry
   find_stack_map_after (int offset) {
 
     int i = find_stack_map_index_after(offset);
@@ -327,51 +327,6 @@ class DCInstrument {
     } else {
         return stack_map_table[i];
     }
-  }
-
-  /**
-   * Update the distance (as an offset delta) from one StackMap
-   * entry to the next.  Note that this might cause the the
-   * frame type to change.
-   */
-  private void
-  modify_stack_map_offset (StackMapTableEntry stack_map, int delta) {
-
-      int frame_type = stack_map.getFrameType();
-      int new_delta = stack_map.getByteCodeOffsetDelta() + delta;
-
-      if (new_delta < 0 || new_delta > 32767) {
-          throw new RuntimeException("Invalid StackMap offset_delta");
-      }
-
-      // (new Throwable("in modify_stack_map_offset")).printStackTrace();
-
-      if (frame_type >= Constants.SAME_FRAME &&
-          frame_type <= Constants.SAME_FRAME_MAX) {
-          if (new_delta > Constants.SAME_FRAME_MAX) {
-              stack_map.setFrameType(Constants.SAME_FRAME_EXTENDED);
-          } else {
-              stack_map.setFrameType(new_delta);
-          }
-      } else if (frame_type >= Constants.SAME_LOCALS_1_STACK_ITEM_FRAME &&
-                 frame_type <= Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_MAX) {
-          if (new_delta > Constants.SAME_FRAME_MAX) {
-              stack_map.setFrameType(Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED);
-          } else {
-              stack_map.setFrameType(Constants.SAME_LOCALS_1_STACK_ITEM_FRAME + new_delta);
-          }
-      } else if (frame_type == Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED) {
-      } else if (frame_type >= Constants.CHOP_FRAME &&
-                 frame_type <= Constants.CHOP_FRAME_MAX) {
-      } else if (frame_type == Constants.SAME_FRAME_EXTENDED) {
-      } else if (frame_type >= Constants.APPEND_FRAME &&
-                 frame_type <= Constants.APPEND_FRAME_MAX) {
-      } else if (frame_type == Constants.FULL_FRAME) {
-      } else {
-          throw new RuntimeException("Invalid StackMap frame_type");
-      }
-
-      stack_map.setByteCodeOffsetDelta(new_delta);
   }
 
   /**
@@ -391,12 +346,12 @@ class DCInstrument {
           inst = ih.getInstruction();
           opcode = inst.getOpcode();
 
-          if ( opcode == Constants.TABLESWITCH || opcode == Constants.LOOKUPSWITCH ) {
+          if ( opcode == Const.TABLESWITCH || opcode == Const.LOOKUPSWITCH ) {
               int current_offset = ih.getPosition();
-              StackMapTableEntry stack_map = find_stack_map_after(current_offset);
+              StackMapEntry stack_map = find_stack_map_after(current_offset);
               int delta = (current_offset + inst.getLength()) - running_offset;
               if (delta != 0) {
-                  modify_stack_map_offset(stack_map, delta);
+                  stack_map.updateByteCodeOffset(delta);
               }
               // Since StackMap offsets are relative to the previous one
               // we only have to do the first one after a switch.
@@ -420,16 +375,16 @@ class DCInstrument {
       uninitialized_NEW_map.clear();
       il.setPositions();
 
-      for (StackMapTableEntry smte : stack_map_table) {
+      for (StackMapEntry smte : stack_map_table) {
           int frame_type = smte.getFrameType();
 
-          if ((frame_type >= Constants.APPEND_FRAME &&
-               frame_type <= Constants.APPEND_FRAME_MAX) ||
-              (frame_type == Constants.FULL_FRAME)) {
+          if ((frame_type >= Const.APPEND_FRAME &&
+               frame_type <= Const.APPEND_FRAME_MAX) ||
+              (frame_type == Const.FULL_FRAME)) {
 
               if (smte.getNumberOfLocals() > 0) {
                   for (StackMapType smt : smte.getTypesOfLocals()) {
-                      if (smt.getType() == Constants.ITEM_NewObject) {
+                      if (smt.getType() == Const.ITEM_NewObject) {
                           int i = smt.getIndex();
                           uninitialized_NEW_map.put(il.findHandle(i), new Integer(i));
                       }
@@ -437,7 +392,7 @@ class DCInstrument {
               }
               if (smte.getNumberOfStackItems() > 0) {
                   for (StackMapType smt : smte.getTypesOfStackItems()) {
-                      if (smt.getType() == Constants.ITEM_NewObject) {
+                      if (smt.getType() == Const.ITEM_NewObject) {
                           int i = smt.getIndex();
                           uninitialized_NEW_map.put(il.findHandle(i), new Integer(i));
                       }
@@ -456,16 +411,16 @@ class DCInstrument {
   private void
   update_NEW_object_stack_map_entries (int old_offset, int new_offset) {
 
-      for (StackMapTableEntry smte : stack_map_table) {
+      for (StackMapEntry smte : stack_map_table) {
           int frame_type = smte.getFrameType();
 
-          if ((frame_type >= Constants.APPEND_FRAME &&
-               frame_type <= Constants.APPEND_FRAME_MAX) ||
-              (frame_type == Constants.FULL_FRAME)) {
+          if ((frame_type >= Const.APPEND_FRAME &&
+               frame_type <= Const.APPEND_FRAME_MAX) ||
+              (frame_type == Const.FULL_FRAME)) {
 
               if (smte.getNumberOfLocals() > 0) {
                   for (StackMapType smt : smte.getTypesOfLocals()) {
-                      if (smt.getType() == Constants.ITEM_NewObject) {
+                      if (smt.getType() == Const.ITEM_NewObject) {
                           if (old_offset == smt.getIndex()) {
                               smt.setIndex(new_offset);
                           }
@@ -474,7 +429,7 @@ class DCInstrument {
               }
               if (smte.getNumberOfStackItems() > 0) {
                   for (StackMapType smt : smte.getTypesOfStackItems()) {
-                      if (smt.getType() == Constants.ITEM_NewObject) {
+                      if (smt.getType() == Const.ITEM_NewObject) {
                           if (old_offset == smt.getIndex()) {
                               smt.setIndex(new_offset);
                           }
@@ -511,21 +466,21 @@ class DCInstrument {
   private byte
   convert_Type_to_StackMapType (Type type) {
       switch (type.getType()) {
-          case Constants.T_BOOLEAN:
-          case Constants.T_CHAR:
-          case Constants.T_BYTE:
-          case Constants.T_SHORT:
-          case Constants.T_INT:
-              return Constants.ITEM_Integer;
-          case Constants.T_FLOAT:
-              return Constants.ITEM_Float;
-          case Constants.T_DOUBLE:
-              return Constants.ITEM_Double;
-          case Constants.T_LONG:
-              return Constants.ITEM_Long;
-          case Constants.T_ARRAY:
-          case Constants.T_OBJECT:
-              return Constants.ITEM_Object;
+          case Const.T_BOOLEAN:
+          case Const.T_CHAR:
+          case Const.T_BYTE:
+          case Const.T_SHORT:
+          case Const.T_INT:
+              return Const.ITEM_Integer;
+          case Const.T_FLOAT:
+              return Const.ITEM_Float;
+          case Const.T_DOUBLE:
+              return Const.ITEM_Double;
+          case Const.T_LONG:
+              return Const.ITEM_Long;
+          case Const.T_ARRAY:
+          case Const.T_OBJECT:
+              return Const.ITEM_Object;
           default:
               throw new RuntimeException("Invalid type: " + type);
           }
@@ -536,28 +491,28 @@ class DCInstrument {
   private StackMapType
   generate_StackMapType_from_Type (Type type) {
       switch (type.getType()) {
-          case Constants.T_BOOLEAN:
-          case Constants.T_CHAR:
-          case Constants.T_BYTE:
-          case Constants.T_SHORT:
-          case Constants.T_INT:
-              return new StackMapType(Constants.ITEM_Integer, -1, pool.getConstantPool());
-          case Constants.T_FLOAT:
-              return new StackMapType(Constants.ITEM_Float, -1, pool.getConstantPool());
-          case Constants.T_DOUBLE:
-              return new StackMapType(Constants.ITEM_Double, -1, pool.getConstantPool());
-          case Constants.T_LONG:
-              return new StackMapType(Constants.ITEM_Long, -1, pool.getConstantPool());
-          case Constants.T_ARRAY:
-          case Constants.T_OBJECT:
-              return new StackMapType(Constants.ITEM_Object,
+          case Const.T_BOOLEAN:
+          case Const.T_CHAR:
+          case Const.T_BYTE:
+          case Const.T_SHORT:
+          case Const.T_INT:
+              return new StackMapType(Const.ITEM_Integer, -1, pool.getConstantPool());
+          case Const.T_FLOAT:
+              return new StackMapType(Const.ITEM_Float, -1, pool.getConstantPool());
+          case Const.T_DOUBLE:
+              return new StackMapType(Const.ITEM_Double, -1, pool.getConstantPool());
+          case Const.T_LONG:
+              return new StackMapType(Const.ITEM_Long, -1, pool.getConstantPool());
+          case Const.T_ARRAY:
+          case Const.T_OBJECT:
+              return new StackMapType(Const.ITEM_Object,
                                       pool.addClass(typeToClassGetName(type)),
                                       pool.getConstantPool());
           // UNKNOWN seems to be used for Uninitialized objects.
           // The second argument to the constructor should be the code offset
           // of the corresponding 'new' instruction.  Just using 0 for now.
-          case Constants.T_UNKNOWN:
-              return new StackMapType(Constants.ITEM_NewObject, 0, pool.getConstantPool());
+          case Const.T_UNKNOWN:
+              return new StackMapType(Const.ITEM_NewObject, 0, pool.getConstantPool());
           default:
               throw new RuntimeException("Invalid type: " + type + type.getType());
           }
@@ -631,7 +586,7 @@ class DCInstrument {
       int index;  // locals index
 
       for (int i = 0; i < stack_map_table.length; i++) {
-        if (stack_map_table[i].getFrameType() == Constants.FULL_FRAME) {
+        if (stack_map_table[i].getFrameType() == Const.FULL_FRAME) {
 
             int num_locals = stack_map_table[i].getNumberOfLocals();
             StackMapType[] new_local_types = new StackMapType[num_locals + 1];
@@ -656,7 +611,6 @@ class DCInstrument {
                  index++;
             }
 
-            stack_map_table[i].setNumberOfLocals(num_locals + 1);
             stack_map_table[i].setTypesOfLocals(new_local_types);
         }
       }
@@ -758,20 +712,11 @@ class DCInstrument {
   private void
   fetch_current_stack_map_table (MethodGen mg) {
 
-      smta = get_stack_map_table_attribute(mg);
+      smta = (StackMap)get_stack_map_table_attribute(mg);
       if (smta != null) {
-          stack_map_table = ((StackMapTable)smta).getStackMapTable();
+          // get a deep copy of the original StackMapTable.
+          stack_map_table = ((StackMap)(smta.copy(smta.getConstantPool()))).getStackMap();
           needStackMap = true;
-
-          // We need to make a deep copy of the Stack Map items so
-          // we can modify them without affecting the unmodified
-          // version of this method (if there is one).
-          int len = stack_map_table.length;
-          new_stack_map_table = new StackMapTableEntry[len];
-          for (int j = 0; j < len; j++) {
-              new_stack_map_table[j] = stack_map_table[j].copy();
-          }
-          stack_map_table = new_stack_map_table;
 
           debug_instrument_inst.log ("Original StackMap: %s%n", smta);
           debug_instrument_inst.log ("Attribute tag: %s length: %d nameIndex: %d%n",
@@ -780,7 +725,7 @@ class DCInstrument {
           mg.removeCodeAttribute(smta);
       } else {
           stack_map_table = empty_stack_map_table;
-          if (gen.getMajor() > Constants.MAJOR_1_6) {
+          if (gen.getMajor() > Const.MAJOR_1_6) {
               needStackMap = true;
           }
           debug_instrument_inst.log ("Original StackMap: (none)%n");
@@ -796,7 +741,7 @@ class DCInstrument {
 
       running_offset = -1; // no +1 on first entry
       for (int i=0; i < stack_map_table.length; i++) {
-        running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+        running_offset = stack_map_table[i].getByteCodeOffset()
                                             + running_offset + 1;
         debug_instrument_inst.log ("@%03d %s %n", running_offset, stack_map_table[i]);
       }
@@ -809,19 +754,12 @@ class DCInstrument {
 
       if (stack_map_table.length == 0)
           return;
-      debug_instrument_inst.log ("New StackMap %s items:%n", stack_map_table.length);
+      print_stack_map_table("New");
 
       // Build new StackMapTable attribute
-      int map_table_size = 2;  // space for the number_of_entries
-      for (int i=0; i < stack_map_table.length; i++) {
-        map_table_size += stack_map_table[i].getEntryByteSize();
-        debug_instrument_inst.log ("  %s, %d%n", stack_map_table[i],
-                               stack_map_table[i].getEntryByteSize());
-      }
-      debug_instrument_inst.log ("New StackMap size: %d%n", map_table_size);
-
-      StackMapTable map_table = new StackMapTable(pool.addUtf8("StackMapTable"),
-                                map_table_size, stack_map_table, pool.getConstantPool());
+      StackMap map_table = new StackMap(pool.addUtf8("StackMapTable"),
+                                                  0, null, pool.getConstantPool());
+      map_table.setStackMap(stack_map_table);
       mg.addCodeAttribute(map_table);
   }
 
@@ -977,7 +915,7 @@ class DCInstrument {
 
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
-    if ((gen.getModifiers() & Constants.ACC_ANNOTATION) != 0) {
+    if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
       debug_instrument.log ("Not instrumenting annotation %s%n",gen.getClassName());
       return gen.getJavaClass().copy();
     }
@@ -1138,7 +1076,7 @@ class DCInstrument {
 
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
-    if ((gen.getModifiers() & Constants.ACC_ANNOTATION) != 0) {
+    if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
       debug_instrument.log ("(refs_only)Not instrumenting annotation %s%n",gen.getClassName());
       return gen.getJavaClass().copy();
     }
@@ -1288,7 +1226,7 @@ class DCInstrument {
 
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
-    if ((gen.getModifiers() & Constants.ACC_ANNOTATION) != 0) {
+    if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
       debug_instrument.log ("Not instrumenting annotation %s%n",gen.getClassName());
       return gen.getJavaClass().copy();
     }
@@ -1417,7 +1355,7 @@ class DCInstrument {
 
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
-    if ((gen.getModifiers() & Constants.ACC_ANNOTATION) != 0) {
+    if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
       debug_instrument.log ("(refs_only)Not instrumenting annotation %s%n",gen.getClassName());
       return gen.getJavaClass().copy();
     }
@@ -1674,7 +1612,7 @@ class DCInstrument {
     InstructionList il = new InstructionList();
     il.append (ifact.createInvoke (DCRuntime.class.getName(),
                                        "exception_exit", Type.VOID,
-                                       Type.NO_ARGS, Constants.INVOKESTATIC));
+                                       Type.NO_ARGS, Const.INVOKESTATIC));
     il.append (new ATHROW());
 
     add_exception_handler(mg, il);
@@ -1745,7 +1683,7 @@ class DCInstrument {
     int arg_index = (mg.isStatic()? 0 : 1);
     StackMapType[] arg_map_types = new StackMapType[arg_types.length + arg_index];
     if (!mg.isStatic()) {
-        arg_map_types[0] = new StackMapType(Constants.ITEM_Object,
+        arg_map_types[0] = new StackMapType(Const.ITEM_Object,
                                             pool.addClass(mg.getClassName()),
                                             pool.getConstantPool());
     }
@@ -1753,17 +1691,16 @@ class DCInstrument {
       arg_map_types[arg_index++] = generate_StackMapType_from_Type (arg_types[ii]);
     }
 
-    StackMapTableEntry map_entry;
-    StackMapType stack_map_type = new StackMapType (Constants.ITEM_Object,
+    StackMapEntry map_entry;
+    StackMapType stack_map_type = new StackMapType (Const.ITEM_Object,
                                   pool.addClass(throwable.getClassName()),
                                   pool.getConstantPool());
     StackMapType[] stack_map_types = {stack_map_type};
-    map_entry = new StackMapTableEntry (Constants.FULL_FRAME, map_offset,
-                       arg_map_types.length, arg_map_types,
-                       1, stack_map_types, pool.getConstantPool());
+    map_entry = new StackMapEntry (Const.FULL_FRAME, map_offset,
+                       arg_map_types, stack_map_types, pool.getConstantPool());
 
     int orig_size = stack_map_table.length;
-    new_stack_map_table = new StackMapTableEntry[orig_size+1];
+    new_stack_map_table = new StackMapEntry[orig_size+1];
     System.arraycopy (stack_map_table, 0,
                       new_stack_map_table, 0, orig_size);
     new_stack_map_table[orig_size] = map_entry;
@@ -1779,7 +1716,7 @@ class DCInstrument {
     InstructionList il = new InstructionList();
     il.append (ifact.createInvoke (DCRuntime.class.getName(),
                                        "exception_exit_refs_only", Type.VOID,
-                                       Type.NO_ARGS, Constants.INVOKESTATIC));
+                                       Type.NO_ARGS, Const.INVOKESTATIC));
     il.append (new ATHROW());
 
     add_exception_handler(mg, il);
@@ -1835,11 +1772,11 @@ class DCInstrument {
         // original first entry having an offset of 0 because of the
         // NOP we inserted above.
 
-        modify_stack_map_offset(stack_map_table[0], -(len_code+1));
+        stack_map_table[0].updateByteCodeOffset(-(len_code+1));
     }
 
     int new_table_length = stack_map_table.length + 1;
-    new_stack_map_table = new StackMapTableEntry[new_table_length];
+    new_stack_map_table = new StackMapEntry[new_table_length];
     StackMapType tag_frame_type = generate_StackMapType_from_Type(object_arr);
 
     // Check number of compiler temps immediately prior to the tag
@@ -1851,29 +1788,29 @@ class DCInstrument {
     switch (compiler_temp_count) {
       case 0: {
         StackMapType[] stack_map_type_arr = {tag_frame_type};
-        new_stack_map_table[0] = new StackMapTableEntry(Constants.APPEND_FRAME, len_code, 1,
-                                     stack_map_type_arr, 0, null, pool.getConstantPool());
+        new_stack_map_table[0] = new StackMapEntry(Const.APPEND_FRAME, len_code,
+                                     stack_map_type_arr, null, pool.getConstantPool());
         break;
       }
       case 1: {
-        StackMapType top_frame_type = new StackMapType(Constants.ITEM_Bogus, -1, pool.getConstantPool());
+        StackMapType top_frame_type = new StackMapType(Const.ITEM_Bogus, -1, pool.getConstantPool());
         StackMapType[] stack_map_type_arr = {top_frame_type, tag_frame_type};
-        new_stack_map_table[0] = new StackMapTableEntry(Constants.APPEND_FRAME + 1, len_code, 2,
-                                     stack_map_type_arr, 0, null, pool.getConstantPool());
+        new_stack_map_table[0] = new StackMapEntry(Const.APPEND_FRAME + 1, len_code,
+                                     stack_map_type_arr, null, pool.getConstantPool());
         break;
       }
       case 2: {
-        StackMapType top_frame_type = new StackMapType(Constants.ITEM_Bogus, -1, pool.getConstantPool());
+        StackMapType top_frame_type = new StackMapType(Const.ITEM_Bogus, -1, pool.getConstantPool());
         StackMapType[] stack_map_type_arr = {top_frame_type, top_frame_type, tag_frame_type};
-        new_stack_map_table[0] = new StackMapTableEntry(Constants.APPEND_FRAME + 2, len_code, 3,
-                                     stack_map_type_arr, 0, null, pool.getConstantPool());
+        new_stack_map_table[0] = new StackMapEntry(Const.APPEND_FRAME + 2, len_code,
+                                     stack_map_type_arr, null, pool.getConstantPool());
         break;
       }
       case 3: {
-        StackMapType top_frame_type = new StackMapType(Constants.ITEM_Bogus, -1, pool.getConstantPool());
+        StackMapType top_frame_type = new StackMapType(Const.ITEM_Bogus, -1, pool.getConstantPool());
         StackMapType[] stack_map_type_arr = {top_frame_type, top_frame_type, top_frame_type, tag_frame_type};
-        new_stack_map_table[0] = new StackMapTableEntry(Constants.APPEND_FRAME + 3, len_code, 4,
-                                     stack_map_type_arr, 0, null, pool.getConstantPool());
+        new_stack_map_table[0] = new StackMapEntry(Const.APPEND_FRAME + 3, len_code,
+                                     stack_map_type_arr, null, pool.getConstantPool());
         break;
       }
       default:
@@ -1995,7 +1932,6 @@ class DCInstrument {
                                     LocalVariableGen tag_frame_local) {
 
     Type arg_types[] = mg.getArgumentTypes();
-    // LocalVariableGen[] locals = mg.getLocalVariables();
 
     // Determine the offset of the first argument in the frame
     int offset = 1;
@@ -2030,7 +1966,7 @@ class DCInstrument {
     il.append (ifact.createConstant (params));
     il.append (ifact.createInvoke (DCRuntime.class.getName(),
                                    "create_tag_frame", object_arr, string_arg,
-                                   Constants.INVOKESTATIC));
+                                   Const.INVOKESTATIC));
     il.append (InstructionFactory.createStore (object_arr, tag_frame_local.getIndex()));
     debug_instrument_inst.log ("Store Tag frame local at index %d%n",
                                tag_frame_local.getIndex());
@@ -2121,7 +2057,7 @@ class DCInstrument {
        method_args = new Type[] {object_arr, Type.OBJECT, Type.INT,
                                  object_arr};
      il.append (ifact.createInvoke (DCRuntime.class.getName(), method_name,
-                             Type.VOID, method_args, Constants.INVOKESTATIC));
+                             Type.VOID, method_args, Const.INVOKESTATIC));
 
 
      return (il);
@@ -2215,7 +2151,7 @@ class DCInstrument {
                                 object_arr};
     il.append (ifact.createInvoke (DCRuntime.class.getName(), method_name,
                                    Type.VOID, method_args,
-                                   Constants.INVOKESTATIC));
+                                   Const.INVOKESTATIC));
 
     return (il);
   }
@@ -2239,35 +2175,35 @@ class DCInstrument {
     // Replace the object comparison instructions with a call to
     // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
     // return a boolean which is used in a ifeq/ifne instruction
-    case Constants.IF_ACMPEQ:
+    case Const.IF_ACMPEQ:
       return (object_comparison ((BranchInstruction) inst, "object_eq",
-                                 Constants.IFNE));
-    case Constants.IF_ACMPNE:
+                                 Const.IFNE));
+    case Const.IF_ACMPNE:
       return (object_comparison ((BranchInstruction) inst, "object_ne",
-                                 Constants.IFNE));
+                                 Const.IFNE));
 
     // These instructions compare the integer on the top of the stack
     // to zero.  Nothing is made comparable by this, so we need only
     // discard the tag on the top of the stack.
-    case Constants.IFEQ:
-    case Constants.IFNE:
-    case Constants.IFLT:
-    case Constants.IFGE:
-    case Constants.IFGT:
-    case Constants.IFLE: {
+    case Const.IFEQ:
+    case Const.IFNE:
+    case Const.IFLT:
+    case Const.IFGE:
+    case Const.IFGT:
+    case Const.IFLE: {
       return discard_tag_code (inst, 1);
     }
 
     // Instanceof pushes either 0 or 1 on the stack depending on whether
     // the object on top of stack is of the specified type.  We push a
     // tag for a constant, since nothing is made comparable by this.
-    case Constants.INSTANCEOF:
+    case Const.INSTANCEOF:
       return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
 
     // Duplicates the item on the top of stack.  If the value on the
     // top of the stack is a primitive, we need to do the same on the
     // tag stack.  Otherwise, we need do nothing.
-    case Constants.DUP: {
+    case Const.DUP: {
       return dup_tag (inst, stack);
     }
 
@@ -2276,198 +2212,198 @@ class DCInstrument {
     // is not a primitive, there is nothing to do here.  If the second
     // value is not a primitive, then we need only to insert the duped
     // value down 1 on the tag stack (which contains only primitives)
-    case Constants.DUP_X1: {
+    case Const.DUP_X1: {
       return dup_x1_tag (inst, stack);
     }
 
     // Duplicates either the top 2 category 1 values or a single
     // category 2 value and inserts it 2 or 3 values down on the
     // stack.
-    case Constants.DUP2_X1: {
+    case Const.DUP2_X1: {
       return dup2_x1_tag (inst, stack);
     }
 
     // Duplicate either one category 2 value or two category 1 values.
-    case Constants.DUP2: {
+    case Const.DUP2: {
       return dup2_tag (inst, stack);
     }
 
     // Dup the category 1 value on the top of the stack and insert it either
     // two or three values down on the stack.
-    case Constants.DUP_X2: {
+    case Const.DUP_X2: {
       return dup_x2 (inst, stack);
     }
 
-    case Constants.DUP2_X2: {
+    case Const.DUP2_X2: {
       return dup2_x2 (inst, stack);
     }
 
     // Pop instructions discard the top of the stack.  We want to discard
     // the top of the tag stack iff the item on the top of the stack is a
     // primitive.
-    case Constants.POP: {
+    case Const.POP: {
       return pop_tag (inst, stack);
     }
 
     // Pops either the top 2 category 1 values or a single category 2 value
     // from the top of the stack.  We must do the same to the tag stack
     // if the values are primitives.
-    case Constants.POP2: {
+    case Const.POP2: {
       return pop2_tag (inst, stack);
     }
 
     // Swaps the two category 1 types on the top of the stack.  We need
     // to swap the top of the tag stack if the two top elements on the
     // real stack are primitives.
-    case Constants.SWAP: {
+    case Const.SWAP: {
       return swap_tag (inst, stack);
     }
 
-    case Constants.IF_ICMPEQ:
-    case Constants.IF_ICMPGE:
-    case Constants.IF_ICMPGT:
-    case Constants.IF_ICMPLE:
-    case Constants.IF_ICMPLT:
-    case Constants.IF_ICMPNE: {
+    case Const.IF_ICMPEQ:
+    case Const.IF_ICMPGE:
+    case Const.IF_ICMPGT:
+    case Const.IF_ICMPLE:
+    case Const.IF_ICMPLT:
+    case Const.IF_ICMPNE: {
       return build_il (dcr_call ("cmp_op", Type.VOID, Type.NO_ARGS), inst);
     }
 
-    case Constants.GETFIELD: {
+    case Const.GETFIELD: {
       return load_store_field (mg, (GETFIELD) inst);
     }
 
-    case Constants.PUTFIELD: {
+    case Const.PUTFIELD: {
       return load_store_field (mg, (PUTFIELD) inst);
     }
 
-    case Constants.GETSTATIC: {
+    case Const.GETSTATIC: {
       return load_store_field (mg, ((GETSTATIC) inst));
     }
 
-    case Constants.PUTSTATIC: {
+    case Const.PUTSTATIC: {
       return load_store_field (mg, ((PUTSTATIC) inst));
     }
 
-    case Constants.DLOAD:
-    case Constants.DLOAD_0:
-    case Constants.DLOAD_1:
-    case Constants.DLOAD_2:
-    case Constants.DLOAD_3:
-    case Constants.FLOAD:
-    case Constants.FLOAD_0:
-    case Constants.FLOAD_1:
-    case Constants.FLOAD_2:
-    case Constants.FLOAD_3:
-    case Constants.ILOAD:
-    case Constants.ILOAD_0:
-    case Constants.ILOAD_1:
-    case Constants.ILOAD_2:
-    case Constants.ILOAD_3:
-    case Constants.LLOAD:
-    case Constants.LLOAD_0:
-    case Constants.LLOAD_1:
-    case Constants.LLOAD_2:
-    case Constants.LLOAD_3: {
+    case Const.DLOAD:
+    case Const.DLOAD_0:
+    case Const.DLOAD_1:
+    case Const.DLOAD_2:
+    case Const.DLOAD_3:
+    case Const.FLOAD:
+    case Const.FLOAD_0:
+    case Const.FLOAD_1:
+    case Const.FLOAD_2:
+    case Const.FLOAD_3:
+    case Const.ILOAD:
+    case Const.ILOAD_0:
+    case Const.ILOAD_1:
+    case Const.ILOAD_2:
+    case Const.ILOAD_3:
+    case Const.LLOAD:
+    case Const.LLOAD_0:
+    case Const.LLOAD_1:
+    case Const.LLOAD_2:
+    case Const.LLOAD_3: {
       return load_store_local ((LoadInstruction)inst, tag_frame_local,
                                "push_local_tag");
     }
 
-    case Constants.DSTORE:
-    case Constants.DSTORE_0:
-    case Constants.DSTORE_1:
-    case Constants.DSTORE_2:
-    case Constants.DSTORE_3:
-    case Constants.FSTORE:
-    case Constants.FSTORE_0:
-    case Constants.FSTORE_1:
-    case Constants.FSTORE_2:
-    case Constants.FSTORE_3:
-    case Constants.ISTORE:
-    case Constants.ISTORE_0:
-    case Constants.ISTORE_1:
-    case Constants.ISTORE_2:
-    case Constants.ISTORE_3:
-    case Constants.LSTORE:
-    case Constants.LSTORE_0:
-    case Constants.LSTORE_1:
-    case Constants.LSTORE_2:
-    case Constants.LSTORE_3: {
+    case Const.DSTORE:
+    case Const.DSTORE_0:
+    case Const.DSTORE_1:
+    case Const.DSTORE_2:
+    case Const.DSTORE_3:
+    case Const.FSTORE:
+    case Const.FSTORE_0:
+    case Const.FSTORE_1:
+    case Const.FSTORE_2:
+    case Const.FSTORE_3:
+    case Const.ISTORE:
+    case Const.ISTORE_0:
+    case Const.ISTORE_1:
+    case Const.ISTORE_2:
+    case Const.ISTORE_3:
+    case Const.LSTORE:
+    case Const.LSTORE_0:
+    case Const.LSTORE_1:
+    case Const.LSTORE_2:
+    case Const.LSTORE_3: {
       return load_store_local ((StoreInstruction) inst, tag_frame_local,
                                "pop_local_tag");
     }
 
-    case Constants.LDC:
-    case Constants.LDC_W:
-    case Constants.LDC2_W: {
+    case Const.LDC:
+    case Const.LDC_W:
+    case Const.LDC2_W: {
       return ldc_tag (inst, stack);
     }
 
     // Push the tag for the array onto the tag stack.  This causes
     // anything comparable to the length to be comparable to the array
     // as an index.
-    case Constants.ARRAYLENGTH: {
+    case Const.ARRAYLENGTH: {
       return array_length (inst);
     }
 
-    case Constants.BIPUSH:
-    case Constants.SIPUSH:
-    case Constants.DCONST_0:
-    case Constants.DCONST_1:
-    case Constants.FCONST_0:
-    case Constants.FCONST_1:
-    case Constants.FCONST_2:
-    case Constants.ICONST_0:
-    case Constants.ICONST_1:
-    case Constants.ICONST_2:
-    case Constants.ICONST_3:
-    case Constants.ICONST_4:
-    case Constants.ICONST_5:
-    case Constants.ICONST_M1:
-    case Constants.LCONST_0:
-    case Constants.LCONST_1: {
+    case Const.BIPUSH:
+    case Const.SIPUSH:
+    case Const.DCONST_0:
+    case Const.DCONST_1:
+    case Const.FCONST_0:
+    case Const.FCONST_1:
+    case Const.FCONST_2:
+    case Const.ICONST_0:
+    case Const.ICONST_1:
+    case Const.ICONST_2:
+    case Const.ICONST_3:
+    case Const.ICONST_4:
+    case Const.ICONST_5:
+    case Const.ICONST_M1:
+    case Const.LCONST_0:
+    case Const.LCONST_1: {
       return build_il (dcr_call ("push_const", Type.VOID, Type.NO_ARGS), inst);
     }
 
     // Primitive Binary operators.  Each is augmented with a call to
     // DCRuntime.binary_tag_op that merges the tags and updates the tag
     // Stack.
-    case Constants.DADD:
-    case Constants.DCMPG:
-    case Constants.DCMPL:
-    case Constants.DDIV:
-    case Constants.DMUL:
-    case Constants.DREM:
-    case Constants.DSUB:
-    case Constants.FADD:
-    case Constants.FCMPG:
-    case Constants.FCMPL:
-    case Constants.FDIV:
-    case Constants.FMUL:
-    case Constants.FREM:
-    case Constants.FSUB:
-    case Constants.IADD:
-    case Constants.IAND:
-    case Constants.IDIV:
-    case Constants.IMUL:
-    case Constants.IOR:
-    case Constants.IREM:
-    case Constants.ISHL:
-    case Constants.ISHR:
-    case Constants.ISUB:
-    case Constants.IUSHR:
-    case Constants.IXOR:
-    case Constants.LADD:
-    case Constants.LAND:
-    case Constants.LCMP:
-    case Constants.LDIV:
-    case Constants.LMUL:
-    case Constants.LOR:
-    case Constants.LREM:
-    case Constants.LSHL:
-    case Constants.LSHR:
-    case Constants.LSUB:
-    case Constants.LUSHR:
-    case Constants.LXOR:
+    case Const.DADD:
+    case Const.DCMPG:
+    case Const.DCMPL:
+    case Const.DDIV:
+    case Const.DMUL:
+    case Const.DREM:
+    case Const.DSUB:
+    case Const.FADD:
+    case Const.FCMPG:
+    case Const.FCMPL:
+    case Const.FDIV:
+    case Const.FMUL:
+    case Const.FREM:
+    case Const.FSUB:
+    case Const.IADD:
+    case Const.IAND:
+    case Const.IDIV:
+    case Const.IMUL:
+    case Const.IOR:
+    case Const.IREM:
+    case Const.ISHL:
+    case Const.ISHR:
+    case Const.ISUB:
+    case Const.IUSHR:
+    case Const.IXOR:
+    case Const.LADD:
+    case Const.LAND:
+    case Const.LCMP:
+    case Const.LDIV:
+    case Const.LMUL:
+    case Const.LOR:
+    case Const.LREM:
+    case Const.LSHL:
+    case Const.LSHR:
+    case Const.LSUB:
+    case Const.LUSHR:
+    case Const.LXOR:
       return build_il (dcr_call ("binary_tag_op", Type.VOID, Type.NO_ARGS),
                        inst);
 
@@ -2477,14 +2413,14 @@ class DCInstrument {
     // the jump table.  But the tags for those values are not available.
     // And since they are all constants, its not clear how interesting it
     // would be anyway.
-    case Constants.LOOKUPSWITCH:
-    case Constants.TABLESWITCH:
+    case Const.LOOKUPSWITCH:
+    case Const.TABLESWITCH:
       return discard_tag_code (inst, 1);
 
     // Make the integer argument to ANEWARRAY comparable to the new
     // array's index.
-    case Constants.ANEWARRAY:
-    case Constants.NEWARRAY: {
+    case Const.ANEWARRAY:
+    case Const.NEWARRAY: {
       return new_array (inst);
     }
 
@@ -2492,29 +2428,29 @@ class DCInstrument {
     // comparable to the corresponding indices of the new array.
     // For any other number of dimensions, discard the tags for the
     // arguments.
-    case Constants.MULTIANEWARRAY: {
+    case Const.MULTIANEWARRAY: {
       return multi_newarray_dc (inst);
     }
 
     // Mark the array and its index as comparable.  Also for primitives,
     // push the tag of the array element on the tag stack
-    case Constants.AALOAD:
-    case Constants.BALOAD:
-    case Constants.CALOAD:
-    case Constants.DALOAD:
-    case Constants.FALOAD:
-    case Constants.IALOAD:
-    case Constants.LALOAD:
-    case Constants.SALOAD: {
+    case Const.AALOAD:
+    case Const.BALOAD:
+    case Const.CALOAD:
+    case Const.DALOAD:
+    case Const.FALOAD:
+    case Const.IALOAD:
+    case Const.LALOAD:
+    case Const.SALOAD: {
       return array_load (inst);
     }
 
     // Mark the array and its index as comparable.  For primitives, store
     // the tag for the value on the top of the stack in the tag storage
     // for the array.
-    case Constants.AASTORE:
+    case Const.AASTORE:
       return array_store (inst, "aastore", Type.OBJECT);
-    case Constants.BASTORE:
+    case Const.BASTORE:
       // The JVM uses bastore for both byte and boolean.
       // We need to differentiate.
       Type arr_type = stack.peek(2);
@@ -2523,27 +2459,27 @@ class DCInstrument {
       } else {
           return array_store (inst, "bastore", Type.BYTE);
       }
-    case Constants.CASTORE:
+    case Const.CASTORE:
       return array_store (inst, "castore", Type.CHAR);
-    case Constants.DASTORE:
+    case Const.DASTORE:
       return array_store (inst, "dastore", Type.DOUBLE);
-    case Constants.FASTORE:
+    case Const.FASTORE:
       return array_store (inst, "fastore", Type.FLOAT);
-    case Constants.IASTORE:
+    case Const.IASTORE:
       return array_store (inst, "iastore", Type.INT);
-    case Constants.LASTORE:
+    case Const.LASTORE:
       return array_store (inst, "lastore", Type.LONG);
-    case Constants.SASTORE:
+    case Const.SASTORE:
       return array_store (inst, "sastore", Type.SHORT);
 
     // Prefix the return with a call to the correct normal_exit method
     // to handle the tag stack
-    case Constants.ARETURN:
-    case Constants.DRETURN:
-    case Constants.FRETURN:
-    case Constants.IRETURN:
-    case Constants.LRETURN:
-    case Constants.RETURN: {
+    case Const.ARETURN:
+    case Const.DRETURN:
+    case Const.FRETURN:
+    case Const.IRETURN:
+    case Const.LRETURN:
+    case Const.RETURN: {
       return return_tag (mg, inst);
     }
 
@@ -2551,64 +2487,64 @@ class DCInstrument {
     // to call the instrumented version (with the DCompMarker argument).
     // Calls to uninstrumented code (rare) discard primitive arguments
     // from the tag stack and produce an arbitrary return tag.
-    case Constants.INVOKESTATIC:
-    case Constants.INVOKEVIRTUAL:
-    case Constants.INVOKESPECIAL:
-    case Constants.INVOKEINTERFACE:
-    case Constants.INVOKEDYNAMIC:
+    case Const.INVOKESTATIC:
+    case Const.INVOKEVIRTUAL:
+    case Const.INVOKESPECIAL:
+    case Const.INVOKEINTERFACE:
+    case Const.INVOKEDYNAMIC:
       return handle_invoke ((InvokeInstruction) inst);
 
     // Throws an exception.  This clears the operand stack of the current
     // frame.  We need to clear the tag stack as well.
-    case Constants.ATHROW:
+    case Const.ATHROW:
       return build_il (dcr_call ("throw_op", Type.VOID, Type.NO_ARGS), inst);
 
     // Opcodes that don't need any modifications.  Here for reference
-    case Constants.ACONST_NULL:
-    case Constants.ALOAD:
-    case Constants.ALOAD_0:
-    case Constants.ALOAD_1:
-    case Constants.ALOAD_2:
-    case Constants.ALOAD_3:
-    case Constants.ASTORE:
-    case Constants.ASTORE_0:
-    case Constants.ASTORE_1:
-    case Constants.ASTORE_2:
-    case Constants.ASTORE_3:
-    case Constants.CHECKCAST:
-    case Constants.D2F:     // double to float
-    case Constants.D2I:     // double to integer
-    case Constants.D2L:     // double to long
-    case Constants.DNEG:    // Negate double on top of stack
-    case Constants.F2D:     // float to double
-    case Constants.F2I:     // float to integer
-    case Constants.F2L:     // float to long
-    case Constants.FNEG:    // Negate float on top of stack
-    case Constants.GOTO:
-    case Constants.GOTO_W:
-    case Constants.I2B:     // integer to byte
-    case Constants.I2C:     // integer to char
-    case Constants.I2D:     // integer to double
-    case Constants.I2F:     // integer to float
-    case Constants.I2L:     // integer to long
-    case Constants.I2S:     // integer to short
-    case Constants.IFNONNULL:
-    case Constants.IFNULL:
-    case Constants.IINC:    // increment local variable by a constant
-    case Constants.INEG:    // negate integer on top of stack
-    case Constants.JSR:     // pushes return address on the stack, but that
+    case Const.ACONST_NULL:
+    case Const.ALOAD:
+    case Const.ALOAD_0:
+    case Const.ALOAD_1:
+    case Const.ALOAD_2:
+    case Const.ALOAD_3:
+    case Const.ASTORE:
+    case Const.ASTORE_0:
+    case Const.ASTORE_1:
+    case Const.ASTORE_2:
+    case Const.ASTORE_3:
+    case Const.CHECKCAST:
+    case Const.D2F:     // double to float
+    case Const.D2I:     // double to integer
+    case Const.D2L:     // double to long
+    case Const.DNEG:    // Negate double on top of stack
+    case Const.F2D:     // float to double
+    case Const.F2I:     // float to integer
+    case Const.F2L:     // float to long
+    case Const.FNEG:    // Negate float on top of stack
+    case Const.GOTO:
+    case Const.GOTO_W:
+    case Const.I2B:     // integer to byte
+    case Const.I2C:     // integer to char
+    case Const.I2D:     // integer to double
+    case Const.I2F:     // integer to float
+    case Const.I2L:     // integer to long
+    case Const.I2S:     // integer to short
+    case Const.IFNONNULL:
+    case Const.IFNULL:
+    case Const.IINC:    // increment local variable by a constant
+    case Const.INEG:    // negate integer on top of stack
+    case Const.JSR:     // pushes return address on the stack, but that
                             // is thought of as an object, so we don't need
                             // a tag for it.
-    case Constants.JSR_W:
-    case Constants.L2D:     // long to double
-    case Constants.L2F:     // long to float
-    case Constants.L2I:     // long to int
-    case Constants.LNEG:    // negate long on top of stack
-    case Constants.MONITORENTER:
-    case Constants.MONITOREXIT:
-    case Constants.NEW:
-    case Constants.NOP:
-    case Constants.RET:     // this is the internal JSR return
+    case Const.JSR_W:
+    case Const.L2D:     // long to double
+    case Const.L2F:     // long to float
+    case Const.L2I:     // long to int
+    case Const.LNEG:    // negate long on top of stack
+    case Const.MONITORENTER:
+    case Const.MONITOREXIT:
+    case Const.NEW:
+    case Const.NOP:
+    case Const.RET:     // this is the internal JSR return
       return (null);
 
     // Make sure we didn't miss anything
@@ -2638,22 +2574,22 @@ class DCInstrument {
     // Replace the object comparison instructions with a call to
     // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
     // return a boolean which is used in a ifeq/ifne instruction
-    case Constants.IF_ACMPEQ:
+    case Const.IF_ACMPEQ:
       return (object_comparison ((BranchInstruction) inst, "object_eq",
-                                 Constants.IFNE));
-    case Constants.IF_ACMPNE:
+                                 Const.IFNE));
+    case Const.IF_ACMPNE:
       return (object_comparison ((BranchInstruction) inst, "object_ne",
-                                 Constants.IFNE));
+                                 Const.IFNE));
 
     // Prefix the return with a call to the correct normal_exit
     // method.  normal_exit_primitive is not needed because nothing
     // happens to the tag stack.
-    case Constants.ARETURN:
-    case Constants.DRETURN:
-    case Constants.FRETURN:
-    case Constants.IRETURN:
-    case Constants.LRETURN:
-    case Constants.RETURN: {
+    case Const.ARETURN:
+    case Const.DRETURN:
+    case Const.FRETURN:
+    case Const.IRETURN:
+    case Const.LRETURN:
+    case Const.RETURN: {
       InstructionList il = new InstructionList();
       il.append (dcr_call ("normal_exit_refs_only", Type.VOID, Type.NO_ARGS));
       il.append (inst);
@@ -2662,11 +2598,11 @@ class DCInstrument {
 
     // Adds the extra argument to calls to instrumented methods, or
     // does nothing for calls to uninstrumented methods.
-    case Constants.INVOKESTATIC:
-    case Constants.INVOKEVIRTUAL:
-    case Constants.INVOKESPECIAL:
-    case Constants.INVOKEINTERFACE:
-    case Constants.INVOKEDYNAMIC:
+    case Const.INVOKESTATIC:
+    case Const.INVOKEVIRTUAL:
+    case Const.INVOKESPECIAL:
+    case Const.INVOKEINTERFACE:
+    case Const.INVOKEDYNAMIC:
       return handle_invoke_refs_only ((InvokeInstruction) inst);
 
     // All other instructions need no instrumentation
@@ -2806,18 +2742,18 @@ class DCInstrument {
 
       Type[] new_arg_types = new Type[] {javalangObject, javalangObject};
 
-      if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
+      if (invoke.getOpcode() == Const.INVOKESPECIAL) {
         // this is a super.equals(Object) call
         il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
                                        "dcomp_super_equals",
                                        ret_type, new_arg_types,
-                                       Constants.INVOKESTATIC));
+                                       Const.INVOKESTATIC));
       } else {
         // just a regular equals(Object) call
         il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
                                        "dcomp_equals",
                                        ret_type, new_arg_types,
-                                       Constants.INVOKESTATIC));
+                                       Const.INVOKESTATIC));
       }
 
     } else if (is_object_clone(method_name, ret_type, arg_types) ||
@@ -2939,7 +2875,7 @@ class DCInstrument {
     assert arg_types.length == 0 : invoke;
 
     // if this is a super call
-    if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
+    if (invoke.getOpcode() == Const.INVOKESPECIAL) {
 
       // If the superclass has an instrumented method, call it
       // otherwise call the uninstrumented method.  This has to be
@@ -3057,18 +2993,18 @@ class DCInstrument {
 
       Type[] new_arg_types = new Type[] {javalangObject, javalangObject};
 
-      if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
+      if (invoke.getOpcode() == Const.INVOKESPECIAL) {
         // this is a super.equals(Object) call
         il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
                                        "dcomp_super_equals",
                                        ret_type, new_arg_types,
-                                       Constants.INVOKESTATIC));
+                                       Const.INVOKESTATIC));
       } else {
         // just a regular equals(Object) call
         il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
                                        "dcomp_equals",
                                        ret_type, new_arg_types,
-                                       Constants.INVOKESTATIC));
+                                       Const.INVOKESTATIC));
       }
 
     } else if (method_name.equals("clone")
@@ -3086,18 +3022,18 @@ class DCInstrument {
       /*
       Type[] new_arg_types = new Type[] {javalangObject};
 
-      if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
+      if (invoke.getOpcode() == Const.INVOKESPECIAL) {
         // this is a super.clone() call
         il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
                                        "dcomp_super_clone",
                                        ret_type, new_arg_types,
-                                       Constants.INVOKESTATIC));
+                                       Const.INVOKESTATIC));
       } else {
         // just a regular clone() call
         il.append (ifact.createInvoke ("daikon.dcomp.DCRuntime",
                                        "dcomp_clone",
                                        ret_type, new_arg_types,
-                                       Constants.INVOKESTATIC));
+                                       Const.INVOKESTATIC));
       }
       */
 
@@ -3131,7 +3067,7 @@ class DCInstrument {
     InstructionList il = new InstructionList();
     il.append (ifact.createInvoke (DCRuntime.class.getName(),
                                    compare_method, Type.BOOLEAN,
-                                   two_objects, Constants.INVOKESTATIC));
+                                   two_objects, Const.INVOKESTATIC));
     assert branch.getTarget() != null;
     il.append (InstructionFactory.createBranchInstruction (boolean_if,
                                               branch.getTarget()));
@@ -3170,16 +3106,16 @@ class DCInstrument {
     if (f instanceof GETSTATIC) {
       il.append (ifact.createInvoke (classname,
                  tag_method_name (GET_TAG, classname, f.getFieldName(pool)),
-                 Type.VOID, Type.NO_ARGS, Constants.INVOKESTATIC));
+                 Type.VOID, Type.NO_ARGS, Const.INVOKESTATIC));
     } else if (f instanceof PUTSTATIC) {
         il.append (ifact.createInvoke (classname,
                    tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
-                   Type.VOID, Type.NO_ARGS, Constants.INVOKESTATIC));
+                   Type.VOID, Type.NO_ARGS, Const.INVOKESTATIC));
     } else if (f instanceof GETFIELD) {
       il.append (InstructionFactory.createDup (obj_type.getSize()));
       il.append (ifact.createInvoke (classname,
                  tag_method_name (GET_TAG, classname, f.getFieldName(pool)),
-                 Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+                 Type.VOID, Type.NO_ARGS, Const.INVOKEVIRTUAL));
     } else { // must be put field
       if (field_type.getSize() == 2) {
         LocalVariableGen lv = get_tmp2_local (mg, field_type);
@@ -3187,14 +3123,14 @@ class DCInstrument {
         il.append (InstructionFactory.createDup (obj_type.getSize()));
         il.append (ifact.createInvoke (classname,
                    tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
-                   Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+                   Type.VOID, Type.NO_ARGS, Const.INVOKEVIRTUAL));
         il.append (InstructionFactory.createLoad (field_type, lv.getIndex()));
       } else {
         il.append (new SWAP());
         il.append (InstructionFactory.createDup (obj_type.getSize()));
         il.append (ifact.createInvoke (classname,
                    tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
-                   Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+                   Type.VOID, Type.NO_ARGS, Const.INVOKEVIRTUAL));
         il.append (new SWAP());
       }
     }
@@ -3238,7 +3174,7 @@ class DCInstrument {
     il.append (ifact.createConstant (index));
     il.append (ifact.createInvoke (DCRuntime.class.getName(), method,
                                   Type.VOID, new Type[] {Type.INT},
-                                  Constants.INVOKESTATIC));
+                                  Const.INVOKESTATIC));
     il.append (f);
     return (il);
   }
@@ -3269,7 +3205,7 @@ class DCInstrument {
     // Call the runtime method to handle loading/storing the local/parameter
     il.append (ifact.createInvoke (DCRuntime.class.getName(), method,
                                   Type.VOID, new Type[] {object_arr, Type.INT},
-                                  Constants.INVOKESTATIC));
+                                  Const.INVOKESTATIC));
     il.append (lvi);
     return (il);
   }
@@ -3449,12 +3385,12 @@ class DCInstrument {
 
       switch (ih.getInstruction().getOpcode()) {
 
-      case Constants.ARETURN :
-      case Constants.DRETURN :
-      case Constants.FRETURN :
-      case Constants.IRETURN :
-      case Constants.LRETURN :
-      case Constants.RETURN :
+      case Const.ARETURN :
+      case Const.DRETURN :
+      case Const.FRETURN :
+      case Const.IRETURN :
+      case Const.LRETURN :
+      case Const.RETURN :
         // log ("Exit at line %d%n", line_number);
         //only do incremental lines if we don't have the line generator
         if (line_number == last_line_number && foundLine == false) {
@@ -3493,7 +3429,7 @@ class DCInstrument {
     if (cinit == null) {
       InstructionList il = new InstructionList();
       il.append (InstructionFactory.createReturn (Type.VOID));
-      MethodGen cinit_gen = new MethodGen (Constants.ACC_STATIC, Type.VOID,
+      MethodGen cinit_gen = new MethodGen (Const.ACC_STATIC, Type.VOID,
         Type.NO_ARGS, new String[0], "<clinit>", gen.getClassName(), il, pool);
       cinit_gen.setMaxLocals();
       cinit_gen.setMaxStack();
@@ -3511,7 +3447,7 @@ class DCInstrument {
       InstructionList il = new InstructionList();
       il.append (ifact.createConstant (gen.getClassName()));
       il.append (ifact.createInvoke (DCRuntime.class.getName(), "class_init",
-                              Type.VOID, string_arg, Constants.INVOKESTATIC));
+                              Type.VOID, string_arg, Const.INVOKESTATIC));
 
       insert_at_method_start(cinit_gen, il);
       create_new_stack_map_attribute (cinit_gen);
@@ -3750,7 +3686,7 @@ class DCInstrument {
                                              Type[] arg_types) {
 
     return ifact.createInvoke (DCRuntime.class.getName(), method_name,
-                               ret_type, arg_types, Constants.INVOKESTATIC);
+                               ret_type, arg_types, Const.INVOKESTATIC);
   }
 
   /**
@@ -4135,6 +4071,20 @@ class DCInstrument {
 
     debug_instrument_inst.log ("  replace_inst: %s %d%n%s%n", ih, new_il.getLength(), new_il);
 
+    if (debug_instrument_inst.enabled) {
+      InstructionHandle tih = ih;
+      debug_instrument_inst.log ("replace_inst #0 %n");
+      while (tih != null) {
+        debug_instrument_inst.log ("inst: %s %n", tih);
+        if (tih.hasTargeters()) {
+          for (InstructionTargeter it : tih.getTargeters()) {
+            debug_instrument_inst.log ("targeter: %s %n", it);
+          }
+        }
+        tih = tih.getNext();
+      }
+    }
+
     // If there is only one new instruction, just replace it in the handle
     if (new_il.getLength() == 1) {
       ih.setInstruction (new_il.getEnd().getInstruction());
@@ -4159,8 +4109,36 @@ class DCInstrument {
       // to recalculate new_length as the padding may have changed.
       new_length = new_end.getNext().getPosition() - new_start.getPosition();
 
+    if (debug_instrument_inst.enabled) {
+      InstructionHandle tih = new_end;
+      debug_instrument_inst.log ("replace_inst #0.5 %n");
+      while (tih != null) {
+        debug_instrument_inst.log ("inst: %s %n", tih);
+        if (tih.hasTargeters()) {
+          for (InstructionTargeter it : tih.getTargeters()) {
+            debug_instrument_inst.log ("targeter: %s %n", it);
+          }
+        }
+        tih = tih.getNext();
+      }
+    }
+
       // Move all of the branches from the old instruction to the new start
       il.redirectBranches (ih, new_start);
+
+    if (debug_instrument_inst.enabled) {
+      InstructionHandle tih = new_end;
+      debug_instrument_inst.log ("replace_inst #1 %n");
+      while (tih != null) {
+        debug_instrument_inst.log ("inst: %s %n", tih);
+        if (tih.hasTargeters()) {
+          for (InstructionTargeter it : tih.getTargeters()) {
+            debug_instrument_inst.log ("targeter: %s %n", it);
+          }
+        }
+        tih = tih.getNext();
+      }
+    }
 
       // Move other targets to the new instuctions.
       if (ih.hasTargeters()) {
@@ -4185,6 +4163,20 @@ class DCInstrument {
         }
       }
 
+    if (debug_instrument_inst.enabled) {
+      InstructionHandle tih = new_end;
+      debug_instrument_inst.log ("replace_inst #2 %n");
+      while (tih != null) {
+        debug_instrument_inst.log ("inst: %s %n", tih);
+        if (tih.hasTargeters()) {
+          for (InstructionTargeter it : tih.getTargeters()) {
+            debug_instrument_inst.log ("targeter: %s %n", it);
+          }
+        }
+        tih = tih.getNext();
+      }
+    }
+
       // Remove the old handle.  There should be no targeters left to it.
       try {
         il.delete (ih);
@@ -4194,6 +4186,20 @@ class DCInstrument {
       }
       // Need to update instruction address due to delete above.
       il.setPositions();
+
+    if (debug_instrument_inst.enabled) {
+      InstructionHandle tih = new_end;
+      debug_instrument_inst.log ("replace_inst #3 %n");
+      while (tih != null) {
+        debug_instrument_inst.log ("inst: %s %n", tih);
+        if (tih.hasTargeters()) {
+          for (InstructionTargeter it : tih.getTargeters()) {
+            debug_instrument_inst.log ("targeter: %s %n", it);
+          }
+        }
+        tih = tih.getNext();
+      }
+    }
 
       if (needStackMap) {
         // Look for branches within the new il; i.e., both the source
@@ -4223,12 +4229,26 @@ class DCInstrument {
             nih = nih.getNext();
         }
 
+    if (debug_instrument_inst.enabled) {
+      InstructionHandle tih = new_end;
+      debug_instrument_inst.log ("replace_inst #4 %n");
+      while (tih != null) {
+        debug_instrument_inst.log ("inst: %s %n", tih);
+        if (tih.hasTargeters()) {
+          for (InstructionTargeter it : tih.getTargeters()) {
+            debug_instrument_inst.log ("targeter: %s %n", it);
+          }
+        }
+        tih = tih.getNext();
+      }
+    }
+
         if (target_count != 0) {
             // Currently, target_count is always 2; but code is
             // written to allow more.
             int cur_loc = new_start.getPosition();
             int orig_size = stack_map_table.length;
-            new_stack_map_table = new StackMapTableEntry[orig_size + target_count];
+            new_stack_map_table = new StackMapEntry[orig_size + target_count];
 
             // Calculate the operand stack value(s) for revised code.
             mgen.setMaxStack();
@@ -4250,9 +4270,9 @@ class DCInstrument {
                 if (stack.size() == 1) {
                     StackMapType stack_map_type0 = generate_StackMapType_from_Type(stack.peek(0));
                     StackMapType[] stack_map_types0 = {stack_map_type0};
-                    new_stack_map_table[new_index+i] = new StackMapTableEntry(
-                        Constants.SAME_LOCALS_1_STACK_ITEM_FRAME, 0, 0,
-                        null, 1, stack_map_types0, pool.getConstantPool());
+                    new_stack_map_table[new_index+i] = new StackMapEntry(
+                        Const.SAME_LOCALS_1_STACK_ITEM_FRAME, 0,
+                        null, stack_map_types0, pool.getConstantPool());
                 } else {
                     // need stack map FULL - MAKE SHARED METHOD
                     int local_map_index = 0;
@@ -4270,12 +4290,12 @@ class DCInstrument {
                         stack_map_types[ii] = generate_StackMapType_from_Type(stack.peek(ss-ii-1));
                     }
 
-                    new_stack_map_table[new_index+i] = new StackMapTableEntry(
-                        Constants.FULL_FRAME, 0,
-                        local_map_index, local_map_types,
-                        ss, stack_map_types, pool.getConstantPool());
+                    new_stack_map_table[new_index+i] = new StackMapEntry(
+                        Const.FULL_FRAME, 0,
+                        Arrays.copyOf(local_map_types, local_map_index),
+                        stack_map_types, pool.getConstantPool());
                 }
-                modify_stack_map_offset (new_stack_map_table[new_index+i], target_offsets[i]-(running_offset+1));
+                new_stack_map_table[new_index+i].updateByteCodeOffset(target_offsets[i]-(running_offset+1));
                 running_offset = target_offsets[i];
             }
 
@@ -4287,16 +4307,16 @@ class DCInstrument {
                     if (nih.hasTargeters()) {
                         for (InstructionTargeter it : nih.getTargeters()) {
                             if (it instanceof BranchInstruction) {
-                                modify_stack_map_offset (stack_map_table[new_index],
-                                nih.getPosition() - target_offsets[target_count-1] - 1
-                                - stack_map_table[new_index].getByteCodeOffsetDelta());
+                                stack_map_table[new_index].updateByteCodeOffset(
+                                  nih.getPosition() - target_offsets[target_count-1] - 1
+                                  - stack_map_table[new_index].getByteCodeOffset());
                                 break l1;
                             } else if (it instanceof CodeExceptionGen) {
                                 CodeExceptionGen exc = (CodeExceptionGen)it;
                                 if (exc.getHandlerPC() == nih) {
-                                    modify_stack_map_offset (stack_map_table[new_index],
-                                    nih.getPosition() - target_offsets[target_count-1] - 1
-                                    - stack_map_table[new_index].getByteCodeOffsetDelta());
+                                    stack_map_table[new_index].updateByteCodeOffset(
+                                      nih.getPosition() - target_offsets[target_count-1] - 1
+                                      - stack_map_table[new_index].getByteCodeOffset());
                                     break l1;
                                 }
                             }
@@ -4337,11 +4357,12 @@ class DCInstrument {
     debug_instrument_inst.log ("%n");
     print_stack_map_table ("replace_inst After");
     if (debug_instrument_inst.enabled) {
+      debug_instrument_inst.log ("replace_inst #5 %n");
       while (new_end != null) {
         debug_instrument_inst.log ("inst: %s %n", new_end);
         if (new_end.hasTargeters()) {
           for (InstructionTargeter it : new_end.getTargeters()) {
-            System.out.println ("Targeter has type " + it.getClass().getName());
+            debug_instrument_inst.log ("targeter: %s %n", it);
           }
         }
         new_end = new_end.getNext();
@@ -4533,8 +4554,8 @@ class DCInstrument {
 
     // Call the method
     il.append(ifact.createInvoke(gen.getClassName(), mg.getName(),
-      mg.getReturnType(), arg_types, (mg.isStatic() ? Constants.INVOKESTATIC
-                                      : Constants.INVOKEVIRTUAL)));
+      mg.getReturnType(), arg_types, (mg.isStatic() ? Const.INVOKESTATIC
+                                      : Const.INVOKEVIRTUAL)));
 
     // If there is a return value, return it
     il.append(InstructionFactory.createReturn(mg.getReturnType()));
@@ -4545,7 +4566,7 @@ class DCInstrument {
     mg.setMaxLocals();
 
     // turn off the native flag
-    mg.setAccessFlags(mg.getAccessFlags() & ~Constants.ACC_NATIVE);
+    mg.setAccessFlags(mg.getAccessFlags() & ~Const.ACC_NATIVE);
   }
 
   /**
@@ -4627,8 +4648,8 @@ class DCInstrument {
 
     // Call the method
     il.append(ifact.createInvoke(gen.getClassName(), mg.getName(),
-      mg.getReturnType(), arg_types, (mg.isStatic() ? Constants.INVOKESTATIC
-                                      : Constants.INVOKEVIRTUAL)));
+      mg.getReturnType(), arg_types, (mg.isStatic() ? Const.INVOKESTATIC
+                                      : Const.INVOKEVIRTUAL)));
 
     // If there is a return value, return it
     il.append(InstructionFactory.createReturn(mg.getReturnType()));
@@ -4639,7 +4660,7 @@ class DCInstrument {
     mg.setMaxLocals();
 
     // turn off the native flag
-    mg.setAccessFlags(mg.getAccessFlags() & ~Constants.ACC_NATIVE);
+    mg.setAccessFlags(mg.getAccessFlags() & ~Const.ACC_NATIVE);
   }
 
   /**
@@ -4679,7 +4700,7 @@ class DCInstrument {
     for (Field field : gen.getFields()) {
       if (is_primitive (field.getType()) && !field.isStatic()) {
         FieldGen tag_field
-          = new FieldGen (field.getAccessFlags() | Constants.ACC_SYNTHETIC,
+          = new FieldGen (field.getAccessFlags() | Const.ACC_SYNTHETIC,
                 Type.OBJECT, DCRuntime.tag_field_name(field.getName()), pool);
         gen.addField (tag_field.getField());
       }
@@ -4895,7 +4916,7 @@ class DCInstrument {
 
     // Create the get accessor method
     MethodGen get_method
-      = new MethodGen(f.getAccessFlags() | Constants.ACC_FINAL,
+      = new MethodGen(f.getAccessFlags() | Const.ACC_FINAL,
         Type.VOID, Type.NO_ARGS, new String[] {}, accessor_name,
         classname, il, pool);
     get_method.isPrivate(false);
@@ -4947,7 +4968,7 @@ class DCInstrument {
 
     // Create the get accessor method
     MethodGen set_method
-      = new MethodGen(f.getAccessFlags() | Constants.ACC_FINAL,
+      = new MethodGen(f.getAccessFlags() | Const.ACC_FINAL,
         Type.VOID, Type.NO_ARGS, new String[] {}, accessor_name,
         classname, il, pool);
     set_method.setMaxLocals();
@@ -4972,9 +4993,9 @@ class DCInstrument {
     debug_instrument.log ("Added interface DCompInstrumented");
 
     InstructionList il = new InstructionList();
-    int flags = Constants.ACC_PUBLIC;
+    int flags = Const.ACC_PUBLIC;
     if (gen.isInterface())
-      flags = Constants.ACC_PUBLIC | Constants.ACC_ABSTRACT;
+      flags = Const.ACC_PUBLIC | Const.ACC_ABSTRACT;
     MethodGen method = new MethodGen (flags, Type.BOOLEAN,
                                       new Type[] { Type.OBJECT },
                                       new String[] { "obj" },
@@ -4988,7 +5009,7 @@ class DCInstrument {
                                  "equals",
                                  Type.BOOLEAN,
                                  new Type[] { Type.OBJECT, dcomp_marker },
-                                 Constants.INVOKEVIRTUAL));
+                                 Const.INVOKEVIRTUAL));
     il.append(InstructionFactory.createReturn(Type.BOOLEAN));
     method.setMaxStack();
     method.setMaxLocals();
@@ -5007,9 +5028,9 @@ class DCInstrument {
    */
   public void add_equals_method (ClassGen gen) {
     InstructionList il = new InstructionList();
-    int flags = Constants.ACC_PUBLIC;
+    int flags = Const.ACC_PUBLIC;
     if (gen.isInterface())
-      flags = flags | Constants.ACC_ABSTRACT;
+      flags = flags | Const.ACC_ABSTRACT;
     MethodGen method = new MethodGen(flags, Type.BOOLEAN,
                                      new Type[] { Type.OBJECT },
                                      new String[] { "obj" }, "equals",
@@ -5021,7 +5042,7 @@ class DCInstrument {
                                  "equals",
                                  Type.BOOLEAN,
                                  new Type[] { Type.OBJECT },
-                                 Constants.INVOKESPECIAL));
+                                 Const.INVOKESPECIAL));
     il.append(InstructionFactory.createReturn(Type.BOOLEAN));
     method.setMaxStack();
     method.setMaxLocals();
@@ -5056,9 +5077,9 @@ class DCInstrument {
    */
   public void add_clone_method (ClassGen gen) {
     InstructionList il = new InstructionList();
-    int flags = Constants.ACC_PROTECTED;
+    int flags = Const.ACC_PROTECTED;
     if (gen.isInterface())
-      flags = Constants.ACC_PUBLIC | Constants.ACC_ABSTRACT;
+      flags = Const.ACC_PUBLIC | Const.ACC_ABSTRACT;
     MethodGen method = new MethodGen(flags, Type.OBJECT,
                                      Type.NO_ARGS,
                                      new String[] {  }, "clone",
@@ -5069,7 +5090,7 @@ class DCInstrument {
                                  "clone",
                                  Type.OBJECT,
                                  Type.NO_ARGS,
-                                 Constants.INVOKESPECIAL));
+                                 Const.INVOKESPECIAL));
     il.append(InstructionFactory.createReturn(Type.OBJECT));
     method.setMaxStack();
     method.setMaxLocals();
@@ -5254,6 +5275,11 @@ class DCInstrument {
     LocalVariableGen[] locals = mg.getLocalVariables();
     Type[] arg_types = mg.getArgumentTypes();
 
+    // We need a deep copy
+    for (int ii = 0; ii < locals.length; ii++) {
+      locals[ii] = (LocalVariableGen)(locals[ii].clone());
+    }
+
     // Initial offset into the stack frame of the first parameter
     int offset = 0;
     if (!mg.isStatic())
@@ -5350,9 +5376,9 @@ class DCInstrument {
     }
 
     // Call the method
-    short kind = Constants.INVOKEVIRTUAL;
+    short kind = Const.INVOKEVIRTUAL;
     if (mg.isStatic())
-      kind = Constants.INVOKESTATIC;
+      kind = Const.INVOKESTATIC;
     il.append (ifact.createInvoke (mg.getClassName(), mg.getName(),
                                    ret_type, mg.getArgumentTypes(), kind));
 

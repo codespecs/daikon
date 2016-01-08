@@ -60,29 +60,29 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
-import org.apache.bcel.Constants;
-import org.apache.bcel.generic.ConstantPoolGen;
-import org.apache.bcel.generic.InstructionHandle;
-import org.apache.bcel.generic.JsrInstruction;
-import org.apache.bcel.generic.MethodGen;
-import org.apache.bcel.generic.ObjectType;
-import org.apache.bcel.generic.RET;
-import org.apache.bcel.generic.ReturnInstruction;
-import org.apache.bcel.generic.ReturnaddressType;
-import org.apache.bcel.generic.Type;
-import org.apache.bcel.verifier.VerificationResult;
-import org.apache.bcel.verifier.exc.AssertionViolatedException;
-import org.apache.bcel.verifier.exc.VerifierConstraintViolatedException;
-import org.apache.bcel.verifier.statics.Pass2Verifier; // for Javadoc
-import org.apache.bcel.verifier.structurals.ControlFlowGraph;
-import org.apache.bcel.verifier.structurals.ExceptionHandler;
-import org.apache.bcel.verifier.structurals.ExecutionVisitor;
-import org.apache.bcel.verifier.structurals.Frame;
-import org.apache.bcel.verifier.structurals.InstConstraintVisitor;
-import org.apache.bcel.verifier.structurals.InstructionContext;
-import org.apache.bcel.verifier.structurals.LocalVariables;
-import org.apache.bcel.verifier.structurals.OperandStack;
-import org.apache.bcel.verifier.structurals.UninitializedObjectType;
+import org.apache.commons.bcel6.Const;
+import org.apache.commons.bcel6.generic.ConstantPoolGen;
+import org.apache.commons.bcel6.generic.InstructionHandle;
+import org.apache.commons.bcel6.generic.JsrInstruction;
+import org.apache.commons.bcel6.generic.MethodGen;
+import org.apache.commons.bcel6.generic.ObjectType;
+import org.apache.commons.bcel6.generic.RET;
+import org.apache.commons.bcel6.generic.ReturnInstruction;
+import org.apache.commons.bcel6.generic.ReturnaddressType;
+import org.apache.commons.bcel6.generic.Type;
+import org.apache.commons.bcel6.verifier.VerificationResult;
+import org.apache.commons.bcel6.verifier.exc.AssertionViolatedException;
+import org.apache.commons.bcel6.verifier.exc.VerifierConstraintViolatedException;
+import org.apache.commons.bcel6.verifier.statics.Pass2Verifier; // for Javadoc
+import org.apache.commons.bcel6.verifier.structurals.ControlFlowGraph;
+import org.apache.commons.bcel6.verifier.structurals.ExceptionHandler;
+import org.apache.commons.bcel6.verifier.structurals.ExecutionVisitor;
+import org.apache.commons.bcel6.verifier.structurals.Frame;
+import org.apache.commons.bcel6.verifier.structurals.InstConstraintVisitor;
+import org.apache.commons.bcel6.verifier.structurals.InstructionContext;
+import org.apache.commons.bcel6.verifier.structurals.LocalVariables;
+import org.apache.commons.bcel6.verifier.structurals.OperandStack;
+import org.apache.commons.bcel6.verifier.structurals.UninitializedObjectType;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -234,7 +234,7 @@ public final class StackVer {
 	/**
 	 * This class should only be instantiated by a Verifier.
 	 *
-	 * @see org.apache.bcel.verifier.Verifier
+	 * @see org.apache.commons.bcel6.verifier.Verifier
 	 */
 	public StackVer (){
 	}
@@ -395,88 +395,88 @@ public final class StackVer {
 			}
 		}while ((ih = ih.getNext()) != null);
 
- 	}
+	}
 
-	/**
-	 * Implements the pass 3b data flow analysis as described in the
-	 * Java Virtual Machine Specification, Second Edition.  As it is doing
-   * so it keeps track of the stack and local variables at each instruction.
- 	 *
- 	 * @see org.apache.bcel.verifier.statics.Pass2Verifier#getLocalVariablesInfo(int)
- 	 */
-	public VerificationResult do_stack_ver (MethodGen mg){
+    /**
+     * Implements the pass 3b data flow analysis as described in the
+     * Java Virtual Machine Specification, Second Edition.  As it is doing
+     * so it keeps track of the stack and local variables at each instruction.
+     *
+     * @see org.apache.commons.bcel6.verifier.statics.Pass2Verifier#getLocalVariablesInfo(int)
+     */
+    public VerificationResult do_stack_ver (MethodGen mg){
 
       /*
         if (! myOwner.doPass3a(method_no).equals(VerificationResult.VR_OK)){
-			return VerificationResult.VR_NOTYET;
-		}
+            return VerificationResult.VR_NOTYET;
+        }
       */
-		// Pass 3a ran before, so it's safe to assume the JavaClass object is
-		// in the BCEL repository.
-		// JavaClass jc = Repository.lookupClass(myOwner.getClassName());
+        // Pass 3a ran before, so it's safe to assume the JavaClass object is
+        // in the BCEL repository.
+        // JavaClass jc = Repository.lookupClass(myOwner.getClassName());
 
         ConstantPoolGen constantPoolGen = mg.getConstantPool();
-		// Init Visitors
-		InstConstraintVisitor icv = new LimitedConstraintVisitor();
-		icv.setConstantPoolGen(constantPoolGen);
+        // Init Visitors
+        InstConstraintVisitor icv = new LimitedConstraintVisitor();
+        icv.setConstantPoolGen(constantPoolGen);
 
-		ExecutionVisitor ev = new ExecutionVisitor();
-		ev.setConstantPoolGen(constantPoolGen);
+        ExecutionVisitor ev = new ExecutionVisitor();
+        ev.setConstantPoolGen(constantPoolGen);
 
-		try{
-      stack_types = new StackTypes (mg);
+        try{
+            stack_types = new StackTypes (mg);
 
-			icv.setMethodGen(mg);
+            icv.setMethodGen(mg);
 
-			////////////// DFA BEGINS HERE ////////////////
-			if (! (mg.isAbstract() || mg.isNative()) ){ // IF mg HAS CODE (See pass 2)
+            ////////////// DFA BEGINS HERE ////////////////
+            if (! (mg.isAbstract() || mg.isNative()) ){ // IF mg HAS CODE (See pass 2)
 
-				ControlFlowGraph cfg = new ControlFlowGraph(mg);
+                // false says don't check if jsr subroutine is covered by exception handler
+                ControlFlowGraph cfg = new ControlFlowGraph(mg, false);
 
-				// Build the initial frame situation for this method.
-				Frame f = new Frame(mg.getMaxLocals(),mg.getMaxStack());
-				if ( !mg.isStatic() ){
-					if (mg.getName().equals(Constants.CONSTRUCTOR_NAME)){
-						Frame._this = new UninitializedObjectType(new ObjectType(mg.getClassName()));
-						f.getLocals().set(0, Frame._this);
-					}
-					else{
-            @SuppressWarnings("nullness") // unannotated: org.apache.bcel.verifier.structurals.Frame is not yet annotated
+                // Build the initial frame situation for this method.
+                Frame f = new Frame(mg.getMaxLocals(),mg.getMaxStack());
+                if ( !mg.isStatic() ){
+                    if (mg.getName().equals(Const.CONSTRUCTOR_NAME)){
+                        Frame.setThis(new UninitializedObjectType(new ObjectType(mg.getClassName())));
+                        f.getLocals().set(0, Frame.getThis());
+                    } else {
+            @SuppressWarnings("nullness") // unannotated: org.apache.commons.bcel6.verifier.structurals.Frame is not yet annotated
             /*@NonNull*/ UninitializedObjectType dummy = null;
-						Frame._this = dummy;
-						f.getLocals().set(0, new ObjectType(mg.getClassName()));
-					}
-				}
-				Type[] argtypes = mg.getArgumentTypes();
-				int twoslotoffset = 0;
-				for (int j=0; j<argtypes.length; j++){
-					if (argtypes[j] == Type.SHORT || argtypes[j] == Type.BYTE || argtypes[j] == Type.CHAR || argtypes[j] == Type.BOOLEAN){
-						argtypes[j] = Type.INT;
-					}
-					f.getLocals().set(twoslotoffset + j + (mg.isStatic()?0:1), argtypes[j]);
-					if (argtypes[j].getSize() == 2){
-						twoslotoffset++;
-						f.getLocals().set(twoslotoffset + j + (mg.isStatic()?0:1), Type.UNKNOWN);
-					}
-				}
-				circulationPump(cfg, cfg.contextOf(mg.getInstructionList().getStart()), f, icv, ev);
-			}
-		}
-		catch (VerifierConstraintViolatedException ce){
-			ce.extendMessage("Constraint violated in method '"+mg+"':\n","");
-			return new VerificationResult(VerificationResult.VERIFIED_REJECTED, ce.getMessage());
-		}
-		catch (RuntimeException re){
-			// These are internal errors
+                        Frame.setThis(dummy);
+                        f.getLocals().set(0, new ObjectType(mg.getClassName()));
+                    }
+                }
+                Type[] argtypes = mg.getArgumentTypes();
+                int twoslotoffset = 0;
+                for (int j=0; j<argtypes.length; j++){
+                    if (argtypes[j] == Type.SHORT || argtypes[j] == Type.BYTE || argtypes[j] == Type.CHAR || argtypes[j] == Type.BOOLEAN){
+                        argtypes[j] = Type.INT;
+                    }
+                    f.getLocals().set(twoslotoffset + j + (mg.isStatic()?0:1), argtypes[j]);
+                    if (argtypes[j].getSize() == 2){
+                        twoslotoffset++;
+                        f.getLocals().set(twoslotoffset + j + (mg.isStatic()?0:1), Type.UNKNOWN);
+                    }
+                }
+                circulationPump(cfg, cfg.contextOf(mg.getInstructionList().getStart()), f, icv, ev);
+            }
+        }
+        catch (VerifierConstraintViolatedException ce){
+            ce.extendMessage("Constraint violated in method '"+mg+"':\n","");
+            return new VerificationResult(VerificationResult.VERIFIED_REJECTED, ce.getMessage());
+        }
+        catch (RuntimeException re){
+            // These are internal errors
 
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			re.printStackTrace(pw);
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            re.printStackTrace(pw);
 
-			throw new AssertionViolatedException("Some RuntimeException occured while verify()ing class '"+mg.getClassName()+"', method '"+mg+"'. Original RuntimeException's stack trace:\n---\n"+sw+"---\n");
-		}
-		return VerificationResult.VR_OK;
-	}
+            throw new AssertionViolatedException("Some RuntimeException occured while verify()ing class '"+mg.getClassName()+"', method '"+mg+"'. Original RuntimeException's stack trace:\n---\n"+sw+"---\n");
+        }
+        return VerificationResult.VR_OK;
+    }
 
   // Code from PassVerifier in BCEL so that we don't have to extend it
 

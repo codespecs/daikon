@@ -15,9 +15,9 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Method;
 import java.io.*;
 
-import org.apache.bcel.generic.*;
-import org.apache.bcel.verifier.*;
-import org.apache.bcel.verifier.structurals.*;
+import org.apache.commons.bcel6.generic.*;
+import org.apache.commons.bcel6.verifier.*;
+import org.apache.commons.bcel6.verifier.structurals.*;
 
 import org.apache.commons.io.*;
 

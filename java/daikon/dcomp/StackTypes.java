@@ -3,13 +3,13 @@ package daikon.dcomp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.bcel.generic.MethodGen;
-import org.apache.bcel.generic.InstructionList;
-import org.apache.bcel.generic.Type;
-import org.apache.bcel.verifier.structurals.OperandStack;
-import org.apache.bcel.verifier.structurals.LocalVariables;
-import org.apache.bcel.verifier.structurals.Frame;
-import org.apache.bcel.verifier.structurals.UninitializedObjectType;
+import org.apache.commons.bcel6.generic.MethodGen;
+import org.apache.commons.bcel6.generic.InstructionList;
+import org.apache.commons.bcel6.generic.Type;
+import org.apache.commons.bcel6.verifier.structurals.OperandStack;
+import org.apache.commons.bcel6.verifier.structurals.LocalVariables;
+import org.apache.commons.bcel6.verifier.structurals.Frame;
+import org.apache.commons.bcel6.verifier.structurals.UninitializedObjectType;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -46,10 +46,10 @@ public final class StackTypes {
 
     if (track_locals) {
       assert loc_arr != null : "@AssumeAssertion(nullness): dependent: non-null if track_locals==true";
-      loc_arr[offset] = (LocalVariables) f.getLocals().clone();
+      loc_arr[offset] = (LocalVariables)(f.getLocals().clone());
     }
 
-    os_arr[offset] = (OperandStack) os.clone();
+    os_arr[offset] = (OperandStack)(os.clone());
   }
 
   /** Returns the stack contents at the specified offset **/

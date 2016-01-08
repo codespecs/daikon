@@ -7,10 +7,10 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipException;
 
-import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.JavaClass;
-import org.apache.bcel.generic.*;
-import org.apache.bcel.*;
+import org.apache.commons.bcel6.classfile.ClassParser;
+import org.apache.commons.bcel6.classfile.JavaClass;
+import org.apache.commons.bcel6.generic.*;
+import org.apache.commons.bcel6.*;
 
 import daikon.DynComp;
 import daikon.util.Option;
@@ -354,8 +354,8 @@ public class BuildJDK {
 
       // Create the DcompMarker class (used to identify instrumented calls)
       ClassGen dcomp_marker = new ClassGen("java.lang.DCompMarker",
-        "java.lang.Object", "DCompMarker.class", Constants.ACC_INTERFACE
-        | Constants.ACC_PUBLIC | Constants.ACC_ABSTRACT, new String[0]);
+        "java.lang.Object", "DCompMarker.class", Const.ACC_INTERFACE
+        | Const.ACC_PUBLIC | Const.ACC_ABSTRACT, new String[0]);
       dcomp_marker.getJavaClass().dump (new File(dest, "java"
          + File.separator + "lang" + File.separator + "DCompMarker.class"));
 
