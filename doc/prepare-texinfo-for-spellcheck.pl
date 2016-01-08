@@ -2,10 +2,15 @@
 
 # prepare-texinfo-for-spellcheck.pl
 # argument: .texinfo file
+# 
 # Reads the input .texinfo file and outputs a filtered
 # version that elides the texinfo commands.  It also
 # removes other text that is not appropriate as input
 # to spellcheckx such as examples and comments.
+# 
+# The resulting file can be spell-checked in batch mode
+# to output misspelled words; then the user can correct
+# those misspellings in the original version.
 
 use v5.14;    #to get given/when
 
@@ -37,6 +42,7 @@ my %line_operators = (
     "\@appendix"          => SKIP_LINE,
     "\@bye"               => SKIP_LINE,
     "\@c"                 => SKIP_LINE,
+    "\@cartouche"         => SKIP_LINE,
     "\@chapter"           => SKIP_LINE,
     "\@cindex"            => SKIP_LINE,
     "\@clear"             => SKIP_LINE,
@@ -59,6 +65,7 @@ my %line_operators = (
     "\@ifset"             => SKIP_LINE,
     "\@iftex"             => SKIP_LINE,
     "\@include"           => SKIP_LINE,
+    "\@indentedblock"     => SKIP_LINE,
     "\@item"              => SKIP_LINE,
     "\@itemize"           => SKIP_LINE,
     "\@itemx"             => SKIP_LINE,
@@ -125,6 +132,7 @@ my %token_operators = (
     "\@settitle"         => SKIP_TOKEN,
     "\@strong"           => OUTPUT_ARG,
     "\@t"                => OUTPUT_ARG,
+    "\@tie"              => SKIP_ARG,
     "\@titlefont"        => OUTPUT_ARG,
     "\@today"            => SKIP_ARG,
     "\@uref"             => SKIP_ARG,

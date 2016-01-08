@@ -562,7 +562,7 @@ DCOMP_RT	:= dcomp-rt
 #DCOMP_JDK	:= /tmp/$(USER)/dcomp-j2sdk-1.5
 J2SDK15		:= /usr/lib/j2sdk1.5-sun
 dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
-dcomp_rt.jar : dcomp_premain.jar
+dcomp_rt.jar : dcomp_premain.jar $(ORIG_RT)
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
 # was 1590
@@ -812,7 +812,7 @@ audit:
 # override (not augment) any other use of -Alint in this Makefile.
 # "-proc:only" prevents generation of .class files (so generated classfiles are
 # version 7 rather than version 8).
-CHECKER_ARGS ?= -AsuppressWarnings=flowexpr.parameter.not.final -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only
+CHECKER_ARGS ?= -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only
 
 ## All of the following targets need to depend on "compile".
 
@@ -827,6 +827,7 @@ JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingCh
 JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_REGEX_QUAL_ARGS = -processor org.checkerframework.checker.experimental.regex_qual.RegexCheckerAdapter -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_LOCK_ARGS = -processor org.checkerframework.checker.lock.LockChecker -AsuppressWarnings=method.guarantee.violated,override.sideeffect.invalid -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 ## Code in dcomp directory is not called directly; annotations would be useless.
@@ -987,6 +988,10 @@ check-regex-qual: ${ALL_GENERATED_FILES} compile
 check-formatter: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+
+check-lock: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${CHECKER_ARGS} ${JAVAC_LOCK_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 check-igj-all-nostubs: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_IGJ_ARGS} ${CHECKER_ARGS} ...
@@ -1154,7 +1159,7 @@ javadoc: api
 # no switch to javadoc that ignores a subpackage.  Don't include the
 # typequals package -- it crashes javadoc.
 .PHONY: api
-api: ../plume-lib $(JAVA_FILES) 
+api: ../plume-lib $(JAVA_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	@rm -f java-files.txt
 	find . -name "*.java" -print | grep -v typequals > java-files.txt

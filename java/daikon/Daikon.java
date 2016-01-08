@@ -18,6 +18,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -85,8 +86,8 @@ public final class Daikon {
 
   // Don't change the order of the modifiers on these strings as they
   // are automatically updated as part of the release process
-  public final static String release_version = "5.2.11";
-  public final static String release_date = "August 5, 2015";
+  public final static String release_version = "5.2.21";
+  public final static String release_date = "January 6, 2016";
   public final static String release_string =
     "Daikon version "
       + release_version
@@ -1813,9 +1814,14 @@ public final class Daikon {
           "Used memory: "
             + (java.lang.Runtime.getRuntime().totalMemory()
               - java.lang.Runtime.getRuntime().freeMemory()));
-        if (FileIO.data_trace_state != null)
-          debugTrace.fine("Active slices: " +
-                          FileIO.data_trace_state.all_ppts.countSlices());
+        try {
+          if (FileIO.data_trace_state != null)
+            debugTrace.fine("Active slices: " +
+                            FileIO.data_trace_state.all_ppts.countSlices());
+        } catch (ConcurrentModificationException e) {
+          // Because this code is a separate thread, the number of ppts
+          // could change during countSlices.  Just ignore and continue.
+        }
       }
     }
   }

@@ -1,4 +1,7 @@
-all: config-options.texinfo invariants-doc.texinfo html-chap html pdf
+all: all-except-pdf pdf
+all-except-pdf: config-options.texinfo invariants-doc.texinfo html-chap html
+
+TEXI2HTML ?= makeinfo --html
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 # Large split size fixes an apparent bug in makeinfo 4.11:
@@ -52,7 +55,8 @@ images/dfepl-flow.jpg: images/dfepl-flow.eps
 images/%.pdf: images/%.eps
 	epstopdf $< --outfile=$@
 
-html: daikon.html developer.html valgrind-merge.html
+.PHONY: html
+html: daikon.html developer.html
 
 daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
 	$(MAKE) daikon-html
@@ -65,22 +69,16 @@ daikon-fast: daikon.texinfo
 .PHONY: daikon-html
 # Does the actual work
 daikon-html:
-	makeinfo --html --no-split daikon.texinfo
+	${TEXI2HTML} --no-split daikon.texinfo
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' daikon.html
-	../plume-lib/bin/add-favicon . daikon-favicon.png
+	../plume-lib/bin/html-add-favicon daikon-favicon.png daikon.html
 
 developer.html: developer.texinfo 
-	makeinfo --html --no-split $<
+	${TEXI2HTML} --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' $@
-	../plume-lib/bin/add-favicon . daikon-favicon.png
-
-valgrind-merge.html: valgrind-merge.texinfo
-	makeinfo --html --no-split $<
-	# Fixup 'bad' href inserted by makeinfo.
-	perl -pi -e 's|dir.html#Top|index.html|;' $@
-	../plume-lib/bin/add-favicon . daikon-favicon.png
+	../plume-lib/bin/html-add-favicon daikon-favicon.png developer.html
 
 html-chap: daikon/index.html developer/index.html
 
@@ -88,7 +86,7 @@ html-chap: daikon/index.html developer/index.html
 # pathnames become incorrect.  We need to copy them over ourselves.
 daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
 	rm -rf daikon/*
-	makeinfo --html --split=chapter -o daikon $<
+	${TEXI2HTML} --split=chapter -o daikon $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' daikon/index.html
 	mkdir daikon/images
@@ -98,25 +96,20 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 
 developer/index.html: developer.texinfo
 	rm -rf developer/*
-	makeinfo --html --split=chapter -o developer $<
+	${TEXI2HTML} --split=chapter -o developer $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' developer/index.html
-	# Fixup 'bad' href inserted by makeinfo.
-	perl -pi -e 's|../valgrind-merge/index.html|../valgrind-merge.html|;' developer/Distribution.html
 	mkdir developer/images
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images
 	../plume-lib/bin/add-favicon developer ../daikon-favicon.png
 
-pdf: daikon.pdf images/dfepl-flow.eps developer.pdf valgrind-merge.pdf
+pdf: daikon.pdf images/dfepl-flow.eps developer.pdf 
 
 daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	makeinfo --pdf $<
 
 developer.pdf: developer.texinfo
-	makeinfo --pdf $<
-
-valgrind-merge.pdf: valgrind-merge.texinfo
 	makeinfo --pdf $<
 
 # Note that the clean target does not remove invariants-doc.texinfo or
@@ -155,6 +148,16 @@ dist:
 # www:
 # 	cd .. && $(MAKE) www
 
+.PHONY: find-changes spell-check
 find-changes:
 	diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 
+# -u switch to hunspell is undocumented and subject to change,
+# but gives a line number whereas -l does not.
+spell-check:
+	perl prepare-texinfo-for-spellcheck.pl < daikon.texinfo | hunspell -u -p daikon.dict
+	perl prepare-texinfo-for-spellcheck.pl < developer.texinfo | hunspell -u -p daikon.dict
+# For CHANGES file, only recent lines (top 100), and not text starting with
+# 4+ spaces (assumed to be literal code or commands.  Permit some failures.
+	@echo "The following command is allowed to have some failures not in daikon.dict"
+	head -100 CHANGES | sed 's/^    .*/ /' | hunspell -u -p daikon.dict

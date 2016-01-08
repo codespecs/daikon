@@ -139,9 +139,9 @@ ifdef ESC_ON
 endif
 
 
+DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 # DAIKONDIR is where the 'daikon' project is cloned
-DAIKONDIR?=${DAIKONDIR}
-DAIKONDIR?=$(HOME)/research/invariants
+DAIKONDIR?=${DAIKONDIR_DEFAULT}
 # Test that the directory exists.  There must be a better way to do this.
 DAIKONDIR:=$(wildcard ${DAIKONDIR})
 ifndef DAIKONDIR
@@ -262,12 +262,16 @@ DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
 
 # This test should use "command -v" instead of "which"
-DOS2UNIX ?= $(shell which dos2unix)
-ifeq ($(DOS2UNIX),)
-  ifeq ($(shell which perl),)
-    $(error Install either dos2unix or perl)
+ifndef DOS2UNIX
+  WHICHDOS2UNIX := $(shell which dos2unix)
+  ifneq ($(WHICHDOS2UNIX),)
+    DOS2UNIX = $(WHICHDOS2UNIX) --quiet
   else
-    DOS2UNIX ?= perl -pi -e 's/\r\n|\n|\r/\n/g'
+    ifneq ($(shell which perl),)
+      DOS2UNIX = perl -pi -e 's/\r\n|\n|\r/\n/g'
+    else
+      $(error Install either dos2unix or perl)
+    endif
   endif
 endif
 
@@ -526,12 +530,14 @@ DCOMP_ARGS  = '--ppt-select-pattern=$(INST_FILES)' \
 			  --compare-sets-file=$(PROJECT_FILE).txt-cset \
 			  --decl_file $(PROJECT_FILE).decls-DynComp \
               --trace-sets-file=$(PROJECT_FILE).txt-trace \
-			  --shiny-print=$(SHINY_PRINT)
+			  --abridged-vars=$(SHINY_PRINT)
 DCOMP_RT ?= $(wildcard ${DAIKONDIR}/java/dcomp_rt.jar)
 ifeq ($(DCOMP_RT),)
   DCOMP_RT := $(wildcard $(pag)/software/pkg/DynComp/dcomp_rt.jar)
 endif
 ifndef DCOMP_RT
+# Some targets, such as clean, don't really need dcomp_rt.jar.
+# It would be nice for them not to issue this warning.
   $(info dcomp_rt.jar is not in ${DAIKONDIR}/java; it must be on the classpath.)
 endif
 
@@ -560,7 +566,7 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 		--compare-sets-file=$(PROJECT_FILE).txt-cset-nojdk \
 		--decl_file $(PROJECT_FILE).decls-DynComp-nojdk \
 		--trace-sets-file=$(PROJECT_FILE).txt-trace-nojdk \
-		--shiny-print=$(SHINY_PRINT) --no-jdk $(MAIN_CLASS) $(MAIN_ARGS)
+		--abridged-vars=$(SHINY_PRINT) --no-jdk $(MAIN_CLASS) $(MAIN_ARGS)
 
 else
 dyncomp:

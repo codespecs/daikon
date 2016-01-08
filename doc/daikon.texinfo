@@ -56,14 +56,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.2.11
+@center Daikon version 5.2.21
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.2.11 release date
-@center August 5, 2015
+@c Print out the Daikon version 5.2.21 release date
+@center January 6, 2016
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.2.11, released August 5, 2015.
+It describes Daikon version 5.2.21, released January 6, 2016.
 
 @menu
 * Introduction::
@@ -199,12 +199,12 @@ The following mailing lists (and their archives) are available:
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
 To subscribe, visit
-@uref{http://groups.google.com/forum/#!forum/daikon-announce}.
+@uref{https://groups.google.com/forum/#!forum/daikon-announce}.
 @item daikon-discuss@@googlegroups.com
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
-@uref{http://groups.google.com/forum/#!forum/daikon-discuss}.
+@uref{https://groups.google.com/forum/#!forum/daikon-discuss}.
 @item daikon-developers@@googlegroups.com
 This list goes to the Daikon maintainers.  Use it for bug reports,
 suggestions, and the like.  If you are an active contributor to Daikon,
@@ -260,7 +260,7 @@ There are two additional requirements.  You must have a Java 7 (or later) JVM
 The @file{tools.jar} file that comes with your JVM must also be on your
 classpath.
 
-@xref{Installing Daikon}, for situations where you should
+See bullet point two above (@ref{Installing Daikon}), for situations where you should
 follow the complete installation instructions of
 @ref{Complete installation}.  (Also, if you do not know how to add a jar file to your
 classpath, then use the complete installation instructions, which walks
@@ -344,16 +344,16 @@ If you wish to edit the Daikon source code and re-compile Daikon,
 @item
 Choose the directory where you want to install Daikon; we'll call this
 the @var{daikonparent} directory.  In this directory, download and
-unpack Daikon.
+unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon.tar.gz
-tar zxf daikon.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-#.#.#.tar.gz
+tar zxf daikon-#.#.#.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-#.#.#/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:  
@@ -365,9 +365,9 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon
+export DAIKONDIR=@var{daikonparent}/daikon-#.#.#
 # The full pathname of the directory that contains the Java JDK
-export JAVA_HOME=/usr/lib/jvm/default-java
+export JAVA_HOME=/usr/lib/jvm/java
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
@@ -377,10 +377,10 @@ effect.
 
 @item
 Optionally, customize other variables.  The customizable variables are
-listed in the Daikon startup file: @file{daikon.bashrc}.
+listed in the Daikon startup file: @file{$DAIKONDIR/scripts/daikon.bashrc}.
 
 You may customize them by setting environment variables, or by adding a
-@code{Makefile.user} file to directory @code{$DAIKONDIR/java} (it is
+@file{Makefile.user} file to directory @file{$DAIKONDIR/java} (it is
 automatically read at the beginning of the main Makefile, and prevents
 you from having to edit the main Makefile directly).
 
@@ -411,7 +411,6 @@ depending on your computer.
 Optionally, download other executables, such as
 the Simplify theorem prover (@pxref{Installing Simplify}).
 
-
 @end enumerate
 @exampleindent 4
 
@@ -438,16 +437,16 @@ The default installation of Cygwin is sufficient for installing Daikon.
 @item
 Choose the directory where you want to install Daikon; we'll call this
 the @var{daikonparent} directory.  In this directory, download and
-unpack Daikon.
+unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon.tar.gz
-tar zxf daikon.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-#.#.#.tar.gz
+tar zxf daikon-#.#.#.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-#.#.#/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{~/.bashrc}:  
@@ -457,7 +456,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon
+export DAIKONDIR=@var{daikonparent}/daikon-#.#.#
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -494,7 +493,7 @@ effect.
 
 @item
 Optionally, customize other variables.  The customizable variables are
-listed in the Daikon startup file: @file{daikon.bashrc}.
+listed in the Daikon startup file: @file{$DAIKONDIR/scripts/daikon.bashrc}.
 
 You may customize them by setting environment variables, or by adding a
 @file{Makefile.user} file to directory @file{$DAIKONDIR/java} (it is
@@ -510,19 +509,19 @@ OSTYPE = cygwin
 @item
 Optionally, compile Daikon and build other tools.
 Note that this step is @emph{not} required if you only want to use Daikon
-with its Java front end (Chicory).  This step is required for using
-Daikon with its C/C++ front end (Kvasir), and for other tools.
+with its Java front end (Chicory) or its .NET front end (Celeriac).
+This step is required for using other tools such as DynComp.
 
 @example
 make -C $DAIKONDIR rebuild-everything
 @end example
 
 @noindent
-This builds the various executables used by Daikon, such as the 
+This builds the various executables used by Daikon, such as the
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 If you need more
-information about compiling Daikon,
-see @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
+information about compiling Daikon, see
+@ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 If you have trouble compiling the C/C++ front end Kvasir, see
 @xref{Installing Kvasir}.  Note that
 Kvasir does not work under Cygwin.
@@ -533,8 +532,7 @@ On Windows, running @command{make} requires
 that @uref{http://www.cygwin.com/,Cygwin} be installed.
 
 Optionally, download other executables, such as
-the Simplify theorem
-prover (@pxref{Installing Simplify}).
+the Simplify theorem prover (@pxref{Installing Simplify}).
 
 @end enumerate
 @exampleindent 4
@@ -762,6 +760,7 @@ and the Daikon output is written to the terminal.
 
 @menu
 * StackAr example::
+* Detecting invariants when running a Java program from a jar file::
 * Using DynComp with Java programs::
 * Understanding the invariants::
 * Understanding DynComp::
@@ -807,7 +806,7 @@ following steps after installing Daikon (@pxref{Installing Daikon}).
 @item
 Compile the program with the @option{-g} switch to enable debugging
 symbols.  (The program and test suite appear in the
-@file{DataStructures} subdirectory directory.)
+@file{DataStructures} subdirectory.)
 @example
 cd examples/java-examples/StackAr
 javac -g DataStructures/*.java
@@ -845,7 +844,7 @@ whole process is as follows:
 @item
 Compile the program with the @option{-g} switch to enable debugging
 symbols.  (The program and test suite appear in the
-@file{DataStructures} subdirectory directory.)
+@file{DataStructures} subdirectory.)
 @example
 cd examples/java-examples/StackAr
 javac -g DataStructures/*.java
@@ -932,6 +931,37 @@ For more information about the Annotate program, see @ref{Annotate}.
 
 @end itemize
 @end enumerate
+@exampleindent 4
+
+
+@node Detecting invariants when running a Java program from a jar file
+@subsection Detecting invariants when running a Java program from a jar file
+
+If your Java program is run directly from a @file{jar} file,
+such as either of:
+
+@exampleindent 1
+@example
+java mypackage.jar arguments
+java -cp <originalclasspath> mypackage.jar arguments
+@end example
+
+@noindent
+then to detect invariants in that Java program,
+run one of these commands:
+
+@smallexample
+java -cp mypackage.jar daikon.Chicory --daikon <MyMain> arguments
+java -cp mypackage.jar:<original classpath> daikon.Chicory --daikon <MyMain> arguments
+@end smallexample
+
+@noindent
+where @command{<MyMain>} is the Main-class of the @file{jar} file, which you
+can determine by running the command:
+
+@example
+unzip -p mypackage.jar META-INF/MANIFEST.MF | grep '^Main-Class:'
+@end example
 @exampleindent 4
 
 
@@ -2022,7 +2052,7 @@ programmers.
 @cindex output format, Jtest DBC
 @item DBC format
 This format produces output in the design-by-contract (@dfn{DBC}) format
-expected by @nospellcheck{Parasoft's} @command{Jtest} tool (@uref{http://www.parasoft.com}).
+expected by @nospellcheck{Parasoft's} @command{Jtest} tool (@uref{https://www.parasoft.com}).
 
 @c This implementation detail is not relevant to users
 @c Like the Java output format, this output format makes extensive use of
@@ -2941,8 +2971,8 @@ typical entry is
 PPT_NAME @var{pptname}
 @var{condition1}
 @var{condition2}
-    DAIKON_FORMAT @var{output string}
-    ESC_FORMAT @var{output string}
+    DAIKON_FORMAT @var{string}
+    ESC_FORMAT @var{string}
 @var{condition3}
 ...
 @end example
@@ -2966,13 +2996,17 @@ is intended to operate.)  The automatically generated Splitter source
 code fails to compile (but Daikon proceeds without it) if a variable
 name in a condition is not found at the matching program point.
 
-Indented lines beginning with @samp{DAIKON_FORMAT},
+An indented lines beginning with @samp{DAIKON_FORMAT},
 @samp{JAVA_FORMAT}, @samp{ESC_FORMAT}, or @samp{SIMPLIFY_FORMAT}
 @c UNDONE is there a @samp{CSHARPCONTRACT_FORMAT}?
-may be used to specify how to represent the
-condition specified by the splitter in each of Daikon's output
-formats, to allow the splitting condition to be used as a dummy
-invariant.
+specifies how to print the condition.
+These are optional; for any Daikon output format that is omitted,
+the Java condition itself is used.
+The alternate printed representation is used when the
+splitting condition is used as a dummy
+invariant; see configuration option
+@option{daikon.split.PptSplitter.dummy_invariant_level}.
+
 
 @node          Replacement sections
 @subsubsection Replacement sections
@@ -3022,7 +3056,7 @@ The disadvantage of indiscriminate splitting is that it slows Daikon down.
 
 Daikon uses a condition only where it can be used.  For example, the
 condition @code{myArray.length == x} is applicable only at program points
-where that have variables named @code{myArray} and @code{x}.  To see
+that have variables named @code{myArray} and @code{x}.  To see
 warnings about places a splitting condition cannot be used (reported as
 failure to compile splitters at those locations), place the following line
 in a file that is passed to Daikon via the @option{--config} flag
@@ -3580,7 +3614,6 @@ This section lists options that control which program points appear in
 Chicory's output.
 
 
-
 @table @option
 @item --ppt-select-pattern=@var{regexp}
 Only produce trace output for classes/procedures/program points whose
@@ -3600,13 +3633,6 @@ traces only @code{bar}, you could match the method name (in any class)
 with regular expression
 @samp{bar$}, or you could match the program point name with @samp{C\.bar\(}.
 
-Using Linux shell syntax, you would execute
-@example
-java daikon.Chicory --ppt-select-pattern='bar$' ...
-java daikon.Chicory --ppt-select-pattern='C\.bar\(' ...
-@end example
-
-From the Windows command line, you would execute
 @example
 java daikon.Chicory --ppt-select-pattern='bar$' ...
 java daikon.Chicory --ppt-select-pattern='C\.bar\(' ...
@@ -3621,12 +3647,6 @@ instrumented program run faster, since it need not output those variables.
 
 This option works just like @option{--ppt-select-pattern} does, except
 that matching program points are excluded, not included.
-
-The @option{--ppt-omit-pattern} argument may be supplied multiple times, in
-order to specify multiple omitting criteria.  A program point is omitted
-if its fully qualified class, procedure name, or
-complete program point name matches one of the omitting criteria.
-
 
 The @option{--ppt-omit-pattern} argument may be supplied multiple times, in
 order to specify multiple omitting criteria.  A program point is omitted
@@ -4222,11 +4242,10 @@ turned on with @option{--abridged-vars}.
 
 If you did not already do so when installing Daikon
 (@pxref{Complete installation}), follow the instructions here to build an
-instrumented copy of the JDK@.  Use the following command in
-@file{$DAIKONDIR}:
+instrumented copy of the JDK@.  Use the following command:
 
 @example
-make -C java dcomp_rt.jar
+make -C $DAIKONDIR/java dcomp_rt.jar
 @end example
 
 Make sure the @env{JAVA_HOME} environment variable is set to the directory
@@ -4464,7 +4483,7 @@ If you want to run tests using JUnit, then explicitly create a Suite that
 contains the tests you want to run, rather than annotating methods with
 @code{@@Test} and depending on JUnit to find them and call them via reflection.
 If you are generating JUnit test suites with 
-@uref{http://mernst.github.io/randoop/, ,Randoop}, then supply the
+@uref{http://randoop.github.io/randoop/, ,Randoop}, then supply the
 @option{--junit-reflection-allowed=false} command-line option to Randoop.
 @item
 @c The manual should be more specific about how a user can know this is the
@@ -4894,7 +4913,7 @@ This option applies an approximation for handling literal values which
 greatly speeds up the performance of DynComp and drastically lowers its
 memory usage, but at the expense of a slight loss in precision of the
 generated comparability sets.  If you cannot get DynComp to successfully
-run on a large program, even after tweaking @option{--gc-num-vars}, try
+run on a large program, even after tweaking @option{--gc-num-tags}, try
 turning on this option.
 
 @item --dyncomp-detailed-mode
@@ -8048,7 +8067,7 @@ JVM-specific; see your JVM documentation for details.  For instance,
 its name in JDK versions 1.2 and earlier is @option{-mx}.)
 However, the value you use should be less than your system's total amount
 of physical memory.
-Some implementations of Java use a suprisingly small default, such as 64
+Some implementations of Java use a surprisingly small default, such as 64
 megabytes; to permit use of up to 2048
 megabytes, you would run Java like so:
 @example
@@ -8770,7 +8789,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.2.11, released August 5, 2015.
+This manual describes Daikon version 5.2.21, released January 6, 2016.
 A more detailed list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -8784,7 +8803,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.2.11
+@cindex Daikon version 5.2.21
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited

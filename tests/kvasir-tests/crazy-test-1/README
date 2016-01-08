@@ -1,3 +1,8 @@
+To reduce the number of goal file differences, I haved committed the 
+'incorrect' comp.goal file.  If and when this problem is fixed,
+we can compare the revised results to comp.goal.386.
+markro 10/1/2015
+
 crazy-test-1.comp fails (64 bits only) due to the 'multiple struct members
 in a single register' problem.
 This will require a significant amount of work in Kvasir to repair.

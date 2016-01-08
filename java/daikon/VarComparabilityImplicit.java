@@ -76,13 +76,13 @@ public final class VarComparabilityImplicit
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals (final /*@Nullable*/ Object o) {
     if (!(o instanceof VarComparabilityImplicit)) return false;
     return equals ((VarComparabilityImplicit) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (VarComparabilityImplicit o) {
+  /*@Pure*/ public boolean equals (final VarComparabilityImplicit o) {
     return equality_set_ok (o);
   }
 

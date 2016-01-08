@@ -86,7 +86,7 @@ int main()
   char localString33[33];
   int* localIntArray = (int*)malloc(6*sizeof(*localIntArray));
   buffer* cur_buffer = 0;
-  printf("buffer population[999]: %p\n", (unsigned long)population);
+  printf("buffer population[999]: %p\n", population);
   printf("buffer multiDimensional[4][5][12]: %p\n", multiDimensional);
 
   cur_buffer = population;
@@ -108,7 +108,7 @@ int main()
   localIntArray[4] = 65;
   localIntArray[5] = 68;
 
-  printf("%s %d %s %f %s %u\n",
+  printf("%s %d %s %f %s %lu\n",
 	 population[0].firstName,
 	 population[0].age,
 	 population[0].middleName,
@@ -128,7 +128,7 @@ int main()
   strcpy(populationPtr->lastName, "supercalifragilisticexpialadocious");
   populationPtr->SS = 12121212;
 
-  printf("%s %d %s %f %s %u\n",
+  printf("%s %d %s %f %s %lu\n",
 	 populationPtr[0].firstName,
 	 populationPtr[0].age,
 	 populationPtr[0].middleName,

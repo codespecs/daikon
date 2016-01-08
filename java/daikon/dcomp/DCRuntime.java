@@ -16,7 +16,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-@SuppressWarnings("nullness")
+@SuppressWarnings({"nullness","interning"}) // tricky code, skip for now
 public final class DCRuntime {
 
   /** List of all instrumented methods **/
@@ -2194,7 +2194,7 @@ public final class DCRuntime {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo))
           continue;
-        ArrayList<String> stuff = shinyOutput(set, daikon.DynComp.shiny_print);
+        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf ("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2209,7 +2209,7 @@ public final class DCRuntime {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo))
           continue;
-        ArrayList<String> stuff = shinyOutput(set, daikon.DynComp.shiny_print);
+        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf ("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2242,7 +2242,7 @@ public final class DCRuntime {
         if (set.get(0) instanceof ParameterInfo)
           if (((ParameterInfo)(set.get(0))).isPrimitive())
             continue;
-        ArrayList<String> stuff = shinyOutput(set, daikon.DynComp.shiny_print);
+        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf ("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2263,7 +2263,7 @@ public final class DCRuntime {
         if (set.get(0) instanceof ParameterInfo)
           if (((ParameterInfo)(set.get(0))).isPrimitive())
             continue;
-        ArrayList<String> stuff = shinyOutput(set, daikon.DynComp.shiny_print);
+        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         ps.printf ("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2321,13 +2321,13 @@ public final class DCRuntime {
      */
 
     if (depth == 0) {
-      ps.printf("%s%n", shinyOutput(node, daikon.DynComp.shiny_print));
+      ps.printf("%s%n", skinyOutput(node, daikon.DynComp.abridged_vars));
       if (tree.get(node) == null) return;
       for (DaikonVariableInfo child : tree.get(node))
         if (child != node) print_tree(ps, tree, child, depth + 1);
     } else {
       for (int i = 0; i < depth; i++) ps.printf("--");
-      ps.printf("%s (%s)%n", shinyOutput(node, daikon.DynComp.shiny_print)
+      ps.printf("%s (%s)%n", skinyOutput(node, daikon.DynComp.abridged_vars)
                            , TagEntry.get_line_trace(node));
       if (tree.get(node) == null ) return;
       for (DaikonVariableInfo child : tree.get(node))
@@ -2343,14 +2343,14 @@ public final class DCRuntime {
    * e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *    "daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
    */
-  private static ArrayList<String> shinyOutput(DVSet l, boolean on) {
+  private static ArrayList<String> skinyOutput(DVSet l, boolean on) {
     ArrayList<String> o = new ArrayList<String>();
     for(DaikonVariableInfo dvi : l)
-      o.add(shinyOutput(dvi, on));
+      o.add(skinyOutput(dvi, on));
     return o;
   }
 
-  private static String shinyOutput(DaikonVariableInfo dv, boolean on) {
+  private static String skinyOutput(DaikonVariableInfo dv, boolean on) {
     if (!on) return dv.toString();
     String dvtxt = dv.toString();
     String type = dvtxt.split(":")[0];

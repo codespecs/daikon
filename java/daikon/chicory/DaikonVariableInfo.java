@@ -458,7 +458,7 @@ public abstract class DaikonVariableInfo
      * @param type the class whose fields should all be added to this node
      */
     /*@RequiresNonNull("#1.clazz")*/
-    protected void addClassVars(ClassInfo cinfo, boolean dontPrintInstanceVars,
+    protected void addClassVars(final ClassInfo cinfo, boolean dontPrintInstanceVars,
                                 Class<?> type, String offset, int depth) {
 
         //DaikonVariableInfo corresponding to the "this" object
@@ -1208,7 +1208,7 @@ public abstract class DaikonVariableInfo
     *                "this.ballCount."
     */
    /*@RequiresNonNull("#1.clazz")*/
-   protected void addChildNodes(ClassInfo cinfo, Class<?> type, String theName,
+   protected void addChildNodes(final ClassInfo cinfo, Class<?> type, String theName,
                                 String offset, int depthRemaining) {
 
        debug_vars.log ("enter addChildNodes:%n");

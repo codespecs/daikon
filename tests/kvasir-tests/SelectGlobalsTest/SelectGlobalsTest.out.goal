@@ -6,6 +6,6 @@
 
 Begin processing variable list file "SelectGlobalsTest.vars" ...
 Done processing variable list file "SelectGlobalsTest.vars"
-4 0 -1
+4 3 -1
 ==PID== 
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

@@ -8,8 +8,10 @@
 ##                  (or "none" if you don't have it)
 ## Optionally, you may set the following environment variables:
 ##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
-##        files, instead of the default, which is to use daikon.jar.
-## You should not need to edit this file directly.
+##        files, instead of the default, which is to use daikon.jar.  This is
+##        useful if you have made changes to Daikon and compiled the .java
+##        files to .class files but have not re-made the daikon.jar file.
+## You should not need to edit this file.
 
 if (! $?JAVA_HOME) then
   echo "JAVA_HOME environment variable is not set."

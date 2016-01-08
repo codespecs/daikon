@@ -22,6 +22,7 @@ import org.apache.commons.bcel6.verifier.structurals.*;
 import org.apache.commons.io.*;
 
 /*>>>
+import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -56,7 +57,7 @@ public class SummaryInfo {
     init();
   }
 
-  String invoke_type;           // interned
+  /*@Interned*/ String invoke_type;           // interned
   /*@BinaryNameForNonArray*/ String original_classname;
   String original_methodname;
   java.lang.reflect.Method method;

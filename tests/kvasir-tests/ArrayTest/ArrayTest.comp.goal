@@ -11,35 +11,32 @@
 ::eightA[..]
 ::eightA[..].B[0]
 ::eightA[..].B[0]->C
-::eightA[..].B[0]->C.baz_head
+::eightA[..].B[0]->C.baz_head ::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->C.baz_tail
 ::eightA[..].B[0]->C.y
 ::eightA[..].B[0]->D
 ::eightA[..].B[0]->D->neverSeeMe
 ::eightA[..].B[0]->D[0]
-::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->bar_tail
 ::eightA[..].B[0][0]
 ::eightA[..].B[1]
 ::eightA[..].B[1]->C
-::eightA[..].B[1]->C.baz_head
+::eightA[..].B[1]->C.baz_head ::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->C.baz_tail
 ::eightA[..].B[1]->C.y
 ::eightA[..].B[1]->D
 ::eightA[..].B[1]->D->neverSeeMe
 ::eightA[..].B[1]->D[0]
-::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->bar_tail
 ::eightA[..].B[1][0]
 ::eightA[..].B[2]
 ::eightA[..].B[2]->C
-::eightA[..].B[2]->C.baz_head
+::eightA[..].B[2]->C.baz_head ::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->C.baz_tail
 ::eightA[..].B[2]->C.y
 ::eightA[..].B[2]->D
 ::eightA[..].B[2]->D->neverSeeMe
 ::eightA[..].B[2]->D[0]
-::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->bar_tail
 ::eightA[..].B[2][0]
 ::eightA[..].foo_head
@@ -80,35 +77,32 @@
 ::eightA[..]
 ::eightA[..].B[0]
 ::eightA[..].B[0]->C
-::eightA[..].B[0]->C.baz_head
+::eightA[..].B[0]->C.baz_head ::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->C.baz_tail
 ::eightA[..].B[0]->C.y
 ::eightA[..].B[0]->D
 ::eightA[..].B[0]->D->neverSeeMe
 ::eightA[..].B[0]->D[0]
-::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->bar_tail
 ::eightA[..].B[0][0]
 ::eightA[..].B[1]
 ::eightA[..].B[1]->C
-::eightA[..].B[1]->C.baz_head
+::eightA[..].B[1]->C.baz_head ::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->C.baz_tail
 ::eightA[..].B[1]->C.y
 ::eightA[..].B[1]->D
 ::eightA[..].B[1]->D->neverSeeMe
 ::eightA[..].B[1]->D[0]
-::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->bar_tail
 ::eightA[..].B[1][0]
 ::eightA[..].B[2]
 ::eightA[..].B[2]->C
-::eightA[..].B[2]->C.baz_head
+::eightA[..].B[2]->C.baz_head ::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->C.baz_tail
 ::eightA[..].B[2]->C.y
 ::eightA[..].B[2]->D
 ::eightA[..].B[2]->D->neverSeeMe
 ::eightA[..].B[2]->D[0]
-::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->bar_tail
 ::eightA[..].B[2][0]
 ::eightA[..].foo_head
@@ -409,35 +403,32 @@ ArrayTest.c.returnIntSum():::ENTER
 ::eightA[..]
 ::eightA[..].B[0]
 ::eightA[..].B[0]->C
-::eightA[..].B[0]->C.baz_head
+::eightA[..].B[0]->C.baz_head ::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->C.baz_tail
 ::eightA[..].B[0]->C.y
 ::eightA[..].B[0]->D
 ::eightA[..].B[0]->D->neverSeeMe
 ::eightA[..].B[0]->D[0]
-::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->bar_tail
 ::eightA[..].B[0][0]
 ::eightA[..].B[1]
 ::eightA[..].B[1]->C
-::eightA[..].B[1]->C.baz_head
+::eightA[..].B[1]->C.baz_head ::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->C.baz_tail
 ::eightA[..].B[1]->C.y
 ::eightA[..].B[1]->D
 ::eightA[..].B[1]->D->neverSeeMe
 ::eightA[..].B[1]->D[0]
-::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->bar_tail
 ::eightA[..].B[1][0]
 ::eightA[..].B[2]
 ::eightA[..].B[2]->C
-::eightA[..].B[2]->C.baz_head
+::eightA[..].B[2]->C.baz_head ::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->C.baz_tail
 ::eightA[..].B[2]->C.y
 ::eightA[..].B[2]->D
 ::eightA[..].B[2]->D->neverSeeMe
 ::eightA[..].B[2]->D[0]
-::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->bar_tail
 ::eightA[..].B[2][0]
 ::eightA[..].foo_head
@@ -482,35 +473,32 @@ ArrayTest.c.returnIntSum():::EXIT0
 ::eightA[..]
 ::eightA[..].B[0]
 ::eightA[..].B[0]->C
-::eightA[..].B[0]->C.baz_head
+::eightA[..].B[0]->C.baz_head ::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->C.baz_tail
 ::eightA[..].B[0]->C.y
 ::eightA[..].B[0]->D
 ::eightA[..].B[0]->D->neverSeeMe
 ::eightA[..].B[0]->D[0]
-::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->bar_tail
 ::eightA[..].B[0][0]
 ::eightA[..].B[1]
 ::eightA[..].B[1]->C
-::eightA[..].B[1]->C.baz_head
+::eightA[..].B[1]->C.baz_head ::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->C.baz_tail
 ::eightA[..].B[1]->C.y
 ::eightA[..].B[1]->D
 ::eightA[..].B[1]->D->neverSeeMe
 ::eightA[..].B[1]->D[0]
-::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->bar_tail
 ::eightA[..].B[1][0]
 ::eightA[..].B[2]
 ::eightA[..].B[2]->C
-::eightA[..].B[2]->C.baz_head
+::eightA[..].B[2]->C.baz_head ::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->C.baz_tail
 ::eightA[..].B[2]->C.y
 ::eightA[..].B[2]->D
 ::eightA[..].B[2]->D->neverSeeMe
 ::eightA[..].B[2]->D[0]
-::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->bar_tail
 ::eightA[..].B[2][0]
 ::eightA[..].foo_head

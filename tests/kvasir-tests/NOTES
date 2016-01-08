@@ -44,7 +44,7 @@ dtrace-append is a test meant to check if Kvasir correctly outputs appended trac
 NON-WORKING TESTS
 
 These tests are meant to illustrate some features that Kvasir does not currently support,
-mainly due to it's handling of function entry/exit.
+mainly due to its handling of function entry/exit.
 
 pthread-test - used to gauge the ability of Fjalar to handle multithreaded situations. 
 This is a simple test which forces an interleaving of 2 functions.

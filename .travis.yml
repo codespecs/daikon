@@ -1,0 +1,45 @@
+language: java
+
+## Version for Ubuntu 14.04 Trusty.
+## Problem: The job times out on travis-ci.org, but the container-based version
+## does not.
+# script: make DAIKONDIR=`pwd` nightly-test
+# sudo: required
+# dist: trusty
+# before_install:
+#   - sudo apt-get update -qq
+#   - sudo apt-get install -qq graphviz texinfo texlive
+
+## Version for container-based infrastructure.
+## Skip generating the manual because the version of makeinfo installed
+## on Ubuntu 12.04 Precise doesn't take the --pdf command-line option.
+script: make DAIKONDIR=`pwd` nightly-test-except-doc-pdf
+sudo: false
+addons:
+  apt:
+    packages:
+      - graphviz
+      - texi2html
+      - texinfo
+# On Travis-CI's Ubuntu 12.04 infrastructure, makeinfo does not take the
+# --split=chapter command-line argument but texi2html does.
+env: TEXI2HTML=texi2html
+
+jdk:
+  - oraclejdk8
+#  - oraclejdk7
+  - openjdk7
+
+notifications:
+  email:
+    - mernst@cs.washington.edu
+    - markro@cs.washington.edu
+
+after_success:
+  - |
+      if [[ ($TRAVIS_BRANCH == master) &&
+            ($TRAVIS_PULL_REQUEST == false) &&
+            ( (! $TRAVIS_JOB_NUMBER == *.*) || ($TRAVIS_JOB_NUMBER == *.1) ) ]] ; then
+        curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
+        sh trigger-travis.sh codespecs daikon-typecheck $TRAVISTOKEN
+      fi

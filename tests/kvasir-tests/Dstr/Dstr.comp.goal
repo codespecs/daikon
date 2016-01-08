@@ -319,17 +319,15 @@ Dstr.Dstr(char\_const*):::ENTER
 ::collation
 ::collation[..]
 this
-this->max this->used
+this->max this->used this[0]
 this->theBuffer val
-this[0]
 
 Dstr.Dstr(char\_const*):::EXIT0
 ::collation
 ::collation[..]
 this
-this->max this->used
+this->max this->used this[0]
 this->theBuffer val
-this[0]
 
 Dstr.aschar()\_const:::ENTER
 ::collation

@@ -14,6 +14,9 @@ import typequals.*;
  * This is a special invariant used internally by Daikon to represent
  * invariants whose meaning Daikon doesn't understand. The only
  * operation that can be performed on a DummyInvariant is to print it.
+ * In particular, the invariant cannot be tested against a sample:
+ * the invariant is always assumed to hold and is always considered to be
+ * statistically justified.
  * <p>
  *
  * The main use for a dummy invariant is to represent a splitting condition

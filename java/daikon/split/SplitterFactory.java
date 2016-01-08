@@ -58,7 +58,7 @@ public class SplitterFactory {
     // a -Java 6 or Java 7 runtime.  A better solution would be to add
     // these command-line arguments only when running
     // SplitterFactoryTestUpdater, but that program does not support that.
-    = "javac -source 6 -target 6 -classpath " + new File(System.getenv("DAIKONDIR"), "java")  + File.pathSeparatorChar + new File(System.getenv("DAIKONDIR"), "daikon.jar");
+    = "javac -nowarn -source 6 -target 6 -classpath " + new File(System.getenv("DAIKONDIR"), "java")  + File.pathSeparatorChar + new File(System.getenv("DAIKONDIR"), "daikon.jar");
 
   /**
    * Positive integer.  Specifies the Splitter compilation timeout, in
@@ -125,6 +125,8 @@ public class SplitterFactory {
                 sp.addElement(splitter);
                 numGood++;
               } else {
+                // UNDONE: We should only output the load error if the
+                // compile was successful.
                 System.out.println(splitterObjects[i][k].getError());
               }
             }

@@ -467,10 +467,6 @@ public class Instrument implements ClassFileTransformer {
   // This really should be part of the abstraction provided by BCEL,
   // similar to LineNumberTable and LocalVariableTable.  However, for
   // now we'll do it all within Instrument.java.
-
-  // Set by instrument_all_methods
-  // Used by instrument_all_methods, find_stack_map_equal, find_stack_map_after,
-  // update_stack_map_offset, add_entry_instrumentation
   private StackMapEntry[] stack_map_table;
   private StackMapEntry[] empty_stack_map_table = {};
   // kind of a hack since no pointers in Java and not
@@ -478,6 +474,8 @@ public class Instrument implements ClassFileTransformer {
   private int running_offset;
   // original stack map table
   private StackMap smta;
+  //Map<Integer, InstructionHandle> offset_map = new HashMap<Integer, InstructionHandle>();
+  InstructionHandle[] offset_map;
 
 
  /**
@@ -581,6 +579,15 @@ public class Instrument implements ClassFileTransformer {
         if (mi == null)  // method filtered out!
           continue;
 
+        // Create a map of Uninitialized_variable_info offsets to
+        // InstructionHandles.  We will use this map after we
+        // complete instrumentation to update the offsets due
+        // to code modification and expansion.
+        // The offsets point to 'new' instructions; since we do
+        // not modify these, their Instruction Handles will remain
+        // unchanged throught the instrumentaion process.
+        process_uninitialized_variable_info(il, true);
+
         if (!shouldInclude && debug) {
           out.format ("Class %s included [%s]%n", cg.getClassName(), mi);
         }
@@ -675,6 +682,11 @@ public class Instrument implements ClassFileTransformer {
           ih = next_ih;
         }
 
+        // Update the Uninitialized_variable_info offsets before
+        // we write out the new StackMapTable.
+        process_uninitialized_variable_info(il, false);
+        print_stack_map_table("Final");
+
         // Build new StackMapTable attribute
         StackMap map_table = new StackMap(pgen.addUtf8("StackMapTable"),
                                                     0, null, pgen.getConstantPool());
@@ -730,10 +742,10 @@ public class Instrument implements ClassFileTransformer {
 
     if (shouldInclude) {
       debug_transform.log ("Added trace info to class %s%n", class_info);
-      synchronized(Runtime.new_classes) {
+      synchronized (Runtime.new_classes) {
         Runtime.new_classes.add(class_info);
       }
-      synchronized(Runtime.all_classes) {
+      synchronized (Runtime.all_classes) {
         Runtime.all_classes.add(class_info);
       }
     } else { // not included
@@ -922,6 +934,67 @@ public class Instrument implements ClassFileTransformer {
     throw new RuntimeException("Invalid StackMap offset 2");
   }
 
+
+  /**
+   * Either save or update the uninitialized_variable_info
+   * offsets.  If 'save' is true, build a HashMap of
+   * offsets to InsturctionHandles.  If 'save' is false,
+   * update the offsets using the HashMap.
+   */
+  private void
+  process_uninitialized_variable_info (InstructionList il, boolean save) {
+    il.setPositions();
+    if (save) {
+        // UNDONE: Should this be a sparse array?
+        // We allocate one entry for each byte of the instruction list.
+        offset_map = new InstructionHandle[il.getEnd().getPosition()];
+    }
+    for (int i = 0; i < stack_map_table.length; i++) {
+      int max_types;
+      StackMapType[] types;
+      StackMapTableEntry stack_map = stack_map_table[i];
+
+      max_types = stack_map.getNumberOfLocals();
+      if (max_types > 0) {
+        types = stack_map.getTypesOfLocals();
+        process_uninitialized_variable_items(max_types, types, il, save);
+      }
+
+      max_types = stack_map.getNumberOfStackItems();
+      if (max_types > 0) {
+        types = stack_map.getTypesOfStackItems();
+        process_uninitialized_variable_items(max_types, types, il, save);
+      }
+    }
+  }
+
+  private void
+  process_uninitialized_variable_items (int max_types, StackMapType[] types,
+                                        InstructionList il, boolean save) {
+    for (int j = 0; j < max_types; j++) {
+      if (types[j].getType() == Constants.ITEM_NewObject) {
+        int offset = types[j].getIndex();
+        if (save) {
+          // Initial pass over StackMapTable
+          // build the offset_map
+          InstructionHandle ih = il.findHandle(offset);
+          assert (ih != null) : " no InstructionHandle for offset";
+          InstructionHandle ih2 = offset_map[offset];
+          if (ih2 != null) {
+            assert (ih.equals(ih2)) : " InstructionHandles don't match";
+          } else {
+            offset_map[offset] = ih;
+          }
+        } else {
+          // Final pass over StackMapTable
+          // update the offsets
+          InstructionHandle ih = offset_map[offset];
+          assert (ih != null) : " no InstructionHandle for offset";
+          types[j].setIndex(ih.getPosition());
+        }
+      }
+    }
+  }
 
   /**
    * Check to see if there have been any changes in a switch statement's
@@ -1764,9 +1837,12 @@ public class Instrument implements ClassFileTransformer {
       for (int ii = first_local_index; ii < locals.length; ii++) {
         l = locals[ii];
         if (l.getIndex() > offset) {
+            // if offset is 0, probably a lock object
             // there is hidden compiler temp before the next local
+            // We set its lifetime to start+1,end to make sure our
+            // local_nonce variable is allocated prior to this temp.
             new_lvg = mg.addLocalVariable ("DaIkOnTeMp" + offset, Type.INT, offset,
-                                 il.getStart(), il.getEnd());
+                                 (il.getStart()).getNext(), il.getEnd());
             ii--; // need to revisit same local
         } else {
             new_lvg = mg.addLocalVariable (l.getName(), l.getType(), l.getIndex(),

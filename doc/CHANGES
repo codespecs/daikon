@@ -20,6 +20,71 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.20 (January 5, 2016)
+
+Documentation:
+- Improved instructions on building Daikon and Kvasir.
+
+===========================================================================
+
+5.2.18 (December 5, 2015)
+
+Daikon:
+- Avoid ConcurrentModificationException in the FileIOProgress thread.
+- Makefile in distribution is now the same as in a cloned repository.
+
+Kvasir:
+- Eliminated OS-specific regression test failures.
+
+Documentation:
+- New manual section "Detecting invariants when running a Java program from
+  a jar file"
+- Restructured developer manual section "Requirements for compiling Daikon"
+
+Distribution:
+- The distribution contains new directories doc/www, java/jtb, and java/lib,
+  which makes the directory layout more like the repository's.
+
+===========================================================================
+
+5.2.16 (November 2, 2015)
+
+Chicory:
+- Improved handling of Java code containing synchronized locks.
+- Improved handling of Java initialization methods containing calls
+  to other initialization methods.
+
+Daikon:
+- The --shiny-print option was renamed --abridged-vars to match the
+  documentation.
+
+Kvasir:
+- We made some changes to the DynComp tool to improve the accuracy of the
+  comparability information. Occasionally, the system loader was causing
+  unrelated items to be placed in the same comparability set.  
+
+===========================================================================
+
+5.2.14 (October 5, 2015)
+
+Daikon:
+  We have improved splitter verification testing.
+
+Documentation:
+  Improved discussion of splitters
+
+===========================================================================
+
+5.2.12 (September 3, 2015)
+
+Daikon:
+  We have improved splitter file processing.
+
+Documentation:
+  Improved discussion of splitters
+
+===========================================================================
+
 5.2.10 (August 4, 2015)
 
 Chicory:
