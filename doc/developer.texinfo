@@ -2320,7 +2320,9 @@ make -C $DAIKONDIR/tests clean diffs
 @c [Time: 25 min]
 @c Time has increased significantly with additon of
 @c more tests.  Time below is on buffalo as of 12/16/2015
-[Time: 83 min]
+@c A clock synchronization problem on my shared file server
+@c was causing make to rebuild too much.  Fixed 1/8/2016.
+[Time: 59 min]
 
 
 @need 1000
