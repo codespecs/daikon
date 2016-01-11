@@ -20,6 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.22 (Next release, due approx Feb. 1)
+
+We have updated the Daikon tool set to include a newer version of BCEL.
+If Chicory throws an error such as the following:
+    "BCEL must be in the classpath.  Normally it is found in daikon.jar."
+Then the problem is most likely that your classpath contains a previous
+version of daikon.jar or plume.jar.
+
+===========================================================================
+
 5.2.20 (January 5, 2016)
 
 Documentation:

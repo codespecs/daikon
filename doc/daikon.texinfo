@@ -8586,9 +8586,25 @@ Chicory; please report it if it is not already explained in this manual.
 
 
 @menu
+* BCEL must be in the classpath
 * VerifyError constant pool index error::
 * Attempted duplicate class definition error::
 @end menu
+
+@node       BCEL must be in the classpath
+@subsection BCEL must be in the classpath
+@cindex BCEL error, when running Chicory
+
+If Chicory throws an error such as the following:
+@smallexample
+BCEL must be in the classpath.  Normally it is found in daikon.jar.
+@end smallexample
+
+then the problem is most likely that your classpath does not contain
+daikon.jar.  If you are running a Daikon version post 5.2.20; then it
+could be caused by your classpath containing a previous version of
+daikon.jar or plume.jar.
+
 
 @node       VerifyError constant pool index error
 @subsection VerifyError constant pool index error
