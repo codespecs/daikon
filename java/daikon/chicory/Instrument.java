@@ -952,7 +952,7 @@ public class Instrument implements ClassFileTransformer {
     for (int i = 0; i < stack_map_table.length; i++) {
       int max_types;
       StackMapType[] types;
-      StackMapTableEntry stack_map = stack_map_table[i];
+      StackMapEntry stack_map = stack_map_table[i];
 
       max_types = stack_map.getNumberOfLocals();
       if (max_types > 0) {
@@ -972,7 +972,7 @@ public class Instrument implements ClassFileTransformer {
   process_uninitialized_variable_items (int max_types, StackMapType[] types,
                                         InstructionList il, boolean save) {
     for (int j = 0; j < max_types; j++) {
-      if (types[j].getType() == Constants.ITEM_NewObject) {
+      if (types[j].getType() == Const.ITEM_NewObject) {
         int offset = types[j].getIndex();
         if (save) {
           // Initial pass over StackMapTable
