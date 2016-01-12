@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.2.22 (Next release, due approx Feb. 1)
+5.2.22 (??)
 
 We have updated the Daikon tool set to include a newer version of BCEL.
 If Chicory throws an error such as the following:
