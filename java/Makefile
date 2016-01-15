@@ -875,7 +875,7 @@ check-interning-all: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
-# These targets run the Interning checker on just one file.
+# This target runs the Interning checker on just one file.
 # Typical command:
 # INTERNING_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-interning-onefile
 INTERNING_ONEFILE ?= daikon/PptTopLevel.java
@@ -886,6 +886,13 @@ signature: check-signature
 check-signature: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+
+# This target runs the Signature checker on just one file.
+# Typical command:
+# SIGNATURE_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-signature-onefile
+SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
+check-signature-onefile: ${ALL_GENERATED_FILES} compile
+	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 
 check-nullness: daikon/util/README check-nullness-all
 
