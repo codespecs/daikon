@@ -282,7 +282,10 @@ clean-everything-but-kvasir:
 	${MAKE} -C ${DAIKONDIR}/doc very-clean
 
 clean-kvasir:
-	-${MAKE} -C ${DAIKONDIR}/fjalar/valgrind uninstall distclean 
+# make sure fjalar directory exists
+ifeq (true, $(shell if [ -d fjalar ] ; then echo true; fi))
+	-${MAKE} -C ${DAIKONDIR}/fjalar/valgrind uninstall distclean
+endif
 
 
 ### Testing the code
