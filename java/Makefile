@@ -422,7 +422,8 @@ AUTO_GENERATED_FILES_2 = \
 
 AUTO_GENERATED_CLASSES_2 = $(subst .java,.class,${AUTO_GENERATED_FILES_2})
 
-ALL_GENERATED_FILES = ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+# Used as a prerequisite, not for the file names, so OK to include plume-lib-update.
+ALL_GENERATED_FILES = plume-lib-update ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
 
 ###########################################################################
