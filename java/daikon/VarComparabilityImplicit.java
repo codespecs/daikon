@@ -4,6 +4,7 @@ import java.util.Vector;
 import java.io.Serializable;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -62,7 +63,7 @@ public final class VarComparabilityImplicit
     this.dimensions = dimensions;
   }
 
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
     if (base < 0) {
       // This is equals() to everything
       return -1;
@@ -204,7 +205,7 @@ public final class VarComparabilityImplicit
   }
 
   // for debugging
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
     String result = "" + base;
     for (int i=0; i<dimensions; i++) {
       result += "[" + indexType(i) + "]";

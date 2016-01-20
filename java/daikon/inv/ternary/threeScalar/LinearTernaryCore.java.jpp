@@ -48,6 +48,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -163,7 +164,7 @@ public final class CLASSNAME
     this.wrapper = wrapper;
   }
 
-  /*@SideEffectFree*/ public CLASSNAME clone() {
+  /*@SideEffectFree*/ public CLASSNAME clone(/*>>>@GuardSatisfied LinearTernaryCore this*/) {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
       result.def_points = new Point[MINTRIPLES];

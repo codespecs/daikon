@@ -23,6 +23,7 @@ import daikon.chicory.DaikonWriter;
 import daikon.DynComp;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -31,7 +32,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * Instruments a class file to perform Dynamic Comparability.
  */
-@SuppressWarnings({"nullness","interning"})   //
+@SuppressWarnings("nullness")   //
 class DCInstrument {
 
   protected JavaClass orig_class;
@@ -902,7 +903,7 @@ class DCInstrument {
       return equals (md.name, md.arg_types);
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied MethodDef this*/) {
       int code = name.hashCode();
       for (Type arg : arg_types)
         code += arg.hashCode();
@@ -921,7 +922,7 @@ class DCInstrument {
     public boolean contains (int offset) {
       return (offset >= start_pc) && (offset < (start_pc + len));
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CodeRange this*/) {
       return String.format ("Code range: %d..%d", start_pc, start_pc+len-1);
     }
   }

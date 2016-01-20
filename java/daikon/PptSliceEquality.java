@@ -13,6 +13,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -77,7 +78,7 @@ public class PptSliceEquality
   private static class VarInfoAndComparability {
     public VarInfo vi;
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoAndComparability this*/) {
       // This is about as good as we can do it.  Can't do hashcode of
       // the comparability because two comparabilities may be
       // comparable and yet be not the same
@@ -611,7 +612,7 @@ public class PptSliceEquality
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSliceEquality this*/) {
     StringBuffer result = new StringBuffer("PptSliceEquality: [");
     for (Invariant inv : invs) {
       result.append (inv.repr());

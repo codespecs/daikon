@@ -130,7 +130,7 @@ public class Runtime
 
     /** Stack of active methods. **/
     // /*@GuardedBy("Runtime.class")*/ Map<Thread, /*@GuardedBy("Runtime.class")*/ Stack</*@GuardedBy("Runtime.class")*/ CallInfo>> is the ideal annotated type,
-    // however this is not possible since Map is not a proper parameterized type. 
+    // however this is not possible since Map is not a proper parameterized type.
     private static /*@GuardedBy("Runtime.class")*/ Map<Thread, Stack<CallInfo>> thread_to_callstack
         = new LinkedHashMap<Thread,Stack<CallInfo>>();
 
@@ -758,7 +758,7 @@ public class Runtime
   public static class BooleanWrap implements PrimitiveWrapper{
     boolean val;
     public BooleanWrap (boolean val) { this.val = val; }
-    /*@SideEffectFree*/ public String toString() { return Boolean.toString(val); }
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied BooleanWrap this*/) { return Boolean.toString(val); }
     public Boolean getJavaWrapper() { return new Boolean(val); }
     public Class<?> primitiveClass() { return boolean.class; }
   }
@@ -767,7 +767,7 @@ public class Runtime
   public static class ByteWrap implements PrimitiveWrapper{
     byte val;
     public ByteWrap (byte val) { this.val = val; }
-    /*@SideEffectFree*/ public String toString() { return Byte.toString(val); }
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ByteWrap this*/) { return Byte.toString(val); }
     public Byte getJavaWrapper() { return new Byte(val); }
     public Class<?> primitiveClass() { return byte.class; }
   }
@@ -777,7 +777,7 @@ public class Runtime
     char val;
     public CharWrap (char val) { this.val = val; }
     // Print characters as integers.
-    /*@SideEffectFree*/ public String toString() { return Integer.toString(val); }
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CharWrap this*/) { return Integer.toString(val); }
     public Character getJavaWrapper() { return new Character(val); }
     public Class<?> primitiveClass() { return char.class; }
   }
@@ -786,7 +786,7 @@ public class Runtime
   public static class FloatWrap implements PrimitiveWrapper{
     float val;
     public FloatWrap (float val) { this.val = val; }
-    /*@SideEffectFree*/ public String toString() { return Float.toString(val); }
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied FloatWrap this*/) { return Float.toString(val); }
     public Float getJavaWrapper() { return new Float(val); }
     public Class<?> primitiveClass() { return float.class; }
   }
@@ -795,7 +795,7 @@ public class Runtime
   public static class IntWrap implements PrimitiveWrapper{
     int val;
     public IntWrap (int val) { this.val = val; }
-    /*@SideEffectFree*/ public String toString() { return Integer.toString(val); }
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied IntWrap this*/) { return Integer.toString(val); }
     public Integer getJavaWrapper() { return new Integer(val); }
     public Class<?> primitiveClass() { return int.class; }
   }
@@ -804,7 +804,7 @@ public class Runtime
   public static class LongWrap implements PrimitiveWrapper{
     long val;
     public LongWrap (long val) { this.val = val; }
-    /*@SideEffectFree*/ public String toString() { return Long.toString(val); }
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied LongWrap this*/) { return Long.toString(val); }
     public Long getJavaWrapper() { return new Long(val); }
     public Class<?> primitiveClass() { return long.class; }
   }
@@ -813,7 +813,7 @@ public class Runtime
   public static class ShortWrap implements PrimitiveWrapper{
     short val;
     public ShortWrap (short val) { this.val = val; }
-    /*@SideEffectFree*/ public String toString() { return Short.toString(val); }
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ShortWrap this*/) { return Short.toString(val); }
     public Short getJavaWrapper() { return new Short(val); }
     public Class<?> primitiveClass() { return short.class; }
   }
@@ -822,7 +822,7 @@ public class Runtime
   public static class DoubleWrap implements PrimitiveWrapper{
     double val;
     public DoubleWrap (double val) { this.val = val; }
-    /*@SideEffectFree*/ public String toString() { return Double.toString(val); }
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DoubleWrap this*/) { return Double.toString(val); }
     public Double getJavaWrapper() { return new Double(val); }
     public Class<?> primitiveClass() { return double.class; }
   }

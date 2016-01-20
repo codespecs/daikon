@@ -223,6 +223,7 @@ import java.util.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.framework.qual.*;
@@ -383,7 +384,7 @@ public final class ONEOFSCALAR
 #endif
 
   @SuppressWarnings("interning") // clone method re-does interning
-  /*@SideEffectFree*/ public ONEOFSCALAR clone() {
+  /*@SideEffectFree*/ public ONEOFSCALAR clone(/*>>>@GuardSatisfied OneOf this*/) {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = elts.clone();
 #ifdef IS_SEQUENCE

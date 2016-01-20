@@ -11,6 +11,7 @@ import java.util.Set;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -70,11 +71,11 @@ public class Violation implements Serializable {
             this.xmlname = xmlname;
         }
 
-        /*@Pure*/ public int hashCode() {
+        /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Time this*/) {
             return name.hashCode();
         }
 
-        /*@SideEffectFree*/ public String toString() {
+        /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Time this*/) {
             return name;
         }
 
@@ -197,14 +198,14 @@ public class Violation implements Serializable {
     /**
      * String representation.
      */
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Violation this*/) {
         return time.toString() + " : " + property.toString();
     }
 
     /**
      * String representation.
      */
-    /*@SideEffectFree*/ public String toStringWithMethod() {
+    /*@SideEffectFree*/ public String toStringWithMethod(/*>>>@GuardSatisfied Violation this*/) {
         return time.toString() + "of " + property.method() + " : " + property.toString();
     }
 
@@ -223,7 +224,7 @@ public class Violation implements Serializable {
         return (this.property.equals(other.property) && this.time.equals(other.time));
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Violation this*/) {
         return property.hashCode() + time.hashCode();
     }
 

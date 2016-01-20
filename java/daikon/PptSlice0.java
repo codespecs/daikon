@@ -10,6 +10,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -184,7 +185,7 @@ public class PptSlice0
       // return theImp.repr();
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied ImplicationWrapper this*/) {
       if (hashCode == 0) {
         hashCode = format().hashCode();
         // hashCode = (theImp.iff ? 1 : 0);

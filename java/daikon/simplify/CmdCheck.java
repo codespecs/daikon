@@ -124,7 +124,7 @@ public class CmdCheck
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdCheck this*/) {
     return "CmdCheck: " + proposition;
   }
 

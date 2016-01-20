@@ -12,11 +12,12 @@ import daikon.util.ArraysMDE;
 import daikon.util.Stopwatch;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-@SuppressWarnings({"nullness","interning"}) // tricky code, skip for now
+@SuppressWarnings("nullness")
 public final class DCRuntime {
 
   /** List of all instrumented methods **/
@@ -169,7 +170,7 @@ public final class DCRuntime {
       this.value_source = value_source;
       this.compared_to = compared_to;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied BranchInfo this*/) {
       return String.format ("%s:%s", value_source, compared_to);
     }
   }
@@ -183,7 +184,7 @@ public final class DCRuntime {
 
   /** Perform any initialization required before instrumentation begins **/
   public static void init() {
-  
+
     if (Premain.debug_dcruntime) {
         debug = true;
         debug_tag_frame = true;
@@ -205,7 +206,7 @@ public final class DCRuntime {
   }
 
   public static void debug_print_call_stack() {
-    if (!debug) return;  
+    if (!debug) return;
 
     StackTraceElement[] stack_trace;
     stack_trace = Thread.currentThread().getStackTrace();
@@ -815,7 +816,7 @@ public final class DCRuntime {
   }
 
   /**
-   * The JVM uses bastore for both boolean and byte data types.  
+   * The JVM uses bastore for both boolean and byte data types.
    * With the addition of StackMap verification in Java7 we can
    * no longer use the same runtime routine for both data types.
    * Hence, the addition of zastore below for boolean.
@@ -2153,7 +2154,7 @@ public final class DCRuntime {
       ps.println (dv.getRepTypeName());
       int comp = dv_comp_map.get (dv);
       if (dv.isArray()) {
-        String name = dv.getName();  
+        String name = dv.getName();
         // If we an array of CLASSNAME or TO_STRING get the index
         // comparability from the base array.
         if (name.endsWith(DaikonVariableInfo.class_suffix)) {

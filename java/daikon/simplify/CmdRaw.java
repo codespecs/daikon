@@ -31,7 +31,7 @@ public class CmdRaw
 
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdRaw this*/) {
     return "CmdRaw: " + cmd;
   }
 

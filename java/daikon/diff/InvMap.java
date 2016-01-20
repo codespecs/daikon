@@ -7,6 +7,7 @@ import daikon.inv.*;
 import plume.IterableIterator;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -102,7 +103,7 @@ public class InvMap implements Serializable {
     return answer.iterator();
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied InvMap this*/) {
     String result = "";
     for (PptTopLevel ppt : pptIterable()) {
       result += ppt.name() + Global.lineSep;

@@ -22,6 +22,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -196,12 +197,12 @@ public class DynamicConstants implements Serializable {
       return (c.vi == vi);
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Constant this*/) {
       return (vi.hashCode());
     }
 
     @SuppressWarnings("purity") // side effects to local state (string creation)
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Constant this*/) {
 
       StringBuffer out = new StringBuffer();
       out.append (vi.name());

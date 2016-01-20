@@ -30,7 +30,7 @@ public class CmdUndoAssume
 
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdUndoAssume this*/) {
     return "CmdUndoAssume";
   }
 

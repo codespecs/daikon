@@ -12,6 +12,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -341,7 +342,7 @@ public abstract class PptSlice
    * For debugging only.
    **/
   @SuppressWarnings("purity")   // string creation
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSlice this*/) {
     StringBuffer sb = new StringBuffer();
     for (VarInfo vi : var_infos) {
       sb.append (" " + vi.name());

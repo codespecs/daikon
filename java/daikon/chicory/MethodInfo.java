@@ -4,6 +4,7 @@ import java.util.*;
 import java.lang.reflect.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -213,7 +214,7 @@ public class MethodInfo {
   }
 
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied MethodInfo this*/) {
     String out = "";
     if (class_info != null)
       out = class_info.class_name + ".";

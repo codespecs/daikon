@@ -21,6 +21,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -582,7 +583,7 @@ public abstract /*@Interned*/ class VarInfoName
   // This should be safe even in the absence of caching, because "repr()"
   // returns a new string each time, but it is equal() to any other
   // returned string, so their hashCode()s should be the same.
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoName this*/) {
     return repr().hashCode();
   }
 
@@ -596,7 +597,7 @@ public abstract /*@Interned*/ class VarInfoName
   // This is a debugging method, not intended for ordinary output.
   // Code producing output should usually call name() rather than
   // calling toString (perhaps implicitly).
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfoName this*/) {
     return repr();
   }
 

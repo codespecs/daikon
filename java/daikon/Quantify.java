@@ -3,6 +3,7 @@ package daikon;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -104,7 +105,7 @@ public class Quantify {
       this.sequence = sequence;
       this.offset = offset;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Length this*/) {
       return name();
     }
     /*@SideEffectFree*/ public String name() {

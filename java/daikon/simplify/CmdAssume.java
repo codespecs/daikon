@@ -36,7 +36,7 @@ public class CmdAssume
 
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdAssume this*/) {
     return "CmdAssume: " + proposition;
   }
 

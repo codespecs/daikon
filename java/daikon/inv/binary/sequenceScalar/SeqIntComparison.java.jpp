@@ -136,6 +136,7 @@ import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -253,7 +254,7 @@ public final class SEQINTEQUAL
     return (null);
   }
 
-  /*@SideEffectFree*/ public SEQINTEQUAL clone() {
+  /*@SideEffectFree*/ public SEQINTEQUAL clone(/*>>>@GuardSatisfied SeqIntComparison this*/) {
     SEQINTEQUAL result = (SEQINTEQUAL) super.clone();
     return result;
   }

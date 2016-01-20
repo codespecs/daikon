@@ -12,6 +12,7 @@ import org.apache.bcel.verifier.structurals.Frame;
 import org.apache.bcel.verifier.structurals.UninitializedObjectType;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -57,7 +58,7 @@ public final class StackTypes {
     return (os_arr[offset]);
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied StackTypes this*/) {
 
     StringBuffer sb = new StringBuffer();
 
@@ -78,7 +79,7 @@ public final class StackTypes {
   /**
    * TODO
    */
-  /*@SideEffectFree*/ public String toString (OperandStack os) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied StackTypes this,*/ OperandStack os) {
 
     String buff = "";
 
@@ -98,7 +99,7 @@ public final class StackTypes {
   /**
    * TODO
    */
-  /*@SideEffectFree*/ public String toString (LocalVariables lv) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied StackTypes this,*/ LocalVariables lv) {
 
     String buff = "";
 

@@ -38,7 +38,7 @@ public class NonsensicalList extends AbstractList<Object>
         return -1;
     }
 
-    /*@SideEffectFree*/ public String toString()
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied NonsensicalList this*/)
     {
         return "NonsensicalList";
     }

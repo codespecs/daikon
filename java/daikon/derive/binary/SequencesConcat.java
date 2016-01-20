@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -94,7 +95,7 @@ public final class SequencesConcat
     return VarInfo.make_function ("concat", var1(), var2());
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SequencesConcat this*/) {
     return "[SequencesConcat of " + var1().name() + " " + var2().name() + "]";
 
   }

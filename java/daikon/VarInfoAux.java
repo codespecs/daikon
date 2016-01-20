@@ -7,6 +7,7 @@ import java.util.logging.Level;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -292,15 +293,15 @@ public final class VarInfoAux
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  /*@SideEffectFree*/ public VarInfoAux clone() throws CloneNotSupportedException {
+  /*@SideEffectFree*/ public VarInfoAux clone(/*>>>@GuardSatisfied VarInfoAux this*/) throws CloneNotSupportedException {
     return (VarInfoAux) super.clone();
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfoAux this*/) {
     return map.toString();
   }
 
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoAux this*/) {
     return map.hashCode();
   }
 
@@ -441,7 +442,7 @@ public final class VarInfoAux
   /*@Pure*/ public boolean hasDuplicates() {
     return getFlag (HAS_DUPLICATES);
   }
-  
+
   /**
    * @see #HAS_ORDER
    */
@@ -449,7 +450,7 @@ public final class VarInfoAux
   /*@Pure*/ public boolean hasOrder() {
     return getFlag (HAS_ORDER);
   }
-  
+
   /**
    * @see #HAS_SIZE
    */
@@ -457,7 +458,7 @@ public final class VarInfoAux
   /*@Pure*/ public boolean hasSize() {
     return getFlag (HAS_SIZE);
   }
-  
+
   /**
    * @see #HAS_NULL
    */
@@ -465,7 +466,7 @@ public final class VarInfoAux
   /*@Pure*/ public boolean hasNull() {
     return getFlag (HAS_NULL);
   }
-  
+
   /**
    * @see #NULL_TERMINATING
    */
@@ -473,7 +474,7 @@ public final class VarInfoAux
   /*@Pure*/ public boolean nullTerminating() {
     return getFlag (NULL_TERMINATING);
   }
-  
+
   /**
    * @see #IS_STRUCT
    */
@@ -481,7 +482,7 @@ public final class VarInfoAux
   /*@Pure*/ public boolean isParam() {
     return getFlag (IS_PARAM);
   }
-  
+
   /**
    * @see #PACKAGE_NAME
    */
@@ -489,7 +490,7 @@ public final class VarInfoAux
   /*@Pure*/ public boolean packageName() {
     return getFlag (PACKAGE_NAME);
   }
-  
+
   /**
    * @see #IS_STRUCT
    */
@@ -497,5 +498,5 @@ public final class VarInfoAux
   /*@Pure*/ public boolean isStruct() {
     return getFlag (IS_STRUCT);
   }
- 
+
 }

@@ -22,7 +22,7 @@ import org.apache.bcel.verifier.structurals.*;
 import org.apache.commons.io.*;
 
 /*>>>
-import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -57,7 +57,7 @@ public class SummaryInfo {
     init();
   }
 
-  /*@Interned*/ String invoke_type;           // interned
+  String invoke_type;           // interned
   /*@BinaryNameForNonArray*/ String original_classname;
   String original_methodname;
   java.lang.reflect.Method method;
@@ -141,7 +141,7 @@ public class SummaryInfo {
    * Returns the full signature of the original method.  Uses reflection
    * to get the parameter types and may change class loading order
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SummaryInfo this*/) {
     List<String> param_names = new ArrayList<String>();
     for (Class<?> p : original_params())
       param_names.add (p.getSimpleName());
