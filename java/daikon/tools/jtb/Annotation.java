@@ -5,6 +5,7 @@ import java.util.regex.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -248,7 +249,7 @@ public class Annotation {
       this.name = name;
       this.xmlname = xmlname;
     }
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
       return name.hashCode();
     }
     /*@SideEffectFree*/ public String toString() {
@@ -288,7 +289,7 @@ public class Annotation {
             && (this.kind().equals(anno.kind())));
   }
 
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Annotation this*/) {
     return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
   }
 

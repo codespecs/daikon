@@ -7,6 +7,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -436,7 +437,7 @@ public class PptName
   // ==================== OBJECT METHODS ====================
 
   /* @return interned string such that this.equals(new PptName(this.toString())) */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptName this*/) {
     return fullname;
   }
 
@@ -450,7 +451,7 @@ public class PptName
     return (o != null) && (o.fullname == fullname);
   }
 
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied PptName this*/) {
     return fullname.hashCode();
   }
 

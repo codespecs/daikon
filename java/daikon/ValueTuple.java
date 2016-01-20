@@ -11,6 +11,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -280,7 +281,7 @@ public final class ValueTuple implements Cloneable {
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  /*@SideEffectFree*/ public ValueTuple clone() throws CloneNotSupportedException {
+  /*@SideEffectFree*/ public ValueTuple clone(/*>>>@GuardSatisfied ValueTuple this*/) throws CloneNotSupportedException {
     return (ValueTuple) super.clone();
   }
 
@@ -321,7 +322,7 @@ public final class ValueTuple implements Cloneable {
     ValueTuple other = (ValueTuple) obj;
     return (vals == other.vals) && (mods == other.mods);
   }
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied ValueTuple this*/) {
     return vals.hashCode() * 31 + mods.hashCode();
   }
 
@@ -340,7 +341,7 @@ public final class ValueTuple implements Cloneable {
   }
 
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ValueTuple this*/) {
     return toString(null);
   }
 
@@ -349,7 +350,7 @@ public final class ValueTuple implements Cloneable {
    * If vis is non-null, the values are annotated with the VarInfo name that
    * would be associated with the value.
    **/
-  /*@SideEffectFree*/ public String toString(VarInfo /*@Nullable*/ [] vis) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ValueTuple this,*/ VarInfo /*@Nullable*/ [] vis) {
     StringBuffer sb = new StringBuffer("[");
     assert vals.length == mods.length;
     assert vis == null || vals.length == vis.length;

@@ -26,6 +26,7 @@ import java.io.Serializable;
 import org.checkerframework.checker.formatter.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.framework.qual.*;
@@ -448,7 +449,7 @@ public abstract class Invariant
    * Do nothing special, Overridden to remove
    * exception from declaration
    **/
-  /*@SideEffectFree*/ public Invariant clone(/*>>> @NonPrototype Invariant this*/) {
+  /*@SideEffectFree*/ public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     try {
       Invariant result = (Invariant) super.clone();
       return result;
@@ -1587,7 +1588,7 @@ public abstract class Invariant
       return (ic.inv.match (inv));
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Match this*/) {
       return (inv.getClass().hashCode());
     }
   }
@@ -1973,11 +1974,11 @@ public abstract class Invariant
   }
 
   // Receiver must be fully initialized
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Invariant this*/) {
     return format();
   }
 
-  public static String toString (/*@NonPrototype*/ Invariant[] invs) {
+  public static String toString(/*@NonPrototype*/ Invariant[] invs) {
 
     ArrayList<String> strings = new ArrayList<String>(invs.length);
     for (int i = 0; i < invs.length; i++) {

@@ -3,6 +3,7 @@ package daikon;
 import java.io.Serializable;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -44,7 +45,7 @@ public final class VarComparabilityNone
     return it;
   }
 
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return 0;
   }
 
@@ -62,7 +63,7 @@ public final class VarComparabilityNone
     return true;
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return ("no-comparability");
   }
 }

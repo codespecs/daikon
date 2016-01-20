@@ -6,6 +6,7 @@ import daikon.derive.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -39,7 +40,7 @@ public abstract class BinaryDerivation
     base2 = vi2;
   }
 
-  /*@SideEffectFree*/ public BinaryDerivation clone() {
+  /*@SideEffectFree*/ public BinaryDerivation clone(/*>>>@GuardSatisfied BinaryDerivation this*/) {
     try {
       return (BinaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {

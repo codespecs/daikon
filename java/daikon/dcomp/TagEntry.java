@@ -35,7 +35,6 @@ import org.checkerframework.checker.nullness.qual.*;
  * -charlest
  */
 
-@SuppressWarnings("interning")
 class TagEntry extends WeakReference<Object> {
 
   /** Maps each object to its entry in the Union-Find datastructure **/

@@ -6,6 +6,7 @@ import plume.*;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
@@ -82,7 +83,7 @@ public class NonModulus
     return new NonModulus (slice);
   }
 
-  /*@SideEffectFree*/ public NonModulus clone() {
+  /*@SideEffectFree*/ public NonModulus clone(/*>>>@GuardSatisfied NonModulus this*/) {
     NonModulus result = (NonModulus) super.clone();
     result.elements = new TreeSet<Long>(this.elements);
     return result;

@@ -10,6 +10,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -356,7 +357,7 @@ public final /*(at)Interned*/ class Equality
     return UtilMDE.join(clauses, " && ");
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Equality this*/) {
     return repr();
   }
 

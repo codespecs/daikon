@@ -55,6 +55,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.framework.qual.*;
@@ -299,7 +300,7 @@ public class CLASSNAME
     return new CLASSNAME (slice);
   }
 
-  /*@SideEffectFree*/ public CLASSNAME clone() {
+  /*@SideEffectFree*/ public CLASSNAME clone(/*>>>@GuardSatisfied LinearTernary this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;

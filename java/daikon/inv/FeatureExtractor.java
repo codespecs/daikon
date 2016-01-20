@@ -12,6 +12,8 @@ import java.util.*;
 import java.text.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -748,7 +750,7 @@ public final class FeatureExtractor {
 
     //returns a valid hashCode
     @Override
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/) {
       return number;
     }
 

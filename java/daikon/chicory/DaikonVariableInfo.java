@@ -9,6 +9,7 @@ import daikon.Chicory;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -187,7 +188,7 @@ public abstract class DaikonVariableInfo
     /**
      * Returns a string representation of this node.
      */
-    /*@SideEffectFree*/ public String toString()
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/)
     {
         return getClass().getName() + ":" + getName();
     }
@@ -227,7 +228,7 @@ public abstract class DaikonVariableInfo
      * Don't modify the list of children through the iterator,
      * as an unmodifiable list is used to generate the iterator.
      */
-    public Iterator<DaikonVariableInfo> iterator()
+    public Iterator<DaikonVariableInfo> iterator(/*>>>@GuardSatisfied DaikonVariableInfo this*/)
     {
         return Collections.unmodifiableList(children).iterator();
     }
@@ -510,7 +511,7 @@ public abstract class DaikonVariableInfo
             // is 'this$0'.  This is a field in an inner class that contains
             // a pointer to the instance of the outer class. And, we would like
             // to expose the outer class fields of an inner class to allow
-            // Daikon to find related invariants. So we will no longer 
+            // Daikon to find related invariants. So we will no longer
             // exclude synthetic fields.
             // I will try more testing to see if there are other synthetic
             // fields that should be skipped.  But for now, there are none.

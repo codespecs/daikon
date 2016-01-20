@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -79,7 +80,7 @@ public class Property implements Serializable {
     /**
      * Easy-on-the-eye string representation.
      */
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Property this*/) {
         return kind.toString() + " : " + daikonRep();
     }
 
@@ -103,11 +104,11 @@ public class Property implements Serializable {
             this.xmlname = xmlname;
         }
 
-        /*@Pure*/ public int hashCode() {
+        /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
             return name.hashCode();
         }
 
-        /*@SideEffectFree*/ public String toString() {
+        /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Kind this*/) {
             return name;
         }
 
@@ -161,7 +162,7 @@ public class Property implements Serializable {
                 && (this.kind().equals(anno.kind())));
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Property this*/) {
         return daikonRep.hashCode()
             + kind.hashCode()
             + (method == null ? 0 : method.hashCode());

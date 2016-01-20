@@ -12,6 +12,7 @@ import daikon.util.ArraysMDE;
 import daikon.util.Stopwatch;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -20,7 +21,6 @@ import org.checkerframework.dataflow.qual.*;
  * Class used in dataflow that creates a tree the defines the way that
  * each value is created.
  */
-@SuppressWarnings("interning")
 public class ValueSource {
 
   /** Description of the value, includes its source if it is a constant **/
@@ -135,7 +135,7 @@ public class ValueSource {
   public Throwable get_stack_trace() {
     return stack_trace;
   }
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ValueSource this*/) {
     String left_descr = "-";
     if (left != null)
       left_descr = left.toString();

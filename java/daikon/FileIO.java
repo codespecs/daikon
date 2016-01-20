@@ -26,6 +26,8 @@ import java.util.zip.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
+
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -245,7 +247,7 @@ public final class FileIO {
       this.parent_ppt_name = parent_ppt_name;
       this.id = id;
     }
-    /*@SideEffectFree*/ public String toString() { return parent_ppt_name + "[" + id + "] "
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ParentRelation this*/) { return parent_ppt_name + "[" + id + "] "
                                  + rel_type; };
     private void readObject(ObjectInputStream in)
       throws IOException, ClassNotFoundException {
@@ -938,7 +940,7 @@ public final class FileIO {
       return ppt.name().compareTo(other.ppt.name());
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Invocation this*/) {
       return this.format().hashCode();
     }
   }
@@ -1136,7 +1138,7 @@ public final class FileIO {
    * read from a dtrace file, the corresponding callback is called.
    * <p>
    *
-   * to use a Processor, pass it to 
+   * to use a Processor, pass it to
    * {@link #read_data_trace_files(Collection, PptMap, FileIO.Processor, boolean)}.
    * {@code read_data_trace_files} will call
    * {@link #process_sample(PptMap,PptTopLevel,ValueTuple,Integer)}
@@ -2726,7 +2728,7 @@ public final class FileIO {
       comparability = VarComparabilityNone.it;
     }
 
-    /*@SideEffectFree*/ public VarDefinition clone() {
+    /*@SideEffectFree*/ public VarDefinition clone(/*>>>@GuardSatisfied VarDefinition this*/) {
       try {
         return (VarDefinition) super.clone();
       } catch (CloneNotSupportedException e) {

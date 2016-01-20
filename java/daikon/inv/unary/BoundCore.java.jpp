@@ -111,6 +111,7 @@ import java.text.DecimalFormat;
 import java.io.Serializable;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -159,7 +160,7 @@ public class LOWERBOUNDCORE
     return MIN1;
   }
 
-  /*@SideEffectFree*/ public LOWERBOUNDCORE clone() {
+  /*@SideEffectFree*/ public LOWERBOUNDCORE clone(/*>>>@GuardSatisfied BoundCore this*/) {
     try {
       return (LOWERBOUNDCORE) super.clone();
     } catch (CloneNotSupportedException e) {

@@ -5,12 +5,12 @@ import java.util.*;
 import static java.lang.System.out;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-@SuppressWarnings({"nullness", // uninitialized fields default to null
-                   "interning"})
+@SuppressWarnings("nullness") // uninitialized fields default to null
 class Test {
 
   A at;
@@ -43,7 +43,7 @@ class Test {
     public void tta () {
       add (y);
     }
-    /*@SideEffectFree*/ public String toString() { return ("A " + id); }
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied A this*/) { return ("A " + id); }
   }
 
   public static class C {
@@ -59,7 +59,7 @@ class Test {
       long1 = l1;
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied C this*/) {
       return cid;
     }
 
@@ -337,11 +337,11 @@ class Test {
         && this.y == ((Obj)obj).y;
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Obj this*/) {
       return this.x + this.y;
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Obj this*/) {
       return String.valueOf(this.x) + String.valueOf(this.y);
     }
   }

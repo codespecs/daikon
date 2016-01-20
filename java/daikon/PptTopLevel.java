@@ -36,6 +36,7 @@ import java.util.logging.Level;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -432,7 +433,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns the full name of the ppt **/
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptTopLevel this*/) {
     return name();
   }
 
@@ -2680,6 +2681,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /*@Pure*/
+  // TODO: Why is this method synchronized? There is no synchronization happening when proverStack is initialized.
   public synchronized static /*@Nullable*/ LemmaStack getProverStack() {
       return proverStack;
   }

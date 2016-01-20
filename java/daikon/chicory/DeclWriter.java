@@ -10,6 +10,7 @@ import daikon.Chicory;
 import daikon.util.SimpleLog;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -496,7 +497,7 @@ public class DeclWriter extends DaikonWriter {
       this (parent_ppt_name, type, null, null, null);
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarRelation this*/) {
       return String.format ("VarRelation %s (%s->%s) %s [%s]", parent_ppt_name,
                             local_prefix, parent_prefix, local_variable, type);
     }
@@ -541,7 +542,7 @@ public class DeclWriter extends DaikonWriter {
     }
 
     @Override
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarRelation this*/) {
       return (parent_ppt_name.hashCode()
               + ((local_variable == null) ? 0 : local_variable.hashCode()));
     }
@@ -589,7 +590,7 @@ public class DeclWriter extends DaikonWriter {
         if ((parent != null) && !var.isStatic() && !relative_name.endsWith(".this")) {
           if (debug) System.out.println("traverse var parent: " + parent.getName());
           outFile.println ("  enclosing-var " + escape (parent.getName()));
-        }  
+        }
 
         // If this variable has multiple value, indicate it is an array
         if (var.isArray())
