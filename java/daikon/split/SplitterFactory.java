@@ -65,7 +65,7 @@ public class SplitterFactory {
    * seconds, after which the compilation process is terminated and
    * retried, on the assumption that it has hung.
    **/
-  public static int dkconfig_compile_timeout = 6;
+  public static int dkconfig_compile_timeout = 10;
 
   private static /*@MonotonicNonNull*/ FileCompiler fileCompiler; // lazily initialized
 
