@@ -652,6 +652,7 @@ ${INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES} ${MAP_FILES}
 		${USER_DAIKON_OPTIONS} \
 		${PERSONAL_DAIKON_OPTIONS} \
 		--no_text_output \
+		--no_show_progress \
 		${DTRACE_FILES} \
 		${DECLS_FILES} \
 		${SPINFO_FILES} \
@@ -674,6 +675,7 @@ ${SPINFO_INV_FILE}: ${PROJECT_FILE}.decls-DynComp ${PROJECT_FILE}.spinfo-static 
 		${USER_DAIKON_OPTIONS} \
 		${PERSONAL_DAIKON_OPTIONS} \
 		--no_text_output \
+		--no_show_progress \
 		$(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE)-dyncomp.dtrace.gz \
 		${CWD}/${PROJECT_FILE}.spinfo-static \
 		${MAP_FILES}) \
@@ -727,7 +729,7 @@ txt-jaif: $(PROJECT_FILE).txt-jaif
 	@echo
 	@echo "### run AnnotateNullable (${PROJECT_FILE})"
 	@echo
-	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.Daikon --no_text_output \
+	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.Daikon --no_text_output --no_show_progress \
 	  $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz \
 	  --config ${DAIKONDIR}/java/daikon/annotate_nullable.config \
 	  -o $(PROJECT_FILE)-jaif.inv.gz
