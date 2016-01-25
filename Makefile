@@ -173,7 +173,7 @@ compile-java:
 
 very-clean:
 	${MAKE} -C ${DAIKONDIR} clean-everything
-	cd plume-lib/java && $(MAKE) very-clean
+	-cd plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
 # You can ignore the warning from tests/Makefile that dcomp_rt.jar is not present.
 	cd tests && $(MAKE) very-clean
@@ -285,10 +285,7 @@ clean-everything-but-kvasir:
 	${MAKE} -C ${DAIKONDIR}/doc very-clean
 
 clean-kvasir:
-# make sure fjalar directory exists
-ifeq (true, $(shell if [ -d fjalar ] ; then echo true; fi))
 	-${MAKE} -C ${DAIKONDIR}/fjalar/valgrind uninstall distclean
-endif
 
 
 ### Testing the code
