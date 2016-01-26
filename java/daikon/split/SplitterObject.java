@@ -56,7 +56,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
-   * @param full_pathname the pathname of a .class file
+   * @param fileName the pathname of a .class file
    * @return a Java Class corresponding to the .class file, or null
    **/
   static /*@Nullable*/ Class<?> defineSplitterClass(/*@BinaryName*/ String className, String fileName) {

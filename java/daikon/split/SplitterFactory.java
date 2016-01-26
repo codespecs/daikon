@@ -65,7 +65,7 @@ public class SplitterFactory {
    * seconds, after which the compilation process is terminated and
    * retried, on the assumption that it has hung.
    **/
-  public static int dkconfig_compile_timeout = 6;
+  public static int dkconfig_compile_timeout = 20;
 
   private static /*@MonotonicNonNull*/ FileCompiler fileCompiler; // lazily initialized
 
@@ -249,7 +249,7 @@ public class SplitterFactory {
     // We delay setting fileCompiler until now because we want to permit
     // the user to set the dkconfig_compiler variable.  Note that our
     // timeout is specified in seconds, but the parameter to FileCompiler
-    // is specified in milliseconds
+    // is specified in milliseconds.
     if (fileCompiler == null) {
       fileCompiler = new FileCompiler(dkconfig_compiler,
                                       1000 * (long) dkconfig_compile_timeout);
@@ -269,7 +269,7 @@ public class SplitterFactory {
         return true;
     }
 
-    // look for corresponding EXIT ppt. This is because the exit ppt usually has
+    // Look for corresponding EXIT ppt. This is because the exit ppt usually has
     // more relevant variables in scope (eg. return, hashcodes) than the enter.
     String regex;
     int index = ppt_name.indexOf("OBJECT");

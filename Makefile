@@ -123,6 +123,9 @@ RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name SCCS -o -name RCS -o -n
 
 TMPDIR ?= $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/$(USER),/tmp/$(USER))
 
+# For deterministic sorting
+LC_ALL=C
+
 ## Examples of better ways to get the lists:
 # PERL_MODULES := $(wildcard *.pm)
 # PERL_SCRIPTS := $(wildcard *.pl)
@@ -170,7 +173,7 @@ compile-java:
 
 very-clean:
 	${MAKE} -C ${DAIKONDIR} clean-everything
-	cd plume-lib/java && $(MAKE) very-clean
+	-cd plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
 # You can ignore the warning from tests/Makefile that dcomp_rt.jar is not present.
 	cd tests && $(MAKE) very-clean
@@ -282,10 +285,7 @@ clean-everything-but-kvasir:
 	${MAKE} -C ${DAIKONDIR}/doc very-clean
 
 clean-kvasir:
-# make sure fjalar directory exists
-ifeq (true, $(shell if [ -d fjalar ] ; then echo true; fi))
 	-${MAKE} -C ${DAIKONDIR}/fjalar/valgrind uninstall distclean
-endif
 
 
 ### Testing the code
@@ -584,7 +584,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	# to the ${TMPDIR}/daikon-jar directory
 	$(MAKE) -C java all_directly
 	cd java && find . \( -name "dcomp-rt*" \) -prune -o -name '*.class' -print \
-		-exec ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar \;
+		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 

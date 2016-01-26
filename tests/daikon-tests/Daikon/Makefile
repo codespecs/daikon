@@ -64,4 +64,4 @@ inputs/%.inv.gz: inputs/%.dtrace.gz ${INPUTS_DECLS}
 	@echo
 	@echo "Creating inv file for daikon.Diff input [$@] ..."
 	@echo
-	java daikon.Daikon --no_text_output $^ -o $@
+	java daikon.Daikon --no_text_output --no_show_progress $^ -o $@
