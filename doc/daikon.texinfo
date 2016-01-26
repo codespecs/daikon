@@ -8570,19 +8570,25 @@ java daikon.Chicory DataStructures.StackArTester
 @end example
 
 @noindent
-fails with an error (such as ``couldn't find or load main class''), then first try
+fails with an error, then first try
 @example
 java DataStructures.StackArTester
 @end example
 
-@noindent
-which is likely to fail with the same error.
-
+@itemize
+@item
 If the latter command also fails, the problem is not with Chicory.
-First solve your Java problem, then once again attempt to use Chicory.
-
+First solve your Java problem,
+then once again attempt to use Chicory.
+@item
 If the latter command does not fail, then you have found a bug in
 Chicory; please report it if it is not already explained in this manual.
+
+(If the error is ``couldn't find or load main class'' and the
+class that cannot be found is in Chicory itself, then there is not a bug in
+Chicory.  Rather, you have failed to put @file{daikon.jar} on the classpath
+when running Chicory, as described in @ref{Simple installation}.)
+@end itemize
 
 
 @menu
