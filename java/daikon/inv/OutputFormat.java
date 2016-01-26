@@ -4,6 +4,7 @@ import plume.Pair;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -37,7 +38,7 @@ public enum OutputFormat {
 
   OutputFormat(String name) { this.name = name; }
 
-  /*@SideEffectFree*/ public String toString() { return "OutputFormat:" + name; }
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied OutputFormat this*/) { return "OutputFormat:" + name; }
 
   /*@Pure*/ public boolean isJavaFamily() {
     return (this == DBCJAVA || this == JML || this == JAVA);

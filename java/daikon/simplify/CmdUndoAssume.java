@@ -1,6 +1,7 @@
 package daikon.simplify;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -14,7 +15,7 @@ public class CmdUndoAssume
   public static CmdUndoAssume single = new CmdUndoAssume();
 
   /** For documentation, read the class overview. */
-  public void apply(Session s) {
+  public void apply(/*@GuardedBy("itself")*/ Session s) {
 
     synchronized (s) {
       // send out the (BG_POP)
@@ -29,7 +30,7 @@ public class CmdUndoAssume
 
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdUndoAssume this*/) {
     return "CmdUndoAssume";
   }
 

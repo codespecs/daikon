@@ -11,6 +11,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
@@ -742,7 +743,7 @@ public final class Debug {
     return (out);
   }
 
-  public static String toString (/*@Nullable*/ Object val) {
+  public static String toString(/*@Nullable*/ Object val) {
     if (val == null)
       return ("none");
     if (val instanceof String)
@@ -759,7 +760,7 @@ public final class Debug {
       return (val.toString());
   }
 
-  public static String toString (VarInfo[] vis) {
+  public static String toString(VarInfo[] vis) {
 
     String vars = "";
     for (VarInfo vi : vis)
@@ -771,7 +772,7 @@ public final class Debug {
    * Returns a string containing each variable and its value
    * The string is of the form v1 = val1: v2 = val2, etc.
    */
-  public static String toString (VarInfo[] vis, ValueTuple vt) {
+  public static String toString(VarInfo[] vis, ValueTuple vt) {
 
     String out = "";
 

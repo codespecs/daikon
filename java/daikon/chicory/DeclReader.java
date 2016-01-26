@@ -7,6 +7,7 @@ import java.io.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -134,7 +135,7 @@ public class DeclReader {
       this.comparability = comparability;
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DeclVarInfo this*/) {
       return String.format ("%s [%s] %s", type, rep_type, name);
     }
 
@@ -258,7 +259,7 @@ public class DeclReader {
       return name.replaceFirst (":::.*", "");
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DeclPpt this*/) {
       return name;
     }
 

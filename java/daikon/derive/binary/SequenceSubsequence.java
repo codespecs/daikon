@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.derive.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -24,8 +25,8 @@ public abstract class SequenceSubsequence
 
   // base1 is the sequence
   // base2 is the scalar
-  public VarInfo seqvar() { return base1; }
-  public VarInfo sclvar() { return base2; }
+  public VarInfo seqvar(/*>>>@GuardSatisfied SequenceSubsequence this*/) { return base1; }
+  public VarInfo sclvar(/*>>>@GuardSatisfied SequenceSubsequence this*/) { return base2; }
 
   // Indicates whether the subscript is an index of valid data or a limit
   // (one element beyond the data of interest).  The first (or last)

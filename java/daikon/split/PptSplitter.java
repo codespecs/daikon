@@ -15,6 +15,7 @@ import java.io.Serializable;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -789,7 +790,7 @@ public class PptSplitter implements Serializable {
     return (v);
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSplitter this*/) {
 
     return "Splitter " + splitter + ": ppt1 " + ppts[0].name() + ": ppt2 "
             + ppts[1].name;

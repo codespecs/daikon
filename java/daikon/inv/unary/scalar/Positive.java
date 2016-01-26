@@ -6,6 +6,7 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
@@ -65,7 +66,7 @@ public class Positive
   }
 
   // A printed representation for user output
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied Positive this,*/ OutputFormat format) {
     return var().name() + " > 0";
   }
 

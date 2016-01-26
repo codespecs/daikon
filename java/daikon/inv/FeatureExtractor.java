@@ -12,6 +12,8 @@ import java.util.*;
 import java.text.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -738,7 +740,7 @@ public final class FeatureExtractor {
 
     @Override
       /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied IntDoublePair this,*/ /*>>>@GuardSatisfied @Nullable*/ Object o) {
       if (o instanceof IntDoublePair) {
         IntDoublePair other = (IntDoublePair) o;
         return ((number == other.number) && (value == other.value));
@@ -748,13 +750,13 @@ public final class FeatureExtractor {
 
     //returns a valid hashCode
     @Override
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/) {
       return number;
     }
 
     // Compares an Object to this
     // Throws ClassCastException if argument is not an IntDoublePair
-    /*@Pure*/ public int compareTo(IntDoublePair p) {
+    /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied IntDoublePair this,*/ IntDoublePair p) {
       if (this.number < p.number) {
         return -1;
       } else if (this.number > p.number) {

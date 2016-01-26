@@ -7,6 +7,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -228,7 +229,7 @@ public final /*@Interned*/ class ProglangType
    * Returns the type of elements of this.
    * They may themselves be arrays if this is multidimensional.
    **/
-  public ProglangType elementType() {
+  public ProglangType elementType(/*>>>@GuardSatisfied ProglangType this*/) {
     // Presume that if there are no dimensions, this must be a list of
     // objects.  Callers should really find this out from other information
     // in the variable, but this will old code that relied on the pseudo
@@ -415,7 +416,7 @@ public final /*@Interned*/ class ProglangType
       else
         throw new IllegalArgumentException("Bad character: " + value);
       return Intern.internedLong(Character.getNumericValue(c));
-    } 
+    }
     // When parse_value is called from FileIO.read_ppt_decl, we have
     // not set file_rep_type. Hence, rep_type is still file_rep_type
     // and BASE_BOOLEAN is legal.  (Daikon issue #33 - markro)
@@ -745,7 +746,7 @@ public final /*@Interned*/ class ProglangType
   }
 
   // For Java programs, a @BinaryName.
-  /*@SideEffectFree*/ public String format() {
+  /*@SideEffectFree*/ public String format(/*>>>@GuardSatisfied ProglangType this*/) {
     if (dimensions == 0)
       return base;
 
@@ -756,7 +757,7 @@ public final /*@Interned*/ class ProglangType
     return sb.toString();
   }
 
-  public static String toString (ProglangType[] types) {
+  public static String toString(ProglangType[] types) {
     StringBuilderDelimited out = new StringBuilderDelimited(", ");
     for (int i = 0; i < types.length; i++) {
       out.append(types[i]);
@@ -765,7 +766,7 @@ public final /*@Interned*/ class ProglangType
   }
 
   // For Java programs, a @BinaryName.
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ProglangType this*/) {
     return format();
   }
 

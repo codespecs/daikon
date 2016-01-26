@@ -13,6 +13,7 @@ import java.util.logging.*;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -557,7 +558,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   /**
    * Returns a string containing each suppression separated by commas.
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/) {
     return UtilMDE.join(suppression_set, ", ");
   }
 

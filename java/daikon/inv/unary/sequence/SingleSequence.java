@@ -10,6 +10,7 @@ import java.util.logging.Level;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import typequals.*;
 */
@@ -42,7 +43,7 @@ public abstract class SingleSequence
     super();
   }
 
-  public VarInfo var(/*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this*/) {
+  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this*/) {
     return ppt.var_infos[0];
   }
 

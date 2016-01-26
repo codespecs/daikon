@@ -13,6 +13,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -64,7 +65,7 @@ public class PptSliceEquality
   }
 
   // Not valid for this type of slice.  Always pretend there are enough.
-  public int num_samples() { if (true) throw new Error(); return Integer.MAX_VALUE; }
+  public int num_samples(/*>>>@GuardSatisfied PptSliceEquality this*/) { if (true) throw new Error(); return Integer.MAX_VALUE; }
   public int num_mod_samples() { if (true) throw new Error(); return Integer.MAX_VALUE; }
   public int num_values() { if (true) throw new Error(); return Integer.MAX_VALUE; }
 
@@ -77,7 +78,7 @@ public class PptSliceEquality
   private static class VarInfoAndComparability {
     public VarInfo vi;
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoAndComparability this*/) {
       // This is about as good as we can do it.  Can't do hashcode of
       // the comparability because two comparabilities may be
       // comparable and yet be not the same
@@ -86,7 +87,7 @@ public class PptSliceEquality
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarInfoAndComparability this,*/ /*>>>@GuardSatisfied @Nullable*/ Object o) {
       if (!(o instanceof VarInfoAndComparability)) return false;
       return equals ((VarInfoAndComparability) o);
     }
@@ -97,7 +98,7 @@ public class PptSliceEquality
      * inheritance, we require that the comptability go both ways.
      **/
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (VarInfoAndComparability o) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarInfoAndComparability this,*/ /*@GuardSatisfied*/ VarInfoAndComparability o) {
 
       return (vi.comparableNWay (o.vi)
               && (vi.comparability.equality_set_ok (o.vi.comparability)));
@@ -611,7 +612,7 @@ public class PptSliceEquality
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSliceEquality this*/) {
     StringBuffer result = new StringBuffer("PptSliceEquality: [");
     for (Invariant inv : invs) {
       result.append (inv.repr());

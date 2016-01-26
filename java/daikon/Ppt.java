@@ -10,6 +10,7 @@ import daikon.inv.Invariant;    // for emptyInvList
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -53,7 +54,7 @@ public abstract class Ppt
   // up too much space in PptSlice objects.
   // This is safe if the receiver is @UnknownInitialization(PptTopLevel.class) OR
   // @UnknownInitialization(PptSlice.class), but annotations cannot express that.
-  public abstract String name(/*>>>@UnknownInitialization(PptTopLevel.class) Ppt this*/);
+  public abstract String name(/*>>>@GuardSatisfied @UnknownInitialization(PptTopLevel.class) Ppt this*/);
 
   /** Trim the collections used in this Ppt. */
   public void trimToSize() {
@@ -83,7 +84,7 @@ public abstract class Ppt
   }
 
   /** Return a string representation of the variable names. */
-  /*@SideEffectFree*/ public String varNames(/*>>>@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this*/) {
+  /*@SideEffectFree*/ public String varNames(/*>>>@GuardSatisfied @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this*/) {
     return (varNames (var_infos));
   }
 

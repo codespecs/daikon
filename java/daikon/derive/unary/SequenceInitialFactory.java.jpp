@@ -27,6 +27,7 @@ import plume.*;
 import java.util.logging.Logger;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 

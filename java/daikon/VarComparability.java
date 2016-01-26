@@ -5,6 +5,7 @@ import plume.*;
 import java.util.logging.Logger;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -78,8 +79,8 @@ public abstract class VarComparability {
   }
   public abstract VarComparability makeAlias();
 
-  public abstract VarComparability elementType();
-  public abstract VarComparability indexType(int dim);
+  public abstract VarComparability elementType(/*>>>@GuardSatisfied VarComparability this*/);
+  public abstract VarComparability indexType(/*>>>@GuardSatisfied VarComparability this,*/ int dim);
 
   /** Return the comparability for the length of this string**/
   public abstract VarComparability string_length_type();
@@ -87,7 +88,7 @@ public abstract class VarComparability {
   /**
    * Returns true if this is comparable to everything else.
    */
-  public abstract boolean alwaysComparable();
+  public abstract boolean alwaysComparable(/*>>>@GuardSatisfied VarComparability this*/);
 
   /** Returns whether two variables are comparable. **/
   public static /*@Pure*/ boolean comparable(VarInfo v1, VarInfo v2) {
@@ -96,13 +97,18 @@ public abstract class VarComparability {
 
   /** Returns whether two comparabilities are comparable. **/
   @SuppressWarnings("purity")    // Override the purity checker
-  public static /*@Pure*/ boolean comparable (VarComparability type1,
-                                              VarComparability type2) {
+  public static /*@Pure*/ boolean comparable (/*@GuardSatisfied*/ VarComparability type1,
+                                              /*@GuardSatisfied*/ VarComparability type2) {
 
     if (type1 != null && type2 != null && type1.getClass() != type2.getClass())
       throw new Error(String.format ("Trying to compare VarComparabilities " +
-                      "of different types: %s (%s) and %s (%s)", type1,
-                      type1.getClass(), type2, type2.getClass()));
+                      "of different types: %s (%s) and %s (%s)", type1.toString(),
+                      type1.getClass(), type2.toString(), type2.getClass()));
+    // TODO: Remove .toString() in "type1.toString()" and "type2.toString()" after the Lock Checker
+    // is fixed to recognize that the .toString() is implicit.
+    // Currently it is needed because the parameter expects @GuardedBy({})
+    // and type2 is @GuardSatisfied (Strings are always @GuardedBy({})
+    // since they are immutable).
 
     if (type1 instanceof VarComparabilityNone || type1 == null || type2 == null) {
       return VarComparabilityNone.comparable ((VarComparabilityNone)type1,
@@ -122,7 +128,7 @@ public abstract class VarComparability {
    * (because they are not always transitive).  They can override this
    * method to provide the correct results
    */
-  public boolean equality_set_ok (VarComparability other) {
+  public boolean equality_set_ok (/*>>>@GuardSatisfied VarComparability this,*/ /*@GuardSatisfied*/ VarComparability other) {
     return comparable (this, other);
   }
 

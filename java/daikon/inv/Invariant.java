@@ -26,6 +26,7 @@ import java.io.Serializable;
 import org.checkerframework.checker.formatter.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.framework.qual.*;
@@ -296,7 +297,7 @@ public abstract class Invariant
    * computed constants well-formed.  Is overridden in classes like
    * LinearBinary/Ternary and Upper/LowerBound.
    **/
-  public boolean enoughSamples(/*>>> @NonPrototype Invariant this*/) {
+  public boolean enoughSamples(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     return true;
   }
 
@@ -448,7 +449,7 @@ public abstract class Invariant
    * Do nothing special, Overridden to remove
    * exception from declaration
    **/
-  /*@SideEffectFree*/ public Invariant clone(/*>>> @NonPrototype Invariant this*/) {
+  /*@SideEffectFree*/ public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     try {
       Invariant result = (Invariant) super.clone();
       return result;
@@ -669,7 +670,7 @@ public abstract class Invariant
   // }
 
   /** Return a string representation of the variable names. */
-  public final String varNames(/*>>> @NonPrototype Invariant this*/) {
+  public final String varNames(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     return ppt.varNames();
   }
 
@@ -682,7 +683,7 @@ public abstract class Invariant
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  public String repr(/*>>> @NonPrototype Invariant this*/) {
+  public String repr(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     // A better default would be to use reflection and print out all
     // the variable names.
     return getClass() + varNames() + ": " + format();
@@ -707,7 +708,7 @@ public abstract class Invariant
    * format gives a high-level representation for user output.
    **/
   // receiver must be fully-initialized because subclasses read their fields
-  /*@SideEffectFree*/ public String format(/*>>>@NonPrototype Invariant this*/) {
+  /*@SideEffectFree*/ public String format(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     String result = format_using(OutputFormat.DAIKON);
     if (PrintInvariants.dkconfig_print_inv_class) {
       String classname = getClass().getName();
@@ -718,7 +719,7 @@ public abstract class Invariant
     return result;
   }
 
-  /*@SideEffectFree*/ public abstract String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
+  /*@SideEffectFree*/ public abstract String format_using(/*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat format) ;
 
   /**
    * @return conjuction of mapping the same function of our
@@ -777,7 +778,7 @@ public abstract class Invariant
    * @return standard "format needs to be implemented" for the given
    * requested format.  Made public so cores can call it.
    **/
-  public String format_unimplemented(/*>>> @NonPrototype Invariant this,*/ OutputFormat request) {
+  public String format_unimplemented(/*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat request) {
     String classname = this.getClass().getName();
     return "warning: method " + classname + ".format(" + request + ")"
       + " needs to be implemented: " + format();
@@ -790,7 +791,7 @@ public abstract class Invariant
    * supplied, is a human-readable description of the invariant in its
    * uninformative state, which will be added to the message.
    **/
-  public String format_too_few_samples(/*>>> @NonPrototype Invariant this,*/ OutputFormat request, /*@Nullable*/ String attempt) {
+  public String format_too_few_samples(/*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat request, /*@Nullable*/ String attempt) {
     if (request == OutputFormat.SIMPLIFY) {
       return "(AND)";
     } else if (request == OutputFormat.JAVA ||
@@ -1579,7 +1580,7 @@ public abstract class Invariant
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Match this,*/ /*>>>@GuardSatisfied @Nullable*/ Object obj) {
       if (!(obj instanceof Match))
         return (false);
 
@@ -1587,7 +1588,7 @@ public abstract class Invariant
       return (ic.inv.match (inv));
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Match this*/) {
       return (inv.getClass().hashCode());
     }
   }
@@ -1973,11 +1974,11 @@ public abstract class Invariant
   }
 
   // Receiver must be fully initialized
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Invariant this*/) {
     return format();
   }
 
-  public static String toString (/*@NonPrototype*/ Invariant[] invs) {
+  public static String toString(/*@NonPrototype*/ Invariant[] invs) {
 
     ArrayList<String> strings = new ArrayList<String>(invs.length);
     for (int i = 0; i < invs.length; i++) {

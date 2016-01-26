@@ -37,6 +37,7 @@ package daikon.derive.binary;
 import daikon.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 

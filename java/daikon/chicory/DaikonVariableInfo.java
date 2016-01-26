@@ -9,6 +9,7 @@ import daikon.Chicory;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -153,7 +154,7 @@ public abstract class DaikonVariableInfo
     /**
      * Returns the name of this variable.
      */
-    public /*@Nullable*/ String getName()
+    public /*@Nullable*/ String getName(/*>>>@GuardSatisfied DaikonVariableInfo this*/)
     {
         if (name == null)
             return null;
@@ -187,7 +188,7 @@ public abstract class DaikonVariableInfo
     /**
      * Returns a string representation of this node.
      */
-    /*@SideEffectFree*/ public String toString()
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/)
     {
         return getClass().getName() + ":" + getName();
     }
@@ -510,7 +511,7 @@ public abstract class DaikonVariableInfo
             // is 'this$0'.  This is a field in an inner class that contains
             // a pointer to the instance of the outer class. And, we would like
             // to expose the outer class fields of an inner class to allow
-            // Daikon to find related invariants. So we will no longer 
+            // Daikon to find related invariants. So we will no longer
             // exclude synthetic fields.
             // I will try more testing to see if there are other synthetic
             // fields that should be skipped.  But for now, there are none.
@@ -1402,7 +1403,7 @@ public abstract class DaikonVariableInfo
     /**
      * Compares based on the name of the variable
      */
-    /*@Pure*/ public int compareTo (DaikonVariableInfo dv)
+    /*@Pure*/ public int compareTo (/*>>>@GuardSatisfied DaikonVariableInfo this,*/ DaikonVariableInfo dv)
     {
         return name.compareTo (dv.name);
     }

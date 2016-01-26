@@ -7,6 +7,7 @@ import plume.*;
 import java.util.logging.Logger;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -295,7 +296,7 @@ public class ContextSplitterFactory
       this.splitters = splitters;
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptNameAndSplitters this*/) {
       return "PptNameAndSplitters<" + ppt_name + ","
         + Arrays.asList(splitters).toString() + ">";
     }
