@@ -3,6 +3,7 @@ package daikon;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -58,7 +59,7 @@ public class Quantify {
    * for quantification (i, j, etc), and normal daikon variables
    */
   public static abstract class Term {
-    /*@SideEffectFree*/ public abstract String name();
+    /*@SideEffectFree*/ public abstract String name(/*>>>@GuardSatisfied Term this*/);
     /*@SideEffectFree*/ public String esc_name() { return name(); }
     /*@SideEffectFree*/ public String jml_name() { return esc_name(); }
     /*@SideEffectFree*/ public String jml_name(boolean in_prestate) { return jml_name(); }
@@ -80,7 +81,7 @@ public class Quantify {
     public FreeVar (String name) {
       this.name = name;
     }
-    /*@SideEffectFree*/ public String name() {
+    /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied FreeVar this*/) {
       return name;
     }
     /*@SideEffectFree*/ public String simplify_name() {
@@ -92,7 +93,7 @@ public class Quantify {
   public static class Constant extends Term {
     int val;
     public Constant (int val) { this.val = val; }
-    /*@SideEffectFree*/ public String name() { return "" + val; }
+    /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied Constant this*/) { return "" + val; }
     public int get_value() { return val; }
   }
 
@@ -104,10 +105,10 @@ public class Quantify {
       this.sequence = sequence;
       this.offset = offset;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Length this*/) {
       return name();
     }
-    /*@SideEffectFree*/ public String name() {
+    /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied Length this*/) {
       return name_with_offset ("size(" + sequence.name() + ")", offset);
     }
     /*@SideEffectFree*/ public String esc_name() {
@@ -205,7 +206,7 @@ public class Quantify {
       this.offset = offset;
     }
 
-    /*@SideEffectFree*/ public String name() {
+    /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied VarPlusOffset this*/) {
       return name_with_offset (var.name(), offset);
     }
 

@@ -8,6 +8,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import typequals.*;
 */
@@ -36,7 +37,7 @@ public abstract class SingleFloat
     return ((vis.length == 1) && vis[0].file_rep_type.isFloat());
   }
 
-  public VarInfo var(/*>>>@UnknownInitialization(SingleFloat.class) @Raw(SingleFloat.class) SingleFloat this*/) {
+  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(SingleFloat.class) @Raw(SingleFloat.class) SingleFloat this*/) {
     return ppt.var_infos[0];
   }
 

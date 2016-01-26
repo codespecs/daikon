@@ -10,6 +10,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -178,13 +179,13 @@ public class PptSlice0
     }
 
     // Abstracted out to permit use of a cached value
-    private String format() {
+    private String format(/*>>>@GuardSatisfied ImplicationWrapper this*/) {
       // return format;
       return theImp.format();
       // return theImp.repr();
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied ImplicationWrapper this*/) {
       if (hashCode == 0) {
         hashCode = format().hashCode();
         // hashCode = (theImp.iff ? 1 : 0);
@@ -196,7 +197,7 @@ public class PptSlice0
 
     // Returns the value of "isSameInvariant()".
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied ImplicationWrapper this,*/ /*>>>@GuardSatisfied @Nullable*/ Object o) {
       if (o == null)
         return false;
       assert o instanceof ImplicationWrapper;
@@ -237,7 +238,7 @@ public class PptSlice0
   }
 
   // I need to figure out how to set these.
-  public int num_samples() { return 2222; }
+  public int num_samples(/*>>>@GuardSatisfied PptSlice0 this*/) { return 2222; }
   public int num_mod_samples() { return 2222; }
   public int num_values() { return 2222; }
 

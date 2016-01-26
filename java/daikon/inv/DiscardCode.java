@@ -4,6 +4,7 @@ import java.io.*;
 import daikon.inv.filter.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -114,7 +115,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
    * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
    */
-  /*@Pure*/ public int compareTo(DiscardCode o) {
+  /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied DiscardCode this,*/ DiscardCode o) {
     if (this.enumValue < o.enumValue) {
       return -1;
     } else if (this.enumValue == o.enumValue) {
@@ -147,7 +148,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
                       "Non-canonical variable","Implied post state","Only constant variables in this expression","Derived Param","Control Check"
                       ,"Exact","Variable Filter","Filtered"}
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DiscardCode this*/) {
     if (this.enumValue==-1)
       return "Not discarded";
     else if (this.enumValue==0)

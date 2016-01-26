@@ -13,6 +13,7 @@ import java.io.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -80,7 +81,7 @@ public class WSMatch {
     }
 
     /** Sort based on percentage of matches **/
-    /*@Pure*/ public int compareTo (MatchInfo m1) {
+    /*@Pure*/ public int compareTo (/*>>>@GuardSatisfied MatchInfo this,*/ MatchInfo m1) {
       if (this.perc_match == m1.perc_match)
         return 0;
       else if (this.perc_match < m1.perc_match)
@@ -89,7 +90,7 @@ public class WSMatch {
         return 1;
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied MatchInfo this*/) {
       return String.format ("%5.2f  %s.%s  %s.%s", perc_match,
                             ppt1.get_short_name(), var1.name,
                             ppt2.get_short_name(), var2.name);
@@ -107,11 +108,11 @@ public class WSMatch {
       this.v1 = v1;
       this.v2 = v2;
     }
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarPair this*/) {
       return v1.name.hashCode() * v2.name.hashCode();
     }
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (final /*@Nullable*/ Object other) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarPair this,*/ final /*>>>@GuardSatisfied @Nullable*/ Object other) {
       if (other instanceof VarPair) {
         VarPair vp = (VarPair) other;
         return (v1.name.equals (vp.v1.name) && v2.name.equals (vp.v2.name));
@@ -363,7 +364,7 @@ public class WSMatch {
     RowMatch (int index1, int index2) {
       this.index1 = index1; this.index2 = index2;
     }
-    /*@SideEffectFree*/ public String toString () {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied RowMatch this*/) {
       return (index1 + "-" + index2);
     }
   }

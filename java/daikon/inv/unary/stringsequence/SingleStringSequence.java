@@ -8,6 +8,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import typequals.*;
 */
@@ -38,7 +39,7 @@ public abstract class SingleStringSequence
             && vis[0].file_rep_type.isArray());
   }
 
-  public VarInfo var(/*>>>@UnknownInitialization(SingleStringSequence.class) @Raw(SingleStringSequence.class) SingleStringSequence this*/) {
+  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(SingleStringSequence.class) @Raw(SingleStringSequence.class) SingleStringSequence this*/) {
     return ppt.var_infos[0];
   }
 

@@ -6,6 +6,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -66,12 +67,12 @@ public class CommonStringSequence
   // Don't write clone, because this.intersect is read-only
   // protected Object clone();
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CommonStringSequence this*/) {
     return "CommonStringSequence " + varNames() + ": "
       + "elts=\"" + elts;
   }
 
-  private String printIntersect() {
+  private String printIntersect(/*>>>@GuardSatisfied CommonStringSequence this*/) {
     if (intersect==null)
       return "{}";
 
@@ -85,18 +86,18 @@ public class CommonStringSequence
     return result;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CommonStringSequence this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
 
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied CommonStringSequence this*/) {
     return (printIntersect() + " subset of " + var().name());
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied CommonStringSequence this*/) {
     if (intersect==null)
       return "()";
 

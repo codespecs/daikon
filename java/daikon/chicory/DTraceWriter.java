@@ -7,6 +7,7 @@ import java.util.*;
 import daikon.Chicory;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
@@ -63,7 +64,7 @@ public class DTraceWriter extends DaikonWriter
     /**
      * Prints the method entry program point in the dtrace file
      */
-    public void methodEntry(MethodInfo mi, int nonceVal, /*@Nullable*/ Object obj, Object[] args)
+    public void methodEntry(/*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi, int nonceVal, /*@Nullable*/ Object obj, Object[] args)
     {
         //don't print
         if (Runtime.dtrace_closed)
@@ -95,7 +96,7 @@ public class DTraceWriter extends DaikonWriter
     /**
      * Prints the method exit program point in the dtrace file
      */
-    public void methodExit(MethodInfo mi, int nonceVal, /*@Nullable*/ Object obj, Object[] args, Object ret_val, int lineNum)
+    public void methodExit(/*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi, int nonceVal, /*@Nullable*/ Object obj, Object[] args, Object ret_val, int lineNum)
     {
         if (Runtime.dtrace_closed)
             return;
@@ -124,7 +125,7 @@ public class DTraceWriter extends DaikonWriter
     }
 
     //prints an invocation nonce entry in the dtrace
-    private void printNonce(int val)
+    private void printNonce(/*>>>@GuardSatisfied DTraceWriter this,*/ int val)
     {
         outFile.println("this_invocation_nonce");
         outFile.println(val);
@@ -143,7 +144,7 @@ public class DTraceWriter extends DaikonWriter
      *                exit program points.
      *
     */
-    private void traverse(MethodInfo mi, RootInfo root,
+    private void traverse(/*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi, RootInfo root,
             Object[] args,
             Object thisObj,
             Object ret_val)
@@ -187,7 +188,7 @@ public class DTraceWriter extends DaikonWriter
     }
 
     //traverse from the traversal pattern data structure and recurse
-    private void traverseValue(MethodInfo mi, DaikonVariableInfo curInfo,
+    private void traverseValue(/*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi, DaikonVariableInfo curInfo,
                                Object val) {
 
         if (curInfo.dTraceShouldPrint()) {

@@ -12,6 +12,7 @@ import daikon.util.ArraysMDE;
 import daikon.util.Stopwatch;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -135,7 +136,7 @@ public class ValueSource {
   public Throwable get_stack_trace() {
     return stack_trace;
   }
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ValueSource this*/) {
     String left_descr = "-";
     if (left != null)
       left_descr = left.toString();

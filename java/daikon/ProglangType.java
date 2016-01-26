@@ -7,6 +7,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -228,7 +229,7 @@ public final /*@Interned*/ class ProglangType
    * Returns the type of elements of this.
    * They may themselves be arrays if this is multidimensional.
    **/
-  public ProglangType elementType() {
+  public ProglangType elementType(/*>>>@GuardSatisfied ProglangType this*/) {
     // Presume that if there are no dimensions, this must be a list of
     // objects.  Callers should really find this out from other information
     // in the variable, but this will old code that relied on the pseudo
@@ -745,7 +746,7 @@ public final /*@Interned*/ class ProglangType
   }
 
   // For Java programs, a @BinaryName.
-  /*@SideEffectFree*/ public String format() {
+  /*@SideEffectFree*/ public String format(/*>>>@GuardSatisfied ProglangType this*/) {
     if (dimensions == 0)
       return base;
 
@@ -765,7 +766,7 @@ public final /*@Interned*/ class ProglangType
   }
 
   // For Java programs, a @BinaryName.
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ProglangType this*/) {
     return format();
   }
 

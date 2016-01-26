@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 */
@@ -202,7 +203,7 @@ public final class Runtime {
   // because this is a library; control flow occurs at run time in generated
   // instrumented code that is not checkable by a source code typechecker.
   @SuppressWarnings("nullness")   // set and used by run-time instrumentation
-  public static PrintStream dtrace;
+  public static /*@GuardedBy("itself")*/ PrintStream dtrace;
   public static boolean dtrace_closed = false;
   // daikon.Daikon should never load daikon.Runtime; but sometimes it
   // happens, due to reflective loading of the target program that gets the
@@ -282,6 +283,7 @@ public final class Runtime {
   private static void addShutdownHook() {
     java.lang.Runtime.getRuntime().addShutdownHook(new Thread() {
         @Override
+        @SuppressWarnings("lock") // TODO: Fix Checker Framework issue 523 and remove this @SuppressWarnings.
         public void run() {
           if (! dtrace_closed) {
 

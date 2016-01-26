@@ -8,6 +8,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import typequals.*;
 */
@@ -31,7 +32,7 @@ public abstract class SingleScalar
     super();
   }
 
-  public VarInfo var(/*>>>@UnknownInitialization(SingleScalar.class) @Raw(SingleScalar.class) SingleScalar this*/) {
+  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(SingleScalar.class) @Raw(SingleScalar.class) SingleScalar this*/) {
     return ppt.var_infos[0];
   }
 
