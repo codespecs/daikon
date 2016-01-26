@@ -10,6 +10,7 @@ import java.io.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -34,7 +35,7 @@ public class ParseResults {
   }
 
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ParseResults this*/) {
     return "package name: " + packageName + ", " + "file name: "
       + fileName;
   }

@@ -81,7 +81,7 @@ public class WSMatch {
     }
 
     /** Sort based on percentage of matches **/
-    /*@Pure*/ public int compareTo (MatchInfo m1) {
+    /*@Pure*/ public int compareTo (/*>>>@GuardSatisfied MatchInfo this,*/ MatchInfo m1) {
       if (this.perc_match == m1.perc_match)
         return 0;
       else if (this.perc_match < m1.perc_match)
@@ -112,7 +112,7 @@ public class WSMatch {
       return v1.name.hashCode() * v2.name.hashCode();
     }
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (final /*@Nullable*/ Object other) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarPair this,*/ final /*>>>@GuardSatisfied @Nullable*/ Object other) {
       if (other instanceof VarPair) {
         VarPair vp = (VarPair) other;
         return (v1.name.equals (vp.v1.name) && v2.name.equals (vp.v2.name));

@@ -2382,7 +2382,7 @@ public final class DCRuntime {
     implements Comparable<DVSet> {
     static final long serialVersionUID = 20050923L;
 
-    /*@Pure*/ public int compareTo (DVSet s1) {
+    /*@Pure*/ public int compareTo (/*>>>@GuardSatisfied DVSet this,*/ DVSet s1) {
       if (s1.size() == 0)
         return 1;
       else if (size() == 0)

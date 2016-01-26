@@ -33,11 +33,11 @@ public final class VarComparabilityNone
     return it;
   }
 
-  public VarComparability elementType() {
+  public VarComparability elementType(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return it;
   }
 
-  public VarComparability indexType(int dim) {
+  public VarComparability indexType(/*>>>@GuardSatisfied VarComparabilityNone this,*/ int dim) {
     return it;
   }
 
@@ -49,7 +49,7 @@ public final class VarComparabilityNone
     return 0;
   }
 
-  public boolean alwaysComparable() {
+  public boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return true;
   }
 
@@ -58,8 +58,8 @@ public final class VarComparabilityNone
    * representation types in the data trace file are the same.  This
    * lets us compare integers to longs, but not integers to arrays.
    **/
-  static /*@Pure*/ boolean comparable(VarComparabilityNone vcomp1,
-                                      VarComparabilityNone vcomp2) {
+  static /*@Pure*/ boolean comparable(/*@GuardSatisfied*/ VarComparabilityNone vcomp1,
+                                      /*@GuardSatisfied*/ VarComparabilityNone vcomp2) {
     return true;
   }
 

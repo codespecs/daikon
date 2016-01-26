@@ -115,7 +115,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
    * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
    */
-  /*@Pure*/ public int compareTo(DiscardCode o) {
+  /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied DiscardCode this,*/ DiscardCode o) {
     if (this.enumValue < o.enumValue) {
       return -1;
     } else if (this.enumValue == o.enumValue) {

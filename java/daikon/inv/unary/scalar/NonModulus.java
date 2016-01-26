@@ -89,12 +89,12 @@ public class NonModulus
     return result;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied NonModulus this*/) {
     return "NonModulus" + varNames() + ": "
       + "m=" + modulus + ",r=" + remainder;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied NonModulus this,*/ OutputFormat format) {
     updateResults();
     String name = var().name_using(format);
 
@@ -132,7 +132,7 @@ public class NonModulus
   }
 
   // Set either modulus and remainder, or no_result_yet.
-  void updateResults() {
+  void updateResults(/*>>>@GuardSatisfied NonModulus this*/) {
     if (results_accurate)
       return;
     if (elements.size() == 0) {

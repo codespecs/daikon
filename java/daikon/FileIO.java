@@ -871,13 +871,13 @@ public final class FileIO {
 
     // Print the Invocation on two lines, indented by two spaces
     // The receiver Invocation may be canonicalized or not.
-    String format() {
+    String format(/*>>>@GuardSatisfied Invocation this*/) {
       return format(true);
     }
 
     // Print the Invocation on one or two lines, indented by two spaces.
     // The receiver Invocation may be canonicalized or not.
-    String format(boolean show_values) {
+    String format(/*>>>@GuardSatisfied Invocation this,*/ boolean show_values) {
       if (! show_values) {
         return "  " + ppt.ppt_name.getNameWithoutPoint();
       }
@@ -929,14 +929,14 @@ public final class FileIO {
 
     // Return true if the invocations print the same
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object other) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Invocation this,*/ /*>>>@GuardSatisfied @Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation)
         return this.format().equals(((FileIO.Invocation) other).format());
       else
         return false;
     }
 
-    /*@Pure*/ public int compareTo(Invocation other) {
+    /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied Invocation this,*/ Invocation other) {
       return ppt.name().compareTo(other.ppt.name());
     }
 

@@ -107,11 +107,11 @@ public abstract class BinaryDerivation
     return !(base1.isCanonical() && base2.isCanonical());
   }
 
-  public VarInfo var1() {
+  public VarInfo var1(/*>>>@GuardSatisfied BinaryDerivation this*/) {
     return base1;
   }
 
-  public VarInfo var2() {
+  public VarInfo var2(/*>>>@GuardSatisfied BinaryDerivation this*/) {
     return base2;
   }
 

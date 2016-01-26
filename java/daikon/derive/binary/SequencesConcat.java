@@ -38,8 +38,8 @@ public final class SequencesConcat
    **/
   public static boolean dkconfig_enabled = false;
 
-  public VarInfo var1() { return base1; }
-  public VarInfo var2() { return base2; }
+  public VarInfo var1(/*>>>@GuardSatisfied SequencesConcat this*/) { return base1; }
+  public VarInfo var2(/*>>>@GuardSatisfied SequencesConcat this*/) { return base2; }
 
 
   /**

@@ -53,7 +53,7 @@ public class InvMap implements Serializable {
     get(ppt).add(inv);
   }
 
-  public List<Invariant> get(PptTopLevel ppt) {
+  public List<Invariant> get(/*>>>@GuardSatisfied InvMap this,*/ PptTopLevel ppt) {
     if (! pptToInvs.containsKey(ppt)) {
       throw new Error("ppt has not yet been added: " + ppt.name());
     }
@@ -67,7 +67,7 @@ public class InvMap implements Serializable {
    * with them in the InvMap!  Use invariantIterator instead.
    * @see #invariantIterator()
    **/
-  public Iterator<PptTopLevel> pptIterator() {
+  public Iterator<PptTopLevel> pptIterator(/*>>>@GuardSatisfied InvMap this*/) {
     return ppts.iterator();
   }
 
@@ -78,7 +78,7 @@ public class InvMap implements Serializable {
    * with them in the InvMap!  Use invariantIterator instead.
    * @see #invariantIterator()
    **/
-  public Iterable<PptTopLevel> pptIterable() {
+  public Iterable<PptTopLevel> pptIterable(/*>>>@GuardSatisfied InvMap this*/) {
     return new IterableIterator<PptTopLevel>(pptIterator());
   }
 

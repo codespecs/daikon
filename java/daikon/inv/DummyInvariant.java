@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -178,7 +179,7 @@ public class DummyInvariant
     negated = !negated;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied DummyInvariant this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();
@@ -190,7 +191,7 @@ public class DummyInvariant
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied DummyInvariant this*/) {
     String df;
     if (daikonFormat == null)
       df = "<dummy>";
@@ -202,7 +203,7 @@ public class DummyInvariant
       return df;
   }
 
-  public String format_java() {
+  public String format_java(/*>>>@GuardSatisfied DummyInvariant this*/) {
     if (javaFormat == null)
       return "format_java not implemented for dummy invariant";
     if (negated)
@@ -211,7 +212,7 @@ public class DummyInvariant
       return javaFormat;
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied DummyInvariant this*/) {
     if (escFormat == null)
       return "format_esc not implemented for dummy invariant";
     if (negated)
@@ -220,7 +221,7 @@ public class DummyInvariant
       return escFormat;
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied DummyInvariant this*/) {
     if (simplifyFormat == null)
       return "format_simplify not implemented for dummy invariant";
     if (negated)
@@ -229,7 +230,7 @@ public class DummyInvariant
       return simplifyFormat;
   }
 
-  public String format_jml() {
+  public String format_jml(/*>>>@GuardSatisfied DummyInvariant this*/) {
     if (jmlFormat == null)
       return "format_jml not implemented for dummy invariant";
     if (negated)
@@ -238,7 +239,7 @@ public class DummyInvariant
       return jmlFormat;
   }
 
-  public String format_dbc() {
+  public String format_dbc(/*>>>@GuardSatisfied DummyInvariant this*/) {
     if (dbcFormat == null)
       return "format_dbc not implemented for dummy invariant";
     if (negated)
@@ -247,7 +248,7 @@ public class DummyInvariant
       return dbcFormat;
   }
 
-  public String format_csharp() {
+  public String format_csharp(/*>>>@GuardSatisfied DummyInvariant this*/) {
     if (csharpFormat == null)
         return "format_csharp not implemented for dummy invariant";
       if (negated)

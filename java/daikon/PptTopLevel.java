@@ -157,7 +157,7 @@ public class PptTopLevel extends Ppt {
   public final PptName ppt_name;
 
   /*@Pure*/
-  public String name(/*>>>@UnknownInitialization(PptTopLevel.class) @Raw(PptTopLevel.class) PptTopLevel this*/) {
+  public String name(/*>>>@GuardSatisfied @UnknownInitialization(PptTopLevel.class) @Raw(PptTopLevel.class) PptTopLevel this*/) {
     return name;
   }
 

@@ -3,6 +3,7 @@ package daikon.inv;
 import daikon.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -38,14 +39,14 @@ public abstract class Joiner
     this(ppt.joiner_view, left, right);
   }
 
-  public abstract String repr();
+  public abstract String repr(/*>>>@GuardSatisfied Joiner this*/);
 
     // I think we don't resurrect joiners
   protected Invariant resurrect_done(int[] permutation) {
     throw new UnsupportedOperationException();
   }
 
-  /*@SideEffectFree*/ public abstract String format_using(OutputFormat format);
+  /*@SideEffectFree*/ public abstract String format_using(/*>>>@GuardSatisfied Joiner this,*/ OutputFormat format);
 
   /*@Pure*/ public boolean isValidEscExpression() {
     return left.isValidEscExpression() &&

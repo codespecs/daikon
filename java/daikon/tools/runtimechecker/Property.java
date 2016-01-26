@@ -35,21 +35,21 @@ public class Property implements Serializable {
      * The name of the method that this property describes. ("null" for object
      * invariants.)
      */
-    public String method() {
+    public String method(/*>>>@GuardSatisfied Property this*/) {
         return method;
     }
 
     // The kind of proerty (enter, exit or objectInvariant).
     private final Kind kind;
     /** The kind of property (enter, exit or objectInvariant). */
-    public Kind kind() {
+    public Kind kind(/*>>>@GuardSatisfied Property this*/) {
         return kind;
     }
 
     /** Daikon representation (as output by Daikon's default output format). */
     private final String daikonRep;
     /** Daikon representation (as output by Daikon's default output format). */
-    public String daikonRep() {
+    public String daikonRep(/*>>>@GuardSatisfied Property this*/) {
         return daikonRep;
     }
 
@@ -149,7 +149,7 @@ public class Property implements Serializable {
      * The other fields may differ.
      */
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (final /*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Property this,*/ final /*>>>@GuardSatisfied @Nullable*/ Object o) {
         if (o == null) {
             return false;
         }

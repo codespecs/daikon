@@ -209,17 +209,17 @@ public class CLASSNAME
     return new CLASSNAME(slice);
   }
 
-  /*@SideEffectFree*/ public CLASSNAME clone(/*>>>@GuardSatisfied EltwiseIntComparisons this*/) {
+  /*@SideEffectFree*/ public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     return result;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": "
       + "falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
@@ -230,7 +230,7 @@ public class CLASSNAME
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
     if (debugEltwiseIntComparison) {
       System.out.println(repr());
     }
@@ -241,7 +241,7 @@ public class CLASSNAME
 #endif
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] form = VarInfo.esc_quantify (false, var(), var());
     #if defined(EQUAL) || defined(EQUALFLOAT)
       return form[0] + "(" + form[1] + " " + COMPARATORSTRING + " " + form[2] + ")" + form[3];
@@ -250,17 +250,17 @@ public class CLASSNAME
     #endif
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     return "daikon.Quant." + COMPARATORSTRINGQUANT + "(" + var().name_using(format) + ")";
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] split = var().csharp_array_split();
     String name = var().csharp_name();
     return "Contract.ForAll(0, " + split[0] + ".Count()-1, i => " + split[0] + "[i]" + split[1] + " " + COMPARATORSTRING + " " + split[0] + "[i+1]" + split[1] + ")";
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] form = VarInfo.simplify_quantify (QuantFlags.adjacent(),
                                                var(), var());
 #if defined(EQUAL) || defined(EQUALFLOAT)

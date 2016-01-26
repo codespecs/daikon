@@ -37,7 +37,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
 
-  public Iterator<NISuppression> iterator(/*>>>@GuardSatisfied NISuppressionSet this*/) {
+  public Iterator<NISuppression> iterator() {
     List<NISuppression> asList = Arrays.<NISuppression>asList(suppression_set);
     return asList.iterator();
   }

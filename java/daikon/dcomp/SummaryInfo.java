@@ -125,7 +125,7 @@ public class SummaryInfo {
   }
 
   /** Returns the type of each parameter of the original method **/
-  public Class<?>[] original_params() {
+  public Class<?>[] original_params(/*>>>@GuardSatisfied SummaryInfo this*/) {
     if (invoke_type == "static") { // interned
       return method.getParameterTypes();
     } else {

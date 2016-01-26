@@ -221,7 +221,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
             + ", @ " + pptName);
   }
 
-  /*@Pure*/ public int compareTo(SplitterObject o) {
+  /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied SplitterObject this,*/ SplitterObject o) {
     return this.guid - o.getGUID();
   }
 }

@@ -154,7 +154,7 @@ public abstract class DaikonVariableInfo
     /**
      * Returns the name of this variable.
      */
-    public /*@Nullable*/ String getName()
+    public /*@Nullable*/ String getName(/*>>>@GuardSatisfied DaikonVariableInfo this*/)
     {
         if (name == null)
             return null;
@@ -228,7 +228,7 @@ public abstract class DaikonVariableInfo
      * Don't modify the list of children through the iterator,
      * as an unmodifiable list is used to generate the iterator.
      */
-    public Iterator<DaikonVariableInfo> iterator(/*>>>@GuardSatisfied DaikonVariableInfo this*/)
+    public Iterator<DaikonVariableInfo> iterator()
     {
         return Collections.unmodifiableList(children).iterator();
     }
@@ -1403,7 +1403,7 @@ public abstract class DaikonVariableInfo
     /**
      * Compares based on the name of the variable
      */
-    /*@Pure*/ public int compareTo (DaikonVariableInfo dv)
+    /*@Pure*/ public int compareTo (/*>>>@GuardSatisfied DaikonVariableInfo this,*/ DaikonVariableInfo dv)
     {
         return name.compareTo (dv.name);
     }

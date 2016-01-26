@@ -81,7 +81,7 @@ public abstract class PptSlice
     }
   }
 
-  /*@SideEffectFree*/ public final String name(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/) {
+  /*@SideEffectFree*/ public final String name(/*>>>@GuardSatisfied @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/) {
     return parent.name + varNames(var_infos);
   }
 
@@ -210,7 +210,7 @@ public abstract class PptSlice
 
 
   /** Return an approximation of the number of samples seen on this slice **/
-  public abstract int num_samples();
+  public abstract int num_samples(/*>>>@GuardSatisfied PptSlice this*/);
 
   /**
    * Return an approximation of the number of distinct values seen on

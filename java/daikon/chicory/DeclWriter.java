@@ -531,7 +531,7 @@ public class DeclWriter extends DaikonWriter {
      */
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarRelation this,*/ /*>>>@GuardSatisfied @Nullable*/ Object o) {
       if (!(o instanceof VarRelation) || (o == null))
         return false;
       VarRelation vr = (VarRelation) o;

@@ -33,6 +33,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import typequals.*;
 */
 
@@ -65,15 +66,15 @@ public abstract class CLASSNAME
             && vis[2].file_rep_type.IS_SCALAR);
   }
 
-  public VarInfo var1() {
+  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return ppt.var_infos[0];
   }
 
-  public VarInfo var2() {
+  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return ppt.var_infos[1];
   }
 
-  public VarInfo var3() {
+  public VarInfo var3(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return ppt.var_infos[2];
   }
 

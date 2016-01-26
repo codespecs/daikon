@@ -87,7 +87,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** returns the interned name of the variable **/
   /*@Pure*/
-  public /*@Interned*/ String name() {
+  public /*@Interned*/ String name(/*>>>@GuardSatisfied VarInfo this*/) {
     if (FileIO.new_decl_format)
       return str_name;
     else
@@ -2608,7 +2608,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Pair this,*/ /*>>>@GuardSatisfied @Nullable*/ Object obj) {
       if (!(obj instanceof Pair))
         return (false);
 

@@ -822,7 +822,7 @@ class DCInstrument {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    boolean equals (String name, Type[] arg_types) {
+    boolean equals (/*>>>@GuardSatisfied MethodDef this,*/ String name, Type[] arg_types) {
       if (!name.equals (this.name))
         return false;
       if (this.arg_types.length != arg_types.length)
@@ -834,7 +834,7 @@ class DCInstrument {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied MethodDef this,*/ /*>>>@GuardSatisfied @Nullable*/ Object obj) {
       if (!(obj instanceof MethodDef))
         return false;
       MethodDef md = (MethodDef)obj;

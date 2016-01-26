@@ -65,7 +65,7 @@ public class PptSliceEquality
   }
 
   // Not valid for this type of slice.  Always pretend there are enough.
-  public int num_samples() { if (true) throw new Error(); return Integer.MAX_VALUE; }
+  public int num_samples(/*>>>@GuardSatisfied PptSliceEquality this*/) { if (true) throw new Error(); return Integer.MAX_VALUE; }
   public int num_mod_samples() { if (true) throw new Error(); return Integer.MAX_VALUE; }
   public int num_values() { if (true) throw new Error(); return Integer.MAX_VALUE; }
 
@@ -87,7 +87,7 @@ public class PptSliceEquality
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarInfoAndComparability this,*/ /*>>>@GuardSatisfied @Nullable*/ Object o) {
       if (!(o instanceof VarInfoAndComparability)) return false;
       return equals ((VarInfoAndComparability) o);
     }
@@ -98,7 +98,7 @@ public class PptSliceEquality
      * inheritance, we require that the comptability go both ways.
      **/
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (VarInfoAndComparability o) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarInfoAndComparability this,*/ /*@GuardSatisfied*/ VarInfoAndComparability o) {
 
       return (vi.comparableNWay (o.vi)
               && (vi.comparability.equality_set_ok (o.vi.comparability)));
