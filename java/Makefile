@@ -861,7 +861,7 @@ show_nullness_java_files:
 # check-all: check-formatter check-interning check-nullness check-signature check-regex check-prototype check-vindex
 ## check-regex-qual target runs extremely slowly.
 # check-all: check-formatter check-interning check-nullness check-signature check-regex check-regex-qual
-check-all: check-formatter check-interning check-nullness check-signature check-regex
+check-all: check-formatter check-interning check-nullness check-signature check-regex check-lock
 
 intern: check-interning
 interning: check-interning
