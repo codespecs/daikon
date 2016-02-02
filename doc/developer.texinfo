@@ -2458,7 +2458,7 @@ nothing to commit (use -u to show untracked files)
 
 @noindent
 If the command output lists any files, they need to be
-committed to the repository now.
+committed to the repository and pushed now.
 
 [Time: moments]
 
