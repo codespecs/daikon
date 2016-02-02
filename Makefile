@@ -469,10 +469,10 @@ staging:
 # renaming the staging directory to be the release directory.
 staging-to-www: $(STAGING_DIR)
 	-chmod u+w $(WWW_PARENT)
-	-chmod -R u+w $(WWW_DIR)
+	-chmod -R -f u+w $(WWW_DIR)
 	\rm -rf $(WWW_DIR)
 	\mv $(STAGING_DIR) $(WWW_DIR)
-	-chmod -R u-w $(WWW_DIR)
+	-chmod -R -f u-w $(WWW_DIR)
 	-chmod u-w $(WWW_PARENT)
 	@echo "*****"
 	@echo "Don't forget to send mail to daikon-announce and commit changes."
