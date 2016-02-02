@@ -24,6 +24,7 @@ classpath
 codebase
 comparabilities
 comparator
+ConcurrentModificationException
 consequents
 Coregrind
 CSE
@@ -54,6 +55,7 @@ EM64T
 executables
 fcntl
 filename
+FileIOProgress
 fjalar
 Fjalar
 Fjalar's
