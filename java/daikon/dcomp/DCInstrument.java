@@ -1050,7 +1050,7 @@ class DCInstrument {
     if (track_class) {
       // System.out.printf ("adding class %s to all class list%n", class_info);
       synchronized(daikon.chicory.Runtime.all_classes) {
-          daikon.chicory.Runtime.all_classes.add (class_info);
+        daikon.chicory.Runtime.all_classes.add (class_info);
       }
     }
 
@@ -1210,9 +1210,9 @@ class DCInstrument {
     // Chicory runtime for this information.
     if (track_class) {
       // System.out.printf ("adding class %s to all class list%n", class_info);
-        synchronized(daikon.chicory.Runtime.all_classes) {
-            daikon.chicory.Runtime.all_classes.add (class_info);
-        }
+      synchronized(daikon.chicory.Runtime.all_classes) {
+        daikon.chicory.Runtime.all_classes.add (class_info);
+      }
     }
 
     return (gen.getJavaClass().copy());
