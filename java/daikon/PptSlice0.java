@@ -197,7 +197,7 @@ public class PptSlice0
 
     // Returns the value of "isSameInvariant()".
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied ImplicationWrapper this,*/ /*>>>@GuardSatisfied @Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied ImplicationWrapper this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (o == null)
         return false;
       assert o instanceof ImplicationWrapper;

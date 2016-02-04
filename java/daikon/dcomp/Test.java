@@ -332,7 +332,7 @@ class Test {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Obj this,*/ /*>>>@GuardSatisfied @Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Obj this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       return (obj instanceof Obj)
         && this.x == ((Obj)obj).x
         && this.y == ((Obj)obj).y;
@@ -358,7 +358,7 @@ class Test {
 
     // Overrides Obj.equals
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied ObjSub this,*/ /*>>>@GuardSatisfied @Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied ObjSub this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       return (obj instanceof ObjSub)
         && super.equals(obj)
         && this.z == ((ObjSub)obj).z;

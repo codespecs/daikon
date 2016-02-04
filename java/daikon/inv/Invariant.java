@@ -1580,7 +1580,7 @@ public abstract class Invariant
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Match this,*/ /*>>>@GuardSatisfied @Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Match this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof Match))
         return (false);
 

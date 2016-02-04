@@ -834,7 +834,7 @@ class DCInstrument {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied MethodDef this,*/ /*>>>@GuardSatisfied @Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied MethodDef this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof MethodDef))
         return false;
       MethodDef md = (MethodDef)obj;

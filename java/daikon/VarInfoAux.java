@@ -307,7 +307,7 @@ public final class VarInfoAux
 
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarInfoAux this,*/ /*>>>@GuardSatisfied @Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarInfoAux this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
     } else {

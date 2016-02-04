@@ -2608,7 +2608,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Pair this,*/ /*>>>@GuardSatisfied @Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Pair this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof Pair))
         return (false);
 

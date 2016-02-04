@@ -275,7 +275,7 @@ public class Annotation {
    * and "kind" are equal.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Annotation this,*/ final /*>>>@GuardSatisfied @Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Annotation this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o == null) {
       return false;
     }

@@ -87,7 +87,7 @@ public class PptSliceEquality
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarInfoAndComparability this,*/ /*>>>@GuardSatisfied @Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarInfoAndComparability this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (!(o instanceof VarInfoAndComparability)) return false;
       return equals ((VarInfoAndComparability) o);
     }

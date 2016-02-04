@@ -569,7 +569,7 @@ public abstract /*@Interned*/ class VarInfoName
   // The usual Object methods
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarInfoName this,*/ /*>>>@GuardSatisfied @Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarInfoName this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     return (o instanceof VarInfoName) && equals((VarInfoName) o);
   }
 

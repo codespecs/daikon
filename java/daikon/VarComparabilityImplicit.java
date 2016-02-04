@@ -77,7 +77,7 @@ public final class VarComparabilityImplicit
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarComparabilityImplicit this,*/ final /*>>>@GuardSatisfied @Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied VarComparabilityImplicit this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (!(o instanceof VarComparabilityImplicit)) return false;
     return equals ((VarComparabilityImplicit) o);
   }

@@ -913,7 +913,7 @@ public class NIS {
 
     /** Equal iff classes / swap variable / and variables match exactly **/
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied SupInv this,*/ /*>>>@GuardSatisfied @Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied SupInv this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof SupInv))
         return (false);
 
