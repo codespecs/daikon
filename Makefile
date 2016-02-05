@@ -474,10 +474,6 @@ staging-to-www: $(STAGING_DIR)
 	\mv $(STAGING_DIR) $(WWW_DIR)
 	-chmod -R -f u-w $(WWW_DIR)
 	-chmod u-w $(WWW_PARENT)
-	@echo "*****"
-	@echo "Don't forget to send mail to daikon-announce and commit changes."
-	@echo "(See sample message in the 'Making a distribution' chapter of the Developer Manual.)"
-	@echo "*****"
 
 
 # Webpages of publications that use Daikon

@@ -2074,42 +2074,22 @@ the entire process
 will take at least two hours --- but could be much more depending on the number of
 different platforms on which you test the release.
 
-@noindent
-@cartouche
-IMPORTANT:
-The default version of the Java JDK on the majority of the CSE
-machines is now JDK 8.  However, for the time being, we wish to continue
-to use JDK 7 for our distribution process; the intention is to maximize
-compatibility with our existing code base.  You will find a suitable
-version (for an AMD64 based machine) at @file{/homes/gws/markro/jdk7}.
-In addition, if you have used @command{source $DAIKONDIR/scripts/daikon.bashrc}
-to set your environment (@env{CLASS_PATH}
-and @env{PATH} in particular), it is recommended that you:
-@itemize
-@item get a fresh copy of your Bash shell (e.g., log out and log back in)
-@item set @env{DAIKONDIR} as you would normally
-@item @command{export JAVA_HOME=/homes/gws/markro/jdk7}
-@item @command{source $DAIKONDIR/scripts/daikon.bashrc}
-@end itemize
-This should fulfill most of the directory layout requirements noted below.
-@end cartouche
-
-Each of the steps below assumes that the current working directory is @file{$DAIKONDIR}
-and that you are using the Bash shell.
+Each of the steps below assumes that you are using the Bash shell.
 
 @c maximize line size for all example command lists
 @exampleindent 1
 
 @menu
-* Directory layout::
+* Directory layout requirements::
+* Distribution setup instructions::
 * Updating dependencies::
 * Distribution steps::
 @end menu
 
 
 @need 1000
-@node    Directory layout
-@section Directory layout
+@node    Directory layout requirements
+@section Directory layout requirements
 
 @itemize
 
@@ -2129,7 +2109,7 @@ A clone of
 @c @file{$DAIKONDIR/@/plume-lib}.
 
 @item
-Environment variable @env{JAVA_HOME} must be set to your JDK installation.
+Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
 @c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
 @c or:       export JAVA_HOME=/usr/lib/jvm/java
 
@@ -2166,6 +2146,27 @@ of the bibliography you wish to use.
 @end itemize
 
 
+@need 1000
+@node    Distribution setup instructions
+@section Distribution setup instructions
+
+The default version of the Java JDK on the majority of the CSE
+machines is now JDK 8.  However, for the time being, we wish to continue
+to use JDK 7 for our distribution process; the intention is to maximize
+compatibility with our existing code base.  You will find a suitable
+version (for an AMD64 based machine) at @file{/homes/gws/markro/jdk7}.
+
+The recommended setup for the distribution process:
+@itemize
+@item get a fresh copy of your Bash shell (e.g., log out and log back in)
+@item set @env{DAIKONDIR} as you would normally
+@item @command{export JAVA_HOME=/homes/gws/markro/jdk7}
+@item @command{source $DAIKONDIR/scripts/daikon.bashrc}
+@end itemize
+This should fulfill most of the directory layout requirements noted above.
+
+
+@need 1000
 @node    Updating dependencies
 @section  Getting the latest version of dependencies
 
@@ -2203,8 +2204,9 @@ variable to the location of the Checker Framework directory.
 
 
 @item
-If the Checker Framework has been released since the last distribution,
-then you need to perform the following steps to update @file{plume.jar}.
+Most likely a new Checker Framework has been released since the last distribution
+and/or there have been changes to plume-lib.  You should always build an updated
+@file{plume.jar} just to be safe.
 
 @example
 make -C $DAIKONDIR plume-lib-update
@@ -2213,8 +2215,8 @@ make clean && make && make verify-plume-jar-classfile-version && \
     \cp -pf plume.jar ../../java/lib
 @end example
 
-@c Time on buffalo as of 12/01/2014
-[Time: 5 min]
+@c Time on buffalo as of 02/05/2016
+[Time: 9 min]
 
 
 @item
@@ -2255,25 +2257,90 @@ repository.
 @node    Distribution steps
 @section Steps for making the distribution
 
-@noindent
-@cartouche
-IMPORTANT:
-While the majority of the distribution process is currently run
-with JDK@tie{}7; we need to ensure that our system runs on JDK@tie{}8 as well.
-This means you will need to repeat steps 1-4 below in a separate shell
-with @command{export JAVA_HOME=/usr/lib/jvm/java}. (In addition to the
-other normal environment settings.)
-@end cartouche
+Up to this point (primarily the rebuilding of @file{plume.jar}), we have been using
+JDK@tie{}7 - and our release version will be built with it as well. However, we
+also need to ensure that our system runs on JDK@tie{}8. We do this now to
+reduce the risk of accidentally releasing any JDK@tie{}8 built components.
 
-Each of the steps below assumes that the current working directory is @file{$DAIKONDIR}
-and that you are using the Bash shell.
+This means you will need to run the next three steps in a separate shell
+with @command{export JAVA_HOME=/usr/lib/jvm/java}.
 
-@strong{Caution:} Any problems encountered in the next 7 steps
+@itemize
+@item start a fresh copy of your Bash shell
+@item set @env{DAIKONDIR} as you would normally
+@item @command{export JAVA_HOME=/usr/lib/jvm/java}.
+@item @command{source $DAIKONDIR/scripts/daikon.bashrc}
+@end itemize
+
+@strong{Caution:} Any problems encountered in the next 3 steps
 need to be corrected immediately and the release process restarted with
 step 1 below.
 
 
 @enumerate
+
+@need 1000
+@item
+Do a very clean rebuild of everything.
+
+@example
+make very-clean
+make rebuild-everything
+@end example
+
+@c Time on buffalo as of 12/16/2015
+@c [Time: 18 min]
+@c buffalo has twice the memory of godwit.
+@c Time on godwit as of 11/27/2014
+[Time: 20 min]
+
+
+@need 1000
+@item
+Run the Daikon regression tests.
+The last line printed should be "All tests succeeded."
+
+@c do not need to clean due to very-clean in step one
+@example
+make -C $DAIKONDIR/tests diffs
+@end example
+
+@c Time on godwit as of 11/27/2014
+@c [Time: 25 min]
+@c Time has increased significantly with additon of
+@c more tests.  Time below is on buffalo as of 12/16/2015
+@c A clock synchronization problem on my shared file server
+@c was causing make to rebuild too much.  Fixed 1/8/2016.
+[Time: 59 min]
+
+
+@need 1000
+@item
+Run the Kvasir regression tests.
+The last line printed should be ``All tests succeeded.'',
+indicating that there are no diff files marked FAILED.
+
+@c do not need to clean-all due to very-clean in step one
+@example
+make -C $DAIKONDIR/tests/kvasir-tests regression-tests
+@end example
+
+@c Time on godwit as of 11/27/2014
+@c [Time: 20 min]
+@c Time on buffalo as of 12/16/2015
+[Time: 23 min]
+
+
+@need 1000
+@item
+Upon successful completion of the first three steps, you should exit
+your JDK@tie{}8 based Bash shell and return to your JDK@tie{}7 based
+shell.  The remainder of the distribution process will use JDK@tie{}7.
+
+@strong{Caution:} Any problems encountered in the next 7 steps
+need to be corrected immediately and the release process restarted with
+step 1 above (and going back to JDK@tie{}8).
+
 
 @need 1000
 @item
@@ -2312,8 +2379,9 @@ make -C $DAIKONDIR/java check-nullness
 Run the Daikon regression tests.
 The last line printed should be "All tests succeeded."
 
+@c do not need to clean due to very-clean in step one
 @example
-make -C $DAIKONDIR/tests clean diffs
+make -C $DAIKONDIR/tests diffs
 @end example
 
 @c Time on godwit as of 11/27/2014
@@ -2331,8 +2399,9 @@ Run the Kvasir regression tests.
 The last line printed should be ``All tests succeeded.'',
 indicating that there are no diff files marked FAILED.
 
+@c do not need to clean-all due to very-clean in step one
 @example
-make -C $DAIKONDIR/tests/kvasir-tests clean-all regression-tests
+make -C $DAIKONDIR/tests/kvasir-tests regression-tests
 @end example
 
 @c Time on godwit as of 11/27/2014
@@ -2525,12 +2594,12 @@ If any corrections are required, do so back in the main
 repository, commit the changes and
 then repeat this step.
 
-@c Time on buffalo as of 12/16/2015
-@c [Time: 34 min]
-@c I've notified mernst about this 10x slow down.
-@c [Time: 4 min]
+[Time: 4 min]
 
-Next, check the staging website to see if it has any broken links.
+
+@need 1000
+@item
+Next, check the staging website to see if it has any broken document links.
 
 @example
 make check-for-broken-doc-links
@@ -2569,13 +2638,13 @@ Correct the file. (Most likely located beneath either
 @item
 Commit the changes.
 @item
-Repeat this step.
+Repeat the previous step to rebuild the release candidate.
+@item
+Repeat this step to verify your corrections.
 @end itemize
 
-@c total time should be about:
-[Time: 12 min]
-@c However, time on buffalo as of 12/16/2015
-@c is 40 minutes.
+[Time: 8 min]
+
 
 @need 1000
 @item
@@ -2809,10 +2878,13 @@ git push
 @need 1000
 @item
 Send mail to the @samp{daikon-announce} mailing list.
-This list is located at @samp{daikon-announce@@googlegroups.com}.
-Here is a suggested template:
+Use the suggested template below, replacing <version number> with
+the actual number of the release.
 
 @example
+<to:>  daikon-announce@@googlegroups.com
+<subject:>  Daikon version <version number> has been released
+
 Daikon version <version number> is now available.
 
 Please see the entry from the doc/CHANGES file that appears below for more details.
