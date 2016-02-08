@@ -1285,7 +1285,11 @@ parent program point.  Dataflow hierarchy is enabled by default, but
 can be disabled by the @option{--nohierarchy} flag.  When dataflow is enabled,
 the only samples that are examined by Daikon are the @code{:::EXIT} program
 points (plus @samp{orig} variables) since these contain a complete view of
-the data.
+the data, from which invariants at all other locations can be inferred.
+For example, Daikon does not need to examine data at @code{:::ENTER} or
+@code{:::OBJECT} program points which are parents of @code{:::EXIT} in the
+dataflow hierarchy.
+
 
 @node    Equality optimization
 @section Equality optimization
