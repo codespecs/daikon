@@ -2681,8 +2681,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /*@Pure*/
-  // TODO: Why is this method synchronized? There is no synchronization happening when proverStack is initialized.
-  public synchronized static /*@Nullable*/ LemmaStack getProverStack() {
+  public static /*@Nullable*/ LemmaStack getProverStack() {
       return proverStack;
   }
 
