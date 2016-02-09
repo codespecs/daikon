@@ -2760,10 +2760,14 @@ configuration parameters.  These configuration parameters control which
 invariants are checked and reported, the statistical tests for
 invariants, which derived variables are created, and more.
 
-The configuration options are set by creating a configuration file and
+There are two ways to set configuration options.  You can 
+specify a configuration setting directly on the command line,
+using the @option{--config_option @var{name}=@var{value}} option (which you
+may repeat as many times as you want).
+Or, you can create a configuration file and
 supplying it to Daikon on the command line using the @option{--config
-@var{filename}} option.  Daikon reads all supplied configuration files
-in order, overriding the defaults.  You may wish to use the supplied
+@var{filename}} option.  Daikon applies all the command-line arguments
+in order.  You may wish to use the supplied
 example configuration file
 @file{daikon/java/daikon/config/example-settings.txt} as an example when
 creating your own configuration files.  (If you did not download
@@ -2774,9 +2778,6 @@ You can also control Daikon's output via its command-line options
 (@pxref{Running Daikon}) and via the command-line options to its front
 ends such as Chicory (@pxref{Chicory options}) or Kvasir (@pxref{Kvasir
 options}).
-
-You may also specify a configuration setting directly on the command line,
-using the @option{--config_option @var{name}=@var{value}} option.
 
 The configuration options are different from the debugging flags
 @option{--debug} and @option{--dbg @var{category}}
