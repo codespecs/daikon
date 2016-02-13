@@ -132,13 +132,13 @@ public class Runtime
     private static Map<Thread,Stack<CallInfo>> thread_to_callstack
         = new LinkedHashMap<Thread,Stack<CallInfo>>();
 
-  /**
-   * Sample count at a call site to begin sampling.  All previous calls
-   * will be recorded.  Sampling starts at 10% and decreases by a factor
-   * of 10 each time another sample_start samples have been recorded.  If
-   * sample_start is 0, then all calls will be recorded.
-   */
-  public static int sample_start = 0;
+    /**
+     * Sample count at a call site to begin sampling.  All previous calls
+     * will be recorded.  Sampling starts at 10% and decreases by a factor
+     * of 10 each time another sample_start samples have been recorded.  If
+     * sample_start is 0, then all calls will be recorded.
+     */
+    public static int sample_start = 0;
 
     // Constructor
     private Runtime()
