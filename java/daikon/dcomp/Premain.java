@@ -133,7 +133,11 @@ public class Premain {
       boolean in_jdk = false;
 
       // Check if class is in JDK
-      if (BCELUtil.in_jdk_fielddescriptor (className)) {
+      // TODO: This line is better than the code with @SuppressWarnings.  Why doesn't it work?
+      // /*@ClassGetName*/ String classnameAsClassGetName = UtilMDE.fieldDescriptorToClassGetName(classname);
+      @SuppressWarnings("signature")
+      /*@ClassGetName*/ String classnameAsClassGetName = className.replace('/', '.');
+      if (BCELUtil.in_jdk (classnameAsClassGetName)) {
         // If --no-jdk option is active, then skip it.
         if (DynComp.no_jdk)
           return (null);
