@@ -2806,7 +2806,7 @@ class DCInstrument {
   }
 
   /** Returns whether or not the specified classname is instrumented **/
-  boolean callee_instrumented (String classname) {
+  boolean callee_instrumented (/*@ClassGetName*/ String classname) {
 
     // System.out.printf ("Checking callee instrumented on %s\n", classname);
 
@@ -3610,7 +3610,7 @@ class DCInstrument {
    * if it matches ones of the select patterns and doesn't match any of the
    * omit patterns.
    */
-  public boolean should_track (String classname, String pptname) {
+  public boolean should_track (/*@ClassGetName*/ String classname, String pptname) {
 
     debug_track.log ("Considering tracking ppt %s %s%n", classname, pptname);
 
@@ -4667,7 +4667,7 @@ class DCInstrument {
    * Returns whether or not tag fields are used within the specified class.
    * We can safely use class fields except in Object, String, and Class
    */
-  public boolean tag_fields_ok (String classname) {
+  public boolean tag_fields_ok (/*@ClassGetName*/ String classname) {
 
     if (BCELUtil.is_constructor(mgen))
       if (!constructor_is_initialized)

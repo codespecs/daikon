@@ -19,6 +19,7 @@ import daikon.DynComp;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
 */
 
 public class Premain {
@@ -116,7 +117,7 @@ public class Premain {
     }
 
     @SuppressWarnings("nullness") // bug: java.lang.instrument is not yet annotated
-    public byte /*@Nullable*/ [] transform (ClassLoader loader, String className,
+    public byte /*@Nullable*/ [] transform (ClassLoader loader, /*@FieldDescriptor*/ String className,
                            Class<?> classBeingRedefined,
                            ProtectionDomain protectionDomain,
                            byte[] classfileBuffer)
@@ -132,7 +133,7 @@ public class Premain {
       boolean in_jdk = false;
 
       // Check if class is in JDK
-      if (BCELUtil.in_jdk (className.replace('/', '.'))) {
+      if (BCELUtil.in_jdk_fielddescriptor (className)) {
         // If --no-jdk option is active, then skip it.
         if (DynComp.no_jdk)
           return (null);
