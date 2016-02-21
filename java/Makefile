@@ -858,10 +858,10 @@ show_nullness_java_files:
 	@echo ${DAIKON_JAVA_FILES}
 
 ## Reinstate prototype and vindex checkers later.
-# check-all: check-formatter check-interning check-nullness check-signature check-regex check-prototype check-vindex
+# check-all: check-formatter check-interning check-nullness check-regex check-signature check-prototype check-vindex
 ## check-regex-qual target runs extremely slowly.
-# check-all: check-formatter check-interning check-nullness check-signature check-regex check-regex-qual
-check-all: check-formatter check-interning check-nullness check-signature check-regex
+# check-all: check-formatter check-interning check-nullness check-regex check-regex-qual check-signature
+check-all: check-formatter check-interning check-nullness check-regex check-signature
 
 intern: check-interning
 interning: check-interning
