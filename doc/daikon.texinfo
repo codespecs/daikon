@@ -8074,6 +8074,8 @@ megabytes, you would run Java like so:
 @example
 java -Xmx2048m ...
 @end example
+@noindent
+though you can use much more depending on the limitations of your JVM.
 
 If you are using Chicory's @option{--daikon} command-line argument to
 run Daikon, then you must separately indicate the amount of memory
