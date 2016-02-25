@@ -95,7 +95,8 @@ public class SplitterFactory {
   }
 
   /**
-   * Finds the splitters that apply to a given Ppt and loads them.
+   * Finds the splitters that apply to a given Ppt and loads them
+   * (that is, it populates SplitterList).
    * @param ppt the Ppt
    * @param spfiles a list of SpinfoFiles
    */
