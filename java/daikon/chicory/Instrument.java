@@ -142,7 +142,7 @@ public class Instrument implements ClassFileTransformer {
    * called by the Java runtime each time a new class is loaded.
    */
   public byte /*@Nullable*/ []
-  transform (ClassLoader loader, /*@FieldDescriptor*/ String className,
+  transform (ClassLoader loader, /*@InternalForm*/ String className,
              Class<?> classBeingRedefined, ProtectionDomain protectionDomain,
              byte[] classfileBuffer) throws IllegalClassFormatException {
 

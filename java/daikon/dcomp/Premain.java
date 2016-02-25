@@ -117,7 +117,7 @@ public class Premain {
     }
 
     @SuppressWarnings("nullness") // bug: java.lang.instrument is not yet annotated
-    public byte /*@Nullable*/ [] transform (ClassLoader loader, /*@FieldDescriptor*/ String className,
+    public byte /*@Nullable*/ [] transform (ClassLoader loader, /*@InternalForm*/ String className,
                            Class<?> classBeingRedefined,
                            ProtectionDomain protectionDomain,
                            byte[] classfileBuffer)
@@ -133,11 +133,7 @@ public class Premain {
       boolean in_jdk = false;
 
       // Check if class is in JDK
-      // TODO: This line is better than the code with @SuppressWarnings.  Why doesn't it work?
-      // /*@ClassGetName*/ String classnameAsClassGetName = UtilMDE.fieldDescriptorToClassGetName(classname);
-      @SuppressWarnings("signature")
-      /*@ClassGetName*/ String classnameAsClassGetName = className.replace('/', '.');
-      if (BCELUtil.in_jdk (classnameAsClassGetName)) {
+      if (BCELUtil.in_jdk_internalform (className)) {
         // If --no-jdk option is active, then skip it.
         if (DynComp.no_jdk)
           return (null);
