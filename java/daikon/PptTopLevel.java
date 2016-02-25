@@ -191,6 +191,7 @@ public class PptTopLevel extends Ppt {
   private Map<List<Integer>,PptSlice> views;
 
   /** List of all of the splitters for this ppt. */
+  // Not List because List doesn't support the trimToSize() method.
   public /*@MonotonicNonNull*/ ArrayList<PptSplitter> splitters = null;
 
   /**
