@@ -2239,20 +2239,20 @@ Update the bibliography.
 The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
 from, two open source projects.
 The home page for the Valgrind instrumentation framework is
-@uref{http://www.valgrind.org}.  As of March 2015 we are using version 3.10.1,
-released in November, 2014.
-(You can verify this by inspecting the first
-line of the file @file{$DAIKONDIR/fjalar/valgrind/NEWS}.)
-
+@uref{http://www.valgrind.org}.
 The home page for the GNU Binutils
-(a collection of binary tools, of which we only use readelf) is
+(a collection of binary tools, of which Kvasir uses only readelf) is
 @uref{http://www.gnu.org/software/binutils/}.
-As of April 2015 we are using version 2.25, released in December, 2014.
-[TODO: How can a reader confirm that this is correct or determine the
-version on his or her own?]
 
-If a newer version of either of these projects is
-available, you should update the Fjalar source tree as soon as practical.
+File
+@uref{https://raw.githubusercontent.com/codespecs/fjalar/master/valgrind/REVISION,
+, @file{$DAIKONDIR/fjalar/valgrind/REVISION}} indicates the version of
+these tools that Kvasir uses.
+You can determine whether a newer version of these tools is available
+by comparing the @file{REVISION} file to
+@url{http://valgrind.org/downloads/current.html} and
+@url{http://ftp.gnu.org/gnu/binutils/?C=M;O=D}.
+If so, you should update the Fjalar source tree as soon as practical.
 For details, see the separate document ``Merging
 newer versions of Valgrind into Fjalar'', which appears in the @file{fjalar}
 repository.
