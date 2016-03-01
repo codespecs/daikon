@@ -595,8 +595,10 @@ public class Instrument implements ClassFileTransformer {
 
         method_infos.add(mi);
 
-        cur_method_info_index = Runtime.methods.size();
-        Runtime.methods.add(mi);
+        synchronized(Runtime.class) {
+            cur_method_info_index = Runtime.methods.size();
+            Runtime.methods.add(mi);
+        }
 
         // Add nonce local to matchup enter/exits
         String entry_ppt_name = DaikonWriter.methodEntryName(fullClassName,

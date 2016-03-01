@@ -210,7 +210,9 @@ public class SessionManager
       finished = true;
       Session tmp = session;
       session = null;
-      tmp.kill();
+      synchronized(tmp) {
+          tmp.kill();
+      }
     }
   }
 

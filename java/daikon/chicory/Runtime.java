@@ -146,43 +146,6 @@ public class Runtime
         throw new Error("Do not create instances of Runtime");
     }
 
-    /** Printf to dtrace file. **/
-    /*@FormatMethod*/
-    @SuppressWarnings("formatter") // call to format method is correct because of @FormatMethod annotation
-    final private static void printf(String format, /*@Nullable*/ Object... args)
-    {
-        if (!dtrace_closed)
-            dtrace.printf(format, args);
-    }
-
-    /** Println to dtrace file. **/
-    final private static void println(String msg)
-    {
-        if (!dtrace_closed)
-            dtrace.println(msg);
-    }
-
-    /** Println to dtrace file. **/
-    final private static void println(int val)
-    {
-        if (!dtrace_closed)
-            dtrace.println(val);
-    }
-
-    /** Println to dtrace file. **/
-    final private static void println(Object obj)
-    {
-        if (!dtrace_closed)
-            dtrace.println(obj);
-    }
-
-    /** Println to dtrace file. **/
-    final private static void println()
-    {
-        if (!dtrace_closed)
-            dtrace.println();
-    }
-
     /**
      * Thrown to indicate that main should not print a stack trace, but only
      * print the message itself to the user.

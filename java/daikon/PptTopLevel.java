@@ -2681,7 +2681,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /*@Pure*/
-  public synchronized static /*@Nullable*/ LemmaStack getProverStack() {
+  public static /*@Nullable*/ LemmaStack getProverStack() {
       return proverStack;
   }
 
