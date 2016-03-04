@@ -319,7 +319,7 @@ public class DeclWriter extends DaikonWriter {
           assert enterRoot != null : "Traversal pattern not initialized at "
             + "method " + mi.method_name;
 
-          print_method (mi, exitRoot,methodExitName(member,exitLoc.intValue()),
+          print_method (mi, exitRoot, methodExitName(member, exitLoc.intValue()),
                         PptType.SUBEXIT, comp_info);
         }
       }
