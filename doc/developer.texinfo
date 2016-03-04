@@ -1245,6 +1245,7 @@ Michael D. Ernst, published in Foundations of Software Engineering in 2004;
 the paper is available from
 @uref{http://plse.cs.washington.edu/daikon/pubs/invariants-incremental-fse2004-abstract.html}.
 
+@need 2000
 @node    Dataflow hierarchy
 @section Dataflow hierarchy
 
@@ -1265,21 +1266,42 @@ The purpose of dataflow hierarchy is to reduce the presence of
 redundant invariants by only keeping invariants at the highest parent
 at which they apply.  This saves both time and space.
 
-Daikon provides four ways that program points can be connected.
-First, @code{:::CLASS} program points are parents of
-all their method program points.  Second, between two classes that are
-related by inheritance, corresponding program points relate --- for
-example, @code{java.util.Vector:::CLASS} is a child of
-@code{java.util.List:::CLASS}.  Third, when a program point contains
-variables of a type whose @code{:::CLASS} program point is also available to
-Daikon, the former program point's variables relate to the latter
-program point's @code{:::CLASS} method.  For example, if X.y is of type Y, and
-Y contains fields a and b, X.y, X.y.a and X.y.b relate to
-Y.this, Y.b and Y.a.  Fourth, variables at @code{:::ENTER} program
-points are related to the @samp{orig} versions at @code{:::EXIT} program points.
+@c original:
+@c Daikon provides four ways that program points can be connected.
+@c First, @code{:::CLASS} program points are parents of
+@c all their method program points.  Second, between two classes that are
+@c related by inheritance, corresponding program points relate --- for
+@c example, @code{java.util.Vector:::CLASS} is a child of
+@c @code{java.util.List:::CLASS}.  Third, when a program point contains
+@c variables of a type whose @code{:::CLASS} program point is also available to
+@c Daikon, the former program point's variables relate to the latter
+@c program point's @code{:::CLASS} method.  For example, if X.y is of type Y, and
+@c Y contains fields a and b, X.y, X.y.a and X.y.b relate to
+@c Y.this, Y.b and Y.a.  Fourth, variables at @code{:::ENTER} program
+@c points are related to the @samp{orig} versions at @code{:::EXIT} program points.
 
-When using Daikon, the above four ways of relations in the dataflow
-hierarchy will result in some true invariants that are not reported at
+@ref{Program point declarations} describes how program points are
+declared in a Daikon input file. Here we will describe how the
+@code{parent} records are typically used to connect program points into
+a dataflow hierarchy.
+
+A program point that represents the @code{ENTRY} or @code{EXIT} of a
+static method will have a @code{parent} record that points to the
+@code{CLASS} program point for the containing class.
+
+A program point that represents the @code{ENTRY} or @code{EXIT} of a
+non-static (instance) method will have a @code{parent} record that points to the
+@code{OBJECT} program point for the containing object.
+
+A program point that represents a @code{CLASS}
+will usually not have a @code{parent} record.
+
+A program point that represents a @code{OBJECT}
+will have a @code{parent} record that points to the @code{CLASS}
+program point for the object if the object has static data members.
+
+When using Daikon, the relations used to describe the dataflow
+hierarchy may result in some true invariants that are not reported at
 some program points.  However, the invariant will be present in some
 parent program point.  Dataflow hierarchy is enabled by default, but
 can be disabled by the @option{--nohierarchy} flag.  When dataflow is enabled,
@@ -1313,7 +1335,7 @@ equality invariants.  Every equality set has a leader or
 Non-equality invariants are only instantiated and checked on the
 leader.  When printing invariants, Daikon reports only invariants on
 the leader.  The user can easily determine that @samp{odd(a)} and @samp{a == b}
-imply @samp{odd(b)}.  Equality optimization can be turned off at the 
+imply @samp{odd(b)}.  Equality optimization can be turned off at the
 command line with the @option{--noequality} flag.
 
 
@@ -3189,6 +3211,7 @@ Some additional details about the declaration file format appear in file
 @node       Declaration-related records
 @subsection Declaration-related records
 
+@exampleindent 2
 
 @menu
 * Declaration version::
@@ -3303,6 +3326,27 @@ Program point names must be distinct.
 @c The Version 1 declaration file format specification is described in
 @c "V1 pptname format", but it is not relevant for version 2.
 
+While Daikon does not infer program point relationships from @code{ppt-name}s,
+it does require these names to conform to a set syntax.
+The following patterns are for the @code{enter}, @code{subexit},
+@code{class} and @code{object} @code{ppt-type}s, respectively.
+
+@example
+<fully qualified class name>.<method/function name>(<argument types>):::ENTER
+<fully qualified class name>.<method/function name>(<argument types>):::EXIT<id>
+<fully qualified class name>:::CLASS
+<fully qualified class name>:::OBJECT
+@end example
+
+@noindent
+Since in most languages a method or function may have multiple exit points,
+the @code{ppt-name} for a @code{subexit} @code{ppt-type} must be appended
+with a unique id.  Typically, this is the corresponding source line number.
+
+@c Note:
+@c There is a little code in FileIO.java to support additional ppt-names ending
+@c in THROWS and GLOBAL.  Neither Daikon or Kvasir currently use them.
+
 The following information about the program point (@code{ppt-info}) can be specified:
 @itemize 
 @item @code{ppt-type <type>}
@@ -3320,6 +3364,8 @@ from a programming language or when is no dataflow hierarchy.
 
 Specifies one or more flags for this @code{ppt}.  The possible flags are:
 @code{static}, @code{enter}, @code{exit}, @code{private}, @code{return}.
+It should be noted that neither Daikon nor Kvasir currently use or
+output this field.
 
 @item @code{parent <relation-type> <parent-ppt-name> <relation-id>}
 
@@ -3332,8 +3378,9 @@ program point.  For example, an object program point is a parent of
 each of the method program points in that object.
 
 The @var{relation-type} is the type of parent-child relationship in
-the hierarchy.  Possible relationship types are @code{parent} and
-@code{user}.
+the hierarchy. There are a few relationship types used internally
+by Daikon, but the only one output to the data files is @code{parent}.
+@c types are: parent, user, enter-exit, exit-exitnn, merge-child and ppt-pptcond
 A @code{parent} relationship is one where the program points themselves
 are explicitly related, such as an enter and an exit point.  All of the
 variables at one of the points exists at the other.  A @code{user}
