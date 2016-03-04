@@ -652,14 +652,6 @@ plume-import-check :
 	echo "done"; \
 	fi
 
-#
-# Web Services Matching targets
-#
-WSMATCH_JAVA_FILES = daikon/tools/WSMatch.java daikon/chicory/*.java
-wsmatch : daikon/tools/WSMatch.class
-daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES))
-	$(JAVAC_COMMAND) $(WSMATCH_JAVA_FILES)
-
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
 all_except_daikon: ../plume-lib ${AUTO_GENERATED_FILES}
