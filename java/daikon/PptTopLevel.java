@@ -1230,9 +1230,12 @@ public class PptTopLevel extends Ppt {
     for (int ii = 0; ii < ppt.var_infos.length; ii++) {
       if (ppt.var_infos[ii].missingOutOfBounds()) {
         int mod = vt.getModified(ppt.var_infos[ii]);
-        assert var_infos[ii].derived != null : "@AssumeAssertion(nullness)";
+        if (this.var_infos[ii].derived == null) {
+          System.out.printf("ppt %s, ii %s, ppt.var_infos[ii] %s, this.var_infos[ii] %s%n", ppt, ii, ppt.var_infos[ii], this.var_infos[ii]);
+        }
+        assert this.var_infos[ii].derived != null : "@AssumeAssertion(nullness)";
         if (mod == ValueTuple.MISSING_NONSENSICAL)
-          var_infos[ii].derived.missing_array_bounds = true;
+          this.var_infos[ii].derived.missing_array_bounds = true;
       }
     }
   }
