@@ -7050,7 +7050,7 @@ the Daikon developers.
 
 @command{AnnotateNullable} determines which variables in a Java program were ever
 null during execution.  @command{AnnotateNullable} makes it easier to use the
-@uref{http://types.cs.washington.edu/checker-framework/@/current/@/checkers-manual.html#nullness-checker, Nullness Checker}
+@uref{http://types.cs.washington.edu/checker-framework/@/current/@/checker-framework-manual.html#nullness-checker, Nullness Checker}
 that is part of the
 @uref{http://types.cs.washington.edu/@/checker-framework/, Checker Framework}.
 
