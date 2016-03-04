@@ -282,7 +282,7 @@ public class NISuppressee {
       else if (binv.get_swap())
         extra = " [swap]";
     }
-    return (UtilMDE.unqualified_name (sup_class) + extra);
+    return sup_class.getSimpleName() + extra;
   }
 
 }

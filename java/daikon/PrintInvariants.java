@@ -1485,7 +1485,7 @@ public final class PrintInvariants {
 
           // Print the invariant
           System.out.printf ("    %s [%s] %s%n", inv.format(),
-                             UtilMDE.unqualified_name(inv.getClass()), suppress);
+                             inv.getClass().getSimpleName(), suppress);
 
           // Print all unary and binary invariants over the same variables
           for (int i = 0; i < vis.length; i++) {
@@ -1540,7 +1540,7 @@ public final class PrintInvariants {
 
     for (Invariant inv : slice.invs) {
       System.out.printf ("%s%s [%s]%n", indent, inv.format(),
-                         UtilMDE.unqualified_name(inv.getClass()));
+                         inv.getClass().getSimpleName());
     }
 
   }

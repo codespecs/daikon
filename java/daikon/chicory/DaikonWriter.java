@@ -182,7 +182,7 @@ public abstract class DaikonWriter
       } else {
         Constructor<?> constructor = (Constructor<?>) member;
         fullname = declaring_class.getName() + "."
-          + UtilMDE.unqualified_name (declaring_class);
+            + declaring_class.getSimpleName();
         args = constructor.getParameterTypes();
       }
       String arg_str = "";

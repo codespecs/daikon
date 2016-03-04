@@ -1098,7 +1098,7 @@ public class NIS {
       String out = "Comparability " + comparability + " : ";
 
       for (Class<? extends Invariant> iclass : antecedent_map.keySet()) {
-        out += UtilMDE.unqualified_name (iclass) + " : ";
+        out += iclass.getSimpleName() + " : ";
         List<Invariant> ilist = antecedent_map.get (iclass);
         for (Invariant inv : ilist) {
           if (inv.is_false())

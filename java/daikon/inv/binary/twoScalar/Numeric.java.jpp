@@ -225,7 +225,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   public String repr() {
-    return UtilMDE.unqualified_name (getClass()) + ": " + format() +
+    return getClass().getSimpleName() + ": " + format() +
       (swap ? " [swapped]" : " [unswapped]");
   }
 
