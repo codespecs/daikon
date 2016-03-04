@@ -20,6 +20,14 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.24 (March 4, 2016)
+
+Documentation:
+- Added more examples of invariants.
+- Improved instructions on building Daikon and Kvasir.
+
+===========================================================================
+
 5.2.22 (February 1, 2016)
 
 We have updated the Daikon tool set to include a newer version of BCEL.
