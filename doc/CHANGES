@@ -135,7 +135,7 @@ of the top-level directory within these archive files.
 
 Documentation:
 - The developer manual has an improved discussion of comparability values.
-- Developer manual section A.5 Example files has been updated.
+- Developer manual section A.5, "Example files", has been updated.
 - The user manual has an improved discussion of mixed .decls and .dtrace
   files.  This includes some clarification of how to use the output(s) of
   Chicory and DynComp with Daikon.
