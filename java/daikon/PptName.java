@@ -356,7 +356,7 @@ public class PptName
       if (cls == null)
         return (false);
 
-      String class_name = UtilMDE.unqualified_name (cls);
+      String class_name = UtilMDE.fullyQualifiedNameToSimpleName (cls);
       assert method != null;    // for nullness checker
       int arg_start = method.indexOf ('(');
       String method_name = method;
