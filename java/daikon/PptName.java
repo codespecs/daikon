@@ -356,6 +356,7 @@ public class PptName
       if (cls == null)
         return (false);
 
+      @SuppressWarnings("signature") // cls is allowed to be arbitrary, especially for non-Java code
       String class_name = UtilMDE.fullyQualifiedNameToSimpleName (cls);
       assert method != null;    // for nullness checker
       int arg_start = method.indexOf ('(');
