@@ -2221,17 +2221,19 @@ nothing to commit, working directory clean
 
 
 @item
-Download the latest version of the Checker Framework Java compiler from
-@uref{http://checkerframework.org/}.
-Set the @env{CHECKERFRAMEWORK} environment
-variable to the location of the Checker Framework directory.
+Make sure your Checker Framework repositories are up-to-date.
+(For instructions on how to set up and build the Checker Framework, see
+@uref{http://types.cs.washington.edu/checker-framework/current/checker-framework-manual.html#build-source,Building from source}.)
+Make sure the @env{CHECKERFRAMEWORK} environment
+variable points to the location of your Checker Framework directory.
 
 [Time: moments]
 
 
 @item
 Most likely a new Checker Framework has been released since the last distribution
-and/or there have been changes to plume-lib.  You should always build an updated
+(which may cause compatibility problems)
+and/or there may have been changes to plume-lib.  You should always build an updated
 @file{plume.jar} just to be safe.
 
 @example
@@ -2288,7 +2290,7 @@ JDK@tie{}7 - and our release version will be built with it as well. However, we
 also need to ensure that our system runs on JDK@tie{}8. We do this now to
 reduce the risk of accidentally releasing any JDK@tie{}8 built components.
 
-This means you will need to run the next three steps in a separate shell
+This means you will need to run the next four steps in a separate shell
 with @command{export JAVA_HOME=/usr/lib/jvm/java}.
 
 @itemize
@@ -2298,7 +2300,7 @@ with @command{export JAVA_HOME=/usr/lib/jvm/java}.
 @item @command{source $DAIKONDIR/scripts/daikon.bashrc}
 @end itemize
 
-@strong{Caution:} Any problems encountered in the next 3 steps
+@strong{Caution:} Any problems encountered in the next 4 steps
 need to be corrected immediately and the release process restarted with
 step 1 below.
 
@@ -2320,6 +2322,15 @@ make rebuild-everything
 @c Time on godwit as of 11/27/2014
 [Time: 20 min]
 
+
+@need 1000
+@item
+Run the Nullness Checker.  This is to verify that the Checker Framework
+Java compiler was correctly used to build Daikon.  There should be no
+errors output.
+
+@c Time on godwit as of 11/27/2014
+[Time: 30 min]
 
 @need 1000
 @item
@@ -2490,6 +2501,8 @@ DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION
 git log v$DAIKONVERSION..HEAD
 @end smallexample
 
+When you have competed your updates, commit and push the changes.
+
 [Time: a few minutes]
 
 
@@ -2608,7 +2621,7 @@ git clone https://github.com/codespecs/daikon /tmp/$USER/daikon
 cd /tmp/$USER/daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk7
-source $DAIKONDIR/scripts/daikon.bashrc
+source scripts/daikon.bashrc
 make staging
 @end example
 
@@ -2620,7 +2633,7 @@ If any corrections are required, do so back in the main
 repository, commit the changes and
 then repeat this step.
 
-[Time: 4 min]
+[Time: 23 min]
 
 
 @need 1000
@@ -2686,34 +2699,6 @@ make test-staged-dist
 
 @c Time on buffalo as of 12/16/2015
 [Time: 10 min; runs Checker Framework tests]
-
-
-@need 1000
-@item
-Test the distribution on a 32-bit machine.
-This is probably best done on a virtual machine running a current version
-of Fedora.  The instructions below assume you are running on such a machine.
-They will download the staged release archive, extract the files, set
-the appropriate environment variables and run the top level Makefile.
-Finally, a short verification test is run;
-success is indicated by invariant output being written to the screen.
-
-@smallexample
-mkdir -p ~/tmp
-cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
-rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-tar xzf daikon-$DAIKONVERSION.tar.gz
-cd daikon-$DAIKONVERSION
-export JAVA_HOME=/usr/lib/jvm/java
-export DAIKONDIR=`pwd`
-source scripts/daikon.bashrc
-make distribution-check
-@end smallexample
-
-[Time: 10 min]
 
 
 @need 1000
@@ -2822,7 +2807,7 @@ and are ready to make the actual release.
 restarted the release process.
 
 At this point we are done building and testing the release candidate and you
-should exit the Bash command shell created in step 12 and return to your
+should exit the Bash command shell created in step 15 and return to your
 original Bash shell.
 
 
