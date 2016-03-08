@@ -25,7 +25,7 @@ public class Runtime
     public static int nonce = 0;
 
     /** debug flag **/
-    public static final boolean debug = false;
+    public static boolean debug = false;
 
     /**
      * Flag indicating that a dtrace record is currently being written
