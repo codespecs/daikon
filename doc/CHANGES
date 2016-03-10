@@ -20,6 +20,17 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.28 (scheduled for April 2016)
+
+We have decided to deprecate support for 32-bit hosts.
+- Fjalar/Kvasir, the C/C++ front end for Daikon, no longer builds on a 32-bit
+  platform and we will no longer support the 32-bit version of this tool.
+- At the present time, Chicory and Daikon continue to build and run on a
+  32-bit platform, but we have stopped testing this configuration and make
+  no guarantees for the future.
+
+===========================================================================
+
 5.2.26 (March 10, 2016)
 
 This is an update to 5.2.24 to correct a small problem in Chicory.  It was
