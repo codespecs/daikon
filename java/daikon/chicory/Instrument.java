@@ -1966,6 +1966,8 @@ public class Instrument implements ClassFileTransformer {
       return true;
     if (classname.equals ("daikon/PptTopLevel$PptType"))
       return true;
+    if (classname.startsWith ("daikon/util/UtilMDE"))
+      return true;
     return false;
   }
 

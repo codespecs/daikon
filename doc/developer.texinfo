@@ -2329,6 +2329,10 @@ Run the Nullness Checker.  This is to verify that the Checker Framework
 Java compiler was correctly used to build Daikon.  There should be no
 errors output.
 
+@example
+make -C $DAIKONDIR/java check-nullness
+@end example
+
 @c Time on godwit as of 11/27/2014
 [Time: 30 min]
 
