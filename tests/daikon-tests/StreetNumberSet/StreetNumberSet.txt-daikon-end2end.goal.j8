@@ -72,6 +72,10 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271;condition=
 return == false
 orig(other) == null
 ===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271;condition="not(orig((begins.length == 0)))"
+return == false
+orig(other) == null
+===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT272
 this.begins == other.begins
 this.begins == orig(other.begins)
@@ -90,6 +94,14 @@ this.ends == orig(other.ends)
 orig(this) == orig(other)
 return == true
 ===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT272;condition="not(orig((begins.length == 0)))"
+this.begins == other.begins
+this.begins == orig(other.begins)
+this.ends == other.ends
+this.ends == orig(other.ends)
+orig(this) == orig(other)
+return == true
+===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT281
 return == false
 orig(other) != null
@@ -97,6 +109,10 @@ orig(other) != null
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT281;condition="not(return == true)"
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT281;condition="not((begins.length == 0))"
+return == false
+orig(other) != null
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT281;condition="not(orig((begins.length == 0)))"
 return == false
 orig(other) != null
 ===========================================================================
@@ -110,6 +126,10 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT282;condition=
 return == false
 orig(other) != null
 ===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT282;condition="not(orig((begins.length == 0)))"
+return == false
+orig(other) != null
+===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT286
 return == false
 orig(other) != null
@@ -120,12 +140,19 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT286;condition=
 return == false
 orig(other) != null
 ===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT286;condition="not(orig((begins.length == 0)))"
+return == false
+orig(other) != null
+===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT290
 return == true
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT290;condition="return == true"
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT290;condition="not((begins.length == 0))"
+return == true
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT290;condition="not(orig((begins.length == 0)))"
 return == true
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT
@@ -155,6 +182,32 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT;condition="no
 return == false
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT;condition="not((begins.length == 0))"
+this.begins == orig(this.begins)
+this.begins[] == orig(this.begins[])
+this.ends == orig(this.ends)
+this.ends[] == orig(this.ends[])
+other.begins == orig(other.begins)
+other.begins[] == orig(other.begins[])
+other.ends == orig(other.ends)
+other.ends[] == orig(other.ends[])
+this.begins != null
+this.begins[] contains no duplicates
+this.begins[] elements >= 0
+this.ends != null
+this.ends[] contains no duplicates
+this.ends[] elements >= 0
+other.begins != null
+other.begins[] contains no duplicates
+other.begins[] elements >= 0
+other.ends != null
+other.ends[] contains no duplicates
+other.ends[] elements >= 0
+size(this.begins[]) >= 1
+size(this.ends[]) >= 1
+size(other.begins[]) >= 1
+size(other.ends[]) >= 1
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT;condition="not(orig((begins.length == 0)))"
 this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
@@ -213,6 +266,19 @@ this.ends[] contains no duplicates
 size(this.begins[]) >= 1
 size(this.ends[]) >= 1
 ===========================================================================
+MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT;condition="not(orig((begins.length == 0)))"
+this.begins == orig(this.begins)
+this.begins[] == orig(this.begins[])
+this.ends == orig(this.ends)
+this.ends[] == orig(this.ends[])
+this.begins != null
+this.begins[] contains no duplicates
+this.ends != null
+this.ends[] contains no duplicates
+orig(o.getClass().getName()) is printable
+size(this.begins[]) >= 1
+size(this.ends[]) >= 1
+===========================================================================
 MapQuick1.StreetNumberSet.hashCode():::ENTER
 this.begins[] elements one of { 1, 3, 7 }
 this.begins[] one of { [1], [3, 1, 7] }
@@ -238,6 +304,19 @@ size(this.ends[]) one of { 1, 3 }
 ===========================================================================
 MapQuick1.StreetNumberSet.hashCode():::EXIT;condition="not((begins.length == 0))"
 ===========================================================================
+MapQuick1.StreetNumberSet.hashCode():::EXIT;condition="not(orig((begins.length == 0)))"
+this.begins == orig(this.begins)
+this.begins[] == orig(this.begins[])
+this.ends == orig(this.ends)
+this.ends[] == orig(this.ends[])
+this.begins[] elements one of { 1, 3, 7 }
+this.begins[] one of { [1], [3, 1, 7] }
+this.ends[] elements one of { 1, 5, 7 }
+this.ends[] one of { [5, 1, 7], [7] }
+return == 122
+size(this.begins[]) one of { 1, 3 }
+size(this.ends[]) one of { 1, 3 }
+===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::ENTER
 other != null
 other.begins != null
@@ -259,12 +338,18 @@ MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT260;condit
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT260;condition="not((begins.length == 0))"
 return == true
 ===========================================================================
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT260;condition="not(orig((begins.length == 0)))"
+return == true
+===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT261
 return == false
 ===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT261;condition="not(return == true)"
 ===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT261;condition="not((begins.length == 0))"
+return == false
+===========================================================================
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT261;condition="not(orig((begins.length == 0)))"
 return == false
 ===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT
@@ -317,6 +402,33 @@ size(this.ends[]) >= 1
 size(other.begins[]) >= 1
 size(other.ends[]) >= 1
 ===========================================================================
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT;condition="not(orig((begins.length == 0)))"
+this.begins == orig(this.begins)
+this.begins[] == orig(this.begins[])
+this.ends == orig(this.ends)
+this.ends[] == orig(this.ends[])
+other.begins == orig(other.begins)
+other.begins[] == orig(other.begins[])
+other.ends == orig(other.ends)
+other.ends[] == orig(other.ends[])
+this.begins != null
+this.begins[] contains no duplicates
+this.begins[] elements >= 0
+this.ends != null
+this.ends[] contains no duplicates
+this.ends[] elements >= 0
+other.begins != null
+other.begins[] contains no duplicates
+other.begins[] elements >= 0
+other.ends != null
+other.ends[] contains no duplicates
+other.ends[] elements >= 0
+orig(other) != null
+size(this.begins[]) >= 1
+size(this.ends[]) >= 1
+size(other.begins[]) >= 1
+size(other.ends[]) >= 1
+===========================================================================
 MapQuick1.StreetNumberSet.isEmpty():::ENTER
 ===========================================================================
 MapQuick1.StreetNumberSet.isEmpty():::EXIT
@@ -329,6 +441,21 @@ return == false
 MapQuick1.StreetNumberSet.isEmpty():::EXIT;condition="not(return == true)"
 ===========================================================================
 MapQuick1.StreetNumberSet.isEmpty():::EXIT;condition="not((begins.length == 0))"
+this.begins == orig(this.begins)
+this.begins[] == orig(this.begins[])
+this.ends == orig(this.ends)
+this.ends[] == orig(this.ends[])
+this.begins != null
+this.begins[] contains no duplicates
+this.begins[] elements >= 0
+this.ends != null
+this.ends[] contains no duplicates
+this.ends[] elements >= 0
+return == false
+size(this.begins[]) >= 1
+size(this.ends[]) >= 1
+===========================================================================
+MapQuick1.StreetNumberSet.isEmpty():::EXIT;condition="not(orig((begins.length == 0)))"
 this.begins == orig(this.begins)
 this.begins[] == orig(this.begins[])
 this.ends == orig(this.ends)
@@ -359,6 +486,24 @@ this.ends[] elements <= return
 ===========================================================================
 MapQuick1.StreetNumberSet.max():::EXIT;condition="not((begins.length == 0))"
 ===========================================================================
+MapQuick1.StreetNumberSet.max():::EXIT;condition="not(orig((begins.length == 0)))"
+this.begins == orig(this.begins)
+this.begins[] == orig(this.begins[])
+this.ends == orig(this.ends)
+this.ends[] == orig(this.ends[])
+this.begins != null
+this.begins[] contains no duplicates
+this.begins[] elements >= 0
+this.ends != null
+this.ends[] contains no duplicates
+this.ends[] elements >= 0
+return >= 0
+size(this.begins[]) >= 1
+size(this.ends[]) >= 1
+this.begins[] elements <= return
+return in this.ends[]
+this.ends[] elements <= return
+===========================================================================
 MapQuick1.StreetNumberSet.min():::ENTER
 ===========================================================================
 MapQuick1.StreetNumberSet.min():::ENTER;condition="not((begins.length == 0))"
@@ -374,6 +519,24 @@ this.begins[] elements >= return
 this.ends[] elements >= return
 ===========================================================================
 MapQuick1.StreetNumberSet.min():::EXIT;condition="not((begins.length == 0))"
+===========================================================================
+MapQuick1.StreetNumberSet.min():::EXIT;condition="not(orig((begins.length == 0)))"
+this.begins == orig(this.begins)
+this.begins[] == orig(this.begins[])
+this.ends == orig(this.ends)
+this.ends[] == orig(this.ends[])
+this.begins != null
+this.begins[] contains no duplicates
+this.begins[] elements >= 0
+this.ends != null
+this.ends[] contains no duplicates
+this.ends[] elements >= 0
+return >= 0
+size(this.begins[]) >= 1
+size(this.ends[]) >= 1
+return in this.begins[]
+this.begins[] elements >= return
+this.ends[] elements >= return
 ===========================================================================
 MapQuick1.StreetNumberSet.orderStatistic(int):::ENTER
 n >= 0

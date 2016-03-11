@@ -788,7 +788,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       + ",canBeMissing="
       + canBeMissing
       + (",equal_to="
-        + (equalitySet == null ? "null" : equalitySet.toString()))
+      + (equalitySet == null ? "null" : equalitySet.toString()))
+      + ",PostState="
+      + postState
       + ",isCanonical()="
       + isCanonical()
       + ">";

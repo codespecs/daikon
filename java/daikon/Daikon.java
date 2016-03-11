@@ -1381,16 +1381,18 @@ public final class Daikon {
   public static void init_ppt (PptTopLevel ppt, PptMap all_ppts) {
 
     if (!Daikon.using_DaikonSimple) {
-      // Setup splitters.  This must be done before adding derived variables.
+      // Create orig variables and setup splitters.
+      // This must be done before adding derived variables.
       // Do not add splitters to ppts that were already created by splitters!
+      // Also, ppts created by splitters already have their orig_vars.
       if (! (ppt instanceof PptConditional)) {
+        progress = "Creating orig variables and splitters for: " + ppt.name;
+        create_orig_vars (ppt, all_ppts);
         setup_splitters(ppt);
       }
     }
 
-    // Create orig and derived variables
-    progress = "Creating orig variables for: " + ppt.name;
-    create_orig_vars (ppt, all_ppts);
+    // Create derived variables
     if (!Derivation.dkconfig_disable_derived_variables) {
       progress = "Creating derived variables for: " + ppt.name;
       ppt.create_derived_variables();
@@ -1900,7 +1902,7 @@ public final class Daikon {
     }
 
     // System.out.println("samples processed: " + FileIO.samples_processed);
-    // if  {
+
     int unmatched_count = FileIO.call_stack.size() + FileIO.call_hashmap.size();
     if ((use_dataflow_hierarchy
          && FileIO.samples_processed == unmatched_count)
