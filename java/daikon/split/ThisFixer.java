@@ -6,6 +6,10 @@ import daikon.*;
 import daikon.tools.jtb.*;
 import jtb.ParseException;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * ThisFixer is a visitor for a jtb syntax tree that changes all instances
  * of "this." to "this_". For example "this.x" would go to "this_x".
