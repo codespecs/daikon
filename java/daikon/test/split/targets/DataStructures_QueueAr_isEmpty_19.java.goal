@@ -8,14 +8,14 @@ public final class DataStructures_QueueAr_isEmpty_19 extends Splitter {
     return "currentSize == 0"; 
   } 
 
-  VarInfo currentSize_varinfo; // this.currentSize
+  VarInfo this_currentSize_varinfo; // this.currentSize
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
   public DataStructures_QueueAr_isEmpty_19() { } 
   public DataStructures_QueueAr_isEmpty_19(Ppt ppt) { 
-    currentSize_varinfo = ppt.find_var_by_name("this.currentSize");
+    this_currentSize_varinfo = ppt.find_var_by_name("this.currentSize");
   }
 
   public Splitter instantiate(Ppt ppt) { 
@@ -23,18 +23,18 @@ public final class DataStructures_QueueAr_isEmpty_19 extends Splitter {
   } 
 
   public boolean valid() { 
-    return (currentSize_varinfo != null);
+    return (this_currentSize_varinfo != null);
   } 
 
   public boolean test(ValueTuple vt) { 
     /* writeTestBody: 1 declarations */
-    long currentSize = currentSize_varinfo.getIntValue(vt);
-    return(currentSize==0); 
+    long this_currentSize = this_currentSize_varinfo.getIntValue(vt);
+    return(this_currentSize==0); 
   } 
 
   public String repr() { 
     return "DataStructures_QueueAr_isEmpty_19: "
-      + "currentSize_varinfo = " + currentSize_varinfo.repr() + " "
+      + "this_currentSize_varinfo = " + this_currentSize_varinfo.repr() + " "
       ;
   } 
 
@@ -44,9 +44,9 @@ public final class DataStructures_QueueAr_isEmpty_19 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) { 
     dummyInv = null; 
-    VarInfo currentSize_vi = ppt.find_var_by_name("this.currentSize");
-    if (currentSize_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {currentSize_vi});
+    VarInfo this_currentSize_vi = ppt.find_var_by_name("this.currentSize");
+    if (this_currentSize_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_currentSize_vi});
     }
   } 
 

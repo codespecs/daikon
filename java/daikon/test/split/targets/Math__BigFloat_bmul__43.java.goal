@@ -10,6 +10,7 @@ public final class Math__BigFloat_bmul__43 extends Splitter {
 
   VarInfo daikonreturn__p_varinfo; // return._p
   VarInfo daikonreturn_sign_varinfo; // return.sign
+  VarInfo orig_$p_varinfo; // orig($p)
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
@@ -18,6 +19,7 @@ public final class Math__BigFloat_bmul__43 extends Splitter {
   public Math__BigFloat_bmul__43(Ppt ppt) { 
     daikonreturn__p_varinfo = ppt.find_var_by_name("return._p");
     daikonreturn_sign_varinfo = ppt.find_var_by_name("return.sign");
+    orig_$p_varinfo = ppt.find_var_by_name("orig($p)");
   }
 
   public Splitter instantiate(Ppt ppt) { 
@@ -25,13 +27,14 @@ public final class Math__BigFloat_bmul__43 extends Splitter {
   } 
 
   public boolean valid() { 
-    return (daikonreturn__p_varinfo != null) && (daikonreturn_sign_varinfo != null);
+    return (daikonreturn__p_varinfo != null) && (daikonreturn_sign_varinfo != null) && (orig_$p_varinfo != null);
   } 
 
   public boolean test(ValueTuple vt) { 
-    /* writeTestBody: 2 declarations */
+    /* writeTestBody: 3 declarations */
     long daikonreturn__p = daikonreturn__p_varinfo.getIntValue(vt);
     String daikonreturn_sign = daikonreturn_sign_varinfo.getStringValue(vt);
+    long orig_$p = orig_$p_varinfo.getIntValue(vt);
     return(orig_$p!=0&&daikonreturn__p==0&&(daikonreturn_sign.equals("+")||daikonreturn_sign.equals("-"))); 
   } 
 
@@ -39,6 +42,7 @@ public final class Math__BigFloat_bmul__43 extends Splitter {
     return "Math__BigFloat_bmul__43: "
       + "daikonreturn__p_varinfo = " + daikonreturn__p_varinfo.repr() + " "
       + "daikonreturn_sign_varinfo = " + daikonreturn_sign_varinfo.repr() + " "
+      + "orig_$p_varinfo = " + orig_$p_varinfo.repr() + " "
       ;
   } 
 
@@ -50,8 +54,9 @@ public final class Math__BigFloat_bmul__43 extends Splitter {
     dummyInv = null; 
     VarInfo daikonreturn__p_vi = ppt.find_var_by_name("return._p");
     VarInfo daikonreturn_sign_vi = ppt.find_var_by_name("return.sign");
-    if (daikonreturn__p_vi != null && daikonreturn_sign_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {daikonreturn__p_vi, daikonreturn_sign_vi});
+    VarInfo orig_$p_vi = ppt.find_var_by_name("orig($p)");
+    if (daikonreturn__p_vi != null && daikonreturn_sign_vi != null && orig_$p_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {daikonreturn__p_vi, daikonreturn_sign_vi, orig_$p_vi});
     }
   } 
 

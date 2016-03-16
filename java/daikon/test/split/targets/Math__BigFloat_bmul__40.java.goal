@@ -8,12 +8,14 @@ public final class Math__BigFloat_bmul__40 extends Splitter {
     return "!orig($y._a.is_defined)"; 
   } 
 
+  VarInfo orig_$y__a_is_defined_varinfo; // orig($y._a.is_defined)
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
   public Math__BigFloat_bmul__40() { } 
   public Math__BigFloat_bmul__40(Ppt ppt) { 
+    orig_$y__a_is_defined_varinfo = ppt.find_var_by_name("orig($y._a.is_defined)");
   }
 
   public Splitter instantiate(Ppt ppt) { 
@@ -21,17 +23,18 @@ public final class Math__BigFloat_bmul__40 extends Splitter {
   } 
 
   public boolean valid() { 
-    /* no variables were found */
-    return false;
+    return (orig_$y__a_is_defined_varinfo != null);
   } 
 
   public boolean test(ValueTuple vt) { 
-    /* writeTestBody: 0 declarations */
+    /* writeTestBody: 1 declarations */
+    boolean orig_$y__a_is_defined = orig_$y__a_is_defined_varinfo.getIntValue(vt) > 0;
     return(!orig_$y__a_is_defined); 
   } 
 
   public String repr() { 
     return "Math__BigFloat_bmul__40: "
+      + "orig_$y__a_is_defined_varinfo = " + orig_$y__a_is_defined_varinfo.repr() + " "
       ;
   } 
 
@@ -41,6 +44,10 @@ public final class Math__BigFloat_bmul__40 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) { 
     dummyInv = null; 
+    VarInfo orig_$y__a_is_defined_vi = ppt.find_var_by_name("orig($y._a.is_defined)");
+    if (orig_$y__a_is_defined_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {orig_$y__a_is_defined_vi});
+    }
   } 
 
   public DummyInvariant getDummyInvariant() { 

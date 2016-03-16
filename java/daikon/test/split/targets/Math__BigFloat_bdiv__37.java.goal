@@ -9,6 +9,7 @@ public final class Math__BigFloat_bdiv__37 extends Splitter {
   } 
 
   VarInfo daikonreturn__p_varinfo; // return._p
+  VarInfo orig_$p_varinfo; // orig($p)
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
@@ -16,6 +17,7 @@ public final class Math__BigFloat_bdiv__37 extends Splitter {
   public Math__BigFloat_bdiv__37() { } 
   public Math__BigFloat_bdiv__37(Ppt ppt) { 
     daikonreturn__p_varinfo = ppt.find_var_by_name("return._p");
+    orig_$p_varinfo = ppt.find_var_by_name("orig($p)");
   }
 
   public Splitter instantiate(Ppt ppt) { 
@@ -23,18 +25,20 @@ public final class Math__BigFloat_bdiv__37 extends Splitter {
   } 
 
   public boolean valid() { 
-    return (daikonreturn__p_varinfo != null);
+    return (daikonreturn__p_varinfo != null) && (orig_$p_varinfo != null);
   } 
 
   public boolean test(ValueTuple vt) { 
-    /* writeTestBody: 1 declarations */
+    /* writeTestBody: 2 declarations */
     long daikonreturn__p = daikonreturn__p_varinfo.getIntValue(vt);
+    long orig_$p = orig_$p_varinfo.getIntValue(vt);
     return(orig_$p!=0&&daikonreturn__p==0); 
   } 
 
   public String repr() { 
     return "Math__BigFloat_bdiv__37: "
       + "daikonreturn__p_varinfo = " + daikonreturn__p_varinfo.repr() + " "
+      + "orig_$p_varinfo = " + orig_$p_varinfo.repr() + " "
       ;
   } 
 
@@ -45,8 +49,9 @@ public final class Math__BigFloat_bdiv__37 extends Splitter {
   public void instantiateDummy(PptTopLevel ppt) { 
     dummyInv = null; 
     VarInfo daikonreturn__p_vi = ppt.find_var_by_name("return._p");
-    if (daikonreturn__p_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {daikonreturn__p_vi});
+    VarInfo orig_$p_vi = ppt.find_var_by_name("orig($p)");
+    if (daikonreturn__p_vi != null && orig_$p_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {daikonreturn__p_vi, orig_$p_vi});
     }
   } 
 
