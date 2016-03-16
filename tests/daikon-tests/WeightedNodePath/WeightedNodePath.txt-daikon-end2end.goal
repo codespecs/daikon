@@ -32,7 +32,12 @@ MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::EXIT
 this.node == orig(node)
 this.path == null
 ===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::EXIT;condition="not(node == null)"
+===========================================================================
 MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::EXIT;condition="not(orig(node == null))"
+this.node == orig(node)
+this.node != null
+this.path == null
 ===========================================================================
 MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::EXIT;condition="not(path != null)"
 this.node == orig(node)
@@ -44,6 +49,8 @@ path.path.node != null
 path.path.cost >= 1
 path.cost >= 1
 path.path.cost < path.cost
+===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::ENTER;condition="not(node == null)"
 ===========================================================================
 MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT
 this.node == orig(node)
@@ -76,7 +83,32 @@ this.cost > path.path.cost
 this.cost > path.cost
 path.path.cost < path.cost
 ===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT;condition="not(node == null)"
+===========================================================================
 MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT;condition="not(orig(node == null))"
+this.node == orig(node)
+this.path == orig(path)
+this.path.node == path.node
+this.path.path == path.path
+this.path.path.node == path.path.node
+this.path.path.path == path.path.path
+this.path.path.cost == path.path.cost
+this.path.cost == path.cost
+path.node == orig(path.node)
+path.path == orig(path.path)
+path.path.node == orig(path.path.node)
+path.path.path == orig(path.path.path)
+path.path.cost == orig(path.path.cost)
+path.cost == orig(path.cost)
+this.node != null
+this.cost >= 1
+path.node != null
+path.path.node != null
+path.path.cost >= 1
+path.cost >= 1
+this.cost > path.path.cost
+this.cost > path.cost
+path.path.cost < path.cost
 ===========================================================================
 MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT;condition="path != null"
 this.node == orig(node)
@@ -176,9 +208,13 @@ MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER
 (this.path != null)  ==>  (this.path.path.node != null)
 node != null
 ===========================================================================
+MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER;condition="not(node == null)"
+===========================================================================
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER;condition="path != null"
+node != null
 ===========================================================================
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER;condition="not(path != null)"
+node != null
 ===========================================================================
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT
 this.node == orig(this.node)
@@ -200,7 +236,29 @@ this.cost == orig(this.cost)
 return != null
 return.getClass().getName() == MapQuick.WeightedNodePath.class
 ===========================================================================
+MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT;condition="not(node == null)"
+===========================================================================
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT;condition="not(orig(node == null))"
+this.node == orig(this.node)
+this.path == orig(this.path)
+this.path.node == orig(this.path.node)
+this.path.path == orig(this.path.path)
+this.path.path.node == orig(this.path.path.node)
+this.path.path.path == orig(this.path.path.path)
+this.path.path.cost == orig(this.path.path.cost)
+this.path.cost == orig(this.path.cost)
+this.cost == orig(this.cost)
+this.node != null
+this.path.node != null
+this.path.path.node != null
+this.path.cost >= 1
+this.cost >= 1
+return != null
+return.getClass().getName() == MapQuick.WeightedNodePath.class
+orig(node) != null
+this.path.path.cost < this.path.cost
+this.path.path.cost < this.cost
+this.path.cost < this.cost
 ===========================================================================
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT;condition="path != null"
 this.node == orig(this.node)

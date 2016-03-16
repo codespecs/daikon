@@ -335,7 +335,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     // it is needed to re-parse the condition in a new jtb syntax tree each
     // time.  (All the parsing is hidden in the static methods.)
     condition = NameFixer.fixUnqualifiedMemberNames(condition, className, varInfos);
-    condition = ThisRemover.removeThisDot(condition);
+    condition = ThisFixer.fixThisUsage(condition, varInfos);
     condition = OrigFixer.fixOrig(condition);
     condition = PrefixFixer.fixPrefix(condition);
     // UNDONE: If the condition contains a naked reference to a class
@@ -483,9 +483,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * Calculates the base name of a variable.  The base name
    * of a variable is the part of the variable with prefix
-   * "this." removed, and "orig()" replaced * by "orig_".
-   * In addition, '.' are converted to '_'.  For example, 
-   * orig(this.x) goes to orig_x.  Finally,
+   * "this." replaced by "this_", and "orig()" replaced * by "orig_".
+   * In addition, '.' are converted to '_'.  For example,
+   * orig(this.x) goes to orig_this_x.  Finally,
    * Java Reserved words are replaced with appropriate substitutes.
    *
    * @param varInfo the VarInfo for the variable whose base name is
@@ -499,12 +499,12 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         name.endsWith(")")) {
       name = name.substring(5, name.length() -1);
       if (name.startsWith("this.")) {
-          name = name.substring(5);
+          name = "this_" + name.substring(5);
       }
       name = "orig_" + name;
     } else {
       if (name.startsWith("this.")) {
-          name = name.substring(5);
+          name = "this_" + name.substring(5);
       }
     }
 
@@ -688,7 +688,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       try {
         String compilableName = compilableName(varInfo, className);
         Global.debugSplit.fine("varInfo " + varInfo.name() + " isNeeded(" +
-                               compilableName + ", " + classVars + ")=" + 
+                               compilableName + ", " + classVars + ")=" +
                                isNeeded(compilableName, classVars));
         if (isNeeded(compilableName, classVars)) {
           variableManagerList.add(new VariableManager(varInfo, condition, className));
