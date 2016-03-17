@@ -51,11 +51,11 @@ public class GeoSegment  {
 
   /*@ requires name != null; */
   /*@ requires p1 != null; */
-  /*@ requires p1.latitude  isPointer; */
-  /*@ requires p1.longitude  isPointer; */
+  /*@ requires p1.latitude is a pointer; */
+  /*@ requires p1.longitude is a pointer; */
   /*@ requires p2 != null; */
-  /*@ requires p2.latitude  isPointer; */
-  /*@ requires p2.longitude  isPointer; */
+  /*@ requires p2.latitude is a pointer; */
+  /*@ requires p2.longitude is a pointer; */
   /*@ requires p1.latitude > p1.longitude; */
   /*@ requires p1.latitude > p2.longitude; */
   /*@ requires p1.longitude < p2.latitude; */
@@ -67,10 +67,10 @@ public class GeoSegment  {
   /*@ ensures this.p2 == \old(p2); */
   /*@ ensures this.p2.latitude == p2.latitude; */
   /*@ ensures this.p2.longitude == p2.longitude; */
-  /*@ ensures p1.latitude  isPointer; */
-  /*@ ensures p1.longitude  isPointer; */
-  /*@ ensures p2.latitude  isPointer; */
-  /*@ ensures p2.longitude  isPointer; */
+  /*@ ensures p1.latitude is a pointer; */
+  /*@ ensures p1.longitude is a pointer; */
+  /*@ ensures p2.latitude is a pointer; */
+  /*@ ensures p2.longitude is a pointer; */
   /*@ ensures p1.latitude > p1.longitude; */
   /*@ ensures p1.latitude > p2.longitude; */
   /*@ ensures p1.longitude < p2.latitude; */
@@ -114,18 +114,18 @@ public class GeoSegment  {
     return new GeoSegment(name, p2, p1);
   }
 
-  /*@ requires this.p1.latitude  isPointer; */
-  /*@ requires this.p1.longitude  isPointer; */
-  /*@ requires this.p2.latitude  isPointer; */
-  /*@ requires this.p2.longitude  isPointer; */
+  /*@ requires this.p1.latitude is a pointer; */
+  /*@ requires this.p1.longitude is a pointer; */
+  /*@ requires this.p2.latitude is a pointer; */
+  /*@ requires this.p2.longitude is a pointer; */
   /*@ requires this.p1.latitude != this.p2.latitude; */
   /*@ requires this.p1.longitude != this.p2.longitude; */
   /*@ ensures this.name == \result; */
   /*@ ensures \result == \old(this.name); */
-  /*@ ensures this.p1.latitude  isPointer; */
-  /*@ ensures this.p1.longitude  isPointer; */
-  /*@ ensures this.p2.latitude  isPointer; */
-  /*@ ensures this.p2.longitude  isPointer; */
+  /*@ ensures this.p1.latitude is a pointer; */
+  /*@ ensures this.p1.longitude is a pointer; */
+  /*@ ensures this.p2.latitude is a pointer; */
+  /*@ ensures this.p2.longitude is a pointer; */
   /*@ ensures \result != null; */
   /*@ ensures this.p1.latitude != this.p2.latitude; */
   /*@ ensures this.p1.longitude != this.p2.longitude; */
@@ -137,10 +137,10 @@ public class GeoSegment  {
     return this.name;
   }
 
-  /*@ requires this.p1.latitude  isPointer; */
-  /*@ requires this.p1.longitude  isPointer; */
-  /*@ requires this.p2.latitude  isPointer; */
-  /*@ requires this.p2.longitude  isPointer; */
+  /*@ requires this.p1.latitude is a pointer; */
+  /*@ requires this.p1.longitude is a pointer; */
+  /*@ requires this.p2.latitude is a pointer; */
+  /*@ requires this.p2.longitude is a pointer; */
   /*@ requires this.p1.latitude != this.p2.latitude; */
   /*@ requires this.p1.longitude != this.p2.longitude; */
   /*@ ensures this.p1 == \result; */
@@ -149,11 +149,11 @@ public class GeoSegment  {
   /*@ ensures \result == \old(this.p1); */
   /*@ ensures \result.latitude == \old(this.p1.latitude); */
   /*@ ensures \result.longitude == \old(this.p1.longitude); */
-  /*@ ensures this.p2.latitude  isPointer; */
-  /*@ ensures this.p2.longitude  isPointer; */
+  /*@ ensures this.p2.latitude is a pointer; */
+  /*@ ensures this.p2.longitude is a pointer; */
   /*@ ensures \result != null; */
-  /*@ ensures \result.latitude  isPointer; */
-  /*@ ensures \result.longitude  isPointer; */
+  /*@ ensures \result.latitude is a pointer; */
+  /*@ ensures \result.longitude is a pointer; */
   /*@ ensures this.p2.latitude != \result.latitude; */
   /*@ ensures this.p2.latitude > \result.longitude; */
   /*@ ensures this.p2.longitude < \result.latitude; */
@@ -165,21 +165,21 @@ public class GeoSegment  {
     return this.p1;
   }
 
-  /*@ requires this.p1.latitude  isPointer; */
-  /*@ requires this.p1.longitude  isPointer; */
-  /*@ requires this.p2.latitude  isPointer; */
-  /*@ requires this.p2.longitude  isPointer; */
+  /*@ requires this.p1.latitude is a pointer; */
+  /*@ requires this.p1.longitude is a pointer; */
+  /*@ requires this.p2.latitude is a pointer; */
+  /*@ requires this.p2.longitude is a pointer; */
   /*@ ensures this.p2 == \result; */
   /*@ ensures this.p2.latitude == \result.latitude; */
   /*@ ensures this.p2.longitude == \result.longitude; */
   /*@ ensures \result == \old(this.p2); */
   /*@ ensures \result.latitude == \old(this.p2.latitude); */
   /*@ ensures \result.longitude == \old(this.p2.longitude); */
-  /*@ ensures this.p1.latitude  isPointer; */
-  /*@ ensures this.p1.longitude  isPointer; */
+  /*@ ensures this.p1.latitude is a pointer; */
+  /*@ ensures this.p1.longitude is a pointer; */
   /*@ ensures \result != null; */
-  /*@ ensures \result.latitude  isPointer; */
-  /*@ ensures \result.longitude  isPointer; */
+  /*@ ensures \result.latitude is a pointer; */
+  /*@ ensures \result.longitude is a pointer; */
   /*@ ensures this.p1.latitude > \result.longitude; */
   /*@ ensures this.p1.longitude < \result.latitude; */
   /*@ ensures \result.latitude > \result.longitude; */
@@ -189,15 +189,15 @@ public class GeoSegment  {
     return this.p2;
   }
 
-  /*@ requires this.p1.latitude  isPointer; */
-  /*@ requires this.p1.longitude  isPointer; */
-  /*@ requires this.p2.latitude  isPointer; */
-  /*@ requires this.p2.longitude  isPointer; */
+  /*@ requires this.p1.latitude is a pointer; */
+  /*@ requires this.p1.longitude is a pointer; */
+  /*@ requires this.p2.latitude is a pointer; */
+  /*@ requires this.p2.longitude is a pointer; */
   /*@ requires this.p1.longitude != this.p2.longitude; */
-  /*@ ensures this.p1.latitude  isPointer; */
-  /*@ ensures this.p1.longitude  isPointer; */
-  /*@ ensures this.p2.latitude  isPointer; */
-  /*@ ensures this.p2.longitude  isPointer; */
+  /*@ ensures this.p1.latitude is a pointer; */
+  /*@ ensures this.p1.longitude is a pointer; */
+  /*@ ensures this.p2.latitude is a pointer; */
+  /*@ ensures this.p2.longitude is a pointer; */
   /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
   /*@ ensures this.p1.longitude != this.p2.longitude; */
   /** @return this.length */
@@ -206,16 +206,16 @@ public class GeoSegment  {
     return p1.distanceTo(p2);
   }
 
-  /*@ requires this.p1.latitude  isPointer; */
-  /*@ requires this.p1.longitude  isPointer; */
-  /*@ requires this.p2.latitude  isPointer; */
-  /*@ requires this.p2.longitude  isPointer; */
+  /*@ requires this.p1.latitude is a pointer; */
+  /*@ requires this.p1.longitude is a pointer; */
+  /*@ requires this.p2.latitude is a pointer; */
+  /*@ requires this.p2.longitude is a pointer; */
   /*@ requires this.p1.latitude != this.p2.latitude; */
   /*@ requires this.p1.longitude != this.p2.longitude; */
-  /*@ ensures this.p1.latitude  isPointer; */
-  /*@ ensures this.p1.longitude  isPointer; */
-  /*@ ensures this.p2.latitude  isPointer; */
-  /*@ ensures this.p2.longitude  isPointer; */
+  /*@ ensures this.p1.latitude is a pointer; */
+  /*@ ensures this.p1.longitude is a pointer; */
+  /*@ ensures this.p2.latitude is a pointer; */
+  /*@ ensures this.p2.longitude is a pointer; */
   /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
   /*@ ensures this.p1.latitude != this.p2.latitude; */
   /*@ ensures this.p1.longitude != this.p2.longitude; */
@@ -235,10 +235,10 @@ public class GeoSegment  {
     return "Seg{" + name + "," + p1 + "," + p2 + "}";
   }
 
-  /*@ also_ensures this.p1.latitude  isPointer; */
-  /*@ also_ensures this.p1.longitude  isPointer; */
-  /*@ also_ensures this.p2.latitude  isPointer; */
-  /*@ also_ensures this.p2.longitude  isPointer; */
+  /*@ also_ensures this.p1.latitude is a pointer; */
+  /*@ also_ensures this.p1.longitude is a pointer; */
+  /*@ also_ensures this.p2.latitude is a pointer; */
+  /*@ also_ensures this.p2.longitude is a pointer; */
   /*@ also_ensures \result == false; */
   /*@ also_ensures this.p1.latitude != this.p2.latitude; */
   /*@ also_ensures this.p1.longitude != this.p2.longitude; */
@@ -259,12 +259,12 @@ public class GeoSegment  {
     // to multi-line return statements.
   }
 
-  /*@ also_ensures this.p1.latitude  isPointer; */
-  /*@ also_ensures this.p1.longitude  isPointer; */
-  /*@ also_ensures this.p2.latitude  isPointer; */
-  /*@ also_ensures this.p2.longitude  isPointer; */
-  /*@ also_ensures \result  isPointer; */
+  /*@ also_ensures this.p1.latitude is a pointer; */
+  /*@ also_ensures this.p1.longitude is a pointer; */
+  /*@ also_ensures this.p2.latitude is a pointer; */
+  /*@ also_ensures this.p2.longitude is a pointer; */
   /*@ also_ensures \result != 0; */
+  /*@ also_ensures \result is a pointer; */
   /*@ also_ensures this.p1.latitude != \result; */
   /*@ also_ensures this.p1.longitude != \result; */
   /*@ also_ensures this.p2.latitude != \result; */
@@ -313,13 +313,13 @@ public class GeoPoint {
   /*@ spec_public */ private final int latitude;
   /*@ spec_public */ private final int longitude;
 
-  /*@ requires latitude  isPointer; */
-  /*@ requires longitude  isPointer; */
+  /*@ requires latitude is a pointer; */
+  /*@ requires longitude is a pointer; */
   /*@ requires latitude > longitude; */
   /*@ ensures this.latitude == \old(latitude); */
   /*@ ensures this.longitude == \old(longitude); */
-  /*@ ensures this.latitude  isPointer; */
-  /*@ ensures this.longitude  isPointer; */
+  /*@ ensures this.latitude is a pointer; */
+  /*@ ensures this.longitude is a pointer; */
   // Constructors
 
   /**
@@ -361,9 +361,9 @@ public class GeoPoint {
       (this.longitude == other.longitude);
   }
 
-  /*@ also_ensures this.latitude  isPointer; */
-  /*@ also_ensures this.longitude  isPointer; */
-  /*@ also_ensures \result  isPointer; */
+  /*@ also_ensures this.latitude is a pointer; */
+  /*@ also_ensures this.longitude is a pointer; */
+  /*@ also_ensures \result is a pointer; */
   /*@ also_ensures this.latitude < \result; */
   /*@ also_ensures this.longitude < \result; */
   /*@ also_ensures 7 * this.latitude + 41 * this.longitude - \result + 4.294967296E9 == 0; */
@@ -373,18 +373,18 @@ public class GeoPoint {
     return latitude * 7 + longitude * 41;
   }
 
-  /*@ requires this.latitude  isPointer; */
-  /*@ requires this.longitude  isPointer; */
+  /*@ requires this.latitude is a pointer; */
+  /*@ requires this.longitude is a pointer; */
   /*@ requires gp != null; */
-  /*@ requires gp.latitude  isPointer; */
-  /*@ requires gp.longitude  isPointer; */
+  /*@ requires gp.latitude is a pointer; */
+  /*@ requires gp.longitude is a pointer; */
   /*@ requires this.latitude > gp.longitude; */
   /*@ requires this.longitude < gp.latitude; */
   /*@ requires gp.latitude > gp.longitude; */
-  /*@ ensures this.latitude  isPointer; */
-  /*@ ensures this.longitude  isPointer; */
-  /*@ ensures gp.latitude  isPointer; */
-  /*@ ensures gp.longitude  isPointer; */
+  /*@ ensures this.latitude is a pointer; */
+  /*@ ensures this.longitude is a pointer; */
+  /*@ ensures gp.latitude is a pointer; */
+  /*@ ensures gp.longitude is a pointer; */
   /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
   /*@ ensures this.latitude > gp.longitude; */
   /*@ ensures this.longitude < gp.latitude; */
@@ -403,20 +403,20 @@ public class GeoPoint {
     return Math.sqrt(x * x + y * y);
   }
 
-  /*@ requires this.latitude  isPointer; */
-  /*@ requires this.longitude  isPointer; */
+  /*@ requires this.latitude is a pointer; */
+  /*@ requires this.longitude is a pointer; */
   /*@ requires gp != null; */
-  /*@ requires gp.latitude  isPointer; */
-  /*@ requires gp.longitude  isPointer; */
+  /*@ requires gp.latitude is a pointer; */
+  /*@ requires gp.longitude is a pointer; */
   /*@ requires this.latitude != gp.latitude; */
   /*@ requires this.latitude > gp.longitude; */
   /*@ requires this.longitude < gp.latitude; */
   /*@ requires this.longitude != gp.longitude; */
   /*@ requires gp.latitude > gp.longitude; */
-  /*@ ensures this.latitude  isPointer; */
-  /*@ ensures this.longitude  isPointer; */
-  /*@ ensures gp.latitude  isPointer; */
-  /*@ ensures gp.longitude  isPointer; */
+  /*@ ensures this.latitude is a pointer; */
+  /*@ ensures this.longitude is a pointer; */
+  /*@ ensures gp.latitude is a pointer; */
+  /*@ ensures gp.longitude is a pointer; */
   /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
   /*@ ensures this.latitude != gp.latitude; */
   /*@ ensures this.latitude > gp.longitude; */

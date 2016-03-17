@@ -456,8 +456,8 @@ daikon.Quant.getElement_Object(DataStructures.CursorList.cursorSpace, this.heade
 (\result == true)  ==>  (daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")), new String[] { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null }) || daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")), new String[] { null, null, null, "DataStructures.MyInteger", null, "DataStructures.MyInteger", null, "DataStructures.MyInteger", null, "DataStructures.MyInteger", null, "DataStructures.MyInteger", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null }))
 (\result == true)  ==>  (daikon.Quant.eltsGTE(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), daikon.Quant.getElement_int(DataStructures.CursorList.cursorSpace, this.header)))
 (\result == true)  ==>  (daikon.Quant.getElement_int(DataStructures.CursorList.cursorSpace, this.header-1) > daikon.Quant.getElement_int(DataStructures.CursorList.cursorSpace, DataStructures.CursorList.SPACE_SIZE-1))
-(\result == true)  ==>  (daikon.Quant.getElement_int(DataStructures.CursorList.cursorSpace, this.header)  isPointer)
 (\result == true)  ==>  (daikon.Quant.getElement_int(DataStructures.CursorList.cursorSpace, this.header) < daikon.Quant.getElement_int(DataStructures.CursorList.cursorSpace, this.header-1))
+(\result == true)  ==>  (daikon.Quant.getElement_int(DataStructures.CursorList.cursorSpace, this.header) is a pointer)
 (\result == true)  ==>  (this.header > daikon.Quant.getElement_int(DataStructures.CursorList.cursorSpace, this.header))
 DataStructures.CursorList.cursorSpace.getClass().getName() == \old(DataStructures.CursorList.cursorSpace.getClass().getName())
 ===========================================================================
@@ -668,7 +668,7 @@ DataStructures.CursorListItr.isPastEnd():::EXIT
     Variables: this this.current return orig(this) orig(this.current)
 this.current == \old(this.current)
 (this.current == 0)  <==>  (\result == true)
-(this.current == 0)  ==>  (this.current  isPointer)
+(this.current == 0)  ==>  (this.current is a pointer)
 ===========================================================================
 DataStructures.CursorListItr.retrieve():::ENTER
     Variables: this this.current

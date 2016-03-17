@@ -67,10 +67,10 @@ public class QueueAr
   @ ensures (this.currentSize == 0)  <==>  (\result == true);
   @ ensures (this.currentSize == 0)  ==>  ((!(this.back == 0)) || (daikon.Quant.size(this.theArray)-1 == 0));
   @ ensures (this.currentSize == 0)  ==>  ((!(this.back == 0)) || (this.front == 0));
-  @ ensures (this.currentSize == 0)  ==>  (this.currentSize  isPointer);
   @ ensures (this.currentSize == 0)  ==>  (this.currentSize <= daikon.Quant.size(this.theArray)-1);
   @ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.back);
   @ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.front);
+  @ ensures (this.currentSize == 0)  ==>  (this.currentSize is a pointer);
   @ ensures (this.currentSize == 0)  ==>  (daikon.Quant.eltsEqual(this.theArray, null));
   @ ensures (this.currentSize == 0)  ==>  (daikon.Quant.eltsEqual(this.theArray, \old(daikon.Quant.getElement_Object(this.theArray, this.currentSize))));
   @ ensures (this.currentSize == 0)  ==>  (daikon.Quant.eltsEqual(this.theArray, daikon.Quant.getElement_Object(this.theArray, \old(this.currentSize))));
@@ -184,10 +184,10 @@ public class QueueAr
   @ ensures (this.currentSize == 0)  ==>  (\result == daikon.Quant.getElement_Object(this.theArray, \old(this.currentSize)));
   @ ensures (this.currentSize == 0)  ==>  (\result == daikon.Quant.getElement_Object(this.theArray, this.back));
   @ ensures (this.currentSize == 0)  ==>  (\result == daikon.Quant.getElement_Object(this.theArray, this.currentSize));
-  @ ensures (this.currentSize == 0)  ==>  (this.currentSize  isPointer);
   @ ensures (this.currentSize == 0)  ==>  (this.currentSize <= daikon.Quant.size(this.theArray)-1);
   @ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.back);
   @ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.front);
+  @ ensures (this.currentSize == 0)  ==>  (this.currentSize is a pointer);
   @ ensures (this.currentSize == 0)  ==>  (daikon.Quant.eltsEqual(this.theArray, null));
   @ ensures (this.currentSize == 0)  ==>  (daikon.Quant.eltsEqual(this.theArray, \old(daikon.Quant.getElement_Object(this.theArray, this.currentSize))));
   @ ensures (this.currentSize == 0)  ==>  (daikon.Quant.eltsEqual(this.theArray, \result));

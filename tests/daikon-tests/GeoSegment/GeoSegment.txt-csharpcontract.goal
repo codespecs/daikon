@@ -5,22 +5,22 @@ MapQuick1.GeoPoint:::OBJECT
 this.latitude > this.longitude
 ===========================================================================
 MapQuick1.GeoPoint.GeoPoint(int, int):::ENTER
-latitude  isPointer
-longitude  isPointer
+latitude is a pointer
+longitude is a pointer
 latitude > longitude
 ===========================================================================
 MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT
 this.latitude == Contract.OldValue(latitude)
 this.longitude == Contract.OldValue(longitude)
-this.latitude  isPointer
-this.longitude  isPointer
+this.latitude is a pointer
+this.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::ENTER
-this.latitude  isPointer
-this.longitude  isPointer
+this.latitude is a pointer
+this.longitude is a pointer
 gp != null
-gp.latitude  isPointer
-gp.longitude  isPointer
+gp.latitude is a pointer
+gp.longitude is a pointer
 this.latitude > gp.longitude
 this.longitude < gp.latitude
 gp.latitude > gp.longitude
@@ -30,10 +30,10 @@ this.latitude == Contract.OldValue(this.latitude)
 this.longitude == Contract.OldValue(this.longitude)
 gp.latitude == Contract.OldValue(gp.latitude)
 gp.longitude == Contract.OldValue(gp.longitude)
-this.latitude  isPointer
-this.longitude  isPointer
-gp.latitude  isPointer
-gp.longitude  isPointer
+this.latitude is a pointer
+this.longitude is a pointer
+gp.latitude is a pointer
+gp.longitude is a pointer
 MapQuick1.GeoPoint.REP_SCALE_FACTOR > Contract.Result<double>()
 this.latitude > gp.longitude
 this.longitude < gp.latitude
@@ -50,25 +50,25 @@ this.latitude == Contract.OldValue(this.latitude)
 this.longitude == Contract.OldValue(this.longitude)
 ===========================================================================
 MapQuick1.GeoPoint.hashCode():::ENTER
-this.latitude  isPointer
-this.longitude  isPointer
+this.latitude is a pointer
+this.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoPoint.hashCode():::EXIT
 this.latitude == Contract.OldValue(this.latitude)
 this.longitude == Contract.OldValue(this.longitude)
-this.latitude  isPointer
-this.longitude  isPointer
-Contract.Result<int>()  isPointer
+this.latitude is a pointer
+this.longitude is a pointer
+Contract.Result<int>() is a pointer
 this.latitude < Contract.Result<int>()
 this.longitude < Contract.Result<int>()
 7 * this.latitude + 41 * this.longitude - Contract.Result<int>() + 4.294967296E9 == 0
 ===========================================================================
 MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
-this.latitude  isPointer
-this.longitude  isPointer
+this.latitude is a pointer
+this.longitude is a pointer
 gp != null
-gp.latitude  isPointer
-gp.longitude  isPointer
+gp.latitude is a pointer
+gp.longitude is a pointer
 this.latitude != gp.latitude
 this.latitude > gp.longitude
 this.longitude < gp.latitude
@@ -80,10 +80,10 @@ this.latitude == Contract.OldValue(this.latitude)
 this.longitude == Contract.OldValue(this.longitude)
 gp.latitude == Contract.OldValue(gp.latitude)
 gp.longitude == Contract.OldValue(gp.longitude)
-this.latitude  isPointer
-this.longitude  isPointer
-gp.latitude  isPointer
-gp.longitude  isPointer
+this.latitude is a pointer
+this.longitude is a pointer
+gp.latitude is a pointer
+gp.longitude is a pointer
 MapQuick1.GeoPoint.REP_SCALE_FACTOR > Contract.Result<double>()
 this.latitude != gp.latitude
 this.latitude > gp.longitude
@@ -105,11 +105,11 @@ MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.
 name != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: name.toString is printable
 p1 != null
-p1.latitude  isPointer
-p1.longitude  isPointer
+p1.latitude is a pointer
+p1.longitude is a pointer
 p2 != null
-p2.latitude  isPointer
-p2.longitude  isPointer
+p2.latitude is a pointer
+p2.longitude is a pointer
 p1.latitude > p1.longitude
 p1.latitude > p2.longitude
 p1.longitude < p2.latitude
@@ -128,10 +128,10 @@ p1.longitude == Contract.OldValue(p1.longitude)
 p2.latitude == Contract.OldValue(p2.latitude)
 p2.longitude == Contract.OldValue(p2.longitude)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: name.toString is printable
-p1.latitude  isPointer
-p1.longitude  isPointer
-p2.latitude  isPointer
-p2.longitude  isPointer
+p1.latitude is a pointer
+p1.longitude is a pointer
+p2.latitude is a pointer
+p2.longitude is a pointer
 this.name.Equals(name)
 name.Equals(Contract.OldValue(name))
 p1.latitude > p1.longitude
@@ -140,20 +140,20 @@ p1.longitude < p2.latitude
 p2.latitude > p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 o != null
 o.GetType() == typeof(MapQuick1.GeoSegment)
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT
 this.name == Contract.OldValue(this.name)
@@ -163,20 +163,20 @@ this.p1.longitude == Contract.OldValue(this.p1.longitude)
 this.p2 == Contract.OldValue(this.p2)
 this.p2.latitude == Contract.OldValue(this.p2.latitude)
 this.p2.longitude == Contract.OldValue(this.p2.longitude)
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 Contract.Result<boolean>() == false
 this.name.Equals(Contract.OldValue(this.name))
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.hashCode():::ENTER
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoSegment.hashCode():::EXIT
 this.name == Contract.OldValue(this.name)
@@ -186,11 +186,11 @@ this.p1.longitude == Contract.OldValue(this.p1.longitude)
 this.p2 == Contract.OldValue(this.p2)
 this.p2.latitude == Contract.OldValue(this.p2.latitude)
 this.p2.longitude == Contract.OldValue(this.p2.longitude)
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
-Contract.Result<int>()  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
+Contract.Result<int>() is a pointer
 Contract.Result<int>() != 0
 this.name.Equals(Contract.OldValue(this.name))
 this.p1.latitude != Contract.Result<int>()
@@ -199,10 +199,10 @@ this.p2.latitude != Contract.Result<int>()
 this.p2.longitude != Contract.Result<int>()
 ===========================================================================
 MapQuick1.GeoSegment.heading():::ENTER
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -214,20 +214,20 @@ this.p1.longitude == Contract.OldValue(this.p1.longitude)
 this.p2 == Contract.OldValue(this.p2)
 this.p2.latitude == Contract.OldValue(this.p2.latitude)
 this.p2.longitude == Contract.OldValue(this.p2.longitude)
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 this.name.Equals(Contract.OldValue(this.name))
 MapQuick1.GeoPoint.REP_SCALE_FACTOR > Contract.Result<double>()
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.length():::ENTER
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.length():::EXIT
@@ -238,19 +238,19 @@ this.p1.longitude == Contract.OldValue(this.p1.longitude)
 this.p2 == Contract.OldValue(this.p2)
 this.p2.latitude == Contract.OldValue(this.p2.latitude)
 this.p2.longitude == Contract.OldValue(this.p2.longitude)
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 this.name.Equals(Contract.OldValue(this.name))
 MapQuick1.GeoPoint.REP_SCALE_FACTOR > Contract.Result<double>()
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.name():::ENTER
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -263,10 +263,10 @@ this.p2 == Contract.OldValue(this.p2)
 this.p2.latitude == Contract.OldValue(this.p2.latitude)
 this.p2.longitude == Contract.OldValue(this.p2.longitude)
 Contract.Result<java.lang.String>() == Contract.OldValue(this.name)
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 Contract.Result<java.lang.String>() != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.toString is printable
 this.name.Equals(Contract.Result<java.lang.String>())
@@ -275,10 +275,10 @@ this.p1.longitude != this.p2.longitude
 Contract.Result<java.lang.String>().Equals(Contract.OldValue(this.name))
 ===========================================================================
 MapQuick1.GeoSegment.p1():::ENTER
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -293,11 +293,11 @@ this.p2.longitude == Contract.OldValue(this.p2.longitude)
 Contract.Result<MapQuick1.GeoPoint>() == Contract.OldValue(this.p1)
 Contract.Result<MapQuick1.GeoPoint>().latitude == Contract.OldValue(this.p1.latitude)
 Contract.Result<MapQuick1.GeoPoint>().longitude == Contract.OldValue(this.p1.longitude)
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 Contract.Result<MapQuick1.GeoPoint>() != null
-Contract.Result<MapQuick1.GeoPoint>().latitude  isPointer
-Contract.Result<MapQuick1.GeoPoint>().longitude  isPointer
+Contract.Result<MapQuick1.GeoPoint>().latitude is a pointer
+Contract.Result<MapQuick1.GeoPoint>().longitude is a pointer
 this.name.Equals(Contract.OldValue(this.name))
 this.p2.latitude != Contract.Result<MapQuick1.GeoPoint>().latitude
 this.p2.latitude > Contract.Result<MapQuick1.GeoPoint>().longitude
@@ -306,10 +306,10 @@ this.p2.longitude != Contract.Result<MapQuick1.GeoPoint>().longitude
 Contract.Result<MapQuick1.GeoPoint>().latitude > Contract.Result<MapQuick1.GeoPoint>().longitude
 ===========================================================================
 MapQuick1.GeoSegment.p2():::ENTER
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
-this.p2.latitude  isPointer
-this.p2.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoSegment.p2():::EXIT
 this.name == Contract.OldValue(this.name)
@@ -322,11 +322,11 @@ this.p2.longitude == Contract.Result<MapQuick1.GeoPoint>().longitude
 Contract.Result<MapQuick1.GeoPoint>() == Contract.OldValue(this.p2)
 Contract.Result<MapQuick1.GeoPoint>().latitude == Contract.OldValue(this.p2.latitude)
 Contract.Result<MapQuick1.GeoPoint>().longitude == Contract.OldValue(this.p2.longitude)
-this.p1.latitude  isPointer
-this.p1.longitude  isPointer
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
 Contract.Result<MapQuick1.GeoPoint>() != null
-Contract.Result<MapQuick1.GeoPoint>().latitude  isPointer
-Contract.Result<MapQuick1.GeoPoint>().longitude  isPointer
+Contract.Result<MapQuick1.GeoPoint>().latitude is a pointer
+Contract.Result<MapQuick1.GeoPoint>().longitude is a pointer
 this.name.Equals(Contract.OldValue(this.name))
 this.p1.latitude > Contract.Result<MapQuick1.GeoPoint>().longitude
 this.p1.longitude < Contract.Result<MapQuick1.GeoPoint>().latitude

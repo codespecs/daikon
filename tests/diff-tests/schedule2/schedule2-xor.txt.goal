@@ -1,7 +1,7 @@
 <std.enqueue(int;process *;)int:::ENTER, null>
   <prio >= 0 {1+}, null> (UInt,JM)
 <std.enqueue(int;process *;)int:::EXIT, null>
-  <(return == 0)  ==>  (return  isPointer) {1+}, null> (NInt,JM)
+  <(return == 0)  ==>  (return is a pointer) {1+}, null> (NInt,JM)
   <(return == 0)  ==>  (prio >= 0) {1+}, null> (NInt,JM)
   <(return == -4)  ==>  (prio != 0) {0.9999+}, null> (NInt,JM)
   <prio >= 0 {1+}, null> (UInt,JM)
@@ -27,7 +27,7 @@
 <std.put_end(int;process *;)int:::ENTER, null>
   <prio >= 0 {1+}, null> (UInt,JM)
 <std.put_end(int;process *;)int:::EXIT, null>
-  <(return == 0)  ==>  (return  isPointer) {1+}, null> (NInt,JM)
+  <(return == 0)  ==>  (return is a pointer) {1+}, null> (NInt,JM)
   <(return == 0)  ==>  (prio >= 0) {1+}, null> (NInt,JM)
   <(return == -4)  ==>  (prio != 0) {0.9999+}, null> (NInt,JM)
   <prio >= 0 {1+}, null> (UInt,JM)

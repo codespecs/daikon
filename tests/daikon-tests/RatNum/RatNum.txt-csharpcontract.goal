@@ -22,8 +22,8 @@ Contract.OldValue(d) % this.denom == 0
 ===========================================================================
 PolyCalc.RatNum.RatNum(int, int):::EXIT
 (this.denom == 0).Implies(() => Contract.OldValue(d) == 0)
-(this.denom == 0).Implies(() => Contract.OldValue(d)  isPointer)
-(this.denom == 0).Implies(() => this.denom  isPointer)
+(this.denom == 0).Implies(() => Contract.OldValue(d) is a pointer)
+(this.denom == 0).Implies(() => this.denom is a pointer)
 (this.denom == 0).Implies(() => this.denom == Contract.OldValue(d))
 (this.denom == 0).Implies(() => this.numer == Contract.OldValue(n))
 (!(Contract.OldValue(n) == 0)) || (this.numer == 0)
@@ -60,7 +60,7 @@ PolyCalc.RatNum.approx():::EXIT
 this.numer == Contract.OldValue(this.numer)
 this.denom == Contract.OldValue(this.denom)
 (this.denom == 0).Implies(() => Contract.Result<double>() == NaN)
-(this.denom == 0).Implies(() => this.denom  isPointer)
+(this.denom == 0).Implies(() => this.denom is a pointer)
 (this.denom == 0).Implies(() => this.numer != this.denom)
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
@@ -136,11 +136,11 @@ this.denom == Contract.OldValue(this.denom)
 arg.numer == Contract.OldValue(arg.numer)
 arg.denom == Contract.OldValue(arg.denom)
 (arg.denom == 0).Implies(() => (!(arg.numer == 0)) || (this.numer == 0))
-(arg.denom == 0).Implies(() => arg.denom  isPointer)
+(arg.denom == 0).Implies(() => arg.denom is a pointer)
 (arg.denom == 0).Implies(() => arg.denom == Contract.Result<PolyCalc.RatNum>().denom)
 (arg.denom == 0).Implies(() => arg.numer == Contract.Result<PolyCalc.RatNum>().numer)
 (arg.denom == 0).Implies(() => Contract.Result<PolyCalc.RatNum>() == Contract.OldValue(arg))
-(arg.denom == 0).Implies(() => Contract.Result<PolyCalc.RatNum>().denom  isPointer)
+(arg.denom == 0).Implies(() => Contract.Result<PolyCalc.RatNum>().denom is a pointer)
 (arg.denom == 0).Implies(() => Contract.Result<PolyCalc.RatNum>().denom == 0)
 (arg.denom == 0).Implies(() => this.denom >= arg.denom)
 (arg.denom == 0).Implies(() => this.denom >= Contract.Result<PolyCalc.RatNum>().denom)
@@ -184,7 +184,7 @@ PolyCalc.RatNum.isNaN():::EXIT
 this.numer == Contract.OldValue(this.numer)
 this.denom == Contract.OldValue(this.denom)
 (this.denom == 0).Implies(() => Contract.Result<boolean>() == true)
-(this.denom == 0).Implies(() => this.denom  isPointer)
+(this.denom == 0).Implies(() => this.denom is a pointer)
 ===========================================================================
 PolyCalc.RatNum.isNegative():::ENTER
 ===========================================================================

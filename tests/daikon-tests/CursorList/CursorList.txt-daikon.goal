@@ -436,8 +436,8 @@ DataStructures.CursorList.cursorSpace[this.header].element == orig(DataStructure
 (return == true)  ==>  (DataStructures.CursorList.cursorSpace[].element.getClass().getName() one of { [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], [null, null, null, DataStructures.MyInteger, null, DataStructures.MyInteger, null, DataStructures.MyInteger, null, DataStructures.MyInteger, null, DataStructures.MyInteger, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null] })
 (return == true)  ==>  (DataStructures.CursorList.cursorSpace[].next elements >= DataStructures.CursorList.cursorSpace[this.header].next)
 (return == true)  ==>  (DataStructures.CursorList.cursorSpace[this.header-1].next > DataStructures.CursorList.cursorSpace[DataStructures.CursorList.SPACE_SIZE-1].next)
-(return == true)  ==>  (DataStructures.CursorList.cursorSpace[this.header].next  isPointer)
 (return == true)  ==>  (DataStructures.CursorList.cursorSpace[this.header].next < DataStructures.CursorList.cursorSpace[this.header-1].next)
+(return == true)  ==>  (DataStructures.CursorList.cursorSpace[this.header].next is a pointer)
 (return == true)  ==>  (this.header > DataStructures.CursorList.cursorSpace[this.header].next)
 DataStructures.CursorList.cursorSpace.getClass().getName() == orig(DataStructures.CursorList.cursorSpace.getClass().getName())
 ===========================================================================
@@ -646,7 +646,7 @@ DataStructures.CursorListItr.isPastEnd():::ENTER
 DataStructures.CursorListItr.isPastEnd():::EXIT
 this.current == orig(this.current)
 (this.current == 0)  <==>  (return == true)
-(this.current == 0)  ==>  (this.current  isPointer)
+(this.current == 0)  ==>  (this.current is a pointer)
 ===========================================================================
 DataStructures.CursorListItr.isPastEnd():::EXIT;condition="return == true"
 this.current == 0

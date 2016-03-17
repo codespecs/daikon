@@ -171,7 +171,7 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 ::Other_RAC == \old(::Other_RAC)
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
-(\result == 0)  ==>  (\result  isPointer)
+(\result == 0)  ==>  (\result is a pointer)
 ::High_Confidence == 1
 ::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
 ::Alt_Layer_Value >= 0
@@ -234,7 +234,7 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 ::Other_RAC == \old(::Other_RAC)
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
-(\result == 0)  ==>  (\result  isPointer)
+(\result == 0)  ==>  (\result is a pointer)
 ::High_Confidence == 1
 ::Two_of_Three_Reports_Valid == 0 || ::Two_of_Three_Reports_Valid == 1
 ::Alt_Layer_Value >= 0
@@ -298,7 +298,7 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
 (\result == 0)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
-(\result == 0)  ==>  (\result  isPointer)
+(\result == 0)  ==>  (\result is a pointer)
 (\result == 1)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
 (\result == 1)  ==>  (::Up_Separation <= ::Down_Separation)
 ::High_Confidence == 1
@@ -367,7 +367,7 @@ daikon.Quant.pairwiseEqual(::Positive_RA_Alt_Thresh, \old(::Positive_RA_Alt_Thre
 ::Other_Capability == \old(::Other_Capability)
 ::Climb_Inhibit == \old(::Climb_Inhibit)
 (\result == 0)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
-(\result == 0)  ==>  (\result  isPointer)
+(\result == 0)  ==>  (\result is a pointer)
 (\result == 1)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
 (\result == 1)  ==>  (::Own_Tracked_Alt_Rate >= 2)
 ::High_Confidence == 1

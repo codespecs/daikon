@@ -119,7 +119,7 @@ pat == Contract.OldValue(pat)
 j == Contract.OldValue(j)
 (return == 0).Implies(() => Contract.OldValue(*i) >= 1)
 (return == 0).Implies(() => pat[].CompareTo(Contract.OldValue(pat[])) > 0)
-(return == 0).Implies(() => return  isPointer)
+(return == 0).Implies(() => return is a pointer)
 arg != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
 i != null
@@ -139,7 +139,7 @@ maxsize == 100
 std.getline(char *;int;)boolean:::EXIT
 s == Contract.OldValue(s)
 maxsize == Contract.OldValue(maxsize)
-(return == 0).Implies(() => return  isPointer)
+(return == 0).Implies(() => return is a pointer)
 (return == 0).Implies(() => s[].Equals(Contract.OldValue(s[])))
 s != null
 maxsize == 100
@@ -167,7 +167,7 @@ sub != null
 std.getsub(char *;char *;)boolean:::EXIT
 arg == Contract.OldValue(arg)
 sub == Contract.OldValue(sub)
-(return == 0).Implies(() => return  isPointer)
+(return == 0).Implies(() => return is a pointer)
 arg != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
 sub != null
@@ -185,7 +185,7 @@ std.in_set_2(char;)boolean:::ENTER
 std.in_set_2(char;)boolean:::EXIT
 c == Contract.OldValue(c)
 (return == 0).Implies(() => c % 2 == 1)
-(return == 0).Implies(() => return  isPointer)
+(return == 0).Implies(() => return is a pointer)
 (return == 1).Implies(() => c % 5 == 2)
 (return == 1).Implies(() => c.OneOf(37, 42))
 return.OneOf(0, 1)
@@ -198,7 +198,7 @@ std.locate(character;char *;int;)boolean:::EXIT
 c == Contract.OldValue(c)
 pat == Contract.OldValue(pat)
 offset == Contract.OldValue(offset)
-(return == 0).Implies(() => return  isPointer)
+(return == 0).Implies(() => return is a pointer)
 pat != null
 offset >= 1
 return.OneOf(0, 1)
@@ -270,7 +270,7 @@ i == Contract.OldValue(i)
 pat == Contract.OldValue(pat)
 j == Contract.OldValue(j)
 (return == 0).Implies(() => *i == Contract.OldValue(*i))
-(return == 0).Implies(() => return  isPointer)
+(return == 0).Implies(() => return is a pointer)
 lin != null
 i != null
 *i >= 0

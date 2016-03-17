@@ -345,7 +345,7 @@ Contract.ForAll(0, this.elementData.Count(), i => this.elementData[i].Equals(Con
 this.elementCount == Contract.OldValue(this.elementCount)
 this.capacityIncrement == Contract.OldValue(this.capacityIncrement)
 (this.elementCount == 0).Implies(() => Contract.Result<boolean>() == true)
-(this.elementCount == 0).Implies(() => this.elementCount  isPointer)
+(this.elementCount == 0).Implies(() => this.elementCount is a pointer)
 (this.elementCount == 0).Implies(() => this.elementCount <= this.capacityIncrement)
 (this.elementCount == 0).Implies(() => this.elementCount == (this.elementData.Count() / javautil.Vector13.serialVersionUID))
 (this.elementCount == 0).Implies(() => this.elementCount == (this.elementData.Count()-1 / javautil.Vector13.serialVersionUID))

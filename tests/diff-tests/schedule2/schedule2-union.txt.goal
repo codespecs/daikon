@@ -8,7 +8,7 @@
   <::next_pid >= 1 {1+}, null> (UInt,JM)
   <prio >= 0 {1+}, null> (UInt,JM)
 <std.enqueue(int;process *;)int:::EXIT, null>
-  <(return == 0)  ==>  (return  isPointer) {1+}, null> (NInt,JM)
+  <(return == 0)  ==>  (return is a pointer) {1+}, null> (NInt,JM)
   <(return == 0)  ==>  (prio >= 0) {1+}, null> (NInt,JM)
   <(return == -4)  ==>  (prio != 0) {0.9999+}, null> (NInt,JM)
   <::next_pid == orig(::next_pid) {1+}, null> (Bin,JM)
@@ -17,7 +17,7 @@
   <prio >= 0 {1+}, null> (UInt,JM)
   <return == 0 {1+}, null> (UInt,JM)
 <std.finish()int:::EXIT, null>
-  <(return == 0)  ==>  (return  isPointer) {1+}, null> (NInt,JM)
+  <(return == 0)  ==>  (return is a pointer) {1+}, null> (NInt,JM)
   <::next_pid == orig(::next_pid) {1+}, null> (Bin,JM)
 <std.flush()int:::EXIT, null>
   <::next_pid == orig(::next_pid) {1+}, null> (Bin,JM)
@@ -33,7 +33,7 @@
   <(return == 0)  ==>  (*ratio == orig(*ratio)) {1+}, null> (NInt,JM)
   <(return == 0)  ==>  (*command == orig(*command)) {1+}, null> (NInt,JM)
   <(return == 0)  ==>  (*prio == orig(*prio)) {1+}, null> (NInt,JM)
-  <(return == 0)  ==>  (return  isPointer) {1+}, null> (NInt,JM)
+  <(return == 0)  ==>  (return is a pointer) {1+}, null> (NInt,JM)
   <(return == 1)  ==>  (*prio != 0) {1+}, null> (NInt,JM)
   <::next_pid == orig(::next_pid) {1+}, null> (Bin,JM)
   <command == orig(command) {1+}, null> (Bin,JM)
@@ -80,7 +80,7 @@
   <::next_pid >= 1 {1+}, null> (UInt,JM)
   <prio >= 0 {1+}, null> (UInt,JM)
 <std.put_end(int;process *;)int:::EXIT, null>
-  <(return == 0)  ==>  (return  isPointer) {1+}, null> (NInt,JM)
+  <(return == 0)  ==>  (return is a pointer) {1+}, null> (NInt,JM)
   <(return == 0)  ==>  (prio >= 0) {1+}, null> (NInt,JM)
   <(return == -4)  ==>  (prio != 0) {0.9999+}, null> (NInt,JM)
   <::next_pid == orig(::next_pid) {1+}, null> (Bin,JM)

@@ -389,11 +389,11 @@ javautil.Vector13.isEmpty():::EXIT
       Unmodified variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement size(this.elementData[]) this.elementData[this.elementCount..] this.elementData[0..this.elementCount-1]
 modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]
 (this.elementCount == 0)  ==  (\result == true)
-(this.elementCount == 0)  ==>  (this.elementCount  isPointer)
 (this.elementCount == 0)  ==>  (this.elementCount <= this.capacityIncrement)
 (this.elementCount == 0)  ==>  (warning: method daikon.inv.ternary.threeScalar.FunctionBinary$DivisionLong_xzy.format(OutputFormat:ESC/Java) needs to be implemented: this.elementCount == (size(this.elementData[]) / javautil.Vector13.serialVersionUID))
 (this.elementCount == 0)  ==>  (warning: method daikon.inv.ternary.threeScalar.FunctionBinary$DivisionLong_xzy.format(OutputFormat:ESC/Java) needs to be implemented: this.elementCount == (size(this.elementData[])-1 / javautil.Vector13.serialVersionUID))
 (this.elementCount == 0)  ==>  (warning: method daikon.inv.ternary.threeScalar.FunctionBinary$DivisionLong_xyz.format(OutputFormat:ESC/Java) needs to be implemented: this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID))
+(this.elementCount == 0)  ==>  (this.elementCount is a pointer)
 (this.elementCount == 0)  ==>  ((\forall int i; (0 <= i && i <= this.elementCount-1) ==> (this.elementData[i] != null)))
 (this.elementCount == 0)  ==>  ((\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null)))
 (this.elementCount == 0)  ==>  ((\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null))))

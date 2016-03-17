@@ -105,7 +105,7 @@ public class IsPointer extends SingleScalar {
           return "daikon.tools.runtimechecker.Runtime.isWithinPointerRange(" +
                   varname + ")";
       else
-          return varname + "  isPointer";
+          return varname + " is a pointer";
     }
 
     protected double computeConfidence() {
