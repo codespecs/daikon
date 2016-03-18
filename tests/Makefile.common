@@ -275,6 +275,9 @@ ifndef DOS2UNIX
   endif
 endif
 
+# For deterministic sorting
+export LC_ALL=C
+
 
 default: help
 

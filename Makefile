@@ -124,7 +124,7 @@ RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name SCCS -o -name RCS -o -n
 TMPDIR ?= $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/$(USER),/tmp/$(USER))
 
 # For deterministic sorting
-LC_ALL=C
+export LC_ALL=C
 
 ## Examples of better ways to get the lists:
 # PERL_MODULES := $(wildcard *.pm)
