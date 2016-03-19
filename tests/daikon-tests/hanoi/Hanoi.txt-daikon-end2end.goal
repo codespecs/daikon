@@ -68,58 +68,12 @@ this.height >= orig(towerHeight)
 this.diskLocation[0..orig(towerHeight)-1] elements == orig(toPeg)
 ===========================================================================
 six170.Hanoi.moveTower(int, int, int):::EXIT;condition="orig(towerHeight == 1)"
-this.diskLocation == orig(this.diskLocation)
-this.height == orig(this.height)
-this.height == size(this.diskLocation[])
-this.height == orig(size(this.diskLocation[]))
-this.noOutput == orig(this.noOutput)
-orig(fromPeg) == orig(this.diskLocation[post(towerHeight)-1])
-orig(fromPeg) == orig(this.diskLocation[towerHeight-1])
-orig(toPeg) == this.diskLocation[orig(towerHeight)-1]
-this.diskLocation[orig(towerHeight)..] == orig(this.diskLocation[post(towerHeight)..])
-this.diskLocation[orig(towerHeight)..] == orig(this.diskLocation[towerHeight..])
-this.diskLocation != null
-this.diskLocation[] elements one of { 0, 1, 2 }
-this.noOutput == true
-orig(this.diskLocation[]) elements one of { 0, 1, 2 }
-orig(fromPeg) one of { 0, 1, 2 }
-orig(toPeg) one of { 0, 1, 2 }
 orig(towerHeight) == 1
-this.diskLocation[this.height..] == []
 this.diskLocation[0..orig(towerHeight)-1] one of { [0], [1], [2] }
 orig(this.diskLocation[0..towerHeight-1]) one of { [0], [1], [2] }
-this.height >= orig(towerHeight)
-(orig(fromPeg) & orig(toPeg)) == 0
-orig(fromPeg) != orig(toPeg)
-orig(this.diskLocation[0..towerHeight-1]) elements == orig(fromPeg)
-this.diskLocation[0..orig(towerHeight)-1] elements == orig(toPeg)
 ===========================================================================
 six170.Hanoi.moveTower(int, int, int):::EXIT;condition="not(orig(towerHeight == 1))"
-this.diskLocation == orig(this.diskLocation)
-this.height == orig(this.height)
-this.height == size(this.diskLocation[])
-this.height == orig(size(this.diskLocation[]))
-this.noOutput == orig(this.noOutput)
-orig(fromPeg) == orig(this.diskLocation[post(towerHeight)-1])
-orig(fromPeg) == orig(this.diskLocation[towerHeight-1])
-orig(toPeg) == this.diskLocation[orig(towerHeight)-1]
-this.diskLocation[orig(towerHeight)..] == orig(this.diskLocation[post(towerHeight)..])
-this.diskLocation[orig(towerHeight)..] == orig(this.diskLocation[towerHeight..])
-this.diskLocation != null
-this.diskLocation[] elements one of { 0, 1, 2 }
-this.noOutput == true
-orig(this.diskLocation[]) elements one of { 0, 1, 2 }
-orig(fromPeg) one of { 0, 1, 2 }
-orig(toPeg) one of { 0, 1, 2 }
 orig(towerHeight) >= 2
-this.diskLocation[this.height..] == []
-this.diskLocation[0..orig(towerHeight)-1] elements are equal
-orig(this.diskLocation[0..towerHeight-1]) elements are equal
-this.height >= orig(towerHeight)
-(orig(fromPeg) & orig(toPeg)) == 0
-orig(fromPeg) != orig(toPeg)
-orig(this.diskLocation[0..towerHeight-1]) elements == orig(fromPeg)
-this.diskLocation[0..orig(towerHeight)-1] elements == orig(toPeg)
 ===========================================================================
 six170.Hanoi.moveTower(int, int, int):::EXIT;condition="towerHeight == 1"
 this.diskLocation == orig(this.diskLocation)
@@ -650,16 +604,6 @@ this.noOutput == orig(this.noOutput)
 this.noOutput == true
 ===========================================================================
 six170.Hanoi.showTowers():::EXIT;condition="not(!noOutput)"
-this.diskLocation == orig(this.diskLocation)
-this.diskLocation[] == orig(this.diskLocation[])
-this.height == orig(this.height)
-this.height == size(this.diskLocation[])
-this.height == orig(size(this.diskLocation[]))
-this.noOutput == orig(this.noOutput)
-this.diskLocation != null
-this.diskLocation[] elements one of { 0, 1, 2 }
-this.noOutput == true
-this.diskLocation[this.height..] == []
 ===========================================================================
 six170.Hanoi.showTowers():::EXIT;condition="not(orig(!noOutput))"
 this.diskLocation == orig(this.diskLocation)
