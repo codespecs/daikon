@@ -28,7 +28,7 @@ public abstract class SplitterList
    **/
   public static boolean dkconfig_all_splitters = true;
 
-  private static final HashMap<String,Splitter[]> ppt_splitters = new HashMap<String,Splitter[]>();
+  private static final HashMap<String,Splitter[]> ppt_splitters = new LinkedHashMap<String,Splitter[]>();
 
   /**
    * Associate an array of splitters with the program point pptname.

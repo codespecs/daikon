@@ -604,16 +604,6 @@ this.noOutput == orig(this.noOutput)
 this.noOutput == true
 ===========================================================================
 six170.Hanoi.showTowers():::EXIT;condition="not(!noOutput)"
-this.diskLocation == orig(this.diskLocation)
-this.diskLocation[] == orig(this.diskLocation[])
-this.height == orig(this.height)
-this.height == size(this.diskLocation[])
-this.height == orig(size(this.diskLocation[]))
-this.noOutput == orig(this.noOutput)
-this.diskLocation != null
-this.diskLocation[] elements one of { 0, 1, 2 }
-this.noOutput == true
-this.diskLocation[this.height..] == []
 ===========================================================================
 six170.Hanoi.showTowers():::EXIT;condition="not(orig(!noOutput))"
 this.diskLocation == orig(this.diskLocation)

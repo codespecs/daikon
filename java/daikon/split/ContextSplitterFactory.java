@@ -232,7 +232,7 @@ public class ContextSplitterFactory
       // Place the ID into the mapping
       Map<String,Set<Long>> caller2ids = callee2caller2ids.get(callee_ppt_name);
       if (caller2ids == null) {
-        caller2ids = new HashMap<String,Set<Long>>();
+        caller2ids = new LinkedHashMap<String,Set<Long>>();
         callee2caller2ids.put(callee_ppt_name, caller2ids);
       }
       Set<Long> ids = caller2ids.get(caller_condition);
