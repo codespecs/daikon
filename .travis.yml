@@ -23,11 +23,13 @@ addons:
       - texinfo
   ## Enable this when you wish to see JUnit reports.
   ## Disable to minimize use of Amazon S3.
-  artifacts:
-    paths:
-      - $(find tests -print | tr "\n" ":")
-    s3_region: "us-west-2"
-    debug: true
+  # artifacts:
+  #   paths:
+  #     # "find tests -print" produces too long a command line
+  #     - $(find tests -name '*txt*' -print | tr "\n" ":")
+  #     - $(find tests -name '*decls*' -print | tr "\n" ":")
+  #   s3_region: "us-west-2"
+  #   debug: true
 # On Travis-CI's Ubuntu 12.04 infrastructure, makeinfo does not take the
 # --split=chapter command-line argument but texi2html does.
 env: TEXI2HTML=texi2html
