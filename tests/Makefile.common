@@ -191,6 +191,17 @@ PROJECT?=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[67]-)?daikon/(workspace/)?tes
 # Function to compute goal filename extension.  If we are using Java8 then
 # if filename.test.goal.j8 exists, use it; otherwise, use filename.test.goal
 # otherwise (not Java8) use filename.test.goal. 
+# Reasons for different behavior between Java 7 and Java 8 include:
+#  * nondeterministic behavior, such as using a HashMap's iterator.
+#    In this case, don't create a .goal.j8 goal file; instead, change the
+#    subject program to use LinkedHashMap.
+#  * different line numbers for :::EXITnnn program points, when a return
+#    statement spans multiple lines.  In this case, don't create a .goal.j8
+#    goal file; instead, change the subject program to put the entire return
+#    statement on one line.
+#  * different numbers of calls to hashCode, due to differences in Java 7 and
+#    Java 8 HashMap implementations and possibly String.hashCode().
+#    This is currently the only reason to create a .goal.j8 file.
 # The argument ($(1)) is '<filename>.<test>'
 goal_name = $(if $(findstring 1.8, "$(shell java -version 2>&1)"), \
 			  $(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
