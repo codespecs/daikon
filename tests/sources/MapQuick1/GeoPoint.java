@@ -66,9 +66,9 @@ public class GeoPoint {
       return false;
 
     GeoPoint other = (GeoPoint) o;
-    return
-      (this.latitude == other.latitude) &&
-      (this.longitude == other.longitude);
+    return (this.latitude == other.latitude) && (this.longitude == other.longitude);
+
+
   }
 
   // specified by superclass (Object)
