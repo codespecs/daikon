@@ -1264,6 +1264,8 @@ public final class CLASSNAME
       // Same formula if all of the points match
       if (values_seen != other.values_seen)
         return (false);
+      // This and elsewhere seem to assume that values_seen < MINTRIPLES;
+      // is that necessarily true?
       for (int ii = 0; ii < values_seen; ii++) {
         // used to use !=, but that test seems wrong
         if (! def_points[ii].equals(other.def_points[ii]))
