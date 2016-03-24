@@ -3933,6 +3933,10 @@ your program.  By contrast to this option (and
 @option{--daikon-online}), if you invoke Daikon from the command line,
 you can supply Daikon with as many trace files as you wish.
 
+If the program that Chicory is tracing aborts with an error, then Chicory
+does not run Daikon, but prints a message such as ``Warning: Did not run
+Daikon because target exited with 1 status''.
+
 @item --daikon-online
 This option is like @option{--daikon}, except that no @file{.dtrace}
 data trace file is produced.  Instead, Chicory sends trace information
