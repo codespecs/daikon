@@ -374,22 +374,22 @@ Daikon.
 A Java class defining an invariant is a concrete subclass of one of
 the following abstract classes:
 @table @code
-@item SingleScalar
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/scalar/SingleScalar.html,@code{SingleScalar}}
 Invariants over a single numeric (scalar) variable,
 such as @samp{x != 0}.
-@item TwoScalar
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/twoScalar/TwoScalar.html,@code{TwoScalar}}
 Invariants over two numeric variables, such as @samp{y
 = abs(x)}.
-@item ThreeScalar
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/ternary/threeScalar/ThreeScalar.html,@code{ThreeScalar}}
 Invariants over three numeric variables, such as
 @samp{z = ax + by + c}.
-@item SingleSequence
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/sequence/SingleSequence.html,@code{SingleSequence}}
 Invariants over one sequence (array)
 variable, such as @samp{a[] contains no duplicates}.
-@item TwoSequence
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/twoSequence/TwoSequence.html,@code{TwoSequence}}
 Invariants over two sequences, such as @samp{a[] is a
 subsequence of b[]}.
-@item SequenceScalar
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/sequenceScalar/SequenceScalar.html,@code{SequenceScalar}}
 Invariants over a scalar and a sequence, such
 as @samp{x is a member of a[]}.
 @end table
