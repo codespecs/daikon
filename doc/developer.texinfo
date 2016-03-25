@@ -1252,19 +1252,27 @@ the paper is available from
 @cindex dataflow hierarchy
 @cindex hierarchy
 
-Dataflow hierarchy is a means to relate variables in different program
-points in a partial ordering.  Variables in program point X are
-related to variables in another program point Y by a @dfn{flow} relation
-if every sample seen of @nospellcheck{X's} variables is also meant to be seen at Y.
-Y is called a parent program point of X.  For example, all the field
+The dataflow hierarchy expresses relationships between variables at
+different program points.  It is used to save time and space during invariant
+generation and to prevent invariants from being printed multiple times.
+
+Suppose there are two program points X and its parent Y.  Then every sample
+seen at X is also seen at Y, and every invariant that is true at Y is also
+true at X.
+
+Variable @emph{z} in program point X is
+related to variable @emph{z'} in another program point Y by a @dfn{flow} relation
+if every sample seen of @emph{z} at X is also seen of @emph{z'} at Y.
+Y is called a parent program point of X.
+
+For example, all the field
 variables in the @code{:::ENTER} program point of a method in class C relate to
 the field variables in the @code{:::CLASS} program point of C.  This is because
 the state of C, when in context at the entry @code{:::ENTER} program point, is
 also in context at the @code{:::CLASS} program point.  Any invariant that holds
 true on a parent program point must hold on the child program point.
-The purpose of dataflow hierarchy is to reduce the presence of
-redundant invariants by only keeping invariants at the highest parent
-at which they apply.  This saves both time and space.
+Daikon saves time and space by only computing invariants at the highest parent
+at which they apply.
 
 @c original:
 @c Daikon provides four ways that program points can be connected.
@@ -1280,30 +1288,36 @@ at which they apply.  This saves both time and space.
 @c Y.this, Y.b and Y.a.  Fourth, variables at @code{:::ENTER} program
 @c points are related to the @samp{orig} versions at @code{:::EXIT} program points.
 
-@ref{Program point declarations} describes how program points are
+@ref{Program point declarations} describe how program points are
 declared in a Daikon input file. Here we will describe how the
 @code{parent} records are typically used to connect program points into
 a dataflow hierarchy.
 
+@itemize
+@item
 A program point that represents the @code{ENTRY} or @code{EXIT} of a
 static method will have a @code{parent} record that points to the
 @code{CLASS} program point for the containing class.
 
+@item
 A program point that represents the @code{ENTRY} or @code{EXIT} of a
 non-static (instance) method will have a @code{parent} record that points to the
 @code{OBJECT} program point for the containing object.
 
+@item
 A program point that represents a @code{CLASS}
 will usually not have a @code{parent} record.
 
+@item
 A program point that represents a @code{OBJECT}
 will have a @code{parent} record that points to the @code{CLASS}
 program point for the object if the object has static data members.
+@end itemize
 
 When using Daikon, the relations used to describe the dataflow
 hierarchy may result in some true invariants that are not reported at
 some program points.  However, the invariant will be present in some
-parent program point.  Dataflow hierarchy is enabled by default, but
+parent program point.  The dataflow hierarchy is used by default, but
 can be disabled by the @option{--nohierarchy} flag.  When dataflow is enabled,
 the only samples that are examined by Daikon are the @code{:::EXIT} program
 points (plus @samp{orig} variables) since these contain a complete view of
