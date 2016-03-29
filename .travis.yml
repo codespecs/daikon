@@ -39,10 +39,12 @@ jdk:
 #  - oraclejdk7
   - openjdk7
 
-notifications:
-  email:
-    - mernst@cs.washington.edu
-    - markro@cs.washington.edu
+## Disable so that we are not notified of build failures in forks.
+## Use Travis default: send mail to author and committer of breaking commit.
+# notifications:
+#   email:
+#     - mernst@cs.washington.edu
+#     - markro@cs.washington.edu
 
 after_success:
   - |
