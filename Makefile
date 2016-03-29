@@ -385,6 +385,10 @@ repository-test:
 	cd daikon && make 
 
 
+validate:
+	html5validator --ignore-re /java/api/ tools/hierarchical/clustering.html /tests/sources/
+
+
 ###########################################################################
 ### Distribution
 ###
