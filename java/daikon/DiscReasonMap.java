@@ -55,6 +55,10 @@ public final class DiscReasonMap {
         return;
     }
 
+    if (inv.ppt.var_infos.length == 0) {
+      System.out.println("no var infos");
+      return;
+    }
     String vars_result = inv.ppt.var_infos[0].name();
     for (int i = 1; i < inv.ppt.var_infos.length; i++) {
       vars_result += "," + (inv.ppt.var_infos[i]).name();

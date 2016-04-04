@@ -431,14 +431,19 @@ public final class Debug {
       class_str = UtilMDE.replaceString (inv_class.getName(), packageName, "");
     }
 
+    String vars = "";
+    if (vis == null) {
+      System.out.println("no var infos");
+    } else {
+
     // Get a string with all of the variable names.  Each is separated by ': '
     // 3 variable slots are always setup for consistency
-    String vars = "";
     for (VarInfo v: vis) {
       vars += v.name() + ": ";
     }
     for (int i = vis.length; i < 3; i++) {
       vars += ": ";
+    }
     }
 
     // Figure out the sample count if possible
@@ -450,7 +455,10 @@ public final class Debug {
 
     String line = " line=" + FileIO.get_linenum();
 
-    debug.fine (class_str + ": " + ppt.name()
+    String name = "ppt is null";
+    if (ppt != null) name = ppt.name();
+
+    debug.fine (class_str + ": " + name
                  + samp_str + line + ": " + vars + msg);
     if (dkconfig_showTraceback) {
       Throwable stack = new Throwable("debug traceback");
