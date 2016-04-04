@@ -935,8 +935,7 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
 
 If you wish to write a program that manipulates a @file{.dtrace} file, you
 can use Daikon's built-in mechanisms for parsing @file{.dtrace} files.
-(This is easier and less error-prone than write a program that directly
-reads the file.)
+(This is easier and less error-prone than writing your own parser.)
 
 You will write a subclass of @code{FileIO.Processor}, then pass an instance
 of that class to @code{FileIO.read_data_trace_files}.  Daikon will parse

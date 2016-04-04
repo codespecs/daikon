@@ -1,6 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html>
 <head><link rel="icon" href="daikon-favicon.png" type="image/png"/>
   <title>Daikon FAQ (Frequently Asked Questions)</title>
 </head>
@@ -67,13 +66,13 @@ a small set of easily comprehensible formulas.
 The set of formulas that Daikon outputs is called an <em>operational
 abstraction</em>.  The operational abstraction states properties about a
 program's data structures &mdash; the sort that might be written in an
-<tt>assert</tt> statement or a formal specification.
+<code>assert</code> statement or a formal specification.
 </p>
 
 <p>
 Here is a simple example of Daikon's output:  <a
 href="StackAr.html">StackAr.html</a>.  The colored annotations starting
-with &ldquo;<font color="red"><tt>@</tt></font>&rdquo; (in <a
+with &ldquo;<code style="color:red;">@</code>&rdquo; (in <a
 href="http://www.jmlspecs.org/">JML</a> format)
 were automatically detected by
 Daikon and automatically inserted in the source code.  Many other uses for
@@ -110,7 +109,7 @@ Direct uses of invariants by a human include:
 Uses of invariants by other tools include:
 </p>
 <ul>
-  <li>Check assumptions by converting the invariants to <tt>assert</tt>
+  <li>Check assumptions by converting the invariants to <code>assert</code>
       statements.</li>
   <li>Validate test suites by indicating the level of value coverage, which
       indicates how many different values are computed.  This complements
@@ -238,7 +237,7 @@ Daikon unable to access those values, then Daikon obviously cannot produce
 any desired output.
 If values are packed (for instance, using a bit array instead of an array
 of boolean values), then Daikon will not be able to access the values.
-If values have very complex names (for example, <tt>a.b[i].c.d()</tt>, then
+If values have very complex names (for example, <code>a.b[i].c.d()</code>, then
 Daikon may not even try that variable name.  See the configuration options
 that control what derived variables Daikon uses.
 </p>

@@ -39,11 +39,6 @@ jdk:
 #  - oraclejdk7
   - openjdk7
 
-notifications:
-  email:
-    - mernst@cs.washington.edu
-    - markro@cs.washington.edu
-
 after_success:
   - |
       if [[ ($TRAVIS_BRANCH == master) &&
