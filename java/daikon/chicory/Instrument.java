@@ -492,6 +492,11 @@ public class Instrument implements ClassFileTransformer {
     ClassInfo class_info = new ClassInfo (cg.getClassName(), loader);
     List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
 
+    if (cg.getMajor() < Const.MAJOR_1_6) {
+        System.out.printf ("Chicory warning: ClassFile: %s - classfile version (%d) is out of date and may not be processed correctly.%n",
+                           cg.getClassName(), cg.getMajor());
+    }
+
     boolean shouldInclude = false;
 
     try {
@@ -689,11 +694,13 @@ public class Instrument implements ClassFileTransformer {
         process_uninitialized_variable_info(il, false);
         print_stack_map_table("Final");
 
-        // Build new StackMapTable attribute
-        StackMap map_table = new StackMap(pgen.addUtf8("StackMapTable"),
-                                                    0, null, pgen.getConstantPool());
-        map_table.setStackMap(stack_map_table);
-        mg.addCodeAttribute(map_table);
+        if (cg.getMajor() > Const.MAJOR_1_5) {
+            // Build new StackMapTable attribute
+            StackMap map_table = new StackMap(pgen.addUtf8("StackMapTable"),
+                                              0, null, pgen.getConstantPool());
+            map_table.setStackMap(stack_map_table);
+            mg.addCodeAttribute(map_table);
+        }
 
         // UNDONE: not sure this is necessary anymore?
         // Remove the Local variable type table attribute (if any).
