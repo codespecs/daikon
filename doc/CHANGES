@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.2.28 (scheduled for April 2016)
+5.3.0 (April 5, 2016)
 
 Daikon:
 - We have improved splitter processing. Splitter expressions containing
@@ -32,6 +32,9 @@ Kvasir:
 - We updated the underlying Valgrind infrastructure to version 3.11.0.
   Users of Kvasir to analyze C/C++ codes should not see any differences
   in behavior from the previous version.
+
+Documentation:
+- Improved discussion of program points.
 
 We have decided to deprecate support for 32-bit hosts.
 - Fjalar/Kvasir, the C/C++ front end for Daikon, no longer builds on a 32-bit
