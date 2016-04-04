@@ -1260,8 +1260,8 @@ seen at X is also seen at Y, and every invariant that is true at Y is also
 true at X.
 
 Variable @emph{z} in program point X is
-related to variable @emph{z'} in another program point Y by a @dfn{flow} relation
-if every sample seen of @emph{z} at X is also seen of @emph{z'} at Y.
+related to variable @emph{z@quoteright{}} in another program point Y by a @dfn{flow} relation
+if every sample seen of @emph{z} at X is also seen of @emph{z@quoteright{}} at Y.
 Y is called a parent program point of X.
 
 For example, all the field
