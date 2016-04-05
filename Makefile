@@ -352,13 +352,12 @@ test-staged-dist: $(STAGING_DIR)
 	## First, test daikon.jar.
 	(cd $(DISTTESTDIR); mv $(NEW_RELEASE_NAME) daikon)
 	(cd $(DISTTESTDIR)/daikon/java && \
-	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
+	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
 	## Make sure that all of the class files are 1.7 (version 51) or earlier
 	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 classfile_check_version 51)
 	## Second, test the .java files.
-	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
-	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(RTJAR):$(TOOLSJAR) all_javac)
-	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar junit)
+	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(RTJAR):$(TOOLSJAR):$(DISTTESTDIRJAVA)/lib/junit-4.12.jar all_javac)
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
 	# Test the main target of the makefile
 	cd $(DISTTESTDIR)/daikon && make
 	# test basic operation (Chicory/Daikon)
