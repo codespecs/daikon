@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.2.27
+@center Daikon version 5.3.1
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.2.27 release date
-@center March 10, 2016
+@c Print out the Daikon version 5.3.1 release date
+@center April 5, 2016
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.2.27, released March 10, 2016.
+It describes Daikon version 5.3.1, released April 5, 2016.
 
 @menu
 * Introduction::
@@ -1271,8 +1271,8 @@ seen at X is also seen at Y, and every invariant that is true at Y is also
 true at X.
 
 Variable @emph{z} in program point X is
-related to variable @emph{z'} in another program point Y by a @dfn{flow} relation
-if every sample seen of @emph{z} at X is also seen of @emph{z'} at Y.
+related to variable @emph{z@quoteright{}} in another program point Y by a @dfn{flow} relation
+if every sample seen of @emph{z} at X is also seen of @emph{z@quoteright{}} at Y.
 Y is called a parent program point of X.
 
 For example, all the field
