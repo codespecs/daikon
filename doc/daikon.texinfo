@@ -8615,7 +8615,7 @@ BCEL must be in the classpath.  Normally it is found in daikon.jar.
 
 @noindent
 then the problem is most likely that your classpath does not contain
-daikon.jar.  If you are running a Daikon version post 5.2.20; then it
+daikon.jar.  If you are running a Daikon version post 5.2.20, then it
 could be caused by your classpath containing a previous version of
 daikon.jar or plume.jar.
 
