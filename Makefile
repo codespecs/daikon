@@ -569,7 +569,6 @@ update-dist-version-file:
 
 JAR_FILES = \
 $(INV_DIR)/java/lib/java-getopt.jar \
-$(INV_DIR)/java/lib/junit-4.12.jar \
 $(INV_DIR)/java/lib/plume.jar
 
 ## Problem: "make -C java veryclean; make daikon.jar" fails, as does
@@ -590,7 +589,6 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/java-getopt.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/junit-4.12.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume.jar
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
