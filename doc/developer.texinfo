@@ -358,9 +358,22 @@ Project > properties > Java build path:
 
 You can easily write your own invariants and have Daikon check them,
 in addition to all the other invariants that are already part of Daikon.
-Adding a new invariant to Daikon requires writing one Java class, adding
-a line to another file to inform Daikon of the new
-class, and recompiling Daikon.
+Adding a new invariant to Daikon requires writing one Java class, as
+explained below.
+@itemize
+@item
+If you are willing to edit the Daikon source code, you should define the
+invariant in Daikon's source code, in a subdirectory of
+@file{java/daikon/inv/}.  Then, edit method @code{Daikon.setup_proto_invs} to
+call the new invariant's @code{get_proto} method and recompile Daikon.
+@item
+If you do not wish to edit the Daikon source code, then compile the new
+invariant and put its @file{.class} file on your classpath.  Then, invoke
+Daikon with the @option{--user_defined_invariant} command-line argument
+(@pxref{Options to control invariant detection,,,daikon,Daikon User Manual}).
+@end itemize
+
+
 
 The file @file{java/daikon/inv/unary/scalar/Positive.java} in the
 Daikon distribution contains a sample invariant.  This invariant is
@@ -495,8 +508,6 @@ implementations for the different output formats later as needed.
 See also @ref{New formatting for invariants}.
 @end table
 
-After the invariant is written, add a call to its @code{get_proto}
-method in the @code{Daikon.setup_proto_invs} method.
 
 @node    New derived variables
 @section New derived variables

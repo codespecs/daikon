@@ -20,6 +20,14 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.3.2 (scheduled for May 2016)
+
+Daikon:
+ - Command-line argument --user_defined_invariant makes Daikon compute a
+   user-defined invariant in addition to those that are built in to Daikon.
+
+===========================================================================
+
 5.2.28 (scheduled for April 2016)
 
 Daikon:
@@ -3796,7 +3804,7 @@ Added linear ternary invariants, of the form z = ax + by + c.
 
 ===========================================================================
 
- LocalWords:  daikonenv PrintableString StringLength PrintInvariants guardNulls
+ LocalWords:  daikonenv PrintableString StringLength PrintInvariants guardNulls ConcurrentModificationException FileIOProgress Makefile splitters javax gcc
  LocalWords:  PrintInvariant LinearTernaryFloat LinearBinaryFloat LinearTernary
  LocalWords:  noInvariantGuarding SeqIndex SeqIndexIntEqual DtraceDiff Quant ps
  LocalWords:  SeqIndexFloatLessThan DerivedVariableFilter ajax typeOf mypackage

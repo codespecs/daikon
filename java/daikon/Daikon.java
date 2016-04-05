@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -324,6 +326,7 @@ public final class Daikon {
   // Control invariant detection
   public static final String conf_limit_SWITCH = "conf_limit";
   public static final String list_type_SWITCH = "list_type";
+  public static final String user_defined_invariant_SWITCH = "user_defined_invariant";
   public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
   // Process only part of the trace file
@@ -342,6 +345,24 @@ public final class Daikon {
   public static final String disc_reason_SWITCH = "disc_reason";
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String wrap_xml_SWITCH = "wrap_xml";
+
+  /** Regular expression that matches class names in the format expected by
+   * {@link Class#getName(String)}.
+   */
+  // This regular expression is taken from
+  // checker-framework/checker/src/org/checkerframework/checker/signature/qual/ClassGetName.java
+  // .  It's a bit too lenient since we don't need to permit arrays and
+  // primitives.
+  private static final String classGetNameRegex = "(^[A-Za-z_][A-Za-z_0-9]*(\\.[A-Za-z_][A-Za-z_0-9]*)*(\\$[A-Za-z_0-9]+)*$)|^\\[+([BCDFIJSZ]|L[A-Za-z_][A-Za-z_0-9]*(\\.[A-Za-z_][A-Za-z_0-9]*)*(\\$[A-Za-z_0-9]+)*;)$";
+  private static final Pattern classGetNamePattern;
+  static {
+    try {
+      classGetNamePattern = Pattern.compile(classGetNameRegex);
+    } catch (PatternSyntaxException e) {
+      // This shouldn't happen because classGetNameRegex is a legal regex
+      throw new Error(e);
+    }
+  }
 
   public static /*@MonotonicNonNull*/ File server_dir = null; //YOAV: the directory from which we read the dtrace files
 
@@ -780,6 +801,7 @@ public final class Daikon {
         // Control invariant detection
         new LongOpt(conf_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(list_type_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(user_defined_invariant_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(no_dataflow_hierarchy_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt(suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         // Process only part of the trace file
@@ -892,6 +914,18 @@ public final class Daikon {
                 list_type_string);
             } catch (Exception e) {
               throw new Daikon.TerminationMessage("Problem parsing " + list_type_SWITCH + " option: " + e);
+            }
+            break;
+          } else if (user_defined_invariant_SWITCH.equals(option_name)) {
+            try {
+              String user_defined_invariant_string = getOptarg(g);
+              Matcher m = classGetNamePattern.matcher(user_defined_invariant_string);
+              if (! m.matches()) {
+                throw new Daikon.TerminationMessage("Bad argument " + user_defined_invariant_string + " for " + ppt_regexp_SWITCH + ": not in the format required by Class.getName(String)");
+              }
+              userDefinedInvariants.add(user_defined_invariant_string);
+            } catch (Exception e) {
+              throw new Daikon.TerminationMessage("Problem parsing " + user_defined_invariant_SWITCH + " option: " + e);
             }
             break;
           } else if (
@@ -1111,6 +1145,13 @@ public final class Daikon {
     }
     return result;
   }
+
+  /**
+   * Invariants passed on the command line with the
+   * --user_defined_invariant option.  A list of class names in the format
+   * required by {@link Class#forName(String)}.
+   */
+  private static List<String> userDefinedInvariants = new ArrayList<String>();
 
   /**
    * Creates the list of prototype invariants for all Daikon invariants.
@@ -1345,6 +1386,35 @@ public final class Daikon {
       // LinearTernary (LinearTernary.java.jpp)
       proto_invs.add(LinearTernary.get_proto());
       proto_invs.add(LinearTernaryFloat.get_proto());
+    }
+
+    // User-defined invariants
+    for (String invariantClassName : userDefinedInvariants) {
+      Class<?> invClass;
+      try {
+         invClass = Class.forName(invariantClassName);
+      } catch (ClassNotFoundException e) {
+        throw new Daikon.TerminationMessage("Cannot load class " + invariantClassName + " in " + user_defined_invariant_SWITCH + " command-line argument; is it on the classpath?");
+      }
+      Method get_proto_method;
+      try {
+        get_proto_method = invClass.getMethod("get_proto");
+      } catch (NoSuchMethodException e) {
+        throw new Daikon.TerminationMessage("No get_proto() method in user-defined invariant class " + invariantClassName);
+      } catch (SecurityException e) {
+        throw new Daikon.TerminationMessage(e, "SecurityException while looking up get_proto() method in user-defined invariant class " + invariantClassName);
+      }
+      Invariant inv;
+      try {
+        Object inv_as_object = get_proto_method.invoke(null);
+        if (! (inv_as_object instanceof Invariant)) {
+          throw new Daikon.TerminationMessage(invariantClassName + ".get_proto() returned object of the wrong type.  It should have been a subclass of invariant, but was " + inv_as_object.getClass() + ": " + inv_as_object);
+        }
+        inv = (Invariant) inv_as_object;
+      } catch (Exception e) {
+        throw new Daikon.TerminationMessage(e, "Exception while invoking " + invariantClassName + ".get_proto()");
+      }
+      proto_invs.add(inv);
     }
 
     // Remove any elements that are not enabled
