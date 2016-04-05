@@ -250,8 +250,8 @@ else
 endif
 CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
-CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/plume.jar
-CPJUNIT := ${DAIKONDIR}/java/lib/plume.jar
+CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
+CPJUNIT := ${DAIKONDIR}/java/lib/junit-4.12.jar
 
 export CLASSPATH := .:$(CP):$(SCRATCH_FOR_DAIKON):$(CPDAIKON)
 ifeq (cygwin,$(OSTYPE))
@@ -435,7 +435,7 @@ INST_LIST_FILE:=${SCRATCH_FOR_DAIKON}/.instrument-files
 ifeq (infer,${INSTRUMENT})
 # Adding the dependency on the per-project Makefile is not enough, but does
 # help, for instance if the MAIN_CLASS setting in Makefile changes.
-${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists ./Makefile
+${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists ./Makefile $(MAIN_JAVA) $(MAIN2_JAVA)
 	@echo
 	@echo "### figure out the necessary files (${PROJECT_FILE})"
 	@echo
@@ -1401,6 +1401,8 @@ showvars:
 	@echo "SPINFO_FILES        =" ${SPINFO_FILES}
 	@echo "MAIN_CLASS          =" ${MAIN_CLASS}
 	@echo "MAIN_ARGS           =" ${MAIN_ARGS}
+	@echo "MAIN_JAVA           =" ${MAIN_JAVA}
+	@echo "MAIN2_JAVA          =" ${MAIN2_JAVA}
 	@echo "JAVA_ARGS           =" ${JAVA_ARGS}
 	@echo "ESC_ON              =" ${ESC_ON}
 ifdef ESC_ON

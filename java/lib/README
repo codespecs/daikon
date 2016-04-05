@@ -18,6 +18,9 @@ GNU getopt 1.0.8 (java-getopt.jar)
   6. "jar cf java-getopt.jar gnu/"
 - http://www.urbanophile.com/arenn/coding/download.html
 
+JUnit 4.12 (junit-4.12.jar)
+- Downloaded from: https://github.com/junit-team/junit4/wiki/Download-and-Install
+
 plume-lib (plume.jar)
 - A library of useful abstractions for programming.
 - https://github.com/mernst/plume-lib.git
@@ -26,6 +29,6 @@ plume-lib (plume.jar)
   the plume-lib source in the Daikon root directory!
   plume.jar needs to be compiled with a JSR 308 compiler, so its annotations
   are present in the .jar file.  However, it has to be compiled with "-target
-  5" or the like, so that it can be used by a Java 5 JVM.
+  7" or the like, so that it can be used by a Java 7 JVM.
 - Note that plume-lib includes BCEL, Apache Commons IO, JUnit,
   and the Checker Framework qualifiers.
