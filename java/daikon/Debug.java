@@ -857,8 +857,10 @@ public final class Debug {
     }
 
     // if a ppt was specified, add it to the array of tracked ppts
-    if (ppt != null)
-      debugTrackPpt = ArraysMDE.concat (debugTrackPpt, new String[] {ppt});
+    if (ppt != null) {
+      String[] newPpt = new String[] {ppt};
+      debugTrackPpt = ArraysMDE.concat (debugTrackPpt, newPpt);
+    }
 
     System.out.println ();
     debugTrack.fine ("After --track: " + def);
