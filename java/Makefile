@@ -102,7 +102,7 @@ JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx1024m
 # distributed version, of Daikon.  The if clause avoids a (harmless but
 # annoying) javac error message that they don't exist.
 ifeq "$(wildcard ${DAIKONDIR}/java/lib/plume.jar)" "${DAIKONDIR}/java/lib/plume.jar"
-    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/plume.jar
+    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
 endif
 ifeq "$(wildcard ${CHECKERJAR})" "${CHECKERJAR}"
     CLASSPATH_JARS2 = ${CHECKERJAR}

@@ -248,7 +248,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning")  // cast from Object
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/ public static boolean setEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  /*@Pure*/ public static boolean setEqual(final /*@Nullable*/ Object seq1, final /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return setEqual(toObjArray(seq1), toObjArray(seq2));
@@ -258,7 +258,7 @@ public final class Quant {
    */
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
   @SuppressWarnings("interning")  // cast from Object
-  /*@Pure*/ public static boolean isReverse(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  /*@Pure*/ public static boolean isReverse(final /*@Nullable*/ Object seq1, final /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return isReverse(toObjArray(seq1), toObjArray(seq2));
@@ -268,7 +268,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning")  // cast from Object
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/ public static boolean pairwiseEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  /*@Pure*/ public static boolean pairwiseEqual(final /*@Nullable*/ Object seq1, final /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return pairwiseEqual(toObjArray(seq1), toObjArray(seq2));
@@ -278,7 +278,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning")  // cast from Object
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/ public static boolean pairwiseNotEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  /*@Pure*/ public static boolean pairwiseNotEqual(final /*@Nullable*/ Object seq1, final /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return pairwiseNotEqual(toObjArray(seq1), toObjArray(seq2));
@@ -288,7 +288,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning")  // cast from Object
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/ public static boolean lexEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  /*@Pure*/ public static boolean lexEqual(final /*@Nullable*/ Object seq1, final /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return lexEqual(toObjArray(seq1), toObjArray(seq2));
@@ -298,7 +298,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning")  // cast from Object
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
-  /*@Pure*/ public static boolean lexNotEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
+  /*@Pure*/ public static boolean lexNotEqual(final /*@Nullable*/ Object seq1, final /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return lexNotEqual(toObjArray(seq1), toObjArray(seq2));
@@ -308,7 +308,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning")  // cast from Object
   /*@EnsuresNonNullIf(result=true, expression="#2")*/
-  /*@Pure*/ public static boolean memberOf(Object elt, /*@Nullable*/ Object arr) {
+  /*@Pure*/ public static boolean memberOf(Object elt, final /*@Nullable*/ Object arr) {
     if (arr == null) { return false; }
     return memberOf(elt, toObjArray(arr));
   }

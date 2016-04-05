@@ -15,7 +15,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * </pre>
  * A concrete example invocation:
  * <pre>
- *   java -cp $DAIKONDIR/java:$DAIKONDIR/java/lib/plume.jar daikon.tools.ReadTrace /scratch/$USER/tests/daikon-tests/StackAr/StackAr.dtrace.gz
+ *   java -cp $DAIKONDIR/daikon.jar daikon.tools.ReadTrace /scratch/$USER/tests/daikon-tests/StackAr/StackAr.dtrace.gz
  * </pre>
  */
 public class ReadTrace {
