@@ -1561,8 +1561,7 @@ public class Instrument implements ClassFileTransformer {
    * Return an array of strings, each corresponding to mgen's argument types
    * @return an array of strings, each corresponding to mgen's argument types
    */
-  /*@BinaryName*/
-  private String[]
+  private /*@BinaryName*/ String[]
   getArgTypes (MethodGen mgen) {
 
     Type[] arg_types = mgen.getArgumentTypes();
