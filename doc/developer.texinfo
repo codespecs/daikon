@@ -2255,23 +2255,6 @@ variable points to the location of your Checker Framework directory.
 
 
 @item
-Most likely a new Checker Framework has been released since the last distribution
-(which may cause compatibility problems)
-and/or there may have been changes to plume-lib.  You should always build an updated
-@file{plume.jar} just to be safe.
-
-@example
-make -C $DAIKONDIR plume-lib-update
-cd $DAIKONDIR/plume-lib/java
-make clean && make && make verify-plume-jar-classfile-version && \
-    \cp -pf plume.jar ../../java/lib
-@end example
-
-@c Time on buffalo as of 02/05/2016
-[Time: 9 min]
-
-
-@item
 Update the bibliography.
 
 @example
