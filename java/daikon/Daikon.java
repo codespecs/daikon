@@ -1434,14 +1434,15 @@ public final class Daikon {
       }
       Invariant inv;
       try {
+        @SuppressWarnings("nullness") // null argument is OK because get_proto_method is static
         Object inv_as_object = get_proto_method.invoke(null);
-        if (!(inv_as_object instanceof Invariant)) {
-          throw new Daikon.TerminationMessage(
-              invariantClassName
-                  + ".get_proto() returned object of the wrong type.  It should have been a subclass of invariant, but was "
-                  + inv_as_object.getClass()
-                  + ": "
-                  + inv_as_object);
+        if (inv_as_object == null) {
+          throw new Daikon.TerminationMessage(invariantClassName + ".get_proto() returned null but should have returned an Invariant");
+        }
+        if (! (inv_as_object instanceof Invariant)) {
+          @SuppressWarnings("nullness") // looks like a Checker Framework bug, since inv_as_object is known to be non-null at this point
+          Class<?> cls = inv_as_object.getClass();
+          throw new Daikon.TerminationMessage(invariantClassName + ".get_proto() returned object of the wrong type.  It should have been a subclass of invariant, but was " + cls + ": " + inv_as_object);
         }
         inv = (Invariant) inv_as_object;
       } catch (Exception e) {

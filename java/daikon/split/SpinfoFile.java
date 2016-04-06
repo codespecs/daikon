@@ -308,7 +308,7 @@ public class SpinfoFile {
    * Returns whether the line is blank (or null).
    */
   /*@EnsuresNonNullIf(result=false, expression="#1")*/
-  /*@Pure*/ private static boolean isBlank(/*@Nullable*/ String line) {
+  /*@Pure*/ private static boolean isBlank(final /*@Nullable*/ String line) {
     return (line == null) || line.trim().equals("");
   }
 
