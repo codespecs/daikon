@@ -67,9 +67,9 @@ public abstract class SingleScalar
     assert (mod_index >= 0) && (mod_index < 2);
     long value = ((Long) val).longValue();
     if (mod_index == 0) {
-      return add_unmodified(value, count);
+      return check_unmodified(value, count);
     } else {
-      return add_modified(value, count);
+      return check_modified(value, count);
     }
   }
 
