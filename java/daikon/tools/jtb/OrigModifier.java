@@ -48,9 +48,9 @@ public class OrigModifier extends DepthFirstVisitor {
     // f0 -> PrimaryPrefix()
     // f1 -> ( PrimarySuffix() )*
   public void visit(PrimaryExpression n) {
-    // let simple variables be varibles with out "."'s in their names
+    // let simple variables be variables with out "."'s in their names
     // such as x or myList
-    // let compound variables be varibles with "."'s in their names
+    // let compound variables be variables with "."'s in their names
     // such as this.x or myPackage.MyObject.myList
 
     // First checks for and handles simple variables.

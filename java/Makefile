@@ -694,7 +694,7 @@ daikon/Runtime.class: daikon/Runtime.java
 
 
 ###########################################################################
-### Non-compilation targets
+### Cleaning (removing generated files
 ###
 
 # It's good to run "make clean" occasionally, because it costs little to
@@ -755,8 +755,9 @@ tags-without-generated-files: clean-generated-files
 	@etags --language=java ${TAG_FILES}
 	$(MAKE) compile
 
-###
-### Static checks of the code
+
+###########################################################################
+### Code quality (static checks of the code)
 ###
 
 findbugs: .findbugs-output
@@ -788,6 +789,10 @@ checkstyle-cs: .checkstyle-cschecks-output
 checkstyle-sun: .checkstyle-sunchecks-output
 .PHONY: checkstyle checkstyle-cs checkstyle-sun
 
+checkstyle:
+# This invocation works on Ubuntu.
+	checkstyle -c /usr/share/checkstyle/sun_checks.xml ${JAVA_FILES}
+
 jlint:
 	jlint . | grep -v "Value of referenced variable '.*' may be NULL" | grep -v "Compare strings as object references" | perl -p -e 's:^daikon/::'
 
@@ -798,7 +803,17 @@ audit:
 	cd $(HOME)/java && maudit daikon | perl -p -e 's/^daikon\///'
 
 
+reindent:
+	java -jar ~/java/google-java-format/core/target/google-java-format-0.1-SNAPSHOT-all-deps.jar --replace ${JAVA_FILES_FOR_STYLE}
+	${CHECKERFRAMEWORK}/checker/bin/fixup-google-java-format.py ${JAVA_FILES}
+
+
+
+
+###########################################################################
 ### Pluggable type qualifier checkers
+###
+
 # (Don't run these until after you have compiled Daikon at least once.)
 
 # Note about CHECKER_ARGS: if this contains any -Alint option, it will
@@ -1072,7 +1087,7 @@ possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
 
 
 
-###
+###########################################################################
 ### Testing
 ###
 
@@ -1133,7 +1148,8 @@ clover: all_directly
 	cd $(CLOVER)/java; \
 	  ${JAVAC} -classpath $(CLOVER_CP) -g -target 1.1 daikon/Daikon.java
 
-###
+
+###########################################################################
 ### Documentation
 ###
 
@@ -1217,16 +1233,7 @@ daikon/config/HtmlToTexinfo.class: daikon/config/HtmlToTexinfo.java
 # 		$(JDOC_FILES)
 
 
-###
-### Switching between version 2 and version 3 (temporary)
-###
-
-# Recurse to the directory above this since regression tests need to be
-# switched too
-use-%:
-	cd .. && $(MAKE) $@
-
-###
+###########################################################################
 ### For debugging the Makefile.
 ###
 

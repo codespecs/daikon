@@ -1828,7 +1828,7 @@ the @code{ListImplementors} section of the @file{.decls} file.
 See @ref{ListImplementors declaration,,,developer,Daikon Developer Manual}.
 
 @item --user_defined_invariant @var{classname}
-Load a user invariant from the given class.
+Load a user invariant that is defined in the given class.
 The @emph{classname} should be in the fully-qualified format expected by 
 @uref{https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getName--,,@code{Class.getName()}},
 such as ``@code{mypackage.subpackage.ClassName}'',
@@ -2507,7 +2507,7 @@ found no invariants.  You can get a little bit more information by using
 the @option{--output_num_samples} flag to Daikon
 (@pxref{Options to control Daikon output}).
 
-@cindex nonsensical values, ignored when computing invaraints
+@cindex nonsensical values, ignored when computing invariants
 
 Daikon's output is predicated on the assumption that all expressions
 that get evaluated are sensible.  For instance, if Daikon prints
@@ -2550,7 +2550,7 @@ about @code{x} is also true about @code{y}.  Daikon chooses one variable
 (the leader) from the set of equal variables, and only prints invariants
 over the leader.
 @c This is true, but I believe it detracts from the point.
-@c Daikon also prints equalities about the varibles in the set.
+@c Daikon also prints equalities about the variables in the set.
 
 Suppose that @code{a = b = c}.  Then Daikon will print @code{a = b} and
 @code{a = c}, but not @code{b = c}.  Furthermore, Daikon might print
@@ -9191,7 +9191,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  ctype sed declsfiledir declsfiledirflat searchpath includepath
 @c  LocalWords:  GNUG disambigfilename mdas memset subarrays lackwit unsetting
 @c  LocalWords:  postprocessing structs pcc gzipped zlib baz ints std min rray
-@c  LocalWords:  ointer ifdef endif SmartPointer SmartArray malloc
+@c  LocalWords:  ointer ifdef endif SmartPointer SmartArray malloc tex toc
 @c  LocalWords:  mystring strcpy strcat smartpointers basemap namespace ansi eq
 @c  LocalWords:  protoize fallback fixups const asm inline typeid typename bool
 @c  LocalWords:  bitand bitor compl wchar xor unportable enums enum stdlib env
@@ -9202,8 +9202,8 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  runcluster xm ALG xmeans TraceSelect NOCLEAN DIFFS MergeESC pp
 @c  LocalWords:  escannotated jmlannotated dbcannotated Annnotate xml INVINFO
 @c  LocalWords:  ubs Throwable throwable rethrown WriteViolationFile MyProg
-@c  LocalWords:  callMethod isInstrumented getInvariants INVS ijmp
-@c  LocalWords:  bBoOmjpi de iconv undefine DHAVE Xie Ast rt MyPackage
+@c  LocalWords:  callMethod isInstrumented getInvariants INVS ijmp exin wp
+@c  LocalWords:  bBoOmjpi de iconv undefine DHAVE Xie Ast rt MyPackage jre
 @c  LocalWords:  superdirectory SOURCEPATH InvalidClassDataError strace lstat
 @c  LocalWords:  RuntimeException IFLNK interconvert interconvertible strdup ld
 @c  LocalWords:  lwpp ine runtime's malloced MaxPermSize JVM's MyVector perc vv
@@ -9240,4 +9240,18 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  instrumenters NoSuchMethodException myprogram glibc NonNull XP
 @c  LocalWords:  Nullable Nullness daikondir nullable NonZero jaif nonnull Rudd
 @c  LocalWords:  Holten McCamant Alexandru Salcianu Tschantz Nadya Kuzmina dec
-@c  LocalWords:  readibility subexit dups rel birthyear preprocess
+@c  LocalWords:  readibility subexit dups rel birthyear preprocess ifset
+@c  LocalWords:  nospellcheck tableindent paragraphindent exinenum ifclear
+@c  LocalWords:  firstparagraphindent codequotebacktick exampleindent dfn
+@c  LocalWords:  evenheading thispage thischaptername thischapternum hfuzz
+@c  LocalWords:  oddheading thissectionnum thissectionname everyfooting d1
+@c  LocalWords:  QuickTime QTSystem QTJava cygpath arg1 arg2 arg3 MyMain
+@c  LocalWords:  originalclasspath grep EXIT79 EXIT32 prepend Xmx256m var1
+@c  LocalWords:  prepended computeConfidence numsamples getName var2 var3
+@c  LocalWords:  jcc Java2 seq1 CSharpContract myString otherString EXIT48
+@c  LocalWords:  unsplit if'' condition1 condition2 condition3 procedure1
+@c  LocalWords:  replacement1 procedure2 replacement2 arg0 EXIT33 pack1 d2
+@c  LocalWords:  pack2 online'' EXIT11 o1 o2 SIGSEGV O0 fjalar gcc3 EXIT0
+@c  LocalWords:  I' C' S' A' P' superclasses vv1 bzip2 Xmx512m bfd dev ABI
+@c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
+@c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
