@@ -50,7 +50,7 @@ public class SplitterFactoryTestUpdater {
    * after running this method.
    * @param args are ignored.
    */
-  public static void  main(String[] args) {
+  public static void main(String[] args) {
     // For debugging
     // SplitterFactory.dkconfig_delete_splitters_on_exit = false;
 
@@ -82,8 +82,7 @@ public class SplitterFactoryTestUpdater {
    * @param decls the decls files that should be used in generating the
    *  splitter java files.
    */
-  private static void generateSplitters(List<String> spinfos,
-                                        List<String> decls) {
+  private static void generateSplitters(List<String> spinfos, List<String> decls) {
     HashSet<File> declsFileSet = new HashSet<File>();
     HashSet<File> spinfoFiles = new HashSet<File>();
     PptMap allPpts = new PptMap();
@@ -101,14 +100,14 @@ public class SplitterFactoryTestUpdater {
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
       // calling read_data_trace_file in a loop instead of calling
-      // read_data_trace_files allows us to mix version 1 and 
+      // read_data_trace_files allows us to mix version 1 and
       // version 2 decls file formats.
       for (String declsFile : decls) {
         // This reset allows current format to differ from previous.
         FileIO.resetNewDeclFormat();
         FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
       }
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
@@ -137,8 +136,7 @@ public class SplitterFactoryTestUpdater {
           throw e;
         }
         String javaFileName = new File(fileName).getName();
-        String className =
-          javaFileName.substring(0, javaFileName.length()-".java".length());
+        String className = javaFileName.substring(0, javaFileName.length() - ".java".length());
         classNames.add(className);
       }
     }
@@ -147,17 +145,19 @@ public class SplitterFactoryTestUpdater {
   private static void moveFile(String fromName, String toName) {
     File from = new File(fromName);
     File to = new File(toName);
-    if (! from.exists()) {
+    if (!from.exists()) {
       throw new Error("Does not exist: " + fromName);
     }
-    if (! from.canRead()) {
+    if (!from.canRead()) {
       throw new Error("Cannot read " + fromName);
     }
     // canWrite() requires that the file already exists.  So comment this out.
     // if (! to.canWrite()) {
     //   throw new Error("Cannot write " + toName + " = " + to.getAbsoluteFile() + " when copying from " + fromName);
     // }
-    if (to.exists()) { to.delete(); }
+    if (to.exists()) {
+      to.delete();
+    }
     // file.renameTo(to) fails if the two files are on different file systems
     // (e.g., /tmp and /scratch may be different
     // So read and write the file directly rather than using renameTo().
@@ -193,7 +193,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("package daikon.test.split;");
     ps.println();
     ps.println("import junit.framework.*;");
-    ps.println("import daikon.split.*;"  );
+    ps.println("import daikon.split.*;");
     ps.println("import daikon.*;");
     ps.println("import java.util.*;");
     ps.println("import java.io.*;");
@@ -233,7 +233,8 @@ public class SplitterFactoryTestUpdater {
     ps.println("    private static String usage =");
     ps.println("      UtilMDE.joinLines(");
     ps.println("        \"Usage:  java daikon.tools.CreateSpinfo FILE.java ...\",");
-    ps.println("        \"  -s       Save (do not delete) the splitter java files in the temp directory\",");
+    ps.println(
+        "        \"  -s       Save (do not delete) the splitter java files in the temp directory\",");
     ps.println("        \"  -h       Display this usage message\"");
     ps.println("      );");
     ps.println();
@@ -281,7 +282,8 @@ public class SplitterFactoryTestUpdater {
     ps.println("  /**");
     ps.println("   * Sets up the test by generating the needed splitter java files.");
     ps.println("   */");
-    ps.println("  private static void createSplitterFiles(List<String> spinfos, List<String> decls) {");
+    ps.println(
+        "  private static void createSplitterFiles(List<String> spinfos, List<String> decls) {");
     ps.println("    Set<File> spFiles = new HashSet<File>();");
     ps.println("    PptMap allPpts = new PptMap();");
     ps.println("    for (String spinfo : spinfos) {");
@@ -295,7 +297,8 @@ public class SplitterFactoryTestUpdater {
     ps.println("      Daikon.create_splitters(spFiles);");
     ps.println("      for (String declsFile : decls) {");
     ps.println("        FileIO.resetNewDeclFormat();");
-    ps.println("        FileIO.read_data_trace_file(declsFile, allPpts);"); // invoked for side effects
+    ps.println(
+        "        FileIO.read_data_trace_file(declsFile, allPpts);"); // invoked for side effects
     ps.println("      }");
     ps.println("      tempDir = SplitterFactory.getTempDir();");
     ps.println("    } catch(IOException e) {");
@@ -331,10 +334,12 @@ public class SplitterFactoryTestUpdater {
     ps.println("    List<String> spinfoFiles;");
     ps.println("    List<String> declsFiles;");
     for (int i = 0; i < spinfoFileLists.size(); i++) {
-      ps.println("    createSplitterFiles(\""
-                 + UtilMDE.java_source(spinfoFileLists.get(i).get(0))
-                 + "\", \""
-                 + UtilMDE.java_source(declsFileLists.get(i).get(0)) + "\");");
+      ps.println(
+          "    createSplitterFiles(\""
+              + UtilMDE.java_source(spinfoFileLists.get(i).get(0))
+              + "\", \""
+              + UtilMDE.java_source(declsFileLists.get(i).get(0))
+              + "\");");
     }
     ps.println("  }");
   }
@@ -376,5 +381,4 @@ public class SplitterFactoryTestUpdater {
       ps.println("    suite.addTest(new SplitterFactoryTest(\"test" + className + "\"));");
     }
   }
-
 }

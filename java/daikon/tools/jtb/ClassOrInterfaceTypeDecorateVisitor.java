@@ -22,12 +22,14 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
   // A map from token images to "ungenerified" versions of the classes
   // or interfaces that the given identifiers extend.
-  HashMap<String,Stack<ClassOrInterfaceType>> shadowingMap = new HashMap<String,Stack<ClassOrInterfaceType>>();
+  HashMap<String, Stack<ClassOrInterfaceType>> shadowingMap =
+      new HashMap<String, Stack<ClassOrInterfaceType>>();
 
   // For debugging purposes.
   private void printShadowingMap() {
     System.out.println("Shadowing map:");
-    for (Map.Entry</*@KeyFor("shadowingMap")*/ String,Stack<ClassOrInterfaceType>> e : shadowingMap.entrySet()) {
+    for (Map.Entry</*@KeyFor("shadowingMap")*/ String, Stack<ClassOrInterfaceType>> e :
+        shadowingMap.entrySet()) {
       System.out.print("  " + e.getKey() + " stack: ");
       for (ClassOrInterfaceType t : e.getValue()) {
         StringWriter w = new StringWriter();
@@ -39,91 +41,88 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     }
   }
 
-   // f0 -> [ TypeParameters() ]
-   // f1 -> ResultType()
-   // f2 -> MethodDeclarator()
-   // f3 -> [ "throws" NameList() ]
-   // f4 -> ( Block() | ";" )
-   public void visit(MethodDeclaration n) {
+  // f0 -> [ TypeParameters() ]
+  // f1 -> ResultType()
+  // f2 -> MethodDeclarator()
+  // f3 -> [ "throws" NameList() ]
+  // f4 -> ( Block() | ";" )
+  public void visit(MethodDeclaration n) {
 
-     // A shallow clone, which is what we want.
-     HashMap<String,Stack<ClassOrInterfaceType>> oldShadowingMap =
-       copy(shadowingMap);
+    // A shallow clone, which is what we want.
+    HashMap<String, Stack<ClassOrInterfaceType>> oldShadowingMap = copy(shadowingMap);
 
-     if (n.f0.present()) {
-       augmentShadowingMap((TypeParameters)n.f0.node);
-     }
-      n.f1.accept(this);
-      n.f2.accept(this);
-      n.f3.accept(this);
-      n.f4.accept(this);
+    if (n.f0.present()) {
+      augmentShadowingMap((TypeParameters) n.f0.node);
+    }
+    n.f1.accept(this);
+    n.f2.accept(this);
+    n.f3.accept(this);
+    n.f4.accept(this);
 
-      // Restore shadowing map because we're going out of scope from
-      // the TypeParameters declared in this method.
-      shadowingMap = oldShadowingMap;
-      //printShadowingMap();
-   }
+    // Restore shadowing map because we're going out of scope from
+    // the TypeParameters declared in this method.
+    shadowingMap = oldShadowingMap;
+    //printShadowingMap();
+  }
 
-   // f0 -> [ TypeParameters() ]
-   // f1 -> <IDENTIFIER>
-   // f2 -> FormalParameters()
-   // f3 -> [ "throws" NameList() ]
-   // f4 -> "{"
-   // f5 -> [ ExplicitConstructorInvocation() ]
-   // f6 -> ( BlockStatement() )*
-   // f7 -> "}"
-   public void visit(ConstructorDeclaration n) {
+  // f0 -> [ TypeParameters() ]
+  // f1 -> <IDENTIFIER>
+  // f2 -> FormalParameters()
+  // f3 -> [ "throws" NameList() ]
+  // f4 -> "{"
+  // f5 -> [ ExplicitConstructorInvocation() ]
+  // f6 -> ( BlockStatement() )*
+  // f7 -> "}"
+  public void visit(ConstructorDeclaration n) {
 
-     // A shallow clone, which is what we want.
-     HashMap<String,Stack<ClassOrInterfaceType>> oldShadowingMap =
-       copy(shadowingMap);
+    // A shallow clone, which is what we want.
+    HashMap<String, Stack<ClassOrInterfaceType>> oldShadowingMap = copy(shadowingMap);
 
-     if (n.f0.present()) {
-       augmentShadowingMap((TypeParameters)n.f0.node);
-     }
-      n.f1.accept(this);
-      n.f2.accept(this);
-      n.f3.accept(this);
-      n.f4.accept(this);
-      n.f5.accept(this);
-      n.f6.accept(this);
-      n.f7.accept(this);
+    if (n.f0.present()) {
+      augmentShadowingMap((TypeParameters) n.f0.node);
+    }
+    n.f1.accept(this);
+    n.f2.accept(this);
+    n.f3.accept(this);
+    n.f4.accept(this);
+    n.f5.accept(this);
+    n.f6.accept(this);
+    n.f7.accept(this);
 
-      // Restore shadowing map because we're going out of scope from
-      // the TypeParameters declared in this method.
-      shadowingMap = oldShadowingMap;
-      //printShadowingMap();
-   }
+    // Restore shadowing map because we're going out of scope from
+    // the TypeParameters declared in this method.
+    shadowingMap = oldShadowingMap;
+    //printShadowingMap();
+  }
 
-   // f0 -> ( "class" | "interface" )
-   // f1 -> <IDENTIFIER>
-   // f2 -> [ TypeParameters() ]
-   // f3 -> [ ExtendsList(isInterface) ]
-   // f4 -> [ ImplementsList(isInterface) ]
-   // f5 -> ClassOrInterfaceBody(isInterface)
-   public void visit(ClassOrInterfaceDeclaration n) {
+  // f0 -> ( "class" | "interface" )
+  // f1 -> <IDENTIFIER>
+  // f2 -> [ TypeParameters() ]
+  // f3 -> [ ExtendsList(isInterface) ]
+  // f4 -> [ ImplementsList(isInterface) ]
+  // f5 -> ClassOrInterfaceBody(isInterface)
+  public void visit(ClassOrInterfaceDeclaration n) {
 
-     // A shallow clone, which is what we want.
-     HashMap<String,Stack<ClassOrInterfaceType>> oldShadowingMap =
-       copy(shadowingMap);
+    // A shallow clone, which is what we want.
+    HashMap<String, Stack<ClassOrInterfaceType>> oldShadowingMap = copy(shadowingMap);
 
-      n.f0.accept(this);
-      n.f1.accept(this);
+    n.f0.accept(this);
+    n.f1.accept(this);
 
-     if (n.f2.present()) {
-       augmentShadowingMap((TypeParameters)n.f2.node);
-     }
+    if (n.f2.present()) {
+      augmentShadowingMap((TypeParameters) n.f2.node);
+    }
 
-      n.f2.accept(this);
-      n.f3.accept(this);
-      n.f4.accept(this);
-      n.f5.accept(this);
+    n.f2.accept(this);
+    n.f3.accept(this);
+    n.f4.accept(this);
+    n.f5.accept(this);
 
-      // Restore shadowing map because we're going out of scope from
-      // the TypeParameters declared in this method.
-      shadowingMap = oldShadowingMap;
-      //printShadowingMap();
-   }
+    // Restore shadowing map because we're going out of scope from
+    // the TypeParameters declared in this method.
+    shadowingMap = oldShadowingMap;
+    //printShadowingMap();
+  }
 
   public void augmentShadowingMap(TypeParameters n) {
     // Grammar production:
@@ -132,11 +131,12 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     // f2 -> ( "," TypeParameter() )*
     // f3 -> ">"
     final List<TypeParameter> params = new ArrayList<TypeParameter>();
-    n.accept(new DepthFirstVisitor() {
-        public void visit(TypeParameter n) {
-          params.add(n);
-        }
-      });
+    n.accept(
+        new DepthFirstVisitor() {
+          public void visit(TypeParameter n) {
+            params.add(n);
+          }
+        });
 
     for (TypeParameter t : params) {
       augmentShadowingMap(t);
@@ -148,7 +148,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   public void augmentShadowingMap(TypeParameter n) {
     n.f0.accept(this);
     n.f1.accept(this);
-    TypeBound b = (TypeBound)n.f1.node;
+    TypeBound b = (TypeBound) n.f1.node;
 
     if (n.f1.present()) {
 
@@ -179,15 +179,12 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
       }
 
       ClassOrInterfaceType objectType =
-        (ClassOrInterfaceType)Ast.create("ClassOrInterfaceType", "Object");
+          (ClassOrInterfaceType) Ast.create("ClassOrInterfaceType", "Object");
       s.push(objectType);
-
     }
 
     //printShadowingMap();
   }
-
-
 
   // ClassOrInterfaceType:
   // f0 -> <IDENTIFIER>
@@ -202,12 +199,12 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     StringWriter w = new StringWriter();
     //t.accept(new TreeFormatter());
     t.accept(new TreeDumper(w));
-    ClassOrInterfaceType n = (ClassOrInterfaceType)Ast.create("ClassOrInterfaceType", w.toString());
+    ClassOrInterfaceType n =
+        (ClassOrInterfaceType) Ast.create("ClassOrInterfaceType", w.toString());
 
     ungenerify(n);
 
     t.unGenerifiedVersionOfThis = n;
-
   }
 
   // ClassOrInterfaceType:
@@ -219,7 +216,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     // Drop all type arguments.
     n.f1 = new NodeOptional(); // This removes optional node, if present.
     Vector<Node> nodeSequenceList = (n.f2).nodes;
-    for (int i = 0 ; i < nodeSequenceList.size() ; i++) {
+    for (int i = 0; i < nodeSequenceList.size(); i++) {
       NodeSequence oldSequence = (NodeSequence) nodeSequenceList.get(i);
       NodeSequence newSequence = new NodeSequence(3);
       newSequence.addNode(oldSequence.elementAt(0)); // "."
@@ -231,7 +228,8 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     // 2. Only the first <IDENTIFIER> may possibly be associated
     //    with a type argument. If we find it in typeParametersInScope,
     //    we replace t with [...]
-    for (Map.Entry</*@KeyFor("shadowingMap")*/ String,Stack<ClassOrInterfaceType>> entry : shadowingMap.entrySet()) {
+    for (Map.Entry</*@KeyFor("shadowingMap")*/ String, Stack<ClassOrInterfaceType>> entry :
+        shadowingMap.entrySet()) {
       if (entry.getKey().equals(n.f0.tokenImage)) {
         ClassOrInterfaceType c = entry.getValue().peek();
         //System.out.println("c:" + Ast.format(c));
@@ -242,7 +240,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
         }
         // Prepend all-but-first identifiers to the list of identifiers in f2.
         // Prepending in reverse order ensures the right prepending order.
-        for (int i = cSequence.size()-1 ; i >= 0 ; i--) {
+        for (int i = cSequence.size() - 1; i >= 0; i--) {
           nodeSequenceList.add(0, cSequence.get(i));
         }
         // Set f0 to the first identifier.
@@ -264,23 +262,24 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
       //System.out.print("n::::");
       //System.out.println(sw.toString().trim());
     }
-}
+  }
 
   // Makes a copy of the stacks and of the map. The
   // ClassOrInterfaceType objects are not copied.
-  private static HashMap<String,Stack<ClassOrInterfaceType>> copy(HashMap<String,Stack<ClassOrInterfaceType>> m) {
+  private static HashMap<String, Stack<ClassOrInterfaceType>> copy(
+      HashMap<String, Stack<ClassOrInterfaceType>> m) {
 
-    HashMap<String,Stack<ClassOrInterfaceType>> newMap = new HashMap<String,Stack<ClassOrInterfaceType>>();
+    HashMap<String, Stack<ClassOrInterfaceType>> newMap =
+        new HashMap<String, Stack<ClassOrInterfaceType>>();
 
-    for (Map.Entry</*@KeyFor("m")*/ String,Stack<ClassOrInterfaceType>> e : m.entrySet()) {
+    for (Map.Entry</*@KeyFor("m")*/ String, Stack<ClassOrInterfaceType>> e : m.entrySet()) {
       String key = e.getKey();
       Stack<ClassOrInterfaceType> oldStack = e.getValue();
       @SuppressWarnings("unchecked")
-      Stack<ClassOrInterfaceType> newStack = (Stack<ClassOrInterfaceType>)oldStack.clone();
+      Stack<ClassOrInterfaceType> newStack = (Stack<ClassOrInterfaceType>) oldStack.clone();
       newMap.put(key, newStack);
     }
 
     return newMap;
   }
-
 }

@@ -16,7 +16,7 @@ public class MinusVisitorTester extends TestCase {
   private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());
 
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (LogHelper.INFO);
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(MinusVisitorTester.class));
   }
 
@@ -29,13 +29,14 @@ public class MinusVisitorTester extends TestCase {
   // map2: A->{W, X2, Z}, C->{Z}, D->{M_unjustified, N}
   // map1-map2: A->{X1, Y}, B->{Y}, D->{M}
   public void testMinus() {
-    VarInfo[] vars = { DiffTester.newIntVarInfo("w"),
-                       DiffTester.newIntVarInfo("x"),
-                       DiffTester.newIntVarInfo("y"),
-                       DiffTester.newIntVarInfo("z"),
-                       DiffTester.newIntVarInfo("m"),
-                       DiffTester.newIntVarInfo("n"),
-                       DiffTester.newIntVarInfo("o"),
+    VarInfo[] vars = {
+      DiffTester.newIntVarInfo("w"),
+      DiffTester.newIntVarInfo("x"),
+      DiffTester.newIntVarInfo("y"),
+      DiffTester.newIntVarInfo("z"),
+      DiffTester.newIntVarInfo("m"),
+      DiffTester.newIntVarInfo("n"),
+      DiffTester.newIntVarInfo("o"),
     };
     PptTopLevel A = Common.makePptTopLevel("A:::OBJECT", vars);
     PptTopLevel B = Common.makePptTopLevel("B:::OBJECT", vars);
@@ -60,14 +61,14 @@ public class MinusVisitorTester extends TestCase {
     Invariant unjO = new DiffDummyInvariant(sliceo, "O", false);
 
     InvMap map1 = new InvMap();
-    map1.put(A, Arrays.</*@NonNull*/ Invariant> asList(W, X1, Y));
-    map1.put(B, Arrays.</*@NonNull*/ Invariant> asList(Y));
-    map1.put(D, Arrays.</*@NonNull*/ Invariant> asList(M, unjN, unjO));
+    map1.put(A, Arrays.</*@NonNull*/ Invariant>asList(W, X1, Y));
+    map1.put(B, Arrays.</*@NonNull*/ Invariant>asList(Y));
+    map1.put(D, Arrays.</*@NonNull*/ Invariant>asList(M, unjN, unjO));
 
     InvMap map2 = new InvMap();
-    map2.put(A, Arrays.</*@NonNull*/ Invariant> asList(W, X2, Z));
-    map2.put(C, Arrays.</*@NonNull*/ Invariant> asList(Z));
-    map2.put(D, Arrays.</*@NonNull*/ Invariant> asList(unjM, N));
+    map2.put(A, Arrays.</*@NonNull*/ Invariant>asList(W, X2, Z));
+    map2.put(C, Arrays.</*@NonNull*/ Invariant>asList(Z));
+    map2.put(D, Arrays.</*@NonNull*/ Invariant>asList(unjM, N));
 
     RootNode root = diff.diffInvMap(map1, map2, false);
     MinusVisitor v = new MinusVisitor();
@@ -75,11 +76,10 @@ public class MinusVisitorTester extends TestCase {
     InvMap result = v.getResult();
 
     InvMap expected = new InvMap();
-    expected.put(A, Arrays.</*@NonNull*/ Invariant> asList(X1, Y));
-    expected.put(B, Arrays.</*@NonNull*/ Invariant> asList(Y));
-    expected.put(D, Arrays.</*@NonNull*/ Invariant> asList(M));
+    expected.put(A, Arrays.</*@NonNull*/ Invariant>asList(X1, Y));
+    expected.put(B, Arrays.</*@NonNull*/ Invariant>asList(Y));
+    expected.put(D, Arrays.</*@NonNull*/ Invariant>asList(M));
 
     assert expected.toString().equals(result.toString());
   }
-
 }

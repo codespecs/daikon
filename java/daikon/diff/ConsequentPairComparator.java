@@ -31,5 +31,4 @@ public class ConsequentPairComparator implements Comparator<Invariant> {
 
     return c.compare(inv1, inv2);
   }
-
 }

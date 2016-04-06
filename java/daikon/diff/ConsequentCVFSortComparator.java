@@ -14,8 +14,8 @@ import org.checkerframework.dataflow.qual.*;
  * classes to figure out what this class does.
  **/
 public class ConsequentCVFSortComparator implements Comparator<Invariant> {
-  private Comparator<Invariant> c = new ConsequentSortComparator
-    (new Invariant.ClassVarnameFormulaComparator());
+  private Comparator<Invariant> c =
+      new ConsequentSortComparator(new Invariant.ClassVarnameFormulaComparator());
 
   /*@Pure*/ public int compare(Invariant inv1, Invariant inv2) {
     return c.compare(inv1, inv2);

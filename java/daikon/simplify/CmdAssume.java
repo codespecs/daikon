@@ -9,9 +9,7 @@ import org.checkerframework.dataflow.qual.*;
  * of the session.  The proposition is assumed to be true, and is not
  * proved.  This command will not block.
  **/
-public class CmdAssume
-  implements Cmd
-{
+public class CmdAssume implements Cmd {
   public final String proposition;
 
   public CmdAssume(String proposition) {
@@ -32,11 +30,9 @@ public class CmdAssume
 
       // there is no output from Simplify
     }
-
   }
 
   /*@SideEffectFree*/ public String toString() {
     return "CmdAssume: " + proposition;
   }
-
 }

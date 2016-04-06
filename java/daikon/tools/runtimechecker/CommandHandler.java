@@ -11,43 +11,41 @@ import java.io.InputStreamReader;
  */
 public class CommandHandler {
 
-    public boolean handles(String command) {
-        throw new UnsupportedOperationException();
+  public boolean handles(String command) {
+    throw new UnsupportedOperationException();
+  }
+
+  public boolean handle(String[] args) {
+    throw new UnsupportedOperationException();
+  }
+
+  public void usageMessage() {
+    String[] classnameArray = getClass().getName().split("\\.");
+    String simpleClassname = classnameArray[classnameArray.length - 1];
+
+    InputStream in = getClass().getResourceAsStream(simpleClassname + ".doc");
+    if (in == null) {
+      System.err.println("Didn't find documentation for " + getClass());
+      return;
     }
-
-    public boolean handle(String[] args) {
-        throw new UnsupportedOperationException();
+    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+    String line = null;
+    try {
+      while ((line = reader.readLine()) != null) {
+        System.err.println(line);
+      }
+    } catch (IOException e) {
+      try {
+        reader.close();
+      } catch (IOException e2) {
+        // ignore second exception
+      }
+      throw new Error(e);
     }
-
-    public void usageMessage() {
-        String[] classnameArray = getClass().getName().split("\\.");
-        String simpleClassname = classnameArray[classnameArray.length - 1];
-
-        InputStream in = getClass().getResourceAsStream(
-                simpleClassname + ".doc");
-        if (in == null) {
-            System.err.println("Didn't find documentation for " + getClass());
-            return;
-        }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        String line = null;
-        try {
-            while ((line = reader.readLine()) != null) {
-                System.err.println(line);
-            }
-        } catch (IOException e) {
-            try {
-                reader.close();
-            } catch (IOException e2) {
-                // ignore second exception
-            }
-            throw new Error(e);
-        }
-        try {
-            reader.close();
-        } catch (IOException e) {
-            throw new Error(e);
-        }
+    try {
+      reader.close();
+    } catch (IOException e) {
+      throw new Error(e);
     }
-
+  }
 }

@@ -18,7 +18,7 @@ public class DerivedParameterFilter extends InvariantFilter {
    */
   public static boolean dkconfig_enabled = true;
 
-  public DerivedParameterFilter () {
+  public DerivedParameterFilter() {
     isOn = dkconfig_enabled;
   }
 
@@ -37,14 +37,13 @@ public class DerivedParameterFilter extends InvariantFilter {
    * variable derived from a parameter, when we think that the
    * parameter itself may have changed by virtue of not having a
    * "param == orig(param)" invariant. */
-
-  boolean shouldDiscardInvariant( Invariant inv ) {
+  boolean shouldDiscardInvariant(Invariant inv) {
     if (inv.ppt.parent.ppt_name.isExitPoint()) {
-      PrintInvariants.debugFiltering.fine ("\tconsidering DPF for vars " + inv.ppt.varNames());
+      PrintInvariants.debugFiltering.fine("\tconsidering DPF for vars " + inv.ppt.varNames());
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
         VarInfo vi = inv.ppt.var_infos[i];
         // ppt has to be a PptSlice, not a PptTopLevel
-        PrintInvariants.debugFiltering.fine ("\tconsidering DPF for " + vi.name());
+        PrintInvariants.debugFiltering.fine("\tconsidering DPF for " + vi.name());
         if (vi.isDerivedParamAndUninteresting()) {
           // System.out.printf ("derived and uninteresting: %s\n", vi.name());
           return true;

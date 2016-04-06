@@ -214,10 +214,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
     ProglangType type1 = vis[0].file_rep_type;
     ProglangType type2 = vis[1].file_rep_type;
     if (!type1.BASE_IS_TYPE || !type2.BASE_IS_TYPE) {
-      return (false);
+      return false;
     }
 
-    return (true);
+    return true;
   }
 
   /*@Pure*/ public boolean isExact() {
@@ -761,8 +761,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
      */
     /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
-      if (swap) return (suppressions_swap);
-      else return (suppressions);
+      if (swap) {
+        return (suppressions_swap);
+      } else {
+        return (suppressions);
+      }
     }
 
     /** definition of this invariant (the suppressee) (unswapped) **/
@@ -894,8 +897,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns the prototype invariant **/
     public static /*@Prototype*/ Square get_proto (boolean swap) {
-      if (swap) return proto_swap;
-      else return proto;
+      if (swap) {
+        return proto_swap;
+      } else {
+        return proto;
+      }
     }
 
     // Variables starting with dkconfig_ should only be set via the
@@ -999,14 +1005,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (x == 0)
         return (y == 0);
       else
-        return (true);
+        return true;
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
     /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
-      if (swap) return (suppressions_swap);
-      else return (suppressions);
+      if (swap) {
+        return (suppressions_swap);
+      } else {
+        return (suppressions);
+      }
     }
 
     /** definition of this invariant (the suppressee) (unswapped) **/
@@ -1068,7 +1077,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /*@Pure*/ public boolean is_symmetric() {
-      return (true);
+      return true;
     }
 
     public String get_format_str (OutputFormat format) {
@@ -1173,8 +1182,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns a list of non-instantiating suppressions for this invariant. */
     /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
-      if (swap) return (suppressions_swap);
-      else return (suppressions);
+      if (swap) {
+        return (suppressions_swap);
+      } else {
+        return (suppressions);
+      }
     }
 
     /** definition of this invariant (the suppressee) (unswapped) **/
@@ -1251,7 +1263,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /*@Pure*/ public boolean is_symmetric() {
-      return (true);
+      return true;
     }
 
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
@@ -1349,8 +1361,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns a list of non-instantiating suppressions for this invariant. */
     /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
-      if (swap) return (suppressions_swap);
-      else return (suppressions);
+      if (swap) {
+        return (suppressions_swap);
+      } else {
+        return (suppressions);
+      }
     }
 
     /** definition of this invariant (the suppressee) (unswapped) **/
@@ -1449,8 +1464,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
      */
     /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
-      if (swap) return (suppressions_swap);
-      else return (suppressions);
+      if (swap) {
+        return (suppressions_swap);
+      } else {
+        return (suppressions);
+      }
     }
 
     /** definition of this invariant (the suppressee) (unswapped) **/

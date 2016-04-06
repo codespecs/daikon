@@ -8,7 +8,6 @@ import daikon.asm.KillerInstruction;
 import daikon.asm.X86Instruction;
 import junit.framework.TestCase;
 
-
 public class KillerInstructionTests extends TestCase {
 
   public static void testKillerInstruction1() {
@@ -48,22 +47,18 @@ public class KillerInstructionTests extends TestCase {
     i = new KillerInstruction(path);
     assertKills(i, "ecx", "edx", "eax", "esp", "ebp");
     assertNotKills(i, "ebx", "esi", "edi");
-
   }
 
   private static void assertKills(KillerInstruction i, String... vars) {
-    for (String v : vars)
-      assert i.kills(v);
+    for (String v : vars) assert i.kills(v);
   }
 
   private static void assertNotKills(KillerInstruction i, String... vars) {
-    for (String v : vars)
-      assert ! i.kills(v);
+    for (String v : vars) assert !i.kills(v);
   }
 
   private static void addX86Instruction(List<IInstruction> path, String string) {
     X86Instruction i = X86Instruction.parseInstruction(string);
     path.add(i);
   }
-
 }

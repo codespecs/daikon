@@ -16,10 +16,7 @@ import org.checkerframework.dataflow.qual.*;
  * tell Daikon.  For example, whether order matters in a collection.
  * This is immutable and interned.
  **/
-
-public final class VarInfoAux
-  implements Cloneable, Serializable
-{
+public final class VarInfoAux implements Cloneable, Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -131,72 +128,66 @@ public final class VarInfoAux
    * Parse allow for quoted elements.  White space to the left and
    * right of keys and values do not matter, but inbetween does.
    **/
-  public static /*@Interned*/ VarInfoAux parse (String inString) throws IOException {
+  public static /*@Interned*/ VarInfoAux parse(String inString) throws IOException {
     Reader inStringReader = new StringReader(inString);
-    StreamTokenizer tok = new StreamTokenizer (inStringReader);
+    StreamTokenizer tok = new StreamTokenizer(inStringReader);
     tok.resetSyntax();
     tok.wordChars(0, Integer.MAX_VALUE);
     tok.quoteChar('\"');
-    tok.whitespaceChars(' ',' ');
+    tok.whitespaceChars(' ', ' ');
     tok.ordinaryChar('[');
     tok.ordinaryChar(']');
     tok.ordinaryChars(',', ',');
     tok.ordinaryChars('=', '=');
-    Map</*@Interned*/ String,/*@Interned*/ String> map = theDefault.map;
+    Map</*@Interned*/ String, /*@Interned*/ String> map = theDefault.map;
 
     String key = "";
     String value = "";
     boolean seenEqual = false;
     boolean insideVector = false;
-    for (int tokInfo = tok.nextToken(); tokInfo != StreamTokenizer.TT_EOF;
-         tokInfo = tok.nextToken()) {
+    for (int tokInfo = tok.nextToken();
+        tokInfo != StreamTokenizer.TT_EOF;
+        tokInfo = tok.nextToken()) {
       @SuppressWarnings("interning") // initialization-checking pattern
       boolean mapUnchanged = (map == theDefault.map);
       if (mapUnchanged) {
         // We use default values if none are specified.  We initialize
         // here rather than above to save time when there are no tokens.
 
-        map = new HashMap</*@Interned*/ String,/*@Interned*/ String>(theDefault.map);
+        map = new HashMap</*@Interned*/ String, /*@Interned*/ String>(theDefault.map);
       }
 
       /*@Interned*/ String token;
       if (tok.ttype == StreamTokenizer.TT_WORD || tok.ttype == '\"') {
-        assert tok.sval != null : "@AssumeAssertion(nullness): representation invariant of StreamTokenizer";
+        assert tok.sval != null
+            : "@AssumeAssertion(nullness): representation invariant of StreamTokenizer";
         token = tok.sval.trim().intern();
       } else {
         token = ((char) tok.ttype + "").intern();
       }
 
-      debug.fine ("Token info: " + tokInfo + " " + token);
+      debug.fine("Token info: " + tokInfo + " " + token);
 
       if (token == "[") { // interned
-        if (!seenEqual)
-          throw new IOException("Aux option did not contain an '='");
-        if (insideVector)
-          throw new IOException("Vectors cannot be nested in an aux option");
-        if (value.length() > 0)
-          throw new IOException("Cannot mix scalar and vector values");
+        if (!seenEqual) throw new IOException("Aux option did not contain an '='");
+        if (insideVector) throw new IOException("Vectors cannot be nested in an aux option");
+        if (value.length() > 0) throw new IOException("Cannot mix scalar and vector values");
 
         insideVector = true;
         value = "";
       } else if (token == "]") { // interned
-        if (!insideVector)
-          throw new IOException("']' without preceding '['");
+        if (!insideVector) throw new IOException("']' without preceding '['");
         insideVector = false;
       } else if (token == ",") { // interned
-        if (!seenEqual)
-          throw new IOException("Aux option did not contain an '='");
-        if (insideVector)
-          throw new IOException("',' cannot be used inside a vector");
-        map.put (key.intern(), value.intern());
+        if (!seenEqual) throw new IOException("Aux option did not contain an '='");
+        if (insideVector) throw new IOException("',' cannot be used inside a vector");
+        map.put(key.intern(), value.intern());
         key = "";
         value = "";
         seenEqual = false;
       } else if (token == "=") { // interned
-        if (seenEqual)
-          throw new IOException("Aux option contained more than one '='");
-        if (insideVector)
-          throw new IOException("'=' cannot be used inside a vector");
+        if (seenEqual) throw new IOException("Aux option contained more than one '='");
+        if (insideVector) throw new IOException("'=' cannot be used inside a vector");
         seenEqual = true;
       } else {
         if (!seenEqual) {
@@ -210,19 +201,19 @@ public final class VarInfoAux
     }
 
     if (seenEqual) {
-      map.put (key.intern(), value.intern());
+      map.put(key.intern(), value.intern());
     }
 
     // Interning
     VarInfoAux result = new VarInfoAux(map).intern();
-    assert interningMap != null : "@AssumeAssertion(nullness):  application invariant:  postcondition of intern(), which was just called";
+    assert interningMap != null
+        : "@AssumeAssertion(nullness):  application invariant:  postcondition of intern(), which was just called";
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("New parse " + result);
-      debug.fine ("Intern table size: " + new Integer(interningMap.size()));
+      debug.fine("New parse " + result);
+      debug.fine("Intern table size: " + new Integer(interningMap.size()));
     }
     return result;
   }
-
 
   /**
    * Interned default options.
@@ -232,18 +223,15 @@ public final class VarInfoAux
   /**
    * Create a new VarInfoAux with default options.
    **/
-  public static /*@Interned*/ VarInfoAux getDefault () {
+  public static /*@Interned*/ VarInfoAux getDefault() {
     return theDefault;
   }
-
-
 
   /**
    * Map for interning.
    **/
-  private static /*@MonotonicNonNull*/ Map<VarInfoAux,/*@Interned*/ VarInfoAux> interningMap = null;
-
-
+  private static /*@MonotonicNonNull*/ Map<VarInfoAux, /*@Interned*/ VarInfoAux> interningMap =
+      null;
 
   /**
    * Special handler for deserialization.
@@ -252,12 +240,10 @@ public final class VarInfoAux
     return this.intern();
   }
 
-
   /**
    * Contains the actual hashMap for this.
    **/
   private Map</*@Interned*/ String, /*@Interned*/ String> map;
-
 
   /**
    * Whether this is interned.
@@ -267,17 +253,18 @@ public final class VarInfoAux
   /**
    * Make the default map here.
    **/
-  private VarInfoAux () {
-    HashMap</*@Interned*/ String, /*@Interned*/ String> defaultMap = new HashMap</*@Interned*/ String,/*@Interned*/ String>();
+  private VarInfoAux() {
+    HashMap</*@Interned*/ String, /*@Interned*/ String> defaultMap =
+        new HashMap</*@Interned*/ String, /*@Interned*/ String>();
     // The following are default values.
-    defaultMap.put (HAS_DUPLICATES, TRUE);
-    defaultMap.put (HAS_ORDER, TRUE);
-    defaultMap.put (HAS_SIZE, TRUE);
-    defaultMap.put (HAS_NULL, TRUE);
-    defaultMap.put (NULL_TERMINATING, TRUE);
-    defaultMap.put (IS_PARAM, FALSE);
-    defaultMap.put (PACKAGE_NAME, NO_PACKAGE_NAME);
-    defaultMap.put (IS_STRUCT, FALSE);
+    defaultMap.put(HAS_DUPLICATES, TRUE);
+    defaultMap.put(HAS_ORDER, TRUE);
+    defaultMap.put(HAS_SIZE, TRUE);
+    defaultMap.put(HAS_NULL, TRUE);
+    defaultMap.put(NULL_TERMINATING, TRUE);
+    defaultMap.put(IS_PARAM, FALSE);
+    defaultMap.put(PACKAGE_NAME, NO_PACKAGE_NAME);
+    defaultMap.put(IS_STRUCT, FALSE);
     this.map = defaultMap;
     this.isInterned = false;
   }
@@ -285,7 +272,7 @@ public final class VarInfoAux
   /**
    * Create a new VarInfoAux with default options.
    **/
-  private VarInfoAux (Map</*@Interned*/ String,/*@Interned*/ String> map) {
+  private VarInfoAux(Map</*@Interned*/ String, /*@Interned*/ String> map) {
     this.map = map;
     this.isInterned = false;
   }
@@ -304,9 +291,8 @@ public final class VarInfoAux
     return map.hashCode();
   }
 
-
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
     } else {
@@ -315,7 +301,7 @@ public final class VarInfoAux
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (VarInfoAux o) {
+  /*@Pure*/ public boolean equals(VarInfoAux o) {
     return this.map.equals(o.map);
   }
 
@@ -323,12 +309,13 @@ public final class VarInfoAux
    * Returns canonical representation of this.  Doesn't need to be
    * called by outside classes because these are always interned.
    **/
-  @SuppressWarnings({"interning","cast"}) // intern method
+  @SuppressWarnings({"interning", "cast"}) // intern method
   private /*@Interned*/ VarInfoAux intern() {
-    if (this.isInterned) return (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
+    if (this.isInterned)
+      return (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
 
     if (interningMap == null) {
-      interningMap = new HashMap<VarInfoAux,/*@Interned*/ VarInfoAux>();
+      interningMap = new HashMap<VarInfoAux, /*@Interned*/ VarInfoAux>();
     }
 
     /*@Interned*/ VarInfoAux result;
@@ -336,7 +323,8 @@ public final class VarInfoAux
       result = interningMap.get(this);
     } else {
       // Intern values in map
-      interningMap.put (this, (/*@Interned*/ VarInfoAux) this); // cast is redundant (except in JSR 308)
+      interningMap.put(
+          this, (/*@Interned*/ VarInfoAux) this); // cast is redundant (except in JSR 308)
       result = (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
       this.isInterned = true;
     }
@@ -375,19 +363,19 @@ public final class VarInfoAux
       final String sValue = getValue(key);
       StreamTokenizer tok = new StreamTokenizer(new StringReader(sValue));
       tok.quoteChar('"');
-      tok.whitespaceChars(' ',' ');
+      tok.whitespaceChars(' ', ' ');
       ArrayList<String> lValues = new ArrayList<String>();
 
       int tokInfo = tok.nextToken();
       while (tokInfo != StreamTokenizer.TT_EOF) {
         if (tok.ttype != '"') continue;
-        assert tok.sval != null : "@AssumeAssertion(nullness)"; // tok.type == '"' guarantees not null
+        assert tok.sval != null
+            : "@AssumeAssertion(nullness)"; // tok.type == '"' guarantees not null
         lValues.add(tok.sval.trim());
         tokInfo = tok.nextToken();
       }
-      return lValues.toArray(new String[]{});
-    }
-    catch (IOException ex) {
+      return lValues.toArray(new String[] {});
+    } catch (IOException ex) {
       throw new RuntimeException(String.format("Parsing for key '%s' failed", key), ex);
     }
   }
@@ -418,9 +406,10 @@ public final class VarInfoAux
    * Return a new VarInfoAux with the desired value set.
    * Does not modify this.
    **/
-  public /*@Interned*/ VarInfoAux setValue (String key, String value) {
-    HashMap</*@Interned*/ String,/*@Interned*/ String> newMap = new HashMap</*@Interned*/ String,/*@Interned*/ String> (this.map);
-    newMap.put (key.intern(), value.intern());
+  public /*@Interned*/ VarInfoAux setValue(String key, String value) {
+    HashMap</*@Interned*/ String, /*@Interned*/ String> newMap =
+        new HashMap</*@Interned*/ String, /*@Interned*/ String>(this.map);
+    newMap.put(key.intern(), value.intern());
     return new VarInfoAux(newMap).intern();
   }
 
@@ -432,70 +421,67 @@ public final class VarInfoAux
     return setValue(key, Integer.toString(value));
   }
 
-
-
   /**
    * @see #HAS_DUPLICATES
    */
-  @SuppressWarnings("keyfor")   // HAS_DUPLICATES is always a key
+  @SuppressWarnings("keyfor") // HAS_DUPLICATES is always a key
   /*@Pure*/ public boolean hasDuplicates() {
-    return getFlag (HAS_DUPLICATES);
+    return getFlag(HAS_DUPLICATES);
   }
-  
+
   /**
    * @see #HAS_ORDER
    */
-  @SuppressWarnings("keyfor")   // HAS_ORDER is always a key
+  @SuppressWarnings("keyfor") // HAS_ORDER is always a key
   /*@Pure*/ public boolean hasOrder() {
-    return getFlag (HAS_ORDER);
+    return getFlag(HAS_ORDER);
   }
-  
+
   /**
    * @see #HAS_SIZE
    */
-  @SuppressWarnings("keyfor")   // HAS_SIZE is always a key
+  @SuppressWarnings("keyfor") // HAS_SIZE is always a key
   /*@Pure*/ public boolean hasSize() {
-    return getFlag (HAS_SIZE);
+    return getFlag(HAS_SIZE);
   }
-  
+
   /**
    * @see #HAS_NULL
    */
-  @SuppressWarnings("keyfor")   // HAS_NULL is always a key
+  @SuppressWarnings("keyfor") // HAS_NULL is always a key
   /*@Pure*/ public boolean hasNull() {
-    return getFlag (HAS_NULL);
+    return getFlag(HAS_NULL);
   }
-  
+
   /**
    * @see #NULL_TERMINATING
    */
-  @SuppressWarnings("keyfor")   // NULL_TERMINATING is always a key
+  @SuppressWarnings("keyfor") // NULL_TERMINATING is always a key
   /*@Pure*/ public boolean nullTerminating() {
-    return getFlag (NULL_TERMINATING);
+    return getFlag(NULL_TERMINATING);
   }
-  
+
   /**
    * @see #IS_STRUCT
    */
-  @SuppressWarnings("keyfor")   // IS_PARAM is always a key
+  @SuppressWarnings("keyfor") // IS_PARAM is always a key
   /*@Pure*/ public boolean isParam() {
-    return getFlag (IS_PARAM);
+    return getFlag(IS_PARAM);
   }
-  
+
   /**
    * @see #PACKAGE_NAME
    */
-  @SuppressWarnings("keyfor")   // PACKAGE_NAME is always a key
+  @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
   /*@Pure*/ public boolean packageName() {
-    return getFlag (PACKAGE_NAME);
+    return getFlag(PACKAGE_NAME);
   }
-  
+
   /**
    * @see #IS_STRUCT
    */
-  @SuppressWarnings("keyfor")   // IS_STRUCT is always a key
+  @SuppressWarnings("keyfor") // IS_STRUCT is always a key
   /*@Pure*/ public boolean isStruct() {
-    return getFlag (IS_STRUCT);
+    return getFlag(IS_STRUCT);
   }
- 
 }

@@ -1,4 +1,5 @@
 package daikon.derive.unary;
+
 import daikon.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
@@ -10,9 +11,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 // originally from pass1.
-public final class SequenceLength
-  extends UnaryDerivation
-{
+public final class SequenceLength extends UnaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -29,41 +28,38 @@ public final class SequenceLength
 
   public SequenceLength(VarInfo vi, int shift) {
     super(vi);
-    this.shift = shift;         // typically 0 or -1
+    this.shift = shift; // typically 0 or -1
   }
 
   public static boolean applicable(VarInfo vi) {
     assert vi.rep_type.isArray();
 
     if (vi.derived != null) {
-      assert
-        ((vi.derived instanceof SequenceScalarSubsequence)
-         || (vi.derived instanceof SequenceScalarArbitrarySubsequence)
-         || (vi.derived instanceof SequenceStringIntersection)
-         || (vi.derived instanceof SequenceScalarIntersection)
-         || (vi.derived instanceof SequenceStringUnion)
-         || (vi.derived instanceof SequenceScalarUnion)
-         || (vi.derived instanceof SequencesConcat)
-         || (vi.derived instanceof SequencesPredicate)
-         || (vi.derived instanceof SequencesJoin)
-         || (vi.derived instanceof SequenceFloatSubsequence)
-         || (vi.derived instanceof SequenceFloatArbitrarySubsequence)
-         || (vi.derived instanceof SequenceFloatIntersection)
-         || (vi.derived instanceof SequenceFloatUnion)
-         || (vi.derived instanceof SequencesPredicateFloat)
-         || (vi.derived instanceof SequencesJoinFloat)
-         );
+      assert ((vi.derived instanceof SequenceScalarSubsequence)
+          || (vi.derived instanceof SequenceScalarArbitrarySubsequence)
+          || (vi.derived instanceof SequenceStringIntersection)
+          || (vi.derived instanceof SequenceScalarIntersection)
+          || (vi.derived instanceof SequenceStringUnion)
+          || (vi.derived instanceof SequenceScalarUnion)
+          || (vi.derived instanceof SequencesConcat)
+          || (vi.derived instanceof SequencesPredicate)
+          || (vi.derived instanceof SequencesJoin)
+          || (vi.derived instanceof SequenceFloatSubsequence)
+          || (vi.derived instanceof SequenceFloatArbitrarySubsequence)
+          || (vi.derived instanceof SequenceFloatIntersection)
+          || (vi.derived instanceof SequenceFloatUnion)
+          || (vi.derived instanceof SequencesPredicateFloat)
+          || (vi.derived instanceof SequencesJoinFloat));
 
       if (!( // All of the below give new information when taking a sizeof
-            (vi.derived instanceof SequenceStringIntersection)
-            || (vi.derived instanceof SequenceScalarIntersection)
-            || (vi.derived instanceof SequenceStringUnion)
-            || (vi.derived instanceof SequenceScalarUnion)
-            || (vi.derived instanceof SequencesConcat)
-            || (vi.derived instanceof SequenceFloatIntersection)
-            || (vi.derived instanceof SequenceFloatUnion)
+      (vi.derived instanceof SequenceStringIntersection)
+          || (vi.derived instanceof SequenceScalarIntersection)
+          || (vi.derived instanceof SequenceStringUnion)
+          || (vi.derived instanceof SequenceScalarUnion)
+          || (vi.derived instanceof SequencesConcat)
+          || (vi.derived instanceof SequenceFloatIntersection)
+          || (vi.derived instanceof SequenceFloatUnion))) {
 
-            )) {
         return false;
       }
     }
@@ -75,10 +71,9 @@ public final class SequenceLength
     return true;
   }
 
-  public ValueAndModified computeValueAndModifiedImpl (ValueTuple vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL)
-      return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
     Object val = base.getValue(vt);
     if (val == null) {
       return ValueAndModified.MISSING_NONSENSICAL;
@@ -88,35 +83,35 @@ public final class SequenceLength
     ProglangType rep_type = base.rep_type;
 
     if (rep_type == ProglangType.INT_ARRAY) {
-      len = ((long[])val).length;
+      len = ((long[]) val).length;
     } else if (rep_type == ProglangType.DOUBLE_ARRAY) {
-      len = ((double[])val).length;
+      len = ((double[]) val).length;
     } else {
-      len = ((Object[])val).length;
+      len = ((Object[]) val).length;
     }
-    return new ValueAndModified(Intern.internedLong(len+shift), source_mod);
+    return new ValueAndModified(Intern.internedLong(len + shift), source_mod);
   }
 
   @SuppressWarnings("keyfor") // need EnsuresQualifier feature
   protected VarInfo makeVarInfo() {
-    VarInfo v = VarInfo.make_scalar_seq_func("size", ProglangType.INT, base,
-                                         shift);
+    VarInfo v = VarInfo.make_scalar_seq_func("size", ProglangType.INT, base, shift);
 
     if (base.aux.hasValue(VarInfoAux.MINIMUM_LENGTH)) {
-      v.aux = v.aux.setInt(VarInfoAux.MINIMUM_VALUE,
-                           base.aux.getInt(VarInfoAux.MINIMUM_LENGTH)+shift);
+      v.aux =
+          v.aux.setInt(
+              VarInfoAux.MINIMUM_VALUE, base.aux.getInt(VarInfoAux.MINIMUM_LENGTH) + shift);
     }
     if (base.aux.hasValue(VarInfoAux.MAXIMUM_LENGTH)) {
-      v.aux = v.aux.setInt(VarInfoAux.MAXIMUM_VALUE,
-                           base.aux.getInt(VarInfoAux.MAXIMUM_LENGTH)+shift);
+      v.aux =
+          v.aux.setInt(
+              VarInfoAux.MAXIMUM_VALUE, base.aux.getInt(VarInfoAux.MAXIMUM_LENGTH) + shift);
     }
 
     return v;
   }
 
   /*@Pure*/ public boolean isSameFormula(Derivation other) {
-    return (other instanceof SequenceLength)
-      && (((SequenceLength) other).shift == this.shift);
+    return (other instanceof SequenceLength) && (((SequenceLength) other).shift == this.shift);
   }
 
   /** Returns the ESC name **/
@@ -130,28 +125,26 @@ public final class SequenceLength
     // return ql.esc_name();
 
     if (base.isPrestate())
-      return String.format ("\\old(%s.length)%s",
-                  base.enclosing_var.postState.esc_name(), shift_str (shift));
-    else
-      return String.format ("%s.length%s", base.enclosing_var.esc_name(),
-                            shift_str (shift));
+      return String.format(
+          "\\old(%s.length)%s", base.enclosing_var.postState.esc_name(), shift_str(shift));
+    else return String.format("%s.length%s", base.enclosing_var.esc_name(), shift_str(shift));
   }
 
   /** Returns the JML name **/
-  public String jml_name (String index) {
-    Quantify.Length ql = new Quantify.Length (base, shift);
+  public String jml_name(String index) {
+    Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.jml_name();
   }
 
   /** Returns the Simplify name **/
   /*@SideEffectFree*/ public String simplify_name() {
-    Quantify.Length ql = new Quantify.Length (base, shift);
+    Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.simplify_name();
   }
 
   /** Returns the CSharpContract name **/
   /*@SideEffectFree*/ public String csharp_name(String index) {
-    Quantify.Length ql = new Quantify.Length (base, shift);
+    Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.csharp_name();
   }
 

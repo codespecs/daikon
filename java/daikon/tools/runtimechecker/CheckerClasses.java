@@ -43,32 +43,30 @@ public class CheckerClasses {
   }
 
   @SuppressWarnings("interned")
-  public void addDeclaration(ClassOrInterfaceBody clazz,
-                             StringBuffer decl) {
+  public void addDeclaration(ClassOrInterfaceBody clazz, StringBuffer decl) {
 
     for (CheckerClass c : classes) {
       if (c.fclassbody == clazz) {
         c.addDeclaration(decl);
       }
     }
-
   }
 
-  public void addDeclaration(ConstructorDeclaration clazz,
-                             StringBuffer decl) {
+  public void addDeclaration(ConstructorDeclaration clazz, StringBuffer decl) {
 
-    @SuppressWarnings("nullness") // application invariant: a constructor is always in a class or interface
-    /*@NonNull*/ ClassOrInterfaceBody body = (ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, clazz);
+    @SuppressWarnings(
+        "nullness") // application invariant: a constructor is always in a class or interface
+    /*@NonNull*/ ClassOrInterfaceBody body =
+        (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, clazz);
     addDeclaration(body, decl);
   }
 
-  public void addDeclaration(MethodDeclaration clazz,
-                             StringBuffer decl) {
+  public void addDeclaration(MethodDeclaration clazz, StringBuffer decl) {
 
-    @SuppressWarnings("nullness") // application invariant: a method is always in a class or interface
-    /*@NonNull*/ ClassOrInterfaceBody body = (ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, clazz);
+    @SuppressWarnings(
+        "nullness") // application invariant: a method is always in a class or interface
+    /*@NonNull*/ ClassOrInterfaceBody body =
+        (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, clazz);
     addDeclaration(body, decl);
   }
-
-
 }

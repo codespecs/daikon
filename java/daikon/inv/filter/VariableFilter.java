@@ -11,7 +11,7 @@ public class VariableFilter extends InvariantFilter {
 
   String variable;
 
-  public VariableFilter( String variable ) {
+  public VariableFilter(String variable) {
     this.variable = variable;
   }
 
@@ -19,11 +19,7 @@ public class VariableFilter extends InvariantFilter {
     return variable;
   }
 
-  boolean shouldDiscardInvariant( Invariant invariant ) {
-    if (invariant.usesVar( variable ))
-      return false;
-    else {
-      return true;
-    }
+  boolean shouldDiscardInvariant(Invariant invariant) {
+    return ! invariant.usesVar(variable);
   }
 }

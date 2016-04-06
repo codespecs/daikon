@@ -15,13 +15,13 @@ import org.checkerframework.dataflow.qual.*;
  * The type parameter CHILD is the type of the children (and is ignored if
  * there are no children).
  **/
-public abstract class Node<CONTENT extends /*@Nullable*/ Object,CHILD> {
+public abstract class Node<CONTENT extends /*@Nullable*/ Object, CHILD> {
 
   private List<CHILD> children = new ArrayList<CHILD>();
   // Nonsensical for RootNode
-  private Pair<CONTENT,CONTENT> userObject;
+  private Pair<CONTENT, CONTENT> userObject;
 
-  public Node(Pair<CONTENT,CONTENT> userObject) {
+  public Node(Pair<CONTENT, CONTENT> userObject) {
     this.userObject = userObject;
   }
 
@@ -37,7 +37,7 @@ public abstract class Node<CONTENT extends /*@Nullable*/ Object,CHILD> {
     return children.iterator();
   }
 
-  public Pair<CONTENT,CONTENT> getUserObject() {
+  public Pair<CONTENT, CONTENT> getUserObject() {
     return userObject;
   }
 
@@ -52,5 +52,4 @@ public abstract class Node<CONTENT extends /*@Nullable*/ Object,CHILD> {
   }
 
   public abstract void accept(Visitor v);
-
 }

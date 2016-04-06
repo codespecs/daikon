@@ -28,6 +28,7 @@ public final class TestAst extends TestCase {
 
   public static class MethodDeclarationHarvester extends DepthFirstVisitor {
     List<MethodDeclaration> decls = new ArrayList<MethodDeclaration>();
+
     public void visit(MethodDeclaration m) {
 
       decls.add(m);
@@ -40,9 +41,9 @@ public final class TestAst extends TestCase {
     }
   }
 
-
   public static class ClassOrInterfaceDeclarationHarvester extends DepthFirstVisitor {
     List<ClassOrInterfaceDeclaration> decls = new ArrayList<ClassOrInterfaceDeclaration>();
+
     public void visit(ClassOrInterfaceDeclaration m) {
       decls.add(m);
       m.f0.accept(this);
@@ -65,10 +66,11 @@ public final class TestAst extends TestCase {
       declString = Ast.format(decl);
     }
     assert result == true
-        : "pptName: " + pptName +
-               "\ndoesn't match method declaration:\n----------\n"
-               + declString + "\n----------"
-               ;
+        : "pptName: "
+            + pptName
+            + "\ndoesn't match method declaration:\n----------\n"
+            + declString
+            + "\n----------";
   }
 
   public void test_Ast_Ppt_Match() {
@@ -76,7 +78,7 @@ public final class TestAst extends TestCase {
     // Parse the file "GenericTestClass.java" (under same dir as this class)
     InputStream sourceIn = this.getClass().getResourceAsStream("GenericTestClass.java");
     if (sourceIn == null) {
-        throw new Error("Couldn't find file GenericTestClass.java");
+      throw new Error("Couldn't find file GenericTestClass.java");
     }
     JavaParser parser = new JavaParser(sourceIn);
 
@@ -88,11 +90,11 @@ public final class TestAst extends TestCase {
       throw new Error(e);
     }
 
-
     // Test class declarations
 
     // Pick off class declarations
-    ClassOrInterfaceDeclarationHarvester classDeclarationHarvester = new ClassOrInterfaceDeclarationHarvester();
+    ClassOrInterfaceDeclarationHarvester classDeclarationHarvester =
+        new ClassOrInterfaceDeclarationHarvester();
 
     compilationUnit.accept(classDeclarationHarvester);
     List<ClassOrInterfaceDeclaration> classDecls = classDeclarationHarvester.decls;
@@ -100,8 +102,7 @@ public final class TestAst extends TestCase {
     {
       String expected = "daikon.test.GenericTestClass";
       assert Ast.getClassName(classDecls.get(0)).equals(expected)
-        : "Got: " + classDecls.get(0) + "\nExpected: " + expected;
-
+          : "Got: " + classDecls.get(0) + "\nExpected: " + expected;
     }
     // Illegal in Java 6
     // {
@@ -180,23 +181,47 @@ public final class TestAst extends TestCase {
 
     decl = methodDecls.get(11);
     assert decl.f2.f0.tokenImage.equals("foo11") : decl.f2.f0.tokenImage;
-    checkMatch("daikon.test.GenericTestClass.foo11(java.lang.Comparable, java.lang.Object):::ENTER", decl, matcher);
-    checkMatch("daikon.test.GenericTestClass.foo11(java.lang.Comparable, java.lang.Object):::EXIT32", decl, matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo11(java.lang.Comparable, java.lang.Object):::ENTER",
+        decl,
+        matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo11(java.lang.Comparable, java.lang.Object):::EXIT32",
+        decl,
+        matcher);
 
     decl = methodDecls.get(12);
     assert decl.f2.f0.tokenImage.equals("foo115") : decl.f2.f0.tokenImage;
-    checkMatch("daikon.test.GenericTestClass.foo115(java.lang.Comparable, java.lang.String):::ENTER", decl, matcher);
-    checkMatch("daikon.test.GenericTestClass.foo115(java.lang.Comparable, java.lang.String):::EXIT35", decl, matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo115(java.lang.Comparable, java.lang.String):::ENTER",
+        decl,
+        matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo115(java.lang.Comparable, java.lang.String):::EXIT35",
+        decl,
+        matcher);
 
     decl = methodDecls.get(13);
     assert decl.f2.f0.tokenImage.equals("foo12") : decl.f2.f0.tokenImage;
-    checkMatch("daikon.test.GenericTestClass.foo12(java.lang.Object, java.util.List):::ENTER", decl, matcher);
-    checkMatch("daikon.test.GenericTestClass.foo12(java.lang.Object, java.util.List):::EXIT37", decl, matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo12(java.lang.Object, java.util.List):::ENTER",
+        decl,
+        matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo12(java.lang.Object, java.util.List):::EXIT37",
+        decl,
+        matcher);
 
     decl = methodDecls.get(14);
     assert decl.f2.f0.tokenImage.equals("foo13") : decl.f2.f0.tokenImage;
-    checkMatch("daikon.test.GenericTestClass.foo13(java.lang.Object, java.util.List):::ENTER", decl, matcher);
-    checkMatch("daikon.test.GenericTestClass.foo13(java.lang.Object, java.util.List):::EXIT39", decl, matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo13(java.lang.Object, java.util.List):::ENTER",
+        decl,
+        matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo13(java.lang.Object, java.util.List):::EXIT39",
+        decl,
+        matcher);
 
     decl = methodDecls.get(15);
     assert decl.f2.f0.tokenImage.equals("foo14") : decl.f2.f0.tokenImage;
@@ -225,13 +250,25 @@ public final class TestAst extends TestCase {
 
     decl = methodDecls.get(20);
     assert decl.f2.f0.tokenImage.equals("foo19") : decl.f2.f0.tokenImage;
-    checkMatch("daikon.test.GenericTestClass.foo19(java.lang.Comparable[], java.lang.Object[]):::ENTER", decl, matcher);
-    checkMatch("daikon.test.GenericTestClass.foo19(java.lang.Comparable[], java.lang.Object[]):::EXIT51", decl, matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo19(java.lang.Comparable[], java.lang.Object[]):::ENTER",
+        decl,
+        matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo19(java.lang.Comparable[], java.lang.Object[]):::EXIT51",
+        decl,
+        matcher);
 
     decl = methodDecls.get(21);
     assert decl.f2.f0.tokenImage.equals("foo20") : decl.f2.f0.tokenImage;
-    checkMatch("daikon.test.GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::ENTER", decl, matcher);
-    checkMatch("daikon.test.GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::EXIT53", decl, matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::ENTER",
+        decl,
+        matcher);
+    checkMatch(
+        "daikon.test.GenericTestClass.foo20(java.lang.Comparable[][][], java.lang.Object[][]):::EXIT53",
+        decl,
+        matcher);
 
     // Illegal in Java 6
     //

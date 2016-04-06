@@ -11,8 +11,6 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-
-
 /**
  * SpinfoFile stores information parsed from a .spinfo file.
  * The constructor parses the file; then clients can make calls to
@@ -94,7 +92,6 @@ public class SpinfoFile {
     return splitterObjects;
   }
 
-
   /**
    * Return the number of splitters (SplitterObject objects) represented by
    * this file.
@@ -106,7 +103,7 @@ public class SpinfoFile {
     }
     return result;
   }
-      
+
   /**
    * Return the number of splitters (SplitterObject objects) represented by
    * all the files in the list.
@@ -119,7 +116,6 @@ public class SpinfoFile {
     return result;
   }
 
-
   /**
    * parseFile sets the member fields statementReplacer and splitterObjects,
    * from the spinfoFile.
@@ -128,7 +124,9 @@ public class SpinfoFile {
    */
   /*@RequiresNonNull("tempDir")*/
   /*@EnsuresNonNull({"statementReplacer", "splitterObjects"})*/
-  public void parseFile(/*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile) throws IOException {
+  public void parseFile(
+      /*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile)
+      throws IOException {
     List<ReplaceStatement> replaceStatements = new ArrayList<ReplaceStatement>();
     List<List<String>> pptSections = new ArrayList<List<String>>();
     try {
@@ -143,32 +141,31 @@ public class SpinfoFile {
           line = line.substring("PPT_NAME".length()).trim();
           readPptStatements(spinfoFile, pptSections, line);
         } else {
-          throw new
-            RuntimeException("Illegal file format in: " + spinfoFileName + lineSep +
-                             "at: " + spinfoFile.getLineNumber() + lineSep +
-                             line);
+          throw new RuntimeException(
+              "Illegal file format in: "
+                  + spinfoFileName
+                  + lineSep
+                  + "at: "
+                  + spinfoFile.getLineNumber()
+                  + lineSep
+                  + line);
         }
         line = spinfoFile.readLine();
       }
     } catch (IOException ioe) {
       //  System.err.println(ioe);
-      System.err.println("Error in " +  spinfoFileName);
-      System.err.println(" at line number " + spinfoFile.getLineNumber() +
-                         " of .spinfo file");
+      System.err.println("Error in " + spinfoFileName);
+      System.err.println(" at line number " + spinfoFile.getLineNumber() + " of .spinfo file");
       throw new RuntimeException(ioe);
     } catch (ParseException e) {
       //  System.err.println(ioe);
-      System.err.println("Error in " +  spinfoFileName);
-      System.err.println(" at line number " + spinfoFile.getLineNumber() +
-                         " of .spinfo file");
+      System.err.println("Error in " + spinfoFileName);
+      System.err.println(" at line number " + spinfoFile.getLineNumber() + " of .spinfo file");
       throw new RuntimeException(e);
     }
     statementReplacer = new StatementReplacer(replaceStatements);
     splitterObjects = createSplitterObjects(pptSections);
   }
-
-
-
 
   /**
    * Reads a group of replace statement lines. The method declaration
@@ -180,21 +177,26 @@ public class SpinfoFile {
    *  are added.
    */
   @SuppressWarnings("nullness") // bug exposed by test case Asserts.assertTwice().
-  private void readReplaceStatements(/*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile,
-                                     List<ReplaceStatement> replaceStatements)
-    throws IOException, ParseException {
+  private void readReplaceStatements(
+      /*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile,
+      List<ReplaceStatement> replaceStatements)
+      throws IOException, ParseException {
     String methodDeclaration = spinfoFile.readLine();
-    while (! isBlank(methodDeclaration)) {
+    while (!isBlank(methodDeclaration)) {
       String returnStatement = spinfoFile.readLine();
       if (isBlank(returnStatement)) {
         throw new RuntimeException(
-          "MalFormed .spinfo file in: " + spinfoFileName + lineSep +
-          (spinfoFile.getLineNumber() - 1) + lineSep +
-          methodDeclaration + lineSep +
-          "Each replace statement must be a pair of lines.");
+            "MalFormed .spinfo file in: "
+                + spinfoFileName
+                + lineSep
+                + (spinfoFile.getLineNumber() - 1)
+                + lineSep
+                + methodDeclaration
+                + lineSep
+                + "Each replace statement must be a pair of lines.");
       }
       ReplaceStatement replaceStatement =
-        new ReplaceStatement(methodDeclaration.trim(), returnStatement.trim());
+          new ReplaceStatement(methodDeclaration.trim(), returnStatement.trim());
       replaceStatements.add(replaceStatement);
       methodDeclaration = spinfoFile.readLine();
     }
@@ -212,14 +214,15 @@ public class SpinfoFile {
    * @param pptName name of the ppt.
    * @throws IOException if an I/O error occurs.
    */
-  private void readPptStatements(/*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile,
-                                 List<List<String>> pptSections,
-                                 String pptName)
-    throws IOException {
+  private void readPptStatements(
+      /*>>> @UnknownInitialization @Raw SpinfoFile this,*/ LineNumberReader spinfoFile,
+      List<List<String>> pptSections,
+      String pptName)
+      throws IOException {
     List<String> pptSection = new ArrayList<String>();
     pptSection.add(pptName);
     String line = spinfoFile.readLine();
-    while ((line != null) && (! line.trim().equals(""))) {
+    while ((line != null) && (!line.trim().equals(""))) {
       pptSection.add(line);
       line = spinfoFile.readLine();
     }
@@ -235,7 +238,8 @@ public class SpinfoFile {
    *  SplitterObjects for one of lists of ppt statements found in pptSections.
    */
   /*@RequiresNonNull("tempDir")*/
-  private SplitterObject[][] createSplitterObjects(/*>>> @UnknownInitialization @Raw SpinfoFile this,*/ List<List<String>> pptSections) {
+  private SplitterObject[][] createSplitterObjects(
+      /*>>> @UnknownInitialization @Raw SpinfoFile this,*/ List<List<String>> pptSections) {
     List<SplitterObject[]> splittersForAllPpts = new ArrayList<SplitterObject[]>();
     for (List<String> pptSection : pptSections) {
       List<SplitterObject> splittersForThisPpt = new ArrayList<SplitterObject>();
@@ -248,11 +252,15 @@ public class SpinfoFile {
             // nothing to do
           } else if (isFormatting(pptStatement)) {
             if (splitObj == null) {
-              throw new
-                RuntimeException("Malformed Spinfo file: " + spinfoFileName + lineSep +
-                                 "Indented format specification, " + pptStatement +
-                                 ", must follow an unindented condition" + lineSep +
-                                 "For details, see the Daikon manual, section \"Splitter info file\"");
+              throw new RuntimeException(
+                  "Malformed Spinfo file: "
+                      + spinfoFileName
+                      + lineSep
+                      + "Indented format specification, "
+                      + pptStatement
+                      + ", must follow an unindented condition"
+                      + lineSep
+                      + "For details, see the Daikon manual, section \"Splitter info file\"");
             } else {
               setFormatting(splitObj, pptStatement.trim());
             }
@@ -292,8 +300,7 @@ public class SpinfoFile {
       obj.csharpFormat = command.substring("CSHARPCONTRACT_FORMAT".length()).trim();
       obj.dummyDesired = true;
     } else {
-      System.err.println("Unrecognized format spec in .spinfo: "
-                                 + command);
+      System.err.println("Unrecognized format spec in .spinfo: " + command);
     }
   }
 
@@ -321,5 +328,4 @@ public class SpinfoFile {
   /*@Pure*/ private static boolean isFormatting(String line) {
     return (line.startsWith("\t") || line.startsWith(" "));
   }
-
 }

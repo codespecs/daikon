@@ -13,7 +13,6 @@ import jtb.ParseException;
  */
 class NullReplacer extends DepthFirstVisitor {
 
-
   private int columnshift = 0;
   private int columnshiftline = -1;
   // column shifting only applies to a single line, then is turned off again.
@@ -35,8 +34,7 @@ class NullReplacer extends DepthFirstVisitor {
    *  instances of "0".
    * @throws ParseException if expression is not a valid java expression.
    */
-  public static String replaceNull(String expression)
-    throws ParseException {
+  public static String replaceNull(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     NullReplacer replacer = new NullReplacer();
     root.accept(replacer);
@@ -73,5 +71,4 @@ class NullReplacer extends DepthFirstVisitor {
     }
     n.endColumn = n.endColumn + columnshift;
   }
-
 }

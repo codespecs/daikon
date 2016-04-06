@@ -43,8 +43,7 @@ class PrefixFixer extends DepthFirstVisitor {
    * @param expression valid segment of java code from which prefix
    *  should be fixed.
    */
-  public static String fixPrefix(String expression)
-    throws ParseException {
+  public static String fixPrefix(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     PrefixFixer fixer = new PrefixFixer();
     root.accept(fixer);
@@ -62,16 +61,15 @@ class PrefixFixer extends DepthFirstVisitor {
   public void visit(NodeToken n) {
     if (isMatch(n)) {
       twoTokensAgo.tokenImage = "";
-      lastToken.tokenImage =
-        threeTokensAgo.tokenImage + "_" + lastToken.tokenImage;
+      lastToken.tokenImage = threeTokensAgo.tokenImage + "_" + lastToken.tokenImage;
       threeTokensAgo.tokenImage = "";
     }
     n.beginColumn = -1;
     n.endColumn = -1;
     if (twoTokensAgo != null) // test is to quiet the Nullness Checker
-      threeTokensAgo = twoTokensAgo;
+    threeTokensAgo = twoTokensAgo;
     if (lastToken != null) // test is to quiet the Nullness Checker
-      twoTokensAgo = lastToken;
+    twoTokensAgo = lastToken;
     lastToken = n;
     super.visit(n);
   }
@@ -80,16 +78,17 @@ class PrefixFixer extends DepthFirstVisitor {
    * Fixes the last token if needed.
    */
   private void fixLastToken() {
-    if (threeTokensAgo != null &&
-        twoTokensAgo != null && // redundant, but for Nullness Checker
-        lastToken != null && // redundant, but for Nullness Checker
-        Visitors.isIdentifier(lastToken) &&
-        Visitors.isDot(twoTokensAgo) &&
-        Visitors.isIdentifier(threeTokensAgo) &&
-        (! lastToken.tokenImage.equals("length"))) {
+    if (threeTokensAgo != null
+        && twoTokensAgo != null
+        && // redundant, but for Nullness Checker
+        lastToken != null
+        && // redundant, but for Nullness Checker
+        Visitors.isIdentifier(lastToken)
+        && Visitors.isDot(twoTokensAgo)
+        && Visitors.isIdentifier(threeTokensAgo)
+        && (!lastToken.tokenImage.equals("length"))) {
       twoTokensAgo.tokenImage = "";
-      lastToken.tokenImage =
-        threeTokensAgo.tokenImage + "_" + lastToken.tokenImage;
+      lastToken.tokenImage = threeTokensAgo.tokenImage + "_" + lastToken.tokenImage;
       threeTokensAgo.tokenImage = "";
     }
   }
@@ -100,14 +99,13 @@ class PrefixFixer extends DepthFirstVisitor {
    */
   /*@EnsuresNonNullIf(result=true, expression={"lastToken","twoTokensAgo","threeTokensAgo"})*/
   /*@Pure*/ private boolean isMatch(NodeToken n) {
-    return ((! Visitors.isLParen(n)) &&
-            lastToken != null &&
-            Visitors.isIdentifier(lastToken) &&
-            twoTokensAgo != null &&
-            Visitors.isDot(twoTokensAgo) &&
-            threeTokensAgo != null &&
-            Visitors.isIdentifier(threeTokensAgo) &&
-            (! lastToken.tokenImage.equals("length")));
+    return ((!Visitors.isLParen(n))
+        && lastToken != null
+        && Visitors.isIdentifier(lastToken)
+        && twoTokensAgo != null
+        && Visitors.isDot(twoTokensAgo)
+        && threeTokensAgo != null
+        && Visitors.isIdentifier(threeTokensAgo)
+        && (!lastToken.tokenImage.equals("length")));
   }
-
 }

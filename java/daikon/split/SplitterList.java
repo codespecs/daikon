@@ -15,8 +15,7 @@ import org.checkerframework.checker.nullness.qual.*;
 // a factory, not an instantiated splitter).
 // It's a shame to have to hard-code for each program point name.
 
-public abstract class SplitterList
-{
+public abstract class SplitterList {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   // "@ref{}" produces a cross-reference in the printed manual.  It must
@@ -28,7 +27,8 @@ public abstract class SplitterList
    **/
   public static boolean dkconfig_all_splitters = true;
 
-  private static final HashMap<String,Splitter[]> ppt_splitters = new LinkedHashMap<String,Splitter[]>();
+  private static final HashMap<String, Splitter[]> ppt_splitters =
+      new LinkedHashMap<String, Splitter[]>();
 
   /**
    * Associate an array of splitters with the program point pptname.
@@ -40,11 +40,11 @@ public abstract class SplitterList
 
     if ((Global.debugSplit != null) && Global.debugSplit.isLoggable(Level.FINE)) {
       String[] splits_strings = new String[splits.length];
-      for (int i=0; i<splits.length; i++) {
+      for (int i = 0; i < splits.length; i++) {
         splits_strings[i] = splits[i].condition();
       }
-      Global.debugSplit.fine ("Registering splitters for " + pptname + ":"
-                              + plume.ArraysMDE.toString(splits_strings));
+      Global.debugSplit.fine(
+          "Registering splitters for " + pptname + ":" + plume.ArraysMDE.toString(splits_strings));
     }
 
     if (ppt_splitters.containsKey(pptname)) {
@@ -54,7 +54,7 @@ public abstract class SplitterList
       System.arraycopy(splits, 0, new_splits, old.length, splits.length);
       ppt_splitters.put(pptname, new_splits);
     } else {
-      assert ! ppt_splitters.containsKey(pptname);
+      assert !ppt_splitters.containsKey(pptname);
       // assert ! ppt_splitters.containsKey(pptname)
       //               : "SplitterList already contains " + pptname
       //               + " which maps to" + lineSep + " " + ArraysMDE.toString(get_raw(pptname))
@@ -65,13 +65,11 @@ public abstract class SplitterList
 
   // This is only used by the debugging output in SplitterList.put().
   public static String formatSplitters(Splitter[] splits) {
-    if (splits == null)
-      return "null";
+    if (splits == null) return "null";
     StringBuffer sb = new StringBuffer();
     sb.append("[");
-    for (int i=0; i<splits.length; i++) {
-      if (i != 0)
-        sb.append(", ");
+    for (int i = 0; i < splits.length; i++) {
+      if (i != 0) sb.append(", ");
       sb.append("\"");
       sb.append(splits[i].condition());
       sb.append("\"");
@@ -177,8 +175,7 @@ public abstract class SplitterList
           splitterArrays.addElement(result);
         }
         // For the OBJECT program point, we want to use all the splitters.
-      } else if ((pptName.indexOf("OBJECT") != -1)
-                 && (name.indexOf("OBJECT") != -1)) {
+      } else if ((pptName.indexOf("OBJECT") != -1) && (name.indexOf("OBJECT") != -1)) {
         for (Splitter[] sa : ppt_splitters.values()) {
           splitterArrays.addElement(sa);
         }
@@ -186,8 +183,8 @@ public abstract class SplitterList
     }
 
     if (splitterArrays.size() == 0) {
-        Global.debugSplit.fine ("SplitterList.get found no splitters for " + pptName);
-        return null;
+      Global.debugSplit.fine("SplitterList.get found no splitters for " + pptName);
+      return null;
     } else {
       Vector<Splitter> splitters = new Vector<Splitter>();
       for (Splitter[] tempsplitters : splitterArrays) {
@@ -195,8 +192,9 @@ public abstract class SplitterList
           splitters.addElement(tempsplitters[j]);
         }
       }
-        Global.debugSplit.fine ("SplitterList.get found " + splitters.size() + " splitters for " + pptName);
-        return splitters.toArray(new Splitter[0]);
+      Global.debugSplit.fine(
+          "SplitterList.get found " + splitters.size() + " splitters for " + pptName);
+      return splitters.toArray(new Splitter[0]);
     }
   }
 
@@ -205,16 +203,17 @@ public abstract class SplitterList
    * The resulting splitters are factories, not instantiated splitters.
    * @return an array of splitters
    */
-  public static Splitter[] get_all( ) {
+  public static Splitter[] get_all() {
     Vector<Splitter> splitters = new Vector<Splitter>();
     for (Splitter[] splitter_array : ppt_splitters.values()) {
       for (int i = 0; i < splitter_array.length; i++) {
         Splitter tempsplitter = splitter_array[i];
-        int j = 0; boolean duplicate = false;
+        int j = 0;
+        boolean duplicate = false;
         // Weed out splitters with the same condition.
         if (!splitters.isEmpty()) {
           for (Splitter splitter : splitters) {
-            if ((tempsplitter.condition().trim()).equals( splitter.condition().trim())) {
+            if ((tempsplitter.condition().trim()).equals(splitter.condition().trim())) {
               // System.err.println(" duplicate " + tempsplitter.condition()); System.err.println();
               duplicate = true;
               break;
@@ -228,5 +227,4 @@ public abstract class SplitterList
     }
     return splitters.toArray(new Splitter[0]);
   }
-
 }

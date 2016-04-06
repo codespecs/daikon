@@ -7,11 +7,10 @@ import static daikon.inv.Invariant.asInvClass;
 /** InvariantLemmas are Lemmas created by printing a Daikon invariant
  * in Simplify format, sometimes with some hacks.
  **/
-
 public class InvariantLemma extends Lemma {
   public String from; // A note explaining our derivation
   public Invariant invariant; // A pointer back to the invariant we
-                              // were made from
+  // were made from
 
   public InvariantLemma(Invariant inv) {
     super(inv.format(), inv.format_using(OutputFormat.SIMPLIFY));
@@ -27,7 +26,7 @@ public class InvariantLemma extends Lemma {
   public Class<? extends Invariant> invClass() {
     Class<? extends Invariant> c;
     if (invariant instanceof GuardingImplication) {
-      c = ((Implication)invariant).consequent().getClass();
+      c = ((Implication) invariant).consequent().getClass();
     } else {
       c = invariant.getClass();
     }
@@ -51,7 +50,7 @@ public class InvariantLemma extends Lemma {
     // it isn't that hard, and seems to work so long as the new ppt is valid.
     InvariantLemma result;
     if (inv instanceof Implication) {
-      Implication imp = (Implication)inv;
+      Implication imp = (Implication) inv;
       PptSlice lhs_saved = imp.predicate().ppt;
       PptSlice rhs_saved = imp.consequent().ppt;
       imp.predicate().ppt = PptSlice0.makeFakePrestate(lhs_saved);
@@ -69,5 +68,4 @@ public class InvariantLemma extends Lemma {
     result.from += " (orig() added)";
     return result;
   }
-
 }

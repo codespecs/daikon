@@ -12,7 +12,7 @@ public class XorVisitorTester extends TestCase {
   private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());
 
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (LogHelper.INFO);
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(XorVisitorTester.class));
   }
 
@@ -25,13 +25,14 @@ public class XorVisitorTester extends TestCase {
   // map2: A->{W, X2, Z}, C->{Z}, D->{M_unjustified, N}
   // map1 xor map2: A->{X1, X2, Y, Z}, B->{Y}, C->{Z}, D->{M, N}
   public void testXor() {
-    VarInfo[] vars = { DiffTester.newIntVarInfo("w"),
-                       DiffTester.newIntVarInfo("x"),
-                       DiffTester.newIntVarInfo("y"),
-                       DiffTester.newIntVarInfo("z"),
-                       DiffTester.newIntVarInfo("m"),
-                       DiffTester.newIntVarInfo("n"),
-                       DiffTester.newIntVarInfo("o"),
+    VarInfo[] vars = {
+      DiffTester.newIntVarInfo("w"),
+      DiffTester.newIntVarInfo("x"),
+      DiffTester.newIntVarInfo("y"),
+      DiffTester.newIntVarInfo("z"),
+      DiffTester.newIntVarInfo("m"),
+      DiffTester.newIntVarInfo("n"),
+      DiffTester.newIntVarInfo("o"),
     };
     PptTopLevel A = Common.makePptTopLevel("A:::OBJECT", vars);
     PptTopLevel B = Common.makePptTopLevel("B:::OBJECT", vars);
@@ -78,5 +79,4 @@ public class XorVisitorTester extends TestCase {
 
     assert expected.toString().equals(result.toString());
   }
-
 }

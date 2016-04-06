@@ -9,19 +9,17 @@ import java.io.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-
 /**
  * Prints the differing invariant pairs.
  **/
 public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
 
-  public static final Logger debug = Logger.getLogger ("daikon.diff.DetailedStatisticsVisitor");
+  public static final Logger debug = Logger.getLogger("daikon.diff.DetailedStatisticsVisitor");
 
   private boolean printUninteresting;
 
-  public PrintDifferingInvariantsVisitor(PrintStream ps, boolean verbose,
-                                         boolean printEmptyPpts,
-                                         boolean printUninteresting) {
+  public PrintDifferingInvariantsVisitor(
+      PrintStream ps, boolean verbose, boolean printEmptyPpts, boolean printUninteresting) {
     super(ps, verbose, printEmptyPpts);
     this.printUninteresting = printUninteresting;
   }
@@ -40,36 +38,34 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
    **/
   protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
-    if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING ||
-        type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {
+    if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING
+        || type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {
       return printUninteresting;
     }
 
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
-    if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2 ||
-        rel == DetailedStatisticsVisitor.REL_SAME_UNJUST1_UNJUST2 ||
-        rel == DetailedStatisticsVisitor.REL_DIFF_UNJUST1_UNJUST2 ||
-        rel == DetailedStatisticsVisitor.REL_MISS_UNJUST1 ||
-        rel == DetailedStatisticsVisitor.REL_MISS_UNJUST2) {
+    if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2
+        || rel == DetailedStatisticsVisitor.REL_SAME_UNJUST1_UNJUST2
+        || rel == DetailedStatisticsVisitor.REL_DIFF_UNJUST1_UNJUST2
+        || rel == DetailedStatisticsVisitor.REL_MISS_UNJUST1
+        || rel == DetailedStatisticsVisitor.REL_MISS_UNJUST2) {
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine (" Returning false");
+        debug.fine(" Returning false");
       }
 
       return false;
     }
 
-    if ((inv1 == null || !inv1.isWorthPrinting()) &&
-        (inv2 == null || !inv2.isWorthPrinting())) {
+    if ((inv1 == null || !inv1.isWorthPrinting()) && (inv2 == null || !inv2.isWorthPrinting())) {
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine (" Returning false");
+        debug.fine(" Returning false");
       }
       return false;
     }
 
-
-      if (debug.isLoggable(Level.FINE)) {
-        debug.fine (" Returning true");
-      }
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine(" Returning true");
+    }
 
     return true;
   }

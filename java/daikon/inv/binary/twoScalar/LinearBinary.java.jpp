@@ -93,7 +93,7 @@ public class CLASSNAME
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     #if defined (TYPELONG)
       // Don't look for linearbinary over hashcodes and booleans
@@ -102,7 +102,7 @@ public class CLASSNAME
         return false;
     #endif
 
-    return (true);
+    return true;
   }
 
   /** Instantiate an invariant on the specified slice **/

@@ -20,9 +20,7 @@ import org.checkerframework.dataflow.qual.*;
  * computeValueandModified() to get value.  Derivations are created by
  * DerivationFactory.
  **/
-public abstract class Derivation
-  implements Serializable, Cloneable
-{
+public abstract class Derivation implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -51,7 +49,6 @@ public abstract class Derivation
   // This is static, so we can't mention it here.
   // It's in DerivationFactory, though. // really?
   // public boolean applicable();
-
 
   // This is essentially a clone() method that also switches the variables.
   public abstract Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars);
@@ -92,6 +89,7 @@ public abstract class Derivation
     }
     return this_var_info;
   }
+
   private /*@MonotonicNonNull*/ VarInfo this_var_info;
 
   /**
@@ -160,7 +158,7 @@ public abstract class Derivation
    * a slice.  Slices should override.
    */
   public Quantify.Term get_lower_bound() {
-    throw new RuntimeException ("not a slice derivation: " + this);
+    throw new RuntimeException("not a slice derivation: " + this);
   }
 
   /**
@@ -168,7 +166,7 @@ public abstract class Derivation
    * a slice.  Slices should override.
    */
   public Quantify.Term get_upper_bound() {
-    throw new RuntimeException ("not a slice derivation: " + this);
+    throw new RuntimeException("not a slice derivation: " + this);
   }
 
   /**
@@ -176,7 +174,7 @@ public abstract class Derivation
    * if this is not a slice.  Slices should override.
    */
   public VarInfo get_array_var() {
-    throw new RuntimeException ("not a slice derivation: " + this);
+    throw new RuntimeException("not a slice derivation: " + this);
   }
 
   /**
@@ -185,7 +183,7 @@ public abstract class Derivation
    * specify an index on a non-array variable
    */
   /*@SideEffectFree*/ public String esc_name(String index) {
-    throw new RuntimeException ("esc_name not implemented for " + this);
+    throw new RuntimeException("esc_name not implemented for " + this);
   }
 
   /**
@@ -193,8 +191,8 @@ public abstract class Derivation
    * is specified, it is used as an array index.  It is an error to
    * specify an index on a non-array variable
    */
-  public String jml_name (String index) {
-    return esc_name (index);
+  public String jml_name(String index) {
+    return esc_name(index);
   }
 
   /**
@@ -202,14 +200,14 @@ public abstract class Derivation
    * is specified, it is used as an array index.  It is an error to
    * specify an index on a non-array variable
    */
-  /*@SideEffectFree*/ public String csharp_name (String index) {
-    throw new RuntimeException ("csharp_name not implemented for " + this);
+  /*@SideEffectFree*/ public String csharp_name(String index) {
+    throw new RuntimeException("csharp_name not implemented for " + this);
   }
 
   /** Returns the name of this variable in simplify format **/
   /*@SideEffectFree*/ public String simplify_name() {
-    throw new RuntimeException ("simplify_name not implemented for "
-                                + this.getClass() + " (" + this + ")");
+    throw new RuntimeException(
+        "simplify_name not implemented for " + this.getClass() + " (" + this + ")");
   }
 
   /**
@@ -217,22 +215,20 @@ public abstract class Derivation
    * if this and d are of the same derivation with the same formula
    * and have the same bases.
    */
-  /*@Pure*/ public boolean is_prestate_version (Derivation d) {
+  /*@Pure*/ public boolean is_prestate_version(Derivation d) {
 
     // The derivations must be of the same type
-    if (getClass() != d.getClass())
-        return false;
+    if (getClass() != d.getClass()) return false;
 
     // Each base of vi must be the prestate version of this
     VarInfo[] base1 = getBases();
     VarInfo[] base2 = d.getBases();
     for (int ii = 0; ii < base1.length; ii++) {
-      if (!base1[ii].is_prestate_version(base2[ii]))
-        return false;
+      if (!base1[ii].is_prestate_version(base2[ii])) return false;
     }
 
     // The derivations must have the same formula (offset, start_from, etc)
-    return isSameFormula (d);
+    return isSameFormula(d);
   }
 
   /**
@@ -247,10 +243,9 @@ public abstract class Derivation
   }
 
   /** Returns a string that corresponds to the the specified shift **/
-  protected String shift_str (int shift) {
+  protected String shift_str(int shift) {
     String shift_str = "";
-    if (shift != 0)
-      shift_str = String.format ("%+d", shift);
+    if (shift != 0) shift_str = String.format("%+d", shift);
     return (shift_str);
   }
 
@@ -259,19 +254,17 @@ public abstract class Derivation
    * an expression (such as orig(a[vi])).  If the expression
    * is orig, the orig is implied for this variable.
    */
-  protected String inside_esc_name (VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null)
-      return "";
+  protected String inside_esc_name(VarInfo vi, boolean in_orig, int shift) {
+    if (vi == null) return "";
 
     if (in_orig) {
       if (vi.isPrestate()) {
         assert vi.postState != null; // because isPrestate() = true
         return vi.postState.esc_name() + shift_str(shift);
       } else {
-        return String.format ("\\new(%s)%s", vi.esc_name(), shift_str(shift));
+        return String.format("\\new(%s)%s", vi.esc_name(), shift_str(shift));
       }
-    } else
-      return vi.esc_name() + shift_str(shift);
+    } else return vi.esc_name() + shift_str(shift);
   }
 
   /**
@@ -279,19 +272,17 @@ public abstract class Derivation
    * an expression (such as orig(a[vi])).  If the expression
    * is orig, the orig is implied for this variable.
    */
-  protected String inside_jml_name (VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null)
-      return "";
+  protected String inside_jml_name(VarInfo vi, boolean in_orig, int shift) {
+    if (vi == null) return "";
 
     if (in_orig) {
       if (vi.isPrestate()) {
         assert vi.postState != null; // because isPrestate() = true
         return vi.postState.jml_name() + shift_str(shift);
       } else {
-        return String.format ("\\new(%s)%s", vi.jml_name(), shift_str(shift));
+        return String.format("\\new(%s)%s", vi.jml_name(), shift_str(shift));
       }
-    } else
-      return vi.jml_name() + shift_str(shift);
+    } else return vi.jml_name() + shift_str(shift);
   }
 
   /**
@@ -299,9 +290,8 @@ public abstract class Derivation
    * an expression (such as orig(a[vi])).  If the expression
    * is orig, the orig is implied for this variable.
    */
-  protected String inside_csharp_name (VarInfo vi, boolean in_orig, int shift) {
-    if (vi == null)
-      return "";
+  protected String inside_csharp_name(VarInfo vi, boolean in_orig, int shift) {
+    if (vi == null) return "";
 
     if (in_orig) {
       if (vi.isPrestate()) {
@@ -309,12 +299,8 @@ public abstract class Derivation
         return vi.postState.csharp_name() + shift_str(shift);
       } else {
         // return String.format ("\\new(%s)%s", vi.csharp_name(), shift_str(shift));
-        return String.format ("%s%s", vi.csharp_name(), shift_str(shift));
+        return String.format("%s%s", vi.csharp_name(), shift_str(shift));
       }
-    } else
-      return vi.csharp_name() + shift_str(shift);
+    } else return vi.csharp_name() + shift_str(shift);
   }
-
-
-
 }

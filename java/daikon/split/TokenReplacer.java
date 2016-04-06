@@ -63,11 +63,12 @@ class TokenReplacer extends DepthFirstVisitor {
    *  by the corresponding element of newVars.
    */
   public static String replaceTokens(String expression, List<String> oldVars, List<String> newVars)
-    throws ParseException {
+      throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     TokenReplacer tokenReplacer = new TokenReplacer(oldVars, newVars);
     root.accept(tokenReplacer);
-    assert tokenReplacer.lastToken != null : "@AssumeAssertion(nullness) : accept just set lastToken";
+    assert tokenReplacer.lastToken != null
+        : "@AssumeAssertion(nullness) : accept just set lastToken";
     tokenReplacer.replaceLastToken();
     return Ast.format(root);
   }
@@ -77,8 +78,8 @@ class TokenReplacer extends DepthFirstVisitor {
    */
   /*@RequiresNonNull("lastToken")*/
   private void replaceLastToken() {
-    if (Visitors.isIdentifier(lastToken) &&
-        (twoTokensAgo == null || (! Visitors.isDot(twoTokensAgo)))) {
+    if (Visitors.isIdentifier(lastToken)
+        && (twoTokensAgo == null || (!Visitors.isDot(twoTokensAgo)))) {
       for (int i = 0; i < oldVars.size(); i++) {
         if (lastToken.tokenImage.equals(oldVars.get(i))) {
           lastToken.tokenImage = newVars.get(i);
@@ -98,10 +99,10 @@ class TokenReplacer extends DepthFirstVisitor {
    * are not thrown from the lengths of tokens changing.
    */
   public void visit(NodeToken n) {
-    if (Visitors.isLParen(n) &&
-        lastToken != null &&
-        Visitors.isIdentifier(lastToken) &&
-        (twoTokensAgo == null || (! Visitors.isDot(twoTokensAgo)))) {
+    if (Visitors.isLParen(n)
+        && lastToken != null
+        && Visitors.isIdentifier(lastToken)
+        && (twoTokensAgo == null || (!Visitors.isDot(twoTokensAgo)))) {
       for (int i = 0; i < oldVars.size(); i++) {
         if (lastToken.tokenImage.equals(oldVars.get(i))) {
           lastToken.tokenImage = newVars.get(i);
@@ -112,10 +113,8 @@ class TokenReplacer extends DepthFirstVisitor {
     n.beginColumn = -1;
     n.endColumn = -1;
     if (lastToken != null) // test is to quiet the Nullness Checker
-      twoTokensAgo = lastToken;
+    twoTokensAgo = lastToken;
     lastToken = n;
     super.visit(n);
   }
-
-
 }

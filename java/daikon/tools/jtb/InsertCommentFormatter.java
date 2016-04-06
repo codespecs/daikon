@@ -21,9 +21,7 @@ import jtb.visitor.*;
  * The caller must supply the collection of inserted comments for
  * recognition by this visitor.
  **/
-public class InsertCommentFormatter
-  extends DepthFirstVisitor
-{
+public class InsertCommentFormatter extends DepthFirstVisitor {
   private boolean debug = false;
 
   private Vector<NodeToken> comments;
@@ -39,7 +37,6 @@ public class InsertCommentFormatter
   //    column shifting being done, but first real token not yet found
   // columnshift != 0, columnshiftline != -1:
   //    column shifting being done, applies only to specified line
-
 
   private static final String lineSep = System.getProperty("line.separator");
 
@@ -61,14 +58,24 @@ public class InsertCommentFormatter
   }
 
   public void visit(NodeToken n) {
-    if (debug) { System.out.println("Visit (at " + n.beginLine + "," + n.beginColumn + ") (in comments = " + comments.contains(n) + ") " + n.tokenImage); }
+    if (debug) {
+      System.out.println(
+          "Visit (at "
+              + n.beginLine
+              + ","
+              + n.beginColumn
+              + ") (in comments = "
+              + comments.contains(n)
+              + ") "
+              + n.tokenImage);
+    }
 
     // See comment at use of this variable below
     boolean prev_is_double_slash_comment = false;
 
     // Handle special tokens first
-    if ( n.numSpecials() > 0 )  // handles case when n.specialTokens is null
-      for ( NodeToken s : n.specialTokens ) {
+    if (n.numSpecials() > 0) // handles case when n.specialTokens is null
+    for (NodeToken s : n.specialTokens) {
         visit(s);
         prev_is_double_slash_comment = s.tokenImage.startsWith("//");
       }
@@ -89,7 +96,10 @@ public class InsertCommentFormatter
       n.endLine += lineshift;
       n.beginColumn += columnshift;
       n.endColumn += columnshift;
-      if (debug) { System.out.println("Shifted by " + lineshift + "," + columnshift + ": <<<" + n.tokenImage.trim() + ">>>"); }
+      if (debug) {
+        System.out.println(
+            "Shifted by " + lineshift + "," + columnshift + ": <<<" + n.tokenImage.trim() + ">>>");
+      }
     }
     // Special-case the situation of ending a file with a "//"-style
     // comment that does not start at the beginning of its line; in that
@@ -109,7 +119,9 @@ public class InsertCommentFormatter
       columnshift += numColumns(n);
       lineshift += numLines(n);
     }
-    if (debug) { System.out.println("End visit (at " + n.beginLine + "," + n.beginColumn + ") " + n.tokenImage); }
-
+    if (debug) {
+      System.out.println(
+          "End visit (at " + n.beginLine + "," + n.beginColumn + ") " + n.tokenImage);
+    }
   }
 }

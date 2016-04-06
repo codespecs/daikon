@@ -19,7 +19,7 @@ class TokenExtractor extends DepthFirstVisitor {
   /** blocks public constructor. */
   private TokenExtractor() {
     super();
-    }
+  }
 
   /**
    * Extracts all the tokens from expression.
@@ -29,8 +29,7 @@ class TokenExtractor extends DepthFirstVisitor {
    *    java code.
    * @return all the tokens of expression.
    */
-  public static NodeToken[] extractTokens(String expression)
-    throws ParseException {
+  public static NodeToken[] extractTokens(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     TokenExtractor extractor = new TokenExtractor();
     root.accept(extractor);
@@ -54,8 +53,7 @@ class TokenExtractor extends DepthFirstVisitor {
    * If presently visiting expression, adds n to tokens.
    */
   public void visit(NodeToken n) {
-      tokens.add(n);
-      super.visit(n);
+    tokens.add(n);
+    super.visit(n);
   }
-
 }

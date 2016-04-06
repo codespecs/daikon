@@ -12,7 +12,6 @@ import org.checkerframework.dataflow.qual.*;
 // "array[]-indexn".  These may be different depending on the programming
 // language; for instance, C uses "*array" in place of "array[]-element".
 
-
 /**
  * Represents the comparability of variables, including methods to
  * determine if two VarComparabilities are comparable.
@@ -26,9 +25,7 @@ import org.checkerframework.dataflow.qual.*;
 public abstract class VarComparability {
 
   /** Debug tracer. **/
-  public static final Logger debug =
-    Logger.getLogger("daikon.VarComparability");
-
+  public static final Logger debug = Logger.getLogger("daikon.VarComparability");
 
   public static final int NONE = 0;
   public static final int IMPLICIT = 1;
@@ -50,8 +47,8 @@ public abstract class VarComparability {
     } else if (format == IMPLICIT) {
       return VarComparabilityImplicit.parse(rep, vartype);
     } else {
-      throw new IllegalArgumentException("bad format argument " + format
-                      + " should have been in {0, 1, 2}");
+      throw new IllegalArgumentException(
+          "bad format argument " + format + " should have been in {0, 1, 2}");
     }
   }
 
@@ -64,21 +61,23 @@ public abstract class VarComparability {
    * @param old the varcomparability that this is derived from; has
    * the same indices as this.
    **/
-  public static VarComparability makeComparabilitySameIndices (String elemTypeName,
-                                                               VarComparability old) {
+  public static VarComparability makeComparabilitySameIndices(
+      String elemTypeName, VarComparability old) {
     if (old instanceof VarComparabilityNone) {
       return VarComparabilityNone.it;
     } else {
-      throw new Error ("makeComparabilitySameIndices not implemented for implicit comparables");
+      throw new Error("makeComparabilitySameIndices not implemented for implicit comparables");
     }
   }
 
   public static VarComparability makeAlias(VarInfo vi) {
     return vi.comparability.makeAlias();
   }
+
   public abstract VarComparability makeAlias();
 
   public abstract VarComparability elementType();
+
   public abstract VarComparability indexType(int dim);
 
   /** Return the comparability for the length of this string**/
@@ -95,22 +94,24 @@ public abstract class VarComparability {
   }
 
   /** Returns whether two comparabilities are comparable. **/
-  @SuppressWarnings("purity")    // Override the purity checker
-  public static /*@Pure*/ boolean comparable (VarComparability type1,
-                                              VarComparability type2) {
+  @SuppressWarnings("purity") // Override the purity checker
+  public static /*@Pure*/ boolean comparable(VarComparability type1, VarComparability type2) {
 
     if (type1 != null && type2 != null && type1.getClass() != type2.getClass())
-      throw new Error(String.format ("Trying to compare VarComparabilities " +
-                      "of different types: %s (%s) and %s (%s)", type1.toString(),
-                      type1.getClass(), type2.toString(), type2.getClass()));
+      throw new Error(
+          String.format(
+              "Trying to compare VarComparabilities " + "of different types: %s (%s) and %s (%s)",
+              type1.toString(),
+              type1.getClass(),
+              type2.toString(),
+              type2.getClass()));
 
     if (type1 instanceof VarComparabilityNone || type1 == null || type2 == null) {
-      return VarComparabilityNone.comparable ((VarComparabilityNone)type1,
-                                              (VarComparabilityNone)type2);
+      return VarComparabilityNone.comparable(
+          (VarComparabilityNone) type1, (VarComparabilityNone) type2);
     } else if (type1 instanceof VarComparabilityImplicit) {
-        return VarComparabilityImplicit.comparable
-          ((VarComparabilityImplicit)type1,
-           (VarComparabilityImplicit)type2);
+      return VarComparabilityImplicit.comparable(
+          (VarComparabilityImplicit) type1, (VarComparabilityImplicit) type2);
     } else {
       throw new Error("Unrecognized subtype of VarComparability: " + type1);
     }
@@ -122,8 +123,7 @@ public abstract class VarComparability {
    * (because they are not always transitive).  They can override this
    * method to provide the correct results
    */
-  public boolean equality_set_ok (VarComparability other) {
-    return comparable (this, other);
+  public boolean equality_set_ok(VarComparability other) {
+    return comparable(this, other);
   }
-
 }

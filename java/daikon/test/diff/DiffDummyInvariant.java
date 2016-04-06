@@ -12,9 +12,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * A dummy invariant used for testing purposes.
  **/
-public class DiffDummyInvariant
-  extends Invariant
-{
+public class DiffDummyInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -29,29 +27,38 @@ public class DiffDummyInvariant
     this(ppt, formula, justified, true, true);
   }
 
-  public DiffDummyInvariant(PptSlice ppt, String formula,
-                        boolean justified, boolean interesting) {
+  public DiffDummyInvariant(PptSlice ppt, String formula, boolean justified, boolean interesting) {
     this(ppt, formula, justified, interesting, true);
   }
 
-  public DiffDummyInvariant(PptSlice ppt, String formula,
-                        boolean justified, boolean interesting,
-                        boolean isWorthPrinting) {
-    this(ppt, formula, (justified ? Invariant.CONFIDENCE_JUSTIFIED : Invariant.CONFIDENCE_UNJUSTIFIED), interesting, isWorthPrinting);
+  public DiffDummyInvariant(
+      PptSlice ppt,
+      String formula,
+      boolean justified,
+      boolean interesting,
+      boolean isWorthPrinting) {
+    this(
+        ppt,
+        formula,
+        (justified ? Invariant.CONFIDENCE_JUSTIFIED : Invariant.CONFIDENCE_UNJUSTIFIED),
+        interesting,
+        isWorthPrinting);
   }
 
   public DiffDummyInvariant(PptSlice ppt, String formula, double confidence) {
     this(ppt, formula, confidence, true, true);
   }
 
-  public DiffDummyInvariant(PptSlice ppt, String formula,
-                        double confidence, boolean interesting) {
+  public DiffDummyInvariant(PptSlice ppt, String formula, double confidence, boolean interesting) {
     this(ppt, formula, confidence, interesting, true);
   }
 
-  public DiffDummyInvariant(PptSlice ppt, String formula,
-                        double confidence, boolean interesting,
-                        boolean isWorthPrinting) {
+  public DiffDummyInvariant(
+      PptSlice ppt,
+      String formula,
+      double confidence,
+      boolean interesting,
+      boolean isWorthPrinting) {
     super(ppt);
     this.formula = formula;
     this.confidence = confidence;
@@ -98,5 +105,4 @@ public class DiffDummyInvariant
   /*@Pure*/ public boolean isWorthPrinting() {
     return isWorthPrinting;
   }
-
 }

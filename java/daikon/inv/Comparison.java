@@ -12,5 +12,6 @@ public interface Comparison {
   public double eq_confidence();
 
   public VarInfo var1();
+
   public VarInfo var2();
 }

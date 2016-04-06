@@ -15,13 +15,13 @@ package daikon.chicory;
  * Variable declarations" (but really ought to be documented here too...).
  */
 public enum VarFlags {
-    IS_PARAM,
-    NO_DUPS,
-    NOT_ORDERED,
-    NO_SIZE,
-    NOMOD,
-    SYNTHETIC,
-    CLASSNAME,
-    TO_STRING,
-    NON_NULL
+  IS_PARAM,
+  NO_DUPS,
+  NOT_ORDERED,
+  NO_SIZE,
+  NOMOD,
+  SYNTHETIC,
+  CLASSNAME,
+  TO_STRING,
+  NON_NULL
 };

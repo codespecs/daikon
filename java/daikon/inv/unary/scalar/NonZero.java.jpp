@@ -127,13 +127,13 @@ public class NONZERO
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types(vis))
-      return (false);
+      return false;
 
     if (vis[0].aux.isStruct() ||
         !vis[0].aux.hasNull())
-      return (false);
+      return false;
 
-    return (true);
+    return true;
   }
 
   /** instantiate an invariant on the specified slice **/

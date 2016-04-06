@@ -22,36 +22,32 @@ import org.checkerframework.checker.nullness.qual.*;
  * left unmodified.  A .spinfo file is written for every .java file, or
  * in the single file indicated as the -o command-line argument..
  */
-
 public class CreateSpinfo {
 
-// The expressions in the Java source are extracted as follows:
-// For each method:
-//  * extracts all expressions in conditional statements
-//    ie. if, for, which, etc.
-//  * if the method body is a one-line return statement, it
-//    extracts it for later substitution into expressions which
-//    call this function. These statements are referred to as
-//    replace statements
-// For each field declaration
-//  * if the field is a boolean, it stores the expression
-//    "<fieldname> == true" as a splitting condition.
-//
-//  The method printSpinfoFile prints out these expressions and
-//  replace statements in splitter info file format.
+  // The expressions in the Java source are extracted as follows:
+  // For each method:
+  //  * extracts all expressions in conditional statements
+  //    ie. if, for, which, etc.
+  //  * if the method body is a one-line return statement, it
+  //    extracts it for later substitution into expressions which
+  //    call this function. These statements are referred to as
+  //    replace statements
+  // For each field declaration
+  //  * if the field is a boolean, it stores the expression
+  //    "<fieldname> == true" as a splitting condition.
+  //
+  //  The method printSpinfoFile prints out these expressions and
+  //  replace statements in splitter info file format.
 
-  public static final Logger debug =
-    Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
+  public static final Logger debug = Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
 
   private static String usage =
-    UtilMDE.joinLines(
-      "Usage:  java daikon.tools.CreateSpinfo FILE.java ...",
-      "  -o outputfile   Put all output in specified file",
-      "  -h              Display this usage message"
-      );
+      UtilMDE.joinLines(
+          "Usage:  java daikon.tools.CreateSpinfo FILE.java ...",
+          "  -o outputfile   Put all output in specified file",
+          "  -h              Display this usage message");
 
-
-  public static void main (String[] args) throws IOException {
+  public static void main(String[] args) throws IOException {
     try {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
@@ -75,44 +71,43 @@ public class CreateSpinfo {
     // If not set, put output in files named after the input (source) files.
     String outputfilename = null;
 
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
-    LongOpt[] longopts = new LongOpt[] {
-      new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-    };
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    LongOpt[] longopts =
+        new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        };
 
-    Getopt g =
-      new Getopt("daikon.tools.jtb.CreateSpinfo", args, "ho:", longopts);
+    Getopt g = new Getopt("daikon.tools.jtb.CreateSpinfo", args, "ho:", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
-      switch(c) {
-      case 0:
-        // got a long option
-        String option_name = longopts[g.getLongind()].getName();
-        if (Daikon.help_SWITCH.equals(option_name)) {
+      switch (c) {
+        case 0:
+          // got a long option
+          String option_name = longopts[g.getLongind()].getName();
+          if (Daikon.help_SWITCH.equals(option_name)) {
+            System.out.println(usage);
+            throw new Daikon.TerminationMessage();
+          } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
+            Global.debugAll = true;
+          } else if (Daikon.debug_SWITCH.equals(option_name)) {
+            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+          } else {
+            throw new RuntimeException("Unknown long option received: " + option_name);
+          }
+          break;
+        case 'o':
+          outputfilename = Daikon.getOptarg(g);
+          break;
+        case 'h':
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
-        } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
-          Global.debugAll = true;
-        } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel (Daikon.getOptarg(g), LogHelper.FINE);
-        } else {
-          throw new RuntimeException("Unknown long option received: " +
-                                     option_name);
-        }
-        break;
-      case 'o':
-        outputfilename = Daikon.getOptarg(g);
-        break;
-      case 'h':
-        System.out.println(usage);
-        throw new Daikon.TerminationMessage();
-      case '?':
-        break; // getopt() already printed an error
-      default:
-        System.out.println("getopt() returned " + c);
-        break;
+        case '?':
+          break; // getopt() already printed an error
+        default:
+          System.out.println("getopt() returned " + c);
+          break;
       }
     }
 
@@ -120,18 +115,18 @@ public class CreateSpinfo {
     int argindex = g.getOptind();
     if (argindex >= args.length) {
       throw new Daikon.TerminationMessage(
-         "Error: No .java file arguments supplied."+ Global.lineSep + usage);
+          "Error: No .java file arguments supplied." + Global.lineSep + usage);
     }
     if (outputfilename != null) {
       PrintWriter output = new PrintWriter(new FileWriter(outputfilename));
-      for ( ; argindex < args.length; argindex++) {
+      for (; argindex < args.length; argindex++) {
         String javaFileName = args[argindex];
         writeSplitters(javaFileName, output);
       }
       output.flush();
       output.close();
     } else {
-      for ( ; argindex < args.length; argindex++) {
+      for (; argindex < args.length; argindex++) {
         String javaFileName = args[argindex];
         String spinfoFileName = spinfoFileName(javaFileName);
         PrintWriter output = new PrintWriter(new FileWriter(spinfoFileName));
@@ -150,22 +145,21 @@ public class CreateSpinfo {
    */
   private static String spinfoFileName(String javaFileName) {
     if (javaFileName.endsWith(".java")) {
-      return javaFileName.substring(0, javaFileName.length()-5) + ".spinfo";
+      return javaFileName.substring(0, javaFileName.length() - 5) + ".spinfo";
     }
 
     // The file does not end with ".java".  Proceed, but issue a warning.
-    System.err.println ("Warning: CreateSpinfo input file "
-                        + javaFileName + "does not end in .java.");
+    System.err.println(
+        "Warning: CreateSpinfo input file " + javaFileName + "does not end in .java.");
 
     // change the file extension to .spinfo
-    int dotPos = javaFileName.indexOf (".");
+    int dotPos = javaFileName.indexOf(".");
     if (dotPos == -1) {
       return javaFileName + ".spinfo";
     } else {
-      return javaFileName.substring (0, dotPos) + ".spinfo";
+      return javaFileName.substring(0, dotPos) + ".spinfo";
     }
   }
-
 
   /**
    * Write splitters for the Java file to the PrintWriter as a spinfo file.
@@ -173,8 +167,7 @@ public class CreateSpinfo {
    *  spinfo file is being made.
    * @param output the PrintWriter to which this spinfo file is being wrote.
    */
-  private static void writeSplitters(String javaFileName, PrintWriter output)
-    throws IOException {
+  private static void writeSplitters(String javaFileName, PrintWriter output) throws IOException {
     Reader input = new FileReader(javaFileName);
     JavaParser parser = new JavaParser(input);
     Node root = null;
@@ -184,13 +177,13 @@ public class CreateSpinfo {
       e.printStackTrace();
       throw new Daikon.TerminationMessage("ParseException");
     }
-    debug.fine ("CreateSpinfo: processing file " + javaFileName);
+    debug.fine("CreateSpinfo: processing file " + javaFileName);
     ConditionExtractor extractor = new ConditionExtractor();
     root.accept(extractor);
     // conditions: method name (String) to conditional expressions (String)
-    Map<String,List<String>> conditions = extractor.getConditionMap();
+    Map<String, List<String>> conditions = extractor.getConditionMap();
     // replaceStatements: method declaration (String) to method body (String)
-    Map<String,String> replaceStatements = extractor.getReplaceStatements();
+    Map<String, String> replaceStatements = extractor.getReplaceStatements();
     String packageName = extractor.getPackageName();
     filterConditions(conditions);
     addOrigConditions(conditions);
@@ -201,7 +194,7 @@ public class CreateSpinfo {
    * Remove redundant and trivial conditions from conditionMap.
    * Side-effects conditionMap.
    */
-  private static void filterConditions(Map<String,List<String>> conditionMap) {
+  private static void filterConditions(Map<String, List<String>> conditionMap) {
     for (String key : conditionMap.keySet()) {
       List<String> conditions = conditionMap.get(key);
       conditions = UtilMDE.removeDuplicates(conditions);
@@ -216,8 +209,8 @@ public class CreateSpinfo {
    * added which is identical to the initial condition with the exception
    * that it is prefixed with "orig(" and suffixed with ")".
    */
-  private static void addOrigConditions(Map<String,List<String>> conditionMap) {
-    for (List<String> conditions : conditionMap.values() ) {
+  private static void addOrigConditions(Map<String, List<String>> conditionMap) {
+    for (List<String> conditions : conditionMap.values()) {
       int size = conditions.size();
       for (int i = 0; i < size; i++) {
         conditions.add(addOrig(conditions.get(i)));
@@ -245,14 +238,17 @@ public class CreateSpinfo {
    * @param packageName the package name of the java file for which this
    *  spinfo file is being written.
    */
-  private static void printSpinfoFile(PrintWriter output,
-                                      Map<String,List<String>> conditions,
-                                      Map<String,String> replaceStatements,
-                                      /*@Nullable*/ String packageName)
-    throws IOException {
+  private static void printSpinfoFile(
+      PrintWriter output,
+      Map<String, List<String>> conditions,
+      Map<String, String> replaceStatements,
+      /*@Nullable*/ String packageName)
+      throws IOException {
     if (!replaceStatements.values().isEmpty()) {
       output.println("REPLACE");
-      for (/*@KeyFor("replaceStatements")*/ String declaration : UtilMDE.sortedKeySet(replaceStatements)) {
+      for (
+      /*@KeyFor("replaceStatements")*/ String declaration :
+          UtilMDE.sortedKeySet(replaceStatements)) {
         output.println(declaration);
         String replacement = replaceStatements.get(declaration);
         output.println(removeNewlines(replacement));
@@ -263,12 +259,11 @@ public class CreateSpinfo {
       List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {
-        String qualifiedMethod
-          = (packageName == null) ? method : packageName + "." + method;
+        String qualifiedMethod = (packageName == null) ? method : packageName + "." + method;
         output.println("PPT_NAME " + qualifiedMethod);
         for (int i = 0; i < method_conds.size(); i++) {
           String cond = removeNewlines(method_conds.get(i));
-          if (! (cond.equals("true") || cond.equals("false"))) {
+          if (!(cond.equals("true") || cond.equals("false"))) {
             output.println(cond);
           }
         }
@@ -283,10 +278,9 @@ public class CreateSpinfo {
    */
   private static String removeNewlines(String target) {
     String[] lines = UtilMDE.splitLines(target);
-    for (int i=0; i<lines.length; i++) {
+    for (int i = 0; i < lines.length; i++) {
       lines[i] = lines[i].trim();
     }
     return UtilMDE.join(lines, " ");
   }
-
 }

@@ -75,11 +75,11 @@ public abstract class CLASSNAME extends BinaryInvariant {
   public boolean valid_types (VarInfo[] vis) {
 
     if (vis.length != 2)
-      return (false);
+      return false;
 
     if (!vis[0].file_rep_type.BASE_IS_SCALAR
         || !vis[1].file_rep_type.BASE_IS_SCALAR)
-      return (false);
+      return false;
 
     return ((vis[0].file_rep_type.isArray() && !vis[1].file_rep_type.isArray())
           || !vis[0].file_rep_type.isArray() && vis[1].file_rep_type.isArray());
@@ -98,7 +98,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * first, this is essentially symmetric.  Subclasses can override if necessary
    */
   /*@Pure*/ public boolean is_symmetric() {
-    return (true);
+    return true;
   }
 
    // Check if swap occurred and call one of the other two methods

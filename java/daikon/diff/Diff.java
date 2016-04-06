@@ -41,17 +41,16 @@ import org.checkerframework.dataflow.qual.*;
  **/
 public final class Diff {
 
-  public static final Logger debug = Logger.getLogger ("daikon.diff.Diff");
-
+  public static final Logger debug = Logger.getLogger("daikon.diff.Diff");
 
   private static String usage =
-    UtilMDE.joinLines(
-      "Usage:",
-      "    java daikon.diff.Diff [flags...] file1 [file2]",
-      "  file1 and file2 are serialized invariants produced by Daikon.",
-      "  If file2 is not specified, file1 is compared with the empty set.",
-      "  For a list of flags, see the Daikon manual, which appears in the ",
-      "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.");
+      UtilMDE.joinLines(
+          "Usage:",
+          "    java daikon.diff.Diff [flags...] file1 [file2]",
+          "  file1 and file2 are serialized invariants produced by Daikon.",
+          "  If file2 is not specified, file1 is compared with the empty set.",
+          "  For a list of flags, see the Daikon manual, which appears in the ",
+          "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.");
 
   // added to disrupt the tree when bug hunting -LL
   private static boolean treeManip = false;
@@ -61,20 +60,12 @@ public final class Diff {
   private static /*@MonotonicNonNull*/ PptMap manip2 = null;
 
   /** The long command line options. **/
-  private static final String HELP_SWITCH =
-    "help";
-  private static final String INV_SORT_COMPARATOR1_SWITCH =
-    "invSortComparator1";
-  private static final String INV_SORT_COMPARATOR2_SWITCH =
-    "invSortComparator2";
-  private static final String INV_PAIR_COMPARATOR_SWITCH =
-    "invPairComparator";
-  private static final String IGNORE_UNJUSTIFIED_SWITCH =
-    "ignore_unjustified";
-  private static final String IGNORE_NUMBERED_EXITS_SWITCH =
-    "ignore_exitNN";
-
-
+  private static final String HELP_SWITCH = "help";
+  private static final String INV_SORT_COMPARATOR1_SWITCH = "invSortComparator1";
+  private static final String INV_SORT_COMPARATOR2_SWITCH = "invSortComparator2";
+  private static final String INV_PAIR_COMPARATOR_SWITCH = "invPairComparator";
+  private static final String IGNORE_UNJUSTIFIED_SWITCH = "ignore_unjustified";
+  private static final String IGNORE_NUMBERED_EXITS_SWITCH = "ignore_exitNN";
 
   /** Determine which ppts should be paired together in the tree. **/
   private static final Comparator<PptTopLevel> PPT_COMPARATOR = new Ppt.NameComparator();
@@ -95,7 +86,7 @@ public final class Diff {
   }
 
   public Diff(boolean examineAllPpts) {
-    this (examineAllPpts, false);
+    this(examineAllPpts, false);
   }
 
   public Diff(boolean examineAllPpts, Comparator<Invariant> c) {
@@ -103,17 +94,20 @@ public final class Diff {
     setAllInvComparators(c);
   }
 
-  public Diff (boolean examineAllPpts, boolean ignoreNumberedExits) {
+  public Diff(boolean examineAllPpts, boolean ignoreNumberedExits) {
     this.examineAllPpts = examineAllPpts;
     this.ignoreNumberedExits = ignoreNumberedExits;
     setAllInvComparators(new Invariant.ClassVarnameComparator());
   }
 
-  public Diff (boolean examineAllPpts, boolean ignoreNumberedExits,
-               /*@Nullable*/ /*@ClassGetName*/ String invSortComparator1Classname,
-               /*@Nullable*/ /*@ClassGetName*/ String invSortComparator2Classname,
-               /*@Nullable*/ /*@ClassGetName*/ String invPairComparatorClassname,
-               Comparator<Invariant> defaultComparator) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+  public Diff(
+      boolean examineAllPpts,
+      boolean ignoreNumberedExits,
+      /*@Nullable*/ /*@ClassGetName*/ String invSortComparator1Classname,
+      /*@Nullable*/ /*@ClassGetName*/ String invSortComparator2Classname,
+      /*@Nullable*/ /*@ClassGetName*/ String invPairComparatorClassname,
+      Comparator<Invariant> defaultComparator)
+      throws ClassNotFoundException, InstantiationException, IllegalAccessException {
     this.examineAllPpts = examineAllPpts;
     this.ignoreNumberedExits = ignoreNumberedExits;
     this.invSortComparator1 = selectComparator(invSortComparator1Classname, defaultComparator);
@@ -127,9 +121,8 @@ public final class Diff {
    * InvMaps.
    **/
   public static void main(String[] args)
-    throws FileNotFoundException, StreamCorruptedException,
-           OptionalDataException, IOException, ClassNotFoundException,
-           InstantiationException, IllegalAccessException {
+      throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
+          ClassNotFoundException, InstantiationException, IllegalAccessException {
     try {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
@@ -149,9 +142,8 @@ public final class Diff {
    * @see daikon.Daikon.TerminationMessage
    **/
   public static void mainHelper(final String[] args)
-    throws FileNotFoundException, StreamCorruptedException,
-           OptionalDataException, IOException, ClassNotFoundException,
-           InstantiationException, IllegalAccessException {
+      throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
+          ClassNotFoundException, InstantiationException, IllegalAccessException {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     boolean printDiff = false;
@@ -176,163 +168,162 @@ public final class Diff {
 
     boolean optionSelected = false;
 
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
-//     daikon.LogHelper.setLevel ("daikon.diff", daikon.LogHelper.FINE);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    //     daikon.LogHelper.setLevel ("daikon.diff", daikon.LogHelper.FINE);
 
-    LongOpt[] longOpts = new LongOpt[] {
-      new LongOpt(Daikon.help_SWITCH,
-                  LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(INV_SORT_COMPARATOR1_SWITCH,
-                  LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(INV_SORT_COMPARATOR2_SWITCH,
-                  LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(INV_PAIR_COMPARATOR_SWITCH,
-                  LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(IGNORE_UNJUSTIFIED_SWITCH,
-                  LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(IGNORE_NUMBERED_EXITS_SWITCH,
-                  LongOpt.NO_ARGUMENT, null, 0),
-    };
+    LongOpt[] longOpts =
+        new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(INV_SORT_COMPARATOR1_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(INV_SORT_COMPARATOR2_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(INV_PAIR_COMPARATOR_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(IGNORE_UNJUSTIFIED_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(IGNORE_NUMBERED_EXITS_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        };
 
-    Getopt g = new Getopt("daikon.diff.Diff", args,
-                          "Hhyduastmxno:jzpevl", longOpts);
+    Getopt g =
+        new Getopt(
+            "daikon.diff.Diff", args,
+            "Hhyduastmxno:jzpevl", longOpts);
     int c;
-    while ((c = g.getopt()) !=-1) {
+    while ((c = g.getopt()) != -1) {
       switch (c) {
-      case 0:
-        // got a long option
-        String optionName = longOpts[g.getLongind()].getName();
-        if (Daikon.help_SWITCH.equals(optionName)) {
+        case 0:
+          // got a long option
+          String optionName = longOpts[g.getLongind()].getName();
+          if (Daikon.help_SWITCH.equals(optionName)) {
+            System.out.println(usage);
+            throw new Daikon.TerminationMessage();
+          } else if (INV_SORT_COMPARATOR1_SWITCH.equals(optionName)) {
+            if (invSortComparator1Classname != null) {
+              throw new Error(
+                  "multiple --"
+                      + INV_SORT_COMPARATOR1_SWITCH
+                      + " classnames supplied on command line");
+            }
+            @SuppressWarnings("signature") // user input, should be checked
+            /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
+            invSortComparator1Classname = cgn;
+          } else if (INV_SORT_COMPARATOR2_SWITCH.equals(optionName)) {
+            if (invSortComparator2Classname != null) {
+              throw new Error(
+                  "multiple --"
+                      + INV_SORT_COMPARATOR2_SWITCH
+                      + " classnames supplied on command line");
+            }
+            @SuppressWarnings("signature") // user input, should be checked
+            /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
+            invSortComparator2Classname = cgn;
+          } else if (INV_PAIR_COMPARATOR_SWITCH.equals(optionName)) {
+            if (invPairComparatorClassname != null) {
+              throw new Error(
+                  "multiple --"
+                      + INV_PAIR_COMPARATOR_SWITCH
+                      + " classnames supplied on command line");
+            }
+            @SuppressWarnings("signature") // user input, should be checked
+            /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
+            invPairComparatorClassname = cgn;
+          } else if (IGNORE_UNJUSTIFIED_SWITCH.equals(optionName)) {
+            optionSelected = true;
+            includeUnjustified = false;
+            break;
+          } else if (IGNORE_NUMBERED_EXITS_SWITCH.equals(optionName)) {
+            ignoreNumberedExits = true;
+            break;
+          } else {
+            throw new RuntimeException("Unknown long option received: " + optionName);
+          }
+          break;
+        case 'h':
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
-        } else if (INV_SORT_COMPARATOR1_SWITCH.equals(optionName)) {
-          if (invSortComparator1Classname != null) {
-            throw new Error("multiple --" + INV_SORT_COMPARATOR1_SWITCH +
-                            " classnames supplied on command line");
-          }
-          @SuppressWarnings("signature") // user input, should be checked
-          /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
-          invSortComparator1Classname = cgn;
-        } else if (INV_SORT_COMPARATOR2_SWITCH.equals(optionName)) {
-          if (invSortComparator2Classname != null) {
-            throw new Error("multiple --" + INV_SORT_COMPARATOR2_SWITCH +
-                            " classnames supplied on command line");
-          }
-          @SuppressWarnings("signature") // user input, should be checked
-          /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
-          invSortComparator2Classname = cgn;
-        } else if (INV_PAIR_COMPARATOR_SWITCH.equals(optionName)) {
-          if (invPairComparatorClassname != null) {
-            throw new Error("multiple --" + INV_PAIR_COMPARATOR_SWITCH +
-                            " classnames supplied on command line");
-          }
-          @SuppressWarnings("signature") // user input, should be checked
-          /*@ClassGetName*/ String cgn = Daikon.getOptarg(g);
-          invPairComparatorClassname = cgn;
-        } else if (IGNORE_UNJUSTIFIED_SWITCH.equals(optionName)) {
+        case 'H':
+          PrintAllVisitor.HUMAN_OUTPUT = true;
+          break;
+        case 'y': // included for legacy code
           optionSelected = true;
           includeUnjustified = false;
           break;
-        } else if (IGNORE_NUMBERED_EXITS_SWITCH.equals(optionName)) {
-          ignoreNumberedExits = true;
+        case 'd':
+          optionSelected = true;
+          printDiff = true;
           break;
-        } else {
-          throw new RuntimeException("Unknown long option received: " +
-                                     optionName);
-        }
-        break;
-      case 'h':
-        System.out.println(usage);
-        throw new Daikon.TerminationMessage();
-      case 'H':
-        PrintAllVisitor.HUMAN_OUTPUT = true;
-        break;
-      case 'y':  // included for legacy code
-        optionSelected = true;
-        includeUnjustified = false;
-        break;
-      case 'd':
-        optionSelected = true;
-        printDiff = true;
-        break;
-      case 'u':
-        printUninteresting = true;
-        break;
-      case 'a':
-        optionSelected = true;
-        printAll = true;
-        break;
-      case 's':
-        optionSelected = true;
-        stats = true;
-        break;
-      case 't':
-        optionSelected = true;
-        tabSeparatedStats = true;
-        break;
-      case 'm':
-        optionSelected = true;
-        minus = true;
-        break;
-      case 'x':
-        optionSelected = true;
-        xor = true;
-        break;
-      case 'n':
-        optionSelected = true;
-        union = true;
-        break;
-      case 'o':
-        if (outputFile != null) {
-          throw new Error
-            ("multiple output files supplied on command line");
-        }
-        String outputFilename = Daikon.getOptarg(g);
-        outputFile = new File(outputFilename);
-        if (! UtilMDE.canCreateAndWrite(outputFile)) {
-          throw new Error("Cannot write to file " + outputFile);
-        }
-        break;
-      case 'j':
-        continuousJustification = true;
-        break;
-      case 'z':
-        treeManip = true;
-        // Only makes sense if -p is also on.
-        examineAllPpts = true;
-        break;
-      case 'p':
-        examineAllPpts = true;
-        break;
-      case 'e':
-        printEmptyPpts = true;
-        break;
-      case 'v':
-        verbose = true;
-        break;
-      case 'l':
-        logging = true;
-        break;
-      case '?':
-        // getopt() already printed an error
-        System.out.println(usage);
-        throw new Daikon.TerminationMessage("Bad argument");
-      default:
-        System.out.println("getopt() returned " + c);
-        break;
+        case 'u':
+          printUninteresting = true;
+          break;
+        case 'a':
+          optionSelected = true;
+          printAll = true;
+          break;
+        case 's':
+          optionSelected = true;
+          stats = true;
+          break;
+        case 't':
+          optionSelected = true;
+          tabSeparatedStats = true;
+          break;
+        case 'm':
+          optionSelected = true;
+          minus = true;
+          break;
+        case 'x':
+          optionSelected = true;
+          xor = true;
+          break;
+        case 'n':
+          optionSelected = true;
+          union = true;
+          break;
+        case 'o':
+          if (outputFile != null) {
+            throw new Error("multiple output files supplied on command line");
+          }
+          String outputFilename = Daikon.getOptarg(g);
+          outputFile = new File(outputFilename);
+          if (!UtilMDE.canCreateAndWrite(outputFile)) {
+            throw new Error("Cannot write to file " + outputFile);
+          }
+          break;
+        case 'j':
+          continuousJustification = true;
+          break;
+        case 'z':
+          treeManip = true;
+          // Only makes sense if -p is also on.
+          examineAllPpts = true;
+          break;
+        case 'p':
+          examineAllPpts = true;
+          break;
+        case 'e':
+          printEmptyPpts = true;
+          break;
+        case 'v':
+          verbose = true;
+          break;
+        case 'l':
+          logging = true;
+          break;
+        case '?':
+          // getopt() already printed an error
+          System.out.println(usage);
+          throw new Daikon.TerminationMessage("Bad argument");
+        default:
+          System.out.println("getopt() returned " + c);
+          break;
       }
     }
 
     // Turn on the defaults
-    if (! optionSelected) {
+    if (!optionSelected) {
       printDiff = true;
     }
 
-    if (logging)
-      System.err.println("Invariant Diff: Starting Log");
+    if (logging) System.err.println("Invariant Diff: Starting Log");
 
-    if (logging)
-      System.err.println("Invariant Diff: Creating Diff Object");
+    if (logging) System.err.println("Invariant Diff: Creating Diff Object");
 
     Comparator<Invariant> defaultComparator;
     if (minus || xor || union) {
@@ -343,15 +334,23 @@ public final class Diff {
 
     // Set the comparators based on the command-line options
 
-    Diff diff = new Diff(examineAllPpts, ignoreNumberedExits,
-                         invSortComparator1Classname,
-                         invSortComparator2Classname,
-                         invPairComparatorClassname, defaultComparator);
+    Diff diff =
+        new Diff(
+            examineAllPpts,
+            ignoreNumberedExits,
+            invSortComparator1Classname,
+            invSortComparator2Classname,
+            invPairComparatorClassname,
+            defaultComparator);
 
-    if ((!(diff.invSortComparator1.getClass().toString().equals
-           (diff.invSortComparator2.getClass().toString()))) ||
-        (!(diff.invSortComparator1.getClass().toString().equals
-           (diff.invPairComparator.getClass().toString())))) {
+    if ((!(diff.invSortComparator1
+            .getClass()
+            .toString()
+            .equals(diff.invSortComparator2.getClass().toString())))
+        || (!(diff.invSortComparator1
+            .getClass()
+            .toString()
+            .equals(diff.invPairComparator.getClass().toString())))) {
       System.out.println("You are using different comparators to sort or pair up invariants.");
       System.out.println("This may cause misalignment of invariants and may cause Diff to");
       System.out.println("work incorectly.  Make sure you know what you are doing!");
@@ -365,8 +364,7 @@ public final class Diff {
     InvMap invMap1 = null;
     InvMap invMap2 = null;
 
-    if (logging)
-      System.err.println("Invariant Diff: Reading Files");
+    if (logging) System.err.println("Invariant Diff: Reading Files");
 
     if (numFiles == 1) {
       String filename1 = args[firstFileIndex];
@@ -378,58 +376,52 @@ public final class Diff {
       invMap1 = diff.readInvMap(new File(filename1));
       invMap2 = diff.readInvMap(new File(filename2));
     } else if (treeManip) {
-      System.out.println ("Warning, the preSplit file must be second");
+      System.out.println("Warning, the preSplit file must be second");
       if (numFiles < 3) {
-        System.out.println
-          ("Sorry, no manip file [postSplit] [preSplit] [manip]");
+        System.out.println("Sorry, no manip file [postSplit] [preSplit] [manip]");
       }
       String filename1 = args[firstFileIndex];
       String filename2 = args[firstFileIndex + 1];
       String filename3 = args[firstFileIndex + 2];
       String filename4 = args[firstFileIndex + 3];
-      PptMap map1 = FileIO.read_serialized_pptmap(new File(filename1),
-                                                  false // use saved config
-                                                  );
-      PptMap map2 = FileIO.read_serialized_pptmap(new File(filename2),
-                                                  false // use saved config
-                                                  );
-      manip1 = FileIO.read_serialized_pptmap(new File(filename3),
-                                             false // use saved config
-                                             );
-      manip2 = FileIO.read_serialized_pptmap(new File(filename4),
-                                             false // use saved config
-                                             );
+      PptMap map1 =
+          FileIO.read_serialized_pptmap(
+              new File(filename1), false // use saved config
+              );
+      PptMap map2 =
+          FileIO.read_serialized_pptmap(
+              new File(filename2), false // use saved config
+              );
+      manip1 =
+          FileIO.read_serialized_pptmap(
+              new File(filename3), false // use saved config
+              );
+      manip2 =
+          FileIO.read_serialized_pptmap(
+              new File(filename4), false // use saved config
+              );
 
       // get the xor from these two manips
       treeManip = false;
 
-
       // RootNode pass_and_both = diff.diffPptMap (manip1, map2, includeUnjustified);
       // RootNode fail_and_both = diff.diffPptMap (manip2, map2, includeUnjustified);
-
 
       // get rid of the "both" invariants
       // MinusVisitor2 aMinusB = new MinusVisitor2();
       //      pass_and_both.accept (aMinusB);
       // fail_and_both.accept (aMinusB);
 
+      RootNode pass_and_fail = diff.diffPptMap(manip1, manip2, includeUnjustified);
 
-      RootNode pass_and_fail = diff.diffPptMap (manip1, manip2, includeUnjustified);
-
-
-
-      XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out,
-                                                          false,
-                                                          false,
-                                                          false);
-      pass_and_fail.accept (xiv);
+      XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out, false, false, false);
+      pass_and_fail.accept(xiv);
 
       // remove for the latest version
       treeManip = true;
 
       // form the root with tree manips
-      RootNode root = diff.diffPptMap (map1, map2, includeUnjustified);
-
+      RootNode root = diff.diffPptMap(map1, map2, includeUnjustified);
 
       // now run the stats visitor for checking matches
       //      MatchCountVisitor2 mcv = new MatchCountVisitor2
@@ -446,13 +438,9 @@ public final class Diff {
       //      System.exit(0);
       */
 
+      MatchCountVisitor2 mcv2 = new MatchCountVisitor2(System.out, verbose, false);
 
-
-
-      MatchCountVisitor2 mcv2 = new MatchCountVisitor2
-        (System.out, verbose, false);
-
-      root.accept (mcv2);
+      root.accept(mcv2);
       // print final is simply for debugging, remove
       // when experiments are over.
       mcv2.printFinal();
@@ -460,22 +448,20 @@ public final class Diff {
       // Most of the bug-experiments expect the final output
       // of the Diff to be these three lines.  It is best
       // not to change it.
-      System.out.println ("Precison: " + mcv2.calcPrecision());
-      System.out.println ("Recall: " + mcv2.calcRecall());
-      System.out.println ("Success");
+      System.out.println("Precison: " + mcv2.calcPrecision());
+      System.out.println("Recall: " + mcv2.calcRecall());
+      System.out.println("Success");
       throw new Daikon.TerminationMessage();
 
     } else if (numFiles > 2) {
 
       // The new stuff that allows multiple files -LL
 
-
       PptMap[] mapAr = new PptMap[numFiles];
       int j = 0;
       for (int i = firstFileIndex; i < args.length; i++) {
         String fileName = args[i];
-        mapAr[j++] = FileIO.read_serialized_pptmap(new File (fileName),
-                                                   false);
+        mapAr[j++] = FileIO.read_serialized_pptmap(new File(fileName), false);
       }
 
       // Cascade a lot of the different invariants into one map,
@@ -483,11 +469,11 @@ public final class Diff {
 
       // Initialize it all
       RootNode root = null;
-      MultiDiffVisitor v1 = new MultiDiffVisitor (mapAr[0]);
+      MultiDiffVisitor v1 = new MultiDiffVisitor(mapAr[0]);
 
       for (int i = 1; i < mapAr.length; i++) {
-        root = diff.diffPptMap (mapAr[i], v1.currMap, includeUnjustified);
-        root.accept (v1);
+        root = diff.diffPptMap(mapAr[i], v1.currMap, includeUnjustified);
+        root.accept(v1);
       }
 
       // now take the final result for the MultiDiffVisitor
@@ -497,41 +483,37 @@ public final class Diff {
       v1.printAll();
       return;
     } else {
-      System.out.println (usage);
+      System.out.println(usage);
       throw new Daikon.TerminationMessage();
     }
 
-    if (logging)
-      System.err.println("Invariant Diff: Creating Tree");
+    if (logging) System.err.println("Invariant Diff: Creating Tree");
 
-    if (logging)
-      System.err.println("Invariant Diff: Visiting Tree");
+    if (logging) System.err.println("Invariant Diff: Visiting Tree");
 
     RootNode root = diff.diffInvMap(invMap1, invMap2, includeUnjustified);
 
     if (stats) {
-      DetailedStatisticsVisitor v =
-        new DetailedStatisticsVisitor(continuousJustification);
+      DetailedStatisticsVisitor v = new DetailedStatisticsVisitor(continuousJustification);
       root.accept(v);
       System.out.print(v.format());
     }
 
     if (tabSeparatedStats) {
-      DetailedStatisticsVisitor v =
-        new DetailedStatisticsVisitor(continuousJustification);
+      DetailedStatisticsVisitor v = new DetailedStatisticsVisitor(continuousJustification);
       root.accept(v);
       System.out.print(v.repr());
     }
 
     if (printDiff) {
-      PrintDifferingInvariantsVisitor v = new PrintDifferingInvariantsVisitor
-        (System.out, verbose, printEmptyPpts, printUninteresting);
+      PrintDifferingInvariantsVisitor v =
+          new PrintDifferingInvariantsVisitor(
+              System.out, verbose, printEmptyPpts, printUninteresting);
       root.accept(v);
     }
 
     if (printAll) {
-      PrintAllVisitor v = new PrintAllVisitor
-        (System.out, verbose, printEmptyPpts);
+      PrintAllVisitor v = new PrintAllVisitor(System.out, verbose, printEmptyPpts);
       root.accept(v);
     }
 
@@ -553,7 +535,7 @@ public final class Diff {
         InvMap resultMap = v.getResult();
         UtilMDE.writeObject(resultMap, outputFile);
         if (debug.isLoggable(Level.FINE)) {
-          debug.fine ("Result: " + resultMap.toString());
+          debug.fine("Result: " + resultMap.toString());
         }
 
         // System.out.println("Output written to: " + outputFile);
@@ -573,9 +555,7 @@ public final class Diff {
       }
     }
 
-
-    if (logging)
-      System.err.println("Invariant Diff: Ending Log");
+    if (logging) System.err.println("Invariant Diff: Ending Log");
 
     // finished; return (and end program)
   }
@@ -584,8 +564,7 @@ public final class Diff {
    * Reads an InvMap from a file that contains a serialized InvMap or
    * PptMap.
    **/
-  private InvMap readInvMap(File file) throws
-  IOException, ClassNotFoundException {
+  private InvMap readInvMap(File file) throws IOException, ClassNotFoundException {
     Object o = UtilMDE.readObject(file);
     if (o instanceof InvMap) {
       return (InvMap) o;
@@ -614,8 +593,7 @@ public final class Diff {
     ppts.addAll(pptMap.asCollection());
 
     for (PptTopLevel ppt : ppts) {
-      if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint())
-        continue;
+      if (ignoreNumberedExits && ppt.ppt_name.isNumberedExitPoint()) continue;
 
       // List<Invariant> invs = ppt.getInvariants();
       List<Invariant> invs = UtilMDE.sortList(ppt.getInvariants(), PptTopLevel.icfp);
@@ -623,8 +601,7 @@ public final class Diff {
       if (examineAllPpts) {
         // Add conditional ppts
         for (PptConditional pptCond : ppt.cond_iterable()) {
-          List<Invariant> invsCond = UtilMDE.sortList (pptCond.getInvariants(),
-                                          PptTopLevel.icfp);
+          List<Invariant> invsCond = UtilMDE.sortList(pptCond.getInvariants(), PptTopLevel.icfp);
           // List<Invariant> invsCond = pptCond.getInvariants();
           map.put(pptCond, invsCond);
         }
@@ -650,25 +627,26 @@ public final class Diff {
    * The tree consists of the invariants in map1 and map2.  If
    * includeUnjustified is true, the unjustified invariants are included.
    **/
-  public RootNode diffInvMap(InvMap map1, InvMap map2,
-                             boolean includeUnjustified) {
+  public RootNode diffInvMap(InvMap map1, InvMap map2, boolean includeUnjustified) {
     RootNode root = new RootNode();
 
-    Iterator<Pair</*@Nullable*/ PptTopLevel,/*@Nullable*/ PptTopLevel>> opi = new OrderedPairIterator<PptTopLevel>(map1.pptSortedIterator(PPT_COMPARATOR), map2.pptSortedIterator(PPT_COMPARATOR), PPT_COMPARATOR);
+    Iterator<Pair</*@Nullable*/ PptTopLevel, /*@Nullable*/ PptTopLevel>> opi =
+        new OrderedPairIterator<PptTopLevel>(
+            map1.pptSortedIterator(PPT_COMPARATOR),
+            map2.pptSortedIterator(PPT_COMPARATOR),
+            PPT_COMPARATOR);
     while (opi.hasNext()) {
-      Pair</*@Nullable*/ PptTopLevel,/*@Nullable*/ PptTopLevel> ppts = opi.next();
+      Pair</*@Nullable*/ PptTopLevel, /*@Nullable*/ PptTopLevel> ppts = opi.next();
       PptTopLevel ppt1 = ppts.a;
       PptTopLevel ppt2 = ppts.b;
       if (shouldAdd(ppt1) || shouldAdd(ppt2)) {
-        PptNode node = diffPptTopLevel(ppt1, ppt2, map1, map2,
-                                       includeUnjustified);
+        PptNode node = diffPptTopLevel(ppt1, ppt2, map1, map2, includeUnjustified);
         root.add(node);
       }
     }
 
     return root;
   }
-
 
   /**
    * Diffs two PptMaps by converting them to InvMaps.  Provided for
@@ -684,8 +662,7 @@ public final class Diff {
    * compatibiliy with legacy code.
    * If includeUnjustified is true, the unjustified invariants are included.
    **/
-  public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2,
-                             boolean includeUnjustified) {
+  public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2, boolean includeUnjustified) {
     InvMap map1 = convertToInvMap(pptMap1);
     InvMap map2 = convertToInvMap(pptMap2);
     return diffInvMap(map1, map2, includeUnjustified);
@@ -717,51 +694,50 @@ public final class Diff {
    * the program points may be null.
    * If includeUnjustied is true, the unjustified invariants are included.
    **/
-  private PptNode diffPptTopLevel(/*@Nullable*/ PptTopLevel ppt1, /*@Nullable*/ PptTopLevel ppt2,
-                                  InvMap map1, InvMap map2,
-                                  boolean includeUnjustified) {
+  private PptNode diffPptTopLevel(
+      /*@Nullable*/ PptTopLevel ppt1,
+      /*@Nullable*/ PptTopLevel ppt2,
+      InvMap map1,
+      InvMap map2,
+      boolean includeUnjustified) {
     PptNode pptNode = new PptNode(ppt1, ppt2);
 
-    assert ppt1 == null || ppt2 == null ||
-                      PPT_COMPARATOR.compare(ppt1, ppt2) == 0
+    assert ppt1 == null || ppt2 == null || PPT_COMPARATOR.compare(ppt1, ppt2) == 0
         : "Program points do not correspond";
 
     List<Invariant> invs1;
     if (ppt1 != null && !treeManip) {
       invs1 = map1.get(ppt1);
       Collections.sort(invs1, invSortComparator1);
-    }
-
-    else if (ppt1 != null && treeManip && !isCond(ppt1)) {
+    } else if (ppt1 != null && treeManip && !isCond(ppt1)) {
       HashSet<String> repeatFilter = new HashSet<String>();
-      ArrayList<Invariant> ret = new ArrayList<Invariant> ();
+      ArrayList<Invariant> ret = new ArrayList<Invariant>();
       invs1 = map1.get(ppt1);
       for (Invariant inv : invs1) {
-        if (/*inv.justified() && */inv instanceof Implication) {
+        if (
+        /*inv.justified() && */ inv instanceof Implication) {
           Implication imp = (Implication) inv;
-          if (!repeatFilter.contains (imp.consequent().format_using(OutputFormat.JAVA))) {
-            repeatFilter.add (imp.consequent().format_using(OutputFormat.JAVA));
-            ret.add (imp.consequent());
+          if (!repeatFilter.contains(imp.consequent().format_using(OutputFormat.JAVA))) {
+            repeatFilter.add(imp.consequent().format_using(OutputFormat.JAVA));
+            ret.add(imp.consequent());
           }
           // add both sides of a biimplication
           if (imp.iff == true) {
             if (!repeatFilter.contains(imp.predicate().format())) {
-              repeatFilter.add (imp.predicate().format());
-              ret.add (imp.predicate());
+              repeatFilter.add(imp.predicate().format());
+              ret.add(imp.predicate());
             }
           }
         }
         // Report invariants that are not part of implications
         // "as is".
         else {
-          ret.add (inv);
+          ret.add(inv);
         }
       }
       invs1 = ret;
       Collections.sort(invs1, invSortComparator1);
-    }
-
-    else {
+    } else {
       invs1 = new ArrayList<Invariant>();
     }
 
@@ -770,41 +746,38 @@ public final class Diff {
       invs2 = map2.get(ppt2);
       Collections.sort(invs2, invSortComparator2);
     } else {
-      if ( false && treeManip && isCond (ppt1)) {
+      if (false && treeManip && isCond(ppt1)) {
         assert ppt1 != null : "@AssumeAssertion(nullness): dead code";
         assert manip1 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
         assert manip2 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
 
         // remember, only want to mess with the second list
-        invs2 = findCondPpt (manip1, ppt1);
-        List<Invariant> tmpList = findCondPpt (manip2, ppt1);
+        invs2 = findCondPpt(manip1, ppt1);
+        List<Invariant> tmpList = findCondPpt(manip2, ppt1);
 
-        invs2.addAll (tmpList);
+        invs2.addAll(tmpList);
 
         // This uses set difference model instead of XOR
         //        invs2 = tmpList;
 
         // must call sort or it won't work!
         Collections.sort(invs2, invSortComparator2);
-      }
-      else if (treeManip && ppt2 != null && !isCond(ppt2)) {
+      } else if (treeManip && ppt2 != null && !isCond(ppt2)) {
         assert manip1 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
         assert manip2 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
 
-        invs2 = findNormalPpt (manip1, ppt2);
-        invs2.addAll ( findNormalPpt (manip2, ppt2));
-        Collections.sort (invs2, invSortComparator2);
-      }
-      else {
+        invs2 = findNormalPpt(manip1, ppt2);
+        invs2.addAll(findNormalPpt(manip2, ppt2));
+        Collections.sort(invs2, invSortComparator2);
+      } else {
         invs2 = new ArrayList<Invariant>();
       }
     }
 
-    Iterator<Pair</*@Nullable*/ Invariant,/*@Nullable*/ Invariant>> opi
-      = new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(),
-                                           invPairComparator);
+    Iterator<Pair</*@Nullable*/ Invariant, /*@Nullable*/ Invariant>> opi =
+        new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(), invPairComparator);
     while (opi.hasNext()) {
-      Pair</*@Nullable*/ Invariant,/*@Nullable*/ Invariant> invariants = opi.next();
+      Pair</*@Nullable*/ Invariant, /*@Nullable*/ Invariant> invariants = opi.next();
       Invariant inv1 = invariants.a;
       Invariant inv2 = invariants.b;
       if (!includeUnjustified) {
@@ -821,62 +794,60 @@ public final class Diff {
       }
     }
 
-
     return pptNode;
   }
 
-  /*@Pure*/ private boolean isCond (/*@Nullable*/ PptTopLevel ppt) {
+  /*@Pure*/ private boolean isCond(/*@Nullable*/ PptTopLevel ppt) {
     return (ppt instanceof PptConditional);
   }
 
-  private List<Invariant> findCondPpt (PptMap manip, PptTopLevel ppt) {
+  private List<Invariant> findCondPpt(PptMap manip, PptTopLevel ppt) {
     // targetName should look like this below
     // Contest.smallestRoom(II)I:::EXIT9;condition="max < num
     String targetName = ppt.name();
 
-    String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
+    String targ = targetName.substring(0, targetName.lastIndexOf(";condition"));
 
-    for ( String somePptName : manip.nameStringSet() ) {
+    for (String somePptName : manip.nameStringSet()) {
       // A conditional Ppt always contains the normal Ppt
-      if (targ.equals (somePptName)) {
+      if (targ.equals(somePptName)) {
         @SuppressWarnings("nullness") // map: iterating over keySet
-        /*@NonNull*/ PptTopLevel repl = manip.get (somePptName);
+        /*@NonNull*/ PptTopLevel repl = manip.get(somePptName);
         return repl.getInvariants();
       }
     }
     //    System.out.println ("Could not find the left hand side of implication!!!");
-    System.out.println ("LHS Missing: " + targ);
+    System.out.println("LHS Missing: " + targ);
     return new ArrayList<Invariant>();
   }
 
-
-  private List<Invariant> findNormalPpt (PptMap manip, PptTopLevel ppt) {
+  private List<Invariant> findNormalPpt(PptMap manip, PptTopLevel ppt) {
     // targetName should look like this below
     // Contest.smallestRoom(II)I:::EXIT9
     String targetName = ppt.name();
 
     //    String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
 
-    for ( String somePptName : manip.nameStringSet() ) {
+    for (String somePptName : manip.nameStringSet()) {
       // A conditional Ppt always contains the normal Ppt
-      if (targetName.equals (somePptName)) {
+      if (targetName.equals(somePptName)) {
         @SuppressWarnings("nullness") // map: iterating over keySet
-        /*@NonNull*/ PptTopLevel repl = manip.get (somePptName);
+        /*@NonNull*/ PptTopLevel repl = manip.get(somePptName);
         return UtilMDE.sortList(repl.getInvariants(), PptTopLevel.icfp);
       }
     }
     //    System.out.println ("Could not find the left hand side of implication!!!");
-    System.out.println ("LHS Missing: " + targetName);
+    System.out.println("LHS Missing: " + targetName);
     return new ArrayList<Invariant>();
   }
-
 
   /**
    * Use the comparator for sorting both sets and creating the pair
    * tree.
    **/
   /*@EnsuresNonNull({"invSortComparator1", "invSortComparator2", "invPairComparator"})*/
-  public void setAllInvComparators(/*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
+  public void setAllInvComparators(
+      /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
     setInvSortComparator1(c);
     setInvSortComparator2(c);
     setInvPairComparator(c);
@@ -886,9 +857,9 @@ public final class Diff {
    * If the classname is non-null, returns the comparator named by the
    * classname.  Else, returns the default.
    **/
-  private static Comparator<Invariant> selectComparator
-    (/*@Nullable*/ /*@ClassGetName*/ String classname, Comparator<Invariant> defaultComparator) throws
-    ClassNotFoundException, InstantiationException, IllegalAccessException {
+  private static Comparator<Invariant> selectComparator(
+      /*@Nullable*/ /*@ClassGetName*/ String classname, Comparator<Invariant> defaultComparator)
+      throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 
     if (classname != null) {
       Class<?> cls = Class.forName(classname);
@@ -902,20 +873,22 @@ public final class Diff {
 
   /** Use the comparator for sorting the first set. **/
   /*@EnsuresNonNull("invSortComparator1")*/
-  public void setInvSortComparator1(/*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
+  public void setInvSortComparator1(
+      /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
     invSortComparator1 = c;
   }
 
   /** Use the comparator for sorting the second set. **/
   /*@EnsuresNonNull("invSortComparator2")*/
-  public void setInvSortComparator2(/*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
+  public void setInvSortComparator2(
+      /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
     invSortComparator2 = c;
   }
 
   /** Use the comparator for creating the pair tree. **/
   /*@EnsuresNonNull("invPairComparator")*/
-  public void setInvPairComparator(/*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
+  public void setInvPairComparator(
+      /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
     invPairComparator = c;
   }
-
 }

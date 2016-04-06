@@ -85,14 +85,14 @@ public class CLASSNAME
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     // Check to see that both arrays are ordered
     if (!vis[0].aux.hasOrder() ||
         !vis[1].aux.hasOrder())
-      return (false);
+      return false;
 
-    return (true);
+    return true;
   }
 
   /** instantiates the invariant on the specified slice **/

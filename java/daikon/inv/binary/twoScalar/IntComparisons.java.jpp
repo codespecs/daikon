@@ -416,16 +416,16 @@ public final class INTEQUAL
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     #if defined (IS_INT)
       #if defined (EQUAL)
-        return (true);
+        return true;
       #elif defined (NONEQUAL)
         if (dkconfig_integral_only)
           return (vis[0].file_rep_type.isIntegral()
                   && vis[1].file_rep_type.isIntegral());
-        return (true);
+        return true;
       #else
         return (vis[0].file_rep_type.isIntegral()
                 && vis[1].file_rep_type.isIntegral());
@@ -444,7 +444,7 @@ public final class INTEQUAL
         return result;
       #endif
     #else
-      return (true);
+      return true;
     #endif
 
 #if !(defined(EQUAL) || defined(EQUALFLOAT))
@@ -566,7 +566,7 @@ public final class INTEQUAL
 
 #ifdef EQUAL_OP
   /*@Pure*/ public boolean is_equality_inv() {
-    return (true);
+    return true;
   }
 #endif
 
@@ -585,7 +585,7 @@ public final class INTEQUAL
 
 #if (defined(EQUAL_OP) || defined(NONEQUAL_OP))
   /*@Pure*/ public boolean is_symmetric() {
-    return (true);
+    return true;
   }
 
 #else

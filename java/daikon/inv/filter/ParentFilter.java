@@ -22,56 +22,67 @@ public class ParentFilter extends InvariantFilter {
    */
   public static boolean dkconfig_enabled = true;
 
-  public ParentFilter () {
+  public ParentFilter() {
     isOn = dkconfig_enabled;
   }
 
   private static boolean debug = false;
   // private static boolean debug = true;
 
-  boolean shouldDiscardInvariant( Invariant inv ) {
+  boolean shouldDiscardInvariant(Invariant inv) {
 
     // System.out.printf("shouldDiscardInvariant(%s)%n", inv.format());
 
     if (Debug.logDetail()) {
       if (inv.ppt.parent.parents != null) {
-        inv.log ("%s has PptTopLevel %s which has %d parents",
-            inv.format(), inv.ppt.parent.name, inv.ppt.parent.parents.size());
+        inv.log(
+            "%s has PptTopLevel %s which has %d parents",
+            inv.format(),
+            inv.ppt.parent.name,
+            inv.ppt.parent.parents.size());
         for (PptRelation rel : inv.ppt.parent.parents) {
-          inv.log ("--%s%n", rel);
-          inv.log ("--variables: %s", VarInfo.arrayToString (rel.parent.var_infos));
-          inv.log ("--map: %s", rel.child_to_parent_map);
+          inv.log("--%s%n", rel);
+          inv.log("--variables: %s", VarInfo.arrayToString(rel.parent.var_infos));
+          inv.log("--map: %s", rel.child_to_parent_map);
         }
       } else {
-        inv.log ("%s has PptTopLevel %s which has 0 parents", inv.format(),
-                 inv.ppt.parent.name);
+        inv.log("%s has PptTopLevel %s which has 0 parents", inv.format(), inv.ppt.parent.name);
       }
     }
 
     // If there are no parents, can't discard
-    if (inv.ppt.parent.parents == null)
-      return (false);
+    if (inv.ppt.parent.parents == null) return false;
 
     // Loop through each parent ppt getting the parent/child relation info
-    outer: for (PptRelation rel : inv.ppt.parent.parents) {
+    outer:
+    for (PptRelation rel : inv.ppt.parent.parents) {
 
-      if (Debug.logDetail())
-        inv.log ("  considering parent %s [%s]", rel, rel.parent.name());
+      if (Debug.logDetail()) inv.log("  considering parent %s [%s]", rel, rel.parent.name());
 
       // Look up each variable in the parent, skip this parent if any
       // variables don't exist in the parent.
       /*@Nullable*/ VarInfo[] pvis_raw = new VarInfo[inv.ppt.var_infos.length];
       for (int j = 0; j < pvis_raw.length; j++) {
-        pvis_raw[j] = rel.parentVar (inv.ppt.var_infos[j]);
+        pvis_raw[j] = rel.parentVar(inv.ppt.var_infos[j]);
         // pvis_raw[j] *can* be null.  Why, and is that a problem? -MDE
         if (pvis_raw[j] == null) {
           if (Debug.logDetail()) {
-            inv.log ("variable %s [%s] cannot be found in %s",
-                     inv.ppt.var_infos[j],
-                     inv.ppt.var_infos[j].get_equalitySet_vars(), rel);
+            inv.log(
+                "variable %s [%s] cannot be found in %s",
+                inv.ppt.var_infos[j],
+                inv.ppt.var_infos[j].get_equalitySet_vars(),
+                rel);
             for (VarInfo evi : inv.ppt.var_infos[j].get_equalitySet_vars())
-              inv.log ("var %s index %d, dp %b, depth %d, complex %d, idp %s, name %s, param vars %s",
-                       evi, evi.varinfo_index, evi.isDerivedParamAndUninteresting(), evi.derivedDepth(), evi.complexity(), evi.isDerivedParam(), evi.get_VarInfoName(), evi.ppt.getParamVars());
+              inv.log(
+                  "var %s index %d, dp %b, depth %d, complex %d, idp %s, name %s, param vars %s",
+                  evi,
+                  evi.varinfo_index,
+                  evi.isDerivedParamAndUninteresting(),
+                  evi.derivedDepth(),
+                  evi.complexity(),
+                  evi.isDerivedParam(),
+                  evi.get_VarInfoName(),
+                  evi.ppt.getParamVars());
           }
           continue outer;
         }
@@ -79,20 +90,16 @@ public class ParentFilter extends InvariantFilter {
       @SuppressWarnings("nullness") // at this point, pvis contains only non-null elements
       VarInfo[] pvis = pvis_raw;
 
-      if (Debug.logDetail())
-        inv.log ("  got variables");
+      if (Debug.logDetail()) inv.log("  got variables");
 
       // Sort the parent variables in index order
-      Arrays.sort (pvis, VarInfo.IndexComparator.getInstance());
-      if (Debug.logDetail())
-        inv.log ("Found parent vars: %s", VarInfo.arrayToString (pvis));
+      Arrays.sort(pvis, VarInfo.IndexComparator.getInstance());
+      if (Debug.logDetail()) inv.log("Found parent vars: %s", VarInfo.arrayToString(pvis));
 
       // Lookup the slice, skip if not found
-      PptSlice pslice = rel.parent.findSlice (pvis);
-      if (pslice == null)
-        continue;
-      if (Debug.logDetail())
-        inv.log ("Found parent slice: %s", pslice.name());
+      PptSlice pslice = rel.parent.findSlice(pvis);
+      if (pslice == null) continue;
+      if (Debug.logDetail()) inv.log("Found parent slice: %s", pslice.name());
 
       // System.out.printf ("  found parent slice (%d invs): %s%n", pslice.invs.size(), pslice.name());
 
@@ -102,25 +109,21 @@ public class ParentFilter extends InvariantFilter {
       // references to the class are non null
       for (Invariant pinv : pslice.invs) {
         // System.out.printf ("  inv in parent slice: %s%n", pinv.format());
-        if (pinv.isGuardingPredicate)
-          continue;
-        if (pinv.getClass() != inv.getClass())
-          continue;
+        if (pinv.isGuardingPredicate) continue;
+        if (pinv.getClass() != inv.getClass()) continue;
         if ((pinv.getClass() == daikon.inv.unary.scalar.NonZero.class)
             && pinv.ppt.var_infos[0].isThis()) {
-          inv.log ("Not filtered by %s 'this != null'", pinv.format());
+          inv.log("Not filtered by %s 'this != null'", pinv.format());
           continue;
         }
-        if (! pinv.isSameFormula (inv))
-          continue;
+        if (!pinv.isSameFormula(inv)) continue;
 
         // Check that all the guard variables correspond.
         List<VarInfo> guardedVars = inv.getGuardingList();
         List<VarInfo> pGuardedVars = pinv.getGuardingList();
         // Optimization: bail our early if size of list is different.
         if ((guardedVars.size() != pGuardedVars.size())
-            && (guardedVars.size() != pGuardedVars.size()+1))
-          continue;
+            && (guardedVars.size() != pGuardedVars.size() + 1)) continue;
         boolean var_mismatch = false;
         for (VarInfo v : guardedVars) {
           VarInfo pv = rel.parentVarAnyInEquality(v);
@@ -134,37 +137,55 @@ public class ParentFilter extends InvariantFilter {
             var_mismatch = true;
             break;
           }
-          if (! (pv.name().equals("this")
-                 || pGuardedVars.contains(pv))) {
-            if (debug) System.out.printf("Not in guarding list %s for %s: parent var %s at %s for %s at %s%n",
-                              guardedVars, pinv, pv, rel.parent, v.name(), rel.child);
+          if (!(pv.name().equals("this") || pGuardedVars.contains(pv))) {
+            if (debug)
+              System.out.printf(
+                  "Not in guarding list %s for %s: parent var %s at %s for %s at %s%n",
+                  guardedVars,
+                  pinv,
+                  pv,
+                  rel.parent,
+                  v.name(),
+                  rel.child);
             VarInfo pgv = pGuardedVars.size() > 0 ? pGuardedVars.get(0) : null;
             assert (pgv != pv);
-            if (debug && pgv != null) System.out.printf("%s is index %d at %s, %s is index %d at %s%n",
-                              pgv, pgv.varinfo_index, pgv.ppt.name, pv, pv.varinfo_index, pv.ppt.name);
+            if (debug && pgv != null)
+              System.out.printf(
+                  "%s is index %d at %s, %s is index %d at %s%n",
+                  pgv,
+                  pgv.varinfo_index,
+                  pgv.ppt.name,
+                  pv,
+                  pv.varinfo_index,
+                  pv.ppt.name);
             var_mismatch = true;
             break;
           }
         }
-        if (var_mismatch)
-          continue;
+        if (var_mismatch) continue;
 
         if (Invariant.logOn()) {
-          inv.log ("Filtered by parent inv '%s' at ppt %s with rel %s",
-                   pinv.format(), pslice.name(), rel);
+          inv.log(
+              "Filtered by parent inv '%s' at ppt %s with rel %s",
+              pinv.format(),
+              pslice.name(),
+              rel);
           for (VarInfo cvi : inv.ppt.var_infos) {
-            inv.log ("child variable %s matches parent variable %s",
-                     cvi, rel.parentVar (cvi));
+            inv.log("child variable %s matches parent variable %s", cvi, rel.parentVar(cvi));
             for (VarInfo evi : cvi.get_equalitySet_vars())
-              inv.log ("var %s index %d, dp %b, depth %d, complex %d",
-                       evi, evi.varinfo_index, evi.isDerivedParamAndUninteresting(), evi.derivedDepth(), evi.complexity());
+              inv.log(
+                  "var %s index %d, dp %b, depth %d, complex %d",
+                  evi,
+                  evi.varinfo_index,
+                  evi.isDerivedParamAndUninteresting(),
+                  evi.derivedDepth(),
+                  evi.complexity());
           }
         }
-        return (true);
+        return true;
       }
     }
 
-    return (false);
+    return false;
   }
-
 }

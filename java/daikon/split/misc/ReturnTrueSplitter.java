@@ -9,9 +9,7 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 // This splitter tests the condition "return == true".
-public final class ReturnTrueSplitter
-  extends Splitter
-{
+public final class ReturnTrueSplitter extends Splitter {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -19,11 +17,10 @@ public final class ReturnTrueSplitter
 
   private /*@Nullable*/ VarInfo return_varinfo;
 
-  public ReturnTrueSplitter() {
-  }
+  public ReturnTrueSplitter() {}
 
   public ReturnTrueSplitter(Ppt ppt) {
-    return_varinfo = ppt.find_var_by_name ("return");
+    return_varinfo = ppt.find_var_by_name("return");
     instantiated = true;
   }
 
@@ -33,11 +30,11 @@ public final class ReturnTrueSplitter
 
   /*@EnsuresNonNullIf(result=true, expression="return_varinfo")*/
   public boolean valid() {
-    return ((return_varinfo != null)
-            && (return_varinfo.type == ProglangType.BOOLEAN));
+    return ((return_varinfo != null) && (return_varinfo.type == ProglangType.BOOLEAN));
   }
 
-  @SuppressWarnings("nullness:contracts.precondition.override.invalid") // application invariant about private variable
+  @SuppressWarnings(
+      "nullness:contracts.precondition.override.invalid") // application invariant about private variable
   /*@RequiresNonNull("return_varinfo")*/
   public boolean test(ValueTuple vt) {
     return (return_varinfo.getIntValue(vt) != 0);

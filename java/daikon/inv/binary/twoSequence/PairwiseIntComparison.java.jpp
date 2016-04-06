@@ -267,14 +267,14 @@ public class PAIRWISEINTEQUAL
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       if (!(vis[0].type.ELEMENTISTYPE && vis[1].type.ELEMENTISTYPE))
         return false;
     #endif
 
-    return (true);
+    return true;
   }
 
   /** instantiates the invariant on the specified slice **/
@@ -389,7 +389,7 @@ public class PAIRWISEINTEQUAL
 
   #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     /*@Pure*/ public boolean is_symmetric() {
-    return (true);
+    return true;
   }
 
 #else

@@ -1,4 +1,5 @@
 package daikon.derive.unary;
+
 import daikon.*;
 import daikon.derive.*;
 import plume.*;
@@ -8,9 +9,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 // like SequenceMax; if one changes, change the other, too
-public final class SequenceMin
-  extends UnaryDerivation
-{
+public final class SequenceMin extends UnaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -29,23 +28,17 @@ public final class SequenceMin
 
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL)
-      return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
     Object val = base.getValue(vt);
-    if (val == null)
-      return ValueAndModified.MISSING_NONSENSICAL;
+    if (val == null) return ValueAndModified.MISSING_NONSENSICAL;
     if (val instanceof long[]) {
-      long[] val_array = (long[])val;
-      if (val_array.length == 0)
-        return ValueAndModified.MISSING_NONSENSICAL;
-      return new ValueAndModified(Intern.internedLong(ArraysMDE.min(val_array)),
-                                  source_mod);
+      long[] val_array = (long[]) val;
+      if (val_array.length == 0) return ValueAndModified.MISSING_NONSENSICAL;
+      return new ValueAndModified(Intern.internedLong(ArraysMDE.min(val_array)), source_mod);
     } else if (val instanceof double[]) {
-      double[] val_array = (double[])val;
-      if (val_array.length == 0)
-        return ValueAndModified.MISSING_NONSENSICAL;
-      return new ValueAndModified(Intern.internedDouble(ArraysMDE.min(val_array)),
-                                  source_mod);
+      double[] val_array = (double[]) val;
+      if (val_array.length == 0) return ValueAndModified.MISSING_NONSENSICAL;
+      return new ValueAndModified(Intern.internedDouble(ArraysMDE.min(val_array)), source_mod);
 
     } else {
       return ValueAndModified.MISSING_NONSENSICAL;
@@ -53,7 +46,7 @@ public final class SequenceMin
   }
 
   protected VarInfo makeVarInfo() {
-    return VarInfo.make_scalar_seq_func ("min", null, base, 0);
+    return VarInfo.make_scalar_seq_func("min", null, base, 0);
   }
 
   /*@Pure*/ public boolean isSameFormula(Derivation other) {
@@ -62,6 +55,6 @@ public final class SequenceMin
 
   /** Returns the ESC name **/
   /*@SideEffectFree*/ public String esc_name(String index) {
-    return String.format ("min(%s)", base.esc_name());
+    return String.format("min(%s)", base.esc_name());
   }
 }

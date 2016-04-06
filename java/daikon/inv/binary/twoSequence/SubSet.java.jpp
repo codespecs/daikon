@@ -112,7 +112,7 @@ public class SUBSET
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     #if 0
       // JHP: This code is removed because these sorts of static checks
@@ -137,7 +137,7 @@ public class SUBSET
       }
     #endif
 
-    return (true);
+    return true;
   }
 
   /** instantiates the invariant on the specified slice **/

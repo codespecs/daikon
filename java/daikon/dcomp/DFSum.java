@@ -16,6 +16,6 @@ import java.lang.annotation.*;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface DFSum{
+public @interface DFSum {
   String value();
 }

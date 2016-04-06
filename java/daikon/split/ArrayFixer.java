@@ -81,7 +81,7 @@ class ArrayFixer extends DepthFirstVisitor {
    * @throws ParseException when condition is not a valid segment of java code
    */
   public static String fixArrays(String expression, String[] names, VarInfo[] varInfos)
-   throws ParseException {
+      throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     ArrayFixer fixer = new ArrayFixer(names, varInfos);
     root.accept(fixer);
@@ -112,17 +112,16 @@ class ArrayFixer extends DepthFirstVisitor {
    * Adds "_identity" or "_array" if needed at this node token.
    */
   public void visit(NodeToken n) {
-    if (lastTokenMayBeIdentity &&
-        (! (Visitors.isLBracket(n) || Visitors.isDot(n)))) {
-      assert lastToken != null : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeIdentity == true";
+    if (lastTokenMayBeIdentity && (!(Visitors.isLBracket(n) || Visitors.isDot(n)))) {
+      assert lastToken != null
+          : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeIdentity == true";
       lastToken.tokenImage = lastToken.tokenImage + "_identity";
       lastToken.endColumn = lastToken.endColumn + 9;
       columnshift = columnshift + 9;
       columnshiftline = lastToken.beginLine;
-    }
-    else if (lastTokenMayBeElements &&
-             (Visitors.isLBracket(n) || Visitors.isDot(n))) {
-      assert lastToken != null : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeElements == true";
+    } else if (lastTokenMayBeElements && (Visitors.isLBracket(n) || Visitors.isDot(n))) {
+      assert lastToken != null
+          : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeElements == true";
       lastToken.tokenImage = lastToken.tokenImage + "_array";
       lastToken.endColumn = lastToken.endColumn + 6;
       columnshift = columnshift + 6;
@@ -138,8 +137,7 @@ class ArrayFixer extends DepthFirstVisitor {
             if (varName.equals(n.tokenImage)) {
               lastTokenMayBeIdentity = true;
             }
-          }
-          else if (varName.equals(n.tokenImage)) {
+          } else if (varName.equals(n.tokenImage)) {
             lastTokenMayBeElements = true;
           }
         }
@@ -148,8 +146,7 @@ class ArrayFixer extends DepthFirstVisitor {
     if (n.beginLine == columnshiftline) {
       n.beginColumn = n.beginColumn + columnshift;
       n.endColumn = n.endColumn + columnshift;
-    }
-    else {
+    } else {
       columnshift = 0;
       columnshiftline = -1;
     }
@@ -158,12 +155,12 @@ class ArrayFixer extends DepthFirstVisitor {
 
   private void fixLastToken() {
     if (lastTokenMayBeIdentity) {
-      assert lastToken != null : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeIdentity == true";
+      assert lastToken != null
+          : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeIdentity == true";
       lastToken.tokenImage = lastToken.tokenImage + "_identity";
       lastToken.endColumn = lastToken.endColumn + 9;
       columnshift = columnshift + 9;
       columnshiftline = lastToken.beginLine;
     }
   }
-
 }

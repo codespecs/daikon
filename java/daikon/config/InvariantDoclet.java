@@ -22,8 +22,7 @@ import org.checkerframework.checker.signature.qual.*;
  *   --text FILENAME      Text format, with each name preceded by "+"
  *                        characters to indicate depth in the tree.
  **/
-public class InvariantDoclet
-{
+public class InvariantDoclet {
 
   private static final String lineSep = System.getProperty("line.separator");
 
@@ -32,24 +31,22 @@ public class InvariantDoclet
    * are purposefully missing enable variables.  Any others will
    * throw an exception.
    */
-  private static /*@Regex*/ String[] invs_without_enables = new /*@Regex*/ String[]
-    {
-      "FunctionBinary.*",
-      ".*RangeFloat.*",
-      ".*RangeInt.*",
-      "AndJoiner",
-      "DummyInvariant",
-      "Equality",
-      "GuardingImplication",
-      "Implication",
-    };
+  private static /*@Regex*/ String[] invs_without_enables =
+      new /*@Regex*/ String[] {
+        "FunctionBinary.*",
+        ".*RangeFloat.*",
+        ".*RangeInt.*",
+        "AndJoiner",
+        "DummyInvariant",
+        "Equality",
+        "GuardingImplication",
+        "Implication",
+      };
 
   /**
    * Entry point for this doclet (invoked by javadoc).
    **/
-  public static boolean start(RootDoc doc)
-    throws IOException
-  {
+  public static boolean start(RootDoc doc) throws IOException {
     InvariantDoclet pd = new InvariantDoclet(doc);
     pd.process();
 
@@ -61,62 +58,59 @@ public class InvariantDoclet
    * @return number of tokens used by one option.
    **/
   public static int optionLength(String opt) {
-    if ("--texinfo".equals(opt))
-      return 2; // == 1 tag + 1 argument
+    if ("--texinfo".equals(opt)) return 2; // == 1 tag + 1 argument
 
-    if ("--text".equals(opt))
-      return 2; // == 1 tag + 1 argument
+    if ("--text".equals(opt)) return 2; // == 1 tag + 1 argument
 
-    return 0;   // unknown option
+    return 0; // unknown option
   }
 
   // ======================== NON-STATIC METHODS ==============================
 
-  protected RootDoc root;   // root document
-  protected Map<ClassDoc,Set</*@KeyFor("cmap")*/ ClassDoc>> cmap;   // map of classdoc to derived classes for the class
+  protected RootDoc root; // root document
+  protected Map<ClassDoc, Set</*@KeyFor("cmap")*/ ClassDoc>>
+      cmap; // map of classdoc to derived classes for the class
   protected boolean dump_class_tree = false;
-
 
   public InvariantDoclet(RootDoc doc) {
     root = doc;
-    cmap = new TreeMap<ClassDoc,Set</*@KeyFor("cmap")*/ ClassDoc>>();
+    cmap = new TreeMap<ClassDoc, Set</*@KeyFor("cmap")*/ ClassDoc>>();
   }
 
   /**
    * Process a javadoc tree and create the specified invariant output.
    **/
-  public void process()
-    throws IOException {
+  public void process() throws IOException {
 
     @SuppressWarnings("keyfor") // the loop below makes all these keys to cmap
     /*@KeyFor("cmap")*/ ClassDoc[] clazzes = root.classes();
 
     //go through all of the classes and intialize the map
     for (ClassDoc cd : clazzes) {
-      cmap.put (cd, new TreeSet</*@KeyFor("cmap")*/ ClassDoc>());
+      cmap.put(cd, new TreeSet</*@KeyFor("cmap")*/ ClassDoc>());
     }
 
     //go through the list again and put in the derived class information
     for (ClassDoc cd : clazzes) {
       ClassDoc super_c = cd.superclass();
       if (super_c != null) {
-        if (! cmap.containsKey(super_c)) {
+        if (!cmap.containsKey(super_c)) {
           // System.out.println ("NO SUPER: " + cd + " s: " + super_c);
         } else {
           // System.out.println ("   SUPER: " + cd + "s: " + super_c);
-          Set</*@KeyFor("cmap")*/ ClassDoc> derived = cmap.get (super_c);
-          derived.add (cd);
+          Set</*@KeyFor("cmap")*/ ClassDoc> derived = cmap.get(super_c);
+          derived.add(cd);
         }
       }
     }
 
     if (dump_class_tree) {
       //loop through each class in order
-      for ( ClassDoc cd : cmap.keySet() ) {
+      for (ClassDoc cd : cmap.keySet()) {
 
         //if this is a top level class
-        if ((cd.superclass() == null) || (cmap.get (cd.superclass()) == null)) {
-          process_class_tree_txt (System.out, cd, 0);
+        if ((cd.superclass() == null) || (cmap.get(cd.superclass()) == null)) {
+          process_class_tree_txt(System.out, cd, 0);
         }
       }
     }
@@ -131,23 +125,22 @@ public class InvariantDoclet
 
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintStream outf = new PrintStream (new FileOutputStream (fname));
+        PrintStream outf = new PrintStream(new FileOutputStream(fname));
 
         @SuppressWarnings("keyfor") // Invariant is always a key
-        /*@KeyFor("this.cmap")*/ ClassDoc inv = root.classNamed ("daikon.inv.Invariant");
-        process_class_sorted_texinfo (outf, inv);
+        /*@KeyFor("this.cmap")*/ ClassDoc inv = root.classNamed("daikon.inv.Invariant");
+        process_class_sorted_texinfo(outf, inv);
         outf.close();
 
       } else if ("--text".equals(opt)) {
 
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintStream outf = new PrintStream (new FileOutputStream(fname));
+        PrintStream outf = new PrintStream(new FileOutputStream(fname));
         @SuppressWarnings("keyfor") // Invariant is always present
-        /*@KeyFor("cmap")*/ ClassDoc inv = root.classNamed ("daikon.inv.Invariant");
-        process_class_tree_txt (outf, inv, 0);
+        /*@KeyFor("cmap")*/ ClassDoc inv = root.classNamed("daikon.inv.Invariant");
+        process_class_tree_txt(outf, inv, 0);
         outf.close();
-
       }
     }
   }
@@ -159,32 +152,30 @@ public class InvariantDoclet
    * @param cd      Starting class
    * @param indent  Starting indent for the derived class (normally 0)
    */
-  public void process_class_tree_txt (PrintStream out, /*@KeyFor("this.cmap")*/ ClassDoc cd, int indent) {
+  public void process_class_tree_txt(
+      PrintStream out, /*@KeyFor("this.cmap")*/ ClassDoc cd, int indent) {
     assert cmap.containsKey(cd);
 
     String prefix = "";
 
     //create the prefix string
-    for (int i = 0; i < indent; i++)
-      prefix += "+";
+    for (int i = 0; i < indent; i++) prefix += "+";
 
     //put out this class
     String is_abstract = "";
-    if (cd.isAbstract())
-      is_abstract = " (Abstract)";
-    out.println (prefix + cd + is_abstract);
+    if (cd.isAbstract()) is_abstract = " (Abstract)";
+    out.println(prefix + cd + is_abstract);
     String comment = cd.commentText();
     comment = "         " + comment;
-    comment = UtilMDE.replaceString (comment, lineSep, lineSep + "        ");
-    out.println (comment);
+    comment = UtilMDE.replaceString(comment, lineSep, lineSep + "        ");
+    out.println(comment);
 
     //put out each derived class
-    Set</*@KeyFor("cmap")*/ ClassDoc> derived = cmap.get (cd);
+    Set</*@KeyFor("cmap")*/ ClassDoc> derived = cmap.get(cd);
     for (ClassDoc dc : derived) {
-      process_class_tree_txt (out, dc, indent + 1);
+      process_class_tree_txt(out, dc, indent + 1);
     }
   }
-
 
   /**
    * Prints a class and all of its derived classes with their documentation
@@ -194,7 +185,7 @@ public class InvariantDoclet
    * @param out     stream to which write output
    * @param cd      Class to process
    */
-  public void process_class_sorted_texinfo (PrintStream out, /*@KeyFor("this.cmap")*/ ClassDoc cd) {
+  public void process_class_sorted_texinfo(PrintStream out, /*@KeyFor("this.cmap")*/ ClassDoc cd) {
 
     out.println("@c BEGIN AUTO-GENERATED INVARIANTS LISTING");
     out.println("@c Automatically generated by " + getClass());
@@ -208,38 +199,37 @@ public class InvariantDoclet
     int permute_cnt = 0;
 
     TreeSet<ClassDoc> list = new TreeSet<ClassDoc>();
-    gather_derived_classes (cd, list);
+    gather_derived_classes(cd, list);
     for (ClassDoc dc : list) {
-      if (dc.isAbstract())
-        continue;
-      if (dc.qualifiedName().indexOf (".test.") != -1)
-        continue;
+      if (dc.isAbstract()) continue;
+      if (dc.qualifiedName().indexOf(".test.") != -1) continue;
 
       // setup the comment for info
       String comment = dc.commentText();
 
       comment = HtmlToTexinfo.htmlToTexinfo(comment);
 
-      if (dc.name().startsWith ("FunctionBinary")) {
-        String[] parts = dc.name().split ("[._]");
+      if (dc.name().startsWith("FunctionBinary")) {
+        String[] parts = dc.name().split("[._]");
         String fb_function = parts[1];
         String fb_permute = parts[2];
-        if (last_fb.equals (fb_function)) {
+        if (last_fb.equals(fb_function)) {
           permutes += ", " + fb_permute;
           permute_cnt++;
         } else /* new type of function binary */ {
-          if (! last_fb.equals("")) { // actually, == test would work here
-            out.println ();
-            out.println ("@item " + fb_type + "." + last_fb + "_@{" + permutes
-                       + "@}");
-            out.println (last_comment);
+          if (!last_fb.equals("")) { // actually, == test would work here
+            out.println();
+            out.println("@item " + fb_type + "." + last_fb + "_@{" + permutes + "@}");
+            out.println(last_comment);
             assert (permute_cnt == 3) || (permute_cnt == 6);
             if (permute_cnt == 3)
-              out.println ("Since the function is symmetric, only the "
-                           + "permutations xyz, yxz, and zxy are checked.");
+              out.println(
+                  "Since the function is symmetric, only the "
+                      + "permutations xyz, yxz, and zxy are checked.");
             else
-              out.println ("Since the function is non-symmetric, all six "
-                           + "permutations of the variables are checked.");
+              out.println(
+                  "Since the function is non-symmetric, all six "
+                      + "permutations of the variables are checked.");
           }
           last_fb = fb_function;
           permutes = fb_permute;
@@ -248,38 +238,36 @@ public class InvariantDoclet
           permute_cnt = 1;
         }
       } else {
-        out.println ();
-        out.println ("@item " + dc.name());
-        out.println (comment);
+        out.println();
+        out.println("@item " + dc.name());
+        out.println(comment);
       }
 
       // Make sure that all invariants have enable variables
-      if (true && (find_enabled (dc) == -1)) {
+      if (true && (find_enabled(dc) == -1)) {
         boolean ok_without_enable = false;
         for (String re : invs_without_enables) {
-          if (dc.name().matches ("^" + re + "$")) {
+          if (dc.name().matches("^" + re + "$")) {
             ok_without_enable = true;
             break;
           }
         }
-        if (!ok_without_enable)
-          throw new RuntimeException ("No enable variable for " + dc.name());
+        if (!ok_without_enable) throw new RuntimeException("No enable variable for " + dc.name());
       }
 
       // Note whether this invariant is turned off by default
-      if (find_enabled (dc) == 0) {
-        out.println ();
-        out.println("This invariant is not enabled by default.  "
-                    + "See the configuration option");
+      if (find_enabled(dc) == 0) {
+        out.println();
+        out.println("This invariant is not enabled by default.  " + "See the configuration option");
         out.println("@samp{" + dc + ".enabled}.");
       }
 
       //get a list of any other configuration variables
-      Vector<FieldDoc> config_vars = find_fields (dc, Configuration.PREFIX);
+      Vector<FieldDoc> config_vars = find_fields(dc, Configuration.PREFIX);
       for (int i = 0; i < config_vars.size(); i++) {
-        FieldDoc f = config_vars.get (i);
-        if (f.name().equals (Configuration.PREFIX + "enabled")) {
-          config_vars.remove (i);
+        FieldDoc f = config_vars.get(i);
+        if (f.name().equals(Configuration.PREFIX + "enabled")) {
+          config_vars.remove(i);
           break;
         }
       }
@@ -288,15 +276,15 @@ public class InvariantDoclet
 
       if (config_vars.size() > 0) {
         out.println();
-        out.println("See also the following configuration option"
-                    + (config_vars.size() > 1 ? "s" : "") + ":");
+        out.println(
+            "See also the following configuration option"
+                + (config_vars.size() > 1 ? "s" : "")
+                + ":");
         out.println("    @itemize @bullet");
         for (FieldDoc f : config_vars) {
           out.print("    @item ");
-          out.println("@samp{" +
-                      UtilMDE.replaceString(f.qualifiedName(),
-                                            Configuration.PREFIX, "")
-                      + "}");
+          out.println(
+              "@samp{" + UtilMDE.replaceString(f.qualifiedName(), Configuration.PREFIX, "") + "}");
         }
         out.println("    @end itemize");
       }
@@ -313,18 +301,16 @@ public class InvariantDoclet
    * @param cd      The base class from which to start the search
    * @param set    The set to add classes to.  Should start out empty.
    */
-
-  public void gather_derived_classes (/*@KeyFor("this.cmap")*/ ClassDoc cd, TreeSet<ClassDoc> set) {
+  public void gather_derived_classes(/*@KeyFor("this.cmap")*/ ClassDoc cd, TreeSet<ClassDoc> set) {
     assert cmap.containsKey(cd);
 
     // System.out.println ("Processing " + cd);
-    Set</*@KeyFor("cmap")*/ ClassDoc> derived = cmap.get (cd);
+    Set</*@KeyFor("cmap")*/ ClassDoc> derived = cmap.get(cd);
     for (ClassDoc dc : derived) {
-      set.add (dc);
-      gather_derived_classes (dc, set);
+      set.add(dc);
+      gather_derived_classes(dc, set);
     }
   }
-
 
   /**
    * Looks for a field named dkconfig_enabled in the class and find
@@ -335,8 +321,7 @@ public class InvariantDoclet
    * @return 1 for true, 0 for false, -1 if there was an error or
    * there was no such field
    */
-
-  public int find_enabled (ClassDoc cd) {
+  public int find_enabled(ClassDoc cd) {
 
     String enable_name = Configuration.PREFIX + "enabled";
     // System.out.println ("Looking for " + enable_name);
@@ -344,7 +329,7 @@ public class InvariantDoclet
     FieldDoc[] fields = cd.fields();
     for (int j = 0; j < fields.length; j++) {
       FieldDoc field = fields[j];
-      if (enable_name.equals (field.name())) {
+      if (enable_name.equals(field.name())) {
         // System.out.println ("Found " + field.qualifiedName());
         try {
           String fullname = field.qualifiedName();
@@ -355,17 +340,17 @@ public class InvariantDoclet
           try {
             c = UtilMDE.classForName(classname);
           } catch (Throwable e) {
-            System.err.printf("Exception in UtilMDE.classForName(%s): %s",
-                              fullname, e);
+            System.err.printf("Exception in UtilMDE.classForName(%s): %s", fullname, e);
             return -1;
           }
-          Field f = c.getField (enable_name);
+          Field f = c.getField(enable_name);
           @SuppressWarnings("nullness") // f has boolean type, so result is non-null Boolean
           /*@NonNull*/ Object value = f.get(null);
-          if (((Boolean) value).booleanValue())
+          if (((Boolean) value).booleanValue()) {
             return (1);
-          else
+          } else {
             return (0);
+          }
         } catch (Exception e) {
           System.err.println(e);
           return -1;
@@ -386,17 +371,14 @@ public class InvariantDoclet
    * If no fields are found, a zero length vector is returned (not
    * null).
    */
-
-  public Vector<FieldDoc> find_fields (ClassDoc cd, String prefix) {
+  public Vector<FieldDoc> find_fields(ClassDoc cd, String prefix) {
 
     Vector<FieldDoc> list = new Vector<FieldDoc>();
 
     for (FieldDoc f : cd.fields()) {
-      if (f.name().startsWith (prefix))
-        list.add (f);
+      if (f.name().startsWith(prefix)) list.add(f);
     }
 
     return (list);
   }
-
 }

@@ -41,15 +41,14 @@ public class AnnotateNullable {
   // Why is this variable static?
   static PptMap ppts = new PptMap(); // dummy value, to satisfy Nullness Checker
 
-  static SimpleLog verbose = new SimpleLog (/*enabled=*/ false);
+  static SimpleLog verbose = new SimpleLog(/*enabled=*/ false);
 
-  static SimpleLog debug = new SimpleLog (/*enabled=*/ false);
+  static SimpleLog debug = new SimpleLog(/*enabled=*/ false);
 
   /**
    * Map from a class name to the list of static functions for that class
    */
-  static Map<String,List<PptTopLevel>> class_map
-    = new LinkedHashMap<String,List<PptTopLevel>>();
+  static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<String, List<PptTopLevel>>();
 
   // The package for the previous class.  Used to reduce duplication in
   // output file.
@@ -59,28 +58,28 @@ public class AnnotateNullable {
    * Write an output file in the stub class format (see the Checker
    * Framework Manual), instead of in annotation file format.
    */
-  @Option ("Use the stub class file format")
+  @Option("Use the stub class file format")
   public static boolean stub_format = false;
 
   /**
    * Adds NonNull annotations as well as Nullable annotations.  Unlike Nullable
    * annotations, NonNull annotations are not necessarily correct.
    */
-  @Option ("-n Insert NonNull as well as Nullable annotations")
+  @Option("-n Insert NonNull as well as Nullable annotations")
   public static boolean nonnull_annotations = false;
 
-  public static void main (String[] args) throws IOException {
+  public static void main(String[] args) throws IOException {
 
-    Options options = new Options ("plume.AnnotateNullable [options] "
-                                   + "<inv_file>", AnnotateNullable.class);
-    String[] inv_files = options.parse_or_usage (args);
+    Options options =
+        new Options("plume.AnnotateNullable [options] " + "<inv_file>", AnnotateNullable.class);
+    String[] inv_files = options.parse_or_usage(args);
     assert inv_files.length == 1;
 
     // Read the serialized invariant file
-    File inv_file = new File (inv_files[0]);
+    File inv_file = new File(inv_files[0]);
     ppts = FileIO.read_serialized_pptmap(inv_file, true);
     Daikon.all_ppts = ppts;
-    verbose.log ("Finished reading %d program points", ppts.size());
+    verbose.log("Finished reading %d program points", ppts.size());
 
     // Setup the list of proto invariants and initialize NIS suppressions
     Daikon.setup_proto_invs();
@@ -88,13 +87,13 @@ public class AnnotateNullable {
 
     // Write out the definitions of our annotations
     if (stub_format) {
-      System.out.println ("import org.checkerframework.checker.nullness.qual.Nullable;");
-      System.out.println ("import org.checkerframework.checker.nullness.qual.NonNull;");
+      System.out.println("import org.checkerframework.checker.nullness.qual.Nullable;");
+      System.out.println("import org.checkerframework.checker.nullness.qual.NonNull;");
       System.out.println();
     } else {
-      System.out.println ("package org.checkerframework.checker.nullness.qual:");
-      System.out.println ("annotation @Nullable:");
-      System.out.println ("annotation @NonNull:");
+      System.out.println("package org.checkerframework.checker.nullness.qual:");
+      System.out.println("annotation @Nullable:");
+      System.out.println("annotation @NonNull:");
       System.out.println();
     }
 
@@ -106,10 +105,10 @@ public class AnnotateNullable {
     // First find all of the classes
     for (PptTopLevel ppt : ppts.pptIterable()) {
       if (ppt.is_object()) {
-        String classname = ppt.name().replace (":::OBJECT", "");
-        assert !class_map.containsKey (classname) : classname;
+        String classname = ppt.name().replace(":::OBJECT", "");
+        assert !class_map.containsKey(classname) : classname;
         List<PptTopLevel> static_methods = new ArrayList<PptTopLevel>();
-        class_map.put (classname, static_methods);
+        class_map.put(classname, static_methods);
       }
     }
 
@@ -117,25 +116,24 @@ public class AnnotateNullable {
     // static method can be identified because it will not have the OBJECT
     // point as a parent.
     for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (!ppt.is_combined_exit() || !is_static_method(ppt))
-        continue;
+      if (!ppt.is_combined_exit() || !is_static_method(ppt)) continue;
 
-      String name = ppt.name().replaceFirst ("[(].*$", "");
-      int lastdot = name.lastIndexOf ('.');
+      String name = ppt.name().replaceFirst("[(].*$", "");
+      int lastdot = name.lastIndexOf('.');
       @SuppressWarnings("keyfor") // appliction invariant:  KeyFor and substring
-      /*@KeyFor("class_map")*/ // class_map has entry per class, and this method is in some class
-      String classname = name.substring (0, lastdot);
+      /*@KeyFor("class_map")*/
+      // class_map has entry per class, and this method is in some class
+      String classname = name.substring(0, lastdot);
       // System.out.printf ("classname for ppt %s is '%s'%n", name, classname);
-      /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get (classname);
+      /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get(classname);
       assert static_methods != null : classname;
-      static_methods.add (ppt);
+      static_methods.add(ppt);
     }
 
     // Debug print all of the static methods
     if (false) {
       for (String classname : class_map.keySet()) {
-        System.out.printf ("class %s static methods: %s%n", classname,
-                           class_map.get(classname));
+        System.out.printf("class %s static methods: %s%n", classname, class_map.get(classname));
       }
     }
 
@@ -143,9 +141,10 @@ public class AnnotateNullable {
     // found for any class ppts
     for (PptTopLevel ppt : ppts.pptIterable()) {
       if (ppt.is_class()) {
-        @SuppressWarnings("nullness") // map: retrieve class name from class Ppt name, with string manipulation
-        /*@NonNull*/ List<PptTopLevel> static_methods
-          = class_map.get (ppt.name().replace (":::CLASS", ""));
+        @SuppressWarnings(
+            "nullness") // map: retrieve class name from class Ppt name, with string manipulation
+        /*@NonNull*/ List<PptTopLevel> static_methods =
+            class_map.get(ppt.name().replace(":::CLASS", ""));
         int child_cnt = 0;
         // TODO: Once Checker Framework issue 565 has been fixed
         // ( https://github.com/typetools/checker-framework/issues/565 ),
@@ -155,28 +154,24 @@ public class AnnotateNullable {
           PptRelation child_rel = ppt.children.get(i);
           PptTopLevel child = child_rel.child;
           // Skip enter ppts, all of the info is at the exit.
-          if (child.type == PptType.ENTER)
-            continue;
-          if (child.type == PptType.OBJECT)
-            continue;
+          if (child.type == PptType.ENTER) continue;
+          if (child.type == PptType.OBJECT) continue;
           child_cnt++;
-          assert static_methods.contains (child) : child;
+          assert static_methods.contains(child) : child;
         }
         assert child_cnt == static_methods.size() : static_methods;
       }
     }
 
-
     // Process each class.
     for (PptTopLevel ppt : ppts.pptIterable()) {
 
       // Skip synthetic program points
-      if (ppt.name().startsWith ("$"))
-        continue;
+      if (ppt.name().startsWith("$")) continue;
 
       // Skip program points that are not OBJECT ppts
       if (ppt.is_object()) {
-        process_class (ppt);
+        process_class(ppt);
       }
     }
   }
@@ -204,17 +199,15 @@ public class AnnotateNullable {
     return object_ppt;
   }
 
-
   // Process a class, including all its methods.
   // Takes the object program point as its argument.
-  public static void process_class (PptTopLevel object_ppt) {
+  public static void process_class(PptTopLevel object_ppt) {
 
     // Get the class program point (if any)
     PptTopLevel class_ppt = class_for_object(object_ppt);
 
     String class_samples = "-";
-    if (class_ppt != null)
-      class_samples = String.format ("%d", class_ppt.num_samples());
+    if (class_ppt != null) class_samples = String.format("%d", class_ppt.num_samples());
     String ppt_package = object_ppt.ppt_name.getPackageName();
     if (ppt_package == null) {
       ppt_package = "";
@@ -225,65 +218,65 @@ public class AnnotateNullable {
       if (ppt_package != last_package) {
         // This will print the empty string if we switch from a package to the
         // unnamed package.  That is intentional.
-        System.out.printf ("package %s;%n%n", ppt_package);
+        System.out.printf("package %s;%n%n", ppt_package);
         last_package = ppt_package;
       }
-      System.out.printf ("class %s { // %d/%s obj/class samples%n",
-                         object_ppt.ppt_name.getFullClassName(),
-                         object_ppt.num_samples(),
-                         class_samples);
+      System.out.printf(
+          "class %s { // %d/%s obj/class samples%n",
+          object_ppt.ppt_name.getFullClassName(),
+          object_ppt.num_samples(),
+          class_samples);
     } else {
-      System.out.printf ("package %s:%n", ppt_package);
-      System.out.printf ("class %s : // %d/%s obj/class samples%n",
-                         object_ppt.ppt_name.getShortClassName(),
-                         object_ppt.num_samples(),
-                         class_samples);
+      System.out.printf("package %s:%n", ppt_package);
+      System.out.printf(
+          "class %s : // %d/%s obj/class samples%n",
+          object_ppt.ppt_name.getShortClassName(),
+          object_ppt.num_samples(),
+          class_samples);
     }
 
     // Process static fields
     if (class_ppt != null) {
-      process_obj_fields (class_ppt);
+      process_obj_fields(class_ppt);
     }
 
     // Process member (non-static) fields
-    process_obj_fields (object_ppt);
+    process_obj_fields(object_ppt);
 
     // Process static methods
     if (class_ppt != null) {
       for (PptRelation child_rel : class_ppt.children) {
         PptTopLevel child = child_rel.child;
         // Skip enter ppts, all of the info is at the exit.
-        if (child.type == PptType.ENTER)
-          continue;
-        if (child.type == PptType.OBJECT)
-          continue;
-        debug.log ("processing static method %s, type %s", child, child.type);
-        process_method (child);
+        if (child.type == PptType.ENTER) continue;
+        if (child.type == PptType.OBJECT) continue;
+        debug.log("processing static method %s, type %s", child, child.type);
+        process_method(child);
       }
     } else {
       String classname = object_ppt.ppt_name.getFullClassName();
       assert classname != null;
       @SuppressWarnings("nullness") // map: class_map has entry per classname
-      /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get (classname);
+      /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get(classname);
       assert static_methods != null : classname;
-      for (PptTopLevel child : static_methods)
-        process_method (child);
+      for (PptTopLevel child : static_methods) process_method(child);
     }
 
     // Process member (non-static) methods
     for (PptRelation child_rel : object_ppt.children) {
       PptTopLevel child = child_rel.child;
       // Skip enter ppts, all of the info is at the exit.
-      if (child.type == PptType.ENTER)
-        continue;
-      debug.log ("processing method %s, type %s", child, child.type);
-      process_method (child);
+      if (child.type == PptType.ENTER) continue;
+      debug.log("processing method %s, type %s", child, child.type);
+      process_method(child);
     }
 
-    if (stub_format)
-      System.out.printf ("}%n%n");
-    else
-      System.out.printf ("%n%n");
+    if (stub_format) {
+      System.out.printf("}%n%n");
+    } else {
+      System.out.printf("%n%n");
+    }
+      
   }
 
   /**
@@ -292,16 +285,15 @@ public class AnnotateNullable {
    * a null value.  Returns an empty string if no annotation is applicable.
    * Otherwise, the return value contains a trailing space.
    */
-  public static String get_annotation (PptTopLevel ppt, VarInfo vi) {
+  public static String get_annotation(PptTopLevel ppt, VarInfo vi) {
 
     if (vi.type.isPrimitive()) {
       return "";
     }
 
     String annotation = (nonnull_annotations ? "NonNull" : "");
-    if ((ppt.num_samples (vi) > 0) && !ppt.is_nonzero (vi))
-      annotation = "Nullable";
-    if (annotation != "") {     // interned
+    if ((ppt.num_samples(vi) > 0) && !ppt.is_nonzero(vi)) annotation = "Nullable";
+    if (annotation != "") { // interned
       // if (! stub_format) {
       //   annotation = "org.checkerframework.checker.nullness.qual." + annotation;
       // }
@@ -313,7 +305,7 @@ public class AnnotateNullable {
   /**
    * Print out the annotations for the specified method.
    */
-  public static void process_method (PptTopLevel ppt) {
+  public static void process_method(PptTopLevel ppt) {
 
     assert ppt.type == PptType.EXIT : ppt;
 
@@ -321,19 +313,19 @@ public class AnnotateNullable {
     List<VarInfo> params = new ArrayList<VarInfo>();
     VarInfo retvar = null;
     for (VarInfo vi : ppt.var_infos) {
-      if (vi.var_kind == VarInfo.VarKind.RETURN)
+      if (vi.var_kind == VarInfo.VarKind.RETURN) {
         retvar = vi;
-      else if (vi.isParam()
-               && (vi.name() != "this") // interned
-               && !vi.isPrestate())
-        params.add (vi);
+      } else {
+        if (vi.isParam()
+          && (vi.name() != "this") // interned
+          && !vi.isPrestate()) params.add(vi);
+      }
     }
 
     // Get the annotation for the return value
     String return_annotation = "";
     if (retvar != null) {
-      return_annotation = get_annotation (ppt, retvar);
-
+      return_annotation = get_annotation(ppt, retvar);
     }
 
     // Look up the annotation for each parameter.
@@ -343,36 +335,33 @@ public class AnnotateNullable {
       String annotation = "";
       names.add(param.name());
       if (param.file_rep_type.isHashcode()) {
-        annotation = get_annotation (ppt, param);
+        annotation = get_annotation(ppt, param);
       }
       annos.add(annotation);
     }
 
     // Print out the method declaration
     if (stub_format) {
-      System.out.printf ("  %s %s(", return_annotation, ppt.ppt_name.getMethodName());
+      System.out.printf("  %s %s(", return_annotation, ppt.ppt_name.getMethodName());
       for (int i = 0; i < params.size(); i++) {
-        if (i != 0)
-          System.out.printf (" ,");
-        System.out.printf ("%s %s %s", annos.get(i), "type-goes-here", names.get(i));
+        if (i != 0) System.out.printf(" ,");
+        System.out.printf("%s %s %s", annos.get(i), "type-goes-here", names.get(i));
       }
-      System.out.printf ("); // %d samples%n", ppt.num_samples());
+      System.out.printf("); // %d samples%n", ppt.num_samples());
     } else {
-      System.out.printf ("  method %s : // %d samples%n",
-                         jvm_signature(ppt), ppt.num_samples());
-      System.out.printf ("    return: %s%n", return_annotation);
+      System.out.printf("  method %s : // %d samples%n", jvm_signature(ppt), ppt.num_samples());
+      System.out.printf("    return: %s%n", return_annotation);
       for (int i = 0; i < params.size(); i++) {
         // Print the annotation for this parameter
-        System.out.printf ("    parameter #%d : %s // %s%n", i, annos.get(i), names.get(i));
+        System.out.printf("    parameter #%d : %s // %s%n", i, annos.get(i), names.get(i));
       }
     }
   }
 
-
   /**
    * Print out the annotations for each field in the object or class.
    */
-  public static void process_obj_fields (PptTopLevel ppt) {
+  public static void process_obj_fields(PptTopLevel ppt) {
 
     for (VarInfo vi : ppt.var_infos) {
 
@@ -381,22 +370,19 @@ public class AnnotateNullable {
       // Skip anyone with a parent in the hierarchy.  We are only
       // interested in them at the top (e.g., we don't want to see
       // object fields in each method).
-      if (!vi.parents.isEmpty())
-        continue;
+      if (!vi.parents.isEmpty()) continue;
 
       // Skip 'this' variables (we know they are non-null).
-      if (vi.name().equals ("this"))
-        continue;
+      if (vi.name().equals("this")) continue;
       // Likewise for getClass(), a method call that is supplied to Daikon
       // like an oddly-named variable.
-      if (field_name(vi).equals ("getClass()"))
-        continue;
+      if (field_name(vi).equals("getClass()")) continue;
 
       // Skip any variable that is enclosed by a variable other than
       // 'this'.  These are fields and can only be annotated where they
       // are declared
       VarInfo evar = vi.get_enclosing_var();
-      if ((evar != null) && (!evar.name().equals ("this"))) {
+      if ((evar != null) && (!evar.name().equals("this"))) {
         // System.out.printf ("  enclosed %s %s%n", vi.type, vi.name());
         continue;
       }
@@ -404,14 +390,12 @@ public class AnnotateNullable {
       // print out the entry for this field
       String annotation = "";
       if (vi.file_rep_type.isHashcode()) {
-        annotation = get_annotation (ppt, vi);
+        annotation = get_annotation(ppt, vi);
       }
       if (stub_format) {
-        System.out.printf ("  field %s %s {} // %s%n", field_name(vi),
-                           annotation, vi.type);
+        System.out.printf("  field %s %s {} // %s%n", field_name(vi), annotation, vi.type);
       } else {
-        System.out.printf ("  field %s : %s // %s%n", field_name(vi),
-                           annotation, vi.type);
+        System.out.printf("  field %s : %s // %s%n", field_name(vi), annotation, vi.type);
       }
     }
   }
@@ -419,28 +403,28 @@ public class AnnotateNullable {
   /**
    * Returns a JVM signature for the method.
    */
-  public static String jvm_signature (PptTopLevel ppt) {
+  public static String jvm_signature(PptTopLevel ppt) {
 
     @SuppressWarnings("nullness") // Java method, so getMethodName() != null
     /*@NonNull*/ String method = ppt.ppt_name.getMethodName();
     @SuppressWarnings("nullness") // Java method, so getSignature() != null
     /*@NonNull*/ String java_sig = ppt.ppt_name.getSignature();
-    String java_args = java_sig.replace (method, "");
+    String java_args = java_sig.replace(method, "");
     // System.out.printf ("m/s/a = %s %s %s%n", method, java_sig, java_args);
-    if (method.equals (ppt.ppt_name.getShortClassName()))
-      method = "<init>";
+    if (method.equals(ppt.ppt_name.getShortClassName())) method = "<init>";
 
     // Problem:  I need the return type, but Chicory does not output it.
     // So, I could try to retrieve it from the "return" variable in the
     // program point (which is, fortunately, always an exit point), or
     // change Chicory to output it.
     VarInfo returnVar = ppt.find_var_by_name("return");
-    @SuppressWarnings("signature") // application invariant: returnVar.type.toString() is a binary name (if returnVar is non-null), because we are processing a Java program
-    String returnType = returnVar == null ? "V" : UtilMDE.binaryNameToFieldDescriptor(returnVar.type.toString());
+    @SuppressWarnings(
+        "signature") // application invariant: returnVar.type.toString() is a binary name (if returnVar is non-null), because we are processing a Java program
+    String returnType =
+        returnVar == null ? "V" : UtilMDE.binaryNameToFieldDescriptor(returnVar.type.toString());
 
     return method + UtilMDE.arglistToJvm(java_args) + returnType;
   }
-
 
   /**
    * Returns the field name of the specified variable.  This is the relative
@@ -449,19 +433,18 @@ public class AnnotateNullable {
    * name).  The field name is obtained in that case, by removing the
    * package/class specifier.
    */
-  public static String field_name (VarInfo vi) {
+  public static String field_name(VarInfo vi) {
 
-    if (vi.relative_name != null)
-      return vi.relative_name;
+    if (vi.relative_name != null) return vi.relative_name;
 
     String field_name = vi.name();
-    int pt = field_name.lastIndexOf ('.');
-    if (pt == -1)
+    int pt = field_name.lastIndexOf('.');
+    if (pt == -1) {
       return field_name;
-    else
-      return field_name.substring(pt+1);
+    } else {
+      return field_name.substring(pt + 1);
+    }
   }
-
 
   /**
    * Returns whether or not the method of the specified ppt
@@ -470,15 +453,13 @@ public class AnnotateNullable {
    * This does not work for enter ppts, because constructors do not
    * have the object as a parent on entry.
    */
-  /*@Pure*/ public static boolean is_static_method (PptTopLevel ppt) {
+  /*@Pure*/ public static boolean is_static_method(PptTopLevel ppt) {
 
     assert ppt.is_exit() : ppt;
     for (PptRelation rel : ppt.parents) {
-      if (rel.parent.is_object())
-        return false;
+      if (rel.parent.is_object()) return false;
     }
 
     return true;
   }
-
 }

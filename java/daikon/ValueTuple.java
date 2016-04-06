@@ -15,7 +15,6 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-
 /**
  * This data structure holds a tuple of values for a particular program
  * point.  VarInfo objects can use this to get the values of the variables
@@ -42,9 +41,8 @@ public final class ValueTuple implements Cloneable {
    * Modification bit per value, possibly packed into fewer ints than the
    * vals field.  Don't use a single int because that won't scale to (say)
    * more than 32 values.
-  **/
+   **/
   public int /*@Interned*/ [] mods;
-
 
   // Right now there are only three meaningful values for a mod:
   /** Not modified.  **/
@@ -70,32 +68,72 @@ public final class ValueTuple implements Cloneable {
   // (An alternate representation would pack the mod values into fewer ints
   // than the vals field.)
 
-  /*@Pure*/ public int getModified(VarInfo vi) { return vi.getModified(this); }
-  /*@Pure*/ public boolean isUnmodified(VarInfo vi) { return vi.isUnmodified(this); }
-  /*@Pure*/ public boolean isModified(VarInfo vi) { return vi.isModified(this); }
-  /*@Pure*/ public boolean isMissingNonsensical(VarInfo vi) { return vi.isMissingNonsensical(this); }
-  /*@Pure*/ public boolean isMissingFlow(VarInfo vi) { return vi.isMissingFlow(this); }
+  /*@Pure*/ public int getModified(VarInfo vi) {
+    return vi.getModified(this);
+  }
+  /*@Pure*/ public boolean isUnmodified(VarInfo vi) {
+    return vi.isUnmodified(this);
+  }
+  /*@Pure*/ public boolean isModified(VarInfo vi) {
+    return vi.isModified(this);
+  }
+  /*@Pure*/ public boolean isMissingNonsensical(VarInfo vi) {
+    return vi.isMissingNonsensical(this);
+  }
+  /*@Pure*/ public boolean isMissingFlow(VarInfo vi) {
+    return vi.isMissingFlow(this);
+  }
+
   @SuppressWarnings("nullness") // postcondition: array expression
   /*@EnsuresNonNullIf(result=false, expression="vals[#1.value_index]")*/
-  /*@Pure*/ public boolean isMissing(VarInfo vi) { return vi.isMissing(this); }
+  /*@Pure*/ public boolean isMissing(VarInfo vi) {
+    return vi.isMissing(this);
+  }
 
-  /*@Pure*/ int getModified(int value_index) { return mods[value_index]; }
-  /*@Pure*/ boolean isUnmodified(int value_index) { return mods[value_index] == UNMODIFIED; }
-  /*@Pure*/ boolean isModified(int value_index) { return mods[value_index] == MODIFIED; }
-  /*@Pure*/ boolean isMissingNonsensical(/*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
+  /*@Pure*/ int getModified(int value_index) {
+    return mods[value_index];
+  }
+  /*@Pure*/ boolean isUnmodified(int value_index) {
+    return mods[value_index] == UNMODIFIED;
+  }
+  /*@Pure*/ boolean isModified(int value_index) {
+    return mods[value_index] == MODIFIED;
+  }
+  /*@Pure*/ boolean isMissingNonsensical(
+      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int
+          value_index) {
+    return mods[value_index] == MISSING_NONSENSICAL;
+  }
+
   @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // dependent property
   /*@EnsuresNonNullIf(result=false, expression="this.vals[#1]")*/
-  /*@Pure*/ boolean isMissingFlow(/*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int value_index) { return mods[value_index] == MISSING_FLOW; }
+  /*@Pure*/ boolean isMissingFlow(
+      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int
+          value_index) {
+    return mods[value_index] == MISSING_FLOW;
+  }
+
   @SuppressWarnings("nullness") // postcondition: array expression
   /*@EnsuresNonNullIf(result=false, expression="vals[#1]")*/
-  /*@Pure*/ boolean isMissing(/*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int value_index) {
-    return (isMissingNonsensical(value_index) || isMissingFlow(value_index)); }
+  /*@Pure*/ boolean isMissing(
+      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int
+          value_index) {
+    return (isMissingNonsensical(value_index) || isMissingFlow(value_index));
+  }
 
   // The arguments ints represent modification information.
-  /*@Pure*/ static boolean modIsUnmodified(int mod_value) { return mod_value == UNMODIFIED; }
-  /*@Pure*/ static boolean modIsModified(int mod_value) { return mod_value == MODIFIED; }
-  /*@Pure*/ static boolean modIsMissingNonsensical(int mod_value) { return mod_value == MISSING_NONSENSICAL; }
-  /*@Pure*/ static boolean modIsMissingFlow(int mod_value) { return mod_value == MISSING_FLOW; }
+  /*@Pure*/ static boolean modIsUnmodified(int mod_value) {
+    return mod_value == UNMODIFIED;
+  }
+  /*@Pure*/ static boolean modIsModified(int mod_value) {
+    return mod_value == MODIFIED;
+  }
+  /*@Pure*/ static boolean modIsMissingNonsensical(int mod_value) {
+    return mod_value == MISSING_NONSENSICAL;
+  }
+  /*@Pure*/ static boolean modIsMissingFlow(int mod_value) {
+    return mod_value == MISSING_FLOW;
+  }
 
   // A tuplemod is summary modification information about the whole tuple
   // rather than about specific elements of the tuple.
@@ -130,24 +168,27 @@ public final class ValueTuple implements Cloneable {
   // The arrays are filled up in a static block below.
   // (As of 1/9/2000, tuplemod_modified_not_missing is used only in
   // num_mod_samples(), and tuplemod_not_missing is not used.)
-  public static final int[] tuplemod_not_missing = new int[TUPLEMOD_VALUES/2];
-  public static final int[] tuplemod_modified_not_missing = new int[TUPLEMOD_VALUES/4];
+  public static final int[] tuplemod_not_missing = new int[TUPLEMOD_VALUES / 2];
+  public static final int[] tuplemod_modified_not_missing = new int[TUPLEMOD_VALUES / 4];
 
   static {
     int i1 = 0, i2 = 0;
-    for (int tm=0; tm<TUPLEMOD_VALUES; tm++) {
-      if (!tuplemodHasMissingFlow(tm) && !tuplemodHasMissingNonsensical(tm) ) {
+    for (int tm = 0; tm < TUPLEMOD_VALUES; tm++) {
+      if (!tuplemodHasMissingFlow(tm) && !tuplemodHasMissingNonsensical(tm)) {
         tuplemod_not_missing[i1] = tm;
         i1++;
       }
-      if (tuplemodHasModified(tm) && !tuplemodHasMissingFlow(tm) && !tuplemodHasMissingNonsensical(tm)) {
+      if (tuplemodHasModified(tm)
+          && !tuplemodHasMissingFlow(tm)
+          && !tuplemodHasMissingNonsensical(tm)) {
         tuplemod_modified_not_missing[i2] = tm;
         i2++;
       }
     }
   }
 
-  static int make_tuplemod(boolean unmodified, boolean modified, boolean missingNonsensical, boolean missingFlow) {
+  static int make_tuplemod(
+      boolean unmodified, boolean modified, boolean missingNonsensical, boolean missingFlow) {
     int result = 0;
     if (unmodified) result += UNMODIFIED_BITVAL;
     if (modified) result += MODIFIED_BITVAL;
@@ -159,9 +200,11 @@ public final class ValueTuple implements Cloneable {
   static boolean tuplemodHasModified(int tuplemod) {
     return ((tuplemod & MODIFIED_BITVAL) != 0);
   }
+
   static boolean tuplemodHasUnmodified(int tuplemod) {
     return ((tuplemod & UNMODIFIED_BITVAL) != 0);
   }
+
   static boolean tuplemodHasMissingNonsensical(int tuplemod) {
     return ((tuplemod & MISSING_NONSENSICAL_BITVAL) != 0);
   }
@@ -177,23 +220,23 @@ public final class ValueTuple implements Cloneable {
    **/
   static String tuplemodToStringBrief(int tuplemod) {
     return ((tuplemodHasModified(tuplemod) ? "M" : "m")
-            + (tuplemodHasUnmodified(tuplemod) ? "U" : "u")
-            + (tuplemodHasMissingNonsensical(tuplemod) ? "X" : "x")
-            + (tuplemodHasMissingFlow(tuplemod) ? "F" : "f"));
+        + (tuplemodHasUnmodified(tuplemod) ? "U" : "u")
+        + (tuplemodHasMissingNonsensical(tuplemod) ? "X" : "x")
+        + (tuplemodHasMissingFlow(tuplemod) ? "F" : "f"));
   }
-
 
   static int tupleMod(int[] mods) {
     boolean[] has_modbit_val = new boolean[MODBIT_VALUES];
     // Extraneous, as the array is initialized to all zeroes.
     Arrays.fill(has_modbit_val, false);
-    for (int i=0; i<mods.length; i++) {
+    for (int i = 0; i < mods.length; i++) {
       has_modbit_val[mods[i]] = true;
     }
-    return make_tuplemod(has_modbit_val[UNMODIFIED],
-                         has_modbit_val[MODIFIED],
-                         has_modbit_val[MISSING_NONSENSICAL],
-                         has_modbit_val[MISSING_FLOW]);
+    return make_tuplemod(
+        has_modbit_val[UNMODIFIED],
+        has_modbit_val[MODIFIED],
+        has_modbit_val[MISSING_NONSENSICAL],
+        has_modbit_val[MISSING_FLOW]);
   }
 
   int tupleMod() {
@@ -205,7 +248,6 @@ public final class ValueTuple implements Cloneable {
     assert (result >= 0) && (result < MODBIT_VALUES);
     return result;
   }
-
 
   /**
    * Get the value of the variable vi in this ValueTuple.
@@ -251,15 +293,15 @@ public final class ValueTuple implements Cloneable {
     return result;
   }
 
-  public void checkRep(/*>>> @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this*/) {
+  public void checkRep(
+      /*>>> @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this*/ ) {
     assert vals.length == mods.length;
-    for (int i=0; i<vals.length; i++) {
+    for (int i = 0; i < vals.length; i++) {
       assert 0 <= mods[i] && mods[i] < MODBIT_VALUES
-        : String.format("mods: %s i:%d mods[i]: %s%n", mods, i, mods[i]);
+          : String.format("mods: %s i:%d mods[i]: %s%n", mods, i, mods[i]);
       assert (isMissing(i) ? vals[i] == null : true);
     }
   }
-
 
   /** Default constructor that interns its argument. */
   public ValueTuple(/*@Nullable*/ /*@Interned*/ Object[] vals, int[] mods) {
@@ -299,12 +341,11 @@ public final class ValueTuple implements Cloneable {
     return new ValueTuple(vals, mods, false);
   }
 
-
   /** Constructor that takes already-interned arguments. */
-  static ValueTuple makeFromInterned(/*@Nullable*/ /*@Interned*/ Object /*@Interned*/ [] vals, int[] mods) {
+  static ValueTuple makeFromInterned(
+      /*@Nullable*/ /*@Interned*/ Object /*@Interned*/ [] vals, int[] mods) {
     return new ValueTuple(vals, mods, true);
   }
-
 
   // Like clone(), but avoids its problems of default access and returning
   // an Object.
@@ -315,9 +356,8 @@ public final class ValueTuple implements Cloneable {
   // These definitions are intended to make different ValueTuples with the
   // same contents compare identically.
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
-    if (! (obj instanceof ValueTuple))
-      return false;
+  /*@Pure*/ public boolean equals(/*@Nullable*/ Object obj) {
+    if (!(obj instanceof ValueTuple)) return false;
     ValueTuple other = (ValueTuple) obj;
     return (vals == other.vals) && (mods == other.mods);
   }
@@ -325,10 +365,8 @@ public final class ValueTuple implements Cloneable {
     return vals.hashCode() * 31 + mods.hashCode();
   }
 
-
   /*@Pure*/ public int size() {
-    assert vals.length == mods.length
-      : "vals = " + vals + " mods = " + mods;
+    assert vals.length == mods.length : "vals = " + vals + " mods = " + mods;
     return vals.length;
   }
 
@@ -338,7 +376,6 @@ public final class ValueTuple implements Cloneable {
     int[] new_mods = ArraysMDE.subarray(mods, 0, len);
     return new ValueTuple(new_vals, new_mods);
   }
-
 
   /*@SideEffectFree*/ public String toString() {
     return toString(null);
@@ -353,43 +390,43 @@ public final class ValueTuple implements Cloneable {
     StringBuffer sb = new StringBuffer("[");
     assert vals.length == mods.length;
     assert vis == null || vals.length == vis.length;
-    for (int i=0; i<vals.length; i++) {
-      if (i>0)
-        sb.append("; ");
+    for (int i = 0; i < vals.length; i++) {
+      if (i > 0) sb.append("; ");
       if (vis != null) {
-        sb.append (vis[i].name() + "=");
+        sb.append(vis[i].name() + "=");
       }
       Object val = vals[i];
       int mod = mods[i];
       switch (mod) {
-      case UNMODIFIED:
-      case MODIFIED:
-        if (val instanceof String)
-          sb.append("\"" + val + "\"");
-        else if (val instanceof long[])
-          sb.append(ArraysMDE.toString((long[])val));
-        else if (val instanceof int[])
-          // shouldn't reach this case -- should be long[], not int[]
-          // sb.append(ArraysMDE.toString((int[])val));
-          throw new Error("should be long[], not int[]");
-        else if (val instanceof double[])
-          sb.append(ArraysMDE.toString ((double[])val));
-        else if (val instanceof String[])
-          sb.append(ArraysMDE.toString((String[])val));
-        else
-          sb.append(val);
-        if (mod == UNMODIFIED) {
-          sb.append("(U)");
-        }
-        break;
-      case MISSING_NONSENSICAL:
-        sb.append("(missing)");
-        break;
-      case MISSING_FLOW:
-        sb.append("(missing-flow)");
-        break;
-      default:
-        throw new Error("bad modbit " + mod);
+        case UNMODIFIED:
+        case MODIFIED:
+          if (val instanceof String) {
+            sb.append("\"" + val + "\"");
+          } else if (val instanceof long[]) {
+            sb.append(ArraysMDE.toString((long[]) val));
+          } else if (val instanceof int[]) {
+            // shouldn't reach this case -- should be long[], not int[]
+            // sb.append(ArraysMDE.toString((int[])val));
+            throw new Error("should be long[], not int[]");
+          } else if (val instanceof double[]) {
+            sb.append(ArraysMDE.toString((double[]) val));
+          } else if (val instanceof String[]) {
+            sb.append(ArraysMDE.toString((String[]) val));
+          } else {
+            sb.append(val);
+          }
+          if (mod == UNMODIFIED) {
+            sb.append("(U)");
+          }
+          break;
+        case MISSING_NONSENSICAL:
+          sb.append("(missing)");
+          break;
+        case MISSING_FLOW:
+          sb.append("(missing-flow)");
+          break;
+        default:
+          throw new Error("bad modbit " + mod);
       }
     }
     sb.append("]");
@@ -398,24 +435,24 @@ public final class ValueTuple implements Cloneable {
 
   public static String valsToString(/*@Nullable*/ Object[] vals) {
     StringBuffer sb = new StringBuffer("[");
-    for (int i=0; i<vals.length; i++) {
-      if (i>0)
-        sb.append(", ");
-      sb.append (valToString (vals[i]));
+    for (int i = 0; i < vals.length; i++) {
+      if (i > 0) sb.append(", ");
+      sb.append(valToString(vals[i]));
     }
     sb.append("]");
     return sb.toString();
   }
 
-  public static String valToString (/*@Nullable*/ Object val) {
+  public static String valToString(/*@Nullable*/ Object val) {
     if (val == null) return "null";
-    if (val instanceof long[])
-      return(ArraysMDE.toString((long[])val));
-    else if (val instanceof int[])
+    if (val instanceof long[]) {
+      return (ArraysMDE.toString((long[]) val));
+    } else if (val instanceof int[]) {
       // shouldn't reach this case -- should be long[], not int[]
-      return(ArraysMDE.toString((int[])val));
-    else
-      return(val.toString());
+      return (ArraysMDE.toString((int[]) val));
+    } else {
+      return (val.toString());
+    }
   }
 
   /**
@@ -426,11 +463,10 @@ public final class ValueTuple implements Cloneable {
     int new_len = indices.length;
     /*@Nullable*/ /*@Interned*/ Object[] new_vals = new /*@Nullable*/ /*@Interned*/ Object[new_len];
     int[] new_mods = new int[new_len];
-    for (int i=0; i<new_len; i++) {
+    for (int i = 0; i < new_len; i++) {
       new_vals[i] = vals[indices[i]];
       new_mods[i] = mods[indices[i]];
     }
     return new ValueTuple(new_vals, new_mods);
   }
-
 }

@@ -69,8 +69,8 @@ class NameFixer extends DepthFirstVisitor {
    *   qualified with className.
    * @throws ParseException when condition is not a valid segment of java code
    */
-  public static String fixUnqualifiedMemberNames(String expression, String className, VarInfo[] varInfos)
-   throws ParseException {
+  public static String fixUnqualifiedMemberNames(
+      String expression, String className, VarInfo[] varInfos) throws ParseException {
     Global.debugSplit.fine("<<enter>> fixUnqualifiedMemberNames; expression: " + expression);
     Node root = Visitors.getJtbTree(expression);
     NameFixer fixer = new NameFixer(className, varInfos);
@@ -88,9 +88,9 @@ class NameFixer extends DepthFirstVisitor {
   public void visit(NodeToken n) {
     boolean found = false;
 
-    if (lastTokenMayBeMemberVar &&
-        (! (Visitors.isLParen(n) || Visitors.isDot(n)))) {
-      assert lastToken != null : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeMemberVar == true";
+    if (lastTokenMayBeMemberVar && (!(Visitors.isLParen(n) || Visitors.isDot(n)))) {
+      assert lastToken != null
+          : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeMemberVar == true";
       int len = className.length() + 1;
       lastToken.tokenImage = className + "." + lastToken.tokenImage;
       lastToken.endColumn = lastToken.endColumn + len;
@@ -99,13 +99,12 @@ class NameFixer extends DepthFirstVisitor {
     }
 
     lastTokenMayBeMemberVar = false;
-    if ((Visitors.isIdentifier(n)) &&
-       ((lastToken == null) || (!Visitors.isDot(lastToken)))) {
+    if ((Visitors.isIdentifier(n)) && ((lastToken == null) || (!Visitors.isDot(lastToken)))) {
 
       for (VarInfo varInfo : varInfos) {
         if (varInfo.name().equals(n.tokenImage)) {
-          found = true;  
-          break;  // expression variable is OK as is
+          found = true;
+          break; // expression variable is OK as is
         }
       }
 
@@ -114,7 +113,7 @@ class NameFixer extends DepthFirstVisitor {
         for (VarInfo varInfo : varInfos) {
           if (varInfo.name().equals(testName)) {
             lastTokenMayBeMemberVar = true;
-            break;  // could be previously unqualified member var
+            break; // could be previously unqualified member var
             // but we still need to make sure not followed by '(' or '.'
           }
         }
@@ -134,7 +133,8 @@ class NameFixer extends DepthFirstVisitor {
 
   private void fixLastToken() {
     if (lastTokenMayBeMemberVar) {
-      assert lastToken != null : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeMemberVar == true";
+      assert lastToken != null
+          : "@AssumeAssertion(nullness): dependent: because lastTokenMayBeMemberVar == true";
       int len = className.length() + 1;
       lastToken.tokenImage = className + "." + lastToken.tokenImage;
       lastToken.endColumn = lastToken.endColumn + len;
@@ -142,5 +142,4 @@ class NameFixer extends DepthFirstVisitor {
       columnshiftline = lastToken.beginLine;
     }
   }
-
 }

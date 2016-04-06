@@ -1808,7 +1808,7 @@ public String format_csharp_contract() {
    * formula at an upper point.
    */
   public boolean mergeFormulasOk() {
-    return (true);
+    return true;
   }
 
   /*@Pure*/ public boolean isSameFormula(Invariant o) {
@@ -2084,7 +2084,7 @@ public String format_csharp_contract() {
   public boolean state_match (Object state) {
 
     if (num_elts == 0)
-      return (false);
+      return false;
 
     if (!(state instanceof INT[]))
       System.out.println ("state is of class '" + state.getClass().getName()
@@ -2099,9 +2099,9 @@ public String format_csharp_contract() {
         }
       }
       if (!match)
-        return (false);
+        return false;
     }
-    return (true);
+    return true;
   }
 
 #ifdef BASE_INT

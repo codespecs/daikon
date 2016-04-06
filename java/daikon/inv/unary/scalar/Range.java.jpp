@@ -110,12 +110,12 @@ public abstract class RANGE extends SUPERCLASS {
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     if (!vis[0].file_rep_type.BASE_IS_TYPE)
-      return (false);
+      return false;
 
-    return (true);
+    return true;
   }
 
   /**
@@ -189,7 +189,7 @@ public abstract class RANGE extends SUPERCLASS {
 
   /*@Pure*/ public boolean isSameFormula (Invariant other) {
     assert other.getClass() == getClass();
-    return (true);
+    return true;
   }
   /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
     return false;

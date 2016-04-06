@@ -21,8 +21,7 @@ import typequals.*;
  * Prints as either <code>x has no values</code>
  * or as <code>x has values: "v1" "v2" "v3" ...</code>.
  */
-public final class CompleteOneOfString extends SingleString
-{
+public final class CompleteOneOfString extends SingleString {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -32,16 +31,16 @@ public final class CompleteOneOfString extends SingleString
   public static class Info implements Serializable {
     static final long serialVersionUID = 20091210L;
     public String val;
-    public int    cnt;
-    public Info (String val, int cnt) {
+    public int cnt;
+
+    public Info(String val, int cnt) {
       this.val = val.intern();
       this.cnt = cnt;
     }
-    private void readObject(ObjectInputStream in)
-      throws IOException, ClassNotFoundException {
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
-      if (val != null)
-        val = val.intern();
+      if (val != null) val = val.intern();
     }
   }
 
@@ -54,16 +53,17 @@ public final class CompleteOneOfString extends SingleString
    **/
   public static boolean dkconfig_enabled = false;
 
-  public CompleteOneOfString (PptSlice slice) {
-    super (slice);
+  public CompleteOneOfString(PptSlice slice) {
+    super(slice);
     vals = new ArrayList<Info>();
   }
 
-  public /*@Prototype*/ CompleteOneOfString () {
-    super ();
+  public /*@Prototype*/ CompleteOneOfString() {
+    super();
   }
 
-  private static /*@Prototype*/ CompleteOneOfString proto = new /*@Prototype*/ CompleteOneOfString ();
+  private static /*@Prototype*/ CompleteOneOfString proto =
+      new /*@Prototype*/ CompleteOneOfString();
 
   /** Returns the prototype invariant for CompleteOneOFString **/
   public static /*@Prototype*/ CompleteOneOfString get_proto() {
@@ -76,28 +76,25 @@ public final class CompleteOneOfString extends SingleString
   }
 
   /** instantiate an invariant on the specified slice **/
-  public CompleteOneOfString instantiate_dyn (/*>>> @Prototype CompleteOneOfString this,*/ PptSlice slice) {
+  public CompleteOneOfString instantiate_dyn(
+      /*>>> @Prototype CompleteOneOfString this,*/ PptSlice slice) {
     return new CompleteOneOfString(slice);
   }
 
   /** return description of invariant.  Only Daikon format is implemented **/
   /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
-      if (vals.size() == 0)
-        return var().name() + "has no values";
-      StringBuilder out
-        = new StringBuilder (vals.get(0).val.length() * vals.size());
-      out.append (var().name() + " has values: ");
-      for (Info val : vals)
-        out.append (String.format (" %s[%d]", val.val, val.cnt));
+      if (vals.size() == 0) return var().name() + "has no values";
+      StringBuilder out = new StringBuilder(vals.get(0).val.length() * vals.size());
+      out.append(var().name() + " has values: ");
+      for (Info val : vals) out.append(String.format(" %s[%d]", val.val, val.cnt));
       return out.toString();
-    } else
-      return format_unimplemented (format);
+    } else return format_unimplemented(format);
   }
 
   /** Check to see if a only contains printable ascii characters **/
   public InvariantStatus add_modified(/*@Interned*/ String a, int count) {
-    return check_modified (a, count);
+    return check_modified(a, count);
   }
 
   /** Check to see if a only contains printable ascii characters **/
@@ -108,15 +105,17 @@ public final class CompleteOneOfString extends SingleString
         return InvariantStatus.NO_CHANGE;
       }
     }
-    vals.add (new Info (a, count));
+    vals.add(new Info(a, count));
     return InvariantStatus.NO_CHANGE;
   }
+
   protected double computeConfidence() {
     ValueSet vs = ppt.var_infos[0].get_value_set();
-    if (vs.size() > 0)
+    if (vs.size() > 0) {
       return Invariant.CONFIDENCE_JUSTIFIED;
-    else
+    } else {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
+    }
   }
 
   /**
@@ -136,6 +135,4 @@ public final class CompleteOneOfString extends SingleString
   /*@Pure*/ public boolean isSameFormula(Invariant o) {
     return false;
   }
-
-
 }

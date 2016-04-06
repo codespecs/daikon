@@ -126,9 +126,9 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   /*@Pure*/ public boolean is_symmetric() {
     #ifdef SYMMETRIC
-      return (true);
+      return true;
     #else
-      return (false);
+      return false;
     #endif
   }
 
@@ -168,7 +168,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   /*@Pure*/ public boolean is ## FUNCTION() {
-    return (true);
+    return true;
   }
 
   #ifdef EXACT

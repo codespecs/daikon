@@ -36,20 +36,20 @@ public class ValueSource {
   /*@Nullable*/ ValueSource right;
 
   /** ValueSet used for the null reference value **/
-  public static ValueSource null_value_source
-    = new ValueSource ("null", new Throwable().fillInStackTrace());
+  public static ValueSource null_value_source =
+      new ValueSource("null", new Throwable().fillInStackTrace());
 
   private static String blank_string = "                 ";
 
   private static final String lineSep = System.getProperty("line.separator");
 
   // ValueSource (String descr) { this.descr = descr; }
-  ValueSource (String descr, Throwable stack_trace) {
+  ValueSource(String descr, Throwable stack_trace) {
     this.descr = descr;
     this.stack_trace = stack_trace;
   }
-  ValueSource (String descr, Throwable stack_trace, ValueSource left,
-               ValueSource right) {
+
+  ValueSource(String descr, Throwable stack_trace, ValueSource left, ValueSource right) {
     this.descr = descr;
     this.stack_trace = stack_trace;
     this.left = left;
@@ -62,7 +62,7 @@ public class ValueSource {
    * compare_to param is presumed to be compared to all of the test
    * sequence variables found.
    */
-  public Map<String,Set<String>> get_var_compares (String compare_to) {
+  public Map<String, Set<String>> get_var_compares(String compare_to) {
 
     // Look to see if there are any comparisons to null.  Add these as
     // compare_to values if they exist.  Note that null is really the
@@ -72,22 +72,21 @@ public class ValueSource {
     // be compared)
     Set<String> other_compares = new LinkedHashSet<String>();
     for (ValueSource vs : get_node_list()) {
-      if (vs.descr.equals ("equals")) {
+      if (vs.descr.equals("equals")) {
         if ((vs.left == null_value_source) || (vs.right == null_value_source))
-          other_compares.add ("null");
+          other_compares.add("null");
       }
     }
 
-    Map<String,Set<String>> var_compares
-      = new LinkedHashMap<String,Set<String>>();
+    Map<String, Set<String>> var_compares = new LinkedHashMap<String, Set<String>>();
     for (String var : get_vars()) {
-      Set<String> compare_to_set = var_compares.get (var);
+      Set<String> compare_to_set = var_compares.get(var);
       if (compare_to_set == null) {
         compare_to_set = new LinkedHashSet<String>();
-        var_compares.put (var, compare_to_set);
+        var_compares.put(var, compare_to_set);
       }
-      compare_to_set.add (compare_to);
-      compare_to_set.addAll (other_compares);
+      compare_to_set.add(compare_to);
+      compare_to_set.addAll(other_compares);
     }
     return var_compares;
   }
@@ -103,10 +102,10 @@ public class ValueSource {
     Set<String> varnames = new LinkedHashSet<String>();
     for (ValueSource vs : get_node_list()) {
       // System.out.printf ("get_vars: processing node %s%n", vs.descr);
-      if (vs.descr.startsWith ("local-store")) {
-        int local_index = Integer.decode(vs.descr.split (" ")[1]);
+      if (vs.descr.startsWith("local-store")) {
+        int local_index = Integer.decode(vs.descr.split(" ")[1]);
         String local_name = DFInstrument.test_seq_locals[local_index];
-        varnames.add (local_name);
+        varnames.add(local_name);
       }
     }
     return varnames;
@@ -117,19 +116,17 @@ public class ValueSource {
    */
   public List<ValueSource> get_node_list() {
     List<ValueSource> vs_list = new ArrayList<ValueSource>();
-    add_node_list (vs_list);
+    add_node_list(vs_list);
     return vs_list;
   }
 
   /**
    * Add all of the nodes in this tree to vs_list
    */
-  private void add_node_list (List<ValueSource> vs_list) {
-    vs_list.add (this);
-    if (left != null)
-      left.add_node_list (vs_list);
-    if (right != null)
-      right.add_node_list (vs_list);
+  private void add_node_list(List<ValueSource> vs_list) {
+    vs_list.add(this);
+    if (left != null) left.add_node_list(vs_list);
+    if (right != null) right.add_node_list(vs_list);
   }
 
   public Throwable get_stack_trace() {
@@ -137,52 +134,48 @@ public class ValueSource {
   }
   /*@SideEffectFree*/ public String toString() {
     String left_descr = "-";
-    if (left != null)
-      left_descr = left.toString();
+    if (left != null) left_descr = left.toString();
     String right_descr = "-";
-    if (right != null)
-      right_descr = right.toString();
-    return String.format ("(%s %s/%s)", descr, left_descr, right_descr);
+    if (right != null) right_descr = right.toString();
+    return String.format("(%s %s/%s)", descr, left_descr, right_descr);
   }
 
-  public String tree_dump () {
+  public String tree_dump() {
     StringBuilder out = new StringBuilder();
-    return tree_dump (out, 0).toString();
+    return tree_dump(out, 0).toString();
   }
 
   /** make sure that the blank string is long enough for the specified size **/
-  private void ensure_blank_len (int size) {
+  private void ensure_blank_len(int size) {
     if (size > blank_string.length()) {
-      while (blank_string.length() < size)
-        blank_string += " ";
+      while (blank_string.length() < size) blank_string += " ";
     }
   }
 
   public StringBuilder tree_dump(StringBuilder out, int indent) {
 
     // Make sure the blank string is long enough for the indent.
-    ensure_blank_len (indent+2);
+    ensure_blank_len(indent + 2);
 
-    out.append (blank_string, 0, indent);
-    out.append ('-');
-    out.append (descr);
+    out.append(blank_string, 0, indent);
+    out.append('-');
+    out.append(descr);
     if (stack_trace != null) {
       for (StackTraceElement ste : stack_trace.getStackTrace()) {
-        if (ste.getClassName().startsWith ("daikon.dcomp.DCRuntime"))
-          continue;
-        out.append (lineSep);
-        out.append (blank_string, 0, indent+2);
-        out.append (ste);
+        if (ste.getClassName().startsWith("daikon.dcomp.DCRuntime")) continue;
+        out.append(lineSep);
+        out.append(blank_string, 0, indent + 2);
+        out.append(ste);
       }
     }
     if (left != null) {
-      left.tree_dump (out, indent+2);
-      out.append (lineSep);
+      left.tree_dump(out, indent + 2);
+      out.append(lineSep);
     }
 
     if (right != null) {
-      right.tree_dump (out, indent+2);
-      out.append (lineSep);
+      right.tree_dump(out, indent + 2);
+      out.append(lineSep);
     }
 
     return out;

@@ -29,10 +29,7 @@ import org.checkerframework.dataflow.qual.*;
  * There would be 4 ternary slices -- for {A,B,C}, {A,B,D}, {A,C,D}, and
  * {B,C,D}.
  **/
-
-public abstract class PptSlice
-  extends Ppt
-{
+public abstract class PptSlice extends Ppt {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -54,7 +51,9 @@ public abstract class PptSlice
   // with the program point hierarchy.
   /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
-  public abstract int arity(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/);
+
+  public abstract int arity(
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/ );
 
   /**
    * The invariants contained in this slice.
@@ -70,17 +69,18 @@ public abstract class PptSlice
     this.parent = parent;
     invs = new ArrayList<Invariant>();
     // Ensure that the VarInfo objects are in order (and not duplicated).
-    for (int i=0; i<var_infos.length-1; i++) {
-      assert var_infos[i].varinfo_index <= var_infos[i+1].varinfo_index;
+    for (int i = 0; i < var_infos.length - 1; i++) {
+      assert var_infos[i].varinfo_index <= var_infos[i + 1].varinfo_index;
     }
     assert this instanceof PptSliceEquality || arity() == var_infos.length;
 
     if (debugGeneral.isLoggable(Level.FINE)) {
-      debugGeneral.fine (ArraysMDE.toString(var_infos));
+      debugGeneral.fine(ArraysMDE.toString(var_infos));
     }
   }
 
-  /*@SideEffectFree*/ public final String name(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/) {
+  /*@SideEffectFree*/ public final String name(
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/ ) {
     return parent.name + varNames(var_infos);
   }
 
@@ -90,7 +90,7 @@ public abstract class PptSlice
 
   // This is only called from inv.filter.VariableFilter.
   public boolean usesVar(String name) {
-    for (int i=0; i<var_infos.length; i++) {
+    for (int i = 0; i < var_infos.length; i++) {
       // mistere: I'm not sure is this is the right thing for
       // the gui, but it's probably close
       if (var_infos[i].name().equals(name)) {
@@ -107,8 +107,7 @@ public abstract class PptSlice
   // Only called right now from tools/ExtractConsequent
   public boolean usesVarDerived(String name) {
     for (VarInfo vi : var_infos) {
-      if (vi.includes_simple_name(name))
-        return true;
+      if (vi.includes_simple_name(name)) return true;
     }
     return false;
   }
@@ -116,8 +115,7 @@ public abstract class PptSlice
   /** @return true if all of this slice's variables are orig() variables. */
   public boolean allPrestate() {
     for (VarInfo vi : var_infos) {
-      if (! vi.isPrestateDerived())
-        return false;
+      if (!vi.isPrestateDerived()) return false;
     }
     return true;
   }
@@ -129,16 +127,13 @@ public abstract class PptSlice
   // and to take action if the vector becomes void.
   public void removeInvariant(Invariant inv) {
 
-    if (Debug.logDetail())
-      log ("Removing invariant '" + inv.format() + "'");
-    if (Debug.logOn())
-      inv.log ("Removed from slice: %s", inv.format());
+    if (Debug.logDetail()) log("Removing invariant '" + inv.format() + "'");
+    if (Debug.logOn()) inv.log("Removed from slice: %s", inv.format());
     boolean removed = invs.remove(inv);
     assert removed : "inv " + inv + " not in ppt " + name();
     Global.falsified_invariants++;
     if (invs.size() == 0) {
-      if (Debug.logDetail())
-        log ("last invariant removed");
+      if (Debug.logDetail()) log("last invariant removed");
     }
   }
 
@@ -156,8 +151,7 @@ public abstract class PptSlice
       assert old_invs_size - invs.size() == to_remove.size();
       Global.falsified_invariants += to_remove.size();
       if (invs.size() == 0) {
-        if (Debug.logDetail())
-          log ("last invariant removed");
+        if (Debug.logDetail()) log("last invariant removed");
       }
     }
   }
@@ -169,20 +163,20 @@ public abstract class PptSlice
    * ValueTuple that encapsulates objects of any type whatever.)
    * @return a List of Invariants that weakened due to the processing.
    **/
-  abstract List<Invariant> add (ValueTuple full_vt, int count);
+  abstract List<Invariant> add(ValueTuple full_vt, int count);
 
   /**
    * Removes any falsified invariants from our list.
    */
   /*@RequiresNonNull("NIS.suppressor_map")*/
-  protected void remove_falsified () {
+  protected void remove_falsified() {
 
     // Remove the dead invariants
     for (Iterator<Invariant> iFalsified = invs.iterator(); iFalsified.hasNext(); ) {
       Invariant inv = iFalsified.next();
       if (inv.is_false()) {
         iFalsified.remove();
-        NIS.falsified (inv);
+        NIS.falsified(inv);
       }
     }
   }
@@ -194,7 +188,7 @@ public abstract class PptSlice
    * to, for each repeat, increment the value.  So 0, 0, 2 becomes 0,
    * 1, 2.
    **/
-  private void fixPermutation (int[] permutation) {
+  private void fixPermutation(int[] permutation) {
     for (int i = 0; i < permutation.length; i++) {
       int count = 0;
       for (int j = 0; j < permutation.length; j++) {
@@ -206,7 +200,6 @@ public abstract class PptSlice
     }
     assert ArraysMDE.fn_is_permutation(permutation);
   }
-
 
   /** Return an approximation of the number of samples seen on this slice **/
   public abstract int num_samples();
@@ -229,16 +222,14 @@ public abstract class PptSlice
    **/
   public static final class ArityVarnameComparator implements Comparator<PptSlice> {
     /*@Pure*/ public int compare(PptSlice slice1, PptSlice slice2) {
-      if (slice1 == slice2)
-        return 0;
+      if (slice1 == slice2) return 0;
       // Don't do this assert, which prevents comparison across different Ppts.
       // (The assert check may be useful in some situations, though.)
       // assert slice1.parent == slice2.parent;
       if (slice1.arity() != slice2.arity()) {
         return slice2.arity() - slice1.arity();
       }
-      return Ppt.varNames(slice1.var_infos)
-        .compareTo(Ppt.varNames(slice2.var_infos));
+      return Ppt.varNames(slice1.var_infos).compareTo(Ppt.varNames(slice2.var_infos));
     }
   }
 
@@ -250,8 +241,7 @@ public abstract class PptSlice
    **/
   public static final class ArityPptnameComparator implements Comparator<PptSlice> {
     /*@Pure*/ public int compare(PptSlice slice1, PptSlice slice2) {
-      if (slice1 == slice2)
-        return 0;
+      if (slice1 == slice2) return 0;
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
       // assert slice1.parent == slice2.parent;
@@ -262,18 +252,15 @@ public abstract class PptSlice
     }
   }
 
-
   ///////////////////////////////////////////////////////////////////////////
   /// Invariant guarding
 
   public boolean containsOnlyGuardingPredicates() {
     for (Invariant inv : invs) {
-      if (!inv.isGuardingPredicate)
-        return false;
+      if (!inv.isGuardingPredicate) return false;
     }
     return true;
   }
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// Miscellaneous
@@ -285,8 +272,7 @@ public abstract class PptSlice
     if (invs.size() == 0) return;
     List<Invariant> toRemove = new ArrayList<Invariant>();
     for (Invariant inv : invs) {
-      if (omitTypes['r'] && inv.isReflexive())
-        toRemove.add(inv);
+      if (omitTypes['r'] && inv.isReflexive()) toRemove.add(inv);
     }
     removeInvariants(toRemove);
   }
@@ -308,8 +294,7 @@ public abstract class PptSlice
       // System.out.printf ("equality set for vi %s = %s\n", vi, vi.equalitySet);
       if (!vi.isCanonical()) {
         assert var_infos.length == 2 : this + " - " + vi;
-        assert var_infos[0].canonicalRep() == var_infos[1].canonicalRep()
-          : this + " - " + vi;
+        assert var_infos[0].canonicalRep() == var_infos[1].canonicalRep() : this + " - " + vi;
       }
     }
 
@@ -333,21 +318,26 @@ public abstract class PptSlice
     throw new Error("Shouldn't get called");
   }
 
-  public PptSlice copy_new_invs (PptTopLevel ppt, VarInfo[] vis) {
+  public PptSlice copy_new_invs(PptTopLevel ppt, VarInfo[] vis) {
     throw new Error("Shouldn't get called");
   }
 
   /**
    * For debugging only.
    **/
-  @SuppressWarnings("purity")   // string creation
+  @SuppressWarnings("purity") // string creation
   /*@SideEffectFree*/ public String toString() {
     StringBuffer sb = new StringBuffer();
     for (VarInfo vi : var_infos) {
-      sb.append (" " + vi.name());
+      sb.append(" " + vi.name());
     }
-    return this.getClass().getName() + ": " + parent.ppt_name + " "
-           + sb + " samples: " + num_samples();
+    return this.getClass().getName()
+        + ": "
+        + parent.ppt_name
+        + " "
+        + sb
+        + " samples: "
+        + num_samples();
   }
   /**
    * Returns whether or not this slice already contains the specified
@@ -355,13 +345,12 @@ public abstract class PptSlice
    * This will return true for invariants of the same kind with different
    * formulas (eg, one_of, bound, linearbinary)
    */
-  public boolean contains_inv (Invariant inv) {
+  public boolean contains_inv(Invariant inv) {
 
     for (Invariant mine : invs) {
-      if (mine.match (inv))
-        return (true);
+      if (mine.match(inv)) return true;
     }
-    return (false);
+    return false;
   }
 
   /**
@@ -370,7 +359,7 @@ public abstract class PptSlice
    * invariants be of the same class and have the same formula
    */
   /*@EnsuresNonNullIf(result=true, expression="find_inv_exact(#1)")*/
-  public boolean contains_inv_exact (Invariant inv) {
+  public boolean contains_inv_exact(Invariant inv) {
 
     return (find_inv_exact(inv) != null);
   }
@@ -381,11 +370,10 @@ public abstract class PptSlice
    * the invariants be of the same class and have the same formula
    */
   /*@Pure*/
-  public /*@Nullable*/ Invariant find_inv_exact (Invariant inv) {
+  public /*@Nullable*/ Invariant find_inv_exact(Invariant inv) {
 
     for (Invariant mine : invs) {
-      if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv))
-        return (mine);
+      if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv)) return (mine);
     }
     return (null);
   }
@@ -394,11 +382,10 @@ public abstract class PptSlice
    * Returns the invariant that matches the specified class if it
    * exists.  Otherwise returns null.
    */
-  public /*@Nullable*/ Invariant find_inv_by_class (Class<? extends Invariant> cls) {
+  public /*@Nullable*/ Invariant find_inv_by_class(Class<? extends Invariant> cls) {
 
     for (Invariant inv : invs) {
-      if ((inv.getClass() == cls))
-        return (inv);
+      if ((inv.getClass() == cls)) return (inv);
     }
     return (null);
   }
@@ -409,27 +396,27 @@ public abstract class PptSlice
    * or is obvious statically.
    */
   @SuppressWarnings("nullness") // checker bug with flow and static fields
-  /*@Pure*/ public boolean is_inv_true (Invariant inv) {
+  /*@Pure*/ public boolean is_inv_true(Invariant inv) {
 
-    if (contains_inv_exact (inv)) {
+    if (contains_inv_exact(inv)) {
       if (Debug.logOn() && (Daikon.current_inv != null))
-        Daikon.current_inv.log ("inv %s exists", inv.format());
-      return (true);
+        Daikon.current_inv.log("inv %s exists", inv.format());
+      return true;
     }
 
     // Check to see if the invariant is obvious statically over the leaders.
     // This check should be sufficient since if it isn't obvious statically
     // over the leaders, it should have been created.
-    DiscardInfo di = inv.isObviousStatically (var_infos);
+    DiscardInfo di = inv.isObviousStatically(var_infos);
     if (di != null) {
       if (Debug.logOn() && (Daikon.current_inv != null))
-        Daikon.current_inv.log ("inv %s is obv statically", inv.format());
-      return (true);
+        Daikon.current_inv.log("inv %s is obv statically", inv.format());
+      return true;
     }
 
     boolean suppressed = inv.is_ni_suppressed();
     if (suppressed && Debug.logOn() && (Daikon.current_inv != null))
-      Daikon.current_inv.log ("inv %s is ni suppressed", inv.format());
+      Daikon.current_inv.log("inv %s is ni suppressed", inv.format());
     return (suppressed);
   }
 
@@ -437,9 +424,7 @@ public abstract class PptSlice
    * Output specified log information if the PtpSlice class, and this ppt
    * and variables are enabled for logging
    */
-  public void log (String msg) {
-    Debug.log (getClass(), this, msg);
+  public void log(String msg) {
+    Debug.log(getClass(), this, msg);
   }
-
-
 }

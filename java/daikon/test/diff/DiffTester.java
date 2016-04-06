@@ -14,8 +14,7 @@ import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
 
-
-@SuppressWarnings("nullness")   // testing code
+@SuppressWarnings("nullness") // testing code
 public class DiffTester extends TestCase {
 
   private Diff diffSome;
@@ -38,16 +37,18 @@ public class DiffTester extends TestCase {
   private PptMap imps2;
 
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (LogHelper.INFO);
+    daikon.LogHelper.setupLogs(LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(DiffTester.class));
   }
 
   public static VarInfo newIntVarInfo(String name) {
-    VarInfo result = new VarInfo(name,
-                                 ProglangType.INT,
-                                 ProglangType.INT,
-                                 VarComparabilityNone.it,
-                                 VarInfoAux.getDefault());
+    VarInfo result =
+        new VarInfo(
+            name,
+            ProglangType.INT,
+            ProglangType.INT,
+            VarComparabilityNone.it,
+            VarInfoAux.getDefault());
     return result;
   }
 
@@ -77,36 +78,32 @@ public class DiffTester extends TestCase {
     {
       ppts4 = new PptMap();
       ppts4.add(newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
-      PptTopLevel ppt1 =
-        newPptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]);
-      PptTopLevel ppt2 =
-        newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]);
+      PptTopLevel ppt1 = newPptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]);
+      PptTopLevel ppt2 = newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]);
       ppts4.add(ppt1);
       ppts4.add(ppt2);
     }
 
     {
       pptsCond = new PptMap();
-      PptTopLevel ppt1 =
-        newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]);
+      PptTopLevel ppt1 = newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]);
       Splitter split = new ReturnTrueSplitter();
-      PptSplitter ppt_split = new PptSplitter (ppt1, split);
+      PptSplitter ppt_split = new PptSplitter(ppt1, split);
       ppt1.splitters = new ArrayList<PptSplitter>();
-      ppt1.splitters.add (ppt_split);
+      ppt1.splitters.add(ppt_split);
       pptsCond.add(ppt1);
       pptsCond.add(newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
       pptsCond.add(newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     }
 
     // Invoke private method using reflection
-    Method mAddViews = PptTopLevel.class.getDeclaredMethod
-      ("addViews", new Class<?>[] {Vector.class});
+    Method mAddViews =
+        PptTopLevel.class.getDeclaredMethod("addViews", new Class<?>[] {Vector.class});
     mAddViews.setAccessible(true);
 
     {
       invs1 = new PptMap();
-      VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
-                         newIntVarInfo("z")};
+      VarInfo[] vars = {newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z")};
       PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant invx = LowerBound.get_proto().instantiate(slicex);
@@ -128,8 +125,7 @@ public class DiffTester extends TestCase {
     {
       // Permutation of invs1
       invs2 = new PptMap();
-      VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
-                         newIntVarInfo("z")};
+      VarInfo[] vars = {newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z")};
       PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
       PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
       Invariant invy = LowerBound.get_proto().instantiate(slicey);
@@ -150,8 +146,7 @@ public class DiffTester extends TestCase {
 
     {
       invs3 = new PptMap();
-      VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
-                         newIntVarInfo("z")};
+      VarInfo[] vars = {newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z")};
       PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant invx = LowerBound.get_proto().instantiate(slicex);
@@ -172,16 +167,13 @@ public class DiffTester extends TestCase {
 
     {
       // Ensure that Modulus is enabled
-      Configuration.getInstance().
-        apply(daikon.inv.unary.scalar.Modulus.class,
-              "enabled",
-              "true");
+      Configuration.getInstance().apply(daikon.inv.unary.scalar.Modulus.class, "enabled", "true");
 
       imps1 = new PptMap();
-      VarInfo[] vars = { newIntVarInfo("x") };
+      VarInfo[] vars = {newIntVarInfo("x")};
       PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
-      Invariant inv1 = LowerBound.get_proto().instantiate (slicex);
+      Invariant inv1 = LowerBound.get_proto().instantiate(slicex);
       Invariant inv2 = Modulus.get_proto().instantiate(slicex);
       Invariant inv3 = UpperBound.get_proto().instantiate(slicex);
       Implication imp1 = Implication.makeImplication(ppt, inv1, inv2, false, inv1, inv2);
@@ -193,11 +185,10 @@ public class DiffTester extends TestCase {
       imps1.add(ppt);
     }
 
-
     // Permutation of the nullary invariants in invs1
     {
       imps2 = new PptMap();
-      VarInfo[] vars = { newIntVarInfo("x") };
+      VarInfo[] vars = {newIntVarInfo("x")};
       PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant inv1 = LowerBound.get_proto().instantiate(slicex);
@@ -211,7 +202,6 @@ public class DiffTester extends TestCase {
       Implication imp1 = Implication.makeImplication(ppt, inv1, inv2, false, inv1, inv2);
       imps2.add(ppt);
     }
-
   }
 
   public void testEmptyEmpty() {
@@ -225,17 +215,11 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
     PptNode node;
-    node = new PptNode
-      (null,
-       newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    node = new PptNode(null, newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (null,
-       newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
+    node = new PptNode(null, newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (null,
-       newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
+    node = new PptNode(null, newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
     assert printTree(ref).equals(printTree(diff));
@@ -246,39 +230,35 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
     PptNode node;
-    node = new PptNode
-      (newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
-       null);
+    node = new PptNode(newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]), null);
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
-       null);
+    node = new PptNode(newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]), null);
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
-       null);
+    node = new PptNode(newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]), null);
     ref.add(node);
 
     assert printTree(ref).equals(printTree(diff));
   }
-
 
   public void testPpts1Ppts1() {
     RootNode diff = diffSome.diffPptMap(ppts1, ppts1);
 
     RootNode ref = new RootNode();
     PptNode node;
-    node = new PptNode
-      (newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+            newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
+            newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
-       newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+            newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
     assert printTree(ref).equals(printTree(diff));
@@ -289,17 +269,17 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
     PptNode node;
-    node = new PptNode
-      (newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+            newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
+            newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
-       null);
+    node = new PptNode(newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]), null);
     ref.add(node);
 
     assert printTree(ref).equals(printTree(diff));
@@ -310,30 +290,31 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
     PptNode node;
-    node = new PptNode
-      (newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+            newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
+            newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
-       newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+            newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
     assert printTree(ref).equals(printTree(diff));
   }
-
 
   public void testInvs1Empty() {
     RootNode diff = diffSome.diffPptMap(invs1, empty);
 
     RootNode ref = new RootNode();
 
-    VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
-                       newIntVarInfo("z") };
+    VarInfo[] vars = {newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z")};
     PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.get_proto().instantiate(slicex);
@@ -362,8 +343,7 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
 
-    VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
-                       newIntVarInfo("z") };
+    VarInfo[] vars = {newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z")};
     PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.get_proto().instantiate(slicex);
@@ -394,8 +374,7 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
 
-    VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
-                       newIntVarInfo("z") };
+    VarInfo[] vars = {newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z")};
     PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.get_proto().instantiate(slicex);
@@ -426,8 +405,7 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
 
-    VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
-                       newIntVarInfo("z") };
+    VarInfo[] vars = {newIntVarInfo("x"), newIntVarInfo("y"), newIntVarInfo("z")};
     PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.get_proto().instantiate(slicex);
@@ -460,13 +438,10 @@ public class DiffTester extends TestCase {
 
   public void testNonModulus() {
     // Ensure that NonModulus is enabled
-    Configuration.getInstance().
-      apply(daikon.inv.unary.scalar.NonModulus.class,
-            "enabled",
-            "true");
+    Configuration.getInstance().apply(daikon.inv.unary.scalar.NonModulus.class, "enabled", "true");
 
     PptMap map = new PptMap();
-    VarInfo[] vars = { newIntVarInfo("x") };
+    VarInfo[] vars = {newIntVarInfo("x")};
     PptTopLevel ppt = newPptTopLevel("Foo.Baa(int):::ENTER", vars);
     PptSlice slice = new PptSlice1(ppt, vars);
     Invariant inv = NonModulus.get_proto().instantiate(slice);
@@ -486,17 +461,20 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
     PptNode node;
-    node = new PptNode
-      (newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+            newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
+            newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
-       newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+            newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
     assert printTree(ref).equals(printTree(diff));
@@ -510,23 +488,31 @@ public class DiffTester extends TestCase {
 
     RootNode ref = new RootNode();
     PptNode node;
-    node = new PptNode
-      (newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+            newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode(null, newPptTopLevel
-      ("Foo.Baa(int):::ENTER;condition=\"not(return == true)\"", new VarInfo[0]));
+    node =
+        new PptNode(
+            null,
+            newPptTopLevel(
+                "Foo.Baa(int):::ENTER;condition=\"not(return == true)\"", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode(null, newPptTopLevel
-      ("Foo.Baa(int):::ENTER;condition=\"return == true\"", new VarInfo[0]));
+    node =
+        new PptNode(
+            null,
+            newPptTopLevel("Foo.Baa(int):::ENTER;condition=\"return == true\"", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
-       newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
+            newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
     ref.add(node);
-    node = new PptNode
-      (newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
-       newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
+    node =
+        new PptNode(
+            newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+            newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
     assert printTree(ref).equals(printTree(diff));
@@ -547,5 +533,4 @@ public class DiffTester extends TestCase {
   PptTopLevel newPptTopLevel(String pptname, VarInfo[] vars) {
     return Common.makePptTopLevel(pptname, vars);
   }
-
 }

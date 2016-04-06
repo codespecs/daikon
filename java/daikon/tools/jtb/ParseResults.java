@@ -33,10 +33,8 @@ public class ParseResults {
     this.compilationUnit = compilationUnit;
   }
 
-
   /*@SideEffectFree*/ public String toString() {
-    return "package name: " + packageName + ", " + "file name: "
-      + fileName;
+    return "package name: " + packageName + ", " + "file name: " + fileName;
   }
 
   /**
@@ -58,100 +56,94 @@ public class ParseResults {
     return retval;
   }
 
-
   public static ParseResults parse(String javaFileName) {
     return parse(javaFileName, false);
   }
 
   public static ParseResults parse(String javaFileName, boolean discardComments) {
 
-      CompilationUnit compilationUnit = null;
+    CompilationUnit compilationUnit = null;
 
-      System.out.println("Parsing file " + javaFileName);
+    System.out.println("Parsing file " + javaFileName);
 
-      File file = new File(javaFileName);
-      String fileName = file.getName();
-      assert fileName.endsWith(".java")
-        : "Found a java-file argument that doesn't end in .java: "
-                        + file;
+    File file = new File(javaFileName);
+    String fileName = file.getName();
+    assert fileName.endsWith(".java")
+        : "Found a java-file argument that doesn't end in .java: " + file;
 
-      try {
-        Reader input = new FileReader(javaFileName);
-        JavaParser parser = new JavaParser(input);
+    try {
+      Reader input = new FileReader(javaFileName);
+      JavaParser parser = new JavaParser(input);
+      compilationUnit = parser.CompilationUnit();
+      input.close();
+
+      // To discard comments, we dump the AST without special
+      // tokens, and then we read it again in the same way as
+      // before.
+      if (discardComments) {
+        Writer output = new StringWriter();
+        TreeDumper dumper = new TreeDumper(output);
+        dumper.printSpecials(false); // Do not print specials <==> discard comments
+        compilationUnit.accept(new TreeFormatter());
+        compilationUnit.accept(dumper);
+        output.close();
+
+        input = new StringReader(output.toString());
+        parser = new JavaParser(input);
         compilationUnit = parser.CompilationUnit();
         input.close();
-
-        // To discard comments, we dump the AST without special
-        // tokens, and then we read it again in the same way as
-        // before.
-        if (discardComments) {
-          Writer output = new StringWriter();
-          TreeDumper dumper = new TreeDumper(output);
-          dumper.printSpecials(false); // Do not print specials <==> discard comments
-          compilationUnit.accept(new TreeFormatter());
-          compilationUnit.accept(dumper);
-          output.close();
-
-          input = new StringReader(output.toString());
-          parser = new JavaParser(input);
-          compilationUnit = parser.CompilationUnit();
-          input.close();
-        }
-
-      } catch (Exception e) {
-        e.printStackTrace();
-        throw new Error(e);
       }
 
-      // Construct the package name.
-      String packageNameString;
-      // CompilationUnit:
-      // f0 -> [ PackageDeclaration() ]
-      // f1 -> ( ImportDeclaration() )*
-      // f2 -> ( TypeDeclaration() )*
-      // f3 -> ( <"\u001a"> )?
-      // f4 -> ( <STUFF_TO_IGNORE: ~[]> )?
-      // f5 -> <EOF>
-      // PackageDeclaration:
-      // f0 -> Modifiers()
-      // f1 -> "package"
-      // f2 -> Name()
-      // f3 -> ";"
-      NodeOptional packageDeclarationMaybe = compilationUnit.f0;
-      if (packageDeclarationMaybe.present()) {
-        PackageDeclaration packageDeclaration =
-          (PackageDeclaration) packageDeclarationMaybe.node;
-        Name packageName = packageDeclaration.f2;
-        StringWriter stringWriter = new StringWriter();
-        TreeDumper dumper = new TreeDumper(stringWriter);
-        dumper.visit(packageName);
-        packageNameString = stringWriter.toString().trim();
-      } else {
-        packageNameString = "";
-      }
-
-      ParseResults results = new ParseResults(packageNameString, fileName, compilationUnit);
-
-      // Find the class name.
-      NodeListOptional typeDeclarationMaybe = compilationUnit.f2;
-      for (int j = 0 ; j < typeDeclarationMaybe.size() ; j++) {
-
-        TypeDeclaration typeDeclaration =
-          (TypeDeclaration) typeDeclarationMaybe.elementAt(j);
-
-        NodeSequence sequence = (NodeSequence)typeDeclaration.f0.choice;
-        NodeChoice nodeChoice = (NodeChoice)sequence.elementAt(1);
-        ClassOrInterfaceDeclaration decl =
-          (ClassOrInterfaceDeclaration)nodeChoice.choice;
-
-//         assert !Ast.isInterface(decl)
-//                           : "Do not give .java files that declare interfaces "
-//                           + "to the instrumenter: " + javaFileName;
-
-        results.roots.add(typeDeclaration);
-      }
-
-      return results;
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new Error(e);
     }
 
+    // Construct the package name.
+    String packageNameString;
+    // CompilationUnit:
+    // f0 -> [ PackageDeclaration() ]
+    // f1 -> ( ImportDeclaration() )*
+    // f2 -> ( TypeDeclaration() )*
+    // f3 -> ( <"\u001a"> )?
+    // f4 -> ( <STUFF_TO_IGNORE: ~[]> )?
+    // f5 -> <EOF>
+    // PackageDeclaration:
+    // f0 -> Modifiers()
+    // f1 -> "package"
+    // f2 -> Name()
+    // f3 -> ";"
+    NodeOptional packageDeclarationMaybe = compilationUnit.f0;
+    if (packageDeclarationMaybe.present()) {
+      PackageDeclaration packageDeclaration = (PackageDeclaration) packageDeclarationMaybe.node;
+      Name packageName = packageDeclaration.f2;
+      StringWriter stringWriter = new StringWriter();
+      TreeDumper dumper = new TreeDumper(stringWriter);
+      dumper.visit(packageName);
+      packageNameString = stringWriter.toString().trim();
+    } else {
+      packageNameString = "";
+    }
+
+    ParseResults results = new ParseResults(packageNameString, fileName, compilationUnit);
+
+    // Find the class name.
+    NodeListOptional typeDeclarationMaybe = compilationUnit.f2;
+    for (int j = 0; j < typeDeclarationMaybe.size(); j++) {
+
+      TypeDeclaration typeDeclaration = (TypeDeclaration) typeDeclarationMaybe.elementAt(j);
+
+      NodeSequence sequence = (NodeSequence) typeDeclaration.f0.choice;
+      NodeChoice nodeChoice = (NodeChoice) sequence.elementAt(1);
+      ClassOrInterfaceDeclaration decl = (ClassOrInterfaceDeclaration) nodeChoice.choice;
+
+      //         assert !Ast.isInterface(decl)
+      //                           : "Do not give .java files that declare interfaces "
+      //                           + "to the instrumenter: " + javaFileName;
+
+      results.roots.add(typeDeclaration);
+    }
+
+    return results;
+  }
 }

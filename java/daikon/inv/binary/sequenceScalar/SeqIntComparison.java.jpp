@@ -192,7 +192,7 @@ public final class SEQINTEQUAL
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     VarInfo seqvar;
     VarInfo sclvar;
@@ -212,7 +212,7 @@ public final class SEQINTEQUAL
         return false;
     #endif
 
-    return (true);
+    return true;
   }
 
   /** instantiates the invariant on the specified slice **/

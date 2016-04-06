@@ -26,7 +26,8 @@ public class UnionVisitor extends DepthFirstVisitor {
   public void visit(PptNode node) {
     PptTopLevel ppt1 = node.getPpt1();
     PptTopLevel ppt2 = node.getPpt2();
-    @SuppressWarnings("nullness") // application invariant: at least one of ppt1 and ppt2 is non-null
+    @SuppressWarnings(
+        "nullness") // application invariant: at least one of ppt1 and ppt2 is non-null
     /*@NonNull*/ PptTopLevel pptNonNull = (ppt1 != null ? ppt1 : ppt2);
     result.addPpt(pptNonNull);
     currentPpt = pptNonNull;
@@ -38,8 +39,10 @@ public class UnionVisitor extends DepthFirstVisitor {
    * invariants are non-null, add the invariant with the better
    * (higher) confidence.
    **/
-  @SuppressWarnings("nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode has already been visited
-  /*@RequiresNonNull("currentPpt")*/ // visitor invariant
+  @SuppressWarnings(
+      "nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode has already been visited
+  /*@RequiresNonNull("currentPpt")*/
+  // visitor invariant
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
@@ -56,5 +59,4 @@ public class UnionVisitor extends DepthFirstVisitor {
       }
     }
   }
-
 }

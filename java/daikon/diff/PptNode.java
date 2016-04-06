@@ -12,7 +12,7 @@ import org.checkerframework.dataflow.qual.*;
  * Contains a pair of Ppts.  Resides in the second level of the tree.
  * All its children are InvNodes.
  **/
-public class PptNode extends Node</*@Nullable*/ PptTopLevel,InvNode> {
+public class PptNode extends Node</*@Nullable*/ PptTopLevel, InvNode> {
 
   /** Either ppt1 or ppt2 may be null, but not both. **/
   public PptNode(/*@Nullable*/ PptTopLevel ppt1, /*@Nullable*/ PptTopLevel ppt2) {
@@ -33,5 +33,4 @@ public class PptNode extends Node</*@Nullable*/ PptTopLevel,InvNode> {
   public void accept(Visitor v) {
     v.visit(this);
   }
-
 }

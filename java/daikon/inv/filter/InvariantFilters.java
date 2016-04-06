@@ -55,67 +55,63 @@ public class InvariantFilters {
 
   public InvariantFilters() {
 
-    addPropertyFilter( new UnjustifiedFilter());
-    addPropertyFilter( new ParentFilter());
-    addPropertyFilter( new ObviousFilter());
+    addPropertyFilter(new UnjustifiedFilter());
+    addPropertyFilter(new ParentFilter());
+    addPropertyFilter(new ObviousFilter());
 
     // This set of filters is invoked when preparing invariants for processing
     // by Simplify, but before Simplify actually runs this will just not
     // filter anything, so no need to fear recursiveness here.
-    addPropertyFilter( new SimplifyFilter( ));
+    addPropertyFilter(new SimplifyFilter());
 
-    addPropertyFilter( new OnlyConstantVariablesFilter());
-    addPropertyFilter( new DerivedParameterFilter());
+    addPropertyFilter(new OnlyConstantVariablesFilter());
+    addPropertyFilter(new DerivedParameterFilter());
     if (Daikon.output_format == OutputFormat.ESCJAVA) {
-      addPropertyFilter( new UnmodifiedVariableEqualityFilter());
+      addPropertyFilter(new UnmodifiedVariableEqualityFilter());
     }
 
     // Filter out invariants that contain certain types of derived variables
     // By default, all derived variales are accepted.
-    addPropertyFilter (new DerivedVariableFilter());
+    addPropertyFilter(new DerivedVariableFilter());
 
-    addPropertyFilter (new ReadonlyPrestateFilter());
+    addPropertyFilter(new ReadonlyPrestateFilter());
 
-    addPropertyFilter (new StringFilter());
+    addPropertyFilter(new StringFilter());
   }
-
 
   private static /*@MonotonicNonNull*/ InvariantFilters default_filters = null;
 
   public static InvariantFilters defaultFilters() {
-    if (default_filters == null)
-      default_filters = new InvariantFilters ();
+    if (default_filters == null) default_filters = new InvariantFilters();
     return default_filters;
   }
 
-
-  void addPropertyFilter(/*>>>@UnknownInitialization(InvariantFilters.class) @Raw(InvariantFilters.class) InvariantFilters this,*/ InvariantFilter filter ) {
-    propertyFilters.add( filter );
+  void addPropertyFilter(
+      /*>>>@UnknownInitialization(InvariantFilters.class) @Raw(InvariantFilters.class) InvariantFilters this,*/ InvariantFilter
+          filter) {
+    propertyFilters.add(filter);
   }
 
-
-  public /*@Nullable*/ InvariantFilter shouldKeepVarFilters( Invariant invariant ) {
+  public /*@Nullable*/ InvariantFilter shouldKeepVarFilters(Invariant invariant) {
     // Logger df = PrintInvariants.debugFiltering;
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
         boolean hasAnyVariable = false;
         for (VariableFilter filter : variableFilters) {
-          if (! filter.shouldDiscard( invariant )) {
+          if (!filter.shouldDiscard(invariant)) {
             hasAnyVariable = true;
           }
         }
-        if (! hasAnyVariable) {
-          if (Invariant.logOn())
-            invariant.log ("Failed ANY_VARIABLE filter");
+        if (!hasAnyVariable) {
+          if (Invariant.logOn()) invariant.log("Failed ANY_VARIABLE filter");
           return variableFilters.get(0);
         }
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
         for (VariableFilter filter : variableFilters) {
-          if (filter.shouldDiscard( invariant )) {
+          if (filter.shouldDiscard(invariant)) {
             if (Invariant.logOn())
-              invariant.log ("Failed ALL_VARIABLES filter %s",
-                             filter.getClass().getName());
-              return filter;
+              invariant.log("Failed ALL_VARIABLES filter %s", filter.getClass().getName());
+            return filter;
           }
         }
       }
@@ -123,30 +119,33 @@ public class InvariantFilters {
     return null;
   }
 
-  public /*@Nullable*/ InvariantFilter shouldKeepPropFilters( Invariant invariant ) {
+  public /*@Nullable*/ InvariantFilter shouldKeepPropFilters(Invariant invariant) {
     Logger df = PrintInvariants.debugFiltering;
     for (InvariantFilter filter : propertyFilters) {
       if (Invariant.logDetail() || df.isLoggable(Level.FINE)) {
-        invariant.log (df, "applying " + filter.getClass().getName());
+        invariant.log(df, "applying " + filter.getClass().getName());
       }
-      if (filter.shouldDiscard( invariant )) {
+      if (filter.shouldDiscard(invariant)) {
         if (Invariant.logOn() || df.isLoggable(Level.FINE))
-          invariant.log (df, "failed " + filter.getClass().getName()
-                         // + " num_values = "
-                         // + ",num_unmod_missing_samples==" + invariant.ppt.num_mod_samples()
-                         + ": " + invariant.format()
-                         );
+          invariant.log(
+              df,
+              "failed "
+                  + filter.getClass().getName()
+                  // + " num_values = "
+                  // + ",num_unmod_missing_samples==" + invariant.ppt.num_mod_samples()
+                  + ": "
+                  + invariant.format());
         return filter;
       }
-     }
-     return null;
+    }
+    return null;
   }
 
-  public /*@Nullable*/ InvariantFilter shouldKeep( Invariant invariant ) {
+  public /*@Nullable*/ InvariantFilter shouldKeep(Invariant invariant) {
     Logger df = PrintInvariants.debugFiltering;
 
     if (Invariant.logOn() || df.isLoggable(Level.FINE)) {
-      invariant.log (df, "filtering");
+      invariant.log(df, "filtering");
     }
 
     if (invariant instanceof GuardingImplication) {
@@ -160,9 +159,8 @@ public class InvariantFilters {
     }
 
     //  Property filters.
-    invariant.log ("Processing %s Prop filters", propertyFilters.size());
+    invariant.log("Processing %s Prop filters", propertyFilters.size());
     return (shouldKeepPropFilters(invariant));
-
   }
 
   public Iterator<InvariantFilter> getPropertyFiltersIterator() {
@@ -183,17 +181,18 @@ public class InvariantFilters {
   }
 
   // Description must be a valid description of a filter
-  public boolean getFilterSetting( String description ) {
+  public boolean getFilterSetting(String description) {
     return find(description).getSetting();
   }
 
   // Description must be a valid description of a filter
-  public void changeFilterSetting( String description, boolean turnOn ) {
+  public void changeFilterSetting(String description, boolean turnOn) {
     InvariantFilter filter = find(description);
-    if (turnOn)
+    if (turnOn) {
       filter.turnOn();
-    else
+    } else {
       filter.turnOff();
+    }
   }
 
   public void turnFiltersOn() {
@@ -208,35 +207,38 @@ public class InvariantFilters {
     }
   }
 
-  public void addVariableFilter( String variable ) {
-    variableFilters.add( new VariableFilter( variable ));
+  public void addVariableFilter(String variable) {
+    variableFilters.add(new VariableFilter(variable));
   }
 
-  public boolean containsVariableFilter( String variable ) {
+  public boolean containsVariableFilter(String variable) {
     for (VariableFilter vf : variableFilters) {
-      if (vf.getVariable().equals( variable )) {
+      if (vf.getVariable().equals(variable)) {
         return true;
       }
     }
     return false;
   }
 
-  public void removeVariableFilter( String variable ) {
+  public void removeVariableFilter(String variable) {
     boolean foundOnce = false;
     for (Iterator<VariableFilter> iter = variableFilters.iterator(); iter.hasNext(); ) {
       VariableFilter vf = iter.next();
-      if (vf.getVariable().equals( variable )) {
+      if (vf.getVariable().equals(variable)) {
         iter.remove();
         foundOnce = true;
       }
     }
     if (foundOnce) return;
 
-    throw new Error( "InvariantFilters.removeVariableFilter():  filter for variable '" + variable + "' not found" );
+    throw new Error(
+        "InvariantFilters.removeVariableFilter():  filter for variable '"
+            + variable
+            + "' not found");
   }
 
   // variableFilterType is either InvariantFilters.ANY_VARIABLE or InvariantFilters.ALL_VARIABLES
-  public void setVariableFilterType( int variableFilterType ) {
+  public void setVariableFilterType(int variableFilterType) {
     this.variableFilterType = variableFilterType;
   }
 
@@ -258,21 +260,19 @@ public class InvariantFilters {
    * The Equality invariants are inserted into the beginning.  Equality
    * invariants are useful when it comes to displaying invariants.
    **/
-  public static List<Invariant> addEqualityInvariants( List<Invariant> invariants ) {
+  public static List<Invariant> addEqualityInvariants(List<Invariant> invariants) {
 
     return invariants;
-
   }
 
   // For debugging (not very efficient)
   static String reprVarInfoList(List<VarInfo> vis) {
     String result = "";
-    for (int i=0; i<vis.size(); i++) {
-      if (i!=0) result += " ";
+    for (int i = 0; i < vis.size(); i++) {
+      if (i != 0) result += " ";
       VarInfo vi = vis.get(i);
       result += vi.name();
     }
     return "[ " + result + " ]";
   }
-
 }

@@ -1,6 +1,5 @@
 package daikon.split;
 
-
 import java.util.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
@@ -11,7 +10,6 @@ import daikon.tools.jtb.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
-
 
 /**
  * StatementReplacer is a jtb syntax tree visitor that replaces method calls
@@ -81,8 +79,7 @@ class StatementReplacer extends DepthFirstVisitor {
         // ParseException does not accept optional "cause" argument
         throw new ParseException(message);
       }
-    } while ((replacements < MAXREPLACEMENTS)
-             && (! replacedExpression.equals(expression)));
+    } while ((replacements < MAXREPLACEMENTS) && (!replacedExpression.equals(expression)));
     if (replacements >= MAXREPLACEMENTS) {
       return originalExpression;
     } else {
@@ -104,7 +101,7 @@ class StatementReplacer extends DepthFirstVisitor {
    *  made.
    */
   public void visit(PrimaryExpression n) {
-    if (! matchFound) {
+    if (!matchFound) {
       ReplaceStatement replaceStatement;
       NodeToken firstToken;
       List<String> newArgs;
@@ -126,18 +123,16 @@ class StatementReplacer extends DepthFirstVisitor {
         String newReturnStatement;
         try {
           newReturnStatement =
-           TokenReplacer.replaceTokens(replaceStatement.getReturnStatement(),
-                                        oldArgs,
-                                        newArgs);
+              TokenReplacer.replaceTokens(replaceStatement.getReturnStatement(), oldArgs, newArgs);
           matchFound = true;
           super.visit(n);
           matchFound = false;
           firstToken.tokenImage = newReturnStatement;
           return;
         } catch (ParseException e) {
-         // need to throw an unchecked Exception since visit
-         // cannot throw a checked Exception.
-         throw new IllegalStateException(e.getMessage(), e);
+          // need to throw an unchecked Exception since visit
+          // cannot throw a checked Exception.
+          throw new IllegalStateException(e.getMessage(), e);
         }
       }
     }
@@ -198,10 +193,10 @@ class StatementReplacer extends DepthFirstVisitor {
    * are "non-this" method calls.
    */
   /*@Pure*/ private boolean isNonThisMethod(PrimaryExpression n) {
-    return (n.f0.f0.choice instanceof Name &&
-            n.f1.size() > 0 &&
-            n.f1.elementAt(0) instanceof PrimarySuffix &&
-            ((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof Arguments);
+    return (n.f0.f0.choice instanceof Name
+        && n.f1.size() > 0
+        && n.f1.elementAt(0) instanceof PrimarySuffix
+        && ((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof Arguments);
   }
 
   /**
@@ -210,11 +205,11 @@ class StatementReplacer extends DepthFirstVisitor {
    * For example "this.get(5)" is a "this" method call.
    */
   /*@Pure*/ private boolean isThisDotMethod(PrimaryExpression n) {
-    return (n.f0.f0.choice instanceof NodeToken &&
-            Visitors.isThis((NodeToken) n.f0.f0.choice) &&
-            n.f1.size() == 2 &&
-            n.f1.elementAt(1) instanceof PrimarySuffix &&
-            ((PrimarySuffix) n.f1.elementAt(1)).f0.choice instanceof Arguments);
+    return (n.f0.f0.choice instanceof NodeToken
+        && Visitors.isThis((NodeToken) n.f0.f0.choice)
+        && n.f1.size() == 2
+        && n.f1.elementAt(1) instanceof PrimarySuffix
+        && ((PrimarySuffix) n.f1.elementAt(1)).f0.choice instanceof Arguments);
   }
 
   /**
@@ -225,12 +220,11 @@ class StatementReplacer extends DepthFirstVisitor {
    */
   private List<String> getArgs(PrimaryExpression n) {
     List<String> args = new ArrayList<String>();
-    int index = n.f1.size()- 1;
+    int index = n.f1.size() - 1;
     if (index > 1) {
-     index = 1;
+      index = 1;
     }
-    Arguments argumentNode =
-      (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;
+    Arguments argumentNode = (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;
     if (argumentNode.f1.present()) {
       ArgumentList argListNode = (ArgumentList) argumentNode.f1.node;
       args.add(addParens(Ast.format(argListNode.f0)));
@@ -253,8 +247,7 @@ class StatementReplacer extends DepthFirstVisitor {
   private List<String> getNonThisArgs(PrimaryExpression n) {
     List<String> args = new ArrayList<String>();
     int index = 0;
-    Arguments argumentNode =
-      (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;
+    Arguments argumentNode = (Arguments) ((PrimarySuffix) n.f1.elementAt(index)).f0.choice;
     if (argumentNode.f1.present()) {
       ArgumentList argListNode = (ArgumentList) argumentNode.f1.node;
       args.add(Ast.format(argListNode.f0));
@@ -276,10 +269,9 @@ class StatementReplacer extends DepthFirstVisitor {
    */
   public static String addParens(String arg) {
     arg = arg.trim();
-    if (arg.charAt(0) == '(' && arg.charAt(arg.length() -1) == ')') {
+    if (arg.charAt(0) == '(' && arg.charAt(arg.length() - 1) == ')') {
       return arg;
     }
     return "(" + arg + ")";
   }
-
 }

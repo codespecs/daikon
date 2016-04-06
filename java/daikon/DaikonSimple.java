@@ -47,14 +47,13 @@ import org.checkerframework.dataflow.qual.*;
  * the two, we can find problems with the optimization implementation by
  * tracking the cause of the differences.
  */
-@SuppressWarnings("nullness")   // not actively maintained
+@SuppressWarnings("nullness") // not actively maintained
 public class DaikonSimple {
 
   // logging information
   public static final Logger debug = Logger.getLogger("daikon.DaikonSimple");
 
-  public static final Logger debug_detail = Logger
-      .getLogger("daikon.DaikonSimple.Detail");
+  public static final Logger debug_detail = Logger.getLogger("daikon.DaikonSimple.Detail");
 
   // // inv file for storing the invariants in serialized form
   // public static File inv_file = null;
@@ -62,32 +61,31 @@ public class DaikonSimple {
   private static String usage =
       UtilMDE.join(
           new String[] {
-              "",
-              "Usage: java daikon.DaikonSimple [OPTION]... <decls_file> <dtrace_file>",
-              "  -h, --" + Daikon.help_SWITCH,
-              "      Display this usage message",
-              // "  -o, <inv_file> ",
-              // "      Writes output to <inv_file>",
-              "  --" + Daikon.debugAll_SWITCH,
-              "      Turns on all debug flags (voluminous output)",
-              "  --" + Daikon.debug_SWITCH + " logger",
-              "      Turns on the specified debug logger",
-              "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
-              "      Print debug info on the specified invariant class, vars, and ppt", },
+            "",
+            "Usage: java daikon.DaikonSimple [OPTION]... <decls_file> <dtrace_file>",
+            "  -h, --" + Daikon.help_SWITCH,
+            "      Display this usage message",
+            // "  -o, <inv_file> ",
+            // "      Writes output to <inv_file>",
+            "  --" + Daikon.debugAll_SWITCH,
+            "      Turns on all debug flags (voluminous output)",
+            "  --" + Daikon.debug_SWITCH + " logger",
+            "      Turns on the specified debug logger",
+            "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
+            "      Print debug info on the specified invariant class, vars, and ppt",
+          },
           lineSep);
 
   // a pptMap that contains all the program points
   public static PptMap all_ppts;
 
-  public static void main(final String[] args) throws IOException,
-      FileNotFoundException {
+  public static void main(final String[] args) throws IOException, FileNotFoundException {
 
     try {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
       String message = e.getMessage();
-      if (Debug.dkconfig_show_stack_trace)
-        e.printStackTrace();
+      if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
       if (message != null) {
         System.err.println(message);
         System.exit(1);
@@ -110,8 +108,7 @@ public class DaikonSimple {
    * @see daikon.Daikon.TerminationMessage
    * @see daikon.Daikon#mainHelper(String[])
    */
-  public static void mainHelper(final String[] args) throws IOException,
-      FileNotFoundException {
+  public static void mainHelper(final String[] args) throws IOException, FileNotFoundException {
 
     // set up logging information
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
@@ -137,8 +134,7 @@ public class DaikonSimple {
     Set<String> dtrace_files = files.dtrace;
 
     if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
-      throw new Daikon.TerminationMessage(
-          "No .decls or .dtrace files specified");
+      throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
     }
 
     // Create the list of all invariant types
@@ -165,8 +161,7 @@ public class DaikonSimple {
       if (ppt.num_samples() == 0) {
         continue;
       }
-      List<Invariant> invs = PrintInvariants.sort_invariant_list(ppt
-          .invariants_vector());
+      List<Invariant> invs = PrintInvariants.sort_invariant_list(ppt.invariants_vector());
       List<Invariant> filtered_invs = Daikon.filter_invs(invs);
       // The dkconfig_quiet printing is used for creating diffs between
       // DaikonSimple
@@ -183,12 +178,10 @@ public class DaikonSimple {
       // names.
 
       if (Daikon.dkconfig_quiet) {
-        System.out
-            .println("====================================================");
+        System.out.println("====================================================");
         System.out.println(ppt.name());
       } else {
-        System.out
-            .println("===================================================+");
+        System.out.println("===================================================+");
         System.out.println(ppt.name() + " +");
       }
 
@@ -275,7 +268,7 @@ public class DaikonSimple {
         // /* if (!is_var_ok_binary(var2))
         // /* continue;
 
-        if (! (var1.compatible(var2)
+        if (!(var1.compatible(var2)
             || (var1.type.isArray() && var1.eltsCompatible(var2))
             || (var2.type.isArray() && var2.eltsCompatible(var1)))) {
           continue;
@@ -295,20 +288,17 @@ public class DaikonSimple {
     for (int i1 = 0; i1 < ppt.var_infos.length; i1++) {
       VarInfo var1 = ppt.var_infos[i1];
 
-      if (!is_var_ok(var1))
-        continue;
+      if (!is_var_ok(var1)) continue;
 
       for (int i2 = i1; i2 < ppt.var_infos.length; i2++) {
         VarInfo var2 = ppt.var_infos[i2];
 
-        if (!is_var_ok(var2))
-          continue;
+        if (!is_var_ok(var2)) continue;
 
         for (int i3 = i2; i3 < ppt.var_infos.length; i3++) {
           VarInfo var3 = ppt.var_infos[i3];
 
-          if (!is_var_ok(var3))
-            continue;
+          if (!is_var_ok(var3)) continue;
 
           if (!is_slice_ok(var1, var2, var3)) {
             continue;
@@ -325,7 +315,6 @@ public class DaikonSimple {
     // This method didn't add any new variables.
     assert old_num_vars == ppt.var_infos.length;
     ppt.repCheck();
-
   }
 
   // This method is exclusively for checking variables participating
@@ -335,7 +324,6 @@ public class DaikonSimple {
 
     return (var.file_rep_type.isIntegral() || var.file_rep_type.isFloat())
         && !var.rep_type.isArray();
-
   }
 
   /**
@@ -427,7 +415,6 @@ public class DaikonSimple {
     // with the right enter entry
     Integer last_nonce = new Integer(-1);
 
-
     /**
      * Creates a valuetuple for the receiver using the vt of the original.  The
      * method copies over the values of variables shared by both program points
@@ -435,21 +422,21 @@ public class DaikonSimple {
      * Also, adds the orig and derived variables to the receiver and returns the
      * newly created valuetuple.
      */
-    private static ValueTuple copySample(PptTopLevel receiver,
-        PptTopLevel original, ValueTuple vt, int nonce) {
+    private static ValueTuple copySample(
+        PptTopLevel receiver, PptTopLevel original, ValueTuple vt, int nonce) {
 
       // Make the vt for the receiver ppt
-//      Object[] values = new Object[receiver.num_tracevars];
-//      int[] mods = new int[receiver.num_tracevars];
-      /*@Nullable*/ /*@Interned*/ Object[] values = new /*@Interned*/ Object[receiver.var_infos.length - receiver.num_static_constant_vars];
+      //      Object[] values = new Object[receiver.num_tracevars];
+      //      int[] mods = new int[receiver.num_tracevars];
+      /*@Nullable*/ /*@Interned*/ Object[] values =
+          new /*@Interned*/ Object[receiver.var_infos.length - receiver.num_static_constant_vars];
       int[] mods = new int[receiver.var_infos.length - receiver.num_static_constant_vars];
 
       // Build the vt for the receiver ppt by looking through the current
       // vt and filling in the gaps.
       int k = 0;
       for (VarInfo var : receiver.var_infos) {
-        if (var.is_static_constant)
-          continue;
+        if (var.is_static_constant) continue;
         boolean found = false;
         for (VarInfo var2 : original.var_infos) {
           if (var.name().equals(var2.name())) {
@@ -465,7 +452,6 @@ public class DaikonSimple {
           mods[k] = 2;
         }
         k++;
-
       }
 
       ValueTuple receiver_vt = new ValueTuple(values, mods);
@@ -475,7 +461,6 @@ public class DaikonSimple {
       FileIO.compute_derived_variables(receiver, receiver_vt.vals, receiver_vt.mods);
 
       return receiver_vt;
-
     }
 
     /**
@@ -483,8 +468,8 @@ public class DaikonSimple {
      * program point and removing the invariant from the list of possibles if
      * any invariant is falsified.
      */
-    public void process_sample(PptMap all_ppts, PptTopLevel ppt, ValueTuple vt,
-                               /*@Nullable*/ Integer nonce) {
+    public void process_sample(
+        PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
       this.all_ppts = all_ppts;
 
       // Add samples to orig and derived variables
@@ -507,8 +492,7 @@ public class DaikonSimple {
       ValueTuple object_vt = null;
       ValueTuple class_vt = null;
 
-      if ((ppt_name.isEnterPoint() && !ppt_name.isConstructor())
-          || ppt_name.isExitPoint()) {
+      if ((ppt_name.isEnterPoint() && !ppt_name.isConstructor()) || ppt_name.isExitPoint()) {
         object_ppt = all_ppts.get(ppt_name.makeObject());
         class_ppt = all_ppts.get(ppt_name.makeClassStatic());
       }
@@ -519,26 +503,26 @@ public class DaikonSimple {
       // class ppt
       if (object_ppt != null) {
 
-          // the check assumes that static fields are not stored first in the
-          // object ppt
-          if (ppt.find_var_by_name (object_ppt.var_infos[0].name()) != null) {
-            // object and class ppt should be created
-            object_vt = copySample(object_ppt, ppt, vt, nonce);
+        // the check assumes that static fields are not stored first in the
+        // object ppt
+        if (ppt.find_var_by_name(object_ppt.var_infos[0].name()) != null) {
+          // object and class ppt should be created
+          object_vt = copySample(object_ppt, ppt, vt, nonce);
 
-            if (class_ppt != null) {
-                class_vt = copySample(class_ppt, ppt, vt, nonce);
-            }
-
-          } else {
-            // only class ppt should be created
-            if (class_ppt != null) {
-              class_vt = copySample(class_ppt, ppt, vt, nonce);
-            }
-
-            object_vt = null;
-            object_ppt = null;
+          if (class_ppt != null) {
+            class_vt = copySample(class_ppt, ppt, vt, nonce);
           }
+
+        } else {
+          // only class ppt should be created
+          if (class_ppt != null) {
+            class_vt = copySample(class_ppt, ppt, vt, nonce);
+          }
+
+          object_vt = null;
+          object_ppt = null;
         }
+      }
 
       // If this is an enter point, just remember it for later
       if (ppt_name.isEnterPoint()) {
@@ -575,11 +559,9 @@ public class DaikonSimple {
         wait = false;
       }
 
-      if (object_ppt != null)
-        add(object_ppt, object_vt, nonce); // apply object vt
+      if (object_ppt != null) add(object_ppt, object_vt, nonce); // apply object vt
 
-      if (class_ppt != null)
-        add(class_ppt, class_vt, nonce);
+      if (class_ppt != null) add(class_ppt, class_vt, nonce);
     }
 
     // The method iterates through all of the invariants in the ppt
@@ -619,7 +601,6 @@ public class DaikonSimple {
         }
       }
 
-
       // If the point has no variables, skip it
       if (ppt.var_infos.length == 0) {
         // The sample should be skipped but Daikon does not do this so
@@ -641,7 +622,7 @@ public class DaikonSimple {
       ppt.incSampleNumber();
 
       // Loop through each slice
-      for (PptSlice slice :  ppt.views_iterable()) {
+      for (PptSlice slice : ppt.views_iterable()) {
         Iterator<Invariant> k = slice.invs.iterator();
         boolean missing = false;
 
@@ -676,10 +657,9 @@ public class DaikonSimple {
             Invariant inv = k.next();
             Invariant pre_inv = inv.clone();
             for (VarInfo vi : inv.ppt.var_infos) {
-              assert vt.getValue (vi) != null : vi;
+              assert vt.getValue(vi) != null : vi;
             }
-            if (inv.ppt instanceof PptSlice2)
-              assert inv.ppt.var_infos.length == 2;
+            if (inv.ppt instanceof PptSlice2) assert inv.ppt.var_infos.length == 2;
             InvariantStatus status = inv.add_sample(vt, 1);
             if (status == InvariantStatus.FALSIFIED) {
               k.remove();
@@ -692,12 +672,11 @@ public class DaikonSimple {
         // add methods
         for (int j = 0; j < vt.vals.length; j++) {
           if (!vt.isMissing(j)) {
-              ValueSet vs = ppt.value_sets[j];
-              vs.add(vt.vals[j]);
+            ValueSet vs = ppt.value_sets[j];
+            vs.add(vt.vals[j]);
           }
         }
         ppt.mbtracker.add(vt, 1);
-
       }
     }
   }

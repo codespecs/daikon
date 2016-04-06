@@ -1,4 +1,3 @@
 package daikon.dcomp;
 
-public interface DCompMarker {
-}
+public interface DCompMarker {}

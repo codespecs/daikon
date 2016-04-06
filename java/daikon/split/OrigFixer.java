@@ -44,8 +44,7 @@ class OrigFixer extends DepthFirstVisitor {
    * @return condition with all instances of "orig()" replaced.
    * @throws ParseException if expression is not valid java code.
    */
-  public static String fixOrig(String expression)
-    throws ParseException {
+  public static String fixOrig(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     OrigFixer fixer = new OrigFixer();
     root.accept(fixer);
@@ -58,23 +57,21 @@ class OrigFixer extends DepthFirstVisitor {
    */
   public void visit(PrimaryExpression n) {
     if (isOrig(n)) {
-      NodeToken origToken =  ((Name) n.f0.f0.choice).f0;
+      NodeToken origToken = ((Name) n.f0.f0.choice).f0;
       origToken.tokenImage = "";
-      NodeToken openParen =
-        ((Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).f0;
+      NodeToken openParen = ((Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).f0;
       openParen.tokenImage = "";
       foundOrig = true;
       super.visit(n);
 
       // handle lastToken
-      if (lastToken != null &&
-          Visitors.isIdentifier(lastToken) &&
-          (twoTokensAgo == null || (! Visitors.isDot(twoTokensAgo)))) {
+      if (lastToken != null
+          && Visitors.isIdentifier(lastToken)
+          && (twoTokensAgo == null || (!Visitors.isDot(twoTokensAgo)))) {
         lastToken.tokenImage = "orig_" + lastToken.tokenImage;
       }
       foundOrig = false;
-      NodeToken closeParen =
-        ((Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).f2;
+      NodeToken closeParen = ((Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).f2;
       closeParen.tokenImage = "";
     } else {
       super.visit(n);
@@ -96,16 +93,16 @@ class OrigFixer extends DepthFirstVisitor {
     withinArgList = false;
   }
 
- /**
-  * Returns in n if an instance of the method "orig".
-  * @return true iff n is a instance of the method "orig".
-  */
+  /**
+   * Returns in n if an instance of the method "orig".
+   * @return true iff n is a instance of the method "orig".
+   */
   /*@Pure*/ private boolean isOrig(PrimaryExpression n) {
-    return ((n.f0.f0.choice instanceof Name) &&
-            (((Name) n.f0.f0.choice).f0.tokenImage.equals("orig")) &&
-            (n.f1.size() > 0) &&
-            (n.f1.elementAt(0) instanceof PrimarySuffix) &&
-            (((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof Arguments));
+    return ((n.f0.f0.choice instanceof Name)
+        && (((Name) n.f0.f0.choice).f0.tokenImage.equals("orig"))
+        && (n.f1.size() > 0)
+        && (n.f1.elementAt(0) instanceof PrimarySuffix)
+        && (((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof Arguments));
   }
 
   /**
@@ -119,7 +116,7 @@ class OrigFixer extends DepthFirstVisitor {
       lastToken.tokenImage = "orig_" + lastToken.tokenImage;
     }
     if (lastToken != null) // test is to quiet the Nullness Checker
-      twoTokensAgo = lastToken;
+    twoTokensAgo = lastToken;
     lastToken = n;
   }
 
@@ -129,10 +126,9 @@ class OrigFixer extends DepthFirstVisitor {
    */
   /*@EnsuresNonNullIf(result=true, expression="lastToken")*/
   /*@Pure*/ private boolean isLastTokenVar(NodeToken n) {
-    return (lastToken != null &&
-            Visitors.isIdentifier(lastToken) &&
-            (twoTokensAgo == null || (! Visitors.isDot(twoTokensAgo))) &&
-            (! Visitors.isLParen(n)));
+    return (lastToken != null
+        && Visitors.isIdentifier(lastToken)
+        && (twoTokensAgo == null || (!Visitors.isDot(twoTokensAgo)))
+        && (!Visitors.isLParen(n)));
   }
-
 }

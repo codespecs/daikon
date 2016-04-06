@@ -18,5 +18,4 @@ public interface IInstruction {
   public abstract boolean kills(String var);
 
   public abstract String getAddress();
-
 }

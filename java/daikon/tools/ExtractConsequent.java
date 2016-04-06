@@ -24,7 +24,7 @@ import org.checkerframework.checker.nullness.qual.*;
  **/
 public class ExtractConsequent {
 
-  public static final Logger debug = Logger.getLogger ("daikon.ExtractConsequent");
+  public static final Logger debug = Logger.getLogger("daikon.ExtractConsequent");
   private static final String lineSep = Global.lineSep;
 
   private static class HashedConsequent {
@@ -48,27 +48,26 @@ public class ExtractConsequent {
   }
 
   /* A HashMap whose keys are PPT names (Strings) and whose values are
-      HashMaps whose keys are predicate names (Strings) and whose values are
-       HashMaps whose keys are Strings (normalized java-format invariants)
-         and whose values are HashedConsequent objects. */
-  private static Map<String,Map<String,Map<String,HashedConsequent>>> pptname_to_conditions = new HashMap<String,Map<String,Map<String,HashedConsequent>>>();
+  HashMaps whose keys are predicate names (Strings) and whose values are
+   HashMaps whose keys are Strings (normalized java-format invariants)
+     and whose values are HashedConsequent objects. */
+  private static Map<String, Map<String, Map<String, HashedConsequent>>> pptname_to_conditions =
+      new HashMap<String, Map<String, Map<String, HashedConsequent>>>();
 
   private static String usage =
-    UtilMDE.joinLines(
-      "Usage: java daikon.ExtractConsequent [OPTION]... FILE",
-      "  -h, --" + Daikon.help_SWITCH,
-      "      Display this usage message",
-      "  --" + Daikon.suppress_redundant_SWITCH,
-      "      Suppress display of logically redundant invariants.",
-      "  --" + Daikon.debugAll_SWITCH,
-      "      Turn on all debug switches",
-      "  --" + Daikon.debug_SWITCH + " <logger>",
-      "      Turn on the specified debug logger");
-
+      UtilMDE.joinLines(
+          "Usage: java daikon.ExtractConsequent [OPTION]... FILE",
+          "  -h, --" + Daikon.help_SWITCH,
+          "      Display this usage message",
+          "  --" + Daikon.suppress_redundant_SWITCH,
+          "      Suppress display of logically redundant invariants.",
+          "  --" + Daikon.debugAll_SWITCH,
+          "      Turn on all debug switches",
+          "  --" + Daikon.debug_SWITCH + " <logger>",
+          "      Turn on the specified debug logger");
 
   public static void main(String[] args)
-    throws FileNotFoundException, IOException, ClassNotFoundException
-  {
+      throws FileNotFoundException, IOException, ClassNotFoundException {
     try {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
@@ -88,48 +87,47 @@ public class ExtractConsequent {
    * @see daikon.Daikon.TerminationMessage
    **/
   public static void mainHelper(final String[] args)
-    throws FileNotFoundException, IOException, ClassNotFoundException
-  {
+      throws FileNotFoundException, IOException, ClassNotFoundException {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    LongOpt[] longopts = new LongOpt[] {
-      new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-    };
+    LongOpt[] longopts =
+        new LongOpt[] {
+          new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        };
     Getopt g = new Getopt("daikon.ExtractConsequent", args, "h", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
-      case 0:
-        // got a long option
-        String option_name = longopts[g.getLongind()].getName();
-        if (Daikon.help_SWITCH.equals(option_name)) {
+        case 0:
+          // got a long option
+          String option_name = longopts[g.getLongind()].getName();
+          if (Daikon.help_SWITCH.equals(option_name)) {
+            System.out.println(usage);
+            throw new Daikon.TerminationMessage();
+          } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
+            Daikon.suppress_redundant_invariants_with_simplify = true;
+          } else if (Daikon.config_option_SWITCH.equals(option_name)) {
+            String item = Daikon.getOptarg(g);
+            daikon.config.Configuration.getInstance().apply(item);
+            break;
+          } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
+            Global.debugAll = true;
+          } else if (Daikon.debug_SWITCH.equals(option_name)) {
+            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+          } else {
+            throw new RuntimeException("Unknown long option received: " + option_name);
+          }
+          break;
+        case 'h':
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
-        } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
-          Daikon.suppress_redundant_invariants_with_simplify = true;
-        } else if (Daikon.config_option_SWITCH.equals(option_name)) {
-          String item = Daikon.getOptarg(g);
-          daikon.config.Configuration.getInstance().apply(item);
+        case '?':
+          break; // getopt() already printed an error
+        default:
+          System.out.println("getopt() returned " + c);
           break;
-        } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
-          Global.debugAll = true;
-        } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
-        } else {
-          throw new RuntimeException("Unknown long option received: " +
-                                     option_name);
-        }
-        break;
-      case 'h':
-        System.out.println(usage);
-        throw new Daikon.TerminationMessage();
-      case '?':
-        break; // getopt() already printed an error
-      default:
-        System.out.println("getopt() returned " + c);
-        break;
       }
     }
     // The index of the first non-option argument -- the name of the file
@@ -138,9 +136,10 @@ public class ExtractConsequent {
       throw new Daikon.TerminationMessage("Wrong number of arguments." + Daikon.lineSep + usage);
     }
     String filename = args[fileIndex];
-    PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
-                                                true // use saved config
-                                                );
+    PptMap ppts =
+        FileIO.read_serialized_pptmap(
+            new File(filename), true // use saved config
+            );
     extract_consequent(ppts);
   }
 
@@ -160,17 +159,20 @@ public class ExtractConsequent {
     // All conditions at a program point.  A TreeSet to enable
     // deterministic output.
     TreeSet<String> allConds = new TreeSet<String>();
-    for ( String pptname : pptname_to_conditions.keySet() ) {
-      Map<String,Map<String,HashedConsequent>> cluster_to_conditions = pptname_to_conditions.get(pptname);
-      for ( Map.Entry</*@KeyFor("cluster_to_conditions")*/ String,Map<String,HashedConsequent>> entry : cluster_to_conditions.entrySet()) {
+    for (String pptname : pptname_to_conditions.keySet()) {
+      Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
+          pptname_to_conditions.get(pptname);
+      for (Map.Entry</*@KeyFor("cluster_to_conditions")*/ String, Map<String, HashedConsequent>>
+          entry : cluster_to_conditions.entrySet()) {
         String predicate = entry.getKey();
-        Map<String,HashedConsequent> conditions = entry.getValue();
+        Map<String, HashedConsequent> conditions = entry.getValue();
         StringBuffer conjunctionJava = new StringBuffer();
         StringBuffer conjunctionDaikon = new StringBuffer();
         StringBuffer conjunctionESC = new StringBuffer();
         StringBuffer conjunctionSimplify = new StringBuffer("(AND ");
         int count = 0;
-        for (Map.Entry</*@KeyFor("conditions")*/ String,HashedConsequent> entry2 : conditions.entrySet()) {
+        for (Map.Entry</*@KeyFor("conditions")*/ String, HashedConsequent> entry2 :
+            conditions.entrySet()) {
           count++;
           String condIndex = entry2.getKey();
           HashedConsequent cond = entry2.getValue();
@@ -182,9 +184,8 @@ public class ExtractConsequent {
           String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
           String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
           String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
-          allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr,
-                                    escStr, simplifyStr));
-//           allConds.add(condIndex);
+          allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
+          //           allConds.add(condIndex);
           if (count > 0) {
             conjunctionJava.append(" && ");
             conjunctionDaikon.append(" and ");
@@ -206,10 +207,12 @@ public class ExtractConsequent {
             || useless_inv_pattern_2.matcher(conj).find()) {
           // System.out.println("Suppressing: " + conj);
         } else {
-          allConds.add(combineDummy(conjunctionJava.toString(),
-                                    conjunctionDaikon.toString(),
-                                    conjunctionESC.toString(),
-                                    conjunctionSimplify.toString()));
+          allConds.add(
+              combineDummy(
+                  conjunctionJava.toString(),
+                  conjunctionDaikon.toString(),
+                  conjunctionESC.toString(),
+                  conjunctionSimplify.toString()));
         }
       }
 
@@ -226,8 +229,7 @@ public class ExtractConsequent {
     pw.flush();
   }
 
-  static String combineDummy(String inv, String daikonStr, String esc,
-                             String simplify) {
+  static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
     StringBuffer combined = new StringBuffer(inv);
     combined.append(lineSep + "\tDAIKON_FORMAT ");
     combined.append(daikonStr);
@@ -238,32 +240,30 @@ public class ExtractConsequent {
     return combined.toString();
   }
 
-
   /**
    * Extract consequents from a implications at a single program
    * point. It only searches for top level Program points because
    * Implications are produced only at those points.
    **/
-  public static void extract_consequent_maybe(PptTopLevel ppt,
-                                              PptMap all_ppts) {
+  public static void extract_consequent_maybe(PptTopLevel ppt, PptMap all_ppts) {
     ppt.simplify_variable_names();
 
     List<Invariant> invs = new ArrayList<Invariant>();
     if (invs.size() > 0) {
       String pptname = cleanup_pptname(ppt.name());
       for (Invariant maybe_as_inv : invs) {
-        Implication maybe = (Implication)maybe_as_inv;
+        Implication maybe = (Implication) maybe_as_inv;
 
         // don't print redundant invariants.
-        if (Daikon.suppress_redundant_invariants_with_simplify &&
-            maybe.ppt.parent.redundant_invs.contains(maybe)) {
+        if (Daikon.suppress_redundant_invariants_with_simplify
+            && maybe.ppt.parent.redundant_invs.contains(maybe)) {
           continue;
         }
 
         // don't print out invariants with min(), max(), or sum() variables
         boolean mms = false;
         VarInfo[] varbls = maybe.ppt.var_infos;
-        for (int v=0; !mms && v<varbls.length; v++) {
+        for (int v = 0; !mms && v < varbls.length; v++) {
           mms |= varbls[v].isDerivedSequenceMinMaxSum();
         }
         if (mms) {
@@ -286,14 +286,12 @@ public class ExtractConsequent {
         // extract the consequent (predicate) if the predicate
         // (consequent) uses the variable "cluster".  Ignore if they
         // both depend on "cluster"
-        if (consequent.usesVarDerived("cluster"))
-          cons_uses_cluster = true;
-        if (predicate.usesVarDerived("cluster"))
-          pred_uses_cluster = true;
+        if (consequent.usesVarDerived("cluster")) cons_uses_cluster = true;
+        if (predicate.usesVarDerived("cluster")) pred_uses_cluster = true;
 
-        if (!(pred_uses_cluster ^ cons_uses_cluster))
+        if (!(pred_uses_cluster ^ cons_uses_cluster)) {
           continue;
-        else if (pred_uses_cluster) {
+        } else if (pred_uses_cluster) {
           inv = consequent;
           cluster_inv = predicate;
         } else {
@@ -316,16 +314,16 @@ public class ExtractConsequent {
         // filter out unwanted invariants
 
         // 1) Invariants involving sequences
-        if (inv instanceof daikon.inv.binary.twoSequence.TwoSequence ||
-            inv instanceof daikon.inv.binary.sequenceScalar.SequenceScalar ||
-            inv instanceof daikon.inv.binary.sequenceString.SequenceString ||
-            inv instanceof daikon.inv.unary.sequence.SingleSequence ||
-            inv instanceof daikon.inv.unary.stringsequence.SingleStringSequence ) {
+        if (inv instanceof daikon.inv.binary.twoSequence.TwoSequence
+            || inv instanceof daikon.inv.binary.sequenceScalar.SequenceScalar
+            || inv instanceof daikon.inv.binary.sequenceString.SequenceString
+            || inv instanceof daikon.inv.unary.sequence.SingleSequence
+            || inv instanceof daikon.inv.unary.stringsequence.SingleStringSequence) {
           continue;
         }
 
-        if (inv instanceof daikon.inv.ternary.threeScalar.LinearTernary ||
-            inv instanceof daikon.inv.binary.twoScalar.LinearBinary) {
+        if (inv instanceof daikon.inv.ternary.threeScalar.LinearTernary
+            || inv instanceof daikon.inv.binary.twoScalar.LinearBinary) {
           continue;
         }
 
@@ -340,36 +338,34 @@ public class ExtractConsequent {
           // For instance, inv_string is "x != y", fake_inv_string is "x == y"
           HashedConsequent fake = new HashedConsequent(inv, inv_string);
           boolean added =
-            store_invariant(cluster_inv.format_using(OutputFormat.JAVA),
-                            fake_inv_string, fake, pptname);
+              store_invariant(
+                  cluster_inv.format_using(OutputFormat.JAVA), fake_inv_string, fake, pptname);
           if (!added) {
             // We couldn't add "x == y", (when we're "x != y") because
             // it already exists; so don't add "x == y" either.
             continue;
           }
         }
-        store_invariant(cluster_inv.format_using(OutputFormat.JAVA),
-                        inv_string, real, pptname);
+        store_invariant(cluster_inv.format_using(OutputFormat.JAVA), inv_string, real, pptname);
       }
     }
   }
 
   // Store the invariant for later printing. Ignore duplicate
   // invariants at the same program point.
-  private static boolean store_invariant (String predicate,
-                                          String index,
-                                          HashedConsequent consequent,
-                                          String pptname) {
+  private static boolean store_invariant(
+      String predicate, String index, HashedConsequent consequent, String pptname) {
     if (!pptname_to_conditions.containsKey(pptname)) {
-      pptname_to_conditions.put(pptname, new HashMap<String,Map<String,HashedConsequent>>());
+      pptname_to_conditions.put(pptname, new HashMap<String, Map<String, HashedConsequent>>());
     }
 
-    Map<String,Map<String,HashedConsequent>> cluster_to_conditions = pptname_to_conditions.get(pptname);
+    Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
+        pptname_to_conditions.get(pptname);
     if (!cluster_to_conditions.containsKey(predicate)) {
-      cluster_to_conditions.put(predicate, new HashMap<String,HashedConsequent>());
+      cluster_to_conditions.put(predicate, new HashMap<String, HashedConsequent>());
     }
 
-    Map<String,HashedConsequent> conditions = cluster_to_conditions.get(predicate);
+    Map<String, HashedConsequent> conditions = cluster_to_conditions.get(predicate);
     if (conditions.containsKey(index)) {
       HashedConsequent old = conditions.get(index);
       if (old.fakeFor != null && consequent.fakeFor == null) {
@@ -386,16 +382,14 @@ public class ExtractConsequent {
     }
   }
 
-
-  private static boolean contains_constant_non_012 (Invariant inv) {
+  private static boolean contains_constant_non_012(Invariant inv) {
     if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
       daikon.inv.unary.scalar.OneOfScalar oneof = (daikon.inv.unary.scalar.OneOfScalar) inv;
       // OneOf invariants that indicate a small set ( > 1 element) of
       // possible values are not interesting, and have already been
       // eliminated by the isInteresting check
       long num = ((Long) oneof.elt()).longValue();
-      if (num > 2 || num < -1)
-        return true;
+      if (num > 2 || num < -1) return true;
     }
 
     return false;
@@ -403,14 +397,13 @@ public class ExtractConsequent {
 
   // remove non-word characters and everything after ":::" from the
   // program point name, leaving PackageName.ClassName.MethodName
-  private static String cleanup_pptname (String pptname) {
+  private static String cleanup_pptname(String pptname) {
     int index;
     if ((index = pptname.indexOf("(")) > 0) {
       pptname = pptname.substring(0, index);
     }
 
-    if (pptname.endsWith("."))
-      pptname = pptname.substring(0, pptname.length()-2);
+    if (pptname.endsWith(".")) pptname = pptname.substring(0, pptname.length() - 2);
 
     Matcher m = non_word_pattern.matcher(pptname);
     return m.replaceAll(".");
@@ -424,7 +417,7 @@ public class ExtractConsequent {
    * detected. However it tries not to be smart ... If there is more than
    * one inequality in the expression, it doesn't perform a substitution.
    **/
-  private static String simplify_inequalities (String condition) {
+  private static String simplify_inequalities(String condition) {
     if (contains_exactly_one(condition, inequality_pattern)) {
       if (gteq_pattern.matcher(condition).find())
         condition = gteq_pattern.matcher(condition).replaceFirst("<");
@@ -432,38 +425,36 @@ public class ExtractConsequent {
         condition = lteq_pattern.matcher(condition).replaceFirst(">");
       else if (neq_pattern.matcher(condition).find())
         condition = neq_pattern.matcher(condition).replaceFirst("==");
-      else
-        throw new Error("this can't happen");
+      else throw new Error("this can't happen");
     }
     return condition;
   }
 
-  private static boolean contains_exactly_one (String string,
-                                               Pattern pattern) {
+  private static boolean contains_exactly_one(String string, Pattern pattern) {
     Matcher m = pattern.matcher(string);
     // return true if first call returns true and second returns false
-    return (m.find()
-            && !m.find());
+    return (m.find() && !m.find());
   }
 
   static Pattern orig_pattern, dot_class_pattern, non_word_pattern;
   static Pattern gteq_pattern, lteq_pattern, neq_pattern, inequality_pattern;
   static Pattern contradict_inv_pattern, useless_inv_pattern_1, useless_inv_pattern_2;
+
   static {
     try {
       non_word_pattern = Pattern.compile("\\W+");
       orig_pattern = Pattern.compile("orig\\s*\\(");
       dot_class_pattern = Pattern.compile("\\.class");
-      inequality_pattern = Pattern.compile(  "[\\!<>]=");
+      inequality_pattern = Pattern.compile("[\\!<>]=");
       gteq_pattern = Pattern.compile(">=");
       lteq_pattern = Pattern.compile("<=");
       neq_pattern = Pattern.compile("\\!=");
-      contradict_inv_pattern
-        = Pattern.compile("(^| && )(.*) == -?[0-9]+ &.*& \\2 == -?[0-9]+($| && )");
-      useless_inv_pattern_1
-        = Pattern.compile("(^| && )(.*) > -?[0-9]+ &.*& \\2 > -?[0-9]+($| && )");
-      useless_inv_pattern_2
-        = Pattern.compile("(^| && )(.*) < -?[0-9]+ &.*& \\2 < -?[0-9]+($| && )");
+      contradict_inv_pattern =
+          Pattern.compile("(^| && )(.*) == -?[0-9]+ &.*& \\2 == -?[0-9]+($| && )");
+      useless_inv_pattern_1 =
+          Pattern.compile("(^| && )(.*) > -?[0-9]+ &.*& \\2 > -?[0-9]+($| && )");
+      useless_inv_pattern_2 =
+          Pattern.compile("(^| && )(.*) < -?[0-9]+ &.*& \\2 < -?[0-9]+($| && )");
     } catch (PatternSyntaxException me) {
       throw new Error("ExtractConsequent: Error while compiling pattern " + me.getMessage());
     }

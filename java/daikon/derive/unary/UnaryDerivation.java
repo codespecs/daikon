@@ -9,9 +9,7 @@ import plume.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-public abstract class UnaryDerivation
-  extends Derivation
-{
+public abstract class UnaryDerivation extends Derivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -19,7 +17,9 @@ public abstract class UnaryDerivation
 
   public VarInfo base;
 
-  public UnaryDerivation(VarInfo vi) { base = vi; }
+  public UnaryDerivation(VarInfo vi) {
+    base = vi;
+  }
 
   /*@SideEffectFree*/ public UnaryDerivation clone() {
     try {
@@ -37,10 +37,8 @@ public abstract class UnaryDerivation
 
   public ValueAndModified computeValueAndModified(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL)
-      return ValueAndModified.MISSING_NONSENSICAL;
-    if (source_mod == ValueTuple.MISSING_FLOW)
-      return ValueAndModified.MISSING_FLOW;
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod == ValueTuple.MISSING_FLOW) return ValueAndModified.MISSING_FLOW;
 
     return computeValueAndModifiedImpl(vt);
   }
@@ -55,13 +53,15 @@ public abstract class UnaryDerivation
   }
 
   /*@SideEffectFree*/ public VarInfo[] getBases() {
-    return new VarInfo[] { base() };
+    return new VarInfo[] {base()};
   }
 
   /*@Pure*/ public VarInfo getBase(int i) {
     switch (i) {
-    case 0: return base;
-    default: throw new Error("bad base: " + i);
+      case 0:
+        return base;
+      default:
+        throw new Error("bad base: " + i);
     }
   }
 
@@ -70,7 +70,7 @@ public abstract class UnaryDerivation
   }
 
   /*@Pure*/ public boolean isDerivedFromNonCanonical() {
-    return ! base.isCanonical();
+    return !base.isCanonical();
   }
 
   public int derivedDepth() {

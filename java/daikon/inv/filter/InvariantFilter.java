@@ -7,31 +7,37 @@ import daikon.inv.*;
 public abstract class InvariantFilter {
   boolean isOn;
 
-  public InvariantFilter( boolean isOn ) {
+  public InvariantFilter(boolean isOn) {
     this.isOn = isOn;
   }
 
   // TODO:  This is a hack.  Should add constructors that take a boolean
   // for every subclass.
   public InvariantFilter() {
-    this( true );
+    this(true);
   }
 
   public abstract String getDescription();
 
-  public void turnOn()  { isOn = true; }
-  public void turnOff() { isOn = false; }
+  public void turnOn() {
+    isOn = true;
+  }
+
+  public void turnOff() {
+    isOn = false;
+  }
 
   public boolean getSetting() {
     return isOn;
   }
 
-  public boolean shouldDiscard( Invariant invariant ) {
-    if (! isOn)
+  public boolean shouldDiscard(Invariant invariant) {
+    if (!isOn) {
       return false;
-    else
-      return shouldDiscardInvariant( invariant );
+    } else {
+      return shouldDiscardInvariant(invariant);
+    }
   }
 
-  abstract boolean shouldDiscardInvariant( Invariant invariant );
+  abstract boolean shouldDiscardInvariant(Invariant invariant);
 }

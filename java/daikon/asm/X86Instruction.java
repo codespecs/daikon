@@ -30,7 +30,8 @@ public class X86Instruction implements IInstruction {
   public /*@Nullable*/ String owner = null;
 
   // See method parseInstruction. It sets all fields appropriately.
-  private X86Instruction(String dllName, String address, String opName, List<String> args, List <String> killedVars) {
+  private X86Instruction(
+      String dllName, String address, String opName, List<String> args, List<String> killedVars) {
     this.dllName = dllName;
     this.address = address;
     this.opName = opName;
@@ -51,16 +52,11 @@ public class X86Instruction implements IInstruction {
 
     for (String s : args) {
 
-      if (Operand.isConstant(s))
-        continue;
-      if (Operand.isDerefdNumber(s))
-        continue;
-      if (Operand.is8BitReg(s))
-        continue;
-      if (Operand.is16BitReg(s))
-        continue;
-      if (Operand.isFPUReg(s))
-        continue;
+      if (Operand.isConstant(s)) continue;
+      if (Operand.isDerefdNumber(s)) continue;
+      if (Operand.is8BitReg(s)) continue;
+      if (Operand.is16BitReg(s)) continue;
+      if (Operand.isFPUReg(s)) continue;
 
       // If the string looks like this: [0+eax+(edx*4)] return the
       // string without brackets, and return eax.  There's some
@@ -85,19 +81,19 @@ public class X86Instruction implements IInstruction {
         } else { // regs.size() == 2
           retval.add(regs.get(1));
           retval.add(s.substring(1, s.length() - 1));
-          if (!opName.equals("lea"))
-            retval.add(s);
+          if (!opName.equals("lea")) retval.add(s);
           continue;
         }
       }
 
       if (s.equals("esp")) {
-        if (isFirstInBlock)
+        if (isFirstInBlock) {
           retval.add(s);
-        else if (opName.equals("call") || opName.equals("call_ind"))
+        } else if (opName.equals("call") || opName.equals("call_ind")) {
           retval.add(s);
-        else
+        } else {
           continue;
+        }
       }
 
       retval.add(s);
@@ -122,8 +118,7 @@ public class X86Instruction implements IInstruction {
       b.append(" ");
       b.append(a);
     }
-    if (killedVars.isEmpty())
-      return b.toString();
+    if (killedVars.isEmpty()) return b.toString();
 
     b.append(" -> ");
     for (String a : killedVars) {
@@ -137,16 +132,13 @@ public class X86Instruction implements IInstruction {
    * dllname:address opname arg ... arg &rarr; resultvar
    */
   public static X86Instruction parseInstruction(String s) {
-    if (s == null)
-      throw new IllegalArgumentException("String cannot be null.");
+    if (s == null) throw new IllegalArgumentException("String cannot be null.");
     String[] tokens = s.trim().split("\\s+");
-    if (tokens.length < 2)
-      throw new IllegalArgumentException("Invalid instruction string: " + s);
+    if (tokens.length < 2) throw new IllegalArgumentException("Invalid instruction string: " + s);
 
     // Set dllName and address fields.
     String[] dllAddr = tokens[0].split(":");
-    if (dllAddr.length != 2)
-      throw new IllegalArgumentException("Invalid instruction string: " + s);
+    if (dllAddr.length != 2) throw new IllegalArgumentException("Invalid instruction string: " + s);
     if (!(dllAddr[0].endsWith(".dll") || dllAddr[0].endsWith(".exe")))
       throw new IllegalArgumentException("Invalid instruction string: " + s);
     String inst_dllName = dllAddr[0];
@@ -170,7 +162,7 @@ public class X86Instruction implements IInstruction {
     for (; i < tokens.length; i++) {
       if (tokens[i].equals("->")) {
         if (tokens.length < i + 2) // There should be at least one resultVar.
-          throw new IllegalArgumentException("Invalid instruction string: " + s);
+        throw new IllegalArgumentException("Invalid instruction string: " + s);
         i++; // Move i to first result var.
         break;
       }
@@ -197,25 +189,21 @@ public class X86Instruction implements IInstruction {
   }
 
   private static boolean isValidRHSVar(String s) {
-    if (Operand.isRegister(s))
-      return true;
-    if (Operand.isDeref(s))
-      return true;
+    if (Operand.isRegister(s)) return true;
+    if (Operand.isDeref(s)) return true;
     return false;
   }
 
   // Refine if needed.
   private static boolean isValidLHSOp(String s) {
-    if (Operand.isConstant(s))
-      return true;
-    if (Operand.isRegister(s))
-      return true;
-    if (Operand.isDeref(s))
-      return true;
+    if (Operand.isConstant(s)) return true;
+    if (Operand.isRegister(s)) return true;
+    if (Operand.isDeref(s)) return true;
     return false;
   }
 
   private static Set<String> varsUnmodifiedByCallOp;
+
   static {
     varsUnmodifiedByCallOp = new LinkedHashSet<String>();
     varsUnmodifiedByCallOp.add("ebx");
@@ -223,7 +211,6 @@ public class X86Instruction implements IInstruction {
     varsUnmodifiedByCallOp.add("edi");
     varsUnmodifiedByCallOp.add("ebp");
   }
-
 
   // Only works for extended registers. This should
   // be fine because we only compute variables over
@@ -237,63 +224,51 @@ public class X86Instruction implements IInstruction {
     }
 
     if (var.equals("eax")) {
-      if (killedVars.contains(var) || killedVars.contains("ax")
-          || killedVars.contains("ah") || killedVars.contains("al"))
-        return true;
-      else
-        return false;
+      if (killedVars.contains(var)
+          || killedVars.contains("ax")
+          || killedVars.contains("ah")
+          || killedVars.contains("al")) return true;
+      else return false;
     }
 
     if (var.equals("ebx")) {
-      if (killedVars.contains(var) || killedVars.contains("bx")
-          || killedVars.contains("bh") || killedVars.contains("bl"))
-        return true;
-      else
-        return false;
+      if (killedVars.contains(var)
+          || killedVars.contains("bx")
+          || killedVars.contains("bh")
+          || killedVars.contains("bl")) return true;
+      else return false;
     }
 
     if (var.equals("ecx")) {
-      if (killedVars.contains(var) || killedVars.contains("cx")
-          || killedVars.contains("ch") || killedVars.contains("cl"))
-        return true;
-      else
-        return false;
+      if (killedVars.contains(var)
+          || killedVars.contains("cx")
+          || killedVars.contains("ch")
+          || killedVars.contains("cl")) return true;
+      else return false;
     }
 
     if (var.equals("edx")) {
-      if (killedVars.contains(var) || killedVars.contains("dx")
-          || killedVars.contains("dh") || killedVars.contains("dl"))
-        return true;
-      else
-        return false;
+      if (killedVars.contains(var)
+          || killedVars.contains("dx")
+          || killedVars.contains("dh")
+          || killedVars.contains("dl")) return true;
+      else return false;
     }
 
     if (var.equals("edi")) {
-      if (killedVars.contains(var) || killedVars.contains("di"))
-        return true;
-      else
-        return false;
+      return (killedVars.contains(var) || killedVars.contains("di"));
     }
 
     if (var.equals("esi")) {
-      if (killedVars.contains(var) || killedVars.contains("si"))
-        return true;
-      else
-        return false;
+      return (killedVars.contains(var) || killedVars.contains("si"));
     }
 
     if (var.equals("esp")) {
-      if (killedVars.contains(var) || killedVars.contains("sp"))
-        return true;
-      else
-        return false;
+      return (killedVars.contains(var) || killedVars.contains("sp"));
     }
 
     if (var.equals("ebp")) {
-      if (killedVars.contains(var) || killedVars.contains("bp"))
-        return true;
-      else
-        return false;
+      return (killedVars.contains(var) || killedVars.contains("bp"));
     }
 
     if (Operand.isRegister(var)) {
@@ -301,8 +276,7 @@ public class X86Instruction implements IInstruction {
     }
 
     if (Operand.isDeref(var)) {
-      if (killedVars.contains(var))
-        return true;
+      if (killedVars.contains(var)) return true;
       for (String reg : Operand.getExtendedRegisters(var)) {
         for (String killedVar : killedVars) {
           // [...eax...] killed by [...eax...]
@@ -318,25 +292,24 @@ public class X86Instruction implements IInstruction {
       return false;
     }
 
-//     if (Operand.isDeref(var)) {
-//       if (killedVars.contains(var))
-//         return true;
-//       for (String killedVar : killedVars) {
-//         if (Operand.isDeref(killedVar))
-//           return true;
-//       }
-//       for (String reg : Operand.getExtendedRegisters(var)) {
-//         if (killedVars.contains(reg))
-//           return true;
-//       }
-//       return false;
-//     }
+    //     if (Operand.isDeref(var)) {
+    //       if (killedVars.contains(var))
+    //         return true;
+    //       for (String killedVar : killedVars) {
+    //         if (Operand.isDeref(killedVar))
+    //           return true;
+    //       }
+    //       for (String reg : Operand.getExtendedRegisters(var)) {
+    //         if (killedVars.contains(reg))
+    //           return true;
+    //       }
+    //       return false;
+    //     }
 
     // It may be something like "16+ebx". Do a quick sanity check.
     if (var.indexOf('+') != -1) {
       for (String reg : Operand.getExtendedRegisters(var)) {
-        if (killedVars.contains(reg))
-          return true;
+        if (killedVars.contains(reg)) return true;
       }
     }
 
@@ -351,5 +324,4 @@ public class X86Instruction implements IInstruction {
   public String getAddress() {
     return address;
   }
-
 }

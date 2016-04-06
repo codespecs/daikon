@@ -145,7 +145,7 @@ public final class CLASSNAME
    * didn't occur at the lower ppt).
    */
   /*@Pure*/ public boolean isFlowable() {
-    return (false);
+    return false;
   }
 
   // Note that this method is relatively inconsistent with respect to
@@ -587,7 +587,7 @@ public final class CLASSNAME
    */
 
   public boolean mergeFormulasOk() {
-    return (true);
+    return true;
   }
 
   /**

@@ -47,7 +47,7 @@ public class InvTranslate {
   int quality = 0;
 
   /** Map of variables from inv to inv **/
-  Map<String,String> var_map = new LinkedHashMap<String,String>();
+  Map<String, String> var_map = new LinkedHashMap<String, String>();
 
   /** source invariant **/
   Invariant inv1;
@@ -66,7 +66,7 @@ public class InvTranslate {
    * Setup a translation from i1 to i2.  The quality and the variable
    * map is set accordingly.
    */
-  public InvTranslate (Invariant i1, Invariant i2) {
+  public InvTranslate(Invariant i1, Invariant i2) {
 
     inv1 = i1;
     inv2 = i2;
@@ -77,10 +77,11 @@ public class InvTranslate {
       return;
     }
 
-    if (i1.isSameFormula (i2))
+    if (i1.isSameFormula(i2)) {
       quality = 80;
-    else
+    } else {
       quality = 40;
+    }
 
     // Create the simple mapping and adjust for the quality of the variable
     // mapping (variables of the same derivation are better than those of
@@ -88,14 +89,16 @@ public class InvTranslate {
     for (int i = 0; i < i1.ppt.var_infos.length; i++) {
       VarInfo v1 = i1.ppt.var_infos[i];
       VarInfo v2 = i2.ppt.var_infos[i];
-      add_variable_map (v1.name(), v2.name());
-      if ((v1.derived == null) && (v2.derived == null))
+      add_variable_map(v1.name(), v2.name());
+      if ((v1.derived == null) && (v2.derived == null)) {
         quality += 5;
-      else if ((v1.derived != null) && (v2.derived != null)
-               && (v1.derived.getClass() == v2.derived.getClass()))
+      } else if ((v1.derived != null)
+          && (v2.derived != null)
+                 && (v1.derived.getClass() == v2.derived.getClass())) {
         quality += 5;
-      else /* variables have different derivations */
-        quality -= 5;
+      } else {
+        /* variables have different derivations */ quality -= 5;
+      }
     }
   }
 
@@ -107,22 +110,25 @@ public class InvTranslate {
   /**
    * Add the specified variable names to the variable translation.
    */
-  private void add_variable_map (/*>>>@UnknownInitialization(daikon.tools.InvTranslate.class) @Raw(daikon.tools.InvTranslate.class) InvTranslate this,*/ String v1_name, String v2_name) {
+  private void add_variable_map(
+      /*>>>@UnknownInitialization(daikon.tools.InvTranslate.class) @Raw(daikon.tools.InvTranslate.class) InvTranslate this,*/ String
+          v1_name,
+      String v2_name) {
 
-    assert !var_map.containsKey (v1_name);
+    assert !var_map.containsKey(v1_name);
 
-    var_map.put (v1_name, v2_name);
+    var_map.put(v1_name, v2_name);
   }
 
   /**
    * Returns a somewhat verbose description of the translation.
    */
-  /*@SideEffectFree*/ public String toString () {
+  /*@SideEffectFree*/ public String toString() {
     StringBuilder out = new StringBuilder();
 
     List<String> mappings = new ArrayList<String>();
     for (String key : var_map.keySet()) {
-      String value = var_map.get (key);
+      String value = var_map.get(key);
       mappings.add(key + "->" + value);
     }
     out.append(UtilMDE.join(mappings, ", "));

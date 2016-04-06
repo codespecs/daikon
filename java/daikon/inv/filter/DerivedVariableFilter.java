@@ -32,12 +32,12 @@ public class DerivedVariableFilter extends InvariantFilter {
 
   /**
    */
-  public DerivedVariableFilter () {
+  public DerivedVariableFilter() {
     isOn = dkconfig_class_re != null;
     if (isOn) {
       assert dkconfig_class_re != null
-        : "@AssumeAssertion(nullness): dependent:  nullness is indicated by boolean variable isOn";
-      class_re = Pattern.compile (dkconfig_class_re);
+          : "@AssumeAssertion(nullness): dependent:  nullness is indicated by boolean variable isOn";
+      class_re = Pattern.compile(dkconfig_class_re);
     }
   }
 
@@ -45,21 +45,20 @@ public class DerivedVariableFilter extends InvariantFilter {
     return dkconfig_class_re;
   }
 
-  boolean shouldDiscardInvariant( Invariant invariant ) {
+  boolean shouldDiscardInvariant(Invariant invariant) {
 
-    assert class_re != null
-      : "@AssumeAssertion(nullness):  only called when filter is active";
+    assert class_re != null : "@AssumeAssertion(nullness):  only called when filter is active";
 
     for (VarInfo vi : invariant.ppt.var_infos) {
-      if (vi.derived == null)
-        continue;
+      if (vi.derived == null) continue;
       // System.out.printf ("Comparing %s to %s\n",
       //                   vi.derived.getClass().getName(), class_re);
       assert class_re != null
-        : "@AssumeAssertion(nullness): limited side effects don't affect this field";
-      if (class_re.matcher (vi.derived.getClass().getName()).find())
-        return (true);
+          : "@AssumeAssertion(nullness): limited side effects don't affect this field";
+      if (class_re.matcher(vi.derived.getClass().getName()).find()) {
+        return true;
+      }
     }
-    return (false);
+    return false;
   }
 }

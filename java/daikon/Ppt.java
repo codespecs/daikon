@@ -5,7 +5,7 @@ package daikon;
 import java.util.*;
 import java.io.Serializable;
 import plume.*;
-import daikon.inv.Invariant;    // for emptyInvList
+import daikon.inv.Invariant; // for emptyInvList
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -27,7 +27,6 @@ import org.checkerframework.dataflow.qual.*;
 // Originally, both PptConditional and PptSlice were called "Views"; but
 // presently (6/2002), only Slices are called Views.
 
-
 // Ppt is an abstract base class rather than an interface in part because
 // interfaces cannot declare member variables.  I suspect that using
 // members directly will be more efficient than calling accessor
@@ -35,9 +34,7 @@ import org.checkerframework.dataflow.qual.*;
 
 // The common interface for all Ppt objects.
 /*@UsesObjectEquals*/
-public abstract class Ppt
-  implements Serializable
-{
+public abstract class Ppt implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -53,7 +50,7 @@ public abstract class Ppt
   // up too much space in PptSlice objects.
   // This is safe if the receiver is @UnknownInitialization(PptTopLevel.class) OR
   // @UnknownInitialization(PptSlice.class), but annotations cannot express that.
-  public abstract String name(/*>>>@UnknownInitialization(PptTopLevel.class) Ppt this*/);
+  public abstract String name(/*>>>@UnknownInitialization(PptTopLevel.class) Ppt this*/ );
 
   /** Trim the collections used in this Ppt. */
   public void trimToSize() {
@@ -65,7 +62,7 @@ public abstract class Ppt
   protected static final List<Invariant> emptyInvList = new ArrayList<Invariant>();
 
   /** Returns a string rep of the specified variable names **/
-  @SuppressWarnings("purity")    // Impure side effects do not escape (string creation)
+  @SuppressWarnings("purity") // Impure side effects do not escape (string creation)
   /*@SideEffectFree*/ public static String varNames(VarInfo[] infos) {
     StringBuffer sb = new StringBuffer();
     sb.append("(");
@@ -73,7 +70,7 @@ public abstract class Ppt
       sb.append("<implication slice>");
     } else {
       sb.append(infos[0].name());
-      for (int i=1; i<infos.length; i++) {
+      for (int i = 1; i < infos.length; i++) {
         sb.append(", ");
         sb.append(infos[i].name());
       }
@@ -83,8 +80,9 @@ public abstract class Ppt
   }
 
   /** Return a string representation of the variable names. */
-  /*@SideEffectFree*/ public String varNames(/*>>>@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this*/) {
-    return (varNames (var_infos));
+  /*@SideEffectFree*/ public String varNames(
+      /*>>>@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this*/ ) {
+    return (varNames(var_infos));
   }
 
   /**
@@ -108,8 +106,7 @@ public abstract class Ppt
     // System.out.printf ("Ppt.find_var_by_name(%s): %s%n", varname, this);
     int i = indexOf(varname);
     if (i == -1) {
-      if (varname.contains ("[]"))
-        return find_var_by_name (varname.replace ("[]", "[..]"));
+      if (varname.contains("[]")) return find_var_by_name(varname.replace("[]", "[..]"));
       // System.out.printf ("Ppt.find_var_by_name: Didn't find %s or %s in %s%n", varname, varname.replace ("[]", "[..]"), this);
       return (null);
     } else {
@@ -117,7 +114,7 @@ public abstract class Ppt
     }
   }
 
-  public boolean containsVar (VarInfo vi) {
+  public boolean containsVar(VarInfo vi) {
     // There's gotta be a faster way of doing this.  I don't want to
     // use a HashSet for var_infos because various things clobber
     // this.var_infos.
@@ -157,5 +154,4 @@ public abstract class Ppt
       return s.replace(a, magic).replace(b, a).replace(magic, b);
     }
   }
-
 }

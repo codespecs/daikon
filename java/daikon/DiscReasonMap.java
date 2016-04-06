@@ -21,7 +21,7 @@ public final class DiscReasonMap {
   //      e.g. "this.head, this.tail" (names appear in sorted order).
   //    Value:  list containing DiscardInfo's for all Invariants using
   //      those variable names in that PptTopLevel.
-  private static HashMap<String,HashMap<String,List<DiscardInfo>>> the_map;
+  private static HashMap<String, HashMap<String, List<DiscardInfo>>> the_map;
 
   // This seems to be a gross singleton pattern.
   static {
@@ -34,7 +34,7 @@ public final class DiscReasonMap {
 
   /*@EnsuresNonNull("the_map")*/
   public static void initialize() {
-    the_map = new HashMap<String,HashMap<String,List<DiscardInfo>>>();
+    the_map = new HashMap<String, HashMap<String, List<DiscardInfo>>>();
   }
 
   /**
@@ -44,15 +44,13 @@ public final class DiscReasonMap {
    * Requires: inv != null &and; disc_info != null &and; disc_info.shouldDiscard()
    */
   public static void put(Invariant inv, DiscardInfo disc_info) {
-    if (! PrintInvariants.print_discarded_invariants)
-      return;
+    if (!PrintInvariants.print_discarded_invariants) return;
     assert disc_info != null;
 
     // Let's not keep track of DiscardInfo's from Invariants who have
     // any repeated variables since we don't expect them to print anyway
     for (int i = 1; i < inv.ppt.var_infos.length; i++) {
-      if (inv.ppt.var_infos[i] == inv.ppt.var_infos[i-1])
-        return;
+      if (inv.ppt.var_infos[i] == inv.ppt.var_infos[i - 1]) return;
     }
 
     if (inv.ppt.var_infos.length == 0) {
@@ -67,14 +65,12 @@ public final class DiscReasonMap {
   }
 
   public static void put(Invariant inv, DiscardCode discardCode, String discardString) {
-    if (! PrintInvariants.print_discarded_invariants)
-      return;
+    if (!PrintInvariants.print_discarded_invariants) return;
     put(inv, new DiscardInfo(inv, discardCode, discardString));
   }
 
   public static void put(String vars, String ppt, DiscardInfo disc_info) {
-    if (! PrintInvariants.print_discarded_invariants)
-      return;
+    if (!PrintInvariants.print_discarded_invariants) return;
     assert disc_info != null;
 
     // Get the vars out of inv in our proper format
@@ -91,7 +87,7 @@ public final class DiscReasonMap {
       vars_result += temp_var + ",";
       }*/
 
-    HashMap<String,List<DiscardInfo>> ppt_hashmap = the_map.get(ppt);
+    HashMap<String, List<DiscardInfo>> ppt_hashmap = the_map.get(ppt);
     if (ppt_hashmap != null) {
       List<DiscardInfo> disc_infos = ppt_hashmap.get(vars);
       if (disc_infos != null) {
@@ -114,7 +110,7 @@ public final class DiscReasonMap {
       }
     } else {
       // In case where nothing from this inv's PptTopLevel has been discarded yet
-      HashMap<String,List<DiscardInfo>> new_map = new HashMap<String,List<DiscardInfo>>();
+      HashMap<String, List<DiscardInfo>> new_map = new HashMap<String, List<DiscardInfo>>();
       List<DiscardInfo> temp = new ArrayList<DiscardInfo>();
       temp.add(disc_info);
       new_map.put(vars, temp);
@@ -132,7 +128,7 @@ public final class DiscReasonMap {
    **/
   public static List<DiscardInfo> returnMatches_from_ppt(InvariantInfo invInfo) {
     ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
-    HashMap<String,List<DiscardInfo>> vars_map_from_ppt = the_map.get(invInfo.ppt());
+    HashMap<String, List<DiscardInfo>> vars_map_from_ppt = the_map.get(invInfo.ppt());
 
     if (vars_map_from_ppt == null) {
       return result;
@@ -155,7 +151,9 @@ public final class DiscReasonMap {
     }
 
     for (DiscardInfo di : di_list) {
-      String shortName = di.className().substring(di.className().lastIndexOf('.')+1); // chop off hierarchical info
+      String shortName =
+          di.className()
+              .substring(di.className().lastIndexOf('.') + 1); // chop off hierarchical info
       if ((invInfo.className() == null)
           || invInfo.className().equals(di.className())
           || invInfo.className().equals(shortName)) {
@@ -170,7 +168,7 @@ public final class DiscReasonMap {
   // least 1 DiscardInfo associated with it.
   private static List<DiscardInfo> all_vars_tied_from_ppt(String ppt) {
     @SuppressWarnings("nullness") // map:  method precondition
-    /*@NonNull*/ HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
+    /*@NonNull*/ HashMap<String, List<DiscardInfo>> vars_map = the_map.get(ppt);
     assert vars_map != null;
 
     ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
@@ -188,12 +186,11 @@ public final class DiscReasonMap {
     System.out.println();
     System.out.println();
     System.out.println("DEBUGGING PPT: " + ppt);
-    HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
+    HashMap<String, List<DiscardInfo>> vars_map = the_map.get(ppt);
     if (vars_map == null) {
       System.out.println("No reasons for this ppt");
       return;
     }
     System.out.println(vars_map.keySet().toString());
   }
-
 }

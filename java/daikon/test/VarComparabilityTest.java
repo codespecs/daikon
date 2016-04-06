@@ -8,7 +8,7 @@ public class VarComparabilityTest extends TestCase {
 
   // for convenience
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(LinearTernaryCoreTest.class));
   }
 
@@ -31,7 +31,7 @@ public class VarComparabilityTest extends TestCase {
 
   VarComparability parsei(String rep, int dims) {
     String typerep = "int";
-    for (int i=0; i<dims; i++) {
+    for (int i = 0; i < dims; i++) {
       typerep += "[]";
     }
     ProglangType type = ProglangType.parse(typerep);
@@ -50,8 +50,8 @@ public class VarComparabilityTest extends TestCase {
     assert comp(v1, v1);
     assert comp(v1, v1a);
     assert comp(v1a, v1);
-    assert ! comp(v1, v2);
-    assert ! comp(v2, v1);
+    assert !comp(v1, v2);
+    assert !comp(v2, v1);
     assert comp(v2, v2);
 
     assert comp(v1, v_1);
@@ -98,26 +98,25 @@ public class VarComparabilityTest extends TestCase {
 
     assert comp(v1, v12.elementType());
     assert comp(v1, v13.elementType());
-    assert ! comp(v1, v23.elementType());
+    assert !comp(v1, v23.elementType());
     assert comp(v1, v1_1.elementType());
     assert comp(v1, v_1_1.elementType());
-    assert ! comp(v1, v12.indexType(0));
-    assert ! comp(v1, v13.indexType(0));
-    assert ! comp(v1, v23.indexType(0));
+    assert !comp(v1, v12.indexType(0));
+    assert !comp(v1, v13.indexType(0));
+    assert !comp(v1, v23.indexType(0));
     assert comp(v1, v1_1.indexType(0));
     assert comp(v1, v_1_1.indexType(0));
 
-    assert ! comp(v2, v12.elementType());
-    assert ! comp(v2, v13.elementType());
+    assert !comp(v2, v12.elementType());
+    assert !comp(v2, v13.elementType());
     assert comp(v2, v23.elementType());
-    assert ! comp(v2, v1_1.elementType());
+    assert !comp(v2, v1_1.elementType());
     assert comp(v2, v_1_1.elementType());
     assert comp(v2, v12.indexType(0));
-    assert ! comp(v2, v13.indexType(0));
-    assert ! comp(v2, v23.indexType(0));
+    assert !comp(v2, v13.indexType(0));
+    assert !comp(v2, v23.indexType(0));
     assert comp(v2, v1_1.indexType(0));
     assert comp(v2, v_1_1.indexType(0));
-
   }
 
   public void test_VarComparabilityImplicit_1Darray_whole() {
@@ -133,27 +132,27 @@ public class VarComparabilityTest extends TestCase {
 
     assert comp(v12, v12);
     assert comp(v12, v12a);
-    assert ! comp(v12, v13);
-    assert ! comp(v12, v23);
-    assert ! comp(v13, v12);
+    assert !comp(v12, v13);
+    assert !comp(v12, v23);
+    assert !comp(v13, v12);
     assert comp(v13, v13);
     assert comp(v13, v13a);
-    assert ! comp(v13, v23);
-    assert ! comp(v23, v12);
-    assert ! comp(v23, v13);
+    assert !comp(v13, v23);
+    assert !comp(v23, v12);
+    assert !comp(v23, v13);
     assert comp(v23, v23);
     assert comp(v23, v23a);
 
     assert comp(v1_1, v12);
     assert comp(v1_1, v13);
-    assert ! comp(v1_1, v23);
+    assert !comp(v1_1, v23);
     assert comp(v1_1, v1_1);
     assert comp(v1_1, v_12);
     assert comp(v1_1, v_1_1);
 
     assert comp(v_12, v12);
-    assert ! comp(v_12, v13);
-    assert ! comp(v_12, v23);
+    assert !comp(v_12, v13);
+    assert !comp(v_12, v23);
     assert comp(v_12, v1_1);
     assert comp(v_12, v_12);
     assert comp(v_12, v_1_1);
@@ -182,13 +181,13 @@ public class VarComparabilityTest extends TestCase {
     assert comp(v123, v123);
     assert comp(v1234, v1234);
     assert comp(v12a, v12);
-    assert ! comp(v12a, v123);
-    assert ! comp(v12a, v1234);
-    assert ! comp(v123a, v12);
+    assert !comp(v12a, v123);
+    assert !comp(v12a, v1234);
+    assert !comp(v123a, v12);
     assert comp(v123a, v123);
-    assert ! comp(v123a, v1234);
-    assert ! comp(v1234a, v12);
-    assert ! comp(v1234a, v123);
+    assert !comp(v123a, v1234);
+    assert !comp(v1234a, v12);
+    assert !comp(v1234a, v123);
     assert comp(v1234a, v1234);
 
     assert comp(v12, v123.elementType());
@@ -198,18 +197,16 @@ public class VarComparabilityTest extends TestCase {
     assert comp(v_1, v123);
     assert comp(v_1, v1234);
 
-    assert ! comp(v_1234, v12);
-    assert ! comp(v_1234, v123);
+    assert !comp(v_1234, v12);
+    assert !comp(v_1234, v123);
     assert comp(v_1234, v1234);
 
-    assert ! comp(v_234, v12);
-    assert ! comp(v_234, v123);
+    assert !comp(v_234, v12);
+    assert !comp(v_234, v123);
     assert comp(v_234, v1234);
 
-    assert ! comp(v_34, v12);
-    assert ! comp(v_34, v123);
+    assert !comp(v_34, v12);
+    assert !comp(v_34, v123);
     assert comp(v_34, v1234);
-
   }
-
 }

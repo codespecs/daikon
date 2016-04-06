@@ -58,7 +58,7 @@ public class DeclReader {
   @Option("Specify the comparability type (implicit or none)")
   public static String comparability = "implicit";
 
-  public HashMap<String,DeclPpt> ppts = new LinkedHashMap<String,DeclPpt>();
+  public HashMap<String, DeclPpt> ppts = new LinkedHashMap<String, DeclPpt>();
 
   /**
    * Information about variables within a program point
@@ -70,8 +70,7 @@ public class DeclReader {
     public String comparability;
     public int index;
 
-    public DeclVarInfo (String name, String type, String rep_type,
-                        String comparability, int index) {
+    public DeclVarInfo(String name, String type, String rep_type, String comparability, int index) {
       this.name = name;
       this.type = type;
       this.rep_type = rep_type;
@@ -94,7 +93,7 @@ public class DeclReader {
      * auxiliary information.
      */
     public String get_type_name() {
-      return type.replaceFirst (" .*", "");
+      return type.replaceFirst(" .*", "");
     }
 
     /**
@@ -102,23 +101,23 @@ public class DeclReader {
      * the decl file.  The static value (if any) is discarded.
      */
     public String get_rep_type() {
-      return rep_type.replaceFirst (" .*", "");
+      return rep_type.replaceFirst(" .*", "");
     }
 
     /*@Pure*/ public boolean is_double() {
-      return (rep_type.equals ("double") || (rep_type.equals ("float")));
+      return (rep_type.equals("double") || (rep_type.equals("float")));
     }
 
     /*@Pure*/ public boolean is_string() {
-      return (rep_type.equals ("string"));
+      return (rep_type.equals("string"));
     }
 
     /*@Pure*/ public boolean is_string_array() {
-      return (rep_type.equals ("string[]"));
+      return (rep_type.equals("string[]"));
     }
 
     /*@Pure*/ public boolean is_int() {
-      return (rep_type.equals ("int"));
+      return (rep_type.equals("int"));
     }
 
     /** Returns the comparability string from the decl file **/
@@ -127,15 +126,15 @@ public class DeclReader {
     }
 
     public String get_basic_comparability() {
-      return comparability.replaceFirst ("\\[.*\\]", "");
+      return comparability.replaceFirst("\\[.*\\]", "");
     }
 
-    public void set_comparability (String comparability) {
+    public void set_comparability(String comparability) {
       this.comparability = comparability;
     }
 
     /*@SideEffectFree*/ public String toString() {
-      return String.format ("%s [%s] %s", type, rep_type, name);
+      return String.format("%s [%s] %s", type, rep_type, name);
     }
 
     /**
@@ -143,45 +142,41 @@ public class DeclReader {
      * The result is null exactly if the value is nonsensical.
      * The return value is interned.
      */
-    public /*@Nullable*/ /*@Interned*/ Object read_data (EntryReader reader) throws IOException {
+    public /*@Nullable*/ /*@Interned*/ Object read_data(EntryReader reader) throws IOException {
       String var_name = reader.readLine();
       if (var_name == null)
-        throw new Error("file " + reader.getFileName() + " terminated prematurely, expeced var " + this.name);
-      if (!var_name.equals (this.name))
-        throw new Error (var_name + " found where " + this.name
-                         + " expected ");
+        throw new Error(
+            "file " + reader.getFileName() + " terminated prematurely, expeced var " + this.name);
+      if (!var_name.equals(this.name))
+        throw new Error(var_name + " found where " + this.name + " expected ");
       String value = reader.readLine();
       String mod_bit = reader.readLine();
       if ((value == null) || (mod_bit == null))
         throw new Error("file " + reader.getFileName() + " terminated prematurely");
-      if (value.equals ("nonsensical")) {
+      if (value.equals("nonsensical")) {
         return null;
       } else if (is_int()) {
         try {
-          return (Intern.intern(new Integer (value))); // interning bugfix
+          return (Intern.intern(new Integer(value))); // interning bugfix
         } catch (NumberFormatException t) {
-          throw new Error ("Unexpected value '" + value
-                           + "' for integer variable " + this.name);
+          throw new Error("Unexpected value '" + value + "' for integer variable " + this.name);
         }
       } else if (is_double()) {
         try {
-          return (Intern.intern(new Double (value))); // interning bugfix
+          return (Intern.intern(new Double(value))); // interning bugfix
         } catch (NumberFormatException t) {
-          throw new Error ("Unexpected string '" + value
-                           + "' for double variable " + this.name);
+          throw new Error("Unexpected string '" + value + "' for double variable " + this.name);
         }
       } else if (is_string()) {
         if (value.startsWith("\"") && value.endsWith("\""))
-          value = value.substring (1, value.length()-1);
+          value = value.substring(1, value.length() - 1);
         return value.intern();
       } else if (is_string_array()) {
-        return (null);  // treating arrays as nonsensical for now
+        return (null); // treating arrays as nonsensical for now
       } else {
         throw new Error("unexpected rep type " + rep_type);
       }
-
     }
-
   }
 
   /**
@@ -191,7 +186,7 @@ public class DeclReader {
    */
   public static class DeclPpt {
     public String name;
-    public HashMap<String,DeclVarInfo> vars = new LinkedHashMap<String,DeclVarInfo>();
+    public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<String, DeclVarInfo>();
 
     /**
      * List of values for the program point.  There is one entry in
@@ -201,7 +196,7 @@ public class DeclReader {
      **/
     List<List</*@Interned*/ Object>> data_values = new ArrayList<List</*@Interned*/ Object>>();
 
-    public DeclPpt (String name) {
+    public DeclPpt(String name) {
       this.name = name;
     }
 
@@ -209,8 +204,7 @@ public class DeclReader {
      * Read a single variable declaration from decl_file.  The file
      * must be positioned immediately before the variable name
      */
-    public DeclVarInfo read_var (EntryReader decl_file)
-      throws java.io.IOException {
+    public DeclVarInfo read_var(EntryReader decl_file) throws java.io.IOException {
 
       String name = decl_file.readLine();
       String type = decl_file.readLine();
@@ -221,10 +215,10 @@ public class DeclReader {
 
       // I don't see the point of this interning.  No code seems to take
       // advantage of it.  Is it just for space?  -MDE
-      DeclVarInfo var = new DeclVarInfo (name.intern(), type.intern(),
-                                         rep_type.intern(), comparability.intern(),
-                                         vars.size());
-      vars.put (name, var);
+      DeclVarInfo var =
+          new DeclVarInfo(
+              name.intern(), type.intern(), rep_type.intern(), comparability.intern(), vars.size());
+      vars.put(name, var);
       return (var);
     }
 
@@ -232,9 +226,9 @@ public class DeclReader {
      * Adds a record of data for this ppt.  The data must have one element
      * for each variable in the ppt and be ordered in the same way
      */
-    public void add_var_data (List</*@Interned*/ Object> var_data_list) {
+    public void add_var_data(List</*@Interned*/ Object> var_data_list) {
       assert var_data_list.size() == vars.size();
-      data_values.add (var_data_list);
+      data_values.add(var_data_list);
     }
 
     public List<List</*@Interned*/ Object>> get_var_data() {
@@ -244,8 +238,8 @@ public class DeclReader {
     /**
      * Returns the DeclVarInfo named var_name or null if it doesn't exist
      */
-    public /*@Nullable*/ DeclVarInfo find_var (String var_name) {
-      return vars.get (var_name);
+    public /*@Nullable*/ DeclVarInfo find_var(String var_name) {
+      return vars.get(var_name);
     }
 
     /** Returns the ppt name **/
@@ -255,7 +249,7 @@ public class DeclReader {
 
     /** Returns the name without the :::EXIT, :::ENTER, etc **/
     public String get_short_name() {
-      return name.replaceFirst (":::.*", "");
+      return name.replaceFirst(":::.*", "");
     }
 
     /*@SideEffectFree*/ public String toString() {
@@ -264,32 +258,28 @@ public class DeclReader {
 
     /** Returns the list of variables in their standard order **/
     public List<DeclVarInfo> get_all_vars() {
-      return new ArrayList<DeclVarInfo> (vars.values());
+      return new ArrayList<DeclVarInfo>(vars.values());
     }
-
   }
 
-  public DeclReader() {
-  }
+  public DeclReader() {}
 
   /**
    * Read declarations from the specified pathname
    */
-  public void read (File pathname) {
+  public void read(File pathname) {
     try {
 
       EntryReader decl_file = new EntryReader(pathname, "^(//|#).*", null);
 
-      for (String line = decl_file.readLine(); line != null;
-           line = decl_file.readLine()) {
-        if (!line.equals ("DECLARE"))
-          continue;
+      for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
+        if (!line.equals("DECLARE")) continue;
 
         // Read the declaration
-        read_decl (decl_file);
+        read_decl(decl_file);
       }
     } catch (Exception e) {
-      throw new Error ("Error reading comparability decl file", e);
+      throw new Error("Error reading comparability decl file", e);
     }
   }
 
@@ -297,22 +287,21 @@ public class DeclReader {
    * Reads a single declaration from decl_file.  The opening "DECLARE"
    * line should have already been read.  Returns the ppt.
    */
-  protected DeclPpt read_decl (EntryReader decl_file) throws IOException {
+  protected DeclPpt read_decl(EntryReader decl_file) throws IOException {
 
     // Read the name of the program point
     String pptname = decl_file.readLine();
-    if (pptname == null)
-      throw new Error("file " + decl_file.getFileName() + " ends prematurely");
-    assert pptname.contains (":::");
-    DeclPpt ppt = new DeclPpt (pptname);
-    ppts.put (pptname, ppt);
+    if (pptname == null) throw new Error("file " + decl_file.getFileName() + " ends prematurely");
+    assert pptname.contains(":::");
+    DeclPpt ppt = new DeclPpt(pptname);
+    ppts.put(pptname, ppt);
 
     // Read each of the variables in this program point.  The variables
     // are terminated by a blank line.
     String line = decl_file.readLine();
     while ((line != null) && (line.length() != 0)) {
-      decl_file.putback (line);
-      ppt.read_var (decl_file);
+      decl_file.putback(line);
+      ppt.read_var(decl_file);
       line = decl_file.readLine();
     }
 
@@ -322,10 +311,10 @@ public class DeclReader {
   public void dump_decl() {
 
     for (String ppt_name : ppts.keySet()) {
-      System.out.printf ("Comp Ppt: %s%n", ppt_name);
-      DeclPpt ppt = ppts.get (ppt_name);
+      System.out.printf("Comp Ppt: %s%n", ppt_name);
+      DeclPpt ppt = ppts.get(ppt_name);
       for (String var_name : ppt.vars.keySet()) {
-        System.out.printf ("  var %s%n", var_name);
+        System.out.printf("  var %s%n", var_name);
       }
     }
   }
@@ -336,25 +325,24 @@ public class DeclReader {
   // outputs a declaration for every program point, and this lookup can
   // fail when using the --comparability-file=... command-line argument
   // with a file produced by DynComp.
-  public /*@Nullable*/ DeclPpt find_ppt (String ppt_name) {
-    DeclPpt result = ppts.get (ppt_name);
+  public /*@Nullable*/ DeclPpt find_ppt(String ppt_name) {
+    DeclPpt result = ppts.get(ppt_name);
     return result;
   }
 
   /**
    * Reads a decl file and dumps statistics
    */
-  public static void main (String[] args) throws IOException {
+  public static void main(String[] args) throws IOException {
 
-    Options options = new Options ("DeclReader [options] decl-files...",
-                                   DeclReader.class);
-    String[] files = options.parse_or_usage (args);
+    Options options = new Options("DeclReader [options] decl-files...", DeclReader.class);
+    String[] files = options.parse_or_usage(args);
     boolean print_each_set = !avg_size;
 
     // If reading/dumping dtrace file, just read one file and dump it
     if (dump_dtrace) {
       DTraceReader trace = new DTraceReader();
-      trace.read (new File (files[0]));
+      trace.read(new File(files[0]));
       trace.dump_data();
       return;
     }
@@ -364,9 +352,9 @@ public class DeclReader {
     // write out the result
     if (primitive_declaration_type_comparability) {
       DeclReader dr = new DeclReader();
-      dr.read (new File (files[0]));
+      dr.read(new File(files[0]));
       dr.primitive_declaration_types();
-      dr.write_decl (files[1], comparability);
+      dr.write_decl(files[1], comparability);
       return;
     }
 
@@ -374,9 +362,9 @@ public class DeclReader {
     // base on the declared types and write out the result
     if (declaration_type_comparability) {
       DeclReader dr = new DeclReader();
-      dr.read (new File (files[0]));
+      dr.read(new File(files[0]));
       dr.declaration_types();
-      dr.write_decl (files[1], comparability);
+      dr.write_decl(files[1], comparability);
       return;
     }
 
@@ -384,15 +372,15 @@ public class DeclReader {
     // on the rep type of each variable and write out the result.
     if (rep_type_comparability) {
       DeclReader dr = new DeclReader();
-      dr.read (new File (files[0]));
+      dr.read(new File(files[0]));
       dr.rep_types();
-      dr.write_decl (files[1], comparability);
+      dr.write_decl(files[1], comparability);
       return;
     }
 
     for (String filename : files) {
       DeclReader dr = new DeclReader();
-      dr.read (new File (filename));
+      dr.read(new File(filename));
 
       int num_sets = 0;
       int total_set_size = 0;
@@ -401,48 +389,41 @@ public class DeclReader {
       int num_vars = 0;
 
       // Map from rep type to the count of each declared type for that rep
-      Map<String,Map<String,Integer>> rep_map
-        = new LinkedHashMap<String,Map<String,Integer>>();
+      Map<String, Map<String, Integer>> rep_map = new LinkedHashMap<String, Map<String, Integer>>();
 
       // Loop through each ppt
       for (DeclPpt ppt : dr.ppts.values()) {
-        if (print_each_set)
-          System.out.printf ("ppt %s%n", ppt.name);
+        if (print_each_set) System.out.printf("ppt %s%n", ppt.name);
 
         int ppt_num_sets = 0;
         int ppt_total_set_size = 0;
 
         // Build a map from comparabilty to all of the variables with that comp
-        Map<String,List<DeclVarInfo>> comp_map
-          = new LinkedHashMap<String,List<DeclVarInfo>>();
+        Map<String, List<DeclVarInfo>> comp_map = new LinkedHashMap<String, List<DeclVarInfo>>();
         for (DeclVarInfo vi : ppt.vars.values()) {
 
           // Update the map that tracks the declared types for each rep type
-          Map<String,Integer> dec_map = rep_map.get (vi.get_rep_type());
+          Map<String, Integer> dec_map = rep_map.get(vi.get_rep_type());
           if (dec_map == null) {
-            dec_map = new LinkedHashMap<String,Integer>();
-            rep_map.put (vi.get_rep_type(), dec_map);
+            dec_map = new LinkedHashMap<String, Integer>();
+            rep_map.put(vi.get_rep_type(), dec_map);
           }
-          Integer cnt = dec_map.get (vi.get_type_name());
-          if (cnt == null)
-            cnt = new Integer(0);
-          dec_map.put (vi.get_type_name(), ++cnt);
+          Integer cnt = dec_map.get(vi.get_type_name());
+          if (cnt == null) cnt = new Integer(0);
+          dec_map.put(vi.get_type_name(), ++cnt);
 
           num_vars++;
-          if (vi.get_type_name().equals ("int"))
-            num_type_integer_vars++;
-          if (vi.get_rep_type().equals ("int"))
-            num_rep_type_integer_vars++;
-          if (!vi.get_type_name().equals ("int") && vi.get_rep_type().equals ("int"))
-            System.out.printf ("huh '%s' - '%s'%n", vi.get_type_name(),
-                               vi.rep_type);
+          if (vi.get_type_name().equals("int")) num_type_integer_vars++;
+          if (vi.get_rep_type().equals("int")) num_rep_type_integer_vars++;
+          if (!vi.get_type_name().equals("int") && vi.get_rep_type().equals("int"))
+            System.out.printf("huh '%s' - '%s'%n", vi.get_type_name(), vi.rep_type);
           String comp = vi.get_basic_comparability();
-          if (!comp_map.containsKey (comp)) {
-            comp_map.put (comp, new ArrayList<DeclVarInfo>());
+          if (!comp_map.containsKey(comp)) {
+            comp_map.put(comp, new ArrayList<DeclVarInfo>());
           }
-          assert comp_map.containsKey (comp); // XXX flow could compute this
-          List<DeclVarInfo> vi_list = comp_map.get (comp);
-          vi_list.add (vi);
+          assert comp_map.containsKey(comp); // XXX flow could compute this
+          List<DeclVarInfo> vi_list = comp_map.get(comp);
+          vi_list.add(vi);
         }
 
         // Print out the variables with each comparability
@@ -452,34 +433,37 @@ public class DeclReader {
           if (print_each_set) {
             ppt_num_sets++;
             ppt_total_set_size += vi_list.size();
-            System.out.printf ("  %-5s : [%d] %s%n",
-                               vi_list.get(0).get_basic_comparability(),
-                               vi_list.size(), vi_list);
+            System.out.printf(
+                "  %-5s : [%d] %s%n",
+                vi_list.get(0).get_basic_comparability(),
+                vi_list.size(),
+                vi_list);
           }
         }
         if (print_each_set && (ppt_num_sets > 0))
-          System.out.printf ("  %d sets of average size %f%n", ppt_num_sets,
-                             ((double) ppt_total_set_size) / ppt_num_sets);
+          System.out.printf(
+              "  %d sets of average size %f%n",
+              ppt_num_sets,
+              ((double) ppt_total_set_size) / ppt_num_sets);
       }
 
       if (avg_size) {
-        System.out.printf ("%-35s %,6d sets of average size %f found%n",
-                           filename, num_sets,
-                           ((double)total_set_size) / num_sets);
+        System.out.printf(
+            "%-35s %,6d sets of average size %f found%n",
+            filename,
+            num_sets,
+            ((double) total_set_size) / num_sets);
       }
       for (String rep_type : rep_map.keySet()) {
-        Map<String,Integer> dec_map = rep_map.get (rep_type);
-        System.out.printf ("Rep Type %s (%d declared types):%n", rep_type,
-                           dec_map.size());
+        Map<String, Integer> dec_map = rep_map.get(rep_type);
+        System.out.printf("Rep Type %s (%d declared types):%n", rep_type, dec_map.size());
         for (String dec_type : dec_map.keySet()) {
-          System.out.printf ("  %5d - %s%n", dec_map.get (dec_type), dec_type);
+          System.out.printf("  %5d - %s%n", dec_map.get(dec_type), dec_type);
         }
       }
-      System.out.printf ("Total variables of declared type int = %d%n",
-                         num_type_integer_vars);
-      System.out.printf ("Total variables of rep type int = %d%n",
-                         num_rep_type_integer_vars);
-      System.out.printf ("Total number of variables = %d%n", num_vars);
+      System.out.printf("Total variables of declared type int = %d%n", num_type_integer_vars);
+      System.out.printf("Total variables of rep type int = %d%n", num_rep_type_integer_vars);
+      System.out.printf("Total number of variables = %d%n", num_vars);
     }
   }
 
@@ -490,9 +474,9 @@ public class DeclReader {
    * different type name will be in a different set.  Primitives
    * with different type names will be in different sets.
    */
-  public void declaration_types () {
+  public void declaration_types() {
 
-    Map<String,Integer> type_comp = new LinkedHashMap<String,Integer>();
+    Map<String, Integer> type_comp = new LinkedHashMap<String, Integer>();
     int next_comparability = 1;
 
     // Loop through each program point
@@ -505,15 +489,15 @@ public class DeclReader {
         // are not included because hashcodes of different declared types
         // can still be sensibly compared (eg, subclasses/superclasses)
         String declared_type = vi.get_type_name();
-        Integer comparability = type_comp.get (declared_type);
+        Integer comparability = type_comp.get(declared_type);
         if (comparability == null) {
-          comparability = Integer.valueOf (next_comparability);
+          comparability = Integer.valueOf(next_comparability);
           next_comparability++;
-          type_comp.put (declared_type, comparability);
-          System.out.printf ("declared type %s has comparability %d%n",
-                             declared_type, comparability);
+          type_comp.put(declared_type, comparability);
+          System.out.printf(
+              "declared type %s has comparability %d%n", declared_type, comparability);
         }
-        vi.set_comparability (comparability.toString());
+        vi.set_comparability(comparability.toString());
       }
     }
   }
@@ -523,9 +507,9 @@ public class DeclReader {
    * declaration type is in a separate set.  Hashcodes are all set
    * to a single comparability regardless of their declared type
    */
-  public void primitive_declaration_types () {
+  public void primitive_declaration_types() {
 
-    Map<String,Integer> type_comp = new LinkedHashMap<String,Integer>();
+    Map<String, Integer> type_comp = new LinkedHashMap<String, Integer>();
     int next_comparability = 1;
 
     // Loop through each program point
@@ -538,19 +522,20 @@ public class DeclReader {
         // are not included because hashcodes of different declared types
         // can still be sensibly compared (eg, subclasses/superclasses)
         String declared_type;
-        if (vi.get_rep_type().startsWith ("hashcode"))
+        if (vi.get_rep_type().startsWith("hashcode")) {
           declared_type = "hashcode";
-        else
+        } else {
           declared_type = vi.get_type_name();
-        Integer comparability = type_comp.get (declared_type);
-        if (comparability == null) {
-          comparability = Integer.valueOf (next_comparability);
-          next_comparability++;
-          type_comp.put (declared_type, comparability);
-          System.out.printf ("declared type %s has comparability %d%n",
-                             declared_type, comparability);
         }
-        vi.set_comparability (comparability.toString());
+        Integer comparability = type_comp.get(declared_type);
+        if (comparability == null) {
+          comparability = Integer.valueOf(next_comparability);
+          next_comparability++;
+          type_comp.put(declared_type, comparability);
+          System.out.printf(
+              "declared type %s has comparability %d%n", declared_type, comparability);
+        }
+        vi.set_comparability(comparability.toString());
       }
     }
   }
@@ -558,9 +543,9 @@ public class DeclReader {
   /**
    * Sets the comparability to match the rep types.
    */
-  public void rep_types () {
+  public void rep_types() {
 
-    Map<String,Integer> type_comp = new LinkedHashMap<String,Integer>();
+    Map<String, Integer> type_comp = new LinkedHashMap<String, Integer>();
     int next_comparability = 1;
 
     // Loop through each program point
@@ -571,15 +556,15 @@ public class DeclReader {
 
         // Determine the comparabilty for this rep type.
         String rep_type = vi.get_rep_type();
-        Integer comparability = type_comp.get (rep_type);
+        Integer comparability = type_comp.get(rep_type);
         if (comparability == null) {
-          comparability = Integer.valueOf (next_comparability);
+          comparability = Integer.valueOf(next_comparability);
           next_comparability++;
-          type_comp.put (rep_type, comparability);
-          System.out.printf ("representation type %s has comparability %d%n",
-                             rep_type, comparability);
+          type_comp.put(rep_type, comparability);
+          System.out.printf(
+              "representation type %s has comparability %d%n", rep_type, comparability);
         }
-        vi.set_comparability (comparability.toString());
+        vi.set_comparability(comparability.toString());
       }
     }
   }
@@ -588,29 +573,32 @@ public class DeclReader {
    * Writes the declaration to the specified file.  If the filename
    * is -, writes to stdout.
    */
-  public void write_decl (String filename, String comparability)
-    throws IOException {
+  public void write_decl(String filename, String comparability) throws IOException {
 
     // Get the output stream
     PrintStream decl_file;
-    if (filename.equals ("-"))
+    if (filename.equals("-")) {
       decl_file = System.out;
-    else {
-      decl_file = new PrintStream (filename);
+    } else {
+      decl_file = new PrintStream(filename);
     }
 
-    decl_file.printf ("// Declaration file written by DeclReader%n%n");
-    decl_file.printf ("VarComparability%n%s%n", comparability);
+    decl_file.printf("// Declaration file written by DeclReader%n%n");
+    decl_file.printf("VarComparability%n%s%n", comparability);
 
     // Loop through each program point
     for (DeclPpt ppt : ppts.values()) {
 
-      decl_file.printf ("%nDECLARE%n%s%n", ppt.name);
+      decl_file.printf("%nDECLARE%n%s%n", ppt.name);
 
       // Loop through each variable
       for (DeclVarInfo vi : ppt.vars.values()) {
-        decl_file.printf ("%s%n%s%n%s%n%s%n", vi.get_name(), vi.get_type(),
-                          vi.get_rep_type(), vi.get_comparability());
+        decl_file.printf(
+            "%s%n%s%n%s%n%s%n",
+            vi.get_name(),
+            vi.get_type(),
+            vi.get_rep_type(),
+            vi.get_comparability());
       }
     }
 
@@ -619,7 +607,6 @@ public class DeclReader {
 
   /** Returns a list of all of the program points **/
   public List<DeclPpt> get_all_ppts() {
-    return new ArrayList<DeclPpt> (ppts.values());
+    return new ArrayList<DeclPpt>(ppts.values());
   }
-
 }

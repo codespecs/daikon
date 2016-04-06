@@ -14,7 +14,6 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-
 // This is a fake PptSlice for use with Implication invariants.
 
 // - The implication invariants at a program point are grouped into a
@@ -25,19 +24,18 @@ import org.checkerframework.dataflow.qual.*;
 // parameter, we construct a PptSlice0 whose VarInfos have had their
 // names tweaked, and temporarily use that as the invariant's ppt.
 
-public class PptSlice0
-  extends PptSlice
-{
+public class PptSlice0 extends PptSlice {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
   PptSlice0(PptTopLevel parent) {
-     super(parent, new VarInfo[0]);
+    super(parent, new VarInfo[0]);
   }
 
-  public final int arity(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice0 this*/) {
+  public final int arity(
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice0 this*/ ) {
     return 0;
   }
 
@@ -47,13 +45,12 @@ public class PptSlice0
   public static PptSlice makeFakePrestate(PptSlice sliceTemplate) {
     PptSlice0 fake = new PptSlice0(sliceTemplate.parent);
     fake.var_infos = new /*NNC:@MonotonicNonNull*/ VarInfo[sliceTemplate.var_infos.length];
-    for (int i=0; i < fake.var_infos.length; i++) {
+    for (int i = 0; i < fake.var_infos.length; i++) {
       fake.var_infos[i] = VarInfo.origVarInfo(sliceTemplate.var_infos[i]);
     }
     fake.var_infos = castNonNullDeep(fake.var_infos); // issue 154
     return fake;
   }
-
 
   // We trade space for time by keeping a hash table of all the
   // implications (they're also stored as a vector in invs) so we can
@@ -82,7 +79,7 @@ public class PptSlice0
   public void checkRep() {
     if (invariantsSeen != null && invs.size() != invariantsSeen.size()) {
       assert invs.size() == invariantsSeen.size()
-        : "invs.size()=" + invs.size() + ", invariantsSeen.size()=" + invariantsSeen.size();
+          : "invs.size()=" + invs.size() + ", invariantsSeen.size()=" + invariantsSeen.size();
     }
     assert invariantsSeen == null || invs.size() == invariantsSeen.size();
   }
@@ -99,7 +96,7 @@ public class PptSlice0
     // assert ! hasImplication((Implication) inv);
     initInvariantsSeen();
     invs.add(inv);
-    invariantsSeen.add(new ImplicationWrapper((Implication)inv));
+    invariantsSeen.add(new ImplicationWrapper((Implication) inv));
     // checkRep();
   }
 
@@ -110,7 +107,7 @@ public class PptSlice0
     // assert hasImplication((Implication) inv);
     initInvariantsSeen();
     invs.remove(inv);
-    invariantsSeen.remove(new ImplicationWrapper((Implication)inv));
+    invariantsSeen.remove(new ImplicationWrapper((Implication) inv));
     // checkRep();
   }
 
@@ -130,8 +127,7 @@ public class PptSlice0
       } else {
         // Faster to update
         for (Invariant trinv : to_remove) {
-          invariantsSeen.remove(new
-              ImplicationWrapper((Implication)trinv));
+          invariantsSeen.remove(new ImplicationWrapper((Implication) trinv));
         }
       }
     }
@@ -153,7 +149,6 @@ public class PptSlice0
   //   }
   //   return (Implication) resultWrapper.theImp;
   // }
-
 
   // We'd like to use a more sophisticated equality check and hashCode
   // for implications when they appear in the invariantsSeen HashSet,
@@ -196,11 +191,10 @@ public class PptSlice0
 
     // Returns the value of "isSameInvariant()".
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
-      if (o == null)
-        return false;
+    /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
+      if (o == null) return false;
       assert o instanceof ImplicationWrapper;
-      ImplicationWrapper other = (ImplicationWrapper)o;
+      ImplicationWrapper other = (ImplicationWrapper) o;
       if (hashCode() != other.hashCode()) {
         return false;
       }
@@ -216,30 +210,34 @@ public class PptSlice0
       // guarded invariant.
       if (false) {
         boolean fmt_eq = format().equals(other.format());
-        if (! ((!same_eq) || fmt_eq)) {
-          System.out.println ("imp1 = " + theImp.format());
-          System.out.println ("imp2 = " + other.theImp.format());
-          System.out.println ("fmt_eq = " + fmt_eq + " same_eq = " + same_eq);
-          System.out.println ("lefteq = "
-                             + theImp.left.isSameInvariant(other.theImp.left));
-          System.out.println ("righteq = "
-                           + theImp.right.isSameInvariant(other.theImp.right));
-          System.out.println ("right class = "
-                              + theImp.right.getClass() + "/"
-                              + other.theImp.right.getClass());
+        if (!((!same_eq) || fmt_eq)) {
+          System.out.println("imp1 = " + theImp.format());
+          System.out.println("imp2 = " + other.theImp.format());
+          System.out.println("fmt_eq = " + fmt_eq + " same_eq = " + same_eq);
+          System.out.println("lefteq = " + theImp.left.isSameInvariant(other.theImp.left));
+          System.out.println("righteq = " + theImp.right.isSameInvariant(other.theImp.right));
+          System.out.println(
+              "right class = " + theImp.right.getClass() + "/" + other.theImp.right.getClass());
           // throw new Error();
         }
         assert (!same_eq) || fmt_eq;
       }
       return same_eq;
     }
-
   }
 
   // I need to figure out how to set these.
-  public int num_samples() { return 2222; }
-  public int num_mod_samples() { return 2222; }
-  public int num_values() { return 2222; }
+  public int num_samples() {
+    return 2222;
+  }
+
+  public int num_mod_samples() {
+    return 2222;
+  }
+
+  public int num_values() {
+    return 2222;
+  }
 
   void instantiate_invariants() {
     throw new Error("Shouldn't get called");
@@ -248,5 +246,4 @@ public class PptSlice0
   public List<Invariant> add(ValueTuple vt, int count) {
     throw new Error("Shouldn't get called");
   }
-
 }

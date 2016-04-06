@@ -56,8 +56,7 @@ class ThisFixer extends DepthFirstVisitor {
    * @return expression with instances of "this."
    *    changes to "this_".
    */
-  public static String fixThisUsage(String expression, VarInfo[] varInfos)
-    throws ParseException {
+  public static String fixThisUsage(String expression, VarInfo[] varInfos) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     ThisFixer fixer = new ThisFixer(varInfos);
     root.accept(fixer);
@@ -74,18 +73,15 @@ class ThisFixer extends DepthFirstVisitor {
 
     if (n.beginLine == columnshiftline) {
       n.beginColumn = n.beginColumn + columnshift;
-    }
-    else {
+    } else {
       columnshift = 0;
       columnshiftline = -1;
     }
 
-    if ((Visitors.isDot(n)) &&
-       ((lastToken == null) || (Visitors.isThis(lastToken)))) {
+    if ((Visitors.isDot(n)) && ((lastToken == null) || (Visitors.isThis(lastToken)))) {
       n.tokenImage = "_";
-    }
-    else if ((Visitors.isIdentifier(n)) &&
-       ((lastToken == null) || (!Visitors.isDot(lastToken)))) {
+    } else if ((Visitors.isIdentifier(n))
+        && ((lastToken == null) || (!Visitors.isDot(lastToken)))) {
 
       for (VarInfo varInfo : varInfos) {
         if (varInfo.isParam()) {
@@ -115,5 +111,4 @@ class ThisFixer extends DepthFirstVisitor {
     lastToken = n;
     super.visit(n);
   }
-
 }

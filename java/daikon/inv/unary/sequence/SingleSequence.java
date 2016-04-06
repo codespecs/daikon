@@ -17,9 +17,7 @@ import typequals.*;
 /**
  * Invariants on a single sequence.
  **/
-public abstract class SingleSequence
-  extends UnaryInvariant
-{
+public abstract class SingleSequence extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -42,9 +40,8 @@ public abstract class SingleSequence
     super();
   }
 
-  public VarInfo var(/*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this*/) {
+  public VarInfo var(
+      /*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this*/ ) {
     return ppt.var_infos[0];
   }
-
-
 }

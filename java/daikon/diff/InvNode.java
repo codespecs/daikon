@@ -12,7 +12,7 @@ import org.checkerframework.dataflow.qual.*;
  * Contains a pair of Invariants.  Resides in the third level of the tree.
  * Has no children.
  **/
-public class InvNode extends Node</*@Nullable*/ Invariant,/*@NonNull*/ Void> {
+public class InvNode extends Node</*@Nullable*/ Invariant, /*@NonNull*/ Void> {
 
   /** Either inv1 or inv2 may be null, but not both. **/
   public InvNode(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
@@ -33,5 +33,4 @@ public class InvNode extends Node</*@Nullable*/ Invariant,/*@NonNull*/ Void> {
   public void accept(Visitor v) {
     v.visit(this);
   }
-
 }

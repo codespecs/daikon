@@ -8,7 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * Stores the instructions associated with a generic "ppt file." Such
  * a file consists of records, each record containing information
@@ -19,51 +18,51 @@ import java.util.Map;
  */
 public class PptFile {
 
-    public Map<String, List<String>> records = new LinkedHashMap<String, List<String>>();
+  public Map<String, List<String>> records = new LinkedHashMap<String, List<String>>();
 
-    public static PptFile getPptFile(String fileName) {
-        try {
-            FileReader fileReader = new FileReader(fileName);
-            LineNumberReader reader = new LineNumberReader(fileReader);
-            return new PptFile(reader);
-        } catch (IOException e) {
-            System.out.println("I/O error while reading file.");
-            throw new RuntimeException(e);
-        }
+  public static PptFile getPptFile(String fileName) {
+    try {
+      FileReader fileReader = new FileReader(fileName);
+      LineNumberReader reader = new LineNumberReader(fileReader);
+      return new PptFile(reader);
+    } catch (IOException e) {
+      System.out.println("I/O error while reading file.");
+      throw new RuntimeException(e);
     }
+  }
 
-    public PptFile(LineNumberReader reader) throws IOException {
+  public PptFile(LineNumberReader reader) throws IOException {
 
-        String line = reader.readLine();
-        assert line != null && line.startsWith("====================") : line;
-        line = reader.readLine();
-        boolean readingPptName = true;
-        String name = null;
-        List<String> lines = new ArrayList<String>();
+    String line = reader.readLine();
+    assert line != null && line.startsWith("====================") : line;
+    line = reader.readLine();
+    boolean readingPptName = true;
+    String name = null;
+    List<String> lines = new ArrayList<String>();
 
-        while (line != null) {
-            if (readingPptName) {
-                // Read ppt name.
-                assert line != null;
-                assert line.trim().length() != 0;
-                assert !line.startsWith("====================") : "line " + reader.getLineNumber();
-                name = line;
-                //System.out.println("NAME " + name);
-                readingPptName = false;
-            } else {
-                //System.out.println("LINE " + line);
-                if (line.startsWith("====================")) {
-                    // End of record.
-                    assert name != null : "@AssumeAssertion(nullness): was set on previous loop iteration";
-                    records.put(name, lines);
-                    name = null;
-                    lines = new ArrayList<String>();
-                    readingPptName = true;
-                } else {
-                    lines.add(line);
-                }
-            }
-            line = reader.readLine();
+    while (line != null) {
+      if (readingPptName) {
+        // Read ppt name.
+        assert line != null;
+        assert line.trim().length() != 0;
+        assert !line.startsWith("====================") : "line " + reader.getLineNumber();
+        name = line;
+        //System.out.println("NAME " + name);
+        readingPptName = false;
+      } else {
+        //System.out.println("LINE " + line);
+        if (line.startsWith("====================")) {
+          // End of record.
+          assert name != null : "@AssumeAssertion(nullness): was set on previous loop iteration";
+          records.put(name, lines);
+          name = null;
+          lines = new ArrayList<String>();
+          readingPptName = true;
+        } else {
+          lines.add(line);
         }
+      }
+      line = reader.readLine();
     }
+  }
 }

@@ -10,7 +10,6 @@ import jtb.visitor.*;
  * tree to accomodate the change.  For example, the expression get(this.x)
  * would be changed to get(orig(this.x)).
  **/
-
 public class OrigModifier extends DepthFirstVisitor {
 
   private int columnshift = 0;
@@ -23,7 +22,6 @@ public class OrigModifier extends DepthFirstVisitor {
   // columnshift != 0, columnshiftline != -1:
   //    column shifting being needed, applies only to specified line
 
-
   /**
    * Corrects column fields of n.
    * modifies n, this
@@ -32,21 +30,19 @@ public class OrigModifier extends DepthFirstVisitor {
     if (n.beginLine == columnshiftline) {
       n.beginColumn = n.beginColumn + columnshift;
       n.endColumn = n.endColumn + columnshift;
-    }
-    else {
+    } else {
       columnshift = 0;
       columnshiftline = -1;
     }
   }
-
 
   /**
    * Checks if n is a variable name.  If so adds "orig(" to the
    *          front of the name and ")" to the end.
    * modifies n, this
    */
-    // f0 -> PrimaryPrefix()
-    // f1 -> ( PrimarySuffix() )*
+  // f0 -> PrimaryPrefix()
+  // f1 -> ( PrimarySuffix() )*
   public void visit(PrimaryExpression n) {
     // let simple variables be variables with out "."'s in their names
     // such as x or myList
@@ -63,7 +59,7 @@ public class OrigModifier extends DepthFirstVisitor {
         //checks if the Name is simple
         if (((Name) n.f0.f0.choice).f1.size() == 0) {
           NodeToken variableToken = ((Name) n.f0.f0.choice).f0;
-          variableToken.tokenImage =  "orig(" + variableToken.tokenImage + ")";
+          variableToken.tokenImage = "orig(" + variableToken.tokenImage + ")";
           columnshift = columnshift + 6;
           columnshiftline = variableToken.endLine;
           super.visit(n);
@@ -86,7 +82,7 @@ public class OrigModifier extends DepthFirstVisitor {
             NodeToken firstToken = (NodeToken) n.f0.f0.choice;
             firstToken.tokenImage = "orig(" + firstToken.tokenImage;
             Enumeration<Node> nodeSequence =
-              ((NodeSequence) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).elements();
+                ((NodeSequence) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).elements();
             NodeToken lastToken = firstToken;
             while (nodeSequence.hasMoreElements()) {
               lastToken = (NodeToken) nodeSequence.nextElement();
@@ -121,5 +117,4 @@ public class OrigModifier extends DepthFirstVisitor {
     }
     super.visit(n);
   }
-
 }

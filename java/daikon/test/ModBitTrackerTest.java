@@ -8,7 +8,7 @@ import java.util.BitSet;
 public class ModBitTrackerTest extends TestCase {
 
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(ModBitTrackerTest.class));
   }
 
@@ -37,8 +37,8 @@ public class ModBitTrackerTest extends TestCase {
     int[] mods = new int[numvars];
     // We'll reuse this ValueTuple throughout, side-effecting its mods array.
     ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
-    for (int sampleno=0; sampleno<numsamples; sampleno++) {
-      for (int var=0; var<numvars; var++) {
+    for (int sampleno = 0; sampleno < numsamples; sampleno++) {
+      for (int var = 0; var < numvars; var++) {
         mods[var] = booleanToModBit(bitsets[var].get(sampleno));
       }
       result.add(vt, 1);
@@ -53,7 +53,7 @@ public class ModBitTrackerTest extends TestCase {
     assert mbt.num_vars() == numvars;
     assert mbt.num_samples() == numsamples;
 
-    for (int i=0; i<numvars; i++) {
+    for (int i = 0; i < numvars; i++) {
       assert bitsets[i].equals(mbt.get(i));
     }
   }
@@ -86,25 +86,24 @@ public class ModBitTrackerTest extends TestCase {
   // of the additional ones is a duplicate of one of the unique ones.
 
   BitSet[] makeBitSets(int numvars, int numsamples, double duplicate_factor) {
-    int totalvars = (int) (numvars * (1+duplicate_factor));
+    int totalvars = (int) (numvars * (1 + duplicate_factor));
     BitSet[] result = new BitSet[totalvars];
-    for (int var=0; var<numvars; var++) {
-      BitSet bs = new BitSet(numsamples+numvars);
-      for (int sample=0; sample<numsamples; sample++) {
+    for (int var = 0; var < numvars; var++) {
+      BitSet bs = new BitSet(numsamples + numvars);
+      for (int sample = 0; sample < numsamples; sample++) {
         bs.set(sample, randomModBoolean(var, sample));
       }
       // add samples that make all the variables unique
-      bs.set(numsamples+numvars-1, false);
-      bs.set(numsamples+var, true);
+      bs.set(numsamples + numvars - 1, false);
+      bs.set(numsamples + var, true);
       result[var] = bs;
     }
     // Add duplicate BitSets.
-    for (int var=numvars; var<totalvars; var++) {
+    for (int var = numvars; var < totalvars; var++) {
       result[var] = (BitSet) (result[r.nextInt(numvars)].clone());
     }
     return result;
   }
-
 
   public void oneModBitTrackerTest(int vars, int samples, double duplicate_factor) {
     BitSet[] bitsets = makeBitSets(vars, samples, duplicate_factor);
@@ -119,5 +118,4 @@ public class ModBitTrackerTest extends TestCase {
     oneModBitTrackerTest(5, 10, 0.0);
     oneModBitTrackerTest(100, 1000, 5.0);
   }
-
 }

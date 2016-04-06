@@ -56,11 +56,12 @@ public class CheckerClass {
     // f3 -> ";"
     // Get the package and imports from clazz. We'll include them.
     @SuppressWarnings("nullness") // application invariant: every body is in a compilation unit
-    /*@NonNull*/ CompilationUnit clazzCU = (CompilationUnit)Ast.getParent(CompilationUnit.class, clazz);
+    /*@NonNull*/ CompilationUnit clazzCU =
+        (CompilationUnit) Ast.getParent(CompilationUnit.class, clazz);
     NodeOptional no = clazzCU.f0;
     String packageName = null;
     if (no.present()) {
-      packageName = Ast.format(((PackageDeclaration)no.node).f2).trim();
+      packageName = Ast.format(((PackageDeclaration) no.node).f2).trim();
     } else {
       packageName = "";
     }
@@ -87,7 +88,7 @@ public class CheckerClass {
     }
     alreadyCalled = true;
     code.append("}"); // we're done declaring the class.
-    return (CompilationUnit)Ast.create("CompilationUnit", code.toString());
+    return (CompilationUnit) Ast.create("CompilationUnit", code.toString());
   }
 
   public String getCheckerClassName() {
@@ -97,5 +98,4 @@ public class CheckerClass {
   public void addDeclaration(StringBuffer decl) {
     code.append(decl);
   }
-
 }

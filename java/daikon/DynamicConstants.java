@@ -74,8 +74,7 @@ public class DynamicConstants implements Serializable {
   public static boolean dkconfig_OneOf_only = false;
 
   /** Debug tracer. **/
-  public static final Logger debug
-                          = Logger.getLogger ("daikon.DynamicConstants");
+  public static final Logger debug = Logger.getLogger("daikon.DynamicConstants");
 
   /**
    * List of dynamic constants.
@@ -172,10 +171,10 @@ public class DynamicConstants implements Serializable {
       assert ((constant || previous_constant)
               ? (val != null && count > 0)
               : (val == null && count == 0))
-        : toString();
+          : toString();
     }
 
-    public Constant (VarInfo vi) {
+    public Constant(VarInfo vi) {
       this.vi = vi;
     }
 
@@ -183,15 +182,13 @@ public class DynamicConstants implements Serializable {
      * returns whether the specified variable is currently a constant OR
      * was a constant at the beginning of constants processing.
      **/
-    /*@Pure*/ public boolean is_prev_constant () {
+    /*@Pure*/ public boolean is_prev_constant() {
       return constant || previous_constant;
     }
 
-
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
-      if (!(obj instanceof Constant))
-        return (false);
+    /*@Pure*/ public boolean equals(/*@Nullable*/ Object obj) {
+      if (!(obj instanceof Constant)) return false;
       Constant c = (Constant) obj;
       return (c.vi == vi);
     }
@@ -204,30 +201,35 @@ public class DynamicConstants implements Serializable {
     /*@SideEffectFree*/ public String toString() {
 
       StringBuffer out = new StringBuffer();
-      out.append (vi.name());
-      if (val == null)
-        out.append (" (val missing)");
-      else
-        out.append (" (val=" + val + ")");
-      if (vi.isCanonical())
-        out.append (" (leader) ");
-      out.append (" [always_missing=" + always_missing + ", constant="
-                  + constant + ", previous_constant=" + previous_constant
-                  + ", previous_missing=" + previous_missing + "]");
+      out.append(vi.name());
+      if (val == null) {
+        out.append(" (val missing)");
+      } else {
+        out.append(" (val=" + val + ")");
+      }
+      if (vi.isCanonical()) out.append(" (leader) ");
+      out.append(
+          " [always_missing="
+              + always_missing
+              + ", constant="
+              + constant
+              + ", previous_constant="
+              + previous_constant
+              + ", previous_missing="
+              + previous_missing
+              + "]");
       return (out.toString());
     }
   }
 
   /** Compares two constants based on the vi_index of their variable. **/
-  public static final class ConIndexComparator
-    implements Comparator<Constant>, Serializable {
+  public static final class ConIndexComparator implements Comparator<Constant>, Serializable {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20050923L;
 
-    private ConIndexComparator() {
-    }
+    private ConIndexComparator() {}
 
     /*@Pure*/ public int compare(Constant con1, Constant con2) {
       return (con1.vi.varinfo_index - con2.vi.varinfo_index);
@@ -236,6 +238,7 @@ public class DynamicConstants implements Serializable {
     public static ConIndexComparator getInstance() {
       return theInstance;
     }
+
     static final ConIndexComparator theInstance = new ConIndexComparator();
   }
 
@@ -243,18 +246,17 @@ public class DynamicConstants implements Serializable {
    * Create an initial list of constants and missing variables for the
    * specified ppt.
    */
-  public DynamicConstants (PptTopLevel ppt) {
+  public DynamicConstants(PptTopLevel ppt) {
 
     this.ppt = ppt;
 
     // Start everything off as missing (since we haven't seen any values yet)
     for (VarInfo vi : ppt.var_infos) {
-      Constant c = new Constant (vi);
-      all_list.add (c);
-      missing_list.add (c);
+      Constant c = new Constant(vi);
+      all_list.add(c);
+      missing_list.add(c);
     }
     all_vars = all_list.toArray(new Constant[all_list.size()]);
-
   }
 
   /**
@@ -267,7 +269,7 @@ public class DynamicConstants implements Serializable {
    * Creates all new views required for the newly non constants (noncons)
    * and the newly non-missing (non_missing)
    */
-  public void add (ValueTuple vt, int count) {
+  public void add(ValueTuple vt, int count) {
 
     // System.out.println("DynamicConstants.add : " + vt.toString(ppt.var_infos));
 
@@ -281,23 +283,31 @@ public class DynamicConstants implements Serializable {
       con.checkRep();
 
       if (Debug.logDetail())
-        Debug.log (getClass(), ppt, Debug.vis(con.vi), "Adding "
-                   + Debug.toString(con.vi.getValueOrNull (vt)) +
-                   " to constant " + con.val +" : missing = "
-                   + missing (con.vi, vt)
-                  +": samples = " + con.count + "/" + count);
-      if (missing (con.vi, vt) || (con.val != con.vi.getValue (vt))) {
+        Debug.log(
+            getClass(),
+            ppt,
+            Debug.vis(con.vi),
+            "Adding "
+                + Debug.toString(con.vi.getValueOrNull(vt))
+                + " to constant "
+                + con.val
+                + " : missing = "
+                + missing(con.vi, vt)
+                + ": samples = "
+                + con.count
+                + "/"
+                + count);
+      if (missing(con.vi, vt) || (con.val != con.vi.getValue(vt))) {
         i.remove();
         con.constant = false;
         con.previous_constant = true;
         assert all_vars[con.vi.varinfo_index].constant == false;
-        non_con.add (con);
+        non_con.add(con);
       } else {
         con.count += count;
       }
       con.checkRep();
     }
-
 
     // Move any non-missing variables to the constant list and init their val.
     // If a variable is missing out of bounds, leave it on this list
@@ -306,27 +316,34 @@ public class DynamicConstants implements Serializable {
     for (Iterator<Constant> i = missing_list.iterator(); i.hasNext(); ) {
       Constant con = i.next();
       con.checkRep();
-      if (con.vi.missingOutOfBounds())
-        continue;
+      if (con.vi.missingOutOfBounds()) continue;
 
-      if (missing (con.vi, vt)) {
+      if (missing(con.vi, vt)) {
         // value is still missingg, nothing to do (we incremented its count above)
         continue;
       }
 
-      /*@Interned*/ Object val = con.vi.getValue (vt);
+      /*@Interned*/ Object val = con.vi.getValue(vt);
       // the variable is not missing, so it is non-null
       assert val != null;
 
       i.remove();
       con.always_missing = false;
       if (Debug.logDetail())
-        Debug.log (getClass(), ppt, Debug.vis(con.vi), "Adding "
-                   + Debug.toString(val) +
-                   " to missing : missing = "
-                   + missing (con.vi, vt)
-                  + ": samples = " + con.count + "/" + count
-                  + "/" + sample_cnt);
+        Debug.log(
+            getClass(),
+            ppt,
+            Debug.vis(con.vi),
+            "Adding "
+                + Debug.toString(val)
+                + " to missing : missing = "
+                + missing(con.vi, vt)
+                + ": samples = "
+                + con.count
+                + "/"
+                + count
+                + "/"
+                + sample_cnt);
       // Is the Constant missing because it was initialized that way, or
       // has the program point seen values in the past?
       if (sample_cnt == 0) {
@@ -334,10 +351,10 @@ public class DynamicConstants implements Serializable {
         con.val = val;
         con.count = count;
         con.constant = true;
-        con_list.add (con);
+        con_list.add(con);
       } else {
         // This variable truly is missing; has seen a missing value in the past.
-        non_missing.add (con);
+        non_missing.add(con);
         con.previous_missing = true;
       }
     }
@@ -345,7 +362,7 @@ public class DynamicConstants implements Serializable {
     sample_cnt += count;
 
     // Create slices over newly non-constant and non-missing variables
-    instantiate_new_views (non_con, non_missing);
+    instantiate_new_views(non_con, non_missing);
 
     // Turn off previous_constant on all newly non-constants
     for (Constant con : non_con) {
@@ -365,11 +382,10 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns whether the specified variable is missing in this ValueTuple. **/
-  private boolean missing (VarInfo vi, ValueTuple vt) {
+  private boolean missing(VarInfo vi, ValueTuple vt) {
 
-    int mod = vt.getModified (vi);
-    return ((mod == ValueTuple.MISSING_FLOW)
-            || (mod == ValueTuple.MISSING_NONSENSICAL));
+    int mod = vt.getModified(vi);
+    return ((mod == ValueTuple.MISSING_FLOW) || (mod == ValueTuple.MISSING_NONSENSICAL));
   }
 
   /** Returns the Constant for the specified variable. */
@@ -381,7 +397,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns whether the specified variable is currently a constant. **/
-  /*@Pure*/ public boolean is_constant (VarInfo vi) {
+  /*@Pure*/ public boolean is_constant(VarInfo vi) {
 
     return getConstant(vi).constant;
   }
@@ -390,7 +406,7 @@ public class DynamicConstants implements Serializable {
    * returns whether the specified variable is currently a constant OR
    * was a constant at the beginning of constants processing.
    **/
-  /*@Pure*/ public boolean is_prev_constant (VarInfo vi) {
+  /*@Pure*/ public boolean is_prev_constant(VarInfo vi) {
 
     return getConstant(vi).is_prev_constant();
   }
@@ -400,7 +416,7 @@ public class DynamicConstants implements Serializable {
    * the variable is not constant or prev_constant.  But, it is apparently
    * only called on constants with a value.
    **/
-  public /*@Interned*/ Object constant_value (VarInfo vi) {
+  public /*@Interned*/ Object constant_value(VarInfo vi) {
 
     @SuppressWarnings("nullness") // non-missing value, so non-null val field
     /*@NonNull*/ Object result = getConstant(vi).val;
@@ -408,7 +424,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns whether the specified variable missing for all values so far. **/
-  /*@Pure*/ public boolean is_missing (VarInfo vi) {
+  /*@Pure*/ public boolean is_missing(VarInfo vi) {
 
     return (getConstant(vi).always_missing);
   }
@@ -417,7 +433,7 @@ public class DynamicConstants implements Serializable {
    * returns whether the specified variable is currently missing OR
    * was missing at the beginning of constants processing.
    **/
-  /*@Pure*/ public boolean is_prev_missing (VarInfo vi) {
+  /*@Pure*/ public boolean is_prev_missing(VarInfo vi) {
 
     Constant c = all_vars[vi.varinfo_index];
     return (c.always_missing || c.previous_missing);
@@ -428,8 +444,7 @@ public class DynamicConstants implements Serializable {
 
     int con_cnt = 0;
     for (Constant con : con_list) {
-      if (con.vi.isCanonical())
-        con_cnt++;
+      if (con.vi.isCanonical()) con_cnt++;
     }
 
     return (con_cnt);
@@ -439,17 +454,22 @@ public class DynamicConstants implements Serializable {
    * Creates all new views required for the newly non constants (noncons)
    * and the newly non-missing (non_missing).
    */
-  public void instantiate_new_views (List<Constant> noncons,
-                                     List<Constant> non_missing) {
+  public void instantiate_new_views(List<Constant> noncons, List<Constant> non_missing) {
 
     if (Debug.logOn()) {
       for (Constant con : noncons) {
-        Debug.log (getClass(), ppt, Debug.vis(con.vi), "is non constant"
-                    + " with val = " + Debug.toString(con.val)
-                    + " with count = " + con.count);
+        Debug.log(
+            getClass(),
+            ppt,
+            Debug.vis(con.vi),
+            "is non constant"
+                + " with val = "
+                + Debug.toString(con.val)
+                + " with count = "
+                + con.count);
       }
       for (Constant con : non_missing) {
-        Debug.log (getClass(), ppt, Debug.vis(con.vi), "is non missing");
+        Debug.log(getClass(), ppt, Debug.vis(con.vi), "is non missing");
       }
     }
 
@@ -468,25 +488,24 @@ public class DynamicConstants implements Serializable {
     // been created when those other variables became non-constants.
     if (noncons.size() > 0) {
       List<Constant> cons = new ArrayList<Constant>();
-      cons.addAll (con_list);
-      cons.addAll (noncons);
-      debug.fine ("Instantiating non constants in ppt: " + ppt.name());
-      instantiate_views (noncons, cons);
+      cons.addAll(con_list);
+      cons.addAll(noncons);
+      debug.fine("Instantiating non constants in ppt: " + ppt.name());
+      instantiate_views(noncons, cons);
     }
 
     // Create all views over the newly non-missing.  Since missing
     // vars were not included in any previous views, we must match them
     // against all variables.
     if (non_missing.size() > 0) {
-      debug.fine ("Instantiating non missing in ppt: " + ppt.name());
-      instantiate_views (non_missing, all_list);
+      debug.fine("Instantiating non missing in ppt: " + ppt.name());
+      instantiate_views(non_missing, all_list);
     }
 
     // Create any ternary invariants that are suppressed when one
     // of the variables is a constant.  Currently, only LinearTernary
     // falls into this list (It is suppressed by (x = C) && (Ay + Bz = D))
-    if (NIS.dkconfig_enabled)
-      instantiate_constant_suppressions (noncons, all_list);
+    if (NIS.dkconfig_enabled) instantiate_constant_suppressions(noncons, all_list);
   }
 
   /**
@@ -499,28 +518,23 @@ public class DynamicConstants implements Serializable {
    *    binary:  list1-vars X list2-vars
    *    ternary: list1-vars X list2-vars X list2-vars
    */
-  private void instantiate_views (List<Constant> list1,
-                                  List<Constant> list2) {
+  private void instantiate_views(List<Constant> list1, List<Constant> list2) {
 
     // Get list1 leaders
     Set<Constant> leaders1 = new LinkedHashSet<Constant>();
     for (Constant con : list1) {
-      if (con.vi.isCanonical())
-        leaders1.add (con);
+      if (con.vi.isCanonical()) leaders1.add(con);
     }
 
     // Get list2 leaders
     Set<Constant> leaders2 = new LinkedHashSet<Constant>();
     for (Constant con : list2) {
-      if (con.vi.isCanonical())
-        leaders2.add (con);
+      if (con.vi.isCanonical()) leaders2.add(con);
     }
 
-    if (debug.isLoggable (Level.FINE)) {
-      debug.fine ("instantiating over " + leaders1.size()
-                  + " leaders1: " + leaders1);
-      debug.fine ("instantiating over " + leaders2.size()
-                  + " leaders2: " + leaders2);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine("instantiating over " + leaders1.size() + " leaders1: " + leaders1);
+      debug.fine("instantiating over " + leaders2.size() + " leaders2: " + leaders2);
     }
 
     // any new views created
@@ -529,21 +543,17 @@ public class DynamicConstants implements Serializable {
     int mod = ValueTuple.MODIFIED;
 
     // Unary slices/invariants
-    for (Constant con: leaders1) {
-      if (Debug.logOn())
-        Debug.log (getClass(), ppt, Debug.vis(con.vi), "Considering slice");
-      if (!ppt.is_slice_ok (con.vi))
-         continue;
-      PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
+    for (Constant con : leaders1) {
+      if (Debug.logOn()) Debug.log(getClass(), ppt, Debug.vis(con.vi), "Considering slice");
+      if (!ppt.is_slice_ok(con.vi)) continue;
+      PptSlice1 slice1 = new PptSlice1(ppt, con.vi);
       slice1.instantiate_invariants();
-      if (Debug.logOn())
-        Debug.log (getClass(), ppt, Debug.vis(con.vi), "Instantiated invs");
+      if (Debug.logOn()) Debug.log(getClass(), ppt, Debug.vis(con.vi), "Instantiated invs");
       if (con.count > 0) {
-        assert con.val != null
-          : "@AssumeAssertion(nullness): dependent: val != null when count>0";
-        slice1.add_val_bu (con.val, mod, con.count);
+        assert con.val != null : "@AssumeAssertion(nullness): dependent: val != null when count>0";
+        slice1.add_val_bu(con.val, mod, con.count);
       }
-      new_views.add (slice1);
+      new_views.add(slice1);
     }
 
     // Binary slices/invariants.
@@ -551,10 +561,9 @@ public class DynamicConstants implements Serializable {
       for (Constant con2 : leaders2) {
         Constant c1 = con1;
         Constant c2 = con2;
-        Debug.log (getClass(), ppt, Debug.vis(c1.vi, c2.vi),
-                   "Considering slice");
+        Debug.log(getClass(), ppt, Debug.vis(c1.vi, c2.vi), "Considering slice");
         if (con2.vi.varinfo_index < con1.vi.varinfo_index) {
-          if (leaders1.contains (con2)) {
+          if (leaders1.contains(con2)) {
             // The variable is in both leader lists.
             // Don't add it on this iteration; add it when the variables
             // are given in order (to prevent creating the slice twice).
@@ -563,25 +572,29 @@ public class DynamicConstants implements Serializable {
           c1 = con2;
           c2 = con1;
         }
-        if (!ppt.is_slice_ok (c1.vi, c2.vi)) {
+        if (!ppt.is_slice_ok(c1.vi, c2.vi)) {
           if (Debug.logOn())
-            Debug.log (debug, getClass(), ppt, Debug.vis(c1.vi, c2.vi),
-                       "Not instantiating slice " + c1.vi.equalitySet.size());
+            Debug.log(
+                debug,
+                getClass(),
+                ppt,
+                Debug.vis(c1.vi, c2.vi),
+                "Not instantiating slice " + c1.vi.equalitySet.size());
           continue;
         }
-        PptSlice2 slice2 = new PptSlice2 (ppt, c1.vi, c2.vi);
-        Debug.log (getClass(), ppt, Debug.vis (c1.vi, c2.vi),
-                   String.format ("instantiating slice %s [%s %s]%n", slice2,
-                                  c1, c2));
+        PptSlice2 slice2 = new PptSlice2(ppt, c1.vi, c2.vi);
+        Debug.log(
+            getClass(),
+            ppt,
+            Debug.vis(c1.vi, c2.vi),
+            String.format("instantiating slice %s [%s %s]%n", slice2, c1, c2));
         slice2.instantiate_invariants();
         if (c1.count > 0 && c2.count > 0) {
-          assert c1.val != null
-            : "@AssumeAssertion(nullness): dependent: val != null when count>0";
-          assert c2.val != null
-            : "@AssumeAssertion(nullness): dependent: val != null when count>0";
-          slice2.add_val_bu (c1.val, c2.val, mod, mod, con1.count);
+          assert c1.val != null : "@AssumeAssertion(nullness): dependent: val != null when count>0";
+          assert c2.val != null : "@AssumeAssertion(nullness): dependent: val != null when count>0";
+          slice2.add_val_bu(c1.val, c2.val, mod, mod, con1.count);
         }
-        new_views.add (slice2);
+        new_views.add(slice2);
       }
     }
 
@@ -590,81 +603,79 @@ public class DynamicConstants implements Serializable {
     // creating the slice twice).
     for (Constant con1 : leaders1) {
       for (Constant con2 : leaders2) {
-        if ((con2.vi.varinfo_index < con1.vi.varinfo_index)
-            && leaders1.contains (con2))
-          continue;
+        if ((con2.vi.varinfo_index < con1.vi.varinfo_index) && leaders1.contains(con2)) continue;
         for (Constant con3 : leaders2) {
-          if ((con3.vi.varinfo_index < con2.vi.varinfo_index) ||
-              ((con3.vi.varinfo_index < con1.vi.varinfo_index)
-               && leaders1.contains (con3)))
+          if ((con3.vi.varinfo_index < con2.vi.varinfo_index)
+              || ((con3.vi.varinfo_index < con1.vi.varinfo_index) && leaders1.contains(con3)))
             continue;
           Constant[] con_arr = {con1, con2, con3};
-          Arrays.sort (con_arr, ConIndexComparator.getInstance());
-          assert (con_arr[0].vi.varinfo_index
-                              <= con_arr[1].vi.varinfo_index) &&
-                             (con_arr[1].vi.varinfo_index
-                              <= con_arr[2].vi.varinfo_index);
-          if (!ppt.is_slice_ok (con_arr[0].vi, con_arr[1].vi, con_arr[2].vi))
-            continue;
+          Arrays.sort(con_arr, ConIndexComparator.getInstance());
+          assert (con_arr[0].vi.varinfo_index <= con_arr[1].vi.varinfo_index)
+              && (con_arr[1].vi.varinfo_index <= con_arr[2].vi.varinfo_index);
+          if (!ppt.is_slice_ok(con_arr[0].vi, con_arr[1].vi, con_arr[2].vi)) continue;
 
-          PptSlice3 slice3 = new PptSlice3 (ppt, con_arr[0].vi, con_arr[1].vi,
-                                            con_arr[2].vi);
+          PptSlice3 slice3 = new PptSlice3(ppt, con_arr[0].vi, con_arr[1].vi, con_arr[2].vi);
           slice3.instantiate_invariants();
-          if ((con_arr[0].count > 0) && (con_arr[1].count > 0)
-              && (con_arr[2].count > 0)) {
+          if ((con_arr[0].count > 0) && (con_arr[1].count > 0) && (con_arr[2].count > 0)) {
             assert con_arr[0].val != null
-              : "@AssumeAssertion(nullness): dependent: val != null when count>0";
+                : "@AssumeAssertion(nullness): dependent: val != null when count>0";
             assert con_arr[1].val != null
-              : "@AssumeAssertion(nullness): dependent: val != null when count>0";
+                : "@AssumeAssertion(nullness): dependent: val != null when count>0";
             assert con_arr[2].val != null
-              : "@AssumeAssertion(nullness): dependent: val != null when count>0";
-            slice3.add_val_bu (con_arr[0].val, con_arr[1].val,
-                              con_arr[2].val, mod, mod, mod, con_arr[0].count);
+                : "@AssumeAssertion(nullness): dependent: val != null when count>0";
+            slice3.add_val_bu(
+                con_arr[0].val, con_arr[1].val, con_arr[2].val, mod, mod, mod, con_arr[0].count);
           }
-          new_views.add (slice3);
+          new_views.add(slice3);
         }
       }
     }
 
     // Debug print the created slies
-    if (Debug.logOn() || debug.isLoggable (Level.FINE)) {
+    if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
       int[] slice_cnt = {0, 0, 0, 0};
       int[] inv_cnt = {0, 0, 0, 0};
       int[] true_inv_cnt = {0, 0, 0, 0};
       for (PptSlice slice : new_views) {
         for (Invariant inv : slice.invs) {
-          inv.log ("created, falsified = %b", inv.is_false());
-          if (!inv.is_false())
+          inv.log("created, falsified = %b", inv.is_false());
+          if (!inv.is_false()) {
             true_inv_cnt[slice.arity()]++;
-          else {
+          } else {
             String vals = "";
             for (VarInfo vi : slice.var_infos) {
-              vals += vi.name() + "="
-                + Debug.toString (constant_value(vi)) + " ";
+              vals += vi.name() + "=" + Debug.toString(constant_value(vi)) + " ";
             }
-            inv.log ("Invariant %s destroyed by constant values %s",
-                      inv.format(), vals);
+            inv.log("Invariant %s destroyed by constant values %s", inv.format(), vals);
           }
         }
-        if (slice.invs.size() > 0)
-          slice_cnt[slice.arity()]++;
+        if (slice.invs.size() > 0) slice_cnt[slice.arity()]++;
         inv_cnt[slice.arity()] += slice.invs.size();
         if (Debug.logDetail()) {
           StringBuffer sb = new StringBuffer();
           for (int j = 0; j < slice.arity(); j++) {
             VarInfo v = slice.var_infos[j];
-            sb.append (v.name() + " [" + v.file_rep_type +"] ["
-                        + v.comparability + "] ");
+            sb.append(v.name() + " [" + v.file_rep_type + "] [" + v.comparability + "] ");
           }
-          Debug.log (debug, getClass(), ppt, slice.var_infos,
-                      "Adding slice over " + sb + ": with " + slice.invs.size()
-                      + " invariants" );
+          Debug.log(
+              debug,
+              getClass(),
+              ppt,
+              slice.var_infos,
+              "Adding slice over " + sb + ": with " + slice.invs.size() + " invariants");
         }
       }
       for (int i = 1; i <= 3; i++)
-        debug.fine ("Added " + slice_cnt[i] + " slice" + i + "s with "
-                    + true_inv_cnt[i] + " invariants (" + inv_cnt[i]
-                    + " total)");
+        debug.fine(
+            "Added "
+                + slice_cnt[i]
+                + " slice"
+                + i
+                + "s with "
+                + true_inv_cnt[i]
+                + " invariants ("
+                + inv_cnt[i]
+                + " total)");
 
       String leader1_str = "";
       int leader1_cnt = 0;
@@ -683,8 +694,14 @@ public class DynamicConstants implements Serializable {
           leader2_cnt++;
         }
       }
-      debug.fine (leader1_cnt + " leader1 ints (" + leader1_str + "): "
-                  + leader2_cnt + " leader2 ints (" + leader2_str);
+      debug.fine(
+          leader1_cnt
+              + " leader1 ints ("
+              + leader1_str
+              + "): "
+              + leader2_cnt
+              + " leader2 ints ("
+              + leader2_str);
     }
 
     // Remove any falsified invariants from the new views.  Don't
@@ -697,101 +714,85 @@ public class DynamicConstants implements Serializable {
           to_remove.add(inv);
         }
       }
-      slice.removeInvariants (to_remove);
+      slice.removeInvariants(to_remove);
     }
 
     // Add the new slices to the top level ppt.  This will discard any
     // slices that ended up with zero invariants
-    ppt.addViews (new_views);
-
+    ppt.addViews(new_views);
   }
 
-  public void instantiate_constant_suppressions (List<Constant> new_noncons,
-                                                 List<Constant> all) {
+  public void instantiate_constant_suppressions(List<Constant> new_noncons, List<Constant> all) {
 
     // Find all of the variable (non-constant) non-missing
     // integral/float leaders
     List<Constant> vars = new ArrayList<Constant>();
     for (Constant con : all) {
-      if (con.always_missing || con.previous_missing)
-        continue;
-      if (con.constant || con.previous_constant)
-        continue;
-      if (!con.vi.isCanonical())
-        continue;
-      if (!con.vi.file_rep_type.isIntegral() &&!con.vi.file_rep_type.isFloat())
-        continue;
-      if (con.vi.rep_type.isArray())
-        continue;
-      vars.add (con);
+      if (con.always_missing || con.previous_missing) continue;
+      if (con.constant || con.previous_constant) continue;
+      if (!con.vi.isCanonical()) continue;
+      if (!con.vi.file_rep_type.isIntegral() && !con.vi.file_rep_type.isFloat()) continue;
+      if (con.vi.rep_type.isArray()) continue;
+      vars.add(con);
     }
 
     // Find all of the new non-constant integer/float leaders
     List<Constant> new_leaders = new ArrayList<Constant>();
     for (Constant con : new_noncons) {
-      if (!con.vi.isCanonical())
-        continue;
-      if (!con.vi.file_rep_type.isIntegral() &&!con.vi.file_rep_type.isFloat())
-        continue;
-      if (con.vi.rep_type.isArray())
-        continue;
-      new_leaders.add (con);
+      if (!con.vi.isCanonical()) continue;
+      if (!con.vi.file_rep_type.isIntegral() && !con.vi.file_rep_type.isFloat()) continue;
+      if (con.vi.rep_type.isArray()) continue;
+      new_leaders.add(con);
     }
 
-    if (debug.isLoggable (Level.FINE)) {
-      debug.fine ("new non-con leaders = " + new_leaders);
-      debug.fine ("variable leaders = " + vars);
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine("new non-con leaders = " + new_leaders);
+      debug.fine("variable leaders = " + vars);
     }
 
     // Consider all of the ternary slices with one new non-constant
     for (int i = 0; i < new_leaders.size(); i++) {
       Constant con1 = new_leaders.get(i);
       assert con1.val != null : "@AssumeAssertion(nullness)";
-      for (int j = 0; j < vars.size(); j++ ) {
+      for (int j = 0; j < vars.size(); j++) {
         Constant con2 = vars.get(j);
         assert con1 != con2;
-        for (int k = j; k < vars.size(); k++ ) {
+        for (int k = j; k < vars.size(); k++) {
           Constant con3 = vars.get(k);
           assert con1 != con3;
-          if (!ppt.is_slice_ok (con1.vi, con2.vi, con3.vi))
-            continue;
+          if (!ppt.is_slice_ok(con1.vi, con2.vi, con3.vi)) continue;
 
-          if (debug.isLoggable (Level.FINE))
-            debug.fine (String.format ("considering slice %s %s %s", con1, con2,
-                                 con3));
+          if (debug.isLoggable(Level.FINE))
+            debug.fine(String.format("considering slice %s %s %s", con1, con2, con3));
 
           // Look for a linearbinary over two variables.  If it doesn't
           // exist we don't create a LinearTernary
-          Invariant lb = find_linear_binary (ppt.findSlice (con2.vi,con3.vi));
-          if (lb == null)
-            continue;
+          Invariant lb = find_linear_binary(ppt.findSlice(con2.vi, con3.vi));
+          if (lb == null) continue;
 
           // Find the ternary slice and create it if it is not there
-          PptSlice slice = ppt.get_or_instantiate_slice (con1.vi, con2.vi,
-                                                         con3.vi);
+          PptSlice slice = ppt.get_or_instantiate_slice(con1.vi, con2.vi, con3.vi);
 
           // Create the LinearTernary invariant from the LinearBinary
           // invariant and the constant value
           Invariant lt = null;
           if (con1.vi.file_rep_type.isIntegral()) {
-            lt = LinearTernary.get_proto().instantiate (slice);
+            lt = LinearTernary.get_proto().instantiate(slice);
             if (lt != null)
-              ((LinearTernary) lt).setup ((LinearBinary) lb, con1.vi,
-                        ((Long) con1.val).longValue());
+              ((LinearTernary) lt).setup((LinearBinary) lb, con1.vi, ((Long) con1.val).longValue());
           } else /* must be float */ {
-            lt = LinearTernaryFloat.get_proto().instantiate (slice);
+            lt = LinearTernaryFloat.get_proto().instantiate(slice);
             if (lt != null)
-              ((LinearTernaryFloat) lt).setup ((LinearBinaryFloat) lb, con1.vi,
-                        ((Double) con1.val).doubleValue());
+              ((LinearTernaryFloat) lt)
+                  .setup((LinearBinaryFloat) lb, con1.vi, ((Double) con1.val).doubleValue());
           }
           if (lt != null) {
             if (Debug.dkconfig_internal_check)
-              assert slice.find_inv_by_class (lt.getClass()) == null
-                : "inv = " + lt.format() + " slice = " + slice;
-            slice.addInvariant (lt);
-            if (debug.isLoggable (Level.FINE))
-              debug.fine ("Adding invariant " + lt.format() + " to slice "
-                          + slice);
+              assert slice.find_inv_by_class(lt.getClass()) == null
+                  : "inv = " + lt.format() + " slice = " + slice;
+            slice.addInvariant(lt);
+            if (debug.isLoggable(Level.FINE))
+              debug.fine("Adding invariant " + lt.format() + " to slice " + slice);
           }
         }
       }
@@ -801,18 +802,16 @@ public class DynamicConstants implements Serializable {
     for (int i = 0; i < new_leaders.size(); i++) {
       Constant con1 = new_leaders.get(i);
       assert con1.val != null : "@AssumeAssertion(nullness)";
-      for (int j = i; j < new_leaders.size(); j++ ) {
+      for (int j = i; j < new_leaders.size(); j++) {
         Constant con2 = new_leaders.get(j);
-        for (int k = 0; k < vars.size(); k++ ) {
+        for (int k = 0; k < vars.size(); k++) {
           Constant con3 = vars.get(k);
           assert con2 != con3;
           assert con1 != con3;
-          if (!ppt.is_slice_ok (con1.vi, con2.vi, con3.vi))
-            continue;
+          if (!ppt.is_slice_ok(con1.vi, con2.vi, con3.vi)) continue;
 
-          if (debug.isLoggable (Level.FINE))
-            debug.fine (String.format ("considering slice %s %s %s", con1, con2,
-                                 con3));
+          if (debug.isLoggable(Level.FINE))
+            debug.fine(String.format("considering slice %s %s %s", con1, con2, con3));
 
           // Create the ternary slice
 
@@ -823,63 +822,67 @@ public class DynamicConstants implements Serializable {
           PptSlice slice = null;
           InvariantStatus sts = InvariantStatus.NO_CHANGE;
           if (con1.vi.file_rep_type.isIntegral()) {
-            OneOfScalar oo = (OneOfScalar) ppt.find_inv_by_class
-                (new VarInfo[] {con3.vi}, OneOfScalar.class);
-            if (oo == null)
-              continue;
-            slice = ppt.get_or_instantiate_slice (con1.vi, con2.vi, con3.vi);
+            OneOfScalar oo =
+                (OneOfScalar) ppt.find_inv_by_class(new VarInfo[] {con3.vi}, OneOfScalar.class);
+            if (oo == null) continue;
+            slice = ppt.get_or_instantiate_slice(con1.vi, con2.vi, con3.vi);
 
-            lt = LinearTernary.get_proto().instantiate (slice);
+            lt = LinearTernary.get_proto().instantiate(slice);
             if (lt != null) {
               assert con2.val != null : "@AssumeAssertion(nullness)";
-              sts = ((LinearTernary) lt).setup (oo, con1.vi,
-                        ((Long) con1.val).longValue(),
-                        con2.vi, ((Long) con2.val).longValue());
+              sts =
+                  ((LinearTernary) lt)
+                      .setup(
+                          oo,
+                          con1.vi,
+                          ((Long) con1.val).longValue(),
+                          con2.vi,
+                          ((Long) con2.val).longValue());
             }
           } else /* must be float */ {
-            OneOfFloat oo = (OneOfFloat) ppt.find_inv_by_class
-                (new VarInfo[] {con3.vi}, OneOfFloat.class);
-            if (oo == null)
-              continue;
-            slice = ppt.get_or_instantiate_slice (con1.vi, con2.vi, con3.vi);
-            lt = LinearTernaryFloat.get_proto().instantiate (slice);
+            OneOfFloat oo =
+                (OneOfFloat) ppt.find_inv_by_class(new VarInfo[] {con3.vi}, OneOfFloat.class);
+            if (oo == null) continue;
+            slice = ppt.get_or_instantiate_slice(con1.vi, con2.vi, con3.vi);
+            lt = LinearTernaryFloat.get_proto().instantiate(slice);
             if (lt != null) {
               assert con2.val != null : "@AssumeAssertion(nullness)";
-              sts = ((LinearTernaryFloat) lt).setup (oo, con1.vi,
-                        ((Double) con1.val).doubleValue(),
-                        con2.vi, ((Double) con2.val).doubleValue());
+              sts =
+                  ((LinearTernaryFloat) lt)
+                      .setup(
+                          oo,
+                          con1.vi,
+                          ((Double) con1.val).doubleValue(),
+                          con2.vi,
+                          ((Double) con2.val).doubleValue());
             }
           }
           if ((lt != null) && (sts == InvariantStatus.NO_CHANGE)) {
             if (Debug.dkconfig_internal_check)
-              assert slice.find_inv_by_class (lt.getClass()) == null
-                : "inv = " + lt.format() + " slice = " + slice;
-            slice.addInvariant (lt);
-            debug.fine ("Adding invariant " + lt.format() + " to slice "
-                        + slice);
+              assert slice.find_inv_by_class(lt.getClass()) == null
+                  : "inv = " + lt.format() + " slice = " + slice;
+            slice.addInvariant(lt);
+            debug.fine("Adding invariant " + lt.format() + " to slice " + slice);
           }
         }
       }
     }
-
   }
 
   /**
    * Looks for a LinearBinary invariant in the specified slice.
    * Will match either float or integer versions
    */
-  private /*@Nullable*/ Invariant find_linear_binary (/*@Nullable*/ PptSlice slice) {
+  private /*@Nullable*/ Invariant find_linear_binary(/*@Nullable*/ PptSlice slice) {
 
     // if (debug.isLoggable (Level.FINE))
     //  debug.fine ("considering slice " + slice);
 
-    if (slice == null)
-      return (null);
+    if (slice == null) return (null);
 
     for (Invariant inv : slice.invs) {
       // debug.fine ("inv = " + inv.getClass());
-      if ((inv.getClass() == LinearBinary.class)
-          || (inv.getClass() == LinearBinaryFloat.class))
+      if ((inv.getClass() == LinearBinary.class) || (inv.getClass() == LinearBinaryFloat.class))
         return (inv);
     }
 
@@ -892,19 +895,18 @@ public class DynamicConstants implements Serializable {
    * between constants are interesting, but to match previous behavior, this
    * is what we will do for now.
    */
-  public void post_process () {
+  public void post_process() {
 
     // if requested, don't create any post-processed invariants
     if (no_post_process) {
       int con_count = 0;
       for (Constant con : con_list) {
-        if (!con.vi.isCanonical())
-          continue;
-        System.out.println ("  Not creating invariants over leader "
-                            + con.vi.name() + " = " + con.val);
+        if (!con.vi.isCanonical()) continue;
+        System.out.println(
+            "  Not creating invariants over leader " + con.vi.name() + " = " + con.val);
         con_count++;
       }
-      System.out.println (con_count + " constants at ppt " + ppt);
+      System.out.println(con_count + " constants at ppt " + ppt);
       return;
     }
 
@@ -912,10 +914,9 @@ public class DynamicConstants implements Serializable {
     // equality invariant, since that is assumed to exist in many places
     if (dkconfig_OneOf_only) {
       for (Constant con : con_list) {
-        if (!con.vi.isCanonical())
-          continue;
-        instantiate_oneof (con);
-        ppt.create_equality_inv (con.vi, con.vi, con.count);
+        if (!con.vi.isCanonical()) continue;
+        instantiate_oneof(con);
+        ppt.create_equality_inv(con.vi, con.vi, con.count);
       }
       return;
     }
@@ -934,20 +935,20 @@ public class DynamicConstants implements Serializable {
     // should have no invariants over them.
     List<Constant> non_missing = new ArrayList<Constant>();
 
-    instantiate_new_views (noncons, non_missing);
+    instantiate_new_views(noncons, non_missing);
 
-  /* Code to just create just unary slices for constants
-    for (Constant con : con_list) {
-      if (!con.vi.isCanonical())
-        continue;
-      PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
-      slice1.instantiate_invariants();
-      if (con.val != null)
-        slice1.add_val (con.val, ValueTuple.MODIFIED, con.count);
-      new_views.add (slice1);
-    }
-    ppt.addViews (new_views);
-  */
+    /* Code to just create just unary slices for constants
+      for (Constant con : con_list) {
+        if (!con.vi.isCanonical())
+          continue;
+        PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
+        slice1.instantiate_invariants();
+        if (con.val != null)
+          slice1.add_val (con.val, ValueTuple.MODIFIED, con.count);
+        new_views.add (slice1);
+      }
+      ppt.addViews (new_views);
+    */
   }
 
   /**
@@ -963,14 +964,12 @@ public class DynamicConstants implements Serializable {
     // Turn off track logging so that we don't get voluminous messages
     // each time this is called
     boolean debug_on = Logger.getLogger("daikon.Debug").isLoggable(Level.FINE);
-    if (debug_on)
-      LogHelper.setLevel ("daikon.Debug", Level.OFF);
+    if (debug_on) LogHelper.setLevel("daikon.Debug", Level.OFF);
 
     // Get constant leaders
     List<Constant> leaders = new ArrayList<Constant>(100);
     for (Constant con : con_list) {
-      if (!con.vi.isCanonical())
-        continue;
+      if (!con.vi.isCanonical()) continue;
 
       // hashcode types are not involved in suppressions
       if (NIS.dkconfig_skip_hashcode_type) {
@@ -979,7 +978,7 @@ public class DynamicConstants implements Serializable {
         }
       }
 
-      leaders.add (con);
+      leaders.add(con);
     }
 
     List<PptSlice> new_views = new ArrayList<PptSlice>(100);
@@ -1000,18 +999,15 @@ public class DynamicConstants implements Serializable {
         assert con.val != null : "@AssumeAssertion(nullness): dependent: val when count>0";
         slice1.add_val_bu(con.val, mod, con.count);
       }
-      if (slice1.invs.size() > 0)
-        new_views.add(slice1);
+      if (slice1.invs.size() > 0) new_views.add(slice1);
     }
-
 
     // Binary slices/invariants
     for (int i = 0; i < leaders.size(); i++) {
       Constant con1 = leaders.get(i);
       for (int j = i; j < leaders.size(); j++) {
         Constant con2 = leaders.get(j);
-        if (!con1.vi.compatible(con2.vi))
-          continue;
+        if (!con1.vi.compatible(con2.vi)) continue;
 
         PptSlice2 slice2 = new PptSlice2(ppt, con1.vi, con2.vi);
         if (NIS.dkconfig_suppressor_list) {
@@ -1022,13 +1018,12 @@ public class DynamicConstants implements Serializable {
 
         if (con1.count > 0 && con2.count > 0) {
           assert con1.val != null
-            : "@AssumeAssertion(nullness): dependent: val != null when count>0";
+              : "@AssumeAssertion(nullness): dependent: val != null when count>0";
           assert con2.val != null
-            : "@AssumeAssertion(nullness): dependent: val != null when count>0";
+              : "@AssumeAssertion(nullness): dependent: val != null when count>0";
           slice2.add_val_bu(con1.val, con2.val, mod, mod, con1.count);
         }
-        if (slice2.invs.size() > 0)
-          new_views.add(slice2);
+        if (slice2.invs.size() > 0) new_views.add(slice2);
       }
     }
 
@@ -1042,16 +1037,15 @@ public class DynamicConstants implements Serializable {
       }
     }
 
-    if (debug_on)
-      LogHelper.setLevel ("daikon.Debug", Level.FINE);
+    if (debug_on) LogHelper.setLevel("daikon.Debug", Level.FINE);
 
     return (new_views);
   }
 
-  public void print_missing (PrintWriter out) {
+  public void print_missing(PrintWriter out) {
 
     for (Constant con : missing_list) {
-      out.println (con.vi.name() + " is always missing");
+      out.println(con.vi.name() + " is always missing");
     }
   }
 
@@ -1060,7 +1054,7 @@ public class DynamicConstants implements Serializable {
    * is merged since constants are not used after we are done processing
    * samples.
    */
-  public void merge () {
+  public void merge() {
 
     // clear the constant and missing lists
     missing_list.clear();
@@ -1072,9 +1066,10 @@ public class DynamicConstants implements Serializable {
     for (VarInfo pvar : ppt.var_infos) {
       boolean missing = true;
       for (PptRelation rel : ppt.children) {
-        VarInfo cvar = rel.childVar (pvar);
-        if ((cvar != null) && (rel.child.constants != null)
-            && !rel.child.constants.is_missing (cvar)) {
+        VarInfo cvar = rel.childVar(pvar);
+        if ((cvar != null)
+            && (rel.child.constants != null)
+            && !rel.child.constants.is_missing(cvar)) {
           missing = false;
           break;
         }
@@ -1083,46 +1078,43 @@ public class DynamicConstants implements Serializable {
       c.checkRep();
       c.always_missing = missing;
       c.checkRep();
-      if (missing)
-        missing_list.add (c);
-
+      if (missing) missing_list.add(c);
     }
   }
 
   /**
    * Creates OneOf invariants for each constant
    */
-  public void instantiate_oneof (Constant con) {
+  public void instantiate_oneof(Constant con) {
     assert con.val != null : "@AssumeAssertion(nullness)";
 
     // @NonNull, but not marked that way to ease warning suppression.
     Invariant inv;
-    PptSlice1 slice1 = (PptSlice1) ppt.get_or_instantiate_slice (con.vi);
+    PptSlice1 slice1 = (PptSlice1) ppt.get_or_instantiate_slice(con.vi);
 
     // Create the correct OneOf invariant
     ProglangType rep_type = con.vi.rep_type;
     boolean is_scalar = rep_type.isScalar();
     if (is_scalar) {
-      inv = OneOfScalar.get_proto().instantiate (slice1);
+      inv = OneOfScalar.get_proto().instantiate(slice1);
     } else if (rep_type == ProglangType.INT_ARRAY) {
-      inv = OneOfSequence.get_proto().instantiate (slice1);
-    } else if (Daikon.dkconfig_enable_floats
-               && rep_type == ProglangType.DOUBLE) {
-      inv = OneOfFloat.get_proto().instantiate (slice1);
-    } else if (Daikon.dkconfig_enable_floats
-               && rep_type == ProglangType.DOUBLE_ARRAY) {
-      inv = OneOfFloatSequence.get_proto().instantiate (slice1);
+      inv = OneOfSequence.get_proto().instantiate(slice1);
+    } else if (Daikon.dkconfig_enable_floats && rep_type == ProglangType.DOUBLE) {
+      inv = OneOfFloat.get_proto().instantiate(slice1);
+    } else if (Daikon.dkconfig_enable_floats && rep_type == ProglangType.DOUBLE_ARRAY) {
+      inv = OneOfFloatSequence.get_proto().instantiate(slice1);
     } else if (rep_type == ProglangType.STRING) {
-      inv = OneOfString.get_proto().instantiate (slice1);
+      inv = OneOfString.get_proto().instantiate(slice1);
     } else if (rep_type == ProglangType.STRING_ARRAY) {
-      inv = OneOfStringSequence.get_proto().instantiate (slice1);
+      inv = OneOfStringSequence.get_proto().instantiate(slice1);
     } else {
       throw new Error("Unrecognized rep_type in instantiate_oneof");
     }
-    assert inv != null : "@AssumeAssertion(nullness): instantiation of the given invariants always succeeds";
-    slice1.addInvariant (inv);
+    assert inv != null
+        : "@AssumeAssertion(nullness): instantiation of the given invariants always succeeds";
+    slice1.addInvariant(inv);
 
     // Add the value to it
-    slice1.add_val_bu (con.val, ValueTuple.MODIFIED, con.count);
+    slice1.add_val_bu(con.val, ValueTuple.MODIFIED, con.count);
   }
 }

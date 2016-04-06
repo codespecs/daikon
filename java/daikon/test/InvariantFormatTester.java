@@ -28,8 +28,7 @@ import org.checkerframework.dataflow.qual.*;
  * file. More detail on the expected formats of these files is in
  * Daikon developer manual
  **/
-public class InvariantFormatTester extends TestCase
-{
+public class InvariantFormatTester extends TestCase {
 
   /**
    * Maximum file size that can currently be examined by the program.
@@ -55,13 +54,13 @@ public class InvariantFormatTester extends TestCase
    **/
   private static String command_file = "InvariantFormatTest.commands";
 
-  @Option ("-d File to write any differences to.  Will be deleted on success")
-  public static File diff_file = new File ("InvariantFormatTest.diffs");
+  @Option("-d File to write any differences to.  Will be deleted on success")
+  public static File diff_file = new File("InvariantFormatTest.diffs");
 
   /**
    * Determines whether the object will generate goal statements.
    **/
-  @Option ("-g Filename to write goals to")
+  @Option("-g Filename to write goals to")
   public static /*@Nullable*/ File generate_goals = null;
 
   /**
@@ -76,11 +75,11 @@ public class InvariantFormatTester extends TestCase
    *        is the correct output
    **/
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     String usage = "java daikon.test.InvariantFormatTester";
-    Options options = new Options (usage, InvariantFormatTester.class);
-    String[] other_args = options.parse_or_usage (args);
+    Options options = new Options(usage, InvariantFormatTester.class);
+    String[] other_args = options.parse_or_usage(args);
     if (other_args.length > 0) {
       options.print_usage("unexpected arguments");
       return;
@@ -132,8 +131,7 @@ public class InvariantFormatTester extends TestCase
     // run the actual test
 
     if (!execute()) {
-      fail("At least one test failed." +
-           " Inspect " + diff_file + " for error report.");
+      fail("At least one test failed." + " Inspect " + diff_file + " for error report.");
     }
   }
 
@@ -153,8 +151,7 @@ public class InvariantFormatTester extends TestCase
         if (currentLine != null && !isComment(currentLine) && !isWhitespace(currentLine))
           return currentLine;
       }
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException(e.toString());
     }
     return null;
@@ -171,16 +168,16 @@ public class InvariantFormatTester extends TestCase
   private boolean execute() {
 
     // Open the input stream.
-    InputStream inputStream = InvariantFormatTester.class
-      .getResourceAsStream(command_file);
+    InputStream inputStream = InvariantFormatTester.class.getResourceAsStream(command_file);
     if (inputStream == null) {
-      fail("Input file for invariant format tests missing." +
-           " (Should be in " + command_file +
-           " and it must be within the classpath)");
+      fail(
+          "Input file for invariant format tests missing."
+              + " (Should be in "
+              + command_file
+              + " and it must be within the classpath)");
       throw new Error("This can't happen"); // to quiet Findbugs
     }
-    LineNumberReader commandReader =
-      new LineNumberReader(new InputStreamReader(inputStream));
+    LineNumberReader commandReader = new LineNumberReader(new InputStreamReader(inputStream));
 
     // Create a stream for the output
     OutputStream out = new ByteArrayOutputStream();
@@ -189,24 +186,25 @@ public class InvariantFormatTester extends TestCase
     // Run the test
     try {
       result = performTest(commandReader, new PrintStream(out));
-    }
-    catch (RuntimeException e) {
-      throw new RuntimeException ("Error detected on line " +
-               commandReader.getLineNumber() + " of " +
-               InvariantFormatTester.class.getResource(command_file), e);
+    } catch (RuntimeException e) {
+      throw new RuntimeException(
+          "Error detected on line "
+              + commandReader.getLineNumber()
+              + " of "
+              + InvariantFormatTester.class.getResource(command_file),
+          e);
     }
 
     // Close the command file
     try {
       inputStream.close();
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       // Can't write the goals into the commands file if it can't be cleared,
       // otherwise not important.  Only matters if output file is the same
       // as the input file
       if (generate_goals != null)
-        throw new RuntimeException("Can't close commands file " +
-                   InvariantFormatTester.class.getResource(command_file));
+        throw new RuntimeException(
+            "Can't close commands file " + InvariantFormatTester.class.getResource(command_file));
     }
 
     // Get all of the output as a string
@@ -217,13 +215,12 @@ public class InvariantFormatTester extends TestCase
 
       // Create the goal file and write the output to it
       try {
-        PrintStream out_fp = new PrintStream (generate_goals);
-        out_fp.printf ("%s", output);
+        PrintStream out_fp = new PrintStream(generate_goals);
+        out_fp.printf("%s", output);
         out_fp.close();
         System.out.println("Goals generated");
       } catch (Exception e) {
-        throw new RuntimeException ("Can't write goal file " + generate_goals,
-                                    e);
+        throw new RuntimeException("Can't write goal file " + generate_goals, e);
       }
     } else { // handle any differences
 
@@ -233,11 +230,11 @@ public class InvariantFormatTester extends TestCase
       // If the test failed, write the differences to the diff file
       if (!result) {
         try {
-          PrintStream diff_fp = new PrintStream (diff_file);
-          diff_fp.printf ("%s", output);
+          PrintStream diff_fp = new PrintStream(diff_file);
+          diff_fp.printf("%s", output);
           diff_fp.close();
         } catch (Exception e) {
-          throw new RuntimeException ("Can't write diff file " + diff_file, e);
+          throw new RuntimeException("Can't write diff file " + diff_file, e);
         }
         return false;
       }
@@ -260,19 +257,17 @@ public class InvariantFormatTester extends TestCase
     if (generate_goals != null) {
       try {
         commands.mark(MAX_FILE_SIZE);
-      }
-      catch (IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException("Cannot mark file in order to generate goals");
       }
     }
 
     while (true) {
       // Create a new test case
-      FormatTestCase currentCase
-        = FormatTestCase.instantiate(commands, (generate_goals != null));
-      if (currentCase == null)
+      FormatTestCase currentCase = FormatTestCase.instantiate(commands, (generate_goals != null));
+      if (currentCase == null) {
         break;
-      else {
+      } else {
         invariantTestCases.add(currentCase);
         if ((generate_goals == null) && !currentCase.passes()) {
           output.print(currentCase.getDiffString());
@@ -286,8 +281,7 @@ public class InvariantFormatTester extends TestCase
       // Go to beginning of the commands buffer
       try {
         commands.reset();
-      }
-      catch (IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException("Cannot reset to mark, thus cannot write goals");
       }
 
@@ -309,8 +303,7 @@ public class InvariantFormatTester extends TestCase
             output.println(currentLineOfText);
           currentLineOfText = commands.readLine();
         }
-      }
-      catch (IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException("Writing goal output failed");
       }
     }
@@ -335,9 +328,8 @@ public class InvariantFormatTester extends TestCase
    * @return true if the line is made up only of whitespace, false otherwise
    **/
   /*@Pure*/ static boolean isWhitespace(String line) {
-    for (int x=0; x<line.length(); x++) {
-      if (!Character.isWhitespace(line.charAt(x)))
-        return false;
+    for (int x = 0; x < line.length(); x++) {
+      if (!Character.isWhitespace(line.charAt(x))) return false;
     }
     return true;
   }

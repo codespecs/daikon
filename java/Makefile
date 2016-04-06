@@ -163,8 +163,10 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   # Until "make ../plume-lib" has been run, sort-directory-order is not available.
   SORT_DIRECTORY_ORDER = sort
 endif
-JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | ${SORT_DIRECTORY_ORDER})
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
+# Copied from 
+JAVA_FILES_FOR_STYLE = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' -o -path './jtb/' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | grep -v '^\./jtb/' | ${SORT_DIRECTORY_ORDER})
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
@@ -791,7 +793,7 @@ checkstyle-sun: .checkstyle-sunchecks-output
 
 checkstyle:
 # This invocation works on Ubuntu.
-	checkstyle -c /usr/share/checkstyle/sun_checks.xml ${JAVA_FILES}
+	checkstyle -c /usr/share/checkstyle/sun_checks.xml ${JAVA_FILES_FOR_STYLE}
 
 jlint:
 	jlint . | grep -v "Value of referenced variable '.*' may be NULL" | grep -v "Compare strings as object references" | perl -p -e 's:^daikon/::'
@@ -805,7 +807,7 @@ audit:
 
 reindent:
 	java -jar ~/java/google-java-format/core/target/google-java-format-0.1-SNAPSHOT-all-deps.jar --replace ${JAVA_FILES_FOR_STYLE}
-	${CHECKERFRAMEWORK}/checker/bin/fixup-google-java-format.py ${JAVA_FILES}
+	${CHECKERFRAMEWORK}/checker/bin/fixup-google-java-format.py ${JAVA_FILES_FOR_STYLE}
 
 
 
@@ -1255,6 +1257,7 @@ showvars:
 	@echo JAVAC_ARGS = ${JAVAC_ARGS}
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
 	@echo JAVA_FILES = $(JAVA_FILES)
+	@echo JAVA_FILES_FOR_STYLE = $(JAVA_FILES_FOR_STYLE)
 	@echo TAG_FILES = $(TAG_FILES)
 	@echo INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)
 	@echo INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)

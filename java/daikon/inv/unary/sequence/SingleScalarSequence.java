@@ -14,10 +14,7 @@ import typequals.*;
 /**
  * Abstract base class used to evaluate single long sequences.
  **/
-
-public abstract class SingleScalarSequence
-  extends SingleSequence
-{
+public abstract class SingleScalarSequence extends SingleSequence {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -32,21 +29,22 @@ public abstract class SingleScalarSequence
   }
 
   /** Returns whether or not the specified types are valid.
-  * (Static version of method.) **/
-  public static final boolean valid_types_static (VarInfo[] vis) {
+   * (Static version of method.) **/
+  public static final boolean valid_types_static(VarInfo[] vis) {
     return ((vis.length == 1)
-            && vis[0].file_rep_type.baseIsScalar()
-            && vis[0].file_rep_type.isArray());
+        && vis[0].file_rep_type.baseIsScalar()
+        && vis[0].file_rep_type.isArray());
   }
 
   /** Returns whether or not the specified types are valid  **/
-  public final boolean valid_types (VarInfo[] vis) {
+  public final boolean valid_types(VarInfo[] vis) {
     return valid_types_static(vis);
   }
 
   // Identical to superclass definition, and therefore gratuitious
   @Override
-  public VarInfo var(/*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleScalarSequence this*/) {
+  public VarInfo var(
+      /*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleScalarSequence this*/ ) {
     return ppt.var_infos[0];
   }
 
@@ -54,10 +52,9 @@ public abstract class SingleScalarSequence
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
-    assert Intern.isInterned(val) : "not interned: " + val + "/"
-      + val.getClass();
+    assert Intern.isInterned(val) : "not interned: " + val + "/" + val.getClass();
     assert Intern.isInterned(val);
     // System.out.println("SingleScalarSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
     long[] value = (long[]) val;
@@ -70,9 +67,8 @@ public abstract class SingleScalarSequence
     }
   }
 
-
   public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
     long[] value = (long[]) val;
@@ -101,13 +97,10 @@ public abstract class SingleScalarSequence
 
   public abstract InvariantStatus check_modified(long /*@Interned*/ [] value, int count);
 
-
   public InvariantStatus check_unmodified(long /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
-
 }
-
 
 //     def format(self, arg_tuple=None):
 //         if arg_tuple == None:

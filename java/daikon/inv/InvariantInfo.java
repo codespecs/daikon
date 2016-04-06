@@ -21,28 +21,28 @@ public class InvariantInfo {
   /** If null, treated as a wildcard. */
   private /*@Nullable*/ String className;
 
-//   private InvariantInfo() {
-//     // Make the default constructor private, this should never be called
-//   }
+  //   private InvariantInfo() {
+  //     // Make the default constructor private, this should never be called
+  //   }
 
   /* // It's ok if vars isn't given in sorted order, we'll sort it here */
   public InvariantInfo(String ppt, /*@Nullable*/ String vars, /*@Nullable*/ String className) {
     this.ppt = ppt;
     this.className = className;
     /* if (vars != null) {
-      // Sort the vars into ascending order
-      StringTokenizer st = new StringTokenizer(vars, ",");
-      ArrayList temp = new ArrayList();
-      while (st.hasMoreTokens()) {
-        temp.add(st.nextToken());
-      }
-      Collections.sort(temp);
-      String vars_result = "";
-      for (int i = 0; i < temp.size(); i++) {
-        vars_result += temp.get(i) + ",";
-      }
-      this.vars = vars_result;
-      }*/
+    // Sort the vars into ascending order
+    StringTokenizer st = new StringTokenizer(vars, ",");
+    ArrayList temp = new ArrayList();
+    while (st.hasMoreTokens()) {
+      temp.add(st.nextToken());
+    }
+    Collections.sort(temp);
+    String vars_result = "";
+    for (int i = 0; i < temp.size(); i++) {
+      vars_result += temp.get(i) + ",";
+    }
+    this.vars = vars_result;
+    }*/
     this.vars = vars;
   }
 
@@ -66,8 +66,7 @@ public class InvariantInfo {
    * ["var1,var2,var3", "var1,var3,var2", "var2,var1,var3"... etc.]
    */
   public /*@Nullable*/ List<String> var_permutations() {
-    if (vars == null)
-      return null;
+    if (vars == null) return null;
 
     // We know there can be at most 3 vars so it's not worth writing
     // a complicated routine that generates all permutations

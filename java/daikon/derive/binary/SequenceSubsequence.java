@@ -11,9 +11,7 @@ import org.checkerframework.dataflow.qual.*;
  * Derivations of the form A[0..i] or A[i..<em>end</em>], derived from A and
  * i.
  **/
-public abstract class SequenceSubsequence
-  extends BinaryDerivation
-{
+public abstract class SequenceSubsequence extends BinaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -24,8 +22,13 @@ public abstract class SequenceSubsequence
 
   // base1 is the sequence
   // base2 is the scalar
-  public VarInfo seqvar() { return base1; }
-  public VarInfo sclvar() { return base2; }
+  public VarInfo seqvar() {
+    return base1;
+  }
+
+  public VarInfo sclvar() {
+    return base2;
+  }
 
   // Indicates whether the subscript is an index of valid data or a limit
   // (one element beyond the data of interest).  The first (or last)
@@ -42,45 +45,45 @@ public abstract class SequenceSubsequence
    * @param off_by_one true means we should exclude the scalar from
    * the range; false means we should include it
    **/
-  public SequenceSubsequence (VarInfo vi1, VarInfo vi2, boolean from_start, boolean off_by_one) {
+  public SequenceSubsequence(VarInfo vi1, VarInfo vi2, boolean from_start, boolean off_by_one) {
     super(vi1, vi2);
     this.from_start = from_start;
-    if (off_by_one)
+    if (off_by_one) {
       index_shift = from_start ? -1 : +1;
-    else
+    } else {
       index_shift = 0;
+    }
   }
-
 
   protected VarInfo makeVarInfo() {
     VarInfo seqvar = seqvar();
     VarInfo sclvar = sclvar();
 
     VarInfo vi = null;
-    if (from_start)
-      vi = VarInfo.make_subsequence (seqvar, null, 0, sclvar, index_shift);
-    else
-      vi = VarInfo.make_subsequence (seqvar, sclvar, index_shift, null, 0);
+    if (from_start) {
+      vi = VarInfo.make_subsequence(seqvar, null, 0, sclvar, index_shift);
+    } else {
+      vi = VarInfo.make_subsequence(seqvar, sclvar, index_shift, null, 0);
+    }
 
     return (vi);
-
   }
 
   /** Returns the lower bound of the slice **/
   public Quantify.Term get_lower_bound() {
     if (from_start) {
-      return new Quantify.Constant (0);
+      return new Quantify.Constant(0);
     } else {
-      return new Quantify.VarPlusOffset (sclvar(), index_shift);
+      return new Quantify.VarPlusOffset(sclvar(), index_shift);
     }
   }
 
   /** Returns the upper bound of the slice **/
   public Quantify.Term get_upper_bound() {
     if (from_start) {
-      return new Quantify.VarPlusOffset (sclvar(), index_shift);
+      return new Quantify.VarPlusOffset(sclvar(), index_shift);
     } else {
-      return new Quantify.Length (seqvar(), -1);
+      return new Quantify.Length(seqvar(), -1);
     }
   }
 
@@ -99,31 +102,36 @@ public abstract class SequenceSubsequence
 
   /** Returns the ESC name **/
   /*@SideEffectFree*/ public String esc_name(String index) {
-    return String.format ("%s[%s..%s]", seqvar().esc_name(),
-                 get_lower_bound().esc_name(), get_upper_bound().esc_name());
+    return String.format(
+        "%s[%s..%s]",
+        seqvar().esc_name(),
+        get_lower_bound().esc_name(),
+        get_upper_bound().esc_name());
   }
 
   /** returns the JML name for the slice **/
   @SuppressWarnings("nullness")
-  public String jml_name (String index) {
+  public String jml_name(String index) {
 
     // The slice routine needs the actual length as opposed to the
     // highest legal index.
     Quantify.Term upper = get_upper_bound();
     if (upper instanceof Quantify.Length) {
-      ((Quantify.Length)upper).set_offset (0);
+      ((Quantify.Length) upper).set_offset(0);
     }
 
     if (seqvar().isPrestate()) {
-      return String.format ("\\old(daikon.Quant.slice(%s, %s, %s))",
-                            seqvar().enclosing_var.postState.jml_name(),
-                            get_lower_bound().jml_name(true),
-                            upper.jml_name(true));
+      return String.format(
+          "\\old(daikon.Quant.slice(%s, %s, %s))",
+          seqvar().enclosing_var.postState.jml_name(),
+          get_lower_bound().jml_name(true),
+          upper.jml_name(true));
     } else {
-      return String.format ("daikon.Quant.slice(%s, %s, %s)",
-                            seqvar().enclosing_var.jml_name(),
-                            get_lower_bound().jml_name(),
-                            upper.jml_name());
+      return String.format(
+          "daikon.Quant.slice(%s, %s, %s)",
+          seqvar().enclosing_var.jml_name(),
+          get_lower_bound().jml_name(),
+          upper.jml_name());
     }
   }
 

@@ -44,7 +44,8 @@ public class VarParent implements Serializable {
   /** Parent ppt relation id **/
   public int parent_relation_id;
 
-  public VarParent (String parent_ppt, int parent_relation_id, /*@Nullable*/ String parent_variable) {
+  public VarParent(
+      String parent_ppt, int parent_relation_id, /*@Nullable*/ String parent_variable) {
     this.parent_ppt = parent_ppt;
     this.parent_relation_id = parent_relation_id;
     this.parent_variable = parent_variable;

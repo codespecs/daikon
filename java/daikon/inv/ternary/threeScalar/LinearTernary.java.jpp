@@ -117,13 +117,13 @@ public class CLASSNAME
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     // make sure the variables are integral
     if (!vis[0].file_rep_type.IS_INTEGRAL
         || !vis[1].file_rep_type.IS_INTEGRAL
         || !vis[2].file_rep_type.IS_INTEGRAL)
-      return (false);
+      return false;
 
     // Don't create if any of the variables are constant.
     // DynamicConstants will create this from LinearBinary
@@ -132,7 +132,7 @@ public class CLASSNAME
     if (NIS.dkconfig_enabled && (parent.is_constant (vis[0])
                                  || parent.is_constant(vis[1])
                                  || parent.is_constant (vis[2])))
-      return (false);
+      return false;
 
     /*
     // JHP: This code is removed because these sorts of static checks
@@ -291,7 +291,7 @@ public class CLASSNAME
     }
     */
 
-    return (true);
+    return true;
   }
 
   /** Instantiate the invariant on the specified slice **/

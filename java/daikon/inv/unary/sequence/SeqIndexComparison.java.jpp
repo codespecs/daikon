@@ -203,12 +203,12 @@ public class CLASSNAME extends SUPERCLASS {
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     // Don't compare indices to object addresses.
     ProglangType elt_type = vis[0].file_rep_type.elementType();
     if (!elt_type.BASEISTYPE())
-      return (false);
+      return false;
 
     // Make sure that the indices are comparable to the elements
     VarInfo seqvar = vis[0];
@@ -216,10 +216,10 @@ public class CLASSNAME extends SUPERCLASS {
     VarComparability elt_compar = seqvar.comparability.elementType();
     VarComparability index_compar = seqvar.comparability.indexType(0);
     if (! VarComparability.comparable (elt_compar, index_compar)) {
-      return (false);
+      return false;
     }
 
-    return (true);
+    return true;
   }
 
   /** Instantiate the invariant on the specified slice **/

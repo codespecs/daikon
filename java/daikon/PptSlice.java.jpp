@@ -795,7 +795,7 @@ public final class PPTSLICE1 extends PptSlice {
           return(true);
       #endif
     }
-    return (false);
+    return false;
   }
 
 

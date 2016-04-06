@@ -14,9 +14,7 @@ import org.checkerframework.dataflow.qual.*;
  * an antecedent invariant in an implication where that antecedent
  * consists of two invariants anded together.
  **/
-public class AndJoiner
-  extends Joiner
-{
+public class AndJoiner extends Joiner {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -26,9 +24,7 @@ public class AndJoiner
     super(ppt, left, right);
   }
 
-  public AndJoiner(PptTopLevel ppt,
-                   Invariant left,
-                   Invariant right) {
+  public AndJoiner(PptTopLevel ppt, Invariant left, Invariant right) {
     super(ppt, left, right);
   }
 
@@ -37,8 +33,7 @@ public class AndJoiner
   }
 
   public String repr() {
-    return "[" + left.repr() + " and " +
-      right.repr() + "]";
+    return "[" + left.repr() + " and " + right.repr() + "]";
   }
 
   /*@SideEffectFree*/ public String format_using(OutputFormat format) {
@@ -49,7 +44,9 @@ public class AndJoiner
     }
     if (format == OutputFormat.DAIKON) {
       return UtilMDE.join(invStrings, " and ");
-    } else if (format == OutputFormat.ESCJAVA || format.isJavaFamily() || format == OutputFormat.CSHARPCONTRACT) {
+    } else if (format == OutputFormat.ESCJAVA
+        || format.isJavaFamily()
+        || format == OutputFormat.CSHARPCONTRACT) {
       // Forrest
       return "(" + UtilMDE.join(invStrings, ") && (") + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
@@ -62,18 +59,17 @@ public class AndJoiner
   public List<Invariant> conjuncts() {
     List<Invariant> result = new ArrayList<Invariant>(2);
     if (left instanceof AndJoiner) {
-      result.addAll(((AndJoiner)left).conjuncts());
+      result.addAll(((AndJoiner) left).conjuncts());
     } else {
       result.add(left);
     }
     if (right instanceof AndJoiner) {
-      result.addAll(((AndJoiner)right).conjuncts());
+      result.addAll(((AndJoiner) right).conjuncts());
     } else {
       result.add(right);
     }
     return result;
   }
-
 
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
@@ -82,9 +78,14 @@ public class AndJoiner
     DiscardInfo leftObvious = left.isObviousDynamically(vis);
     DiscardInfo rightObvious = right.isObviousDynamically(vis);
     if (leftObvious != null && rightObvious != null) {
-      return new DiscardInfo(this, DiscardCode.obvious,
-                             "Left obvious: " + leftObvious.discardString() + Global.lineSep
-                             + "Right obvious: " + rightObvious.discardString());
+      return new DiscardInfo(
+          this,
+          DiscardCode.obvious,
+          "Left obvious: "
+              + leftObvious.discardString()
+              + Global.lineSep
+              + "Right obvious: "
+              + rightObvious.discardString());
     }
     return null;
   }
@@ -94,9 +95,15 @@ public class AndJoiner
     DiscardInfo leftObvious = left.isObviousStatically(vis);
     DiscardInfo rightObvious = right.isObviousStatically(vis);
     if (leftObvious != null && rightObvious != null) {
-      DiscardInfo result = new DiscardInfo(this, DiscardCode.obvious,
-                                           "Left obvious: " + leftObvious.discardString() + Global.lineSep
-                                           + "Right obvious: " + rightObvious.discardString());
+      DiscardInfo result =
+          new DiscardInfo(
+              this,
+              DiscardCode.obvious,
+              "Left obvious: "
+                  + leftObvious.discardString()
+                  + Global.lineSep
+                  + "Right obvious: "
+                  + rightObvious.discardString());
       return result;
     } else {
       return null;

@@ -18,10 +18,7 @@ import typequals.*;
  * Prints as <code>x != r (mod m)</code>, where <code>r</code>
  * is the remainder and <code>m</code> is the modulus.
  **/
-
-public class NonModulus
-  extends SingleScalar
-{
+public class NonModulus extends SingleScalar {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -56,7 +53,7 @@ public class NonModulus
     super();
   }
 
-  private static /*@Prototype*/ NonModulus proto = new /*@Prototype*/ NonModulus ();
+  private static /*@Prototype*/ NonModulus proto = new /*@Prototype*/ NonModulus();
 
   /** Returns the prototype invariant for NonModulus **/
   public static /*@Prototype*/ NonModulus get_proto() {
@@ -64,10 +61,9 @@ public class NonModulus
   }
 
   /** NonModulus is only valid on integral types **/
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis))
-      return (false);
+    if (!valid_types(vis)) return false;
 
     return (vis[0].file_rep_type.baseIsIntegral());
   }
@@ -78,8 +74,8 @@ public class NonModulus
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected NonModulus instantiate_dyn (/*>>> @Prototype NonModulus this,*/ PptSlice slice) {
-    return new NonModulus (slice);
+  protected NonModulus instantiate_dyn(/*>>> @Prototype NonModulus this,*/ PptSlice slice) {
+    return new NonModulus(slice);
   }
 
   /*@SideEffectFree*/ public NonModulus clone() {
@@ -89,8 +85,7 @@ public class NonModulus
   }
 
   public String repr() {
-    return "NonModulus" + varNames() + ": "
-      + "m=" + modulus + ",r=" + remainder;
+    return "NonModulus" + varNames() + ": " + "m=" + modulus + ",r=" + remainder;
   }
 
   /*@SideEffectFree*/ public String format_using(OutputFormat format) {
@@ -122,9 +117,13 @@ public class NonModulus
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return "(NEQ (MOD " + var().simplify_name() + " "
-        + simplify_format_long(modulus) + ") "
-        + simplify_format_long(remainder) + ")";
+      return "(NEQ (MOD "
+          + var().simplify_name()
+          + " "
+          + simplify_format_long(modulus)
+          + ") "
+          + simplify_format_long(remainder)
+          + ")";
     }
 
     return format_unimplemented(format);
@@ -132,8 +131,7 @@ public class NonModulus
 
   // Set either modulus and remainder, or no_result_yet.
   void updateResults() {
-    if (results_accurate)
-      return;
+    if (results_accurate) return;
     if (elements.size() == 0) {
       no_result_yet = true;
     } else {
@@ -159,17 +157,15 @@ public class NonModulus
   public InvariantStatus add_modified(long value, int count) {
     if (elements.add(Intern.internedLong(value))
         && results_accurate
-        && (! no_result_yet)
-        && (MathMDE.mod_positive(value, modulus) == remainder))
-      results_accurate = false;
+        && (!no_result_yet)
+        && (MathMDE.mod_positive(value, modulus) == remainder)) results_accurate = false;
     return InvariantStatus.NO_CHANGE;
   }
 
   protected double computeConfidence() {
     updateResults();
-    if (no_result_yet)
-      return Invariant.CONFIDENCE_UNJUSTIFIED;
-    double probability_one_elt_nonmodulus = 1 - 1.0/modulus;
+    if (no_result_yet) return Invariant.CONFIDENCE_UNJUSTIFIED;
+    double probability_one_elt_nonmodulus = 1 - 1.0 / modulus;
     // return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_mod_samples());
     return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_samples());
   }
@@ -185,41 +181,31 @@ public class NonModulus
     } else if (no_result_yet || other.no_result_yet) {
       return false;
     } else {
-      return
-        (modulus == other.modulus) &&
-        (remainder == other.remainder);
+      return (modulus == other.modulus) && (remainder == other.remainder);
     }
   }
 
   /** Returns true if this has the given modulus and remainder. **/
   public boolean hasModulusRemainder(long modulus, long remainder) {
     updateResults();
-    if (no_result_yet)
-      return false;
+    if (no_result_yet) return false;
 
-    return ((modulus == this.modulus)
-            && (remainder == this.remainder));
+    return ((modulus == this.modulus) && (remainder == this.remainder));
   }
-
 
   /*@Pure*/ public boolean isExclusiveFormula(Invariant o) {
     updateResults();
-    if (no_result_yet)
-      return false;
+    if (no_result_yet) return false;
     if (o instanceof NonModulus) {
       NonModulus other = (NonModulus) o;
       other.updateResults();
-      if (other.no_result_yet)
-        return false;
-      return ((modulus == other.modulus)
-              && (remainder != other.remainder));
+      if (other.no_result_yet) return false;
+      return ((modulus == other.modulus) && (remainder != other.remainder));
     } else if (o instanceof Modulus) {
       Modulus other = (Modulus) o;
-      return ((modulus == other.modulus)
-              && (remainder == other.remainder));
+      return ((modulus == other.modulus) && (remainder == other.remainder));
     }
 
     return false;
   }
-
 }

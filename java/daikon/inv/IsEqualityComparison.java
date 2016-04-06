@@ -15,11 +15,10 @@ public final class IsEqualityComparison implements Filter<Invariant> {
   // Don't create new instances, just use this existing one
   public static final IsEqualityComparison it = new IsEqualityComparison();
 
-  private IsEqualityComparison() { }
+  private IsEqualityComparison() {}
 
   public boolean accept(Invariant inv) {
-    if (!(inv instanceof Comparison))
-      return false;
+    if (!(inv instanceof Comparison)) return false;
     double chance_conf = ((Comparison) inv).eq_confidence();
     return chance_conf > Invariant.dkconfig_confidence_limit;
   }

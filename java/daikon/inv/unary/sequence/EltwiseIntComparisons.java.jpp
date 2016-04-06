@@ -193,14 +193,14 @@ public class CLASSNAME
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     #if !defined(EQUAL) && defined(TYPELONG)
       if (!vis[0].type.baseIsIntegral())
-        return (false);
+        return false;
     #endif
 
-    return (true);
+    return true;
   }
 
   /** Instantiate the invariant on the specified slice **/

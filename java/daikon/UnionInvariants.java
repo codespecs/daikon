@@ -21,16 +21,18 @@ import plume.UtilMDE;
  * single inv file.)
  **/
 public final class UnionInvariants {
-  private UnionInvariants() { throw new Error("do not instantiate"); }
+  private UnionInvariants() {
+    throw new Error("do not instantiate");
+  }
 
   // Non-empty program points in the input files must be distinct.
   private static String usage =
-    UtilMDE.joinLines(
-      "Usage: java daikon.UnionInvariants [OPTION]... FILE.inv[.gz] [FILE.inv[.gz] ...]",
-      "  -h, --" + Daikon.help_SWITCH,
-      "      Display this usage message",
-      "  --" + Daikon.suppress_redundant_SWITCH,
-      "      Suppress display of logically redundant invariants.");
+      UtilMDE.joinLines(
+          "Usage: java daikon.UnionInvariants [OPTION]... FILE.inv[.gz] [FILE.inv[.gz] ...]",
+          "  -h, --" + Daikon.help_SWITCH,
+          "      Display this usage message",
+          "  --" + Daikon.suppress_redundant_SWITCH,
+          "      Suppress display of logically redundant invariants.");
 
   public static void main(final String[] args) throws Exception {
     try {
@@ -54,57 +56,62 @@ public final class UnionInvariants {
   public static void mainHelper(String[] args) throws Exception {
     File inv_file = null;
 
-    LongOpt[] longopts = new LongOpt[] {
-      new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-    };
+    LongOpt[] longopts =
+        new LongOpt[] {
+          new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        };
     Getopt g = new Getopt("daikon.UnionInvariants", args, "ho:", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
-      switch(c) {
-      case 0:
-        // got a long option
-        String option_name = longopts[g.getLongind()].getName();
-        if (Daikon.help_SWITCH.equals(option_name)) {
+      switch (c) {
+        case 0:
+          // got a long option
+          String option_name = longopts[g.getLongind()].getName();
+          if (Daikon.help_SWITCH.equals(option_name)) {
+            System.out.println(usage);
+            throw new Daikon.TerminationMessage();
+          } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
+            Daikon.suppress_redundant_invariants_with_simplify = true;
+          } else {
+            throw new Daikon.TerminationMessage("Unknown option received: " + option_name);
+          }
+          break;
+        case 'h':
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
-        } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
-          Daikon.suppress_redundant_invariants_with_simplify = true;
-        } else {
-          throw new Daikon.TerminationMessage("Unknown option received: " +
-                                     option_name);
-        }
-        break;
-      case 'h':
-        System.out.println(usage);
-        throw new Daikon.TerminationMessage();
-      case 'o':
+        case 'o':
           String inv_filename = Daikon.getOptarg(g);
 
           if (inv_file != null) {
-            throw new Daikon.TerminationMessage("multiple serialization output files supplied on command line: " + inv_file + " " + inv_filename);
+            throw new Daikon.TerminationMessage(
+                "multiple serialization output files supplied on command line: "
+                    + inv_file
+                    + " "
+                    + inv_filename);
           }
 
-        System.out.println("Inv filename = " + inv_filename);
-        inv_file = new File(inv_filename);
+          System.out.println("Inv filename = " + inv_filename);
+          inv_file = new File(inv_filename);
 
-        if (! UtilMDE.canCreateAndWrite(inv_file)) {
-            throw new Daikon.TerminationMessage("Cannot write to serialization output file " + inv_file);
-        }
-        break;
-        //
-      case '?':
-        break; // getopt() already printed an error
-      default:
-        System.out.println("getopt() returned " + c);
-        break;
+          if (!UtilMDE.canCreateAndWrite(inv_file)) {
+            throw new Daikon.TerminationMessage(
+                "Cannot write to serialization output file " + inv_file);
+          }
+          break;
+          //
+        case '?':
+          break; // getopt() already printed an error
+        default:
+          System.out.println("getopt() returned " + c);
+          break;
       }
     }
 
     // The index of the first non-option argument
     int fileIndex = g.getOptind();
     if ((inv_file == null) || (args.length - fileIndex == 0)) {
-        System.out.println(usage);
-        throw new Daikon.TerminationMessage("Wrong number of args");
+      System.out.println(usage);
+      throw new Daikon.TerminationMessage("Wrong number of args");
     }
 
     PptMap result = new PptMap();
@@ -112,9 +119,9 @@ public final class UnionInvariants {
       String filename = args[i];
       System.out.println("Reading " + filename + "...");
       PptMap ppt_map =
-        FileIO.read_serialized_pptmap(new File(filename),
-                                      true // use saved config
-                                      );
+          FileIO.read_serialized_pptmap(
+              new File(filename), true // use saved config
+              );
       union(result, ppt_map);
     }
 
@@ -146,13 +153,14 @@ public final class UnionInvariants {
   /**
    * Union multiple PptMaps into one.
    **/
-  public static void union(PptMap collector,  // mutated
-                           PptMap source      // unmodified (but aliased into)
-                           ) {
+  public static void union(
+      PptMap collector, // mutated
+      PptMap
+          source // unmodified (but aliased into)
+              ) {
     for (PptTopLevel ppt : source.pptIterable()) {
 
-      if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0))
-        continue;
+      if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) continue;
 
       if (collector.get(ppt.ppt_name) != null) {
         throw new RuntimeException("Cannot merge two non-empty ppts named " + ppt.name());
@@ -162,5 +170,4 @@ public final class UnionInvariants {
       collector.add(ppt);
     }
   }
-
 }

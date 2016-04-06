@@ -12,11 +12,11 @@ public class UnjustifiedFilter extends InvariantFilter {
    */
   public static boolean dkconfig_enabled = true;
 
-  public UnjustifiedFilter () {
+  public UnjustifiedFilter() {
     isOn = dkconfig_enabled;
   }
 
-  boolean shouldDiscardInvariant( Invariant invariant ) {
+  boolean shouldDiscardInvariant(Invariant invariant) {
     return !invariant.justified();
   }
 }
