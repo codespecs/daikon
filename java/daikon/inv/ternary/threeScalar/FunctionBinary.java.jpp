@@ -314,7 +314,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /**
-   * Apply the specified sample to the function, returning the result
+   * Apply the specified sample to the function, returning the result.
    * The caller is responsible for permuting the arguments.
    */
   public InvariantStatus check_ordered (PRIMITIVE result, PRIMITIVE arg1,
@@ -330,7 +330,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /**
-   * Apply the specified sample to the function, returning the result
+   * Apply the specified sample to the function, returning the result.
    * The caller is responsible for permuting the arguments.
    */
   public InvariantStatus add_ordered (PRIMITIVE result, PRIMITIVE arg1,
