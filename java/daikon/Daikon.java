@@ -64,6 +64,7 @@ import daikon.suppress.NIS.SuppressionProcessor;
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
 import typequals.*;
 */
 
@@ -918,7 +919,9 @@ public final class Daikon {
                         + ppt_regexp_SWITCH
                         + ": not in the format required by Class.getName(String)");
               }
-              userDefinedInvariants.add(user_defined_invariant_string);
+              @SuppressWarnings("signature") // Regex match guarantees the formate of Class.getName()
+              /*@ClassGetName*/ String cname = user_defined_invariant_string;
+              userDefinedInvariants.add(cname);
             } catch (Exception e) {
               throw new Daikon.TerminationMessage(
                   "Problem parsing " + user_defined_invariant_SWITCH + " option: " + e);
@@ -1169,7 +1172,7 @@ public final class Daikon {
    * --user_defined_invariant option.  A list of class names in the format
    * required by {@link Class#forName(String)}.
    */
-  private static List<String> userDefinedInvariants = new ArrayList<String>();
+  private static List</*@ClassGetName*/ String> userDefinedInvariants = new ArrayList</*@ClassGetName*/ String>();
 
   /**
    * Creates the list of prototype invariants for all Daikon invariants.
