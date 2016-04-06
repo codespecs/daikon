@@ -2180,18 +2180,9 @@ Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installa
 @c @end example
 
 @item
-Environment variable @env{BIBDIR} must be set to a clone of
-@uref{https://github.com/mernst/plume-bib}.
-You can create this clone with the commands:
+Optionally, set environment variable @env{BIBDIR} to a clone of
+@uref{https://github.com/mernst/plume-bib.git}.
 
-@example
-cd
-git clone https://github.com/mernst/plume-bib.git bib
-export BIBDIR=`pwd`/bib
-@end example
-
-Alternatively, you may set the environment variable @env{BIBDIR} to the location
-of the bibliography you wish to use.
 
 @end itemize
 
@@ -2684,7 +2675,8 @@ not in the drop directories. This means:
 Switch back to your original Bash shell.
 @item
 Correct the file. (Most likely located beneath either
-@file{$DAIKONDIR/doc} or @file{$BIBDIR}.)
+@file{$DAIKONDIR/doc} or
+@file{$BIBDIR} (@file{~/bib/} if @file{$BIBDIR} is not set).)
 @item
 Commit the changes.
 @item
