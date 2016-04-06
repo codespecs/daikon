@@ -38,7 +38,11 @@ public class KillerInstruction implements IInstruction {
   }
 
   public boolean kills(String var) {
-    for (X86Instruction i : instructions) if (i.kills(var)) return true;
+    for (X86Instruction i : instructions) {
+      if (i.kills(var)) {
+        return true;
+      }
+    }
     return false;
   }
 

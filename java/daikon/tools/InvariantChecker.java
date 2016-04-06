@@ -209,12 +209,20 @@ public class InvariantChecker {
       throw new Daikon.TerminationMessage(
           "The directory " + dir_file + " is empty" + Global.lineSep + usage);
     ArrayList<File> invariants = new ArrayList<File>();
-    for (File f : filesInDir) if (f.toString().indexOf(".inv") != -1) invariants.add(f);
+    for (File f : filesInDir) {
+      if (f.toString().indexOf(".inv") != -1) {
+        invariants.add(f);
+      }
+    }
     if (invariants.size() == 0)
       throw new Daikon.TerminationMessage(
           "Did not find any invariant files in the directory " + dir_file + Global.lineSep + usage);
     ArrayList<File> dtraces = new ArrayList<File>();
-    for (File f : filesInDir) if (f.toString().indexOf(".dtrace") != -1) dtraces.add(f);
+    for (File f : filesInDir) {
+      if (f.toString().indexOf(".dtrace") != -1) {
+        dtraces.add(f);
+      }
+    }
     if (dtraces.size() == 0)
       throw new Daikon.TerminationMessage(
           "Did not find any dtrace files in the directory " + dir_file + Global.lineSep + usage);

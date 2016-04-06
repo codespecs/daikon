@@ -813,8 +813,10 @@ public final class FeatureExtractor {
         } else if (args[i].equals("-i")) {
           inputs.add(args[++i]);
         } else if (args[i].equals("-o")) {
-          if (output == null) output = args[++i];
-          else throw new IOException("Multiple output files not allowed");
+          if (output != null) {
+            throw new IOException("Multiple output files not allowed");
+          }
+          output = args[++i];
         } else {
           throw new IOException("Invalid argument: " + args[i]);
         }

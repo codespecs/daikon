@@ -92,7 +92,11 @@ public class NISuppressee {
   public InvariantStatus check(ValueTuple vt, VarInfo[] vis) {
 
     // Nothing to check if any variable is missing
-    for (int i = 0; i < vis.length; i++) if (vis[i].isMissing(vt)) return InvariantStatus.NO_CHANGE;
+    for (int i = 0; i < vis.length; i++) {
+      if (vis[i].isMissing(vt)) {
+        return InvariantStatus.NO_CHANGE;
+      }
+    }
 
     if (var_count == 3) {
       TernaryInvariant ternary_inv = (TernaryInvariant) sample_inv;

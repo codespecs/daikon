@@ -430,7 +430,11 @@ public class PptTopLevel extends Ppt {
   // Appears to be used only in the memory monitor.
   public int num_array_vars() {
     int num_arrays = 0;
-    for (VarInfo vi : var_infos) if (vi.rep_type.isArray()) num_arrays++;
+    for (VarInfo vi : var_infos) {
+      if (vi.rep_type.isArray()) {
+        num_arrays++;
+      }
+    }
     return num_arrays;
   }
 

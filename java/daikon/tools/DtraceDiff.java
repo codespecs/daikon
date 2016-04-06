@@ -372,7 +372,11 @@ public class DtraceDiff {
         long[] v1 = (long[]) val1;
         long[] v2 = (long[]) val2;
         if (v1.length != v2.length) return false;
-        for (int i = 0; i < v1.length; i++) if (v1[i] != v2[i]) return false;
+        for (int i = 0; i < v1.length; i++) {
+          if (v1[i] != v2[i]) {
+            return false;
+          }
+        }
         return true;
       } else if (type.baseIsFloat()) {
         double[] v1 = (double[]) val1;

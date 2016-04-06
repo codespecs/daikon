@@ -1818,12 +1818,18 @@ public final class DCRuntime {
       if (!dv.declShouldPrint()) continue;
       // System.out.printf ("      processing dv %s [%s]%n", dv,
       //                    dv.getTypeName());
-      if (dv.isHashcode()) hashcode_var_cnt++;
-      else if (dv.isHashcodeArray()) hashcode_arr_cnt++;
-      else primitive_var_cnt++;
-      if (dv.getName().contains(".toString")) tostring_cnt++;
-      else if (dv.getName().contains(DaikonVariableInfo.class_suffix)) class_var_cnt++;
-      else if (dv instanceof FieldInfo) {
+      if (dv.isHashcode()) {
+        hashcode_var_cnt++;
+      } else if (dv.isHashcodeArray()) {
+        hashcode_arr_cnt++;
+      } else {
+        primitive_var_cnt++;
+      }
+      if (dv.getName().contains(".toString")) {
+        tostring_cnt++;
+      } else if (dv.getName().contains(DaikonVariableInfo.class_suffix)) {
+        class_var_cnt++;
+      } else if (dv instanceof FieldInfo) {
         Field field = ((FieldInfo) dv).getField();
         int modifiers = field.getModifiers();
         if (field.isEnumConstant()) enum_cnt++;
@@ -2054,8 +2060,9 @@ public final class DCRuntime {
 
     List<DVSet> l = get_comparable(mi.traversalEnter);
     ps.printf("Variable sets for %s enter%n", clean_decl_name(mi.toString()));
-    if (l == null) ps.printf("  not called%n");
-    else {
+    if (l == null) {
+      ps.printf("  not called%n");
+    } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
@@ -2066,8 +2073,9 @@ public final class DCRuntime {
 
     l = get_comparable(mi.traversalExit);
     ps.printf("Variable sets for %s exit%n", clean_decl_name(mi.toString()));
-    if (l == null) ps.printf("  not called%n");
-    else {
+    if (l == null) {
+      ps.printf("  not called%n");
+    } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
@@ -2089,8 +2097,9 @@ public final class DCRuntime {
 
     List<DVSet> l = get_comparable(mi.traversalEnter);
     ps.printf("Variable sets for %s enter%n", clean_decl_name(mi.toString()));
-    if (l == null) ps.printf("  not called%n");
-    else {
+    if (l == null) {
+      ps.printf("  not called%n");
+    } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
         if (set.get(0) instanceof FieldInfo) if (((FieldInfo) (set.get(0))).isPrimitive()) continue;
@@ -2104,8 +2113,9 @@ public final class DCRuntime {
 
     l = get_comparable(mi.traversalExit);
     ps.printf("Variable sets for %s exit%n", clean_decl_name(mi.toString()));
-    if (l == null) ps.printf("  not called%n");
-    else {
+    if (l == null) {
+      ps.printf("  not called%n");
+    } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
         if (set.get(0) instanceof FieldInfo) if (((FieldInfo) (set.get(0))).isPrimitive()) continue;
@@ -2122,8 +2132,9 @@ public final class DCRuntime {
     List<DVSet> l = get_comparable(mi.traversalEnter);
     Map<DaikonVariableInfo, DVSet> t = get_comparable_traced(mi.traversalEnter);
     ps.printf("DynComp Traced Tree for %s enter%n", clean_decl_name(mi.toString()));
-    if (t == null) ps.printf("  not called%n");
-    else {
+    if (t == null) {
+      ps.printf("  not called%n");
+    } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
         print_tree(ps, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
@@ -2135,8 +2146,9 @@ public final class DCRuntime {
     l = get_comparable(mi.traversalExit);
     t = get_comparable_traced(mi.traversalExit);
     ps.printf("DynComp Traced Tree for %s exit%n", clean_decl_name(mi.toString()));
-    if (t == null) ps.printf("  not called%n");
-    else {
+    if (t == null) {
+      ps.printf("  not called%n");
+    } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) continue;
         print_tree(ps, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
@@ -2550,8 +2562,9 @@ public final class DCRuntime {
    * superclasses
    */
   public static int num_prim_fields(Class<?> clazz) {
-    if (clazz == Object.class) return 0;
-    else {
+    if (clazz == Object.class) {
+      return 0;
+    } else {
       int field_cnt = num_prim_fields(clazz.getSuperclass());
       for (Field f : clazz.getDeclaredFields()) {
         if (f.getType().isPrimitive()) field_cnt++;
@@ -2811,8 +2824,9 @@ public final class DCRuntime {
    */
   private static String obj_str(Object obj) {
 
-    if (obj == null) return ("null");
-    else {
+    if (obj == null) {
+      return ("null");
+    } else {
       String tostring = obj.toString();
       String default_tostring =
           String.format("%s@%x", obj.getClass().getName(), System.identityHashCode(obj));

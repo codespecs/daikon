@@ -3815,8 +3815,11 @@ class DCInstrument {
       if (is_category2(stack.peek(1))) {
         throw new Error("not supposed to happen " + stack_contents(stack, 3));
       } else if (is_category2(stack.peek(2))) {
-        if (is_primitive(stack.peek(1))) op = "dup2_x1";
-        else op = "dup_x1";
+        if (is_primitive(stack.peek(1))) {
+          op = "dup2_x1";
+        } else {
+          op = "dup_x1";
+        }
       } else if (is_primitive(stack.peek(1))) {
         if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup2_x2";
         else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup2_x1";
@@ -3832,8 +3835,11 @@ class DCInstrument {
       if (is_category2(stack.peek(1))) {
         throw new Error("not supposed to happen " + stack_contents(stack, 3));
       } else if (is_category2(stack.peek(2))) {
-        if (is_primitive(stack.peek(1))) op = "dup_x1";
-        else op = null; // nothing to dup
+        if (is_primitive(stack.peek(1))) {
+          op = "dup_x1";
+        } else {
+          op = null; // nothing to dup
+        }
       } else if (is_primitive(stack.peek(1))) {
         if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup_x2";
         else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup_x1";
@@ -3866,8 +3872,9 @@ class DCInstrument {
    */
   InstructionList pop2_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (is_category2(top)) return discard_tag_code(inst, 1);
-    else {
+    if (is_category2(top)) {
+      return discard_tag_code(inst, 1);
+    } else {
       int cnt = 0;
       if (is_primitive(top)) cnt++;
       if (is_primitive(stack.peek(1))) cnt++;
