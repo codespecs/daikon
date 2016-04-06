@@ -729,3 +729,9 @@ ifndef NONETWORK
 		(cd plume-lib; git pull -q ${GIT_OPTIONS}) ; fi
 endif
 
+update-plume-jar: plume-lib-update
+ifndef CHECKERFRAMEWORK
+	$(error CHECKERFRAMEWORK is not set)
+endif
+	make -D plume-lib/java clean jar verify-plume-jar-classfile-version
+	\cp -pf plume-lib/java/plume.jar java/lib/
