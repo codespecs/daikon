@@ -2134,7 +2134,6 @@ Each of the steps below assumes that you are using the Bash shell.
 * Distribution setup instructions::
 * Updating dependencies::
 * The day before the release::
-* Verify that Daikon passes its tests::
 * Distribution steps::
 @end menu
 
@@ -2379,10 +2378,16 @@ that links can be fixed the day before the release or at least very early
 in the process.
 
 
-@node    Verify that Daikon passes its tests
-@section Verify that Daikon passes its tests
+@node    Distribution steps
+@section Steps for making the distribution
 
-First, verify that Daikon passes its tests, under both JDK 7 and JDK 8.
+Use JDK@tie{}7 for the release process.
+
+@enumerate
+
+@need 1000
+@item
+Verify that Daikon passes its tests, under both JDK 7 and JDK 8.
 
 For Jenkins, visit each of the following URLs and verify that the job is green:
 @* @url{http://tern.cs.washington.edu:8080/job/daikon/}
@@ -2427,35 +2432,6 @@ changes the day before to permit the continuous integration jobs to run
 overnight.
 
 
-
-@node    Distribution steps
-@section Steps for making the distribution
-
-
-
-Up to this point, we have been using
-JDK@tie{}7 --- and our release version will be built with it as well. However, we
-also need to ensure that our system runs on JDK@tie{}8. We do this now to
-reduce the risk of accidentally releasing any JDK@tie{}8 built components.
-
-This means you will need to run the next four steps in a separate shell
-with @command{export JAVA_HOME=/usr/lib/jvm/java}.
-
-@itemize
-@item start a fresh copy of your Bash shell
-@item set @env{DAIKONDIR} as you would normally
-@item @command{export JAVA_HOME=/usr/lib/jvm/java}.
-@item @command{source $DAIKONDIR/scripts/daikon.bashrc}
-@end itemize
-
-@strong{Caution:} Any problems encountered in the next 4 steps
-need to be corrected immediately and the release process restarted with
-step 1 below.
-
-
-@enumerate
-
-@need 1000
 @item
 Do a very clean rebuild of everything.
 
@@ -2470,138 +2446,12 @@ make rebuild-everything
 @c Time on godwit as of 11/27/2014
 [Time: 20 min]
 
-
-@need 1000
-@item
-Run the Nullness Checker.  This is to verify that the Checker Framework
-Java compiler was correctly used to build Daikon.  There should be no
-errors output.
-
-@example
-make -C $DAIKONDIR/java check-nullness
-@end example
-
-@c Time on godwit as of 11/27/2014
-[Time: 30 min]
-
-@need 1000
-@item
-Run the Daikon regression tests.
-The last line printed should be "All tests succeeded."
-
-@c do not need to clean due to very-clean in step one
-@example
-make -C $DAIKONDIR/tests diffs
-@end example
-
-@c Time on godwit as of 11/27/2014
-@c [Time: 25 min]
-@c Time has increased significantly with additon of
-@c more tests.  Time below is on buffalo as of 12/16/2015
-@c A clock synchronization problem on my shared file server
-@c was causing make to rebuild too much.  Fixed 1/8/2016.
-[Time: 59 min]
-
-
-@need 1000
-@item
-Run the Kvasir regression tests.
-The last line printed should be ``All tests succeeded.'',
-indicating that there are no diff files marked FAILED.
-
-@c do not need to clean-all due to very-clean in step one
-@example
-make -C $DAIKONDIR/tests/kvasir-tests regression-tests
-@end example
-
-@c Time on godwit as of 11/27/2014
-@c [Time: 20 min]
-@c Time on buffalo as of 12/16/2015
-[Time: 23 min]
-
-
-@need 1000
-@item
-Upon successful completion of the first three steps, you should exit
-your JDK@tie{}8 based Bash shell and return to your JDK@tie{}7 based
-shell.  The remainder of the distribution process will use JDK@tie{}7.
-
-@strong{Caution:} Any problems encountered in the next 7 steps
-need to be corrected immediately and the release process restarted with
-step 1 above (and going back to JDK@tie{}8).
-
-
-@need 1000
-@item
-Do a very clean rebuild of everything.
-
-@example
-make very-clean
-make rebuild-everything
-@end example
-
-@c Time on buffalo as of 12/16/2015
-@c [Time: 18 min]
-@c buffalo has twice the memory of godwit.
-@c Time on godwit as of 11/27/2014
-[Time: 20 min]
-
-
-@need 1000
-@item
-Run the Nullness Checker.  This is to verify that the Checker Framework
-Java compiler was correctly used to build Daikon.  There should be no
-errors output.
-
-@example
-make -C $DAIKONDIR/java check-nullness
-@end example
-
-@c Time on buffalo as of 12/16/2015
-@c [Time: 25 min]
-@c Time on godwit as of 11/27/2014
-[Time: 30 min]
-
-
-@need 1000
-@item
-Run the Daikon regression tests.
-The last line printed should be "All tests succeeded."
-
-@c do not need to clean due to very-clean in step one
-@example
-make -C $DAIKONDIR/tests diffs
-@end example
-
-@c Time on godwit as of 11/27/2014
-@c [Time: 25 min]
-@c Time has increased significantly with additon of
-@c more tests.  Time below is on buffalo as of 12/16/2015
-@c A clock synchronization problem on my shared file server
-@c was causing make to rebuild too much.  Fixed 1/8/2016.
-[Time: 59 min]
-
-
-@need 1000
-@item
-Run the Kvasir regression tests.
-The last line printed should be ``All tests succeeded.'',
-indicating that there are no diff files marked FAILED.
-
-@c do not need to clean-all due to very-clean in step one
-@example
-make -C $DAIKONDIR/tests/kvasir-tests regression-tests
-@end example
-
-@c Time on godwit as of 11/27/2014
-@c [Time: 20 min]
-@c Time on buffalo as of 12/16/2015
-[Time: 23 min]
 
 
 @need 1000
 @item
 Run the Java parser tests.
+[TODO: This should not be a separate step.  It should be integrated into the normal Daikon tests, and the make command should fail if any diff comparisons are not identical.]
 
 @example
 cd $DAIKONDIR/tests/parser-tests
@@ -2617,7 +2467,7 @@ Success is indicated by each of the diff comparisons being identical.
 @item
 Once you have successfully reached this point, you are ready to make a release
 candidate and begin testing it.
-The following command will verify that doc/CHANGES is up-to-date and then list
+The following command will verify that @file{doc/CHANGES} is up-to-date and then list
 any uncommitted files.
 
 @example
@@ -2636,6 +2486,7 @@ nothing to commit (use -u to show untracked files)
 @noindent
 If the command output lists any files, they need to be
 committed to the repository and pushed now.
+[TODO:  In that case, does one need to start all over, first waiting 
 
 [Time: moments]
 
@@ -2757,10 +2608,9 @@ Repeat this step to verify your corrections.
 
 @need 1000
 @item
-Test the distribution on a 64-bit machine.
+Test the staged distribution on a 64-bit Fedora machine.
 Since the machine you are using to build the release is probably
-such a machine, you may simply run the command below. The last step in this
-test runs Chicory/Daikon on the @file{StackAr} example.  Success is indicated
+such a machine, you may simply run the command below.  Success is indicated
 by invariant output being written to the screen.
 
 @example
@@ -2773,29 +2623,23 @@ make test-staged-dist
 
 @need 1000
 @item
-Test the distribution on a 64-bit, Ubuntu based system.  The 64-bit test
-run above is normally run on one of our local machines; therefore, it was
-probably done on a Fedora (Red Hat) based system.
-Ubuntu is another distributor of Linux based systems and there have been
-some differences with Fedora in the past.  This test is
-probably best done on a virtual machine running a current version. It is
-important to regularly check to see if a new major release of Ubuntu is
-available and upgrade your test bed as necessary.
-
-The instructions below download the staged release archive, extract the files, set
-the appropriate environment variables and run the top level Makefile.
-Finally, a short verification test is run;
-success is indicated by invariant output being written to the screen.
+Test the distribution on Ubuntu and MacOSX machines.
+Run the following commands
 
 @smallexample
-export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64  # or java-8 as appropriate
-mkdir -p ~/tmp
-cd ~/tmp
-curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
-sh test-distribution.sh
+$pl/bin/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token`
+$pl/bin/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token`
 @end smallexample
 
-[Time: 20 min]
+(where @file{~/private/.travis-access-token} contains the output of
+@command{travis login && travis token}), and then wait until the following
+two URLs indicate success:
+@* @url{https://travis-ci.org/codespecs/test-daikon-staging}
+@* @url{https://travis-ci.org/codespecs/test-daikon-staging-macosx}
+
+If there is a problem, fix it and start over.
+
+[Time: 15 min]
 
 
 @need 1000
@@ -2819,28 +2663,6 @@ sh test-distribution.sh
 @end smallexample
 
 [Time: 10 min]
-
-
-@need 1000
-@item
-Test the distribution on a MacOSX machine
-with the development tools installed.
-
-The output from the make command should show a number of lines beginning with
-"Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
-Kvasir was not built because this is not a Linux platform.  Then execution will
-continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
-Success is indicated by invariant output being written to the screen.
-
-@smallexample
-export JAVA_HOME=$(/usr/libexec/java_home)
-mkdir -p ~/tmp
-cd ~/tmp
-curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
-sh test-distribution.sh
-@end smallexample
-
-[Time: 4 min]
 
 
 @need 1000
