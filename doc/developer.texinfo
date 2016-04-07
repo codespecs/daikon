@@ -2788,18 +2788,11 @@ Finally, a short verification test is run;
 success is indicated by invariant output being written to the screen.
 
 @smallexample
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64  # or java-8 as appropriate
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
-rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-tar xzf daikon-$DAIKONVERSION.tar.gz
-cd daikon-$DAIKONVERSION
-export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64  # or java-8 as appropriate
-export DAIKONDIR=`pwd`
-source scripts/daikon.bashrc
-make distribution-check
+curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
+sh test-distribution.sh
 @end smallexample
 
 [Time: 20 min]
@@ -2818,20 +2811,11 @@ continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
 Success is indicated by invariant output being written to the screen.
 
 @smallexample
+export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.7.0_45"
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
-rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-tar xzf daikon-$DAIKONVERSION.tar.gz
-cd daikon-$DAIKONVERSION
-# Convert OSTYPE from a shell variable to a system environment variable.
-export OSTYPE
-export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.7.0_45"
-export DAIKONDIR=`pwd`
-source scripts/daikon.bashrc
-make distribution-check
+curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
+sh test-distribution.sh
 @end smallexample
 
 [Time: 10 min]
@@ -2849,21 +2833,11 @@ continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
 Success is indicated by invariant output being written to the screen.
 
 @smallexample
+export JAVA_HOME=$(/usr/libexec/java_home)
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`curl -s http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
-    | xargs echo -n`
-rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-curl -O http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-# or: wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-tar xzf daikon-$DAIKONVERSION.tar.gz
-cd daikon-$DAIKONVERSION
-# Convert OSTYPE from a shell variable to a system environment variable.
-export OSTYPE
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
-export DAIKONDIR=`pwd`
-source scripts/daikon.bashrc
-make distribution-check
+curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
+sh test-distribution.sh
 @end smallexample
 
 [Time: 4 min]
