@@ -5,6 +5,9 @@
 
 # Fail the whole script if any command fails
 set -e
+# Echo commands before executing them
+set -x
+
 
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
