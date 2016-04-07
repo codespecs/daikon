@@ -2133,6 +2133,8 @@ Each of the steps below assumes that you are using the Bash shell.
 * Directory layout requirements::
 * Distribution setup instructions::
 * Updating dependencies::
+* The day before the release::
+* Verify that Daikon passes its tests::
 * Distribution steps::
 @end menu
 
