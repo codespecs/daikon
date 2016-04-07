@@ -2100,8 +2100,7 @@ as you prepare for a release the current version number is probably odd.  It wil
 be updated as one of the steps in the release process.  After making the
 distribution, one of the final steps is to increment the version number again to
 prepare for subsequent development.  This system has the useful side effect
-of allowing the build and test process to be repeated to fix a problem (steps 1--7
-of @ref{Distribution steps} below)
+of allowing the build and test process to be repeated to fix a problem
 without having to worry about updating or resetting the version number.
 Another advantage is to reinforce, to people who are working from the
 version control repository, that they are not using the released version,
@@ -2242,16 +2241,6 @@ Make sure your Checker Framework repositories are up-to-date.
 @uref{http://types.cs.washington.edu/checker-framework/current/checker-framework-manual.html#build-source,Building from source}.)
 Make sure the @env{CHECKERFRAMEWORK} environment
 variable points to the location of your Checker Framework directory.
-
-[Time: moments]
-
-
-@item
-Update the bibliography.
-
-@example
-(cd $BIBDIR; git pull)
-@end example
 
 [Time: moments]
 
