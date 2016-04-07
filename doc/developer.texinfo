@@ -2287,7 +2287,8 @@ First, verify that Daikon passes its tests, under both JDK 7 and JDK 8.
 
 For Jenkins, visit each of the following URLs and verify that the job is green:
 @* @url{http://tern.cs.washington.edu:8080/job/daikon/}
-@* @url{http://tern.cs.washington.edu:8080/job/fjalar/}
+@c There is no Fjalar job on Jenkins.  We should add one.
+@c @* @url{http://tern.cs.washington.edu:8080/job/fjalar/}
 @* @url{http://tern.cs.washington.edu:8080/job/daikon-typecheck/}
 
 For Travis CI,
