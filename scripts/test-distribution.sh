@@ -9,18 +9,22 @@ set -e
 set -x
 
 
+# Use default URL if environment variable is not set by caller
+DAIKONBASEURL=${DAIKONBASEURL:-http://plse.cs.washington.edu/daikon}
+
+
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
 
 mkdir -p ~/tmp
 cd ~/tmp
 
-# DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION -O - | xargs echo -n`
-DAIKONVERSION=`curl --fail -s http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION | xargs echo -n`
+# DAIKONVERSION=`wget -q $DAIKONBASEURL/download/doc/VERSION -O - | xargs echo -n`
+DAIKONVERSION=`curl --fail -s $DAIKONBASEURL/download/doc/VERSION | xargs echo -n`
 
 rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-# wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-curl --fail -O http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
+# wget $DAIKONBASEURL/download/daikon-$DAIKONVERSION.tar.gz
+curl --fail -O $DAIKONBASEURL/download/daikon-$DAIKONVERSION.tar.gz
 
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
