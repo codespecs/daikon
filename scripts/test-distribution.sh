@@ -29,5 +29,6 @@ curl --fail -O $DAIKONBASEURL/download/daikon-$DAIKONVERSION.tar.gz
 tar xzf daikon-$DAIKONVERSION.tar.gz
 cd daikon-$DAIKONVERSION
 export DAIKONDIR=`pwd`
-source scripts/daikon.bashrc
+# Source the daikon.bashrc file
+. scripts/daikon.bashrc
 make distribution-check
