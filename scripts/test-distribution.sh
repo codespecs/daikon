@@ -9,7 +9,8 @@ set -e
 set -x
 
 
-# Use default URL if environment variable is not set by caller
+# Use default URL if environment variable is not set by caller.
+# Caller might do: DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
 DAIKONBASEURL=${DAIKONBASEURL:-http://plse.cs.washington.edu/daikon}
 
 
