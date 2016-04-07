@@ -2280,8 +2280,105 @@ newer versions of Valgrind into Fjalar'', which appears in the @file{fjalar}
 repository.
 
 
-@node    Distribution steps
-@section Steps for making the distribution
+@node    The day before the release
+@section The day before the release
+
+Do these steps the day before the release, so that tests have time to
+complete overnight.
+
+@itemize
+
+@need 1000
+@item
+Edit the @file{doc/CHANGES} file to indicate what has changed
+in this version.  A good way to determine what has changed is to diff
+the Texinfo source files in the @file{doc/} directory against the previous
+versions:
+
+@smallexample
+cd $DAIKONDIR/doc
+diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
+@end smallexample
+
+@need 1000
+Another good source of information are the repository logs since the
+last release:
+
+@smallexample
+cd $DAIKONDIR
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
+    -O - | xargs echo -n`
+git log v$DAIKONVERSION..HEAD
+@end smallexample
+
+@c TODO: How can this be done for Git?
+@c As we normally only tag the repository when we make a release, this can
+@c usually be simplified to:
+@c
+@c @example
+@c git log  -v -r "last(tagged())::"
+@c @end example
+
+In addition, you should run the same command in your Fjalar clone:
+
+@smallexample
+cd $DAIKONDIR/fjalar
+DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
+    -O - | xargs echo -n`
+git log v$DAIKONVERSION..HEAD
+@end smallexample
+
+When you have competed your updates, commit and push the changes.
+
+[Time: a few minutes]
+
+
+@need 1000
+@item
+Check the release documents for spelling errors.
+
+@example
+cd $DAIKONDIR/doc
+make spell-check
+@end example
+
+Any words that may be spelled incorrectly are output to standard out.
+
+@itemize
+
+@item
+If the word is misspelled, correct it in the source (@file{.texinfo}) file.
+
+@item
+If the word is spelled correctly and is a normal English word, add it to
+@file{daikon.dict}, keeping the list in alphabetical order.
+
+@item
+If the word is spelled correctly and is a proper name, such as a person's
+or company's name, then either add it to @file{daikon.dict} or
+write @code{@@nospellcheck} around it.
+
+@item
+If the word is technical information, such as part
+of a computer command or filename, then mark it with a Texinfo command;
+see ``Chapter 9: Marking Text,
+Words and Phrases'' of the
+GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, PDF},
+@uref{https://www.gnu.org/software/texinfo/manual/texinfo/texinfo.html#Marking-Text,, HTML}).
+
+@end itemize
+
+[Time: moments]
+
+@end itemize
+
+TODO: it would be good to build the staging release the day before, too, so
+that links can be fixed the day before the release or at least very early
+in the process.
+
+
+@node    Verify that Daikon passes its tests
+@section Verify that Daikon passes its tests
 
 First, verify that Daikon passes its tests, under both JDK 7 and JDK 8.
 
@@ -2323,6 +2420,11 @@ The delay to wait for this to happen is a reason that you should avoid
 making changes to Daikon on the release day.  Instead, you should make
 changes the day before to permit the continuous integration jobs to run
 overnight.
+
+
+
+@node    Distribution steps
+@section Steps for making the distribution
 
 
 
@@ -2502,89 +2604,6 @@ cd $DAIKONDIR/tests/parser-tests
 @end example
 
 Success is indicated by each of the diff comparisons being identical.
-
-[Time: moments]
-
-
-@need 1000
-@item
-Edit the @file{doc/CHANGES} file to indicate what has changed
-in this version.  A good way to determine what has changed is to diff
-the Texinfo source files in the @file{doc/} directory against the previous
-versions:
-
-@smallexample
-cd $DAIKONDIR/doc
-diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
-@end smallexample
-
-@need 1000
-Another good source of information are the repository logs since the
-last release:
-
-@smallexample
-cd $DAIKONDIR
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
-git log v$DAIKONVERSION..HEAD
-@end smallexample
-
-@c TODO: How can this be done for Git?
-@c As we normally only tag the repository when we make a release, this can
-@c usually be simplified to:
-@c
-@c @example
-@c git log  -v -r "last(tagged())::"
-@c @end example
-
-In addition, you should run the same command in your Fjalar clone:
-
-@smallexample
-cd $DAIKONDIR/fjalar
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
-git log v$DAIKONVERSION..HEAD
-@end smallexample
-
-When you have competed your updates, commit and push the changes.
-
-[Time: a few minutes]
-
-
-@need 1000
-@item
-Check the release documents for spelling errors.
-
-@example
-cd $DAIKONDIR/doc
-make spell-check
-@end example
-
-Any words that may be spelled incorrectly are output to standard out.
-
-@itemize
-
-@item
-If the word is misspelled, correct it in the source (@file{.texinfo}) file.
-
-@item
-If the word is spelled correctly and is a normal English word, add it to
-@file{daikon.dict}, keeping the list in alphabetical order.
-
-@item
-If the word is spelled correctly and is a proper name, such as a person's
-or company's name, then either add it to @file{daikon.dict} or
-write @code{@@nospellcheck} around it.
-
-@item
-If the word is technical information, such as part
-of a computer command or filename, then mark it with a Texinfo command;
-see ``Chapter 9: Marking Text,
-Words and Phrases'' of the
-GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, PDF},
-@uref{https://www.gnu.org/software/texinfo/manual/texinfo/texinfo.html#Marking-Text,, HTML}).
-
-@end itemize
 
 [Time: moments]
 
