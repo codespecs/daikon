@@ -2283,8 +2283,50 @@ repository.
 @node    Distribution steps
 @section Steps for making the distribution
 
-Up to this point (primarily the rebuilding of @file{plume.jar}), we have been using
-JDK@tie{}7 - and our release version will be built with it as well. However, we
+First, verify that Daikon passes its tests, under both JDK 7 and JDK 8.
+
+For Jenkins, visit each of the following URLs and verify that the job is green:
+@* @url{http://tern.cs.washington.edu:8080/job/daikon/}
+@* @url{http://tern.cs.washington.edu:8080/job/fjalar/}
+@* @url{http://tern.cs.washington.edu:8080/job/daikon-typecheck/}
+
+For Travis CI,
+all of the following jobs should be green:
+@* @url{https://travis-ci.org/codespecs/daikon}
+@* @url{https://travis-ci.org/codespecs/fjalar}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck-formatter}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck-interning}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck-nullness}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck-regex}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck-signature}
+
+@c I can't figure out how to insert literal HTML, which would show the job
+@c status without requiring the user to click.
+@c @inlinefmtifelse{html, all of the following icons should be green:, see the
+@c HTML version of this manual for a list of icons that must be green.}
+@c @ifhtml
+@c <img src="https://travis-ci.org/codespecs/daikon.svg?branch=master" alt="Travis CI status for codespecs/daikon"/>
+@c <img src="https://travis-ci.org/codespecs/fjalar.svg?branch=master" alt="Travis CI status for codespecs/fjalar"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck-formatter.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-formatter"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck-interning.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-interning"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck-nullness.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-nullness"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck-regex.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-regex"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck-signature.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-signature"/>
+@c @end ifhtml
+
+If any of the jobs is not passing, then correct the problem and wait for
+the jobs to complete and pass.
+The delay to wait for this to happen is a reason that you should avoid
+making changes to Daikon on the release day.  Instead, you should make
+changes the day before to permit the continuous integration jobs to run
+overnight.
+
+
+
+Up to this point, we have been using
+JDK@tie{}7 --- and our release version will be built with it as well. However, we
 also need to ensure that our system runs on JDK@tie{}8. We do this now to
 reduce the risk of accidentally releasing any JDK@tie{}8 built components.
 
