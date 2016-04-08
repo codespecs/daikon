@@ -309,8 +309,6 @@ nightly-test:
 	$(MAKE) javadoc doc-all
 	$(MAKE) dyncomp-jdk
 	$(MAKE) junit test
-# TODO: Ensure that this halts if any test fails.
-	(cd tests/parser-tests && ./run-all)
 
 # For systems such as Ubuntu 12.04 where makeinfo does not take the --pdf
 # command-line option, don't build the PDF manual.
@@ -319,7 +317,6 @@ nightly-test-except-doc-pdf:
 	$(MAKE) javadoc doc-all-except-pdf
 	$(MAKE) dyncomp-jdk
 	$(MAKE) junit test
-	(cd tests/parser-tests && ./run-all)
 
 ### Tags
 

@@ -26,10 +26,10 @@ help-recurse-list:
 	@echo ""
 
 ifeq (x86_64,$(shell uname -m))
-all diffs: txt-diff diff-tests chicory-tests merge-invariants-tests results
+all diffs: txt-diff diff-tests chicory-tests merge-invariants-tests parser-tests results
 else
 # the merge-invariants-tests take too long on 32 bits
-all diffs: txt-diff diff-tests chicory-tests results
+all diffs: txt-diff diff-tests chicory-tests parser-tests results
 endif
 
 quick: quick-txt-diff diff-tests results
@@ -41,7 +41,7 @@ esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff tx
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	$(MAKE) pat-daikon-tests-$@
 pat-daikon-tests-%:
-	$(MAKE) -C daikon-tests $*
+	$(MAKE) -C daikon-tests --jobs=4 -Orecurse $*
 
 list-targets:
 	$(MAKE) -C daikon-tests list-targets
@@ -58,11 +58,16 @@ merge-invariants-tests:
 	$(MAKE) -C merge-invariants-tests
 .PHONY: merge-invariants-tests
 
+parser-tests:
+	$(MAKE) -C parser-tests
+.PHONY: parser-tests
+
 clean:
 	$(MAKE) -C chicory-tests clean
 	$(MAKE) -C daikon-tests clean
 	$(MAKE) -C diff-tests clean
 	$(MAKE) -C merge-invariants-tests clean
+	$(MAKE) -C parser-tests clean
 
 very-clean: clean
 	$(MAKE) -C kvasir-tests clean-all
@@ -80,6 +85,7 @@ RESULTS_PATTERN :=    -name '*.txt-*.diff' \
                    -o -name '*.decls-DynComp.diff' \
                    -o -name '*.decls-DynComp-nojdk.diff' \
                    -o -name '*.txt-cset-nojdk.diff' \
+                   -o -name '*.java-parsed.diff' \
                    -o -name '*xcheck.diff' \
                    -o -name '*daikon.diff'
 results_header:

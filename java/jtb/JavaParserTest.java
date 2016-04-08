@@ -10,7 +10,7 @@ import jtb.ParseException;
 public class JavaParserTest {
 
    public static void main(String args[]) {
-      JavaParser parser;
+      JavaParser parser = null;
       Node root;
       if ( args.length == 0 ) {
          System.out.println("Java Parser Version 1.1:  Reading from standard input . . .");
@@ -23,14 +23,14 @@ public class JavaParserTest {
             }
             catch (java.io.FileNotFoundException e) {
                System.out.println("Java Parser Version 1.1:  File " + args[0]+ " not found.");
-               return;
+               System.exit(1);
             }
          } else {
             System.out.println("Java Parser Version 1.1:  Usage is one of:");
             System.out.println("         java JavaParser < inputfile");
             System.out.println("OR");
             System.out.println("         java JavaParser inputfile");
-            return;
+            System.exit(1);
          }
       }
       try {
@@ -60,6 +60,7 @@ public class JavaParserTest {
       catch (ParseException e) {
          System.out.println(e.getMessage());
          System.out.println("Java Parser Version 1.1:  Encountered errors during parse.");
+         System.exit(1);
       }
    }
 }
