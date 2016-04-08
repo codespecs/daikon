@@ -25,6 +25,13 @@ help-recurse-list:
 	@echo " which are ones that have been selected as useful tests.)"
 	@echo ""
 
+FIND_VERSION := $(shell make --version 2>&1 | head -1)
+ifeq (4.,$(findstring 4.,$(FIND_VERSION)))
+  MPARG := -Orecurse
+else
+  MPARG :=
+endif
+
 ifeq (x86_64,$(shell uname -m))
 all diffs: txt-diff diff-tests chicory-tests merge-invariants-tests parser-tests results
 else
@@ -41,7 +48,7 @@ esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff tx
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	$(MAKE) pat-daikon-tests-$@
 pat-daikon-tests-%:
-	$(MAKE) -C daikon-tests --jobs=4 $*
+	$(MAKE) -C daikon-tests --jobs=4 $(MPARG) $*
 
 list-targets:
 	$(MAKE) -C daikon-tests list-targets
