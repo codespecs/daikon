@@ -17,13 +17,13 @@ default: summary
 
 .PHONY: regression-tests
 regression-tests:
-	$(MAKE) --jobs=4 -Orecurse nightly-tests__diffs-w-daikon-if-working
+	$(MAKE) --jobs=4 nightly-tests__diffs-w-daikon-if-working
 	$(MAKE) nightly-summary-only-w-daikon
 	@$(MAKE) --no-print-directory results
 
 .PHONY: TEMP-regression-tests
 TEMP-regression-tests:
-	$(MAKE) --jobs=4 -Orecurse TEMP-nightly-tests__diffs-w-daikon-if-working
+	$(MAKE) --jobs=4 TEMP-nightly-tests__diffs-w-daikon-if-working
 	$(MAKE) TEMP-nightly-summary-only-w-daikon
 	@$(MAKE) --no-print-directory results
 
@@ -82,7 +82,7 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	$(MAKE) --jobs=4 -Orecurse nightly-tests__clean
+	$(MAKE) --jobs=4 nightly-tests__clean
 
 
 default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
