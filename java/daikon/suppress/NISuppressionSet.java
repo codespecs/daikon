@@ -451,7 +451,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     //  return;
     // }
 
-    for (int i = 0; i < vis.length; i++) assert !vis[i].missingOutOfBounds();
+    for (int i = 0; i < vis.length; i++) {
+      assert !vis[i].missingOutOfBounds();
+    }
 
     // Find the slice and create it if it is not already there.
     // Note that we must make a copy of vis.  vis is used to create each
@@ -544,7 +546,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     // Create a new suppression set with all of the suppressions.
     /*NNC:@MonotonicNonNull*/ NISuppression[] new_array =
         new NISuppression[suppression_set.length + new_suppressions.size()];
-    for (int i = 0; i < suppression_set.length; i++) new_array[i] = suppression_set[i];
+    for (int i = 0; i < suppression_set.length; i++) {
+      new_array[i] = suppression_set[i];
+    }
     for (int i = 0; i < new_suppressions.size(); i++)
       new_array[suppression_set.length + i] = new_suppressions.get(i);
     new_array = castNonNullDeep(new_array); // issue 154

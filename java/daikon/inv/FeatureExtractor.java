@@ -474,8 +474,12 @@ public final class FeatureExtractor {
       ArrayList<String> usefulStrings, ArrayList<String> nonusefulStrings, File outputFile)
       throws IOException {
     PrintStream output = new PrintStream(new FileOutputStream(outputFile));
-    for (String s : usefulStrings) output.println(s);
-    for (String s : nonusefulStrings) output.println(s);
+    for (String s : usefulStrings) {
+      output.println(s);
+    }
+    for (String s : nonusefulStrings) {
+      output.println(s);
+    }
     output.close();
   }
 
@@ -498,7 +502,9 @@ public final class FeatureExtractor {
     br.close();
 
     PrintStream ps = new PrintStream(new FileOutputStream(output));
-    for (String s : outputData) ps.println(s);
+    for (String s : outputData) {
+      ps.println(s);
+    }
     ps.close();
   }
 
@@ -512,7 +518,9 @@ public final class FeatureExtractor {
 
     PrintStream ps = new PrintStream(new FileOutputStream(output));
     ps.println(vectors.size());
-    for (String s : vectors) ps.println(s);
+    for (String s : vectors) {
+      ps.println(s);
+    }
     ps.close();
   }
 
@@ -892,10 +900,16 @@ public final class FeatureExtractor {
       int size = negrepeat * negvectors.size() + posrepeat * posvectors.size();
       if (type.equals("SVMfu")) ps.println(size);
       // now write the data
-      for (int repeat = 0; repeat < negrepeat; repeat++)
-        for (String s : negvectors) ps.println(s + " ");
-      for (int repeat = 0; repeat < posrepeat; repeat++)
-        for (String s : posvectors) ps.println(s + " ");
+      for (int repeat = 0; repeat < negrepeat; repeat++) {
+        for (String s : negvectors) {
+          ps.println(s + " ");
+        }
+      }
+      for (int repeat = 0; repeat < posrepeat; repeat++) {
+        for (String s : posvectors) {
+          ps.println(s + " ");
+        }
+      }
       ps.close();
 
       // Print a summary of positives and negatives to stdout.

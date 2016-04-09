@@ -130,7 +130,9 @@ public class SummaryInfo {
     } else {
       Class<?>[] all_args = method.getParameterTypes();
       Class<?>[] args = new Class<?>[all_args.length - 1];
-      for (int ii = 1; ii < all_args.length; ii++) args[ii - 1] = all_args[ii];
+      for (int ii = 1; ii < all_args.length; ii++) {
+        args[ii - 1] = all_args[ii];
+      }
       return args;
     }
   }
@@ -141,7 +143,9 @@ public class SummaryInfo {
    */
   /*@SideEffectFree*/ public String toString() {
     List<String> param_names = new ArrayList<String>();
-    for (Class<?> p : original_params()) param_names.add(p.getSimpleName());
+    for (Class<?> p : original_params()) {
+      param_names.add(p.getSimpleName());
+    }
 
     return String.format(
         "%s %s.%s(%s)",

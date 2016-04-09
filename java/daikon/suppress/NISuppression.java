@@ -572,7 +572,9 @@ public class NISuppression {
     for (int i = 0; i < ss.suppression_set.length; i++) {
       NISuppression s = ss.suppression_set[i];
       List<NISuppressor> sors = new ArrayList<NISuppressor>(old_sors);
-      for (int j = 0; j < s.suppressors.length; j++) sors.add(s.suppressors[j].translate(match));
+      for (int j = 0; j < s.suppressors.length; j++) {
+        sors.add(s.suppressors[j].translate(match));
+      }
       new_suppressions.add(new NISuppression(sors, suppressee));
     }
 

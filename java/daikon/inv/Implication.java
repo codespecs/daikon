@@ -151,14 +151,18 @@ public class Implication extends Joiner {
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     assert vis.length > 0;
-    for (int ii = 0; ii < vis.length; ii++) assert vis[ii] != null;
+    for (int ii = 0; ii < vis.length; ii++) {
+      assert vis[ii] != null;
+    }
     return orig_right.isObviousStatically(vis);
   }
 
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     assert vis.length > 0;
-    for (int ii = 0; ii < vis.length; ii++) assert vis[ii] != null;
+    for (int ii = 0; ii < vis.length; ii++) {
+      assert vis[ii] != null;
+    }
     DiscardInfo di = orig_right.isObviousDynamically(vis);
     if (di != null) {
       log("failed isObviousDynamically with vis = %s", VarInfo.arrayToString(vis));

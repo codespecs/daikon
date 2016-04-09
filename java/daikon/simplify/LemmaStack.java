@@ -251,7 +251,9 @@ public class LemmaStack {
         int end = Math.min(start + size - 1, invs.length - 1);
         if (!allTrue(excluded, start, end)
             && allExceptImply(invs, excluded, start, end, consequence)) {
-          for (int i = start; i <= end; i++) excluded[i] = true;
+          for (int i = start; i <= end; i++) {
+            excluded[i] = true;
+          }
         }
       }
     }

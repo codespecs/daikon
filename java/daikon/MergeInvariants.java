@@ -283,8 +283,11 @@ public final class MergeInvariants {
       // Splitters should not have any children to begin with
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
-        for (PptSplitter ppt_split : ppt.splitters)
-          for (PptTopLevel p : ppt_split.ppts) assert p.children.size() == 0 : p;
+        for (PptSplitter ppt_split : ppt.splitters) {
+          for (PptTopLevel p : ppt_split.ppts) {
+            assert p.children.size() == 0 : p;
+          }
+        }
       }
 
       // Loop over each of the input ppt maps, looking for the same ppt
@@ -334,8 +337,11 @@ public final class MergeInvariants {
       assert ppt.children.size() > 0 : ppt;
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
-        for (PptSplitter ppt_split : ppt.splitters)
-          for (PptTopLevel p : ppt_split.ppts) assert p.children.size() > 0 : p;
+        for (PptSplitter ppt_split : ppt.splitters) {
+          for (PptTopLevel p : ppt_split.ppts) {
+            assert p.children.size() > 0 : p;
+          }
+        }
       }
     }
 

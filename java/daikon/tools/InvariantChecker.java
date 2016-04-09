@@ -265,7 +265,9 @@ public class InvariantChecker {
     outputComma.add(commaLine);
 
     System.out.println();
-    for (String output : outputComma) System.out.println(output);
+    for (String output : outputComma) {
+      System.out.println(output);
+    }
   }
 
   private static String toPercentage(int portion, int total) {

@@ -26,7 +26,9 @@ public class InstructionUtils {
     // Stores the sets that make up the partition. Initially, the
     // partition consists of singleton sets, one per variable.
     DSForest partition = new DSForest();
-    for (String v : vars) partition.add(v);
+    for (String v : vars) {
+      partition.add(v);
+    }
 
     for (IInstruction instr : path) {
 

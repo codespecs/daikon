@@ -302,8 +302,12 @@ public class DynComp {
 
     cmdlist.add(String.format("-javaagent:%s=%s", premain, premain_args));
 
-    for (String target_arg : target_args) cmdlist.add(target_arg);
-    if (verbose) System.out.printf("\nExecuting target program: %s\n", args_to_string(cmdlist));
+    for (String target_arg : target_args) {
+      cmdlist.add(target_arg);
+    }
+    if (verbose) {
+      System.out.printf("\nExecuting target program: %s\n", args_to_string(cmdlist));
+    }
     String[] cmdline = cmdlist.toArray(new String[cmdlist.size()]);
 
     // Execute the command, sending all output to our streams
@@ -369,7 +373,9 @@ public class DynComp {
   /** convert a list of arguments into a command line string **/
   public String args_to_string(List<String> args) {
     String str = "";
-    for (String arg : args) str += arg + " ";
+    for (String arg : args) {
+      str += arg + " ";
+    }
     return (str.trim());
   }
 }

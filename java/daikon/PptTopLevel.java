@@ -421,10 +421,14 @@ public class PptTopLevel extends Ppt {
     // Fix variable pointers so that they refer to the variables
     // in this program point (they may have been cloned from a diff
     // program point)
-    for (VarInfo vi : var_infos) vi.update_after_moving_to_new_ppt();
+    for (VarInfo vi : var_infos) {
+      vi.update_after_moving_to_new_ppt();
+    }
 
     // Relate the variables to one another
-    for (VarInfo vi : var_infos) vi.relate_var();
+    for (VarInfo vi : var_infos) {
+      vi.relate_var();
+    }
   }
 
   // Appears to be used only in the memory monitor.
@@ -585,7 +589,9 @@ public class PptTopLevel extends Ppt {
     value_sets = new_value_sets;
 
     // Relate the variables to one another
-    for (VarInfo vi : vis) vi.relate_var();
+    for (VarInfo vi : vis) {
+      vi.relate_var();
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1494,7 +1500,9 @@ public class PptTopLevel extends Ppt {
     if (cslice != null) {
       System.out.println("Trying to add slice " + slice);
       System.out.println("but, slice " + cslice + " already exists");
-      for (Invariant inv : cslice.invs) System.out.println(" -- inv " + inv);
+      for (Invariant inv : cslice.invs) {
+        System.out.println(" -- inv " + inv);
+      }
       throw new Error();
     }
 
@@ -2847,7 +2855,9 @@ public class PptTopLevel extends Ppt {
     int backgroundMark = proverStack.markLevel();
 
     /*NNC:@MonotonicNonNull*/ InvariantLemma[] lemmas = new InvariantLemma[invs.length];
-    for (int i = 0; i < invs.length; i++) lemmas[i] = new InvariantLemma(invs[i]);
+    for (int i = 0; i < invs.length; i++) {
+      lemmas[i] = new InvariantLemma(invs[i]);
+    }
     lemmas = castNonNullDeep(lemmas); // issue 154
     boolean[] present = new boolean[lemmas.length];
     Arrays.fill(present, 0, present.length, true);
@@ -2875,7 +2885,9 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    for (int i = 0; i < invs.length; i++) proverStack.pushLemma(lemmas[i]);
+    for (int i = 0; i < invs.length; i++) {
+      proverStack.pushLemma(lemmas[i]);
+    }
 
     // If the background is necessarily false, we are in big trouble
     if (proverStack.checkForContradiction() == 'T') {
@@ -3227,7 +3239,9 @@ public class PptTopLevel extends Ppt {
     assert in_merge == false : this;
 
     // check variables for some possible errors
-    for (VarInfo vi : var_infos) vi.var_check();
+    for (VarInfo vi : var_infos) {
+      vi.var_check();
+    }
   }
 
   /**
@@ -3249,7 +3263,9 @@ public class PptTopLevel extends Ppt {
 
     // Calculate the indentation
     String indent_str = "";
-    for (int i = 0; i < indent; i++) indent_str += "--  ";
+    for (int i = 0; i < indent; i++) {
+      indent_str += "--  ";
+    }
 
     // Get the type of the parent relation
     String rel_type = "";
@@ -3275,7 +3291,9 @@ public class PptTopLevel extends Ppt {
       for (Iterator<PptSlice> i = views_iterator(); i.hasNext(); ) {
         PptSlice cslice = i.next();
         l.fine(indent_str + "++ " + cslice);
-        for (VarInfo vi : cslice.var_infos) assert vi.isCanonical() : vi;
+        for (VarInfo vi : cslice.var_infos) {
+          assert vi.isCanonical() : vi;
+        }
       }
     }
 
@@ -3843,7 +3861,9 @@ public class PptTopLevel extends Ppt {
   @SuppressWarnings("nullness") // reinitialization
   public void clean_for_merge() {
     equality_view = null;
-    for (int i = 0; i < var_infos.length; i++) var_infos[i].equalitySet = null;
+    for (int i = 0; i < var_infos.length; i++) {
+      var_infos[i].equalitySet = null;
+    }
     views = new HashMap<List<Integer>, PptSlice>();
     // parents = new ArrayList();
     // children = new ArrayList();
@@ -3869,7 +3889,9 @@ public class PptTopLevel extends Ppt {
       assert (slice.var_infos[0].canonicalRep() == slice.var_infos[1].canonicalRep()) : slice;
       slices_to_remove.add(slice);
     }
-    for (PptSlice slice : slices_to_remove) removeSlice(slice);
+    for (PptSlice slice : slices_to_remove) {
+      removeSlice(slice);
+    }
   }
 
   /**
@@ -3982,7 +4004,9 @@ public class PptTopLevel extends Ppt {
     }
 
     // Check results
-    for (int j = 0; j < vis1.length; j++) assert vis1[j] == vis2[permute[j]];
+    for (int j = 0; j < vis1.length; j++) {
+      assert vis1[j] == vis2[permute[j]];
+    }
 
     return (permute);
   }

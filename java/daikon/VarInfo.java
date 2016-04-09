@@ -495,7 +495,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     // Build the string name
     List<String> arg_names = new ArrayList<String>();
-    for (VarInfo vi : bases) arg_names.add(vi.name());
+    for (VarInfo vi : bases) {
+      arg_names.add(vi.name());
+    }
     str_name = String.format("%s(%s)", name, UtilMDE.join(arg_names, ",")).intern();
 
     // The parent ppt is the same as the base if each varinfo in the
@@ -1024,7 +1026,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       // Determine the result from VarInfoName
       Set<VarInfo> paramVars = ppt.getParamVars();
       Set<VarInfoName> param_names = new LinkedHashSet<VarInfoName>();
-      for (VarInfo vi : paramVars) param_names.add(vi.var_info_name); // vin ok
+      for (VarInfo vi : paramVars) {
+        param_names.add(vi.var_info_name); // vin ok
+      }
 
       String param = "";
       VarInfoName.Finder finder = new VarInfoName.Finder(param_names);
@@ -2552,7 +2556,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         result.addAll(base.get_all_enclosing_vars());
       }
     } else { // not derived
-      for (VarInfo vi = this.enclosing_var; vi != null; vi = vi.enclosing_var) result.add(vi);
+      for (VarInfo vi = this.enclosing_var; vi != null; vi = vi.enclosing_var) {
+        result.add(vi);
+      }
     }
     return result;
   }
@@ -3379,7 +3385,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         };
     } else {
       VarInfoName vin[] = new VarInfoName[vars.length];
-      for (int ii = 0; ii < vars.length; ii++) vin[ii] = vars[ii].var_info_name; // vin ok
+      for (int ii = 0; ii < vars.length; ii++) {
+        vin[ii] = vars[ii].var_info_name; // vin ok
+      }
       return VarInfoName.QuantHelper.format_esc(vin, elementwise);
     }
   }
@@ -3586,7 +3594,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (!FileIO.new_decl_format) {
       // Get the names for each variable.
       VarInfoName vin[] = new VarInfoName[vars.length];
-      for (int ii = 0; ii < vars.length; ii++) vin[ii] = vars[ii].var_info_name; // vin ok
+      for (int ii = 0; ii < vars.length; ii++) {
+        vin[ii] = vars[ii].var_info_name; // vin ok
+      }
 
       return VarInfoName.QuantHelper.format_simplify(
           vin,
@@ -4010,7 +4020,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public static VarInfo make_function(String function_name, VarInfo... vars) {
 
     VarInfoName[] vin = new VarInfoName[vars.length];
-    for (int ii = 0; ii < vars.length; ii++) vin[ii] = vars[ii].var_info_name;
+    for (int ii = 0; ii < vars.length; ii++) {
+      vin[ii] = vars[ii].var_info_name;
+    }
 
     VarInfo vi =
         new VarInfo(

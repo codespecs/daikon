@@ -316,7 +316,9 @@ public class Instrument implements ClassFileTransformer {
         InstructionTargeter[] targeters = ih.getTargeters();
         if (targeters != null) {
           // out.format ("targeters length = %d%n", targeters.length);
-          for (int j = 0; j < targeters.length; j++) targeters[j].updateTarget(ih, ih.getNext());
+          for (int j = 0; j < targeters.length; j++) {
+            targeters[j].updateTarget(ih, ih.getNext());
+          }
         }
         try {
           il.delete(ih);

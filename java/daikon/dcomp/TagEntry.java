@@ -134,7 +134,9 @@ class TagEntry extends WeakReference<Object> {
       } catch (IndexOutOfBoundsException e) {
       }
       String result = "";
-      for (String s : blarg2) result += s + " <- ";
+      for (String s : blarg2) {
+        result += s + " <- ";
+      }
       return result.substring(0, result.length() - 4);
     }
   }

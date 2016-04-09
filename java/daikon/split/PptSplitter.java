@@ -202,12 +202,16 @@ public class PptSplitter implements Serializable {
     @SuppressWarnings({"unchecked", "rawtypes"})
     List<Invariant> suppressed_invs[] =
         (ArrayList<Invariant>[]) new /*@Nullable*/ ArrayList[ppts.length];
-    for (int i = 0; i < ppts.length; i++) suppressed_invs[i] = NIS.create_suppressed_invs(ppts[i]);
+    for (int i = 0; i < ppts.length; i++) {
+      suppressed_invs[i] = NIS.create_suppressed_invs(ppts[i]);
+    }
 
     add_implications_pair();
 
     // Remove all of the NIS suppressed invariants that we previously created
-    for (int i = 0; i < ppts.length; i++) ppts[i].remove_invs(suppressed_invs[i]);
+    for (int i = 0; i < ppts.length; i++) {
+      ppts[i].remove_invs(suppressed_invs[i]);
+    }
   }
 
   /**
@@ -250,7 +254,9 @@ public class PptSplitter implements Serializable {
         System.out.printf("this: %s\n", this);
         System.out.printf("pchild: %s[%08X]\n", pchild, System.identityHashCode(pchild));
         System.out.printf("pchild.children: %s\n", pchild.children);
-        for (PptRelation rel : pchild.children) System.out.printf("  relation = %s\n", rel);
+        for (PptRelation rel : pchild.children) {
+          System.out.printf("  relation = %s\n", rel);
+        }
         System.out.printf("parent: %s\n", parent);
         throw new Error();
       }
@@ -326,7 +332,9 @@ public class PptSplitter implements Serializable {
             if (nc_slice.invs.size() != 1) {
               // Impossible: multiple invariants found
               System.out.println("Found " + nc_slice.invs.size() + " invs at " + nc_slice);
-              for (Invariant inv2 : nc_slice.invs) System.out.println(" -- inv = " + inv2);
+              for (Invariant inv2 : nc_slice.invs) {
+                System.out.println(" -- inv = " + inv2);
+              }
               for (VarInfo cvi : cvis_non_canonical)
                 System.out.println(" -- equality set = " + cvi.equalitySet.shortString());
               throw new Error("nc_slice.invs.size() == " + nc_slice.invs.size());

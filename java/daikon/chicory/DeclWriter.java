@@ -412,7 +412,9 @@ public class DeclWriter extends DaikonWriter {
     }
 
     // Look for and print any object-user relations
-    for (DaikonVariableInfo child : root) find_relations(cinfo, false, null, child, relations);
+    for (DaikonVariableInfo child : root) {
+      find_relations(cinfo, false, null, child, relations);
+    }
     for (VarRelation relation : relations)
       outFile.println(
           "parent " + relation.type + " " + relation.parent_ppt_name + " " + relation.id);

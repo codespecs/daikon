@@ -942,7 +942,9 @@ public final class DCRuntime {
 
       System.out.printf("this = '%s', mi = %s%n", obj_str(obj), methods.get(mi_index));
       System.out.printf("args: ");
-      for (Object arg : args) System.out.printf("%s ", obj_str(arg));
+      for (Object arg : args) {
+        System.out.printf("%s ", obj_str(arg));
+      }
       System.out.printf("%n");
     }
 
@@ -997,7 +999,9 @@ public final class DCRuntime {
 
       System.out.printf("this = '%s', mi = %s%n", obj_str(obj), methods.get(mi_index));
       System.out.printf("args: ");
-      for (Object arg : args) System.out.printf("%s ", obj_str(arg));
+      for (Object arg : args) {
+        System.out.printf("%s ", obj_str(arg));
+      }
       System.out.printf("%n");
     }
 
@@ -1062,7 +1066,9 @@ public final class DCRuntime {
 
       System.out.printf("this = '%s', mi = %s%n", obj_str(obj), methods.get(mi_index));
       System.out.printf("args: ");
-      for (Object arg : args) System.out.printf("%s ", obj_str(arg));
+      for (Object arg : args) {
+        System.out.printf("%s ", obj_str(arg));
+      }
       System.out.printf("%n");
       System.out.printf("ret_val = %s, exit_line_number= %d%n", ret_val, exit_line_number);
     }
@@ -1110,7 +1116,9 @@ public final class DCRuntime {
 
       System.out.printf("this = '%s', mi = %s%n", obj_str(obj), methods.get(mi_index));
       System.out.printf("args: ");
-      for (Object arg : args) System.out.printf("%s ", obj_str(arg));
+      for (Object arg : args) {
+        System.out.printf("%s ", obj_str(arg));
+      }
       System.out.printf("%n");
       System.out.printf("ret_val = %s, exit_line_number= %d%n", ret_val, exit_line_number);
     }
@@ -2179,7 +2187,9 @@ public final class DCRuntime {
       for (DaikonVariableInfo child : tree.get(node))
         if (child != node) print_tree(ps, tree, child, depth + 1);
     } else {
-      for (int i = 0; i < depth; i++) ps.printf("--");
+      for (int i = 0; i < depth; i++) {
+        ps.printf("--");
+      }
       ps.printf(
           "%s (%s)%n",
           skinyOutput(node, daikon.DynComp.abridged_vars),
@@ -2199,7 +2209,9 @@ public final class DCRuntime {
    */
   private static ArrayList<String> skinyOutput(DVSet l, boolean on) {
     ArrayList<String> o = new ArrayList<String>();
-    for (DaikonVariableInfo dvi : l) o.add(skinyOutput(dvi, on));
+    for (DaikonVariableInfo dvi : l) {
+      o.add(skinyOutput(dvi, on));
+    }
     return o;
   }
 
@@ -2300,7 +2312,9 @@ public final class DCRuntime {
     for (DaikonVariableInfo child : root) {
       if (child.declShouldPrint()) add_variable_traced(sets, child);
     }
-    for (DVSet dvs : sets.values()) dvs.sort();
+    for (DVSet dvs : sets.values()) {
+      dvs.sort();
+    }
 
     return sets;
   }
@@ -2317,7 +2331,9 @@ public final class DCRuntime {
     } catch (NullPointerException e) {
     }
 
-    for (DaikonVariableInfo child : dv) add_variable_traced(sets, child);
+    for (DaikonVariableInfo child : dv) {
+      add_variable_traced(sets, child);
+    }
   }
 
   /**
@@ -2435,7 +2451,9 @@ public final class DCRuntime {
     }
 
     // Process the children
-    for (DaikonVariableInfo child : dv) add_variable(sets, child);
+    for (DaikonVariableInfo child : dv) {
+      add_variable(sets, child);
+    }
   }
 
   /**

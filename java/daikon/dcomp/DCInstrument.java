@@ -809,7 +809,9 @@ class DCInstrument {
 
     /*@Pure*/ public int hashCode() {
       int code = name.hashCode();
-      for (Type arg : arg_types) code += arg.hashCode();
+      for (Type arg : arg_types) {
+        code += arg.hashCode();
+      }
       return code;
     }
   }
@@ -3670,7 +3672,9 @@ class DCInstrument {
     // Get an array of the type names
     Type[] arg_types = m.getArgumentTypes();
     String[] type_names = new String[arg_types.length];
-    for (int ii = 0; ii < arg_types.length; ii++) type_names[ii] = arg_types[ii].toString();
+    for (int ii = 0; ii < arg_types.length; ii++) {
+      type_names[ii] = arg_types[ii].toString();
+    }
 
     // Remove exceptions from the name
     String full_name = m.toString();
@@ -4001,7 +4005,9 @@ class DCInstrument {
   /** Convenience function to build an instruction list **/
   protected InstructionList build_il(Instruction... instructions) {
     InstructionList il = new InstructionList();
-    for (Instruction inst : instructions) append_inst(il, inst);
+    for (Instruction inst : instructions) {
+      append_inst(il, inst);
+    }
     return (il);
   }
 

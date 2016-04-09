@@ -621,7 +621,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     assert (assert_enabled = true);
     if (assert_enabled) {
       Match m = new Match(result);
-      for (int i = 1; i < invs.size(); i++) assert m.equals(new Match(invs.get(i)));
+      for (int i = 1; i < invs.size(); i++) {
+        assert m.equals(new Match(invs.get(i)));
+      }
     }
 
     return (result);

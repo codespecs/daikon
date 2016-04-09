@@ -954,18 +954,24 @@ public final class PrintInvariants {
         || (Daikon.output_format == OutputFormat.DBCJAVA)) {
       if (modified_vars.size() > 0) {
         out.print("      Modified variables:");
-        for (VarInfo vi : modified_vars) out.print(" " + (vi.old_var_name()));
+        for (VarInfo vi : modified_vars) {
+          out.print(" " + (vi.old_var_name()));
+        }
         out.println();
       }
       if (reassigned_parameters.size() > 0) {
         // out.print("      Reassigned parameters:");
         out.print("      Modified primitive arguments:");
-        for (VarInfo vi : reassigned_parameters) out.print(" " + vi.old_var_name());
+        for (VarInfo vi : reassigned_parameters) {
+          out.print(" " + vi.old_var_name());
+        }
         out.println();
       }
       if (unmodified_vars.size() > 0) {
         out.print("      Unmodified variables:");
-        for (VarInfo vi : unmodified_vars) out.print(" " + vi.old_var_name());
+        for (VarInfo vi : unmodified_vars) {
+          out.print(" " + vi.old_var_name());
+        }
         out.println();
       }
     }
@@ -1068,8 +1074,12 @@ public final class PrintInvariants {
         get_csharp_invariant_variables(inv, sortedVariables, true);
         get_csharp_invariant_variables(inv, variables, false);
 
-        for (String s : sortedVariables) sortedVars += s + " ";
-        for (String s : variables) vars += s + " ";
+        for (String s : sortedVariables) {
+          sortedVars += s + " ";
+        }
+        for (String s : variables) {
+          vars += s + " ";
+        }
 
         out.println(csharp);
 

@@ -159,7 +159,9 @@ public class InvariantDoclet {
     String prefix = "";
 
     //create the prefix string
-    for (int i = 0; i < indent; i++) prefix += "+";
+    for (int i = 0; i < indent; i++) {
+      prefix += "+";
+    }
 
     //put out this class
     String is_abstract = "";

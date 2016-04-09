@@ -246,7 +246,9 @@ public class Premain {
 
             for (String local : locals.keySet()) {
               dataflow_fp.printf("%s ", local);
-              for (String ct : locals.get(local)) dataflow_fp.printf("%s ", ct);
+              for (String ct : locals.get(local)) {
+                dataflow_fp.printf("%s ", ct);
+              }
               dataflow_fp.println();
             }
           }

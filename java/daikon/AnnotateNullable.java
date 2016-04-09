@@ -259,7 +259,9 @@ public class AnnotateNullable {
       @SuppressWarnings("nullness") // map: class_map has entry per classname
       /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get(classname);
       assert static_methods != null : classname;
-      for (PptTopLevel child : static_methods) process_method(child);
+      for (PptTopLevel child : static_methods) {
+        process_method(child);
+      }
     }
 
     // Process member (non-static) methods

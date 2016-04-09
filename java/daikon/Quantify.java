@@ -279,12 +279,16 @@ public class Quantify {
 
     // create empty result
     QuantifyReturn[] result = new QuantifyReturn[vars.length];
-    for (int ii = 0; ii < vars.length; ii++) result[ii] = new QuantifyReturn(vars[ii]);
+    for (int ii = 0; ii < vars.length; ii++) {
+      result[ii] = new QuantifyReturn(vars[ii]);
+    }
 
     // Determine all of the simple identifiers used by these variables
     Set<String> simples = new HashSet<String>();
     for (VarInfo vi : vars) {
-      for (String name : vi.get_all_simple_names()) simples.add(name);
+      for (String name : vi.get_all_simple_names()) {
+        simples.add(name);
+      }
     }
     // System.out.printf ("simple names = %s\n", simples);
 

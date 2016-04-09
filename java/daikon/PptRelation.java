@@ -529,7 +529,9 @@ public class PptRelation implements Serializable {
       // TODO: Is this "@Nullable" annotation correct?  (That is, can the
       // element value actually be null?)
       /*@Nullable*/ VarInfo[] child_vp_bases = new VarInfo[vp_bases.length];
-      for (int j = 0; j < vp_bases.length; j++) child_vp_bases[j] = rel.childVar(vp_bases[j]);
+      for (int j = 0; j < vp_bases.length; j++) {
+        child_vp_bases[j] = rel.childVar(vp_bases[j]);
+      }
 
       // Loop through the child (exit) looking for a matching derived variable
       for (VarInfo vc : child.var_infos) {

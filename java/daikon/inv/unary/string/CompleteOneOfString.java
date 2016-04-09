@@ -87,7 +87,9 @@ public final class CompleteOneOfString extends SingleString {
       if (vals.size() == 0) return var().name() + "has no values";
       StringBuilder out = new StringBuilder(vals.get(0).val.length() * vals.size());
       out.append(var().name() + " has values: ");
-      for (Info val : vals) out.append(String.format(" %s[%d]", val.val, val.cnt));
+      for (Info val : vals) {
+        out.append(String.format(" %s[%d]", val.val, val.cnt));
+      }
       return out.toString();
     } else return format_unimplemented(format);
   }

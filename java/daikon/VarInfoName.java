@@ -3163,7 +3163,9 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
      **/
     public static VarInfoName getFreeIndex(VarInfoName... vins) {
       Set<String> simples = new HashSet<String>();
-      for (VarInfoName vin : vins) simples.addAll(new SimpleNamesVisitor(vin).simples());
+      for (VarInfoName vin : vins) {
+        simples.addAll(new SimpleNamesVisitor(vin).simples());
+      }
       return new FreeVar(freshDistinctFrom(simples));
     }
 

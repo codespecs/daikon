@@ -117,7 +117,9 @@ public class DummyInvariant extends Invariant {
     // Find between 1 and 3 unique variables, to pick a slice to put
     // this in.
     HashSet<VarInfo> uniqVarsSet = new HashSet<VarInfo>();
-    for (int i = 0; i < vars.length; i++) uniqVarsSet.add(vars[i].canonicalRep());
+    for (int i = 0; i < vars.length; i++) {
+      uniqVarsSet.add(vars[i].canonicalRep());
+    }
     int sliceSize = uniqVarsSet.size();
     if (sliceSize > 3) sliceSize = 3;
     /*NNC:@MonotonicNonNull*/ VarInfo[] newVars = new VarInfo[sliceSize];

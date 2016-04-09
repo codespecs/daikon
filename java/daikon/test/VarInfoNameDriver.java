@@ -390,7 +390,9 @@ public class VarInfoNameDriver {
       assert args.length >= 4;
       String func = args[1];
       List<VarInfoName> function_vars = new Vector<VarInfoName>();
-      for (int x = 2; x < args.length; x++) function_vars.add(vars.get(args[x]));
+      for (int x = 2; x < args.length; x++) {
+        function_vars.add(vars.get(args[x]));
+      }
       VarInfoName result = VarInfoName.applyFunctionOfN(func, function_vars);
       vars.put(args[0], result);
       out.println(args[0] + " = " + result.name());

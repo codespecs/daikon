@@ -49,7 +49,9 @@ public final class LogHelper {
 
     Logger root = Logger.getLogger("");
     Handler[] handlers = root.getHandlers();
-    for (Handler handler : handlers) root.removeHandler(handler);
+    for (Handler handler : handlers) {
+      root.removeHandler(handler);
+    }
     root.addHandler(app);
     root.setLevel(l);
     allLoggers.add(root);

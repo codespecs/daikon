@@ -511,10 +511,14 @@ public final class Debug {
       for (int i = 0; i < numvars; i++) {
         VarInfo v = vis[i];
         vars += v.name();
-        if (ourvars[i] != null) vars += " {" + ourvars[i] + "}";
+        if (ourvars[i] != null) {
+          vars += " {" + ourvars[i] + "}";
+        }
         vars += ": ";
       }
-      for (int i = numvars; i < 3; i++) vars += ": ";
+      for (int i = numvars; i < 3; i++) {
+        vars += ": ";
+      }
     }
 
     // Figure out the sample count if possible
@@ -583,7 +587,9 @@ public final class Debug {
     outer:
     for (String[] cv : debugTrackVars) {
       if (cv.length != vis.length) continue;
-      for (int j = 0; j < ourvars.length; j++) ourvars[j] = null;
+      for (int j = 0; j < ourvars.length; j++) {
+        ourvars[j] = null;
+      }
 
       // Flags to insure that we don't match a variable more than once
       boolean[] used = {false, false, false};
@@ -722,7 +728,9 @@ public final class Debug {
   public static String toString(VarInfo[] vis) {
 
     String vars = "";
-    for (VarInfo vi : vis) vars += vi.name() + " ";
+    for (VarInfo vi : vis) {
+      vars += vi.name() + " ";
+    }
     return (vars);
   }
 
@@ -796,7 +804,9 @@ public final class Debug {
     if (vars != null) {
       String[] var_arr = vars.split(", *");
       String[][] new_var = new String[debugTrackVars.length + 1][];
-      for (int ii = 0; ii < debugTrackVars.length; ii++) new_var[ii] = debugTrackVars[ii];
+      for (int ii = 0; ii < debugTrackVars.length; ii++) {
+        new_var[ii] = debugTrackVars[ii];
+      }
       new_var[debugTrackVars.length] = var_arr;
       debugTrackVars = new_var;
     }

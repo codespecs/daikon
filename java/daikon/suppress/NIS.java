@@ -942,7 +942,9 @@ public class NIS {
     /** Hash on class and variables **/
     /*@Pure*/ public int hashCode() {
       int code = suppressee.sup_class.hashCode();
-      for (int i = 0; i < vis.length; i++) code += vis[i].hashCode();
+      for (int i = 0; i < vis.length; i++) {
+        code += vis[i].hashCode();
+      }
       return (code);
     }
 

@@ -590,9 +590,12 @@ public class Runtime {
                   synchronized (Runtime.dtrace) {
                     dtrace.println();
                     // These are for debugging, I assume. -MDE
-                    for (Pattern p : ppt_omit_pattern) dtrace.println("# ppt-omit-pattern: " + p);
-                    for (Pattern p : ppt_select_pattern)
+                    for (Pattern p : ppt_omit_pattern) {
+                      dtrace.println("# ppt-omit-pattern: " + p);
+                    }
+                    for (Pattern p : ppt_select_pattern) {
                       dtrace.println("# ppt-select-pattern: " + p);
+                    }
                     // This lets us know we didn't lose any data.
                     dtrace.println("# EOF (added by Runtime.addShutdownHook)");
                     dtrace.close();

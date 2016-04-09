@@ -737,7 +737,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
 
     StringBuffer sb = new StringBuffer();
     sb.append(base);
-    for (int i = 0; i < dimensions; i++) sb.append("[]");
+    for (int i = 0; i < dimensions; i++) {
+      sb.append("[]");
+    }
     return sb.toString();
   }
 

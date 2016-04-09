@@ -55,8 +55,12 @@ public class Common {
     if (vlist.size() > 0) {
       VarInfo[] full = new VarInfo[vars.length + vlist.size()];
       int index = 0;
-      for (VarInfo vi : vars) full[index++] = vi;
-      for (VarInfo vi : vlist) full[index++] = vi;
+      for (VarInfo vi : vars) {
+        full[index++] = vi;
+      }
+      for (VarInfo vi : vlist) {
+        full[index++] = vi;
+      }
       vars = full;
     }
 

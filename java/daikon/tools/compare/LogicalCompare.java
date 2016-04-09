@@ -273,12 +273,16 @@ public class LogicalCompare {
           } else {
             Vector<Lemma> assume = lemmas.minimizeProof(inv);
             System.out.println();
-            for (Lemma lem : assume) System.out.println(lem.summarize());
+            for (Lemma lem : assume) {
+              System.out.println(lem.summarize());
+            }
             System.out.println("----------------------------------");
             System.out.println(inv.summarize());
             if (opt_show_formulas) {
               System.out.println();
-              for (Lemma lem : assume) System.out.println("    " + lem.formula);
+              for (Lemma lem : assume) {
+                System.out.println("    " + lem.formula);
+              }
               System.out.println("    ----------------------" + "--------------------");
               System.out.println("    " + inv.formula);
             }

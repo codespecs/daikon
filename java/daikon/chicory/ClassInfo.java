@@ -83,7 +83,9 @@ public class ClassInfo {
       throw new Error(e);
     }
 
-    for (MethodInfo mi : method_infos) mi.initViaReflection();
+    for (MethodInfo mi : method_infos) {
+      mi.initViaReflection();
+    }
 
     if (ChicoryPremain.shouldDoPurity()) {
       for (String pureMeth : ChicoryPremain.getPureMethods()) {
@@ -133,7 +135,9 @@ public class ClassInfo {
         ps.printf("%s [%s] %s", mi.arg_type_strings[ii], mi.arg_types[ii], mi.arg_names[ii]);
       }
       ps.printf("%n    exits: ");
-      for (Integer exit_loc : mi.exit_locations) ps.printf("%s ", exit_loc);
+      for (Integer exit_loc : mi.exit_locations) {
+        ps.printf("%s ", exit_loc);
+      }
       ps.printf("%n");
     }
   }
