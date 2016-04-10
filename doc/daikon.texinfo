@@ -7742,8 +7742,24 @@ understand Daikon's operation; @pxref{Daikon debugging options}.
 @node       Can't run Daikon
 @subsection Can't run Daikon: could not find or load main class, or NoClassDefFoundError
 
+An error such as one of these:
+@example
+Error: Could not find or load main class mypackage.MyClass
+Exception in thread "main" java.lang.NoClassDefFoundError: mypackage/MyClass
+@end example
+@exampleindent 4
+
+@noindent
+means that Java did not find the class @file{mypackage.MyClass} on your
+classpath.  To correct the problem, you need to make sure that the
+directory or jar file that contains file @file{mypackage/MyClass.class}
+is on your classpath.
+The classpath is passed as a command-line argument such as @option{-cp} or
+@option{-classpath}; if no such command-line argument is passed, the
+classpath is determined from your @env{CLASSPATH} environment variable.
+
 @exampleindent 1
-If you can't run Daikon at all and you get an error such as one of these:
+As one specific example, if the error is one of these:
 @example
 Error: Could not find or load main class daikon.Chicory
 Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
@@ -7752,19 +7768,6 @@ Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
 @noindent
 then you have not put @file{daikon.jar} on your classpath;
 @pxref{Installing Daikon}.
-
-More generally, an error such as
-@example
-Exception in thread "main" java.lang.NoClassDefFoundError: plume/FuzzyFloat
-@end example
-@exampleindent 4
-
-@noindent
-means that Java did not find the class @file{plume/FuzzyFloat} on your
-classpath.  To debug such a problem, you need to determine your
-classpath (it's your @env{CLASSPATH} environment variable under
-Mac/Linux), and the location of file @file{plume/FuzzyFloat.class} or of
-the jar file that contains it.
 
 
 @node       File input errors
