@@ -551,10 +551,16 @@ public class Chicory {
     return (System.currentTimeMillis() - start);
   }
 
-  /** convert a list of arguments into a command line string **/
+  /**
+   * Convert a list of arguments into a command-line string.
+   * Only used for debugging output.
+   **/
   public String args_to_string(List<String> args) {
     String str = "";
     for (String arg : args) {
+      if (arg.indexOf(" ") != -1) {
+        str = "'" + str + "'";
+      }
       str += arg + " ";
     }
     return (str.trim());
