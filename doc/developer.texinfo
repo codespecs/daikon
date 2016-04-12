@@ -2625,8 +2625,11 @@ Test the distribution on Ubuntu and MacOSX machines.
 Run the following commands
 
 @smallexample
-$pl/bin/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token`
-$pl/bin/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token`
+NEW_VERSION=`cat doc/VERSION`
+$pl/bin/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
+  "Test staging distribution for release ${NEW_VERSION}"
+$pl/bin/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
+  "Test staging distribution for release ${NEW_VERSION}"
 @end smallexample
 
 and then wait until the following
