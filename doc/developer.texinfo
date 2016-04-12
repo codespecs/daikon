@@ -2180,6 +2180,12 @@ Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installa
 @c @file{$DAIKONDIR/@/plume-lib}.
 
 @item
+File @file{~/private/.travis-access-token} must contain the output of
+@command{travis login && travis token}.  You might need to install the
+@command{travis} program first by running either @command{gem install travis}
+or @command{sudo apt-get install ruby-dev && sudo gem install travis}.
+
+@item
 Optionally, set environment variable @env{BIBDIR} to a clone of
 @uref{https://github.com/mernst/plume-bib.git}.
 
@@ -2620,8 +2626,7 @@ $pl/bin/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-a
 $pl/bin/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token`
 @end smallexample
 
-(where @file{~/private/.travis-access-token} contains the output of
-@command{travis login && travis token}), and then wait until the following
+and then wait until the following
 two URLs indicate success:
 @* @url{https://travis-ci.org/codespecs/test-daikon-staging}
 @* @url{https://travis-ci.org/codespecs/test-daikon-staging-macosx}
