@@ -605,8 +605,8 @@ plume-lib-update:
 	${MAKE} -C .. plume-lib-update
 
 # The class files are not used; this is just to sanity-check
-plume-lib-compile:
 # ... but compilation takes too long, so don't bother with the sanity-check.
+plume-lib-compile:
 # 	${MAKE} -C ../plume-lib/java compile
 
 # # A stable version of plume.jar is checked in, so that all this is not necessary.
