@@ -165,7 +165,7 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
 endif
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | ${SORT_DIRECTORY_ORDER})
 JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
-# Copied from 
+# Copied from
 JAVA_FILES_FOR_STYLE = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' -o -path './jtb' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
@@ -607,7 +607,7 @@ plume-lib-update:
 # The class files are not used; this is just to sanity-check
 # ... but compilation takes too long, so don't bother with the sanity-check.
 plume-lib-compile:
-# 	${MAKE} -C ../plume-lib/java compile
+#	${MAKE} -C ../plume-lib/java compile
 
 # # A stable version of plume.jar is checked in, so that all this is not necessary.
 # lib/plume.jar: ../plume-lib/java/plume.jar
@@ -623,7 +623,7 @@ daikon/util/README: plume-lib-update daikon/util/.timestamp-daikonutil
 
 daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
   ${PLUMEJAVA}/*.manifest) ${PLUMEJAVA}/Makefile
-	$(MAKE) -C ${PLUMEJAVA}
+	$(MAKE) -C ${PLUMEJAVA} compile
 	/bin/rm -rf daikon/util
 	$(INSTALL) -d daikon/util/
 	cp ${PLUME}/*.java daikon/util
