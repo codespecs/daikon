@@ -2152,17 +2152,6 @@ A clone of
 @uref{https://github.com/codespecs/fjalar} must be a sibling of
 @file{$DAIKONDIR}.
 
-@c Not necessary because the commands handle this for you.
-@c @item
-@c A clone of
-@c @uref{https://github.com/mernst/plume-lib} must be in
-@c @file{$DAIKONDIR/@/plume-lib}.
-
-@item
-Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
-@c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
-@c or:       export JAVA_HOME=/usr/lib/jvm/java
-
 @c If it's created automatically, there is no need to mention it as a requirement.
 @c @item
 @c There must be a symbolic link from
@@ -2178,6 +2167,17 @@ Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installa
 @c cd @@DAIKONDIR
 @c ln -nsf ../myfjalar fjalar
 @c @end example
+
+@item
+Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
+@c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
+@c or:       export JAVA_HOME=/usr/lib/jvm/java
+
+@c Not necessary because the commands handle this for you.
+@c @item
+@c A clone of
+@c @uref{https://github.com/mernst/plume-lib} must be in
+@c @file{$DAIKONDIR/@/plume-lib}.
 
 @item
 Optionally, set environment variable @env{BIBDIR} to a clone of
