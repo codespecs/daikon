@@ -2180,10 +2180,13 @@ Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installa
 @c @file{$DAIKONDIR/@/plume-lib}.
 
 @item
-File @file{~/private/.travis-access-token} must contain the output of
+File @file{~/private/.travis-access-token} must contain the text after
+``Your access token is@w{ }'' in the output of
 @command{travis login && travis token}.  You might need to install the
 @command{travis} program first by running either @command{gem install travis}
 or @command{sudo apt-get install ruby-dev && sudo gem install travis}.
+Make sure this file is not readable by others, for example by running
+@command{chmod og-rwx ~/private}.
 
 @item
 Optionally, set environment variable @env{BIBDIR} to a clone of
