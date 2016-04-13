@@ -21,7 +21,7 @@ import org.apache.commons.bcel6.generic.InstructionFactory;
 import org.apache.commons.bcel6.generic.*;
 import org.apache.commons.bcel6.verifier.VerificationResult;
 
-import sun.nio.cs.ext.ISCII91;
+//import sun.nio.cs.ext.ISCII91;
 
 import daikon.util.SimpleLog;
 
