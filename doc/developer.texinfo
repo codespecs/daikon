@@ -2206,6 +2206,7 @@ to use JDK 7 for our distribution process; the intention is to maximize
 compatibility with our existing code base.  You will find a suitable
 version (for an AMD64 based machine) at @file{/homes/gws/markro/jdk7}.
 
+@need 1000
 The recommended setup for the distribution process:
 @itemize
 @item get a fresh copy of your Bash shell (e.g., log out and log back in)
@@ -2434,6 +2435,7 @@ overnight.
 Do a very clean rebuild of everything.
 
 @example
+cd $DAIKONDIR
 make very-clean
 make rebuild-everything
 @end example
@@ -2443,22 +2445,6 @@ make rebuild-everything
 @c buffalo has twice the memory of godwit.
 @c Time on godwit as of 11/27/2014
 [Time: 20 min]
-
-
-
-@need 1000
-@item
-Run the Java parser tests.
-[TODO: This should not be a separate step.  It should be integrated into the normal Daikon tests, and the make command should fail if any diff comparisons are not identical.]
-
-@example
-cd $DAIKONDIR/tests/parser-tests
-./run-all
-@end example
-
-Success is indicated by each of the diff comparisons being identical.
-
-[Time: moments]
 
 
 @need 1000
@@ -2615,8 +2601,8 @@ by invariant output being written to the screen.
 make test-staged-dist
 @end example
 
-@c Time on buffalo as of 12/16/2015
-[Time: 10 min; runs Checker Framework tests]
+@c Time on buffalo as of 04/1r36/201r65
+[Time: 1 min]
 
 
 @need 1000
@@ -2626,9 +2612,9 @@ Run the following commands:
 
 @smallexample
 NEW_VERSION=`cat doc/VERSION`
-$pl/bin/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
+$PLUMEBIN/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
-$pl/bin/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
+$PLUMEBIN/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
   "Test staging distribution for release $@{NEW_VERSION@}"
 @end smallexample
 
@@ -2656,6 +2642,7 @@ Success is indicated by invariant output being written to the screen.
 
 @smallexample
 export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.7.0_45"
+export DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
 mkdir -p ~/tmp
 cd ~/tmp
 curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
@@ -2728,6 +2715,7 @@ Verify these changes by doing product builds (no need to clean first) and
 running a short verification test.
 
 @example
+cd $DAIKONDIR
 make rebuild-everything quick-test
 @end example
 
