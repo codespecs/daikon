@@ -175,7 +175,7 @@ endif
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | ${SORT_DIRECTORY_ORDER})
 JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 # Copied from
-JAVA_FILES_FOR_STYLE = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' -o -path './jtb' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
+JAVA_FILES_FOR_STYLE = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
@@ -472,7 +472,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # Do not mark this target as .PHONY.  We want it to
 # always recompile, whether recompilation is necessary or not.  (Why?)
-all_directly: ../plume-lib ${AUTO_GENERATED_FILES} plume-copy-and-check java_files.txt
+all_directly: ../plume-lib ${AUTO_GENERATED_FILES} plume-copy-and-check check-format java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	rm -f `find daikon -name "*.class" -print`
@@ -815,11 +815,11 @@ audit:
 	cd $(HOME)/java && maudit daikon | perl -p -e 's/^daikon\///'
 
 
-reindent:
-	java -jar ~/java/google-java-format/core/target/google-java-format-0.1-SNAPSHOT-all-deps.jar --replace ${JAVA_FILES_FOR_STYLE}
-	${CHECKERFRAMEWORK}/checker/bin/fixup-google-java-format.py ${JAVA_FILES_FOR_STYLE}
+reformat:
+	@../plume-lib/bin/run-google-java-format.py ${JAVA_FILES_FOR_STYLE}
 
-
+check-format:
+	@../plume-lib/bin/check-google-java-format.py ${JAVA_FILES_FOR_STYLE}
 
 
 ###########################################################################
