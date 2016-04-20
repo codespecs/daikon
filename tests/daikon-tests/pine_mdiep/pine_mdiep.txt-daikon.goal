@@ -1141,7 +1141,6 @@ km.keys.bind.cmd one of { 0, 500 }
 km.keys.bind.nch one of { 0, 2 }
 km.keys.column one of { 0, 1 }
 bitmap[] one of { 3, 253, 255 }
-orig(km.formatted_hm) is a pointer
 km.how_many % orig(km.how_many) == 0
 orig(km.how_many) is a bitwise subset of km.how_many
 km.keys.name == orig(km.keys.name)
@@ -1728,7 +1727,6 @@ km.keys.bind.cmd one of { 0, 500 }
 km.keys.bind.nch one of { 0, 2 }
 km.keys.column one of { 0, 1 }
 bm[] one of { 3, 253, 255 }
-orig(km.formatted_hm) is a pointer
 km.how_many % orig(km.how_many) == 0
 orig(km.how_many) is a bitwise subset of km.how_many
 km.keys.name == orig(km.keys.name)
@@ -7332,8 +7330,6 @@ km.keys.bind has only one value
 km.keys.bind.cmd == 500
 km.keys.bind.ch has only one value
 km.formatted_hm == 4294967042L
-orig(ps.goto_default_rule) is a pointer
-orig(km.formatted_hm) is a pointer
 ps.home_dir is a substring of ps.folders_dir
 ps.folders_dir == orig(ps.folders_dir)
 ps.home_dir is a substring of ps.pinerc

@@ -847,7 +847,6 @@ PolyCalc.RatPoly.isNaN():::EXIT
       Unmodified variables: this this.terms this.terms.wrapped this.terms.wrapped[] this.terms.wrapped[].getClass().getName() size(this.terms.wrapped[])
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return == true)  ==>  (size(this.terms.wrapped[]) == 1)
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return == true)  ==>  (size(this.terms.wrapped[])-1 is a pointer)
-warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return == true)  ==>  (size(this.terms.wrapped[])-1 is a pointer)
 (\result == true)  ==>  (this.terms.wrapped.elementType == \type(PolyCalc.RatTerm))
 ===========================================================================
 PolyCalc.RatPoly.mul(PolyCalc.RatPoly):::ENTER

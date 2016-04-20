@@ -276,4 +276,8 @@ public class DummyInvariant extends Invariant {
   protected Invariant resurrect_done(int[] permutation) {
     throw new Error("Not implemented");
   }
+
+  public boolean isSameFormula(Invariant other) {
+    throw new Error("Not implemented");
+  }
 }

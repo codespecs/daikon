@@ -116,7 +116,6 @@ public class RatPoly {
     @ ensures daikon.Quant.pairwiseEqual(this.terms.wrapped, \old(this.terms.wrapped));
     @ ensures (\result == true)  ==>  (daikon.Quant.size(this.terms.wrapped) == 1);
     @ ensures (\result == true)  ==>  (daikon.Quant.size(this.terms.wrapped)-1 is a pointer);
-    @ ensures (\result == true)  ==>  (daikon.Quant.size(this.terms.wrapped)-1 is a pointer);
     @*/
     /** @return true if and only if this has some coefficient = "NaN".
      */

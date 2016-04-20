@@ -851,7 +851,6 @@ this.terms.wrapped == \old(this.terms.wrapped)
 daikon.Quant.pairwiseEqual(this.terms.wrapped, \old(this.terms.wrapped))
 (\result == true)  ==>  (daikon.Quant.size(this.terms.wrapped) == 1)
 (\result == true)  ==>  (daikon.Quant.size(this.terms.wrapped)-1 is a pointer)
-(\result == true)  ==>  (daikon.Quant.size(this.terms.wrapped)-1 is a pointer)
 (\result == true)  ==>  (daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.terms.wrapped), new String[] { "PolyCalc.RatTerm" }))
 ===========================================================================
 PolyCalc.RatPoly.mul(PolyCalc.RatPoly):::ENTER

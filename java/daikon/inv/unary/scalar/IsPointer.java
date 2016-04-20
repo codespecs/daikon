@@ -116,4 +116,9 @@ public class IsPointer extends SingleScalar {
 
     return Invariant.PROBABILITY_JUSTIFIED;
   }
+
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+    assert other instanceof IsPointer;
+    return true;
+  }
 }

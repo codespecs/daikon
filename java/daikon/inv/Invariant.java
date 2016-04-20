@@ -1013,9 +1013,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @exception RuntimeException if other.getClass() != this.getClass()
    **/
-  /*@Pure*/ public boolean isSameFormula(/*>>> @Prototype Invariant this,*/ Invariant other) {
-    return false;
-  }
+  public abstract boolean isSameFormula(/*>>> @Prototype Invariant this,*/ Invariant other);
 
   /**
    * Returns whether or not it is possible to merge invariants of the same

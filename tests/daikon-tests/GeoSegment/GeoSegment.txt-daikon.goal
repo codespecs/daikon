@@ -2,6 +2,8 @@
 MapQuick1.GeoPoint:::CLASS
 ===========================================================================
 MapQuick1.GeoPoint:::OBJECT
+this.latitude is a pointer
+this.longitude is a pointer
 this.latitude > this.longitude
 ===========================================================================
 MapQuick1.GeoPoint.GeoPoint(int, int):::ENTER
@@ -12,12 +14,8 @@ latitude > longitude
 MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT
 this.latitude == orig(latitude)
 this.longitude == orig(longitude)
-this.latitude is a pointer
-this.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::ENTER
-this.latitude is a pointer
-this.longitude is a pointer
 gp != null
 gp.latitude is a pointer
 gp.longitude is a pointer
@@ -30,8 +28,6 @@ this.latitude == orig(this.latitude)
 this.longitude == orig(this.longitude)
 gp.latitude == orig(gp.latitude)
 gp.longitude == orig(gp.longitude)
-this.latitude is a pointer
-this.longitude is a pointer
 gp.latitude is a pointer
 gp.longitude is a pointer
 MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
@@ -46,44 +42,30 @@ o.getClass().getName() == MapQuick1.GeoPoint.class
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69
 ===========================================================================
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69;condition="return == true"
-this.latitude is a pointer
-this.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69;condition="not(return == true)"
-this.latitude is a pointer
-this.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT
 this.latitude == orig(this.latitude)
 this.longitude == orig(this.longitude)
 ===========================================================================
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT;condition="return == true"
-this.latitude is a pointer
-this.longitude is a pointer
 return == true
 ===========================================================================
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT;condition="not(return == true)"
-this.latitude is a pointer
-this.longitude is a pointer
 return == false
 ===========================================================================
 MapQuick1.GeoPoint.hashCode():::ENTER
-this.latitude is a pointer
-this.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoPoint.hashCode():::EXIT
 this.latitude == orig(this.latitude)
 this.longitude == orig(this.longitude)
-this.latitude is a pointer
-this.longitude is a pointer
 return is a pointer
 this.latitude < return
 this.longitude < return
 7 * this.latitude + 41 * this.longitude - return + 4.294967296E9 == 0
 ===========================================================================
 MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
-this.latitude is a pointer
-this.longitude is a pointer
 gp != null
 gp.latitude is a pointer
 gp.longitude is a pointer
@@ -98,8 +80,6 @@ this.latitude == orig(this.latitude)
 this.longitude == orig(this.longitude)
 gp.latitude == orig(gp.latitude)
 gp.longitude == orig(gp.longitude)
-this.latitude is a pointer
-this.longitude is a pointer
 gp.latitude is a pointer
 gp.longitude is a pointer
 MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
@@ -113,7 +93,11 @@ MapQuick1.GeoSegment:::OBJECT
 this.name != null
 this.name.toString is printable
 this.p1 != null
+this.p1.latitude is a pointer
+this.p1.longitude is a pointer
 this.p2 != null
+this.p2.latitude is a pointer
+this.p2.longitude is a pointer
 this.p1.latitude > this.p1.longitude
 this.p1.latitude > this.p2.longitude
 this.p1.longitude < this.p2.latitude
@@ -158,26 +142,14 @@ p1.longitude < p2.latitude
 p2.latitude > p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 o != null
 o.getClass().getName() == MapQuick1.GeoSegment.class
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135;condition="not(return == true)"
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT
 this.name == orig(this.name)
@@ -187,26 +159,14 @@ this.p1.longitude == orig(this.p1.longitude)
 this.p2 == orig(this.p2)
 this.p2.latitude == orig(this.p2.latitude)
 this.p2.longitude == orig(this.p2.longitude)
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 return == false
 this.name.toString == orig(this.name.toString)
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT;condition="not(return == true)"
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoSegment.hashCode():::ENTER
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoSegment.hashCode():::EXIT
 this.name == orig(this.name)
@@ -216,10 +176,6 @@ this.p1.longitude == orig(this.p1.longitude)
 this.p2 == orig(this.p2)
 this.p2.latitude == orig(this.p2.latitude)
 this.p2.longitude == orig(this.p2.longitude)
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 return != 0
 return is a pointer
 this.name.toString == orig(this.name.toString)
@@ -229,10 +185,6 @@ this.p2.latitude != return
 this.p2.longitude != return
 ===========================================================================
 MapQuick1.GeoSegment.heading():::ENTER
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -244,20 +196,12 @@ this.p1.longitude == orig(this.p1.longitude)
 this.p2 == orig(this.p2)
 this.p2.latitude == orig(this.p2.latitude)
 this.p2.longitude == orig(this.p2.longitude)
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 this.name.toString == orig(this.name.toString)
 MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.length():::ENTER
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.length():::EXIT
@@ -268,19 +212,11 @@ this.p1.longitude == orig(this.p1.longitude)
 this.p2 == orig(this.p2)
 this.p2.latitude == orig(this.p2.latitude)
 this.p2.longitude == orig(this.p2.longitude)
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 this.name.toString == orig(this.name.toString)
 MapQuick1.GeoPoint.REP_SCALE_FACTOR > return
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.name():::ENTER
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -293,10 +229,6 @@ this.p2 == orig(this.p2)
 this.p2.latitude == orig(this.p2.latitude)
 this.p2.longitude == orig(this.p2.longitude)
 return == orig(this.name)
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 return != null
 return.toString is printable
 this.name.toString == return.toString
@@ -305,10 +237,6 @@ this.p1.longitude != this.p2.longitude
 return.toString == orig(this.name.toString)
 ===========================================================================
 MapQuick1.GeoSegment.p1():::ENTER
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -323,8 +251,6 @@ this.p2.longitude == orig(this.p2.longitude)
 return == orig(this.p1)
 return.latitude == orig(this.p1.latitude)
 return.longitude == orig(this.p1.longitude)
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 return != null
 return.latitude is a pointer
 return.longitude is a pointer
@@ -336,10 +262,6 @@ this.p2.longitude != return.longitude
 return.latitude > return.longitude
 ===========================================================================
 MapQuick1.GeoSegment.p2():::ENTER
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
-this.p2.latitude is a pointer
-this.p2.longitude is a pointer
 ===========================================================================
 MapQuick1.GeoSegment.p2():::EXIT
 this.name == orig(this.name)
@@ -352,8 +274,6 @@ this.p2.longitude == return.longitude
 return == orig(this.p2)
 return.latitude == orig(this.p2.latitude)
 return.longitude == orig(this.p2.longitude)
-this.p1.latitude is a pointer
-this.p1.longitude is a pointer
 return != null
 return.latitude is a pointer
 return.longitude is a pointer

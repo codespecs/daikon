@@ -745,7 +745,6 @@ PolyCalc.RatPoly.isNaN():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| (select |terms| |this|))) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |wrapped| (select |terms| |__orig__this|))) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |wrapped| (select |terms| |this|))) |i|) (select (select elems (select |wrapped| (select |terms| |__orig__this|))) |j|))))
 (IMPLIES (EQ |return| |@true|) (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 1))
 (IMPLIES (EQ |return| |@true|) (AND))
-(IMPLIES (EQ |return| |@true|) (AND))
 (IMPLIES (EQ |return| |@true|) (AND (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 1) (EQ (typeof (select (select elems (select |wrapped| (select |terms| |this|))) 0)) |_string_PolyCalc.RatTerm|)))
 ===========================================================================
 PolyCalc.RatPoly.mul(PolyCalc.RatPoly):::ENTER

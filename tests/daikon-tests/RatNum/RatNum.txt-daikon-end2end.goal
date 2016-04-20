@@ -45,8 +45,6 @@ PolyCalc.RatNum.add(PolyCalc.RatNum):::ENTER
 (this.denom == 0)  ==>  ((this.numer == 0) ==> (arg.denom == 0))
 (this.denom == 0)  ==>  (this.denom <= arg.denom)
 (this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 arg != null
 arg.denom >= 0
 ===========================================================================
@@ -140,19 +138,9 @@ arg.denom == orig(arg.denom)
 (this.denom == 0)  ==>  (arg.denom >= return.denom)
 (this.denom == 0)  ==>  (return.denom == 0)
 (this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
 (this.denom == 0)  ==>  (return.numer == (this.numer * arg.denom))
 (this.denom == 0)  ==>  (this.denom <= arg.denom)
 (this.denom == 0)  ==>  (this.denom == return.denom)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 arg.denom >= 0
 return != null
@@ -516,7 +504,6 @@ orig(arg) != null
 ===========================================================================
 PolyCalc.RatNum.approx():::ENTER
 (this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 ===========================================================================
 PolyCalc.RatNum.approx():::ENTER;condition="not(denom < 0)"
@@ -632,12 +619,6 @@ PolyCalc.RatNum.approx():::EXIT
 this.numer == orig(this.numer)
 this.denom == orig(this.denom)
 (this.denom == 0)  ==>  (return == Double.NaN)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 ===========================================================================
@@ -763,6 +744,7 @@ this.denom >= 1
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
 (this.denom == 0)  ==>  (this.denom <= rn.denom)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 rn != null
 rn.denom >= 0
@@ -1177,6 +1159,7 @@ rn.denom == orig(rn.denom)
 (this.denom == 0)  ==>  (rn.denom >= return)
 (this.denom == 0)  ==>  (this.denom <= return)
 (this.denom == 0)  ==>  (this.denom <= rn.denom)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 rn.denom >= 0
 ===========================================================================
@@ -1369,9 +1352,6 @@ orig(rn) != null
 PolyCalc.RatNum.debugPrint():::ENTER
 (this.denom == 0)  ==>  (this has only one value)
 (this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer == 1)
 (this.numer one of { -10, -1 })  ==>  (this.denom == 1)
 (this.numer one of { -10, -1 })  ==>  (this.numer < this.denom)
@@ -1442,13 +1422,6 @@ this.denom == orig(this.denom)
 (this.denom == 0)  ==>  (orig(this) has only one value)
 (this.denom == 0)  ==>  (return has only one value)
 (this.denom == 0)  ==>  (return.toString == "RatNum<numer:1 denom:0>")
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer == 1)
 (this.numer one of { -10, -1 })  ==>  (return.toString one of { "RatNum<numer:-1 denom:1>", "RatNum<numer:-10 denom:1>" })
@@ -1687,6 +1660,7 @@ return.toString is printable
 PolyCalc.RatNum.div(PolyCalc.RatNum):::ENTER
 (this.denom == 0)  ==>  ((this.numer == 0) ==> (arg.numer == 0))
 (this.denom == 0)  ==>  (this.denom <= arg.denom)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 arg != null
 arg.denom >= 0
 ===========================================================================
@@ -1777,13 +1751,6 @@ return == orig(arg)
 (this.denom == 0)  <==>  (this.denom == arg.denom)
 (this.denom == 0)  ==>  (arg.numer != arg.denom)
 (this.denom == 0)  ==>  (this.denom != arg.numer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != arg.denom)
 (this.denom == 0)  ==>  (this.numer != this.denom)
@@ -2039,24 +2006,10 @@ PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT189
 (this.denom == 0)  ==>  (arg.numer >= -1)
 (this.denom == 0)  ==>  (return.denom == 0)
 (this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
 (this.denom == 0)  ==>  (return.numer % arg.denom == 0)
 (this.denom == 0)  ==>  (return.numer == (this.numer * arg.denom))
 (this.denom == 0)  ==>  (this.denom < arg.denom)
 (this.denom == 0)  ==>  (this.denom == return.denom)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer == (return.numer / arg.denom))
 arg.denom >= 1
@@ -2257,8 +2210,10 @@ arg.denom == orig(arg.denom)
 (this.denom == 0)  ==>  ((this.numer == 0) ==> (return.numer == 0))
 (this.denom == 0)  ==>  (arg.denom >= return.denom)
 (this.denom == 0)  ==>  (return.denom == 0)
+(this.denom == 0)  ==>  (return.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom <= arg.denom)
 (this.denom == 0)  ==>  (this.denom == return.denom)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 arg.denom >= 0
 return != null
 return.denom >= 0
@@ -2722,6 +2677,7 @@ orig(arg) != null
 (arg.denom == 0) ==> (return.denom == 0)
 ===========================================================================
 PolyCalc.RatNum.equals(java.lang.Object):::ENTER
+(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != 0)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 obj != null
@@ -2882,13 +2838,6 @@ PolyCalc.RatNum.equals(java.lang.Object):::EXIT232
 (return == true)  ==>  (this.denom >= 1)
 (this.denom == 0)  ==>  (return == false)
 (this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != 0)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 (this.denom == 0)  ==>  (this.numer == 1  (mod 2))
@@ -2984,6 +2933,7 @@ PolyCalc.RatNum.equals(java.lang.Object):::EXIT232;condition="not(orig(arg.isNaN
 PolyCalc.RatNum.equals(java.lang.Object):::EXIT
 this.numer == orig(this.numer)
 this.denom == orig(this.denom)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != 0)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 ===========================================================================
@@ -3214,8 +3164,6 @@ this.numer == orig(this.numer)
 this.denom == orig(this.denom)
 (this.denom == 0)  <==>  (return == true)
 (this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 ===========================================================================
 PolyCalc.RatNum.isNaN():::EXIT;condition="return == true"
 this.denom == 0
@@ -3275,7 +3223,6 @@ this.denom == orig(this.denom)
 (return == true)  ==>  (this.numer < this.denom)
 (return == true)  ==>  (this.numer <= -1)
 (this.denom == 0)  ==>  (return == false)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 (this.denom == 0)  ==>  (this.numer one of { -1, 1, 100 })
@@ -3373,7 +3320,6 @@ this.denom == orig(this.denom)
 (return == true)  ==>  (this.numer != 0)
 (this.denom == 0)  ==>  (return == true)
 (this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer one of { -1, 1, 100 })
 ===========================================================================
 PolyCalc.RatNum.isPositive():::EXIT;condition="return == true"
@@ -3462,8 +3408,6 @@ this.numer < this.denom
 ===========================================================================
 PolyCalc.RatNum.mul(PolyCalc.RatNum):::ENTER
 (this.denom == 0)  ==>  (this.denom <= arg.denom)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 arg != null
@@ -3556,20 +3500,10 @@ arg.denom == orig(arg.denom)
 (this.denom == 0)  ==>  (arg.numer == (return.numer / this.numer))
 (this.denom == 0)  ==>  (return.denom == 0)
 (this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
 (this.denom == 0)  ==>  (return.numer % this.numer == 0)
 (this.denom == 0)  ==>  (return.numer == (this.numer * arg.numer))
 (this.denom == 0)  ==>  (this.denom <= arg.denom)
 (this.denom == 0)  ==>  (this.denom == return.denom)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != return.denom)
 (this.denom == 0)  ==>  (this.numer != this.denom)
@@ -3975,8 +3909,6 @@ arg.denom >= return.denom
 ===========================================================================
 PolyCalc.RatNum.negate():::ENTER
 (this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 ===========================================================================
 PolyCalc.RatNum.negate():::ENTER;condition="not(denom < 0)"
 ===========================================================================
@@ -4026,11 +3958,6 @@ PolyCalc.RatNum.negate():::EXIT
 this.numer == orig(this.numer)
 this.denom == return.denom
 this.denom == orig(this.denom)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 return != null
 (return.numer == 0) ==> (this.numer == 0)
@@ -4328,8 +4255,6 @@ PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
 (this.denom == 0)  ==>  ((this.numer == 0) ==> (arg.denom == 0))
 (this.denom == 0)  ==>  (this.denom <= arg.denom)
 (this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 arg != null
 arg.denom >= 0
 ===========================================================================
@@ -4423,19 +4348,9 @@ arg.denom == orig(arg.denom)
 (this.denom == 0)  ==>  (arg.denom >= return.denom)
 (this.denom == 0)  ==>  (return.denom == 0)
 (this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
-(this.denom == 0)  ==>  (return.denom is a pointer)
 (this.denom == 0)  ==>  (return.numer == (this.numer * arg.denom))
 (this.denom == 0)  ==>  (this.denom <= arg.denom)
 (this.denom == 0)  ==>  (this.denom == return.denom)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 arg.denom >= 0
 return != null
@@ -4806,9 +4721,6 @@ orig(arg) != null
 PolyCalc.RatNum.toString():::ENTER
 (this.denom == 0)  ==>  (this has only one value)
 (this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer == 1)
 (this.numer one of { -10, -1 })  ==>  (this.denom == 1)
 (this.numer one of { -10, -1, 0 })  ==>  (this.denom == 1)
@@ -4874,13 +4786,6 @@ this.denom == orig(this.denom)
 (this.denom == 0)  ==>  (orig(this) has only one value)
 (this.denom == 0)  ==>  (return has only one value)
 (this.denom == 0)  ==>  (return.toString == "RatNum<numer:1 denom:0>")
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer == 1)
 (this.numer one of { -10, -1 })  ==>  (return.toString one of { "RatNum<numer:-1 denom:1>", "RatNum<numer:-10 denom:1>" })
@@ -5109,8 +5014,6 @@ return != null
 return.toString is printable
 ===========================================================================
 PolyCalc.RatNum.unparse():::ENTER
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 ===========================================================================
 PolyCalc.RatNum.unparse():::ENTER;condition="not(denom < 0)"
@@ -5344,11 +5247,6 @@ this.numer == orig(this.numer)
 this.denom == orig(this.denom)
 (this.denom == 0)  ==>  (return has only one value)
 (this.denom == 0)  ==>  (return.toString == "NaN")
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
-(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.denom is a pointer)
 return != null
 return.toString is printable

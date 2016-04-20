@@ -787,7 +787,6 @@ this.terms.wrapped == orig(this.terms.wrapped)
 this.terms.wrapped[] == orig(this.terms.wrapped[])
 (return == true)  ==>  (size(this.terms.wrapped[]) == 1)
 (return == true)  ==>  (size(this.terms.wrapped[])-1 is a pointer)
-(return == true)  ==>  (size(this.terms.wrapped[])-1 is a pointer)
 (return == true)  ==>  (this.terms.wrapped[].getClass().getName() == [PolyCalc.RatTerm])
 ===========================================================================
 PolyCalc.RatPoly.isNaN():::EXIT;condition="return == true"

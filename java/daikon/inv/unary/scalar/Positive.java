@@ -83,4 +83,9 @@ public class Positive extends SingleScalar {
     // being positive by chance.
     return 1 - Math.pow(.5, ppt.num_samples());
   }
+
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+    assert other instanceof Positive;
+    return true;
+  }
 }

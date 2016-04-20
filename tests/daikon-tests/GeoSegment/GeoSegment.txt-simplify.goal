@@ -2,6 +2,8 @@
 MapQuick1.GeoPoint:::CLASS
 ===========================================================================
 MapQuick1.GeoPoint:::OBJECT
+(AND)
+(AND)
 (> (select |latitude| |this|) (select |longitude| |this|))
 ===========================================================================
 MapQuick1.GeoPoint.GeoPoint(int, int):::ENTER
@@ -12,12 +14,8 @@ MapQuick1.GeoPoint.GeoPoint(int, int):::ENTER
 MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT
 (EQ (select |latitude| |this|) |__orig__latitude|)
 (EQ (select |longitude| |this|) |__orig__longitude|)
-(AND)
-(AND)
 ===========================================================================
 MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::ENTER
-(AND)
-(AND)
 (NEQ (hash |gp|) null)
 (AND)
 (AND)
@@ -30,8 +28,6 @@ MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::EXIT
 (EQ (select |longitude| |this|) (select |longitude| |__orig__this|))
 (EQ (select |latitude| |gp|) (select |latitude| |__orig__gp|))
 (EQ (select |longitude| |gp|) (select |longitude| |__orig__gp|))
-(AND)
-(AND)
 (AND)
 (AND)
 (> (select |REP_SCALE_FACTOR| (select |GeoPoint| |MapQuick1|)) |return|)
@@ -50,22 +46,16 @@ MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT
 (EQ (select |longitude| |this|) (select |longitude| |__orig__this|))
 ===========================================================================
 MapQuick1.GeoPoint.hashCode():::ENTER
-(AND)
-(AND)
 ===========================================================================
 MapQuick1.GeoPoint.hashCode():::EXIT
 (EQ (select |latitude| |this|) (select |latitude| |__orig__this|))
 (EQ (select |longitude| |this|) (select |longitude| |__orig__this|))
-(AND)
-(AND)
 (AND)
 (< (select |latitude| |this|) |return|)
 (< (select |longitude| |this|) |return|)
 (AND)
 ===========================================================================
 MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
-(AND)
-(AND)
 (NEQ (hash |gp|) null)
 (AND)
 (AND)
@@ -82,8 +72,6 @@ MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::EXIT
 (EQ (select |longitude| |gp|) (select |longitude| |__orig__gp|))
 (AND)
 (AND)
-(AND)
-(AND)
 (> (select |REP_SCALE_FACTOR| (select |GeoPoint| |MapQuick1|)) |return|)
 (NEQ (select |latitude| |this|) (select |latitude| |gp|))
 (> (select |latitude| |this|) (select |longitude| |gp|))
@@ -95,7 +83,11 @@ MapQuick1.GeoSegment:::OBJECT
 (NEQ (hash (select |name| |this|)) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: this.name.toString is printable
 (NEQ (hash (select |p1| |this|)) null)
+(AND)
+(AND)
 (NEQ (hash (select |p2| |this|)) null)
+(AND)
+(AND)
 (> (select |latitude| (select |p1| |this|)) (select |longitude| (select |p1| |this|)))
 (> (select |latitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
 (< (select |longitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
@@ -140,20 +132,12 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 (> (select |latitude| |p2|) (select |longitude| |p2|))
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
-(AND)
-(AND)
-(AND)
-(AND)
 (NEQ (hash |o|) null)
 (EQ (typeof |o|) |T_MapQuick1.GeoSegment|)
 (NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
 (NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
-(AND)
-(AND)
-(AND)
-(AND)
 ===========================================================================
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT
 (EQ (hash (select |name| |this|)) (hash (select |name| |__orig__this|)))
@@ -163,20 +147,12 @@ MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT
 (EQ (hash (select |p2| |this|)) (hash (select |p2| |__orig__this|)))
 (EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
 (EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
-(AND)
-(AND)
-(AND)
-(AND)
 (EQ |return| |@false|)
 (EQ (select |toString| (select |name| |this|)) (select |toString| (select |name| |__orig__this|)))
 (NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
 (NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
 ===========================================================================
 MapQuick1.GeoSegment.hashCode():::ENTER
-(AND)
-(AND)
-(AND)
-(AND)
 ===========================================================================
 MapQuick1.GeoSegment.hashCode():::EXIT
 (EQ (hash (select |name| |this|)) (hash (select |name| |__orig__this|)))
@@ -186,10 +162,6 @@ MapQuick1.GeoSegment.hashCode():::EXIT
 (EQ (hash (select |p2| |this|)) (hash (select |p2| |__orig__this|)))
 (EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
 (EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
-(AND)
-(AND)
-(AND)
-(AND)
 (NEQ |return| 0)
 (AND)
 (EQ (select |toString| (select |name| |this|)) (select |toString| (select |name| |__orig__this|)))
@@ -199,10 +171,6 @@ MapQuick1.GeoSegment.hashCode():::EXIT
 (NEQ (select |longitude| (select |p2| |this|)) |return|)
 ===========================================================================
 MapQuick1.GeoSegment.heading():::ENTER
-(AND)
-(AND)
-(AND)
-(AND)
 (NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
 (NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
 ===========================================================================
@@ -214,20 +182,12 @@ MapQuick1.GeoSegment.heading():::EXIT
 (EQ (hash (select |p2| |this|)) (hash (select |p2| |__orig__this|)))
 (EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
 (EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
-(AND)
-(AND)
-(AND)
-(AND)
 (EQ (select |toString| (select |name| |this|)) (select |toString| (select |name| |__orig__this|)))
 (> (select |REP_SCALE_FACTOR| (select |GeoPoint| |MapQuick1|)) |return|)
 (NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
 (NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
 ===========================================================================
 MapQuick1.GeoSegment.length():::ENTER
-(AND)
-(AND)
-(AND)
-(AND)
 (NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
 ===========================================================================
 MapQuick1.GeoSegment.length():::EXIT
@@ -238,19 +198,11 @@ MapQuick1.GeoSegment.length():::EXIT
 (EQ (hash (select |p2| |this|)) (hash (select |p2| |__orig__this|)))
 (EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
 (EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
-(AND)
-(AND)
-(AND)
-(AND)
 (EQ (select |toString| (select |name| |this|)) (select |toString| (select |name| |__orig__this|)))
 (> (select |REP_SCALE_FACTOR| (select |GeoPoint| |MapQuick1|)) |return|)
 (NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
 ===========================================================================
 MapQuick1.GeoSegment.name():::ENTER
-(AND)
-(AND)
-(AND)
-(AND)
 (NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
 (NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
 ===========================================================================
@@ -263,10 +215,6 @@ MapQuick1.GeoSegment.name():::EXIT
 (EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
 (EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
 (EQ (hash |return|) (hash (select |name| |__orig__this|)))
-(AND)
-(AND)
-(AND)
-(AND)
 (NEQ (hash |return|) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.toString is printable
 (EQ (select |toString| (select |name| |this|)) (select |toString| |return|))
@@ -275,10 +223,6 @@ warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simp
 (EQ (select |toString| |return|) (select |toString| (select |name| |__orig__this|)))
 ===========================================================================
 MapQuick1.GeoSegment.p1():::ENTER
-(AND)
-(AND)
-(AND)
-(AND)
 (NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
 (NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
 ===========================================================================
@@ -293,8 +237,6 @@ MapQuick1.GeoSegment.p1():::EXIT
 (EQ (hash |return|) (hash (select |p1| |__orig__this|)))
 (EQ (select |latitude| |return|) (select |latitude| (select |p1| |__orig__this|)))
 (EQ (select |longitude| |return|) (select |longitude| (select |p1| |__orig__this|)))
-(AND)
-(AND)
 (NEQ (hash |return|) null)
 (AND)
 (AND)
@@ -306,10 +248,6 @@ MapQuick1.GeoSegment.p1():::EXIT
 (> (select |latitude| |return|) (select |longitude| |return|))
 ===========================================================================
 MapQuick1.GeoSegment.p2():::ENTER
-(AND)
-(AND)
-(AND)
-(AND)
 ===========================================================================
 MapQuick1.GeoSegment.p2():::EXIT
 (EQ (hash (select |name| |this|)) (hash (select |name| |__orig__this|)))
@@ -322,8 +260,6 @@ MapQuick1.GeoSegment.p2():::EXIT
 (EQ (hash |return|) (hash (select |p2| |__orig__this|)))
 (EQ (select |latitude| |return|) (select |latitude| (select |p2| |__orig__this|)))
 (EQ (select |longitude| |return|) (select |longitude| (select |p2| |__orig__this|)))
-(AND)
-(AND)
 (NEQ (hash |return|) null)
 (AND)
 (AND)
