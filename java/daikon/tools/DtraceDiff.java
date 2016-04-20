@@ -250,7 +250,7 @@ public class DtraceDiff {
           if (state1.rtype == FileIO.RecordType.SAMPLE) {
             break;
           } else if ((state1.rtype == FileIO.RecordType.EOF)
-                     || (state1.rtype == FileIO.RecordType.TRUNCATED)) {
+              || (state1.rtype == FileIO.RecordType.TRUNCATED)) {
             break;
           }
         }
@@ -260,7 +260,7 @@ public class DtraceDiff {
           if (state2.rtype == FileIO.RecordType.SAMPLE) {
             break;
           } else if ((state2.rtype == FileIO.RecordType.EOF)
-                     || (state2.rtype == FileIO.RecordType.TRUNCATED)) {
+              || (state2.rtype == FileIO.RecordType.TRUNCATED)) {
             break;
           }
         }

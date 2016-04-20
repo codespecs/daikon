@@ -942,7 +942,7 @@ public abstract class DaikonVariableInfo
     // If the field is in the same package, it's visible if it is
     // not private or protected.
     if (current.getPackage() != null && current.getPackage().equals(fclass.getPackage())) {
-      return ! (Modifier.isPrivate(modifiers) || Modifier.isProtected(modifiers));
+      return !(Modifier.isPrivate(modifiers) || Modifier.isProtected(modifiers));
     }
 
     // The field must be in an unrelated class, it must be marked

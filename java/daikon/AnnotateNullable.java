@@ -278,7 +278,6 @@ public class AnnotateNullable {
     } else {
       System.out.printf("%n%n");
     }
-      
   }
 
   /**
@@ -319,8 +318,8 @@ public class AnnotateNullable {
         retvar = vi;
       } else {
         if (vi.isParam()
-          && (vi.name() != "this") // interned
-          && !vi.isPrestate()) params.add(vi);
+            && (vi.name() != "this") // interned
+            && !vi.isPrestate()) params.add(vi);
       }
     }
 

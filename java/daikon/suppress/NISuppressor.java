@@ -276,7 +276,8 @@ public class NISuppressor {
         if (valid) {
           current_state_str = "true over constant " + ppt.constants.constant_value(v1);
         } else {
-          current_state_str = "invalid over constant " + ppt.constants.constant_value(v1); }
+          current_state_str = "invalid over constant " + ppt.constants.constant_value(v1);
+        }
         return (state = (valid ? NIS.SuppressState.VALID : NIS.SuppressState.INVALID));
       }
 

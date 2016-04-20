@@ -116,7 +116,7 @@ public final class FeatureExtractor {
         if (output_words != null) {
           throw new IOException("Invalid Argument List, repeated " + "output description file");
         }
-         output_words = args[i + 1];
+        output_words = args[i + 1];
       } else if (args[i].equals("-t")) {
         if ((output_type == null) || (output_type.equals(args[i + 1]))) {
           output_type = args[i + 1];

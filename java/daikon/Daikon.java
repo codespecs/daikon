@@ -919,7 +919,7 @@ public final class Daikon {
                         + ppt_regexp_SWITCH
                         + ": not in the format required by Class.getName(String)");
               }
-              @SuppressWarnings("signature") // Regex match guarantees the formate of Class.getName()
+              @SuppressWarnings("signature") // Regex match guarantees the format of Class.getName()
               /*@ClassGetName*/ String cname = user_defined_invariant_string;
               userDefinedInvariants.add(cname);
             } catch (Exception e) {
@@ -1172,7 +1172,8 @@ public final class Daikon {
    * --user_defined_invariant option.  A list of class names in the format
    * required by {@link Class#forName(String)}.
    */
-  private static List</*@ClassGetName*/ String> userDefinedInvariants = new ArrayList</*@ClassGetName*/ String>();
+  private static List</*@ClassGetName*/ String> userDefinedInvariants =
+      new ArrayList</*@ClassGetName*/ String>();
 
   /**
    * Creates the list of prototype invariants for all Daikon invariants.
@@ -1440,12 +1441,20 @@ public final class Daikon {
         @SuppressWarnings("nullness") // null argument is OK because get_proto_method is static
         Object inv_as_object = get_proto_method.invoke(null);
         if (inv_as_object == null) {
-          throw new Daikon.TerminationMessage(invariantClassName + ".get_proto() returned null but should have returned an Invariant");
+          throw new Daikon.TerminationMessage(
+              invariantClassName
+                  + ".get_proto() returned null but should have returned an Invariant");
         }
-        if (! (inv_as_object instanceof Invariant)) {
-          @SuppressWarnings("nullness") // looks like a Checker Framework bug, since inv_as_object is known to be non-null at this point
+        if (!(inv_as_object instanceof Invariant)) {
+          @SuppressWarnings(
+              "nullness") // looks like a Checker Framework bug, since inv_as_object is known to be non-null at this point
           Class<?> cls = inv_as_object.getClass();
-          throw new Daikon.TerminationMessage(invariantClassName + ".get_proto() returned object of the wrong type.  It should have been a subclass of invariant, but was " + cls + ": " + inv_as_object);
+          throw new Daikon.TerminationMessage(
+              invariantClassName
+                  + ".get_proto() returned object of the wrong type.  It should have been a subclass of invariant, but was "
+                  + cls
+                  + ": "
+                  + inv_as_object);
         }
         inv = (Invariant) inv_as_object;
       } catch (Exception e) {

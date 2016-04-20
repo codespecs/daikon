@@ -94,7 +94,7 @@ public class InvTranslate {
         quality += 5;
       } else if ((v1.derived != null)
           && (v2.derived != null)
-                 && (v1.derived.getClass() == v2.derived.getClass())) {
+          && (v1.derived.getClass() == v2.derived.getClass())) {
         quality += 5;
       } else {
         /* variables have different derivations */ quality -= 5;

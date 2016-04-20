@@ -20,6 +20,6 @@ public class VariableFilter extends InvariantFilter {
   }
 
   boolean shouldDiscardInvariant(Invariant invariant) {
-    return ! invariant.usesVar(variable);
+    return !invariant.usesVar(variable);
   }
 }

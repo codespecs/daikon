@@ -30,7 +30,7 @@ import org.checkerframework.checker.nullness.qual.*;
 // Nullness utilities are trusted regarding nullness.
 // Casts look redundant if Nullness Checker is not run.
 @SuppressWarnings({
-    /*>>> "nullness", */
+  /*>>> "nullness", */
   "cast"
 })
 public final class NullnessUtils {

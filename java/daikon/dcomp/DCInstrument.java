@@ -2127,13 +2127,13 @@ class DCInstrument {
     if (method_name.equals("exit_refs_only"))
       method_args =
           new Type[] {
-              /*object_arr, */
+            /*object_arr, */
             Type.OBJECT, Type.INT, object_arr, Type.OBJECT, Type.INT
           };
     else
       method_args =
           new Type[] {
-              /*object_arr, */
+            /*object_arr, */
             Type.OBJECT, Type.INT, object_arr
           };
     il.append(
@@ -3304,7 +3304,7 @@ class DCInstrument {
       assert (return_type.equals(return_local.getType()))
           : " return_type = " + return_type + "current type = " + return_local.getType();
     }
-    
+
     if (return_local == null) {
       // log ("Adding return local of type %s%n", return_type);
       return_local = mg.addLocalVariable("return__$trace2_val", return_type, null, null);
