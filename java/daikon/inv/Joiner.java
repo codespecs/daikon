@@ -56,11 +56,15 @@ public abstract class Joiner extends Invariant {
   }
 
   /*@Pure*/ public boolean isSameInvariant(Invariant other) {
-    if (!getClass().equals(other.getClass())) return false;
+    if (!getClass().equals(other.getClass())) {
+      return false;
+    }
 
     Joiner otherAsJoiner = (Joiner) other;
 
-    if (left == otherAsJoiner.left && right == otherAsJoiner.right) return true;
+    if (left == otherAsJoiner.left && right == otherAsJoiner.right) {
+      return true;
+    }
 
     return left.isSameInvariant(otherAsJoiner.left) && right.isSameInvariant(otherAsJoiner.right);
   }
