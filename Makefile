@@ -168,7 +168,7 @@ help:
 
 compile: compile-java
 
-compile-java:
+compile-java: git-hooks
 	cd java && $(MAKE) all
 
 very-clean:
@@ -741,3 +741,10 @@ ifndef CHECKERFRAMEWORK
 endif
 	make -D plume-lib/java clean jar verify-plume-jar-classfile-version
 	\cp -pf plume-lib/java/plume.jar java/lib/
+
+.PHONY: git-hooks
+git-hooks: .git/hooks/pre-commit .git/hooks/post-merge
+.git/hooks/pre-commit: scripts/daikon.pre-commit
+	cp -pf $< $@
+.git/hooks/post-merge: scripts/daikon.post-merge
+	cp -pf $< $@

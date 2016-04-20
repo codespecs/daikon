@@ -472,7 +472,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # Do not mark this target as .PHONY.  We want it to
 # always recompile, whether recompilation is necessary or not.  (Why?)
-all_directly: ../plume-lib ${AUTO_GENERATED_FILES} plume-copy-and-check check-format java_files.txt
+all_directly: ../plume-lib ${AUTO_GENERATED_FILES} plume-copy-and-check java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	rm -f `find daikon -name "*.class" -print`
@@ -482,6 +482,7 @@ all_directly: ../plume-lib ${AUTO_GENERATED_FILES} plume-copy-and-check check-fo
 	@chmod 444 ${AUTO_GENERATED_FILES}
 # This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
 	$(MAKE) all_pass2
+	$(MAKE) reformat
 # These can't be prerequisites because they depend on .class files from Daikon itself.
 	$(MAKE) chicory
 	$(MAKE) dyncomp
@@ -494,7 +495,7 @@ plume-copy-and-check: plume-lib-update plume-lib-compile plume-copy
 
 .PHONY : daikon compile_daikon
 daikon: compile_daikon junit
-compile_daikon : ../plume-lib $(AUTO_GENERATED_FILES)
+compile_daikon : ../plume-lib $(AUTO_GENERATED_FILES) reformat
 	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
 	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
 	@chmod 444 ${AUTO_GENERATED_FILES}
@@ -666,7 +667,7 @@ plume-import-check :
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
-all_except_daikon: ../plume-lib ${AUTO_GENERATED_FILES}
+all_except_daikon: ../plume-lib ${AUTO_GENERATED_FILES} reformat
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -793,7 +794,7 @@ findbugs-cat:
 
 .PHONY: jar
 jar: ../daikon.jar
-../daikon.jar: ../plume-lib ${AUTO_GENERATED_FILES} compile
+../daikon.jar: ../plume-lib ${AUTO_GENERATED_FILES} reformat compile
 	cd .. && $(MAKE) daikon.jar
 
 checkstyle: checkstyle-cs checkstyle-sun
@@ -1200,7 +1201,7 @@ api: ../plume-lib $(JAVA_FILES)
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
-api-private: ../plume-lib $(AUTO_GENERATED_FILES)
+api-private: ../plume-lib $(AUTO_GENERATED_FILES) reformat
 	mkdir -p api
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
