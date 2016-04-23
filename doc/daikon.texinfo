@@ -1827,8 +1827,9 @@ interface.  The preferred mechanism for indicating such information is
 the @code{ListImplementors} section of the @file{.decls} file.
 See @ref{ListImplementors declaration,,,developer,Daikon Developer Manual}.
 
-@item --user_defined_invariant @var{classname}
-Load a user invariant that is defined in the given class.
+@item --user-defined-invariant @var{classname}
+Use a user-defiend invariant that not built into Daikon but
+is defined in the given class.
 The @var{classname} should be in the fully-qualified format expected by
 @uref{https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getName--,,@code{Class.getName()}},
 such as ``@code{mypackage.subpackage.ClassName}'',
