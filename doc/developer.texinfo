@@ -1803,11 +1803,10 @@ For more information, see the comments in file
 @node    Editing
 @chapter Editing Daikon source code
 
-The Daikon source code follows these coding conventions:
-@ifnothtml
-@* @ @ @ @ @ @ 
-@end ifnothtml
-@uref{http://homes.cs.washington.edu/~mernst/advice/coding-style.html}.
+The Daikon source code follows
+the @uref{https://google.github.io/styleguide/javaguide.html, Google Java Style}
+and also 
+@uref{http://homes.cs.washington.edu/~mernst/advice/coding-style.html, Michael Ernst's coding conventions}.
 
 
 @menu
