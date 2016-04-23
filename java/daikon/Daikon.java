@@ -427,8 +427,8 @@ public final class Daikon {
   public static class TerminationMessage extends RuntimeException {
     static final long serialVersionUID = 20050923L;
 
-    public static String error_at_line_file(LineNumberReader reader, String filename) {
-      return "Error at line " + reader.getLineNumber() + " in file " + filename;
+    public static String error_at_line_file(LineNumberReader reader, String filename, String msg) {
+      return "Error at line " + reader.getLineNumber() + " in file " + filename + ": " + msg;
     }
 
     /// Constructors that take a Throwable
@@ -442,15 +442,15 @@ public final class Daikon {
     }
 
     public TerminationMessage(Throwable e, FileIO.ParseState state) {
-      super(error_at_line_file(state.reader, state.filename), e);
+      super(error_at_line_file(state.reader, state.filename, e.getMessage()), e);
     }
 
     public TerminationMessage(Throwable e, LineNumberReader reader, String filename) {
-      super(error_at_line_file(reader, filename), e);
+      super(error_at_line_file(reader, filename, e.getMessage()), e);
     }
 
     public TerminationMessage(Throwable e, String msg, LineNumberReader reader, String filename) {
-      super(error_at_line_file(reader, filename) + ": " + msg, e);
+      super(error_at_line_file(reader, filename, msg), e);
     }
 
     /// Constructors that do not take a Throwable
@@ -463,11 +463,11 @@ public final class Daikon {
     }
 
     public TerminationMessage(String msg, FileIO.ParseState state) {
-      super(error_at_line_file(state.reader, state.filename) + ": " + msg);
+      super(error_at_line_file(state.reader, state.filename, msg));
     }
 
     public TerminationMessage(String msg, LineNumberReader reader, String filename) {
-      super(error_at_line_file(reader, filename) + ": " + msg);
+      super(error_at_line_file(reader, filename, msg));
     }
     // This constructor is too error-prone:  it leads to throwing away
     // subsequent args if there are not enough % directives in the string.
@@ -493,6 +493,7 @@ public final class Daikon {
         if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
         System.exit(1);
       } else {
+        if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
         System.exit(0);
       }
     }
