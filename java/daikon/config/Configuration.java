@@ -22,7 +22,7 @@ import org.checkerframework.checker.signature.qual.*;
  * <p> Important note: classes that have fields set via this
  * Configuration (dkconfig) interface may not reference daikon.Global
  * in their static initializers, since Global loads the default
- * configuration, which classloads that class, and we have a
+ * configuration, which classloads that class, and we would have a
  * classloading circularity.
  **/
 public final class Configuration implements Serializable {
