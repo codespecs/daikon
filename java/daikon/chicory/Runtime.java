@@ -1,11 +1,11 @@
 package daikon.chicory;
 
-import java.util.regex.Pattern;
-import java.util.zip.GZIPOutputStream;
 import java.io.*;
 import java.net.*;
 import java.net.Socket;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.zip.GZIPOutputStream;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;

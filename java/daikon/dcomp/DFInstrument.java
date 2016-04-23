@@ -1,26 +1,22 @@
 package daikon.dcomp;
 
-import java.util.*;
-import java.util.regex.*;
+import daikon.DynComp;
+import daikon.chicory.ClassInfo;
+import daikon.chicory.DaikonWriter;
+import daikon.chicory.MethodInfo;
+import daikon.util.*;
+import daikon.util.BCELUtil;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
-import java.io.*;
-
+import java.util.*;
+import java.util.regex.*;
 import org.apache.commons.bcel6.*;
 import org.apache.commons.bcel6.classfile.*;
 import org.apache.commons.bcel6.generic.*;
 import org.apache.commons.bcel6.verifier.*;
 import org.apache.commons.bcel6.verifier.structurals.*;
-import daikon.util.BCELUtil;
-
-import daikon.util.*;
 import org.apache.commons.io.*;
-
-import daikon.chicory.MethodInfo;
-import daikon.chicory.ClassInfo;
-import daikon.chicory.DaikonWriter;
-
-import daikon.DynComp;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

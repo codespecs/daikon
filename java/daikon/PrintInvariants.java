@@ -1,24 +1,23 @@
 package daikon;
 
-import java.util.*;
-import java.io.*;
-import gnu.getopt.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.util.regex.*;
-
-import plume.*;
-import daikon.derive.*;
-import daikon.derive.binary.*;
 import daikon.FileIO.ParentRelation;
 import daikon.PptRelation.PptRelationType;
 import daikon.VarInfo.VarFlags;
+import daikon.config.Configuration;
+import daikon.derive.*;
+import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.OutputFormat;
 import daikon.inv.filter.*;
-import daikon.suppress.*;
 import daikon.split.PptSplitter;
-import daikon.config.Configuration;
+import daikon.suppress.*;
+import gnu.getopt.*;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

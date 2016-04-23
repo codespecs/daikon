@@ -1,10 +1,10 @@
 package daikon.test.diff;
 
-import junit.framework.*;
 import daikon.*;
-import daikon.inv.*;
 import daikon.diff.*;
+import daikon.inv.*;
 import java.lang.reflect.*;
+import junit.framework.*;
 
 @SuppressWarnings("nullness") // testing code
 public class PrintDifferingInvariantsVisitorTester extends TestCase {

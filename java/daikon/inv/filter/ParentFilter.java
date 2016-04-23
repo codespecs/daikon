@@ -1,7 +1,7 @@
 package daikon.inv.filter;
 
-import daikon.inv.*;
 import daikon.*;
+import daikon.inv.*;
 import java.util.*;
 
 /*>>>

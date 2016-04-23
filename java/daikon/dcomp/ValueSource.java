@@ -1,15 +1,14 @@
 package daikon.dcomp;
 
+import daikon.chicory.*;
+import daikon.util.ArraysMDE;
+import daikon.util.SimpleLog;
+import daikon.util.Stopwatch;
+import daikon.util.WeakIdentityHashMap;
+import java.io.PrintWriter;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
-import java.lang.reflect.*;
-import java.io.PrintWriter;
-
-import daikon.chicory.*;
-import daikon.util.WeakIdentityHashMap;
-import daikon.util.SimpleLog;
-import daikon.util.ArraysMDE;
-import daikon.util.Stopwatch;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

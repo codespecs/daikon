@@ -1,10 +1,10 @@
 package daikon.split;
 
+import daikon.tools.jtb.*;
 import java.util.*;
+import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import jtb.ParseException;
-import daikon.tools.jtb.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

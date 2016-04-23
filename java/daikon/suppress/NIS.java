@@ -7,11 +7,10 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoString.*;
 import daikon.inv.ternary.*;
 import daikon.inv.ternary.threeScalar.*;
-import plume.*;
-
 import java.lang.reflect.*;
-import java.util.logging.*;
 import java.util.*;
+import java.util.logging.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

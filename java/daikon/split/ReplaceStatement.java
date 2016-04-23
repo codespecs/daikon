@@ -1,11 +1,11 @@
 package daikon.split;
 
-import jtb.*;
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
 import daikon.tools.jtb.*;
 import java.io.*;
 import java.util.*;
+import jtb.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

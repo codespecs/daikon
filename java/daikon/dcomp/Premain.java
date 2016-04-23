@@ -1,21 +1,18 @@
 package daikon.dcomp;
 
-import java.lang.instrument.*;
-import java.security.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-
-import org.apache.commons.bcel6.*;
-import org.apache.commons.bcel6.classfile.*;
-import org.apache.commons.bcel6.generic.*;
-
-import daikon.util.*;
+import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.dcomp.DCRuntime.BranchInfo;
 import daikon.dcomp.ValueSource;
-
-import daikon.DynComp;
+import daikon.util.*;
+import java.io.*;
+import java.lang.instrument.*;
+import java.security.*;
+import java.util.*;
+import java.util.regex.*;
+import org.apache.commons.bcel6.*;
+import org.apache.commons.bcel6.classfile.*;
+import org.apache.commons.bcel6.generic.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

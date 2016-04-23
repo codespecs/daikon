@@ -1,9 +1,9 @@
 package daikon.config;
 
-import java.util.*;
+import com.sun.javadoc.*;
 import java.io.*;
 import java.lang.reflect.*;
-import com.sun.javadoc.*;
+import java.util.*;
 import plume.*;
 
 /*>>>

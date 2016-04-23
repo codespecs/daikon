@@ -1,8 +1,9 @@
 package daikon.simplify;
 
+import static daikon.inv.Invariant.asInvClass;
+
 import daikon.*;
 import daikon.inv.*;
-import static daikon.inv.Invariant.asInvClass;
 
 /** InvariantLemmas are Lemmas created by printing a Daikon invariant
  * in Simplify format, sometimes with some hacks.

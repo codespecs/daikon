@@ -1,7 +1,6 @@
 package daikon.derive;
 
 import daikon.*;
-
 import plume.*;
 
 /*>>>

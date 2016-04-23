@@ -1,9 +1,7 @@
 package daikon.tools.compare;
 
-import java.util.*;
-import java.util.logging.Logger;
-import java.io.*;
-import plume.UtilMDE;
+import static daikon.tools.nullness.NullnessUtils.*;
+
 import daikon.*;
 import daikon.config.Configuration;
 import daikon.inv.*;
@@ -13,8 +11,10 @@ import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.string.*;
 import daikon.simplify.*;
 import gnu.getopt.*;
-
-import static daikon.tools.nullness.NullnessUtils.*;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Logger;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

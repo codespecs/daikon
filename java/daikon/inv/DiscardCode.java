@@ -1,7 +1,7 @@
 package daikon.inv;
 
-import java.io.*;
 import daikon.inv.filter.*;
+import java.io.*;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

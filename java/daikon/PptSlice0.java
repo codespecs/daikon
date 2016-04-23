@@ -1,12 +1,10 @@
 package daikon;
 
-import daikon.inv.*;
-
 import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 
-import plume.*;
-
+import daikon.inv.*;
 import java.util.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

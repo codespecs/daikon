@@ -1,5 +1,12 @@
 package daikon;
 
+import static daikon.Global.lineSep;
+
+import daikon.Daikon.TerminationMessage;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantStatus;
+import daikon.inv.ValueSet;
+import daikon.suppress.NIS;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,15 +19,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import plume.UtilMDE;
-import daikon.Daikon.TerminationMessage;
-import daikon.inv.Invariant;
-import daikon.inv.InvariantStatus;
-import daikon.inv.ValueSet;
-import daikon.suppress.NIS;
-
-import static daikon.Global.lineSep;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

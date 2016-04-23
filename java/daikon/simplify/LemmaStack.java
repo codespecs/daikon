@@ -1,15 +1,15 @@
 package daikon.simplify;
 
-import java.util.Vector;
-import java.util.Stack;
-import java.util.Random;
-import java.util.TreeSet;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.SortedSet;
-import java.util.Iterator;
-import plume.*;
 import daikon.inv.Invariant;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.Stack;
+import java.util.TreeSet;
+import java.util.Vector;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

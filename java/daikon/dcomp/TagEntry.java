@@ -1,8 +1,7 @@
 package daikon.dcomp;
 
-import daikon.util.*;
 import daikon.chicory.DaikonVariableInfo;
-
+import daikon.util.*;
 import java.lang.ref.*;
 import java.util.*;
 

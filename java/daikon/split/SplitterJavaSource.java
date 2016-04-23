@@ -1,12 +1,12 @@
 package daikon.split;
 
 import daikon.*;
-import plume.ArraysMDE;
-import jtb.syntaxtree.*;
-import jtb.ParseException;
 import java.util.*;
-import java.util.regex.*;
 import java.util.logging.Level;
+import java.util.regex.*;
+import jtb.ParseException;
+import jtb.syntaxtree.*;
+import plume.ArraysMDE;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

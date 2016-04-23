@@ -1,9 +1,9 @@
 package daikon.split;
 
+import java.io.*;
 import jtb.JavaParser;
 import jtb.JavaParserConstants;
 import jtb.ParseException;
-import java.io.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 

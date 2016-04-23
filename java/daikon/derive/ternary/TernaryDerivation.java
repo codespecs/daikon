@@ -2,7 +2,6 @@ package daikon.derive.ternary;
 
 import daikon.*;
 import daikon.derive.*;
-
 import plume.*;
 
 /*>>>

@@ -1,14 +1,12 @@
 package daikon;
 
 import daikon.PptTopLevel.PptType;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import plume.Option;
 import plume.Options;
 import plume.SimpleLog;

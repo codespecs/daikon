@@ -1,9 +1,9 @@
 package daikon.inv.unary.scalar;
 
 import daikon.*;
-import daikon.inv.OutputFormat;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

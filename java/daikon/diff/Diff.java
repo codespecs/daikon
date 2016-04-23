@@ -2,13 +2,12 @@ package daikon.diff;
 
 import daikon.*;
 import daikon.inv.*;
-
+import gnu.getopt.*;
 import java.io.*;
 import java.util.*;
-import plume.*;
-import gnu.getopt.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

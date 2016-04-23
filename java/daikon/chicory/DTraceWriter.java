@@ -1,10 +1,9 @@
 package daikon.chicory;
 
+import daikon.Chicory;
 import java.io.PrintStream;
 import java.lang.reflect.*;
 import java.util.*;
-
-import daikon.Chicory;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

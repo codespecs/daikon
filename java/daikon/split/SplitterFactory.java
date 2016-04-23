@@ -1,14 +1,13 @@
 package daikon.split;
 
 import daikon.*;
-
-import plume.*;
-import plume.FileCompiler;
-import jtb.ParseException;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.*;
+import jtb.ParseException;
+import plume.*;
+import plume.FileCompiler;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

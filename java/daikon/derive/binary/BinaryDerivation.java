@@ -2,7 +2,6 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
-
 import plume.*;
 
 /*>>>

@@ -1,10 +1,10 @@
 package daikon.test.split;
 
-import daikon.split.*;
-import java.util.*;
-import java.io.*;
-import plume.*;
 import daikon.*;
+import daikon.split.*;
+import java.io.*;
+import java.util.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

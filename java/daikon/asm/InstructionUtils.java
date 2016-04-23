@@ -1,7 +1,7 @@
 package daikon.asm;
 
-import java.util.*;
 import daikon.util.*;
+import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

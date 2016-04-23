@@ -1,14 +1,13 @@
 package daikon;
 
-import java.util.*;
-import java.io.*;
-import gnu.getopt.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import plume.*;
-
-import daikon.suppress.NIS;
 import daikon.split.PptSplitter;
+import daikon.suppress.NIS;
+import gnu.getopt.*;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

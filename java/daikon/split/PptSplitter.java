@@ -1,17 +1,15 @@
 package daikon.split;
 
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import daikon.*;
 import daikon.inv.*;
 import daikon.suppress.*;
-
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
-
-import plume.*;
-
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.io.Serializable;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

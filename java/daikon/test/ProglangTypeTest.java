@@ -1,8 +1,8 @@
 package daikon.test;
 
-import junit.framework.*;
-import java.util.Comparator;
 import daikon.*;
+import java.util.Comparator;
+import junit.framework.*;
 import plume.ArraysMDE;
 
 @SuppressWarnings("nullness") // testing code

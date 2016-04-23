@@ -1,23 +1,20 @@
 package daikon;
 
-import daikon.inv.OutputFormat;
-import daikon.inv.Invariant;
+import daikon.chicory.DaikonVariableInfo;
 import daikon.derive.*; // see dbc_name_impl(VarInfo v)
-import daikon.derive.unary.*; // see dbc_name_impl(VarInfo v)
 import daikon.derive.binary.*; // see dbc_name_impl(VarInfo v)
 import daikon.derive.ternary.*; // see dbc_name_impl(VarInfo v)
-import daikon.chicory.DaikonVariableInfo;
-
-import plume.*;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
-import java.lang.ref.WeakReference;
-import java.io.Serializable;
-import java.io.ObjectInputStream;
+import daikon.derive.unary.*; // see dbc_name_impl(VarInfo v)
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

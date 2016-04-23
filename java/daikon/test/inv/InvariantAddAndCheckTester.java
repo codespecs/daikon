@@ -1,23 +1,20 @@
 package daikon.test.inv;
 
-import daikon.*;
-
-import daikon.config.Configuration;
-
-import daikon.inv.*;
-import daikon.inv.ternary.threeScalar.ThreeScalar;
-import daikon.inv.binary.*;
-import daikon.inv.unary.*;
-import daikon.inv.unary.sequence.CommonSequence;
 import static daikon.inv.Invariant.asInvClass;
 
-import junit.framework.*;
-
+import daikon.*;
+import daikon.config.Configuration;
+import daikon.inv.*;
+import daikon.inv.binary.*;
+import daikon.inv.ternary.threeScalar.ThreeScalar;
+import daikon.inv.unary.*;
+import daikon.inv.unary.sequence.CommonSequence;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import junit.framework.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

@@ -2,14 +2,12 @@ package daikon.test;
 
 import daikon.PptName;
 import daikon.tools.jtb.*;
-import junit.framework.*;
-
-import jtb.*;
-import jtb.visitor.*;
-import jtb.syntaxtree.*;
-
 import java.io.*;
 import java.util.*;
+import jtb.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
+import junit.framework.*;
 
 /**
  * Tests functionality of some methods in daikon.tools.jtb.Ast.

@@ -1,16 +1,14 @@
 package daikon.suppress;
 
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
-
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
-
-import plume.*;
-
 import java.lang.reflect.*;
-import java.util.logging.Logger;
 import java.util.*;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

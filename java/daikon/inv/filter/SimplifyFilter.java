@@ -1,7 +1,7 @@
 package daikon.inv.filter;
 
-import daikon.PptTopLevel;
 import daikon.Daikon;
+import daikon.PptTopLevel;
 import daikon.inv.*;
 
 public class SimplifyFilter extends InvariantFilter {

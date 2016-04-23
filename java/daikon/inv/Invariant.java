@@ -1,26 +1,24 @@
 package daikon.inv;
 
-import daikon.*;
-import daikon.Debug;
-import daikon.inv.unary.*;
-import daikon.inv.binary.*;
-import daikon.inv.ternary.*;
-import daikon.inv.ternary.threeScalar.*;
-import daikon.inv.filter.*;
-import daikon.suppress.*;
-import daikon.simplify.SimpUtil;
-import daikon.simplify.LemmaStack;
 import static daikon.inv.Invariant.asInvClass;
-
 import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 
-import plume.*;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.util.regex.*;
-import java.util.*;
+import daikon.*;
+import daikon.Debug;
+import daikon.inv.binary.*;
+import daikon.inv.filter.*;
+import daikon.inv.ternary.*;
+import daikon.inv.ternary.threeScalar.*;
+import daikon.inv.unary.*;
+import daikon.simplify.LemmaStack;
+import daikon.simplify.SimpUtil;
+import daikon.suppress.*;
 import java.io.Serializable;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;

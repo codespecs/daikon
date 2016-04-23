@@ -1,8 +1,8 @@
 package daikon.simplify;
 
 import java.io.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

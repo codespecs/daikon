@@ -1,11 +1,10 @@
 package daikon.test.diff;
 
-import junit.framework.*;
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.Invariant;
-
 import java.util.*;
+import junit.framework.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

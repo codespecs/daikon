@@ -2,15 +2,14 @@ package daikon.suppress;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.unary.*;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.*;
+import daikon.inv.unary.*;
 import daikon.suppress.*;
-import plume.*;
-
 import java.lang.reflect.*;
-import java.util.logging.Logger;
 import java.util.*;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

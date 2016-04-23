@@ -2,10 +2,10 @@
 
 package daikon;
 
-import java.util.*;
-import java.io.Serializable;
-import plume.*;
 import daikon.inv.Invariant; // for emptyInvList
+import java.io.Serializable;
+import java.util.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

@@ -2,11 +2,9 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
-
-import plume.*;
-
-import java.util.*;
 import java.io.Serializable;
+import java.util.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

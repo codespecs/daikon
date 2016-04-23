@@ -1,28 +1,26 @@
 package daikon;
 
-import daikon.derive.ValueAndModified;
-import daikon.config.Configuration;
-import daikon.diff.InvMap;
-import daikon.inv.Invariant;
 import static daikon.PptRelation.PptRelationType;
 import static daikon.PptTopLevel.PptFlags;
 import static daikon.PptTopLevel.PptType;
-import static daikon.VarInfo.RefType;
-import static daikon.VarInfo.VarKind;
-import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.LangFlags;
-
+import static daikon.VarInfo.RefType;
+import static daikon.VarInfo.VarFlags;
+import static daikon.VarInfo.VarKind;
 import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 
-import plume.*;
-
+import daikon.config.Configuration;
+import daikon.derive.ValueAndModified;
+import daikon.diff.InvMap;
+import daikon.inv.Invariant;
 import java.io.*;
 import java.net.*;
 import java.text.*;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

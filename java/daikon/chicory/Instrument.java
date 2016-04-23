@@ -1,31 +1,20 @@
 package daikon.chicory;
 
+import static java.lang.System.out;
+
+import daikon.Chicory;
+import daikon.util.SimpleLog;
+import java.io.*;
 import java.lang.instrument.*;
 import java.lang.reflect.Modifier;
 import java.security.*;
-import java.io.*;
 import java.util.*;
 import java.util.regex.*;
-
-import static java.lang.System.out;
-
-// Sun included version of BCEL
-// import com.sun.org.apache.bcel.internal.*;
-// import com.sun.org.apache.bcel.internal.classfile.*;
-// import com.sun.org.apache.bcel.internal.generic.InstructionFactory;
-// import com.sun.org.apache.bcel.internal.generic.*;
-
 import org.apache.commons.bcel6.*;
 import org.apache.commons.bcel6.classfile.*;
-import org.apache.commons.bcel6.generic.InstructionFactory;
 import org.apache.commons.bcel6.generic.*;
+import org.apache.commons.bcel6.generic.InstructionFactory;
 import org.apache.commons.bcel6.verifier.VerificationResult;
-
-//import sun.nio.cs.ext.ISCII91;
-
-import daikon.util.SimpleLog;
-
-import daikon.Chicory;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;

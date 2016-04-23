@@ -1,10 +1,10 @@
 package daikon.inv.unary.scalar;
 
 import daikon.*;
-import daikon.inv.*;
 import daikon.derive.unary.SequenceLength;
-import plume.*;
+import daikon.inv.*;
 import java.util.Iterator;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

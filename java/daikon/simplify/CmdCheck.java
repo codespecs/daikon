@@ -1,7 +1,6 @@
 package daikon.simplify;
 
 import java.io.IOException;
-
 import java.util.logging.Logger;
 
 /*>>>

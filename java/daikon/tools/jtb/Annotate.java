@@ -2,14 +2,13 @@ package daikon.tools.jtb;
 
 import daikon.*;
 import daikon.inv.OutputFormat;
-import plume.*;
 import gnu.getopt.*;
-import java.util.logging.Logger;
 import java.io.*;
 import java.util.*;
-
+import java.util.logging.Logger;
 import jtb.*;
 import jtb.syntaxtree.*;
+import plume.*;
 
 /**
  * Merge Daikon-generated invariants into Java source code as ESC/JML/DBC

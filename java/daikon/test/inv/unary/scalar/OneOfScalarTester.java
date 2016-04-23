@@ -1,9 +1,9 @@
 package daikon.test.inv.unary.scalar;
 
-import junit.framework.*;
 import daikon.*;
 import daikon.inv.unary.scalar.*;
 import daikon.test.Common;
+import junit.framework.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

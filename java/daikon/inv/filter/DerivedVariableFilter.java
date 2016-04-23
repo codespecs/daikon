@@ -1,8 +1,8 @@
 package daikon.inv.filter;
 
-import java.util.regex.Pattern;
-import daikon.inv.*;
 import daikon.VarInfo;
+import daikon.inv.*;
+import java.util.regex.Pattern;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

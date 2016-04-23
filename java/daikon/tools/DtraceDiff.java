@@ -2,14 +2,15 @@
 
 package daikon.tools;
 
-import java.io.*;
-import java.util.*;
-import plume.*;
+import static daikon.tools.nullness.NullnessUtils.*;
+
 import daikon.*;
 import daikon.config.Configuration;
-import java.util.regex.*;
 import gnu.getopt.*;
-import static daikon.tools.nullness.NullnessUtils.*;
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

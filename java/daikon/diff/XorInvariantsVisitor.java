@@ -1,8 +1,8 @@
 package daikon.diff;
 
+import daikon.*;
 import daikon.inv.Invariant;
 import java.io.*;
-import daikon.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

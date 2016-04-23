@@ -2,17 +2,15 @@ package daikon.test;
 
 import daikon.*;
 import daikon.inv.*;
-import plume.*;
-
 import gnu.getopt.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
-
+import java.util.logging.Logger;
 import junit.framework.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

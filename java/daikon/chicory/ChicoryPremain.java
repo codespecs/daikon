@@ -2,18 +2,17 @@ package daikon.chicory;
 
 //import harpoon.ClassFile.HMethod;
 
-import java.lang.instrument.*;
-import java.lang.reflect.Member;
-import java.io.*;
-import java.io.File;
-import java.util.*;
-import java.util.jar.*;
-import java.net.URL;
+import static daikon.tools.nullness.NullnessUtils.castNonNull;
 
 import daikon.Chicory;
 import daikon.util.*;
-
-import static daikon.tools.nullness.NullnessUtils.castNonNull;
+import java.io.*;
+import java.io.File;
+import java.lang.instrument.*;
+import java.lang.reflect.Member;
+import java.net.URL;
+import java.util.*;
+import java.util.jar.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

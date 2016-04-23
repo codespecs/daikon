@@ -1,9 +1,9 @@
 package daikon.split;
 
-import java.util.*;
 import daikon.*;
-import plume.*;
+import java.util.*;
 import java.util.logging.Level;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

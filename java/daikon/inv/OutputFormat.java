@@ -1,8 +1,8 @@
 package daikon.inv;
 
 import daikon.*;
-import plume.Pair;
 import java.util.*;
+import plume.Pair;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

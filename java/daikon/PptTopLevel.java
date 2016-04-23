@@ -1,37 +1,34 @@
 package daikon;
 
+import static daikon.FileIO.ParentRelation;
+import static daikon.PptRelation.PptRelationType;
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import daikon.derive.*;
-import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
+import daikon.derive.unary.*;
 import daikon.inv.*;
+import daikon.inv.binary.*;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoSequence.*;
+import daikon.inv.binary.twoString.*;
+import daikon.inv.filter.InvariantFilters;
+import daikon.inv.ternary.*;
 import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.stringsequence.*;
-import daikon.inv.binary.*;
-import daikon.inv.ternary.*;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.binary.twoString.*;
-import daikon.inv.binary.twoSequence.*;
 import daikon.simplify.*;
 import daikon.split.*;
 import daikon.split.misc.*;
 import daikon.suppress.*;
-import daikon.inv.filter.InvariantFilters;
-import static daikon.FileIO.ParentRelation;
-import static daikon.PptRelation.PptRelationType;
-
-import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
-
-import plume.*;
-
-import java.util.*;
-import java.text.*;
 import java.io.*;
-
-import java.util.logging.Logger;
+import java.text.*;
+import java.util.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

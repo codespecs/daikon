@@ -1,8 +1,8 @@
 package daikon.diff;
 
-import daikon.inv.Invariant;
-import daikon.inv.Implication;
 import daikon.*;
+import daikon.inv.Implication;
+import daikon.inv.Invariant;
 import java.util.*;
 
 /*>>>

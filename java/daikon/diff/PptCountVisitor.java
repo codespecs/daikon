@@ -1,9 +1,9 @@
 package daikon.diff;
 
+import daikon.*;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import java.io.*;
-import daikon.*;
 import java.util.*;
 
 /*>>>

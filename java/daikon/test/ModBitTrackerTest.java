@@ -1,9 +1,9 @@
 package daikon.test;
 
-import junit.framework.*;
 import daikon.*;
-import java.util.Random;
 import java.util.BitSet;
+import java.util.Random;
+import junit.framework.*;
 
 public class ModBitTrackerTest extends TestCase {
 

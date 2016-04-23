@@ -1,7 +1,7 @@
 package daikon.tools;
 
-import java.util.*;
 import daikon.*;
+import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

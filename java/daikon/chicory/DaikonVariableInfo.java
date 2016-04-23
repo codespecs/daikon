@@ -1,11 +1,10 @@
 package daikon.chicory;
 
+import daikon.Chicory;
+import daikon.util.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
-import daikon.util.*;
-
-import daikon.Chicory;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

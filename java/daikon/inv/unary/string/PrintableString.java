@@ -2,10 +2,8 @@ package daikon.inv.unary.string;
 
 import daikon.*;
 import daikon.inv.*;
-
-import plume.*;
-
 import java.util.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

@@ -1,9 +1,9 @@
 package daikon.split;
 
 import java.util.*;
+import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import jtb.ParseException;
 
 /**
  * TokenExtractor is a visitor for a jtb syntax tree that returns all the

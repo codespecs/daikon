@@ -1,7 +1,7 @@
 package daikon;
 
-import daikon.split.*;
 import daikon.inv.DummyInvariant;
+import daikon.split.*;
 import java.util.*;
 
 /*>>>

@@ -1,11 +1,10 @@
 package daikon.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import daikon.asm.IInstruction;
 import daikon.asm.KillerInstruction;
 import daikon.asm.X86Instruction;
+import java.util.ArrayList;
+import java.util.List;
 import junit.framework.TestCase;
 
 public class KillerInstructionTests extends TestCase {

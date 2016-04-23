@@ -1,24 +1,21 @@
 package daikon.dcomp;
 
-import daikon.DynComp;
 import static daikon.dcomp.DCInstrument.MethodDef;
 
-import daikon.chicory.MethodInfo;
+import daikon.DynComp;
 import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
+import daikon.chicory.MethodInfo;
 import daikon.util.*;
-
+import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.regex.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Method;
-import java.io.*;
-
 import org.apache.commons.bcel6.generic.*;
 import org.apache.commons.bcel6.verifier.*;
 import org.apache.commons.bcel6.verifier.structurals.*;
-
 import org.apache.commons.io.*;
 
 /*>>>

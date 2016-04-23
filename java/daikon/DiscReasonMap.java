@@ -4,7 +4,6 @@ import daikon.inv.DiscardCode;
 import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantInfo;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

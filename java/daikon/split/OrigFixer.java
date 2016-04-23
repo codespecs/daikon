@@ -1,9 +1,9 @@
 package daikon.split;
 
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
 import daikon.tools.jtb.*;
 import jtb.ParseException;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

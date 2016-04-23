@@ -1,9 +1,9 @@
 package daikon.diff;
 
-import java.io.*;
-import java.util.*;
 import daikon.*;
 import daikon.inv.*;
+import java.io.*;
+import java.util.*;
 import plume.IterableIterator;
 
 /*>>>

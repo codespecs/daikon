@@ -2,24 +2,20 @@
 
 package daikon.tools.jtb;
 
-import daikon.inv.OutputFormat;
-import daikon.inv.Invariant;
+import daikon.*;
 import daikon.inv.Equality;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 import daikon.inv.filter.*;
-
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
-import java.lang.reflect.*;
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 import jtb.JavaParser;
 import jtb.ParseException;
-import plume.UtilMDE;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
 import plume.ArraysMDE;
-
-import daikon.*;
-
-import java.lang.reflect.*;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

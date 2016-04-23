@@ -1,12 +1,10 @@
 package daikon.tools.jtb;
 
-import jtb.*;
-import jtb.visitor.*;
-import jtb.syntaxtree.*;
-
-import java.util.*;
 import java.io.*;
-
+import java.util.*;
+import jtb.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
 import plume.*;
 
 /*>>>

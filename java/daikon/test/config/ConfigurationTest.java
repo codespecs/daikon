@@ -1,7 +1,7 @@
 package daikon.test.config;
 
-import junit.framework.*;
 import daikon.config.*;
+import junit.framework.*;
 
 public class ConfigurationTest extends TestCase {
 

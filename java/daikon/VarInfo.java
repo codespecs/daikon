@@ -1,27 +1,26 @@
 package daikon;
 
-import daikon.chicory.DaikonVariableInfo;
-import daikon.derive.*;
-import daikon.derive.unary.*;
-import daikon.derive.binary.*;
-import daikon.derive.ternary.*;
-import daikon.VarInfoName.*;
+import static daikon.FileIO.VarDefinition;
+
 import daikon.PrintInvariants;
-import daikon.inv.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.binary.twoScalar.*;
 import daikon.Quantify;
 import daikon.Quantify.QuantFlags;
 import daikon.Quantify.QuantifyReturn;
-import static daikon.FileIO.VarDefinition;
-
-import plume.*;
-
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import daikon.VarInfoName.*;
+import daikon.chicory.DaikonVariableInfo;
+import daikon.derive.*;
+import daikon.derive.binary.*;
+import daikon.derive.ternary.*;
+import daikon.derive.unary.*;
+import daikon.inv.*;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.sequence.*;
 import java.io.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;

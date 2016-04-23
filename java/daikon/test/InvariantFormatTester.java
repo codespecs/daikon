@@ -1,18 +1,13 @@
 package daikon.test;
 
 import daikon.*;
-import plume.*;
-
 import daikon.config.Configuration;
-
 import java.io.*;
-
 import java.net.URL;
-
 import java.util.List;
 import java.util.Vector;
-
 import junit.framework.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

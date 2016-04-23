@@ -1,14 +1,14 @@
 package daikon.tools.jtb;
 
-import java.io.*;
-import gnu.getopt.*;
-import java.util.logging.Logger;
 import daikon.*;
-import jtb.syntaxtree.*;
+import gnu.getopt.*;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Logger;
 import jtb.JavaParser;
 import jtb.ParseException;
+import jtb.syntaxtree.*;
 import plume.*;
-import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

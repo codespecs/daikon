@@ -1,9 +1,9 @@
 package daikon.diff;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import daikon.inv.Invariant;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

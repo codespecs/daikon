@@ -2,24 +2,23 @@
 
 package daikon.tools.jtb;
 
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
 import daikon.*;
-import plume.ArraysMDE;
-import plume.EntryReader;
-import plume.UtilMDE;
+import daikon.chicory.DaikonVariableInfo;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.unary.sequence.EltNonZero;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
-import daikon.chicory.DaikonVariableInfo;
-
+import java.io.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
+import plume.ArraysMDE;
+import plume.EntryReader;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

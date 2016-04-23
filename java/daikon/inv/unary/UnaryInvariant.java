@@ -1,7 +1,7 @@
 package daikon.inv.unary;
 
-import daikon.inv.*;
 import daikon.PptSlice;
+import daikon.inv.*;
 import daikon.inv.InvariantStatus;
 
 /*>>>

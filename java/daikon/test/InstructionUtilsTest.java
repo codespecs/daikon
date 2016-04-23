@@ -1,17 +1,16 @@
 package daikon.test;
 
+import daikon.asm.IInstruction;
+import daikon.asm.InstructionUtils;
+import daikon.asm.KillerInstruction;
+import daikon.asm.X86Instruction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import junit.framework.TestCase;
-import daikon.asm.IInstruction;
-import daikon.asm.InstructionUtils;
-import daikon.asm.KillerInstruction;
-import daikon.asm.X86Instruction;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

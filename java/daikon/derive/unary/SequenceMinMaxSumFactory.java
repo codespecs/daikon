@@ -1,10 +1,10 @@
 package daikon.derive.unary;
 
-import java.util.ArrayList;
 import daikon.Daikon;
-import daikon.VarInfo;
 import daikon.ProglangType;
+import daikon.VarInfo;
 import daikon.inv.OutputFormat;
+import java.util.ArrayList;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

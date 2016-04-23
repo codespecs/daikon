@@ -1,13 +1,13 @@
 package daikon.inv.filter;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.util.*;
-import daikon.inv.*;
-import daikon.PptMap;
-import daikon.VarInfo;
-import daikon.PrintInvariants;
 import daikon.Daikon;
+import daikon.PptMap;
+import daikon.PrintInvariants;
+import daikon.VarInfo;
+import daikon.inv.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

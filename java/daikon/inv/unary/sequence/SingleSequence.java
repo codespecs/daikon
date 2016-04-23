@@ -1,12 +1,12 @@
 package daikon.inv.unary.sequence;
 
 import daikon.*;
-import daikon.inv.*;
-import daikon.inv.unary.UnaryInvariant;
-import daikon.inv.binary.twoSequence.*;
 import daikon.derive.binary.SequenceSubsequence;
-import java.util.logging.Logger;
+import daikon.inv.*;
+import daikon.inv.binary.twoSequence.*;
+import daikon.inv.unary.UnaryInvariant;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

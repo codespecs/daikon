@@ -1,5 +1,14 @@
 package daikon.tools.runtimechecker;
 
+import daikon.Daikon;
+import daikon.FileIO;
+import daikon.Global;
+import daikon.LogHelper;
+import daikon.PptMap;
+import daikon.tools.jtb.*;
+import daikon.tools.runtimechecker.InstrumentVisitor;
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -12,21 +21,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import jtb.JavaParser;
 import jtb.syntaxtree.*;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
 import plume.UtilMDE;
-import daikon.Daikon;
-import daikon.FileIO;
-import daikon.Global;
-import daikon.LogHelper;
-import daikon.PptMap;
-import daikon.tools.jtb.*;
-import daikon.tools.runtimechecker.InstrumentVisitor;
-import gnu.getopt.Getopt;
-import gnu.getopt.LongOpt;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

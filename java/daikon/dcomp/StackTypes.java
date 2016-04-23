@@ -2,13 +2,12 @@ package daikon.dcomp;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.commons.bcel6.generic.MethodGen;
 import org.apache.commons.bcel6.generic.InstructionList;
+import org.apache.commons.bcel6.generic.MethodGen;
 import org.apache.commons.bcel6.generic.Type;
-import org.apache.commons.bcel6.verifier.structurals.OperandStack;
-import org.apache.commons.bcel6.verifier.structurals.LocalVariables;
 import org.apache.commons.bcel6.verifier.structurals.Frame;
+import org.apache.commons.bcel6.verifier.structurals.LocalVariables;
+import org.apache.commons.bcel6.verifier.structurals.OperandStack;
 import org.apache.commons.bcel6.verifier.structurals.UninitializedObjectType;
 
 /*>>>

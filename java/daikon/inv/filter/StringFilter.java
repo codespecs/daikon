@@ -1,7 +1,5 @@
 package daikon.inv.filter;
 
-import java.util.logging.Level;
-
 import daikon.PrintInvariants;
 import daikon.ProglangType;
 import daikon.VarInfo;
@@ -11,6 +9,7 @@ import daikon.inv.binary.twoString.StringEqual;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.inv.unary.string.OneOfString;
+import java.util.logging.Level;
 
 /**
  * Suppress string invariants that are redundant for .NET. The following invariants will be

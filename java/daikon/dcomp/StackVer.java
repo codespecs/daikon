@@ -59,7 +59,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
-
 import org.apache.commons.bcel6.Const;
 import org.apache.commons.bcel6.generic.ConstantPoolGen;
 import org.apache.commons.bcel6.generic.InstructionHandle;

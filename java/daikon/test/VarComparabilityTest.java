@@ -1,8 +1,7 @@
 package daikon.test;
 
-import junit.framework.*;
-
 import daikon.*;
+import junit.framework.*;
 
 public class VarComparabilityTest extends TestCase {
 

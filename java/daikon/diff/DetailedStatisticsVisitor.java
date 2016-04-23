@@ -1,10 +1,10 @@
 package daikon.diff;
 
-import java.io.*;
 import daikon.inv.*;
-import plume.*;
-import java.util.logging.Logger;
+import java.io.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

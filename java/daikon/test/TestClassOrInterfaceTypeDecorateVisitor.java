@@ -2,15 +2,13 @@ package daikon.test;
 
 import daikon.PptName;
 import daikon.tools.jtb.*;
-import junit.framework.*;
-import plume.UtilMDE;
-
-import jtb.*;
-import jtb.visitor.*;
-import jtb.syntaxtree.*;
-
 import java.io.*;
 import java.util.*;
+import jtb.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
+import junit.framework.*;
+import plume.UtilMDE;
 
 public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
 

@@ -1,13 +1,12 @@
 package daikon.chicory;
 
+import daikon.Chicory;
+import daikon.PptTopLevel.PptType;
+import daikon.util.SimpleLog;
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.lang.reflect.*;
-
-import daikon.PptTopLevel.PptType;
-import daikon.Chicory;
-import daikon.util.SimpleLog;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

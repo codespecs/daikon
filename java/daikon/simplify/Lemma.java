@@ -1,7 +1,6 @@
 package daikon.simplify;
 
 import daikon.inv.Invariant;
-
 import java.util.Vector;
 
 /*>>>

@@ -1,6 +1,5 @@
 package daikon.test.diff;
 
-import junit.framework.*;
 import daikon.*;
 import daikon.config.*;
 import daikon.diff.*;
@@ -9,10 +8,10 @@ import daikon.inv.unary.scalar.*;
 import daikon.split.*;
 import daikon.split.misc.*;
 import daikon.test.*;
-
-import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.*;
+import junit.framework.*;
 
 @SuppressWarnings("nullness") // testing code
 public class DiffTester extends TestCase {

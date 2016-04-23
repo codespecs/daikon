@@ -1,9 +1,9 @@
 package daikon.tools.jtb;
 
-import jtb.cparser.*;
-import jtb.cparser.syntaxtree.*;
-import jtb.cparser.customvisitor.*;
 import java.io.*;
+import jtb.cparser.*;
+import jtb.cparser.customvisitor.*;
+import jtb.cparser.syntaxtree.*;
 
 public class CreateSpinfoC {
 

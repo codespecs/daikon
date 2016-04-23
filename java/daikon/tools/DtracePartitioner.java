@@ -1,8 +1,8 @@
 // DtracePartitioner.java
 package daikon.tools;
 
-import java.util.*;
 import java.io.*;
+import java.util.*;
 import plume.*;
 
 /** This class partitions Daikon trace files so that invocations of

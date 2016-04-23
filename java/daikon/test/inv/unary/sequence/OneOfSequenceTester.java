@@ -1,10 +1,10 @@
 package daikon.test.inv.unary.sequence;
 
-import junit.framework.*;
 import daikon.*;
 import daikon.inv.unary.sequence.*;
-import plume.*;
 import daikon.test.Common;
+import junit.framework.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

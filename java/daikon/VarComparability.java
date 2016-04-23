@@ -1,8 +1,7 @@
 package daikon;
 
-import plume.*;
-
 import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;

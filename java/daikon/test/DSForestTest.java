@@ -1,10 +1,8 @@
 package daikon.test;
 
+import daikon.asm.DSForest;
 import java.io.*;
 import java.util.*;
-
-import daikon.asm.DSForest;
-
 import junit.framework.TestCase;
 
 @SuppressWarnings("nullness") // testing code

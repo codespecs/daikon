@@ -1,15 +1,14 @@
 package daikon;
 
-import daikon.inv.*;
-import daikon.suppress.*;
-import daikon.inv.ternary.threeScalar.*;
-
 import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 
-import plume.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import daikon.inv.*;
+import daikon.inv.ternary.threeScalar.*;
+import daikon.suppress.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

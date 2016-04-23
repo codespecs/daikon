@@ -1,8 +1,7 @@
 package daikon;
 
-import java.util.*;
 import java.io.*;
-
+import java.util.*;
 import plume.*;
 
 /*>>>

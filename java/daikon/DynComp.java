@@ -1,13 +1,12 @@
 package daikon;
 
+import daikon.chicory.StreamRedirectThread;
+import daikon.dcomp.*;
+import daikon.util.*;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import daikon.chicory.StreamRedirectThread;
-import daikon.dcomp.*;
-import daikon.util.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

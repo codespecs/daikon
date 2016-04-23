@@ -1,13 +1,13 @@
 package daikon.tools;
 
-import java.util.*;
-import java.io.*;
-import java.util.logging.Logger;
-import java.util.regex.*;
-import gnu.getopt.*;
-import plume.UtilMDE;
 import daikon.*;
 import daikon.inv.*;
+import gnu.getopt.*;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Logger;
+import java.util.regex.*;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

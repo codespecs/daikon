@@ -1,23 +1,20 @@
 package daikon;
 
 import daikon.inv.*;
-import daikon.inv.unary.*;
 import daikon.inv.binary.*;
-import daikon.inv.ternary.*;
-import daikon.suppress.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.string.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.stringsequence.*;
-import daikon.inv.ternary.threeScalar.*;
 import daikon.inv.binary.twoScalar.*;
-
+import daikon.inv.ternary.*;
+import daikon.inv.ternary.threeScalar.*;
+import daikon.inv.unary.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.string.*;
+import daikon.inv.unary.stringsequence.*;
+import daikon.suppress.*;
 import java.io.*;
 import java.util.*;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
-
+import java.util.logging.Logger;
 import plume.*;
 
 /*>>>

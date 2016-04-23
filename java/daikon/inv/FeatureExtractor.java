@@ -1,15 +1,14 @@
 package daikon.inv;
 
-import plume.*;
 import static daikon.inv.Invariant.asInvClass;
 
 import daikon.*;
 import daikon.diff.*;
-
-import java.lang.reflect.*;
 import java.io.*;
-import java.util.*;
+import java.lang.reflect.*;
 import java.text.*;
+import java.util.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

@@ -3,10 +3,8 @@ package daikon;
 import daikon.inv.*;
 import java.io.*;
 import java.util.*;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
-
+import java.util.logging.Logger;
 import plume.*;
 
 /*>>>

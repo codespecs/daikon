@@ -1,23 +1,22 @@
 package daikon;
 
-import daikon.derive.*;
-import daikon.derive.unary.*;
-import daikon.derive.binary.*;
-import daikon.derive.ternary.*;
-import daikon.VarInfoName.*;
-import daikon.PrintInvariants;
-import daikon.inv.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.binary.twoScalar.*;
 import static daikon.FileIO.VarDefinition;
 
-import plume.*;
-
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import daikon.PrintInvariants;
+import daikon.VarInfoName.*;
+import daikon.derive.*;
+import daikon.derive.binary.*;
+import daikon.derive.ternary.*;
+import daikon.derive.unary.*;
+import daikon.inv.*;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.sequence.*;
 import java.io.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

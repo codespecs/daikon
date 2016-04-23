@@ -1,9 +1,8 @@
 package daikon.test;
 
-import java.util.*;
-import java.io.*;
-
 import daikon.*;
+import java.io.*;
+import java.util.*;
 
 /**
  * This is called by VarInfoName to parse varInfoNameTest<em>foo</em> files

@@ -4,8 +4,8 @@ package daikon;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
 import java.util.logging.Logger;
+import java.util.regex.*;
 import plume.*;
 
 /*>>>

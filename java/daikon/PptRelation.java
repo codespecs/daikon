@@ -1,13 +1,14 @@
 package daikon;
 
+import static daikon.FileIO.ParentRelation;
+
 import daikon.inv.*;
 import daikon.split.PptSplitter;
-import static daikon.FileIO.ParentRelation;
-import plume.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

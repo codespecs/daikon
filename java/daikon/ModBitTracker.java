@@ -2,7 +2,6 @@ package daikon;
 
 import java.io.Serializable;
 import java.util.*;
-
 import plume.*;
 
 /*>>>

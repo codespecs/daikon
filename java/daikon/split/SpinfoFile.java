@@ -2,8 +2,8 @@ package daikon.split;
 
 import java.io.*;
 import java.util.*;
-import plume.*;
 import jtb.ParseException;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

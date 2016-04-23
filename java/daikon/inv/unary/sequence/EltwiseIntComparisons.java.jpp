@@ -129,7 +129,6 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.Quantify.QuantFlags;
-// import daikon.inv.binary.twoScalar.CORECLASS;
 import plume.*;
 import java.util.*;
 

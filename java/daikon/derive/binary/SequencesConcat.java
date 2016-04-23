@@ -2,10 +2,8 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
-
-import plume.*;
-
 import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

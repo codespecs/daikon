@@ -1,8 +1,8 @@
 package daikon.chicory;
 
-import java.lang.reflect.*;
 import daikon.Chicory;
 import daikon.util.UtilMDE;
+import java.lang.reflect.*;
 
 /*>>>
 import org.checkerframework.checker.signature.qual.*;

@@ -1,9 +1,9 @@
 package daikon.chicory;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.lang.reflect.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

@@ -1,10 +1,9 @@
 package daikon.test;
 
-import junit.framework.*;
-
 import daikon.*;
 import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.*;
+import junit.framework.*;
 
 public class LinearTernaryCoreTest extends TestCase {
 

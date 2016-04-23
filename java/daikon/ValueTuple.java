@@ -1,11 +1,8 @@
 package daikon;
 
 import daikon.derive.*;
-
-import java.util.logging.Logger;
-
 import java.util.*;
-
+import java.util.logging.Logger;
 import plume.*;
 
 /*>>>

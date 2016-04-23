@@ -1,12 +1,12 @@
 package daikon.test.inv;
 
-import junit.framework.*;
 import daikon.*;
 import daikon.config.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.test.*;
 import java.util.*;
+import junit.framework.*;
 
 @SuppressWarnings("nullness") // testing code
 public class InvariantTester extends TestCase {

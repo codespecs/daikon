@@ -1,7 +1,7 @@
 package daikon.chicory;
 
-import java.util.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

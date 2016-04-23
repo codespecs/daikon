@@ -2,11 +2,10 @@ package daikon.inv;
 
 import daikon.*;
 import daikon.Quantify.QuantFlags;
-
-import plume.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;

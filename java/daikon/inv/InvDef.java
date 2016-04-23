@@ -1,13 +1,12 @@
 package daikon.inv;
 
-import daikon.*;
-import daikon.inv.binary.*;
 import static daikon.inv.Invariant.asInvClass;
 
-import plume.*;
-
+import daikon.*;
+import daikon.inv.binary.*;
 import java.lang.reflect.*;
 import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

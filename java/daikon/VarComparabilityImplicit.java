@@ -1,7 +1,7 @@
 package daikon;
 
-import java.util.Vector;
 import java.io.Serializable;
+import java.util.Vector;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

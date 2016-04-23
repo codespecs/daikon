@@ -1,9 +1,9 @@
 package daikon.test;
 
 import daikon.*;
-import junit.framework.*;
-import java.util.*;
 import java.io.*;
+import java.util.*;
+import junit.framework.*;
 import plume.*;
 
 @SuppressWarnings("nullness") // testing code

@@ -1,9 +1,8 @@
 package daikon.chicory;
 
 import daikon.util.*;
-
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;

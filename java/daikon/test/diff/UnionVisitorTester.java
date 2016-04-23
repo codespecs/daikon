@@ -1,11 +1,11 @@
 package daikon.test.diff;
 
-import java.util.*;
-import junit.framework.*;
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.*;
 import daikon.test.*;
+import java.util.*;
+import junit.framework.*;
 
 public class UnionVisitorTester extends TestCase {
 

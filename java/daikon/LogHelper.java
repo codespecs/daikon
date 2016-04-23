@@ -1,8 +1,8 @@
 package daikon;
 
-import java.util.logging.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.*;
 
 /**
  * Standard methods for setting up logging.
