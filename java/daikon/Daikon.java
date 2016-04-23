@@ -964,7 +964,7 @@ public final class Daikon {
               throw new Daikon.TerminationMessage("Field ClassLoader.classes was not made accessible");
             }
             @SuppressWarnings({"unchecked","nullness"}) // type of ClassLoader.classes field is known, and is non-null
-            /* @NonNull*/ Vector<Class<?>> classes = (Vector<Class<?>>) classesAsObject;
+            /*@NonNull*/ Vector<Class<?>> classes = (Vector<Class<?>>) classesAsObject;
             for (int i=0; i<classes.size(); i++) {
               Class<?> loadedClass = classes.get(i);
               if (Invariant.class.isAssignableFrom(loadedClass)) {
