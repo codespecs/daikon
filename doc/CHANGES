@@ -23,8 +23,11 @@ Further documentation can be found in:
 5.3.2 (scheduled for May 2016)
 
 Daikon:
- - Command-line argument --user_defined_invariant makes Daikon compute a
+ - Command-line argument --user-defined-invariant makes Daikon compute a
    user-defined invariant in addition to those that are built in to Daikon.
+ - Command-line argument --disable-all-invariants disables all of Daikon's
+   built-in invariants.  Subsequent command-line options may enable some of
+   them.
 
 ===========================================================================
 

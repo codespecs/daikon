@@ -3,9 +3,26 @@
 
 package daikon;
 
+import daikon.config.Configuration;
+import daikon.derive.Derivation;
+import daikon.inv.Equality;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
+import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.sequenceString.MemberString;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoSequence.*;
+import daikon.inv.binary.twoString.*;
+import daikon.inv.ternary.threeScalar.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.string.*;
+import daikon.inv.unary.stringsequence.*;
+import daikon.split.*;
+import daikon.suppress.NIS;
+import daikon.suppress.NIS.SuppressionProcessor;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,6 +30,7 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -29,37 +47,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
 import plume.EntryReader;
 import plume.FileIOException;
 import plume.Pair;
 import plume.RegexUtil;
 import plume.Stopwatch;
 import plume.UtilMDE;
-import daikon.config.Configuration;
-import daikon.derive.Derivation;
-import daikon.inv.Equality;
-import daikon.inv.Invariant;
-import daikon.inv.OutputFormat;
-import daikon.inv.binary.sequenceScalar.*;
-import daikon.inv.binary.sequenceString.MemberString;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.binary.twoString.*;
-import daikon.inv.binary.twoSequence.*;
-import daikon.inv.binary.twoString.*;
-import daikon.inv.ternary.threeScalar.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.unary.string.*;
-import daikon.inv.unary.stringsequence.*;
-import daikon.split.*;
-import daikon.suppress.NIS;
-import daikon.suppress.NIS.SuppressionProcessor;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -325,7 +324,8 @@ public final class Daikon {
   // Control invariant detection
   public static final String conf_limit_SWITCH = "conf_limit";
   public static final String list_type_SWITCH = "list_type";
-  public static final String user_defined_invariant_SWITCH = "user_defined_invariant";
+  public static final String user_defined_invariant_SWITCH = "user-defined-invariant";
+  public static final String disable_all_invariants_SWITCH = "disable-all-invariants";
   public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
   // Process only part of the trace file
@@ -799,6 +799,7 @@ public final class Daikon {
           new LongOpt(conf_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(list_type_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(user_defined_invariant_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(disable_all_invariants_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(no_dataflow_hierarchy_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           // Process only part of the trace file
@@ -927,6 +928,55 @@ public final class Daikon {
                   "Problem parsing " + user_defined_invariant_SWITCH + " option: " + e);
             }
             break;
+          } else if (disable_all_invariants_SWITCH.equals(option_name)) {
+            // Get all loaded classes.  This solution is from
+            // http://stackoverflow.com/a/10261850/173852 .  Alternate approach:
+            // http://stackoverflow.com/questions/2548384/java-get-a-list-of-all-classes-loaded-in-the-jvm
+            Field f;
+            try {
+              f = ClassLoader.class.getDeclaredField("classes");
+            } catch (NoSuchFieldException e) {
+              throw new Daikon.TerminationMessage("Didn't find field ClassLoader.classes");
+            }
+            f.setAccessible(true);
+            Object classesAsObject;
+            try {
+              classesAsObject = f.get(Thread.currentThread().getContextClassLoader());
+            } catch (IllegalAccessException e) {
+              throw new Daikon.TerminationMessage("Field ClassLoader.classes was not made accessible");
+            }
+            @SuppressWarnings("unchecked") // type of ClassLoader.classes field is known
+            Vector<Class<?>> classes = (Vector<Class<?>>) classesAsObject;
+            for (int i=0; i<classes.size(); i++) {
+              Class<?> loadedClass = classes.get(i);
+              if (Invariant.class.isAssignableFrom(loadedClass)) {
+                @SuppressWarnings("unchecked") // loadedClass is a subclass of Invariant
+                Class<? extends Invariant> invType = (Class<? extends Invariant>) loadedClass;
+                try {
+                  Field field = invType.getField("dkconfig_enabled");
+                  if (field.getType() != Boolean.TYPE) {
+                    System.out.println(
+                        "Field "
+                            + invType
+                            + ".dkconfig_enabled has type "
+                            + field.getType()
+                            + " instead of boolean.");
+                  } else {
+                    field.set(null, false);
+                    System.out.println(
+                        "Set field "
+                            + invType
+                            + ".dkconfig_enabled to false");
+                  }
+                } catch (NoSuchFieldException e) {
+                  System.out.println(
+                      "Class " + invType + " does not have a dkconfig_enabled field");
+                } catch (IllegalAccessException e) {
+                  throw new Daikon.TerminationMessage(
+                      "IllegalAccessException for field " + invType + ".dkconfig_enabled");
+                }
+              }
+            }
           } else if (no_dataflow_hierarchy_SWITCH.equals(option_name)) {
             use_dataflow_hierarchy = false;
           } else if (suppress_redundant_SWITCH.equals(option_name)) {
