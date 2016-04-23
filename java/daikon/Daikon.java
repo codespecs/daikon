@@ -427,6 +427,14 @@ public final class Daikon {
   public static class TerminationMessage extends RuntimeException {
     static final long serialVersionUID = 20050923L;
 
+    public static String error_at_line_file(LineNumberReader reader, String filename, Throwable e) {
+      String msg = e.getMessage();
+      if (msg == null) {
+        msg = " of type " + e.getClass() + " with no detail message";
+      }
+      return error_at_line_file(reader, filename, msg); 
+    }
+
     public static String error_at_line_file(LineNumberReader reader, String filename, String msg) {
       return "Error at line " + reader.getLineNumber() + " in file " + filename + ": " + msg;
     }
@@ -442,11 +450,11 @@ public final class Daikon {
     }
 
     public TerminationMessage(Throwable e, FileIO.ParseState state) {
-      super(error_at_line_file(state.reader, state.filename, e.getMessage()), e);
+      super(error_at_line_file(state.reader, state.filename, e), e);
     }
 
     public TerminationMessage(Throwable e, LineNumberReader reader, String filename) {
-      super(error_at_line_file(reader, filename, e.getMessage()), e);
+      super(error_at_line_file(reader, filename, e), e);
     }
 
     public TerminationMessage(Throwable e, String msg, LineNumberReader reader, String filename) {
