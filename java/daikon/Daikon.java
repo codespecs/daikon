@@ -963,8 +963,8 @@ public final class Daikon {
             } catch (IllegalAccessException e) {
               throw new Daikon.TerminationMessage("Field ClassLoader.classes was not made accessible");
             }
-            @SuppressWarnings("unchecked") // type of ClassLoader.classes field is known
-            Vector<Class<?>> classes = (Vector<Class<?>>) classesAsObject;
+            @SuppressWarnings({"unchecked","nullness"}) // type of ClassLoader.classes field is known, and is non-null
+            /* @NonNull*/ Vector<Class<?>> classes = (Vector<Class<?>>) classesAsObject;
             for (int i=0; i<classes.size(); i++) {
               Class<?> loadedClass = classes.get(i);
               if (Invariant.class.isAssignableFrom(loadedClass)) {
