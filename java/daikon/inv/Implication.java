@@ -11,6 +11,7 @@ import org.checkerframework.checker.formatter.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
+import typequals.*;
 */
 
 // Here Implication is reimplemented as an extension of the new general
@@ -310,16 +311,16 @@ public class Implication extends Joiner {
             + ")]"));
   }
 
-  public boolean enabled(/*>>> @Prototype Invariant this*/) {
+  public boolean enabled(/*>>> @Prototype Implication this*/) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
-  public boolean valid_types(/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
+  public boolean valid_types(/*>>> @Prototype Implication this,*/ VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
   protected /*@NonPrototype*/ Invariant instantiate_dyn(
-      /*>>> @Prototype Invariant this,*/ PptSlice slice) {
+      /*>>> @Prototype Implication this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 

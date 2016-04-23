@@ -106,16 +106,15 @@ public class DiffDummyInvariant extends Invariant {
     return isWorthPrinting;
   }
 
-  public boolean enabled(/*>>> @Prototype Invariant this*/) {
+  public boolean enabled() {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
-  public boolean valid_types(/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
+  public boolean valid_types(VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
-  protected /*@NonPrototype*/ Invariant instantiate_dyn(
-      /*>>> @Prototype Invariant this,*/ PptSlice slice) {
+  protected DiffDummyInvariant instantiate_dyn(PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 

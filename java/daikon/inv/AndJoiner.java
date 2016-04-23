@@ -7,6 +7,7 @@ import plume.UtilMDE;
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
+import typequals.*;
 */
 
 /**
@@ -114,16 +115,16 @@ public class AndJoiner extends Joiner {
     return super.isSameInvariant(other);
   }
 
-  public boolean enabled(/*>>> @Prototype Invariant this*/) {
+  public boolean enabled(/*>>> @Prototype AndJoiner this*/) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
-  public boolean valid_types(/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
+  public boolean valid_types(/*>>> @Prototype AndJoiner this,*/ VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
-  protected /*@NonPrototype*/ Invariant instantiate_dyn(
-      /*>>> @Prototype Invariant this,*/ PptSlice slice) {
+  protected /*@NonPrototype*/ AndJoiner instantiate_dyn(
+      /*>>> @Prototype AndJoiner this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 

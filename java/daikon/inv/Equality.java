@@ -11,6 +11,7 @@ import plume.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
+import typequals.*;
 */
 
 // Note that this Invariant is used in a *very* different way from
@@ -540,16 +541,16 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     }
   }
 
-  public boolean enabled(/*>>> @Prototype Invariant this*/) {
+  public boolean enabled(/*>>> @Prototype Equality this*/) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
-  public boolean valid_types(/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
+  public boolean valid_types(/*>>> @Prototype Equality this,*/ VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
-  protected /*@NonPrototype*/ Invariant instantiate_dyn(
-      /*>>> @Prototype Invariant this,*/ PptSlice slice) {
+  protected /*@NonPrototype*/ Equality instantiate_dyn(
+      /*>>> @Prototype Equality this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 

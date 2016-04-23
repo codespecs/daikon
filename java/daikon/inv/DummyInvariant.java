@@ -281,16 +281,16 @@ public class DummyInvariant extends Invariant {
     throw new Error("Not implemented");
   }
 
-  public boolean enabled(/*>>> @Prototype Invariant this*/) {
+  public boolean enabled(/*>>> @Prototype DummyInvariant this*/) {
     throw new Error("do not invoke " + getClass() + ".enabled()");
   }
 
-  public boolean valid_types(/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
+  public boolean valid_types(/*>>> @Prototype DummyInvariant this,*/ VarInfo[] vis) {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
-  protected /*@NonPrototype*/ Invariant instantiate_dyn(
-      /*>>> @Prototype Invariant this,*/ PptSlice slice) {
+  protected /*@NonPrototype*/ DummyInvariant instantiate_dyn(
+      /*>>> @Prototype DummyInvariant this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 
