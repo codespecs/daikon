@@ -1946,7 +1946,11 @@ Daikon, @samp{jtb}, and plume.
 Finally, add the required jars for Daikon by right-clicking on
 the project and selecting the Properties menu.  Select "Java Build
 Path", then "Libraries", then "Add External Jars" and add @file{tools.jar},
-@file{junit.jar}, @file{jakarta-oro.jar}, and @file{java-getopt.jar}. 
+and the files in @file{daikon/java/lib/}, namely 
+@file{java-getopt.jar},
+@file{junit-4.12.jar},
+and
+@file{plume.jar}.
 (See your @env{CLASSPATH}
 environment variable for full pathnames to these files.)
 @end enumerate
