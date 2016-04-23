@@ -427,7 +427,7 @@ Its typical implementation is
 super(ppt);
 @end example
 
-@item protected Invariant instantiate_dyn (PptSlice slice)
+@item protected Invariant instantiate_dyn(PptSlice slice)
 Returns an invariant of this class on the specified slice.  Its implementation
 is almost always
 @example
@@ -439,7 +439,7 @@ Returns the prototype invariant used to create other invariants.  Its
 typical implementation is
 @example
 if (proto == null)
-  proto = new InvName (null);
+  proto = new InvName(null);
 return (proto);
 @end example
 
@@ -450,12 +450,12 @@ almost always
 return dkconfig_enabled;
 @end example
 
-@item public boolean instantiate_ok (VarInfo[] vis)
+@item public boolean instantiate_ok(VarInfo[] vis)
 Returns whether or not it makes sense to instantiate this invariant
 over the specified variables.  If not present, the invariant is
 created over all comparable variables of the correct types.
 
-@item public InvariantStatus check_modified (..., int count)
+@item public InvariantStatus check_modified(..., int count)
 Presents a tuple of values to the invariant; these are the first 
 N arguments, which have appropriate types for the particular invariant.  
 The @code{count} argument indicates how many samples have this value.  
@@ -465,12 +465,12 @@ one call to @code{check_modified} with a @code{count} parameter of 3.
 Returns whether or not the sample is consistent with the invariant.
 Does not change the state of the invariant.
 
-@item public InvariantStatus add_modified (..., int count)
+@item public InvariantStatus add_modified(..., int count)
 Similar to @code{check_modified} except that it can change the state
 of the invariant if necessary.  If the invariant doesn't have any
 state, then simply calls @code{check_modified}.
 
-@item protected double computeConfidence ()
+@item protected double computeConfidence()
 Returns the probability that the observed data could not have happened by
 chance alone.  The result usually falls between 0 and 1, where 0 means
 the values seen so far certainly happened by chance and 1 means they
@@ -495,9 +495,9 @@ by chance.  An invariant is printed only if its probability of not
 occurring by chance alone is large enough (by default, greater than .99;
 see Daikon's @option{--conf_limit} command-line option.
 
-@item public String format ()
-@itemx public String repr ()
-@itemx public String format_using (OutputFormat format)
+@item public String format()
+@itemx public String repr()
+@itemx public String format_using(OutputFormat format)
 Returns a high-level printed representation of the
 invariant, for user output.  @code{format} produces @dfn{normal} output, while
 the @code{repr} formatting routine produces low-level, detailed output for 
@@ -882,17 +882,17 @@ private static NISuppressionSet suppressions = null;
 
 public NISuppressionSet get_ni_suppressions() @{
   if (suppressions == null) @{
-    NISuppressee = new NISuppressee (IntGreaterEqual);
+    NISuppressee = new NISuppressee(IntGreaterEqual);
 
-    NISuppressor v1_eq_v2 = new NISuppressor (0, 1, IntEqual.class);
-    NISuppressor v1_lt_v2 = new NISuppressor (0, 1, IntLessThan.class);
+    NISuppressor v1_eq_v2 = new NISuppressor(0, 1, IntEqual.class);
+    NISuppressor v1_lt_v2 = new NISuppressor(0, 1, IntLessThan.class);
 
-    suppressions = new NISuppressionSet (new NISuppression[] @{
-      new NISuppression (v1_eq_v2, suppressee),
-      new NISuppression (v1_lt_v2, suppressee),
+    suppressions = new NISuppressionSet(new NISuppression[] @{
+      new NISuppression(v1_eq_v2, suppressee),
+      new NISuppression(v1_lt_v2, suppressee),
     @});
   @}
-  return (suppressions);
+  return suppressions;
 @}
 @end example
 @c restore default:
@@ -1543,7 +1543,7 @@ master tester, and so it is not necessary to separately run this test
 except to generate goal files.
 
 Furthermore, this framework cannot parse complex types from files
-unless they contain a @code{public (Object) valueOf(String s)}
+unless they contain a @code{public Object valueOf(String s)}
 function. Otherwise the program has no was of knowing how to create
 such an object from a string. All primitives and the String type are
 already recognized.
