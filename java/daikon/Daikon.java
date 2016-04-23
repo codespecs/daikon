@@ -965,22 +965,22 @@ public final class Daikon {
                 try {
                   Field field = invType.getField("dkconfig_enabled");
                   if (field.getType() != Boolean.TYPE) {
-                    System.out.println(
+                    throw new Daikon.TerminationMessage(
                         "Field "
                             + invType
                             + ".dkconfig_enabled has type "
                             + field.getType()
-                            + " instead of boolean.");
+                            + " instead of boolean");
                   } else {
                     field.set(null, false);
-                    System.out.println(
-                        "Set field "
-                            + invType
-                            + ".dkconfig_enabled to false");
+                    // System.out.println(
+                    //     "Set field "
+                    //         + invType
+                    //         + ".dkconfig_enabled to false");
                   }
                 } catch (NoSuchFieldException e) {
-                  System.out.println(
-                      "Class " + invType + " does not have a dkconfig_enabled field");
+                  // System.out.println(
+                  //     "Class " + invType + " does not have a dkconfig_enabled field");
                 } catch (IllegalAccessException e) {
                   throw new Daikon.TerminationMessage(
                       "IllegalAccessException for field " + invType + ".dkconfig_enabled");
