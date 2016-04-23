@@ -8414,9 +8414,9 @@ rather than have Daikon ignore some of the information.
 
 
 @menu
-* Reducing program points::     
-* Reducing variables::          
-* Reducing executions::         
+* Reducing program points::
+* Reducing variables::
+* Reducing executions::
 @end menu
 
 
@@ -8926,14 +8926,44 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE@.
 
-@sp 1
+@menu
+* Library licenses::
+* Front end licenses::
+@end menu
+
+
+@node    Library licenses
+@subsection Library licenses
+
+@menu
+* getopt license::
+* JUnit license::
+@end menu
+
+
+@c @node    Guava license
+@c @subsubsection Guava license
+@c 
+@c Daikon uses the Google Guava library, which is licensed under
+@c the Apache License Version 2.0.  A copy of this license is included
+@c with the Daikon distribution as the file
+@c @file{doc/apache-license-2.txt}.
+
+
+@node    getopt license
+@subsubsection getopt license
 
 Daikon uses the Java port of the GNU @file{getopt} library, which is
-copyright 1998 @nospellcheck{Aaron M. Renn}.  The @file{getopt} library is free software, and
+copyright 1998 @nospellcheck{Aaron M. Renn}.
+The @file{getopt} library is free software, and
 may be redistributed or modified under the terms of the GNU Library
 General Public License version 2.  A copy of this license is included
 with the Daikon distribution as the file
-@file{java/gnu/getopt/COPYING.LIB}.
+@file{doc/gnu-gpl-2.txt}.
+
+
+@node    JUnit license
+@subsubsection JUnit license
 
 Daikon's unit tests use the @command{JUnit} testing framework, which is governed
 by the Common Public License, version 1.0.  @command{JUnit} is provided on an
@@ -8954,6 +8984,11 @@ itself; this offer is made by the Daikon developers exclusively and
 not by any other party.  The Common Public License is included with the
 Daikon distribution as the file @file{java/junit/cpl-v10.html}.
 
+
+
+@node    Front end licenses
+@subsection Front end licenses
+
 Note that the front ends discussed in this manual are separate
 programs, and some are made available under different licenses.
 @c All
@@ -8965,10 +9000,24 @@ programs not derived from the Daikon invariant detection tool, you are
 neither required nor entitled to use the Daikon invariant detector
 itself under these other licenses.
 
+@menu
+* dfepl license::
+* Kvasir license::
+* Celeriac license::
+@end menu
+
+
+@node    dfepl license
+@subsubsection dfepl license
+
 The Daikon Perl front end @command{dfepl} may be used and distributed under the
 regular Daikon license or, at your option, either the GNU General
 Public License or the Perl Artistic License (that is, under the same
 terms as Perl itself).
+
+
+@node    Kvasir license
+@subsubsection Kvasir license
 
 The Daikon C/C++ front end Kvasir is based in part on the Valgrind
 dynamic program supervision framework, copyright 2000-2004
@@ -8990,6 +9039,10 @@ Public License along with Kvasir, in the file @file{kvasir/COPYING};
 if not, write to the 
 @nospellcheck{Free Software Foundation, Inc., 51 Franklin St., Fifth Floor, Boston, MA
 02110-1301, USA}.
+
+
+@node    Celeriac license
+@subsubsection Celeriac license
 
 The Daikon .NET front end Celeriac is Copyright (c) 2012 by
 @nospellcheck{Kellen Donohue}.
