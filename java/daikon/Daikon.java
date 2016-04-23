@@ -303,14 +303,14 @@ public final class Daikon {
    **/
   public static boolean[] omit_types = new boolean[256];
 
+
+  // Command-line options / command-line arguments
   // These variables are public so other programs can reuse the same
   // command-line options.
-
   // Please use these switches in the same order in all places where they
   // appear (in the code and in the documentation); it makes the code
   // easier to read and the documentation easier to keep up to date.
 
-  // Control output
   public static final String help_SWITCH = "help";
   // "-o" switch: file to which serialized output is written
   public static final String no_text_output_SWITCH = "no_text_output";
@@ -929,6 +929,15 @@ public final class Daikon {
             }
             break;
           } else if (disable_all_invariants_SWITCH.equals(option_name)) {
+            // There are two possibilities:
+            //  * a given invariant class is not yet loaded, in which case
+            //    we set the default value for its dkconfig_enabled field.
+            //  * a given invariant class is already loaded, in which case
+            //    we reflectively set its dkconfig_enabled to false.
+
+            // Set the default for not-yet-loaded invariants.
+            Invariant.invariantEnabledDefault = false;
+
             // Get all loaded classes.  This solution is from
             // http://stackoverflow.com/a/10261850/173852 .  Alternate approach:
             // http://stackoverflow.com/questions/2548384/java-get-a-list-of-all-classes-loaded-in-the-jvm

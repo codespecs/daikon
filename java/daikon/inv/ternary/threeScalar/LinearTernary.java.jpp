@@ -83,7 +83,7 @@ public class CLASSNAME
   /**
    * Boolean.  True iff LinearTernary invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public static final boolean debugLinearTernary = false;
   // public static final boolean debugLinearTernary = true;

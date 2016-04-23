@@ -102,7 +102,7 @@ public final class CLASSNAME
   /**
    * Boolean.  True iff Member invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   protected CLASSNAME(PptSlice ppt) {
     super(ppt);

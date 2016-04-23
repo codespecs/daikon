@@ -278,7 +278,7 @@ public final class ONEOFSCALAR
   /**
    * Boolean.  True iff OneOf invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * Positive integer.  Specifies the maximum set size for this type

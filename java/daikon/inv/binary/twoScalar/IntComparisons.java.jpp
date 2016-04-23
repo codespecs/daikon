@@ -380,7 +380,7 @@ public final class INTEQUAL
   /**
    * Boolean.  True iff INTEQUAL invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public static final Logger debug
     = Logger.getLogger("daikon.inv.binary.twoScalar." + INTEQUALstring);

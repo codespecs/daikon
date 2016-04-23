@@ -1835,6 +1835,12 @@ The @var{classname} should be in the fully-qualified format expected by
 such as ``@code{mypackage.subpackage.ClassName}'',
 and its @file{.class} file should appear on the classpath.
 
+@item --disable-all-invariants
+Disable all known invariants:  all those that are built into Daikon, and
+all those that have been specified by @option{--user-defined-invariant} so
+far.  An invariant may be re-enabled after this option is specified,
+see @ref{Options to enable/disable derived variables}.
+
 @item --nohierarchy
 @cindex hierarchy, disabling
 @cindex unmatched entries, not ignoring

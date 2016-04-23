@@ -30,7 +30,7 @@ public class Positive extends SingleScalar {
   /**
    * Boolean.  True iff Positive invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   ///
   /// Required methods

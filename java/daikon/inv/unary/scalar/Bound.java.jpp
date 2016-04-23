@@ -229,7 +229,7 @@ public class LOWERBOUND
   /**
    * Boolean.  True iff LOWERBOUND invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
   /**
    * Long integer.  Together with the corresponding
    * <code>maximal_interesting</code> parameter, specifies the

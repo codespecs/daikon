@@ -132,7 +132,7 @@ public class PptSliceEquality extends PptSlice {
 
     // Start with everything comparable being equal.
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine("InstantiateInvariants: " + parent.name() + " vars:");
+      debug.fine("PptSliceEquality.instantiate_invariants: " + parent.name() + " vars:");
     }
     LinkedHashMap<VarInfoAndComparability, List<VarInfo>> multiMap =
         new LinkedHashMap<VarInfoAndComparability, List<VarInfo>>();
@@ -144,7 +144,11 @@ public class PptSliceEquality extends PptSlice {
       }
     }
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine(Integer.toString(multiMap.keySet().size()));
+      debug.fine("PptSliceEquality.instantiate_invariants "
+                 + parent.name()
+                 + ": "
+                 + Integer.toString(multiMap.keySet().size())
+                 + " VarInfoAndComparability keys");
     }
     Equality[] newInvs = new Equality[multiMap.keySet().size()];
     int varCount = 0;

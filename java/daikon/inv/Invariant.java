@@ -121,6 +121,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public static double dkconfig_fuzzy_ratio = 0.0001;
 
   /**
+   * The default for dkconfig_enabled in each subclass of Invariant.
+   */
+  public static boolean invariantEnabledDefault = true;
+
+  /**
    * The program point for this invariant; includes values, number of
    * samples, VarInfos, etc.  Can be null for a "prototype" invariant.
    **/

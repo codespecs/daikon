@@ -87,7 +87,7 @@ public class NONZERO
   /**
    * Boolean.  True iff NONZERO invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * Determines whether non-null is obvious on 'this' variables.  While
