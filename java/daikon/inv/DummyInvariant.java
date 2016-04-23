@@ -280,4 +280,18 @@ public class DummyInvariant extends Invariant {
   public boolean isSameFormula(Invariant other) {
     throw new Error("Not implemented");
   }
+
+  public boolean enabled(/*>>> @Prototype Invariant this*/) {
+    throw new Error("do not invoke " + getClass() + ".enabled()");
+  }
+
+  public boolean valid_types(/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
+    throw new Error("do not invoke " + getClass() + ".valid_types()");
+  }
+
+  protected /*@NonPrototype*/ Invariant instantiate_dyn(
+      /*>>> @Prototype Invariant this,*/ PptSlice slice) {
+    throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
+  }
+
 }

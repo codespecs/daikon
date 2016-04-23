@@ -1725,27 +1725,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * are done.
    * @return the new invariant
    */
-  protected /*@NonPrototype*/ Invariant instantiate_dyn(
-      /*>>> @Prototype Invariant this,*/ PptSlice slice) {
-    throw new Error("no instantiate_dyn for class " + getClass());
-  }
+  abstract protected /*@NonPrototype*/ Invariant instantiate_dyn(
+      /*>>> @Prototype Invariant this,*/ PptSlice slice);
 
   /**
    * Returns whether or not this class of invariants are currently
    * enabled
    */
-  public boolean enabled(/*>>> @Prototype Invariant this*/ ) {
-    throw new Error("no implementation of enabled() for class " + getClass());
-  }
-
-  /**
-   * Returns whether or not the invariant is valid over the specified
-   * types.
-   */
-  // public boolean valid_types (ProglangType[] rep_types) {
-  //  throw new Error("no valid_types for class " + getClass());
-  //  return false;
-  // }
+  public abstract boolean enabled(/*>>> @Prototype Invariant this*/);
 
   /**
    * Returns whether or not the invariant is valid over the basic types
@@ -1756,9 +1743,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @see #instantiate_ok(VarInfo[])
    */
-  public boolean valid_types(/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
-    throw new Error("no implementation of valid_types() for class " + getClass());
-  }
+  public abstract boolean valid_types(/*>>> @Prototype Invariant this,*/ VarInfo[] vis);
 
   /**
    * Checks to see if the invariant can reasonably be instantiated over
