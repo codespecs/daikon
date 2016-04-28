@@ -522,7 +522,7 @@ chicory-test : ChicoryPremain.jar
 #
 # Dynamic Comparability (DynComp/Java; also Chicory)
 #
-DCOMP_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java daikon/util/*.java
+INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java daikon/util/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
 ORIG_RT ?= $(JAVA_HOME)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
@@ -532,8 +532,8 @@ JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 # Build DynComp/Java, check the DF summary info and run a sanity test
 .PHONY: dyncomp dcomp
 dyncomp dcomp : plume-copy plume-import-check dcomp_premain.jar
-dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
-	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
+dcomp_premain.jar : $(wildcard $(INSTRUMENTATION_JAVA_FILES)) daikon/dcomp/manifest.txt
+	$(JAVAC_COMMAND) $(INSTRUMENTATION_JAVA_FILES)
 	$(JAVA) daikon.dcomp.SummaryInfo
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
 	  daikon/dcomp/Premain.class
@@ -648,18 +648,19 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	$(JAVAC_COMMAND) daikon/util/*.java
 	touch daikon/util/.timestamp-daikonutil
 
-# Checks that daikon.util, rather than plume, is imported by DynComp source files.
-# Should also check that daikon.util is never imported by non-DynComp files.
+# Checks that daikon.util, rather than plume, is imported by source files
+# that do instrumentation.  Should also check that daikon.util is never
+# imported by non-instrumentation files.
 .PHONY: plume-import-check
 plume-import-check :
 	@echo -n "Checking that imports of plume and daikon.util are correct..."
-	@if [ -n "`grep '^import plume' $(DCOMP_JAVA_FILES)`" ]; then \
+	@if [ -n "`grep '^import plume' $(INSTRUMENTATION_JAVA_FILES)`" ]; then \
 	echo ""; \
 	echo "*** ERROR: Do not import plume from DynComp code. It will be"; \
-	echo " instrumented when DynComp is run. Please use the (identical)"; \
-	echo " daikon.util package, which will not be instrumented."; \
+	echo " instrumented when DynComp or Chicory is run. Please use the"; \
+	echo " (identical) daikon.util package, which will not be instrumented."; \
 	echo "The following files import from plume:"; \
-	grep -n '^import plume' $(DCOMP_JAVA_FILES); \
+	grep -n '^import plume' $(INSTRUMENTATION_JAVA_FILES); \
 	else \
 	echo "done"; \
 	fi
