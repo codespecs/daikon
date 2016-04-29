@@ -140,7 +140,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
    * "Non-canonical variable","Implied post state","Only constant variables in this expression","Derived Param","Control Check"
    * ,"Exact","Variable Filter","Filtered"}
    */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DiscardCode this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DiscardCode this*/ ) {
     if (this.enumValue == -1) return "Not discarded";
     else if (this.enumValue == 0) return "Obvious";
     else if (this.enumValue == 1) return "Bad sample seen";

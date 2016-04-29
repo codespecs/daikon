@@ -27,7 +27,7 @@ public class CmdUndoAssume implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdUndoAssume this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdUndoAssume this*/ ) {
     return "CmdUndoAssume";
   }
 }

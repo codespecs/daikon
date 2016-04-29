@@ -76,7 +76,7 @@ public abstract class VarComparability {
 
   public abstract VarComparability makeAlias();
 
-  public abstract VarComparability elementType(/*>>>@GuardSatisfied VarComparability this*/);
+  public abstract VarComparability elementType(/*>>>@GuardSatisfied VarComparability this*/ );
 
   public abstract VarComparability indexType(/*>>>@GuardSatisfied VarComparability this,*/ int dim);
 
@@ -86,7 +86,7 @@ public abstract class VarComparability {
   /**
    * Returns true if this is comparable to everything else.
    */
-  public abstract boolean alwaysComparable(/*>>>@GuardSatisfied VarComparability this*/);
+  public abstract boolean alwaysComparable(/*>>>@GuardSatisfied VarComparability this*/ );
 
   /** Returns whether two variables are comparable. **/
   public static /*@Pure*/ boolean comparable(VarInfo v1, VarInfo v2) {
@@ -95,7 +95,8 @@ public abstract class VarComparability {
 
   /** Returns whether two comparabilities are comparable. **/
   @SuppressWarnings("purity") // Override the purity checker
-  public static /*@Pure*/ boolean comparable(/*@GuardSatisfied*/ VarComparability type1, /*@GuardSatisfied*/ VarComparability type2) {
+  public static /*@Pure*/ boolean comparable(
+      /*@GuardSatisfied*/ VarComparability type1, /*@GuardSatisfied*/ VarComparability type2) {
 
     if (type1 != null && type2 != null && type1.getClass() != type2.getClass())
       throw new Error(
@@ -123,7 +124,9 @@ public abstract class VarComparability {
    * (because they are not always transitive).  They can override this
    * method to provide the correct results
    */
-  public boolean equality_set_ok(/*>>>@GuardSatisfied VarComparability this,*/ /*@GuardSatisfied*/ VarComparability other) {
+  public boolean equality_set_ok(
+      /*>>>@GuardSatisfied VarComparability this,*/
+      /*@GuardSatisfied*/ VarComparability other) {
     return comparable(this, other);
   }
 }

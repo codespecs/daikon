@@ -194,7 +194,8 @@ public class DummyInvariant extends Invariant {
     negated = !negated;
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied DummyInvariant this,*/ OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied DummyInvariant this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();
@@ -206,7 +207,7 @@ public class DummyInvariant extends Invariant {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_daikon(/*>>>@GuardSatisfied DummyInvariant this*/ ) {
     String df;
     if (daikonFormat == null) {
       df = "<dummy>";
@@ -220,7 +221,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_java(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_java(/*>>>@GuardSatisfied DummyInvariant this*/ ) {
     if (javaFormat == null) return "format_java not implemented for dummy invariant";
     if (negated) {
       return "!(" + javaFormat + ")";
@@ -229,7 +230,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_esc(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_esc(/*>>>@GuardSatisfied DummyInvariant this*/ ) {
     if (escFormat == null) return "format_esc not implemented for dummy invariant";
     if (negated) {
       return "!(" + escFormat + ")";
@@ -238,7 +239,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_simplify(/*>>>@GuardSatisfied DummyInvariant this*/ ) {
     if (simplifyFormat == null) return "format_simplify not implemented for dummy invariant";
     if (negated) {
       return "(NOT " + simplifyFormat + ")";
@@ -247,7 +248,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_jml(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_jml(/*>>>@GuardSatisfied DummyInvariant this*/ ) {
     if (jmlFormat == null) return "format_jml not implemented for dummy invariant";
     if (negated) {
       return "!(" + jmlFormat + ")";
@@ -256,7 +257,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_dbc(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_dbc(/*>>>@GuardSatisfied DummyInvariant this*/ ) {
     if (dbcFormat == null) return "format_dbc not implemented for dummy invariant";
     if (negated) {
       return "!(" + dbcFormat + ")";
@@ -265,7 +266,7 @@ public class DummyInvariant extends Invariant {
     }
   }
 
-  public String format_csharp(/*>>>@GuardSatisfied DummyInvariant this*/) {
+  public String format_csharp(/*>>>@GuardSatisfied DummyInvariant this*/ ) {
     if (csharpFormat == null) return "format_csharp not implemented for dummy invariant";
     if (negated) {
       return "!(" + csharpFormat + ")";

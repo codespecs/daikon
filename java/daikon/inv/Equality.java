@@ -66,7 +66,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     numSamples = sample_cnt;
   }
 
-  public int numSamples(/*>>>@GuardSatisfied Equality this*/) {
+  public int numSamples(/*>>>@GuardSatisfied Equality this*/ ) {
     return numSamples;
   }
 
@@ -78,7 +78,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   private TreeSet<VarInfo> vars;
 
   /** Returns the number of variables in the set. **/
-  /*@Pure*/ public int size(/*>>>@GuardSatisfied Equality this*/) {
+  /*@Pure*/ public int size(/*>>>@GuardSatisfied Equality this*/ ) {
     return vars.size();
   }
 
@@ -168,7 +168,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   // convert to normal two-way IntEqual type invariants.  However,
   // they can be called if desired.
 
-  public String repr(/*>>>@GuardSatisfied Equality this*/) {
+  public String repr(/*>>>@GuardSatisfied Equality this*/ ) {
     return "Equality: size="
         + size()
         + " leader: "
@@ -179,7 +179,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         + numSamples();
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -193,7 +194,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied Equality this*/) {
+  public String format_daikon(/*>>>@GuardSatisfied Equality this*/ ) {
     StringBuffer result = new StringBuffer();
     boolean start = true;
     for (VarInfo var : vars) {
@@ -221,7 +222,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return UtilMDE.join(clauses, " && ");
   }
 
-  public String format_esc(/*>>>@GuardSatisfied Equality this*/) {
+  public String format_esc(/*>>>@GuardSatisfied Equality this*/ ) {
     String result = "";
 
     List<VarInfo> valid_equiv = new ArrayList<VarInfo>();
@@ -287,7 +288,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return result;
   }
 
-  public String format_simplify(/*>>>@GuardSatisfied Equality this*/) {
+  public String format_simplify(/*>>>@GuardSatisfied Equality this*/ ) {
     StringBuffer result = new StringBuffer("(AND");
     VarInfo leader = leader();
     String leaderName = leader.simplify_name();
@@ -347,7 +348,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return UtilMDE.join(clauses, " && ");
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Equality this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Equality this*/ ) {
     return repr();
   }
 

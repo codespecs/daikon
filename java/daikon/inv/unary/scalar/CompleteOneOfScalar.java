@@ -74,7 +74,8 @@ public final class CompleteOneOfScalar extends SingleScalar {
   }
 
   /** return description of invariant.  Only Daikon format is implemented **/
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CompleteOneOfScalar this,*/ OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied CompleteOneOfScalar this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       String out = var().name() + " has values: ";
       for (Info val : vals) {

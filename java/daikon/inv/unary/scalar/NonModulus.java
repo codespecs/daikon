@@ -79,17 +79,18 @@ public class NonModulus extends SingleScalar {
     return new NonModulus(slice);
   }
 
-  /*@SideEffectFree*/ public NonModulus clone(/*>>>@GuardSatisfied NonModulus this*/) {
+  /*@SideEffectFree*/ public NonModulus clone(/*>>>@GuardSatisfied NonModulus this*/ ) {
     NonModulus result = (NonModulus) super.clone();
     result.elements = new TreeSet<Long>(this.elements);
     return result;
   }
 
-  public String repr(/*>>>@GuardSatisfied NonModulus this*/) {
+  public String repr(/*>>>@GuardSatisfied NonModulus this*/ ) {
     return "NonModulus" + varNames() + ": " + "m=" + modulus + ",r=" + remainder;
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied NonModulus this,*/ OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied NonModulus this,*/ OutputFormat format) {
     updateResults();
     String name = var().name_using(format);
 
@@ -131,7 +132,7 @@ public class NonModulus extends SingleScalar {
   }
 
   // Set either modulus and remainder, or no_result_yet.
-  void updateResults(/*>>>@GuardSatisfied NonModulus this*/) {
+  void updateResults(/*>>>@GuardSatisfied NonModulus this*/ ) {
     if (results_accurate) return;
     if (elements.size() == 0) {
       no_result_yet = true;

@@ -48,7 +48,7 @@ public class GuardingImplication extends Implication {
     // return !right.isObvious();
   }
 
-  public boolean enoughSamples(/*>>>@GuardSatisfied GuardingImplication this*/) {
+  public boolean enoughSamples(/*>>>@GuardSatisfied GuardingImplication this*/ ) {
     return right.enoughSamples();
   }
 

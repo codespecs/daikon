@@ -320,7 +320,8 @@ public final class ValueTuple implements Cloneable {
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  /*@SideEffectFree*/ public ValueTuple clone(/*>>>@GuardSatisfied ValueTuple this*/) throws CloneNotSupportedException {
+  /*@SideEffectFree*/ public ValueTuple clone(
+      /*>>>@GuardSatisfied ValueTuple this*/ ) throws CloneNotSupportedException {
     return (ValueTuple) super.clone();
   }
 
@@ -354,12 +355,14 @@ public final class ValueTuple implements Cloneable {
   // These definitions are intended to make different ValueTuples with the
   // same contents compare identically.
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied ValueTuple this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+  /*@Pure*/ public boolean equals(
+      /*>>>@GuardSatisfied ValueTuple this,*/
+      /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
     if (!(obj instanceof ValueTuple)) return false;
     ValueTuple other = (ValueTuple) obj;
     return (vals == other.vals) && (mods == other.mods);
   }
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied ValueTuple this*/) {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied ValueTuple this*/ ) {
     return vals.hashCode() * 31 + mods.hashCode();
   }
 
@@ -375,7 +378,7 @@ public final class ValueTuple implements Cloneable {
     return new ValueTuple(new_vals, new_mods);
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ValueTuple this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ValueTuple this*/ ) {
     return toString(null);
   }
 
@@ -384,7 +387,8 @@ public final class ValueTuple implements Cloneable {
    * If vis is non-null, the values are annotated with the VarInfo name that
    * would be associated with the value.
    **/
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ValueTuple this,*/ VarInfo /*@Nullable*/ [] vis) {
+  /*@SideEffectFree*/ public String toString(
+      /*>>>@GuardSatisfied ValueTuple this,*/ VarInfo /*@Nullable*/ [] vis) {
     StringBuffer sb = new StringBuffer("[");
     assert vals.length == mods.length;
     assert vis == null || vals.length == vis.length;

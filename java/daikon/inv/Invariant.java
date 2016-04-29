@@ -290,7 +290,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * computed constants well-formed.  Is overridden in classes like
    * LinearBinary/Ternary and Upper/LowerBound.
    **/
-  public boolean enoughSamples(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
+  public boolean enoughSamples(/*>>>@GuardSatisfied @NonPrototype Invariant this*/ ) {
     return true;
   }
 
@@ -442,7 +442,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Do nothing special, Overridden to remove
    * exception from declaration
    **/
-  /*@SideEffectFree*/ public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
+  /*@SideEffectFree*/ public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/ ) {
     try {
       Invariant result = (Invariant) super.clone();
       return result;
@@ -676,7 +676,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // }
 
   /** Return a string representation of the variable names. */
-  public final String varNames(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
+  public final String varNames(/*>>>@GuardSatisfied @NonPrototype Invariant this*/ ) {
     return ppt.varNames();
   }
 
@@ -689,7 +689,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  public String repr(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
+  public String repr(/*>>>@GuardSatisfied @NonPrototype Invariant this*/ ) {
     // A better default would be to use reflection and print out all
     // the variable names.
     return getClass() + varNames() + ": " + format();
@@ -783,7 +783,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @return standard "format needs to be implemented" for the given
    * requested format.  Made public so cores can call it.
    **/
-  public String format_unimplemented(/*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat request) {
+  public String format_unimplemented(
+      /*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat request) {
     String classname = this.getClass().getName();
     return "warning: method "
         + classname
@@ -802,7 +803,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * uninformative state, which will be added to the message.
    **/
   public String format_too_few_samples(
-      /*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat request, /*@Nullable*/ String attempt) {
+      /*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat request,
+      /*@Nullable*/ String attempt) {
     if (request == OutputFormat.SIMPLIFY) {
       return "(AND)";
     } else if (request == OutputFormat.JAVA
@@ -1558,14 +1560,16 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied Match this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals(
+        /*>>>@GuardSatisfied Match this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof Match)) return false;
 
       Match ic = (Match) obj;
       return (ic.inv.match(inv));
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Match this*/) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Match this*/ ) {
       return (inv.getClass().hashCode());
     }
   }
@@ -1927,7 +1931,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   // Receiver must be fully initialized
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Invariant this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Invariant this*/ ) {
     return format();
   }
 

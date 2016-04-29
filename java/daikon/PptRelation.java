@@ -140,7 +140,7 @@ public class PptRelation implements Serializable {
     return (parent_to_child_map.size());
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptRelation this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptRelation this*/ ) {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 

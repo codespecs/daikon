@@ -133,7 +133,7 @@ public class DeclReader {
       this.comparability = comparability;
     }
 
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DeclVarInfo this*/) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DeclVarInfo this*/ ) {
       return String.format("%s [%s] %s", type, rep_type, name);
     }
 
@@ -252,7 +252,7 @@ public class DeclReader {
       return name.replaceFirst(":::.*", "");
     }
 
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DeclPpt this*/) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DeclPpt this*/ ) {
       return name;
     }
 

@@ -92,11 +92,12 @@ public class DiffDummyInvariant extends Invariant {
     return confidence;
   }
 
-  public String repr(/*>>>@GuardSatisfied DiffDummyInvariant this*/) {
+  public String repr(/*>>>@GuardSatisfied DiffDummyInvariant this*/ ) {
     return "DiffDummyInvariant(" + ppt.arity() + "," + formula + "," + confidence + ")";
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied DiffDummyInvariant this,*/ OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied DiffDummyInvariant this,*/ OutputFormat format) {
     return repr();
   }
 

@@ -26,7 +26,7 @@ public class Lemma implements Comparable<Lemma> {
   }
 
   /** Return a human-readable description. */
-  public String summarize(/*>>>@GuardSatisfied Lemma this*/) {
+  public String summarize(/*>>>@GuardSatisfied Lemma this*/ ) {
     return summary;
   }
 

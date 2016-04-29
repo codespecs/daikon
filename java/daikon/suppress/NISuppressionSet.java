@@ -591,7 +591,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   /**
    * Returns a string containing each suppression separated by commas.
    */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/ ) {
     return UtilMDE.join(suppression_set, ", ");
   }
 }

@@ -485,7 +485,7 @@ public class DeclWriter extends DaikonWriter {
       this(parent_ppt_name, type, null, null, null);
     }
 
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarRelation this*/) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarRelation this*/ ) {
       return String.format(
           "VarRelation %s (%s->%s) %s [%s]",
           parent_ppt_name,
@@ -522,7 +522,9 @@ public class DeclWriter extends DaikonWriter {
      */
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied VarRelation this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals(
+        /*>>>@GuardSatisfied VarRelation this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (!(o instanceof VarRelation) || (o == null)) return false;
       VarRelation vr = (VarRelation) o;
       return (vr.parent_ppt_name.equals(parent_ppt_name)
@@ -531,7 +533,7 @@ public class DeclWriter extends DaikonWriter {
     }
 
     @Override
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarRelation this*/) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarRelation this*/ ) {
       return (parent_ppt_name.hashCode()
           + ((local_variable == null) ? 0 : local_variable.hashCode()));
     }

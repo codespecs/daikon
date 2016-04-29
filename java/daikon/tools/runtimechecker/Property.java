@@ -34,21 +34,21 @@ public class Property implements Serializable {
    * The name of the method that this property describes. ("null" for object
    * invariants.)
    */
-  public String method(/*>>>@GuardSatisfied Property this*/) {
+  public String method(/*>>>@GuardSatisfied Property this*/ ) {
     return method;
   }
 
   // The kind of proerty (enter, exit or objectInvariant).
   private final Kind kind;
   /** The kind of property (enter, exit or objectInvariant). */
-  public Kind kind(/*>>>@GuardSatisfied Property this*/) {
+  public Kind kind(/*>>>@GuardSatisfied Property this*/ ) {
     return kind;
   }
 
   /** Daikon representation (as output by Daikon's default output format). */
   private final String daikonRep;
   /** Daikon representation (as output by Daikon's default output format). */
-  public String daikonRep(/*>>>@GuardSatisfied Property this*/) {
+  public String daikonRep(/*>>>@GuardSatisfied Property this*/ ) {
     return daikonRep;
   }
 
@@ -84,7 +84,7 @@ public class Property implements Serializable {
   /**
    * Easy-on-the-eye string representation.
    */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Property this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Property this*/ ) {
     return kind.toString() + " : " + daikonRep();
   }
 
@@ -108,11 +108,11 @@ public class Property implements Serializable {
       this.xmlname = xmlname;
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Kind this*/ ) {
       return name.hashCode();
     }
 
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Kind this*/) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Kind this*/ ) {
       return name;
     }
 
@@ -150,7 +150,8 @@ public class Property implements Serializable {
    * The other fields may differ.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied Property this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals(
+      /*>>>@GuardSatisfied Property this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o == null) {
       return false;
     }
@@ -163,7 +164,7 @@ public class Property implements Serializable {
         && (this.kind().equals(anno.kind())));
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Property this*/) {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Property this*/ ) {
     return daikonRep.hashCode() + kind.hashCode() + (method == null ? 0 : method.hashCode());
   }
 

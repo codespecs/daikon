@@ -92,7 +92,8 @@ public class IsPointer extends SingleScalar {
   }
 
   @Override
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied IsPointer this,*/ OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied IsPointer this,*/ OutputFormat format) {
     String varname = var().name_using(format);
     if (format == OutputFormat.SIMPLIFY) return "(AND)"; // trivially true
     if (format == OutputFormat.JAVA)

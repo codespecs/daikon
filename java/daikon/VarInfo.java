@@ -88,7 +88,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** returns the interned name of the variable **/
   /*@Pure*/
-  public /*@Interned*/ String name(/*>>>@GuardSatisfied VarInfo this*/) {
+  public /*@Interned*/ String name(/*>>>@GuardSatisfied VarInfo this*/ ) {
     if (FileIO.new_decl_format) {
       return str_name;
     } else {
@@ -814,7 +814,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns the name of the variable.  For more info see repr() **/
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfo this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfo this*/ ) {
     return name();
   }
 
@@ -2639,18 +2639,20 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied Pair this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals(
+        /*>>>@GuardSatisfied Pair this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof Pair)) return false;
 
       Pair o = (Pair) obj;
       return ((o.v1 == v1) && (o.v2 == v2));
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Pair this*/) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Pair this*/ ) {
       return (v1.hashCode() + v2.hashCode());
     }
 
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Pair this*/) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Pair this*/ ) {
       return (v1.name() + " = " + v2.name());
     }
   }

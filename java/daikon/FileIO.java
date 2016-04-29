@@ -238,7 +238,7 @@ public final class FileIO {
       this.parent_ppt_name = parent_ppt_name;
       this.id = id;
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ParentRelation this*/) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ParentRelation this*/ ) {
       return parent_ppt_name + "[" + id + "] " + rel_type;
     };
 
@@ -848,7 +848,7 @@ public final class FileIO {
 
     // Print the Invocation on two lines, indented by two spaces
     // The receiver Invocation may be canonicalized or not.
-    String format(/*>>>@GuardSatisfied Invocation this*/) {
+    String format(/*>>>@GuardSatisfied Invocation this*/ ) {
       return format(true);
     }
 
@@ -902,7 +902,9 @@ public final class FileIO {
 
     // Return true if the invocations print the same
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied Invocation this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object other) {
+    /*@Pure*/ public boolean equals(
+        /*>>>@GuardSatisfied Invocation this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation)
         return this.format().equals(((FileIO.Invocation) other).format());
       else return false;
@@ -912,7 +914,7 @@ public final class FileIO {
       return ppt.name().compareTo(other.ppt.name());
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Invocation this*/) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Invocation this*/ ) {
       return this.format().hashCode();
     }
   }
@@ -2663,7 +2665,7 @@ public final class FileIO {
       comparability = VarComparabilityNone.it;
     }
 
-    /*@SideEffectFree*/ public VarDefinition clone(/*>>>@GuardSatisfied VarDefinition this*/) {
+    /*@SideEffectFree*/ public VarDefinition clone(/*>>>@GuardSatisfied VarDefinition this*/ ) {
       try {
         return (VarDefinition) super.clone();
       } catch (CloneNotSupportedException e) {

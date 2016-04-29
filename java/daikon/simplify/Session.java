@@ -144,7 +144,8 @@ public class Session {
   }
 
   /* package access */ void sendLine(
-      /*>>>@UnknownInitialization(Session.class) @Raw(Session.class) @GuardSatisfied Session this,*/ String s) {
+      /*>>>@UnknownInitialization(Session.class) @Raw(Session.class) @GuardSatisfied Session this,*/ String
+          s) {
     if (dkconfig_trace_input) {
       assert trace_file != null
           : "@AssumeAssertion(nullness): dependent: trace_file is non-null (set in constructor) if dkconfig_trace_input is true";
@@ -156,12 +157,12 @@ public class Session {
 
   /*@Holding("this")*/
   /* package access */
-  /*@Nullable*/ String readLine(/*>>>@GuardSatisfied Session this*/) throws IOException {
+  /*@Nullable*/ String readLine(/*>>>@GuardSatisfied Session this*/ ) throws IOException {
     return output.readLine();
   }
 
   /*@Holding("this")*/
-  public void kill(/*>>>@GuardSatisfied Session this*/) {
+  public void kill(/*>>>@GuardSatisfied Session this*/ ) {
     process.destroy();
     if (dkconfig_trace_input) {
       assert trace_file != null

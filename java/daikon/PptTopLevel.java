@@ -446,7 +446,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns the full name of the ppt **/
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptTopLevel this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptTopLevel this*/ ) {
     return name();
   }
 

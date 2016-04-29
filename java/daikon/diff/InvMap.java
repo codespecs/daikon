@@ -67,7 +67,7 @@ public class InvMap implements Serializable {
    * with them in the InvMap!  Use invariantIterator instead.
    * @see #invariantIterator()
    **/
-  public Iterator<PptTopLevel> pptIterator(/*>>>@GuardSatisfied InvMap this*/) {
+  public Iterator<PptTopLevel> pptIterator(/*>>>@GuardSatisfied InvMap this*/ ) {
     return ppts.iterator();
   }
 
@@ -78,7 +78,7 @@ public class InvMap implements Serializable {
    * with them in the InvMap!  Use invariantIterator instead.
    * @see #invariantIterator()
    **/
-  public Iterable<PptTopLevel> pptIterable(/*>>>@GuardSatisfied InvMap this*/) {
+  public Iterable<PptTopLevel> pptIterable(/*>>>@GuardSatisfied InvMap this*/ ) {
     return new IterableIterator<PptTopLevel>(pptIterator());
   }
 
@@ -104,7 +104,7 @@ public class InvMap implements Serializable {
     return answer.iterator();
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied InvMap this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied InvMap this*/ ) {
     String result = "";
     for (PptTopLevel ppt : pptIterable()) {
       result += ppt.name() + Global.lineSep;

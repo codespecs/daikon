@@ -798,13 +798,15 @@ class DCInstrument {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied MethodDef this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals(
+        /*>>>@GuardSatisfied MethodDef this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof MethodDef)) return false;
       MethodDef md = (MethodDef) obj;
       return equals(md.name, md.arg_types);
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied MethodDef this*/) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied MethodDef this*/ ) {
       int code = name.hashCode();
       for (Type arg : arg_types) {
         code += arg.hashCode();
@@ -826,7 +828,7 @@ class DCInstrument {
     public boolean contains(int offset) {
       return (offset >= start_pc) && (offset < (start_pc + len));
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CodeRange this*/) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CodeRange this*/ ) {
       return String.format("Code range: %d..%d", start_pc, start_pc + len - 1);
     }
   }

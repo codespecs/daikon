@@ -19,7 +19,8 @@ public class Runtime {
    */
   public static List<Throwable> internalInvariantEvaluationErrors = new ArrayList<Throwable>();
 
-  private static /*@GuardedBy("Runtime.class")*/ List<Violation> violations = new ArrayList<Violation>();
+  private static /*@GuardedBy("Runtime.class")*/ List<Violation> violations =
+      new ArrayList<Violation>();
 
   // The number of times that an invariant was checked (whether the
   // check succeeded or failed).

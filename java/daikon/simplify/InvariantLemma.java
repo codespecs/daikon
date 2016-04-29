@@ -23,7 +23,7 @@ public class InvariantLemma extends Lemma {
     invariant = inv;
   }
 
-  public String summarize(/*>>>@GuardSatisfied InvariantLemma this*/) {
+  public String summarize(/*>>>@GuardSatisfied InvariantLemma this*/ ) {
     return summary + " from " + from;
   }
 

@@ -81,7 +81,8 @@ public final class CompleteOneOfString extends SingleString {
   }
 
   /** return description of invariant.  Only Daikon format is implemented **/
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CompleteOneOfString this,*/ OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied CompleteOneOfString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       if (vals.size() == 0) return var().name() + "has no values";
       StringBuilder out = new StringBuilder(vals.get(0).val.length() * vals.size());

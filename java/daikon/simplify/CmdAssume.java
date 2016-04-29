@@ -33,7 +33,7 @@ public class CmdAssume implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdAssume this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdAssume this*/ ) {
     return "CmdAssume: " + proposition;
   }
 }

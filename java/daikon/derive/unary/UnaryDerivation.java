@@ -21,7 +21,7 @@ public abstract class UnaryDerivation extends Derivation {
     base = vi;
   }
 
-  /*@SideEffectFree*/ public UnaryDerivation clone(/*>>>@GuardSatisfied UnaryDerivation this*/) {
+  /*@SideEffectFree*/ public UnaryDerivation clone(/*>>>@GuardSatisfied UnaryDerivation this*/ ) {
     try {
       return (UnaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {

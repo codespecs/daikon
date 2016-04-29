@@ -28,7 +28,7 @@ public class CmdRaw implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdRaw this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdRaw this*/ ) {
     return "CmdRaw: " + cmd;
   }
 }

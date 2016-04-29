@@ -23,11 +23,11 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
 
   // base1 is the sequence
   // base2 is the scalar
-  public VarInfo seqvar(/*>>>@GuardSatisfied SequenceSubsequence this*/) {
+  public VarInfo seqvar(/*>>>@GuardSatisfied SequenceSubsequence this*/ ) {
     return base1;
   }
 
-  public VarInfo sclvar(/*>>>@GuardSatisfied SequenceSubsequence this*/) {
+  public VarInfo sclvar(/*>>>@GuardSatisfied SequenceSubsequence this*/ ) {
     return base2;
   }
 

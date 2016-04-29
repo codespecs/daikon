@@ -63,7 +63,8 @@ public class Positive extends SingleScalar {
   }
 
   // A printed representation for user output
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied Positive this,*/ OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied Positive this,*/ OutputFormat format) {
     return var().name() + " > 0";
   }
 

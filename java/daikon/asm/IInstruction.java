@@ -14,7 +14,7 @@ public interface IInstruction {
 
   public abstract Set<String> getBinaryVarNames();
 
-  /*@SideEffectFree*/ public abstract String toString(/*>>>@GuardSatisfied IInstruction this*/);
+  /*@SideEffectFree*/ public abstract String toString(/*>>>@GuardSatisfied IInstruction this*/ );
 
   public abstract boolean kills(String var);
 

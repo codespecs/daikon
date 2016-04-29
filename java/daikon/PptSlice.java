@@ -200,7 +200,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   /** Return an approximation of the number of samples seen on this slice **/
-  public abstract int num_samples(/*>>>@GuardSatisfied PptSlice this*/);
+  public abstract int num_samples(/*>>>@GuardSatisfied PptSlice this*/ );
 
   /**
    * Return an approximation of the number of distinct values seen on
@@ -324,7 +324,7 @@ public abstract class PptSlice extends Ppt {
    * For debugging only.
    **/
   @SuppressWarnings("purity") // string creation
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSlice this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSlice this*/ ) {
     StringBuffer sb = new StringBuffer();
     for (VarInfo vi : var_infos) {
       sb.append(" " + vi.name());

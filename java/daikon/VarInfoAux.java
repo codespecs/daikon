@@ -280,20 +280,23 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  /*@SideEffectFree*/ public VarInfoAux clone(/*>>>@GuardSatisfied VarInfoAux this*/) throws CloneNotSupportedException {
+  /*@SideEffectFree*/ public VarInfoAux clone(
+      /*>>>@GuardSatisfied VarInfoAux this*/ ) throws CloneNotSupportedException {
     return (VarInfoAux) super.clone();
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfoAux this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfoAux this*/ ) {
     return map.toString();
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoAux this*/) {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoAux this*/ ) {
     return map.hashCode();
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied VarInfoAux this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals(
+      /*>>>@GuardSatisfied VarInfoAux this,*/
+      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
     } else {
@@ -302,7 +305,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied VarInfoAux this,*/ /*@GuardSatisfied*/ VarInfoAux o) {
+  /*@Pure*/ public boolean equals(
+      /*>>>@GuardSatisfied VarInfoAux this,*/
+      /*@GuardSatisfied*/ VarInfoAux o) {
     return this.map.equals(o.map);
   }
 

@@ -739,7 +739,9 @@ public final class FeatureExtractor {
 
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied IntDoublePair this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals(
+        /*>>>@GuardSatisfied IntDoublePair this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (o instanceof IntDoublePair) {
         IntDoublePair other = (IntDoublePair) o;
         return ((number == other.number) && (value == other.value));
@@ -748,7 +750,7 @@ public final class FeatureExtractor {
 
     //returns a valid hashCode
     @Override
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/ ) {
       return number;
     }
 

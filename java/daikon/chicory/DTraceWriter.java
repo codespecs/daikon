@@ -60,7 +60,11 @@ public class DTraceWriter extends DaikonWriter {
   /**
    * Prints the method entry program point in the dtrace file
    */
-  public void methodEntry(/*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi, int nonceVal, /*@Nullable*/ Object obj, Object[] args) {
+  public void methodEntry(
+      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
+      int nonceVal,
+      /*@Nullable*/ Object obj,
+      Object[] args) {
     //don't print
     if (Runtime.dtrace_closed) return;
 
@@ -148,7 +152,11 @@ public class DTraceWriter extends DaikonWriter {
    *
    */
   private void traverse(
-      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi, RootInfo root, Object[] args, Object thisObj, Object ret_val) {
+      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
+      RootInfo root,
+      Object[] args,
+      Object thisObj,
+      Object ret_val) {
     //go through all of the node's children
     for (DaikonVariableInfo child : root) {
 
@@ -183,7 +191,10 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   //traverse from the traversal pattern data structure and recurse
-  private void traverseValue(/*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi, DaikonVariableInfo curInfo, Object val) {
+  private void traverseValue(
+      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
+      DaikonVariableInfo curInfo,
+      Object val) {
 
     if (curInfo.dTraceShouldPrint()) {
       if (!(curInfo instanceof StaticObjInfo)) {

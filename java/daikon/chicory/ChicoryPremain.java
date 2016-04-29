@@ -44,7 +44,6 @@ public class ChicoryPremain {
    **/
   private static boolean doPurity = false;
 
-
   // This @SuppressWarnings is for the two lines
   // Runtime.decl_writer = new DeclWriter (Runtime.dtrace);
   // Runtime.dtrace_writer = new DTraceWriter (Runtime.dtrace);

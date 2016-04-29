@@ -47,7 +47,7 @@ public class KillerInstruction implements IInstruction {
     return false;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied KillerInstruction this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied KillerInstruction this*/ ) {
     StringBuilder b = new StringBuilder();
     for (X86Instruction i : instructions) {
       b.append("(potential)" + i + "\n");

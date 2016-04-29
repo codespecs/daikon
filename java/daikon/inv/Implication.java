@@ -112,11 +112,12 @@ public class Implication extends Joiner {
     return result;
   }
 
-  public String repr(/*>>>@GuardSatisfied Implication this*/) {
+  public String repr(/*>>>@GuardSatisfied Implication this*/ ) {
     return "[Implication: " + left.repr() + " => " + right.repr() + "]";
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied Implication this,*/ OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied Implication this,*/ OutputFormat format) {
     String pred_fmt = left.format_using(format);
     String consq_fmt = right.format_using(format);
     if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {

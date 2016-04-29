@@ -185,18 +185,20 @@ public class DynamicConstants implements Serializable {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied Constant this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals(
+        /*>>>@GuardSatisfied Constant this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof Constant)) return false;
       Constant c = (Constant) obj;
       return (c.vi == vi);
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Constant this*/) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Constant this*/ ) {
       return (vi.hashCode());
     }
 
     @SuppressWarnings("purity") // side effects to local state (string creation)
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Constant this*/) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Constant this*/ ) {
 
       StringBuffer out = new StringBuffer();
       out.append(vi.name());

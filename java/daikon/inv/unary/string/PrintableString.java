@@ -54,7 +54,8 @@ public final class PrintableString extends SingleString {
   }
 
   /** return description of invariant.  Only Daikon format is implemented **/
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied PrintableString this,*/ OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied PrintableString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       return var().name() + " is printable";
     } else {

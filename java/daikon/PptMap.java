@@ -230,7 +230,7 @@ public class PptMap implements Serializable {
   }
 
   /*@SideEffectFree*/
-  public String toString(/*>>>@GuardSatisfied PptMap this*/) {
+  public String toString(/*>>>@GuardSatisfied PptMap this*/ ) {
     return "PptMap: " + nameToPpt.toString();
   }
 
