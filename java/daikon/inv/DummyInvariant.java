@@ -293,5 +293,4 @@ public class DummyInvariant extends Invariant {
       /*>>> @Prototype DummyInvariant this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
-
 }

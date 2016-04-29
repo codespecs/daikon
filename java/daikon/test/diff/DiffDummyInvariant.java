@@ -117,5 +117,4 @@ public class DiffDummyInvariant extends Invariant {
   protected DiffDummyInvariant instantiate_dyn(PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
-
 }

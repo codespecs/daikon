@@ -323,5 +323,4 @@ public class Implication extends Joiner {
       /*>>> @Prototype Implication this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
-
 }

@@ -453,7 +453,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   /**
    * @return the nodes of this, as given by an inorder traversal.
    **/
-  public Collection<VarInfoName> inOrderTraversal(/*>>> @Interned VarInfoName this*/ ) {
+  public Collection<VarInfoName> inOrderTraversal(/*>>> @Interned VarInfoName this*/) {
     return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
   }
 
@@ -513,7 +513,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * @return true if every variable in the name is an orig(...)
    * variable.
    **/
-  /*@Pure*/ public boolean isAllPrestate(/*>>> @Interned VarInfoName this*/ ) {
+  /*@Pure*/ public boolean isAllPrestate(/*>>> @Interned VarInfoName this*/) {
     return new IsAllPrestateVisitor(this).result();
   }
 
@@ -722,7 +722,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for the size of this (this object should be a
    * sequence).  Form is like "size(a[])" or "a.length".
    **/
-  public VarInfoName applySize(/*>>> @Interned VarInfoName this*/ ) {
+  public VarInfoName applySize(/*>>> @Interned VarInfoName this*/) {
     // The simple approach:
     //   return (new SizeOf((Elements) this)).intern();
     // is wrong because this might be "orig(a[])".
@@ -768,7 +768,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * and upper bounds, which can be subtracted to get one less than
    * its size.
    */
-  public /*@Interned*/ VarInfoName[] getSliceBounds(/*>>> @Interned VarInfoName this*/ ) {
+  public /*@Interned*/ VarInfoName[] getSliceBounds(/*>>> @Interned VarInfoName this*/) {
     VarInfoName vin = this;
     boolean inPrestate = false;
     if (vin instanceof Prestate) {
@@ -1402,7 +1402,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for the type of this object; form is like
    * "this.getClass().getName()" or "\typeof(this)".
    **/
-  public VarInfoName applyTypeOf(/*>>> @Interned VarInfoName this*/ ) {
+  public VarInfoName applyTypeOf(/*>>> @Interned VarInfoName this*/) {
     return (new TypeOf(this)).intern();
   }
 
@@ -1478,7 +1478,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for a the prestate value of this object; form is
    * like "orig(this)" or "\old(this)".
    **/
-  public VarInfoName applyPrestate(/*>>> @Interned VarInfoName this*/ ) {
+  public VarInfoName applyPrestate(/*>>> @Interned VarInfoName this*/) {
     if (this instanceof Poststate) {
       return ((Poststate) this).term;
     } else if ((this instanceof Add) && ((Add) this).term instanceof Poststate) {
@@ -1582,7 +1582,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for a the poststate value of this object; form is
    * like "new(this)" or "\new(this)".
    **/
-  public VarInfoName applyPoststate(/*>>> @Interned VarInfoName this*/ ) {
+  public VarInfoName applyPoststate(/*>>> @Interned VarInfoName this*/) {
     return (new Poststate(this)).intern();
   }
 
@@ -1723,12 +1723,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** Returns a name for the decrement of this term, like "this-1". **/
-  public VarInfoName applyDecrement(/*>>> @Interned VarInfoName this*/ ) {
+  public VarInfoName applyDecrement(/*>>> @Interned VarInfoName this*/) {
     return applyAdd(-1);
   }
 
   /** Returns a name for the increment of this term, like "this+1". **/
-  public VarInfoName applyIncrement(/*>>> @Interned VarInfoName this*/ ) {
+  public VarInfoName applyIncrement(/*>>> @Interned VarInfoName this*/) {
     return applyAdd(+1);
   }
 
@@ -1736,7 +1736,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for the elements of a container (as opposed to the
    * identity of the container) like "this[]" or "(elements this)".
    **/
-  public VarInfoName applyElements(/*>>> @Interned VarInfoName this*/ ) {
+  public VarInfoName applyElements(/*>>> @Interned VarInfoName this*/) {
     return (new Elements(this)).intern();
   }
 

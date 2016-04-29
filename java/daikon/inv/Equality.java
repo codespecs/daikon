@@ -553,5 +553,4 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       /*>>> @Prototype Equality this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
-
 }

@@ -303,7 +303,6 @@ public final class Daikon {
    **/
   public static boolean[] omit_types = new boolean[256];
 
-
   // Command-line options / command-line arguments
   // These variables are public so other programs can reuse the same
   // command-line options.
@@ -432,7 +431,7 @@ public final class Daikon {
       if (msg == null) {
         msg = " of type " + e.getClass() + " with no detail message";
       }
-      return error_at_line_file(reader, filename, msg); 
+      return error_at_line_file(reader, filename, msg);
     }
 
     public static String error_at_line_file(LineNumberReader reader, String filename, String msg) {
@@ -961,11 +960,15 @@ public final class Daikon {
             try {
               classesAsObject = f.get(Thread.currentThread().getContextClassLoader());
             } catch (IllegalAccessException e) {
-              throw new Daikon.TerminationMessage("Field ClassLoader.classes was not made accessible");
+              throw new Daikon.TerminationMessage(
+                  "Field ClassLoader.classes was not made accessible");
             }
-            @SuppressWarnings({"unchecked","nullness"}) // type of ClassLoader.classes field is known, and is non-null
+            @SuppressWarnings({
+              "unchecked",
+              "nullness"
+            }) // type of ClassLoader.classes field is known, and is non-null
             /*@NonNull*/ Vector<Class<?>> classes = (Vector<Class<?>>) classesAsObject;
-            for (int i=0; i<classes.size(); i++) {
+            for (int i = 0; i < classes.size(); i++) {
               Class<?> loadedClass = classes.get(i);
               if (Invariant.class.isAssignableFrom(loadedClass)) {
                 @SuppressWarnings("unchecked") // loadedClass is a subclass of Invariant

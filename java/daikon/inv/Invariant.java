@@ -289,7 +289,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * computed constants well-formed.  Is overridden in classes like
    * LinearBinary/Ternary and Upper/LowerBound.
    **/
-  public boolean enoughSamples(/*>>> @NonPrototype Invariant this*/ ) {
+  public boolean enoughSamples(/*>>> @NonPrototype Invariant this*/) {
     return true;
   }
 
@@ -320,7 +320,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   //  - The code is a bit more complicated.
 
   /** A wrapper around getConfidence() or getConfidence(). **/
-  public final boolean justified(/*>>> @NonPrototype Invariant this*/ ) {
+  public final boolean justified(/*>>> @NonPrototype Invariant this*/) {
     boolean just = (!falsified && (getConfidence() >= dkconfig_confidence_limit));
     if (logOn())
       log(
@@ -357,7 +357,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * actual work.
    * @see #computeConfidence()
    **/
-  public final double getConfidence(/*>>> @NonPrototype Invariant this*/ ) {
+  public final double getConfidence(/*>>> @NonPrototype Invariant this*/) {
     assert !falsified;
     // if (falsified)
     //   return CONFIDENCE_NEVER;
@@ -385,7 +385,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Users should use getConfidence() instead.
    * @see     #getConfidence()
    **/
-  protected abstract double computeConfidence(/*>>> @NonPrototype Invariant this*/ );
+  protected abstract double computeConfidence(/*>>> @NonPrototype Invariant this*/);
 
   /**
    * Subclasses should override.  An exact invariant indicates that given
@@ -396,7 +396,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * The result of this method does not depend on whether the invariant is
    * justified, destroyed, etc.
    **/
-  /*@Pure*/ public boolean isExact(/*>>> @Prototype Invariant this*/ ) {
+  /*@Pure*/ public boolean isExact(/*>>> @Prototype Invariant this*/) {
     return false;
   }
 
@@ -422,18 +422,18 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Marks the invariant as falsified.  Should always be called rather
    * than just setting the flag so that we can track when this happens
    */
-  public void falsify(/*>>> @NonPrototype Invariant this*/ ) {
+  public void falsify(/*>>> @NonPrototype Invariant this*/) {
     falsified = true;
     if (logOn()) log("Destroyed %s", format());
   }
 
   /** Clear the falsified flag. */
-  public void clear_falsified(/*>>> @NonPrototype Invariant this*/ ) {
+  public void clear_falsified(/*>>> @NonPrototype Invariant this*/) {
     falsified = false;
   }
 
   /** Returns whether or not this invariant has been destroyed. */
-  /*@Pure*/ public boolean is_false(/*>>> @NonPrototype Invariant this*/ ) {
+  /*@Pure*/ public boolean is_false(/*>>> @NonPrototype Invariant this*/) {
     return (falsified);
   }
 
@@ -441,7 +441,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Do nothing special, Overridden to remove
    * exception from declaration
    **/
-  /*@SideEffectFree*/ public Invariant clone(/*>>> @NonPrototype Invariant this*/ ) {
+  /*@SideEffectFree*/ public Invariant clone(/*>>> @NonPrototype Invariant this*/) {
     try {
       Invariant result = (Invariant) super.clone();
       return result;
@@ -576,7 +576,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * comparable.  Otherwise the comparability information from one
    * of the non always-comparable variables is returned.
    */
-  public VarComparability get_comparability(/*>>> @NonPrototype Invariant this*/ ) {
+  public VarComparability get_comparability(/*>>> @NonPrototype Invariant this*/) {
 
     // assert ppt != null : "class " + getClass();
 
@@ -675,7 +675,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // }
 
   /** Return a string representation of the variable names. */
-  public final String varNames(/*>>> @NonPrototype Invariant this*/ ) {
+  public final String varNames(/*>>> @NonPrototype Invariant this*/) {
     return ppt.varNames();
   }
 
@@ -688,7 +688,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  public String repr(/*>>> @NonPrototype Invariant this*/ ) {
+  public String repr(/*>>> @NonPrototype Invariant this*/) {
     // A better default would be to use reflection and print out all
     // the variable names.
     return getClass() + varNames() + ": " + format();
@@ -700,7 +700,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  public String repr_prob(/*>>> @NonPrototype Invariant this*/ ) {
+  public String repr_prob(/*>>> @NonPrototype Invariant this*/) {
     return repr() + "; confidence = " + getConfidence();
   }
 
@@ -733,7 +733,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @see VarInfo#isValidEscExpression
    **/
-  /*@Pure*/ public boolean isValidEscExpression(/*>>> @NonPrototype Invariant this*/ ) {
+  /*@Pure*/ public boolean isValidEscExpression(/*>>> @NonPrototype Invariant this*/) {
     for (int i = 0; i < ppt.var_infos.length; i++) {
       if (!ppt.var_infos[i].isValidEscExpression()) {
         return false;
@@ -1027,7 +1027,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * merge code as well (to merge the different formulas into a single formula
    * at the upper point
    */
-  public boolean mergeFormulasOk(/*>>> @Prototype Invariant this*/ ) {
+  public boolean mergeFormulasOk(/*>>> @Prototype Invariant this*/) {
     return false;
   }
 
@@ -1097,7 +1097,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Should be overridden by subclasses with non-instantiating suppressions.
    */
   /*@Pure*/
-  public /*@Nullable*/ NISuppressionSet get_ni_suppressions(/*>>> @Prototype Invariant this*/ ) {
+  public /*@Nullable*/ NISuppressionSet get_ni_suppressions(/*>>> @Prototype Invariant this*/) {
     return (null);
   }
 
@@ -1125,7 +1125,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
   // DO NOT OVERRIDE.  Should be declared "final", but the "final" is
   // omitted to allow for easier testing.
-  /*@Pure*/ public boolean isWorthPrinting(/*>>> @NonPrototype Invariant this*/ ) {
+  /*@Pure*/ public boolean isWorthPrinting(/*>>> @NonPrototype Invariant this*/) {
     return InvariantFilters.defaultFilters().shouldKeep(this) == null;
   }
 
@@ -1256,7 +1256,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * possible, suppression, rather than this, should do the dynamic checking.
    **/
   /*@Pure*/
-  public final /*@Nullable*/ DiscardInfo isObvious(/*>>> @NonPrototype Invariant this*/ ) {
+  public final /*@Nullable*/ DiscardInfo isObvious(/*>>> @NonPrototype Invariant this*/) {
     // Actually actually, we'll eliminate invariants as they become obvious
     // rather than on output; the point of this is to speed up computation.
     // // Actually, we do need to check isObviousDerived after all because we
@@ -1316,7 +1316,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * "a[] is a palindrome" corresponding to "a[] is the reverse of
    * a[]", for instance.
    **/
-  /*@Pure*/ public boolean isReflexive(/*>>> @NonPrototype Invariant this*/ ) {
+  /*@Pure*/ public boolean isReflexive(/*>>> @NonPrototype Invariant this*/) {
     return !ArraysMDE.noDuplicates(ppt.var_infos);
   }
 
@@ -1399,7 +1399,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * @return true if this invariant is only over prestate variables .
    */
-  /*@Pure*/ public boolean isAllPrestate(/*>>> @NonPrototype Invariant this*/ ) {
+  /*@Pure*/ public boolean isAllPrestate(/*>>> @NonPrototype Invariant this*/) {
     return ppt.allPrestate();
   }
 
@@ -1408,7 +1408,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // hasUninterestingConstant(), or some other filter.
   // Uninteresting invariants will override this method to return
   // false
-  /*@Pure*/ public boolean isInteresting(/*>>> @NonPrototype Invariant this*/ ) {
+  /*@Pure*/ public boolean isInteresting(/*>>> @NonPrototype Invariant this*/) {
     return true;
   }
 
@@ -1423,7 +1423,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * is likely to be an artifact of the way the program was tested,
    * rather than a statement that would in fact hold over all possible
    * executions. */
-  public boolean hasUninterestingConstant(/*>>> @NonPrototype Invariant this*/ ) {
+  public boolean hasUninterestingConstant(/*>>> @NonPrototype Invariant this*/) {
     return false;
   }
 
@@ -1653,7 +1653,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * (in "guarded" form) would be
    * "a != null &amp;&amp; a.b != null &amp;&amp; d != null &amp;&amp; a.b.c &gt; d.e".
    */
-  public List<VarInfo> getGuardingList(/*>>> @NonPrototype Invariant this*/ ) {
+  public List<VarInfo> getGuardingList(/*>>> @NonPrototype Invariant this*/) {
     return getGuardingList(ppt.var_infos);
   }
 
@@ -1850,7 +1850,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Check the rep invariants of this.
    **/
-  public void repCheck(/*>>> @Prototype Invariant this*/ ) {}
+  public void repCheck(/*>>> @Prototype Invariant this*/) {}
 
   /**
    * Returns whether or not the invariant is currently active.  This is
@@ -1860,7 +1860,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * This is used during suppresion.  Any invariant that is not active
    * cannot suppress another invariant
    */
-  /*@Pure*/ public boolean isActive(/*>>> @NonPrototype Invariant this*/ ) {
+  /*@Pure*/ public boolean isActive(/*>>> @NonPrototype Invariant this*/) {
     return true;
   }
 

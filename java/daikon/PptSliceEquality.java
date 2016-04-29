@@ -144,11 +144,12 @@ public class PptSliceEquality extends PptSlice {
       }
     }
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine("PptSliceEquality.instantiate_invariants "
-                 + parent.name()
-                 + ": "
-                 + Integer.toString(multiMap.keySet().size())
-                 + " VarInfoAndComparability keys");
+      debug.fine(
+          "PptSliceEquality.instantiate_invariants "
+              + parent.name()
+              + ": "
+              + Integer.toString(multiMap.keySet().size())
+              + " VarInfoAndComparability keys");
     }
     Equality[] newInvs = new Equality[multiMap.keySet().size()];
     int varCount = 0;
