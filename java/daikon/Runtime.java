@@ -167,7 +167,12 @@ public final class Runtime {
     // The incrementRecords method (which calls this) is called inside a
     // synchronized block, but re-synchronize just to be sure, or in case
     // this is called from elsewhere.
-    synchronized ( daikon.Runtime.dtrace ) {
+
+    // Ensure that the following method calls on dtrace all occur on the same
+    // instance of dtrace:
+    final /*@GuardedBy("itself")*/ PrintStream dtrace = Runtime.dtrace;
+
+    synchronized ( dtrace ) {
       // The shutdown hook is synchronized on this, so close it up
       // ourselves, lest the call to System.exit cause deadlock.
       dtrace.println();
@@ -177,7 +182,7 @@ public final class Runtime {
       // Don't set dtrace to null, because if we continue running, there will
       // be many attempts to synchronize on it.  (Is that a performance
       // bottleneck, if we continue running?)
-      // dtrace = null;
+      // daikon.Runtime.dtrace = null;
       dtrace_closed = true;
 
       if (dtraceLimitTerminate) {

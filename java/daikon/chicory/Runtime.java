@@ -75,7 +75,7 @@ public class Runtime
     /** Render linked lists as vectors **/
     static boolean linked_lists = true;
 
-    /** Depth to wich to examine structure components **/
+    /** Depth to which to examine structure components **/
     static int nesting_depth = 2;
 
     //
@@ -124,6 +124,7 @@ public class Runtime
         int nonce;
         /** whether or not the call was captured on enter **/
         boolean captured;
+        /*@Holding("Runtime.class")*/
         public CallInfo (int nonce, boolean captured) {
             this.nonce = nonce; this.captured = captured;
         }
@@ -281,7 +282,7 @@ public class Runtime
      */
     public static synchronized void exit(/*@Nullable*/ Object obj, int nonce, int mi_index,
                             Object[] args, Object ret_val, int exitLineNum) {
-      
+
       if (debug) {
           MethodInfo mi = methods.get(mi_index);
           method_indent = method_indent.substring(2);
@@ -463,7 +464,12 @@ public class Runtime
         // The incrementRecords method (which calls this) is called inside a
         // synchronized block, but re-synchronize just to be sure, or in case
         // this is called from elsewhere.
-        synchronized (Runtime.dtrace)
+
+        // Ensure that the following method calls on dtrace all occur on the same
+        // instance of dtrace:
+        final /*@GuardedBy("itself")*/ PrintStream dtrace = Runtime.dtrace;
+
+        synchronized (dtrace)
         {
             // The shutdown hook is synchronized on this, so close it up
             // ourselves, lest the call to System.exit cause deadlock.
@@ -474,7 +480,7 @@ public class Runtime
             // Don't set dtrace to null, because if we continue running, there will
             // be many attempts to synchronize on it.  (Is that a performance
             // bottleneck, if we continue running?)
-            // dtrace = null;
+            // Runtime.dtrace = null;
             dtrace_closed = true;
 
 

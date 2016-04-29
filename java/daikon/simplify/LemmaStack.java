@@ -506,6 +506,8 @@ public class LemmaStack {
   }
 
   public void closeSession() {
+      // Ensure that the following two method calls occur on the same instance of session:
+      final SessionManager session = this.session;
       session.session_done();
       synchronized (session) {
         session.notifyAll();

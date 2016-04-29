@@ -21,7 +21,7 @@ public class CmdRaw
   }
 
   /** For documentation, read the class overview. */
-  public void apply(/*@GuardedBy("itself")*/ Session s) {
+  public void apply(final /*@GuardedBy("itself")*/ Session s) {
 
     synchronized (s) {
       // send out the command

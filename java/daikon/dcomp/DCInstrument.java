@@ -995,8 +995,8 @@ class DCInstrument {
         MethodInfo mi = null;
         if (track && has_code) {
           mi = create_method_info (class_info, mg);
-          class_info.method_infos.add (mi);
-          DCRuntime.methods.add (mi);
+          class_info.method_infos.add(mi);
+          DCRuntime.methods.add(mi);
         }
 
         if (has_code) {
@@ -1049,8 +1049,8 @@ class DCInstrument {
     // Chicory runtime for this information.
     if (track_class) {
       // System.out.printf ("adding class %s to all class list%n", class_info);
-      synchronized(daikon.chicory.Runtime.all_classes) {
-        daikon.chicory.Runtime.all_classes.add (class_info);
+      synchronized (daikon.chicory.Runtime.all_classes) {
+        daikon.chicory.Runtime.all_classes.add(class_info);
       }
     }
 
@@ -1160,8 +1160,8 @@ class DCInstrument {
         MethodInfo mi = null;
         if (track && has_code) {
           mi = create_method_info (class_info, mg);
-          class_info.method_infos.add (mi);
-          DCRuntime.methods.add (mi);
+          class_info.method_infos.add(mi);
+          DCRuntime.methods.add(mi);
         }
 
         if (has_code) {
@@ -1210,8 +1210,8 @@ class DCInstrument {
     // Chicory runtime for this information.
     if (track_class) {
       // System.out.printf ("adding class %s to all class list%n", class_info);
-      synchronized(daikon.chicory.Runtime.all_classes) {
-        daikon.chicory.Runtime.all_classes.add (class_info);
+      synchronized (daikon.chicory.Runtime.all_classes) {
+        daikon.chicory.Runtime.all_classes.add(class_info);
       }
     }
 
@@ -1957,7 +1957,7 @@ class DCInstrument {
     List<Integer> plist = new ArrayList<Integer>();
     for (Type arg_type : arg_types) {
       if (arg_type instanceof BasicType) {
-        plist.add (offset);
+        plist.add(offset);
       }
       offset += arg_type.getSize();
     }
@@ -3171,7 +3171,7 @@ class DCInstrument {
     if (index == null) {
       // index = DCRuntime.static_map.size();
       // DCRuntime.static_map.put (name, index);
-      DCRuntime.static_tags.add (new Object());
+      DCRuntime.static_tags.add(new Object());
     }
 
     // Create code to call the method passing it the static's index
@@ -4855,7 +4855,7 @@ class DCInstrument {
         if (!in_jdk) {
           int min_size = static_map.size() + DCRuntime.max_jdk_static;
           while (DCRuntime.static_tags.size() <= min_size)
-            DCRuntime.static_tags.add (null);
+            DCRuntime.static_tags.add(null);
           static_map.put (full_name(jc,f), min_size);
         } else { // building jdk
           String full_name = full_name(jc,f);

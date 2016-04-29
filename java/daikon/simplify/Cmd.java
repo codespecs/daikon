@@ -10,7 +10,7 @@ public interface Cmd
   /**
    * Runs the command in the given session.
    **/
-  public void apply(/*@GuardedBy("itself")*/ Session s);
+  public void apply(final /*@GuardedBy("itself")*/ Session s);
 
   /**
    * @return a string for debugging only.

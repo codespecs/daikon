@@ -159,12 +159,14 @@ public class Session
     input.flush();
   }
 
+  /*@Holding("this")*/
   /* package access */ /*@Nullable*/ String readLine(/*>>>@GuardSatisfied Session this*/)
     throws IOException
   {
     return output.readLine();
   }
 
+  /*@Holding("this")*/
   public void kill(/*>>>@GuardSatisfied Session this*/) {
     process.destroy();
     if (dkconfig_trace_input) {

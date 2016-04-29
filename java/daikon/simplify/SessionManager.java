@@ -174,7 +174,7 @@ public class SessionManager
   private class Worker
     extends Thread
   {
-    private SessionManager mgr = SessionManager.this; // just sugar
+    private final SessionManager mgr = SessionManager.this; // just sugar
 
     /** The associated session, or null if the thread should shutdown. */
     private /*@Nullable*/ /*@GuardedBy("itself")*/ Session session = new Session();
@@ -209,7 +209,7 @@ public class SessionManager
     /*@RequiresNonNull("session")*/
     private void session_done() {
       finished = true;
-      /*@GuardedBy("itself")*/ Session tmp = session;
+      final /*@GuardedBy("itself")*/ Session tmp = session;
       session = null;
       synchronized(tmp) {
           tmp.kill();

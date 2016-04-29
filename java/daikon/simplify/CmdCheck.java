@@ -33,7 +33,7 @@ public class CmdCheck
   }
 
   /** For documentation, read the class overview. */
-  public void apply(/*@GuardedBy("itself")*/ Session s) {
+  public void apply(final /*@GuardedBy("itself")*/ Session s) {
     try {
 
       String result;
