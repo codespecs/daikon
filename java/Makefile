@@ -822,7 +822,7 @@ reformat:
 	@../plume-lib/bin/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
 
 check-format:
-	@../plume-lib/bin/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
+	@../plume-lib/bin/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || echo "Try running:  make reformat"
 
 
 ###########################################################################
