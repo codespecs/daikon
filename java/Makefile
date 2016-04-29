@@ -176,6 +176,8 @@ DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | ${SO
 JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 # Copied from
 JAVA_FILES_FOR_STYLE = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
+# This should exclude AUTO_GENERATED_FILES, but I don't know how to do that.
+JAVA_FILES_FOR_FORMAT = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
@@ -816,10 +818,10 @@ audit:
 
 
 reformat:
-	@../plume-lib/bin/run-google-java-format.py ${JAVA_FILES_FOR_STYLE}
+	@../plume-lib/bin/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
 
 check-format:
-	@../plume-lib/bin/check-google-java-format.py ${JAVA_FILES_FOR_STYLE}
+	@../plume-lib/bin/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
 
 
 ###########################################################################
@@ -910,7 +912,8 @@ check-signature: ${ALL_GENERATED_FILES} compile
 # This target runs the Signature checker on just one file.
 # Typical command:
 # SIGNATURE_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-signature-onefile
-SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
+# SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
+SIGNATURE_ONEFILE ?= daikon/dcomp/SummaryInfo.java daikon/dcomp/TypeStack.java
 check-signature-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 
@@ -1268,6 +1271,7 @@ showvars:
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo JAVA_FILES_FOR_STYLE = $(JAVA_FILES_FOR_STYLE)
+	@echo JAVA_FILES_FOR_FORMAT = $(JAVA_FILES_FOR_FORMAT)
 	@echo TAG_FILES = $(TAG_FILES)
 	@echo INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)
 	@echo INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)
