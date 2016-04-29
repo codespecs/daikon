@@ -25,8 +25,11 @@ clean-abstracts:
 	@touch dummy-abstract.html
 	\rm -f *-abstract.html
 
+pull-bibfiles:
+	git -C ${BIBDIR} pull
+
 .PHONY: index.html
-index.html:
+index.html: pull-bibfiles
 # Avoid error "Cannot write to index.html"
 	rm -f $@
 	${BWBIN}/bwconv.pl -format=bibtex,htmlpubs -outopts=withyears -hfbodyline BODY-INVARIANTDETECTION -headfoot ../pubs-sources/index-headfoot.html -to $(notdir $@)-1 -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
@@ -48,7 +51,7 @@ writable-abstracts:
 	@\rm -f abstracts-unsplit.html
 
 # Creates *-abstract.html files.
-abstracts: writable-abstracts abstracts-testsubject abstracts-methodology abstracts-invariantdetection writable-abstracts
+abstracts: pull-bibfiles writable-abstracts abstracts-testsubject abstracts-methodology abstracts-invariantdetection writable-abstracts
 
 abstracts-invariantdetection:
 	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${PLUMEBIN}/html-canonical-urls -validurls ${PLUMEBIN}/html-valid-urls -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}

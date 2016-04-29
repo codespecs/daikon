@@ -8,12 +8,14 @@ public final class DataStructures_QueueAr_enqueue_31 extends Splitter {
     return "orig(++back == theArray.length)"; 
   } 
 
+  VarInfo orig_this_back_varinfo; // orig(this.back)
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
   public DataStructures_QueueAr_enqueue_31() { } 
   public DataStructures_QueueAr_enqueue_31(Ppt ppt) { 
+    orig_this_back_varinfo = ppt.find_var_by_name("orig(this.back)");
   }
 
   public Splitter instantiate(Ppt ppt) { 
@@ -21,17 +23,18 @@ public final class DataStructures_QueueAr_enqueue_31 extends Splitter {
   } 
 
   public boolean valid() { 
-    /* no variables were found */
-    return false;
+    return (orig_this_back_varinfo != null);
   } 
 
   public boolean test(ValueTuple vt) { 
-    /* writeTestBody: 0 declarations */
-    return(++orig_back==orig_theArray.length); 
+    /* writeTestBody: 1 declarations */
+    long orig_this_back = orig_this_back_varinfo.getIntValue(vt);
+    return(++orig_this_back==orig_this_theArray.length); 
   } 
 
   public String repr() { 
     return "DataStructures_QueueAr_enqueue_31: "
+      + "orig_this_back_varinfo = " + orig_this_back_varinfo.repr() + " "
       ;
   } 
 
@@ -41,6 +44,10 @@ public final class DataStructures_QueueAr_enqueue_31 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) { 
     dummyInv = null; 
+    VarInfo orig_this_back_vi = ppt.find_var_by_name("orig(this.back)");
+    if (orig_this_back_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {orig_this_back_vi});
+    }
   } 
 
   public DummyInvariant getDummyInvariant() { 

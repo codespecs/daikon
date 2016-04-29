@@ -16,9 +16,7 @@ import typequals.*;
 /**
  * Abstract base class used to evaluate single long scalars.
  **/
-public abstract class SingleScalar
-  extends UnaryInvariant
-{
+public abstract class SingleScalar extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -32,19 +30,20 @@ public abstract class SingleScalar
     super();
   }
 
-  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(SingleScalar.class) @Raw(SingleScalar.class) SingleScalar this*/) {
+  public VarInfo var(
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleScalar.class) @Raw(SingleScalar.class) SingleScalar this*/ ) {
     return ppt.var_infos[0];
   }
 
   /** Returns whether or not the specified types are valid for unary scalar.
    *  (Static version of method.)
    **/
-  public static final boolean valid_types_static (VarInfo[] vis) {
+  public static final boolean valid_types_static(VarInfo[] vis) {
     return ((vis.length == 1) && vis[0].file_rep_type.isScalar());
   }
 
   /** Returns whether or not the specified types are valid for unary scalar **/
-  public final boolean valid_types (VarInfo[] vis) {
+  public final boolean valid_types(VarInfo[] vis) {
     return valid_types_static(vis);
   }
 
@@ -52,7 +51,7 @@ public abstract class SingleScalar
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     long value = ((Long) val).longValue();
     if (mod_index == 0) {
@@ -62,15 +61,14 @@ public abstract class SingleScalar
     }
   }
 
-
   public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     long value = ((Long) val).longValue();
     if (mod_index == 0) {
-      return add_unmodified(value, count);
+      return check_unmodified(value, count);
     } else {
-      return add_modified(value, count);
+      return check_modified(value, count);
     }
   }
 
@@ -98,7 +96,6 @@ public abstract class SingleScalar
   // This has no additional suppression factories beyond those of Invariant.
 
 }
-
 
 //     def format(self, arg_tuple=None):
 //         if arg_tuple == None:

@@ -7,27 +7,27 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 public class ObviousFilter extends InvariantFilter {
-  public String getDescription() { return "Suppress obvious invariants"; }
+  public String getDescription() {
+    return "Suppress obvious invariants";
+  }
 
   /**
    * Boolean. If true, ObviousFilter is initially turned on.
    */
   public static boolean dkconfig_enabled = true;
 
-  public ObviousFilter () {
+  public ObviousFilter() {
     isOn = dkconfig_enabled;
   }
 
-
   @SuppressWarnings("nullness") // condition hidden in local variable
   /*@EnsuresNonNullIf(result=true, expression="#1.isObvious()")*/
-  boolean shouldDiscardInvariant( Invariant invariant ) {
+  boolean shouldDiscardInvariant(Invariant invariant) {
     // if ((invariant.ppt.arity() == 1) || IsEqualityComparison.it.accept(invariant)) {
     DiscardInfo discard = invariant.isObvious();
-    if (discard != null)
-      invariant.log ("discard because %s", discard.discardString());
+    if (discard != null) invariant.log("discard because %s", discard.discardString());
     return (discard != null);
-      /* }
+    /* }
     else {
       // if y cmp f(x_0,x_1, ..., x_n) and x_n is a constant, then we can
       // write y cmp f'(x_0,x_1,...,x_n-1), so we loop through the var_infos

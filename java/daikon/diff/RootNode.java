@@ -1,4 +1,5 @@
 package daikon.diff;
+
 import plume.Pair;
 
 /*>>>
@@ -8,14 +9,14 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * The root of the tree.  All its children are PptNodes.
  **/
-public class RootNode extends Node<Void,PptNode> {
+public class RootNode extends Node<Void, PptNode> {
 
-  @SuppressWarnings({"rawtypes","unchecked"})
+  @SuppressWarnings({"rawtypes", "unchecked"})
   public RootNode() {
-    super((Pair<Void,Void>) (Pair) Pair.of(new Object(), new Object()));
+    super((Pair<Void, Void>) (Pair) Pair.of(new Object(), new Object()));
   }
 
-  public Pair<Void,Void> getUserObject() {
+  public Pair<Void, Void> getUserObject() {
     throw new Error("Shouldn't ask for userObject for RootNode");
   }
 
@@ -30,5 +31,4 @@ public class RootNode extends Node<Void,PptNode> {
   public void accept(Visitor v) {
     v.visit(this);
   }
-
 }

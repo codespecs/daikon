@@ -16,10 +16,7 @@ import typequals.*;
 /**
  * Abstract base class used to evaluate single strings.
  **/
-
-public abstract class SingleString
-  extends UnaryInvariant
-{
+public abstract class SingleString extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -34,11 +31,12 @@ public abstract class SingleString
   }
 
   /** Returns whether or not the specified types are valid for unary string **/
-  public final boolean valid_types (VarInfo[] vis) {
+  public final boolean valid_types(VarInfo[] vis) {
     return ((vis.length == 1) && vis[0].file_rep_type.isString());
   }
 
-  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(SingleString.class) @Raw(SingleString.class) SingleString this*/) {
+  public VarInfo var(
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleString.class) @Raw(SingleString.class) SingleString this*/ ) {
     return ppt.var_infos[0];
   }
 
@@ -46,7 +44,7 @@ public abstract class SingleString
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(String,int)}.
   public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     String value = (String) val;
     if (mod_index == 0) {
@@ -57,7 +55,7 @@ public abstract class SingleString
   }
 
   public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     String value = (String) val;
     if (mod_index == 0) {
@@ -66,7 +64,6 @@ public abstract class SingleString
       return check_modified(value, count);
     }
   }
-
 
   /**
    * This method need not check for falsified;
@@ -87,7 +84,4 @@ public abstract class SingleString
   public InvariantStatus check_unmodified(/*@Interned*/ String value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
-
-
-
 }

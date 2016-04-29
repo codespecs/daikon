@@ -1,18 +1,18 @@
 package daikon.test.inv.unary.scalar;
 
-import junit.framework.*;
 import daikon.*;
 import daikon.inv.unary.scalar.*;
 import daikon.test.Common;
+import junit.framework.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-@SuppressWarnings("nullness")   // testing code
+@SuppressWarnings("nullness") // testing code
 public class OneOfScalarTester extends TestCase {
 
-  private VarInfo[] vars = { Common.makeHashcodeVarInfo("x"), Common.makeIntVarInfo("y") };
+  private VarInfo[] vars = {Common.makeHashcodeVarInfo("x"), Common.makeIntVarInfo("y")};
   private PptTopLevel ppt = Common.makePptTopLevel("Foo.Baa(int):::ENTER", vars);
   private PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
   private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
@@ -20,25 +20,29 @@ public class OneOfScalarTester extends TestCase {
   private static final int DOESNT_MATTER = 0;
 
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(OneOfScalarTester.class));
   }
 
   public static VarInfo newIntVarInfo(String name) {
-    VarInfo result = new VarInfo(name,
-                                 ProglangType.INT,
-                                 ProglangType.INT,
-                                 VarComparabilityNone.it,
-                                 VarInfoAux.getDefault());
+    VarInfo result =
+        new VarInfo(
+            name,
+            ProglangType.INT,
+            ProglangType.INT,
+            VarComparabilityNone.it,
+            VarInfoAux.getDefault());
     return result;
   }
 
   public static VarInfo newHashcodeVarInfo(String name) {
-    VarInfo result = new VarInfo(name,
-                                 ProglangType.HASHCODE,
-                                 ProglangType.HASHCODE,
-                                 VarComparabilityNone.it,
-                                 VarInfoAux.getDefault());
+    VarInfo result =
+        new VarInfo(
+            name,
+            ProglangType.HASHCODE,
+            ProglangType.HASHCODE,
+            VarComparabilityNone.it,
+            VarInfoAux.getDefault());
     return result;
   }
 
@@ -47,18 +51,18 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNullNon() {
-    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
-    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
 
-    assert ! inv1.isSameFormula(inv2);
+    assert !inv1.isSameFormula(inv2);
   }
 
   public void testNullNull() {
-    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
-    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
@@ -67,15 +71,14 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNonNon() {
-    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
-    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar) OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);
 
     assert inv1.isSameFormula(inv2);
   }
-
 
   /* NEED TO DEFINE SEMANTICS WITH MIKE E
   public void testNullNonHashcodeInt() {

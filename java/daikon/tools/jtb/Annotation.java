@@ -40,7 +40,7 @@ import org.checkerframework.dataflow.qual.*;
  *   &lt;OBJECT&gt;, or
  *   &lt;CLASS&gt;.
  * </pre>
-
+ *
  * Obviously, the tool Annotate outputs well-formed annotations, so
  * the user shouldn't have to worry too much about well-formedness.
  *
@@ -55,8 +55,7 @@ import org.checkerframework.dataflow.qual.*;
 public class Annotation {
 
   // Maps into all the Annotation objects created.
-  private static HashMap<Integer,Annotation>
-    annotationsMap = new HashMap<Integer,Annotation>();
+  private static HashMap<Integer, Annotation> annotationsMap = new HashMap<Integer, Annotation>();
 
   /** Daikon representation (as output by Daikon's default output format). */
   private final String daikonRep;
@@ -93,7 +92,8 @@ public class Annotation {
     return daikonClass;
   }
 
-  private Annotation(Kind kind, String daikonRep, String method, String invRep, String daikonClass) {
+  private Annotation(
+      Kind kind, String daikonRep, String method, String invRep, String daikonClass) {
     this.kind = kind;
     this.daikonRep = daikonRep;
     this.method = method;
@@ -108,14 +108,13 @@ public class Annotation {
   // [[ Note: Using an XML parser seems like too strong a hammer here,
   // and the performance of string matching is not an obvious
   // bottleneck. ]]
-  public static Annotation get(String annoString)
-    throws Annotation.MalformedAnnotationException {
+  public static Annotation get(String annoString) throws Annotation.MalformedAnnotationException {
 
     // check well-formedness
     boolean wellformed = true;
     if (!(annoString.matches(".*<INVINFO>.*</INVINFO>.*")
-          && annoString.matches(".*<DAIKON>(.*)</DAIKON>.*")
-          && annoString.matches(".*<METHOD>(.*)</METHOD>.*"))) {
+        && annoString.matches(".*<DAIKON>(.*)</DAIKON>.*")
+        && annoString.matches(".*<METHOD>(.*)</METHOD>.*"))) {
       throw new Annotation.MalformedAnnotationException(annoString);
     }
 
@@ -125,20 +124,17 @@ public class Annotation {
       k = Kind.enter;
     } else if (annoString.matches(".*<EXIT>.*")) {
       k = Kind.exit;
-    } else if (
-               annoString.matches(".*<OBJECT>.*")
-               || annoString.matches(".*<CLASS>.*")) {
+    } else if (annoString.matches(".*<OBJECT>.*") || annoString.matches(".*<CLASS>.*")) {
       k = Kind.objectInvariant;
     } else {
       throw new Annotation.MalformedAnnotationException(annoString);
     }
 
-    String theDaikonRep =
-      annoString.replaceFirst(".*<DAIKON>(.*)</DAIKON>.*", "$1").trim();
-    String theMethod =
-      annoString.replaceFirst(".*<METHOD>(.*)</METHOD>.*", "$1").trim();
+    String theDaikonRep = annoString.replaceFirst(".*<DAIKON>(.*)</DAIKON>.*", "$1").trim();
+    String theMethod = annoString.replaceFirst(".*<METHOD>(.*)</METHOD>.*", "$1").trim();
     String theInvRep = annoString.replaceFirst(".*<INV>(.*)</INV>.*", "$1").trim();
-    String theDaikonClass = annoString.replaceFirst(".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*", "$1").trim();
+    String theDaikonClass =
+        annoString.replaceFirst(".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*", "$1").trim();
 
     Annotation anno = Annotation.get(k, theDaikonRep, theMethod, theInvRep, theDaikonClass);
 
@@ -150,7 +146,7 @@ public class Annotation {
    * represent a well-formed annotation.
    */
   public static class MalformedAnnotationException extends Exception {
-  static final long serialVersionUID = 20050923L;
+    static final long serialVersionUID = 20050923L;
 
     public MalformedAnnotationException(String s) {
       super(s);
@@ -164,20 +160,20 @@ public class Annotation {
    */
   public String xmlString() {
     return "<INVINFO> "
-      + kind.xmlString()
-      + "<DAIKON>"
-      + daikonRep
-      + " </DAIKON> "
-      + "<METHOD> "
-      + method
-      + " </METHOD>"
-      + "<INV>"
-      + invRep
-      + "</INV>"
-      + " <DAIKONCLASS>"
-      + daikonClass
-      + " </DAIKONCLASS>"
-      + "</INVINFO>";
+        + kind.xmlString()
+        + "<DAIKON>"
+        + daikonRep
+        + " </DAIKON> "
+        + "<METHOD> "
+        + method
+        + " </METHOD>"
+        + "<INV>"
+        + invRep
+        + "</INV>"
+        + " <DAIKONCLASS>"
+        + daikonClass
+        + " </DAIKONCLASS>"
+        + "</INVINFO>";
   }
 
   /**
@@ -199,8 +195,7 @@ public class Annotation {
   public static Annotation[] findAnnotations(List<String> annoStrings) {
 
     if (annoStrings == null) {
-      return new Annotation[] {
-      };
+      return new Annotation[] {};
     }
     //Pattern p = Pattern.compile("(<INVINFO>.*</INVINFO>)");
     Set<Annotation> annos = new HashSet<Annotation>();
@@ -222,10 +217,8 @@ public class Annotation {
           // malformed annotation; just go to next iteration
         }
       }
-
     }
-    return annos.toArray(new Annotation[] {
-    });
+    return annos.toArray(new Annotation[] {});
   }
 
   // This class should really be an enum.
@@ -245,6 +238,7 @@ public class Annotation {
   public static class Kind {
     public final String name;
     public final String xmlname;
+
     private Kind(String name, String xmlname) {
       this.name = name;
       this.xmlname = xmlname;
@@ -255,9 +249,11 @@ public class Annotation {
     /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Kind this*/) {
       return name;
     }
+
     public String xmlString() {
       return xmlname;
     }
+
     public static final Kind enter = new Kind("precondition ", "<ENTER>");
     public static final Kind exit = new Kind("postcondition", "<EXIT>");
     public static final Kind objectInvariant = new Kind("obj invariant", "<OBJECT>");
@@ -265,9 +261,7 @@ public class Annotation {
 
   /** Easy-on-the-eye format. */
   /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Annotation this*/) {
-    return kind.toString()
-      + " : "
-      + daikonRep();
+    return kind.toString() + " : " + daikonRep();
   }
 
   /**
@@ -275,7 +269,7 @@ public class Annotation {
    * and "kind" are equal.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied Annotation this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied Annotation this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o == null) {
       return false;
     }
@@ -283,23 +277,22 @@ public class Annotation {
       return false;
     }
     Annotation anno = (Annotation) o;
-    return (
-            this.daikonRep().equals(anno.daikonRep())
-            && (this.method().equals(anno.method()))
-            && (this.kind().equals(anno.kind())));
+    return (this.daikonRep().equals(anno.daikonRep())
+        && (this.method().equals(anno.method()))
+        && (this.kind().equals(anno.kind())));
   }
 
   /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Annotation this*/) {
     return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
   }
 
-
   /**
    * <p>Get the annotation with corresponding properties.
    *
    */
-  public static Annotation get(Kind kind, String daikonRep, String method, String invRep, String daikonClass)
-    throws Annotation.MalformedAnnotationException {
+  public static Annotation get(
+      Kind kind, String daikonRep, String method, String invRep, String daikonClass)
+      throws Annotation.MalformedAnnotationException {
 
     Annotation anno = new Annotation(kind, daikonRep, method, invRep, daikonClass);
     Integer key = new Integer(anno.hashCode());
@@ -310,7 +303,6 @@ public class Annotation {
       return anno;
     }
   }
-
 
   // This is never used, and the "break" clause seems to be buggy, so
   // that this returns at most one property.

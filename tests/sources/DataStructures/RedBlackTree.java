@@ -208,13 +208,13 @@
         private RedBlackNode rotate( Comparable item, RedBlackNode parent )
         {
             if( item.compareTo( parent.element ) < 0 )
-                return parent.left = item.compareTo( parent.left.element ) < 0 ?
-                    rotateWithLeftChild( parent.left )  :  // LL
-                    rotateWithRightChild( parent.left ) ;  // LR
+                return parent.left = item.compareTo( parent.left.element ) < 0 ? rotateWithLeftChild( parent.left ) /* LL */ : rotateWithRightChild( parent.left ) /* LR */ ;
+
+
             else
-                return parent.right = item.compareTo( parent.right.element ) < 0 ?
-                    rotateWithLeftChild( parent.right ) :  // RL
-                    rotateWithRightChild( parent.right );  // RR
+                return parent.right = item.compareTo( parent.right.element ) < 0 ? rotateWithLeftChild( parent.right ) /* RL */ : rotateWithRightChild( parent.right ) /* RR */ ;
+
+
         }
 
         /**

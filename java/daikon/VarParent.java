@@ -1,23 +1,22 @@
 package daikon;
 
-import daikon.derive.*;
-import daikon.derive.unary.*;
-import daikon.derive.binary.*;
-import daikon.derive.ternary.*;
-import daikon.VarInfoName.*;
-import daikon.PrintInvariants;
-import daikon.inv.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.binary.twoScalar.*;
 import static daikon.FileIO.VarDefinition;
 
-import plume.*;
-
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import daikon.PrintInvariants;
+import daikon.VarInfoName.*;
+import daikon.derive.*;
+import daikon.derive.binary.*;
+import daikon.derive.ternary.*;
+import daikon.derive.unary.*;
+import daikon.inv.*;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.sequence.*;
 import java.io.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -44,7 +43,8 @@ public class VarParent implements Serializable {
   /** Parent ppt relation id **/
   public int parent_relation_id;
 
-  public VarParent (String parent_ppt, int parent_relation_id, /*@Nullable*/ String parent_variable) {
+  public VarParent(
+      String parent_ppt, int parent_relation_id, /*@Nullable*/ String parent_variable) {
     this.parent_ppt = parent_ppt;
     this.parent_relation_id = parent_relation_id;
     this.parent_variable = parent_variable;

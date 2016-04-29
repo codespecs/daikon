@@ -1,18 +1,18 @@
 package daikon.test.inv;
 
-import junit.framework.*;
 import daikon.*;
 import daikon.config.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.test.*;
 import java.util.*;
+import junit.framework.*;
 
-@SuppressWarnings("nullness")   // testing code
+@SuppressWarnings("nullness") // testing code
 public class InvariantTester extends TestCase {
 
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(InvariantTester.class));
   }
 
@@ -21,24 +21,21 @@ public class InvariantTester extends TestCase {
   }
 
   public VarInfo newIntVarInfo(String name) {
-    return new VarInfo(name,
-                       ProglangType.INT,
-                       ProglangType.INT,
-                       VarComparabilityNone.it,
-                       VarInfoAux.getDefault());
+    return new VarInfo(
+        name, ProglangType.INT, ProglangType.INT, VarComparabilityNone.it, VarInfoAux.getDefault());
   }
 
   public void testClassVarnameComparator() {
     Comparator<Invariant> c = new Invariant.ClassVarnameComparator();
 
-    VarInfo[] vars = { Common.makeIntVarInfo("x"), Common.makeIntVarInfo("y") };
+    VarInfo[] vars = {Common.makeIntVarInfo("x"), Common.makeIntVarInfo("y")};
     PptTopLevel ppt = Common.makePptTopLevel("Foo:::OBJECT", vars);
     PptSlice slice = new PptSlice2(ppt, vars);
 
     Invariant inv1, inv2, inv2_2, inv2_3, inv2_4, inv2_5, inv2_6, inv3, inv4, inv5, inv6;
 
-    Configuration.getInstance().apply
-      ("daikon.inv.binary.twoScalar.NumericInt.BitwiseComplement.enabled = 1");
+    Configuration.getInstance()
+        .apply("daikon.inv.binary.twoScalar.NumericInt.BitwiseComplement.enabled = 1");
 
     inv1 = NumericInt.BitwiseComplement.get_proto().instantiate(slice);
     assert c.compare(inv1, inv1) == 0;
@@ -82,7 +79,7 @@ public class InvariantTester extends TestCase {
     inv6 = Implication.makeImplication(ppt, inv4, inv1, false, inv4, inv1);
     assert c.compare(inv5, inv6) < 0;
 
-    VarInfo[] vars2 = { Common.makeIntVarInfo("x"), Common.makeIntVarInfo("z") };
+    VarInfo[] vars2 = {Common.makeIntVarInfo("x"), Common.makeIntVarInfo("z")};
     PptTopLevel ppt2 = Common.makePptTopLevel("Foo:::OBJECT", vars2);
     PptSlice slice2 = new PptSlice2(ppt2, vars2);
     inv2 = NumericInt.BitwiseComplement.get_proto().instantiate(slice2);
@@ -92,7 +89,7 @@ public class InvariantTester extends TestCase {
     vars2[1] = Common.makeIntVarInfo("y");
     ppt2 = Common.makePptTopLevel("Foo:::OBJECT", vars2);
     slice2 = new PptSlice2(ppt2, vars2);
-    inv2 = NumericInt.BitwiseComplement.get_proto().instantiate (slice2);
+    inv2 = NumericInt.BitwiseComplement.get_proto().instantiate(slice2);
     assert c.compare(inv1, inv2) > 0;
   }
 
@@ -126,16 +123,16 @@ public class InvariantTester extends TestCase {
     assert Invariant.prob_and(.9, .1) == .91;
 
     Random r = new Random(20010907);
-    for (int i=0; i<100; i++) {
+    for (int i = 0; i < 100; i++) {
       double x = r.nextDouble();
       double y = r.nextDouble();
       double z = r.nextDouble();
       double r1 = Invariant.prob_and(x, y, z);
       double r2 = Invariant.prob_and(x, Invariant.prob_and(y, z));
       double r3 = Invariant.prob_and(Invariant.prob_and(x, y), z);
-      assert Math.abs(r1-r2) < .000001;
-      assert Math.abs(r1-r3) < .000001;
-      assert Math.abs(r2-r3) < .000001;
+      assert Math.abs(r1 - r2) < .000001;
+      assert Math.abs(r1 - r3) < .000001;
+      assert Math.abs(r2 - r3) < .000001;
     }
   }
 
@@ -156,5 +153,4 @@ public class InvariantTester extends TestCase {
     assert Invariant.prob_or(.1, .9) == .1;
     assert Invariant.prob_or(.9, .1) == .1;
   }
-
 }

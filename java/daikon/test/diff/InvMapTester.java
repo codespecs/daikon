@@ -1,17 +1,16 @@
 package daikon.test.diff;
 
-import junit.framework.*;
 import daikon.*;
 import daikon.diff.*;
 import daikon.inv.Invariant;
-
 import java.util.*;
+import junit.framework.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-@SuppressWarnings("interning")  // use of == in test code
+@SuppressWarnings("interning") // use of == in test code
 public class InvMapTester extends TestCase {
 
   private /*@MonotonicNonNull*/ InvMap map; // initialized by setUp()
@@ -36,7 +35,8 @@ public class InvMapTester extends TestCase {
     map = new InvMap();
   }
 
-  /*@RequiresNonNull("map")*/  // implicit flow: setUp was called by JUnit";
+  /*@RequiresNonNull("map")*/
+  // implicit flow: setUp was called by JUnit";
   public void testABC() {
     map.put(pptA, invsA);
     map.put(pptB, invsB);
@@ -55,7 +55,8 @@ public class InvMapTester extends TestCase {
     assert invsC == map.get(pptC);
   }
 
-  /*@RequiresNonNull("map")*/  // implicit flow: setUp was called by JUnit";
+  /*@RequiresNonNull("map")*/
+  // implicit flow: setUp was called by JUnit";
   public void testCAB() {
     map.put(pptC, invsC);
     map.put(pptA, invsA);
@@ -73,5 +74,4 @@ public class InvMapTester extends TestCase {
     assert invsB == map.get(pptB);
     assert invsC == map.get(pptC);
   }
-
 }

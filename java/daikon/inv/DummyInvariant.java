@@ -34,9 +34,7 @@ import typequals.*;
  * <code>daikon.split.PptSplitter.dummy_invariant_level</code> must be set,
  * and formatting information must be supplied in the splitter info file.
  **/
-public class DummyInvariant
-  extends Invariant
-{
+public class DummyInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -61,10 +59,16 @@ public class DummyInvariant
   // slice for the invariant to live in.
   public boolean valid = false;
 
-  public DummyInvariant(PptSlice ppt,
-                        /*@Nullable*/ String daikonStr, /*@Nullable*/ String java, /*@Nullable*/ String esc,
-                         /*@Nullable*/ String simplify, /*@Nullable*/ String jml,
-                         /*@Nullable*/ String dbc, /*@Nullable*/ String csharp, boolean desired) {
+  public DummyInvariant(
+      PptSlice ppt,
+      /*@Nullable*/ String daikonStr,
+      /*@Nullable*/ String java,
+      /*@Nullable*/ String esc,
+      /*@Nullable*/ String simplify,
+      /*@Nullable*/ String jml,
+      /*@Nullable*/ String dbc,
+      /*@Nullable*/ String csharp,
+      boolean desired) {
     super(ppt);
     daikonFormat = daikonStr;
     javaFormat = java;
@@ -76,9 +80,15 @@ public class DummyInvariant
     valid = desired;
   }
 
-  public /*@Prototype*/ DummyInvariant(/*@Nullable*/ String daikonStr, /*@Nullable*/ String java, /*@Nullable*/ String esc,
-                         /*@Nullable*/ String simplify, /*@Nullable*/ String jml,
-                         /*@Nullable*/ String dbc, /*@Nullable*/ String csharp, boolean desired) {
+  public /*@Prototype*/ DummyInvariant(
+      /*@Nullable*/ String daikonStr,
+      /*@Nullable*/ String java,
+      /*@Nullable*/ String esc,
+      /*@Nullable*/ String simplify,
+      /*@Nullable*/ String jml,
+      /*@Nullable*/ String dbc,
+      /*@Nullable*/ String csharp,
+      boolean desired) {
     super();
     daikonFormat = daikonStr;
     javaFormat = java;
@@ -91,35 +101,35 @@ public class DummyInvariant
   }
 
   public DummyInvariant instantiate(PptTopLevel parent, VarInfo[] vars) {
-    assert !this.negated
-        : "Only instantiated invariants should be negated";
-    DummyInvariant inv = new DummyInvariant(ppt,
-                                            daikonFormat,
-                                            javaFormat,
-                                            escFormat,
-                                            simplifyFormat,
-                                            jmlFormat,
-                                            dbcFormat,
-                                            csharpFormat,
-                                            // Not valid until we find a slice for it
-                                            /*valid=*/ false);
+    assert !this.negated : "Only instantiated invariants should be negated";
+    DummyInvariant inv =
+        new DummyInvariant(
+            ppt,
+            daikonFormat,
+            javaFormat,
+            escFormat,
+            simplifyFormat,
+            jmlFormat,
+            dbcFormat,
+            csharpFormat,
+            // Not valid until we find a slice for it
+            /*valid=*/ false);
 
     // Find between 1 and 3 unique variables, to pick a slice to put
     // this in.
     HashSet<VarInfo> uniqVarsSet = new HashSet<VarInfo>();
-    for (int i = 0; i < vars.length; i++)
+    for (int i = 0; i < vars.length; i++) {
       uniqVarsSet.add(vars[i].canonicalRep());
+    }
     int sliceSize = uniqVarsSet.size();
-    if (sliceSize > 3)
-      sliceSize = 3;
+    if (sliceSize > 3) sliceSize = 3;
     /*NNC:@MonotonicNonNull*/ VarInfo[] newVars = new VarInfo[sliceSize];
     {
       Iterator<VarInfo> it = uniqVarsSet.iterator();
       int i = 0;
       while (it.hasNext()) {
         newVars[i++] = it.next();
-        if (i == sliceSize)
-          break;
+        if (i == sliceSize) break;
       }
     }
     vars = newVars;
@@ -132,9 +142,9 @@ public class DummyInvariant
       }
       inv.ppt = slice;
     } else if (vars.length == 2) {
-      if (vars[0] == vars[1])
+      if (vars[0] == vars[1]) {
         return inv;
-      else if (vars[0].varinfo_index > vars[1].varinfo_index) {
+      } else if (vars[0].varinfo_index > vars[1].varinfo_index) {
         VarInfo tmp = vars[0];
         vars[0] = vars[1];
         vars[1] = tmp;
@@ -146,18 +156,23 @@ public class DummyInvariant
       }
       inv.ppt = slice;
     } else if (vars.length == 3) {
-      if (vars[0] == vars[1] || vars[1] == vars[2] || vars[0] == vars[2])
-        return inv;
+      if (vars[0] == vars[1] || vars[1] == vars[2] || vars[0] == vars[2]) return inv;
       // bubble sort
       VarInfo tmp;
       if (vars[0].varinfo_index > vars[1].varinfo_index) {
-        tmp = vars[0]; vars[0] = vars[1]; vars[1] = tmp;
+        tmp = vars[0];
+        vars[0] = vars[1];
+        vars[1] = tmp;
       }
       if (vars[1].varinfo_index > vars[2].varinfo_index) {
-        tmp = vars[1]; vars[1] = vars[2]; vars[2] = tmp;
+        tmp = vars[1];
+        vars[1] = vars[2];
+        vars[2] = tmp;
       }
       if (vars[0].varinfo_index > vars[1].varinfo_index) {
-        tmp = vars[0]; vars[0] = vars[1]; vars[1] = tmp;
+        tmp = vars[0];
+        vars[0] = vars[1];
+        vars[1] = tmp;
       }
       PptSlice3 slice = parent.findSlice(vars[0], vars[1], vars[2]);
       if (slice == null) {
@@ -193,71 +208,90 @@ public class DummyInvariant
 
   public String format_daikon(/*>>>@GuardSatisfied DummyInvariant this*/) {
     String df;
-    if (daikonFormat == null)
+    if (daikonFormat == null) {
       df = "<dummy>";
-    else
+    } else {
       df = daikonFormat;
-    if (negated)
+    }
+    if (negated) {
       return "not(" + df + ")";
-    else
+    } else {
       return df;
+    }
   }
 
   public String format_java(/*>>>@GuardSatisfied DummyInvariant this*/) {
-    if (javaFormat == null)
-      return "format_java not implemented for dummy invariant";
-    if (negated)
+    if (javaFormat == null) return "format_java not implemented for dummy invariant";
+    if (negated) {
       return "!(" + javaFormat + ")";
-    else
+    } else {
       return javaFormat;
+    }
   }
 
   public String format_esc(/*>>>@GuardSatisfied DummyInvariant this*/) {
-    if (escFormat == null)
-      return "format_esc not implemented for dummy invariant";
-    if (negated)
+    if (escFormat == null) return "format_esc not implemented for dummy invariant";
+    if (negated) {
       return "!(" + escFormat + ")";
-    else
+    } else {
       return escFormat;
+    }
   }
 
   public String format_simplify(/*>>>@GuardSatisfied DummyInvariant this*/) {
-    if (simplifyFormat == null)
-      return "format_simplify not implemented for dummy invariant";
-    if (negated)
+    if (simplifyFormat == null) return "format_simplify not implemented for dummy invariant";
+    if (negated) {
       return "(NOT " + simplifyFormat + ")";
-    else
+    } else {
       return simplifyFormat;
+    }
   }
 
   public String format_jml(/*>>>@GuardSatisfied DummyInvariant this*/) {
-    if (jmlFormat == null)
-      return "format_jml not implemented for dummy invariant";
-    if (negated)
+    if (jmlFormat == null) return "format_jml not implemented for dummy invariant";
+    if (negated) {
       return "!(" + jmlFormat + ")";
-    else
+    } else {
       return jmlFormat;
+    }
   }
 
   public String format_dbc(/*>>>@GuardSatisfied DummyInvariant this*/) {
-    if (dbcFormat == null)
-      return "format_dbc not implemented for dummy invariant";
-    if (negated)
+    if (dbcFormat == null) return "format_dbc not implemented for dummy invariant";
+    if (negated) {
       return "!(" + dbcFormat + ")";
-    else
+    } else {
       return dbcFormat;
+    }
   }
 
   public String format_csharp(/*>>>@GuardSatisfied DummyInvariant this*/) {
-    if (csharpFormat == null)
-        return "format_csharp not implemented for dummy invariant";
-      if (negated)
-        return "!(" + csharpFormat + ")";
-      else
-        return csharpFormat;
+    if (csharpFormat == null) return "format_csharp not implemented for dummy invariant";
+    if (negated) {
+      return "!(" + csharpFormat + ")";
+    } else {
+      return csharpFormat;
+    }
   }
 
   protected Invariant resurrect_done(int[] permutation) {
     throw new Error("Not implemented");
+  }
+
+  public boolean isSameFormula(Invariant other) {
+    throw new Error("Not implemented");
+  }
+
+  public boolean enabled(/*>>> @Prototype DummyInvariant this*/) {
+    throw new Error("do not invoke " + getClass() + ".enabled()");
+  }
+
+  public boolean valid_types(/*>>> @Prototype DummyInvariant this,*/ VarInfo[] vis) {
+    throw new Error("do not invoke " + getClass() + ".valid_types()");
+  }
+
+  protected /*@NonPrototype*/ DummyInvariant instantiate_dyn(
+      /*>>> @Prototype DummyInvariant this,*/ PptSlice slice) {
+    throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

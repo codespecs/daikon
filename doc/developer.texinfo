@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.2.21
+@center Daikon version 5.3.1
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.2.21 release date
-@center January 6, 2016
+@c Print out the Daikon version 5.3.1 release date
+@center April 5, 2016
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.2.21, released January 6, 2016.
+It describes Daikon version 5.3.1, released April 5, 2016.
 
 @menu
 * Introduction::
@@ -358,9 +358,22 @@ Project > properties > Java build path:
 
 You can easily write your own invariants and have Daikon check them,
 in addition to all the other invariants that are already part of Daikon.
-Adding a new invariant to Daikon requires writing one Java class, adding
-a line to another file to inform Daikon of the new
-class, and recompiling Daikon.
+Adding a new invariant to Daikon requires writing one Java class, as
+explained below.
+@itemize
+@item
+If you are willing to edit the Daikon source code, you should define the
+invariant in Daikon's source code, in a subdirectory of
+@file{java/daikon/inv/}.  Then, edit method @code{Daikon.setup_proto_invs} to
+call the new invariant's @code{get_proto} method and recompile Daikon.
+@item
+If you do not wish to edit the Daikon source code, then compile the new
+invariant and put its @file{.class} file on your classpath.  Then, invoke
+Daikon with the @option{--user_defined_invariant} command-line argument
+(@pxref{Options to control invariant detection,,,daikon,Daikon User Manual}).
+@end itemize
+
+
 
 The file @file{java/daikon/inv/unary/scalar/Positive.java} in the
 Daikon distribution contains a sample invariant.  This invariant is
@@ -374,22 +387,22 @@ Daikon.
 A Java class defining an invariant is a concrete subclass of one of
 the following abstract classes:
 @table @code
-@item SingleScalar
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/scalar/SingleScalar.html,@code{SingleScalar}}
 Invariants over a single numeric (scalar) variable,
 such as @samp{x != 0}.
-@item TwoScalar
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/twoScalar/TwoScalar.html,@code{TwoScalar}}
 Invariants over two numeric variables, such as @samp{y
 = abs(x)}.
-@item ThreeScalar
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/ternary/threeScalar/ThreeScalar.html,@code{ThreeScalar}}
 Invariants over three numeric variables, such as
 @samp{z = ax + by + c}.
-@item SingleSequence
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/sequence/SingleSequence.html,@code{SingleSequence}}
 Invariants over one sequence (array)
 variable, such as @samp{a[] contains no duplicates}.
-@item TwoSequence
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/twoSequence/TwoSequence.html,@code{TwoSequence}}
 Invariants over two sequences, such as @samp{a[] is a
 subsequence of b[]}.
-@item SequenceScalar
+@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/sequenceScalar/SequenceScalar.html,@code{SequenceScalar}}
 Invariants over a scalar and a sequence, such
 as @samp{x is a member of a[]}.
 @end table
@@ -414,7 +427,7 @@ Its typical implementation is
 super(ppt);
 @end example
 
-@item protected Invariant instantiate_dyn (PptSlice slice)
+@item protected Invariant instantiate_dyn(PptSlice slice)
 Returns an invariant of this class on the specified slice.  Its implementation
 is almost always
 @example
@@ -426,7 +439,7 @@ Returns the prototype invariant used to create other invariants.  Its
 typical implementation is
 @example
 if (proto == null)
-  proto = new InvName (null);
+  proto = new InvName(null);
 return (proto);
 @end example
 
@@ -437,12 +450,12 @@ almost always
 return dkconfig_enabled;
 @end example
 
-@item public boolean instantiate_ok (VarInfo[] vis)
+@item public boolean instantiate_ok(VarInfo[] vis)
 Returns whether or not it makes sense to instantiate this invariant
 over the specified variables.  If not present, the invariant is
 created over all comparable variables of the correct types.
 
-@item public InvariantStatus check_modified (..., int count)
+@item public InvariantStatus check_modified(..., int count)
 Presents a tuple of values to the invariant; these are the first 
 N arguments, which have appropriate types for the particular invariant.  
 The @code{count} argument indicates how many samples have this value.  
@@ -452,12 +465,12 @@ one call to @code{check_modified} with a @code{count} parameter of 3.
 Returns whether or not the sample is consistent with the invariant.
 Does not change the state of the invariant.
 
-@item public InvariantStatus add_modified (..., int count)
+@item public InvariantStatus add_modified(..., int count)
 Similar to @code{check_modified} except that it can change the state
 of the invariant if necessary.  If the invariant doesn't have any
 state, then simply calls @code{check_modified}.
 
-@item protected double computeConfidence ()
+@item protected double computeConfidence()
 Returns the probability that the observed data could not have happened by
 chance alone.  The result usually falls between 0 and 1, where 0 means
 the values seen so far certainly happened by chance and 1 means they
@@ -482,9 +495,9 @@ by chance.  An invariant is printed only if its probability of not
 occurring by chance alone is large enough (by default, greater than .99;
 see Daikon's @option{--conf_limit} command-line option.
 
-@item public String format ()
-@itemx public String repr ()
-@itemx public String format_using (OutputFormat format)
+@item public String format()
+@itemx public String repr()
+@itemx public String format_using(OutputFormat format)
 Returns a high-level printed representation of the
 invariant, for user output.  @code{format} produces @dfn{normal} output, while
 the @code{repr} formatting routine produces low-level, detailed output for 
@@ -495,8 +508,6 @@ implementations for the different output formats later as needed.
 See also @ref{New formatting for invariants}.
 @end table
 
-After the invariant is written, add a call to its @code{get_proto}
-method in the @code{Daikon.setup_proto_invs} method.
 
 @node    New derived variables
 @section New derived variables
@@ -871,17 +882,17 @@ private static NISuppressionSet suppressions = null;
 
 public NISuppressionSet get_ni_suppressions() @{
   if (suppressions == null) @{
-    NISuppressee = new NISuppressee (IntGreaterEqual);
+    NISuppressee = new NISuppressee(IntGreaterEqual);
 
-    NISuppressor v1_eq_v2 = new NISuppressor (0, 1, IntEqual.class);
-    NISuppressor v1_lt_v2 = new NISuppressor (0, 1, IntLessThan.class);
+    NISuppressor v1_eq_v2 = new NISuppressor(0, 1, IntEqual.class);
+    NISuppressor v1_lt_v2 = new NISuppressor(0, 1, IntLessThan.class);
 
-    suppressions = new NISuppressionSet (new NISuppression[] @{
-      new NISuppression (v1_eq_v2, suppressee),
-      new NISuppression (v1_lt_v2, suppressee),
+    suppressions = new NISuppressionSet(new NISuppression[] @{
+      new NISuppression(v1_eq_v2, suppressee),
+      new NISuppression(v1_lt_v2, suppressee),
     @});
   @}
-  return (suppressions);
+  return suppressions;
 @}
 @end example
 @c restore default:
@@ -935,8 +946,7 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
 
 If you wish to write a program that manipulates a @file{.dtrace} file, you
 can use Daikon's built-in mechanisms for parsing @file{.dtrace} files.
-(This is easier and less error-prone than write a program that directly
-reads the file.)
+(This is easier and less error-prone than writing your own parser.)
 
 You will write a subclass of @code{FileIO.Processor}, then pass an instance
 of that class to @code{FileIO.read_data_trace_files}.  Daikon will parse
@@ -1245,47 +1255,87 @@ Michael D. Ernst, published in Foundations of Software Engineering in 2004;
 the paper is available from
 @uref{http://plse.cs.washington.edu/daikon/pubs/invariants-incremental-fse2004-abstract.html}.
 
+@need 2000
 @node    Dataflow hierarchy
 @section Dataflow hierarchy
 
 @cindex dataflow hierarchy
 @cindex hierarchy
 
-Dataflow hierarchy is a means to relate variables in different program
-points in a partial ordering.  Variables in program point X are
-related to variables in another program point Y by a @dfn{flow} relation
-if every sample seen of @nospellcheck{X's} variables is also meant to be seen at Y.
-Y is called a parent program point of X.  For example, all the field
+The dataflow hierarchy expresses relationships between variables at
+different program points.  It is used to save time and space during invariant
+generation and to prevent invariants from being printed multiple times.
+
+Suppose there are two program points X and its parent Y.  Then every sample
+seen at X is also seen at Y, and every invariant that is true at Y is also
+true at X.
+
+Variable @emph{z} in program point X is
+related to variable @emph{z@quoteright{}} in another program point Y by a @dfn{flow} relation
+if every sample seen of @emph{z} at X is also seen of @emph{z@quoteright{}} at Y.
+Y is called a parent program point of X.
+
+For example, all the field
 variables in the @code{:::ENTER} program point of a method in class C relate to
 the field variables in the @code{:::CLASS} program point of C.  This is because
 the state of C, when in context at the entry @code{:::ENTER} program point, is
 also in context at the @code{:::CLASS} program point.  Any invariant that holds
 true on a parent program point must hold on the child program point.
-The purpose of dataflow hierarchy is to reduce the presence of
-redundant invariants by only keeping invariants at the highest parent
-at which they apply.  This saves both time and space.
+Daikon saves time and space by only computing invariants at the highest parent
+at which they apply.
 
-Daikon provides four ways that program points can be connected.
-First, @code{:::CLASS} program points are parents of
-all their method program points.  Second, between two classes that are
-related by inheritance, corresponding program points relate --- for
-example, @code{java.util.Vector:::CLASS} is a child of
-@code{java.util.List:::CLASS}.  Third, when a program point contains
-variables of a type whose @code{:::CLASS} program point is also available to
-Daikon, the former program point's variables relate to the latter
-program point's @code{:::CLASS} method.  For example, if X.y is of type Y, and
-Y contains fields a and b, X.y, X.y.a and X.y.b relate to
-Y.this, Y.b and Y.a.  Fourth, variables at @code{:::ENTER} program
-points are related to the @samp{orig} versions at @code{:::EXIT} program points.
+@c original:
+@c Daikon provides four ways that program points can be connected.
+@c First, @code{:::CLASS} program points are parents of
+@c all their method program points.  Second, between two classes that are
+@c related by inheritance, corresponding program points relate --- for
+@c example, @code{java.util.Vector:::CLASS} is a child of
+@c @code{java.util.List:::CLASS}.  Third, when a program point contains
+@c variables of a type whose @code{:::CLASS} program point is also available to
+@c Daikon, the former program point's variables relate to the latter
+@c program point's @code{:::CLASS} method.  For example, if X.y is of type Y, and
+@c Y contains fields a and b, X.y, X.y.a and X.y.b relate to
+@c Y.this, Y.b and Y.a.  Fourth, variables at @code{:::ENTER} program
+@c points are related to the @samp{orig} versions at @code{:::EXIT} program points.
 
-When using Daikon, the above four ways of relations in the dataflow
-hierarchy will result in some true invariants that are not reported at
+@ref{Program point declarations} describe how program points are
+declared in a Daikon input file. Here we will describe how the
+@code{parent} records are typically used to connect program points into
+a dataflow hierarchy.
+
+@itemize
+@item
+A program point that represents the @code{ENTRY} or @code{EXIT} of a
+static method will have a @code{parent} record that points to the
+@code{CLASS} program point for the containing class.
+
+@item
+A program point that represents the @code{ENTRY} or @code{EXIT} of a
+non-static (instance) method will have a @code{parent} record that points to the
+@code{OBJECT} program point for the containing object.
+
+@item
+A program point that represents a @code{CLASS}
+will usually not have a @code{parent} record.
+
+@item
+A program point that represents a @code{OBJECT}
+will have a @code{parent} record that points to the @code{CLASS}
+program point for the object if the object has static data members.
+@end itemize
+
+When using Daikon, the relations used to describe the dataflow
+hierarchy may result in some true invariants that are not reported at
 some program points.  However, the invariant will be present in some
-parent program point.  Dataflow hierarchy is enabled by default, but
+parent program point.  The dataflow hierarchy is used by default, but
 can be disabled by the @option{--nohierarchy} flag.  When dataflow is enabled,
 the only samples that are examined by Daikon are the @code{:::EXIT} program
 points (plus @samp{orig} variables) since these contain a complete view of
-the data.
+the data, from which invariants at all other locations can be inferred.
+For example, Daikon does not need to examine data at @code{:::ENTER} or
+@code{:::OBJECT} program points which are parents of @code{:::EXIT} in the
+dataflow hierarchy.
+
 
 @node    Equality optimization
 @section Equality optimization
@@ -1309,7 +1359,7 @@ equality invariants.  Every equality set has a leader or
 Non-equality invariants are only instantiated and checked on the
 leader.  When printing invariants, Daikon reports only invariants on
 the leader.  The user can easily determine that @samp{odd(a)} and @samp{a == b}
-imply @samp{odd(b)}.  Equality optimization can be turned off at the 
+imply @samp{odd(b)}.  Equality optimization can be turned off at the
 command line with the @option{--noequality} flag.
 
 
@@ -1493,7 +1543,7 @@ master tester, and so it is not necessary to separately run this test
 except to generate goal files.
 
 Furthermore, this framework cannot parse complex types from files
-unless they contain a @code{public (Object) valueOf(String s)}
+unless they contain a @code{public Object valueOf(String s)}
 function. Otherwise the program has no was of knowing how to create
 such an object from a string. All primitives and the String type are
 already recognized.
@@ -1753,11 +1803,10 @@ For more information, see the comments in file
 @node    Editing
 @chapter Editing Daikon source code
 
-The Daikon source code follows these coding conventions:
-@ifnothtml
-@* @ @ @ @ @ @ 
-@end ifnothtml
-@uref{http://homes.cs.washington.edu/~mernst/advice/coding-style.html}.
+The Daikon source code follows
+the @uref{https://google.github.io/styleguide/javaguide.html, Google Java Style}
+and also 
+@uref{http://homes.cs.washington.edu/~mernst/advice/coding-style.html, Michael Ernst's coding conventions}.
 
 
 @menu
@@ -1896,7 +1945,11 @@ Daikon, @samp{jtb}, and plume.
 Finally, add the required jars for Daikon by right-clicking on
 the project and selecting the Properties menu.  Select "Java Build
 Path", then "Libraries", then "Add External Jars" and add @file{tools.jar},
-@file{junit.jar}, @file{jakarta-oro.jar}, and @file{java-getopt.jar}. 
+and the files in @file{daikon/java/lib/}, namely 
+@file{java-getopt.jar},
+@file{junit-4.12.jar},
+and
+@file{plume.jar}.
 (See your @env{CLASSPATH}
 environment variable for full pathnames to these files.)
 @end enumerate
@@ -2050,8 +2103,7 @@ as you prepare for a release the current version number is probably odd.  It wil
 be updated as one of the steps in the release process.  After making the
 distribution, one of the final steps is to increment the version number again to
 prepare for subsequent development.  This system has the useful side effect
-of allowing the build and test process to be repeated to fix a problem (steps 1--7
-of @ref{Distribution steps} below)
+of allowing the build and test process to be repeated to fix a problem
 without having to worry about updating or resetting the version number.
 Another advantage is to reinforce, to people who are working from the
 version control repository, that they are not using the released version,
@@ -2074,42 +2126,23 @@ the entire process
 will take at least two hours --- but could be much more depending on the number of
 different platforms on which you test the release.
 
-@noindent
-@cartouche
-IMPORTANT:
-The default version of the Java JDK on the majority of the CSE
-machines is now JDK 8.  However, for the time being, we wish to continue
-to use JDK 7 for our distribution process; the intention is to maximize
-compatibility with our existing code base.  You will find a suitable
-version (for an AMD64 based machine) at @file{/homes/gws/markro/jdk7}.
-In addition, if you have used @command{source $DAIKONDIR/scripts/daikon.bashrc}
-to set your environment (@env{CLASS_PATH}
-and @env{PATH} in particular), it is recommended that you:
-@itemize
-@item get a fresh copy of your Bash shell (e.g., log out and log back in)
-@item set @env{DAIKONDIR} as you would normally
-@item @command{export JAVA_HOME=/homes/gws/markro/jdk7}
-@item @command{source $DAIKONDIR/scripts/daikon.bashrc}
-@end itemize
-This should fulfill most of the directory layout requirements noted below.
-@end cartouche
-
-Each of the steps below assumes that the current working directory is @file{$DAIKONDIR}
-and that you are using the Bash shell.
+Each of the steps below assumes that you are using the Bash shell.
 
 @c maximize line size for all example command lists
 @exampleindent 1
 
 @menu
-* Directory layout::
+* Directory layout requirements::
+* Distribution setup instructions::
 * Updating dependencies::
+* The day before the release::
 * Distribution steps::
 @end menu
 
 
 @need 1000
-@node    Directory layout
-@section Directory layout
+@node    Directory layout requirements
+@section Directory layout requirements
 
 @itemize
 
@@ -2121,17 +2154,6 @@ Environment variable @env{DAIKONDIR} must be set to a clone of
 A clone of
 @uref{https://github.com/codespecs/fjalar} must be a sibling of
 @file{$DAIKONDIR}.
-
-@c Not necessary because the commands handle this for you.
-@c @item
-@c A clone of
-@c @uref{https://github.com/mernst/plume-lib} must be in
-@c @file{$DAIKONDIR/@/plume-lib}.
-
-@item
-Environment variable @env{JAVA_HOME} must be set to your JDK installation.
-@c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
-@c or:       export JAVA_HOME=/usr/lib/jvm/java
 
 @c If it's created automatically, there is no need to mention it as a requirement.
 @c @item
@@ -2150,22 +2172,55 @@ Environment variable @env{JAVA_HOME} must be set to your JDK installation.
 @c @end example
 
 @item
-Environment variable @env{BIBDIR} must be set to a clone of
-@uref{https://github.com/mernst/plume-bib}.
-You can create this clone with the commands:
+Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
+@c Example:  export JAVA_HOME=/homes/gws/markro/jdk7
+@c or:       export JAVA_HOME=/usr/lib/jvm/java
 
-@example
-cd
-git clone https://github.com/mernst/plume-bib.git bib
-export BIBDIR=`pwd`/bib
-@end example
+@c Not necessary because the commands handle this for you.
+@c @item
+@c A clone of
+@c @uref{https://github.com/mernst/plume-lib} must be in
+@c @file{$DAIKONDIR/@/plume-lib}.
 
-Alternatively, you may set the environment variable @env{BIBDIR} to the location
-of the bibliography you wish to use.
+@item
+File @file{~/private/.travis-access-token} must contain the text after
+``Your access token is@w{ }'' in the output of
+@command{travis login && travis token}.  You might need to install the
+@command{travis} program first by running either @command{gem install travis}
+or @command{sudo apt-get install ruby-dev && sudo gem install travis}.
+Make sure this file is not readable by others, for example by running
+@command{chmod og-rwx ~/private}.
+
+@item
+Optionally, set environment variable @env{BIBDIR} to a clone of
+@uref{https://github.com/mernst/plume-bib.git}.
+
 
 @end itemize
 
 
+@need 1000
+@node    Distribution setup instructions
+@section Distribution setup instructions
+
+The default version of the Java JDK on the majority of the CSE
+machines is now JDK 8.  However, for the time being, we wish to continue
+to use JDK 7 for our distribution process; the intention is to maximize
+compatibility with our existing code base.  You will find a suitable
+version (for an AMD64 based machine) at @file{/homes/gws/markro/jdk7}.
+
+@need 1000
+The recommended setup for the distribution process:
+@itemize
+@item get a fresh copy of your Bash shell (e.g., log out and log back in)
+@item set @env{DAIKONDIR} as you would normally
+@item @command{export JAVA_HOME=/homes/gws/markro/jdk7}
+@item @command{source $DAIKONDIR/scripts/daikon.bashrc}
+@end itemize
+This should fulfill most of the directory layout requirements noted above.
+
+
+@need 1000
 @node    Updating dependencies
 @section  Getting the latest version of dependencies
 
@@ -2194,35 +2249,11 @@ nothing to commit, working directory clean
 
 
 @item
-Download the latest version of the Checker Framework Java compiler from
-@uref{http://checkerframework.org/}.
-Set the @env{CHECKERFRAMEWORK} environment
-variable to the location of the Checker Framework directory.
-
-[Time: moments]
-
-
-@item
-If the Checker Framework has been released since the last distribution,
-then you need to perform the following steps to update @file{plume.jar}.
-
-@example
-make -C $DAIKONDIR plume-lib-update
-cd $DAIKONDIR/plume-lib/java
-make clean && make && make verify-plume-jar-classfile-version && \
-    \cp -pf plume.jar ../../java/lib
-@end example
-
-@c Time on buffalo as of 12/01/2014
-[Time: 5 min]
-
-
-@item
-Update the bibliography.
-
-@example
-(cd $BIBDIR; git pull)
-@end example
+Make sure your Checker Framework repositories are up-to-date.
+(For instructions on how to set up and build the Checker Framework, see
+@uref{http://types.cs.washington.edu/checker-framework/current/checker-framework-manual.html#build-source,Building from source}.)
+Make sure the @env{CHECKERFRAMEWORK} environment
+variable points to the location of your Checker Framework directory.
 
 [Time: moments]
 
@@ -2233,127 +2264,32 @@ Update the bibliography.
 The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
 from, two open source projects.
 The home page for the Valgrind instrumentation framework is
-@uref{http://www.valgrind.org}.  As of March 2015 we are using version 3.10.1,
-released in November, 2014.
-(You can verify this by inspecting the first
-line of the file @file{$DAIKONDIR/fjalar/valgrind/NEWS}.)
-
+@uref{http://www.valgrind.org}.
 The home page for the GNU Binutils
-(a collection of binary tools, of which we only use readelf) is
+(a collection of binary tools, of which Kvasir uses only readelf) is
 @uref{http://www.gnu.org/software/binutils/}.
-As of April 2015 we are using version 2.25, released in December, 2014.
-[TODO: How can a reader confirm that this is correct or determine the
-version on his or her own?]
 
-If a newer version of either of these projects is
-available, you should update the Fjalar source tree as soon as practical.
+File
+@uref{https://raw.githubusercontent.com/codespecs/fjalar/master/valgrind/REVISION,
+, @file{$DAIKONDIR/fjalar/valgrind/REVISION}} indicates the version of
+these tools that Kvasir uses.
+You can determine whether a newer version of these tools is available
+by comparing the @file{REVISION} file to
+@url{http://valgrind.org/downloads/current.html} and
+@url{http://ftp.gnu.org/gnu/binutils/?C=M;O=D}.
+If so, you should update the Fjalar source tree as soon as practical.
 For details, see the separate document ``Merging
 newer versions of Valgrind into Fjalar'', which appears in the @file{fjalar}
 repository.
 
 
-@node    Distribution steps
-@section Steps for making the distribution
+@node    The day before the release
+@section The day before the release
 
-@noindent
-@cartouche
-IMPORTANT:
-While the majority of the distribution process is currently run
-with JDK@tie{}7; we need to ensure that our system runs on JDK@tie{}8 as well.
-This means you will need to repeat steps 1-4 below in a separate shell
-with @command{export JAVA_HOME=/usr/lib/jvm/java}. (In addition to the
-other normal environment settings.)
-@end cartouche
+Do these steps the day before the release, so that tests have time to
+complete overnight.
 
-Each of the steps below assumes that the current working directory is @file{$DAIKONDIR}
-and that you are using the Bash shell.
-
-@strong{Caution:} Any problems encountered in the next 7 steps
-need to be corrected immediately and the release process restarted with
-step 1 below.
-
-
-@enumerate
-
-@need 1000
-@item
-Do a very clean rebuild of everything.
-
-@example
-make very-clean
-make rebuild-everything
-@end example
-
-@c Time on buffalo as of 12/16/2015
-@c [Time: 18 min]
-@c buffalo has twice the memory of godwit.
-@c Time on godwit as of 11/27/2014
-[Time: 20 min]
-
-
-@need 1000
-@item
-Run the Nullness Checker.  This is to verify that the Checker Framework
-Java compiler was correctly used to build Daikon.  There should be no
-errors output.
-
-@example
-make -C $DAIKONDIR/java check-nullness
-@end example
-
-@c Time on buffalo as of 12/16/2015
-@c [Time: 25 min]
-@c Time on godwit as of 11/27/2014
-[Time: 30 min]
-
-
-@need 1000
-@item
-Run the Daikon regression tests.
-The last line printed should be "All tests succeeded."
-
-@example
-make -C $DAIKONDIR/tests clean diffs
-@end example
-
-@c Time on godwit as of 11/27/2014
-@c [Time: 25 min]
-@c Time has increased significantly with additon of
-@c more tests.  Time below is on buffalo as of 12/16/2015
-@c A clock synchronization problem on my shared file server
-@c was causing make to rebuild too much.  Fixed 1/8/2016.
-[Time: 59 min]
-
-
-@need 1000
-@item
-Run the Kvasir regression tests.
-The last line printed should be ``All tests succeeded.'',
-indicating that there are no diff files marked FAILED.
-
-@example
-make -C $DAIKONDIR/tests/kvasir-tests clean-all regression-tests
-@end example
-
-@c Time on godwit as of 11/27/2014
-@c [Time: 20 min]
-@c Time on buffalo as of 12/16/2015
-[Time: 23 min]
-
-
-@need 1000
-@item
-Run the Java parser tests.
-
-@example
-cd $DAIKONDIR/tests/parser-tests
-./run-all
-@end example
-
-Success is indicated by each of the diff comparisons being identical.
-
-[Time: moments]
-
+@itemize
 
 @need 1000
 @item
@@ -2395,6 +2331,8 @@ DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION
 git log v$DAIKONVERSION..HEAD
 @end smallexample
 
+When you have competed your updates, commit and push the changes.
+
 [Time: a few minutes]
 
 
@@ -2435,12 +2373,88 @@ GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/tex
 
 [Time: moments]
 
+@end itemize
+
+TODO: it would be good to build the staging release the day before, too, so
+that links can be fixed the day before the release or at least very early
+in the process.
+
+
+@node    Distribution steps
+@section Steps for making the distribution
+
+Use JDK@tie{}7 for the release process.
+
+@enumerate
+
+@need 1000
+@item
+Verify that Daikon passes its tests, under both JDK 7 and JDK 8.
+
+For Jenkins, visit each of the following URLs and verify that the job is green:
+@* @url{http://tern.cs.washington.edu:8080/job/daikon/}
+@c There is no Fjalar job on Jenkins.  The Fjalar tests fail on
+@c tern.cs.washington.edu, which runs Jenkins, because tern uses a
+@c different version of the C runtime.  Eventually, make Fjalar work
+@c consistently across all versions of the C runtime.
+@c @* @url{http://tern.cs.washington.edu:8080/job/fjalar/}
+@* @url{http://tern.cs.washington.edu:8080/job/daikon-typecheck/}
+
+For Travis CI,
+all of the following jobs should be green:
+@* @url{https://travis-ci.org/codespecs/daikon}
+@* @url{https://travis-ci.org/codespecs/fjalar}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck-formatter}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck-interning}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck-nullness}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck-regex}
+@* @url{https://travis-ci.org/typetools/daikon-typecheck-signature}
+
+@c I can't figure out how to insert literal HTML, which would show the job
+@c status without requiring the user to click.
+@c @inlinefmtifelse{html, all of the following icons should be green:, see the
+@c HTML version of this manual for a list of icons that must be green.}
+@c @ifhtml
+@c <img src="https://travis-ci.org/codespecs/daikon.svg?branch=master" alt="Travis CI status for codespecs/daikon"/>
+@c <img src="https://travis-ci.org/codespecs/fjalar.svg?branch=master" alt="Travis CI status for codespecs/fjalar"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck-formatter.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-formatter"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck-interning.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-interning"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck-nullness.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-nullness"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck-regex.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-regex"/>
+@c <img src="https://travis-ci.org/typetools/daikon-typecheck-signature.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-signature"/>
+@c @end ifhtml
+
+If any of the jobs is not passing, then correct the problem and wait for
+the jobs to complete and pass.
+The delay to wait for this to happen is a reason that you should avoid
+making changes to Daikon on the release day.  Instead, you should make
+changes the day before to permit the continuous integration jobs to run
+overnight.
+
+
+@item
+Do a very clean rebuild of everything.
+
+@example
+cd $DAIKONDIR
+make very-clean
+make rebuild-everything
+@end example
+
+@c Time on buffalo as of 12/16/2015
+@c [Time: 18 min]
+@c buffalo has twice the memory of godwit.
+@c Time on godwit as of 11/27/2014
+[Time: 20 min]
+
 
 @need 1000
 @item
 Once you have successfully reached this point, you are ready to make a release
 candidate and begin testing it.
-The following command will verify that doc/CHANGES is up-to-date and then list
+The following command will verify that @file{doc/CHANGES} is up-to-date and then list
 any uncommitted files.
 
 @example
@@ -2458,7 +2472,8 @@ nothing to commit (use -u to show untracked files)
 
 @noindent
 If the command output lists any files, they need to be
-committed to the repository now.
+committed to the repository and pushed now.
+[TODO:  In that case, does one need to start all over, first waiting 
 
 [Time: moments]
 
@@ -2513,7 +2528,7 @@ git clone https://github.com/codespecs/daikon /tmp/$USER/daikon
 cd /tmp/$USER/daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk7
-source $DAIKONDIR/scripts/daikon.bashrc
+source scripts/daikon.bashrc
 make staging
 @end example
 
@@ -2525,12 +2540,12 @@ If any corrections are required, do so back in the main
 repository, commit the changes and
 then repeat this step.
 
-@c Time on buffalo as of 12/16/2015
-@c [Time: 34 min]
-@c I've notified mernst about this 10x slow down.
-@c [Time: 4 min]
+[Time: 23 min]
 
-Next, check the staging website to see if it has any broken links.
+
+@need 1000
+@item
+Next, check the staging website to see if it has any broken document links.
 
 @example
 make check-for-broken-doc-links
@@ -2565,94 +2580,55 @@ not in the drop directories. This means:
 Switch back to your original Bash shell.
 @item
 Correct the file. (Most likely located beneath either
-@file{$DAIKONDIR/doc} or @file{$BIBDIR}.)
+@file{$DAIKONDIR/doc} or
+@file{$BIBDIR} (@file{~/bib/} if @file{$BIBDIR} is not set).)
 @item
 Commit the changes.
 @item
-Repeat this step.
+Repeat the previous step to rebuild the release candidate.
+@item
+Repeat this step to verify your corrections.
 @end itemize
 
-@c total time should be about:
-[Time: 12 min]
-@c However, time on buffalo as of 12/16/2015
-@c is 40 minutes.
+[Time: 8 min]
+
 
 @need 1000
 @item
-Test the distribution on a 64-bit machine.
+Test the staged distribution on a 64-bit Fedora machine.
 Since the machine you are using to build the release is probably
-such a machine, you may simply run the command below. The last step in this
-test runs Chicory/Daikon on the @file{StackAr} example.  Success is indicated
+such a machine, you may simply run the command below.  Success is indicated
 by invariant output being written to the screen.
 
 @example
 make test-staged-dist
 @end example
 
-@c Time on buffalo as of 12/16/2015
-[Time: 10 min; runs Checker Framework tests]
+@c Time on buffalo as of 04/1r36/201r65
+[Time: 1 min]
 
 
 @need 1000
 @item
-Test the distribution on a 32-bit machine.
-This is probably best done on a virtual machine running a current version
-of Fedora.  The instructions below assume you are running on such a machine.
-They will download the staged release archive, extract the files, set
-the appropriate environment variables and run the top level Makefile.
-Finally, a short verification test is run;
-success is indicated by invariant output being written to the screen.
+Test the distribution on Ubuntu and MacOSX machines.
+Run the following commands:
 
 @smallexample
-mkdir -p ~/tmp
-cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
-rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-tar xzf daikon-$DAIKONVERSION.tar.gz
-cd daikon-$DAIKONVERSION
-export JAVA_HOME=/usr/lib/jvm/java
-export DAIKONDIR=`pwd`
-source scripts/daikon.bashrc
-make distribution-check
+NEW_VERSION=`cat doc/VERSION`
+$PLUMEBIN/trigger-travis.sh codespecs test-daikon-staging `cat ~/private/.travis-access-token` \
+  "Test staging distribution for release $@{NEW_VERSION@}"
+$PLUMEBIN/trigger-travis.sh codespecs test-daikon-staging-macosx `cat ~/private/.travis-access-token` \
+  "Test staging distribution for release $@{NEW_VERSION@}"
 @end smallexample
 
-[Time: 10 min]
+and then wait until the following
+two URLs indicate success:
+@* @url{https://travis-ci.org/codespecs/test-daikon-staging}
+@* @url{https://travis-ci.org/codespecs/test-daikon-staging-macosx}
 
+If there is a problem, fix it and start over.
 
-@need 1000
-@item
-Test the distribution on a 64-bit, Ubuntu based system.  The 64-bit test
-run above is normally run on one of our local machines; therefore, it was
-probably done on a Fedora (Red Hat) based system.
-Ubuntu is another distributor of Linux based systems and there have been
-some differences with Fedora in the past.  This test is
-probably best done on a virtual machine running a current version. It is
-important to regularly check to see if a new major release of Ubuntu is
-available and upgrade your test bed as necessary.
-
-The instructions below download the staged release archive, extract the files, set
-the appropriate environment variables and run the top level Makefile.
-Finally, a short verification test is run;
-success is indicated by invariant output being written to the screen.
-
-@smallexample
-mkdir -p ~/tmp
-cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
-rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-tar xzf daikon-$DAIKONVERSION.tar.gz
-cd daikon-$DAIKONVERSION
-export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64  # or java-8 as appropriate
-export DAIKONDIR=`pwd`
-source scripts/daikon.bashrc
-make distribution-check
-@end smallexample
-
-[Time: 20 min]
+[Time: 15 min]
 
 
 @need 1000
@@ -2668,55 +2644,15 @@ continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
 Success is indicated by invariant output being written to the screen.
 
 @smallexample
+export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.7.0_45"
+export DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
 mkdir -p ~/tmp
 cd ~/tmp
-DAIKONVERSION=`wget -q http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
-rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-tar xzf daikon-$DAIKONVERSION.tar.gz
-cd daikon-$DAIKONVERSION
-# Convert OSTYPE from a shell variable to a system environment variable.
-export OSTYPE
-export JAVA_HOME="/cygdrive/c/Program\\\ Files/Java/jdk1.7.0_45"
-export DAIKONDIR=`pwd`
-source scripts/daikon.bashrc
-make distribution-check
+curl --fail -O https://raw.githubusercontent.com/codespecs/daikon/master/scripts/test-distribution.sh
+sh test-distribution.sh
 @end smallexample
 
 [Time: 10 min]
-
-
-@need 1000
-@item
-Test the distribution on a MacOSX machine
-with the development tools installed.
-
-The output from the make command should show a number of lines beginning with
-"Processed" as @file{dcomp_rt.jar} is being built.  Next it should indicate that
-Kvasir was not built because this is not a Linux platform.  Then execution will
-continue with a test that runs Chicory/Daikon on the @file{StackAr} example.
-Success is indicated by invariant output being written to the screen.
-
-@smallexample
-mkdir -p ~/tmp
-cd ~/tmp
-DAIKONVERSION=`curl -s http://plse.cs.washington.edu/staging-daikon/download/doc/VERSION \
-    | xargs echo -n`
-rm -rf daikon-$DAIKONVERSION.tar.gz daikon-$DAIKONVERSION
-curl -O http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-# or: wget http://plse.cs.washington.edu/staging-daikon/download/daikon-$DAIKONVERSION.tar.gz
-tar xzf daikon-$DAIKONVERSION.tar.gz
-cd daikon-$DAIKONVERSION
-# Convert OSTYPE from a shell variable to a system environment variable.
-export OSTYPE
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
-export DAIKONDIR=`pwd`
-source scripts/daikon.bashrc
-make distribution-check
-@end smallexample
-
-[Time: 4 min]
 
 
 @need 1000
@@ -2727,7 +2663,7 @@ and are ready to make the actual release.
 restarted the release process.
 
 At this point we are done building and testing the release candidate and you
-should exit the Bash command shell created in step 12 and return to your
+should exit the Bash command shell created in step 15 and return to your
 original Bash shell.
 
 
@@ -2782,6 +2718,7 @@ Verify these changes by doing product builds (no need to clean first) and
 running a short verification test.
 
 @example
+cd $DAIKONDIR
 make rebuild-everything quick-test
 @end example
 
@@ -2809,10 +2746,13 @@ git push
 @need 1000
 @item
 Send mail to the @samp{daikon-announce} mailing list.
-This list is located at @samp{daikon-announce@@googlegroups.com}.
-Here is a suggested template:
+Use the suggested template below, replacing <version number> with
+the actual number of the release.
 
 @example
+<to:>  daikon-announce@@googlegroups.com
+<subject:>  Daikon version <version number> has been released
+
 Daikon version <version number> is now available.
 
 Please see the entry from the doc/CHANGES file that appears below for more details.
@@ -3113,6 +3053,7 @@ Some additional details about the declaration file format appear in file
 @node       Declaration-related records
 @subsection Declaration-related records
 
+@exampleindent 2
 
 @menu
 * Declaration version::
@@ -3227,6 +3168,27 @@ Program point names must be distinct.
 @c The Version 1 declaration file format specification is described in
 @c "V1 pptname format", but it is not relevant for version 2.
 
+While Daikon does not infer program point relationships from @code{ppt-name}s,
+it does require these names to conform to a set syntax.
+The following patterns are for the @code{enter}, @code{subexit},
+@code{class} and @code{object} @code{ppt-type}s, respectively.
+
+@example
+<fully qualified class name>.<method/function name>(<argument types>):::ENTER
+<fully qualified class name>.<method/function name>(<argument types>):::EXIT<id>
+<fully qualified class name>:::CLASS
+<fully qualified class name>:::OBJECT
+@end example
+
+@noindent
+Since in most languages a method or function may have multiple exit points,
+the @code{ppt-name} for a @code{subexit} @code{ppt-type} must be appended
+with a unique id.  Typically, this is the corresponding source line number.
+
+@c Note:
+@c There is a little code in FileIO.java to support additional ppt-names ending
+@c in THROWS and GLOBAL.  Neither Daikon or Kvasir currently use them.
+
 The following information about the program point (@code{ppt-info}) can be specified:
 @itemize 
 @item @code{ppt-type <type>}
@@ -3244,6 +3206,8 @@ from a programming language or when is no dataflow hierarchy.
 
 Specifies one or more flags for this @code{ppt}.  The possible flags are:
 @code{static}, @code{enter}, @code{exit}, @code{private}, @code{return}.
+It should be noted that neither Daikon nor Kvasir currently use or
+output this field.
 
 @item @code{parent <relation-type> <parent-ppt-name> <relation-id>}
 
@@ -3256,8 +3220,9 @@ program point.  For example, an object program point is a parent of
 each of the method program points in that object.
 
 The @var{relation-type} is the type of parent-child relationship in
-the hierarchy.  Possible relationship types are @code{parent} and
-@code{user}.
+the hierarchy. There are a few relationship types used internally
+by Daikon, but the only one output to the data files is @code{parent}.
+@c types are: parent, user, enter-exit, exit-exitnn, merge-child and ppt-pptcond
 A @code{parent} relationship is one where the program points themselves
 are explicitly related, such as an enter and an exit point.  All of the
 variables at one of the points exists at the other.  A @code{user}

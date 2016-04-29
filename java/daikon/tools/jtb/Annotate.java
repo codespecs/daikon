@@ -2,14 +2,13 @@ package daikon.tools.jtb;
 
 import daikon.*;
 import daikon.inv.OutputFormat;
-import plume.*;
 import gnu.getopt.*;
-import java.util.logging.Logger;
 import java.io.*;
 import java.util.*;
-
+import java.util.logging.Logger;
 import jtb.*;
 import jtb.syntaxtree.*;
+import plume.*;
 
 /**
  * Merge Daikon-generated invariants into Java source code as ESC/JML/DBC
@@ -75,30 +74,29 @@ public class Annotate {
   public static final String no_reflection_SWITCH = "no_reflection";
 
   private static String usage =
-    UtilMDE.joinLines(
-      "Usage:  java daikon.tools.Annotate FILE.inv FILE.java ...",
-      "  -h   Display this usage message",
-      "  -i   Insert invariants not supported by ESC with \"!\" instead of \"@\";",
-      "       by default these \"inexpressible\" invariants are simply omitted",
-      "  -r   Use all .java files under the current directory as arguments",
-      "  -s   Use // comments rather than /* comments",
-      "  --format name  Insert specifications in the given format: DBC, ESC, JML, Java",
-      "  --wrap_xml     Wrap each annotation and auxiliary information in XML tags",
-      "  --max_invariants_pp N",
-      "                 Annotate the sources with at most N invariants per program point",
-      "                 (the annotated invariants will be an arbitrary subset of the",
-      "                 total number of invariants for the program point).",
-      "  --no_reflection",
-      "                  (This is an experimental option.) Annotate uses reflection",
-      "                  to determine whether a method overrides/implements another",
-      "                  method. If this flag is given, Annotate will not use reflection",
-      "                  to access information about an instrumented class. This means",
-      "                  that in the JML and ESC formats, no \"also\" annotations",
-      "                  will be inserted.",
-      "  --dbg CATEGORY",
-      "  --debug",
-      "                  Enable one or all loggers, analogously to the Daikon option"
-      );
+      UtilMDE.joinLines(
+          "Usage:  java daikon.tools.Annotate FILE.inv FILE.java ...",
+          "  -h   Display this usage message",
+          "  -i   Insert invariants not supported by ESC with \"!\" instead of \"@\";",
+          "       by default these \"inexpressible\" invariants are simply omitted",
+          "  -r   Use all .java files under the current directory as arguments",
+          "  -s   Use // comments rather than /* comments",
+          "  --format name  Insert specifications in the given format: DBC, ESC, JML, Java",
+          "  --wrap_xml     Wrap each annotation and auxiliary information in XML tags",
+          "  --max_invariants_pp N",
+          "                 Annotate the sources with at most N invariants per program point",
+          "                 (the annotated invariants will be an arbitrary subset of the",
+          "                 total number of invariants for the program point).",
+          "  --no_reflection",
+          "                  (This is an experimental option.) Annotate uses reflection",
+          "                  to determine whether a method overrides/implements another",
+          "                  method. If this flag is given, Annotate will not use reflection",
+          "                  to access information about an instrumented class. This means",
+          "                  that in the JML and ESC formats, no \"also\" annotations",
+          "                  will be inserted.",
+          "  --dbg CATEGORY",
+          "  --debug",
+          "                  Enable one or all loggers, analogously to the Daikon option");
 
   public static void main(String[] args) throws Exception {
     try {
@@ -127,81 +125,81 @@ public class Annotate {
     int maxInvariantsPP = -1;
 
     Daikon.output_format = OutputFormat.ESCJAVA;
-    LongOpt[] longopts = new LongOpt[] {
-      new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(Daikon.format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(wrapXML_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(no_reflection_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
-    };
+    LongOpt[] longopts =
+        new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(Daikon.format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(wrapXML_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(no_reflection_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
+        };
     Getopt g = new Getopt("daikon.tools.jtb.Annotate", args, "hs", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
-      switch(c) {
-      case 0:
-        // got a long option
-        String option_name = longopts[g.getLongind()].getName();
+      switch (c) {
+        case 0:
+          // got a long option
+          String option_name = longopts[g.getLongind()].getName();
 
-        if (Daikon.help_SWITCH.equals(option_name)) {
+          if (Daikon.help_SWITCH.equals(option_name)) {
+            System.out.println(usage);
+            throw new Daikon.TerminationMessage();
+          } else if (no_reflection_SWITCH.equals(option_name)) {
+            useReflection = false;
+          } else if (max_invariants_pp_SWITCH.equals(option_name)) {
+            try {
+              maxInvariantsPP = Integer.parseInt(Daikon.getOptarg(g));
+            } catch (NumberFormatException e) {
+              System.err.println(
+                  "Annotate: found the --max_invariants_pp option "
+                      + "followed by an invalid numeric argument. Annotate "
+                      + "will run without the option.");
+              maxInvariantsPP = -1;
+            }
+          } else if (wrapXML_SWITCH.equals(option_name)) {
+            PrintInvariants.wrap_xml = true;
+          } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
+            Global.debugAll = true;
+          } else if (Daikon.debug_SWITCH.equals(option_name)) {
+            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+          } else if (Daikon.format_SWITCH.equals(option_name)) {
+            String format_name = Daikon.getOptarg(g);
+            Daikon.output_format = OutputFormat.get(format_name);
+            if (Daikon.output_format == null) {
+              throw new Daikon.TerminationMessage("Bad argument:  --format " + format_name);
+            }
+            if (Daikon.output_format == OutputFormat.JML) {
+              setLightweight = false;
+            } else {
+              setLightweight = true;
+            }
+          } else {
+            throw new Daikon.TerminationMessage("Unknown long option received: " + option_name);
+          }
+          break;
+        case 'h':
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
-        } else if (no_reflection_SWITCH.equals(option_name)) {
-          useReflection = false;
-        } else if (max_invariants_pp_SWITCH.equals(option_name)) {
-          try {
-            maxInvariantsPP = Integer.parseInt(Daikon.getOptarg(g));
-          } catch (NumberFormatException e) {
-            System.err.println("Annotate: found the --max_invariants_pp option " +
-                               "followed by an invalid numeric argument. Annotate " +
-                               "will run without the option.");
-            maxInvariantsPP = -1;
-          }
-        } else if (wrapXML_SWITCH.equals(option_name)) {
-          PrintInvariants.wrap_xml = true;
-        } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
-          Global.debugAll = true;
-        } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel (Daikon.getOptarg(g), LogHelper.FINE);
-        } else if (Daikon.format_SWITCH.equals(option_name)) {
-          String format_name = Daikon.getOptarg(g);
-          Daikon.output_format = OutputFormat.get(format_name);
-          if (Daikon.output_format == null) {
-            throw new Daikon.TerminationMessage("Bad argument:  --format "
-                                         + format_name);
-          }
-          if (Daikon.output_format == OutputFormat.JML) {
-            setLightweight = false;
-          } else {
-            setLightweight = true;
-          }
-        } else {
-          throw new Daikon.TerminationMessage("Unknown long option received: " +
-                                       option_name);
-        }
-        break;
-      case 'h':
-        System.out.println(usage);
-        throw new Daikon.TerminationMessage();
-      case 'i':
-        insert_inexpressible = true;
-        break;
-      // case 'r':
-      //   // Should do this witout calling out to the system.  (There must be
-      //   // an easy way to do this in Java.)
-      //   Process p = System.exec("find . -type f -name '*.java' -print");
-      //   p.waitFor();
-      //   StringBufferInputStream sbis
-      //   break;
-      case 's':
-        slashslash = true;
-        break;
-      case '?':
-        break; // getopt() already printed an error
-      default:
-        System.out.println("getopt() returned " + c);
-        break;
+        case 'i':
+          insert_inexpressible = true;
+          break;
+          // case 'r':
+          //   // Should do this witout calling out to the system.  (There must be
+          //   // an easy way to do this in Java.)
+          //   Process p = System.exec("find . -type f -name '*.java' -print");
+          //   p.waitFor();
+          //   StringBufferInputStream sbis
+          //   break;
+        case 's':
+          slashslash = true;
+          break;
+        case '?':
+          break; // getopt() already printed an error
+        default:
+          System.out.println("getopt() returned " + c);
+          break;
       }
     }
 
@@ -212,24 +210,24 @@ public class Annotate {
     int argindex = g.getOptind();
 
     if (argindex >= args.length) {
-      throw new Daikon.TerminationMessage("Error: No .inv file or .java file arguments supplied."+ Global.lineSep + usage);
+      throw new Daikon.TerminationMessage(
+          "Error: No .inv file or .java file arguments supplied." + Global.lineSep + usage);
     }
     String invfile = args[argindex];
     argindex++;
     if (argindex >= args.length) {
-      throw new Daikon.TerminationMessage("Error: No .java file arguments supplied."+ Global.lineSep + usage);
+      throw new Daikon.TerminationMessage(
+          "Error: No .java file arguments supplied." + Global.lineSep + usage);
     }
-    PptMap ppts = FileIO.read_serialized_pptmap(new File(invfile),
-                                                /*use saved config=*/true
-                                                );
+    PptMap ppts = FileIO.read_serialized_pptmap(new File(invfile), /*use saved config=*/ true);
 
     Daikon.suppress_implied_controlled_invariants = true;
     Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
     Daikon.suppress_redundant_invariants_with_simplify = true;
 
-    for ( ; argindex < args.length; argindex++) {
+    for (; argindex < args.length; argindex++) {
       String javafilename = args[argindex];
-      if (! (javafilename.endsWith(".java") || javafilename.endsWith(".java-random-tabs"))) {
+      if (!(javafilename.endsWith(".java") || javafilename.endsWith(".java-random-tabs"))) {
         throw new Daikon.TerminationMessage("File does not end in .java: " + javafilename);
       }
       File outputFile;
@@ -247,7 +245,7 @@ public class Annotate {
       // outputFile.getParentFile().mkdirs();
       Writer output = new FileWriter(outputFile);
 
-      debug.fine ("Parsing file " + javafilename);
+      debug.fine("Parsing file " + javafilename);
 
       // Annotate the file
       Reader input = null;
@@ -261,30 +259,41 @@ public class Annotate {
       Node root = null;
       try {
         root = parser.CompilationUnit();
-      }
-      catch (ParseException e) {
+      } catch (ParseException e) {
         // e.printStackTrace();
         System.err.println(javafilename + ": " + e);
         throw new Daikon.TerminationMessage("ParseException in applyVisitorInsertComments");
       }
 
-      debug.fine ("Processing file " + javafilename);
+      debug.fine("Processing file " + javafilename);
 
       try {
-        Ast.applyVisitorInsertComments(javafilename, root, output,
-                   new AnnotateVisitor(javafilename, root, ppts, slashslash, insert_inexpressible, setLightweight, useReflection,
-                                       maxInvariantsPP));
+        Ast.applyVisitorInsertComments(
+            javafilename,
+            root,
+            output,
+            new AnnotateVisitor(
+                javafilename,
+                root,
+                ppts,
+                slashslash,
+                insert_inexpressible,
+                setLightweight,
+                useReflection,
+                maxInvariantsPP));
       } catch (Error e) {
         String message = e.getMessage();
         if (message != null && message.startsWith("Didn't find class ")) {
-          throw new Daikon.TerminationMessage(message + "." + Global.lineSep +
-            "Be sure to compile Java classes before calling Annotate.");
+          throw new Daikon.TerminationMessage(
+              message
+                  + "."
+                  + Global.lineSep
+                  + "Be sure to compile Java classes before calling Annotate.");
         }
         throw e;
       }
     }
   }
-
 }
 
 // Appendix A: Jtest DBC format (taken from documentation provided by

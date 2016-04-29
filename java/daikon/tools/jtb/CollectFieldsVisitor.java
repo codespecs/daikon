@@ -61,14 +61,12 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
       {
         String name = name(fd.f1);
         allNames.add(name);
-        if (isFinal)
-          finalNames.add(name);
-        if (isOwned)
-          ownedNames.add(name);
+        if (isFinal) finalNames.add(name);
+        if (isOwned) ownedNames.add(name);
       }
       NodeListOptional fds = fd.f2;
       if (fds.present()) {
-        for (int j=0; j<fds.size(); j++) {
+        for (int j = 0; j < fds.size(); j++) {
           // System.out.println("" + j + ": " + fds.elementAt(j));
           NodeSequence ns = (NodeSequence) fds.elementAt(j);
           if (ns.size() != 2) {
@@ -76,10 +74,8 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
           }
           String name = name((VariableDeclarator) ns.elementAt(1));
           allNames.add(name);
-          if (isFinal)
-            finalNames.add(name);
-          if (isOwned)
-            ownedNames.add(name);
+          if (isFinal) finalNames.add(name);
+          if (isOwned) ownedNames.add(name);
         }
       }
     }
@@ -125,15 +121,16 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   // Don't continue into nested classes, but do
   // explore them if they are the root.
   private boolean in_class = false;
+
   public void visit(ClassOrInterfaceDeclaration n) {
-    assert ! cached;
+    assert !cached;
     if (include_nested_classes) {
-      super.visit(n);             // call "accept(this)" on each field
-    } else if (! in_class) {
+      super.visit(n); // call "accept(this)" on each field
+    } else if (!in_class) {
       // Can't combine these two bodies.  It's wrong to reset in_class to
       // false if it was true (eg, for second level of nested class).
       in_class = true;
-      super.visit(n);             // call "accept(this)" on each field
+      super.visit(n); // call "accept(this)" on each field
       in_class = false;
     }
   }
@@ -144,9 +141,8 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   // f3 -> ( "," VariableDeclarator() )*
   // f4 -> ";"
   public void visit(FieldDeclaration n) {
-    assert ! cached;
+    assert !cached;
     fieldDecls.add(n);
-    super.visit(n);             // call "accept(this)" on each field
+    super.visit(n); // call "accept(this)" on each field
   }
-
 }

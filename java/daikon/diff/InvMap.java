@@ -1,9 +1,9 @@
 package daikon.diff;
 
-import java.io.*;
-import java.util.*;
 import daikon.*;
 import daikon.inv.*;
+import java.io.*;
+import java.util.*;
 import plume.IterableIterator;
 
 /*>>>
@@ -26,13 +26,13 @@ public class InvMap implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20090612L;
 
-  private Map<PptTopLevel,List<Invariant>> pptToInvs = new HashMap<PptTopLevel,List<Invariant>>();
+  private Map<PptTopLevel, List<Invariant>> pptToInvs = new HashMap<PptTopLevel, List<Invariant>>();
   // The purpose of this field is apparently to permit the ppts to be
   // extracted in the same order in which they were inserted.
   // Why not use a LinkedHashMap?  Maybe because it was only added in JDK 1.4.
   private List<PptTopLevel> ppts = new ArrayList<PptTopLevel>();
 
-  public InvMap() { }
+  public InvMap() {}
 
   public void addPpt(PptTopLevel ppt) {
     put(ppt, new ArrayList<Invariant>());
@@ -47,14 +47,14 @@ public class InvMap implements Serializable {
   }
 
   public void add(PptTopLevel ppt, Invariant inv) {
-    if (! ppts.contains(ppt)) {
+    if (!ppts.contains(ppt)) {
       throw new Error("ppt has not yet been added: " + ppt.name());
     }
     get(ppt).add(inv);
   }
 
   public List<Invariant> get(/*>>>@GuardSatisfied InvMap this,*/ PptTopLevel ppt) {
-    if (! pptToInvs.containsKey(ppt)) {
+    if (!pptToInvs.containsKey(ppt)) {
       throw new Error("ppt has not yet been added: " + ppt.name());
     }
     return pptToInvs.get(ppt);
@@ -98,8 +98,9 @@ public class InvMap implements Serializable {
   // sequences.
   public Iterator<Invariant> invariantIterator() {
     ArrayList<Invariant> answer = new ArrayList<Invariant>();
-    for (PptTopLevel ppt : ppts)
+    for (PptTopLevel ppt : ppts) {
       answer.addAll(get(ppt));
+    }
     return answer.iterator();
   }
 
@@ -124,20 +125,17 @@ public class InvMap implements Serializable {
 
   /** Include FileIO.new_decl_format in the stream **/
   /*@RequiresNonNull("FileIO.new_decl_format")*/
-  private void writeObject(ObjectOutputStream oos)
-      throws IOException {
+  private void writeObject(ObjectOutputStream oos) throws IOException {
     oos.defaultWriteObject();
     oos.writeObject(FileIO.new_decl_format);
   }
 
   /** Serialize pptmap and FileIO.new_decl_format **/
   /*@EnsuresNonNull("FileIO.new_decl_format")*/
-  private void readObject(ObjectInputStream ois)
-      throws ClassNotFoundException, IOException {
+  private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();
     FileIO.new_decl_format = (Boolean) ois.readObject();
     // System.out.printf ("Restoring new_decl_format to %b%n",
     //                   FileIO.new_decl_format);
   }
-
 }

@@ -162,7 +162,7 @@ public final class SEQINTEQUAL
   /**
    * Boolean.  True iff SEQINTEQUAL invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public static final Logger debug
     = Logger.getLogger("daikon.inv.binary.sequenceScalar." + SEQINTEQUALstring);
@@ -193,7 +193,7 @@ public final class SEQINTEQUAL
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     VarInfo seqvar;
     VarInfo sclvar;
@@ -213,7 +213,7 @@ public final class SEQINTEQUAL
         return false;
     #endif
 
-    return (true);
+    return true;
   }
 
   /** instantiates the invariant on the specified slice **/

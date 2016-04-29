@@ -1,16 +1,15 @@
 package daikon.suppress;
 
-import daikon.*;
-import daikon.inv.*;
-import daikon.inv.unary.*;
-import daikon.inv.binary.*;
 import static daikon.inv.Invariant.asInvClass;
 
-import plume.*;
-
+import daikon.*;
+import daikon.inv.*;
+import daikon.inv.binary.*;
+import daikon.inv.unary.*;
 import java.lang.reflect.*;
-import java.util.logging.*;
 import java.util.*;
+import java.util.logging.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -28,9 +27,7 @@ import typequals.*;
 public class NISuppressor {
 
   /** Debug tracer. **/
-  public static final Logger debug
-                          = Logger.getLogger ("daikon.inv.NISuppressor");
-
+  public static final Logger debug = Logger.getLogger("daikon.inv.NISuppressor");
 
   /**
    * Argument indices used by the invariant.
@@ -69,37 +66,34 @@ public class NISuppressor {
   /**
    * Defines a unary suppressor.
    */
-  public NISuppressor (int v1_index, Class<? extends Invariant> cls) {
+  public NISuppressor(int v1_index, Class<? extends Invariant> cls) {
 
-    debug.fine (String.format ("creating %s over arg %d", cls.getName(),
-                               v1_index));
+    debug.fine(String.format("creating %s over arg %d", cls.getName(), v1_index));
 
     this.v1_index = v1_index;
     this.inv_class = cls;
 
     // Create a sample invariant
     try {
-      Method get_proto = inv_class.getMethod ("get_proto",
-                                                new Class<?>[] {});
+      Method get_proto = inv_class.getMethod("get_proto", new Class<?>[] {});
       @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
-      /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant) get_proto.invoke (null, new Object[] {});
+      /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local =
+          (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
       sample_inv = sample_inv_local;
       assert sample_inv != null;
     } catch (Exception e) {
-      throw new RuntimeException ("error instantiating invariant "
-                                  + inv_class.getName() + ": " + e);
+      throw new RuntimeException("error instantiating invariant " + inv_class.getName() + ": " + e);
     }
 
-    debug.fine ("Created " + this);
+    debug.fine("Created " + this);
   }
 
   /**
    * Defines a binary suppressor.
    */
-  public NISuppressor (int v1_index, int v2_index, Class<? extends Invariant> cls) {
+  public NISuppressor(int v1_index, int v2_index, Class<? extends Invariant> cls) {
 
-    debug.fine (String.format ("creating %s over args %d and %d", cls.getName(),
-                         v1_index, v2_index));
+    debug.fine(String.format("creating %s over args %d and %d", cls.getName(), v1_index, v2_index));
 
     // put the variables in their standard order
     if (v1_index > v2_index) {
@@ -116,10 +110,11 @@ public class NISuppressor {
     // get the class
     swap_class = true;
     try {
-      Method swap_method = cls.getMethod ("swap_class", (Class<?>[])null);
+      Method swap_method = cls.getMethod("swap_class", (Class<?>[]) null);
       if (swap) {
         @SuppressWarnings("nullness") // "swap_class" is static, so null first argument is OK
-        Class<? extends Invariant> tmp_cls = asInvClass(swap_method.invoke (null, (Object /*@Nullable*/ [])null));
+        Class<? extends Invariant> tmp_cls =
+            asInvClass(swap_method.invoke(null, (Object /*@Nullable*/ []) null));
         cls = tmp_cls;
       }
 
@@ -133,26 +128,24 @@ public class NISuppressor {
     // get_proto(boolean) or get_proto().
     try {
       try {
-        Method get_proto = inv_class.getMethod ("get_proto",
-                               new Class<?>[] {boolean.class});
+        Method get_proto = inv_class.getMethod("get_proto", new Class<?>[] {boolean.class});
         @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
-        /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null,
-                                  new Object[] {Boolean.valueOf(swap)});
+        /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local =
+            (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {Boolean.valueOf(swap)});
         sample_inv = sample_inv_local;
       } catch (NoSuchMethodException e) {
-        Method get_proto = inv_class.getMethod ("get_proto",
-                               new Class<?>[] {});
+        Method get_proto = inv_class.getMethod("get_proto", new Class<?>[] {});
         @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
-        /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null, new Object[] {});
+        /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local =
+            (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
         sample_inv = sample_inv_local;
       }
     } catch (Exception e) {
-      throw new RuntimeException ("error getting proto invariant "
-                                  + inv_class.getName() + ": " + e);
+      throw new RuntimeException("error getting proto invariant " + inv_class.getName() + ": " + e);
     }
 
     assert sample_inv != null;
-    debug.fine ("Created " + this);
+    debug.fine("Created " + this);
   }
 
   /**
@@ -164,16 +157,16 @@ public class NISuppressor {
 
     if (v2_index == -1) {
       int new_index = 0;
-      if (v1_index == 0)
-        new_index = 1;
-     return (new NISuppressor (new_index, inv_class));
+      if (v1_index == 0) new_index = 1;
+      return (new NISuppressor(new_index, inv_class));
     }
     assert v3_index == -1;
 
-    if (swap)
-      return new NISuppressor (v1_index, v2_index, inv_class);
-    else
-      return new NISuppressor (v2_index, v1_index, inv_class);
+    if (swap) {
+      return new NISuppressor(v1_index, v2_index, inv_class);
+    } else {
+      return new NISuppressor(v2_index, v1_index, inv_class);
+    }
   }
 
   /**
@@ -193,7 +186,7 @@ public class NISuppressor {
    * variables.  Thus the suppression is only valid over non-pointer variables.
    */
   public boolean instantiate_ok(VarInfo[] vis) {
-    return sample_inv.instantiate_ok (vis);
+    return sample_inv.instantiate_ok(vis);
   }
 
   /**
@@ -224,21 +217,25 @@ public class NISuppressor {
    * @return the state of this suppressor which is one of (NIS.SuppressState.MATCH,
    *         NIS.SuppressState.VALID, NIS.SuppressState.INVALID, NIS.SuppressState.NONSENSICAL)
    */
-
-  public NIS.SuppressState check (PptTopLevel ppt, VarInfo[] vis, /*@Nullable*/ Invariant inv) {
+  public NIS.SuppressState check(PptTopLevel ppt, VarInfo[] vis, /*@Nullable*/ Invariant inv) {
 
     // Currently we only support unary and binary suppressors
     assert v3_index == -1;
     assert v1_index != -1;
 
     // If the underlying invariant is not enabled, we can't possibly be true
-    if (!is_enabled())
-      return (state = NIS.SuppressState.INVALID);
+    if (!is_enabled()) return (state = NIS.SuppressState.INVALID);
 
-    if (Debug.logDetail() && NIS.debug.isLoggable (Level.FINE))
-      NIS.debug.fine ("checking suppressor " + this + " against inv "
-                    + ((inv != null) ? inv.format() : "null") + " over vars "
-                    + VarInfo.arrayToString(vis) + " in ppt " + ppt.name);
+    if (Debug.logDetail() && NIS.debug.isLoggable(Level.FINE))
+      NIS.debug.fine(
+          "checking suppressor "
+              + this
+              + " against inv "
+              + ((inv != null) ? inv.format() : "null")
+              + " over vars "
+              + VarInfo.arrayToString(vis)
+              + " in ppt "
+              + ppt.name);
 
     // If unary
     if (v2_index == -1) {
@@ -257,31 +254,30 @@ public class NISuppressor {
       // and variables must match for this to be true.  This check is only
       // needed for the falsified method.
       if (!NIS.antecedent_method) {
-        if ((inv != null) &&
-            (inv.getClass() == inv_class) && (v1 == inv.ppt.var_infos[0])) {
+        if ((inv != null) && (inv.getClass() == inv_class) && (v1 == inv.ppt.var_infos[0])) {
           return (state = NIS.SuppressState.MATCH);
         }
       }
 
       // Check to see if the suppressor is true over all constants.
-      if (ppt.is_prev_constant (v1)) {
+      if (ppt.is_prev_constant(v1)) {
         assert ppt.constants != null : "@AssumeAssertion(nullness)";
         boolean valid = false;
         VarInfo[] sup_vis = new VarInfo[] {v1};
-        assert sample_inv.valid_types (sup_vis);
+        assert sample_inv.valid_types(sup_vis);
         if (sample_inv.instantiate_ok(sup_vis)) {
           UnaryInvariant uinv = (UnaryInvariant) sample_inv;
           @SuppressWarnings("nullness") // elements of ppt.constants have a constant_value
-          InvariantStatus status = uinv.check
-                    (ppt.constants.constant_value(v1), ValueTuple.MODIFIED, 1);
+          InvariantStatus status =
+              uinv.check(ppt.constants.constant_value(v1), ValueTuple.MODIFIED, 1);
           valid = (status == InvariantStatus.NO_CHANGE);
         }
-        if (NIS.debug.isLoggable(Level.FINE))
-          NIS.debug.fine("constant args - " + valid);
-        if (valid)
+        if (NIS.debug.isLoggable(Level.FINE)) NIS.debug.fine("constant args - " + valid);
+        if (valid) {
           current_state_str = "true over constant " + ppt.constants.constant_value(v1);
-        else
+        } else {
           current_state_str = "invalid over constant " + ppt.constants.constant_value(v1);
+        }
         return (state = (valid ? NIS.SuppressState.VALID : NIS.SuppressState.INVALID));
       }
 
@@ -296,10 +292,10 @@ public class NISuppressor {
       // do this processing as falsified invariants are removed from the lists.
       // An invariant that is still in the list, but marked falsified, is true
       // for our purposes (we will process it later, when it is removed)
-      PptSlice slice = ppt.findSlice (v1);
+      PptSlice slice = ppt.findSlice(v1);
       if (slice != null) {
         for (Invariant slice_inv : slice.invs) {
-          if (match_true (slice_inv)) {
+          if (match_true(slice_inv)) {
             current_state_str = "invariant " + slice_inv.format();
             return (state = NIS.SuppressState.VALID);
           }
@@ -313,13 +309,9 @@ public class NISuppressor {
         // Stringifying "this" is expensive, so only do it if one of the
         // assertions will fail
         assert (v1_index < vis.length)
-        : "v1/len= "
-                           + v1_index + "/" + vis.length +
-                           " suppressor " + this;
+            : "v1/len= " + v1_index + "/" + vis.length + " suppressor " + this;
         assert (v2_index < vis.length)
-        : "v2/len= "
-                           + v2_index + "/" + vis.length +
-                           " suppressor " + this;
+            : "v2/len= " + v2_index + "/" + vis.length + " suppressor " + this;
       }
       VarInfo v1 = vis[v1_index];
       VarInfo v2 = vis[v2_index];
@@ -336,7 +328,9 @@ public class NISuppressor {
       // variables, and swap must match for this to be true.  This check is
       // only needed in the falsified method.
       if (!NIS.antecedent_method) {
-        if ((inv != null) && match(inv) && (v1 == inv.ppt.var_infos[0])
+        if ((inv != null)
+            && match(inv)
+            && (v1 == inv.ppt.var_infos[0])
             && (v2 == inv.ppt.var_infos[1])) {
           if (NIS.debug.isLoggable(Level.FINE))
             NIS.debug.fine("Matches falsified inv " + inv.format());
@@ -346,28 +340,34 @@ public class NISuppressor {
 
       // Check to see if the suppressor is true over all constants.  This
       // code only works for stateless invariants!
-      if (ppt.is_prev_constant (v1) && ppt.is_prev_constant (v2)) {
+      if (ppt.is_prev_constant(v1) && ppt.is_prev_constant(v2)) {
         assert ppt.constants != null : "@AssumeAssertion(nullness)";
         boolean valid = false;
         VarInfo[] sup_vis = new VarInfo[] {v1, v2};
-        assert sample_inv.valid_types (sup_vis);
+        assert sample_inv.valid_types(sup_vis);
         if (sample_inv.instantiate_ok(sup_vis)) {
           BinaryInvariant binv = (BinaryInvariant) sample_inv;
-          InvariantStatus status
-            = binv.check_unordered (ppt.constants.constant_value(v1),
-                                    ppt.constants.constant_value(v2),
-                                    ValueTuple.MODIFIED, 1);
+          InvariantStatus status =
+              binv.check_unordered(
+                  ppt.constants.constant_value(v1),
+                  ppt.constants.constant_value(v2),
+                  ValueTuple.MODIFIED,
+                  1);
           valid = (status == InvariantStatus.NO_CHANGE);
         }
-        if (NIS.debug.isLoggable (Level.FINE))
-          NIS.debug.fine (String.format ("constant args (%s, %s) = %b ",
-                       Debug.toString (ppt.constants.constant_value(v1)),
-                       Debug.toString (ppt.constants.constant_value(v2)),
-                       valid));
-        current_state_str = "true over constants " + ppt.constants.constant_value(v1)
-          + " and " + ppt.constants.constant_value(v2);
-        if (!valid)
-          current_state_str = "not " + current_state_str;
+        if (NIS.debug.isLoggable(Level.FINE))
+          NIS.debug.fine(
+              String.format(
+                  "constant args (%s, %s) = %b ",
+                  Debug.toString(ppt.constants.constant_value(v1)),
+                  Debug.toString(ppt.constants.constant_value(v2)),
+                  valid));
+        current_state_str =
+            "true over constants "
+                + ppt.constants.constant_value(v1)
+                + " and "
+                + ppt.constants.constant_value(v2);
+        if (!valid) current_state_str = "not " + current_state_str;
         return (state = (valid ? NIS.SuppressState.VALID : NIS.SuppressState.INVALID));
       }
 
@@ -382,20 +382,20 @@ public class NISuppressor {
       // do this processing as falsified invariants are removed from the lists.
       // An invariant that is still in the list, but marked falsified, is true
       // for our purposes (we will process it later, when it is removed)
-      PptSlice slice = ppt.findSlice (v1, v2);
+      PptSlice slice = ppt.findSlice(v1, v2);
       if (slice != null) {
         for (Invariant slice_inv : slice.invs) {
           // NIS.debug.fine (": processing inv " + slice_inv.format());
-          if (match_true (slice_inv)) {
-            if (NIS.debug.isLoggable (Level.FINE))
-              NIS.debug.fine ("suppressor matches inv " + slice_inv.format()
-                           + " " + !slice_inv.is_false());
+          if (match_true(slice_inv)) {
+            if (NIS.debug.isLoggable(Level.FINE))
+              NIS.debug.fine(
+                  "suppressor matches inv " + slice_inv.format() + " " + !slice_inv.is_false());
             current_state_str = "invariant " + slice_inv.format();
             return (state = NIS.SuppressState.VALID);
           }
         }
       }
-      NIS.debug.fine ("suppressor not found");
+      NIS.debug.fine("suppressor not found");
       return (state = NIS.SuppressState.INVALID);
     }
   }
@@ -405,11 +405,12 @@ public class NISuppressor {
    * is not falsified.
    * @see #match(Invariant)
    */
-  public boolean match_true (Invariant inv) {
-    if (NIS.antecedent_method)
-      return (match (inv) && !inv.is_false());
-    else
-      return (match (inv));
+  public boolean match_true(Invariant inv) {
+    if (NIS.antecedent_method) {
+      return (match(inv) && !inv.is_false());
+    } else {
+      return (match(inv));
+    }
   }
 
   /**
@@ -417,18 +418,19 @@ public class NISuppressor {
    * inv's variables already match (i.e., that it was looked up in
    * compatible slice
    */
-  public boolean match (Invariant inv) {
+  public boolean match(Invariant inv) {
 
-    if (v2_index == -1)
+    if (v2_index == -1) {
       return (inv.getClass() == inv_class);
-    else {
-      if (inv.getClass() != inv_class)
-        return (false);
+    } else {
+      if (inv.getClass() != inv_class) {
+        return false;
+      }
       if (!swap_class) {
         BinaryInvariant binv = (BinaryInvariant) inv;
         return (binv.is_symmetric() || (swap == binv.get_swap()));
       }
-      return (true);
+      return true;
     }
   }
 
@@ -437,56 +439,50 @@ public class NISuppressor {
    * only checks that the class matches but this will need to be expanded
    * to check for a permutation match as well
    */
-  public boolean match (NISuppressee sse) {
+  public boolean match(NISuppressee sse) {
 
-    if (v2_index == -1)
+    if (v2_index == -1) {
       return (sse.sup_class == inv_class);
-    else {
+    } else {
       if (sse.sup_class != inv_class) {
-        return (false);
+        return false;
       }
       if (!swap_class) {
         BinaryInvariant binv = (BinaryInvariant) sse.sample_inv;
         boolean match = (binv.is_symmetric() || (swap == binv.get_swap()));
         return (match);
       }
-      return (true);
+      return true;
     }
-
   }
 
   /**
    * Returns a copy of this suppressor translated to match the variable
    * order in sor.
    */
-  public NISuppressor translate (NISuppressor sor) {
+  public NISuppressor translate(NISuppressor sor) {
 
-    int new_v1 = sor.translate_index (v1_index);
-    int new_v2 = sor.translate_index (v2_index);
-    int new_v3 = sor.translate_index (v3_index);
+    int new_v1 = sor.translate_index(v1_index);
+    int new_v2 = sor.translate_index(v2_index);
+    int new_v3 = sor.translate_index(v3_index);
 
-    if (new_v2 == -1)
-      return new NISuppressor (new_v1, inv_class);
-    else if (new_v3 == -1)
-      return new NISuppressor (new_v1, new_v2, inv_class);
-    else {
+    if (new_v2 == -1) {
+      return new NISuppressor(new_v1, inv_class);
+    } else if (new_v3 == -1) {
+      return new NISuppressor(new_v1, new_v2, inv_class);
+    } else {
       throw new Error("Unexpected ternary suppressor");
     }
   }
 
   /** Returns the variable index that corresponds to index **/
-  private int translate_index (int index) {
+  private int translate_index(int index) {
 
-    if (index == 0)
-      return (v1_index);
-    else if (index == 1)
-      return (v2_index);
-    else if (index == 2)
-      return (v3_index);
-    else
-      return (index);
+    if (index == 0) return (v1_index);
+    else if (index == 1) return (v2_index);
+    else if (index == 2) return (v3_index);
+    else return (index);
   }
-
 
   /** Returns the invariant class of this suppressor **/
   public Class<? extends Invariant> get_inv_class() {
@@ -499,7 +495,7 @@ public class NISuppressor {
     current_state_str = null;
   }
 
-  static String[] varname = new String[] { "x", "y", "z" };
+  static String[] varname = new String[] {"x", "y", "z"};
 
   /**
    * Returns a string representation of the suppressor.  Rather than show
@@ -511,26 +507,30 @@ public class NISuppressor {
     String cname = inv_class.getCanonicalName();
 
     String status;
-    if (state == NIS.SuppressState.NONE)
+    if (state == NIS.SuppressState.NONE) {
       status = "";
-    else
+    } else {
       status = state.toString().toLowerCase();
+    }
 
-    if (current_state_str != null)
-      status = status + " [" + current_state_str + "]";
+    if (current_state_str != null) status = status + " [" + current_state_str + "]";
 
-    if (v2_index == -1)
-      return (String.format ("%s(%s) [%s]", cname, varname[v1_index], status));
-    else if (v3_index == -1) {
+    if (v2_index == -1) {
+      return (String.format("%s(%s) [%s]", cname, varname[v1_index], status));
+    } else if (v3_index == -1) {
       if (swap && !swap_class)
-        return (String.format ("%s(%s,%s) [%s]", cname, varname[v2_index],
-               varname[v1_index], status));
+        return (String.format(
+            "%s(%s,%s) [%s]", cname, varname[v2_index], varname[v1_index], status));
       else
-        return (String.format ("%s(%s,%s) [%s]", cname, varname[v1_index],
-               varname[v2_index], status));
+        return (String.format(
+            "%s(%s,%s) [%s]", cname, varname[v1_index], varname[v2_index], status));
     } else
-      return (String.format ("%s(%s,%s,%s) [%s]", cname, varname[v1_index],
-                       varname[v2_index], varname[v3_index], status));
+      return (String.format(
+          "%s(%s,%s,%s) [%s]",
+          cname,
+          varname[v1_index],
+          varname[v2_index],
+          varname[v3_index],
+          status));
   }
-
 }

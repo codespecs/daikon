@@ -1,7 +1,7 @@
 package daikon.diff;
 
-import java.util.*;
 import daikon.inv.*;
+import java.util.*;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;
@@ -31,5 +31,4 @@ public class ConsequentPairComparator implements Comparator<Invariant> {
 
     return c.compare(inv1, inv2);
   }
-
 }

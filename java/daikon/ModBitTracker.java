@@ -2,14 +2,12 @@ package daikon;
 
 import java.io.Serializable;
 import java.util.*;
-
 import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
-
 
 // "ModBitTracker" is a poor name for this class, since it tracks
 // whether a value is missing, not whether it is modified.
@@ -18,9 +16,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * The BitSet indicates, for each sample seen in order, whether that
  * variable was present or not.
  **/
-public class ModBitTracker
-  implements Serializable, Cloneable
-{
+public class ModBitTracker implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -96,19 +92,19 @@ public class ModBitTracker
     return num_sets;
   }
 
-
   /** Check the representation invariant. **/
-  public void checkRep(/*>>>@UnknownInitialization(ModBitTracker.class) @Raw(ModBitTracker.class) ModBitTracker this*/) {
+  public void checkRep(
+      /*>>>@UnknownInitialization(ModBitTracker.class) @Raw(ModBitTracker.class) ModBitTracker this*/ ) {
     assert index.length == num_vars;
     assert modbits_arrays.length == num_vars;
-    for (int i=0; i<num_vars; i++) {
+    for (int i = 0; i < num_vars; i++) {
       int this_index = index[i];
       assert this_index >= 0;
       assert this_index < num_sets;
       assert modbits_arrays[this_index] != null;
     }
-    for (int i=0; i<num_vars; i++) {
-      if (i<num_sets) {
+    for (int i = 0; i < num_vars; i++) {
+      if (i < num_sets) {
         assert modbits_arrays[i] != null;
         // Can't make this assertion, as there is no method that tells
         // the highest index that has been used in the BitSet.  (size()
@@ -127,7 +123,8 @@ public class ModBitTracker
    * Returns a BitSet of modbit values for the given variable.
    * The caller must not modify the returned value!
    **/
-  @SuppressWarnings("nullness") // application invariant: index[varindex] is an index for a non-null BitSet in modbits_arrays
+  @SuppressWarnings(
+      "nullness") // application invariant: index[varindex] is an index for a non-null BitSet in modbits_arrays
   public BitSet get(int varindex) {
     return modbits_arrays[index[varindex]];
   }
@@ -139,7 +136,6 @@ public class ModBitTracker
     return get(varindex).get(sampleno);
   }
 
-
   /**
    * Split the specified equivalence set into two pieces.
    * Returns the index of the copy.
@@ -149,25 +145,24 @@ public class ModBitTracker
     /*@NonNull*/ BitSet bs = (BitSet) modbits_arrays[split_index].clone();
     modbits_arrays[num_sets] = bs;
     num_sets++;
-    return num_sets-1;
+    return num_sets - 1;
   }
 
   /** Add to this the modbits for the given ValueTuple. **/
   public void add(ValueTuple vt, int count) {
     if (debug) checkRep();
-    assert vt.size() == num_vars
-      : "vt.size()=" + vt.size() + ", num_vars = " + num_vars;
+    assert vt.size() == num_vars : "vt.size()=" + vt.size() + ", num_vars = " + num_vars;
     if (num_vars == 0) {
       num_samples += count;
       return;
     }
     Arrays.fill(this_bits_valid, false);
     Arrays.fill(this_bits_exception_index, -1);
-    for (int i=0; i<num_vars; i++) {
+    for (int i = 0; i < num_vars; i++) {
       int this_index = index[i];
       // Should this use the whole modbit, not just a boolean?
       boolean modbit = !vt.isMissing(i);
-      if (! this_bits_valid[this_index]) {
+      if (!this_bits_valid[this_index]) {
         // This is the first variable belonging to this equivalence set
         // that we have seen so far.
         this_bits[this_index] = modbit;
@@ -192,14 +187,13 @@ public class ModBitTracker
         }
       }
     }
-    for (int i=0; i<num_sets; i++) {
+    for (int i = 0; i < num_sets; i++) {
       @SuppressWarnings("nullness") // application invariant: non-null up to index=num_sets
       /*@NonNull*/ BitSet bs = modbits_arrays[i];
-      bs.set(num_samples, num_samples+count, this_bits[i]);
+      bs.set(num_samples, num_samples + count, this_bits[i]);
     }
     num_samples += count;
 
     if (debug) checkRep();
   }
-
 }

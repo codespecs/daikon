@@ -6,11 +6,9 @@ package daikon.tools.runtimechecker;
  */
 public class MalformedPropertyException extends Exception {
 
+  private static final long serialVersionUID = 1L;
 
-    private static final long serialVersionUID = 1L;
-
-    public MalformedPropertyException(String s) {
-        super(s);
-    }
-
+  public MalformedPropertyException(String s) {
+    super(s);
+  }
 }

@@ -1,9 +1,9 @@
 package daikon.diff;
 
-import java.io.*;
-import java.text.*;
 import daikon.*;
 import daikon.inv.Invariant;
+import java.io.*;
+import java.text.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -18,12 +18,9 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   // Protected so subclasses can use it.
   protected static final String lineSep = Global.lineSep;
 
-
   protected static boolean HUMAN_OUTPUT = false;
 
-
-  private static DecimalFormat CONFIDENCE_FORMAT =
-    new DecimalFormat("0.####");
+  private static DecimalFormat CONFIDENCE_FORMAT = new DecimalFormat("0.####");
 
   private PrintStream ps;
   private boolean verbose;
@@ -36,8 +33,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
    **/
   private StringBuffer bufOutput = new StringBuffer();
 
-  public PrintAllVisitor(PrintStream ps, boolean verbose,
-                         boolean printEmptyPpts) {
+  public PrintAllVisitor(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
     this.ps = ps;
     this.verbose = verbose;
     this.printEmptyPpts = printEmptyPpts;
@@ -84,7 +80,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   public void visit(InvNode node) {
 
     if (HUMAN_OUTPUT) {
-      printHumanOutput (node);
+      printHumanOutput(node);
       return;
     }
 
@@ -97,7 +93,6 @@ public class PrintAllVisitor extends DepthFirstVisitor {
       bufPrint(null);
     } else {
       printInvariant(inv1);
-
     }
     bufPrint(", ");
     if (inv2 == null) {
@@ -117,7 +112,6 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     bufPrintln();
   }
 
-
   /**
    * This method is an alternate printing procedure for
    * an InvNode so that the output is more human readable.
@@ -132,8 +126,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
     //    bufPrint("  " + "<");
 
-    if (inv1 != null && inv2 != null &&
-        (inv1.format().equals (inv2.format()))) {
+    if (inv1 != null && inv2 != null && (inv1.format().equals(inv2.format()))) {
       return;
     }
 
@@ -141,13 +134,13 @@ public class PrintAllVisitor extends DepthFirstVisitor {
       //   bufPrint((String) null);
     } else {
       //  printInvariant(inv1);
-      bufPrintln (("- " + inv1.format()).trim());
+      bufPrintln(("- " + inv1.format()).trim());
     }
     //    bufPrint(", ");
     if (inv2 == null) {
       //      bufPrint((String) null);
     } else {
-      bufPrintln (("+ " + inv2.format()).trim());
+      bufPrintln(("+ " + inv2.format()).trim());
       //      printInvariant(inv2);
     }
     //    bufPrint(">");
@@ -161,7 +154,6 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
     bufPrintln();
   }
-
 
   /**
    * Prints an invariant, including its printability and possibly its
@@ -210,12 +202,13 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   protected void bufPrint(/*@Nullable*/ String s) {
     bufOutput.append(s);
   }
+
   protected void bufPrintln(/*@Nullable*/ String s) {
     bufPrint(s);
     bufPrintln();
   }
+
   protected void bufPrintln() {
     bufOutput.append(Global.lineSep);
   }
-
 }

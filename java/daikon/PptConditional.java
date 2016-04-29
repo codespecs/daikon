@@ -1,7 +1,7 @@
 package daikon;
 
-import daikon.split.*;
 import daikon.inv.DummyInvariant;
+import daikon.split.*;
 import java.util.*;
 
 /*>>>
@@ -17,9 +17,7 @@ import org.checkerframework.checker.nullness.qual.*;
 // This perhaps shouldn't extend PptTopLevel; fix that in the future.
 // For now, it's convenient to take advantage of its functionality.
 // And they're so similar that maybe this is the right thing after all.
-public final class PptConditional
-  extends PptTopLevel
-{
+public final class PptConditional extends PptTopLevel {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -33,11 +31,11 @@ public final class PptConditional
   // This does not install the variable values.  The reason is that it's
   // more efficient to do that for two PptConditional objects at once.
 
-  public PptConditional(PptTopLevel parent, Splitter splitter,
-                        boolean splitter_inverse) {
+  public PptConditional(PptTopLevel parent, Splitter splitter, boolean splitter_inverse) {
 
-    super(ctor_name_helper(parent, splitter, splitter_inverse),
-          ctor_vis_helper(parent, splitter, splitter_inverse));
+    super(
+        ctor_name_helper(parent, splitter, splitter_inverse),
+        ctor_vis_helper(parent, splitter, splitter_inverse));
     // assert splitter.instantiated() == false;
     this.parent = parent;
     @SuppressWarnings({"rawness", "initialization"}) // won't be used until it's fully initialized
@@ -50,9 +48,8 @@ public final class PptConditional
     // jhp this.invflow_transforms = new int[0][];
   }
 
-  private static String ctor_name_helper(PptTopLevel parent,
-                                         Splitter splitter,
-                                         boolean splitter_inverse) {
+  private static String ctor_name_helper(
+      PptTopLevel parent, Splitter splitter, boolean splitter_inverse) {
     if (splitter_inverse) {
       return parent.name + ";condition=\"not(" + splitter.condition() + ")\"";
     } else {
@@ -60,10 +57,8 @@ public final class PptConditional
     }
   }
 
-
-  private static VarInfo[] ctor_vis_helper(PptTopLevel parent,
-                                           Splitter splitter,
-                                           boolean splitter_inverse) {
+  private static VarInfo[] ctor_vis_helper(
+      PptTopLevel parent, Splitter splitter, boolean splitter_inverse) {
     return (VarInfo.arrayclone_simple(parent.var_infos));
   }
 
@@ -77,5 +72,4 @@ public final class PptConditional
   public /*@Nullable*/ DummyInvariant dummyInvariant() {
     return splitter.getDummyInvariant();
   }
-
 }

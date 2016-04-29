@@ -1,7 +1,7 @@
 package daikon.inv.filter;
 
-import daikon.PptTopLevel;
 import daikon.Daikon;
+import daikon.PptTopLevel;
 import daikon.inv.*;
 
 public class SimplifyFilter extends InvariantFilter {
@@ -16,16 +16,15 @@ public class SimplifyFilter extends InvariantFilter {
    */
   public static boolean dkconfig_enabled = true;
 
-  public SimplifyFilter( ) {
+  public SimplifyFilter() {
     isOn = dkconfig_enabled;
   }
 
-  boolean shouldDiscardInvariant( Invariant invariant ) {
-    if (Daikon.suppress_redundant_invariants_with_simplify &&
-        invariant.ppt.parent.redundant_invs.contains(invariant)) {
-      return (true);
+  boolean shouldDiscardInvariant(Invariant invariant) {
+    if (Daikon.suppress_redundant_invariants_with_simplify
+        && invariant.ppt.parent.redundant_invs.contains(invariant)) {
+      return true;
     }
     return false;
   }
-
 }

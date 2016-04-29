@@ -5,17 +5,14 @@
 <std.enqueue(int;process *;)int:::ENTER>
   <prio >= 0 {1+}, prio >= -1 {1+}> (UInt,DJJ)
 <std.enqueue(int;process *;)int:::EXIT>
-  <null, (return == 0)  ==>  (return  isPointer) {1+}> (NInt,MJ)
+  <null, (return == 0)  ==>  (return is a pointer) {1+}> (NInt,MJ)
   <null, (return == 0)  ==>  (prio >= 0) {1+}> (NInt,MJ)
   <null, (return == -4)  ==>  (prio != 0) {0.9999+}> (NInt,MJ)
   <prio >= 0 {1+}, prio >= -1 {1+}> (UInt,DJJ)
   <return == 0 {1+}, return one of { -4, 0 } {1+}> (UInt,DJJ)
-<std.finish()int:::EXIT>
-  <(return == 0)  ==>  (return  isPointer) {1+}, (return == 0)  ==>  (return  isPointer) {1+}> (NInt,DJJ)
 <std.get_command(int *;int *;float *;)int:::ENTER>
   <*command != 0 {1+}, null> (UInt,JM)
 <std.get_command(int *;int *;float *;)int:::EXIT>
-  <(return == 0)  ==>  (return  isPointer) {1+}, (return == 0)  ==>  (return  isPointer) {1+}> (NInt,DJJ)
   <(return == 1)  ==>  (*prio != 0) {1+}, null> (NInt,JM)
   <null, (orig(*command) == 0) ==> (*command == 0) {1+}> (Bin,MJ)
   <(*prio == 0) ==> (orig(*prio) == 0) {1+}, null> (Bin,JM)
@@ -38,7 +35,7 @@
 <std.put_end(int;process *;)int:::ENTER>
   <prio >= 0 {1+}, prio >= -1 {1+}> (UInt,DJJ)
 <std.put_end(int;process *;)int:::EXIT>
-  <null, (return == 0)  ==>  (return  isPointer) {1+}> (NInt,MJ)
+  <null, (return == 0)  ==>  (return is a pointer) {1+}> (NInt,MJ)
   <null, (return == 0)  ==>  (prio >= 0) {1+}> (NInt,MJ)
   <null, (return == -4)  ==>  (prio != 0) {0.9999+}> (NInt,MJ)
   <prio >= 0 {1+}, prio >= -1 {1+}> (UInt,DJJ)

@@ -1,10 +1,10 @@
 package daikon.config;
 
-import java.lang.reflect.Field;
 import java.io.*;
-import java.util.List;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import plume.EntryReader;
 import plume.UtilMDE;
 
@@ -22,12 +22,10 @@ import org.checkerframework.checker.signature.qual.*;
  * <p> Important note: classes that have fields set via this
  * Configuration (dkconfig) interface may not reference daikon.Global
  * in their static initializers, since Global loads the default
- * configuration, which classloads that class, and we have a
+ * configuration, which classloads that class, and we would have a
  * classloading circularity.
  **/
-public final class Configuration
-  implements Serializable
-{
+public final class Configuration implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -39,6 +37,7 @@ public final class Configuration
 
   private static final Class<String> STRING_CLASS;
   private static final Class<Object> OBJECT_CLASS;
+
   static {
     try {
       @SuppressWarnings("unchecked")
@@ -52,13 +51,13 @@ public final class Configuration
     }
   }
 
-
   /**
    * @return singleton instance of this class
    **/
   public static Configuration getInstance() {
     return instance;
   }
+
   private static volatile /*@NonNull*/ Configuration instance = new Configuration();
 
   /**
@@ -75,14 +74,21 @@ public final class Configuration
    * configuration is changed it only contains those items specified,
    * not the default values of unspecified options.
    */
-  private Configuration() {
-  }
+  private Configuration() {}
 
   /** Lets callers differentiate between configuration problems and all others. **/
   public static class ConfigException extends RuntimeException {
-    public ConfigException(String s, Throwable t) { super (s, t); }
-    public ConfigException(String s) { super(s); }
-    public ConfigException() { super(); }
+    public ConfigException(String s, Throwable t) {
+      super(s, t);
+    }
+
+    public ConfigException(String s) {
+      super(s);
+    }
+
+    public ConfigException() {
+      super();
+    }
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -123,7 +129,7 @@ public final class Configuration
     assert input != null;
     for (String line : new EntryReader(input)) {
       line = line.trim();
-      if (line.length() == 0) continue;    // skip blank lines
+      if (line.length() == 0) continue; // skip blank lines
       if (line.charAt(0) == '#') continue; // skip # comment lines
       apply(line);
     }
@@ -138,7 +144,7 @@ public final class Configuration
     }
 
     String name = line.substring(0, eq).trim();
-    String value = line.substring(eq+1).trim();
+    String value = line.substring(eq + 1).trim();
 
     apply(name, value);
   }
@@ -149,12 +155,13 @@ public final class Configuration
 
     int dot = name.lastIndexOf('.');
     if (dot == -1) {
-      throw new daikon.Daikon.TerminationMessage("Configuration option name must contain a period (.): " + name);
+      throw new daikon.Daikon.TerminationMessage(
+          "Configuration option name must contain a period (.): " + name);
     }
 
     @SuppressWarnings("signature") // substring operation
     /*@ClassGetName*/ String classname = name.substring(0, dot);
-    String fieldname = name.substring(dot+1);
+    String fieldname = name.substring(dot + 1);
 
     apply(classname, fieldname, value);
   }
@@ -170,9 +177,11 @@ public final class Configuration
     try {
       clazz = UtilMDE.classForName(classname);
     } catch (ClassNotFoundException e) {
-      throw new ConfigException("Configuration option attempts to use nonexistent class " + classname, e);
+      throw new ConfigException(
+          "Configuration option attempts to use nonexistent class " + classname, e);
     } catch (LinkageError e) {
-      throw new ConfigException("Configuration option attempts to use class with lnkage error " + classname, e);
+      throw new ConfigException(
+          "Configuration option attempts to use class with lnkage error " + classname, e);
     }
 
     apply(clazz, fieldname, value);
@@ -187,9 +196,11 @@ public final class Configuration
     try {
       field = clazz.getDeclaredField(PREFIX + fieldname);
     } catch (SecurityException e) {
-      throw new ConfigException("Configuration option " + clazz.getName() + "." + fieldname + " is inaccessible");
+      throw new ConfigException(
+          "Configuration option " + clazz.getName() + "." + fieldname + " is inaccessible");
     } catch (NoSuchFieldException e) {
-      throw new ConfigException("Unknown configuration option " + clazz.getName() + "." + fieldname);
+      throw new ConfigException(
+          "Unknown configuration option " + clazz.getName() + "." + fieldname);
     }
 
     apply(field, value);
@@ -208,48 +219,68 @@ public final class Configuration
       } else if (unparsed.equals("0") || unparsed.equalsIgnoreCase("false")) {
         value = Boolean.FALSE;
       } else {
-        throw new ConfigException("Badly formatted boolean argument " + unparsed + " for configuration option " + field.getName());
+        throw new ConfigException(
+            "Badly formatted boolean argument "
+                + unparsed
+                + " for configuration option "
+                + field.getName());
       }
     } else if (type.equals(Integer.TYPE)) {
       try {
         // decode instead of valueOf to handle "0x" and other styles
         value = Integer.decode(unparsed);
       } catch (NumberFormatException e) {
-        throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
+        throw new ConfigException(
+            "Badly formatted argument "
+                + unparsed
+                + " for configuration option "
+                + field.getName());
       }
     } else if (type.equals(Long.TYPE)) {
       try {
         // decode instead of valueOf to handle "0x" and other styles
         value = Long.decode(unparsed);
       } catch (NumberFormatException e) {
-        throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
+        throw new ConfigException(
+            "Badly formatted argument "
+                + unparsed
+                + " for configuration option "
+                + field.getName());
       }
     } else if (type.equals(Float.TYPE)) {
       try {
         value = Float.valueOf(unparsed);
       } catch (NumberFormatException e) {
-        throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
+        throw new ConfigException(
+            "Badly formatted argument "
+                + unparsed
+                + " for configuration option "
+                + field.getName());
       }
     } else if (type.equals(Double.TYPE)) {
       // assert Double.class == Double.TYPE;
       try {
         value = Double.valueOf(unparsed);
       } catch (NumberFormatException e) {
-        throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName());
+        throw new ConfigException(
+            "Badly formatted argument "
+                + unparsed
+                + " for configuration option "
+                + field.getName());
       }
     } else if (type.equals(STRING_CLASS)) {
       value = unparsed;
       if ((unparsed.startsWith("\"") && unparsed.endsWith("\""))
           || (unparsed.startsWith("'") && unparsed.endsWith("'"))) {
-        value = unparsed.substring (1, unparsed.length()-1);
+        value = unparsed.substring(1, unparsed.length() - 1);
       }
-      value = ((String)value).intern();
+      value = ((String) value).intern();
       // System.out.printf ("setting %s to '%s'\n", field, value);
     } else if ((type.getSuperclass() != null)
-               && type.getSuperclass().getName().equals("java.lang.Enum")) {
+        && type.getSuperclass().getName().equals("java.lang.Enum")) {
       try {
-        java.lang.reflect.Method valueOf
-          = type.getDeclaredMethod("valueOf", new Class<?>[] { STRING_CLASS });
+        java.lang.reflect.Method valueOf =
+            type.getDeclaredMethod("valueOf", new Class<?>[] {STRING_CLASS});
         if (valueOf == null) {
           // Can't happen, so RuntimeException instead of ConfigException
           throw new RuntimeException("Didn't find valueOf in " + type);
@@ -259,7 +290,13 @@ public final class Configuration
           Object tmp_value = valueOf.invoke(null, unparsed);
           value = tmp_value;
         } catch (IllegalArgumentException e) {
-          throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName() + ": " + e.getMessage());
+          throw new ConfigException(
+              "Badly formatted argument "
+                  + unparsed
+                  + " for configuration option "
+                  + field.getName()
+                  + ": "
+                  + e.getMessage());
         }
       } catch (NoSuchMethodException e) {
         // Can't happen, so RuntimeException instead of ConfigException
@@ -272,7 +309,11 @@ public final class Configuration
         throw new RuntimeException(e);
       }
     } else {
-      throw new ConfigException("Internal error: Unsupported type " + type.getName() + " for configuration option " + field.toString());
+      throw new ConfigException(
+          "Internal error: Unsupported type "
+              + type.getName()
+              + " for configuration option "
+              + field.toString());
     }
 
     try {
@@ -290,10 +331,8 @@ public final class Configuration
   }
 
   private void addRecord(String classname, String fieldname, String unparsed) {
-    assert ! fieldname.startsWith(PREFIX); // must not have prefix
+    assert !fieldname.startsWith(PREFIX); // must not have prefix
     String record = classname + "." + fieldname + " = " + unparsed;
     statements.add(record);
   }
-
-
 }

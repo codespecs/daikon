@@ -1,12 +1,12 @@
 package daikon.split;
 
 import daikon.*;
-import plume.ArraysMDE;
-import jtb.syntaxtree.*;
-import jtb.ParseException;
 import java.util.*;
-import java.util.regex.*;
 import java.util.logging.Level;
+import java.util.regex.*;
+import jtb.ParseException;
+import jtb.syntaxtree.*;
+import plume.ArraysMDE;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -14,7 +14,6 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.regex.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
-
 
 /**
  * SplitterJavaSource writes the splitter Java file's contents to a string
@@ -41,7 +40,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   private StatementReplacer statementReplacer;
 
   /** Java reserved words that are replaced by replaceReservedWords. */
-  private static final /*@Regex*/ String[] reservedWords = new /*@Regex*/ String[]{"return"};
+  private static final /*@Regex*/ String[] reservedWords = new /*@Regex*/ String[] {"return"};
 
   private static final String lineSep = System.getProperty("line.separator");
 
@@ -56,15 +55,16 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param statementReplacer a statementReplacer for the .spinfo file from
    *  which splitObj is being created from.
    */
-  public SplitterJavaSource(SplitterObject splitObj,
-                            String pptName,
-                            String fileName,
-                            VarInfo[] varInfos,
-                            StatementReplacer statementReplacer)
-  throws ParseException {
+  public SplitterJavaSource(
+      SplitterObject splitObj,
+      String pptName,
+      String fileName,
+      VarInfo[] varInfos,
+      StatementReplacer statementReplacer)
+      throws ParseException {
     className = getClassName(pptName);
-    Global.debugSplit.fine("<<enter>> SplitterJavaSource; pptName: "
-                           + pptName + ", className: " + className);
+    Global.debugSplit.fine(
+        "<<enter>> SplitterJavaSource; pptName: " + pptName + ", className: " + className);
     this.fileName = fileName;
     this.statementReplacer = statementReplacer;
     varInfos = filterNonVars(varInfos);
@@ -84,7 +84,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     add("public final class " + fileName + " extends Splitter { ");
     skipLine();
     add("  public String condition() { ");
-    add("    return \""  + protectQuotations(originalCondition) +  "\"; ");
+    add("    return \"" + protectQuotations(originalCondition) + "\"; ");
     add("  } ");
     skipLine();
     writeFields();
@@ -116,7 +116,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     skipLine();
     add("  public void makeDummyInvariantFactory(DummyInvariant inv) { ");
     add("    dummyInvFactory = inv; ");
-    add("  } " );
+    add("  } ");
     skipLine();
     add("  public void instantiateDummy(PptTopLevel ppt) { ");
     add("    dummyInv = null; ");
@@ -150,7 +150,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * Writes the field declarations of the class to fileText.
    */
-  private void writeFields(/*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+  private void writeFields(
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
     for (int i = 0; i < vars.length; i++) {
       add("  VarInfo " + vars[i].getFieldName() + "; // " + vars[i].getNormalName());
     }
@@ -159,21 +160,27 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * Writes the body of the of constructor which takes a Ppt in as an argument.
    */
-  private void writeConstructorBody(/*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+  private void writeConstructorBody(
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
     for (int i = 0; i < vars.length; i++) {
-      add("    " + vars[i].getFieldName() + " = ppt.find_var_by_name(\"" +
-          vars[i].getNormalName() + "\");");
+      add(
+          "    "
+              + vars[i].getFieldName()
+              + " = ppt.find_var_by_name(\""
+              + vars[i].getNormalName()
+              + "\");");
     }
   }
 
   /**
    * Writes the body of the valid method to fileText.
    */
-  private void writeValidBody(/*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+  private void writeValidBody(
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
     if (vars.length > 0) {
       fileText.append("    return (" + vars[0].getFieldName() + " != null)");
       for (int i = 1; i < vars.length; i++) {
-        fileText.append(" && ("  + vars[i].getFieldName() + " != null)");
+        fileText.append(" && (" + vars[i].getFieldName() + " != null)");
       }
       add(";");
     } else {
@@ -185,7 +192,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * Writes the body of the test method to fileText.
    */
-  private void writeTestBody(/*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+  private void writeTestBody(
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
     add("    " + "/* writeTestBody: " + vars.length + " declarations */");
     for (int i = 0; i < vars.length; i++) {
       String type = vars[i].getType();
@@ -205,9 +213,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         get_expr = "getDoubleValue(vt)";
       } else if (type.equals("double[]")) {
         get_expr = "getDoubleArrayValue(vt)";
-      } else if (type.equals("String") ||
-                 type.equals("java.lang.String") ||
-                 type.equals("char[]")) {
+      } else if (type.equals("String")
+          || type.equals("java.lang.String")
+          || type.equals("char[]")) {
         type = "String";
         get_expr = "getStringValue(vt)";
       } else if (type.equals("String[]") || type.equals("java.lang.String[]")) {
@@ -216,17 +224,32 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         type = "int[]";
         get_expr = "getIntArrayValue(vt)";
       } else {
-        Global.debugSplit.fine("Can't deal with this type " + type +
-                               " declared in Splitter File");
-        throw new Error("Can't deal with this type " + type +
-                        " declared in Splitter File");
+        Global.debugSplit.fine("Can't deal with this type " + type + " declared in Splitter File");
+        throw new Error("Can't deal with this type " + type + " declared in Splitter File");
       }
       if (type.equals("int[]")) {
-        add("    " + type + " " + vars[i].getCompilableName() + " = "
-            + "getIntArray(" + vars[i].getFieldName() + "." + get_expr    + ");");
+        add(
+            "    "
+                + type
+                + " "
+                + vars[i].getCompilableName()
+                + " = "
+                + "getIntArray("
+                + vars[i].getFieldName()
+                + "."
+                + get_expr
+                + ");");
       } else {
-        add("    " + type + " " + vars[i].getCompilableName() + " = "
-            + vars[i].getFieldName() + "." + get_expr    + ";");
+        add(
+            "    "
+                + type
+                + " "
+                + vars[i].getCompilableName()
+                + " = "
+                + vars[i].getFieldName()
+                + "."
+                + get_expr
+                + ";");
       }
     }
   }
@@ -234,11 +257,16 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * Writes the body of the repr method to fileText.
    */
-  private void writeReprBody(/*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
-    add("    return " + "\""+ fileName + ": \"");
+  private void writeReprBody(
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
+    add("    return " + "\"" + fileName + ": \"");
     for (int i = 0; i < vars.length; i++) {
-      add("      + \"" + vars[i].getFieldName() + " = \" + " +
-          vars[i].getFieldName() + ".repr() + \" \"");
+      add(
+          "      + \""
+              + vars[i].getFieldName()
+              + " = \" + "
+              + vars[i].getFieldName()
+              + ".repr() + \" \"");
     }
     add("      ;");
   }
@@ -246,11 +274,16 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * Writes the body of the instantiateDummy method to fileText.
    */
-  private void writeInstantiateDummyBody(/*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
-    if (vars.length >=1 && vars.length <= 3) {
+  private void writeInstantiateDummyBody(
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
+    if (vars.length >= 1 && vars.length <= 3) {
       for (int i = 0; i < vars.length; i++) {
-        add("    VarInfo " + vars[i].getVarName()
-            + " = ppt.find_var_by_name(\"" + vars[i].getNormalName() + "\");");
+        add(
+            "    VarInfo "
+                + vars[i].getVarName()
+                + " = ppt.find_var_by_name(\""
+                + vars[i].getNormalName()
+                + "\");");
       }
       fileText.append("    if (");
       fileText.append(vars[0].getVarName() + " != null");
@@ -261,7 +294,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       fileText.append("      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {");
       fileText.append(vars[0].getVarName());
       for (int i = 1; i < vars.length; i++) {
-        fileText.append(", " +  vars[i].getVarName());
+        fileText.append(", " + vars[i].getVarName());
       }
       add("});");
       add("    }");
@@ -272,14 +305,17 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Appends st to fileText and then ends that line with lineSep.
    * @param st the string to added to fileText.
    */
-  private void add(/*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this,*/ String st) {
+  private void add(
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this,*/ String
+          st) {
     fileText.append(st + lineSep);
   }
 
   /**
    * Skips a line in fileText by adding a black line to fileText.
    */
-  private void skipLine(/*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
+  private void skipLine(
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
     fileText.append(lineSep);
   }
 
@@ -304,7 +340,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       Pattern p = Pattern.compile("([\\W])(" + reservedWord + ")([\\W])");
       Matcher m = p.matcher(string);
       while (m.find()) {
-        string = m.replaceFirst(m.group(1) + "daikon" +reservedWord + m.group(3));
+        string = m.replaceFirst(m.group(1) + "daikon" + reservedWord + m.group(3));
         m = p.matcher(string);
       }
     }
@@ -326,16 +362,14 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param condition a string representation of a conditional statement.
    * @return a version of the conditional with the variable names converted.
    */
-  private static String convertVariableNames(String condition,
-                                             String className,
-                                             VarInfo[] varInfos)
-  throws ParseException {
+  private static String convertVariableNames(String condition, String className, VarInfo[] varInfos)
+      throws ParseException {
     // These methods keep converting between strings and jtb syntax trees
     // because the visitors causes the trees to become invalid.  Therefore,
     // it is needed to re-parse the condition in a new jtb syntax tree each
     // time.  (All the parsing is hidden in the static methods.)
     condition = NameFixer.fixUnqualifiedMemberNames(condition, className, varInfos);
-    condition = ThisRemover.removeThisDot(condition);
+    condition = ThisFixer.fixThisUsage(condition, varInfos);
     condition = OrigFixer.fixOrig(condition);
     condition = PrefixFixer.fixPrefix(condition);
     // UNDONE: If the condition contains a naked reference to a class
@@ -371,9 +405,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    *  may appear in the splitting condition.
    */
   /*@Pure*/ private static boolean isNormalVar(VarInfo varInfo) {
-    return ((! isTypeOfVar(varInfo)) &&
-            (! isSizeVar(varInfo)) &&
-            (! isThisVar(varInfo)));
+    return ((!isTypeOfVar(varInfo)) && (!isSizeVar(varInfo)) && (!isThisVar(varInfo)));
   }
 
   /**
@@ -412,9 +444,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   private static String protectQuotations(String condition) {
     for (int i = 0; i < condition.length(); i++) {
       if (condition.charAt(i) == '"') {
-        condition = condition.substring(0, i) + "\\" +
-          condition.substring(i, condition.length());
-        i=i+2;
+        condition = condition.substring(0, i) + "\\" + condition.substring(i, condition.length());
+        i = i + 2;
       }
     }
     return condition;
@@ -440,7 +471,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @return str with the char at index removed.
    */
   private static String removeCharAt(String str, int index) {
-    return str.substring(0, index) + str.substring(index+1);
+    return str.substring(0, index) + str.substring(index + 1);
   }
 
   /**
@@ -483,9 +514,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * Calculates the base name of a variable.  The base name
    * of a variable is the part of the variable with prefix
-   * "this." removed, and "orig()" replaced * by "orig_".
-   * In addition, '.' are converted to '_'.  For example, 
-   * orig(this.x) goes to orig_x.  Finally,
+   * "this." replaced by "this_", and "orig()" replaced * by "orig_".
+   * In addition, '.' are converted to '_'.  For example,
+   * orig(this.x) goes to orig_this_x.  Finally,
    * Java Reserved words are replaced with appropriate substitutes.
    *
    * @param varInfo the VarInfo for the variable whose base name is
@@ -495,16 +526,15 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   private static String getBaseName(VarInfo varInfo, String className) {
     String name = varInfo.name();
     name = replaceReservedWords(name);
-    if (name.length() > 5 && name.substring(0, 5).equals("orig(") &&
-        name.endsWith(")")) {
-      name = name.substring(5, name.length() -1);
+    if (name.length() > 5 && name.substring(0, 5).equals("orig(") && name.endsWith(")")) {
+      name = name.substring(5, name.length() - 1);
       if (name.startsWith("this.")) {
-          name = name.substring(5);
+        name = "this_" + name.substring(5);
       }
       name = "orig_" + name;
     } else {
       if (name.startsWith("this.")) {
-          name = name.substring(5);
+        name = "this_" + name.substring(5);
       }
     }
 
@@ -512,8 +542,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     // originally array names in type infos end in "[..]"
     // but the replace above will change it to "[__]".   (markro)
     if (varInfo.type.isArray()) {
-        if (name.endsWith("[__]"))
-            name = name.substring(0, name.length()-4);
+      if (name.endsWith("[__]")) name = name.substring(0, name.length() - 4);
     }
     return name;
   }
@@ -554,8 +583,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @return the name of the variable represented by varInfo as it would
    *  appear in the field declaration of a java splitter file.
    */
-  private static String fieldName(VarInfo varInfo, String className)
-  throws ParseException {
+  private static String fieldName(VarInfo varInfo, String className) throws ParseException {
     return compilableName(varInfo, className) + "_varinfo";
   }
 
@@ -566,8 +594,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @return the name of the variable used to hold this varInfo in a java
    *  splitter file.
    */
-  private static String varName(VarInfo varInfo, String className)
-  throws ParseException {
+  private static String varName(VarInfo varInfo, String className) throws ParseException {
     return compilableName(varInfo, className) + "_vi";
   }
 
@@ -580,9 +607,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     if (varInfo.file_rep_type == ProglangType.HASHCODE) {
       return "int";
     } else if ((varInfo.type == ProglangType.CHAR_ARRAY)
-               || (varInfo.type == ProglangType.BOOLEAN)
-               || (varInfo.type == ProglangType.DOUBLE)
-               || (varInfo.type == ProglangType.DOUBLE_ARRAY)) {
+        || (varInfo.type == ProglangType.BOOLEAN)
+        || (varInfo.type == ProglangType.DOUBLE)
+        || (varInfo.type == ProglangType.DOUBLE_ARRAY)) {
       return varInfo.type.format();
     } else {
       return varInfo.rep_type.format();
@@ -614,16 +641,13 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     private String type;
 
     private VariableManager(VarInfo varInfo, String condition, String className)
-    throws ParseException {
+        throws ParseException {
       this.varInfo = varInfo;
       name = varInfo.name();
       compilableName = compilableName(varInfo, className);
       fieldName = fieldName(varInfo, className);
       varName = varName(varInfo, className);
-      type = makeIndexIfNeeded(getVarType(varInfo),
-                               compilableName,
-                               varInfo,
-                               condition);
+      type = makeIndexIfNeeded(getVarType(varInfo), compilableName, varInfo, condition);
     }
 
     /**
@@ -650,14 +674,14 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     /**
      * @return the field name of the variable.
      */
-    private String getFieldName () {
+    private String getFieldName() {
       return fieldName;
     }
 
     /**
      * @return the VarInfo name of the variable.
      */
-    private String getVarName () {
+    private String getVarName() {
       return varName;
     }
 
@@ -675,10 +699,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfos the varInfos for the variables to be managed.
    * @param condition the condition in which the variables are used.
    */
-  private static VariableManager[] makeVariableManagerArray(VarInfo[] varInfos,
-                                                            String condition,
-                                                            String className)
-  throws ParseException {
+  private static VariableManager[] makeVariableManagerArray(
+      VarInfo[] varInfos, String condition, String className) throws ParseException {
 
     Global.debugSplit.fine("<<enter>> makeVariableManagerArray");
 
@@ -687,13 +709,19 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     for (VarInfo varInfo : varInfos) {
       try {
         String compilableName = compilableName(varInfo, className);
-        Global.debugSplit.fine("varInfo " + varInfo.name() + " isNeeded(" +
-                               compilableName + ", " + classVars + ")=" + 
-                               isNeeded(compilableName, classVars));
+        Global.debugSplit.fine(
+            "varInfo "
+                + varInfo.name()
+                + " isNeeded("
+                + compilableName
+                + ", "
+                + classVars
+                + ")="
+                + isNeeded(compilableName, classVars));
         if (isNeeded(compilableName, classVars)) {
           variableManagerList.add(new VariableManager(varInfo, condition, className));
         }
-      } catch(ParseException e) {
+      } catch (ParseException e) {
         System.out.println("ParseException: " + e.toString());
       }
     }
@@ -718,27 +746,26 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    *    Arrays appear with "[]" at the end if their elements or accessed
    *    in the condition.
    */
-  private static List<String> findPossibleClassVariables(String condition)
-  throws ParseException {
+  private static List<String> findPossibleClassVariables(String condition) throws ParseException {
 
     Global.debugSplit.fine("<<enter>> findPossibleClassVariables");
 
     NodeToken[] tokens = TokenExtractor.extractTokens(condition);
-    Global.debugSplit.fine("TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
+    Global.debugSplit.fine(
+        "TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
     Set<String> variables = new LinkedHashSet<String>();
 
     for (int i = 0; i < tokens.length; i++) {
-        NodeToken token = tokens[i];
-        if (token.kind == IDENTIFIER) {
-            if ((i > 0) && (tokens[i-1].kind == DOT))
-                continue;
-            if ((i < tokens.length - 1) && (tokens[i+1].kind == LPAREN))
-                continue;
-            variables.add(token.tokenImage);
-        }
+      NodeToken token = tokens[i];
+      if (token.kind == IDENTIFIER) {
+        if ((i > 0) && (tokens[i - 1].kind == DOT)) continue;
+        if ((i < tokens.length - 1) && (tokens[i + 1].kind == LPAREN)) continue;
+        variables.add(token.tokenImage);
+      }
     }
 
-    Global.debugSplit.fine("<<exit>>  findPossibleClassVariables(" + condition + ") => " + variables.toString());
+    Global.debugSplit.fine(
+        "<<exit>>  findPossibleClassVariables(" + condition + ") => " + variables.toString());
     return new ArrayList<String>(variables);
   }
 
@@ -757,13 +784,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param condition the condition in which the variable occurs.
    * @return the type converted to index type if needed.
    */
-  private static String makeIndexIfNeeded(String type,
-                                          String name,
-                                          VarInfo varInfo,
-                                          String condition)
-  throws ParseException {
-    if ((type.equals("int") || varInfo.type.isArray()) &&
-        varInfo.file_rep_type != ProglangType.HASHCODE) {
+  private static String makeIndexIfNeeded(
+      String type, String name, VarInfo varInfo, String condition) throws ParseException {
+    if ((type.equals("int") || varInfo.type.isArray())
+        && varInfo.file_rep_type != ProglangType.HASHCODE) {
       Stack<Boolean> inArrayIndex = new Stack<Boolean>();
       inArrayIndex.push(Boolean.FALSE);
       NodeToken[] tokens = TokenExtractor.extractTokens(condition);
@@ -776,8 +800,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
           inArrayIndex.push(Boolean.FALSE);
         } else if (tokens[i].kind == RPAREN) {
           inArrayIndex.pop();
-        } else if (inArrayIndex.peek().booleanValue() &&
-                   tokens[i].tokenImage.equals(name)) {
+        } else if (inArrayIndex.peek().booleanValue() && tokens[i].tokenImage.equals(name)) {
           if (type.equals("int") || type.equals("int_index")) {
             // Note the type can only equal "int_index" if the variable
             // was already visited by this if statement since it appears

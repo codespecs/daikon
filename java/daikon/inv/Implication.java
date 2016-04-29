@@ -2,10 +2,8 @@ package daikon.inv;
 
 import daikon.*;
 import daikon.split.PptSplitter;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
-
+import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
@@ -14,6 +12,7 @@ import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
+import typequals.*;
 */
 
 // Here Implication is reimplemented as an extension of the new general
@@ -24,9 +23,7 @@ import org.checkerframework.dataflow.qual.*;
  * handle invariants that are only true when certain other conditions are
  * also true (splitting).
  **/
-public class Implication
-  extends Joiner
-{
+public class Implication extends Joiner {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -43,17 +40,28 @@ public class Implication
    *  Or, right itself if right is a DummyInvariant from a splitter file.  */
   private Invariant orig_right;
 
-  public Invariant predicate() { return left; }
-  public Invariant consequent() { return right; }
+  public Invariant predicate() {
+    return left;
+  }
+
+  public Invariant consequent() {
+    return right;
+  }
+
   public boolean iff;
 
-  protected Implication(PptSlice ppt, Invariant predicate, Invariant consequent,
-                        boolean iff, Invariant orig_predicate, Invariant orig_consequent) {
+  protected Implication(
+      PptSlice ppt,
+      Invariant predicate,
+      Invariant consequent,
+      boolean iff,
+      Invariant orig_predicate,
+      Invariant orig_consequent) {
     super(ppt, predicate, consequent);
-    assert(predicate != null);
-    assert(consequent != null);
-    assert(orig_predicate != null);
-    assert(orig_consequent != null);
+    assert (predicate != null);
+    assert (consequent != null);
+    assert (orig_predicate != null);
+    assert (orig_consequent != null);
     this.iff = iff;
     this.orig_left = orig_predicate;
     this.orig_right = orig_consequent;
@@ -65,20 +73,22 @@ public class Implication
    * @return null if predicate and the consequent are the same, or if
    * the PptTopLevel already contains this Implication.
    **/
-  public static /*@Nullable*/ Implication makeImplication(PptTopLevel ppt,
-                                             Invariant predicate,
-                                             Invariant consequent,
-                                             boolean iff,
-                                             Invariant orig_predicate,
-                                             Invariant orig_consequent) {
+  public static /*@Nullable*/ Implication makeImplication(
+      PptTopLevel ppt,
+      Invariant predicate,
+      Invariant consequent,
+      boolean iff,
+      Invariant orig_predicate,
+      Invariant orig_consequent) {
     if (predicate.isSameInvariant(consequent)) {
-      PptSplitter.debug.fine ("Not creating implication (pred==conseq): " + predicate +
-                              " ==> " + consequent);
+      PptSplitter.debug.fine(
+          "Not creating implication (pred==conseq): " + predicate + " ==> " + consequent);
       return null;
     }
 
-    Implication result = new Implication(ppt.joiner_view, predicate, consequent, iff,
-                                         orig_predicate, orig_consequent);
+    Implication result =
+        new Implication(
+            ppt.joiner_view, predicate, consequent, iff, orig_predicate, orig_consequent);
 
     // Don't add this Implication to the program point if the program
     // point already has this implication.
@@ -86,28 +96,24 @@ public class Implication
       return null;
     }
 
-    if (PptSplitter.debug.isLoggable (Level.FINE))
-      PptSplitter.debug.fine ("Creating implication " + predicate + " ==> "
-                            + consequent);
+    if (PptSplitter.debug.isLoggable(Level.FINE))
+      PptSplitter.debug.fine("Creating implication " + predicate + " ==> " + consequent);
     return result;
   }
 
   protected double computeConfidence() {
     double pred_conf = orig_left.computeConfidence();
     double cons_conf = orig_right.computeConfidence();
-    if ((pred_conf == CONFIDENCE_NEVER)
-        || (cons_conf == CONFIDENCE_NEVER)) {
+    if ((pred_conf == CONFIDENCE_NEVER) || (cons_conf == CONFIDENCE_NEVER)) {
       return CONFIDENCE_NEVER;
     }
     double result = confidence_and(pred_conf, cons_conf);
-    log ("Confidence %s %s/%s for %s",
-         result, pred_conf, cons_conf, format());
+    log("Confidence %s %s/%s for %s", result, pred_conf, cons_conf, format());
     return result;
   }
 
   public String repr(/*>>>@GuardSatisfied Implication this*/) {
-    return "[Implication: " + left.repr()
-      + " => " + right.repr() + "]";
+    return "[Implication: " + left.repr() + " => " + right.repr() + "]";
   }
 
   /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied Implication this,*/ OutputFormat format) {
@@ -126,18 +132,18 @@ public class Implication
       String cmp = (iff ? "IFF" : "IMPLIES");
       return "(" + cmp + " " + pred_fmt + " " + consq_fmt + ")";
     } else if (format == OutputFormat.DBCJAVA) {
-      if ( iff )
+      if (iff) {
         return "((" + pred_fmt + ") == (" + consq_fmt + "))";
-      else
+      } else {
         return "(" + pred_fmt + " $implies " + consq_fmt + ")";
+      }
     } else if (format == OutputFormat.CSHARPCONTRACT) {
-      if ( iff )
+      if (iff) {
         return "(" + pred_fmt + ") == (" + consq_fmt + ")";
-      else
+      } else {
         return "(" + pred_fmt + ").Implies(" + consq_fmt + ")";
-    }
-
-    else {
+      }
+    } else {
       return format_unimplemented(format);
     }
   }
@@ -145,25 +151,26 @@ public class Implication
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     assert vis.length > 0;
-    for (int ii = 0; ii < vis.length; ii++ )
+    for (int ii = 0; ii < vis.length; ii++) {
       assert vis[ii] != null;
+    }
     return orig_right.isObviousStatically(vis);
   }
 
   /*@Pure*/
-  public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     assert vis.length > 0;
-    for (int ii = 0; ii < vis.length; ii++ )
+    for (int ii = 0; ii < vis.length; ii++) {
       assert vis[ii] != null;
-    DiscardInfo di = orig_right.isObviousDynamically (vis);
+    }
+    DiscardInfo di = orig_right.isObviousDynamically(vis);
     if (di != null) {
-      log ("failed isObviousDynamically with vis = %s", VarInfo.arrayToString (vis));
+      log("failed isObviousDynamically with vis = %s", VarInfo.arrayToString(vis));
       return (di);
     }
 
     return (null);
   }
-
 
   /**
    * Return true if the right side of the implication and some
@@ -182,13 +189,13 @@ public class Implication
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     return orig_right.isObviousStatically_SomeInEquality();
-//     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
-//     if (result != null) return result;
-//     assert orig_right.ppt.var_infos.length > 0;
-//     for (int ii = 0; ii < orig_right.ppt.var_infos.length; ii++ )
-//       assert orig_right.ppt.var_infos[ii] != null;
-//     return isObviousStatically_SomeInEqualityHelper (orig_right.ppt.var_infos,
-//                      new VarInfo[orig_right.ppt.var_infos.length], 0);
+    //     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
+    //     if (result != null) return result;
+    //     assert orig_right.ppt.var_infos.length > 0;
+    //     for (int ii = 0; ii < orig_right.ppt.var_infos.length; ii++ )
+    //       assert orig_right.ppt.var_infos[ii] != null;
+    //     return isObviousStatically_SomeInEqualityHelper (orig_right.ppt.var_infos,
+    //                      new VarInfo[orig_right.ppt.var_infos.length], 0);
   }
 
   /**
@@ -215,31 +222,27 @@ public class Implication
     // created, but somehow that creates other implications.  See the
     // disabled code in PptSplitter.add_implication()
     if (orig_right.is_ni_suppressed())
-      return (new DiscardInfo (this, DiscardCode.obvious, "consequent "
-                               + orig_right.format() + " is ni suppressed"));
+      return (new DiscardInfo(
+          this, DiscardCode.obvious, "consequent " + orig_right.format() + " is ni suppressed"));
 
     return orig_right.isObviousDynamically_SomeInEquality();
-//     DiscardInfo result = isObviousDynamically (orig_right.ppt.var_infos);
-//     if (result != null)
-//       return result;
-//     return isObviousDynamically_SomeInEqualityHelper (orig_right.ppt.var_infos,
-//                                  new VarInfo[right.ppt.var_infos.length], 0);
+    //     DiscardInfo result = isObviousDynamically (orig_right.ppt.var_infos);
+    //     if (result != null)
+    //       return result;
+    //     return isObviousDynamically_SomeInEqualityHelper (orig_right.ppt.var_infos,
+    //                                  new VarInfo[right.ppt.var_infos.length], 0);
   }
 
   /*@Pure*/ public boolean isSameFormula(/*@NonNull*/ Invariant other) {
-    Implication other_implic = (Implication)other;
-    return ((iff == other_implic.iff)
-            && super.isSameFormula(other_implic));
+    Implication other_implic = (Implication) other;
+    return ((iff == other_implic.iff) && super.isSameFormula(other_implic));
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/ public boolean isSameInvariant(Invariant other) {
-    if (other == null)
-      return false;
-    if (! (other instanceof Implication))
-      return false;
-    if (iff != ((Implication)other).iff)
-      return false;
+    if (other == null) return false;
+    if (!(other instanceof Implication)) return false;
+    if (iff != ((Implication) other).iff) return false;
     return super.isSameInvariant(other);
   }
 
@@ -265,32 +268,60 @@ public class Implication
    * VarInfo[], String)}.  Uses the consequent as the logger.
    */
   @Override
-  public void log (/*NOT: @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ Logger log, String msg) {
+  public void log(
+      /*NOT: @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ Logger
+          log,
+      String msg) {
 
-    right.log (log, msg + "[for implication " + format() + " ("
-               + (orig_right == null ? "null" : orig_right.format()) + ")]");
+    right.log(
+        log,
+        msg
+            + "[for implication "
+            + format()
+            + " ("
+            + (orig_right == null ? "null" : orig_right.format())
+            + ")]");
   }
 
-
- /**
-  * Logs a description of the invariant and the specified msg via the
-  * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
-  * VarInfo[], String)}.  Uses the consequent as the logger
-  *
-  * @return whether or not it logged anything
-  */
+  /**
+   * Logs a description of the invariant and the specified msg via the
+   * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+   * VarInfo[], String)}.  Uses the consequent as the logger
+   *
+   * @return whether or not it logged anything
+   */
   @Override
   /*@FormatMethod*/
-  @SuppressWarnings({"override.receiver.invalid", // sound overriding, not expressible in Checker Framework
-        "method.invocation.invalid", // call to format is OK
-        "formatter"}) // call to format method is correct because of @FormatMethod annotation
-  public boolean log (/*>>>@UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ String format, /*@Nullable*/ Object... args) {
+  @SuppressWarnings({
+    "override.receiver.invalid", // sound overriding, not expressible in Checker Framework
+    "method.invocation.invalid", // call to format is OK
+    "formatter"
+  }) // call to format method is correct because of @FormatMethod annotation
+  public boolean log(
+      /*>>>@UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ String
+          format,
+      /*@Nullable*/ Object... args) {
     String msg = format;
-    if (args.length > 0)
-      msg = String.format (format, args);
-    return (right.log (msg + " [for implication " + format() + " ("
-               + (orig_right == null ? "null" : orig_right.format()) + ")]"));
+    if (args.length > 0) msg = String.format(format, args);
+    return (right.log(
+        msg
+            + " [for implication "
+            + format()
+            + " ("
+            + (orig_right == null ? "null" : orig_right.format())
+            + ")]"));
   }
 
+  public boolean enabled(/*>>> @Prototype Implication this*/) {
+    throw new Error("do not invoke " + getClass() + ".enabled()");
+  }
 
+  public boolean valid_types(/*>>> @Prototype Implication this,*/ VarInfo[] vis) {
+    throw new Error("do not invoke " + getClass() + ".valid_types()");
+  }
+
+  protected /*@NonPrototype*/ Invariant instantiate_dyn(
+      /*>>> @Prototype Implication this,*/ PptSlice slice) {
+    throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
+  }
 }

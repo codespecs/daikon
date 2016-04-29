@@ -1,20 +1,18 @@
 
 package daikon.dcomp;
 
+import daikon.DynComp;
+import daikon.util.Option;
+import daikon.util.Options;
 import java.io.*;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipException;
-
+import org.apache.commons.bcel6.*;
 import org.apache.commons.bcel6.classfile.ClassParser;
 import org.apache.commons.bcel6.classfile.JavaClass;
 import org.apache.commons.bcel6.generic.*;
-import org.apache.commons.bcel6.*;
-
-import daikon.DynComp;
-import daikon.util.Option;
-import daikon.util.Options;
 
 /**
  * Converts each file in the JDK.  Each method is doubled.  The new methods
@@ -24,12 +22,13 @@ import daikon.util.Options;
  */
 public class BuildJDK {
 
-  @Option("Instrument the given classfiles from the specified source directory (by default, src must be a jar file)")
+  @Option(
+      "Instrument the given classfiles from the specified source directory (by default, src must be a jar file)")
   public static boolean classfiles = false;
 
   /** Synopsis for the dcomp command line **/
-  public static final String synopsis
-    = "daikon.BuildJDK [options] src dest [class_prefix | classfiles...]";
+  public static final String synopsis =
+      "daikon.BuildJDK [options] src dest [class_prefix | classfiles...]";
 
   /**
    * Given an explicit rt.jar filename, or a root JDK or JRE directory, finds
@@ -55,8 +54,7 @@ public class BuildJDK {
       if (!arg.endsWith("jar")) {
         for (String candidate : spaceSeparatedJarLocations.split(" ")) {
           String rt = jarFilename + candidate;
-          if (exists(rt))
-            return rt;
+          if (exists(rt)) return rt;
         }
       }
       return jarFilename;
@@ -86,31 +84,31 @@ public class BuildJDK {
   private static List<String> skipped_methods = new ArrayList<String>();
 
   public static String[] known_skipped_methods = new String[] {
-      /*
-      "sun.rmi.transport.proxy.RMIMasterSocketFactory.createSocket",
-      "sun.awt.X11.XWindowPeer.handleButtonPressRelease",
-      "com.sun.jmx.snmp.daemon.CommunicatorServer.run",
-      "sun.nio.ch.SocketChannelImpl.read0",
-      "sun.nio.ch.SocketChannelImpl.read",
-      "sun.rmi.transport.proxy.RMIMasterSocketFactory.createSocket",
-      "java.nio.channels.SocketChannel.open",
-      "sun.security.provider.PolicyFile.init",
-      "java.io.Console.readPassword",
-      "sun.tools.jps.Jps.main",
-      "sun.net.www.MimeTable.saveAsProperties",
-      "sun.misc.Service.parse",
-      "sun.font.Type1Font.readFile",
-      "sun.misc.Resource.getBytes",
-      "java.util.ServiceLoader.parse",
-      "sun.jkernel.Bundle.loadReceipts",
-      "sun.nio.ch.PipeImpl$Initializer.run",
-      "com.sun.tools.javac.jvm.ClassReader.readInputStream",
-      "com.sun.tools.javac.processing.ServiceProxy.parse",
-      "com.sun.tools.javac.zip.ZipFileIndex$DirectoryEntry.initEntries",
-      "com.sun.tools.javac.zip.ZipFileIndex.readIndex",
-      "com.sun.tools.javac.zip.ZipFileIndex.writeIndex",
-      */
-  };
+        /*
+        "sun.rmi.transport.proxy.RMIMasterSocketFactory.createSocket",
+        "sun.awt.X11.XWindowPeer.handleButtonPressRelease",
+        "com.sun.jmx.snmp.daemon.CommunicatorServer.run",
+        "sun.nio.ch.SocketChannelImpl.read0",
+        "sun.nio.ch.SocketChannelImpl.read",
+        "sun.rmi.transport.proxy.RMIMasterSocketFactory.createSocket",
+        "java.nio.channels.SocketChannel.open",
+        "sun.security.provider.PolicyFile.init",
+        "java.io.Console.readPassword",
+        "sun.tools.jps.Jps.main",
+        "sun.net.www.MimeTable.saveAsProperties",
+        "sun.misc.Service.parse",
+        "sun.font.Type1Font.readFile",
+        "sun.misc.Resource.getBytes",
+        "java.util.ServiceLoader.parse",
+        "sun.jkernel.Bundle.loadReceipts",
+        "sun.nio.ch.PipeImpl$Initializer.run",
+        "com.sun.tools.javac.jvm.ClassReader.readInputStream",
+        "com.sun.tools.javac.processing.ServiceProxy.parse",
+        "com.sun.tools.javac.zip.ZipFileIndex$DirectoryEntry.initEntries",
+        "com.sun.tools.javac.zip.ZipFileIndex.readIndex",
+        "com.sun.tools.javac.zip.ZipFileIndex.writeIndex",
+        */
+      };
 
   /**
    * Invoke as:
@@ -128,12 +126,11 @@ public class BuildJDK {
 
     System.out.println("Starting at " + new Date());
 
-    Options options = new Options (synopsis, BuildJDK.class, DynComp.class);
+    Options options = new Options(synopsis, BuildJDK.class, DynComp.class);
     // options.ignore_options_after_arg (true);
-    String[] cl_args = options.parse_or_usage (args);
+    String[] cl_args = options.parse_or_usage(args);
     boolean ok = check_args(options, cl_args);
-    if (!ok)
-      System.exit(1);
+    if (!ok) System.exit(1);
     verbose = DynComp.verbose;
 
     if (classfiles) {
@@ -141,37 +138,36 @@ public class BuildJDK {
       // Arguments are <srcdir> <destdir> <classfiles>...
       File src_dir = new File(cl_args[0]);
       File dest_dir = new File(cl_args[1]);
-      File[] class_files = new File[cl_args.length-2];
+      File[] class_files = new File[cl_args.length - 2];
       for (int ii = 2; ii < cl_args.length; ii++) {
-        class_files[ii-2] = new File(cl_args[ii]);
+        class_files[ii - 2] = new File(cl_args[ii]);
       }
 
       BuildJDK build = new BuildJDK();
 
       // Restore the static map from field names to ids
-      DCInstrument.restore_static_map (new File (dest_dir, static_map_fname));
-      System.out.printf ("Restored %d entries in static map%n",
-                         DCInstrument.static_map.size());
+      DCInstrument.restore_static_map(new File(dest_dir, static_map_fname));
+      System.out.printf("Restored %d entries in static map%n", DCInstrument.static_map.size());
 
       // Read in each specified classfile
       Map<String, JavaClass> classmap = new LinkedHashMap<String, JavaClass>();
       for (File class_file : class_files) {
-        if (class_file.toString().endsWith ("java/lang/Object.class")) {
-          System.out.printf ("Skipping %s%n", class_file);
+        if (class_file.toString().endsWith("java/lang/Object.class")) {
+          System.out.printf("Skipping %s%n", class_file);
           continue;
         }
-        ClassParser parser = new ClassParser (class_file.toString());
+        ClassParser parser = new ClassParser(class_file.toString());
         JavaClass jc = parser.parse();
-        classmap.put (jc.getClassName(), jc);
+        classmap.put(jc.getClassName(), jc);
       }
 
       // Process each classfile
       for (String classname : classmap.keySet()) {
-        JavaClass jc = classmap.get (classname);
+        JavaClass jc = classmap.get(classname);
         try {
           build.processClassFile(classmap, dest_dir, classname);
         } catch (Throwable e) {
-          throw new Error ("Couldn't instrument " + classname, e);
+          throw new Error("Couldn't instrument " + classname, e);
         }
       }
 
@@ -190,23 +186,22 @@ public class BuildJDK {
       // build.dump_helper_classes(dest_dir);
 
       // Write out the static map
-      System.out.printf ("Found %d statics%n", DCInstrument.static_map.size());
-      DCInstrument.save_static_map (new File (dest_dir, static_map_fname));
+      System.out.printf("Found %d statics%n", DCInstrument.static_map.size());
+      DCInstrument.save_static_map(new File(dest_dir, static_map_fname));
 
       // Write out the list of all classes in the jar file
-      File jdk_classes_dir = new File (dest_dir, "java/lang");
-      File jdk_classes_file = new File (jdk_classes_dir, "jdk_classes.txt");
-      PrintWriter pw = new PrintWriter (jdk_classes_file);
-      System.out.printf ("Writing all classes to %s%n", jdk_classes_file);
+      File jdk_classes_dir = new File(dest_dir, "java/lang");
+      File jdk_classes_file = new File(jdk_classes_dir, "jdk_classes.txt");
+      PrintWriter pw = new PrintWriter(jdk_classes_file);
+      System.out.printf("Writing all classes to %s%n", jdk_classes_file);
       for (String classname : all_classes) {
-        pw.println (classname);
+        pw.println(classname);
       }
       pw.flush();
       pw.close();
 
       // Print out any methods that could not be instrumented
       print_skipped_methods();
-
     }
     System.out.println("done at " + new Date());
   }
@@ -215,39 +210,37 @@ public class BuildJDK {
    * Check the resulting arguments for legality.  Prints a message and
    * Returns false if there was an error
    */
-  public static boolean check_args (Options options, String[] target_args) {
+  public static boolean check_args(Options options, String[] target_args) {
 
     if (classfiles) {
       if (target_args.length < 2) {
-        options.print_usage ("must specify source jar and destination dir");
-        return (false);
+        options.print_usage("must specify source jar and destination dir");
+        return false;
       }
       if (target_args.length < 3) {
-        options.print_usage ("must specify classfiles to instrument");
-        return (false);
+        options.print_usage("must specify classfiles to instrument");
+        return false;
       }
     } else {
       if (target_args.length < 2) {
-        options.print_usage ("must specify source jar and destination dir");
-        return (false);
+        options.print_usage("must specify source jar and destination dir");
+        return false;
       }
       if (target_args.length > 3) {
-        options.print_usage ("too many arguments");
-        return (false);
+        options.print_usage("too many arguments");
+        return false;
       }
     }
 
-    return (true);
-
+    return true;
   }
 
-  private static JarFile getJarFile(String potentialJarFileName)
-      throws IOException, ZipException {
+  private static JarFile getJarFile(String potentialJarFileName) throws IOException, ZipException {
     JarFile jfile;
     final String p = potentialJarFileName;
     try {
       String jar_name = findRtJarFilename(p);
-      System.out.printf ("using jar file %s\n", jar_name);
+      System.out.printf("using jar file %s\n", jar_name);
       jfile = new JarFile(jar_name);
     } catch (ZipException e) {
       throw new ZipException(e.getMessage() + "; filename was " + p);
@@ -269,8 +262,8 @@ public class BuildJDK {
     fos.close();
   }
 
-  void translate_classes(JarFile jfile, String dest, String prefix,
-      String prefixOfFilesToInclude) throws java.io.IOException {
+  void translate_classes(JarFile jfile, String dest, String prefix, String prefixOfFilesToInclude)
+      throws java.io.IOException {
 
     // Map from classname to class so we can find out information about
     // classes we have not yet instrumented.
@@ -288,30 +281,24 @@ public class BuildJDK {
         JarEntry entry = entries.nextElement();
         // System.out.printf ("processing entry %s%n", entry);
         final String entryName = entry.getName();
-        if (!entryName.startsWith(prefixOfFilesToInclude)
-            && !entryName.startsWith("META-INF"))
+        if (!entryName.startsWith(prefixOfFilesToInclude) && !entryName.startsWith("META-INF"))
           continue;
-        if (entryName.endsWith("/"))
-          continue;
-        if (entryName.endsWith("~"))
-          continue;
-        if (entryName.endsWith (".class"))
-          all_classes.add (entryName.replace (".class", ""));
+        if (entryName.endsWith("/")) continue;
+        if (entryName.endsWith("~")) continue;
+        if (entryName.endsWith(".class")) all_classes.add(entryName.replace(".class", ""));
         if (!entryName.endsWith(".class")
             || (skip_object && entryName.equals("java/lang/Object.class"))
-            || (!prefix.equals ("") && !entryName.startsWith (prefix))) {
+            || (!prefix.equals("") && !entryName.startsWith(prefix))) {
           File destfile = new File(entryName);
           if (destfile.getParent() == null) {
-            System.out.printf ("Skipping file %s%n", destfile);
+            System.out.printf("Skipping file %s%n", destfile);
             continue;
           }
           File dir = new File(dfile, destfile.getParent());
           dir.mkdirs();
           File destpath = new File(dir, destfile.getName());
-          if (verbose)
-            System.out.println("Copying Object or non-classfile: " + destpath);
-          copyStreams(jfile.getInputStream(entry), new FileOutputStream(
-              destpath));
+          if (verbose) System.out.println("Copying Object or non-classfile: " + destpath);
+          copyStreams(jfile.getInputStream(entry), new FileOutputStream(destpath));
           continue;
         }
 
@@ -322,24 +309,23 @@ public class BuildJDK {
           ClassParser parser = new ClassParser(is, entryName);
           jc = parser.parse();
         } catch (Exception e) {
-          throw new Error ("Failed to parse entry " + entry, e);
+          throw new Error("Failed to parse entry " + entry, e);
         }
         classmap.put(jc.getClassName(), jc);
       }
 
       if (false) {
-        processClassFile (classmap, dfile,
-                          "sun.rmi.registry.RegistryImpl_Skel");
+        processClassFile(classmap, dfile, "sun.rmi.registry.RegistryImpl_Skel");
         System.exit(0);
       }
 
       // Process each file read.
       for (String classname : classmap.keySet()) {
-        JavaClass jc = classmap.get (classname);
+        JavaClass jc = classmap.get(classname);
         if (test_stack) {
-          System.out.printf ("Testing class %s%n", classname);
+          System.out.printf("Testing class %s%n", classname);
           try {
-            TypeStack.testJavaClass (jc);
+            TypeStack.testJavaClass(jc);
           } catch (Throwable t) {
             t.printStackTrace();
           }
@@ -348,16 +334,23 @@ public class BuildJDK {
         try {
           processClassFile(classmap, dfile, classname);
         } catch (Throwable e) {
-          throw new Error ("Couldn't instrument " + classname, e);
+          throw new Error("Couldn't instrument " + classname, e);
         }
       }
 
       // Create the DcompMarker class (used to identify instrumented calls)
-      ClassGen dcomp_marker = new ClassGen("java.lang.DCompMarker",
-        "java.lang.Object", "DCompMarker.class", Const.ACC_INTERFACE
-        | Const.ACC_PUBLIC | Const.ACC_ABSTRACT, new String[0]);
-      dcomp_marker.getJavaClass().dump (new File(dest, "java"
-         + File.separator + "lang" + File.separator + "DCompMarker.class"));
+      ClassGen dcomp_marker =
+          new ClassGen(
+              "java.lang.DCompMarker",
+              "java.lang.Object",
+              "DCompMarker.class",
+              Const.ACC_INTERFACE | Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
+              new String[0]);
+      dcomp_marker
+          .getJavaClass()
+          .dump(
+              new File(
+                  dest, "java" + File.separator + "lang" + File.separator + "DCompMarker.class"));
 
     } catch (Exception e) {
       throw new Error(e);
@@ -369,18 +362,18 @@ public class BuildJDK {
    * found.  Writes the resulting class to its corresponding location
    * in the directory dfile.
    **/
-  private void processClassFile(Map<String, JavaClass> classmap, File dfile,
-                                String classname) throws java.io.IOException {
-    if (verbose)
-      System.out.printf("processing target %s\n", classname);
+  private void processClassFile(Map<String, JavaClass> classmap, File dfile, String classname)
+      throws java.io.IOException {
+    if (verbose) System.out.printf("processing target %s\n", classname);
     JavaClass jc = classmap.get(classname);
     assert jc != null : "@AssumeAssertion(nullness): seems to be non-null";
-    DCInstrument dci = new DCInstrument (jc, true, null);
+    DCInstrument dci = new DCInstrument(jc, true, null);
     JavaClass inst_jc;
-    if (DynComp.no_primitives)
+    if (DynComp.no_primitives) {
       inst_jc = dci.instrument_jdk_refs_only();
-    else
+    } else {
       inst_jc = dci.instrument_jdk();
+    }
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classname.replace('.', '/') + ".class");
     File dir;
@@ -391,39 +384,37 @@ public class BuildJDK {
     }
     dir.mkdirs();
     File classpath = new File(dir, classfile.getName());
-    inst_jc.dump (classpath);
+    inst_jc.dump(classpath);
     _numFilesProcessed++;
     if ((_numFilesProcessed % 100) == 0)
-      System.out.printf("Processed %d/%d classes at %tc%n",
-          _numFilesProcessed, classmap.size(), new Date());
+      System.out.printf(
+          "Processed %d/%d classes at %tc%n", _numFilesProcessed, classmap.size(), new Date());
   }
 
   /** Copy our various helper classes to java/lang **/
-  private void dump_helper_classes (String dest) throws java.io.IOException {
+  private void dump_helper_classes(String dest) throws java.io.IOException {
 
-    File dir = new File (dest, "java" + File.separator + "lang");
+    File dir = new File(dest, "java" + File.separator + "lang");
 
-    ClassParser parser = new ClassParser ("bin/java/lang/ArrayAccessors.class");
+    ClassParser parser = new ClassParser("bin/java/lang/ArrayAccessors.class");
     JavaClass jc = parser.parse();
-    jc.dump (new File (dir, "ArrayAccessors.class"));
+    jc.dump(new File(dir, "ArrayAccessors.class"));
 
     parser = new ClassParser("bin/java/lang/GenericInterface.class");
     jc = parser.parse();
-    jc.dump (new File (dir, "GenericInterface.class"));
+    jc.dump(new File(dir, "GenericInterface.class"));
 
     parser = new ClassParser("bin/java/lang/ObjectHelper.class");
     jc = parser.parse();
-    jc.dump (new File (dir, "ObjectHelper.class"));
+    jc.dump(new File(dir, "ObjectHelper.class"));
 
     parser = new ClassParser("bin/java/lang/StaticInterface.class");
     jc = parser.parse();
-    jc.dump (new File (dir, "StaticInterface.class"));
-
+    jc.dump(new File(dir, "StaticInterface.class"));
   }
 
   private List<String> classesWithoutInterfaces() {
-    return Arrays.<String>asList("java.lang.Object", "java.lang.String",
-                         "java.lang.Class");
+    return Arrays.<String>asList("java.lang.Object", "java.lang.String", "java.lang.Class");
   }
 
   /**
@@ -435,7 +426,7 @@ public class BuildJDK {
   private static void print_skipped_methods() {
 
     if (skipped_methods.isEmpty()) {
-      System.out.printf ("No methods were skipped.%n");
+      System.out.printf("No methods were skipped.%n");
       return;
     }
 
@@ -443,34 +434,35 @@ public class BuildJDK {
     List<String> known_bad_list = Arrays.asList(known_skipped_methods);
     boolean all_known = true;
     for (String method : skipped_methods) {
-      if (!known_bad_list.contains (method)) {
+      if (!known_bad_list.contains(method)) {
         all_known = false;
         break;
       }
     }
 
     if (all_known) {
-      System.out.printf
-        ("Warning, the following JDK methods could not be instrumented.%n"
-         + "These are known problems.  DynComp will still work as long as%n"
-         + "these methods are not called by your applications.%n"
-         + "If your application calls one, it will throw a NoSuchMethodException.%n");
+      System.out.printf(
+          "Warning, the following JDK methods could not be instrumented.%n"
+              + "These are known problems.  DynComp will still work as long as%n"
+              + "these methods are not called by your applications.%n"
+              + "If your application calls one, it will throw a NoSuchMethodException.%n");
       for (String method : skipped_methods) {
-        System.out.printf ("  %s%n", method);
+        System.out.printf("  %s%n", method);
       }
     } else { // some methods have not been previously seen
-      System.out.printf
-        ("Warning: the following JDK methods could not be instrumented.%n"
-         + "Please report any line that starts with [unexpected] so we can look into them.%n"
-         + "Please give sufficient details; see \"Reporting problems\" in the Daikon manual.%n"
-         + "DynComp will still work as long as these methods are not called%n"
-         + "by your applications.%n"
-         + "If your application calls one, it will throw a NoSuchMethodException.%n");
+      System.out.printf(
+          "Warning: the following JDK methods could not be instrumented.%n"
+              + "Please report any line that starts with [unexpected] so we can look into them.%n"
+              + "Please give sufficient details; see \"Reporting problems\" in the Daikon manual.%n"
+              + "DynComp will still work as long as these methods are not called%n"
+              + "by your applications.%n"
+              + "If your application calls one, it will throw a NoSuchMethodException.%n");
       for (String method : skipped_methods) {
-        if (known_bad_list.contains (method))
-          System.out.printf ("  %s%n", method);
-        else
-          System.out.printf ("  [unexpected] %s%n", method);
+        if (known_bad_list.contains(method)) {
+          System.out.printf("  %s%n", method);
+        } else {
+          System.out.printf("  [unexpected] %s%n", method);
+        }
       }
     }
   }

@@ -17,7 +17,7 @@ class ReplaceStatementMap {
   /**
    * Contains the ReplaceStatements of this, indexed by their names
    */
-  private Map<String,ReplaceStatement> map;
+  private Map<String, ReplaceStatement> map;
 
   /**
    * Creates a new instance of ReplaceStatementMap of the replaceStatements
@@ -26,7 +26,7 @@ class ReplaceStatementMap {
    *  the ReplaceStatements of this.
    */
   ReplaceStatementMap(List<ReplaceStatement> replaceStatements) {
-    map = new HashMap<String,ReplaceStatement>();
+    map = new HashMap<String, ReplaceStatement>();
     for (ReplaceStatement replaceStatement : replaceStatements) {
       map.put(replaceStatement.getName(), replaceStatement);
     }
@@ -63,5 +63,4 @@ class ReplaceStatementMap {
   /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ReplaceStatementMap this*/) {
     return map.toString();
   }
-
 }

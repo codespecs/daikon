@@ -20,6 +20,5 @@ public class DepthFirstVisitor implements Visitor {
     }
   }
 
-  public void visit(InvNode node) { }
-
+  public void visit(InvNode node) {}
 }

@@ -1,9 +1,9 @@
 package daikon.split;
 
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
 import daikon.tools.jtb.*;
 import jtb.ParseException;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
 
 /**
  * NullReplacer is a jtb syntax tree visitor that replaces all instances
@@ -12,7 +12,6 @@ import jtb.ParseException;
  * of the string "null".
  */
 class NullReplacer extends DepthFirstVisitor {
-
 
   private int columnshift = 0;
   private int columnshiftline = -1;
@@ -35,8 +34,7 @@ class NullReplacer extends DepthFirstVisitor {
    *  instances of "0".
    * @throws ParseException if expression is not a valid java expression.
    */
-  public static String replaceNull(String expression)
-    throws ParseException {
+  public static String replaceNull(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
     NullReplacer replacer = new NullReplacer();
     root.accept(replacer);
@@ -73,5 +71,4 @@ class NullReplacer extends DepthFirstVisitor {
     }
     n.endColumn = n.endColumn + columnshift;
   }
-
 }

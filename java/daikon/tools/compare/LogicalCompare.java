@@ -1,9 +1,7 @@
 package daikon.tools.compare;
 
-import java.util.*;
-import java.util.logging.Logger;
-import java.io.*;
-import plume.UtilMDE;
+import static daikon.tools.nullness.NullnessUtils.*;
+
 import daikon.*;
 import daikon.config.Configuration;
 import daikon.inv.*;
@@ -13,8 +11,10 @@ import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.string.*;
 import daikon.simplify.*;
 import gnu.getopt.*;
-
-import static daikon.tools.nullness.NullnessUtils.*;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Logger;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -32,65 +32,65 @@ import org.checkerframework.checker.nullness.qual.*;
  * implied by some combination of test postconditions and application
  * preconditions.
  **/
-
 public class LogicalCompare {
-  private LogicalCompare() { throw new Error("do not instantiate"); }
+  private LogicalCompare() {
+    throw new Error("do not instantiate");
+  }
 
   public static final Logger debug = Logger.getLogger("daikon.tools.compare.LogicalCompare");
 
   // Options corresponding to command-line flags
-  private static boolean opt_proofs         = false;
-  private static boolean opt_show_count     = false;
-  private static boolean opt_show_formulas  = false;
-  private static boolean opt_show_valid     = false;
+  private static boolean opt_proofs = false;
+  private static boolean opt_show_count = false;
+  private static boolean opt_show_formulas = false;
+  private static boolean opt_show_valid = false;
   private static boolean opt_post_after_pre = true;
-  private static boolean opt_timing         = false;
-  private static boolean opt_show_sets      = false;
+  private static boolean opt_timing = false;
+  private static boolean opt_show_sets = false;
   private static boolean opt_minimize_classes = false;
 
   // TODO: both of these fields should be instance fields and the main
   // method should create an instance.
 
   // key = ppt name
-  private static /*@MonotonicNonNull*/ Map<String,Vector<Lemma>> extra_assumptions;
+  private static /*@MonotonicNonNull*/ Map<String, Vector<Lemma>> extra_assumptions;
 
   private static /*@MonotonicNonNull*/ LemmaStack lemmas;
 
   private static String usage =
-    UtilMDE.joinLines(
-      "Usage: java daikon.tools.compare.LogicalCompare [options ...]",
-      "           WEAK-INVS STRONG-INVS [ENTER-PPT [EXIT-PPT]]",
-      "  -h, --" + Daikon.help_SWITCH,
-      "      Display this usage message",
-      "  --config-file FILE",
-      "      Read configuration option file",
-      "  --config_option OPTION=VALUE",
-      "      Set individual configuration option",
-      "  --" + Daikon.debugAll_SWITCH,
-      "      Turns on all debug flags (voluminous output)",
-      "  --" + Daikon.debug_SWITCH + " logger",
-      "      Turns on the specified debug logger",
-      "  --proofs",
-      "      Show minimal sufficient conditions for valid invariants",
-      "  --show-count",
-      "      Print count of invariants checked",
-      "  --show-formulas",
-      "      Print Simplify representation of invariants",
-      "  --show-valid",
-      "      Show invariants that are verified as well as those that fail",
-      "  --show-sets",
-      "      Show, not test, all the invariants that would be considered",
-      "  --post-after-pre-failure",
-      "      Check postcondition match even if preconditions fail",
-      "  --no-post-after-pre-failure",
-      "      Don't check postcondition match if preconditions fail",
-      "  --timing",
-      "      Show time required to check invariants",
-      "  --filters [bBoOmjpis]",
-      "      Control which invariants are removed from consideration",
-      "  --assume FILE",
-      "      Read extra assumptions from FILE"
-      );
+      UtilMDE.joinLines(
+          "Usage: java daikon.tools.compare.LogicalCompare [options ...]",
+          "           WEAK-INVS STRONG-INVS [ENTER-PPT [EXIT-PPT]]",
+          "  -h, --" + Daikon.help_SWITCH,
+          "      Display this usage message",
+          "  --config-file FILE",
+          "      Read configuration option file",
+          "  --config_option OPTION=VALUE",
+          "      Set individual configuration option",
+          "  --" + Daikon.debugAll_SWITCH,
+          "      Turns on all debug flags (voluminous output)",
+          "  --" + Daikon.debug_SWITCH + " logger",
+          "      Turns on the specified debug logger",
+          "  --proofs",
+          "      Show minimal sufficient conditions for valid invariants",
+          "  --show-count",
+          "      Print count of invariants checked",
+          "  --show-formulas",
+          "      Print Simplify representation of invariants",
+          "  --show-valid",
+          "      Show invariants that are verified as well as those that fail",
+          "  --show-sets",
+          "      Show, not test, all the invariants that would be considered",
+          "  --post-after-pre-failure",
+          "      Check postcondition match even if preconditions fail",
+          "  --no-post-after-pre-failure",
+          "      Don't check postcondition match if preconditions fail",
+          "  --timing",
+          "      Show time required to check invariants",
+          "  --filters [bBoOmjpis]",
+          "      Control which invariants are removed from consideration",
+          "  --assume FILE",
+          "      Read extra assumptions from FILE");
 
   // Filter options
   // b        discard uninteresting-constant bounds
@@ -109,49 +109,39 @@ public class LogicalCompare {
     Vector<Invariant> new_invs = new Vector<Invariant>();
     for (Invariant inv : invs) {
       Invariant guarded_inv = inv;
-//       System.err.println("Examining " + inv.format());
-      if (inv instanceof GuardingImplication)
-        inv = ((Implication)inv).consequent();
-      if (inv instanceof LowerBound || inv instanceof UpperBound ||
-          inv instanceof EltLowerBound || inv instanceof EltUpperBound ||
-          inv instanceof LowerBoundFloat || inv instanceof UpperBoundFloat ||
-          inv instanceof EltLowerBoundFloat ||
-          inv instanceof EltUpperBoundFloat) {
-        if (filters['b'] && inv.hasUninterestingConstant())
-          continue;
-        if (filters['B'])
-          continue;
+      //       System.err.println("Examining " + inv.format());
+      if (inv instanceof GuardingImplication) inv = ((Implication) inv).consequent();
+      if (inv instanceof LowerBound
+          || inv instanceof UpperBound
+          || inv instanceof EltLowerBound
+          || inv instanceof EltUpperBound
+          || inv instanceof LowerBoundFloat
+          || inv instanceof UpperBoundFloat
+          || inv instanceof EltLowerBoundFloat
+          || inv instanceof EltUpperBoundFloat) {
+        if (filters['b'] && inv.hasUninterestingConstant()) continue;
+        if (filters['B']) continue;
       }
-      if (inv instanceof OneOf || inv instanceof OneOfString ||
-          inv instanceof OneOfFloat) {
-        if (filters['o'] && inv.hasUninterestingConstant())
-          continue;
-        if (filters['O'])
-          continue;
+      if (inv instanceof OneOf || inv instanceof OneOfString || inv instanceof OneOfFloat) {
+        if (filters['o'] && inv.hasUninterestingConstant()) continue;
+        if (filters['O']) continue;
       }
       // test used to be "(filters['m'] && inv.ppt.num_mod_samples() == 0)"
-      if (filters['m'] && inv.ppt.num_samples() == 0)
-        continue;
-      if (filters['j'] && !inv.justified())
-        continue;
-      if (filters['p'] && isPost && shouldDiscardInvariant(inv))
-        continue;
-      if (filters['i'] && !isPost && inv instanceof Implication)
-        continue;
+      if (filters['m'] && inv.ppt.num_samples() == 0) continue;
+      if (filters['j'] && !inv.justified()) continue;
+      if (filters['p'] && isPost && shouldDiscardInvariant(inv)) continue;
+      if (filters['i'] && !isPost && inv instanceof Implication) continue;
       String simp = inv.format_using(OutputFormat.SIMPLIFY);
-      if (simp.indexOf("format_simplify") != -1 ||
-          simp.indexOf("OutputFormat:Simplify") != -1 ||
-          simp.indexOf("Simplify not implemented") != -1) {
+      if (simp.indexOf("format_simplify") != -1
+          || simp.indexOf("OutputFormat:Simplify") != -1
+          || simp.indexOf("Simplify not implemented") != -1) {
         // Noisy, since we should be able to handle most invariants now
         System.out.println("Can't handle " + inv.format() + ": " + simp);
         continue;
       }
-      if (inv.format_using(OutputFormat.DAIKON)
-          .indexOf("warning: too few samples") != -1)
-        continue;
-      if (inv.isGuardingPredicate)
-        continue;
-//       System.err.println("Keeping   " + inv.format());
+      if (inv.format_using(OutputFormat.DAIKON).indexOf("warning: too few samples") != -1) continue;
+      if (inv.isGuardingPredicate) continue;
+      //       System.err.println("Keeping   " + inv.format());
       new_invs.add(guarded_inv);
     }
     return new_invs;
@@ -161,25 +151,25 @@ public class LogicalCompare {
   // the DerivedParameterFilter, with an exception for invariants
   // indicating that variables are unchanged (except that that
   // exception is currently turned off)
-  private static boolean shouldDiscardInvariant( Invariant inv ) {
+  private static boolean shouldDiscardInvariant(Invariant inv) {
     for (int i = 0; i < inv.ppt.var_infos.length; i++) {
       VarInfo vi = inv.ppt.var_infos[i];
       // ppt has to be a PptSlice, not a PptTopLevel
       if (vi.isDerivedParamAndUninteresting()) {
         // Exception: let invariants like "orig(arg) == arg" through.
-        if (IsEqualityComparison.it.accept( inv )) {
-          Comparison comp = (Comparison)inv;
+        if (IsEqualityComparison.it.accept(inv)) {
+          Comparison comp = (Comparison) inv;
           VarInfo var1 = comp.var1();
           VarInfo var2 = comp.var2();
-          boolean vars_are_same = var1.prestate_name().equals (var2.name())
-            || var2.prestate_name().equals (var1.name());
+          boolean vars_are_same =
+              var1.prestate_name().equals(var2.name()) || var2.prestate_name().equals(var1.name());
           if (vars_are_same) return false;
         }
-//         if (inv instanceof OneOf || inv instanceof OneOfString ||
-//             inv instanceof OneOfString)
-//           return false;
-//         System.err.println("Because of " + vi.name.name() + ", discarding "
-//                            + inv.format());
+        //         if (inv instanceof OneOf || inv instanceof OneOfString ||
+        //             inv instanceof OneOfString)
+        //           return false;
+        //         System.err.println("Because of " + vi.name.name() + ", discarding "
+        //                            + inv.format());
         return true;
       }
     }
@@ -202,8 +192,7 @@ public class LogicalCompare {
   private static Vector<Lemma> translateRemovePre(Vector<Invariant> invs) {
     Vector<Lemma> lems = new Vector<Lemma>();
     for (Invariant inv : invs) {
-      if (!inv.isAllPrestate())
-        lems.add(new InvariantLemma(inv));
+      if (!inv.isAllPrestate()) lems.add(new InvariantLemma(inv));
     }
     return lems;
   }
@@ -221,15 +210,15 @@ public class LogicalCompare {
     return lems;
   }
 
-//   // Print a vector of invariants and their Simplify translations, for
-//   // debugging purposes.
-//   private static void printInvariants(Vector<Invariant> invs) {
-//     for (Invariant inv : invs) {
-//       System.out.println("   " + inv.format());
-//       System.out.println("(BG_PUSH "
-//                          + inv.format_using(OutputFormat.SIMPLIFY) +")");
-//     }
-//   }
+  //   // Print a vector of invariants and their Simplify translations, for
+  //   // debugging purposes.
+  //   private static void printInvariants(Vector<Invariant> invs) {
+  //     for (Invariant inv : invs) {
+  //       System.out.println("   " + inv.format());
+  //       System.out.println("(BG_PUSH "
+  //                          + inv.format_using(OutputFormat.SIMPLIFY) +")");
+  //     }
+  //   }
 
   private static String shortName(Class<?> c) {
     String name = c.getName();
@@ -258,7 +247,8 @@ public class LogicalCompare {
         if (result == 'T' && !identical) {
           Vector<Set<Class<? extends Invariant>>> sets = lemmas.minimizeClasses(inv.formula);
           for (Set<Class<? extends Invariant>> classes : sets) {
-            @SuppressWarnings("nullness") // application invariant: context; might be able to rewrite types to make consequences a Vector<InvariantLemma>";
+            @SuppressWarnings(
+                "nullness") // application invariant: context; might be able to rewrite types to make consequences a Vector<InvariantLemma>";
             /*@NonNull*/ Class<? extends Invariant> inv_class = inv.invClass();
             System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
@@ -273,8 +263,7 @@ public class LogicalCompare {
           System.out.println(inv.summarize());
           System.out.println();
         }
-        if (true)
-          continue;
+        if (true) continue;
       }
 
       if (result == 'T') {
@@ -284,54 +273,48 @@ public class LogicalCompare {
           } else {
             Vector<Lemma> assume = lemmas.minimizeProof(inv);
             System.out.println();
-            for (Lemma lem : assume)
+            for (Lemma lem : assume) {
               System.out.println(lem.summarize());
+            }
             System.out.println("----------------------------------");
             System.out.println(inv.summarize());
             if (opt_show_formulas) {
               System.out.println();
-              for (Lemma lem : assume)
-                System.out.println("    "  + lem.formula);
-              System.out.println("    ----------------------"
-                                 + "--------------------");
+              for (Lemma lem : assume) {
+                System.out.println("    " + lem.formula);
+              }
+              System.out.println("    ----------------------" + "--------------------");
               System.out.println("    " + inv.formula);
             }
           }
         } else if (opt_show_valid) {
           System.out.print("Valid: ");
           System.out.println(inv.summary);
-          if (opt_show_formulas)
-            System.out.println("    " + inv.formula);
+          if (opt_show_formulas) System.out.println("    " + inv.formula);
         }
       } else if (result == 'F') {
         invalidCount++;
-        if (opt_proofs)
-          System.out.println();
+        if (opt_proofs) System.out.println();
         System.out.print("Invalid: ");
         System.out.println(inv.summary);
-        if (opt_show_formulas)
-          System.out.println("    " + inv.formula);
+        if (opt_show_formulas) System.out.println("    " + inv.formula);
       } else {
         assert result == '?';
-        if (opt_proofs)
-          System.out.println();
+        if (opt_proofs) System.out.println();
         System.out.print("Timeout: ");
         System.out.println(inv.summary);
-        if (opt_show_formulas)
-          System.out.println("    " + inv.formula);
+        if (opt_show_formulas) System.out.println("    " + inv.formula);
       }
     }
     return invalidCount;
   }
 
-
   // Check that each of the invariants in CONSEQUENCES follows from
   // zero or more of the invariants in ASSUMPTIONS. Returns the number
   // of invariants that can't be proven to follow.
   /*@RequiresNonNull("lemmas")*/
-  private static int evaluateImplications(Vector<Lemma> assumptions,
-                                          Vector<Lemma> consequences)
-  throws SimplifyError {
+  private static int evaluateImplications(Vector<Lemma> assumptions, Vector<Lemma> consequences)
+      throws SimplifyError {
     int mark = lemmas.markLevel();
     lemmas.pushOrdering();
     lemmas.pushLemmas(assumptions);
@@ -355,10 +338,9 @@ public class LogicalCompare {
   }
 
   /*@RequiresNonNull("lemmas")*/
-  private static int evaluateImplicationsCarefully(Vector<Lemma> safeAssumptions,
-                                                   Vector<Lemma> unsafeAssumptions,
-                                                   Vector<Lemma> consequences)
-    throws SimplifyError {
+  private static int evaluateImplicationsCarefully(
+      Vector<Lemma> safeAssumptions, Vector<Lemma> unsafeAssumptions, Vector<Lemma> consequences)
+      throws SimplifyError {
     int mark = lemmas.markLevel();
     Vector<Lemma> assumptions = new Vector<Lemma>();
     lemmas.pushOrdering();
@@ -400,7 +382,6 @@ public class LogicalCompare {
     return invalidCount;
   }
 
-
   // Initialize the theorem prover. Whichever mode we're in, we should
   // only do this once per program run.
   /*@EnsuresNonNull("lemmas")*/
@@ -416,28 +397,28 @@ public class LogicalCompare {
   // invariants is called the test invariants (from running the app on its
   // test suite).
   /*@RequiresNonNull({"extra_assumptions","lemmas"})*/
-  private static void comparePpts(PptTopLevel app_enter_ppt,
-                                  PptTopLevel test_enter_ppt,
-                                  PptTopLevel app_exit_ppt,
-                                  PptTopLevel test_exit_ppt) {
+  private static void comparePpts(
+      PptTopLevel app_enter_ppt,
+      PptTopLevel test_enter_ppt,
+      PptTopLevel app_exit_ppt,
+      PptTopLevel test_exit_ppt) {
     LemmaStack.clearInts();
 
-//     app_enter_ppt.guardInvariants();
-//     test_enter_ppt.guardInvariants();
-//     app_exit_ppt.guardInvariants();
-//     test_exit_ppt.guardInvariants();
+    //     app_enter_ppt.guardInvariants();
+    //     test_enter_ppt.guardInvariants();
+    //     app_exit_ppt.guardInvariants();
+    //     test_exit_ppt.guardInvariants();
 
     Vector<Invariant> a_pre = app_enter_ppt.invariants_vector();
     Vector<Invariant> t_pre = test_enter_ppt.invariants_vector();
     Vector<Invariant> a_post = app_exit_ppt.invariants_vector();
     Vector<Invariant> t_post = test_exit_ppt.invariants_vector();
 
-    if (opt_timing)
-      System.out.println("Starting timer");
+    if (opt_timing) System.out.println("Starting timer");
     long processing_time_start = System.currentTimeMillis();
 
-    a_pre  = filterInvariants(a_pre, false);
-    t_pre  = filterInvariants(t_pre, false);
+    a_pre = filterInvariants(a_pre, false);
+    t_pre = filterInvariants(t_pre, false);
     a_post = filterInvariants(a_post, true);
     t_post = filterInvariants(t_post, true);
 
@@ -472,8 +453,7 @@ public class LogicalCompare {
     }
 
     if (opt_show_count)
-      System.out.println("Strong preconditions consist of "
-                         + t_pre.size() + " invariants.");
+      System.out.println("Strong preconditions consist of " + t_pre.size() + " invariants.");
     Vector<Lemma> pre_assumptions = new Vector<Lemma>();
     pre_assumptions.addAll(translateStraight(a_pre));
     Vector<Lemma> pre_conclusions = new Vector<Lemma>();
@@ -506,17 +486,14 @@ public class LogicalCompare {
     Collections.sort(post_conclusions);
 
     if (opt_show_count)
-      System.out.println("Weak postconditions consist of "
-                         + post_conclusions.size() + " invariants.");
+      System.out.println(
+          "Weak postconditions consist of " + post_conclusions.size() + " invariants.");
 
-    evaluateImplicationsCarefully(post_assumptions_safe,
-                                  post_assumptions_unsafe, post_conclusions);
+    evaluateImplicationsCarefully(post_assumptions_safe, post_assumptions_unsafe, post_conclusions);
     long time_elapsed = System.currentTimeMillis() - processing_time_start;
     num_checked += post_conclusions.size();
-    if (opt_show_count)
-      System.out.println("Checked " + num_checked + " invariants total");
-    if (opt_timing)
-      System.out.println("Total time " + time_elapsed + "ms");
+    if (opt_show_count) System.out.println("Checked " + num_checked + " invariants total");
+    if (opt_timing) System.out.println("Total time " + time_elapsed + "ms");
   }
 
   /*@RequiresNonNull("extra_assumptions")*/
@@ -537,8 +514,7 @@ public class LogicalCompare {
           }
         } else if (line.startsWith("(")) {
           if (ppt_name == null) {
-            System.err.println("Must specify PPT_NAME before " +
-                               "giving a formula");
+            System.err.println("Must specify PPT_NAME before " + "giving a formula");
             throw new Error();
           }
           String formula, comment;
@@ -555,13 +531,14 @@ public class LogicalCompare {
           }
           formula = formula.trim();
           comment = comment.trim();
-          @SuppressWarnings("nullness") // map: on previous loop iteration, this key was added to map
+          @SuppressWarnings(
+              "nullness") // map: on previous loop iteration, this key was added to map
           /*@NonNull*/ Vector<Lemma> assumption_vec = extra_assumptions.get(ppt_name);
           assumption_vec.add(new Lemma(comment, formula));
         } else {
           System.err.println("Can't parse " + line + " in assumptions file");
-          System.err.println("Should be `PPT_NAME <ppt_name>' or a Simplify " +
-                             "formula (starting with `(')");
+          System.err.println(
+              "Should be `PPT_NAME <ppt_name>' or a Simplify " + "formula (starting with `(')");
           throw new Error();
         }
       }
@@ -574,9 +551,7 @@ public class LogicalCompare {
     }
   }
 
-  public static void main(String[] args)
-    throws FileNotFoundException, IOException, SimplifyError
-  {
+  public static void main(String[] args) throws FileNotFoundException, IOException, SimplifyError {
     try {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
@@ -596,98 +571,95 @@ public class LogicalCompare {
    * @see daikon.Daikon.TerminationMessage
    **/
   public static void mainHelper(final String[] args)
-    throws FileNotFoundException, IOException, SimplifyError
-  {
-    LongOpt[] longopts = new LongOpt[] {
-      new LongOpt("assume",              LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("config_option",       LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("config-file",         LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(Daikon.debugAll_SWITCH,      LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.debug_SWITCH,   LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("filters",             LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("help",                      LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("minimize-classes"      ,    LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("no-post-after-pre-failure", LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("post-after-pre-failure",    LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("proofs",                    LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("show-count",                LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("show-formulas",             LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("show-sets",                 LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("show-valid",                LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("timing",                    LongOpt.NO_ARGUMENT, null, 0),
-    };
+      throws FileNotFoundException, IOException, SimplifyError {
+    LongOpt[] longopts =
+        new LongOpt[] {
+          new LongOpt("assume", LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt("config_option", LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt("config-file", LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt("filters", LongOpt.REQUIRED_ARGUMENT, null, 0),
+          new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt("minimize-classes", LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt("no-post-after-pre-failure", LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt("post-after-pre-failure", LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt("proofs", LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt("show-count", LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt("show-formulas", LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt("show-sets", LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt("show-valid", LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt("timing", LongOpt.NO_ARGUMENT, null, 0),
+        };
 
-    Configuration.getInstance().apply("daikon.inv.Invariant." +
-                                      "simplify_define_predicates=true");
-    Configuration.getInstance().apply("daikon.simplify.Session." +
-                                      "simplify_max_iterations=2147483647");
+    Configuration.getInstance().apply("daikon.inv.Invariant." + "simplify_define_predicates=true");
+    Configuration.getInstance()
+        .apply("daikon.simplify.Session." + "simplify_max_iterations=2147483647");
 
-    extra_assumptions = new LinkedHashMap<String,Vector<Lemma>>();
+    extra_assumptions = new LinkedHashMap<String, Vector<Lemma>>();
 
-    Getopt g = new Getopt("daikon.tools.compare.LogicalCompare", args, "h",
-                          longopts);
+    Getopt g = new Getopt("daikon.tools.compare.LogicalCompare", args, "h", longopts);
     int c;
     boolean user_filters = false;
     while ((c = g.getopt()) != -1) {
-      switch(c) {
-      case 0:
-        // got a long option
-        String option_name = longopts[g.getLongind()].getName();
-        if (Daikon.help_SWITCH.equals(option_name)) {
+      switch (c) {
+        case 0:
+          // got a long option
+          String option_name = longopts[g.getLongind()].getName();
+          if (Daikon.help_SWITCH.equals(option_name)) {
+            System.out.println(usage);
+            throw new Daikon.TerminationMessage();
+          } else if (option_name.equals("config-file")) {
+            String config_file = Daikon.getOptarg(g);
+            try {
+              InputStream stream = new FileInputStream(config_file);
+              Configuration.getInstance().apply(stream);
+            } catch (IOException e) {
+              throw new RuntimeException("Could not open config file " + config_file);
+            }
+          } else if (option_name.equals("config_option")) {
+            String item = Daikon.getOptarg(g);
+            Configuration.getInstance().apply(item);
+          } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
+            Global.debugAll = true;
+          } else if (Daikon.debug_SWITCH.equals(option_name)) {
+            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+          } else if (option_name.equals("proofs")) {
+            opt_proofs = true;
+          } else if (option_name.equals("show-count")) {
+            opt_show_count = true;
+          } else if (option_name.equals("show-formulas")) {
+            opt_show_formulas = true;
+          } else if (option_name.equals("show-valid")) {
+            opt_show_valid = true;
+          } else if (option_name.equals("show-sets")) {
+            opt_show_sets = true;
+          } else if (option_name.equals("post-after-pre-failure")) {
+            opt_post_after_pre = true;
+          } else if (option_name.equals("no-post-after-pre-failure")) {
+            opt_post_after_pre = false;
+          } else if (option_name.equals("timing")) {
+            opt_timing = true;
+          } else if (option_name.equals("filters")) {
+            String f = Daikon.getOptarg(g);
+            for (int i = 0; i < f.length(); i++) {
+              filters[f.charAt(i)] = true;
+            }
+            user_filters = true;
+          } else if (option_name.equals("assume")) {
+            readExtraAssumptions(Daikon.getOptarg(g));
+          } else if (option_name.equals("minimize-classes")) {
+            opt_minimize_classes = true;
+          } else {
+            throw new Error();
+          }
+          break;
+        case 'h':
           System.out.println(usage);
           throw new Daikon.TerminationMessage();
-        } else if (option_name.equals("config-file")) {
-          String config_file = Daikon.getOptarg(g);
-          try {
-            InputStream stream = new FileInputStream(config_file);
-            Configuration.getInstance().apply(stream);
-          } catch (IOException e) {
-            throw new RuntimeException("Could not open config file "
-                                       + config_file);
-          }
-        } else if (option_name.equals("config_option")) {
-          String item = Daikon.getOptarg(g);
-          Configuration.getInstance().apply(item);
-        } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
-          Global.debugAll = true;
-        } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
-        } else if (option_name.equals("proofs")) {
-          opt_proofs = true;
-        } else if (option_name.equals("show-count")) {
-          opt_show_count = true;
-        } else if (option_name.equals("show-formulas")) {
-          opt_show_formulas = true;
-        } else if (option_name.equals("show-valid")) {
-          opt_show_valid = true;
-        } else if (option_name.equals("show-sets")) {
-          opt_show_sets = true;
-        } else if (option_name.equals("post-after-pre-failure")) {
-          opt_post_after_pre = true;
-        } else if (option_name.equals("no-post-after-pre-failure")) {
-          opt_post_after_pre = false;
-        } else if (option_name.equals("timing")) {
-          opt_timing = true;
-        } else if (option_name.equals("filters")) {
-          String f = Daikon.getOptarg(g);
-          for (int i = 0; i < f.length(); i++) {
-            filters[f.charAt(i)] = true;
-          }
-          user_filters = true;
-        } else if (option_name.equals("assume")) {
-          readExtraAssumptions(Daikon.getOptarg(g));
-        } else if (option_name.equals("minimize-classes")) {
-          opt_minimize_classes = true;
-        } else {
-          throw new Error();
-        }
-        break;
-      case 'h':
-        System.out.println(usage);
-        throw new Daikon.TerminationMessage();
-      case '?':
-        // getopt() already printed an error
-        throw new Daikon.TerminationMessage("Bad argument");
+        case '?':
+          // getopt() already printed an error
+          throw new Daikon.TerminationMessage("Bad argument");
       }
     }
 
@@ -701,40 +673,50 @@ public class LogicalCompare {
     int num_args = args.length - g.getOptind();
 
     if (num_args < 2) {
-      throw new Daikon.TerminationMessage("Must have at least two non-option arguments"+ Global.lineSep + usage);
+      throw new Daikon.TerminationMessage(
+          "Must have at least two non-option arguments" + Global.lineSep + usage);
     }
 
     String app_filename = args[g.getOptind() + 0];
     String test_filename = args[g.getOptind() + 1];
 
-    PptMap app_ppts = FileIO.read_serialized_pptmap(new File(app_filename),
-                                                    true // use saved config
-                                                    );
-    PptMap test_ppts = FileIO.read_serialized_pptmap(new File(test_filename),
-                                                     true // use saved config
-                                                     );
+    PptMap app_ppts =
+        FileIO.read_serialized_pptmap(
+            new File(app_filename), true // use saved config
+            );
+    PptMap test_ppts =
+        FileIO.read_serialized_pptmap(
+            new File(test_filename), true // use saved config
+            );
     if (num_args == 4 || num_args == 3) {
       String enter_ppt_name = args[g.getOptind() + 2];
       String exit_ppt_name;
-      if (num_args == 4)
+      if (num_args == 4) {
         exit_ppt_name = args[g.getOptind() + 3];
-      else
+      } else {
         exit_ppt_name = ""; // s/b nonexistent
+      }
       startProver();
 
-      System.out.println("Comparing " + enter_ppt_name + " and "
-                         + exit_ppt_name + " in " + app_filename
-                         + " and " + test_filename);
+      System.out.println(
+          "Comparing "
+              + enter_ppt_name
+              + " and "
+              + exit_ppt_name
+              + " in "
+              + app_filename
+              + " and "
+              + test_filename);
 
       PptTopLevel app_enter_ppt = app_ppts.get(enter_ppt_name);
       PptTopLevel test_enter_ppt = test_ppts.get(enter_ppt_name);
       if (app_enter_ppt == null) {
-        throw new Daikon.TerminationMessage(String.format("Ppt %s not found in %s",
-                                                          enter_ppt_name, app_filename));
+        throw new Daikon.TerminationMessage(
+            String.format("Ppt %s not found in %s", enter_ppt_name, app_filename));
       }
       if (test_enter_ppt == null) {
-        throw new Daikon.TerminationMessage(String.format("Ppt %s not found in %s",
-                                                          enter_ppt_name, test_filename));
+        throw new Daikon.TerminationMessage(
+            String.format("Ppt %s not found in %s", enter_ppt_name, test_filename));
       }
 
       PptTopLevel app_exit_ppt = app_ppts.get(exit_ppt_name);
@@ -742,31 +724,37 @@ public class LogicalCompare {
       if (app_exit_ppt == null) {
         app_exit_ppt = app_ppts.get(app_enter_ppt.ppt_name.makeExit());
         if (app_exit_ppt == null) {
-          throw new Daikon.TerminationMessage(String.format("Neither ppt %s nor ppt %s found in %s",
-                                                            exit_ppt_name,
-                                                            app_enter_ppt.ppt_name.makeExit(),
-                                                            app_filename));
+          throw new Daikon.TerminationMessage(
+              String.format(
+                  "Neither ppt %s nor ppt %s found in %s",
+                  exit_ppt_name,
+                  app_enter_ppt.ppt_name.makeExit(),
+                  app_filename));
         }
       }
       if (test_exit_ppt == null) {
         test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
         if (test_exit_ppt == null) {
-          throw new Daikon.TerminationMessage(String.format("Neither ppt %s nor ppt %s found in %s",
-                                                            exit_ppt_name,
-                                                            test_enter_ppt.ppt_name.makeExit(),
-                                                            test_filename));
+          throw new Daikon.TerminationMessage(
+              String.format(
+                  "Neither ppt %s nor ppt %s found in %s",
+                  exit_ppt_name,
+                  test_enter_ppt.ppt_name.makeExit(),
+                  test_filename));
         }
       }
 
-      comparePpts(app_enter_ppt, test_enter_ppt,
-                  app_exit_ppt, test_exit_ppt);
+      comparePpts(
+          app_enter_ppt, test_enter_ppt,
+          app_exit_ppt, test_exit_ppt);
     } else if (num_args == 2) {
       startProver();
 
       @SuppressWarnings("keyfor") // checker bug: KeyFor name translation
       Collection</*@KeyFor("app_ppts.nameToPpt")*/ String> app_ppt_names = app_ppts.nameStringSet();
       @SuppressWarnings("keyfor") // checker bug: KeyFor name translation
-      Collection</*@KeyFor("test_ppts.nameToPpt")*/ String> test_ppt_names = test_ppts.nameStringSet();
+      Collection</*@KeyFor("test_ppts.nameToPpt")*/ String> test_ppt_names =
+          test_ppts.nameStringSet();
       // These are keys in both app_ppts and test_ppts.
       Set<String> common_names = new TreeSet<String>();
 
@@ -780,7 +768,8 @@ public class LogicalCompare {
         }
         if (app_ppt.num_samples() > 0) {
           if (test_ppt_names.contains(name)
-              && castNonNull(test_ppts.get(name)).num_samples() > 0) { // correlated maps: test_ppts.get(name) is non-null because test_ppt_names.contains(name) is true
+              && castNonNull(test_ppts.get(name)).num_samples()
+                  > 0) { // correlated maps: test_ppts.get(name) is non-null because test_ppt_names.contains(name) is true
             common_names.add(name);
           } else {
             System.out.println(name + " was used but not tested");
@@ -796,20 +785,18 @@ public class LogicalCompare {
         @SuppressWarnings("nullness") // map: iterating over subset of keySet
         /*@NonNull*/ PptTopLevel test_enter_ppt = test_ppts.get(name);
         @SuppressWarnings("nullness") // map: exit should be in map if enter is
-        /*@NonNull*/ PptTopLevel app_exit_ppt =
-          app_ppts.get(app_enter_ppt.ppt_name.makeExit());
+        /*@NonNull*/ PptTopLevel app_exit_ppt = app_ppts.get(app_enter_ppt.ppt_name.makeExit());
         @SuppressWarnings("nullness") // map: exit should be in map if enter is
-        /*@NonNull*/ PptTopLevel test_exit_ppt =
-          test_ppts.get(test_enter_ppt.ppt_name.makeExit());
+        /*@NonNull*/ PptTopLevel test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
 
         assert app_exit_ppt != null;
         assert test_exit_ppt != null;
-        comparePpts(app_enter_ppt, test_enter_ppt,
-                    app_exit_ppt, test_exit_ppt);
-
+        comparePpts(
+            app_enter_ppt, test_enter_ppt,
+            app_exit_ppt, test_exit_ppt);
       }
     } else {
-      throw new Daikon.TerminationMessage("Too many arguments"+ Global.lineSep + usage);
+      throw new Daikon.TerminationMessage("Too many arguments" + Global.lineSep + usage);
     }
   }
 }

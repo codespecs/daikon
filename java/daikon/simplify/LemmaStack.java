@@ -1,15 +1,15 @@
 package daikon.simplify;
 
-import java.util.Vector;
-import java.util.Stack;
-import java.util.Random;
-import java.util.TreeSet;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.SortedSet;
-import java.util.Iterator;
-import plume.*;
 import daikon.inv.Invariant;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.Stack;
+import java.util.TreeSet;
+import java.util.Vector;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -23,7 +23,6 @@ import org.checkerframework.checker.nullness.qual.*;
  * also a convenient place to hang routines that any Simplify client
  * can use.
  **/
-
 public class LemmaStack {
   /**
    * Boolean. Controls Daikon's response when inconsistent invariants
@@ -64,12 +63,19 @@ public class LemmaStack {
 
   /** Tell Simplify to assume a lemma, which should already be on our
    * stack. */
-  private void assume(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma lemma) throws TimeoutException {
+  private void assume(
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma
+          lemma)
+      throws TimeoutException {
     session.request(new CmdAssume(lemma.formula));
   }
 
   /** Assume a list of lemmas. */
-  private void assumeAll(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Vector<Lemma> invs) throws TimeoutException {
+  private void assumeAll(
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Vector<
+              Lemma>
+          invs)
+      throws TimeoutException {
     for (Lemma lem : invs) {
       assume(lem);
     }
@@ -95,7 +101,8 @@ public class LemmaStack {
 
   /** Try to start Simplify. */
   /*@EnsuresNonNull("session")*/
-  private void startProver(/*>>> @UnknownInitialization @Raw LemmaStack this*/) throws SimplifyError {
+  private void startProver(
+      /*>>> @UnknownInitialization @Raw LemmaStack this*/ ) throws SimplifyError {
     SessionManager session_try = SessionManager.attemptProverStartup();
     if (session_try != null) {
       session = session_try;
@@ -105,7 +112,9 @@ public class LemmaStack {
   }
 
   /** Try to restart Simplify back where we left off, after killing it. */
-  private void restartProver(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this*/) throws SimplifyError {
+  private void restartProver(
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this*/ )
+      throws SimplifyError {
     startProver();
     try {
       assumeAll(lemmas);
@@ -117,8 +126,7 @@ public class LemmaStack {
   public LemmaStack() throws SimplifyError {
     startProver();
     lemmas = new Stack<Lemma>();
-    if (daikon.inv.Invariant.dkconfig_simplify_define_predicates)
-      pushLemmas(Lemma.lemmasVector());
+    if (daikon.inv.Invariant.dkconfig_simplify_define_predicates) pushLemmas(Lemma.lemmasVector());
   }
 
   /** Pop a lemma from our and Simplify's stacks. */
@@ -128,7 +136,10 @@ public class LemmaStack {
   }
 
   /** Push an assumption onto our and Simplify's stacks. */
-  public boolean pushLemma(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma lem) throws SimplifyError {
+  public boolean pushLemma(
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma
+          lem)
+      throws SimplifyError {
     SimpUtil.assert_well_formed(lem.formula);
     try {
       assume(lem);
@@ -140,8 +151,7 @@ public class LemmaStack {
         try {
           checkString("(AND)");
         } catch (SimplifyError err) {
-          System.err.println("Error after pushing " + lem.summarize() + " " +
-                             lem.formula);
+          System.err.println("Error after pushing " + lem.summarize() + " " + lem.formula);
           throw err;
         }
       }
@@ -154,7 +164,11 @@ public class LemmaStack {
   }
 
   /** Push a vector of assumptions onto our and Simplify's stacks. */
-  public void pushLemmas(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Vector<Lemma> newLemmas) throws SimplifyError {
+  public void pushLemmas(
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Vector<
+              Lemma>
+          newLemmas)
+      throws SimplifyError {
     for (Lemma lem : newLemmas) {
       pushLemma(lem);
     }
@@ -164,7 +178,10 @@ public class LemmaStack {
    * assumptions. Returns 'T' if Simplify says yes, 'F' if Simplify
    * says no, or '?' if we have to kill Simplify because it won't
    * answer. */
-  private char checkString(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ String str) throws SimplifyError {
+  private char checkString(
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ String
+          str)
+      throws SimplifyError {
     SimpUtil.assert_well_formed(str);
     CmdCheck cc = new CmdCheck(str);
     try {
@@ -173,8 +190,7 @@ public class LemmaStack {
       restartProver();
       return '?';
     }
-    if (cc.unknown)
-      return '?';
+    if (cc.unknown) return '?';
     return cc.valid ? 'T' : 'F';
   }
 
@@ -197,10 +213,8 @@ public class LemmaStack {
   /** Return true if all the invariants in invs[i] in invs[] not
    * between min and max (inclusive) for which excluded[i] is false,
    * together imply the formula conseq. */
-  private boolean allExceptImply(Lemma[] invs, boolean[] excluded,
-                                 int min, int max, String conseq)
-    throws TimeoutException
-  {
+  private boolean allExceptImply(Lemma[] invs, boolean[] excluded, int min, int max, String conseq)
+      throws TimeoutException {
     int assumed = 0;
     for (int i = 0; i < invs.length; i++) {
       if (!excluded[i] && (i < min || i > max)) {
@@ -219,8 +233,7 @@ public class LemmaStack {
    * (inclusive) are true. */
   private static boolean allTrue(boolean[] bools, int min, int max) {
     for (int i = min; i <= max; i++) {
-      if (!bools[i])
-        return false;
+      if (!bools[i]) return false;
     }
     return true;
   }
@@ -230,17 +243,17 @@ public class LemmaStack {
    * such set. The set is currently returned in the same order as the
    * invariants appeared in invs[] */
   private Vector<Lemma> minimizeAssumptions(Lemma[] invs, String consequence)
-    throws TimeoutException
-  {
+      throws TimeoutException {
     boolean[] excluded = new boolean[invs.length];
 
     for (int size = invs.length / 2; size > 1; size /= 2) {
       for (int start = 0; start < invs.length; start += size) {
         int end = Math.min(start + size - 1, invs.length - 1);
-        if (!allTrue(excluded, start, end) &&
-            allExceptImply(invs, excluded, start, end, consequence)) {
-          for (int i = start; i <= end; i++)
+        if (!allTrue(excluded, start, end)
+            && allExceptImply(invs, excluded, start, end, consequence)) {
+          for (int i = start; i <= end; i++) {
             excluded[i] = true;
+          }
         }
       }
     }
@@ -259,13 +272,13 @@ public class LemmaStack {
     } while (reduced);
     Vector<Lemma> new_invs = new Vector<Lemma>();
     for (int i = 0; i < invs.length; i++) {
-      if (!excluded[i])
-        new_invs.add(invs[i]);
+      if (!excluded[i]) new_invs.add(invs[i]);
     }
     return new_invs;
   }
 
-  private static Vector<Lemma> filterByClass(Vector<Lemma> lems, Set<Class<? extends Invariant>> blacklist) {
+  private static Vector<Lemma> filterByClass(
+      Vector<Lemma> lems, Set<Class<? extends Invariant>> blacklist) {
     Vector<Lemma> new_lems = new Vector<Lemma>();
     for (Lemma lem : lems) {
       if (!blacklist.contains(lem.invClass())) {
@@ -275,17 +288,19 @@ public class LemmaStack {
     return new_lems;
   }
 
-  private void minimizeClasses_rec(String result, Vector<Lemma> lems,
-                                   Set<Class<? extends Invariant>> exclude,
-                                   Set<Set<Class<? extends Invariant>>> black,
-                                   Set<Set<Class<? extends Invariant>>> gray,
-                                   Set<Set<Class<? extends Invariant>>> found) throws TimeoutException {
+  private void minimizeClasses_rec(
+      String result,
+      Vector<Lemma> lems,
+      Set<Class<? extends Invariant>> exclude,
+      Set<Set<Class<? extends Invariant>>> black,
+      Set<Set<Class<? extends Invariant>>> gray,
+      Set<Set<Class<? extends Invariant>>> found)
+      throws TimeoutException {
     for (Set<Class<? extends Invariant>> known : found) {
       // If known and exclude are disjoint, return
       Set<Class<? extends Invariant>> exclude2 = new HashSet<Class<? extends Invariant>>(exclude);
       exclude2.retainAll(known);
-      if (exclude2.isEmpty())
-        return;
+      if (exclude2.isEmpty()) return;
     }
     int mark = markLevel();
     Vector<Lemma> filtered = filterByClass(lems, exclude);
@@ -293,13 +308,11 @@ public class LemmaStack {
     boolean holds = checkString(result) == 'T';
     popToMark(mark);
     if (holds) {
-      Vector<Lemma> mini
-        = minimizeAssumptions(filtered.toArray(new Lemma[0]), result);
+      Vector<Lemma> mini = minimizeAssumptions(filtered.toArray(new Lemma[0]), result);
       Set<Class<? extends Invariant>> used = new HashSet<Class<? extends Invariant>>();
       for (Lemma mlem : mini) {
         Class<? extends Invariant> c = mlem.invClass();
-        if (c != null)
-          used.add(c);
+        if (c != null) used.add(c);
       }
       for (Lemma mlem : mini) {
         System.err.println(mlem.summarize());
@@ -331,9 +344,9 @@ public class LemmaStack {
         Set<Class<? extends Invariant>> exclude = new HashSet<Class<? extends Invariant>>();
         Set<Set<Class<? extends Invariant>>> black = new HashSet<Set<Class<? extends Invariant>>>();
         Set<Set<Class<? extends Invariant>>> gray = new HashSet<Set<Class<? extends Invariant>>>();
-        Set<Set<Class<? extends Invariant>>> found_set = new HashSet<Set<Class<? extends Invariant>>>();
-        minimizeClasses_rec(result, assumptions, exclude, black, gray,
-                            found_set);
+        Set<Set<Class<? extends Invariant>>> found_set =
+            new HashSet<Set<Class<? extends Invariant>>>();
+        minimizeClasses_rec(result, assumptions, exclude, black, gray, found_set);
         found.addAll(found_set);
       }
       assumeAll(lemmas);
@@ -444,8 +457,7 @@ public class LemmaStack {
 
   /** Pop off lemmas from the stack until its level matches mark. */
   public void popToMark(int mark) {
-    while (lemmas.size() > mark)
-      popLemma();
+    while (lemmas.size() > mark) popLemma();
   }
 
   /** Convenience method to print a vector of lemmas, in both their
@@ -488,11 +500,10 @@ public class LemmaStack {
     long last_long = Long.MIN_VALUE;
     for (Long ll : ints_seen) {
       long l = ll.longValue();
-      if (l == Long.MIN_VALUE)
-        continue;
+      if (l == Long.MIN_VALUE) continue;
       assert l != last_long;
-      String formula = "(< " + SimpUtil.formatInteger(last_long) + " " +
-        SimpUtil.formatInteger(l) + ")";
+      String formula =
+          "(< " + SimpUtil.formatInteger(last_long) + " " + SimpUtil.formatInteger(l) + ")";
       Lemma lem = new Lemma(last_long + " < " + l, formula);
       pushLemma(lem);
       if (l > -SMALL_INTEGER && l < SMALL_INTEGER) {
@@ -506,11 +517,11 @@ public class LemmaStack {
   }
 
   public void closeSession() {
-      // Ensure that the following two method calls occur on the same instance of session:
-      final SessionManager session = this.session;
-      session.session_done();
-      synchronized (session) {
-        session.notifyAll();
-      }
+    // Ensure that the following two method calls occur on the same instance of session:
+    final SessionManager session = this.session;
+    session.session_done();
+    synchronized (session) {
+      session.notifyAll();
+    }
   }
 }

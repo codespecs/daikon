@@ -2,30 +2,28 @@
 
 package daikon.tools.jtb;
 
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
 import daikon.*;
-import plume.ArraysMDE;
-import plume.EntryReader;
-import plume.UtilMDE;
+import daikon.chicory.DaikonVariableInfo;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.unary.sequence.EltNonZero;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
-import daikon.chicory.DaikonVariableInfo;
-
+import java.io.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
+import plume.ArraysMDE;
+import plume.EntryReader;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
-
 
 // For each class:  (UnmodifiedClassDeclaration)
 //  * insert object invariants
@@ -81,21 +79,21 @@ public class AnnotateVisitor extends DepthFirstVisitor {
    **/
   public int maxInvariantsPP;
 
-
   public Vector<NodeToken> addedComments = new Vector<NodeToken>();
 
   private Stack<ClassFieldInfo> cfis = new Stack<ClassFieldInfo>();
 
   private PptNameMatcher pptMatcher;
 
-  public AnnotateVisitor(String javafilename,
-                         Node root,
-                         PptMap ppts,
-                         boolean slashslash,
-                         boolean insert_inexpressible,
-                         boolean lightweight,
-                         boolean useReflection,
-                         int maxInvariantsPP) {
+  public AnnotateVisitor(
+      String javafilename,
+      Node root,
+      PptMap ppts,
+      boolean slashslash,
+      boolean insert_inexpressible,
+      boolean lightweight,
+      boolean useReflection,
+      int maxInvariantsPP) {
 
     this.pptMatcher = new PptNameMatcher(root);
 
@@ -117,20 +115,18 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     this.maxInvariantsPP = maxInvariantsPP;
   }
 
-
   // Like Ast.addComment, but also keeps a list of what comments were added.
   void addComment(Node n, String comment, boolean first) {
     NodeToken nt = new NodeToken(comment);
     Ast.findLineAndCol(n, nt, first);
     addedComments.add(nt);
     if (debug) {
-      System.out.printf("addComment at %d:%d : %s%n",
-                        nt.beginLine, nt.beginColumn, comment.trim());
+      System.out.printf("addComment at %d:%d : %s%n", nt.beginLine, nt.beginColumn, comment.trim());
     }
     int linenumber = nt.beginLine - 1; /* because in jtb lines start at 1 */
     String lineString = javaFileLines.get(linenumber);
-    int column = getTabbedIndex(nt.beginColumn - 1, /* because in jtb cols start at 1 */
-                                lineString);
+    int column =
+        getTabbedIndex(nt.beginColumn - 1, /* because in jtb cols start at 1 */ lineString);
     StringBuffer sb = new StringBuffer();
     sb.append(lineString.substring(0, column));
     sb.append(comment);
@@ -140,7 +136,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
     sb.append(lineString.substring(column));
     javaFileLines.set(linenumber, sb.toString());
-    if (debug) { System.out.printf("addComment result: <<<%s>>>%n", sb.toString()); }
+    if (debug) {
+      System.out.printf("addComment result: <<<%s>>>%n", sb.toString());
+    }
   }
 
   // Like Ast.addComment, but also keeps a list of what comments were added.
@@ -205,12 +203,13 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     List<String> ownedFieldNames;
     List<String> finalFieldNames;
     List<String> notContainsNullFieldNames;
-    Map<String,String> elementTypeFieldNames;
+    Map<String, String> elementTypeFieldNames;
 
-    ClassFieldInfo(List<String> ownedFieldNames,
-                   List<String> finalFieldNames,
-                   List<String> notContainsNullFieldNames,
-                   Map<String,String> elementTypeFieldNames) {
+    ClassFieldInfo(
+        List<String> ownedFieldNames,
+        List<String> finalFieldNames,
+        List<String> notContainsNullFieldNames,
+        Map<String, String> elementTypeFieldNames) {
       this.ownedFieldNames = ownedFieldNames;
       this.finalFieldNames = finalFieldNames;
       this.notContainsNullFieldNames = notContainsNullFieldNames;
@@ -218,16 +217,15 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
   }
 
-
   // Insert object invariants for this class.
   // Insert owner assertions for fields.
-// Grammar production:
-// f0 -> ( "class" | "interface" )
-// f1 -> <IDENTIFIER>
-// f2 -> [ TypeParameters() ]
-// f3 -> [ ExtendsList(isInterface) ]
-// f4 -> [ ImplementsList(isInterface) ]
-// f5 -> ClassOrInterfaceBody(isInterface)
+  // Grammar production:
+  // f0 -> ( "class" | "interface" )
+  // f1 -> <IDENTIFIER>
+  // f2 -> [ TypeParameters() ]
+  // f3 -> [ ExtendsList(isInterface) ]
+  // f4 -> [ ImplementsList(isInterface) ]
+  // f5 -> ClassOrInterfaceBody(isInterface)
   public void visit(ClassOrInterfaceDeclaration n) {
     String classname = Ast.getClassName(n);
     String pptname = classname + ":::OBJECT";
@@ -241,28 +239,37 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     { // set fieldNames slots
       CollectFieldsVisitor cfv = new CollectFieldsVisitor(n, false);
       if (object_ppt == null) {
-        cfi = new ClassFieldInfo(cfv.ownedFieldNames(),
-                                 cfv.finalFieldNames(),
-                                 new ArrayList<String>(),
-                                 new HashMap<String,String>());
+        cfi =
+            new ClassFieldInfo(
+                cfv.ownedFieldNames(),
+                cfv.finalFieldNames(),
+                new ArrayList<String>(),
+                new HashMap<String, String>());
       } else {
-        cfi = new ClassFieldInfo(cfv.ownedFieldNames(),
-                                 cfv.finalFieldNames(),
-                                 not_contains_null_fields(object_ppt, cfv.allFieldNames()),
-                                 element_type_fields(object_ppt, cfv.allFieldNames()));
+        cfi =
+            new ClassFieldInfo(
+                cfv.ownedFieldNames(),
+                cfv.finalFieldNames(),
+                not_contains_null_fields(object_ppt, cfv.allFieldNames()),
+                element_type_fields(object_ppt, cfv.allFieldNames()));
       }
     }
     cfis.push(cfi);
 
-    super.visit(n);             // call "accept(this)" on each field
+    super.visit(n); // call "accept(this)" on each field
 
     if (lightweight && (Daikon.output_format != OutputFormat.DBCJAVA)) {
-      for (int i=cfi.ownedFieldNames.size()-1; i>=0; i--) {
-        addComment(n.f5.f1, javaLineComment("@ invariant" + " " + cfi.ownedFieldNames.get(i) + ".owner == this;"), true);
+      for (int i = cfi.ownedFieldNames.size() - 1; i >= 0; i--) {
+        addComment(
+            n.f5.f1,
+            javaLineComment("@ invariant" + " " + cfi.ownedFieldNames.get(i) + ".owner == this;"),
+            true);
       }
     }
     if (object_ppt == null) {
-      if (debug) { System.out.println("No object program point found for " + classname); }
+      if (debug) {
+        System.out.println("No object program point found for " + classname);
+      }
     } else {
       InvariantsAndModifiedVars obj_invs = invariants_for(object_ppt, ppts);
       String inv_tag = (Daikon.output_format == OutputFormat.DBCJAVA ? "@invariant" : "invariant");
@@ -275,18 +282,20 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // Given that this method works not on FieldDeclaration, but its grandparent,
   // it should likely be moved to a method with a different formal parameter.
   public void visit(FieldDeclaration n) {
-    super.visit(n);             // call "accept(this)" on each field
+    super.visit(n); // call "accept(this)" on each field
 
     // Nothing to do for Jtest DBCJAVA format
-    if (Daikon.output_format == OutputFormat.DBCJAVA) { return; }
+    if (Daikon.output_format == OutputFormat.DBCJAVA) {
+      return;
+    }
 
-    if (! Ast.contains(n.getParent().getParent(), "public")) {
+    if (!Ast.contains(n.getParent().getParent(), "public")) {
 
-//       n.accept(new TreeFormatter());
-//       String nString = Ast.format(n);
-//       System.out.println("@@@");
-//       Node n2 = n.getParent().getParent(); n2.accept(new TreeFormatter());
-//       System.out.println("@@@" + Ast.format(n2));
+      //       n.accept(new TreeFormatter());
+      //       String nString = Ast.format(n);
+      //       System.out.println("@@@");
+      //       Node n2 = n.getParent().getParent(); n2.accept(new TreeFormatter());
+      //       System.out.println("@@@" + Ast.format(n2));
       addComment(n.getParent().getParent(), "/*@ spec_public */ ");
     }
   }
@@ -298,9 +307,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     List<PptTopLevel> matching_ppts = null;
     if (n instanceof MethodDeclaration) {
-      matching_ppts = pptMatcher.getMatches(ppts, (MethodDeclaration)n);
+      matching_ppts = pptMatcher.getMatches(ppts, (MethodDeclaration) n);
     } else if (n instanceof ConstructorDeclaration) {
-      ConstructorDeclaration cd = (ConstructorDeclaration)n;
+      ConstructorDeclaration cd = (ConstructorDeclaration) n;
       matching_ppts = pptMatcher.getMatches(ppts, cd);
     } else {
       throw new Error("Node must be MethodDeclaration or ConstructorDeclaration");
@@ -311,7 +320,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       if (ppt.ppt_name.isEnterPoint()) {
         requires_invs = invariants_for(ppt, ppts);
       } else if (ppt.ppt_name.isExitPoint()) {
-        if (! ppt.ppt_name.isCombinedExitPoint()) {
+        if (!ppt.ppt_name.isCombinedExitPoint()) {
           continue;
         }
         ensures_invs = invariants_for(ppt, ppts);
@@ -322,9 +331,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     //   System.out.printf("get_requires_and_ensures(%s):%n  => requires=%s%n  => ensures=%s%n", n, requires_invs, ensures_invs);
     // }
 
-    return new /*@Nullable*/ InvariantsAndModifiedVars[] { requires_invs, ensures_invs };
+    return new /*@Nullable*/ InvariantsAndModifiedVars[] {requires_invs, ensures_invs};
   }
-
 
   public void insertAlso(Node n) {
     addComment(n, "@ also" + lineSep, true);
@@ -355,11 +363,15 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
         if (Ast.isAccessModifier(modifier)) {
           Annotate.debug.fine("addComment from nc");
-          addComment(n.getParent().getParent(), "@ " + modifier + " " + getBehaviorString() +
-                     (Daikon.output_format == OutputFormat.JML
-                      ? " // Generated by Daikon"
-                      : "") +
-                     lineSep, true);
+          addComment(
+              n.getParent().getParent(),
+              "@ "
+                  + modifier
+                  + " "
+                  + getBehaviorString()
+                  + (Daikon.output_format == OutputFormat.JML ? " // Generated by Daikon" : "")
+                  + lineSep,
+              true);
           Annotate.debug.fine("addComment complete");
           behaviorInserted = true;
         }
@@ -370,16 +382,19 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         Annotate.debug.fine("With " + nlo.nodes.size() + " nodes");
 
         if (nlo.present())
-          for (Enumeration<Node> e = nlo.elements(); e.hasMoreElements();)
+          for (Enumeration<Node> e = nlo.elements(); e.hasMoreElements(); )
             e.nextElement().accept(this);
 
         if (!behaviorInserted) {
           Annotate.debug.fine("addComment from nlo");
-          addComment(n.getParent().getParent(), "@ " + "private " + getBehaviorString() +
-                     (Daikon.output_format == OutputFormat.JML
-                      ? " // Generated by Daikon"
-                      : "") +
-                     lineSep, true);
+          addComment(
+              n.getParent().getParent(),
+              "@ "
+                  + "private "
+                  + getBehaviorString()
+                  + (Daikon.output_format == OutputFormat.JML ? " // Generated by Daikon" : "")
+                  + lineSep,
+              true);
           Annotate.debug.fine("addComment complete");
         }
       }
@@ -390,9 +405,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     // We are going to move back up the parse tree so we can look
     // at the Modifiers for this method (or constructor).
 
-    NodeChoice nc = (NodeChoice)(n.getParent());
-    NodeSequence ns = (NodeSequence)(nc.getParent());
-    Modifiers m = (Modifiers)(ns.elementAt(0));
+    NodeChoice nc = (NodeChoice) (n.getParent());
+    NodeSequence ns = (NodeSequence) (nc.getParent());
+    Modifiers m = (Modifiers) (ns.elementAt(0));
     if (Annotate.debug.isLoggable(Level.FINE)) {
       System.out.println(Ast.formatEntireTree(m));
     }
@@ -400,19 +415,17 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     Annotate.debug.fine("InsertBehavior visitor complete");
   }
 
-
   public void visit(MethodDeclaration n) {
 
-// Grammar production for ClassOrInterfaceBodyDeclaration:
-// f0 -> Initializer()
-//       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
-//       | ";"
+    // Grammar production for ClassOrInterfaceBodyDeclaration:
+    // f0 -> Initializer()
+    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+    //       | ";"
 
+    super.visit(n); // call "accept(this)" on each field
 
-    super.visit(n);             // call "accept(this)" on each field
-
-
-    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
+    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures =
+        get_requires_and_ensures(ppts, n);
 
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
@@ -439,48 +452,68 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     if (!lightweight)
-      addComment(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, JML_END_COMMENT, true);
+      addComment(
+          n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+          JML_END_COMMENT,
+          true);
 
     boolean invariantInserted =
-      insertInvariants(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, ensures_tag, ensures_invs, lightweight);
+        insertInvariants(
+            n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+            ensures_tag,
+            ensures_invs,
+            lightweight);
 
     if (ensures_invs != null) {
-      insertModifies(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, ensures_invs.modifiedVars, ensures_tag, lightweight);
+      insertModifies(
+          n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+          ensures_invs.modifiedVars,
+          ensures_tag,
+          lightweight);
     }
 
     invariantInserted =
-      insertInvariants(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, requires_tag, requires_invs, lightweight) ||
-      invariantInserted;
+        insertInvariants(
+                n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+                requires_tag,
+                requires_invs,
+                lightweight)
+            || invariantInserted;
 
     if (!lightweight) {
       if (!invariantInserted) {
         insertJMLWorkaround(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */);
       }
       insertBehavior(n);
-      if (isImplementation || isOverride
+      if (isImplementation
+          || isOverride
           // temporary fix: not processed correctly by Ast.java
           || n.f2.f0.toString().equals("clone")) {
         insertAlso(n.getParent().getParent());
       }
-      addComment(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, JML_START_COMMENT, true);
+      addComment(
+          n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+          JML_START_COMMENT,
+          true);
     }
   }
 
-// Grammar production:
-// f0 -> [ TypeParameters() ]
-// f1 -> <IDENTIFIER>
-// f2 -> FormalParameters()
-// f3 -> [ "throws" NameList() ]
-// f4 -> "{"
-// f5 -> [ ExplicitConstructorInvocation() ]
-// f6 -> ( BlockStatement() )*
-// f7 -> "}"
+  // Grammar production:
+  // f0 -> [ TypeParameters() ]
+  // f1 -> <IDENTIFIER>
+  // f2 -> FormalParameters()
+  // f3 -> [ "throws" NameList() ]
+  // f4 -> "{"
+  // f5 -> [ ExplicitConstructorInvocation() ]
+  // f6 -> ( BlockStatement() )*
+  // f7 -> "}"
   public void visit(ConstructorDeclaration n) {
     Annotate.debug.fine("ConstructorDeclaration: " + n.f1);
 
-    super.visit(n);             // call "accept(this)" on each field
+    super.visit(n); // call "accept(this)" on each field
 
-    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
+    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures =
+        get_requires_and_ensures(ppts, n);
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
 
@@ -488,31 +521,45 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     String requires_tag = Daikon.output_format.requires_tag();
 
     if (!lightweight) {
-      addComment(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, JML_END_COMMENT, true);
+      addComment(
+          n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+          JML_END_COMMENT,
+          true);
     }
 
     boolean invariantInserted =
-      insertInvariants(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
-                       ensures_tag, ensures_invs, lightweight);
+        insertInvariants(
+            n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+            ensures_tag,
+            ensures_invs,
+            lightweight);
 
     if (ensures_invs != null) {
-      insertModifies(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
-                     ensures_invs.modifiedVars, ensures_tag, lightweight);
+      insertModifies(
+          n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+          ensures_invs.modifiedVars,
+          ensures_tag,
+          lightweight);
     }
 
     invariantInserted =
-      insertInvariants(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
-                       requires_tag, requires_invs, lightweight) ||
-      invariantInserted;
+        insertInvariants(
+                n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+                requires_tag,
+                requires_invs,
+                lightweight)
+            || invariantInserted;
 
     if (!lightweight) {
       if (!invariantInserted) {
         insertJMLWorkaround(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */);
       }
       insertBehavior(n);
-      addComment(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, JML_START_COMMENT, true);
+      addComment(
+          n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
+          JML_START_COMMENT,
+          true);
     }
-
   }
 
   // This is a hack that indicates whether an "assignable \everything"
@@ -520,12 +567,12 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public boolean pureInJML(Node n) {
     String name = null;
     if (n instanceof MethodDeclaration) {
-      name = ((MethodDeclaration)n).f2.f0.toString();
-      if (name.equals("clone") ||
-          name.equals("equals") ||
-          name.equals("hashCode") ||
-          name.equals("hasMoreElements") ||
-          name.equals("hasNext")) {
+      name = ((MethodDeclaration) n).f2.f0.toString();
+      if (name.equals("clone")
+          || name.equals("equals")
+          || name.equals("hashCode")
+          || name.equals("hasMoreElements")
+          || name.equals("hasNext")) {
         return true;
       }
     }
@@ -542,7 +589,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return insertInvariants(n, prefix, invs, true);
   }
 
-  public boolean insertModifies(Node n, String modifiesString, String prefix, boolean useJavaComment) {
+  public boolean insertModifies(
+      Node n, String modifiesString, String prefix, boolean useJavaComment) {
 
     modifiesString = modifiesString.trim();
 
@@ -597,8 +645,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   // The "invs" argument may be null, in which case no work is done.
   /*@EnsuresNonNullIf(result=true, expression="#3")*/
-  public boolean insertInvariants(Node n, String prefix, final /*@Nullable*/ InvariantsAndModifiedVars invs,
-                                  boolean useJavaComment) {
+  public boolean insertInvariants(
+      Node n,
+      String prefix,
+      final /*@Nullable*/ InvariantsAndModifiedVars invs,
+      boolean useJavaComment) {
     if (invs == null) {
       return false;
     }
@@ -611,22 +662,26 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       maxIndex = Math.min(maxIndex, maxInvariantsPP);
     }
 
-    for (int i = maxIndex-1 ; i >= 0 ; i--) {
+    for (int i = maxIndex - 1; i >= 0; i--) {
       Invariant inv = invs.invariants.get(i);
-      if (! inv.isValidExpression(Daikon.output_format)) {
+      if (!inv.isValidExpression(Daikon.output_format)) {
         // inexpressible invariant
         if (insert_inexpressible) {
           addComment(n, javaLineComment("! " + inv + ";"), true);
         }
         continue;
       } else {
-        String commentContents = (Daikon.output_format == OutputFormat.DBCJAVA ? "  " : "@ ")
-          + prefix + " " + inv.format_using(Daikon.output_format)
-          + (Daikon.output_format == OutputFormat.DBCJAVA ? "  " : ";");
-        if (useJavaComment)
+        String commentContents =
+            (Daikon.output_format == OutputFormat.DBCJAVA ? "  " : "@ ")
+                + prefix
+                + " "
+                + inv.format_using(Daikon.output_format)
+                + (Daikon.output_format == OutputFormat.DBCJAVA ? "  " : ";");
+        if (useJavaComment) {
           commentContents = javaLineComment(commentContents);
-        else
+        } else {
           commentContents += lineSep;
+        }
 
         addComment(n, commentContents, true);
         invariantInserted = true;
@@ -642,12 +697,14 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   //       | PreDecrementExpression()
   //       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
   public void visit(StatementExpression n) {
-    super.visit(n);             // call "accept(this)" on each field
+    super.visit(n); // call "accept(this)" on each field
 
     Annotate.debug.fine("Found a statement expression: " + n.f0.choice);
 
     // Nothing to do for Jtest DBC format
-    if (Daikon.output_format == OutputFormat.DBCJAVA) { return; }
+    if (Daikon.output_format == OutputFormat.DBCJAVA) {
+      return;
+    }
 
     if (n.f0.choice instanceof NodeSequence) {
       NodeSequence ns = (NodeSequence) n.f0.choice;
@@ -681,15 +738,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
           // System.out.printf("In statement, fieldname = %s%n", fieldname);
           if ((fieldname != null)
-              && (isOwned(fieldname)
-                  || isNotContainsNull(fieldname)
-                  || isElementType(fieldname))) {
-            ConstructorDeclaration cd
-              = (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
-            MethodDeclaration md
-              = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
-            if ((cd != null)
-                || ((md != null) && (! Ast.contains(md.f0, "static")))) {
+              && (isOwned(fieldname) || isNotContainsNull(fieldname) || isElementType(fieldname))) {
+            ConstructorDeclaration cd =
+                (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
+            MethodDeclaration md = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
+            if ((cd != null) || ((md != null) && (!Ast.contains(md.f0, "static")))) {
               @SuppressWarnings("nullness")
               /*@NonNull*/ Node parent = Ast.getParent(Statement.class, n);
               // If parent isn't in a block (eg, if parent
@@ -701,10 +754,14 @@ public class AnnotateVisitor extends DepthFirstVisitor {
                   addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this;"));
               }
               if (isNotContainsNull(fieldname)) {
-                addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false;"));
+                addCommentAfter(
+                    parent, javaLineComment("@ set " + fieldname + ".containsNull = false;"));
               }
               if (isElementType(fieldname)) {
-                addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".elementType = " + elementType(fieldname) + ";"));
+                addCommentAfter(
+                    parent,
+                    javaLineComment(
+                        "@ set " + fieldname + ".elementType = " + elementType(fieldname) + ";"));
               }
             }
           }
@@ -717,7 +774,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // f0 -> ConditionalExpression()
   // f1 -> [ AssignmentOperator() Expression() ]
   public void visit(Expression n) {
-    super.visit(n);             // call "accept(this)" on each field
+    super.visit(n); // call "accept(this)" on each field
 
     if (n.f1.present()) {
       Annotate.debug.fine("found an assignment expression: " + n);
@@ -730,11 +787,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         if (lightweight)
           addCommentAfter(stmt, javaLineComment("@ set " + fieldname + ".owner = this;"));
       }
-
     }
-
   }
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// Subroutines
@@ -754,7 +808,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return "/*" + comment + "*/";
   }
 
-
   /**
    * Find a Daikon variable for the given field.  The variable is either
    * "this.field" (for instance variables) or "ClassName.field" (for static
@@ -762,11 +815,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
    **/
   private VarInfo findVar(String field, PptTopLevel ppt) {
     String varname = "this." + field;
-    VarInfo vi = ppt.find_var_by_name (varname);
+    VarInfo vi = ppt.find_var_by_name(varname);
     if (vi == null) {
       // No "this.field" variable, so try (static) "ClassName.field".
       varname = ppt.ppt_name.getFullClassName() + "." + field;
-      vi = ppt.find_var_by_name (varname);
+      vi = ppt.find_var_by_name(varname);
     }
     if (vi == null) {
       // We found a variable in the source code that is not computed by
@@ -775,20 +828,20 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       // throw an error instead, since I expect bugs to be more common
       // than such problems.)
       debug_field_problem(field, ppt);
-      throw new Error("Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
+      throw new Error(
+          "Warning: Annotate: Daikon knows nothing about variable " + varname + " at " + ppt);
     }
     return vi;
   }
 
-
   private void debug_field_problem(String field, PptTopLevel ppt) {
-    System.out.println("Warning: Annotate: Daikon knows nothing about field " + field + " at " + ppt);
+    System.out.println(
+        "Warning: Annotate: Daikon knows nothing about field " + field + " at " + ppt);
     System.out.println("  ppt.var_infos:");
     for (VarInfo pptvi : ppt.var_infos) {
       System.out.println("    " + pptvi.name());
     }
   }
-
 
   // Returns a list of fields with ".containsNull == false" invariants.
   // ppt is an :::OBJECT or :::CLASS program point.
@@ -805,7 +858,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       }
       EltNonZero enz = EltNonZero.find(slice);
       if (enz != null) {
-        String enz_format = format((Invariant)enz);
+        String enz_format = format((Invariant) enz);
         if (enz_format.endsWith(".containsNull == false")) {
           result.add(field);
         }
@@ -817,9 +870,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // Returns a HashMap for fields with ".elementType == \type(...)" invariants,
   // mapping the field to the type.
   // ppt is an :::OBJECT or :::CLASS program point.
-  HashMap<String,String> element_type_fields(PptTopLevel ppt, List<String> allFieldNames) {
+  HashMap<String, String> element_type_fields(PptTopLevel ppt, List<String> allFieldNames) {
     // System.out.println("element_type_fields(" + ppt + ")");
-    HashMap<String,String> result = new HashMap<String,String>();
+    HashMap<String, String> result = new HashMap<String, String>();
     // FieldDeclaration[] fdecls = cfv.fieldDeclarations();
     // System.out.println("fields: " + ArraysMDE.toString(fields));
     for (String field : allFieldNames) {
@@ -833,10 +886,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       }
       String varname = vi.name();
       String elt_varname = varname + "[]";
-      VarInfo elt_vi = ppt.find_var_by_name (elt_varname);
+      VarInfo elt_vi = ppt.find_var_by_name(elt_varname);
       if (elt_vi == null) {
         debug_field_problem(elt_varname, ppt);
-        throw new Daikon.TerminationMessage("Annotate: Daikon knows nothing about variable " + elt_varname + " at " + ppt);
+        throw new Daikon.TerminationMessage(
+            "Annotate: Daikon knows nothing about variable " + elt_varname + " at " + ppt);
       }
       // et_varname variable represents the types of the elements.
       String et_varname = elt_varname + DaikonVariableInfo.class_suffix;
@@ -848,10 +902,16 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       if (elt_vi.rep_type.dimensions() == 1 && elt_vi.rep_type.baseIsPrimitive()) {
         continue;
       }
-      VarInfo et_vi = ppt.find_var_by_name (et_varname);
+      VarInfo et_vi = ppt.find_var_by_name(et_varname);
       if (et_vi == null) {
         debug_field_problem(et_varname, ppt);
-        throw new Daikon.TerminationMessage("Annotate: Daikon knows nothing about variable " + et_varname + " at " + ppt + "\n  with allFieldNames = " + allFieldNames);
+        throw new Daikon.TerminationMessage(
+            "Annotate: Daikon knows nothing about variable "
+                + et_varname
+                + " at "
+                + ppt
+                + "\n  with allFieldNames = "
+                + allFieldNames);
       }
 
       // et_vi != null
@@ -865,7 +925,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         EltOneOfString eoos = EltOneOfString.find(slice);
         // System.out.println("eoos: " + (eoos == null ? "null" : format((Invariant)eoos)));
         if ((eoos != null) && (eoos.num_elts() == 1)) {
-          String eoos_format = format((Invariant)eoos);
+          String eoos_format = format((Invariant) eoos);
           int et_pos = eoos_format.indexOf(".elementType == \\type(");
           if (et_pos != -1) {
             String type = eoos_format.substring(et_pos + ".elementType == ".length());
@@ -877,7 +937,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         OneOfStringSequence eooss = OneOfStringSequence.find(slice);
         // System.out.println("eooss: " + (eooss == null ? "null" : format((Invariant)eooss)));
         if (eooss != null) {
-          String eooss_format = format((Invariant)eooss);
+          String eooss_format = format((Invariant) eooss);
           int et_pos = eooss_format.indexOf(".elementType == \\type(");
           if (et_pos != -1) {
             String type = eooss_format.substring(et_pos + ".elementType == ".length());
@@ -903,24 +963,23 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return inv_string;
   }
 
-  public static InvariantsAndModifiedVars invariants_for(PptTopLevel ppt,
-                                                         PptMap pptmap) {
+  public static InvariantsAndModifiedVars invariants_for(PptTopLevel ppt, PptMap pptmap) {
 
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
     PrintInvariants.print_modified_vars(ppt, pw);
 
-    InvariantsAndModifiedVars retval = new InvariantsAndModifiedVars(Ast.getInvariants(ppt, pptmap), sw.toString());
+    InvariantsAndModifiedVars retval =
+        new InvariantsAndModifiedVars(Ast.getInvariants(ppt, pptmap), sw.toString());
 
     // PrintInvariants.print_modified_vars(ppt, pw) returns possibly
     // several lines. In such a case, we're only interested in the second
     // one, which contains the "modified" or "assignable" clause.
     String[] splitModVars = plume.UtilMDE.splitLines(retval.modifiedVars);
     if (splitModVars.length > 1) {
-      for (int i = 0 ; i < splitModVars.length ; i++) {
-        if (splitModVars[i].startsWith("modifies ") ||
-            splitModVars[i].startsWith("assignable ")) {
-          retval.modifiedVars =  splitModVars[i];
+      for (int i = 0; i < splitModVars.length; i++) {
+        if (splitModVars[i].startsWith("modifies ") || splitModVars[i].startsWith("assignable ")) {
+          retval.modifiedVars = splitModVars[i];
           break;
         }
       }
@@ -937,7 +996,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       this.invariants = invariants;
       this.modifiedVars = modifiedVars;
     }
-
   }
 
   // Consider a line L1 of text that contains some tabs.
@@ -957,12 +1015,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
     int expanded = 0;
     int index = 0;
-    for (int i = 0 ; i < L1.length() ; i++) {
+    for (int i = 0; i < L1.length(); i++) {
 
       if (expanded > untabbedIndex) {
-        throw new RuntimeException("expanded:" + expanded
-                                   + "untabbedIndex:" + untabbedIndex
-                                   + "\nL1:" + L1);
+        throw new RuntimeException(
+            "expanded:" + expanded + "untabbedIndex:" + untabbedIndex + "\nL1:" + L1);
       } else if (expanded == untabbedIndex) {
         index = i;
         break;
@@ -974,25 +1031,20 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       } else {
         expanded += 1;
       }
-
     }
 
-    assert expanded == untabbedIndex :
-                      "\nexpanded:" + expanded
-                      + "\nuntabbedIndex:" + untabbedIndex
-                      + "\nL1: " + L1;
+    assert expanded == untabbedIndex
+        : "\nexpanded:" + expanded + "\nuntabbedIndex:" + untabbedIndex + "\nL1: " + L1;
     return index;
-
   }
 
   /** Return the whitespace at the front of the string. **/
   public static String precedingWhitespace(String s) {
-    for (int i = 0 ; i < s.length() ; i++) {
+    for (int i = 0; i < s.length(); i++) {
       if (!Character.isWhitespace(s.charAt(i))) {
         return s.substring(0, i);
       }
     }
     return s;
   }
-
 }

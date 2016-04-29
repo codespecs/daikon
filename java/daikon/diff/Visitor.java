@@ -6,7 +6,8 @@ package daikon.diff;
 public interface Visitor {
 
   public void visit(RootNode node);
-  public void visit(PptNode node);
-  public void visit(InvNode node);
 
+  public void visit(PptNode node);
+
+  public void visit(InvNode node);
 }

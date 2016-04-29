@@ -10,9 +10,7 @@ import org.checkerframework.dataflow.qual.*;
  * commands (as long as they have no output) to be sent to the
  * prover. It will not block.
  **/
-public class CmdRaw
-  implements Cmd
-{
+public class CmdRaw implements Cmd {
   public final String cmd;
 
   public CmdRaw(String cmd) {
@@ -28,11 +26,9 @@ public class CmdRaw
       s.sendLine(cmd);
       // there is no output from Simplify
     }
-
   }
 
   /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdRaw this*/) {
     return "CmdRaw: " + cmd;
   }
-
 }

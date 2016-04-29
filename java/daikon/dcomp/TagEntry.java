@@ -1,8 +1,7 @@
 package daikon.dcomp;
 
-import daikon.util.*;
 import daikon.chicory.DaikonVariableInfo;
-
+import daikon.util.*;
 import java.lang.ref.*;
 import java.util.*;
 
@@ -39,8 +38,8 @@ import org.checkerframework.checker.nullness.qual.*;
 class TagEntry extends WeakReference<Object> {
 
   /** Maps each object to its entry in the Union-Find datastructure **/
-  public static final WeakIdentityHashMap<Object,TagEntry> object_map
-    = new WeakIdentityHashMap<Object,TagEntry>();
+  public static final WeakIdentityHashMap<Object, TagEntry> object_map =
+      new WeakIdentityHashMap<Object, TagEntry>();
 
   private static SimpleLog debug = new SimpleLog(false);
 
@@ -60,7 +59,7 @@ class TagEntry extends WeakReference<Object> {
   protected String trace_loc = "";
 
   /** Create an entry as a separate set **/
-  public TagEntry (Object obj) {
+  public TagEntry(Object obj) {
     super(obj);
     this.parent = null;
     this.tracer = null;
@@ -68,8 +67,8 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /** Create an entry and add it to an existing set **/
-  public TagEntry (Object obj, TagEntry parent) {
-    super (obj);
+  public TagEntry(Object obj, TagEntry parent) {
+    super(obj);
     this.parent = parent;
     this.tracer = parent; // if TRACING_ENABLED?
     // System.out.printf("Made %s with parent p%s%n", this, this.parent);
@@ -78,10 +77,10 @@ class TagEntry extends WeakReference<Object> {
   /**
    * Creates a set that only contains obj
    */
-  public static TagEntry create (Object obj) {
-    assert !object_map.containsKey (obj);
+  public static TagEntry create(Object obj) {
+    assert !object_map.containsKey(obj);
     TagEntry entry = new TagEntry(obj);
-    object_map.put (obj, entry);
+    object_map.put(obj, entry);
     return (entry);
   }
 
@@ -89,9 +88,9 @@ class TagEntry extends WeakReference<Object> {
    * Merge the sets that contain the specified objects.  If this is the
    * first time either of the objects was seen, create an entry for it.
    */
-  public static void union (Object obj1, Object obj2) {
+  public static void union(Object obj1, Object obj2) {
     assert (obj1 != null) && (obj2 != null);
-    debug.log ("union of '%s' and '%s'%n", obj1, obj2);
+    debug.log("union of '%s' and '%s'%n", obj1, obj2);
 
     TagEntry o1 = get_entry(obj1), o2 = get_entry(obj2);
     TagEntry r1 = o1.find(), r2 = o2.find();
@@ -100,7 +99,8 @@ class TagEntry extends WeakReference<Object> {
 
     if (r1 != r2) {
       r2.parent = r1;
-      o1.rootMe(); o2.rootMe();
+      o1.rootMe();
+      o2.rootMe();
       o2.tracer = o1;
       o2.trace_loc = generateTraceString();
     }
@@ -108,18 +108,17 @@ class TagEntry extends WeakReference<Object> {
 
   public static String generateTraceString() {
     ArrayList<StackTraceElement> blarg =
-      new ArrayList<StackTraceElement>(Arrays.<StackTraceElement>asList(new Exception().getStackTrace()));
-    if (blarg.get(blarg.size() - 1).getClassName()
-        .equals("daikon.dcomp.Premain$ShutdownThread")) return "";
+        new ArrayList<StackTraceElement>(
+            Arrays.<StackTraceElement>asList(new Exception().getStackTrace()));
+    if (blarg.get(blarg.size() - 1).getClassName().equals("daikon.dcomp.Premain$ShutdownThread"))
+      return "";
     do blarg.remove(0);
-    while (blarg.get(0).getClassName().equals("daikon.dcomp.DCRuntime") ||
-           blarg.get(0).getClassName().equals("daikon.dcomp.TagEntry"));
+    while (blarg.get(0).getClassName().equals("daikon.dcomp.DCRuntime")
+        || blarg.get(0).getClassName().equals("daikon.dcomp.TagEntry"));
 
     if (daikon.DynComp.trace_line_depth == 1) {
       StackTraceElement first = blarg.get(0);
-      return first.getClassName() + ":" +
-             first.getMethodName() + "(), " +
-             first.getLineNumber();
+      return first.getClassName() + ":" + first.getMethodName() + "(), " + first.getLineNumber();
     } else {
       ArrayList<String> blarg2 = new ArrayList<String>(daikon.DynComp.trace_line_depth);
       try {
@@ -131,9 +130,12 @@ class TagEntry extends WeakReference<Object> {
           int lnum = ste.getLineNumber();
           blarg2.add(cname + ":" + fname + "(), " + lnum);
         }
-      } catch (IndexOutOfBoundsException e) {}
+      } catch (IndexOutOfBoundsException e) {
+      }
       String result = "";
-      for (String s : blarg2) result += s + " <- ";
+      for (String s : blarg2) {
+        result += s + " <- ";
+      }
       return result.substring(0, result.length() - 4);
     }
   }
@@ -142,16 +144,15 @@ class TagEntry extends WeakReference<Object> {
    * Find the entry associated with obj.  If an entry does not currently
    * exist, create it
    */
-  public static TagEntry get_entry (Object obj) {
+  public static TagEntry get_entry(Object obj) {
 
     assert obj != null;
     TagEntry entry = object_map.get(obj);
-    if (entry == null)
-      entry = create (obj);
+    if (entry == null) entry = create(obj);
     return (entry);
   }
 
-  public static String get_line_trace (Object obj) {
+  public static String get_line_trace(Object obj) {
     return get_entry(obj).trace_loc;
   }
 
@@ -162,13 +163,11 @@ class TagEntry extends WeakReference<Object> {
    */
   public TagEntry find() {
 
-    if (parent == null)
-      return this;
+    if (parent == null) return this;
 
     // Find the tag at the top of the list
     TagEntry tag = this;
-    while (tag.parent != null)
-      tag = tag.parent;
+    while (tag.parent != null) tag = tag.parent;
     TagEntry top = tag;
 
     // Set everyone to point to the top
@@ -187,11 +186,10 @@ class TagEntry extends WeakReference<Object> {
    * its set.  If there is no entry for Object in the map, it must be
    * in a set by itself.
    */
-  public static Object find (Object obj) {
+  public static Object find(Object obj) {
     assert obj != null;
-    TagEntry entry = object_map.get (obj);
-    if (entry == null)
-      return obj;
+    TagEntry entry = object_map.get(obj);
+    if (entry == null) return obj;
     TagEntry root = entry.find();
 
     // It shouldn't matter that this isn't a member of the set, only that
@@ -202,24 +200,29 @@ class TagEntry extends WeakReference<Object> {
     // a reference to the tag instead.  Since the caller has no references
     // to the root, it can't matter what we returned.
     Object root_ref = root.get();
-    if (root_ref == null)
-      root_ref = root;
+    if (root_ref == null) root_ref = root;
     return (root_ref);
   }
 
-  public static /*@Nullable*/ Object tracer_find (Object obj) {
+  public static /*@Nullable*/ Object tracer_find(Object obj) {
     TagEntry entry = object_map.get(obj);
-    if (entry == null) { return obj; }
+    if (entry == null) {
+      return obj;
+    }
     TagEntry tracer = entry.getTracer();
-    if (tracer == null) { return null; }
+    if (tracer == null) {
+      return null;
+    }
     Object tr_ref = tracer.get();
     if (tr_ref == null) tr_ref = tracer;
     return (tr_ref);
   }
 
-  public static Object troot_find (Object obj) {
+  public static Object troot_find(Object obj) {
     TagEntry entry = object_map.get(obj);
-    if (entry == null) { return obj; }
+    if (entry == null) {
+      return obj;
+    }
     TagEntry troot = entry.getTraceRoot();
     Object tr_ref = troot.get();
     if (tr_ref == null) tr_ref = troot;
@@ -233,14 +236,20 @@ class TagEntry extends WeakReference<Object> {
    */
   @SuppressWarnings("nullness") // catches NullPointerException
   public void reroute(/*@Nullable*/ TagEntry newTracer, String tloc) {
-    try { this.tracer.reroute(this, trace_loc); }
-    catch (NullPointerException e) { }
-    finally { this.tracer = newTracer; this.trace_loc = tloc; }
-//    if (this.tracer != null) { System.out.println("Tracer not null"); this.tracer.reroute(this); }
-//    this.tracer = newTracer;
+    try {
+      this.tracer.reroute(this, trace_loc);
+    } catch (NullPointerException e) {
+    } finally {
+      this.tracer = newTracer;
+      this.trace_loc = tloc;
+    }
+    //    if (this.tracer != null) { System.out.println("Tracer not null"); this.tracer.reroute(this); }
+    //    this.tracer = newTracer;
   }
 
-  public void rootMe() { this.reroute(null, ""); }
+  public void rootMe() {
+    this.reroute(null, "");
+  }
 
   /**
    * Returns each of the sets with elements in each set on a separate
@@ -248,44 +257,46 @@ class TagEntry extends WeakReference<Object> {
    */
   public static String dump() {
 
-    LinkedHashMap<Object, List<Object>> sets
-      = new LinkedHashMap<Object,List<Object>>();
+    LinkedHashMap<Object, List<Object>> sets = new LinkedHashMap<Object, List<Object>>();
 
     /* Fill sets from object_map by placing every object in an ArrayList
      * whose key is its root. */
     for (Object obj : object_map.keySet()) {
-      Object rep = find (obj);
-      List<Object> set = sets.get (rep);
+      Object rep = find(obj);
+      List<Object> set = sets.get(rep);
       if (set == null) {
         set = new ArrayList<Object>();
-        sets.put (rep, set);
+        sets.put(rep, set);
       }
-      set.add (obj);
+      set.add(obj);
     }
 
-    String out = String.format ("%d objects in object_map%n",
-                                object_map.size());
+    String out = String.format("%d objects in object_map%n", object_map.size());
     for (Object rep : sets.keySet()) {
-      List<Object> set = sets.get (rep);
+      List<Object> set = sets.get(rep);
       String line = "";
       for (Object entry : set) {
-        if (line != "")         // "interned"
-          line += ", ";
+        if (line != "") // "interned"
+        line += ", ";
         if (entry instanceof DaikonVariableInfo)
-          line += String.format ("%s ", ((DaikonVariableInfo)entry).getName());
-        else
-          line += String.format ("%s [%s]", entry.getClass(), entry);
+          line += String.format("%s ", ((DaikonVariableInfo) entry).getName());
+        else line += String.format("%s [%s]", entry.getClass(), entry);
       }
-      out += String.format ("%s%n", line);
+      out += String.format("%s%n", line);
     }
     return (out);
   }
 
   /** Returns the tracer of this node **/
-  public /*@Nullable*/ TagEntry getTracer() { return tracer; }
+  public /*@Nullable*/ TagEntry getTracer() {
+    return tracer;
+  }
 
   public TagEntry getTraceRoot() {
-    if (tracer == null) return this;
-    else return tracer.getTraceRoot();
+    if (tracer == null) {
+      return this;
+    } else {
+      return tracer.getTraceRoot();
+    }
   }
 }

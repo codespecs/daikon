@@ -53,7 +53,18 @@ this.polys.tail == orig(this.polys.tail.tail)
 this.polys.tail.tail == null
 this.size one of { 1, 2 }
 ===========================================================================
+PolyCalc.RatPolyStack.add():::EXIT;condition="not(orig(size <= 0))"
+===========================================================================
 PolyCalc.RatPolyStack.add():::EXIT;condition="not(size <= 0)"
+this.polys.tail == orig(this.polys.tail.tail)
+this.polys.tail.tail == null
+this.size one of { 1, 2 }
+===========================================================================
+PolyCalc.RatPolyStack.add():::EXIT;condition="not(orig(size <= 1))"
+this.polys.tail == orig(this.polys.tail.tail)
+this.polys.tail.tail == null
+this.size one of { 1, 2 }
+orig(this.size) one of { 2, 3 }
 ===========================================================================
 PolyCalc.RatPolyStack.add():::EXIT;condition="size <= 1"
 this.polys.tail == orig(this.polys.tail.tail)
@@ -79,7 +90,17 @@ PolyCalc.RatPolyStack.clear():::EXIT
 this.polys == null
 this.size == 0
 ===========================================================================
+PolyCalc.RatPolyStack.clear():::EXIT;condition="not(orig(size <= 0))"
+===========================================================================
 PolyCalc.RatPolyStack.clear():::EXIT;condition="size <= 0"
+this.polys == null
+this.size == 0
+===========================================================================
+PolyCalc.RatPolyStack.clear():::EXIT;condition="not(orig(size <= 1))"
+this.polys == null
+this.size == 0
+orig(this.polys.head) has only one value
+orig(this.size) == 3
 ===========================================================================
 PolyCalc.RatPolyStack.clear():::EXIT;condition="size <= 1"
 this.polys == null
@@ -121,7 +142,17 @@ this.polys.tail == orig(this.polys.tail.tail)
 (this.polys.tail == null)  ==>  (this.polys.head has only one value)
 this.size one of { 1, 2, 3 }
 ===========================================================================
+PolyCalc.RatPolyStack.div():::EXIT;condition="not(orig(size <= 0))"
+===========================================================================
 PolyCalc.RatPolyStack.div():::EXIT;condition="not(size <= 0)"
+this.polys.tail == orig(this.polys.tail.tail)
+this.size one of { 1, 2, 3 }
+===========================================================================
+PolyCalc.RatPolyStack.div():::EXIT;condition="not(orig(size <= 1))"
+this.polys.tail == orig(this.polys.tail.tail)
+this.size one of { 1, 2, 3 }
+orig(this) has only one value
+orig(this.size) one of { 2, 3, 4 }
 ===========================================================================
 PolyCalc.RatPolyStack.div():::EXIT;condition="size <= 1"
 this.polys.tail == orig(this.polys.tail.tail)
@@ -137,6 +168,8 @@ this.size one of { 2, 3 }
 PolyCalc.RatPolyStack.dup():::ENTER
 this.size one of { 1, 2, 3 }
 ===========================================================================
+PolyCalc.RatPolyStack.dup():::ENTER;condition="not(size <= 0)"
+===========================================================================
 PolyCalc.RatPolyStack.dup():::EXIT
 this.polys.head == this.polys.tail.head
 this.polys.head == orig(this.polys.head)
@@ -144,14 +177,21 @@ this.polys.tail == orig(this.polys)
 this.polys.tail.tail == orig(this.polys.tail)
 this.size one of { 2, 3, 4 }
 ===========================================================================
+PolyCalc.RatPolyStack.dup():::EXIT;condition="not(orig(size <= 0))"
+===========================================================================
 PolyCalc.RatPolyStack.dup():::EXIT;condition="not(size <= 0)"
+this.polys.head == this.polys.tail.head
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys)
+this.polys.tail.tail == orig(this.polys.tail)
+this.size one of { 2, 3, 4 }
 ===========================================================================
 PolyCalc.RatPolyStack.get(int):::ENTER
 (this.polys.tail != null)  <==>  (this.size one of { 2, 3, 4 })
 (this.polys.tail != null)  ==>  (this.polys.tail.head != null)
 (this.polys.tail == null)  <==>  (this.size == 1)
-(this.polys.tail == null)  ==>  (index  isPointer)
 (this.polys.tail == null)  ==>  (index == 0)
+(this.polys.tail == null)  ==>  (index is a pointer)
 this.polys != null
 this.size >= 1
 index >= 0
@@ -185,15 +225,57 @@ this.size == orig(this.size)
 (this.polys.tail != null)  <==>  (this.size one of { 2, 3, 4 })
 (this.polys.tail != null)  ==>  (this.polys.tail.head != null)
 (this.polys.tail == null)  <==>  (this.size == 1)
-(this.polys.tail == null)  ==>  (orig(index)  isPointer)
 (this.polys.tail == null)  ==>  (orig(index) == 0)
+(this.polys.tail == null)  ==>  (orig(index) is a pointer)
 (this.polys.tail == null)  ==>  (this.polys.head == return)
 this.polys != null
 this.size >= 1
 return != null
 this.size > orig(index)
 ===========================================================================
+PolyCalc.RatPolyStack.get(int):::EXIT;condition="not(orig(size <= 0))"
+===========================================================================
 PolyCalc.RatPolyStack.get(int):::EXIT;condition="not(size <= 0)"
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.polys != null
+this.polys.head != null
+this.polys.tail.head != null
+this.size >= 1
+return != null
+this.size > orig(index)
+===========================================================================
+PolyCalc.RatPolyStack.get(int):::EXIT;condition="orig(size <= 1)"
+this.polys == orig(this.polys)
+this.polys.head == return
+this.polys.tail == orig(this.polys.tail)
+this.size == orig(this.size)
+return == orig(this.polys.head)
+this.polys != null
+this.polys.tail == null
+this.size == 1
+return != null
+orig(index) == 0
+===========================================================================
+PolyCalc.RatPolyStack.get(int):::EXIT;condition="not(orig(size <= 1))"
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.polys != null
+this.polys.head != null
+this.polys.tail != null
+this.polys.tail.head != null
+this.size one of { 2, 3, 4 }
+return != null
+orig(index) >= 0
+this.size > orig(index)
 ===========================================================================
 PolyCalc.RatPolyStack.get(int):::EXIT;condition="size <= 1"
 this.polys == orig(this.polys)
@@ -221,6 +303,21 @@ this.size one of { 2, 3, 4 }
 return != null
 this.size > orig(index)
 ===========================================================================
+PolyCalc.RatPolyStack.get(int):::EXIT;condition="not(orig(size <= index))"
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.polys != null
+this.polys.head != null
+this.polys.tail.head != null
+this.size >= 1
+return != null
+orig(index) >= 0
+this.size > orig(index)
+===========================================================================
 PolyCalc.RatPolyStack.get(int):::EXIT;condition="not(size <= index)"
 this.polys == orig(this.polys)
 this.polys.head == orig(this.polys.head)
@@ -240,8 +337,8 @@ PolyCalc.RatPolyStack.getCons(int):::ENTER
 (this.polys.tail != null)  <==>  (this.size one of { 2, 3, 4 })
 (this.polys.tail != null)  ==>  (this.polys.tail.head != null)
 (this.polys.tail == null)  <==>  (this.size == 1)
-(this.polys.tail == null)  ==>  (index  isPointer)
 (this.polys.tail == null)  ==>  (index == 0)
+(this.polys.tail == null)  ==>  (index is a pointer)
 this.polys != null
 this.size >= 1
 index >= 0
@@ -280,13 +377,24 @@ this.polys.tail == orig(this.polys.tail)
 this.polys.tail.head == orig(this.polys.tail.head)
 this.polys.tail.tail == orig(this.polys.tail.tail)
 this.size == orig(this.size)
+(orig(index) == 0)  <==>  (index == orig(index))
+(orig(index) == 0)  ==>  (orig(index) is a pointer)
+(orig(index) == 0)  ==>  (this.polys == return)
+(orig(index) == 0)  ==>  (this.polys.head == return.head)
+(orig(index) == 0)  ==>  (this.polys.tail == return.tail)
+(orig(index) == 0)  ==>  (this.polys.tail.head == return.tail.head)
+(orig(index) == 0)  ==>  (this.polys.tail.tail == return.tail.tail)
+(orig(index) == 0)  ==>  (this.size >= 1)
+(orig(index) one of { 1, 2, 3 })  <==>  (index < orig(index))
+(orig(index) one of { 1, 2, 3 })  ==>  (this.polys.tail != null)
+(orig(index) one of { 1, 2, 3 })  ==>  (this.size one of { 2, 3, 4 })
 (this.polys.tail != null)  <==>  (this.size one of { 2, 3, 4 })
 (this.polys.tail != null)  ==>  (return.tail.head != null)
 (this.polys.tail != null)  ==>  (this.polys.tail.head != null)
 (this.polys.tail == null)  <==>  (this.size == 1)
 (this.polys.tail == null)  ==>  (index == orig(index))
-(this.polys.tail == null)  ==>  (orig(index)  isPointer)
 (this.polys.tail == null)  ==>  (orig(index) == 0)
+(this.polys.tail == null)  ==>  (orig(index) is a pointer)
 (this.polys.tail == null)  ==>  (return.tail == null)
 (this.polys.tail == null)  ==>  (this.polys == return)
 (this.polys.tail == null)  ==>  (this.polys.head == return.head)
@@ -298,7 +406,55 @@ return.head != null
 return.tail.head != null
 this.size > orig(index)
 ===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::EXIT;condition="not(orig(size <= 0))"
+===========================================================================
 PolyCalc.RatPolyStack.getCons(int):::EXIT;condition="not(size <= 0)"
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.polys != null
+this.polys.head != null
+this.polys.tail.head != null
+this.size >= 1
+return != null
+return.head != null
+return.tail.head != null
+this.size > orig(index)
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::EXIT;condition="orig(size <= 1)"
+this.polys == return
+this.polys.head == return.head
+this.polys.tail == return.tail
+this.size == orig(this.size)
+return == orig(this.polys)
+return.head == orig(this.polys.head)
+return.tail == orig(this.polys.tail)
+this.size == 1
+return != null
+return.head != null
+return.tail == null
+orig(index) == 0
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::EXIT;condition="not(orig(size <= 1))"
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.polys != null
+this.polys.head != null
+this.polys.tail != null
+this.polys.tail.head != null
+this.size one of { 2, 3, 4 }
+return != null
+return.head != null
+return.tail.head != null
+orig(index) >= 0
+this.size > orig(index)
 ===========================================================================
 PolyCalc.RatPolyStack.getCons(int):::EXIT;condition="size <= 1"
 this.polys == return
@@ -330,7 +486,7 @@ return.head != null
 return.tail.head != null
 this.size > orig(index)
 ===========================================================================
-PolyCalc.RatPolyStack.getCons(int):::EXIT;condition="not(index > 0)"
+PolyCalc.RatPolyStack.getCons(int):::EXIT;condition="not(orig(size <= index))"
 this.polys == orig(this.polys)
 this.polys.head == orig(this.polys.head)
 this.polys.tail == orig(this.polys.tail)
@@ -363,6 +519,60 @@ return.head != null
 return.tail.head != null
 this.size > orig(index)
 ===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::EXIT;condition="not(index > 0)"
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.polys != null
+this.polys.head != null
+this.polys.tail.head != null
+this.size >= 1
+return != null
+return.head != null
+return.tail.head != null
+orig(index) >= 0
+this.size > orig(index)
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::EXIT;condition="orig(index > 0)"
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.polys != null
+this.polys.head != null
+this.polys.tail != null
+this.polys.tail.head != null
+this.size one of { 2, 3, 4 }
+return != null
+return.head != null
+return.tail.head != null
+orig(index) one of { 1, 2, 3 }
+this.size > orig(index)
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::EXIT;condition="not(orig(index > 0))"
+this.polys == return
+this.polys.head == return.head
+this.polys.tail == return.tail
+this.polys.tail.head == return.tail.head
+this.polys.tail.tail == return.tail.tail
+this.size == orig(this.size)
+return == orig(this.polys)
+return.head == orig(this.polys.head)
+return.tail == orig(this.polys.tail)
+return.tail.head == orig(this.polys.tail.head)
+return.tail.tail == orig(this.polys.tail.tail)
+this.size >= 1
+return != null
+return.head != null
+return.tail.head != null
+orig(index) == 0
+this.size > orig(index)
+===========================================================================
 PolyCalc.RatPolyStack.mul():::ENTER
 (this.polys.tail.tail == null)  <==>  (this.size == 2)
 this.size one of { 2, 3 }
@@ -384,7 +594,18 @@ this.polys.tail == orig(this.polys.tail.tail)
 this.polys.tail.tail == null
 this.size one of { 1, 2 }
 ===========================================================================
+PolyCalc.RatPolyStack.mul():::EXIT;condition="not(orig(size <= 0))"
+===========================================================================
 PolyCalc.RatPolyStack.mul():::EXIT;condition="not(size <= 0)"
+this.polys.tail == orig(this.polys.tail.tail)
+this.polys.tail.tail == null
+this.size one of { 1, 2 }
+===========================================================================
+PolyCalc.RatPolyStack.mul():::EXIT;condition="not(orig(size <= 1))"
+this.polys.tail == orig(this.polys.tail.tail)
+this.polys.tail.tail == null
+this.size one of { 1, 2 }
+orig(this.size) one of { 2, 3 }
 ===========================================================================
 PolyCalc.RatPolyStack.mul():::EXIT;condition="size <= 1"
 this.polys.tail == orig(this.polys.tail.tail)
@@ -405,8 +626,38 @@ this.polys == orig(this.polys.tail)
 this.polys.head == orig(this.polys.tail.head)
 this.polys.tail == orig(this.polys.tail.tail)
 return == orig(this.polys.head)
+(this.polys != null)  <==>  (orig(this.size) one of { 2, 3, 4 })
+(this.polys != null)  <==>  (this.size one of { 1, 2, 3 })
+(this.polys != null)  ==>  (this.polys.head != null)
+(this.polys != null)  ==>  (this.polys.tail.head != null)
+(this.polys == null)  <==>  (orig(this.size) == 1)
+(this.polys == null)  <==>  (this.size == 0)
+(this.polys == null)  ==>  (this.size is a pointer)
 return != null
 this.size - orig(this.size) + 1 == 0
+===========================================================================
+PolyCalc.RatPolyStack.pop():::EXIT;condition="not(orig(size <= 0))"
+===========================================================================
+PolyCalc.RatPolyStack.pop():::EXIT;condition="size <= 0"
+this.polys == orig(this.polys.tail)
+return == orig(this.polys.head)
+this.polys == null
+this.size == 0
+orig(this.size) == 1
+===========================================================================
+PolyCalc.RatPolyStack.pop():::EXIT;condition="not(size <= 0)"
+this.polys == orig(this.polys.tail)
+this.polys.head == orig(this.polys.tail.head)
+this.polys.tail == orig(this.polys.tail.tail)
+return == orig(this.polys.head)
+this.polys != null
+this.polys.head != null
+this.polys.tail.head != null
+this.size one of { 1, 2, 3 }
+return != null
+orig(this.polys) != null
+orig(this.size) one of { 2, 3, 4 }
+this.size < orig(this.size)
 ===========================================================================
 PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::ENTER
 p != null
@@ -425,7 +676,7 @@ PolyCalc.RatPolyStack.size():::ENTER
 (this.polys != null)  ==>  (this.polys.head != null)
 (this.polys != null)  ==>  (this.polys.tail.head != null)
 (this.polys == null)  <==>  (this.size == 0)
-(this.polys == null)  ==>  (this.size  isPointer)
+(this.polys == null)  ==>  (this.size is a pointer)
 (this.polys.tail != null)  <==>  (this.size one of { 2, 3, 4 })
 (this.polys.tail != null)  ==>  (this.polys != null)
 (this.polys.tail != null)  ==>  (this.polys.tail.head != null)
@@ -463,20 +714,64 @@ return == orig(this.size)
 (this.polys != null)  ==>  (this.polys.head != null)
 (this.polys != null)  ==>  (this.polys.tail.head != null)
 (this.polys == null)  <==>  (return == 0)
-(this.polys == null)  ==>  (return  isPointer)
+(this.polys == null)  ==>  (return is a pointer)
 (this.polys.tail != null)  <==>  (return one of { 2, 3, 4 })
 (this.polys.tail != null)  ==>  (this.polys != null)
 (this.polys.tail != null)  ==>  (this.polys.tail.head != null)
 (this.polys.tail == null)  <==>  (return one of { 0, 1 })
 return >= 0
 ===========================================================================
+PolyCalc.RatPolyStack.size():::EXIT;condition="orig(size <= 0)"
+this.polys == null
+return == 0
+===========================================================================
+PolyCalc.RatPolyStack.size():::EXIT;condition="not(orig(size <= 0))"
+this.polys != null
+return >= 1
+===========================================================================
 PolyCalc.RatPolyStack.size():::EXIT;condition="size <= 0"
+this.polys == orig(this.polys)
+this.size == return
+return == orig(this.size)
 this.polys == null
 return == 0
 ===========================================================================
 PolyCalc.RatPolyStack.size():::EXIT;condition="not(size <= 0)"
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == return
+return == orig(this.size)
 this.polys != null
+this.polys.head != null
+this.polys.tail.head != null
 return >= 1
+===========================================================================
+PolyCalc.RatPolyStack.size():::EXIT;condition="orig(size <= 1)"
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.size == return
+return == orig(this.size)
+this.polys.head != null
+this.polys.tail == null
+return one of { 0, 1 }
+===========================================================================
+PolyCalc.RatPolyStack.size():::EXIT;condition="not(orig(size <= 1))"
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == return
+return == orig(this.size)
+this.polys != null
+this.polys.head != null
+this.polys.tail != null
+this.polys.tail.head != null
+return one of { 2, 3, 4 }
 ===========================================================================
 PolyCalc.RatPolyStack.size():::EXIT;condition="size <= 1"
 this.polys == orig(this.polys)
@@ -524,7 +819,16 @@ this.polys.tail == orig(this.polys.tail.tail)
 (this.polys.tail == null)  ==>  (orig(this.polys.tail.head) has only one value)
 this.size one of { 1, 2, 3 }
 ===========================================================================
+PolyCalc.RatPolyStack.sub():::EXIT;condition="not(orig(size <= 0))"
+===========================================================================
 PolyCalc.RatPolyStack.sub():::EXIT;condition="not(size <= 0)"
+this.polys.tail == orig(this.polys.tail.tail)
+this.size one of { 1, 2, 3 }
+===========================================================================
+PolyCalc.RatPolyStack.sub():::EXIT;condition="not(orig(size <= 1))"
+this.polys.tail == orig(this.polys.tail.tail)
+this.size one of { 1, 2, 3 }
+orig(this.size) one of { 2, 3, 4 }
 ===========================================================================
 PolyCalc.RatPolyStack.sub():::EXIT;condition="size <= 1"
 this.polys.tail == orig(this.polys.tail.tail)
@@ -549,7 +853,25 @@ this.polys.tail.tail == orig(this.polys.tail.tail)
 this.size == orig(this.size)
 this.size one of { 2, 3 }
 ===========================================================================
+PolyCalc.RatPolyStack.swap():::EXIT;condition="not(orig(size <= 0))"
+===========================================================================
 PolyCalc.RatPolyStack.swap():::EXIT;condition="not(size <= 0)"
+this.polys == orig(this.polys.tail)
+this.polys.head == orig(this.polys.tail.head)
+this.polys.tail == orig(this.polys)
+this.polys.tail.head == orig(this.polys.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.size one of { 2, 3 }
+===========================================================================
+PolyCalc.RatPolyStack.swap():::EXIT;condition="not(orig(size <= 1))"
+this.polys == orig(this.polys.tail)
+this.polys.head == orig(this.polys.tail.head)
+this.polys.tail == orig(this.polys)
+this.polys.tail.head == orig(this.polys.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.size one of { 2, 3 }
 ===========================================================================
 PolyCalc.RatPolyStack.swap():::EXIT;condition="not(size <= 1)"
 this.polys == orig(this.polys.tail)

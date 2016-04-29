@@ -70,7 +70,7 @@ do-%:
 	@echo exec $(MAKE) -C daikon-tests/$(DIR) $(subst $(DIR)-,,$*)
 else
 do-%:
-	@$(MAKE) -C $(DIR) $(subst $(DIR)-,,$*)
+	@$(MAKE) -C $(DIR) --jobs=1 $(subst $(DIR)-,,$*)
 endif
 
 HR:="=========================================================================="

@@ -13,15 +13,14 @@ import org.checkerframework.dataflow.qual.*;
  *  invariant <code>a.x = 0</code> is true, the guarded implication is
  *  <code>a != null \rArr; a.x = 0</code>.
  **/
-public class GuardingImplication
-  extends Implication
-{
+public class GuardingImplication extends Implication {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020725L;
 
-  private GuardingImplication(PptSlice ppt, Invariant predicate, Invariant consequent, boolean iff) {
+  private GuardingImplication(
+      PptSlice ppt, Invariant predicate, Invariant consequent, boolean iff) {
     super(ppt, predicate, consequent, iff, predicate, consequent);
   }
 
@@ -29,10 +28,8 @@ public class GuardingImplication
   // Invariant.createGuardedInvariant().  (I need to find a way to enforce this.)
   // A GuardingImplication is never installed in a PptMap -- it's only
   // printed by using format_using.
-  public static GuardingImplication makeGuardingImplication(PptTopLevel ppt,
-                                                            Invariant predicate,
-                                                            Invariant consequent,
-                                                            boolean iff) {
+  public static GuardingImplication makeGuardingImplication(
+      PptTopLevel ppt, Invariant predicate, Invariant consequent, boolean iff) {
     assert predicate != null;
     assert consequent != null;
 
@@ -41,7 +38,8 @@ public class GuardingImplication
     // implication is based off of an existing invariant in a PptSlice, we
     // are guarenteed no duplicate guarding implications exist.
 
-    GuardingImplication result = new GuardingImplication(ppt.joiner_view, predicate, consequent, iff);
+    GuardingImplication result =
+        new GuardingImplication(ppt.joiner_view, predicate, consequent, iff);
     return result;
   }
 
@@ -57,5 +55,4 @@ public class GuardingImplication
   public double computeConfidence() {
     return right.computeConfidence();
   }
-
 }

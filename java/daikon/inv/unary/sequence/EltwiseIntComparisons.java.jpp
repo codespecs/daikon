@@ -129,7 +129,6 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.Quantify.QuantFlags;
-// import daikon.inv.binary.twoScalar.CORECLASS;
 import plume.*;
 import java.util.*;
 
@@ -166,7 +165,7 @@ public class CLASSNAME
   /**
    * Boolean.  True iff EltwiseIntComparison invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   static final boolean debugEltwiseIntComparison = false;
 
@@ -194,14 +193,14 @@ public class CLASSNAME
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     #if !defined(EQUAL) && defined(TYPELONG)
       if (!vis[0].type.baseIsIntegral())
-        return (false);
+        return false;
     #endif
 
-    return (true);
+    return true;
   }
 
   /** Instantiate the invariant on the specified slice **/

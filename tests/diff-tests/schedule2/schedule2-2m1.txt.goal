@@ -1,5 +1,5 @@
 <std.enqueue(int;process *;)int:::EXIT, null>
-  <(return == 0)  ==>  (return  isPointer) {1+}, null> (NInt,JM)
+  <(return == 0)  ==>  (return is a pointer) {1+}, null> (NInt,JM)
   <(return == 0)  ==>  (prio >= 0) {1+}, null> (NInt,JM)
   <(return == -4)  ==>  (prio != 0) {0.9999+}, null> (NInt,JM)
 <std.get_command(int *;int *;float *;)int:::EXIT, null>
@@ -9,6 +9,6 @@
   <(::next_pid == 0) ==> (orig(::next_pid) == 0) {1+}, null> (Bin,JM)
   <return == 0  (mod 4) {1+}, null> (UInt,JM)
 <std.put_end(int;process *;)int:::EXIT, null>
-  <(return == 0)  ==>  (return  isPointer) {1+}, null> (NInt,JM)
+  <(return == 0)  ==>  (return is a pointer) {1+}, null> (NInt,JM)
   <(return == 0)  ==>  (prio >= 0) {1+}, null> (NInt,JM)
   <(return == -4)  ==>  (prio != 0) {0.9999+}, null> (NInt,JM)

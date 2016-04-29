@@ -2,7 +2,6 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
-
 import plume.*;
 
 /*>>>
@@ -14,9 +13,7 @@ import org.checkerframework.dataflow.qual.*;
  * Abstract class to represent a derived variable that came from
  * two base variables.
  **/
-public abstract class BinaryDerivation
-  extends Derivation
-{
+public abstract class BinaryDerivation extends Derivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -49,14 +46,17 @@ public abstract class BinaryDerivation
   }
 
   /*@SideEffectFree*/ public VarInfo[] getBases() {
-    return new VarInfo[] { base1, base2 };
+    return new VarInfo[] {base1, base2};
   }
 
   /*@Pure*/ public VarInfo getBase(int i) {
     switch (i) {
-    case 0: return base1;
-    case 1: return base2;
-    default: throw new Error("bad base: " + i);
+      case 0:
+        return base1;
+      case 1:
+        return base2;
+      default:
+        throw new Error("bad base: " + i);
     }
   }
 
@@ -67,18 +67,14 @@ public abstract class BinaryDerivation
     return result;
   }
 
-  public ValueAndModified computeValueAndModified (ValueTuple vt) {
+  public ValueAndModified computeValueAndModified(ValueTuple vt) {
     int source_mod1 = base1.getModified(vt);
     int source_mod2 = base2.getModified(vt);
     // MISSING_NONSENSICAL takes precedence
-    if (source_mod1 == ValueTuple.MISSING_NONSENSICAL)
-      return ValueAndModified.MISSING_NONSENSICAL;
-    if (source_mod2 == ValueTuple.MISSING_NONSENSICAL)
-      return ValueAndModified.MISSING_NONSENSICAL;
-    if (source_mod1 == ValueTuple.MISSING_FLOW)
-      return ValueAndModified.MISSING_FLOW;
-    if (source_mod2 == ValueTuple.MISSING_FLOW)
-      return ValueAndModified.MISSING_FLOW;
+    if (source_mod1 == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod2 == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod1 == ValueTuple.MISSING_FLOW) return ValueAndModified.MISSING_FLOW;
+    if (source_mod2 == ValueTuple.MISSING_FLOW) return ValueAndModified.MISSING_FLOW;
 
     return computeValueAndModifiedImpl(vt);
   }
@@ -88,11 +84,9 @@ public abstract class BinaryDerivation
    **/
   protected abstract ValueAndModified computeValueAndModifiedImpl(ValueTuple vt);
 
-
   /*@Pure*/ protected boolean isParam() {
     return (base1.isParam() || base2.isParam());
   }
-
 
   public int derivedDepth() {
     return 1 + Math.max(base1.derivedDepth(), base2.derivedDepth());
@@ -114,5 +108,4 @@ public abstract class BinaryDerivation
   public VarInfo var2(/*>>>@GuardSatisfied BinaryDerivation this*/) {
     return base2;
   }
-
 }

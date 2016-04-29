@@ -61,7 +61,7 @@ public class CLASSNAME
   /**
    * Boolean.  True iff LinearBinary invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CORECLASS core;
 
@@ -94,7 +94,7 @@ public class CLASSNAME
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     #if defined (TYPELONG)
       // Don't look for linearbinary over hashcodes and booleans
@@ -103,7 +103,7 @@ public class CLASSNAME
         return false;
     #endif
 
-    return (true);
+    return true;
   }
 
   /** Instantiate an invariant on the specified slice **/

@@ -1,8 +1,8 @@
 package daikon;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.io.IOException;
 import plume.*;
 
 /*>>>
@@ -25,9 +25,7 @@ import org.checkerframework.dataflow.qual.*;
  **/
 // No "@Deprecated" annotation yet, but we should add it once support for
 // file format 1 is removed from Daikon.
-public class PptName
-  implements Serializable
-{
+public class PptName implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -35,13 +33,14 @@ public class PptName
 
   // These are never changed but cannot be declared "final", because they
   // must be re-interned upon deserialization.
-  private /*@Interned*/ String fullname;   // interned full program point name
+  private /*@Interned*/ String fullname; // interned full program point name
   // fn_name and point together comprise fullname
-  private /*@Interned*/ String fn_name;    // interned; the part of fullname before ":::"
-  private /*@Interned*/ String point;      // interned post-separator (separator is ":::")
+  private /*@Interned*/ String fn_name; // interned; the part of fullname before ":::"
+  private /*@Interned*/ String point; // interned post-separator (separator is ":::")
   // cls and method together comprise fn_name
-  private /*@Nullable*/ /*@Interned*/ String cls;        // interned fully-qualified class name
-  final private /*@Nullable*/ /*@Interned*/ String method;     // interned method signature, including types
+  private /*@Nullable*/ /*@Interned*/ String cls; // interned fully-qualified class name
+  final private /*@Nullable*/ /*@Interned*/ String
+      method; // interned method signature, including types
 
   // Representation invariant:
   //
@@ -59,16 +58,16 @@ public class PptName
   /**
    * @param name non-null ppt name as given in the decls file
    **/
-  public PptName( String name ) {
+  public PptName(String name) {
     // If the name is well-formed, like "mvspc.setupGUI()V:::EXIT75",
     // then this constructor will extract the class and method names.
     // If not (eg for lisp code), it's okay because only the GUI uses
     // this class/method information.
 
     fullname = name.intern();
-    int separatorPosition = name.indexOf( FileIO.ppt_tag_separator );
+    int separatorPosition = name.indexOf(FileIO.ppt_tag_separator);
     if (separatorPosition == -1) {
-      throw new Daikon.TerminationMessage("no ppt_tag_separator in '"+name+"'");
+      throw new Daikon.TerminationMessage("no ppt_tag_separator in '" + name + "'");
       // // probably a lisp program, which was instrumented differently
       // cls = method = point = fn_name = null;
       // return;
@@ -97,10 +96,10 @@ public class PptName
   /**
    * className or methodName (or both) must be non-null
    **/
-  public PptName(/*@Nullable*/ String className, /*@Nullable*/ String methodName, String pointName) {
+  public PptName(
+      /*@Nullable*/ String className, /*@Nullable*/ String methodName, String pointName) {
     if ((className == null) && (methodName == null)) {
-      throw new UnsupportedOperationException
-        ("One of class or method must be non-null");
+      throw new UnsupportedOperationException("One of class or method must be non-null");
     }
     // First set class name
     if (className != null) {
@@ -166,10 +165,11 @@ public class PptName
   public /*@Nullable*/ String getShortClassName() {
     if (cls == null) return null;
     int pt = cls.lastIndexOf('.');
-    if (pt == -1)
+    if (pt == -1) {
       return cls;
-    else
-      return cls.substring(pt+1);
+    } else {
+      return cls.substring(pt + 1);
+    }
   }
 
   /**
@@ -179,10 +179,11 @@ public class PptName
   public /*@Nullable*/ String getPackageName() {
     if (cls == null) return null;
     int pt = cls.lastIndexOf('.');
-    if (pt == -1)
+    if (pt == -1) {
       return null;
-    else
+    } else {
       return cls.substring(0, pt);
+    }
   }
 
   /**
@@ -279,7 +280,7 @@ public class PptName
    * @return true iff this name refers to program globals
    **/
   /*@Pure*/ public boolean isGlobalPoint() {
-    return FileIO.global_suffix.equals (point);
+    return FileIO.global_suffix.equals(point);
   }
 
   /**
@@ -330,12 +331,10 @@ public class PptName
    * @see #getPointSubscript()
    **/
   public String exitLine() {
-    if (!isExitPoint())
-      return "";
+    if (!isExitPoint()) return "";
     int non_digit;
-    for (non_digit=FileIO.exit_suffix.length(); non_digit<point.length(); non_digit++) {
-      if (! Character.isDigit(point.charAt(non_digit)))
-        break;
+    for (non_digit = FileIO.exit_suffix.length(); non_digit < point.length(); non_digit++) {
+      if (!Character.isDigit(point.charAt(non_digit))) break;
     }
     return point.substring(FileIO.exit_suffix.length(), non_digit);
   }
@@ -351,18 +350,16 @@ public class PptName
 
     if (method != null) {
 
-      if (method.startsWith ("<init>"))
-        return (true);
+      if (method.startsWith("<init>")) return true;
 
-      if (cls == null)
-        return (false);
+      if (cls == null) return false;
 
-      String class_name = UtilMDE.unqualified_name (cls);
-      assert method != null;    // for nullness checker
-      int arg_start = method.indexOf ('(');
+      @SuppressWarnings("signature") // cls is allowed to be arbitrary, especially for non-Java code
+      String class_name = UtilMDE.fullyQualifiedNameToSimpleName(cls);
+      assert method != null; // for nullness checker
+      int arg_start = method.indexOf('(');
       String method_name = method;
-      if (arg_start != -1)
-        method_name = method.substring (0, arg_start);
+      if (arg_start != -1) method_name = method.substring(0, arg_start);
 
       // System.out.println ("fullname = " + fullname);
       // System.out.println ("fn_name = " + fn_name);
@@ -371,24 +368,25 @@ public class PptName
       // System.out.println ("class_name = " + class_name);
       // System.out.println ("method_name = " + method_name);
 
-      if (class_name.equals (method_name))
-        return (true);
+      if (class_name.equals(method_name)) return true;
     }
 
-    return (false);
-
+    return false;
   }
-
 
   /** Debugging output **/
   public String repr() {
-    return "PptName: fullname=" + fullname
-      + "; fn_name=" + fn_name
-      + "; point=" + point
-      + "; cls=" + cls
-      + "; method=" + method;
+    return "PptName: fullname="
+        + fullname
+        + "; fn_name="
+        + fn_name
+        + "; point="
+        + point
+        + "; cls="
+        + cls
+        + "; method="
+        + method;
   }
-
 
   // ==================== PRODUCERS ====================
 
@@ -442,12 +440,12 @@ public class PptName
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied PptName this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied PptName this,*/ /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     return (o instanceof PptName) && equals((PptName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals (/*>>>@GuardSatisfied PptName this,*/ /*@GuardSatisfied*/ PptName o) {
+  /*@Pure*/ public boolean equals(/*>>>@GuardSatisfied PptName this,*/ /*@GuardSatisfied*/ PptName o) {
     return (o != null) && (o.fullname == fullname);
   }
 
@@ -457,26 +455,19 @@ public class PptName
 
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.
-  private void readObject(ObjectInputStream in)
-    throws IOException, ClassNotFoundException
-  {
+  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     try {
       in.defaultReadObject();
-      if (fullname != null)
-        fullname = fullname.intern();
-      if (fn_name != null)
-        fn_name = fn_name.intern();
-      if (cls != null)
-        cls = cls.intern();
+      if (fullname != null) fullname = fullname.intern();
+      if (fn_name != null) fn_name = fn_name.intern();
+      if (cls != null) cls = cls.intern();
       if (method != null) {
         // method = method.intern();
         UtilMDE.setFinalField(this, "method", method.intern());
       }
-      if (point != null)
-        point = point.intern();
+      if (point != null) point = point.intern();
     } catch (NoSuchFieldException e) {
       throw new Error(e);
     }
   }
-
 }

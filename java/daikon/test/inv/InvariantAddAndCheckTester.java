@@ -1,24 +1,20 @@
 package daikon.test.inv;
 
-import daikon.*;
-
-import daikon.config.Configuration;
-
-import daikon.inv.*;
-import daikon.inv.ternary.threeScalar.ThreeScalar;
-import daikon.inv.binary.*;
-import daikon.inv.unary.*;
-import daikon.inv.unary.sequence.CommonSequence;
 import static daikon.inv.Invariant.asInvClass;
 
-
-import junit.framework.*;
-
+import daikon.*;
+import daikon.config.Configuration;
+import daikon.inv.*;
+import daikon.inv.binary.*;
+import daikon.inv.ternary.threeScalar.ThreeScalar;
+import daikon.inv.unary.*;
+import daikon.inv.unary.sequence.CommonSequence;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import junit.framework.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -118,7 +114,6 @@ public class InvariantAddAndCheckTester extends TestCase {
 
   private static final String lineSep = Global.lineSep;
 
-
   /**
    * This function allows this test to be run from the command line
    * instead of its usual method, which is through the Daikon
@@ -131,17 +126,16 @@ public class InvariantAddAndCheckTester extends TestCase {
    *        is the correct output
    **/
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     if (args.length == 1 && args[0].equalsIgnoreCase("--generate_goals")) {
       writeCommandFile();
     } else if (args.length > 0) {
-      throw new Daikon.TerminationMessage("Usage: java daikon.test.InvariantAddAndCheckTester" +
-                                   " [--generate_goals]");
+      throw new Daikon.TerminationMessage(
+          "Usage: java daikon.test.InvariantAddAndCheckTester" + " [--generate_goals]");
     } else {
       junit.textui.TestRunner.run(new TestSuite(InvariantAddAndCheckTester.class));
     }
   }
-
 
   /**
    * This constructor allows the test to be created from the
@@ -185,8 +179,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     // run the actual test
 
     if (!execute()) {
-      fail("At least one test failed." +
-           " Inspect java/daikon/test/InvariantAddAndCheckTest.diffs for error report.");
+      fail(
+          "At least one test failed."
+              + " Inspect java/daikon/test/InvariantAddAndCheckTest.diffs for error report.");
     }
   }
 
@@ -206,8 +201,7 @@ public class InvariantAddAndCheckTester extends TestCase {
         if (currentLine != null && !isComment(currentLine) && !isWhitespace(currentLine))
           return currentLine;
       }
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException(e.toString());
     }
     return null;
@@ -248,7 +242,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     try {
       commandOutput.write(output, 0, output.length());
       commandOutput.close();
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException("Could not output generated commands");
     }
     System.out.println("Goals generated");
@@ -277,10 +271,10 @@ public class InvariantAddAndCheckTester extends TestCase {
       //  invariantTestCases.add(currentCase);
       String results = AddAndCheckTestCase.runTest(commands);
       if (results == null) break;
-      if (! (results.length() == 0)) {
+      if (!(results.length() == 0)) {
         //  output.print(currentCase.getDiffString());
-          output.append(results);
-          noTestFailed = false;
+        output.append(results);
+        noTestFailed = false;
       }
     }
     if (noTestFailed) {
@@ -303,24 +297,22 @@ public class InvariantAddAndCheckTester extends TestCase {
 
   private static LineNumberReader getInputReader() {
 
-  // Calculate input file locations
-//     URL inputFileLocation =
-//       ClassLoader.getSystemClassLoader().getSystemResource("InvariantTest.commands");
-//     if (inputFileLocation == null)
-//       fail("Input file for invariant format tests missing." +
-//            " (Should be in InvariantTest.commands" +
-//            " and it must be within the classpath)");
+    // Calculate input file locations
+    //     URL inputFileLocation =
+    //       ClassLoader.getSystemClassLoader().getSystemResource("InvariantTest.commands");
+    //     if (inputFileLocation == null)
+    //       fail("Input file for invariant format tests missing." +
+    //            " (Should be in InvariantTest.commands" +
+    //            " and it must be within the classpath)");
 
     //  String inputFile = inputFileLocation.getFile();
     LineNumberReader input = null;
     try {
-      input = new LineNumberReader
-        (new InputStreamReader
-         (new FileInputStream(inputFileName)));
-    }
-    catch (FileNotFoundException e) {
-      fail("Unexpected FileNotFoundException (very strange since the URL" +
-           " of the file was found earlier)");
+      input = new LineNumberReader(new InputStreamReader(new FileInputStream(inputFileName)));
+    } catch (FileNotFoundException e) {
+      fail(
+          "Unexpected FileNotFoundException (very strange since the URL"
+              + " of the file was found earlier)");
     }
     return input;
   }
@@ -329,8 +321,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     try {
       return new FileWriter(commandsFileName);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException("Cannot write output into " + commandsFileName);
     }
   }
@@ -340,33 +331,30 @@ public class InvariantAddAndCheckTester extends TestCase {
     //   URL inputFileLocation =
     //      ClassLoader.getSystemClassLoader().getSystemResource("InvariantTest.commands");
 
-//     if (inputFileLocation == null)
-//       fail("Input file for invariant format tests missing." +
-//            " (Should be in InvariantTest.commands" +
-//            " and it must be within the classpath)");
+    //     if (inputFileLocation == null)
+    //       fail("Input file for invariant format tests missing." +
+    //            " (Should be in InvariantTest.commands" +
+    //            " and it must be within the classpath)");
 
     //  String inputFile = inputFileLocation.getFile();
     //    System.out.println(System.getProperty("user.dir"));
     LineNumberReader commands = null;
     try {
-      commands =  new LineNumberReader
-      (new InputStreamReader
-       (new FileInputStream(commandsFileName)));
-    }
-    catch (FileNotFoundException e) {
-      fail("Unexpected FileNotFoundException (very strange since the URL" +
-           " of the file was found earlier)");
+      commands = new LineNumberReader(new InputStreamReader(new FileInputStream(commandsFileName)));
+    } catch (FileNotFoundException e) {
+      fail(
+          "Unexpected FileNotFoundException (very strange since the URL"
+              + " of the file was found earlier)");
     }
     return commands;
   }
 
   private static FileWriter getDiffsOutputWriter() {
     try {
-        return new FileWriter(new File(diffFileName));
-      }
-      catch (IOException e) {
-        throw new RuntimeException("Cannot write output into " + diffFileName);
-      }
+      return new FileWriter(new File(diffFileName));
+    } catch (IOException e) {
+      throw new RuntimeException("Cannot write output into " + diffFileName);
+    }
   }
 
   /**
@@ -387,9 +375,8 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @return true if the line is made up only of whitespace, false otherwise
    **/
   /*@Pure*/ static boolean isWhitespace(String line) {
-    for (int x=0; x<line.length(); x++) {
-      if (!Character.isWhitespace(line.charAt(x)))
-        return false;
+    for (int x = 0; x < line.length(); x++) {
+      if (!Character.isWhitespace(line.charAt(x))) return false;
     }
     return true;
   }
@@ -452,8 +439,7 @@ public class InvariantAddAndCheckTester extends TestCase {
           continue;
         } else if (isTestTerminator(commandLine)) {
           break;
-        } else if (isAddCommand(commandLine) ||
-                   isCheckCommand(commandLine)) {
+        } else if (isAddCommand(commandLine) || isCheckCommand(commandLine)) {
           exicuteCheckOrAddCommand(commandLine, lineNumber);
         } else if (isCompareCommand(commandLine)) {
         } else {
@@ -478,8 +464,7 @@ public class InvariantAddAndCheckTester extends TestCase {
         } else if (isTestTerminator(commandLine)) {
           results.append(commandLine + lineSep + lineSep);
           break;
-        } else if (isAddCommand(commandLine) ||
-                   isCheckCommand(commandLine)) {
+        } else if (isAddCommand(commandLine) || isCheckCommand(commandLine)) {
           generateCheckOrAddCommand(commandLine, lineNumber);
         } else if (isCompareCommand(commandLine)) {
           // generateCompareCommand(commandLine);
@@ -512,8 +497,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       try {
         classToTest.getField("dkconfig_enabled"); // Enable if needs to be done
         InvariantAddAndCheckTester.config.apply(className + ".enabled", "true");
-      }
-      catch (NoSuchFieldException e) { // Otherwise do nothing
+      } catch (NoSuchFieldException e) { // Otherwise do nothing
       }
 
       if (generatingCommands) {
@@ -523,13 +507,12 @@ public class InvariantAddAndCheckTester extends TestCase {
       // Instantiate variables to be used as the names in the
       // invariants, variables are labeled a,b,c and so on as they
       // appear
-      String typeString = getNextRealLine( commands);
+      String typeString = getNextRealLine(commands);
 
       types = getTypes(typeString);
 
       VarInfo[] vars = getVarInfos(classToTest, types);
       PptSlice sl = createSlice(vars, daikon.test.Common.makePptTopLevel("Test:::OBJECT", vars));
-
 
       // Create an actual instance of the class
       invariantToTest = instantiateClass(classToTest, sl);
@@ -546,7 +529,6 @@ public class InvariantAddAndCheckTester extends TestCase {
       return false;
     }
 
-
     /**
      * Given a line from a command file, generates executes the
      * appropriate check or add command and checks the results against
@@ -560,15 +542,18 @@ public class InvariantAddAndCheckTester extends TestCase {
 
       StringTokenizer tokens = new StringTokenizer(args, argDivider);
       if (tokens.countTokens() != types.length + 2) {
-        throw new RuntimeException("Number of arguments to add command on line "
-                                   + lineNumber + " is: "
-                                   + tokens.countTokens() +
-                                   " but should be: " + (types.length + 2));
+        throw new RuntimeException(
+            "Number of arguments to add command on line "
+                + lineNumber
+                + " is: "
+                + tokens.countTokens()
+                + " but should be: "
+                + (types.length + 2));
       }
       Object[] params = getParams(tokens);
       InvariantStatus goalStatus = parseStatus(tokens.nextToken().trim());
-      tokens.nextToken();       // executed for side effect
-      assert ! tokens.hasMoreTokens();
+      tokens.nextToken(); // executed for side effect
+      assert !tokens.hasMoreTokens();
       InvariantStatus resultStatus = null;
       if (isCheckCommand(command)) {
         resultStatus = getCheckStatus(params);
@@ -576,9 +561,17 @@ public class InvariantAddAndCheckTester extends TestCase {
         resultStatus = getAddStatus(params);
       }
       if (resultStatus != goalStatus) {
-        results.append("Error on line " + lineNumber + ":" + lineSep +
-                       "Expected  InvariantStatus: " + goalStatus + lineSep +
-                       "Found InvariantStatus: " + resultStatus + lineSep);
+        results.append(
+            "Error on line "
+                + lineNumber
+                + ":"
+                + lineSep
+                + "Expected  InvariantStatus: "
+                + goalStatus
+                + lineSep
+                + "Found InvariantStatus: "
+                + resultStatus
+                + lineSep);
       }
     }
 
@@ -592,13 +585,16 @@ public class InvariantAddAndCheckTester extends TestCase {
 
       StringTokenizer tokens = new StringTokenizer(args, argDivider);
       if (tokens.countTokens() != types.length) {
-        throw new RuntimeException("Number of arguments to generate an add command on line: "
-                                   + lineNumber + " is: "
-                                   + tokens.countTokens() +
-                                   " but should be: " + types.length);
+        throw new RuntimeException(
+            "Number of arguments to generate an add command on line: "
+                + lineNumber
+                + " is: "
+                + tokens.countTokens()
+                + " but should be: "
+                + types.length);
       }
       Object[] params = getParams(tokens);
-      assert ! tokens.hasMoreTokens();
+      assert !tokens.hasMoreTokens();
       InvariantStatus goalStatus = null;
       if (isCheckCommand(command)) {
         goalStatus = getCheckStatus(params);
@@ -606,7 +602,15 @@ public class InvariantAddAndCheckTester extends TestCase {
         goalStatus = getAddStatus(params);
       }
       String invariantFormat = getInvariantFormat();
-      results.append(command + argDivider + " " + goalStatus.toString() + argDivider + " " + invariantFormat + lineSep);
+      results.append(
+          command
+              + argDivider
+              + " "
+              + goalStatus.toString()
+              + argDivider
+              + " "
+              + invariantFormat
+              + lineSep);
     }
 
     /**
@@ -631,8 +635,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       try {
         return (InvariantStatus) addModified.invoke(invariantToTest, params);
       } catch (Exception e) {
-        throw new RuntimeException (" error in " + invariantToTest.getClass()
-                                    + ": " + e);
+        throw new RuntimeException(" error in " + invariantToTest.getClass() + ": " + e);
       }
     }
 
@@ -644,8 +647,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       try {
         return (InvariantStatus) checkModified.invoke(invariantToTest, params);
       } catch (Exception e) {
-        throw new RuntimeException (" error in " + invariantToTest.getClass()
-                                    + ": " + e);
+        throw new RuntimeException(" error in " + invariantToTest.getClass() + ": " + e);
       }
     }
 
@@ -657,8 +659,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     private static String getInvariantFormat() {
       try {
-        return (String) outputProducer.invoke(invariantToTest,
-                                              new Object[]{ OutputFormat.DAIKON});
+        return (String) outputProducer.invoke(invariantToTest, new Object[] {OutputFormat.DAIKON});
       } catch (Exception e) {
         throw new RuntimeException(invariantToTest + " " + outputProducer);
       }
@@ -671,9 +672,10 @@ public class InvariantAddAndCheckTester extends TestCase {
       status = status.trim();
       if (status.equals("no_change")) {
         return InvariantStatus.NO_CHANGE;
-      } else  if (status.equals("falsified")) {
+      } else if (status.equals("falsified")) {
         return InvariantStatus.FALSIFIED;
-      }  if (status.equals("weakened")) {
+      }
+      if (status.equals("weakened")) {
         return InvariantStatus.WEAKENED;
       } else {
         throw new RuntimeException("Unrecognized InvariantStatus: " + status);
@@ -691,9 +693,10 @@ public class InvariantAddAndCheckTester extends TestCase {
       Method[] methods = theClass.getMethods();
 
       Method currentMethod;
-      for (int i=0; i<methods.length; i++) {
+      for (int i = 0; i < methods.length; i++) {
         currentMethod = methods[i];
-        if (currentMethod.getName().lastIndexOf("add_modified") != -1) { // Method should be called add_modified
+        if (currentMethod.getName().lastIndexOf("add_modified")
+            != -1) { // Method should be called add_modified
           return currentMethod;
         }
       }
@@ -711,9 +714,10 @@ public class InvariantAddAndCheckTester extends TestCase {
       Method[] methods = theClass.getMethods();
 
       Method currentMethod;
-      for (int i=0; i<methods.length; i++) {
+      for (int i = 0; i < methods.length; i++) {
         currentMethod = methods[i];
-        if (currentMethod.getName().lastIndexOf("check_modified") != -1) { // Method should be called check_modified
+        if (currentMethod.getName().lastIndexOf("check_modified")
+            != -1) { // Method should be called check_modified
           return currentMethod;
         }
       }
@@ -728,7 +732,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       Method[] methods = theClass.getMethods();
 
       Method currentMethod;
-      for (int i=0; i<methods.length; i++) {
+      for (int i = 0; i < methods.length; i++) {
         currentMethod = methods[i];
 
         // Method should be called format_using
@@ -749,8 +753,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     private static Class<?> getClass(/*@BinaryName*/ String classInfo) {
       try {
         return ClassLoader.getSystemClassLoader().loadClass(classInfo);
-      }
-      catch (ClassNotFoundException e) {
+      } catch (ClassNotFoundException e) {
         throw new RuntimeException(e.toString());
       }
     }
@@ -794,15 +797,15 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return an array of VarInfo objects that have the types corresponding
      *         to those in types
      **/
-    private static VarInfo [] getVarInfos(Class<? extends Invariant> classToTest, ProglangType[] types) {
+    private static VarInfo[] getVarInfos(
+        Class<? extends Invariant> classToTest, ProglangType[] types) {
       int numInfos = getArity(classToTest);
 
-      if (numInfos == -1)
-        throw new RuntimeException("Class arity cannot be determined.");
+      if (numInfos == -1) throw new RuntimeException("Class arity cannot be determined.");
 
-      VarInfo[] result = new VarInfo [numInfos];
+      VarInfo[] result = new VarInfo[numInfos];
 
-      for (int i=0; i<numInfos; i++) {
+      for (int i = 0; i < numInfos; i++) {
         result[i] = getVarInfo(types[i], i);
       }
 
@@ -823,9 +826,9 @@ public class InvariantAddAndCheckTester extends TestCase {
 
       String arrayModifier = "";
 
-      if (type == ProglangType.INT_ARRAY ||
-          type == ProglangType.DOUBLE_ARRAY ||
-          type == ProglangType.STRING_ARRAY) { // Is it an array ?
+      if (type == ProglangType.INT_ARRAY
+          || type == ProglangType.DOUBLE_ARRAY
+          || type == ProglangType.STRING_ARRAY) { // Is it an array ?
         arrayModifier = "[]";
       }
 
@@ -836,9 +839,13 @@ public class InvariantAddAndCheckTester extends TestCase {
       // invariant, "b" for the second, and so on
       // - The ProglangType will be specified in the parameters
       // - The comparability will be none
-      VarInfo result = new VarInfo (new String(new char [] {(char)('a' + i)}) +
-                                    arrayModifier, type, type,
-                                    VarComparabilityNone.it, VarInfoAux.getDefault());
+      VarInfo result =
+          new VarInfo(
+              new String(new char[] {(char) ('a' + i)}) + arrayModifier,
+              type,
+              type,
+              VarComparabilityNone.it,
+              VarInfoAux.getDefault());
       return result;
     }
 
@@ -849,12 +856,9 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return the arity of the invariant if it can be determined, -1 otherwise
      **/
     private static int getArity(Class<? extends Invariant> classToTest) {
-      if (UnaryInvariant.class.isAssignableFrom(classToTest))
-        return 1;
-      else if (BinaryInvariant.class.isAssignableFrom(classToTest))
-        return 2;
-      if (ThreeScalar.class.isAssignableFrom(classToTest))
-        return 3;
+      if (UnaryInvariant.class.isAssignableFrom(classToTest)) return 1;
+      if (BinaryInvariant.class.isAssignableFrom(classToTest)) return 2;
+      if (ThreeScalar.class.isAssignableFrom(classToTest)) return 3;
 
       return -1;
     }
@@ -866,38 +870,38 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @param typeNames the type string for an invariant
      * @return an array of ProglangTypes representing the data in typeNames
      **/
-    private static ProglangType [] getTypes(String typeNames) {
+    private static ProglangType[] getTypes(String typeNames) {
       StringTokenizer stok = new StringTokenizer(typeNames);
-      ProglangType[] result = new ProglangType [stok.countTokens()];
+      ProglangType[] result = new ProglangType[stok.countTokens()];
 
-      for (int i=0; i<result.length; i++) {
+      for (int i = 0; i < result.length; i++) {
         String typeName = stok.nextToken();
 
         // A way of doing the same thing as below in fewer lines of code
         // Doesn't seem to work...
         // result[i] = ProglangType.parse(typeName);
 
-        if (typeName.equalsIgnoreCase("int"))
+        if (typeName.equalsIgnoreCase("int")) {
           result[i] = ProglangType.INT;
-        else if (typeName.equalsIgnoreCase("double"))
+        } else if (typeName.equalsIgnoreCase("double")) {
           result[i] = ProglangType.DOUBLE;
-        else if (typeName.equalsIgnoreCase("string"))
+        } else if (typeName.equalsIgnoreCase("string")) {
           result[i] = ProglangType.STRING;
-        else if (typeName.equalsIgnoreCase("int_array"))
+        } else if (typeName.equalsIgnoreCase("int_array")) {
           result[i] = ProglangType.INT_ARRAY;
-        else if (typeName.equalsIgnoreCase("double_array"))
+        } else if (typeName.equalsIgnoreCase("double_array")) {
           result[i] = ProglangType.DOUBLE_ARRAY;
-        else if (typeName.equalsIgnoreCase("string_array"))
+        } else if (typeName.equalsIgnoreCase("string_array")) {
           result[i] = ProglangType.STRING_ARRAY;
-        else
+        } else {
           return null;
+        }
 
         assert result[i] != null : "ProglangType unexpectedly parsed to null in getTypes(String)";
       }
 
       return result;
     }
-
 
     /**
      * This function creates an appropriate PptSlice for a given set of
@@ -923,8 +927,8 @@ public class InvariantAddAndCheckTester extends TestCase {
         assert vars[2] != null;
         return new PptSlice3(ppt, vars);
       } else {
-        throw new RuntimeException("Improper vars passed to createSlice (length = "
-                                   + vars.length + ")");
+        throw new RuntimeException(
+            "Improper vars passed to createSlice (length = " + vars.length + ")");
       }
     }
 
@@ -940,15 +944,14 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
       try {
-        Method get_proto = theClass.getMethod ("get_proto", new Class<?>[] {});
-        Invariant proto = (/*@Prototype*/ Invariant) get_proto.invoke (null, new Object[] {});
-        Invariant inv = proto.instantiate (sl);
+        Method get_proto = theClass.getMethod("get_proto", new Class<?>[] {});
+        Invariant proto = (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
+        Invariant inv = proto.instantiate(sl);
         return (inv);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         e.printStackTrace(System.out);
-        throw new RuntimeException("Error while instantiating invariant "
-                                   + theClass.getName() + ": " + e.toString());
+        throw new RuntimeException(
+            "Error while instantiating invariant " + theClass.getName() + ": " + e.toString());
       }
     }
 
@@ -959,7 +962,5 @@ public class InvariantAddAndCheckTester extends TestCase {
         throw new RuntimeException("Exception reading next line");
       }
     }
-
   }
-
 }

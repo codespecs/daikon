@@ -1066,7 +1066,7 @@ km.keys.bind.cmd == 500
 km.keys.bind.nch == 2
 km.keys.bind.ch has only one value
 km.formatted_hm one of { 0, 4294967042L }
-km.formatted_hm  isPointer
+km.formatted_hm is a pointer
 ===========================================================================
 global.do_menu():::EXIT
 km[] == orig(km[])
@@ -1094,7 +1094,7 @@ km.keys.bind.cmd == 500
 km.keys.bind.nch == 2
 km.keys.bind.ch has only one value
 km.formatted_hm one of { 0, 4294967042L }
-km.formatted_hm  isPointer
+km.formatted_hm is a pointer
 km.keys.name == orig(km.keys.name)
 km.keys.label == orig(km.keys.label)
 ===========================================================================
@@ -1115,7 +1115,7 @@ km.keys.label is printable
 km.keys.bind.cmd one of { 0, 500 }
 km.keys.bind.nch one of { 0, 2 }
 km.formatted_hm one of { 0, 4294967042L }
-km.formatted_hm  isPointer
+km.formatted_hm is a pointer
 bitmap[] one of { 3, 253, 255 }
 width == 80
 row == -2
@@ -1141,7 +1141,6 @@ km.keys.bind.cmd one of { 0, 500 }
 km.keys.bind.nch one of { 0, 2 }
 km.keys.column one of { 0, 1 }
 bitmap[] one of { 3, 253, 255 }
-orig(km.formatted_hm)  isPointer
 km.how_many % orig(km.how_many) == 0
 orig(km.how_many) is a bitwise subset of km.how_many
 km.keys.name == orig(km.keys.name)
@@ -1704,7 +1703,7 @@ km.keys.bind.cmd one of { 0, 500 }
 km.keys.bind.nch one of { 0, 2 }
 km.keys.column == 0
 km.formatted_hm one of { 0, 4294967042L }
-km.formatted_hm  isPointer
+km.formatted_hm is a pointer
 bm[] one of { 3, 253, 255 }
 width == 80
 ===========================================================================
@@ -1728,7 +1727,6 @@ km.keys.bind.cmd one of { 0, 500 }
 km.keys.bind.nch one of { 0, 2 }
 km.keys.column one of { 0, 1 }
 bm[] one of { 3, 253, 255 }
-orig(km.formatted_hm)  isPointer
 km.how_many % orig(km.how_many) == 0
 orig(km.how_many) is a bitwise subset of km.how_many
 km.keys.name == orig(km.keys.name)
@@ -4949,7 +4947,7 @@ menu.keys.bind.nch == 2
 menu.keys.bind.ch has only one value
 menu.keys.column == 0
 menu.formatted_hm one of { 0, 4294967042L }
-menu.formatted_hm  isPointer
+menu.formatted_hm is a pointer
 cmd one of { 508, 513, 750 }
 menu.how_many != menu.formatted_hm
 menu.keys.name < menu.keys.label
@@ -4985,7 +4983,7 @@ menu.keys.bind.nch == 2
 menu.keys.bind.ch has only one value
 menu.keys.column == 0
 menu.formatted_hm one of { 0, 4294967042L }
-menu.formatted_hm  isPointer
+menu.formatted_hm is a pointer
 menu.how_many != menu.formatted_hm
 menu.keys.name < menu.keys.label
 menu.keys.name == orig(menu.keys.name)
@@ -5014,7 +5012,7 @@ menu.keys.bind.ch has only one value
 menu.keys.bind.ch != null
 menu.keys.column == 0
 menu.formatted_hm one of { 0, 4294967042L }
-menu.formatted_hm  isPointer
+menu.formatted_hm is a pointer
 menu.how_many != menu.formatted_hm
 menu.keys.name < menu.keys.label
 menu.keys.bind.cmd != key
@@ -5049,7 +5047,7 @@ menu.keys.bind.ch has only one value
 menu.keys.bind.ch != null
 menu.keys.column == 0
 menu.formatted_hm one of { 0, 4294967042L }
-menu.formatted_hm  isPointer
+menu.formatted_hm is a pointer
 return one of { -1, 513 }
 return != 0
 menu.how_many != menu.formatted_hm
@@ -5127,7 +5125,7 @@ menu.keys.bind.nch == 2
 menu.keys.bind.ch has only one value
 menu.keys.column == 0
 menu.formatted_hm one of { 4294966529L, 4294967042L }
-menu.formatted_hm  isPointer
+menu.formatted_hm is a pointer
 ===========================================================================
 global.menu_command():::EXIT
 menu[] == orig(menu[])
@@ -5152,7 +5150,7 @@ menu.keys.bind.nch == 2
 menu.keys.bind.ch has only one value
 menu.keys.column == 0
 menu.formatted_hm one of { 4294966529L, 4294967042L }
-menu.formatted_hm  isPointer
+menu.formatted_hm is a pointer
 return one of { 512, 730 }
 menu.keys.name == orig(menu.keys.name)
 menu.keys.label == orig(menu.keys.label)
@@ -7048,7 +7046,7 @@ ps.context_list has only one value
 ps.inbox_msgmap == null
 ps.msgmap has only one value
 ps.mail_box_changed one of { 0, 1112426752 }
-ps.mail_box_changed  isPointer
+ps.mail_box_changed is a pointer
 ps.atmts has only one value
 ps.atmts_allocated == 1
 ps.index_disp_format has only one value
@@ -7056,7 +7054,7 @@ ps.folders_dir == "/home/mhardojo/mail"
 ps.start_mode == 0
 ps.mangled_footer one of { 0, 8, 72 }
 ps.goto_default_rule one of { 0, 201326592 }
-ps.goto_default_rule  isPointer
+ps.goto_default_rule is a pointer
 ps.viewer_overlap == 196610
 ps.debug_imap == 32
 ps.start_entry == 0
@@ -7102,7 +7100,7 @@ km.keys.bind has only one value
 km.keys.bind.cmd == 500
 km.keys.bind.ch has only one value
 km.formatted_hm one of { 0, 4294967042L }
-km.formatted_hm  isPointer
+km.formatted_hm is a pointer
 ps.home_dir is a substring of ps.folders_dir
 ps.home_dir is a substring of ps.pinerc
 ps.localdomain is a substring of ps.hostname
@@ -7282,7 +7280,7 @@ ps.inbox_new_mail_count == 0
 ps.inbox_msgmap == null
 ps.msgmap has only one value
 ps.mail_box_changed one of { 0, 1112426752 }
-ps.mail_box_changed  isPointer
+ps.mail_box_changed is a pointer
 ps.atmts has only one value
 ps.atmts_allocated == 1
 ps.index_disp_format has only one value
@@ -7332,8 +7330,6 @@ km.keys.bind has only one value
 km.keys.bind.cmd == 500
 km.keys.bind.ch has only one value
 km.formatted_hm == 4294967042L
-orig(ps.goto_default_rule)  isPointer
-orig(km.formatted_hm)  isPointer
 ps.home_dir is a substring of ps.folders_dir
 ps.folders_dir == orig(ps.folders_dir)
 ps.home_dir is a substring of ps.pinerc
@@ -7544,7 +7540,7 @@ ps.redrawer == null
 ps.inbox_new_mail_count == 0
 ps.inbox_msgmap == null
 ps.mail_box_changed one of { 0, 1112426752 }
-ps.mail_box_changed  isPointer
+ps.mail_box_changed is a pointer
 ps.atmts has only one value
 ps.atmts_allocated == 1
 ps.index_disp_format has only one value
@@ -7796,7 +7792,7 @@ ps.redrawer == null
 ps.inbox_new_mail_count == 0
 ps.inbox_msgmap == null
 ps.mail_box_changed one of { 0, 1112426752 }
-ps.mail_box_changed  isPointer
+ps.mail_box_changed is a pointer
 ps.atmts has only one value
 ps.atmts_allocated == 1
 ps.index_disp_format has only one value

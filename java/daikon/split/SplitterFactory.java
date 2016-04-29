@@ -1,14 +1,13 @@
 package daikon.split;
 
 import daikon.*;
-
-import plume.*;
-import plume.FileCompiler;
-import jtb.ParseException;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.*;
+import jtb.ParseException;
+import plume.*;
+import plume.FileCompiler;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -22,10 +21,11 @@ import org.checkerframework.checker.signature.qual.*;
  * and load the splitters for a given Ppt.
  **/
 public class SplitterFactory {
-  private SplitterFactory() { throw new Error("do not instantiate"); }
+  private SplitterFactory() {
+    throw new Error("do not instantiate");
+  }
 
-  public static final Logger debug =
-    Logger.getLogger("daikon.split.SplitterFactory");
+  public static final Logger debug = Logger.getLogger("daikon.split.SplitterFactory");
 
   /** The directory in which the Java files for the splitter will be made. */
   // This must *not* be set in a static block, which happens before the
@@ -54,11 +54,15 @@ public class SplitterFactory {
    * (with appropriate classpath separator for the operating system).
    **/
   public static String dkconfig_compiler
-    // "-source 6 -target 6" is a hack for when using a Java 8 compiler but
-    // a -Java 6 or Java 7 runtime.  A better solution would be to add
-    // these command-line arguments only when running
-    // SplitterFactoryTestUpdater, but that program does not support that.
-    = "javac -nowarn -source 6 -target 6 -classpath " + new File(System.getenv("DAIKONDIR"), "java")  + File.pathSeparatorChar + new File(System.getenv("DAIKONDIR"), "daikon.jar");
+      // "-source 6 -target 6" is a hack for when using a Java 8 compiler but
+      // a -Java 6 or Java 7 runtime.  A better solution would be to add
+      // these command-line arguments only when running
+      // SplitterFactoryTestUpdater, but that program does not support that.
+      =
+      "javac -nowarn -source 6 -target 6 -classpath "
+          + new File(System.getenv("DAIKONDIR"), "java")
+          + File.pathSeparatorChar
+          + new File(System.getenv("DAIKONDIR"), "daikon.jar");
 
   /**
    * Positive integer.  Specifies the Splitter compilation timeout, in
@@ -82,27 +86,25 @@ public class SplitterFactory {
    * @param infofile filename.spinfo
    * @return a SpinfoFile encapsulating the parsed splitter info file.
    */
-
-  public static SpinfoFile parse_spinfofile (File infofile)
-    throws IOException, FileNotFoundException {
+  public static SpinfoFile parse_spinfofile(File infofile)
+      throws IOException, FileNotFoundException {
     if (tempdir == null) {
       tempdir = createTempDir();
     }
-    if (! dkconfig_delete_splitters_on_exit) {
+    if (!dkconfig_delete_splitters_on_exit) {
       System.out.println("\rSplitters for this run created in " + tempdir);
     }
     return new SpinfoFile(infofile, tempdir);
   }
 
   /**
-   * Finds the splitters that apply to a given Ppt and loads them.
+   * Finds the splitters that apply to a given Ppt and loads them
+   * (that is, it populates SplitterList).
    * @param ppt the Ppt
    * @param spfiles a list of SpinfoFiles
    */
   /*@RequiresNonNull("tempdir")*/
-  public static void load_splitters (PptTopLevel ppt,
-                                     List<SpinfoFile> spfiles)
-  {
+  public static void load_splitters(PptTopLevel ppt, List<SpinfoFile> spfiles) {
     Global.debugSplit.fine("<<enter>> load_splitters");
 
     for (SpinfoFile spfile : spfiles) {
@@ -112,7 +114,13 @@ public class SplitterFactory {
         int numsplitters = splitterObjects[i].length;
         if (numsplitters != 0) {
           String ppt_name = splitterObjects[i][0].getPptName();
-          Global.debugSplit.fine("          load_splitters: " + ppt_name + ", " + ppt + "; match=" + matchPpt(ppt_name, ppt));
+          Global.debugSplit.fine(
+              "          load_splitters: "
+                  + ppt_name
+                  + ", "
+                  + ppt
+                  + "; match="
+                  + matchPpt(ppt_name, ppt));
           if (matchPpt(ppt_name, ppt)) {
             int numGood = 0;
             // Writes, compiles, and loads the splitter .java files.
@@ -130,9 +138,10 @@ public class SplitterFactory {
                 System.out.println(splitterObjects[i][k].getError());
               }
             }
-            System.out.printf("%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
+            System.out.printf(
+                "%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
             if (sp.size() >= 1) {
-              SplitterList.put (ppt_name, sp.toArray(new Splitter[0]));
+              SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
             }
             // delete this entry in the splitter array to prevent it from
             // matching any other Ppts, since the documented behavior is that
@@ -169,10 +178,8 @@ public class SplitterFactory {
    *  to be used in these splitterObjects.
    */
   /*@RequiresNonNull("tempdir")*/
-  private static void loadSplitters(SplitterObject[] splitterObjects,
-                                    PptTopLevel ppt,
-                                    StatementReplacer statementReplacer)
-  {
+  private static void loadSplitters(
+      SplitterObject[] splitterObjects, PptTopLevel ppt, StatementReplacer statementReplacer) {
     Global.debugSplit.fine("<<enter>> loadSplitters - count: " + splitterObjects.length);
 
     // System.out.println("loadSplitters for " + ppt.name);
@@ -185,11 +192,8 @@ public class SplitterFactory {
       StringBuffer fileContents;
       try {
         SplitterJavaSource splitterWriter =
-          new SplitterJavaSource(splitObj,
-                                 splitObj.getPptName(),
-                                 fileName,
-                                 ppt.var_infos,
-                                 statementReplacer);
+            new SplitterJavaSource(
+                splitObj, splitObj.getPptName(), fileName, ppt.var_infos, statementReplacer);
         fileContents = splitterWriter.getFileText();
       } catch (ParseException e) {
         System.out.println("Error in SplitterFactory while writing splitter java file for: ");
@@ -203,14 +207,13 @@ public class SplitterFactory {
       try {
         BufferedWriter writer = UtilMDE.bufferedFileWriter(fileAddress + ".java");
         if (dkconfig_delete_splitters_on_exit) {
-          (new File (fileAddress + ".java")).deleteOnExit();
-          (new File (fileAddress + ".class")).deleteOnExit();
+          (new File(fileAddress + ".java")).deleteOnExit();
+          (new File(fileAddress + ".class")).deleteOnExit();
         }
         writer.write(fileContents.toString());
         writer.flush();
       } catch (IOException ioe) {
-        System.out.println("Error while writing Splitter file: " +
-                           fileAddress);
+        System.out.println("Error while writing Splitter file: " + fileAddress);
         debug.fine(ioe.toString());
       }
     }
@@ -226,8 +229,9 @@ public class SplitterFactory {
       debug.fine(ioe.toString());
     }
     boolean errorOutputExists = errorOutput != null && !errorOutput.equals("");
-    if (errorOutputExists && (! PptSplitter.dkconfig_suppressSplitterErrors)) {
-      System.out.println("\nErrors while compiling Splitter files (Daikon will use non-erroneous splitters):");
+    if (errorOutputExists && (!PptSplitter.dkconfig_suppressSplitterErrors)) {
+      System.out.println(
+          "\nErrors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
     for (int i = 0; i < splitterObjects.length; i++) {
@@ -251,8 +255,7 @@ public class SplitterFactory {
     // timeout is specified in seconds, but the parameter to FileCompiler
     // is specified in milliseconds.
     if (fileCompiler == null) {
-      fileCompiler = new FileCompiler(dkconfig_compiler,
-                                      1000 * (long) dkconfig_compile_timeout);
+      fileCompiler = new FileCompiler(dkconfig_compiler, 1000 * (long) dkconfig_compile_timeout);
     }
     return fileCompiler.compileFiles(fileNames);
   }
@@ -261,12 +264,10 @@ public class SplitterFactory {
    * Determine whether a Ppt's name matches the given pattern.
    */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
-    if (ppt.name.equals(ppt_name))
-      return true;
+    if (ppt.name.equals(ppt_name)) return true;
     if (ppt_name.endsWith(":::EXIT")) {
       String regex = Pattern.quote(ppt_name) + "[0-9]+";
-      if (matchPptRegex(regex, ppt))
-        return true;
+      if (matchPptRegex(regex, ppt)) return true;
     }
 
     // Look for corresponding EXIT ppt. This is because the exit ppt usually has
@@ -279,7 +280,7 @@ public class SplitterFactory {
     } else {
       // Found "OBJECT" suffix.
       if (ppt_name.length() > 6) {
-        regex = Pattern.quote(ppt_name.substring(0, index-1)) + ":::OBJECT";
+        regex = Pattern.quote(ppt_name.substring(0, index - 1)) + ":::OBJECT";
       } else {
         regex = Pattern.quote(ppt_name);
       }
@@ -323,9 +324,9 @@ public class SplitterFactory {
    */
   private static String clean(String str) {
     char[] cleaned = str.toCharArray();
-    for (int i=0; i < cleaned.length; i++) {
+    for (int i = 0; i < cleaned.length; i++) {
       char c = cleaned[i];
-      if (! Character.isJavaIdentifierPart(c)) {
+      if (!Character.isJavaIdentifierPart(c)) {
         cleaned[i] = '_';
       }
     }
@@ -350,5 +351,4 @@ public class SplitterFactory {
     }
     return ""; // Use current directory
   }
-
 }

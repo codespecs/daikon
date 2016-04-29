@@ -11,9 +11,9 @@ package daikon.chicory;
  * change them without a very good reason.
  */
 public enum VarKind {
-    FIELD,
-    FUNCTION,
-    ARRAY,
-    VARIABLE,
-    RETURN
+  FIELD,
+  FUNCTION,
+  ARRAY,
+  VARIABLE,
+  RETURN
 };

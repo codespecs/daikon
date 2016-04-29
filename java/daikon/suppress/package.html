@@ -1,6 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>daikon.suppress package</title>
+  </head>
 <body>
 
 <p>
@@ -34,18 +36,18 @@ Suppression is NOT:
 themselves.  This is instead done by a combination of static methods
 (e.g. A[i] is an element of A[]) and dynamic methods (LinearBinary
 finds out that it reduces to A==B, which is obvious).
-</p>
+</li>
 
 <li> The hiding of invariants during printing for various other
 reasons.  For example, some invariants are not printed because their
 VarInfos aren't interesting.  Suppression only works where one
 invariant logically implies another.
-</p>
+</li>
 
 <li> A mechanism for (efficiently) handling equality.
 daikon.PptSliceEquality and daikon.inv.Equality do this.  However,
 suppression is able to use Equality invariants for suppressing.
-</p>
+</li>
 
 </ul>
 
@@ -83,13 +85,13 @@ through PptTopLevel.add():
 
 <li> Make a set of PptSlice's called "viewsToCheck" that have to be
 given the sample.  Initially, the set is all the PptSlice's.
-</p>
+</li>
 
 <li> Check invariants in viewsToCheck by calling their add() method.
 Attempt suppression on any invariants that fall/flow down and are
 resurrected.  Also attempt suppression on any invariants in this ppt
 that weaken.
-</p>
+</li>
 
 <li> For any falsified or flowed invariants, take the invariants they
 were suppressing, and attempt to re-suppress them by creating a new
@@ -99,10 +101,10 @@ check.  A suppressed invariant could have been in a different slice
 from its suppressor, but it is not necessary to check such invariants
 because a) The slice can't be higher than this and b) If the slice is
 lower, it will be checked later in the data flow.
-</p>
+</li>
 
 <li> Repeat while there are slices to check.
-</p>
+</li>
 
 </ul>
 
@@ -141,7 +143,7 @@ is, for a given PptSlice, there exists exactly one instance of an
 invariant subtype.  For example, if the SubSet invariant (which is
 non-commutative) applies to (A, B) and to (B, A) then there is one
 instance of SubSet of the PptSlice for A and B.  Note: different
-invariant subtypes can still overlap: if A < B, then there will be an
+invariant subtypes can still overlap: if A &lt; B, then there will be an
 IntLessThan for (A, B) and an IntGreaterThan for (B, A) - however the
 PptSlice may contain exactly one instance of IntLessThan.
 </p>

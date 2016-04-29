@@ -191,6 +191,17 @@ PROJECT?=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[67]-)?daikon/(workspace/)?tes
 # Function to compute goal filename extension.  If we are using Java8 then
 # if filename.test.goal.j8 exists, use it; otherwise, use filename.test.goal
 # otherwise (not Java8) use filename.test.goal. 
+# Reasons for different behavior between Java 7 and Java 8 include:
+#  * nondeterministic behavior, such as using a HashMap's iterator.
+#    In this case, don't create a .goal.j8 goal file; instead, change the
+#    subject program to use LinkedHashMap.
+#  * different line numbers for :::EXITnnn program points, when a return
+#    statement spans multiple lines.  In this case, don't create a .goal.j8
+#    goal file; instead, change the subject program to put the entire return
+#    statement on one line.
+#  * different numbers of calls to hashCode, due to differences in Java 7 and
+#    Java 8 HashMap implementations and possibly String.hashCode().
+#    This is currently the only reason to create a .goal.j8 file.
 # The argument ($(1)) is '<filename>.<test>'
 goal_name = $(if $(findstring 1.8, "$(shell java -version 2>&1)"), \
 			  $(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
@@ -239,8 +250,8 @@ else
 endif
 CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
-CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/plume.jar
-CPJUNIT := ${DAIKONDIR}/java/lib/plume.jar
+CPDAIKON := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
+CPJUNIT := ${DAIKONDIR}/java/lib/junit-4.12.jar
 
 export CLASSPATH := .:$(CP):$(SCRATCH_FOR_DAIKON):$(CPDAIKON)
 ifeq (cygwin,$(OSTYPE))
@@ -274,6 +285,9 @@ ifndef DOS2UNIX
     endif
   endif
 endif
+
+# For deterministic sorting
+export LC_ALL=C
 
 
 default: help
@@ -421,7 +435,7 @@ INST_LIST_FILE:=${SCRATCH_FOR_DAIKON}/.instrument-files
 ifeq (infer,${INSTRUMENT})
 # Adding the dependency on the per-project Makefile is not enough, but does
 # help, for instance if the MAIN_CLASS setting in Makefile changes.
-${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists ./Makefile
+${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists ./Makefile $(MAIN_JAVA) $(MAIN2_JAVA)
 	@echo
 	@echo "### figure out the necessary files (${PROJECT_FILE})"
 	@echo
@@ -1023,7 +1037,7 @@ update-goal-impl:
 
 ifeq (generated,$(TRACE_SOURCE))
 	if test -e ${PROJECT_FILE}.txt-daikon-end2end ; then cp -pf \
-	  ${PROJECT_FILE}.txt-daikon-end2end $(call goal_name,${PROJECT_FILE}.txt-daikon-end2end) fi
+	  ${PROJECT_FILE}.txt-daikon-end2end $(call goal_name,${PROJECT_FILE}.txt-daikon-end2end); fi
 	rm -f ${PROJECT_FILE}.txt-daikon-end2end.diff
 	if test -e ${PROJECT_FILE}.txt-chicory.dtrace ; then cp -pf \
 	  ${PROJECT_FILE}.txt-chicory.dtrace $(call goal_name,${PROJECT_FILE}.txt-chicory); fi
@@ -1387,6 +1401,8 @@ showvars:
 	@echo "SPINFO_FILES        =" ${SPINFO_FILES}
 	@echo "MAIN_CLASS          =" ${MAIN_CLASS}
 	@echo "MAIN_ARGS           =" ${MAIN_ARGS}
+	@echo "MAIN_JAVA           =" ${MAIN_JAVA}
+	@echo "MAIN2_JAVA          =" ${MAIN2_JAVA}
 	@echo "JAVA_ARGS           =" ${JAVA_ARGS}
 	@echo "ESC_ON              =" ${ESC_ON}
 ifdef ESC_ON

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# This file will be used as .git/hooks/pre-commit.
+# However, it should be edited as scripts/daikon.pre-commit.
+
+make -C java check-format

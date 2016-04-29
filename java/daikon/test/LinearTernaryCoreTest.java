@@ -1,18 +1,15 @@
 package daikon.test;
 
-import junit.framework.*;
-
 import daikon.*;
 import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.*;
+import junit.framework.*;
 
-public class LinearTernaryCoreTest
-  extends TestCase
-{
+public class LinearTernaryCoreTest extends TestCase {
 
   // for convenience
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(LinearTernaryCoreTest.class));
   }
 
@@ -21,19 +18,20 @@ public class LinearTernaryCoreTest
   }
 
   void set_cache(LinearTernaryCore ltc, int index, long x, long y, long z) {
-    ltc.def_points[index] = new LinearTernaryCore.Point (x, y, z);
+    ltc.def_points[index] = new LinearTernaryCore.Point(x, y, z);
   }
 
-  void one_test_set_tri_linear(int[][] triples, long goal_a, long goal_b, long goal_c, long goal_d) {
+  void one_test_set_tri_linear(
+      int[][] triples, long goal_a, long goal_b, long goal_c, long goal_d) {
     @SuppressWarnings("nullness") // testing code: wrapper will never be used
     LinearTernaryCore ltc = new LinearTernaryCore(null);
-    for (int i=0; i<triples.length; i++) {
+    for (int i = 0; i < triples.length; i++) {
       assert triples[i].length == 3;
-      set_cache (ltc, i, triples[i][0], triples[i][1], triples[i][2]);
+      set_cache(ltc, i, triples[i][0], triples[i][1], triples[i][2]);
     }
     double[] coef;
     try {
-      coef = ltc.calc_tri_linear (ltc.def_points);
+      coef = ltc.calc_tri_linear(ltc.def_points);
     } catch (ArithmeticException e) {
       // In the future, we should perhaps test triples that that don't
       // determine a plane; but none of the current ones do.
@@ -41,24 +39,23 @@ public class LinearTernaryCoreTest
       // throw new Error();
       // coef = null; // not reached
     }
-   //  System.out.println("goals: " + goal_a + " " + goal_b + " " + goal_c + " " + goal_d);
-   //  System.out.println("actual: " + coef[0] + " " + coef[1] + " " + coef[2] + " " + coef[3]);
+    //  System.out.println("goals: " + goal_a + " " + goal_b + " " + goal_c + " " + goal_d);
+    //  System.out.println("actual: " + coef[0] + " " + coef[1] + " " + coef[2] + " " + coef[3]);
     // System.out.println("difference: " + (goal_a - ltc.a) + " " + (goal_b - ltc.b) + " " + (goal_c - ltc.c));
     assert coef[0] == goal_a && coef[1] == goal_b && coef[2] == goal_c && coef[3] == goal_d;
   }
 
   public void test_set_tri_linear() {
-    one_test_set_tri_linear(new int[][] { { 1, 2, 1 },
-                                          { 2, 1, 7 },
-                                          { 3, 3, 7 } },
-                            4, -2, -1, 1);
+    one_test_set_tri_linear(new int[][] {{1, 2, 1}, {2, 1, 7}, {3, 3, 7}}, 4, -2, -1, 1);
     //     # like the above, but swap y and z; results in division-by-zero problem
     //     # tri_linear_relationship((1,1,2),(2,7,1),(3,7,3))
-    one_test_set_tri_linear(new int[][] { { 1, 2, 6 },
-                                          { 2, 1, -4 },
-                                          { 3, 3, 7 } },
-                        //    -3, 7, -1, -5);
-                        3,-7,1, 5);
+    one_test_set_tri_linear(
+        new int[][] {{1, 2, 6}, {2, 1, -4}, {3, 3, 7}},
+        //    -3, 7, -1, -5);
+        3,
+        -7,
+        1,
+        5);
 
     // These have non-integer parameters; must have a LinearTernaryCoreFloat
     // in order to handle them.
@@ -95,11 +92,10 @@ public class LinearTernaryCoreTest
     ltc.b = b;
     ltc.c = c;
     ltc.d = d;
-    String actual_result = ltc.format_using(OutputFormat.DAIKON,
-                                            "x", "y", "z");
- //    System.out.println("Expecting: " + goal_result);
- //    System.out.println("Actual:    " + actual_result);
-     assert actual_result.equals(goal_result);
+    String actual_result = ltc.format_using(OutputFormat.DAIKON, "x", "y", "z");
+    //    System.out.println("Expecting: " + goal_result);
+    //    System.out.println("Actual:    " + actual_result);
+    assert actual_result.equals(goal_result);
   }
 
   public void test_format() {
@@ -117,7 +113,7 @@ public class LinearTernaryCoreTest
     one_test_format(3, -2, 0, -3, "3 * x - 2 * y - 3 == 0");
     //hmmm, we can't actually have this test because there are never any double coeffs, they're not
     //calculated as such and are converted to ints
-  //  one_test_format(3.2, -2.2, 1.4, -3.4, "3.2 * x - 2.2 * y + 1.4 * z - 3.4 == 0");
+    //  one_test_format(3.2, -2.2, 1.4, -3.4, "3.2 * x - 2.2 * y + 1.4 * z - 3.4 == 0");
     one_test_format(3.0, -2.0, 2.0, -3.0, "3 * x - 2 * y + 2 * z - 3 == 0");
     one_test_format(-1.0, 1.0, 0.0, 0.0, "- x + y == 0");
   }

@@ -30,23 +30,24 @@ public class SplitterObject implements Comparable<SplitterObject> {
   private String testString = "Unassigned";
   // Not necessarily an error message -- really just a status message.
   private String errorMessage = "Splitter not yet loaded";
-  private int guid = -999;      // -999 indicates not yet set
-  private /*@MonotonicNonNull*/ File classFile; // class file containing compiled code for this splitter
+  private int guid = -999; // -999 indicates not yet set
+  private /*@MonotonicNonNull*/ File
+      classFile; // class file containing compiled code for this splitter
 
   public boolean dummyDesired = false;
-  public /*@Nullable*/ String daikonFormat   = null;
-  public /*@Nullable*/ String javaFormat     = null;
-  public /*@Nullable*/ String escFormat      = null;
+  public /*@Nullable*/ String daikonFormat = null;
+  public /*@Nullable*/ String javaFormat = null;
+  public /*@Nullable*/ String escFormat = null;
   public /*@Nullable*/ String simplifyFormat = null;
-  public /*@Nullable*/ String jmlFormat      = null;
-  public /*@Nullable*/ String dbcFormat      = null;
-  public /*@Nullable*/ String csharpFormat   = null;
+  public /*@Nullable*/ String jmlFormat = null;
+  public /*@Nullable*/ String dbcFormat = null;
+  public /*@Nullable*/ String csharpFormat = null;
 
   /**
    * @param condition The splitting condition of this splitter
    * @param directory The directory where the source of this splitter is located.
    */
-  public SplitterObject (String pptName, String condition, String directory) {
+  public SplitterObject(String pptName, String condition, String directory) {
     this.condition = condition;
     this.pptName = pptName;
     this.directory = directory;
@@ -59,28 +60,35 @@ public class SplitterObject implements Comparable<SplitterObject> {
    * @param fileName the pathname of a .class file
    * @return a Java Class corresponding to the .class file, or null
    **/
-  static /*@Nullable*/ Class<?> defineSplitterClass(/*@BinaryName*/ String className, String fileName) {
+  static /*@Nullable*/ Class<?> defineSplitterClass(
+      /*@BinaryName*/ String className, String fileName) {
     try {
       return UtilMDE.defineClassFromFile(className, fileName);
     } catch (FileNotFoundException e) {
-      if (! PptSplitter.dkconfig_suppressSplitterErrors) {
-        System.out.println("File "
-                           + fileName.substring(0, fileName.length()-6)
-                           + ".java did not compile");
+      if (!PptSplitter.dkconfig_suppressSplitterErrors) {
+        System.out.println(
+            "File " + fileName.substring(0, fileName.length() - 6) + ".java did not compile");
       }
       return null;
     } catch (IOException ioe) {
       System.out.println("IO Error while reading class data " + fileName);
       return null;
     } catch (UnsupportedClassVersionError ucve) { // should be more general?
-      throw new Daikon.TerminationMessage("Wrong Java version while reading file " + fileName + ": " + ucve.getMessage() + "\n" + "This indicates a possible problem with configuration option\ndaikon.split.SplitterFactory.compiler whose value is: " + SplitterFactory.dkconfig_compiler);
+      throw new Daikon.TerminationMessage(
+          "Wrong Java version while reading file "
+              + fileName
+              + ": "
+              + ucve.getMessage()
+              + "\n"
+              + "This indicates a possible problem with configuration option\ndaikon.split.SplitterFactory.compiler whose value is: "
+              + SplitterFactory.dkconfig_compiler);
     }
   }
 
   /**
    * Sets the "splitter" field of this object to a newly-instantiated object.
    */
-  public void load () {
+  public void load() {
     Class<?> tempClass = defineSplitterClass(className, directory + className + ".class");
     if (tempClass != null) {
       try {
@@ -95,14 +103,27 @@ public class SplitterObject implements Comparable<SplitterObject> {
         iae.printStackTrace(System.out);
         throw new Error(iae);
       }
-      DummyInvariant dummy = new /*@Prototype*/ DummyInvariant(
-         daikonFormat, javaFormat, escFormat, simplifyFormat,
-                       jmlFormat, dbcFormat, csharpFormat, dummyDesired);
+      DummyInvariant dummy =
+          new /*@Prototype*/ DummyInvariant(
+              daikonFormat,
+              javaFormat,
+              escFormat,
+              simplifyFormat,
+              jmlFormat,
+              dbcFormat,
+              csharpFormat,
+              dummyDesired);
       splitter.makeDummyInvariantFactory(dummy);
       errorMessage = "Splitter exists " + this.toString();
       exists = true;
     } else {
-      errorMessage = "\nNo class data for " + this.toString() + ", to be loaded from " + directory + className + ".class";
+      errorMessage =
+          "\nNo class data for "
+              + this.toString()
+              + ", to be loaded from "
+              + directory
+              + className
+              + ".class";
       exists = false;
     }
   }
@@ -119,7 +140,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
    * @return true if the .class file exists for the Splitter
    * represented by this SplitterObject, false otherwise
    */
-  public boolean compiled () {
+  public boolean compiled() {
     if (classFile != null && classFile.exists()) {
       errorMessage = "Splitter exists " + this.toString();
       return true;
@@ -146,7 +167,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   /**
    * get the error message of this SplitterObject.
    */
-  public String getError () {
+  public String getError() {
     return this.errorMessage;
   }
 
@@ -160,21 +181,21 @@ public class SplitterObject implements Comparable<SplitterObject> {
   /**
    * Return the unique ID of this splitterObject.
    */
-  public int getGUID( ) {
+  public int getGUID() {
     return this.guid;
   }
 
   /**
    * @return the full source of the Splitter.
    */
-  public String getFullSourcePath () {
+  public String getFullSourcePath() {
     return (directory + className + ".java");
   }
 
   /**
    * @return the program point represented by this Splitter.
    */
-  public String getPptName () {
+  public String getPptName() {
     return this.pptName;
   }
 
@@ -193,22 +214,22 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.className;
   }
 
-  public void setDirectory (String directory) {
+  public void setDirectory(String directory) {
     this.directory = directory;
   }
 
-  public String getDirectory () {
+  public String getDirectory() {
     return this.directory;
   }
 
   /**
    * @return the condition represented by the Splitter
    */
-  public String condition () {
+  public String condition() {
     return this.condition;
   }
 
-  public void setTestString (String testString) {
+  public void setTestString(String testString) {
     this.testString = testString;
   }
 
@@ -217,8 +238,14 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SplitterObject this*/) {
-    return (className + ": " + "condition: " + condition + ", testString: " + testString
-            + ", @ " + pptName);
+    return (className
+        + ": "
+        + "condition: "
+        + condition
+        + ", testString: "
+        + testString
+        + ", @ "
+        + pptName);
   }
 
   /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied SplitterObject this,*/ SplitterObject o) {

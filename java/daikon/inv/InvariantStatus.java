@@ -18,7 +18,9 @@ public final /*@Interned*/ class InvariantStatus {
     this.status = status;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied InvariantStatus this*/) { return status; }
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied InvariantStatus this*/) {
+    return status;
+  }
 
   /**
    * The InvariantStatus that represents no change being made to the
@@ -36,5 +38,4 @@ public final /*@Interned*/ class InvariantStatus {
    * For example OneOf{1,3} going to OneOf{1,3,10}.
    */
   public static final InvariantStatus WEAKENED = new InvariantStatus("weakened");
-
 }

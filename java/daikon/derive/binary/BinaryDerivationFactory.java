@@ -10,7 +10,6 @@ import org.checkerframework.checker.nullness.qual.*;
 /**
  * Factory to produce BinaryDerivation.
  **/
-
 public abstract class BinaryDerivationFactory implements DerivationFactory {
 
   /**
@@ -24,5 +23,4 @@ public abstract class BinaryDerivationFactory implements DerivationFactory {
    * two variables have nothing to derive from.
    **/
   public abstract BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi1, VarInfo vi2);
-
 }

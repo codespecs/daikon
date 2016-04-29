@@ -12,9 +12,7 @@ import typequals.*;
 /**
  * Exists simply to provide a more intelligent resusurrect_done method.
  **/
-public abstract class TernaryInvariant
-  extends Invariant
-{
+public abstract class TernaryInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -35,8 +33,17 @@ public abstract class TernaryInvariant
     throw new Error("to implement");
   }
 
-  public abstract InvariantStatus add(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3, int mod_index, int count);
+  public abstract InvariantStatus add(
+      /*@Interned*/ Object val1,
+      /*@Interned*/ Object val2,
+      /*@Interned*/ Object val3,
+      int mod_index,
+      int count);
 
-  public abstract InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3, int mod_index, int count);
-
+  public abstract InvariantStatus check(
+      /*@Interned*/ Object val1,
+      /*@Interned*/ Object val2,
+      /*@Interned*/ Object val3,
+      int mod_index,
+      int count);
 }

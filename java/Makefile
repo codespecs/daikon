@@ -13,7 +13,7 @@ DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
 # Test that the directory exists.  There must be a better way to do this.
 DAIKONDIR:=$(wildcard ${DAIKONDIR})
 ifndef DAIKONDIR
-  $(error Environment variable DAIKONDIR is not set to an existing directory)
+  $(error Environment variable DAIKONDIR is not set to an existing directory; is set to $DAIKONDIR)
 endif
 
 # Set DAIKONBIN to scripts/ if it exists, otherwise to bin/.
@@ -66,9 +66,18 @@ else
   JAR ?= jar
 endif
 
+ifdef DAIKON_JAVA7_PATH
+  FIND_VERSION := $(shell javac -version 2>&1)
+  ifneq (1.7,$(findstring 1.7,$(FIND_VERSION)))
+    JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Xlint:-options -Xbootclasspath/a:$(DAIKON_JAVA7_PATH) -Werror -Xlint:-classfile -Xlint:-path ${JAVAC_TARGET_FLAGS}
+  else
+    JAVAC_ARGS ?= -g -XDignore.symbol.file -Werror -Xlint:-classfile -Xlint:-path ${JAVAC_TARGET_FLAGS}
+  endif
+endif
+
 # Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
@@ -102,7 +111,7 @@ JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx1024m
 # distributed version, of Daikon.  The if clause avoids a (harmless but
 # annoying) javac error message that they don't exist.
 ifeq "$(wildcard ${DAIKONDIR}/java/lib/plume.jar)" "${DAIKONDIR}/java/lib/plume.jar"
-    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/plume.jar
+    CLASSPATH_JARS = :${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
 endif
 ifeq "$(wildcard ${CHECKERJAR})" "${CHECKERJAR}"
     CLASSPATH_JARS2 = ${CHECKERJAR}
@@ -163,8 +172,12 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   # Until "make ../plume-lib" has been run, sort-directory-order is not available.
   SORT_DIRECTORY_ORDER = sort
 endif
-JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | ${SORT_DIRECTORY_ORDER})
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
+# Copied from
+JAVA_FILES_FOR_STYLE = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
+# This should exclude AUTO_GENERATED_FILES, but I don't know how to do that.
+JAVA_FILES_FOR_FORMAT = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
@@ -511,7 +524,7 @@ chicory-test : ChicoryPremain.jar
 #
 # Dynamic Comparability (DynComp/Java; also Chicory)
 #
-DCOMP_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java daikon/util/*.java
+INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java daikon/util/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
 ORIG_RT ?= $(JAVA_HOME)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
@@ -521,8 +534,8 @@ JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 # Build DynComp/Java, check the DF summary info and run a sanity test
 .PHONY: dyncomp dcomp
 dyncomp dcomp : plume-copy plume-import-check dcomp_premain.jar
-dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
-	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
+dcomp_premain.jar : $(wildcard $(INSTRUMENTATION_JAVA_FILES)) daikon/dcomp/manifest.txt
+	$(JAVAC_COMMAND) $(INSTRUMENTATION_JAVA_FILES)
 	$(JAVA) daikon.dcomp.SummaryInfo
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
 	  daikon/dcomp/Premain.class
@@ -603,8 +616,9 @@ plume-lib-update:
 	${MAKE} -C .. plume-lib-update
 
 # The class files are not used; this is just to sanity-check
+# ... but compilation takes too long, so don't bother with the sanity-check.
 plume-lib-compile:
-	${MAKE} -C ../plume-lib/java compile
+#	${MAKE} -C ../plume-lib/java compile
 
 # # A stable version of plume.jar is checked in, so that all this is not necessary.
 # lib/plume.jar: ../plume-lib/java/plume.jar
@@ -620,7 +634,7 @@ daikon/util/README: plume-lib-update daikon/util/.timestamp-daikonutil
 
 daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
   ${PLUMEJAVA}/*.manifest) ${PLUMEJAVA}/Makefile
-	$(MAKE) -C ${PLUMEJAVA}
+	$(MAKE) -C ${PLUMEJAVA} compile
 	/bin/rm -rf daikon/util
 	$(INSTALL) -d daikon/util/
 	cp ${PLUME}/*.java daikon/util
@@ -636,29 +650,22 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	$(JAVAC_COMMAND) daikon/util/*.java
 	touch daikon/util/.timestamp-daikonutil
 
-# Checks that daikon.util, rather than plume, is imported by DynComp source files.
-# Should also check that daikon.util is never imported by non-DynComp files.
+# Checks that daikon.util, rather than plume, is imported by source files
+# that do instrumentation.  Should also check that daikon.util is never
+# imported by non-instrumentation files.
 .PHONY: plume-import-check
 plume-import-check :
 	@echo -n "Checking that imports of plume and daikon.util are correct..."
-	@if [ -n "`grep '^import plume' $(DCOMP_JAVA_FILES)`" ]; then \
+	@if [ -n "`grep '^import plume' $(INSTRUMENTATION_JAVA_FILES)`" ]; then \
 	echo ""; \
 	echo "*** ERROR: Do not import plume from DynComp code. It will be"; \
-	echo " instrumented when DynComp is run. Please use the (identical)"; \
-	echo " daikon.util package, which will not be instrumented."; \
+	echo " instrumented when DynComp or Chicory is run. Please use the"; \
+	echo " (identical) daikon.util package, which will not be instrumented."; \
 	echo "The following files import from plume:"; \
-	grep -n '^import plume' $(DCOMP_JAVA_FILES); \
+	grep -n '^import plume' $(INSTRUMENTATION_JAVA_FILES); \
 	else \
 	echo "done"; \
 	fi
-
-#
-# Web Services Matching targets
-#
-WSMATCH_JAVA_FILES = daikon/tools/WSMatch.java daikon/chicory/*.java
-wsmatch : daikon/tools/WSMatch.class
-daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES))
-	$(JAVAC_COMMAND) $(WSMATCH_JAVA_FILES)
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
@@ -702,7 +709,7 @@ daikon/Runtime.class: daikon/Runtime.java
 
 
 ###########################################################################
-### Non-compilation targets
+### Cleaning (removing generated files
 ###
 
 # It's good to run "make clean" occasionally, because it costs little to
@@ -763,8 +770,9 @@ tags-without-generated-files: clean-generated-files
 	@etags --language=java ${TAG_FILES}
 	$(MAKE) compile
 
-###
-### Static checks of the code
+
+###########################################################################
+### Code quality (static checks of the code)
 ###
 
 findbugs: .findbugs-output
@@ -796,6 +804,10 @@ checkstyle-cs: .checkstyle-cschecks-output
 checkstyle-sun: .checkstyle-sunchecks-output
 .PHONY: checkstyle checkstyle-cs checkstyle-sun
 
+checkstyle:
+# This invocation works on Ubuntu.
+	checkstyle -c /usr/share/checkstyle/sun_checks.xml ${JAVA_FILES_FOR_STYLE}
+
 jlint:
 	jlint . | grep -v "Value of referenced variable '.*' may be NULL" | grep -v "Compare strings as object references" | perl -p -e 's:^daikon/::'
 
@@ -806,7 +818,17 @@ audit:
 	cd $(HOME)/java && maudit daikon | perl -p -e 's/^daikon\///'
 
 
+reformat:
+	@../plume-lib/bin/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
+
+check-format:
+	@../plume-lib/bin/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
+
+
+###########################################################################
 ### Pluggable type qualifier checkers
+###
+
 # (Don't run these until after you have compiled Daikon at least once.)
 
 # Note about CHECKER_ARGS: if this contains any -Alint option, it will
@@ -864,10 +886,10 @@ show_nullness_java_files:
 	@echo ${DAIKON_JAVA_FILES}
 
 ## Reinstate prototype and vindex checkers later.
-# check-all: check-formatter check-interning check-nullness check-signature check-regex check-prototype check-vindex
+# check-all: check-formatter check-interning check-nullness check-regex check-signature check-prototype check-vindex
 ## check-regex-qual target runs extremely slowly.
-# check-all: check-formatter check-interning check-nullness check-signature check-regex check-regex-qual
-check-all: check-formatter check-interning check-nullness check-signature check-regex check-lock
+# check-all: check-formatter check-interning check-nullness check-regex check-regex-qual check-signature
+check-all: check-formatter check-interning check-nullness check-regex check-signature check-lock
 
 intern: check-interning
 interning: check-interning
@@ -897,7 +919,8 @@ check-signature: ${ALL_GENERATED_FILES} compile
 # This target runs the Signature checker on just one file.
 # Typical command:
 # SIGNATURE_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-signature-onefile
-SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
+# SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
+SIGNATURE_ONEFILE ?= daikon/dcomp/SummaryInfo.java daikon/dcomp/TypeStack.java
 check-signature-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 
@@ -1086,7 +1109,7 @@ possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
 
 
 
-###
+###########################################################################
 ### Testing
 ###
 
@@ -1147,7 +1170,8 @@ clover: all_directly
 	cd $(CLOVER)/java; \
 	  ${JAVAC} -classpath $(CLOVER_CP) -g -target 1.1 daikon/Daikon.java
 
-###
+
+###########################################################################
 ### Documentation
 ###
 
@@ -1231,16 +1255,7 @@ daikon/config/HtmlToTexinfo.class: daikon/config/HtmlToTexinfo.java
 # 		$(JDOC_FILES)
 
 
-###
-### Switching between version 2 and version 3 (temporary)
-###
-
-# Recurse to the directory above this since regression tests need to be
-# switched too
-use-%:
-	cd .. && $(MAKE) $@
-
-###
+###########################################################################
 ### For debugging the Makefile.
 ###
 
@@ -1262,6 +1277,8 @@ showvars:
 	@echo JAVAC_ARGS = ${JAVAC_ARGS}
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
 	@echo JAVA_FILES = $(JAVA_FILES)
+	@echo JAVA_FILES_FOR_STYLE = $(JAVA_FILES_FOR_STYLE)
+	@echo JAVA_FILES_FOR_FORMAT = $(JAVA_FILES_FOR_FORMAT)
 	@echo TAG_FILES = $(TAG_FILES)
 	@echo INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)
 	@echo INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)

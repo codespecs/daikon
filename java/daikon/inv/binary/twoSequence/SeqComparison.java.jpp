@@ -273,7 +273,7 @@ public class SEQSEQINTEQUAL
   /**
    * Boolean.  True iff SEQSEQINTEQUAL invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * Debugging logger.
@@ -319,7 +319,7 @@ public class SEQSEQINTEQUAL
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
@@ -334,16 +334,16 @@ public class SEQSEQINTEQUAL
                             && (type2.dimensions() == 1)
                             && type2.BASE_IS_TYPE));
       if (only_eq)
-        return (false);
+        return false;
 
       // non equality comparisons don't make sense if the arrays aren't ordered
       if (!var1.aux.hasOrder()
         || !var2.aux.hasOrder())
-        return (false);
+        return false;
 
     #endif
 
-    return (true);
+    return true;
   }
 
   /** Instantiates the invariant on the specified slice **/

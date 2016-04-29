@@ -1,12 +1,12 @@
 package daikon.inv.unary.sequence;
 
 import daikon.*;
-import daikon.inv.*;
-import daikon.inv.unary.UnaryInvariant;
-import daikon.inv.binary.twoSequence.*;
 import daikon.derive.binary.SequenceSubsequence;
-import java.util.logging.Logger;
+import daikon.inv.*;
+import daikon.inv.binary.twoSequence.*;
+import daikon.inv.unary.UnaryInvariant;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -18,9 +18,7 @@ import typequals.*;
 /**
  * Invariants on a single sequence.
  **/
-public abstract class SingleSequence
-  extends UnaryInvariant
-{
+public abstract class SingleSequence extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -43,9 +41,8 @@ public abstract class SingleSequence
     super();
   }
 
-  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this*/) {
+  public VarInfo var(
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this*/ ) {
     return ppt.var_infos[0];
   }
-
-
 }

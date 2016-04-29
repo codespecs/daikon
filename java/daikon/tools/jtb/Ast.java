@@ -2,35 +2,30 @@
 
 package daikon.tools.jtb;
 
-import daikon.inv.OutputFormat;
-import daikon.inv.Invariant;
+import daikon.*;
 import daikon.inv.Equality;
+import daikon.inv.Invariant;
+import daikon.inv.OutputFormat;
 import daikon.inv.filter.*;
-
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
-import java.lang.reflect.*;
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 import jtb.JavaParser;
 import jtb.ParseException;
-import plume.UtilMDE;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
 import plume.ArraysMDE;
-
-import daikon.*;
-
-import java.lang.reflect.*;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 */
 
-@SuppressWarnings({"rawtypes","nullness"}) // not generics-correct
+@SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
 public class Ast {
 
   private static final String lineSep = System.getProperty("line.separator");
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// Visitors
@@ -39,17 +34,16 @@ public class Ast {
   // Reads an AST from the input stream, applies the visitor to the AST,
   // reformats only to insert comments, and writes the resulting AST to the
   // output stream.
-  public static void applyVisitorInsertComments(String javafilename, Node root, Writer output,
-                                                AnnotateVisitor visitor) {
+  public static void applyVisitorInsertComments(
+      String javafilename, Node root, Writer output, AnnotateVisitor visitor) {
     root.accept(visitor);
     root.accept(new InsertCommentFormatter(visitor.addedComments));
     PrintWriter writer = null;
     writer = new PrintWriter(output, true);
-    for (int i = 0 ; i < visitor.javaFileLines.size() ; i++) {
+    for (int i = 0; i < visitor.javaFileLines.size(); i++) {
       writer.println(visitor.javaFileLines.get(i));
     }
     writer.close();
-
 
     //root.accept(new TreeDumper(output));
   }
@@ -57,14 +51,12 @@ public class Ast {
   // Reads an AST from the input stream, applies the visitor to the AST,
   // completely reformats the Ast (losing previous formating), and writes
   // the resulting AST to the output stream.
-  public static void applyVisitorReformat(Reader input, Writer output,
-                                          Visitor visitor) {
+  public static void applyVisitorReformat(Reader input, Writer output, Visitor visitor) {
     JavaParser parser = new JavaParser(input);
     Node root = null;
     try {
       root = parser.CompilationUnit();
-    }
-    catch (ParseException e) {
+    } catch (ParseException e) {
       e.printStackTrace();
       throw new Daikon.TerminationMessage("ParseException in applyVisitorReformat");
     }
@@ -112,7 +104,7 @@ public class Ast {
   public static String quickFixForInternalComment(String s) {
     StringBuffer b = new StringBuffer();
     String[] split = UtilMDE.splitLines(s);
-    for (int i = 0 ; i < split.length ; i++) {
+    for (int i = 0; i < split.length; i++) {
       String line = split[i];
       b.append(line);
       if (line.indexOf("//") != -1) {
@@ -128,8 +120,7 @@ public class Ast {
   // Formats the line enclosing a node
   public static String formatCurrentLine(Node n) {
     Node current = n;
-    while (current.getParent() != null &&
-           print(current.getParent()).indexOf(lineSep) < 0) {
+    while (current.getParent() != null && print(current.getParent()).indexOf(lineSep) < 0) {
       current = current.getParent();
     }
     return print(current);
@@ -147,12 +138,10 @@ public class Ast {
     return formatCurrentLine(n);
   }
 
-
   // Creates an AST from a String
   public static Node create(String type, String stringRep) {
-    return create(type, new Class<?>[]{}, new Object[]{}, stringRep);
+    return create(type, new Class<?>[] {}, new Object[] {}, stringRep);
   }
-
 
   // Creates an AST from a String
   public static Node create(String type, Class<?>[] argTypes, Object[] args, String stringRep) {
@@ -169,15 +158,12 @@ public class Ast {
     return n;
   }
 
-
   ///////////////////////////////////////////////////////////////////////////
   /// Names (fully qualified and otherwise)
   ///
 
   public static boolean isAccessModifier(String s) {
-    return (s.equals("public") ||
-            s.equals("protected") ||
-            s.equals("private"));
+    return (s.equals("public") || s.equals("protected") || s.equals("private"));
   }
 
   // f4 -> VariableDeclaratorId()
@@ -198,7 +184,7 @@ public class Ast {
     StringWriter w = new StringWriter();
     fp.accept(new TreeDumper(w));
 
-    FormalParameter p = (FormalParameter)create("FormalParameter", w.toString());
+    FormalParameter p = (FormalParameter) create("FormalParameter", w.toString());
 
     p.accept(new TreeFormatter());
 
@@ -208,12 +194,11 @@ public class Ast {
     // print() removes whitespace around brackets, so this test is safe.
     while (name.endsWith("[]")) {
       type += "[]";
-      name = name.substring(0, name.length()-2);
+      name = name.substring(0, name.length() - 2);
     }
 
     return type;
   }
-
 
   // f2 -> MethodDeclarator()
   public static String getName(MethodDeclaration m) {
@@ -247,7 +232,6 @@ public class Ast {
     return className + "." + methodName;
   }
 
-
   // Used to be called "getFullName", but that was misleading.
   // Returns the fully qualified signature of a method.
   // <package>.<class>*.<method>(<params>)
@@ -261,7 +245,8 @@ public class Ast {
 
   // Returns the classname if the given type declaration declares a
   // ClassOrInterfaceDeclaration. Otherwise returns null.
-  public static /*@Nullable*/ /*@BinaryNameForNonArray*/ String getClassNameForType(TypeDeclaration d) {
+  public static /*@Nullable*/ /*@BinaryNameForNonArray*/ String getClassNameForType(
+      TypeDeclaration d) {
 
     // Grammar production for TypeDeclaration:
     // f0 -> ";"
@@ -271,8 +256,8 @@ public class Ast {
     if (c.which == 0) {
       return null;
     } else {
-      NodeSequence seq = (NodeSequence)c.choice;
-      NodeChoice c2 = (NodeChoice)seq.elementAt(1);
+      NodeSequence seq = (NodeSequence) c.choice;
+      NodeChoice c2 = (NodeChoice) seq.elementAt(1);
       if (c2.choice instanceof ClassOrInterfaceDeclaration) {
         return getClassName(c2.choice);
       } else {
@@ -286,13 +271,12 @@ public class Ast {
   public static /*@BinaryNameForNonArray*/ String getClassName(Node d) {
 
     ClassOrInterfaceDeclaration n =
-      (d instanceof ClassOrInterfaceDeclaration)
-      ? (ClassOrInterfaceDeclaration)d
-      : (ClassOrInterfaceDeclaration)Ast.getParent(ClassOrInterfaceDeclaration.class, d);
+        (d instanceof ClassOrInterfaceDeclaration)
+            ? (ClassOrInterfaceDeclaration) d
+            : (ClassOrInterfaceDeclaration) Ast.getParent(ClassOrInterfaceDeclaration.class, d);
 
     String packageName;
-    CompilationUnit unit
-      = (CompilationUnit)getParent(CompilationUnit.class, n);
+    CompilationUnit unit = (CompilationUnit) getParent(CompilationUnit.class, n);
     String getPackage = getPackage(unit);
     if (getPackage != null) {
       packageName = getPackage + ".";
@@ -301,18 +285,18 @@ public class Ast {
     }
 
     String className = "";
-    className = (n).f1.tokenImage + ".";   // f1 -> <IDENTIFIER>
+    className = (n).f1.tokenImage + "."; // f1 -> <IDENTIFIER>
 
     Node currentNode = n;
     while (true) {
-      ClassOrInterfaceBody b = (ClassOrInterfaceBody)
-        getParent(ClassOrInterfaceBody.class, currentNode);
+      ClassOrInterfaceBody b =
+          (ClassOrInterfaceBody) getParent(ClassOrInterfaceBody.class, currentNode);
       if (b == null) {
         break;
       }
       Node n1 = b.getParent();
       assert n1 instanceof ClassOrInterfaceDeclaration;
-      if (isInner((ClassOrInterfaceDeclaration)n1)) {
+      if (isInner((ClassOrInterfaceDeclaration) n1)) {
         // TODO: This works for anonymous classes (maybe), but is wrong for
         // non-anonymous inner classes.
         className = "$inner" + "." + className;
@@ -332,14 +316,12 @@ public class Ast {
     @SuppressWarnings("signature") // string concatenation, etc.
     /*@BinaryNameForNonArray*/ String result_bnfna = result;
     return result_bnfna;
-
   }
 
   // f2 -> MethodDeclarator()
   public static void setName(MethodDeclaration m, String name) {
     m.f2.f0.tokenImage = name;
   }
-
 
   // f1 -> [ AssignmentOperator() Expression() ]
   // Return the primary expression on the left-hand side of an assignment
@@ -349,38 +331,36 @@ public class Ast {
 
     assert n.f1.present();
     ConditionalExpression ce = n.f0;
-    assert ! ce.f1.present();
+    assert !ce.f1.present();
     ConditionalOrExpression coe = ce.f0;
-    assert ! coe.f1.present();
+    assert !coe.f1.present();
     ConditionalAndExpression cae = coe.f0;
-    assert ! cae.f1.present();
+    assert !cae.f1.present();
     InclusiveOrExpression ioe = cae.f0;
-    assert ! ioe.f1.present();
+    assert !ioe.f1.present();
     ExclusiveOrExpression eoe = ioe.f0;
-    assert ! eoe.f1.present();
+    assert !eoe.f1.present();
     AndExpression ande = eoe.f0;
-    assert ! ande.f1.present();
+    assert !ande.f1.present();
     EqualityExpression ee = ande.f0;
-    assert ! ee.f1.present();
+    assert !ee.f1.present();
     InstanceOfExpression iofe = ee.f0;
-    assert ! iofe.f1.present();
+    assert !iofe.f1.present();
     RelationalExpression re = iofe.f0;
-    assert ! re.f1.present();
+    assert !re.f1.present();
     ShiftExpression se = re.f0;
-    assert ! se.f1.present();
+    assert !se.f1.present();
     AdditiveExpression adde = se.f0;
-    assert ! adde.f1.present();
+    assert !adde.f1.present();
     MultiplicativeExpression me = adde.f0;
-    assert ! me.f1.present();
+    assert !me.f1.present();
     UnaryExpression ue = me.f0;
-    UnaryExpressionNotPlusMinus uenpm
-      = (UnaryExpressionNotPlusMinus) ue.f0.choice;
+    UnaryExpressionNotPlusMinus uenpm = (UnaryExpressionNotPlusMinus) ue.f0.choice;
     PostfixExpression pfe = (PostfixExpression) uenpm.f0.choice;
-    assert ! pfe.f1.present();
+    assert !pfe.f1.present();
     PrimaryExpression pe = pfe.f0;
     return pe;
   }
-
 
   public static String fieldName(PrimaryExpression pe) {
 
@@ -394,7 +374,7 @@ public class Ast {
 
     NodeListOptional pslist = pe.f1;
     if (pslist.size() > 0) {
-      PrimarySuffix ps = (PrimarySuffix) pslist.elementAt(pslist.size()-1);
+      PrimarySuffix ps = (PrimarySuffix) pslist.elementAt(pslist.size() - 1);
       NodeChoice psnc = ps.f0;
       // PrimarySuffix:
       // f0 -> "." "super"
@@ -405,10 +385,10 @@ public class Ast {
       //       | "." <IDENTIFIER>
       //       | Arguments()
       switch (psnc.which) {
-      case 5:
-        NodeSequence sn = (NodeSequence) psnc.choice;
-        assert sn.size() == 2;
-        return ((NodeToken) sn.elementAt(1)).tokenImage;
+        case 5:
+          NodeSequence sn = (NodeSequence) psnc.choice;
+          assert sn.size() == 2;
+          return ((NodeToken) sn.elementAt(1)).tokenImage;
       }
     }
 
@@ -427,12 +407,12 @@ public class Ast {
     PrimaryPrefix pp = pe.f0;
     NodeChoice ppnc = pp.f0;
     switch (ppnc.which) {
-    case 2:
-      NodeSequence sn = (NodeSequence) ppnc.choice;
-      assert sn.size() == 3;
-      return ((NodeToken) sn.elementAt(2)).tokenImage;
-    case 7:
-      return fieldName((Name) ppnc.choice);
+      case 2:
+        NodeSequence sn = (NodeSequence) ppnc.choice;
+        assert sn.size() == 3;
+        return ((NodeToken) sn.elementAt(2)).tokenImage;
+      case 7:
+        return fieldName((Name) ppnc.choice);
     }
 
     return null;
@@ -441,7 +421,7 @@ public class Ast {
   public static String fieldName(Name n) {
     NodeListOptional nlo = n.f1;
     if (nlo.present()) {
-      NodeSequence ns = (NodeSequence) nlo.elementAt(nlo.size()-1);
+      NodeSequence ns = (NodeSequence) nlo.elementAt(nlo.size() - 1);
       assert ns.size() == 2;
       NodeToken nt = (NodeToken) ns.elementAt(1);
       return nt.tokenImage;
@@ -449,7 +429,6 @@ public class Ast {
       return n.f0.tokenImage;
     }
   }
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// Comments
@@ -492,13 +471,15 @@ public class Ast {
       private boolean seenToken = false;
       private final NodeToken comment;
       private final boolean first;
+
       public AddCommentVisitor(NodeToken comment, boolean first) {
         this.comment = comment;
         this.first = first;
       }
+
       @Override
       public void visit(NodeToken node) {
-        if (! seenToken) {
+        if (!seenToken) {
           seenToken = true;
           if (first && (node.numSpecials() > 0)) {
             comment.beginLine = node.getSpecialAt(0).beginLine;
@@ -552,21 +533,25 @@ public class Ast {
       private boolean seenToken = false;
       private final NodeToken comment;
       private final boolean first;
+
       public AddCommentVisitor(NodeToken comment, boolean first) {
         this.comment = comment;
         this.first = first;
       }
+
       @Override
       public void visit(NodeToken node) {
-        if (! seenToken) {
+        if (!seenToken) {
           seenToken = true;
-          if (first && (node.numSpecials() > 1)
-              && (node.getSpecialAt(0).beginColumn != node.getSpecialAt(node.numSpecials()-1).beginColumn)) {
+          if (first
+              && (node.numSpecials() > 1)
+              && (node.getSpecialAt(0).beginColumn
+                  != node.getSpecialAt(node.numSpecials() - 1).beginColumn)) {
             // There are multiple comments, and the first and last ones
             // start at different columns.  Search from the end, finding
             // the first one with a different column.
-            int i = node.numSpecials()-1;
-            while (node.getSpecialAt(i-1).beginColumn == node.getSpecialAt(i).beginColumn) {
+            int i = node.numSpecials() - 1;
+            while (node.getSpecialAt(i - 1).beginColumn == node.getSpecialAt(i).beginColumn) {
               i--;
             }
             comment.beginLine = node.getSpecialAt(i).beginLine;
@@ -591,13 +576,12 @@ public class Ast {
     n.accept(new AddCommentVisitor(comment, first));
   }
 
-
   /**
    * Adds the comment to the first regular token in the tree, before the
    * ith special token.
    **/
   public static void addNthSpecial(NodeToken n, NodeToken s, int i) {
-    if ( n.specialTokens == null ) n.specialTokens = new Vector<NodeToken>();
+    if (n.specialTokens == null) n.specialTokens = new Vector<NodeToken>();
     n.specialTokens.insertElementAt(s, i);
     s.setParent(n);
   }
@@ -610,13 +594,13 @@ public class Ast {
     addNthSpecial(n, s, 0);
   }
 
-
   // Return the first NodeToken after (all of) the specified Node.
   public static NodeToken nodeTokenAfter(Node n) {
     // After the traversal, the "lastNodeToken" slot contains the
     // last NodeToken visited.
     class LastNodeTokenVisitor extends DepthFirstVisitor {
       public NodeToken lastNodeToken = null;
+
       @Override
       public void visit(NodeToken node) {
         lastNodeToken = node;
@@ -629,13 +613,15 @@ public class Ast {
       private boolean seenPredecessor = false;
       public NodeToken nextNodeToken;
       private final NodeToken predecessor;
+
       public NextNodeTokenVisitor(NodeToken predecessor) {
         this.predecessor = predecessor;
       }
+
       @Override
       @SuppressWarnings("interned")
       public void visit(NodeToken node) {
-        if (! seenPredecessor) {
+        if (!seenPredecessor) {
           if (node == predecessor) {
             seenPredecessor = true;
           }
@@ -670,15 +656,15 @@ public class Ast {
     return result;
   }
 
-
   // Removes all the special tokens (annotations and other comments)
   // from the first regular token in the method
   public static void removeAnnotations(MethodDeclaration m) {
     class RemoveAnnotationsVisitor extends DepthFirstVisitor {
       private boolean seenToken = false;
+
       @Override
       public void visit(NodeToken n) {
-        if (! seenToken) {
+        if (!seenToken) {
           seenToken = true;
           n.specialTokens = null;
         }
@@ -687,7 +673,6 @@ public class Ast {
 
     m.accept(new RemoveAnnotationsVisitor());
   }
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// Whitespace
@@ -702,7 +687,6 @@ public class Ast {
     arg = UtilMDE.removeWhitespaceBefore(arg, "]");
     return arg;
   }
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// PptMap manipulation
@@ -736,7 +720,7 @@ public class Ast {
           throw new Error("Didn't find class " + orig_s);
         }
         @SuppressWarnings("signature") // string concatenation
-        /*@ClassGetName*/ String new_s = s.substring(0,dot_pos) + "$" + s.substring(dot_pos+1);
+        /*@ClassGetName*/ String new_s = s.substring(0, dot_pos) + "$" + s.substring(dot_pos + 1);
         s = new_s;
         // System.out.println("Lookup trying: " + s);
         try {
@@ -767,12 +751,11 @@ public class Ast {
 
     Method[] meths = allMethods.toArray(new Method[0]);
 
-    for (int i=0; i<meths.length; i++) {
-
+    for (int i = 0; i < meths.length; i++) {
 
       Method meth = meths[i];
       // System.out.println("getMethod(" + c.getName() + ", " + getName(methoddecl) + ") checking " + meth.getName());
-      if (! typeMatch(meth.getName(), ast_methodname)) {
+      if (!typeMatch(meth.getName(), ast_methodname)) {
         continue;
       }
 
@@ -795,19 +778,19 @@ public class Ast {
 
     List<FormalParameter> ast_params = getParameters(constructordecl);
 
-
     List<Constructor<?>> publicConstructors = Arrays.<Constructor<?>>asList(c.getConstructors());
-    List<Constructor<?>> declaredConstructors = Arrays.<Constructor<?>>asList(c.getDeclaredConstructors());
+    List<Constructor<?>> declaredConstructors =
+        Arrays.<Constructor<?>>asList(c.getDeclaredConstructors());
     List<Constructor<?>> allConstructors = new ArrayList<Constructor<?>>();
     allConstructors.addAll(publicConstructors);
     allConstructors.addAll(declaredConstructors);
 
     Constructor<?>[] constrs = allConstructors.toArray(new Constructor<?>[0]);
 
-    for (int i=0; i<constrs.length; i++) {
+    for (int i = 0; i < constrs.length; i++) {
 
       Constructor<?> constr = constrs[i];
-      if (! typeMatch(constr.getName(), ast_constructorname)) {
+      if (!typeMatch(constr.getName(), ast_constructorname)) {
         continue;
       }
       Class<?>[] params = constr.getParameterTypes();
@@ -826,23 +809,22 @@ public class Ast {
     }
     // Now check whether args match.
     boolean unmatched = false;
-    int j=0;
+    int j = 0;
     for (Iterator<FormalParameter> itor = ast_params.iterator(); itor.hasNext(); j++) {
       String ast_param = getType(itor.next());
       Class<?> param = params[j];
       //System.out.println("Comparing " + param + " to " + ast_param + ":");
-      if (! typeMatch(classnameForSourceOutput(param), ast_param)) {
+      if (!typeMatch(classnameForSourceOutput(param), ast_param)) {
         return false;
       }
     }
     return true;
   }
 
-
   // return true if m is defined in any superclass of its class
   public static boolean isOverride(MethodDeclaration methdecl) {
-    ClassOrInterfaceDeclaration classOrInterface = (ClassOrInterfaceDeclaration)
-      getParent(ClassOrInterfaceDeclaration.class, methdecl);
+    ClassOrInterfaceDeclaration classOrInterface =
+        (ClassOrInterfaceDeclaration) getParent(ClassOrInterfaceDeclaration.class, methdecl);
     if (classOrInterface != null && isInterface(classOrInterface)) {
       return false;
     }
@@ -872,8 +854,8 @@ public class Ast {
   // return true if methdecl is defined in any interface of its class
   public static boolean isImplementation(MethodDeclaration methdecl) {
 
-    ClassOrInterfaceDeclaration classOrInterface = (ClassOrInterfaceDeclaration)
-      getParent(ClassOrInterfaceDeclaration.class, methdecl);
+    ClassOrInterfaceDeclaration classOrInterface =
+        (ClassOrInterfaceDeclaration) getParent(ClassOrInterfaceDeclaration.class, methdecl);
     if (classOrInterface != null && isInterface(classOrInterface)) {
       return false;
     }
@@ -883,7 +865,7 @@ public class Ast {
     }
     // System.out.println("isImplementation(" + getName(methdecl) + "): class=" + c.getName());
     Class<?>[] interfaces = c.getInterfaces();
-    for (int i=0; i<interfaces.length; i++) {
+    for (int i = 0; i < interfaces.length; i++) {
       if (isImplementation(interfaces[i], methdecl)) {
         return true;
       }
@@ -900,14 +882,13 @@ public class Ast {
       return true;
     }
     Class<?>[] interfaces = c.getInterfaces();
-    for (int i=0; i<interfaces.length; i++) {
+    for (int i = 0; i < interfaces.length; i++) {
       if (isImplementation(interfaces[i], methdecl)) {
         return true;
       }
     }
     return false;
   }
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// Etc.
@@ -930,22 +911,19 @@ public class Ast {
     }
   }
 
-
   public static void addDeclaration(ClassOrInterfaceBody c, ClassOrInterfaceBodyDeclaration d) {
     c.f1.addNode(d);
   }
-
-
 
   // The "access" argument should be one of "public", "protected", or "private".
   public static void setAccess(MethodDeclaration m, String access) {
     // The following four confusing lines are a following of the
     // syntax tree to get to the modifiers.
     ClassOrInterfaceBodyDeclaration decl =
-      (ClassOrInterfaceBodyDeclaration)Ast.getParent(ClassOrInterfaceBodyDeclaration.class, m);
+        (ClassOrInterfaceBodyDeclaration) Ast.getParent(ClassOrInterfaceBodyDeclaration.class, m);
     NodeChoice nc = decl.f0;
-    NodeSequence sequence = (NodeSequence)nc.choice;
-    Modifiers modifiers = (Modifiers)sequence.elementAt(0);
+    NodeSequence sequence = (NodeSequence) nc.choice;
+    Modifiers modifiers = (Modifiers) sequence.elementAt(0);
     NodeListOptional options = modifiers.f0;
     for (Enumeration e = options.elements(); e.hasMoreElements(); ) { // non-generic due to JTB
       NodeChoice c = (NodeChoice) e.nextElement();
@@ -953,8 +931,7 @@ public class Ast {
       if (c.choice instanceof NodeToken) {
         NodeToken t = (NodeToken) c.choice;
         String token = t.tokenImage;
-        if (token.equals("public") || token.equals("protected") ||
-            token.equals("private")) {
+        if (token.equals("public") || token.equals("protected") || token.equals("private")) {
           t.tokenImage = access;
           return;
         }
@@ -970,10 +947,11 @@ public class Ast {
     // The following four confusing lines are a following of the
     // syntax tree to get to the modifiers.
     ClassOrInterfaceBodyDeclaration decl =
-      (ClassOrInterfaceBodyDeclaration)Ast.getParent(ClassOrInterfaceBodyDeclaration.class, method);
+        (ClassOrInterfaceBodyDeclaration)
+            Ast.getParent(ClassOrInterfaceBodyDeclaration.class, method);
     NodeChoice nc = decl.f0;
-    NodeSequence sequence = (NodeSequence)nc.choice;
-    Modifiers modifiers = (Modifiers)sequence.elementAt(0);
+    NodeSequence sequence = (NodeSequence) nc.choice;
+    Modifiers modifiers = (Modifiers) sequence.elementAt(0);
     NodeListOptional options = modifiers.f0;
 
     NodeListOptional filteredOptions = new NodeListOptional();
@@ -989,15 +967,16 @@ public class Ast {
     modifiers.f0 = filteredOptions;
   }
 
-
   // returns true if, for some node in the tree, node.tokenImage.equals(s)
   public static boolean contains(Node n, String s) {
     class ContainsVisitor extends DepthFirstVisitor {
       public boolean found = false;
       private final String s;
+
       public ContainsVisitor(String s) {
         this.s = s;
       }
+
       @Override
       public void visit(NodeToken node) {
         found = found || s.equals(node.tokenImage);
@@ -1007,7 +986,6 @@ public class Ast {
     n.accept(cv);
     return cv.found;
   }
-
 
   // Body must begin and end with a brace.
   public static void setBody(MethodDeclaration m, String body) {
@@ -1019,7 +997,6 @@ public class Ast {
     return print(m.f4.choice);
   }
 
-
   public static String getReturnType(MethodDeclaration m) {
     Node n = m.f1.f0.choice;
     return print(n);
@@ -1030,13 +1007,13 @@ public class Ast {
     return print(d);
   }
 
-
   // Returns the parameters of the method, as a list of
   // FormalParameter objects.  Returns an empty list if there are no
   // parameters.
   public static List<FormalParameter> getParameters(MethodDeclaration m) {
     class GetParametersVisitor extends DepthFirstVisitor {
       public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+
       @Override
       public void visit(FormalParameter p) {
         parameters.add(p);
@@ -1054,6 +1031,7 @@ public class Ast {
   public static List<FormalParameter> getParametersNoImplicit(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
       public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+
       @Override
       public void visit(FormalParameter p) {
         parameters.add(p);
@@ -1071,6 +1049,7 @@ public class Ast {
   public static List<FormalParameter> getParameters(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
       public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+
       @Override
       public void visit(FormalParameter p) {
         parameters.add(p);
@@ -1090,18 +1069,19 @@ public class Ast {
     Node innerClassNode = getParent(ClassOrInterfaceDeclaration.class, cd);
     Node outerClassNode = getParent(ClassOrInterfaceDeclaration.class, innerClassNode);
 
-//     boolean isNestedStatic = false;
-//     Node nestedMaybe = innerClassNode.getParent();
-//     if (nestedMaybe instanceof NestedClassDeclaration) {
-//       if (isStatic((NestedClassDeclaration)nestedMaybe)) {
-//         isNestedStatic = true;
-//       }
-//     }
+    //     boolean isNestedStatic = false;
+    //     Node nestedMaybe = innerClassNode.getParent();
+    //     if (nestedMaybe instanceof NestedClassDeclaration) {
+    //       if (isStatic((NestedClassDeclaration)nestedMaybe)) {
+    //         isNestedStatic = true;
+    //       }
+    //     }
 
-    if (isInner((ClassOrInterfaceDeclaration)innerClassNode)
-        && !isStatic((ClassOrInterfaceDeclaration)innerClassNode)) {
-      NodeToken classNameToken = ((ClassOrInterfaceDeclaration)outerClassNode).f1;
-      ClassOrInterfaceType name = new ClassOrInterfaceType(classNameToken, new NodeOptional(), new NodeListOptional());
+    if (isInner((ClassOrInterfaceDeclaration) innerClassNode)
+        && !isStatic((ClassOrInterfaceDeclaration) innerClassNode)) {
+      NodeToken classNameToken = ((ClassOrInterfaceDeclaration) outerClassNode).f1;
+      ClassOrInterfaceType name =
+          new ClassOrInterfaceType(classNameToken, new NodeOptional(), new NodeListOptional());
       NodeSequence n10 = new NodeSequence(name);
       NodeSequence n9 = new NodeSequence(n10);
       n9.addNode(new NodeListOptional());
@@ -1110,23 +1090,24 @@ public class Ast {
       // Setting all the line and column info on the NodeTokens is a hassle.
       // So we sidestep and 'cheat' by putting a blank as the first character of the name.
       // This works because we are going to re-parse it in the node Create method.
-      VariableDeclaratorId dummyOuterParamName = new VariableDeclaratorId(new NodeToken(" outer$this"), new NodeListOptional());
-      FormalParameter implicitOuter = new FormalParameter(new Modifiers(new NodeListOptional()),
-                                                          new NodeOptional(),
-                                                          type,
-                                                          new NodeOptional(),
-                                                          dummyOuterParamName);
+      VariableDeclaratorId dummyOuterParamName =
+          new VariableDeclaratorId(new NodeToken(" outer$this"), new NodeListOptional());
+      FormalParameter implicitOuter =
+          new FormalParameter(
+              new Modifiers(new NodeListOptional()),
+              new NodeOptional(),
+              type,
+              new NodeOptional(),
+              dummyOuterParamName);
       v.parameters.add(0, implicitOuter);
     }
 
     return v.parameters;
   }
 
-
   public static void addImport(CompilationUnit u, ImportDeclaration i) {
     u.f1.addNode(i);
   }
-
 
   // Returns a list of Strings, the names of all the variables in the node.
   // The node is an expression, conditional expression, or primary
@@ -1141,8 +1122,7 @@ public class Ast {
         Node gp = n.getParent().getParent();
         if (gp instanceof PrimaryPrefix) {
           PrimaryExpression ggp = (PrimaryExpression) gp.getParent();
-          for (Enumeration e = getPrimarySuffixes(ggp);
-               e.hasMoreElements(); ) {
+          for (Enumeration e = getPrimarySuffixes(ggp); e.hasMoreElements(); ) {
             PrimarySuffix s = (PrimarySuffix) e.nextElement();
             if (s.f0.choice instanceof Arguments) {
               return;
@@ -1180,7 +1160,6 @@ public class Ast {
     }
     return false;
   }
-
 
   /** Return true if this is the main method for this class. **/
   public static boolean isMain(MethodDeclaration md) {
@@ -1222,8 +1201,7 @@ public class Ast {
     // probably not a bottleneck anyway.
     List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
 
-    Invariant[] invs_array =
-      invs_vector.toArray(new Invariant[invs_vector.size()]);
+    Invariant[] invs_array = invs_vector.toArray(new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
     Global.non_falsified_invariants += invs_array.length;
@@ -1236,13 +1214,12 @@ public class Ast {
       assert !(inv instanceof Equality);
       for (int j = 0; j < inv.ppt.var_infos.length; j++)
         assert !inv.ppt.var_infos[j].missingOutOfBounds()
-        : "var '" + inv.ppt.var_infos[j].name()
-                           + "' out of bounds in " + inv.format();
+            : "var '" + inv.ppt.var_infos[j].name() + "' out of bounds in " + inv.format();
       InvariantFilters fi = InvariantFilters.defaultFilters();
 
       boolean fi_accepted = true;
       InvariantFilter filter_result = null;
-      filter_result = fi.shouldKeep (inv);
+      filter_result = fi.shouldKeep(inv);
       fi_accepted = (filter_result == null);
 
       // Never print the guarding predicates themselves, they should only
@@ -1252,51 +1229,46 @@ public class Ast {
         Global.reported_invariants++;
         accepted_invariants.add(inv);
       }
-
     }
 
-    accepted_invariants
-      = InvariantFilters.addEqualityInvariants(accepted_invariants);
+    accepted_invariants = InvariantFilters.addEqualityInvariants(accepted_invariants);
 
     return accepted_invariants;
   }
 
   public static boolean isStatic(ClassOrInterfaceDeclaration n) {
-    return isStaticInternal((Node)n);
+    return isStaticInternal((Node) n);
   }
 
   public static boolean isStatic(MethodDeclaration n) {
-    return isStaticInternal((Node)n);
+    return isStaticInternal((Node) n);
   }
 
   public static Modifiers getModifiers(ClassOrInterfaceDeclaration n) {
-    return getModifiersInternal((Node)n);
+    return getModifiersInternal((Node) n);
   }
 
   public static Modifiers getModifiers(MethodDeclaration n) {
-    return getModifiersInternal((Node)n);
+    return getModifiersInternal((Node) n);
   }
 
   private static Modifiers getModifiersInternal(Node n) {
 
-    assert (n instanceof MethodDeclaration)
-                      || (n instanceof ClassOrInterfaceDeclaration);
+    assert (n instanceof MethodDeclaration) || (n instanceof ClassOrInterfaceDeclaration);
 
     ClassOrInterfaceBodyDeclaration decl =
-      (ClassOrInterfaceBodyDeclaration)getParent(ClassOrInterfaceBodyDeclaration.class, n);
+        (ClassOrInterfaceBodyDeclaration) getParent(ClassOrInterfaceBodyDeclaration.class, n);
     assert decl != null;
-    NodeSequence seq = (NodeSequence)decl.f0.choice;
-    return (Modifiers)seq.elementAt(0);
+    NodeSequence seq = (NodeSequence) decl.f0.choice;
+    return (Modifiers) seq.elementAt(0);
   }
-
 
   private static boolean isStaticInternal(Node n) {
     // Grammar production for ClassOrInterfaceBodyDeclaration
     // f0 -> Initializer()
     //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
     //       | ";"
-    assert (n instanceof MethodDeclaration)
-                      || (n instanceof ClassOrInterfaceDeclaration);
+    assert (n instanceof MethodDeclaration) || (n instanceof ClassOrInterfaceDeclaration);
 
     Modifiers modifiers = getModifiersInternal(n);
     if (modifierPresent(modifiers, "static")) {
@@ -1311,11 +1283,11 @@ public class Ast {
     // f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
 
     NodeListOptional list = modifiers.f0;
-    for (int i = 0 ; i < list.size() ; i++) {
-      NodeChoice nodeChoice = (NodeChoice)list.elementAt(i);
+    for (int i = 0; i < list.size(); i++) {
+      NodeChoice nodeChoice = (NodeChoice) list.elementAt(i);
 
       if (nodeChoice.choice instanceof NodeToken) {
-        NodeToken keyword = (NodeToken)nodeChoice.choice;
+        NodeToken keyword = (NodeToken) nodeChoice.choice;
         if (keyword.toString().equals(modifierString)) {
           return true;
         }
@@ -1333,7 +1305,8 @@ public class Ast {
   }
 
   public static boolean isInAnonymousClass(Node node) {
-    ClassOrInterfaceBody clsbody = (ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, node);
+    ClassOrInterfaceBody clsbody =
+        (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, node);
     return (!(clsbody.getParent() instanceof ClassOrInterfaceDeclaration));
   }
 
@@ -1341,10 +1314,9 @@ public class Ast {
     // n.getParent won't be an ClassOrInterfaceDeclaration for anonymous
     // class bodies such as in  new List() { ... }  -- anonymous classes can
     // never be interfaces, however, so that's simple enough to handle. :)
-    if (!(n.getParent() instanceof ClassOrInterfaceDeclaration))
-      return false;
+    if (!(n.getParent() instanceof ClassOrInterfaceDeclaration)) return false;
 
-    return isInterface((ClassOrInterfaceDeclaration)n.getParent());
+    return isInterface((ClassOrInterfaceDeclaration) n.getParent());
   }
 
   public static boolean isInterface(ClassOrInterfaceDeclaration n) {
@@ -1362,7 +1334,6 @@ public class Ast {
     } else {
       return false;
     }
-
   }
 
   public static boolean isPrimitive(jtb.syntaxtree.Type n) {
@@ -1379,7 +1350,6 @@ public class Ast {
     return (n.f0.choice instanceof ReferenceType);
   }
 
-
   public static boolean isArray(jtb.syntaxtree.Type n) {
     // Grammar production:
     // f0 -> PrimitiveType() ( "[" "]" )+
@@ -1388,27 +1358,25 @@ public class Ast {
       return false;
     }
     assert isReference(n);
-    ReferenceType refType = (ReferenceType)n.f0.choice;
-    NodeSequence seq = (NodeSequence)refType.f0.choice;
+    ReferenceType refType = (ReferenceType) n.f0.choice;
+    NodeSequence seq = (NodeSequence) refType.f0.choice;
     if (seq.elementAt(0) instanceof PrimitiveType) {
       return true; // see grammar--must be array in this case
-
     }
-    NodeListOptional opt = (NodeListOptional)seq.elementAt(1);
+    NodeListOptional opt = (NodeListOptional) seq.elementAt(1);
     return opt.present();
   }
 
   public static String classnameForSourceOutput(Class<?> c) {
 
-        assert !c.equals(Void.TYPE);
+    assert !c.equals(Void.TYPE);
 
-        if (c.isPrimitive()) {
-            return c.getName();
-        } else if (c.isArray()) {
-            return UtilMDE.fieldDescriptorToBinaryName(c.getName());
-        } else {
-            return c.getName();
-        }
+    if (c.isPrimitive()) {
+      return c.getName();
+    } else if (c.isArray()) {
+      return UtilMDE.fieldDescriptorToBinaryName(c.getName());
+    } else {
+      return c.getName();
     }
-
+  }
 }

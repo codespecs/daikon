@@ -9,9 +9,7 @@ import org.checkerframework.dataflow.qual.*;
  * An UndoAssume command removes an assumption from the assumption
  * stack of the given session.  The command will not block.
  **/
-public class CmdUndoAssume
-  implements Cmd
-{
+public class CmdUndoAssume implements Cmd {
   public static CmdUndoAssume single = new CmdUndoAssume();
 
   /** For documentation, read the class overview. */
@@ -27,11 +25,9 @@ public class CmdUndoAssume
 
       // there is no output from Simplify
     }
-
   }
 
   /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdUndoAssume this*/) {
     return "CmdUndoAssume";
   }
-
 }

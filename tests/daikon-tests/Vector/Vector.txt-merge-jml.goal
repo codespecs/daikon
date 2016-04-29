@@ -370,11 +370,11 @@ class Vector13 implements Cloneable, java.io.Serializable {
     @ ensures this.elementCount == \old(this.elementCount);
     @ ensures this.capacityIncrement == \old(this.capacityIncrement);
     @ ensures (this.elementCount == 0)  <==>  (\result == true);
-    @ ensures (this.elementCount == 0)  ==>  (this.elementCount  isPointer);
     @ ensures (this.elementCount == 0)  ==>  (this.elementCount <= this.capacityIncrement);
     @ ensures (this.elementCount == 0)  ==>  (this.elementCount == (daikon.Quant.size(this.elementData) / javautil.Vector13.serialVersionUID));
     @ ensures (this.elementCount == 0)  ==>  (this.elementCount == (daikon.Quant.size(this.elementData)-1 / javautil.Vector13.serialVersionUID));
     @ ensures (this.elementCount == 0)  ==>  (this.elementCount == (this.capacityIncrement / javautil.Vector13.serialVersionUID));
+    @ ensures (this.elementCount == 0)  ==>  (this.elementCount is a pointer);
     @ ensures (this.elementCount == 0)  ==>  (daikon.Quant.eltsEqual(this.elementData, null));
     @ ensures this.elementData.getClass().getName() == \old(this.elementData.getClass().getName());
     @*/

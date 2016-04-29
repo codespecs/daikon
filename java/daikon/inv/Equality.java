@@ -2,19 +2,18 @@ package daikon.inv;
 
 import daikon.*;
 import daikon.Quantify.QuantFlags;
-
-import plume.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
+import typequals.*;
 */
-
 
 // Note that this Invariant is used in a *very* different way from
 // the same-named one in V2.  In V2, this is just for printing.  In V3,
@@ -39,7 +38,6 @@ import org.checkerframework.dataflow.qual.*;
 // when pivoting, all the other invariants based on this.leader also
 // need to be pivoted.
 
-
 /**
  * Keeps track of sets of variables that are equal.  Other invariants are
  * instantiated for only one member of the Equality set, the leader.  If
@@ -49,26 +47,22 @@ import org.checkerframework.dataflow.qual.*;
  * that print as <code>x == y</code> and <code>x == z</code>.
  *
  **/
-public final /*(at)Interned*/ class Equality
-  extends Invariant
-{
-   // We are Serializable, so we specify a version to allow changes to
-   // method signatures without breaking serialization.  If you add or
-   // remove fields, you should change this number to the current date.
+public final /*(at)Interned*/ class Equality extends Invariant {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20021231L;
 
-  public static final Logger debug =
-    Logger.getLogger ("daikon.inv.Equality");
+  public static final Logger debug = Logger.getLogger("daikon.inv.Equality");
 
-  public static final Logger debugPostProcess =
-    Logger.getLogger ("daikon.inv.Equality.postProcess");
+  public static final Logger debugPostProcess = Logger.getLogger("daikon.inv.Equality.postProcess");
 
   /**
    * How many samples this has seen.
    **/
   private int numSamples;
 
-  public void setSamples (int sample_cnt) {
+  public void setSamples(int sample_cnt) {
     numSamples = sample_cnt;
   }
 
@@ -92,7 +86,7 @@ public final /*(at)Interned*/ class Equality
    * Returns the variables in their index order.  Unmodifiable.
    **/
   public Set<VarInfo> getVars() {
-    return Collections.unmodifiableSet (vars);
+    return Collections.unmodifiableSet(vars);
   }
 
   /**
@@ -103,12 +97,12 @@ public final /*(at)Interned*/ class Equality
   public Equality(Collection<VarInfo> variables, PptSlice ppt) {
     super(ppt);
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Creating at " + ppt.parent.name() + " vars: ");
+      debug.fine("Creating at " + ppt.parent.name() + " vars: ");
     }
 
     numSamples = 0;
     vars = new TreeSet<VarInfo>(VarInfo.IndexComparator.theInstance);
-    vars.addAll (variables);
+    vars.addAll(variables);
     VarInfo leader = leader();
 
     // ensure well-formedness and set equality slots
@@ -117,13 +111,12 @@ public final /*(at)Interned*/ class Equality
 
     for (VarInfo vi : variables) {
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("  " + vi.name() + " [" + vi.comparability + "]");
+        debug.fine("  " + vi.name() + " [" + vi.comparability + "]");
       }
       assert vi.ppt == leader.ppt;
-      assert vi.comparableNWay (leader);
-      assert VarComparability.comparable (leader, vi)
-        : "not comparable " + leader.name() + " " + vi.name()
-            +" at ppt " + ppt.parent.name();
+      assert vi.comparableNWay(leader);
+      assert VarComparability.comparable(leader, vi)
+          : "not comparable " + leader.name() + " " + vi.name() + " at ppt " + ppt.parent.name();
       assert vi.rep_type.isArray() == leader.rep_type.isArray();
       vi.equalitySet = this;
     }
@@ -132,15 +125,16 @@ public final /*(at)Interned*/ class Equality
   ////////////////////////
   // Accessors
 
-
   private /*@Nullable*/ VarInfo leaderCache = null;
   /**
    * Return the canonical VarInfo of this.  Note that the leader never
    * changes.
    * @return the canonical VarInfo of this
    **/
-  /*@SuppressWarnings("purity")*/ // set cache field
-  /*@Pure*/ public VarInfo leader(/*>>>@GuardSatisfied @UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this*/) {
+  /*@SuppressWarnings("purity")*/
+  // set cache field
+  /*@Pure*/ public VarInfo leader(
+      /*>>>@GuardSatisfied @UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this*/ ) {
     if (leaderCache == null) {
       leaderCache = vars.iterator().next();
     }
@@ -160,7 +154,6 @@ public final /*(at)Interned*/ class Equality
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
-
   ////////////////////////
   // Functions called during actual checking
 
@@ -176,13 +169,17 @@ public final /*(at)Interned*/ class Equality
   // they can be called if desired.
 
   public String repr(/*>>>@GuardSatisfied Equality this*/) {
-    return "Equality: size=" + size()
-      + " leader: " + leader().name() + " with "
-      + format_daikon() + " samples: " + numSamples();
+    return "Equality: size="
+        + size()
+        + " leader: "
+        + leader().name()
+        + " with "
+        + format_daikon()
+        + " samples: "
+        + numSamples();
   }
 
   /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
-
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -206,14 +203,12 @@ public final /*(at)Interned*/ class Equality
         start = false;
       }
       result.append(var.name());
-      result.append ("[" + var.varinfo_index + "]");
+      result.append("[" + var.varinfo_index + "]");
       // result.append("[" + var.comparability + "]");
-      if (var == leader())
-        result.append ("L");
+      if (var == leader()) result.append("L");
     }
     return result.toString();
   }
-
 
   public String format_java() {
     VarInfo leader = leader();
@@ -225,7 +220,6 @@ public final /*(at)Interned*/ class Equality
     }
     return UtilMDE.join(clauses, " && ");
   }
-
 
   public String format_esc(/*>>>@GuardSatisfied Equality this*/) {
     String result = "";
@@ -258,7 +252,7 @@ public final /*(at)Interned*/ class Equality
     equal_vars.addAll(valid_equiv);
     equal_vars.addAll(invalid_equiv);
     int numprinted = 0;
-    for (int j=0; j<equal_vars.size(); j++) {
+    for (int j = 0; j < equal_vars.size(); j++) {
       VarInfo other = equal_vars.get(j);
       if (other == leader) continue;
       if (leader.prestate_name().equals(other.name())) continue;
@@ -268,18 +262,17 @@ public final /*(at)Interned*/ class Equality
       }
       numprinted++;
       if (j >= valid_equiv.size()) {
-        result = result + "warning: method Equality.format_esc() needs to be implemented: " + format();
+        result =
+            result + "warning: method Equality.format_esc() needs to be implemented: " + format();
       }
       if (leader.rep_type.isArray()) {
-        String[] form = VarInfo.esc_quantify (leader, other);
+        String[] form = VarInfo.esc_quantify(leader, other);
         result = result + form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3];
       } else {
         result = result + leader.esc_name() + " == " + other.esc_name();
       }
-
     }
     return result;
-
   }
 
   // When A and B are pointers, don't say (EQ A B); instead say (EQ
@@ -301,8 +294,7 @@ public final /*(at)Interned*/ class Equality
     if (leader.rep_type.isArray()) {
       for (VarInfo var : vars) {
         if (var == leader) continue;
-        String[] form = VarInfo.simplify_quantify (QuantFlags.element_wise(),
-                                                   leader, var);
+        String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(), leader, var);
         String a = format_elt(form[1]);
         String b = format_elt(form[2]);
         result.append(" " + form[0] + "(EQ " + a + " " + b + ")" + form[3]);
@@ -334,22 +326,20 @@ public final /*(at)Interned*/ class Equality
     for (VarInfo var : vars) {
       if (leader == var) continue;
       if (leader.rep_type.isArray()) {
-        clauses.add(String.format("(daikon.Quant.pairwiseEqual(%s, %s)",
-                                  leaderName,
-                                  var.name_using(format)));
+        clauses.add(
+            String.format(
+                "(daikon.Quant.pairwiseEqual(%s, %s)", leaderName, var.name_using(format)));
       } else {
         if (leader.type.isFloat()) {
           clauses.add("(" + Invariant.formatFuzzy("eq", leader, var, format) + ")");
         } else {
           if ((leaderName.indexOf("daikon.Quant.collectObject") != -1)
-              ||
-              (var.name_using(format).indexOf("daikon.Quant.collectObject") != -1)) {
-            clauses.add("(warning: it is meaningless to compare hashcodes for values "
-                          + "obtained through daikon.Quant.collect... methods.");
+              || (var.name_using(format).indexOf("daikon.Quant.collectObject") != -1)) {
+            clauses.add(
+                "(warning: it is meaningless to compare hashcodes for values "
+                    + "obtained through daikon.Quant.collect... methods.");
           } else {
-            clauses.add(String.format("(%s == %s)",
-                                      leaderName,
-                                      var.name_using(format)));
+            clauses.add(String.format("(%s == %s)", leaderName, var.name_using(format)));
           }
         }
       }
@@ -386,23 +376,24 @@ public final /*(at)Interned*/ class Equality
 
     List<VarInfo> result = new LinkedList<VarInfo>();
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Doing add at " + this.ppt.parent.name() + " for " + this);
+      debug.fine("Doing add at " + this.ppt.parent.name() + " for " + this);
     }
     for (Iterator<VarInfo> i = vars.iterator(); i.hasNext(); ) {
       VarInfo vi = i.next();
-      if (vi == leader)
-        continue;
-      assert vi.comparableNWay (leader);
+      if (vi == leader) continue;
+      assert vi.comparableNWay(leader);
       Object viValue = vi.getValueOrNull(vt);
       int viMod = vi.getModified(vt);
       // The following is possible because values are interned.  The
       // test also takes into account missing values, since they are
       // null.
-      if ((leaderValue == viValue) && (leaderMod == viMod)
-          && !leaderOutOfBounds && !vi.missingOutOfBounds()
+      if ((leaderValue == viValue)
+          && (leaderMod == viMod)
+          && !leaderOutOfBounds
+          && !vi.missingOutOfBounds()
           // If the values are NaN, treat them as different.
-          && (!((leaderValue instanceof Double) && ((Double)leaderValue).isNaN()))) {
-          // The values are the same.
+          && (!((leaderValue instanceof Double) && ((Double) leaderValue).isNaN()))) {
+        // The values are the same.
         continue;
       }
       // The values differ.  Remove this from the equality set.
@@ -413,13 +404,25 @@ public final /*(at)Interned*/ class Equality
       //         debug.fine ("  le value: " + leaderValue);
       //       }
       if (Debug.logOn())
-        Debug.log (getClass(), ppt.parent, Debug.vis (vi),
-                   "Var " + vi.name()
-                   + " [" + viValue + "," + viMod + "] split from leader "
-                   + leader.name() + " [" + leaderValue + ","
-                   + leaderMod + "]");
+        Debug.log(
+            getClass(),
+            ppt.parent,
+            Debug.vis(vi),
+            "Var "
+                + vi.name()
+                + " ["
+                + viValue
+                + ","
+                + viMod
+                + "] split from leader "
+                + leader.name()
+                + " ["
+                + leaderValue
+                + ","
+                + leaderMod
+                + "]");
 
-      result.add (vi);
+      result.add(vi);
       i.remove();
     }
 
@@ -432,8 +435,9 @@ public final /*(at)Interned*/ class Equality
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
-  /*@Pure*/ public boolean isSameFormula( Invariant other ) {
-    throw new UnsupportedOperationException( "Equality.isSameFormula(): this method should not be called" );
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+    throw new UnsupportedOperationException(
+        "Equality.isSameFormula(): this method should not be called");
   }
 
   /**
@@ -444,30 +448,31 @@ public final /*(at)Interned*/ class Equality
    * adds leader == leader invariant as well since that invariant is
    * used in suppressions and obvious tests.
    **/
-  public void postProcess () {
+  public void postProcess() {
     if (this.numSamples() == 0) return; // All were missing or not present
     PptTopLevel parent = this.ppt.parent;
     VarInfo[] varArray = this.vars.toArray(new VarInfo[0]);
     if (debugPostProcess.isLoggable(Level.FINE)) {
-      debugPostProcess.fine ("Doing postProcess: " + this.format_daikon());
-      debugPostProcess.fine ("  at: " + this.ppt.parent.name());
+      debugPostProcess.fine("Doing postProcess: " + this.format_daikon());
+      debugPostProcess.fine("  at: " + this.ppt.parent.name());
     }
     VarInfo leader = leader();
 
     if (debugPostProcess.isLoggable(Level.FINE)) {
-      debugPostProcess.fine ("  var1: " + leader.name());
+      debugPostProcess.fine("  var1: " + leader.name());
     }
     for (int i = 0; i < varArray.length; i++) {
       if (varArray[i] == leader) continue;
       if (debugPostProcess.isLoggable(Level.FINE)) {
-        debugPostProcess.fine ("  var2: " + varArray[i].name());
+        debugPostProcess.fine("  var2: " + varArray[i].name());
       }
 
       // Guard to prevent creating unnecessary Equality invariants related to
       // purity method black boxing
-      if (leader.function_args != null && varArray[i].function_args != null &&
-          leader.function_args.size() > 1 &&
-          leader.function_args.size() == varArray[i].function_args.size()) {
+      if (leader.function_args != null
+          && varArray[i].function_args != null
+          && leader.function_args.size() > 1
+          && leader.function_args.size() == varArray[i].function_args.size()) {
         boolean allEqual = true;
         for (int j = 0; j < leader.function_args.size(); j++) {
           if (!leader.function_args.get(j).isEqualTo(varArray[i].function_args.get(j))) {
@@ -478,7 +483,7 @@ public final /*(at)Interned*/ class Equality
         if (allEqual) continue;
       }
 
-      parent.create_equality_inv (leader, varArray[i], numSamples());
+      parent.create_equality_inv(leader, varArray[i], numSamples());
     }
   }
 
@@ -500,23 +505,19 @@ public final /*(at)Interned*/ class Equality
       // System.out.printf ("  processing %s\n", var);
       if (newLeader == null) {
         newLeader = var;
-      }
-      else if (newLeader.isDerivedParamAndUninteresting() &&
-               !var.isDerivedParamAndUninteresting()) {
+      } else if (newLeader.isDerivedParamAndUninteresting()
+          && !var.isDerivedParamAndUninteresting()) {
         // System.out.printf ("%s derived and uninteresting, %s is leader%n",
         //                   newLeader, var);
         newLeader = var;
-      }
-      else if (var.isDerivedParamAndUninteresting() &&
-               !newLeader.isDerivedParamAndUninteresting()) {
+      } else if (var.isDerivedParamAndUninteresting()
+          && !newLeader.isDerivedParamAndUninteresting()) {
         // do nothing
-      }
-      else if (var.derivedDepth() < newLeader.derivedDepth()) {
+      } else if (var.derivedDepth() < newLeader.derivedDepth()) {
         // System.out.printf ("%s greater depth, %s is leader%n",
         //                    newLeader, var);
         newLeader = var;
-      }
-      else if (var.derivedDepth() > newLeader.derivedDepth()) {
+      } else if (var.derivedDepth() > newLeader.derivedDepth()) {
         // do nothing
       }
       // if we got here, this is the "all other things being equal" case
@@ -536,10 +537,21 @@ public final /*(at)Interned*/ class Equality
     super.repCheck();
     VarInfo leader = leader();
     for (VarInfo var : vars) {
-      assert VarComparability.comparable (leader, var)
-        : "not comparable: " + leader.name() + " "
-                + var.name() + " at ppt " + ppt.parent.name();
+      assert VarComparability.comparable(leader, var)
+          : "not comparable: " + leader.name() + " " + var.name() + " at ppt " + ppt.parent.name();
     }
   }
 
+  public boolean enabled(/*>>> @Prototype Equality this*/) {
+    throw new Error("do not invoke " + getClass() + ".enabled()");
+  }
+
+  public boolean valid_types(/*>>> @Prototype Equality this,*/ VarInfo[] vis) {
+    throw new Error("do not invoke " + getClass() + ".valid_types()");
+  }
+
+  protected /*@NonPrototype*/ Equality instantiate_dyn(
+      /*>>> @Prototype Equality this,*/ PptSlice slice) {
+    throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
+  }
 }

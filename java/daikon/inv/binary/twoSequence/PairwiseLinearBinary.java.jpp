@@ -65,7 +65,7 @@ public class CLASSNAME
   /**
    * Boolean.  True iff PairwiseLinearBinary invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CORECLASS core;
 

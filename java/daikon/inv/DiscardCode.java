@@ -1,7 +1,7 @@
 package daikon.inv;
 
-import java.io.*;
 import daikon.inv.filter.*;
+import java.io.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -47,7 +47,6 @@ import org.checkerframework.dataflow.qual.*;
  * There is no representation for an invariant that is *not* discarded;
  * don't use a DiscardCode in that situation.
  */
-
 public class DiscardCode implements Comparable<DiscardCode>, Serializable {
 
   // We are Serializable, so we specify a version to allow changes to
@@ -110,8 +109,8 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
   }
 
   /** The enumeration members in sorted order: <br>
-      obvious, bad_sample, bad_confidence, [unused], not_enough_samples, non_canonical_var,<br>
-      implied_post_condition, only_constant_vars, derived_param, unmodified_var, control_check, exact, var filter
+   * obvious, bad_sample, bad_confidence, [unused], not_enough_samples, non_canonical_var,<br>
+   * implied_post_condition, only_constant_vars, derived_param, unmodified_var, control_check, exact, var filter
    * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
    */
@@ -127,58 +126,36 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
 
   /** Returns the DiscardCode most associated with the given filter */
   public static DiscardCode findCode(InvariantFilter filter) {
-    if ((filter instanceof ObviousFilter) || (filter instanceof SimplifyFilter))
-      return obvious;
-    else if (filter instanceof DerivedParameterFilter)
-      return derived_param;
-    else if (filter instanceof OnlyConstantVariablesFilter)
-      return only_constant_vars;
-    else if (filter instanceof UnjustifiedFilter)
-      return bad_confidence;
-    else if (filter instanceof UnmodifiedVariableEqualityFilter)
-      return unmodified_var;
-    else if (filter instanceof VariableFilter)
-      return var_filtered;
-    else
-      return filtered;
+    if ((filter instanceof ObviousFilter) || (filter instanceof SimplifyFilter)) return obvious;
+    else if (filter instanceof DerivedParameterFilter) return derived_param;
+    else if (filter instanceof OnlyConstantVariablesFilter) return only_constant_vars;
+    else if (filter instanceof UnjustifiedFilter) return bad_confidence;
+    else if (filter instanceof UnmodifiedVariableEqualityFilter) return unmodified_var;
+    else if (filter instanceof VariableFilter) return var_filtered;
+    else return filtered;
   }
 
   /** Prints out a string describing the reason for discard
    * @return one of {"Not discarded","Obvious,"Bad sample seen","Unjustified confidence","Few modified samples","Not enough samples",
-                      "Non-canonical variable","Implied post state","Only constant variables in this expression","Derived Param","Control Check"
-                      ,"Exact","Variable Filter","Filtered"}
+   * "Non-canonical variable","Implied post state","Only constant variables in this expression","Derived Param","Control Check"
+   * ,"Exact","Variable Filter","Filtered"}
    */
   /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DiscardCode this*/) {
-    if (this.enumValue==-1)
-      return "Not discarded";
-    else if (this.enumValue==0)
-      return "Obvious";
-    else if (this.enumValue==1)
-      return "Bad sample seen";
-    else if (this.enumValue==2)
-      return "Unjustified confidence";
-    else if (this.enumValue==3)
-      return "Few modified samples";
-    else if (this.enumValue==4)
-      return "Not enough samples";
-    else if (this.enumValue==5)
-      return "Non-canonical variable";
-    else if (this.enumValue==6)
-      return "Implied post state";
-    else if (this.enumValue==7)
-      return "Only constant variables in this expression";
-    else if (this.enumValue==8)
-      return "Derived Param";
-    else if (this.enumValue==9)
-      return "Unmodified var";
-    else if (this.enumValue==10)
-      return "Control Check";
-    else if (this.enumValue==11)
-      return "Exact";
-    else if (this.enumValue==12)
-      return "Variable Filter";
-    else if (this.enumValue==13)
-      return "Filtered";
+    if (this.enumValue == -1) return "Not discarded";
+    else if (this.enumValue == 0) return "Obvious";
+    else if (this.enumValue == 1) return "Bad sample seen";
+    else if (this.enumValue == 2) return "Unjustified confidence";
+    else if (this.enumValue == 3) return "Few modified samples";
+    else if (this.enumValue == 4) return "Not enough samples";
+    else if (this.enumValue == 5) return "Non-canonical variable";
+    else if (this.enumValue == 6) return "Implied post state";
+    else if (this.enumValue == 7) return "Only constant variables in this expression";
+    else if (this.enumValue == 8) return "Derived Param";
+    else if (this.enumValue == 9) return "Unmodified var";
+    else if (this.enumValue == 10) return "Control Check";
+    else if (this.enumValue == 11) return "Exact";
+    else if (this.enumValue == 12) return "Variable Filter";
+    else if (this.enumValue == 13) return "Filtered";
     else { // this should never happen since the constructor is private
       return "Unknown instance of DiscardCode used";
     }
@@ -188,35 +165,21 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
    * @return one of the static DiscardCode instances
    **/
   public Object readResolve() throws ObjectStreamException {
-    if (enumValue==0)
-      return obvious;
-    else if (enumValue==1)
-      return bad_sample;
-    else if (enumValue==2)
-      return bad_confidence;
-    else if (enumValue==3)
-      throw new Error("few_modified_samples no longer exists");
-    else if (enumValue==4)
-      return not_enough_samples;
-    else if (enumValue==5)
-      return non_canonical_var;
-    else if (enumValue==6)
-      return implied_post_condition;
-    else if (enumValue==7)
-      return only_constant_vars;
-    else if (enumValue==8)
-      return derived_param;
-    else if (enumValue==9)
-      return unmodified_var;
-    else if (enumValue==10)
-      return control_check;
-    else if (enumValue==11)
-      return exact;
-    else if (enumValue==12)
-      return var_filtered;
-    else if (enumValue==13)
-      return filtered;
-    else {//this should never happen
+    if (enumValue == 0) return obvious;
+    else if (enumValue == 1) return bad_sample;
+    else if (enumValue == 2) return bad_confidence;
+    else if (enumValue == 3) throw new Error("few_modified_samples no longer exists");
+    else if (enumValue == 4) return not_enough_samples;
+    else if (enumValue == 5) return non_canonical_var;
+    else if (enumValue == 6) return implied_post_condition;
+    else if (enumValue == 7) return only_constant_vars;
+    else if (enumValue == 8) return derived_param;
+    else if (enumValue == 9) return unmodified_var;
+    else if (enumValue == 10) return control_check;
+    else if (enumValue == 11) return exact;
+    else if (enumValue == 12) return var_filtered;
+    else if (enumValue == 13) return filtered;
+    else { //this should never happen
       // return null;
       throw new Error("impossible");
     }

@@ -230,7 +230,7 @@ public class LOWERBOUND
   /**
    * Boolean.  True iff LOWERBOUND invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
   /**
    * Long integer.  Together with the corresponding
    * <code>maximal_interesting</code> parameter, specifies the
@@ -285,7 +285,7 @@ public class LOWERBOUND
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     return (vis[0].file_rep_type.BASE_IS_INTEGRAL);
     }
@@ -806,7 +806,7 @@ public class LOWERBOUND
    * formula at an upper point.  See merge() below.
    */
   public boolean mergeFormulasOk() {
-    return (true);
+    return true;
   }
 
   /**

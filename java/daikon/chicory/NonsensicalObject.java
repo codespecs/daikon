@@ -11,12 +11,12 @@ package daikon.chicory;
  * If variable x is of type A is null, then we print "null" for x's value.  However,
  * we print "nonsensical" for x.name's value.
  */
-public class NonsensicalObject
-{
-    private static NonsensicalObject instance = new NonsensicalObject();
+public class NonsensicalObject {
+  private static NonsensicalObject instance = new NonsensicalObject();
 
-    private NonsensicalObject() {}
+  private NonsensicalObject() {}
 
-    public static NonsensicalObject getInstance() {return instance;}
-
+  public static NonsensicalObject getInstance() {
+    return instance;
+  }
 }

@@ -33,9 +33,9 @@ PolyCalc.RatNum.RatNum(int, int):::EXIT
     Variables: this this.numer this.denom n d orig(n) orig(d)
       Unmodified variables: n d
 (this.denom == 0)  ==  (\old(d) == 0)
-(this.denom == 0)  ==>  (\old(d)  isPointer)
-(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (\old(d) is a pointer)
 (this.denom == 0)  ==>  (this.denom == \old(d))
+(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer == \old(n))
 (\old(n) == 0) ==> (this.numer == 0)
 (this.numer == 0) ==> (\old(n) == 0)
@@ -75,7 +75,7 @@ PolyCalc.RatNum.approx():::EXIT
     Variables: this this.numer this.denom return orig(this) orig(this.numer) orig(this.denom)
       Unmodified variables: this this.numer this.denom
 (this.denom == 0)  ==>  (\result == Double.NaN)
-(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
@@ -162,12 +162,12 @@ PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT
     Variables: this this.numer this.denom arg arg.numer arg.denom return return.numer return.denom orig(this) orig(this.numer) orig(this.denom) orig(arg) orig(arg.numer) orig(arg.denom)
       Unmodified variables: this this.numer this.denom arg arg.numer arg.denom
 (arg.denom == 0)  ==>  ((arg.numer == 0) ==> (this.numer == 0))
-(arg.denom == 0)  ==>  (arg.denom  isPointer)
 (arg.denom == 0)  ==>  (arg.denom == \result.denom)
+(arg.denom == 0)  ==>  (arg.denom is a pointer)
 (arg.denom == 0)  ==>  (arg.numer == \result.numer)
 (arg.denom == 0)  ==>  (\result == \old(arg))
-(arg.denom == 0)  ==>  (\result.denom  isPointer)
 (arg.denom == 0)  ==>  (\result.denom == 0)
+(arg.denom == 0)  ==>  (\result.denom is a pointer)
 (arg.denom == 0)  ==>  (this.denom >= arg.denom)
 (arg.denom == 0)  ==>  (this.denom >= \result.denom)
 arg.denom >= 0
@@ -221,7 +221,7 @@ PolyCalc.RatNum.isNaN():::EXIT
     Variables: this this.numer this.denom return orig(this) orig(this.numer) orig(this.denom)
       Unmodified variables: this this.numer this.denom
 (this.denom == 0)  ==  (\result == true)
-(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 ===========================================================================
 PolyCalc.RatNum.isNegative():::ENTER
     Variables: this this.numer this.denom
@@ -533,9 +533,9 @@ warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return.numer == 0)  ==>  (orig(this.terms.wrapped[post(return.numer)..]) contains no duplicates)
 (\result.numer == 0)  ==>  ((\forall int i; (\result.numer <= i && i <= \old(this.terms.wrapped.length-1)) ==> (\old(this.terms.wrapped[i]) != null)))
 (\result.numer == 0)  ==>  (\result.denom == 1)
-(\result.numer == 0)  ==>  (\result.numer  isPointer)
 (\result.numer == 0)  ==>  (\result.numer < \result.denom)
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return.numer == 0)  ==>  (return.numer <= size(this.terms.wrapped[]))
+(\result.numer == 0)  ==>  (\result.numer is a pointer)
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return.numer == 0)  ==>  (this.terms.wrapped[0..return.numer-1] == [])
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return.numer == 0)  ==>  (this.terms.wrapped[return.numer..] contains no duplicates)
 (\result.numer == 0)  ==>  ((\forall int i; (\result.numer <= i && i <= this.terms.wrapped.length-1) ==> (this.terms.wrapped[i] != null)))
@@ -566,9 +566,9 @@ PolyCalc.RatPoly.degree():::EXIT
       Unmodified variables: this this.terms this.terms.wrapped this.terms.wrapped[] this.terms.wrapped[].getClass().getName() size(this.terms.wrapped[])
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (orig(this.terms.wrapped[0..post(return)-1]) == [])
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (orig(this.terms.wrapped[post(return)..]) == [])
-warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (return  isPointer)
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (return == size(this.terms.wrapped[]))
-warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (size(this.terms.wrapped[])  isPointer)
+warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (return is a pointer)
+warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (size(this.terms.wrapped[]) is a pointer)
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (this.terms.wrapped[0..return-1] == [])
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (this.terms.wrapped[] == [])
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (this.terms.wrapped[].getClass().getName() == [])
@@ -776,11 +776,11 @@ warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be
 (\result.coeff.numer == 0)  ==>  (\result.coeff.denom <= \old(i))
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return.coeff.numer == 0)  ==>  (return.coeff.denom <= size(ts.wrapped[]))
 (\result.coeff.numer == 0)  ==>  (\result.coeff.denom == 1)
-(\result.coeff.numer == 0)  ==>  (\result.coeff.numer  isPointer)
 (\result.coeff.numer == 0)  ==>  (\result.coeff.numer < \old(i))
 (\result.coeff.numer == 0)  ==>  (\result.coeff.numer < \result.coeff.denom)
 (\result.coeff.numer == 0)  ==>  (\result.coeff.numer <= \result.expt)
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return.coeff.numer == 0)  ==>  (return.coeff.numer <= size(ts.wrapped[])-1)
+(\result.coeff.numer == 0)  ==>  (\result.coeff.numer is a pointer)
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return.coeff.numer == 0)  ==>  (ts.wrapped[0..return.coeff.denom-1] elements == orig(ts.wrapped[post(return.coeff.denom)-1]))
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return.coeff.numer == 0)  ==>  (ts.wrapped[0..return.coeff.denom-1] elements == orig(ts.wrapped[post(return.coeff.numer)]))
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return.coeff.numer == 0)  ==>  (ts.wrapped[0..return.coeff.denom-1] elements == ts.wrapped[return.coeff.denom-1])
@@ -846,8 +846,7 @@ PolyCalc.RatPoly.isNaN():::EXIT
     Variables: this this.terms this.terms.wrapped this.terms.wrapped[] this.terms.wrapped[].getClass().getName() return orig(this) orig(this.terms) orig(this.terms.wrapped) orig(this.terms.wrapped[]) orig(this.terms.wrapped[].getClass().getName()) size(this.terms.wrapped[]) size(this.terms.wrapped[])-1 orig(size(this.terms.wrapped[])) orig(size(this.terms.wrapped[]))-1
       Unmodified variables: this this.terms this.terms.wrapped this.terms.wrapped[] this.terms.wrapped[].getClass().getName() size(this.terms.wrapped[])
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return == true)  ==>  (size(this.terms.wrapped[]) == 1)
-warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return == true)  ==>  (size(this.terms.wrapped[])-1  isPointer)
-warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return == true)  ==>  (size(this.terms.wrapped[])-1  isPointer)
+warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (return == true)  ==>  (size(this.terms.wrapped[])-1 is a pointer)
 (\result == true)  ==>  (this.terms.wrapped.elementType == \type(PolyCalc.RatTerm))
 ===========================================================================
 PolyCalc.RatPoly.mul(PolyCalc.RatPoly):::ENTER
@@ -1240,7 +1239,7 @@ PolyCalc.RatPoly.unparse():::EXIT
       Unmodified variables: this this.terms this.terms.wrapped this.terms.wrapped[] this.terms.wrapped[].getClass().getName() size(this.terms.wrapped[])
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (return has only one value)
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (return.toString == "0")
-warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (size(this.terms.wrapped[])  isPointer)
+warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (size(this.terms.wrapped[]) is a pointer)
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (this.terms.wrapped[] == [])
 warning: method daikon.inv.Implication.format(OutputFormat:ESC/Java) needs to be implemented: (size(this.terms.wrapped[]) == 0)  ==>  (this.terms.wrapped[].getClass().getName() == [])
 \result != null

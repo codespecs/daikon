@@ -1,7 +1,5 @@
 package daikon.inv.filter;
 
-import java.util.logging.Level;
-
 import daikon.PrintInvariants;
 import daikon.ProglangType;
 import daikon.VarInfo;
@@ -11,7 +9,7 @@ import daikon.inv.binary.twoString.StringEqual;
 import daikon.inv.unary.scalar.NonZero;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.inv.unary.string.OneOfString;
-
+import java.util.logging.Level;
 
 /**
  * Suppress string invariants that are redundant for .NET. The following invariants will be
@@ -31,7 +29,7 @@ public class StringFilter extends InvariantFilter {
    */
   public static boolean dkconfig_enabled = false;
 
-  public StringFilter () {
+  public StringFilter() {
     isOn = dkconfig_enabled;
   }
 
@@ -41,13 +39,13 @@ public class StringFilter extends InvariantFilter {
   }
 
   boolean isNullOrEmptyVar(VarInfo var) {
-    return  var.name().startsWith("string.IsNullOrEmpty") ||
-      var.name().startsWith("String.IsNullOrEmpty");
+    return var.name().startsWith("string.IsNullOrEmpty")
+        || var.name().startsWith("String.IsNullOrEmpty");
   }
 
   boolean isNullOrWhitespaceVar(VarInfo var) {
-    return  var.name().startsWith("string.IsNullOrWhiteSpace") ||
-      var.name().startsWith("String.IsNullOrWhiteSpace");
+    return var.name().startsWith("string.IsNullOrWhiteSpace")
+        || var.name().startsWith("String.IsNullOrWhiteSpace");
   }
 
   boolean isFrame(VarInfo lhs, VarInfo rhs) {
@@ -55,8 +53,8 @@ public class StringFilter extends InvariantFilter {
   }
 
   boolean isFrame(Invariant invariant) {
-    return invariant instanceof BinaryInvariant &&
-      isFrame(invariant.ppt.var_infos[0], invariant.ppt.var_infos[1]);
+    return invariant instanceof BinaryInvariant
+        && isFrame(invariant.ppt.var_infos[0], invariant.ppt.var_infos[1]);
   }
 
   /**
@@ -64,14 +62,17 @@ public class StringFilter extends InvariantFilter {
    * is inferred.
    */
   boolean shouldDiscardDerivedStringFrameCondition(Invariant invariant) {
-    if (isFrame(invariant) && invariant.ppt.var_infos[0].enclosing_var != null && invariant.ppt.var_infos[0].enclosing_var.type == ProglangType.STRING) {
+    if (isFrame(invariant)
+        && invariant.ppt.var_infos[0].enclosing_var != null
+        && invariant.ppt.var_infos[0].enclosing_var.type == ProglangType.STRING) {
       VarInfo str = invariant.ppt.var_infos[0].enclosing_var;
 
       for (Invariant other : str.ppt.getInvariants()) {
         if (!other.is_false() && isFrame(other)) {
 
           boolean refEq = other.ppt.var_infos[0] == str;
-          boolean valEq = other instanceof StringEqual && other.ppt.var_infos[0].enclosing_var == str;
+          boolean valEq =
+              other instanceof StringEqual && other.ppt.var_infos[0].enclosing_var == str;
 
           if (refEq || (valEq && !(invariant instanceof StringEqual))) return true;
         }
@@ -92,7 +93,9 @@ public class StringFilter extends InvariantFilter {
         // variable is derived from a string
 
         for (Invariant other : var.ppt.getInvariants()) {
-          if (!other.is_false() && other instanceof OneOfString && ((OneOfString) other).var().enclosing_var == var.enclosing_var) {
+          if (!other.is_false()
+              && other instanceof OneOfString
+              && ((OneOfString) other).var().enclosing_var == var.enclosing_var) {
             // search for a variable.ToString() invariant
 
             return true;
@@ -103,7 +106,6 @@ public class StringFilter extends InvariantFilter {
 
     return false;
   }
-
 
   /**
    * <code>true</code> iff <code>invariant</code> encodes <code>x != null</code> and <code>!string.IsNullOrEmpty(x)</code> is an inferred invariant</code>
@@ -118,13 +120,12 @@ public class StringFilter extends InvariantFilter {
           if (!other.is_false() && other instanceof OneOfScalar) {
             OneOfScalar o = (OneOfScalar) other;
 
-            if (o.var().enclosing_var == i.var() &&
-                (isNullOrEmptyVar(o.var()) || isNullOrWhitespaceVar(o.var())) &&
-                o.getElts()[0] == 0) {
+            if (o.var().enclosing_var == i.var()
+                && (isNullOrEmptyVar(o.var()) || isNullOrWhitespaceVar(o.var()))
+                && o.getElts()[0] == 0) {
 
               return true;
             }
-
           }
         }
       }
@@ -146,13 +147,14 @@ public class StringFilter extends InvariantFilter {
           if (!other.is_false() && other instanceof OneOfScalar) {
             OneOfScalar o = (OneOfScalar) other;
 
-            if (o.var().enclosing_var == i.var().enclosing_var && isNullOrWhitespaceVar(o.var()) && o.getElts()[0] == 0) {
+            if (o.var().enclosing_var == i.var().enclosing_var
+                && isNullOrWhitespaceVar(o.var())
+                && o.getElts()[0] == 0) {
 
               return true;
             }
           }
         }
-
       }
     }
 
@@ -173,13 +175,14 @@ public class StringFilter extends InvariantFilter {
           if (!other.is_false() && other instanceof OneOfScalar) {
             OneOfScalar o = (OneOfScalar) other;
 
-            if (o.var().enclosing_var == i.var().enclosing_var && isNullOrEmptyVar(o.var()) && o.getElts()[0] == 1) {
+            if (o.var().enclosing_var == i.var().enclosing_var
+                && isNullOrEmptyVar(o.var())
+                && o.getElts()[0] == 1) {
 
               return true;
             }
           }
         }
-
       }
     }
 
@@ -190,14 +193,13 @@ public class StringFilter extends InvariantFilter {
   boolean shouldDiscardInvariant(Invariant invariant) {
 
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-      PrintInvariants.debugFiltering.fine ("\tEntering StringFilter.shouldDiscard");
+      PrintInvariants.debugFiltering.fine("\tEntering StringFilter.shouldDiscard");
     }
 
-    return shouldDiscardDerivedStringFrameCondition(invariant) ||
-      shouldDiscardNonNullInvariant(invariant) ||
-      shouldDiscardDerivedStringInvariant(invariant) ||
-      shouldDiscardNullOrEmptyInvariant(invariant) ||
-      shouldDiscardNullOrWhitespaceInvariant(invariant);
+    return shouldDiscardDerivedStringFrameCondition(invariant)
+        || shouldDiscardNonNullInvariant(invariant)
+        || shouldDiscardDerivedStringInvariant(invariant)
+        || shouldDiscardNullOrEmptyInvariant(invariant)
+        || shouldDiscardNullOrWhitespaceInvariant(invariant);
   }
-
 }

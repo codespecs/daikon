@@ -28,13 +28,15 @@ public class MemMonitor implements Runnable {
 
     long initial_mem_load = mem_usage();
     fout.println("Initial memory load, " + initial_mem_load);
-    fout.println("Format: pptName, peak_mem_usage, num_samples, num_static_vars, num_orig_vars, num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars");
+    fout.println(
+        "Format: pptName, peak_mem_usage, num_samples, num_static_vars, num_orig_vars, num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars");
     fout.close();
   }
 
-  private long mem_usage(/*>>>@UnknownInitialization(MemMonitor.class) @Raw(MemMonitor.class) MemMonitor this*/) {
+  private long mem_usage(
+      /*>>>@UnknownInitialization(MemMonitor.class) @Raw(MemMonitor.class) MemMonitor this*/ ) {
     return (java.lang.Runtime.getRuntime().totalMemory()
-            - java.lang.Runtime.getRuntime().freeMemory());
+        - java.lang.Runtime.getRuntime().freeMemory());
   }
 
   public void run() {
@@ -45,7 +47,15 @@ public class MemMonitor implements Runnable {
     fout.close();
   }
 
-  public void end_of_iteration(String pptName, int num_samples, int num_static_vars, int num_orig_vars, int num_scalar_vars, int num_array_vars, int num_derived_scalar_vars, int num_derived_array_vars) {
+  public void end_of_iteration(
+      String pptName,
+      int num_samples,
+      int num_static_vars,
+      int num_orig_vars,
+      int num_scalar_vars,
+      int num_array_vars,
+      int num_derived_scalar_vars,
+      int num_derived_array_vars) {
 
     try {
       fout = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)));

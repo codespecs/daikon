@@ -9,14 +9,12 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-
 /**
  * A session is a channel to the Simplify theorem-proving tool.  Once
  * a session is started, commands may be applied to the session to make
  * queries and manipulate its state.
  **/
-public class Session
-{
+public class Session {
   /**
    * A non-negative integer, representing the largest number of
    * iterations for which Simplify should be allowed to run on any
@@ -76,7 +74,6 @@ public class Session
    * This is intended primarily for debugging
    * when Simplify fails.
    **/
-
   public static boolean dkconfig_trace_input = false;
 
   // non-null if dkconfig_trace_input==true
@@ -100,7 +97,7 @@ public class Session
         newEnv.add("PROVER_KILL_ITER=" + dkconfig_simplify_max_iterations);
       }
       if (dkconfig_simplify_timeout != 0) {
-        newEnv.add("PROVER_KILL_TIME=" + dkconfig_simplify_timeout );
+        newEnv.add("PROVER_KILL_TIME=" + dkconfig_simplify_timeout);
       }
       String[] envArray = newEnv.toArray(new String[] {});
       SessionManager.debugln("Session: exec");
@@ -111,14 +108,12 @@ public class Session
       } else {
         simplifyPath = System.getProperty("simplify.path");
       }
-      process =
-        java.lang.Runtime.getRuntime().exec(simplifyPath + " -nosc", envArray);
+      process = java.lang.Runtime.getRuntime().exec(simplifyPath + " -nosc", envArray);
       SessionManager.debugln("Session: exec ok");
 
       if (dkconfig_trace_input) {
         File f;
-        while ((f = new File("simplify" + trace_count + ".in")).exists())
-          trace_count++;
+        while ((f = new File("simplify" + trace_count + ".in")).exists()) trace_count++;
         trace_file = new PrintStream(new FileOutputStream(f));
       }
 
@@ -141,18 +136,18 @@ public class Session
       byte[] buf = new byte[expect.length()];
       int pos = is.read(buf);
       String actual = new String(buf, 0, pos);
-      assert expect.equals(actual)
-        : "Prompt expected, got '" + actual + "'";
+      assert expect.equals(actual) : "Prompt expected, got '" + actual + "'";
 
     } catch (IOException e) {
       throw new SimplifyError(e.toString());
     }
   }
 
-  /* package access */ void sendLine(/*>>>@UnknownInitialization(Session.class) @Raw(Session.class) @GuardSatisfied Session this,*/ String s) {
+  /* package access */ void sendLine(
+      /*>>>@UnknownInitialization(Session.class) @Raw(Session.class) @GuardSatisfied Session this,*/ String s) {
     if (dkconfig_trace_input) {
       assert trace_file != null
-        : "@AssumeAssertion(nullness): dependent: trace_file is non-null (set in constructor) if dkconfig_trace_input is true";
+          : "@AssumeAssertion(nullness): dependent: trace_file is non-null (set in constructor) if dkconfig_trace_input is true";
       trace_file.println(s);
     }
     input.println(s);
@@ -160,9 +155,8 @@ public class Session
   }
 
   /*@Holding("this")*/
-  /* package access */ /*@Nullable*/ String readLine(/*>>>@GuardSatisfied Session this*/)
-    throws IOException
-  {
+  /* package access */
+  /*@Nullable*/ String readLine(/*>>>@GuardSatisfied Session this*/) throws IOException {
     return output.readLine();
   }
 
@@ -170,14 +164,15 @@ public class Session
   public void kill(/*>>>@GuardSatisfied Session this*/) {
     process.destroy();
     if (dkconfig_trace_input) {
-      assert trace_file != null : "@AssumeAssertion(nullness): conditional: trace_file is non-null if dkconfig_trace_input==true";
+      assert trace_file != null
+          : "@AssumeAssertion(nullness): conditional: trace_file is non-null if dkconfig_trace_input==true";
       trace_file.close();
     }
   }
 
   // for testing and playing around, not for real use
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     /*@GuardedBy("itself")*/ Session s = new Session();
 
     CmdCheck cc;
@@ -188,11 +183,11 @@ public class Session
 
     cc = new CmdCheck("(EQ 1 2)");
     cc.apply(s);
-    assert ! cc.valid;
+    assert !cc.valid;
 
     cc = new CmdCheck("(EQ x z)");
     cc.apply(s);
-    assert ! cc.valid;
+    assert !cc.valid;
 
     CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
     a.apply(s);
@@ -203,7 +198,6 @@ public class Session
     CmdUndoAssume.single.apply(s);
 
     cc.apply(s);
-    assert ! cc.valid;
+    assert !cc.valid;
   }
-
 }

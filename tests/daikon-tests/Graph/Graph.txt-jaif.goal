@@ -5,9 +5,9 @@ annotation @NonNull:
 package MapQuick1:
 class Graph$DuplicateEdgeException : // 0/- obj/class samples
   field MapQuick1.Graph.this :  // MapQuick1.Graph
-  method <init>(LMapQuick1/Graph;)V : // 0 samples
+  method DuplicateEdgeException(LMapQuick1/Graph;)V : // 0 samples
     return: 
-  method <init>(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
+  method DuplicateEdgeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
     return: 
     parameter #0 :  // s
 
@@ -15,9 +15,9 @@ class Graph$DuplicateEdgeException : // 0/- obj/class samples
 package MapQuick1:
 class Graph$DuplicateNodeException : // 0/- obj/class samples
   field MapQuick1.Graph.this :  // MapQuick1.Graph
-  method <init>(LMapQuick1/Graph;)V : // 0 samples
+  method DuplicateNodeException(LMapQuick1/Graph;)V : // 0 samples
     return: 
-  method <init>(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
+  method DuplicateNodeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
     return: 
     parameter #0 :  // s
 
@@ -26,9 +26,9 @@ package MapQuick1:
 class Graph$GraphException : // 0/- obj/class samples
   field getClass().getName() :  // java.lang.Class
   field MapQuick1.Graph.this :  // MapQuick1.Graph
-  method <init>(LMapQuick1/Graph;)V : // 0 samples
+  method GraphException(LMapQuick1/Graph;)V : // 0 samples
     return: 
-  method <init>(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
+  method GraphException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
     return: 
     parameter #0 :  // s
   method getGraph()LMapQuick1/Graph; : // 0 samples
@@ -38,9 +38,9 @@ class Graph$GraphException : // 0/- obj/class samples
 package MapQuick1:
 class Graph$NoNodeException : // 0/- obj/class samples
   field MapQuick1.Graph.this :  // MapQuick1.Graph
-  method <init>(LMapQuick1/Graph;)V : // 0 samples
+  method NoNodeException(LMapQuick1/Graph;)V : // 0 samples
     return: 
-  method <init>(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
+  method NoNodeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
     return: 
     parameter #0 :  // s
 

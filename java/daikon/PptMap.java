@@ -2,7 +2,6 @@ package daikon;
 
 import java.io.*;
 import java.util.*;
-
 import plume.*;
 
 /*>>>
@@ -20,16 +19,13 @@ import org.checkerframework.dataflow.qual.*;
  */
 // Why doesn't this implement Map<String,PptTopLevel> or extend
 // LinkedHashMap<String,PptTopLevel>?
-public class PptMap
-  implements Serializable
-{
+public class PptMap implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
-  private final Map<String,PptTopLevel> nameToPpt
-    = new LinkedHashMap<String,PptTopLevel>();
+  private final Map<String, PptTopLevel> nameToPpt = new LinkedHashMap<String, PptTopLevel>();
 
   public void add(PptTopLevel ppt) {
     nameToPpt.put(ppt.name(), ppt);
@@ -37,7 +33,7 @@ public class PptMap
 
   public void addAll(List<PptTopLevel> ppts) {
     for (PptTopLevel ppt : ppts) {
-      add (ppt);
+      add(ppt);
     }
   }
 
@@ -68,7 +64,8 @@ public class PptMap
    */
   /*@Pure*/
   @SuppressWarnings("nullness") // postcondition: linked maps
-  /*@EnsuresNonNullIf(result=true, expression="get(#1)")*/ // get(#1) == nameToPpt.get(#1)
+  /*@EnsuresNonNullIf(result=true, expression="get(#1)")*/
+  // get(#1) == nameToPpt.get(#1)
   public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
   }
@@ -117,19 +114,21 @@ public class PptMap
     final Iterator<PptTopLevel> iter_view = nameToPpt.values().iterator();
     final Iterator<PptTopLevel> iter_sort = sorted.iterator();
     return new Iterator<PptTopLevel>() {
-        public boolean hasNext() {
-          boolean result = iter_view.hasNext();
-          assert result == iter_sort.hasNext();
-          return result;
-        }
-        public PptTopLevel next() {
-          iter_view.next(); // to check for concurrent modifications
-          return iter_sort.next();
-        }
-        public void remove() {
-          throw new UnsupportedOperationException();
-        }
-      };
+      public boolean hasNext() {
+        boolean result = iter_view.hasNext();
+        assert result == iter_sort.hasNext();
+        return result;
+      }
+
+      public PptTopLevel next() {
+        iter_view.next(); // to check for concurrent modifications
+        return iter_sort.next();
+      }
+
+      public void remove() {
+        throw new UnsupportedOperationException();
+      }
+    };
   }
 
   /**
@@ -161,27 +160,27 @@ public class PptMap
     final Iterator<PptTopLevel> iter_view = nameToPpt.values().iterator();
     final Iterator<PptTopLevel> iter_sort = sorted.iterator();
     return new Iterator<PptTopLevel>() {
-        /*@Nullable*/Iterator<PptConditional> cond_iterator = null;
-        public boolean hasNext() {
-          if ((cond_iterator != null) && cond_iterator.hasNext())
-            return (true);
-          boolean result = iter_view.hasNext();
-          assert result == iter_sort.hasNext();
-          return result;
-        }
-        public PptTopLevel next() {
-          if ((cond_iterator != null) && cond_iterator.hasNext())
-            return (cond_iterator.next());
-          iter_view.next(); // to check for concurrent modifications
-          PptTopLevel ppt = iter_sort.next();
-          if ((ppt != null) && ppt.has_splitters())
-            cond_iterator = ppt.cond_iterator();
-          return (ppt);
-        }
-        public void remove() {
-          throw new UnsupportedOperationException();
-        }
-      };
+      /*@Nullable*/ Iterator<PptConditional> cond_iterator = null;
+
+      public boolean hasNext() {
+        if ((cond_iterator != null) && cond_iterator.hasNext()) return true;
+        boolean result = iter_view.hasNext();
+        assert result == iter_sort.hasNext();
+        return result;
+      }
+
+      public PptTopLevel next() {
+        if ((cond_iterator != null) && cond_iterator.hasNext()) return (cond_iterator.next());
+        iter_view.next(); // to check for concurrent modifications
+        PptTopLevel ppt = iter_sort.next();
+        if ((ppt != null) && ppt.has_splitters()) cond_iterator = ppt.cond_iterator();
+        return (ppt);
+      }
+
+      public void remove() {
+        throw new UnsupportedOperationException();
+      }
+    };
   }
 
   /**
@@ -242,9 +241,7 @@ public class PptMap
     Iterator<PptTopLevel> iter = nameToPpt.values().iterator();
     while (iter.hasNext()) {
       PptTopLevel ppt = iter.next();
-      if ((ppt.num_samples() == 0)
-          && ! FileIO.has_unmatched_procedure_entry(ppt))
-        iter.remove();
+      if ((ppt.num_samples() == 0) && !FileIO.has_unmatched_procedure_entry(ppt)) iter.remove();
     }
   }
 }

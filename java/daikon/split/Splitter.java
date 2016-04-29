@@ -29,9 +29,7 @@ import org.checkerframework.checker.nullness.qual.*;
 // demand, so the class doesn't exist when a serialized object is being
 // re-read.
 /*@UsesObjectEquals*/
-public abstract class Splitter
-  implements Serializable
-{
+public abstract class Splitter implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -44,7 +42,7 @@ public abstract class Splitter
    * to override this (but most will have to, since they will add
    * their own constructors as well).
    **/
-  public Splitter() { }
+  public Splitter() {}
 
   /**
    * Creates a valid splitter than can be used for testing the condition
@@ -86,11 +84,11 @@ public abstract class Splitter
   /** Set up the static ('factory') DummyInvariant for this kind of
    * splitter. This only modifies static data, but it can't be static
    * because subclasses must override it. */
-  public void makeDummyInvariantFactory(DummyInvariant inv) { }
+  public void makeDummyInvariantFactory(DummyInvariant inv) {}
 
   /** Make an instance DummyInvariant for this instance of the
    * splitter, if possible on an appropriate slice from ppt. */
-  public void instantiateDummy(PptTopLevel ppt) { }
+  public void instantiateDummy(PptTopLevel ppt) {}
 
   /** On an instantiated Splitter, give back an appropriate instantiated
    * DummyInvariant. */

@@ -157,15 +157,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     // Make sure that each variable is integral (not boolean or hashcode)
     if (!vis[0].file_rep_type.IS_INTEGRAL
         || !vis[1].file_rep_type.IS_INTEGRAL
         || !vis[2].file_rep_type.IS_INTEGRAL)
-      return (false);
+      return false;
 
-    return (true);
+    return true;
   }
 
   // check_modified relies on func having no side effects.
@@ -315,7 +315,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /**
-   * Apply the specified sample to the function, returning the result
+   * Apply the specified sample to the function, returning the result.
    * The caller is responsible for permuting the arguments.
    */
   public InvariantStatus check_ordered (PRIMITIVE result, PRIMITIVE arg1,
@@ -331,7 +331,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /**
-   * Apply the specified sample to the function, returning the result
+   * Apply the specified sample to the function, returning the result.
    * The caller is responsible for permuting the arguments.
    */
   public InvariantStatus add_ordered (PRIMITIVE result, PRIMITIVE arg1,

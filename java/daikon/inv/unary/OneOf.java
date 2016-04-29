@@ -21,5 +21,5 @@ public interface OneOf {
    **/
   public Object elt();
 
-  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(OneOf.class) @Raw(OneOf.class) OneOf this*/);
+  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(OneOf.class) @Raw(OneOf.class) OneOf this*/ );
 }

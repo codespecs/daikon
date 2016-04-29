@@ -19,12 +19,11 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
    */
   public static boolean dkconfig_enabled = true;
 
-  public OnlyConstantVariablesFilter () {
+  public OnlyConstantVariablesFilter() {
     isOn = dkconfig_enabled;
   }
 
-
-  boolean shouldDiscardInvariant( Invariant invariant ) {
+  boolean shouldDiscardInvariant(Invariant invariant) {
     // System.out.println("OnlyConstantVariablesFilter: " + invariant.format());
     if (IsEqualityComparison.it.accept(invariant)) {
       return false;
@@ -39,41 +38,34 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
       // the implication is in a PptSlice0 (which will always fail the test
       // below
       // if (impl.predicate().isGuardingPredicate)
-        // only consider the consequent
-        invariant = impl.consequent();
-
+      // only consider the consequent
+      invariant = impl.consequent();
     }
 
     VarInfo[] vis = invariant.ppt.var_infos;
-    for (int i=0; i<vis.length; i++) {
-      if (! isConstant(vis[i])) {
+    for (int i = 0; i < vis.length; i++) {
+      if (!isConstant(vis[i])) {
         // System.out.println("In " + invariant.format() + ": non-constant " + vis[i].name);
         return false;
       }
     }
     return true;
-
   }
 
   /*@Pure*/ boolean isConstant(VarInfo vi) {
     PptTopLevel ppt = vi.ppt;
     boolean isStaticConstant = vi.is_static_constant;
-    boolean isDynamicConstant = ((ppt.constants != null)
-                                 && ppt.constants.is_constant(vi));
+    boolean isDynamicConstant = ((ppt.constants != null) && ppt.constants.is_constant(vi));
     PptSlice view = ppt.findSlice(vi);
     // TODO: This should be generalized to other types of scalar
     OneOfScalar oos = (view == null) ? null : OneOfScalar.find(view);
     OneOfFloat oof = (view == null) ? null : OneOfFloat.find(view);
-    boolean isOneOfConstant = (((oos != null)
-                                && (oos.num_elts() == 1)
-                                && (! oos.is_hashcode()))
-                               ||
-                               ((oof != null)
-                                && (oof.num_elts() == 1)
-                                // no hashcode test for floats
-                                // && (! oof.is_hashcode())
-                                ));
+    boolean isOneOfConstant =
+        (((oos != null) && (oos.num_elts() == 1) && (!oos.is_hashcode()))
+            || ((oof != null) && (oof.num_elts() == 1)
+            // no hashcode test for floats
+            // && (! oof.is_hashcode())
+            ));
     return isStaticConstant || isDynamicConstant || isOneOfConstant;
   }
-
 }

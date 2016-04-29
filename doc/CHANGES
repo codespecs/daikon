@@ -20,7 +20,60 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.2.22 (??)
+5.3.2 (scheduled for May 2016)
+
+Daikon:
+ - Command-line argument --user-defined-invariant makes Daikon compute a
+   user-defined invariant in addition to those that are built in to Daikon.
+ - Command-line argument --disable-all-invariants disables all of Daikon's
+   built-in invariants.  Subsequent command-line options may enable some of
+   them.
+
+===========================================================================
+
+5.3.0 (April 5, 2016)
+
+Daikon:
+- We have improved splitter processing. Splitter expressions containing
+  'orig' now work correctly.  Also, A splitter expression containing
+  references to a parameter and an unqualified member variable with the
+  name will now work correctly.
+
+Kvasir:
+- We updated the underlying Valgrind infrastructure to version 3.11.0.
+  Users of Kvasir to analyze C/C++ codes should not see any differences
+  in behavior from the previous version.
+
+Documentation:
+- Improved discussion of program points.
+
+We have decided to deprecate support for 32-bit hosts.
+- Fjalar/Kvasir, the C/C++ front end for Daikon, no longer builds on a 32-bit
+  platform and we will no longer support the 32-bit version of this tool.
+- At the present time, Chicory and Daikon continue to build and run on a
+  32-bit platform, but we have stopped testing this configuration and make
+  no guarantees for the future.
+
+===========================================================================
+
+5.2.26 (March 10, 2016)
+
+This is an update to 5.2.24 to correct a small problem in Chicory.  It was
+inadvertently adding extra information to its output files.  This did not
+cause Daikon to operate incorrectly.  It only made the data files larger
+than necessary.
+
+===========================================================================
+
+5.2.24 (March 4, 2016)
+
+Documentation:
+- Added more examples of invariants.
+- Improved instructions on building Daikon and Kvasir.
+
+===========================================================================
+
+5.2.22 (February 1, 2016)
 
 We have updated the Daikon tool set to include a newer version of BCEL.
 If Chicory throws an error such as the following:
@@ -135,7 +188,7 @@ of the top-level directory within these archive files.
 
 Documentation:
 - The developer manual has an improved discussion of comparability values.
-- Developer manual section A.5 Example files has been updated.
+- Developer manual section A.5, "Example files", has been updated.
 - The user manual has an improved discussion of mixed .decls and .dtrace
   files.  This includes some clarification of how to use the output(s) of
   Chicory and DynComp with Daikon.
@@ -3757,7 +3810,7 @@ Added linear ternary invariants, of the form z = ax + by + c.
 
 ===========================================================================
 
- LocalWords:  daikonenv PrintableString StringLength PrintInvariants guardNulls
+ LocalWords:  daikonenv PrintableString StringLength PrintInvariants guardNulls ConcurrentModificationException FileIOProgress Makefile splitters javax gcc
  LocalWords:  PrintInvariant LinearTernaryFloat LinearBinaryFloat LinearTernary
  LocalWords:  noInvariantGuarding SeqIndex SeqIndexIntEqual DtraceDiff Quant ps
  LocalWords:  SeqIndexFloatLessThan DerivedVariableFilter ajax typeOf mypackage

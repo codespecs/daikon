@@ -16,9 +16,7 @@ import typequals.*;
 /**
  * Abstract base class used to evaluate single string sequences.
  **/
-public abstract class SingleStringSequence
-  extends UnaryInvariant
-{
+public abstract class SingleStringSequence extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -33,13 +31,14 @@ public abstract class SingleStringSequence
   }
 
   /** Returns whether or not the specified types are valid  **/
-  public final boolean valid_types (VarInfo[] vis) {
+  public final boolean valid_types(VarInfo[] vis) {
     return ((vis.length == 1)
-            && vis[0].file_rep_type.baseIsString()
-            && vis[0].file_rep_type.isArray());
+        && vis[0].file_rep_type.baseIsString()
+        && vis[0].file_rep_type.isArray());
   }
 
-  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(SingleStringSequence.class) @Raw(SingleStringSequence.class) SingleStringSequence this*/) {
+  public VarInfo var(
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleStringSequence.class) @Raw(SingleStringSequence.class) SingleStringSequence this*/ ) {
     return ppt.var_infos[0];
   }
 
@@ -47,7 +46,7 @@ public abstract class SingleStringSequence
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
     // System.out.println("SingleStringSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
@@ -62,7 +61,7 @@ public abstract class SingleStringSequence
   }
 
   public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
     /*@Interned*/ String[] value = (/*@Interned*/ String[]) val;
@@ -75,7 +74,8 @@ public abstract class SingleStringSequence
     }
   }
 
-  public abstract InvariantStatus check_modified(/*@Interned*/ String /*@Interned*/ [] value, int count);
+  public abstract InvariantStatus check_modified(
+      /*@Interned*/ String /*@Interned*/ [] value, int count);
 
   public InvariantStatus check_unmodified(/*@Interned*/ String /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
@@ -85,7 +85,8 @@ public abstract class SingleStringSequence
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract InvariantStatus add_modified(/*@Interned*/ String /*@Interned*/ [] value, int count);
+  public abstract InvariantStatus add_modified(
+      /*@Interned*/ String /*@Interned*/ [] value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
@@ -94,6 +95,4 @@ public abstract class SingleStringSequence
   public InvariantStatus add_unmodified(/*@Interned*/ String /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
-
-
 }

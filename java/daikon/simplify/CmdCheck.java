@@ -1,8 +1,6 @@
 package daikon.simplify;
 
 import java.io.IOException;
-
-
 import java.util.logging.Logger;
 
 /*>>>
@@ -15,9 +13,7 @@ import org.checkerframework.dataflow.qual.*;
  * prove it.  The apply method returns when a result is available; the
  * valid field contains the result.
  **/
-public class CmdCheck
-  implements Cmd
-{
+public class CmdCheck implements Cmd {
   public static final Logger debug = Logger.getLogger("daikon.simplify.CmdCheck");
 
   private static final String lineSep = System.getProperty("line.separator");
@@ -54,14 +50,13 @@ public class CmdCheck
         // The "Bad input:"  message generally comes from a syntax error in
         // a previous formula given to Simplify; see the debugging code in
         // simplify.LemmaStack.pushLemmas().
-        if (result.startsWith("Bad input:") ||
-            result.startsWith("Sx.ReadError in file.")) {
-          if (proposition.equals("(OR)")
-              && !LemmaStack.dkconfig_synchronous_errors)
-            System.err.println("For improved error reporting, try using" +
-                               " --config_option " +
-                               "daikon.simplify.LemmaStack." +
-                               "synchronous_errors=true");
+        if (result.startsWith("Bad input:") || result.startsWith("Sx.ReadError in file.")) {
+          if (proposition.equals("(OR)") && !LemmaStack.dkconfig_synchronous_errors)
+            System.err.println(
+                "For improved error reporting, try using"
+                    + " --config_option "
+                    + "daikon.simplify.LemmaStack."
+                    + "synchronous_errors=true");
 
           throw new Error("Simplify error: " + result + " on " + proposition);
         }
@@ -76,14 +71,11 @@ public class CmdCheck
             if (result == null) {
               throw new SimplifyError("Probable core dump");
             }
-          } while (result.startsWith(" ") || result.startsWith("\t")
-                   || result.equals(""));
+          } while (result.startsWith(" ") || result.startsWith("\t") || result.equals(""));
         }
         // then, a blank line
         String blank = s.readLine();
-        assert "".equals(blank)
-        : "Not a blank line '" + blank +
-                          "' after output '" + result + "'";
+        assert "".equals(blank) : "Not a blank line '" + blank + "' after output '" + result + "'";
       }
 
       // expect "##: [Inv|V]alid."
@@ -92,8 +84,8 @@ public class CmdCheck
       try {
         Integer.parseInt(result.substring(0, colon));
       } catch (NumberFormatException e) {
-        throw new Error("Expected number to prefix result '"
-                        + result + "' while checking: " + proposition);
+        throw new Error(
+            "Expected number to prefix result '" + result + "' while checking: " + proposition);
       }
       result = result.substring(colon + 2);
       if ("Valid.".equals(result)) {
@@ -127,5 +119,4 @@ public class CmdCheck
   /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdCheck this*/) {
     return "CmdCheck: " + proposition;
   }
-
 }

@@ -65,10 +65,10 @@ public class QueueAr
   /*@ ensures (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.front == 0)); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.currentSize) ==> (\old(this.theArray[i]) == null))); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.currentSize)) ==> (\old(this.theArray[i]) == null))); */
-  /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize  isPointer); */
   /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.theArray.length-1); */
   /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.back); */
   /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.front); */
+  /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize is a pointer); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.currentSize)) ==> (this.theArray[i] == null))); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null))); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null))); */
@@ -167,10 +167,10 @@ public class QueueAr
   /*@ ensures (this.currentSize == 0)  ==>  (\result == this.theArray[\old(this.currentSize)]); */
   /*@ ensures (this.currentSize == 0)  ==>  (\result == this.theArray[this.back]); */
   /*@ ensures (this.currentSize == 0)  ==>  (\result == this.theArray[this.currentSize]); */
-  /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize  isPointer); */
   /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.theArray.length-1); */
   /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.back); */
   /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.front); */
+  /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize is a pointer); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.currentSize)) ==> (this.theArray[i] == null))); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null))); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null))); */

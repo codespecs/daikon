@@ -21,6 +21,15 @@ addons:
       - graphviz
       - texi2html
       - texinfo
+  ## Enable this when you wish to see JUnit reports.
+  ## Disable to minimize use of Amazon S3.
+  # artifacts:
+  #   paths:
+  #     # "find tests -print" produces too long a command line
+  #     - $(find tests -name '*txt*' -print | tr "\n" ":")
+  #     - $(find tests -name '*decls*' -print | tr "\n" ":")
+  #   s3_region: "us-west-2"
+  #   debug: true
 # On Travis-CI's Ubuntu 12.04 infrastructure, makeinfo does not take the
 # --split=chapter command-line argument but texi2html does.
 env: TEXI2HTML=texi2html
@@ -30,16 +39,11 @@ jdk:
 #  - oraclejdk7
   - openjdk7
 
-notifications:
-  email:
-    - mernst@cs.washington.edu
-    - markro@cs.washington.edu
-
 after_success:
   - |
       if [[ ($TRAVIS_BRANCH == master) &&
             ($TRAVIS_PULL_REQUEST == false) &&
             ( (! $TRAVIS_JOB_NUMBER == *.*) || ($TRAVIS_JOB_NUMBER == *.1) ) ]] ; then
         curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
-        sh trigger-travis.sh codespecs daikon-typecheck $TRAVISTOKEN
+        sh trigger-travis.sh typetools daikon-typecheck $TRAVISTOKEN
       fi

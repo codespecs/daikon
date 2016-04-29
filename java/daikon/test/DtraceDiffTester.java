@@ -1,15 +1,15 @@
 package daikon.test;
 
-import junit.framework.*;
 import daikon.*;
 import daikon.tools.DtraceDiff;
 import java.lang.reflect.*;
 import java.net.URL;
+import junit.framework.*;
 
 public class DtraceDiffTester extends TestCase {
 
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(DtraceDiffTester.class));
   }
 
@@ -22,12 +22,10 @@ public class DtraceDiffTester extends TestCase {
     return DtraceDiff.mainTester(new String[] {find(file1), find(file2)});
   }
 
-  private static boolean diff(String option, String optval,
-                              String file1, String file2) {
+  private static boolean diff(String option, String optval, String file1, String file2) {
     //System.out.println("Diff: " + file1 + " " + file2);
     return DtraceDiff.mainTester(new String[] {option, optval, find(file1), find(file2)});
   }
-
 
   /**
    * Returns the URL string for the specified file.  A URL is used because
@@ -37,15 +35,14 @@ public class DtraceDiffTester extends TestCase {
   private static String find(String file) {
     String file1 = "daikon/test/dtracediff/" + file;
     @SuppressWarnings("nullness") // system class loader exists
-    URL input_file_location =
-      ClassLoader.getSystemResource(file1);
+    URL input_file_location = ClassLoader.getSystemResource(file1);
     if (input_file_location == null) {
       throw new Error("Cannot find " + file1);
     }
     return input_file_location.toExternalForm();
   }
 
-  public void test_samples () {
+  public void test_samples() {
     // these tests should succeed
     assert diff("AllTypes.dtrace.gz", "AllTypes.dtrace.gz");
     assert diff("Hanoi.dtrace.gz", "Hanoi.dtrace.gz");
@@ -58,13 +55,17 @@ public class DtraceDiffTester extends TestCase {
 
     // test that command-line options work (to avoid comparing ppts with
     // a missing variable)
-    assert diff("--ppt-omit-pattern", "six170.Hanoi.showTowers*",
-                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz");
-    assert diff("--var-omit-pattern", "this.height",
-                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz");
-    assert diff("--ppt-select-pattern", "six170.Hanoi.moveDisk*",
-                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz");
+    assert diff(
+        "--ppt-omit-pattern",
+        "six170.Hanoi.showTowers*",
+        "Hanoi.dtrace.gz",
+        "Hanoi-badvar.dtrace.gz");
+    assert diff("--var-omit-pattern", "this.height", "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz");
+    assert diff(
+        "--ppt-select-pattern",
+        "six170.Hanoi.moveDisk*",
+        "Hanoi.dtrace.gz",
+        "Hanoi-badvar.dtrace.gz");
     // needs to test --var-select-pattern
   }
-
 }

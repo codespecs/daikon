@@ -29,20 +29,21 @@ public class MatchCountVisitor extends PrintAllVisitor {
   // invariants found matching
   private HashSet<String> recall = new HashSet<String>();
 
-  private HashMap<String,HashSet<String>> goodMap = new HashMap<String,HashSet<String>>();
+  private HashMap<String, HashSet<String>> goodMap = new HashMap<String, HashSet<String>>();
 
-
-  public MatchCountVisitor (PrintStream ps, boolean verbose,
-                            boolean printEmptyPpts) {
+  public MatchCountVisitor(PrintStream ps, boolean verbose, boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);
   }
 
   // throw out Program points that are not Conditional,
   // meaning they were NOT added from our splitters
-  public void visit (PptNode node) {
+  public void visit(PptNode node) {
     PptTopLevel ppt = node.getPpt1();
-    if (! (ppt instanceof PptConditional)) return;
-    else super.visit (node);
+    if (!(ppt instanceof PptConditional)) {
+      return;
+    } else {
+      super.visit(node);
+    }
   }
 
   public void visit(InvNode node) {
@@ -51,32 +52,28 @@ public class MatchCountVisitor extends PrintAllVisitor {
     String key1 = "";
     String key2 = "";
 
-
-    if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
+    if (inv1 != null && inv1.justified() && !filterOut(inv1)) {
       String thisPptName1 = inv1.ppt.name();
       // System.out.println ("NAME1: " + thisPptName1);
       // Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
-      String bucketKey = thisPptName1.substring (0,
-                                               thisPptName1.lastIndexOf (";condition"));
+      String bucketKey = thisPptName1.substring(0, thisPptName1.lastIndexOf(";condition"));
       key1 = bucketKey + "$" + inv1.format_using(OutputFormat.JAVA);
       // checks for justification
-      if (shouldPrint (inv1, inv1)) // [???]
-        cnt.add (key1);
-
+      if (shouldPrint(inv1, inv1)) // [???]
+      cnt.add(key1);
     }
 
-    if (inv2 != null && inv2.justified() && !filterOut (inv2)) {
+    if (inv2 != null && inv2.justified() && !filterOut(inv2)) {
       String thisPptName2 = inv2.ppt.name();
-      String thisPptName2_substring = thisPptName2.substring (0,
-                                               thisPptName2.lastIndexOf ('('));
+      String thisPptName2_substring = thisPptName2.substring(0, thisPptName2.lastIndexOf('('));
       key2 = thisPptName2_substring + "$" + inv2.format_using(OutputFormat.JAVA);
-      targSet.add (key2);
+      targSet.add(key2);
     }
 
     if (shouldPrint(inv1, inv2)) {
       // inv1 and inv2 should be the same, so it doesn't matter
       // which one we choose when adding to recall -LL
-      recall.add (key1);
+      recall.add(key1);
 
       // System.out.println("K1: " + key1);
       // System.out.println ("K2: " + key2);
@@ -84,55 +81,49 @@ public class MatchCountVisitor extends PrintAllVisitor {
       String thisPptName1 = inv1.ppt.name();
       // System.out.println ("NAME1: " + thisPptName1);
       // Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
-      String bucketKey = thisPptName1.substring (0,
-                                               thisPptName1.lastIndexOf (";condition"));
-      String predicate = extractPredicate (thisPptName1);
-      HashSet<String> bucket = goodMap.get (bucketKey);
+      String bucketKey = thisPptName1.substring(0, thisPptName1.lastIndexOf(";condition"));
+      String predicate = extractPredicate(thisPptName1);
+      HashSet<String> bucket = goodMap.get(bucketKey);
       if (bucket == null) {
         bucket = new HashSet<String>();
-        goodMap.put (bucketKey, bucket);
+        goodMap.put(bucketKey, bucket);
       }
-      bucket.add (predicate + " ==> " + inv1.format());
+      bucket.add(predicate + " ==> " + inv1.format());
     }
   }
 
   /** Grabs the splitting condition from a pptname. */
-  private String extractPredicate (String s) {
-    int cut = s.indexOf (";condition=");
-    return s.substring (cut + 12, s.lastIndexOf('"'));
+  private String extractPredicate(String s) {
+    int cut = s.indexOf(";condition=");
+    return s.substring(cut + 12, s.lastIndexOf('"'));
   }
-
 
   /** s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)"
    *  find the point just after the EXIT107 */
-  private int findCutoff (String s) {
+  private int findCutoff(String s) {
     String lastPart = "";
     int cut = 0;
-    if (s.indexOf ("EXIT") > -1) {
-      cut = s.indexOf ("EXIT");
-      lastPart = s.substring (cut);
+    if (s.indexOf("EXIT") > -1) {
+      cut = s.indexOf("EXIT");
+      lastPart = s.substring(cut);
 
-    }
-
-    else if (s.indexOf ("ENTER") > -1) {
-      cut = s.indexOf ("ENTER");
-      lastPart = s.substring (cut);
-    }
-
-    else {
-      System.out.println ("Should not get here, PPT name not ENTER/EXIT");
+    } else if (s.indexOf("ENTER") > -1) {
+      cut = s.indexOf("ENTER");
+      lastPart = s.substring(cut);
+    } else {
+      System.out.println("Should not get here, PPT name not ENTER/EXIT");
     }
 
     return cut + lastPart.indexOf("(");
-
   }
 
   /** Returns true if the pair of invariants should be printed **/
   /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
-  protected static boolean shouldPrint(final /*@Nullable*/ Invariant inv1, final /*@Nullable*/ Invariant inv2) {
+  protected static boolean shouldPrint(
+      final /*@Nullable*/ Invariant inv1, final /*@Nullable*/ Invariant inv2) {
 
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
-    if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2 ) {
+    if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2) {
       // determineRelationship returns REL_SAME_JUST1_JUST2 only if inv1 and inv2 are nonnull
       assert inv1 != null : "@AssumeAssertion(nullness): dependent: called determineRelationship()";
       assert inv2 != null : "@AssumeAssertion(nullness): dependent: called determineRelationship()";
@@ -145,7 +136,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
       // filter out targets that could never really be achived
       // example:   num >= 10378
 
-      if (filterOut (inv1) || filterOut (inv2)) {
+      if (filterOut(inv1) || filterOut(inv2)) {
         return false;
       }
 
@@ -154,33 +145,29 @@ public class MatchCountVisitor extends PrintAllVisitor {
       return true;
     }
 
-
     return false;
   }
 
   /** returns true iff any token of inv.format_java() contains
    *  a number other than -1, 0, 1 or is null. */
-  private static boolean filterOut (Invariant inv) {
+  private static boolean filterOut(Invariant inv) {
     assert inv != null : "@AssumeAssertion(nullness): precondition";
     String str = inv.format_using(OutputFormat.JAVA);
-    StringTokenizer st = new StringTokenizer (str, " ()");
+    StringTokenizer st = new StringTokenizer(str, " ()");
     while (st.hasMoreTokens()) {
       String oneToken = st.nextToken();
       try {
         char firstChar = oneToken.charAt(0);
         // remember identifiers can not begin with [0-9\-]
-        if (Character.isDigit (firstChar) || firstChar == '-') {
-          if (acceptableNumber (oneToken)) {
+        if (Character.isDigit(firstChar) || firstChar == '-') {
+          if (acceptableNumber(oneToken)) {
             continue;
-          }
-          else return true;
+          } else return true;
         }
 
-      }
-      catch (NumberFormatException e) {
-        System.out.println ("Should never get here... " +
-                            "NumberFormatException in filterOut: " +
-                            oneToken);
+      } catch (NumberFormatException e) {
+        System.out.println(
+            "Should never get here... " + "NumberFormatException in filterOut: " + oneToken);
         continue;
       }
     }
@@ -188,59 +175,51 @@ public class MatchCountVisitor extends PrintAllVisitor {
   }
 
   public double calcRecall() {
-    System.out.println ("Recall: " + recall.size() + " / " + targSet.size());
+    System.out.println("Recall: " + recall.size() + " / " + targSet.size());
     if (targSet.size() == 0) return -1; // avoids divide by zero
     return (double) recall.size() / targSet.size();
   }
-
 
   /** returns true iff numLiteral represents a numeric
    * literal string of integer or float that we believe
    * will be useful for a splitting condition.  Usually that
    * includes -1, 0, 1, and any other numeric literal
    * found in the source code.  */
-  private static boolean acceptableNumber (String numLiteral) {
+  private static boolean acceptableNumber(String numLiteral) {
 
     // need to make sure that it is an integer vs. floating
     // point number
 
-
     // could be float, look for "."
-    if (numLiteral.indexOf (".") > -1) {
-      float fnum = Float.parseFloat (numLiteral);
+    if (numLiteral.indexOf(".") > -1) {
+      float fnum = Float.parseFloat(numLiteral);
       // for now, accept all floats (ignore return value of parseFloat)
       return true;
     }
     // not float, must be int
     else {
-      int num = Integer.parseInt (numLiteral);
+      int num = Integer.parseInt(numLiteral);
 
       // accept -1, 0, 1
-      if (num == -1 || num == 0 || num == 1)
-        return true;
-      else return false;
+      return (num == -1 || num == 0 || num == 1);
     }
-
   }
 
   public double calcPrecision() {
 
-    System.out.println ("Prec: " + recall.size() + " / " + cnt.size());
+    System.out.println("Prec: " + recall.size() + " / " + cnt.size());
     if (cnt.size() == 0) return -1; // to avoid a divide by zero -LL
     return (double) recall.size() / cnt.size();
   }
 
-
   /** Prints the results of the correct set in a human-readable format */
-  public void printFinal () {
+  public void printFinal() {
     for (String ppt : goodMap.keySet()) {
-      System.out.println ();
-      System.out.println ("*****************" + ppt);
+      System.out.println();
+      System.out.println("*****************" + ppt);
       for (String s : goodMap.get(ppt)) {
-        System.out.println (s);
+        System.out.println(s);
       }
     }
-
   }
-
 }

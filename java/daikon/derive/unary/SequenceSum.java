@@ -1,4 +1,5 @@
 package daikon.derive.unary;
+
 import daikon.*;
 import daikon.derive.*;
 import plume.*;
@@ -7,9 +8,7 @@ import plume.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-public final class SequenceSum
-  extends UnaryDerivation
-{
+public final class SequenceSum extends UnaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -28,25 +27,23 @@ public final class SequenceSum
 
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL)
-      return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
     Object val = base.getValue(vt);
-    if (val == null)
-      return ValueAndModified.MISSING_NONSENSICAL;
+    if (val == null) return ValueAndModified.MISSING_NONSENSICAL;
     if (val instanceof long[]) {
-      long[] val_array = (long[])val;
+      long[] val_array = (long[]) val;
       long result = 0;
-      for (int i=0; i<val_array.length; i++)
+      for (int i = 0; i < val_array.length; i++) {
         result += val_array[i];
-      return new ValueAndModified(Intern.internedLong(result),
-                                  source_mod);
+      }
+      return new ValueAndModified(Intern.internedLong(result), source_mod);
     } else if (val instanceof double[]) {
-      double[] val_array = (double[])val;
+      double[] val_array = (double[]) val;
       double result = 0;
-      for (int i=0; i<val_array.length; i++)
+      for (int i = 0; i < val_array.length; i++) {
         result += val_array[i];
-      return new ValueAndModified(Intern.internedDouble(result),
-                                  source_mod);
+      }
+      return new ValueAndModified(Intern.internedDouble(result), source_mod);
 
     } else {
       return ValueAndModified.MISSING_NONSENSICAL;
@@ -54,12 +51,10 @@ public final class SequenceSum
   }
 
   protected VarInfo makeVarInfo() {
-    return VarInfo.make_scalar_seq_func ("sum", null, base, 0);
+    return VarInfo.make_scalar_seq_func("sum", null, base, 0);
   }
-
 
   /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceSum);
   }
-
 }

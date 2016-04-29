@@ -8,10 +8,8 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 // This splitter tests the condition "X>0".
-@SuppressWarnings("nullness")   // uses private fields, client code not analyzed
-public final class SplitterExample
-  extends Splitter
-{
+@SuppressWarnings("nullness") // uses private fields, client code not analyzed
+public final class SplitterExample extends Splitter {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -22,11 +20,10 @@ public final class SplitterExample
 
   private /*@Nullable*/ VarInfo x_varinfo;
 
-  public SplitterExample() {
-  }
+  public SplitterExample() {}
 
   public SplitterExample(Ppt ppt) {
-    x_varinfo = ppt.find_var_by_name ("X");
+    x_varinfo = ppt.find_var_by_name("X");
     instantiated = true;
   }
 
@@ -39,7 +36,8 @@ public final class SplitterExample
     return (x_varinfo != null);
   }
 
-  @SuppressWarnings("nullness:contracts.precondition.override.invalid") // application invariant about private variable
+  @SuppressWarnings(
+      "nullness:contracts.precondition.override.invalid") // application invariant about private variable
   /*@RequiresNonNull("x_varinfo")*/
   public boolean test(ValueTuple vt) {
     // Alternately, if x represents an array, use
@@ -60,9 +58,9 @@ public final class SplitterExample
   /*@RequiresNonNull("dummyInvFactory")*/
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
-    VarInfo x_vi = ppt.find_var_by_name ("X");
+    VarInfo x_vi = ppt.find_var_by_name("X");
     if (x_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] { x_vi });
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {x_vi});
     }
   }
 

@@ -1,7 +1,7 @@
 package daikon.chicory;
 
-import java.util.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -16,7 +16,7 @@ import org.checkerframework.dataflow.qual.*;
  * out during the transformation and other information is added the
  * first time a method is called.
  */
-@SuppressWarnings("nullness")   // to do.  member field is tricky.
+@SuppressWarnings("nullness") // to do.  member field is tricky.
 public class MethodInfo {
 
   /** Class that contains this method **/
@@ -87,10 +87,13 @@ public class MethodInfo {
    * Creates a MethodInfo with the specified class, arg_names, and
    * exit locations
    */
-  public MethodInfo (ClassInfo class_info, String method_name,
-                     String[] arg_names, /*@ClassGetName*/ String[] arg_type_strings,
-                     List<Integer> exit_locations,
-                     List<Boolean> is_included) {
+  public MethodInfo(
+      ClassInfo class_info,
+      String method_name,
+      String[] arg_names,
+      /*@ClassGetName*/ String[] arg_type_strings,
+      List<Integer> exit_locations,
+      List<Boolean> is_included) {
 
     this.class_info = class_info;
     this.method_name = method_name;
@@ -102,8 +105,8 @@ public class MethodInfo {
 
   // Use reserved keyword for basic type rather than signature to
   // avoid conflicts with user defined types. Daikon issue #10.
-  private static HashMap<String,Class<?>> primitive_classes
-    = new HashMap<String,Class<?>>(8);
+  private static HashMap<String, Class<?>> primitive_classes = new HashMap<String, Class<?>>(8);
+
   static {
     primitive_classes.put("boolean", Boolean.TYPE);
     primitive_classes.put("byte", Byte.TYPE);
@@ -116,28 +119,33 @@ public class MethodInfo {
   }
 
   /** Populates this class with data from reflection **/
-  public void initViaReflection () {
+  public void initViaReflection() {
 
     // Get the Class for each argument type
     arg_types = new Class<?>[arg_names.length];
     for (int ii = 0; ii < arg_type_strings.length; ii++) {
       try {
         String aname = arg_type_strings[ii];
-        Class<?> c = primitive_classes.get (aname);
+        Class<?> c = primitive_classes.get(aname);
 
-        if (c == null)
-        {
+        if (c == null) {
           //c = Class.forName (aname);
           //change class loading
           //TODO referring class?
-          c = Class.forName (aname, false, this.class_info.clazz.getClassLoader());
+          c = Class.forName(aname, false, this.class_info.clazz.getClassLoader());
         }
 
         arg_types[ii] = c;
       } catch (Exception e) {
-        throw new Error ("can't find class for " + arg_type_strings[ii]
-                         + " in  method "+ class_info.class_name + "."
-                         + method_name + ": " + e);
+        throw new Error(
+            "can't find class for "
+                + arg_type_strings[ii]
+                + " in  method "
+                + class_info.class_name
+                + "."
+                + method_name
+                + ": "
+                + e);
       }
     }
 
@@ -147,31 +155,27 @@ public class MethodInfo {
         member = null;
         // This case DOES occur at run time.  -MDE 1/22/2010
       } else if (is_constructor()) {
-        member = class_info.clazz.getDeclaredConstructor (arg_types);
+        member = class_info.clazz.getDeclaredConstructor(arg_types);
       } else {
-        member = class_info.clazz.getDeclaredMethod (method_name, arg_types);
+        member = class_info.clazz.getDeclaredMethod(method_name, arg_types);
       }
     } catch (Exception e) {
-      throw new Error ("can't find method " + method_name, e);
+      throw new Error("can't find method " + method_name, e);
     }
 
+    if (ChicoryPremain.shouldDoPurity() && (member != null)) {
+      int mod = member.getModifiers();
 
-    if (ChicoryPremain.shouldDoPurity() && (member != null))
-    {
-        int mod = member.getModifiers();
-
-
-        // Only consider purity on non-abstract, non-static, and non-constructor
-        // methods which return a value!
-        if (!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) &&
-                !(member instanceof Constructor<?>) &&
-                !((Method) member).getReturnType().equals(Void.TYPE))
-        {
-            if (ChicoryPremain.isMethodPure(member))
-            {
-                isPure = true;
-            }
+      // Only consider purity on non-abstract, non-static, and non-constructor
+      // methods which return a value!
+      if (!Modifier.isAbstract(mod)
+          && !Modifier.isStatic(mod)
+          && !(member instanceof Constructor<?>)
+          && !((Method) member).getReturnType().equals(Void.TYPE)) {
+        if (ChicoryPremain.isMethodPure(member)) {
+          isPure = true;
         }
+      }
     }
   }
 
@@ -180,12 +184,12 @@ public class MethodInfo {
    * @return true iff this method is a constructor
    */
   /*@Pure*/ public boolean is_constructor() {
-    return (method_name.equals ("<init>") || method_name.equals(""));
+    return (method_name.equals("<init>") || method_name.equals(""));
   }
 
   /** Returns whether or not this method is a class initializer **/
   /*@Pure*/ public boolean is_class_init() {
-    return (method_name.equals ("<clinit>"));
+    return (method_name.equals("<clinit>"));
   }
 
   /** Returns whether or not this method is static **/
@@ -200,36 +204,32 @@ public class MethodInfo {
    * initialized.
    */
   /*TO DO: @PostNonNull({"traversalEnter", "traversalExit"})*/
-  public void init_traversal (int depth) {
+  public void init_traversal(int depth) {
 
-    traversalEnter = RootInfo.enter_process (this, depth);
+    traversalEnter = RootInfo.enter_process(this, depth);
     // System.out.printf ("Method %s.%s: %n ", class_info.clazz.getName(),
     //                    this);
     // System.out.printf ("Enter daikon variable tree%n%s%n",
     //                    traversalEnter.treeString());
 
-    traversalExit = RootInfo.exit_process (this, depth);
+    traversalExit = RootInfo.exit_process(this, depth);
     // System.out.printf ("Exit daikon variable tree%n%s%n",
     //                    traversalExit.treeString());
   }
 
-
   /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied MethodInfo this*/) {
     String out = "";
-    if (class_info != null)
-      out = class_info.class_name + ".";
+    if (class_info != null) out = class_info.class_name + ".";
     out += method_name + "(";
     for (int ii = 0; ii < arg_names.length; ii++) {
-      if (ii > 0)
-        out += ", ";
+      if (ii > 0) out += ", ";
       out += arg_type_strings[ii] + " " + arg_names[ii];
     }
     return (out + ")");
   }
 
-  public boolean isPure()
-  {
-      return isPure;
+  public boolean isPure() {
+    return isPure;
   }
 
   /** Returns the turn type of the method, or Void.TYPE for a constructor. **/

@@ -99,7 +99,7 @@ public final class CLASSNAME
   /**
    * Boolean.  True iff EltNonZero invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CLASSNAME(PptSlice ppt) {
     super(ppt);

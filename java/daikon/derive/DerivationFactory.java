@@ -13,7 +13,4 @@ package daikon.derive;
  * have instantiate() methods that take a different number of
  * arguments.
  **/
-
-public interface DerivationFactory {
-
-}
+public interface DerivationFactory {}

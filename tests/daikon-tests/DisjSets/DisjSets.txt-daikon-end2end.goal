@@ -26,6 +26,8 @@ size(this.s[])-1 >= this.s[x]
 DataStructures.DisjSets.find(int):::EXIT68
 return == orig(x)
 ===========================================================================
+DataStructures.DisjSets.find(int):::EXIT68;condition="orig(s[x] < 0)"
+===========================================================================
 DataStructures.DisjSets.find(int):::EXIT68;condition="s[x] < 0"
 ===========================================================================
 DataStructures.DisjSets.find(int):::EXIT70
@@ -33,6 +35,8 @@ this.s[orig(x)] >= 0
 return in this.s[]
 return != orig(x)
 this.s[return] < this.s[orig(x)]
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT70;condition="not(orig(s[x] < 0))"
 ===========================================================================
 DataStructures.DisjSets.find(int):::EXIT70;condition="not(s[x] < 0)"
 ===========================================================================
@@ -65,13 +69,58 @@ size(this.s[])-1 > this.s[return]
 size(this.s[])-1 >= this.s[orig(x)]
 this.s[return] <= this.s[orig(x)]
 ===========================================================================
-DataStructures.DisjSets.find(int):::EXIT;condition="s[x] < 0"
+DataStructures.DisjSets.find(int):::EXIT;condition="orig(s[x] < 0)"
 return == orig(x)
 ===========================================================================
-DataStructures.DisjSets.find(int):::EXIT;condition="not(s[x] < 0)"
+DataStructures.DisjSets.find(int):::EXIT;condition="not(orig(s[x] < 0))"
 this.s[orig(x)] >= 0
 return in this.s[]
 return != orig(x)
+this.s[return] < this.s[orig(x)]
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT;condition="s[x] < 0"
+this.s == orig(this.s)
+this.s[] == orig(this.s[])
+return == orig(x)
+this.s != null
+this.s[] elements >= -1
+this.s[i] != i
+{-1} subset of this.s[]
+return >= 0
+this.s[return] == -1
+{-1} subset of this.s[return..]
+{-1} subset of this.s[0..return]
+this.s[] elements <= size(this.s[])-1
+this.s[] elements >= this.s[return]
+(size(this.s[])-1 == 0) ==> (return == 0)
+return <= size(this.s[])-1
+return > this.s[return]
+size(this.s[])-1 > this.s[return]
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT;condition="not(s[x] < 0)"
+this.s == orig(this.s)
+this.s[] == orig(this.s[])
+this.s != null
+this.s[] elements >= -1
+this.s[i] != i
+{-1} subset of this.s[]
+return >= 0
+orig(x) >= 0
+this.s[return] == -1
+{-1} subset of this.s[return..]
+{-1} subset of this.s[0..return]
+this.s[orig(x)] >= 0
+return in this.s[]
+this.s[] elements <= size(this.s[])-1
+this.s[] elements >= this.s[return]
+return != orig(x)
+return <= size(this.s[])-1
+return > this.s[return]
+orig(x) <= size(this.s[])-1
+orig(x) > this.s[return]
+orig(x) != this.s[orig(x)]
+size(this.s[])-1 > this.s[return]
+size(this.s[])-1 >= this.s[orig(x)]
 this.s[return] < this.s[orig(x)]
 ===========================================================================
 DataStructures.DisjSets.unionCareful(int, int):::ENTER

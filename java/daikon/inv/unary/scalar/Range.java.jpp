@@ -111,12 +111,12 @@ public abstract class RANGE extends SUPERCLASS {
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     if (!vis[0].file_rep_type.BASE_IS_TYPE)
-      return (false);
+      return false;
 
-    return (true);
+    return true;
   }
 
   /**
@@ -190,7 +190,7 @@ public abstract class RANGE extends SUPERCLASS {
 
   /*@Pure*/ public boolean isSameFormula (Invariant other) {
     assert other.getClass() == getClass();
-    return (true);
+    return true;
   }
   /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
     return false;
@@ -548,6 +548,7 @@ public abstract class RANGE extends SUPERCLASS {
    * (exactly one bit is set).  Used for non-instantiating
    * suppressions.  Since this is not covered by the Bound or OneOf
    * invariants it is printed.
+   * Prints as <code>x is a power of 2</code>.
    */
   public static class PowerOfTwo extends RANGE {
 
@@ -557,7 +558,7 @@ public abstract class RANGE extends SUPERCLASS {
     static final long serialVersionUID = 20040113L;
 
     /** Boolean.  True if PowerOfTwo invariants should be considered. **/
-    public static boolean dkconfig_enabled = true;
+    public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
     protected PowerOfTwo (PptSlice ppt) {
       super (ppt);
@@ -626,6 +627,7 @@ public abstract class RANGE extends SUPERCLASS {
    * Invariant representing longs whose values are always even.
    * Used for non-instantiating suppressions.  Since this is not
    * covered by the Bound or OneOf invariants it is printed.
+   * Prints as <code>x is even</code>.
    */
   public static class Even extends RANGE {
 

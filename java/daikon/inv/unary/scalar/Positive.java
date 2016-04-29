@@ -1,9 +1,9 @@
 package daikon.inv.unary.scalar;
 
 import daikon.*;
-import daikon.inv.OutputFormat;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
+import daikon.inv.OutputFormat;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -20,10 +20,7 @@ import typequals.*;
  * only as an example for the purposes of the manual.  It isn't actually
  * used (it is replaced by the more general invariant LowerBound).
  **/
-
-public class Positive
-  extends SingleScalar
-{
+public class Positive extends SingleScalar {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -34,7 +31,7 @@ public class Positive
   /**
    * Boolean.  True iff Positive invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   ///
   /// Required methods
@@ -48,7 +45,7 @@ public class Positive
     super();
   }
 
-  private static /*@Prototype*/ Positive proto = new /*@Prototype*/ Positive ();
+  private static /*@Prototype*/ Positive proto = new /*@Prototype*/ Positive();
 
   /** Returns the prototype invariant **/
   public static /*@Prototype*/ Positive get_proto() {
@@ -61,7 +58,7 @@ public class Positive
   }
 
   /** instantiate an invariant on the specified slice **/
-  public Positive instantiate_dyn (/*>>> @Prototype Positive this,*/ PptSlice slice) {
+  public Positive instantiate_dyn(/*>>> @Prototype Positive this,*/ PptSlice slice) {
     return new Positive(slice);
   }
 
@@ -88,4 +85,8 @@ public class Positive
     return 1 - Math.pow(.5, ppt.num_samples());
   }
 
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+    assert other instanceof Positive;
+    return true;
+  }
 }

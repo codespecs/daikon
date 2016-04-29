@@ -2,15 +2,13 @@ package daikon.test;
 
 import daikon.PptName;
 import daikon.tools.jtb.*;
-import junit.framework.*;
-import plume.UtilMDE;
-
-import jtb.*;
-import jtb.visitor.*;
-import jtb.syntaxtree.*;
-
 import java.io.*;
 import java.util.*;
+import jtb.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
+import junit.framework.*;
+import plume.UtilMDE;
 
 public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
 
@@ -22,20 +20,22 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     super(name);
   }
 
-
   public static class UngenerifiedTypeCollector extends DepthFirstVisitor {
     // These two lists have the same length.
     List<ClassOrInterfaceType> generifieds = new ArrayList<ClassOrInterfaceType>();
     List<ClassOrInterfaceType> ungenerifieds = new ArrayList<ClassOrInterfaceType>();
+
     public void visit(ClassOrInterfaceType n) {
       generifieds.add(n);
       ungenerifieds.add(n.unGenerifiedVersionOfThis);
     }
+
     public String collectionResults() {
       StringBuffer b = new StringBuffer();
       b.append("Collection results:\n");
-      for (int i = 0 ; i < generifieds.size() ; i++) {
-        MethodDeclaration m = (MethodDeclaration)Ast.getParent(MethodDeclaration.class, generifieds.get(i));
+      for (int i = 0; i < generifieds.size(); i++) {
+        MethodDeclaration m =
+            (MethodDeclaration) Ast.getParent(MethodDeclaration.class, generifieds.get(i));
         if (m != null) {
           b.append("Method: ");
           m.f0.accept(new TreeFormatter());
@@ -62,7 +62,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     // Parse the file "GenericTestClass.java" (under same dir as this class)
     InputStream sourceIn = this.getClass().getResourceAsStream("GenericTestClass.java");
     if (sourceIn == null) {
-        throw new Error("Couldn't find file GenericTestClass.java");
+      throw new Error("Couldn't find file GenericTestClass.java");
     }
     JavaParser parser = new JavaParser(sourceIn);
 
@@ -78,8 +78,6 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     compilationUnit.accept(new ClassOrInterfaceTypeDecorateVisitor());
     compilationUnit.accept(ungenerifiedCollector);
 
-
-
     /*
      for (int ii = 0; ii < result.length(); ii++) {
       if (result.charAt(ii) !=  expected.charAt(ii)) {
@@ -93,20 +91,18 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     */
 
     String result = ungenerifiedCollector.collectionResults().trim();
-    String[] result_arr = UtilMDE.splitLines (result);
+    String[] result_arr = UtilMDE.splitLines(result);
     String expected = expectedAnswerBuffer.toString().trim();
-    String[] expected_arr = UtilMDE.splitLines (expected);
+    String[] expected_arr = UtilMDE.splitLines(expected);
 
     // UtilMDE.writeFile (new File ("expected.txt"), expected);
     // UtilMDE.writeFile (new File ("result.txt"), result);
 
-    assert expected_arr.length == result_arr.length
-        : "diff in buffer lengths";
+    assert expected_arr.length == result_arr.length : "diff in buffer lengths";
     for (int ii = 0; ii < expected_arr.length; ii++) {
-      assert expected_arr[ii].equals(result_arr[ii])
-        : "diff at line " + ii;
+      assert expected_arr[ii].equals(result_arr[ii]) : "diff at line " + ii;
     }
-      /*
+    /*
     assert ungenerifiedCollector.collectionResults().trim().equals(expectedAnswerBuffer.toString().trim())
                       : ungenerifiedCollector.collectionResults()
                       + "\n\n\nExpected answer:\n\n\n"
@@ -182,21 +178,29 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     expectedAnswerBuffer.append("/* */\n");
     expectedAnswerBuffer.append("<C extends Comparable >List<U>foo115(C x, B y)\n");
     expectedAnswerBuffer.append("  B  -->  String\n");
-    expectedAnswerBuffer.append("Method: <G extends Comparable >List<String>foo12(A x, List<B> y)\n");
+    expectedAnswerBuffer.append(
+        "Method: <G extends Comparable >List<String>foo12(A x, List<B> y)\n");
     expectedAnswerBuffer.append("  Comparable  -->  Comparable\n");
-    expectedAnswerBuffer.append("Method: <G extends Comparable >List<String>foo12(A x, List<B> y)\n");
+    expectedAnswerBuffer.append(
+        "Method: <G extends Comparable >List<String>foo12(A x, List<B> y)\n");
     expectedAnswerBuffer.append("  List<String>  -->  List\n");
-    expectedAnswerBuffer.append("Method: <G extends Comparable >List<String>foo12(A x, List<B> y)\n");
+    expectedAnswerBuffer.append(
+        "Method: <G extends Comparable >List<String>foo12(A x, List<B> y)\n");
     expectedAnswerBuffer.append("  A  -->  Object\n");
-    expectedAnswerBuffer.append("Method: <G extends Comparable >List<String>foo12(A x, List<B> y)\n");
+    expectedAnswerBuffer.append(
+        "Method: <G extends Comparable >List<String>foo12(A x, List<B> y)\n");
     expectedAnswerBuffer.append("  List<B>  -->  List\n");
-    expectedAnswerBuffer.append("Method: <G extends Comparable >List<String>foo13(A x, List<U> y)\n");
+    expectedAnswerBuffer.append(
+        "Method: <G extends Comparable >List<String>foo13(A x, List<U> y)\n");
     expectedAnswerBuffer.append("  Comparable  -->  Comparable\n");
-    expectedAnswerBuffer.append("Method: <G extends Comparable >List<String>foo13(A x, List<U> y)\n");
+    expectedAnswerBuffer.append(
+        "Method: <G extends Comparable >List<String>foo13(A x, List<U> y)\n");
     expectedAnswerBuffer.append("  List<String>  -->  List\n");
-    expectedAnswerBuffer.append("Method: <G extends Comparable >List<String>foo13(A x, List<U> y)\n");
+    expectedAnswerBuffer.append(
+        "Method: <G extends Comparable >List<String>foo13(A x, List<U> y)\n");
     expectedAnswerBuffer.append("  A  -->  Object\n");
-    expectedAnswerBuffer.append("Method: <G extends Comparable >List<String>foo13(A x, List<U> y)\n");
+    expectedAnswerBuffer.append(
+        "Method: <G extends Comparable >List<String>foo13(A x, List<U> y)\n");
     expectedAnswerBuffer.append("  List<U>  -->  List\n");
     expectedAnswerBuffer.append("Method: <H extends java.lang.Object >List<String>foo14(H x)\n");
     expectedAnswerBuffer.append("  java.lang.Object  -->  java.lang.Object\n");
@@ -254,7 +258,5 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     // expectedAnswerBuffer.append("Method: voidfoo2(U.Entry x)\n");
     // expectedAnswerBuffer.append("  U.Entry  -->  Map.Entry\n");
     expectedAnswerBuffer.append("\n");
-
   }
-
 }

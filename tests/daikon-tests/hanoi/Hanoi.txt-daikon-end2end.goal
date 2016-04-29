@@ -67,6 +67,14 @@ this.diskLocation[0..orig(towerHeight)-1] elements are equal
 this.height >= orig(towerHeight)
 this.diskLocation[0..orig(towerHeight)-1] elements == orig(toPeg)
 ===========================================================================
+six170.Hanoi.moveTower(int, int, int):::EXIT;condition="orig(towerHeight == 1)"
+orig(towerHeight) == 1
+this.diskLocation[0..orig(towerHeight)-1] one of { [0], [1], [2] }
+orig(this.diskLocation[0..towerHeight-1]) one of { [0], [1], [2] }
+===========================================================================
+six170.Hanoi.moveTower(int, int, int):::EXIT;condition="not(orig(towerHeight == 1))"
+orig(towerHeight) >= 2
+===========================================================================
 six170.Hanoi.moveTower(int, int, int):::EXIT;condition="towerHeight == 1"
 this.diskLocation == orig(this.diskLocation)
 this.height == orig(this.height)
@@ -157,6 +165,33 @@ return == 2
 orig(pegA) == 0
 orig(pegB) == 1
 ===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT65;condition="orig((pegA == 0)&&(pegB == 1))"
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT65;condition="not(orig((pegA == 0)&&(pegB == 2)))"
+return == 2
+orig(pegA) == 0
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT65;condition="not(orig((pegA == 1)&&(pegB == 0)))"
+return == 2
+orig(pegA) == 0
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT65;condition="not(orig((pegA == 1)&&(pegB == 2)))"
+return == 2
+orig(pegA) == 0
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT65;condition="not(orig((pegA == 2)&&(pegB == 0)))"
+return == 2
+orig(pegA) == 0
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT65;condition="not(orig((pegA == 2)&&(pegB == 1)))"
+return == 2
+orig(pegA) == 0
+orig(pegB) == 1
+===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT66
 return == 2
 orig(pegA) == 1
@@ -182,6 +217,33 @@ orig(pegA) == 1
 orig(pegB) == 0
 ===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT66;condition="not((pegA == 2)&&(pegB == 1))"
+return == 2
+orig(pegA) == 1
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT66;condition="not(orig((pegA == 0)&&(pegB == 1)))"
+return == 2
+orig(pegA) == 1
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT66;condition="not(orig((pegA == 0)&&(pegB == 2)))"
+return == 2
+orig(pegA) == 1
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT66;condition="orig((pegA == 1)&&(pegB == 0))"
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT66;condition="not(orig((pegA == 1)&&(pegB == 2)))"
+return == 2
+orig(pegA) == 1
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT66;condition="not(orig((pegA == 2)&&(pegB == 0)))"
+return == 2
+orig(pegA) == 1
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT66;condition="not(orig((pegA == 2)&&(pegB == 1)))"
 return == 2
 orig(pegA) == 1
 orig(pegB) == 0
@@ -215,6 +277,33 @@ return == 1
 orig(pegA) == 0
 orig(pegB) == 2
 ===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT67;condition="not(orig((pegA == 0)&&(pegB == 1)))"
+return == 1
+orig(pegA) == 0
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT67;condition="orig((pegA == 0)&&(pegB == 2))"
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT67;condition="not(orig((pegA == 1)&&(pegB == 0)))"
+return == 1
+orig(pegA) == 0
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT67;condition="not(orig((pegA == 1)&&(pegB == 2)))"
+return == 1
+orig(pegA) == 0
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT67;condition="not(orig((pegA == 2)&&(pegB == 0)))"
+return == 1
+orig(pegA) == 0
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT67;condition="not(orig((pegA == 2)&&(pegB == 1)))"
+return == 1
+orig(pegA) == 0
+orig(pegB) == 2
+===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT68
 return == 1
 orig(pegA) == 2
@@ -240,6 +329,33 @@ orig(pegB) == 0
 six170.Hanoi.otherPeg(int, int):::EXIT68;condition="(pegA == 2)&&(pegB == 0)"
 ===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT68;condition="not((pegA == 2)&&(pegB == 1))"
+return == 1
+orig(pegA) == 2
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT68;condition="not(orig((pegA == 0)&&(pegB == 1)))"
+return == 1
+orig(pegA) == 2
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT68;condition="not(orig((pegA == 0)&&(pegB == 2)))"
+return == 1
+orig(pegA) == 2
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT68;condition="not(orig((pegA == 1)&&(pegB == 0)))"
+return == 1
+orig(pegA) == 2
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT68;condition="not(orig((pegA == 1)&&(pegB == 2)))"
+return == 1
+orig(pegA) == 2
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT68;condition="orig((pegA == 2)&&(pegB == 0))"
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT68;condition="not(orig((pegA == 2)&&(pegB == 1)))"
 return == 1
 orig(pegA) == 2
 orig(pegB) == 0
@@ -273,6 +389,33 @@ return == 0
 orig(pegA) == 1
 orig(pegB) == 2
 ===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT69;condition="not(orig((pegA == 0)&&(pegB == 1)))"
+return == 0
+orig(pegA) == 1
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT69;condition="not(orig((pegA == 0)&&(pegB == 2)))"
+return == 0
+orig(pegA) == 1
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT69;condition="not(orig((pegA == 1)&&(pegB == 0)))"
+return == 0
+orig(pegA) == 1
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT69;condition="orig((pegA == 1)&&(pegB == 2))"
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT69;condition="not(orig((pegA == 2)&&(pegB == 0)))"
+return == 0
+orig(pegA) == 1
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT69;condition="not(orig((pegA == 2)&&(pegB == 1)))"
+return == 0
+orig(pegA) == 1
+orig(pegB) == 2
+===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT70
 return == 0
 orig(pegA) == 2
@@ -301,6 +444,33 @@ orig(pegA) == 2
 orig(pegB) == 1
 ===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT70;condition="(pegA == 2)&&(pegB == 1)"
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT70;condition="not(orig((pegA == 0)&&(pegB == 1)))"
+return == 0
+orig(pegA) == 2
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT70;condition="not(orig((pegA == 0)&&(pegB == 2)))"
+return == 0
+orig(pegA) == 2
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT70;condition="not(orig((pegA == 1)&&(pegB == 0)))"
+return == 0
+orig(pegA) == 2
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT70;condition="not(orig((pegA == 1)&&(pegB == 2)))"
+return == 0
+orig(pegA) == 2
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT70;condition="not(orig((pegA == 2)&&(pegB == 0)))"
+return == 0
+orig(pegA) == 2
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT70;condition="orig((pegA == 2)&&(pegB == 1))"
 ===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT
 return one of { 0, 1, 2 }
@@ -362,6 +532,66 @@ return one of { 0, 1, 2 }
 orig(pegA) one of { 0, 1, 2 }
 orig(pegB) one of { 0, 1, 2 }
 ===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="orig((pegA == 0)&&(pegB == 1))"
+return == 2
+orig(pegA) == 0
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="not(orig((pegA == 0)&&(pegB == 1)))"
+return one of { 0, 1, 2 }
+orig(pegA) one of { 0, 1, 2 }
+orig(pegB) one of { 0, 1, 2 }
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="orig((pegA == 0)&&(pegB == 2))"
+return == 1
+orig(pegA) == 0
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="not(orig((pegA == 0)&&(pegB == 2)))"
+return one of { 0, 1, 2 }
+orig(pegA) one of { 0, 1, 2 }
+orig(pegB) one of { 0, 1, 2 }
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="orig((pegA == 1)&&(pegB == 0))"
+return == 2
+orig(pegA) == 1
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="not(orig((pegA == 1)&&(pegB == 0)))"
+return one of { 0, 1, 2 }
+orig(pegA) one of { 0, 1, 2 }
+orig(pegB) one of { 0, 1, 2 }
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="orig((pegA == 1)&&(pegB == 2))"
+return == 0
+orig(pegA) == 1
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="not(orig((pegA == 1)&&(pegB == 2)))"
+return one of { 0, 1, 2 }
+orig(pegA) one of { 0, 1, 2 }
+orig(pegB) one of { 0, 1, 2 }
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="orig((pegA == 2)&&(pegB == 0))"
+return == 1
+orig(pegA) == 2
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="not(orig((pegA == 2)&&(pegB == 0)))"
+return one of { 0, 1, 2 }
+orig(pegA) one of { 0, 1, 2 }
+orig(pegB) one of { 0, 1, 2 }
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="orig((pegA == 2)&&(pegB == 1))"
+return == 0
+orig(pegA) == 2
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT;condition="not(orig((pegA == 2)&&(pegB == 1)))"
+return one of { 0, 1, 2 }
+orig(pegA) one of { 0, 1, 2 }
+orig(pegB) one of { 0, 1, 2 }
+===========================================================================
 six170.Hanoi.showTowers():::ENTER
 this.noOutput == true
 ===========================================================================
@@ -374,6 +604,8 @@ this.noOutput == orig(this.noOutput)
 this.noOutput == true
 ===========================================================================
 six170.Hanoi.showTowers():::EXIT;condition="not(!noOutput)"
+===========================================================================
+six170.Hanoi.showTowers():::EXIT;condition="not(orig(!noOutput))"
 this.diskLocation == orig(this.diskLocation)
 this.diskLocation[] == orig(this.diskLocation[])
 this.height == orig(this.height)

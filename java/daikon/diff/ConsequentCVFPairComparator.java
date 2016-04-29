@@ -1,7 +1,7 @@
 package daikon.diff;
 
-import java.util.*;
 import daikon.inv.*;
+import java.util.*;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;
@@ -14,8 +14,8 @@ import org.checkerframework.dataflow.qual.*;
  * classes to figure out what this class does.
  **/
 public class ConsequentCVFPairComparator implements Comparator<Invariant> {
-  private Comparator<Invariant> c = new ConsequentPairComparator
-    (new Invariant.ClassVarnameFormulaComparator());
+  private Comparator<Invariant> c =
+      new ConsequentPairComparator(new Invariant.ClassVarnameFormulaComparator());
 
   /*@Pure*/ public int compare(Invariant inv1, Invariant inv2) {
     return c.compare(inv1, inv2);

@@ -1,4 +1,5 @@
 package daikon.derive.unary;
+
 import daikon.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
@@ -10,8 +11,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /** Length of String variables **/
-public final class StringLength extends UnaryDerivation
-{
+public final class StringLength extends UnaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -31,21 +31,20 @@ public final class StringLength extends UnaryDerivation
     return true;
   }
 
-  public ValueAndModified computeValueAndModifiedImpl (ValueTuple vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL)
-      return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
     Object val = base.getValue(vt);
     if (val == null) {
       return ValueAndModified.MISSING_NONSENSICAL;
     }
 
-    int len = ((String)val).length();
+    int len = ((String) val).length();
     return new ValueAndModified(Intern.internedLong(len), source_mod);
   }
 
   protected VarInfo makeVarInfo() {
-    return VarInfo.make_scalar_str_func ("length", ProglangType.INT, base);
+    return VarInfo.make_scalar_str_func("length", ProglangType.INT, base);
   }
 
   /*@Pure*/ public boolean isSameFormula(Derivation other) {
@@ -54,26 +53,25 @@ public final class StringLength extends UnaryDerivation
 
   /** Returns the ESC name **/
   @SuppressWarnings("nullness")
-  /*@SideEffectFree*/ public String csharp_name (String index) {
-    return String.format ("%s.Length", base.csharp_name());
+  /*@SideEffectFree*/ public String csharp_name(String index) {
+    return String.format("%s.Length", base.csharp_name());
   }
 
   /** Returns the ESC name **/
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/ public String esc_name(String index) {
-    return String.format ("%s.length()", base.esc_name());
+    return String.format("%s.length()", base.esc_name());
   }
 
   /** Returns the JML name **/
   @SuppressWarnings("nullness")
-  public String jml_name (String index) {
-    return String.format ("%s.length()", base.jml_name());
+  public String jml_name(String index) {
+    return String.format("%s.length()", base.jml_name());
   }
 
   /** Returns the simplify name **/
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/ public String simplify_name() {
-    return String.format ("(stringLength %s)", base.simplify_name());
+    return String.format("(stringLength %s)", base.simplify_name());
   }
-
 }

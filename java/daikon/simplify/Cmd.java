@@ -5,8 +5,7 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-public interface Cmd
-{
+public interface Cmd {
   /**
    * Runs the command in the given session.
    **/

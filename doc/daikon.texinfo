@@ -56,14 +56,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.2.21
+@center Daikon version 5.3.1
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.2.21 release date
-@center January 6, 2016
+@c Print out the Daikon version 5.3.1 release date
+@center April 5, 2016
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.2.21, released January 6, 2016.
+It describes Daikon version 5.3.1, released April 5, 2016.
 
 @menu
 * Introduction::
@@ -1827,6 +1827,20 @@ interface.  The preferred mechanism for indicating such information is
 the @code{ListImplementors} section of the @file{.decls} file.
 See @ref{ListImplementors declaration,,,developer,Daikon Developer Manual}.
 
+@item --user-defined-invariant @var{classname}
+Use a user-defiend invariant that not built into Daikon but
+is defined in the given class.
+The @var{classname} should be in the fully-qualified format expected by
+@uref{https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getName--,,@code{Class.getName()}},
+such as ``@code{mypackage.subpackage.ClassName}'',
+and its @file{.class} file should appear on the classpath.
+
+@item --disable-all-invariants
+Disable all known invariants:  all those that are built into Daikon, and
+all those that have been specified by @option{--user-defined-invariant} so
+far.  An invariant may be re-enabled after this option is specified,
+see @ref{Options to enable/disable derived variables}.
+
 @item --nohierarchy
 @cindex hierarchy, disabling
 @cindex unmatched entries, not ignoring
@@ -2500,7 +2514,7 @@ found no invariants.  You can get a little bit more information by using
 the @option{--output_num_samples} flag to Daikon
 (@pxref{Options to control Daikon output}).
 
-@cindex nonsensical values, ignored when computing invaraints
+@cindex nonsensical values, ignored when computing invariants
 
 Daikon's output is predicated on the assumption that all expressions
 that get evaluated are sensible.  For instance, if Daikon prints
@@ -2543,7 +2557,7 @@ about @code{x} is also true about @code{y}.  Daikon chooses one variable
 (the leader) from the set of equal variables, and only prints invariants
 over the leader.
 @c This is true, but I believe it detracts from the point.
-@c Daikon also prints equalities about the varibles in the set.
+@c Daikon also prints equalities about the variables in the set.
 
 Suppose that @code{a = b = c}.  Then Daikon will print @code{a = b} and
 @code{a = c}, but not @code{b = c}.  Furthermore, Daikon might print
@@ -2760,10 +2774,14 @@ configuration parameters.  These configuration parameters control which
 invariants are checked and reported, the statistical tests for
 invariants, which derived variables are created, and more.
 
-The configuration options are set by creating a configuration file and
+There are two ways to set configuration options.  You can 
+specify a configuration setting directly on the command line,
+using the @option{--config_option @var{name}=@var{value}} option (which you
+may repeat as many times as you want).
+Or, you can create a configuration file and
 supplying it to Daikon on the command line using the @option{--config
-@var{filename}} option.  Daikon reads all supplied configuration files
-in order, overriding the defaults.  You may wish to use the supplied
+@var{filename}} option.  Daikon applies all the command-line arguments
+in order.  You may wish to use the supplied
 example configuration file
 @file{daikon/java/daikon/config/example-settings.txt} as an example when
 creating your own configuration files.  (If you did not download
@@ -2774,9 +2792,6 @@ You can also control Daikon's output via its command-line options
 (@pxref{Running Daikon}) and via the command-line options to its front
 ends such as Chicory (@pxref{Chicory options}) or Kvasir (@pxref{Kvasir
 options}).
-
-You may also specify a configuration setting directly on the command line,
-using the @option{--config_option @var{name}=@var{value}} option.
 
 The configuration options are different from the debugging flags
 @option{--debug} and @option{--dbg @var{category}}
@@ -3931,6 +3946,10 @@ This option supplies Daikon with a single trace from one execution of
 your program.  By contrast to this option (and
 @option{--daikon-online}), if you invoke Daikon from the command line,
 you can supply Daikon with as many trace files as you wish.
+
+If the program that Chicory is tracing aborts with an error, then Chicory
+does not run Daikon, but prints a message such as ``Warning: Did not run
+Daikon because target exited with 1 status''.
 
 @item --daikon-online
 This option is like @option{--daikon}, except that no @file{.dtrace}
@@ -7049,7 +7068,7 @@ the Daikon developers.
 
 @command{AnnotateNullable} determines which variables in a Java program were ever
 null during execution.  @command{AnnotateNullable} makes it easier to use the
-@uref{http://types.cs.washington.edu/checker-framework/@/current/@/checkers-manual.html#nullness-checker, Nullness Checker}
+@uref{http://types.cs.washington.edu/checker-framework/@/current/@/checker-framework-manual.html#nullness-checker, Nullness Checker}
 that is part of the
 @uref{http://types.cs.washington.edu/@/checker-framework/, Checker Framework}.
 
@@ -7730,8 +7749,24 @@ understand Daikon's operation; @pxref{Daikon debugging options}.
 @node       Can't run Daikon
 @subsection Can't run Daikon: could not find or load main class, or NoClassDefFoundError
 
+An error such as one of these:
+@example
+Error: Could not find or load main class mypackage.MyClass
+Exception in thread "main" java.lang.NoClassDefFoundError: mypackage/MyClass
+@end example
+@exampleindent 4
+
+@noindent
+means that Java did not find the class @file{mypackage.MyClass} on your
+classpath.  To correct the problem, you need to make sure that the
+directory or jar file that contains file @file{mypackage/MyClass.class}
+is on your classpath.
+The classpath is passed as a command-line argument such as @option{-cp} or
+@option{-classpath}; if no such command-line argument is passed, the
+classpath is determined from your @env{CLASSPATH} environment variable.
+
 @exampleindent 1
-If you can't run Daikon at all and you get an error such as one of these:
+As one specific example, if the error is one of these:
 @example
 Error: Could not find or load main class daikon.Chicory
 Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
@@ -7740,19 +7775,6 @@ Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
 @noindent
 then you have not put @file{daikon.jar} on your classpath;
 @pxref{Installing Daikon}.
-
-More generally, an error such as
-@example
-Exception in thread "main" java.lang.NoClassDefFoundError: plume/FuzzyFloat
-@end example
-@exampleindent 4
-
-@noindent
-means that Java did not find the class @file{plume/FuzzyFloat} on your
-classpath.  To debug such a problem, you need to determine your
-classpath (it's your @env{CLASSPATH} environment variable under
-Mac/Linux), and the location of file @file{plume/FuzzyFloat.class} or of
-the jar file that contains it.
 
 
 @node       File input errors
@@ -8073,6 +8095,8 @@ megabytes, you would run Java like so:
 @example
 java -Xmx2048m ...
 @end example
+@noindent
+though you can use much more depending on the limitations of your JVM.
 
 If you are using Chicory's @option{--daikon} command-line argument to
 run Daikon, then you must separately indicate the amount of memory
@@ -8397,9 +8421,9 @@ rather than have Daikon ignore some of the information.
 
 
 @menu
-* Reducing program points::     
-* Reducing variables::          
-* Reducing executions::         
+* Reducing program points::
+* Reducing variables::
+* Reducing executions::
 @end menu
 
 
@@ -8570,19 +8594,25 @@ java daikon.Chicory DataStructures.StackArTester
 @end example
 
 @noindent
-fails with an error (such as ``couldn't find or load main class''), then first try
+fails with an error, then first try
 @example
 java DataStructures.StackArTester
 @end example
 
-@noindent
-which is likely to fail with the same error.
-
+@itemize
+@item
 If the latter command also fails, the problem is not with Chicory.
-First solve your Java problem, then once again attempt to use Chicory.
-
+First solve your Java problem,
+then once again attempt to use Chicory.
+@item
 If the latter command does not fail, then you have found a bug in
 Chicory; please report it if it is not already explained in this manual.
+
+(If the error is ``couldn't find or load main class'' and the
+class that cannot be found is in Chicory itself, then there is not a bug in
+Chicory.  Rather, you have failed to put @file{daikon.jar} on the classpath
+when running Chicory, as described in @ref{Simple installation}.)
+@end itemize
 
 
 @menu
@@ -8602,7 +8632,7 @@ BCEL must be in the classpath.  Normally it is found in daikon.jar.
 
 @noindent
 then the problem is most likely that your classpath does not contain
-daikon.jar.  If you are running a Daikon version post 5.2.20; then it
+daikon.jar.  If you are running a Daikon version post 5.2.20, then it
 could be caused by your classpath containing a previous version of
 daikon.jar or plume.jar.
 
@@ -8806,7 +8836,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.2.21, released January 6, 2016.
+This manual describes Daikon version 5.3.1, released April 5, 2016.
 A more detailed list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -8820,7 +8850,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.2.21
+@cindex Daikon version 5.3.1
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
@@ -8903,14 +8933,44 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE@.
 
-@sp 1
+@menu
+* Library licenses::
+* Front end licenses::
+@end menu
+
+
+@node    Library licenses
+@subsection Library licenses
+
+@menu
+* getopt license::
+* JUnit license::
+@end menu
+
+
+@c @node    Guava license
+@c @subsubsection Guava license
+@c 
+@c Daikon uses the Google Guava library, which is licensed under
+@c the Apache License Version 2.0.  A copy of this license is included
+@c with the Daikon distribution as the file
+@c @file{doc/apache-license-2.txt}.
+
+
+@node    getopt license
+@subsubsection getopt license
 
 Daikon uses the Java port of the GNU @file{getopt} library, which is
-copyright 1998 @nospellcheck{Aaron M. Renn}.  The @file{getopt} library is free software, and
+copyright 1998 @nospellcheck{Aaron M. Renn}.
+The @file{getopt} library is free software, and
 may be redistributed or modified under the terms of the GNU Library
 General Public License version 2.  A copy of this license is included
 with the Daikon distribution as the file
-@file{java/gnu/getopt/COPYING.LIB}.
+@file{doc/gnu-gpl-2.txt}.
+
+
+@node    JUnit license
+@subsubsection JUnit license
 
 Daikon's unit tests use the @command{JUnit} testing framework, which is governed
 by the Common Public License, version 1.0.  @command{JUnit} is provided on an
@@ -8931,6 +8991,11 @@ itself; this offer is made by the Daikon developers exclusively and
 not by any other party.  The Common Public License is included with the
 Daikon distribution as the file @file{java/junit/cpl-v10.html}.
 
+
+
+@node    Front end licenses
+@subsection Front end licenses
+
 Note that the front ends discussed in this manual are separate
 programs, and some are made available under different licenses.
 @c All
@@ -8942,10 +9007,24 @@ programs not derived from the Daikon invariant detection tool, you are
 neither required nor entitled to use the Daikon invariant detector
 itself under these other licenses.
 
+@menu
+* dfepl license::
+* Kvasir license::
+* Celeriac license::
+@end menu
+
+
+@node    dfepl license
+@subsubsection dfepl license
+
 The Daikon Perl front end @command{dfepl} may be used and distributed under the
 regular Daikon license or, at your option, either the GNU General
 Public License or the Perl Artistic License (that is, under the same
 terms as Perl itself).
+
+
+@node    Kvasir license
+@subsubsection Kvasir license
 
 The Daikon C/C++ front end Kvasir is based in part on the Valgrind
 dynamic program supervision framework, copyright 2000-2004
@@ -8967,6 +9046,10 @@ Public License along with Kvasir, in the file @file{kvasir/COPYING};
 if not, write to the 
 @nospellcheck{Free Software Foundation, Inc., 51 Franklin St., Fifth Floor, Boston, MA
 02110-1301, USA}.
+
+
+@node    Celeriac license
+@subsubsection Celeriac license
 
 The Daikon .NET front end Celeriac is Copyright (c) 2012 by
 @nospellcheck{Kellen Donohue}.
@@ -9171,7 +9254,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  ctype sed declsfiledir declsfiledirflat searchpath includepath
 @c  LocalWords:  GNUG disambigfilename mdas memset subarrays lackwit unsetting
 @c  LocalWords:  postprocessing structs pcc gzipped zlib baz ints std min rray
-@c  LocalWords:  ointer ifdef endif SmartPointer SmartArray malloc
+@c  LocalWords:  ointer ifdef endif SmartPointer SmartArray malloc tex toc
 @c  LocalWords:  mystring strcpy strcat smartpointers basemap namespace ansi eq
 @c  LocalWords:  protoize fallback fixups const asm inline typeid typename bool
 @c  LocalWords:  bitand bitor compl wchar xor unportable enums enum stdlib env
@@ -9182,8 +9265,8 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  runcluster xm ALG xmeans TraceSelect NOCLEAN DIFFS MergeESC pp
 @c  LocalWords:  escannotated jmlannotated dbcannotated Annnotate xml INVINFO
 @c  LocalWords:  ubs Throwable throwable rethrown WriteViolationFile MyProg
-@c  LocalWords:  callMethod isInstrumented getInvariants INVS ijmp
-@c  LocalWords:  bBoOmjpi de iconv undefine DHAVE Xie Ast rt MyPackage
+@c  LocalWords:  callMethod isInstrumented getInvariants INVS ijmp exin wp
+@c  LocalWords:  bBoOmjpi de iconv undefine DHAVE Xie Ast rt MyPackage jre
 @c  LocalWords:  superdirectory SOURCEPATH InvalidClassDataError strace lstat
 @c  LocalWords:  RuntimeException IFLNK interconvert interconvertible strdup ld
 @c  LocalWords:  lwpp ine runtime's malloced MaxPermSize JVM's MyVector perc vv
@@ -9220,4 +9303,18 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  instrumenters NoSuchMethodException myprogram glibc NonNull XP
 @c  LocalWords:  Nullable Nullness daikondir nullable NonZero jaif nonnull Rudd
 @c  LocalWords:  Holten McCamant Alexandru Salcianu Tschantz Nadya Kuzmina dec
-@c  LocalWords:  readibility subexit dups rel birthyear preprocess
+@c  LocalWords:  readibility subexit dups rel birthyear preprocess ifset
+@c  LocalWords:  nospellcheck tableindent paragraphindent exinenum ifclear
+@c  LocalWords:  firstparagraphindent codequotebacktick exampleindent dfn
+@c  LocalWords:  evenheading thispage thischaptername thischapternum hfuzz
+@c  LocalWords:  oddheading thissectionnum thissectionname everyfooting d1
+@c  LocalWords:  QuickTime QTSystem QTJava cygpath arg1 arg2 arg3 MyMain
+@c  LocalWords:  originalclasspath grep EXIT79 EXIT32 prepend Xmx256m var1
+@c  LocalWords:  prepended computeConfidence numsamples getName var2 var3
+@c  LocalWords:  jcc Java2 seq1 CSharpContract myString otherString EXIT48
+@c  LocalWords:  unsplit if'' condition1 condition2 condition3 procedure1
+@c  LocalWords:  replacement1 procedure2 replacement2 arg0 EXIT33 pack1 d2
+@c  LocalWords:  pack2 online'' EXIT11 o1 o2 SIGSEGV O0 fjalar gcc3 EXIT0
+@c  LocalWords:  I' C' S' A' P' superclasses vv1 bzip2 Xmx512m bfd dev ABI
+@c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
+@c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2

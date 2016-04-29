@@ -55,7 +55,7 @@ public final class DiscardInfo {
     this.discardFormat = inv.format();
     // this.className = inv.getClass().getName();
     this.inv = inv;
-    inv.log ("%s", discardString);
+    inv.log("%s", discardString);
   }
 
   public String discardFormat() {
@@ -75,15 +75,13 @@ public final class DiscardInfo {
   }
 
   /*@SideEffectFree*/ public String format() {
-    return (discardFormat + Global.lineSep
-            + discardCode + Global.lineSep
-            + discardString);
+    return (discardFormat + Global.lineSep + discardCode + Global.lineSep + discardString);
   }
 
   /**
    * Adds the specified string as an additional reason
    */
-  public void add_implied (String reason) {
+  public void add_implied(String reason) {
     discardString += " and " + reason;
   }
 
@@ -91,12 +89,10 @@ public final class DiscardInfo {
    * Adds an equality string to the discardString for each variable in
    * in vis which is different from the leader
    */
-  public void add_implied_vis (VarInfo[] vis) {
+  public void add_implied_vis(VarInfo[] vis) {
     for (int i = 0; i < vis.length; i++) {
       if (inv.ppt.var_infos[i] != vis[i])
         discardString += " and " + inv.ppt.var_infos[i] + "==" + vis[i];
     }
   }
-
-
 }

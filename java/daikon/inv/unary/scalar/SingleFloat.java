@@ -16,9 +16,7 @@ import typequals.*;
 /**
  * Abstract base class used to evaluate single double scalars.
  **/
-public abstract class SingleFloat
-  extends UnaryInvariant
-{
+public abstract class SingleFloat extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -33,11 +31,12 @@ public abstract class SingleFloat
   }
 
   /** Returns whether or not the specified types are valid for unary float **/
-  public final boolean valid_types (VarInfo[] vis) {
+  public final boolean valid_types(VarInfo[] vis) {
     return ((vis.length == 1) && vis[0].file_rep_type.isFloat());
   }
 
-  public VarInfo var(/*>>>@GuardSatisfied @UnknownInitialization(SingleFloat.class) @Raw(SingleFloat.class) SingleFloat this*/) {
+  public VarInfo var(
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleFloat.class) @Raw(SingleFloat.class) SingleFloat this*/ ) {
     return ppt.var_infos[0];
   }
 
@@ -45,7 +44,7 @@ public abstract class SingleFloat
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     double value = ((Double) val).doubleValue();
     if (mod_index == 0) {
@@ -55,9 +54,8 @@ public abstract class SingleFloat
     }
   }
 
-
   public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     double value = ((Double) val).doubleValue();
     if (mod_index == 0) {
@@ -82,9 +80,7 @@ public abstract class SingleFloat
     return InvariantStatus.NO_CHANGE;
   }
 
-
   public abstract InvariantStatus check_modified(double value, int count);
-
 
   public InvariantStatus check_unmodified(double value, int count) {
     return InvariantStatus.NO_CHANGE;
@@ -92,7 +88,6 @@ public abstract class SingleFloat
 
   // This has no additional suppression factories beyond those of Invariant.
 }
-
 
 //     def format(self, arg_tuple=None):
 //         if arg_tuple == None:

@@ -27,8 +27,7 @@ import org.checkerframework.checker.interning.qual.*;
 public class DSForest {
 
   // Maps the elements of the partition to their corresponding nodes.
-  HashMap<String, DSForestNode> elements =
-    new LinkedHashMap<String, DSForestNode>();
+  HashMap<String, DSForestNode> elements = new LinkedHashMap<String, DSForestNode>();
 
   // Counter for node unique ids.
   private static int idCounter = 0;
@@ -41,7 +40,10 @@ public class DSForest {
     public int rank;
     public int id;
 
-    @SuppressWarnings({"initialization.invalid.field.write.unknown", "assignment.type.incompatible"}) // weakness of FBC type system
+    @SuppressWarnings({
+      "initialization.invalid.field.write.unknown",
+      "assignment.type.incompatible"
+    }) // weakness of FBC type system
     public DSForestNode(String element) {
       this.element = element;
       this.parent = this;
@@ -56,8 +58,7 @@ public class DSForest {
    * forest. Otherwise throws an IllegalArgumentException.
    */
   public void add(String e) {
-    if (e == null)
-      throw new IllegalArgumentException("Element cannot be null.");
+    if (e == null) throw new IllegalArgumentException("Element cannot be null.");
     if (elements.containsKey(e))
       throw new IllegalArgumentException("Element already in disjoin-set forest.");
 

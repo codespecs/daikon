@@ -5,7 +5,7 @@
 ##
 ## Looks for global variables (those marked with the specified prefix that
 ## appear at every program point) and creates a new global ppt at the
-## end that contains those varibles.
+## end that contains those variables.
 
 use English;
 use strict;

@@ -162,7 +162,7 @@ std.Non_Crossing_Biased_Climb()boolean:::EXIT
 ::Other_RAC == orig(::Other_RAC)
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
-(return == 0)  ==>  (return  isPointer)
+(return == 0)  ==>  (return is a pointer)
 ::High_Confidence == 1
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
 ::Alt_Layer_Value >= 0
@@ -228,7 +228,7 @@ std.Non_Crossing_Biased_Descend()boolean:::EXIT
 ::Other_RAC == orig(::Other_RAC)
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
-(return == 0)  ==>  (return  isPointer)
+(return == 0)  ==>  (return is a pointer)
 ::High_Confidence == 1
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
 ::Alt_Layer_Value >= 0
@@ -295,7 +295,7 @@ std.Own_Above_Threat()boolean:::EXIT
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
 (return == 0)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
-(return == 0)  ==>  (return  isPointer)
+(return == 0)  ==>  (return is a pointer)
 (return == 1)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
 (return == 1)  ==>  (::Up_Separation <= ::Down_Separation)
 ::High_Confidence == 1
@@ -370,7 +370,7 @@ std.Own_Below_Threat()boolean:::EXIT
 ::Other_Capability == orig(::Other_Capability)
 ::Climb_Inhibit == orig(::Climb_Inhibit)
 (return == 0)  <==>  (::Own_Tracked_Alt > ::Other_Tracked_Alt)
-(return == 0)  ==>  (return  isPointer)
+(return == 0)  ==>  (return is a pointer)
 (return == 1)  <==>  (::Own_Tracked_Alt < ::Other_Tracked_Alt)
 (return == 1)  ==>  (::Own_Tracked_Alt_Rate >= 2)
 ::High_Confidence == 1

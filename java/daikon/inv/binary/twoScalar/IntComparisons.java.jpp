@@ -366,6 +366,7 @@ import typequals.*;
 
 /**
  * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars.
+ * Prints as <code>x EQUALShtml y</code>.
  **/
 public final class INTEQUAL
   extends SUPERCLASS IMPLEMENTSCOMPARISON {
@@ -380,7 +381,7 @@ public final class INTEQUAL
   /**
    * Boolean.  True iff INTEQUAL invariants should be considered.
    **/
-  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public static final Logger debug
     = Logger.getLogger("daikon.inv.binary.twoScalar." + INTEQUALstring);
@@ -416,16 +417,16 @@ public final class INTEQUAL
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis))
-      return (false);
+      return false;
 
     #if defined (IS_INT)
       #if defined (EQUAL)
-        return (true);
+        return true;
       #elif defined (NONEQUAL)
         if (dkconfig_integral_only)
           return (vis[0].file_rep_type.isIntegral()
                   && vis[1].file_rep_type.isIntegral());
-        return (true);
+        return true;
       #else
         return (vis[0].file_rep_type.isIntegral()
                 && vis[1].file_rep_type.isIntegral());
@@ -444,7 +445,7 @@ public final class INTEQUAL
         return result;
       #endif
     #else
-      return (true);
+      return true;
     #endif
 
 #if !(defined(EQUAL) || defined(EQUALFLOAT))
@@ -566,7 +567,7 @@ public final class INTEQUAL
 
 #ifdef EQUAL_OP
   /*@Pure*/ public boolean is_equality_inv() {
-    return (true);
+    return true;
   }
 #endif
 
@@ -585,7 +586,7 @@ public final class INTEQUAL
 
 #if (defined(EQUAL_OP) || defined(NONEQUAL_OP))
   /*@Pure*/ public boolean is_symmetric() {
-    return (true);
+    return true;
   }
 
 #else

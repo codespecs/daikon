@@ -124,7 +124,7 @@ RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name SCCS -o -name RCS -o -n
 TMPDIR ?= $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/$(USER),/tmp/$(USER))
 
 # For deterministic sorting
-LC_ALL=C
+export LC_ALL=C
 
 ## Examples of better ways to get the lists:
 # PERL_MODULES := $(wildcard *.pm)
@@ -168,7 +168,7 @@ help:
 
 compile: compile-java
 
-compile-java:
+compile-java: git-hooks
 	cd java && $(MAKE) all
 
 very-clean:
@@ -296,7 +296,7 @@ test:
 junit:
 	cd java && $(MAKE) junit
 
-# A quick test used to verify that Chicory and Diakon
+# A quick test used to verify that Chicory and Daikon
 # are working properly.
 quick-test:
 	cd examples/java-examples/StackAr; \
@@ -329,9 +329,9 @@ TAGS:
 ### Test the distribution
 ###
 
-# This is the target we use to verify that the software we about about
-# to distribute runs correctly. Typically, this is repeated for
-# Windows(Cygwin), Fedora and Ubuntu client machines.
+# This is the target we use to verify that the software we are about
+# to distribute runs correctly in a variety of target environments.
+# Currently, we test Windows(Cygwin), Fedora and Ubuntu client machines.
 distribution-check:
 	$(MAKE) -C scripts
 ifdef DAIKONCLASS_SOURCES
@@ -344,28 +344,33 @@ endif
 DISTTESTDIR := ${TMPDIR}/daikon.dist
 DISTTESTDIRJAVA := ${TMPDIR}/daikon.dist/daikon/java
 
-# Test that the files in the staging area are correct.
+# This is the target we use to do a sanity check of the distribution
+# on the machine used to build the release - prior to running the
+# 'distribution-check' target on a variety of client machines.
+# - verify we can open/unpack the distribution tar file
+# - run the junit verification tests on daikon.jar
+# - verify the released class files are all version 7
+# - verify that we can rebuild the .class files from the .java files
+# - run the junit verification tests on the class files
+# - run the quick-test
 test-staged-dist: $(STAGING_DIR)
+	## First, get and test daikon.jar.
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz)
-	## First, test daikon.jar.
 	(cd $(DISTTESTDIR); mv $(NEW_RELEASE_NAME) daikon)
 	(cd $(DISTTESTDIR)/daikon/java && \
-	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
-	## Make sure that all of the class files are 1.7 (version 51) or earlier
+	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
+	## Make sure that all of the class files are 1.7 (version 51) or earlier.
 	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 classfile_check_version 51)
-	## Second, test the .java files.
-	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
-	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(RTJAR):$(TOOLSJAR) all_javac)
-	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar junit)
-	# Test the main target of the makefile
+	## Test that we can rebuild the .class files from the .java files.
+	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(RTJAR):$(TOOLSJAR):$(DISTTESTDIRJAVA)/lib/junit-4.12.jar all_javac)
+	## Test that these new .class files work properly.
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
+	## Test the main target of the makefile.
 	cd $(DISTTESTDIR)/daikon && make
-	# test basic operation (Chicory/Daikon)
-	cd $(DISTTESTDIR)/daikon/examples/java-examples/StackAr && \
-	  javac -g `find . -name '*.java'` && \
-	  java -cp .:$(DISTTESTDIR)/daikon/daikon.jar -ea daikon.Chicory \
-		--daikon DataStructures/StackArTester
+	## Test the basic operation of Chicory/Daikon.
+	cd $(DISTTESTDIR)/daikon && $(MAKE) quick-test
 
 # I would rather define this inside the repository-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
@@ -383,6 +388,10 @@ repository-test:
 	export JAVA_HOME=/usr/lib/jvm/java
 	source ${DAIKONDIR}/scripts/daikon.bashrc
 	cd daikon && make 
+
+
+validate:
+	html5validator --ignore /doc/daikon.html /doc/daikon/ /doc/developer.html /doc/developer/ /java/api/ tools/hierarchical/clustering.html /tests/sources/
 
 
 ###########################################################################
@@ -469,15 +478,11 @@ staging:
 # renaming the staging directory to be the release directory.
 staging-to-www: $(STAGING_DIR)
 	-chmod u+w $(WWW_PARENT)
-	-chmod -R u+w $(WWW_DIR)
+	-chmod -R -f u+w $(WWW_DIR)
 	\rm -rf $(WWW_DIR)
 	\mv $(STAGING_DIR) $(WWW_DIR)
-	-chmod -R u-w $(WWW_DIR)
+	-chmod -R -f u-w $(WWW_DIR)
 	-chmod u-w $(WWW_PARENT)
-	@echo "*****"
-	@echo "Don't forget to send mail to daikon-announce and commit changes."
-	@echo "(See sample message in the 'Making a distribution' chapter of the Developer Manual.)"
-	@echo "*****"
 
 
 # Webpages of publications that use Daikon
@@ -730,3 +735,16 @@ ifndef NONETWORK
 		(cd plume-lib; git pull -q ${GIT_OPTIONS}) ; fi
 endif
 
+update-plume-jar: plume-lib-update
+ifndef CHECKERFRAMEWORK
+	$(error CHECKERFRAMEWORK is not set)
+endif
+	make -D plume-lib/java clean jar verify-plume-jar-classfile-version
+	\cp -pf plume-lib/java/plume.jar java/lib/
+
+.PHONY: git-hooks
+git-hooks: .git/hooks/pre-commit .git/hooks/post-merge
+.git/hooks/pre-commit: scripts/daikon.pre-commit
+	cp -pf $< $@
+.git/hooks/post-merge: scripts/daikon.post-merge
+	cp -pf $< $@

@@ -33,9 +33,9 @@ PolyCalc.RatNum.RatNum(int, int):::EXIT
     Variables: this this.numer this.denom n d orig(n) orig(d)
       Unmodified variables: n d
 (this.denom == 0)  ==  (\old(d) == 0)
-(this.denom == 0)  ==>  (\old(d)  isPointer)
-(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (\old(d) is a pointer)
 (this.denom == 0)  ==>  (this.denom == \old(d))
+(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer == \old(n))
 (\old(n) == 0) ==> (this.numer == 0)
 (this.numer == 0) ==> (\old(n) == 0)
@@ -75,7 +75,7 @@ PolyCalc.RatNum.approx():::EXIT
     Variables: this this.numer this.denom return orig(this) orig(this.numer) orig(this.denom)
       Unmodified variables: this this.numer this.denom
 (this.denom == 0)  ==>  (\result == Double.NaN)
-(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
@@ -162,12 +162,12 @@ PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT
     Variables: this this.numer this.denom arg arg.numer arg.denom return return.numer return.denom orig(this) orig(this.numer) orig(this.denom) orig(arg) orig(arg.numer) orig(arg.denom)
       Unmodified variables: this this.numer this.denom arg arg.numer arg.denom
 (arg.denom == 0)  ==>  ((arg.numer == 0) ==> (this.numer == 0))
-(arg.denom == 0)  ==>  (arg.denom  isPointer)
 (arg.denom == 0)  ==>  (arg.denom == \result.denom)
+(arg.denom == 0)  ==>  (arg.denom is a pointer)
 (arg.denom == 0)  ==>  (arg.numer == \result.numer)
 (arg.denom == 0)  ==>  (\result == \old(arg))
-(arg.denom == 0)  ==>  (\result.denom  isPointer)
 (arg.denom == 0)  ==>  (\result.denom == 0)
+(arg.denom == 0)  ==>  (\result.denom is a pointer)
 (arg.denom == 0)  ==>  (this.denom >= arg.denom)
 (arg.denom == 0)  ==>  (this.denom >= \result.denom)
 arg.denom >= 0
@@ -221,7 +221,7 @@ PolyCalc.RatNum.isNaN():::EXIT
     Variables: this this.numer this.denom return orig(this) orig(this.numer) orig(this.denom)
       Unmodified variables: this this.numer this.denom
 (this.denom == 0)  ==  (\result == true)
-(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 ===========================================================================
 PolyCalc.RatNum.isNegative():::ENTER
     Variables: this this.numer this.denom

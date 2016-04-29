@@ -1,26 +1,24 @@
 package daikon.tools.runtimechecker;
 
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.List;
-import java.util.*;
-
-import jtb.syntaxtree.*;
-import jtb.visitor.DepthFirstVisitor;
-import jtb.visitor.TreeDumper;
-import jtb.visitor.TreeFormatter;
-import plume.UtilMDE;
 import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.FunctionBinary;
 import daikon.tools.jtb.*;
+import java.io.StringWriter;
+import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import jtb.syntaxtree.*;
+import jtb.visitor.DepthFirstVisitor;
+import jtb.visitor.TreeDumper;
+import jtb.visitor.TreeFormatter;
+import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -56,11 +54,12 @@ public class CheckerClass {
     // f3 -> ";"
     // Get the package and imports from clazz. We'll include them.
     @SuppressWarnings("nullness") // application invariant: every body is in a compilation unit
-    /*@NonNull*/ CompilationUnit clazzCU = (CompilationUnit)Ast.getParent(CompilationUnit.class, clazz);
+    /*@NonNull*/ CompilationUnit clazzCU =
+        (CompilationUnit) Ast.getParent(CompilationUnit.class, clazz);
     NodeOptional no = clazzCU.f0;
     String packageName = null;
     if (no.present()) {
-      packageName = Ast.format(((PackageDeclaration)no.node).f2).trim();
+      packageName = Ast.format(((PackageDeclaration) no.node).f2).trim();
     } else {
       packageName = "";
     }
@@ -87,7 +86,7 @@ public class CheckerClass {
     }
     alreadyCalled = true;
     code.append("}"); // we're done declaring the class.
-    return (CompilationUnit)Ast.create("CompilationUnit", code.toString());
+    return (CompilationUnit) Ast.create("CompilationUnit", code.toString());
   }
 
   public String getCheckerClassName() {
@@ -97,5 +96,4 @@ public class CheckerClass {
   public void addDeclaration(StringBuffer decl) {
     code.append(decl);
   }
-
 }

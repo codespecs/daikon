@@ -61,7 +61,7 @@
 
 
 /**
- * Represents the invariant <code>resultvar = FUNCTION (arg1, arg2)</code>
+ * Represents the invariant <code>resultvar = FUNCTION(arg1, arg2)</code>
  * over three PRIMITIVE scalars.
  * EXTRA_INV_DOC
  */
@@ -126,9 +126,9 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   /*@Pure*/ public boolean is_symmetric() {
     #ifdef SYMMETRIC
-      return (true);
+      return true;
     #else
-      return (false);
+      return false;
     #endif
   }
 
@@ -168,7 +168,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   /*@Pure*/ public boolean is ## FUNCTION() {
-    return (true);
+    return true;
   }
 
   #ifdef EXACT

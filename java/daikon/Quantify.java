@@ -46,11 +46,12 @@ public class Quantify {
   }
 
   /** Returns a set with ELEMENT_WISE turned on if specified **/
-  public static EnumSet<QuantFlags> get_flags (boolean elementwise) {
-    if (elementwise)
-      return EnumSet.of (QuantFlags.ELEMENT_WISE);
-    else
-      return EnumSet.noneOf (QuantFlags.class);
+  public static EnumSet<QuantFlags> get_flags(boolean elementwise) {
+    if (elementwise) {
+      return EnumSet.of(QuantFlags.ELEMENT_WISE);
+    } else {
+      return EnumSet.noneOf(QuantFlags.class);
+    }
   }
 
   /**
@@ -60,16 +61,27 @@ public class Quantify {
    */
   public static abstract class Term {
     /*@SideEffectFree*/ public abstract String name(/*>>>@GuardSatisfied Term this*/);
-    /*@SideEffectFree*/ public String esc_name() { return name(); }
-    /*@SideEffectFree*/ public String jml_name() { return esc_name(); }
-    /*@SideEffectFree*/ public String jml_name(boolean in_prestate) { return jml_name(); }
-    /*@SideEffectFree*/ public String simplify_name() { return name(); }
-    /*@SideEffectFree*/ public String csharp_name() { return name(); }
-    /*@SideEffectFree*/ protected static String name_with_offset (String name, int offset) {
-      if (offset == 0)
+    /*@SideEffectFree*/ public String esc_name() {
+      return name();
+    }
+    /*@SideEffectFree*/ public String jml_name() {
+      return esc_name();
+    }
+    /*@SideEffectFree*/ public String jml_name(boolean in_prestate) {
+      return jml_name();
+    }
+    /*@SideEffectFree*/ public String simplify_name() {
+      return name();
+    }
+    /*@SideEffectFree*/ public String csharp_name() {
+      return name();
+    }
+    /*@SideEffectFree*/ protected static String name_with_offset(String name, int offset) {
+      if (offset == 0) {
         return name;
-      else
-        return String.format ("%s%+d", name, offset);
+      } else {
+        return String.format("%s%+d", name, offset);
+      }
     }
   }
 
@@ -78,7 +90,8 @@ public class Quantify {
    */
   public static class FreeVar extends Term {
     String name;
-    public FreeVar (String name) {
+
+    public FreeVar(String name) {
       this.name = name;
     }
     /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied FreeVar this*/) {
@@ -92,16 +105,25 @@ public class Quantify {
   /** Represents a constant integer **/
   public static class Constant extends Term {
     int val;
-    public Constant (int val) { this.val = val; }
-    /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied Constant this*/) { return "" + val; }
-    public int get_value() { return val; }
+
+    public Constant(int val) {
+      this.val = val;
+    }
+    /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied Constant this*/) {
+      return "" + val;
+    }
+
+    public int get_value() {
+      return val;
+    }
   }
 
   /** Represents the length of a sequence  and an optional offset **/
   public static class Length extends Term {
     VarInfo sequence;
     int offset;
-    public Length (VarInfo sequence, int offset) {
+
+    public Length(VarInfo sequence, int offset) {
       this.sequence = sequence;
       this.offset = offset;
     }
@@ -109,65 +131,60 @@ public class Quantify {
       return name();
     }
     /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied Length this*/) {
-      return name_with_offset ("size(" + sequence.name() + ")", offset);
+      return name_with_offset("size(" + sequence.name() + ")", offset);
     }
     /*@SideEffectFree*/ public String esc_name() {
-      VarInfo arr_var = get_check_array_var ("ESC");
+      VarInfo arr_var = get_check_array_var("ESC");
       if (arr_var.isPrestate()) {
         assert arr_var.postState != null; // because isPrestate() = true
-        return String.format ("\\old(%s)",
-         name_with_offset (arr_var.postState.esc_name() + ".length", offset));
+        return String.format(
+            "\\old(%s)", name_with_offset(arr_var.postState.esc_name() + ".length", offset));
       } else { // array is not orig
-        return name_with_offset (arr_var.esc_name() + ".length", offset);
+        return name_with_offset(arr_var.esc_name() + ".length", offset);
       }
     }
     /*@SideEffectFree*/ public String jml_name() {
-      VarInfo arr_var = get_check_array_var ("JML");
+      VarInfo arr_var = get_check_array_var("JML");
       if (arr_var.isPrestate()) {
         assert arr_var.postState != null; // because isPrestate() = true
-        String name = String.format ("daikon.Quant.size(%s)",
-                                     arr_var.postState.jml_name());
-        return name_with_offset (String.format ("\\old(%s)", name), offset);
+        String name = String.format("daikon.Quant.size(%s)", arr_var.postState.jml_name());
+        return name_with_offset(String.format("\\old(%s)", name), offset);
         // return String.format ("\\old(%s)", name_with_offset (name, offset));
       } else {
-        String name = String.format ("daikon.Quant.size(%s)",
-                                     arr_var.jml_name());
-        return name_with_offset (name, offset);
+        String name = String.format("daikon.Quant.size(%s)", arr_var.jml_name());
+        return name_with_offset(name, offset);
       }
     }
-    /*@SideEffectFree*/ public String jml_name (boolean in_prestate) {
-      if (!in_prestate)
-        return jml_name();
+    /*@SideEffectFree*/ public String jml_name(boolean in_prestate) {
+      if (!in_prestate) return jml_name();
 
-      VarInfo arr_var = get_check_array_var ("JML");
+      VarInfo arr_var = get_check_array_var("JML");
       if (arr_var.isPrestate()) {
         assert arr_var.postState != null; // because isPrestate() = true
-        String name = String.format ("daikon.Quant.size(%s)",
-                                     arr_var.postState.jml_name());
-        return name_with_offset (name, offset);
+        String name = String.format("daikon.Quant.size(%s)", arr_var.postState.jml_name());
+        return name_with_offset(name, offset);
       } else {
-        String name = String.format ("daikon.Quant.size(\\new(%s))",
-                                     arr_var.jml_name());
-        return name_with_offset (name, offset);
+        String name = String.format("daikon.Quant.size(\\new(%s))", arr_var.jml_name());
+        return name_with_offset(name, offset);
       }
     }
     /*@SideEffectFree*/ public String simplify_name() {
-      VarInfo arr_var = get_check_array_var ("Simplify");
-      String length = String.format ("(arrayLength %s)",
-                                     arr_var.simplify_name());
-      if (offset < 0)
-        return String.format ("(- %s %d)", length, -offset);
-      else if (offset > 0)
-        return String.format ("(+ %s %d)", length, offset);
-      else
+      VarInfo arr_var = get_check_array_var("Simplify");
+      String length = String.format("(arrayLength %s)", arr_var.simplify_name());
+      if (offset < 0) {
+        return String.format("(- %s %d)", length, -offset);
+      } else if (offset > 0) {
+        return String.format("(+ %s %d)", length, offset);
+      } else {
         return length;
+      }
     }
     /*@SideEffectFree*/ public String csharp_name() {
       VarInfo arr_var = get_check_array_var("CHARPCONTRACT");
-      return name_with_offset (arr_var.csharp_name() + ".Count()", offset);
+      return name_with_offset(arr_var.csharp_name() + ".Count()", offset);
     }
 
-    public void set_offset (int offset) {
+    public void set_offset(int offset) {
       this.offset = offset;
     }
 
@@ -178,14 +195,16 @@ public class Quantify {
     @SuppressWarnings("sideeffectfree") // throws exception in case of error
     /*@SideEffectFree*/ private VarInfo get_check_array_var(String output_format) {
       VarInfo arr_var = sequence.get_base_array_hashcode();
-      if (arr_var != null)
-        return arr_var;
+      if (arr_var != null) return arr_var;
 
-      throw new Daikon.TerminationMessage
-        (String.format("Error: Can't create %s expression for the size of an array: "
-         + "No base array (hashcode) variable declared for array '%s'"
-         + " in program point %s", output_format, sequence.name(),
-                       sequence.ppt.name()));
+      throw new Daikon.TerminationMessage(
+          String.format(
+              "Error: Can't create %s expression for the size of an array: "
+                  + "No base array (hashcode) variable declared for array '%s'"
+                  + " in program point %s",
+              output_format,
+              sequence.name(),
+              sequence.ppt.name()));
     }
   }
 
@@ -197,47 +216,46 @@ public class Quantify {
     VarInfo var;
     int offset;
 
-    public VarPlusOffset (VarInfo var) {
-      this (var, 0);
+    public VarPlusOffset(VarInfo var) {
+      this(var, 0);
     }
 
-    public VarPlusOffset (VarInfo var, int offset) {
+    public VarPlusOffset(VarInfo var, int offset) {
       this.var = var;
       this.offset = offset;
     }
 
     /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied VarPlusOffset this*/) {
-      return name_with_offset (var.name(), offset);
+      return name_with_offset(var.name(), offset);
     }
 
     /*@SideEffectFree*/ public String esc_name() {
-      return name_with_offset (var.esc_name(), offset);
+      return name_with_offset(var.esc_name(), offset);
     }
 
     /*@SideEffectFree*/ public String jml_name() {
-      return name_with_offset (var.jml_name(), offset);
+      return name_with_offset(var.jml_name(), offset);
     }
 
-    /*@SideEffectFree*/ public String jml_name (boolean in_prestate) {
-      if (!in_prestate)
-        return jml_name();
+    /*@SideEffectFree*/ public String jml_name(boolean in_prestate) {
+      if (!in_prestate) return jml_name();
 
       if (var.isPrestate()) {
         assert var.postState != null; // because isPrestate() = true
-        return name_with_offset (var.postState.jml_name(), offset);
+        return name_with_offset(var.postState.jml_name(), offset);
       } else {
-        return name_with_offset (String.format ("\\new(%s)", var.jml_name()),
-                                 offset);
+        return name_with_offset(String.format("\\new(%s)", var.jml_name()), offset);
       }
     }
 
     /*@SideEffectFree*/ public String simplify_name() {
-      if (offset < 0)
-        return String.format ("(- %s %d)", var.simplify_name(), -offset);
-      else if (offset > 0)
-        return String.format ("(+ %s %d)", var.simplify_name(), offset);
-      else
+      if (offset < 0) {
+        return String.format("(- %s %d)", var.simplify_name(), -offset);
+      } else if (offset > 0) {
+        return String.format("(+ %s %d)", var.simplify_name(), offset);
+      } else {
         return var.simplify_name();
+      }
     }
   }
 
@@ -246,7 +264,8 @@ public class Quantify {
     public VarInfo var;
     /** index into the variable.  If null, variable is not a sequence. **/
     public /*@Nullable*/ Term index;
-    public QuantifyReturn (VarInfo var) {
+
+    public QuantifyReturn(VarInfo var) {
       this.var = var;
     }
   }
@@ -261,14 +280,16 @@ public class Quantify {
 
     // create empty result
     QuantifyReturn[] result = new QuantifyReturn[vars.length];
-    for (int ii = 0; ii < vars.length; ii++)
-      result[ii] = new QuantifyReturn (vars[ii]);
+    for (int ii = 0; ii < vars.length; ii++) {
+      result[ii] = new QuantifyReturn(vars[ii]);
+    }
 
     // Determine all of the simple identifiers used by these variables
     Set<String> simples = new HashSet<String>();
     for (VarInfo vi : vars) {
-      for (String name : vi.get_all_simple_names())
-        simples.add (name);
+      for (String name : vi.get_all_simple_names()) {
+        simples.add(name);
+      }
     }
     // System.out.printf ("simple names = %s\n", simples);
 
@@ -278,8 +299,7 @@ public class Quantify {
       VarInfo vi = vars[ii];
 
       // If this variable is not an array, there is not much to do
-      if (!vi.file_rep_type.isArray())
-        continue;
+      if (!vi.file_rep_type.isArray()) continue;
 
       // Get a unique free variable name
       String idx_name;
@@ -291,7 +311,6 @@ public class Quantify {
     }
     return (result);
   }
-
 
   /**
    * Class that represents an ESC quantification over one or two variables
@@ -306,7 +325,7 @@ public class Quantify {
     private String quant;
     private Term[] indices;
 
-    public ESCQuantification (EnumSet<QuantFlags> flags, VarInfo... vars) {
+    public ESCQuantification(EnumSet<QuantFlags> flags, VarInfo... vars) {
       this.flags = flags.clone();
 
       assert vars != null;
@@ -314,35 +333,44 @@ public class Quantify {
       assert vars[0].file_rep_type.isArray();
 
       // quantification for first var
-      Term index1 = new FreeVar ("i");
-      String quant1 = bld_quant (vars[0], index1);
+      Term index1 = new FreeVar("i");
+      String quant1 = bld_quant(vars[0], index1);
       VarInfo arr_var1 = vars[0].get_array_var();
-      String arr_var1_index = arr_var1.esc_name (index1.esc_name());
+      String arr_var1_index = arr_var1.esc_name(index1.esc_name());
 
       // If there is a second array variable, get quant for it
       if ((vars.length > 1) && (vars[1].file_rep_type.isArray())) {
-        Term index2 = new FreeVar ("j");
-        String quant2 = bld_quant (vars[1], index2);
+        Term index2 = new FreeVar("j");
+        String quant2 = bld_quant(vars[1], index2);
         indices = new Term[] {index1, index2};
-        quants  = new String[] {quant1, quant2};
-        if (flags.contains (QuantFlags.ELEMENT_WISE))
-          quant = String.format("(\\forall int %s, %s; (%s && %s && %s == %s)",
-                                 index1.esc_name(), index2.esc_name(),
-                                 quant1, quant2,
-                                 index1.esc_name(), index2.esc_name());
+        quants = new String[] {quant1, quant2};
+        if (flags.contains(QuantFlags.ELEMENT_WISE))
+          quant =
+              String.format(
+                  "(\\forall int %s, %s; (%s && %s && %s == %s)",
+                  index1.esc_name(),
+                  index2.esc_name(),
+                  quant1,
+                  quant2,
+                  index1.esc_name(),
+                  index2.esc_name());
         else
-          quant = String.format ("(\\forall int %s, %s; (%s && %s)",
-                       index1.esc_name(), index2.esc_name(), quant1, quant2);
+          quant =
+              String.format(
+                  "(\\forall int %s, %s; (%s && %s)",
+                  index1.esc_name(),
+                  index2.esc_name(),
+                  quant1,
+                  quant2);
 
         VarInfo arr_var2 = vars[1].get_array_var();
         arr_vars = new VarInfo[] {arr_var1, arr_var2};
-        String arr_var2_index = arr_var2.esc_name (index2.esc_name());
+        String arr_var2_index = arr_var2.esc_name(index2.esc_name());
         arr_vars_indexed = new String[] {arr_var1_index, arr_var2_index};
       } else { // only one array variable
         indices = new Term[] {index1};
         quants = new String[] {quant1};
-        quant = String.format ("(\\forall int %s; (%s)", index1.esc_name(),
-                               quant1);
+        quant = String.format("(\\forall int %s; (%s)", index1.esc_name(), quant1);
         arr_vars = new VarInfo[] {arr_var1};
         arr_vars_indexed = new String[] {arr_var1_index};
       }
@@ -353,11 +381,13 @@ public class Quantify {
      * var using index.  The expression is of the form
      * lower_bound <= index && index &le; upper_bound
      */
-    private static String bld_quant (VarInfo var, Term index) {
-      return String.format ("%s <= %s && %s <= %s",
-                            var.get_lower_bound().esc_name(),
-                            index.esc_name(), index.esc_name(),
-                            var.get_upper_bound().esc_name());
+    private static String bld_quant(VarInfo var, Term index) {
+      return String.format(
+          "%s <= %s && %s <= %s",
+          var.get_lower_bound().esc_name(),
+          index.esc_name(),
+          index.esc_name(),
+          var.get_upper_bound().esc_name());
     }
 
     /**
@@ -375,9 +405,9 @@ public class Quantify {
      * Returns the specified array variable indexed by its index.
      * For example, if the array variable is 'a.b[]' and the index is 'i',
      * returns a.b[i]
-      **/
-    public String get_arr_vars_indexed (int num) {
-      return arr_vars_indexed [num];
+     **/
+    public String get_arr_vars_indexed(int num) {
+      return arr_vars_indexed[num];
     }
   }
 
@@ -391,18 +421,17 @@ public class Quantify {
     String[] arr_vars_indexed;
     /*@Nullable*/ String[] indices;
 
-    public SimplifyQuantification (EnumSet<QuantFlags> flags, VarInfo... vars) {
+    public SimplifyQuantification(EnumSet<QuantFlags> flags, VarInfo... vars) {
       this.flags = flags.clone();
 
       assert vars != null;
       assert (vars.length == 1) || (vars.length == 2) : vars.length;
       assert vars[0].file_rep_type.isArray();
 
-      if (flags.contains (QuantFlags.ADJACENT)
-          || flags.contains (QuantFlags.DISTINCT))
+      if (flags.contains(QuantFlags.ADJACENT) || flags.contains(QuantFlags.DISTINCT))
         assert vars.length == 2;
 
-     QuantifyReturn[] qrets = quantify(vars);
+      QuantifyReturn[] qrets = quantify(vars);
 
       // build the forall predicate
       StringBuffer int_list, conditions;
@@ -414,8 +443,7 @@ public class Quantify {
         conditions = new StringBuffer();
         for (int i = 0; i < qrets.length; i++) {
           Term idx = qrets[i].index;
-          if (idx == null)
-            continue;
+          if (idx == null) continue;
           VarInfo vi = qrets[i].var;
           Term low = vi.get_lower_bound();
           Term high = vi.get_upper_bound();
@@ -424,43 +452,38 @@ public class Quantify {
             conditions.append(" ");
           }
           int_list.append(idx.simplify_name());
-          conditions.append( "(<= " + low.simplify_name()
-                             + " " + idx.simplify_name() + ")");
-          conditions.append(" (<= " + idx.simplify_name() + " "
-                            + high.simplify_name() + ")");
-          if (flags.contains (QuantFlags.ELEMENT_WISE) && (i >= 1)) {
+          conditions.append("(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
+          conditions.append(" (<= " + idx.simplify_name() + " " + high.simplify_name() + ")");
+          if (flags.contains(QuantFlags.ELEMENT_WISE) && (i >= 1)) {
             // Term[] _boundv = qret.bound_vars.get(i-1);
             // Term _idx = _boundv[0], _low = _boundv[1];
             @SuppressWarnings("nullness")
-            /*@NonNull*/ Term _idx = qrets[i-1].index;
-            Term _low = qrets[i-1].var.get_lower_bound();
+            /*@NonNull*/ Term _idx = qrets[i - 1].index;
+            Term _low = qrets[i - 1].var.get_lower_bound();
             if (_low.simplify_name().equals(low.simplify_name())) {
-              conditions.append(" (EQ " + _idx.simplify_name() + " "
-                                + idx.simplify_name() + ")");
+              conditions.append(" (EQ " + _idx.simplify_name() + " " + idx.simplify_name() + ")");
             } else {
-              conditions.append(" (EQ (- " + _idx.simplify_name() + " "
-                                + _low.simplify_name() + ")");
-              conditions.append(    " (- " + idx.simplify_name() + " "
-                                    + low.simplify_name() + "))");
+              conditions.append(
+                  " (EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
+              conditions.append(" (- " + idx.simplify_name() + " " + low.simplify_name() + "))");
             }
           }
-          if (i == 1 && (flags.contains (QuantFlags.ADJACENT)
-                         || flags.contains (QuantFlags.DISTINCT))) {
+          if (i == 1
+              && (flags.contains(QuantFlags.ADJACENT) || flags.contains(QuantFlags.DISTINCT))) {
             // Term[] _boundv = qret.bound_vars.get(i-1);
             // Term prev_idx = _boundv[0];
             @SuppressWarnings("nullness")
-            /*@NonNull*/ Term prev_idx = qrets[i-1].index;
-            if (flags.contains (QuantFlags.ADJACENT))
-              conditions.append(" (EQ (+ " + prev_idx.simplify_name() + " 1) "
-                                + idx.simplify_name() + ")");
-            if (flags.contains (QuantFlags.DISTINCT))
-              conditions.append(" (NEQ " + prev_idx.simplify_name() + " "
-                                + idx.simplify_name() + ")");
+            /*@NonNull*/ Term prev_idx = qrets[i - 1].index;
+            if (flags.contains(QuantFlags.ADJACENT))
+              conditions.append(
+                  " (EQ (+ " + prev_idx.simplify_name() + " 1) " + idx.simplify_name() + ")");
+            if (flags.contains(QuantFlags.DISTINCT))
+              conditions.append(
+                  " (NEQ " + prev_idx.simplify_name() + " " + idx.simplify_name() + ")");
           }
         }
       }
-      quantification = "(FORALL (" + int_list + ") " + "(IMPLIES (AND "
-        + conditions + ") ";
+      quantification = "(FORALL (" + int_list + ") " + "(IMPLIES (AND " + conditions + ") ";
 
       // stringify the terms
       List<String> avi_list = new ArrayList<String>(vars.length);
@@ -469,7 +492,7 @@ public class Quantify {
         if (qret.index != null) {
           Term index = qret.index;
           VarInfo arr_var = qret.var.get_array_var();
-          arr_var_indexed = arr_var.simplify_name (index.simplify_name());
+          arr_var_indexed = arr_var.simplify_name(index.simplify_name());
           // System.out.printf ("vi = %s, arr_var = %s\n", vi, arr_var);
         } else {
           arr_var_indexed = qret.var.simplify_name();
@@ -483,12 +506,11 @@ public class Quantify {
       // note that the index should be relative to the slice, not relative
       // to the original array (we used to get this wrong)
       indices = new /*@Nullable*/ String[vars.length];
-      for (int i=0; i < qrets.length; i++) {
+      for (int i = 0; i < qrets.length; i++) {
         // Term[] boundv = qret.bound_vars.get(i);
         // Term idx_var = boundv[0];
         QuantifyReturn qret = qrets[i];
-        if (qret.index == null)
-          continue;
+        if (qret.index == null) continue;
         String idx_var_name = qret.index.simplify_name();
         String lower_bound = qret.var.get_lower_bound().simplify_name();
         String idx_expr = "(- " + idx_var_name + " " + lower_bound + ")";
@@ -509,13 +531,13 @@ public class Quantify {
      * For example, if the array variable is 'a[]' and the index is 'i',
      * returns 'select i a'
      **/
-    public String get_arr_vars_indexed (int num) {
-      return arr_vars_indexed [num];
+    public String get_arr_vars_indexed(int num) {
+      return arr_vars_indexed[num];
     }
 
     /** Returns the specified index **/
     @SuppressWarnings("nullness:return.type.incompatible") // possible application invariant?
-    public String get_index (int num) {
+    public String get_index(int num) {
       assert indices[num] != null; // will this assertion fail?
       return indices[num];
     }

@@ -8,8 +8,8 @@
 #endif
 
   // default is that it is not this function, overriden in the subclass
-  /*@Pure*/ public boolean is ## FUNCTION () {
-    return (false);
+  /*@Pure*/ public boolean is ## FUNCTION() {
+    return false;
   }
 
 #define SYMMETRIC 1

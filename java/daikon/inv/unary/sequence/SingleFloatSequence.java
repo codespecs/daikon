@@ -12,10 +12,7 @@ import typequals.*;
 /**
  * Abstract base class used to evaluate single double sequences.
  **/
-
-public abstract class SingleFloatSequence
-  extends SingleSequence
-{
+public abstract class SingleFloatSequence extends SingleSequence {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -30,17 +27,17 @@ public abstract class SingleFloatSequence
   }
 
   /** Returns whether or not the specified types are valid  **/
-  public final boolean valid_types (VarInfo[] vis) {
+  public final boolean valid_types(VarInfo[] vis) {
     return ((vis.length == 1)
-            && vis[0].file_rep_type.baseIsFloat()
-            && vis[0].file_rep_type.isArray());
+        && vis[0].file_rep_type.baseIsFloat()
+        && vis[0].file_rep_type.isArray());
   }
 
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
     // System.out.println("SingleFloatSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
@@ -54,9 +51,8 @@ public abstract class SingleFloatSequence
     return InvariantStatus.NO_CHANGE;
   }
 
-
   public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
-    assert ! falsified;
+    assert !falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
     double[] value = (double[]) val;
@@ -88,9 +84,7 @@ public abstract class SingleFloatSequence
   public InvariantStatus check_unmodified(double /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
-
 }
-
 
 //     def format(self, arg_tuple=None):
 //         if arg_tuple == None:

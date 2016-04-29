@@ -22,9 +22,9 @@ orig(d) % this.denom == 0
 ===========================================================================
 PolyCalc.RatNum.RatNum(int, int):::EXIT
 (this.denom == 0)  <==>  (orig(d) == 0)
-(this.denom == 0)  ==>  (orig(d)  isPointer)
-(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (orig(d) is a pointer)
 (this.denom == 0)  ==>  (this.denom == orig(d))
+(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer == orig(n))
 (orig(n) == 0) ==> (this.numer == 0)
 (this.numer == 0) ==> (orig(n) == 0)
@@ -60,7 +60,7 @@ PolyCalc.RatNum.approx():::EXIT
 this.numer == orig(this.numer)
 this.denom == orig(this.denom)
 (this.denom == 0)  ==>  (return == Double.NaN)
-(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 (this.denom == 0)  ==>  (this.numer != this.denom)
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
@@ -136,12 +136,12 @@ this.denom == orig(this.denom)
 arg.numer == orig(arg.numer)
 arg.denom == orig(arg.denom)
 (arg.denom == 0)  ==>  ((arg.numer == 0) ==> (this.numer == 0))
-(arg.denom == 0)  ==>  (arg.denom  isPointer)
 (arg.denom == 0)  ==>  (arg.denom == return.denom)
+(arg.denom == 0)  ==>  (arg.denom is a pointer)
 (arg.denom == 0)  ==>  (arg.numer == return.numer)
 (arg.denom == 0)  ==>  (return == orig(arg))
-(arg.denom == 0)  ==>  (return.denom  isPointer)
 (arg.denom == 0)  ==>  (return.denom == 0)
+(arg.denom == 0)  ==>  (return.denom is a pointer)
 (arg.denom == 0)  ==>  (this.denom >= arg.denom)
 (arg.denom == 0)  ==>  (this.denom >= return.denom)
 arg.denom >= 0
@@ -197,7 +197,7 @@ PolyCalc.RatNum.isNaN():::EXIT
 this.numer == orig(this.numer)
 this.denom == orig(this.denom)
 (this.denom == 0)  <==>  (return == true)
-(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (this.denom is a pointer)
 ===========================================================================
 PolyCalc.RatNum.isNaN():::EXIT;condition="return == true"
 this.denom == 0

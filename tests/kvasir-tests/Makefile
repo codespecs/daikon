@@ -13,11 +13,26 @@
 #    category to contain it.
 #
 
+FIND_VERSION := $(shell make --version 2>&1 | head -1)
+ifeq (4.,$(findstring 4.,$(FIND_VERSION)))
+  MPARG := -Orecurse
+else
+  MPARG :=
+endif
+
 default: summary
 
-regression-tests: nightly-summary-w-daikon results
+.PHONY: regression-tests
+regression-tests:
+	$(MAKE) --jobs=4 $(MPARG) nightly-tests__diffs-w-daikon-if-working
+	$(MAKE) nightly-summary-only-w-daikon
+	@$(MAKE) --no-print-directory results
 
-TEMP-regression-tests: TEMP-nightly-summary-w-daikon results
+.PHONY: TEMP-regression-tests
+TEMP-regression-tests:
+	$(MAKE) --jobs=4 $(MPARG) TEMP-nightly-tests__diffs-w-daikon-if-working
+	$(MAKE) TEMP-nightly-summary-only-w-daikon
+	@$(MAKE) --no-print-directory results
 
 summary: default-projects__diffs
 	$(MAKE) summary-only
@@ -72,8 +87,9 @@ TEMP-nightly-tests__%: default-projects__% TEMP-medium-easy-tests__%
 update-all:
 	$(MAKE) nightly-tests__update-goals
 
+.PHONY: clean-all
 clean-all:
-	$(MAKE) nightly-tests__clean
+	$(MAKE) --jobs=4 $(MPARG) nightly-tests__clean
 
 
 default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
@@ -200,10 +216,10 @@ medium-crypto-tests__%: do-rijndael__%
 # 'make do-SomeDiectory_target'
 # e.g. 'make do-bzip2__clean'
 do-%__quietly:
-	@$(MAKE) --no-print-directory -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
+	@$(MAKE) --jobs=1 --no-print-directory -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
 
 do-%:
-	@$(MAKE) -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
+	@$(MAKE) --jobs=1 -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
 
 # removes fields before the size (ie, permissions, owner, group).
 PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; if ($$1 > 0) { $$failure++; print "$$1\t$$2\t$$3\n";} END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'

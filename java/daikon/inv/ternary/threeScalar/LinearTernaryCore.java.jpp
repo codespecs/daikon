@@ -847,7 +847,7 @@ public final class CLASSNAME
           wrapper.log ("Calc new plane with points %s %s %s %s",
                        def_points[0], def_points[1], def_points[2], def_points[3]);
       } catch (Exception e) {
-        return (false);
+        return false;
       }
 
       // if the a, b, or c is a new min/max remember it.
@@ -881,13 +881,13 @@ public final class CLASSNAME
         if (debug.isLoggable(Level.FINE))
           debug.fine (wrapper.ppt.name() + ": New a (" + a + ") and b ("
                       + b + ") and c (" + c + ")");
-        return (true);
+        return true;
       } else {
-        return (false);
+        return false;
       }
     } else { // this point doesn't increase the separation
 
-      return (false);
+      return false;
     }
   }
 
@@ -1264,13 +1264,15 @@ public final class CLASSNAME
 
       // Same formula if all of the points match
       if (values_seen != other.values_seen)
-        return (false);
+        return false;
+      // This and elsewhere seem to assume that values_seen < MINTRIPLES;
+      // is that necessarily true?
       for (int ii = 0; ii < values_seen; ii++) {
         // used to use !=, but that test seems wrong
         if (! def_points[ii].equals(other.def_points[ii]))
-          return (false);
+          return false;
       }
-      return (true);
+      return true;
 
     } else {
       return ((values_seen >= MINTRIPLES)
@@ -1302,7 +1304,7 @@ public final class CLASSNAME
    * samples.  And those will appear to have different formulas.
    */
   public boolean mergeFormulasOk() {
-    return (true);
+    return true;
   }
 
   /**

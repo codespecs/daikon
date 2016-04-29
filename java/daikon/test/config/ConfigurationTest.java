@@ -1,14 +1,12 @@
 package daikon.test.config;
 
-import junit.framework.*;
 import daikon.config.*;
+import junit.framework.*;
 
-public class ConfigurationTest
-  extends TestCase
-{
+public class ConfigurationTest extends TestCase {
 
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     junit.textui.TestRunner.run(new TestSuite(ConfigurationTest.class));
   }
 
@@ -21,5 +19,4 @@ public class ConfigurationTest
     // Executed for side effect.
     Configuration.getInstance();
   }
-
 }
