@@ -852,9 +852,11 @@ public final class TypeStack {
     System.out.printf("testing %s...", testClass);
 
     ClassLoaderRepository load;
-    if (testClass.getClassLoader() == null)
+    if (testClass.getClassLoader() == null) {
       load = new ClassLoaderRepository(java.lang.ClassLoader.getSystemClassLoader());
-    else load = new ClassLoaderRepository(testClass.getClassLoader());
+    } else {
+      load = new ClassLoaderRepository(testClass.getClassLoader());
+    }
 
     // How can load be null?  Looks like an error in the test.
     if (load == null) throw new RuntimeException("Null class loader for class " + testClass);
