@@ -134,8 +134,6 @@ public class Runtime {
   }
 
   /** Stack of active methods. **/
-  // /*@GuardedBy("Runtime.class")*/ Map<Thread, /*@GuardedBy("Runtime.class")*/ Stack</*@GuardedBy("Runtime.class")*/ CallInfo>> is the ideal annotated type,
-  // however this is not possible since Map is not a proper parameterized type.
   private static /*@GuardedBy("Runtime.class")*/ Map<Thread, Stack<CallInfo>> thread_to_callstack =
       new LinkedHashMap<Thread, Stack<CallInfo>>();
 
