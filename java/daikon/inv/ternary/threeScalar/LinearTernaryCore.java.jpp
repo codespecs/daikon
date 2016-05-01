@@ -1156,8 +1156,7 @@ public final class CLASSNAME
       return format_simplify(vix, viy, viz, a, b, c, d);
     }
 
-    if ((format.isJavaFamily()))
-      {
+    if ((format.isJavaFamily())) {
       #if defined(TYPEDOUBLE)
         return
           // Add a 1 to each side of the equation because FuzzyFloat
@@ -1181,8 +1180,7 @@ public final class CLASSNAME
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
-        || (format == OutputFormat.CSHARPCONTRACT))
-      {
+        || (format == OutputFormat.CSHARPCONTRACT)) {
         String eq = " == ";
         return formatTerm(a, vix, true)
           + formatTerm(b, viy, (a == 0))

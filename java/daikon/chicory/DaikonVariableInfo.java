@@ -686,8 +686,8 @@ public abstract class DaikonVariableInfo
     }
     theName += ")";
 
-    if (offset.length() > 0) // offset already starts with "this"
-    {
+    if (offset.length() > 0) {
+      // offset already starts with "this"
     } else {
       offset = "this.";
     }
@@ -885,8 +885,8 @@ public abstract class DaikonVariableInfo
       return !(eltType.isPrimitive());
     }
 
-    if (type.getName().equals("java.lang.Object")) //Objects
-    {
+    if (type.getName().equals("java.lang.Object")) {
+      // Objects
       // System.out.println ("type is object " + type);
       return true;
     } else if (Modifier.isAbstract(type.getModifiers())) {
@@ -897,8 +897,8 @@ public abstract class DaikonVariableInfo
     } else if (type.isInterface()) {
       // System.out.println ("type is interface " + type);
       return true;
-    } else if (type.isArray()) //arrays of non-primitive types
-    {
+    } else if (type.isArray()) {
+      // Arrays of non-primitive types
       // System.out.println ("type is array " + type);
       Class<?> eltType = type.getComponentType();
       assert eltType != null; // because type is an array

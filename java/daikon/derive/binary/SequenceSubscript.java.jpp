@@ -167,12 +167,9 @@ public final class SEQUENCESCALARSUBSCRIPT
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/ public String csharp_name (String index) {
     String[] split = seqvar().csharp_array_split();
-    if (seqvar().isPrestate())
-    {
+    if (seqvar().isPrestate()) {
       return String.format ("Contract.OldValue(%s[%s]%s)", seqvar().enclosing_var.postState.csharp_name(), inside_csharp_name (sclvar(), true, index_shift), split[1]);
-    }
-    else
-    {
+    } else {
       return String.format ("%s[%s%s]%s", split[0], sclvar().csharp_name(), shift_str (index_shift), split[1]);
     }
   }

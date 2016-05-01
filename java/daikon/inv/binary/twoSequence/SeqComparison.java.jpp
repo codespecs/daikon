@@ -374,8 +374,7 @@ public class SEQSEQINTEQUAL
       return format_simplify();
     }
 
-    if (format == OutputFormat.DAIKON)
-    {
+    if (format == OutputFormat.DAIKON) {
       String name1 = var1().name_using(format);
       String name2 = var2().name_using(format);
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
@@ -388,14 +387,12 @@ public class SEQSEQINTEQUAL
       #endif
     }
 
-    if (format == OutputFormat.CSHARPCONTRACT)
-    {
+    if (format == OutputFormat.CSHARPCONTRACT) {
       String name1 = var1().csharp_collection_string();
       String name2 = var2().csharp_collection_string();
 
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
-      if (var1().aux.hasOrder())
-      {
+      if (var1().aux.hasOrder()) {
         String dbc = "L" + (EQUALSstringDBC).substring(1);
         return name1 + "." + dbc + "(" + name2 + ")";
       } else {

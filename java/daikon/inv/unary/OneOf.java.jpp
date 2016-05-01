@@ -490,8 +490,7 @@ public final class ONEOFSCALAR
         if (curVarMatch == false) {
           sb.append(TOSTRING(elts[i]));
         }
-      }
-      else {
+      } else {
         sb.append(TOSTRING(elts[i]));
       }
 #elif defined(FLOAT) || defined(ELTFLOAT)
@@ -522,8 +521,7 @@ public final class ONEOFSCALAR
         if (curVarMatch == false) {
           sb.append(TOSTRING(elts[i]));
         }
-      }
-      else {
+      } else {
         sb.append(TOSTRING(elts[i]));
       }
 #else
@@ -688,8 +686,7 @@ public final class ONEOFSCALAR
                 if (Global.fuzzy.eq(constantVal, elts[0]) || (Double.isNaN(constantVal) && Double.isNaN(elts[0]))) {
                   return varname + " == " + vi.name();
                 }
-              }
-              else {
+              } else {
                 Object constantVal = vi.constantValue();
                 if (constantVal.equals(elts[0])) {
                   return varname + " == " + vi.name();
@@ -979,8 +976,7 @@ public String format_csharp_contract() {
           result = varname + " == " + "null";
         } else
           result = varname + " != null";
-        }
-      else { // num_elts == 2
+      } else { // num_elts == 2
         // I have never observed this case happening.
         // Daikon: does not handle this case
         // ESC: returns unimplemented
