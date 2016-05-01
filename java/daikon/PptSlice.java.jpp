@@ -92,10 +92,12 @@ public final class PPTSLICE1 extends PptSlice {
     super(parent, var_infos);
     assert var_infos.length == ARITY;
 
-    if (debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
+    if (debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE)) {
       debug.info("Created " + PPTSLICE1STRING + " " + this.name());
-    if (Debug.logOn())
+    }
+    if (Debug.logOn()) {
       Debug.log (getClass(), this, "Created");
+    }
   }
 
 #if defined(ARITY1)
@@ -134,8 +136,9 @@ public final class PPTSLICE1 extends PptSlice {
    **/
   public void instantiate_invariants(List</*@Prototype*/ Invariant> proto_invs) {
 
-    if (Debug.logOn())
+    if (Debug.logOn()) {
       log ("instantiate invariants");
+    }
 
     // Do nothing if the variables aren't compatible
     #if defined (ARITY1)
@@ -159,10 +162,12 @@ public final class PPTSLICE1 extends PptSlice {
       VarInfo v1 = var_infos[0];
       VarInfo v2 = var_infos[1];
       VarInfo v3 = var_infos[2];
-      if (!v1.compatible(v2))
+      if (!v1.compatible(v2)) {
         return;
-      if (!v2.compatible(v3))
+      }
+      if (!v2.compatible(v3)) {
         return;
+      }
       assert v1.compatible(v3);
     #else
       #error "Bad Arity"
@@ -193,8 +198,9 @@ public final class PPTSLICE1 extends PptSlice {
       @SuppressWarnings("nullness") // application invariant, see comment above
       /*@NonNull*/ Invariant inv = proto.instantiate (this);
       addInvariant(inv);
-      if (Debug.logOn())
+      if (Debug.logOn()) {
         inv.log ("Created invariant %s ss = %s", inv.format(), ss);
+      }
     }
   }
 
@@ -264,19 +270,22 @@ public final class PPTSLICE1 extends PptSlice {
       if (var_infos[i].missingOutOfBounds()) {
         List<Invariant> result = new ArrayList<Invariant>();
         for (Invariant inv : invs) {
-          if (PrintInvariants.print_discarded_invariants)
+          if (PrintInvariants.print_discarded_invariants) {
             DiscReasonMap.put(inv, DiscardCode.bad_sample,
                   var_infos[i].name() + " array index was out of bounds");
+          }
           inv.falsify();
           result.add (inv);
-          if (Invariant.logOn())
+          if (Invariant.logOn()) {
             inv.log ("destroyed because %s array index out of bounds",
                      var_infos[i].name());
+          }
         }
-        if (VarInfo.debugMissing.isLoggable (Level.FINE))
+        if (VarInfo.debugMissing.isLoggable (Level.FINE)) {
           VarInfo.debugMissing.fine ("Removing slice " + this +
                           " because var " + var_infos[i].name() +
                           " array index out of bounds");
+        }
         return (result);
       }
     }
@@ -500,8 +509,9 @@ public final class PPTSLICE1 extends PptSlice {
 
     invs.add(invariant);
     Global.instantiated_invariants++;
-    if (Invariant.logOn())
+    if (Invariant.logOn()) {
       invariant.log ("Instantiated %s", invariant.format());
+    }
 
   }
 
@@ -551,9 +561,10 @@ public final class PPTSLICE1 extends PptSlice {
       assert inv.ppt == this;
     }
 
-    if (Debug.logOn())
+    if (Debug.logOn()) {
       result.log ("Copied " + newInvs.size() + " invariants from "
                   + this.name() + " with " + invs.size() + " invariants");
+    }
     result.invs.addAll (newInvs);
     if (PptSliceEquality.debug.isLoggable(Level.FINE)) {
       PptSliceEquality.debug.fine ("cloneAndPivot: newInvs " + invs);
@@ -605,8 +616,9 @@ public final class PPTSLICE1 extends PptSlice {
 
       // Skip any children that have not seen any samples
       if (ppt.num_samples() == 0) {
-        if (debugMerge.isLoggable (Level.FINE))
+        if (debugMerge.isLoggable (Level.FINE)) {
           debugMerge.fine ("-- slice ignored (no samples) " + ppt.name());
+        }
         continue;
       }
 
@@ -620,8 +632,9 @@ public final class PPTSLICE1 extends PptSlice {
       for (int j = 0; j < var_infos.length; j++) {
         VarInfo pv = var_infos[j];
         VarInfo cv = rel.childVar (pv);
-        if (cv == null)
+        if (cv == null) {
           continue child_loop;
+        }
         cvis[j] = cv.canonicalRep();
         cvis_sorted[j] = cv.canonicalRep();
       }
@@ -636,9 +649,10 @@ public final class PPTSLICE1 extends PptSlice {
       // bound var.  Out of bounds variables destroy all invariants in
       // the slice (since the variable is deemed to be nonsensical)
       if (slice_missing (ppt, cvis)) {
-        if (debugMerge.isLoggable (Level.FINE))
+        if (debugMerge.isLoggable (Level.FINE)) {
           debugMerge.fine ("-- slice ignored (missing) " + ppt.name()
                            + " vars " + Debug.toString (cvis_sorted));
+        }
         continue;
       }
 
@@ -653,14 +667,16 @@ public final class PPTSLICE1 extends PptSlice {
       // invariants must exist at each child to exist at the parent)
       PPTSLICE1 cslice = (PPTSLICE1) ppt.findSlice (cvis_sorted);
       if ((cslice == null) || (cslice.invs.size() == 0)) {
-        if (Debug.logOn())
+        if (Debug.logOn()) {
           this.log ("slice not found " + ppt.name() + " "
                    + VarInfo.arrayToString (cvis_sorted)
                    + " num_samples= " + ppt.num_samples()
                    + " ppt.constants = " + ppt.constants);
-        if (debugMerge.isLoggable (Level.FINE))
+        }
+        if (debugMerge.isLoggable (Level.FINE)) {
           debugMerge.fine ("-- slice not found " + ppt.name()
                            + " vars " + Debug.toString (cvis_sorted));
+        }
         return;
       }
 
@@ -707,8 +723,9 @@ public final class PPTSLICE1 extends PptSlice {
     }
 
     log ("Found " + all_invs.size() + " invariants to merge");
-    if (debugMerge.isLoggable (Level.FINE) && (valid_child_count == 0))
+    if (debugMerge.isLoggable (Level.FINE) && (valid_child_count == 0)) {
       debugMerge.fine ("-- No valid children found");
+    }
 
     // For each invariant found, find the list of invariants of the
     // same type (type corresponds basically but not exactly to the
@@ -738,23 +755,26 @@ public final class PPTSLICE1 extends PptSlice {
         // this shouldn't happen
         System.out.println ("Found " + child_invs.size() + " invariants at "
                          + name() + " (" + valid_child_count + " children)");
-        for (Invariant child_inv : child_invs)
+        for (Invariant child_inv : child_invs) {
           System.out.printf ("-- Invariant = '%s' [%s] @%s%n",
                              child_inv.repr(), child_inv.getClass(),
                              child_inv.ppt);
+        }
         assert child_invs.size() <= valid_child_count;
       }
       if (child_invs.size() == valid_child_count) {
         Invariant first = child_invs.get(0);
-        if (Debug.logOn())
+        if (Debug.logOn()) {
           first.log ("Attempting merge of %s invariants into ppt %s",
                      child_invs.size(), name());
+        }
         Invariant parent_inv = first.merge (child_invs, this);
         if (parent_inv != null) {
           invs.add (parent_inv);
-          if (Debug.logOn())
+          if (Debug.logOn()) {
             parent_inv.log ("Merge successful of %s into %s",
                             parent_inv.format(), name());
+          }
         }
       } else {
         if (Debug.logOn()) {

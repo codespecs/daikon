@@ -16,8 +16,9 @@ public class StringInfo extends DaikonVariableInfo {
 
   @Override
   public Object getMyValFromParentVal(Object value) {
-    if ((value == null) || (value instanceof NonsensicalObject))
+    if ((value == null) || (value instanceof NonsensicalObject)) {
       return NonsensicalObject.getInstance();
+    }
     return value;
   }
 

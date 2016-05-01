@@ -92,8 +92,9 @@ public class CLASSNAME
   /** LinearBinary is only valid on integral types **/
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
     #if defined (TYPELONG)
       // Don't look for linearbinary over hashcodes and booleans
@@ -160,8 +161,9 @@ public class CLASSNAME
     // Merge the cores and build a new invariant containing the merged core
     CLASSNAME result = new CLASSNAME (parent_ppt);
     CORECLASS newcore = core.merge (cores, result);
-    if (newcore == null)
+    if (newcore == null) {
       return (null);
+    }
     result.core = newcore;
     return (result);
   }
@@ -259,8 +261,9 @@ public class CLASSNAME
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof CLASSNAME)
+      if (inv instanceof CLASSNAME) {
         return (CLASSNAME) inv;
+      }
     }
     return null;
   }

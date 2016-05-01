@@ -51,13 +51,13 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
    * a valid VarInfo triple out of vi1 and vi2 (null otherwise)
    */
   public static /*@Nullable*/ ProglangType returnType(VarInfo vi1, VarInfo vi2) {
-    if ((vi1.rep_type == ProglangType.INT_ARRAY) && (vi2.rep_type == ProglangType.INT))
+    if ((vi1.rep_type == ProglangType.INT_ARRAY) && (vi2.rep_type == ProglangType.INT)) {
       return ProglangType.INT;
-    else if ((vi1.rep_type == ProglangType.INT) && (vi2.rep_type == ProglangType.INT_ARRAY))
+    } else if ((vi1.rep_type == ProglangType.INT) && (vi2.rep_type == ProglangType.INT_ARRAY)) {
       return ProglangType.INT;
-    else if ((vi1.rep_type == ProglangType.INT) && (vi2.rep_type == ProglangType.INT))
+    } else if ((vi1.rep_type == ProglangType.INT) && (vi2.rep_type == ProglangType.INT)) {
       return ProglangType.INT_ARRAY;
-    else return null;
+    } else return null;
   }
 
   /**

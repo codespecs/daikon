@@ -239,8 +239,9 @@ public class CLASSNAME
     // Merge the cores and build a new invariant containing the merged core
     CLASSNAME result = new CLASSNAME (parent_ppt);
     CORECLASS newcore = core.merge (cores, result);
-    if (newcore == null)
+    if (newcore == null) {
       return (null);
+    }
     result.core = newcore;
     return (result);
   }

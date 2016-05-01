@@ -768,8 +768,9 @@ public class Instrument implements ClassFileTransformer {
       il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
     }
 
-    if (!exitIter.hasNext())
+    if (!exitIter.hasNext()) {
       throw new RuntimeException("Not enough exit locations in the exitIter");
+    }
 
     il.append(call_enter_exit(c, "exit", exitIter.next()));
     return (il);
@@ -1238,8 +1239,9 @@ public class Instrument implements ClassFileTransformer {
     InstructionHandle old_start = il.getStart();
     InstructionHandle new_start = il.insert(nl);
     for (InstructionTargeter it : old_start.getTargeters()) {
-      if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
+      if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen)) {
         it.updateTarget(old_start, new_start);
+      }
     }
 
     // For Java 7 and beyond the StackMapTable is part of the
@@ -1415,10 +1417,10 @@ public class Instrument implements ClassFileTransformer {
 
     // Call the specified method
     Type[] method_args = null;
-    if (method_name.equals("exit"))
+    if (method_name.equals("exit")) {
       method_args =
           new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ, Type.OBJECT, Type.INT};
-    else method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
+    } else method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
     il.append(
         c.ifact.createInvoke(
             runtime_classname, method_name, Type.VOID, method_args, Const.INVOKESTATIC));
@@ -1505,8 +1507,9 @@ public class Instrument implements ClassFileTransformer {
       Type t = arg_types[ii];
       /*if (t instanceof ObjectType)
         arg_type_strings[ii] = ((ObjectType) t).getClassName();
-        else
+        else {
         arg_type_strings[ii] = t.getSignature().replace('/', '.');
+        }
       */
       arg_type_strings[ii] = t.toString();
     }
@@ -1666,10 +1669,10 @@ public class Instrument implements ClassFileTransformer {
       }
     }
 
-    if (shouldInclude)
+    if (shouldInclude) {
       return new MethodInfo(
           class_info, mgen.getName(), arg_names, arg_type_strings, exit_locs, isIncluded);
-    else return null;
+    } else return null;
   }
 
   /**
@@ -1873,8 +1876,9 @@ public class Instrument implements ClassFileTransformer {
   /*@Pure*/
   private static boolean is_chicory(String classname) {
 
-    if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/Test"))
+    if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/Test")) {
       return true;
+    }
     if (classname.equals("daikon/PptTopLevel$PptType")) return true;
     if (classname.startsWith("daikon/util/UtilMDE")) return true;
     return false;

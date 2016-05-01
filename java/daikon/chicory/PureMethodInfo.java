@@ -164,8 +164,9 @@ public class PureMethodInfo extends DaikonVariableInfo {
    * from from a primitive!
    */
   public static Object convertWrapper(Object obj) {
-    if (obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList)
+    if (obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList) {
       return obj;
+    }
 
     if (obj instanceof Integer) {
       return new Runtime.IntWrap((Integer) obj);

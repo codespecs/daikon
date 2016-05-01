@@ -300,8 +300,9 @@ public final class TypeStack {
   private static OperandStack copyOfStack(OperandStack parent) {
     /*OperandStack copy = new OperandStack(MAX);
 
-    for (Type el : parent)
+    for (Type el : parent) {
         copy.push(el);
+        }
 
 
     return copy;*/
@@ -934,8 +935,9 @@ public final class TypeStack {
       /*>>>@UnknownInitialization @Raw TypeStack this,*/
       Type... types) {
     for (int i = 0; i < types.length; i++) {
-      if (!sameType(top(stack, i), types[i]))
+      if (!sameType(top(stack, i), types[i])) {
         throw new Error("Wanted " + types[i] + " but got " + top(stack, i));
+      }
     }
   }
 

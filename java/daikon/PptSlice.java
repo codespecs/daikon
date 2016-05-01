@@ -396,8 +396,9 @@ public abstract class PptSlice extends Ppt {
   /*@Pure*/ public boolean is_inv_true(Invariant inv) {
 
     if (contains_inv_exact(inv)) {
-      if (Debug.logOn() && (Daikon.current_inv != null))
+      if (Debug.logOn() && (Daikon.current_inv != null)) {
         Daikon.current_inv.log("inv %s exists", inv.format());
+      }
       return true;
     }
 
@@ -406,14 +407,16 @@ public abstract class PptSlice extends Ppt {
     // over the leaders, it should have been created.
     DiscardInfo di = inv.isObviousStatically(var_infos);
     if (di != null) {
-      if (Debug.logOn() && (Daikon.current_inv != null))
+      if (Debug.logOn() && (Daikon.current_inv != null)) {
         Daikon.current_inv.log("inv %s is obv statically", inv.format());
+      }
       return true;
     }
 
     boolean suppressed = inv.is_ni_suppressed();
-    if (suppressed && Debug.logOn() && (Daikon.current_inv != null))
+    if (suppressed && Debug.logOn() && (Daikon.current_inv != null)) {
       Daikon.current_inv.log("inv %s is ni suppressed", inv.format());
+    }
     return (suppressed);
   }
 

@@ -72,7 +72,7 @@ public class ParentFilter extends InvariantFilter {
                 inv.ppt.var_infos[j],
                 inv.ppt.var_infos[j].get_equalitySet_vars(),
                 rel);
-            for (VarInfo evi : inv.ppt.var_infos[j].get_equalitySet_vars())
+            for (VarInfo evi : inv.ppt.var_infos[j].get_equalitySet_vars()) {
               inv.log(
                   "var %s index %d, dp %b, depth %d, complex %d, idp %s, name %s, param vars %s",
                   evi,
@@ -83,6 +83,7 @@ public class ParentFilter extends InvariantFilter {
                   evi.isDerivedParam(),
                   evi.get_VarInfoName(),
                   evi.ppt.getParamVars());
+            }
           }
           continue outer;
         }
@@ -138,7 +139,7 @@ public class ParentFilter extends InvariantFilter {
             break;
           }
           if (!(pv.name().equals("this") || pGuardedVars.contains(pv))) {
-            if (debug)
+            if (debug) {
               System.out.printf(
                   "Not in guarding list %s for %s: parent var %s at %s for %s at %s%n",
                   guardedVars,
@@ -147,9 +148,10 @@ public class ParentFilter extends InvariantFilter {
                   rel.parent,
                   v.name(),
                   rel.child);
+            }
             VarInfo pgv = pGuardedVars.size() > 0 ? pGuardedVars.get(0) : null;
             assert (pgv != pv);
-            if (debug && pgv != null)
+            if (debug && pgv != null) {
               System.out.printf(
                   "%s is index %d at %s, %s is index %d at %s%n",
                   pgv,
@@ -158,6 +160,7 @@ public class ParentFilter extends InvariantFilter {
                   pv,
                   pv.varinfo_index,
                   pv.ppt.name);
+            }
             var_mismatch = true;
             break;
           }
@@ -172,7 +175,7 @@ public class ParentFilter extends InvariantFilter {
               rel);
           for (VarInfo cvi : inv.ppt.var_infos) {
             inv.log("child variable %s matches parent variable %s", cvi, rel.parentVar(cvi));
-            for (VarInfo evi : cvi.get_equalitySet_vars())
+            for (VarInfo evi : cvi.get_equalitySet_vars()) {
               inv.log(
                   "var %s index %d, dp %b, depth %d, complex %d",
                   evi,
@@ -180,6 +183,7 @@ public class ParentFilter extends InvariantFilter {
                   evi.isDerivedParamAndUninteresting(),
                   evi.derivedDepth(),
                   evi.complexity());
+            }
           }
         }
         return true;

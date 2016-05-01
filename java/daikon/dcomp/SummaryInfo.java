@@ -80,10 +80,11 @@ public class SummaryInfo {
 
     // Split around the - separator and make sure there are only two tokens
     String[] si = annotation.split("-");
-    if (si.length != 2)
+    if (si.length != 2) {
       throw new BadSummaryAnnotation(
           "method %s: annotation not in the form" + " 'static|instance-fully_qualified_name'",
           method);
+    }
     invoke_type = si[0].intern();
 
     // Make sure the invoke type is either instance or static

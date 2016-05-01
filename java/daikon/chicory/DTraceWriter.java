@@ -67,8 +67,9 @@ public class DTraceWriter extends DaikonWriter {
 
     //get the root of the method's traversal pattern
     RootInfo root = mi.traversalEnter;
-    if (root == null)
+    if (root == null) {
       throw new RuntimeException("Traversal pattern not initialized at method " + mi.method_name);
+    }
 
     if (debug_vars) {
       System.out.printf("Entering %s%n%s%n", DaikonWriter.methodEntryName(member), root);
@@ -101,9 +102,10 @@ public class DTraceWriter extends DaikonWriter {
 
     //gets the traversal pattern root for this method exit
     RootInfo root = mi.traversalExit;
-    if (root == null)
+    if (root == null) {
       throw new RuntimeException(
           "Traversal pattern not initialized for method " + mi.method_name + " at line " + lineNum);
+    }
 
     //make sure the line number is valid
     //i.e., it is one of the exit locations in the MethodInfo for this method

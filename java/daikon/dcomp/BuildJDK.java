@@ -281,8 +281,9 @@ public class BuildJDK {
         JarEntry entry = entries.nextElement();
         // System.out.printf ("processing entry %s%n", entry);
         final String entryName = entry.getName();
-        if (!entryName.startsWith(prefixOfFilesToInclude) && !entryName.startsWith("META-INF"))
+        if (!entryName.startsWith(prefixOfFilesToInclude) && !entryName.startsWith("META-INF")) {
           continue;
+        }
         if (entryName.endsWith("/")) continue;
         if (entryName.endsWith("~")) continue;
         if (entryName.endsWith(".class")) all_classes.add(entryName.replace(".class", ""));
@@ -386,9 +387,10 @@ public class BuildJDK {
     File classpath = new File(dir, classfile.getName());
     inst_jc.dump(classpath);
     _numFilesProcessed++;
-    if ((_numFilesProcessed % 100) == 0)
+    if ((_numFilesProcessed % 100) == 0) {
       System.out.printf(
           "Processed %d/%d classes at %tc%n", _numFilesProcessed, classmap.size(), new Date());
+    }
   }
 
   /** Copy our various helper classes to java/lang **/

@@ -198,8 +198,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     try {
       while (currentLine != null) {
         currentLine = input.readLine();
-        if (currentLine != null && !isComment(currentLine) && !isWhitespace(currentLine))
+        if (currentLine != null && !isComment(currentLine) && !isWhitespace(currentLine)) {
           return currentLine;
+        }
       }
     } catch (IOException e) {
       throw new RuntimeException(e.toString());

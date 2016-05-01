@@ -419,13 +419,13 @@ public class ExtractConsequent {
    **/
   private static String simplify_inequalities(String condition) {
     if (contains_exactly_one(condition, inequality_pattern)) {
-      if (gteq_pattern.matcher(condition).find())
+      if (gteq_pattern.matcher(condition).find()) {
         condition = gteq_pattern.matcher(condition).replaceFirst("<");
-      else if (lteq_pattern.matcher(condition).find())
+      } else if (lteq_pattern.matcher(condition).find()) {
         condition = lteq_pattern.matcher(condition).replaceFirst(">");
-      else if (neq_pattern.matcher(condition).find())
+      } else if (neq_pattern.matcher(condition).find()) {
         condition = neq_pattern.matcher(condition).replaceFirst("==");
-      else throw new Error("this can't happen");
+      } else throw new Error("this can't happen");
     }
     return condition;
   }

@@ -402,7 +402,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       //         debug.fine ("  vi value: " + viValue);
       //         debug.fine ("  le value: " + leaderValue);
       //       }
-      if (Debug.logOn())
+      if (Debug.logOn()) {
         Debug.log(
             getClass(),
             ppt.parent,
@@ -420,6 +420,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
                 + ","
                 + leaderMod
                 + "]");
+      }
 
       result.add(vi);
       i.remove();

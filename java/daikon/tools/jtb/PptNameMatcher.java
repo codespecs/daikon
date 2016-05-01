@@ -169,8 +169,9 @@ public class PptNameMatcher {
     if (debug_getMatches) System.out.printf("getMatches(%s, %s, ...)%n", classname, methodname);
     if (methodname.equals("<init>")) {
       methodname = simpleName(classname);
-      if (debug_getMatches)
+      if (debug_getMatches) {
         System.out.printf("new methodname: getMatches(%s, %s, ...)%n", classname, methodname);
+      }
     }
 
     if (debug_getMatches) System.out.println("getMatch goal = " + classname + " " + methodname);
@@ -203,18 +204,20 @@ public class PptNameMatcher {
                 && methodname.equals(pptMethodName.substring(pptMethodName.lastIndexOf('$') + 1))));
 
     if (!(classname_matches && methodname_matches)) {
-      if (debug_getMatches)
+      if (debug_getMatches) {
         System.out.printf(
             "getMatch: class name %s and method name %s DO NOT match candidate.%n",
             pptClassName,
             pptMethodName);
+      }
       return false;
     }
-    if (debug_getMatches)
+    if (debug_getMatches) {
       System.out.printf(
           "getMatch: class name %s and method name %s DO match candidate.%n",
           classname,
           methodname);
+    }
 
     List<String> pptTypeStrings = extractPptArgs(pptName);
 
@@ -238,9 +241,10 @@ public class PptNameMatcher {
         }
       }
       if (!OK_outer_this) {
-        if (debug_getMatches)
+        if (debug_getMatches) {
           System.out.println(
               "arg lengths mismatch: " + pptTypeStrings.size() + ", " + method_params.size());
+        }
         return false;
       }
     }
@@ -282,8 +286,9 @@ public class PptNameMatcher {
 
     String astTypeString = getUngenerifiedType(astFormalParameter);
 
-    if (debug_getMatches)
+    if (debug_getMatches) {
       System.out.println("Comparing " + pptTypeString + " to " + astTypeString + ":");
+    }
 
     if (Ast.typeMatch(pptTypeString, astTypeString)) {
       if (debug_getMatches) System.out.println("Match arg: " + pptTypeString + " " + astTypeString);
@@ -295,8 +300,9 @@ public class PptNameMatcher {
       return true;
     }
 
-    if (debug_getMatches)
+    if (debug_getMatches) {
       System.out.println("Mismatch arg: " + pptTypeString + " " + astTypeString);
+    }
 
     return false;
   }
@@ -306,8 +312,9 @@ public class PptNameMatcher {
     @SuppressWarnings("nullness") // application invariant
     /*@NonNull*/ String pptFullMethodName = ppt_name.getSignature();
 
-    if (debug_getMatches)
+    if (debug_getMatches) {
       System.out.println("in extractPptArgs: pptFullMethodName = " + pptFullMethodName);
+    }
     int lparen = pptFullMethodName.indexOf('(');
     int rparen = pptFullMethodName.indexOf(')');
     assert lparen > 0;

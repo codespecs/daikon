@@ -171,10 +171,11 @@ public class CLASSNAME
   }
 
   public String format_simplify() {
-    if (Invariant.dkconfig_simplify_define_predicates)
+    if (Invariant.dkconfig_simplify_define_predicates) {
       return format_simplify_defined();
-    else
+    } else {
       return format_simplify_explicit();
+    }
   }
 
   private String format_simplify_defined() {
@@ -270,8 +271,9 @@ public class CLASSNAME
 
   public InvariantStatus check_modified (PRIMITIVE[] a1, PRIMITIVE[] a2,
                                         int count) {
-    if ((a1 == null) || (a2 == null))
+    if ((a1 == null) || (a2 == null)) {
       return InvariantStatus.FALSIFIED;
+    }
 
     #if defined(SUB)
       int result = INDEX_OF(a2, a1);
@@ -279,19 +281,21 @@ public class CLASSNAME
       int result = INDEX_OF(a1, a2);
     #endif
 
-    if (result == -1)
+    if (result == -1) {
       return InvariantStatus.FALSIFIED;
-    else
+    } else {
       return InvariantStatus.NO_CHANGE;
+    }
   }
 
   public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2,
                                       int count) {
     InvariantStatus is = check_modified (a1, a2, count);
-    if ((is == InvariantStatus.FALSIFIED) && Debug.logOn())
+    if ((is == InvariantStatus.FALSIFIED) && Debug.logOn()) {
       log ("%s destroyed by %s %s",
            format(), Debug.toString(a1),
            Debug.toString(a2));
+    }
     return (is);
   }
 
@@ -443,13 +447,15 @@ public class CLASSNAME
           throw new Error();
         }
         boolean left_included = false, right_included = false;
-        if (super_left_var == null)
+        if (super_left_var == null) {
           left_included = true;
+        }
         if (super_left_var == sub_left_var) {
           if (super_left_shift < sub_left_shift) left_included = true;
         }
-        if (super_right_var == null)
+        if (super_right_var == null) {
           right_included = true;
+        }
         if (super_right_var == sub_right_var) {
           if (super_right_shift > sub_right_shift) right_included = true;
         }
@@ -474,11 +480,13 @@ public class CLASSNAME
         boolean start2 = sss2.from_start;
         if (index1 == index2) {
           if (start1 == true && start2 == true) {
-            if (shift1 <= shift2)
+            if (shift1 <= shift2) {
               return Pair.of(discardCode, discardString + " [shift1]");
+            }
           } else if (start1 == false && start2 == false) {
-            if (shift1 >= shift2)
+            if (shift1 >= shift2) {
               return Pair.of(discardCode, discardString + " [shift2]");
+            }
           }
         }
       } else {
@@ -500,8 +508,9 @@ public class CLASSNAME
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof CLASSNAME)
+      if (inv instanceof CLASSNAME) {
         return (CLASSNAME) inv;
+      }
     }
     return null;
   }
@@ -715,24 +724,26 @@ public class CLASSNAME
           throw new Error();
         }
         boolean left_included, right_included;
-        if (super_left_var == null)
+        if (super_left_var == null) {
           left_included = true;
-        else if (sub_left_var == null) // we know super_left_var != null here
+        } else if (sub_left_var == null) // we know super_left_var != null here
           left_included = false;
-        else
+        else {
           left_included
             = VarInfo.compare_vars(super_left_var, super_left_shift,
                                    sub_left_var, sub_left_shift,
                                    true /* <= */);
-        if (super_right_var == null)
+        }
+        if (super_right_var == null) {
           right_included = true;
-        else if (sub_right_var == null) // we know super_right_var != null here
+        } else if (sub_right_var == null) // we know super_right_var != null here
           right_included = false;
-        else
+        else {
           right_included
             = VarInfo.compare_vars(super_right_var, super_right_shift,
                                    sub_right_var, sub_right_shift,
                                    false /* >= */);
+        }
 //         System.out.println("Is " + subvar.name() + " contained in "
 //                            + supervar.name()
 //                            + "? left: " + left_included + ", right: "
@@ -803,9 +814,10 @@ public class CLASSNAME
 
           // Check to see if there is a subsequence over the supervar
           if (ppt_parent.is_subsequence (subvar, supervar_part)) {
-            if (Debug.logOn())
+            if (Debug.logOn()) {
               inv.log ("ObvSubSeq- true from A subseq B[0..n] %s/%s",
                        subvar.name(), supervar_part.name());
+            }
             return true;
           }
         }

@@ -111,8 +111,9 @@ public class SUBSET
 
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
     #if 0
       // JHP: This code is removed because these sorts of static checks
@@ -193,10 +194,11 @@ public class SUBSET
   }
 
   public String format_simplify() {
-    if (Invariant.dkconfig_simplify_define_predicates)
+    if (Invariant.dkconfig_simplify_define_predicates) {
       return format_simplify_defined();
-    else
+    } else {
       return format_simplify_explicit();
+    }
   }
 
   private String format_simplify_defined() {
@@ -271,14 +273,17 @@ public class SUBSET
 
   public InvariantStatus check_modified(LONG[] a1, LONG[] a2, int count) {
 #if (defined(SUB) || defined(SUBFLOAT))
-    if (!IS_SUBSET(a1, a2))
+    if (!IS_SUBSET(a1, a2)) {
 #else
-    if (!IS_SUBSET(a2, a1))
-    #endif
-    {
+    if (!IS_SUBSET(a2, a1)) {
+#endif
       return InvariantStatus.FALSIFIED;
+    } else {
+      return InvariantStatus.NO_CHANGE;
     }
-    return InvariantStatus.NO_CHANGE;
+#if (defined(balance_curlies_in_cpp_file))
+    }
+#endif
   }
 
   public InvariantStatus add_modified(LONG[] a1, LONG[] a2, int count) {
@@ -350,8 +355,9 @@ public class SUBSET
   public static /*@Nullable*/ SUBSET find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof SUBSET)
+      if (inv instanceof SUBSET) {
         return (SUBSET) inv;
+      }
     }
     return null;
   }

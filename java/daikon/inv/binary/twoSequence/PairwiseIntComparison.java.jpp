@@ -266,12 +266,14 @@ public class PAIRWISEINTEQUAL
   /** PAIRWISEINTEQUAL is only valid on integral types **/
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
     #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-      if (!(vis[0].type.ELEMENTISTYPE && vis[1].type.ELEMENTISTYPE))
+      if (!(vis[0].type.ELEMENTISTYPE && vis[1].type.ELEMENTISTYPE)) {
         return false;
+      }
     #endif
 
     return true;
@@ -280,16 +282,18 @@ public class PAIRWISEINTEQUAL
   /** instantiates the invariant on the specified slice **/
   protected PAIRWISEINTEQUAL instantiate_dyn (/*>>> @Prototype PAIRWISEINTEQUAL this,*/ PptSlice slice) {
     PAIRWISEINTEQUAL inv = new PAIRWISEINTEQUAL(slice);
-    if (logOn())
+    if (logOn()) {
       inv.log ("instantiate");
+    }
     return inv;
   }
 
   #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
   protected PAIRWISEINTEQUAL(PAIRWISEINTEQUAL_SWAP swapped_pic) {
     super(swapped_pic.ppt);
-    if (logOn())
+    if (logOn()) {
       log ("Instantiated from resurrect_done_swapped");
+    }
   }
   #endif
 
@@ -332,8 +336,9 @@ public class PAIRWISEINTEQUAL
     // Subsequence invariants are implied by the same invariant over
     // the supersequence
     DiscardInfo di = superseq_implies (vis);
-    if (di != null)
+    if (di != null) {
       return (di);
+    }
 
     return null;
 
@@ -351,10 +356,12 @@ public class PAIRWISEINTEQUAL
     // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
     VarInfo v1 = vis[0];
     VarInfo v2 = vis[1];
-    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSEQUENCE))
+    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSEQUENCE)) {
       return (null);
-    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE))
+    }
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE)) {
       return (null);
+    }
     @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
     @SuppressWarnings("nullness") // checker bug: flow
@@ -486,9 +493,10 @@ public class PAIRWISEINTEQUAL
 
     public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
                                         int count) {
-      if (logDetail())
+      if (logDetail()) {
         log (debug, "saw add_modified (" + ArraysMDE.toString(a1) +
              ", " + ArraysMDE.toString(a2) + ")");
+      }
       return check_modified(a1, a2, count);
     }
 
@@ -521,8 +529,9 @@ public class PAIRWISEINTEQUAL
   public static /*@Nullable*/ PAIRWISEINTEQUAL find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof PAIRWISEINTEQUAL)
+      if (inv instanceof PAIRWISEINTEQUAL) {
         return (PAIRWISEINTEQUAL) inv;
+      }
     }
     return null;
   }

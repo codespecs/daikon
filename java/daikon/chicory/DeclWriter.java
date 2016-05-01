@@ -327,10 +327,12 @@ public class DeclWriter extends DaikonWriter {
 
     // Look for and print any hierarchy relations
     List<VarRelation> relations = new ArrayList<VarRelation>();
-    for (DaikonVariableInfo child : root)
+    for (DaikonVariableInfo child : root) {
       find_relations(null, mi.is_static(), null, child, relations);
-    for (VarRelation relation : relations)
+    }
+    for (VarRelation relation : relations) {
       outFile.println("parent parent " + relation.parent_ppt_name + " " + relation.id);
+    }
 
     // Print each variable
     for (DaikonVariableInfo childOfRoot : root) {
@@ -414,9 +416,10 @@ public class DeclWriter extends DaikonWriter {
     for (DaikonVariableInfo child : root) {
       find_relations(cinfo, false, null, child, relations);
     }
-    for (VarRelation relation : relations)
+    for (VarRelation relation : relations) {
       outFile.println(
           "parent " + relation.type + " " + relation.parent_ppt_name + " " + relation.id);
+    }
 
     // Write out the variables
     for (DaikonVariableInfo childOfRoot : root) {
@@ -510,8 +513,9 @@ public class DeclWriter extends DaikonWriter {
      **/
     public String relation_str(DaikonVariableInfo var) {
       String out = parent_ppt_name + " " + id;
-      if (!var.isStatic() && (local_prefix != null) && !local_prefix.equals(parent_prefix))
+      if (!var.isStatic() && (local_prefix != null) && !local_prefix.equals(parent_prefix)) {
         out += " " + var.getName().replaceFirst(Pattern.quote(local_prefix), parent_prefix);
+      }
       return out;
     }
 

@@ -33,8 +33,9 @@ public class ProglangTypeTest extends TestCase {
     String[] a1 = (String[]) a;
     String[] b1 = (String[]) b;
     boolean result = comparrcomparator.compare(a1, b1) == 0;
-    if (!result)
+    if (!result) {
       System.out.println("Arrays differ: " + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(b));
+    }
     return result;
   }
 

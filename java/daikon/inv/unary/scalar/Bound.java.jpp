@@ -283,8 +283,9 @@ public class LOWERBOUND
   /** LOWERBOUND is only valid on integral types **/
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
     return (vis[0].file_rep_type.BASE_IS_INTEGRAL);
     }
@@ -328,8 +329,9 @@ public class LOWERBOUND
             // If variable is a double, then use fuzzy comparison
             if (vi.rep_type == ProglangType.DOUBLE) {
               Double constantVal = (Double)vi.constantValue();
-              if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1)))
+              if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1))) {
                 return name + " " + GTESTR + " " + vi.name();
+              }
             }
             // Otherwise just use the equals method
             else {
@@ -384,8 +386,9 @@ public class LOWERBOUND
           // If variable is a double, then use fuzzy comparison
           if (vi.rep_type == ProglangType.DOUBLE) {
             Double constantVal = (Double)vi.constantValue();
-            if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1)))
+            if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1))) {
               return name + " " + GTESTR + " " + vi.name();
+            }
           }
           // Otherwise just use the equals method
           else {
@@ -780,8 +783,9 @@ public class LOWERBOUND
      * empty. */
 #else
     if (other instanceof UPPERBOUND) {
-      if (MIN() GT ((UPPERBOUND) other).MAX())
+      if (MIN() GT ((UPPERBOUND) other).MAX()) {
         return true;
+      }
     }
 #endif
     if (other instanceof ONEOFSCALAR) {
@@ -794,8 +798,9 @@ public class LOWERBOUND
   public static /*@Nullable*/ LOWERBOUND find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof LOWERBOUND)
+      if (inv instanceof LOWERBOUND) {
         return (LOWERBOUND) inv;
+      }
     }
     return null;
   }

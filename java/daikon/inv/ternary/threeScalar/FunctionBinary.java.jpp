@@ -155,8 +155,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /** CLASSNAME is only valid on IS_INTEGRAL types **/
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
     // Make sure that each variable is integral (not boolean or hashcode)
     if (!vis[0].file_rep_type.IS_INTEGRAL
@@ -203,12 +204,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
     for (int ii = 0; ii < subclasses.length; ii++) {
       Class</*@Prototype*/ CLASSNAME> subc = subclasses[ii];
       String function = subc.getName();
-      if (function.indexOf ("CLOVER") >= 0)
+      if (function.indexOf ("CLOVER") >= 0) {
         continue;
+      }
       function = function.replaceFirst (".*FunctionBinary\\$", "");
       function = function.replaceFirst ("_.*", "");
-      if (function.equals ("SubClass"))
+      if (function.equals ("SubClass")) {
         continue;
+      }
       /*@Prototype*/ CLASSNAME[] fb_arr = functions.get (function);
       if (fb_arr == null) {
         fb_arr = new /*@Prototype*/ CLASSNAME[7];
@@ -259,8 +262,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
             // System.out.println ("attempting instantiation of " + fb.getClass());
             if ((ss == null) || !ss.suppressed (slice)) {
               Invariant inv = fb.instantiate_dyn (slice);
-              if (Debug.logOn() && (inv != null))
+              if (Debug.logOn() && (inv != null)) {
                 inv.log ("instantiated non-suppressed invariant %s", inv.format());
+              }
               result.add (inv);
             }
           } else /* NIS not enabled */ {
@@ -321,8 +325,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
                                       PRIMITIVE arg2, int count) {
     // This implementation relies on func having no side effects.
     try {
-      if (! EQUAL(result, func (arg1, arg2)))
+      if (! EQUAL(result, func (arg1, arg2))) {
         return InvariantStatus.FALSIFIED;
+      }
     } catch (Exception e) {
         return InvariantStatus.FALSIFIED;
     }
@@ -391,18 +396,21 @@ public abstract class CLASSNAME extends SUPERCLASS {
     assert var_order != -1;
 
     // If the var order hasn't changed, we don't need to do anything
-    if (var_order == get_var_order())
+    if (var_order == get_var_order()) {
       return (this);
+    }
 
     // Find the class that corresponds to the new order
-    if (functions.isEmpty())
+    if (functions.isEmpty()) {
       build_func_list();
+    }
     int func_id = get_function_id();
     /*@Prototype*/ CLASSNAME[] fb_arr = func_list.get (func_id);
     assert fb_arr != null;
     for (int ii = 0; ii < fb_arr.length; ii++)
-      if ((fb_arr[ii] != null) && (fb_arr[ii].get_var_order() == var_order))
+      if ((fb_arr[ii] != null) && (fb_arr[ii].get_var_order() == var_order)) {
         return (fb_arr[ii].instantiate_dyn (ppt));
+      }
 
     throw new Error ("Could not find new ordering");
   }
@@ -480,9 +488,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
       assert methodname[2].equals("");
       func = "|java-" + methodname[1].trim() + "|";
     }
-    if (func == null)
+    if (func == null) {
       return "format_simplify_contract() doesn't know function " + methodname[0] + "-" +
         methodname[1] + "-" + methodname[2];
+    }
     return "(EQ " + result + " (" + func + " " + arg1 + " " + arg2 + "))";
   }
 
@@ -545,8 +554,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
       func = "|" + methodname[1].trim() + "|";
     }
 
-    if (func == null)
+    if (func == null) {
       return "format_csharp_contract() doesn't know function " + methodname[0] + "-" + methodname[1] + "-" + methodname[2];
+    }
     return result + " == " + func + "(" + arg1 + ", " + arg2 + ")";
   }
 

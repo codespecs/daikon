@@ -508,8 +508,9 @@ class DCInstrument {
 
       if ((inst instanceof RET) || (inst instanceof IINC)) {
         IndexedInstruction index_inst = (IndexedInstruction) inst;
-        if (index_inst.getIndex() >= index_first_moved_local)
+        if (index_inst.getIndex() >= index_first_moved_local) {
           index_inst.setIndex(index_inst.getIndex() + size);
+        }
       } else if (inst instanceof LocalVariableInstruction) {
         // BCEL handles all the details of which opcode and if index
         // is implicit or explicit; also, and if needs to be WIDE.
@@ -1141,9 +1142,9 @@ class DCInstrument {
         // Remove any LVTT tables
         BCELUtil.remove_local_variable_type_tables(mg);
 
-        if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg))
+        if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg)) {
           gen.addMethod(mg.getMethod());
-        else {
+        } else {
           gen.replaceMethod(m, mg.getMethod());
           if (BCELUtil.is_main(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
         }
@@ -1856,8 +1857,9 @@ class DCInstrument {
     InstructionHandle new_start = il.insert(old_start, new_il);
     if (old_start.hasTargeters()) {
       for (InstructionTargeter it : old_start.getTargeters()) {
-        if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
+        if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen)) {
           it.updateTarget(old_start, new_start);
+        }
       }
     }
 
@@ -2033,10 +2035,10 @@ class DCInstrument {
 
     // Call the specified method
     Type[] method_args = null;
-    if (method_name.equals("exit"))
+    if (method_name.equals("exit")) {
       method_args =
           new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr, Type.OBJECT, Type.INT};
-    else method_args = new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr};
+    } else method_args = new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr};
     il.append(
         ifact.createInvoke(
             DCRuntime.class.getName(), method_name, Type.VOID, method_args, Const.INVOKESTATIC));
@@ -2120,18 +2122,19 @@ class DCInstrument {
 
     // Call the specified method
     Type[] method_args = null;
-    if (method_name.equals("exit_refs_only"))
+    if (method_name.equals("exit_refs_only")) {
       method_args =
           new Type[] {
             /*object_arr, */
             Type.OBJECT, Type.INT, object_arr, Type.OBJECT, Type.INT
           };
-    else
+    } else {
       method_args =
           new Type[] {
             /*object_arr, */
             Type.OBJECT, Type.INT, object_arr
           };
+    }
     il.append(
         ifact.createInvoke(
             DCRuntime.class.getName(), method_name, Type.VOID, method_args, Const.INVOKESTATIC));
@@ -2714,8 +2717,9 @@ class DCInstrument {
     }
 
     if (invoke instanceof INVOKESPECIAL) {
-      if (classname.equals(gen.getSuperclassName()) && method_name.equals("<init>"))
+      if (classname.equals(gen.getSuperclassName()) && method_name.equals("<init>")) {
         constructor_is_initialized = true;
+      }
     }
 
     if (is_object_method(method_name, invoke.getArgumentTypes(pool))) callee_instrumented = false;
@@ -3936,9 +3940,9 @@ class DCInstrument {
   InstructionList return_tag(MethodGen mg, Instruction inst) {
     Type type = mg.getReturnType();
     InstructionList il = new InstructionList();
-    if ((type instanceof BasicType) && (type != Type.VOID))
+    if ((type instanceof BasicType) && (type != Type.VOID)) {
       il.append(dcr_call("normal_exit_primitive", Type.VOID, Type.NO_ARGS));
-    else il.append(dcr_call("normal_exit", Type.VOID, Type.NO_ARGS));
+    } else il.append(dcr_call("normal_exit", Type.VOID, Type.NO_ARGS));
     il.append(inst);
     return (il);
   }
@@ -4486,8 +4490,9 @@ class DCInstrument {
     }
 
     // If the method is not static, push the instance on the stack
-    if (!mg.isStatic())
+    if (!mg.isStatic()) {
       il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
+    }
 
     //System.out.printf ("%s: atc = %d, anc = %d%n", mg.getName(), arg_types.length, arg_names.length);
 
@@ -4570,11 +4575,13 @@ class DCInstrument {
     // methods
     int primitive_cnt = 0;
     for (Type arg_type : arg_types) {
-      if (arg_type instanceof BasicType)
+      if (arg_type instanceof BasicType) {
         primitive_cnt++;
+        }
     }
-    if (primitive_cnt > 0)
+    if (primitive_cnt > 0) {
       il.append (discard_tag_code (new NOP(), primitive_cnt));
+      }
 
     // push a tag if there is a primitive return value
     Type ret_type = mg.getReturnType();
@@ -4583,8 +4590,9 @@ class DCInstrument {
     }
     */
     // If the method is not static, push the instance on the stack
-    if (!mg.isStatic())
+    if (!mg.isStatic()) {
       il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
+    }
 
     // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
     if (mg.getName().equals("getCallerClass")
@@ -5124,10 +5132,12 @@ class DCInstrument {
       if (first_local_index > locals.length) {
         Type[] arg_types = mg.getArgumentTypes();
         String[] arg_names = mg.getArgumentNames();
-        for (int ii = 0; ii < arg_types.length; ii++)
+        for (int ii = 0; ii < arg_types.length; ii++) {
           System.out.printf("param %s %s%n", arg_types[ii], arg_names[ii]);
-        for (LocalVariableGen lvg : locals)
+        }
+        for (LocalVariableGen lvg : locals) {
           System.out.printf("local[%d] = %s%n", lvg.getIndex(), lvg);
+        }
         throw new Error(
             "first_local_index > locals.length: "
                 + mg.getClassName()

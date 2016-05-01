@@ -139,8 +139,9 @@ public abstract class DaikonVariableInfo
     children = new ArrayList<DaikonVariableInfo>();
     isArray = arr;
 
-    if ((theName != null) && (theName.contains("[..]") || theName.contains("[]")) && !isArray)
+    if ((theName != null) && (theName.contains("[..]") || theName.contains("[]")) && !isArray) {
       debug_array.log_tb("%s is not an array", theName);
+    }
   }
 
   /**
@@ -493,8 +494,9 @@ public abstract class DaikonVariableInfo
       // Skip variables that match the ignore pattern
       if (Chicory.omit_var != null) {
         String fullname = offset + "." + classField.getName();
-        if (is_static)
+        if (is_static) {
           fullname = classField.getDeclaringClass().getName() + "." + classField.getName();
+        }
         Matcher m = Chicory.omit_var.matcher(fullname);
         if (m.find()) {
           System.out.printf("VAR %s matches omit pattern %s%n", fullname, Chicory.omit_var);
@@ -1159,8 +1161,9 @@ public abstract class DaikonVariableInfo
         // The offset will only be equal to ""
         // if we are examining a local variable (parameter).
         if (!ignore) {
-          if (!theName.equals("return") && !offset.equals(""))
+          if (!theName.equals("return") && !offset.equals("")) {
             newChild.checkForRuntimeClass(type, theName + "[]", offset);
+          }
 
           newChild.checkForString(eltType, theName + "[]", offset);
         }
@@ -1175,8 +1178,9 @@ public abstract class DaikonVariableInfo
         // don't recurse any more!
         return;
       }
-      if (!systemClass(type))
+      if (!systemClass(type)) {
         addClassVars(cinfo, false, type, offset + theName + ".", depthRemaining - 1);
+      }
     }
     debug_vars.log("exit addChildNodes%n");
   }
@@ -1346,8 +1350,9 @@ public abstract class DaikonVariableInfo
 
     if (ppt_statics.contains(name)) {
       debug_vars.log("ignoring already included variable %s [%s]", name, getClass());
-      if (false && !isStatic())
+      if (false && !isStatic()) {
         System.out.printf("ignoring already included variable %s [%s]", name, getClass());
+      }
       declShouldPrint = false;
       dtraceShouldPrint = false;
       return true;

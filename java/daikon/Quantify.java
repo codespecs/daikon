@@ -343,7 +343,7 @@ public class Quantify {
         String quant2 = bld_quant(vars[1], index2);
         indices = new Term[] {index1, index2};
         quants = new String[] {quant1, quant2};
-        if (flags.contains(QuantFlags.ELEMENT_WISE))
+        if (flags.contains(QuantFlags.ELEMENT_WISE)) {
           quant =
               String.format(
                   "(\\forall int %s, %s; (%s && %s && %s == %s)",
@@ -353,7 +353,7 @@ public class Quantify {
                   quant2,
                   index1.esc_name(),
                   index2.esc_name());
-        else
+        } else {
           quant =
               String.format(
                   "(\\forall int %s, %s; (%s && %s)",
@@ -361,6 +361,7 @@ public class Quantify {
                   index2.esc_name(),
                   quant1,
                   quant2);
+        }
 
         VarInfo arr_var2 = vars[1].get_array_var();
         arr_vars = new VarInfo[] {arr_var1, arr_var2};
@@ -427,8 +428,9 @@ public class Quantify {
       assert (vars.length == 1) || (vars.length == 2) : vars.length;
       assert vars[0].file_rep_type.isArray();
 
-      if (flags.contains(QuantFlags.ADJACENT) || flags.contains(QuantFlags.DISTINCT))
+      if (flags.contains(QuantFlags.ADJACENT) || flags.contains(QuantFlags.DISTINCT)) {
         assert vars.length == 2;
+      }
 
       QuantifyReturn[] qrets = quantify(vars);
 
@@ -473,12 +475,14 @@ public class Quantify {
             // Term prev_idx = _boundv[0];
             @SuppressWarnings("nullness")
             /*@NonNull*/ Term prev_idx = qrets[i - 1].index;
-            if (flags.contains(QuantFlags.ADJACENT))
+            if (flags.contains(QuantFlags.ADJACENT)) {
               conditions.append(
                   " (EQ (+ " + prev_idx.simplify_name() + " 1) " + idx.simplify_name() + ")");
-            if (flags.contains(QuantFlags.DISTINCT))
+            }
+            if (flags.contains(QuantFlags.DISTINCT)) {
               conditions.append(
                   " (NEQ " + prev_idx.simplify_name() + " " + idx.simplify_name() + ")");
+            }
           }
         }
       }

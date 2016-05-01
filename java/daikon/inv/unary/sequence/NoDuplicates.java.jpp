@@ -206,9 +206,10 @@ public class CLASSNAME
     // If the maximum size of the array is <= 1, then this is
     // obvious
     VALUE_SET vs = (VALUE_SET) vis[0].get_value_set();
-    if (vs.max_length() <= 1)
+    if (vs.max_length() <= 1) {
       return new DiscardInfo (this, DiscardCode.obvious, "Size of " + vis[0]
                                + " is <= " + vs.max_length());
+    }
 
     // For every other NoDuplicates at this program point, see if there is a
     // subsequence relationship between that array and this one.

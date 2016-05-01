@@ -322,12 +322,13 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /** A wrapper around getConfidence() or getConfidence(). **/
   public final boolean justified(/*>>> @NonPrototype Invariant this*/) {
     boolean just = (!falsified && (getConfidence() >= dkconfig_confidence_limit));
-    if (logOn())
+    if (logOn()) {
       log(
           "justified = %s, confidence = %s, samples = %s",
           just,
           getConfidence(),
           ppt.num_samples());
+    }
     return (just);
   }
 
@@ -509,7 +510,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     Invariant result = this.clone();
     result = result.resurrect_done(permutation);
 
-    if (logOn())
+    if (logOn()) {
       result.log(
           "Created %s via clone_and_permute from %s using permutation %s old_ppt = %s",
           result.format(),
@@ -518,6 +519,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
           VarInfo.arrayToString(ppt.var_infos)
           // + " new_ppt = " + VarInfo.arrayToString (new_ppt.var_infos)
           );
+    }
 
     return (result);
   }
@@ -553,7 +555,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     // Let subclasses fix what they need to
     result = result.resurrect_done(permutation);
 
-    if (logOn())
+    if (logOn()) {
       result.log(
           "Created %s via resurrect from %s using permutation %s old_ppt = %s new_ppt = %s",
           result.format(),
@@ -561,6 +563,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
           ArraysMDE.toString(permutation),
           VarInfo.arrayToString(ppt.var_infos),
           VarInfo.arrayToString(new_ppt.var_infos));
+    }
 
     return result;
   }
@@ -1112,8 +1115,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     NISuppressionSet ss = get_ni_suppressions();
     if (ss == null) return false;
     boolean suppressed = ss.suppressed(ppt);
-    if (suppressed && Debug.logOn() && (Daikon.current_inv != null))
+    if (suppressed && Debug.logOn() && (Daikon.current_inv != null)) {
       Daikon.current_inv.log("inv %s suppressed: %s", format(), ss);
+    }
     if (Debug.logDetail()) log("suppressed = %s suppression set = %s", suppressed, ss);
 
     return (suppressed);
@@ -1272,8 +1276,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     } else {
       DiscardInfo dynamicResult = isObviousDynamically_SomeInEquality();
       if (dynamicResult != null) {
-        if (debugPrint.isLoggable(Level.FINE))
+        if (debugPrint.isLoggable(Level.FINE)) {
           debugPrint.fine("  [obvious:  " + repr_prob() + " ]");
+        }
         return dynamicResult;
       } else {
         return null;
@@ -1433,8 +1438,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public static final class ClassVarnameComparator implements Comparator<Invariant> {
     /*@Pure*/ public int compare(Invariant inv1, Invariant inv2) {
 
-      if (inv1 instanceof Implication && inv2 instanceof Implication)
+      if (inv1 instanceof Implication && inv2 instanceof Implication) {
         return compareImplications((Implication) inv1, (Implication) inv2);
+      }
 
       int compareClass = compareClass(inv1, inv2);
       if (compareClass != 0) return compareClass;

@@ -186,9 +186,9 @@ public final class Debug {
    * doesn't have to
    */
   public static /*@Nullable*/ Debug newDebug(Class<?> c, Ppt ppt, VarInfo[] vis) {
-    if (logOn() && class_match(c) && ppt_match(ppt) && var_match(vis))
+    if (logOn() && class_match(c) && ppt_match(ppt) && var_match(vis)) {
       return new Debug(c, ppt, vis);
-    else return null;
+    } else return null;
   }
 
   /**
@@ -697,8 +697,9 @@ public final class Debug {
             int mod = vt.getModified(v);
             out += v.name() + "=";
             out += toString(val);
-            if ((mod == ValueTuple.MISSING_FLOW) || (mod == ValueTuple.MISSING_NONSENSICAL))
+            if ((mod == ValueTuple.MISSING_FLOW) || (mod == ValueTuple.MISSING_NONSENSICAL)) {
               out += " (missing)";
+            }
             if (v.missingOutOfBounds()) out += " (out of bounds)";
             if (v.equalitySet != null) {
               if (!v.isCanonical()) out += " (leader=" + v.canonicalRep().name() + ")";
@@ -819,8 +820,9 @@ public final class Debug {
     debugTrack.fine("After --track: " + def);
     debugTrack.fine("Track Classes: " + ArraysMDE.toString(debugTrackClass, false));
     String vars_out = "";
-    for (int ii = 0; ii < debugTrackVars.length; ii++)
+    for (int ii = 0; ii < debugTrackVars.length; ii++) {
       vars_out += ArraysMDE.toString(debugTrackVars[ii]) + " ";
+    }
     debugTrack.fine("Track Vars: " + vars_out);
     debugTrack.fine("Track Ppts: " + ArraysMDE.toString(debugTrackPpt, false));
 

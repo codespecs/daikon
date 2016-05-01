@@ -312,7 +312,7 @@ public class PptRelation implements Serializable {
           }
           VarInfo.Pair parent_pair = new VarInfo.Pair(v1, v2, e.numSamples());
           emap.put(parent_pair, parent_pair);
-          if (debug.isLoggable(Level.FINE))
+          if (debug.isLoggable(Level.FINE)) {
             debug.fine(
                 "-- -- "
                     + varr[j].name()
@@ -321,6 +321,7 @@ public class PptRelation implements Serializable {
                     + " in child yield "
                     + parent_pair
                     + " in parent");
+          }
         }
       }
     }
@@ -723,9 +724,9 @@ public class PptRelation implements Serializable {
         PptTopLevel parent = all_ppts.get(pname.makeObject());
 
         if (parent != null) {
-          if (ppt.find_var_by_name(parent.var_infos[0].name()) != null)
+          if (ppt.find_var_by_name(parent.var_infos[0].name()) != null) {
             rel = newObjectMethodRel(parent, ppt);
-          else {
+          } else {
             parent = all_ppts.get(parent.ppt_name.makeClassStatic());
             if (parent != null) rel = newObjectMethodRel(parent, ppt);
           }
@@ -936,9 +937,10 @@ public class PptRelation implements Serializable {
         if (ppt.is_subexit()) continue;
 
         PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
-        if (parent == null)
+        if (parent == null) {
           throw new RuntimeException(
               "parent ppt " + pr.parent_ppt_name + " not found for ppt " + ppt.name());
+        }
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) continue;
         // System.out.printf ("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);

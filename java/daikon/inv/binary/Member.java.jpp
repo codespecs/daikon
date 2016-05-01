@@ -165,8 +165,9 @@ public final class CLASSNAME
     // This is satisfied, for instance, when determining that
     // max(B[0..I]) is an obvious member of B.
     VarInfo sclseqsuper = sclvar_seq.isDerivedSubSequenceOf();
-    if (sclseqsuper == seqvar)
+    if (sclseqsuper == seqvar) {
       return true;
+    }
 
     // We know the scalar was derived from some array, but not from the
     // sequence variable.  If also not from what the sequence variable was
@@ -226,18 +227,21 @@ public final class CLASSNAME
         // determine if the scalar index is statically included in the
         // left/right sequence
         boolean left_included = false, right_included = false;
-        if (seq_left_index == null)
+        if (seq_left_index == null) {
           left_included = true;
+        }
         if (seq_left_index == scl_index) {
           if (seq_left_shift <= scl_shift) left_included = true;
         }
-        if (seq_right_index == null)
+        if (seq_right_index == null) {
           right_included = true;
+        }
         if (seq_right_index == scl_index) {
           if (seq_right_shift >= scl_shift) right_included = true;
         }
-        if (left_included && right_included)
+        if (left_included && right_included) {
           return true;
+        }
 
       // else if the scalar is a specific positional element (eg, b[0])
       } else if (sclvar.derived instanceof SEQUENCEINITIAL) {
@@ -353,9 +357,10 @@ public final class CLASSNAME
   public InvariantStatus add_modified(SCALAR /*@Interned*/ [] a, SCALAR i, int count) {
 
     InvariantStatus is = check_modified(a, i, count);
-    if (debug.isLoggable(Level.FINE) && (is == InvariantStatus.FALSIFIED))
+    if (debug.isLoggable(Level.FINE) && (is == InvariantStatus.FALSIFIED)) {
       debug.fine ("Member destroyed:  " + format() + " because " + i +
                   " not in " + ArraysMDE.toString(a));
+    }
     return (is);
   }
 
@@ -380,8 +385,9 @@ public final class CLASSNAME
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
-    if (Debug.logOn())
+    if (Debug.logOn()) {
       Debug.log (getClass(), ppt.parent, vis, "is obvious check" + format());
+    }
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -390,13 +396,15 @@ public final class CLASSNAME
 
     // Check for subscript in subsequence
     DiscardInfo di = subscript_in_subsequence (vis);
-    if (di != null)
+    if (di != null) {
       return (di);
+    }
 
     // Check for (A subset B) ==> (A[i] member B)
     di = subset_in_subsequence (vis);
-    if (di != null)
+    if (di != null) {
       return (di);
+    }
 
     return (null);
   }
@@ -413,19 +421,23 @@ public final class CLASSNAME
     VarInfo scl_var = sclvar (vis);
     VarInfo seq_var = seqvar (vis);
 
-    if (Debug.logOn())
+    if (Debug.logOn()) {
       Debug.log (getClass(), ppt.parent, vis, "looking for subset in subseq");
+    }
 
     // If the scalar is not a subscript of a seq there is nothing to check.
-    if (scl_var.derived == null)
+    if (scl_var.derived == null) {
       return null;
-    if (!(scl_var.derived instanceof SEQ_SUBSCRIPT))
+    }
+    if (!(scl_var.derived instanceof SEQ_SUBSCRIPT)) {
       return null;
+    }
     SEQ_SUBSCRIPT sssc = (SEQ_SUBSCRIPT) scl_var.derived;
-    if (Debug.logOn())
+    if (Debug.logOn()) {
       Debug.log (getClass(), ppt.parent, vis, "Looking for "
                  + sssc.seqvar().name() + " subset of "
                  + seq_var.name());
+    }
 
     // check to see if subscripts sequence is a subset of the sequence var
     if (ppt.parent.is_subset (sssc.seqvar(), seq_var)) {
@@ -454,39 +466,45 @@ public final class CLASSNAME
     VarInfo seq_var = seqvar (vis);
 
     // Both variables must be derived
-    if ((scl_var.derived == null) || (seq_var.derived == null))
+    if ((scl_var.derived == null) || (seq_var.derived == null)) {
       return (null);
+    }
 
     // If the scalar is not SequenceScalarSubscript, there is nothing to check.
-    if (!(scl_var.derived instanceof SEQ_SUBSCRIPT))
+    if (!(scl_var.derived instanceof SEQ_SUBSCRIPT)) {
       return null;
+    }
     SEQ_SUBSCRIPT sssc = (SEQ_SUBSCRIPT) scl_var.derived;
 
     // If the sequence is not SequenceScalarSubsequence, nothing to check
-    if (!(seq_var.derived instanceof SEQ_SUBSEQUENCE))
+    if (!(seq_var.derived instanceof SEQ_SUBSEQUENCE)) {
       return (null);
+    }
     SEQ_SUBSEQUENCE ssss = (SEQ_SUBSEQUENCE) seq_var.derived;
 
     // Both variables must be derived from equal sequences
-    if (!ppt.parent.is_equal (sssc.seqvar(), ssss.seqvar()))
+    if (!ppt.parent.is_equal (sssc.seqvar(), ssss.seqvar())) {
       return (null);
+    }
 
     // if a[i] in a[0..n], look for i <= n
     if (ssss.from_start) {
-      if (Debug.logOn())
+      if (Debug.logOn()) {
         Debug.log (getClass(), ppt.parent, vis,
           "Looking for " + sssc.sclvar().name() + sssc.index_shift
            + " <= " + ssss.sclvar().name() + ssss.index_shift);
+      }
       if (ppt.parent.is_less_equal (sssc.sclvar(), sssc.index_shift,
                              ssss.sclvar(), ssss.index_shift))
         return new DiscardInfo(this, DiscardCode.obvious,
                      "i <= n ==> a[i] in a[..n] for "
                      + scl_var.name() + " and " + seq_var.name());
     } else { // a[i] in a[n..], look for i >= n
-      if (Debug.logOn())
+      if (Debug.logOn()) {
         Debug.log (getClass(), ppt.parent, vis,
           "Looking for " + ssss.sclvar().name() + ssss.index_shift
            + " <= " + sssc.sclvar().name() + sssc.index_shift);
+      }
       if (ppt.parent.is_less_equal (ssss.sclvar(), ssss.index_shift,
                              sssc.sclvar(), sssc.index_shift))
         return new DiscardInfo(this, DiscardCode.obvious,

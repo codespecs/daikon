@@ -59,8 +59,9 @@ public class DSForest {
    */
   public void add(String e) {
     if (e == null) throw new IllegalArgumentException("Element cannot be null.");
-    if (elements.containsKey(e))
+    if (elements.containsKey(e)) {
       throw new IllegalArgumentException("Element already in disjoin-set forest.");
+    }
 
     // Make a new singleton set containing e.
     DSForestNode n = new DSForestNode(e);

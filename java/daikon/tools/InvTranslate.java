@@ -133,8 +133,9 @@ public class InvTranslate {
     out.append(UtilMDE.join(mappings, ", "));
 
     out.append(" [Quality=" + quality + "]");
-    if ((inv1 != null) && (inv2 != null))
+    if ((inv1 != null) && (inv2 != null)) {
       out.append(" [" + inv1.format() + " -> " + inv2.format() + "]");
+    }
 
     return out.toString();
   }

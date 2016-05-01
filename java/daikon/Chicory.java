@@ -260,8 +260,11 @@ public class Chicory {
     if (premain == null) {
       for (String path : cp.split(separator)) {
         File poss_premain = new File(path);
-        if (poss_premain.getName().equals("daikon.jar"))
-          if (poss_premain.canRead()) premain = poss_premain;
+        if (poss_premain.getName().equals("daikon.jar")) {
+          if (poss_premain.canRead()) {
+            premain = poss_premain;
+          }
+        }
       }
     }
 

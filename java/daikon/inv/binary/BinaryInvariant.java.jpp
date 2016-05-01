@@ -109,8 +109,9 @@ public abstract class CLASSNAME extends BinaryInvariant {
   /** Returns whether or not the specified types are valid **/
   final public boolean valid_types (VarInfo[] vis) {
 
-    if (vis.length != 2)
+    if (vis.length != 2) {
       return false;
+    }
 
     #if defined(TYPELONG) || defined(TYPEDOUBLE) || defined(TYPESTRING)
       boolean dim_ok = !vis[0].file_rep_type.isArray()
@@ -139,18 +140,20 @@ public abstract class CLASSNAME extends BinaryInvariant {
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;
     // assert ArraysMDE.fn_is_permutation(permutation);
-    if (permutation[0] == 1)
+    if (permutation[0] == 1) {
       return resurrect_done_swapped();
-    else
+    } else {
       return resurrect_done_unswapped();
+    }
   }
 
   /**
    * Swaps the variables by inverting the state of swap.
    **/
   protected Invariant resurrect_done_swapped() {
-    if (!is_symmetric())
+    if (!is_symmetric()) {
       swap = !swap;
+    }
     return this;
   }
 
@@ -168,10 +171,11 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * subclasses should access variables.
    **/
   public VarInfo var1() {
-    if (swap)
+    if (swap) {
       return ppt.var_infos[1];
-    else
+    } else {
       return ppt.var_infos[0];
+    }
   }
 
   /**
@@ -179,10 +183,11 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * subclasses should access variables.
    **/
   public VarInfo var2() {
-    if (swap)
+    if (swap) {
       return ppt.var_infos[0];
-    else
+    } else {
       return ppt.var_infos[1];
+    }
   }
 
   /**
@@ -190,10 +195,11 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * only mechanism by which subclasses should access variables.
    **/
   public VarInfo var1 (VarInfo[] vis) {
-    if (swap)
+    if (swap) {
       return vis[1];
-    else
+    } else {
       return vis[0];
+    }
   }
 
   /**
@@ -201,10 +207,11 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * only mechanism by which subclasses should access variables.
    **/
   public VarInfo var2 (VarInfo[] vis) {
-    if (swap)
+    if (swap) {
       return vis[0];
-    else
+    } else {
       return vis[1];
+    }
   }
 
   public InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index,
@@ -216,15 +223,17 @@ public abstract class CLASSNAME extends BinaryInvariant {
     PRIMITIVE v1 = GET_VAL(val1);
     PRIMITIVE v2 = GET_VAL(val2);
     if (mod_index == 0) {
-      if (swap)
+      if (swap) {
         return check_unmodified (v2, v1, count);
-      else
+      } else {
         return check_unmodified(v1, v2, count);
+      }
     } else {
-      if (swap)
+      if (swap) {
         return check_modified (v2, v1, count);
-      else
+      } else {
         return check_modified(v1, v2, count);
+      }
     }
   }
 
@@ -236,15 +245,17 @@ public abstract class CLASSNAME extends BinaryInvariant {
     PRIMITIVE v1 = GET_VAL(val1);
     PRIMITIVE v2 = GET_VAL(val2);
     if (mod_index == 0) {
-      if (swap)
+      if (swap) {
         return add_unmodified(v2, v1, count);
-      else
+      } else {
         return add_unmodified(v1, v2, count);
+      }
     } else {
-      if (swap)
+      if (swap) {
         return add_modified(v2, v1, count);
-      else
+      } else {
         return add_modified(v1, v2, count);
+      }
     }
   }
 

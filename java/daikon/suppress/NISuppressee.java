@@ -101,8 +101,9 @@ public class NISuppressee {
       TernaryInvariant ternary_inv = (TernaryInvariant) sample_inv;
       return ternary_inv.check(vt.getValue(vis[0]), vt.getValue(vis[1]), vt.getValue(vis[2]), 1, 1);
     } else if (var_count == 2) {
-      if (!(sample_inv instanceof BinaryInvariant))
+      if (!(sample_inv instanceof BinaryInvariant)) {
         throw new Error("not binary: " + sample_inv.getClass());
+      }
       BinaryInvariant binary_inv = (BinaryInvariant) sample_inv;
       // System.out.printf ("checking %s over %s=%s and %s=%s%n", sample_inv.getClass(),
       //        vis[0].name(), vt.getValue(vis[0]),

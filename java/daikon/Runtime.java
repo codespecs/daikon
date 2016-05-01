@@ -226,12 +226,13 @@ public final class Runtime {
       if (parent != null) parent.mkdirs();
       OutputStream os = new FileOutputStream(filename, append);
       if (filename.endsWith(".gz")) {
-        if (append)
+        if (append) {
           throw new Error(
               "DTRACEAPPEND environment variable is set."
                   + lineSep
                   + "Cannot append to gzipped dtrace file "
                   + filename);
+        }
         os = new GZIPOutputStream(os);
       }
       dtraceLimit = Integer.getInteger("DTRACELIMIT", Integer.MAX_VALUE).intValue();

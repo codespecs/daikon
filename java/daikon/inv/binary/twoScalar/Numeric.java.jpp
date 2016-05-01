@@ -238,9 +238,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
    */
   /*@SideEffectFree*/ public String format_using(OutputFormat format) {
 
-    if (ppt == null)
+    if (ppt == null) {
       return (String.format ("proto ppt [class %s] format %s", getClass(),
                              get_format_str (format)));
+    }
     String fmt_str = get_format_str (format);
     String v1 = null;
     String v2 = null;
@@ -308,10 +309,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
       } else if (format == OutputFormat.DAIKON) {
         fmt_str += " (elementwise)";
       }
-      if (v1 == null)
+      if (v1 == null) {
         v1 = var1().name_using(format);
-      if (v2 == null)
+      }
+      if (v2 == null) {
         v2 = var2().name_using(format);
+      }
     #else
       v1 = var1().name_using(format);
       v2 = var2().name_using(format);
@@ -340,8 +343,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public InvariantStatus check_modified(PRIMITIVE[] x, PRIMITIVE[] y,
                                         int count) {
     if (x.length != y.length) {
-      if (Debug.logOn())
+      if (Debug.logOn()) {
         log ("Falsified - x length = %s y length = %s", x.length, y.length);
+      }
       return (InvariantStatus.FALSIFIED);
     }
 
@@ -353,15 +357,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
     try {
       for (int i = 0; i < x.length; i++) {
         if (!eq_check (x[i], y[i])) {
-          if (Debug.logOn())
+          if (Debug.logOn()) {
             log ("Falsified - x[%s]=%s y[%s]=%s", i, x[i], i, y[i]);
+          }
           return (InvariantStatus.FALSIFIED);
         }
       }
       return (InvariantStatus.NO_CHANGE);
     } catch (Exception e) {
-      if (Debug.logOn())
+      if (Debug.logOn()) {
         log ("Falsified - exception %s", e);
+      }
       return (InvariantStatus.FALSIFIED);
     }
   }
@@ -369,10 +375,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, int count) {
 
     try {
-      if (eq_check (x, y))
+      if (eq_check (x, y)) {
         return (InvariantStatus.NO_CHANGE);
-      else
+      } else {
         return (InvariantStatus.FALSIFIED);
+      }
     } catch (Exception e) {
       return (InvariantStatus.FALSIFIED);
     }
@@ -395,10 +402,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     VarInfo v2 = var2(vis);
 
     // Make sure each var is a sequence subsequence
-    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSEQUENCE))
+    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSEQUENCE)) {
       return (null);
-    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE))
+    }
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE)) {
       return (null);
+    }
 
     @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
@@ -411,13 +420,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // of the same length.  Thus any subsequence that starts from the
     // beginning or finishes at the end must end or start at the same
     // spot (or it would have been falsified when it didn't)
-    if (der1.from_start != der2.from_start)
+    if (der1.from_start != der2.from_start) {
       return (null);
+    }
 
     // Look up this class over the sequence variables
     Invariant inv = find (getClass(), der1.seqvar(), der2.seqvar());
-    if (inv == null)
+    if (inv == null) {
       return (null);
+    }
     return new DiscardInfo(this, DiscardCode.obvious, "Implied by " +
                            inv.format());
   }
@@ -434,10 +445,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     VarInfo v2 = var2(vis);
 
     // Make sure each var is a sequence subscript
-    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
+    if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT)) {
       return (null);
-    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
+    }
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT)) {
       return (null);
+    }
 
     @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
@@ -445,8 +458,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /*@NonNull*/ SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
 
     // Make sure the shifts match
-    if (der1.index_shift != der2.index_shift)
+    if (der1.index_shift != der2.index_shift) {
       return (null);
+    }
 
     // Look for this invariant over a sequence
     String cstr = getClass().getName();
@@ -462,13 +476,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
       throw new Error ("can't create class for " + cstr, e);
     }
     Invariant inv = find (pairwise_class, der1.seqvar(), der2.seqvar());
-    if (inv == null)
+    if (inv == null) {
       return (null);
+    }
 
     // Look to see if the subscripts are equal
     Invariant subinv = find (EQUALITY.class, der1.sclvar(), der2.sclvar());
-    if (subinv == null)
+    if (subinv == null) {
       return (null);
+    }
 
     return new DiscardInfo(this, DiscardCode.obvious, "Implied by " +
                            inv.format() + " and " + subinv.format());
@@ -479,8 +495,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
-    if (super_result != null)
+    if (super_result != null) {
       return super_result;
+    }
 
     #if (defined (SEQ))
       // any elementwise relation across subsequences is made obvious by
@@ -504,11 +521,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
       StringBuffer why = null;
       for (int j = 0; j < antecedents.length; j++) {
         Invariant inv = antecedents[j].find ();
-        if (inv == null)
+        if (inv == null) {
           continue obvious_loop;
-        if (why == null)
+        }
+        if (why == null) {
           why = new StringBuffer(inv.format());
-        else {
+        } else {
           why.append(" and ");
           why.append(inv.format());
         }
@@ -560,8 +578,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // If either variable is not derived, there is no possible invariant
     // (since we covered all of the direct size comparisons above)
-    if ((v1.derived == null) || (v2.derived == null))
+    if ((v1.derived == null) || (v2.derived == null)) {
       return (null);
+    }
 
     // Get the sequence subsequence derivations
     SEQ_SUBSEQUENCE v1_ss = (SEQ_SUBSEQUENCE) v1.derived;
@@ -586,12 +605,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     assert v.rep_type.isArray();
 
-    if (v.derived == null)
+    if (v.derived == null) {
       return (v.sequenceSize());
-    else if (v.derived instanceof SEQ_SUBSEQUENCE) {
+    } else if (v.derived instanceof SEQ_SUBSEQUENCE) {
       SEQ_SUBSEQUENCE ss = (SEQ_SUBSEQUENCE) v.derived;
-      if (ss.from_start && (ss.index_shift == -1))
+      if (ss.from_start && (ss.index_shift == -1)) {
         return (ss.sclvar());
+      }
     }
 
     return (null);
@@ -718,18 +738,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public String get_format_str (OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EQ 0 (MOD %var1% %var2%))");
-      else if (format == OutputFormat.CSHARPCONTRACT)
+      } else if (format == OutputFormat.CSHARPCONTRACT) {
         return ("%var1% % %var2% == 0");
-      else
-
-        #if defined(TYPEDOUBLE)
-        if (format.isJavaFamily()) {
-          return "daikon.Quant.fuzzy.eq(%var1% % %var2%, 0)";
-        }
-        #endif
+      #if defined(TYPEDOUBLE)
+      } else if (format.isJavaFamily()) {
+        return "daikon.Quant.fuzzy.eq(%var1% % %var2%, 0)";
+      #endif
+      } else {
         return ("%var1% % %var2% == 0");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
@@ -916,11 +935,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public String get_format_str (OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EQ %var1% (* %var2% %var2))");
-      else if (format == OutputFormat.CSHARPCONTRACT)
+      } else if (format == OutputFormat.CSHARPCONTRACT) {
         return "%var1% == %var2%*%var2%";
-      else if (format.isJavaFamily()) {
+      } else if (format.isJavaFamily()) {
         #if defined(TYPEDOUBLE)
         return ("daikon.Quant.fuzzy.eq(%var1%, %var2%*%var2%)");
         #else
@@ -973,10 +992,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns the prototype invariant **/
     public static /*@Prototype*/ ZeroTrack get_proto (boolean swap) {
-      if (swap)
+      if (swap) {
         return proto_swap;
-      else
+      } else {
         return proto;
+      }
     }
 
     // Variables starting with dkconfig_ should only be set via the
@@ -1002,10 +1022,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
-      if (x == 0)
+      if (x == 0) {
         return (y == 0);
-      else
+      } else {
         return true;
+      }
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
@@ -1081,17 +1102,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public String get_format_str (OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EQ %var1% (~ %var2%))");
-      else if (format == OutputFormat.CSHARPCONTRACT)
+      } else if (format == OutputFormat.CSHARPCONTRACT) {
         return "%var1% == ~%var2%";
-      else
-        #if defined(TYPEDOUBLE)
-        if (format.isJavaFamily()) {
-          return "daikon.Quant.fuzzy.eq(%var1%, ~%var2%)";
-        }
-        #endif
+      #if defined(TYPEDOUBLE)
+      } else if (format.isJavaFamily()) {
+        return "daikon.Quant.fuzzy.eq(%var1%, ~%var2%)";
+      #endif
+      } else {
         return ("%var1% == ~%var2%");
+      }
     }
 
     /** Check to see if x == ~y . **/
@@ -1124,10 +1145,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns the prototype invariant **/
     public static /*@Prototype*/ BitwiseSubset get_proto (boolean swap) {
-      if (swap)
+      if (swap) {
         return proto_swap;
-      else
+      } else {
         return proto;
+      }
     }
 
     // Variables starting with dkconfig_ should only be set via the
@@ -1143,19 +1165,19 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public String get_format_str (OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EQ %var1% (|java-bitwise-or| %var2% %var1%))");
-      else if (format == OutputFormat.DAIKON)
+      } else if (format == OutputFormat.DAIKON) {
         return ("%var2% is a bitwise subset of %var1%");
-      else if (format == OutputFormat.CSHARPCONTRACT)
+      } else if (format == OutputFormat.CSHARPCONTRACT) {
         return "%var1% == (%var2% | %var1%)";
-      else
-        #if defined(TYPEDOUBLE)
-        if (format.isJavaFamily()) {
-          return "daikon.Quant.fuzzy.eq(%var1%, %var2% | %var1%)";
-        }
-        #endif
+      #if defined(TYPEDOUBLE)
+      } else if (format.isJavaFamily()) {
+        return "daikon.Quant.fuzzy.eq(%var1%, %var2% | %var1%)";
+      #endif
+      } else {
         return ("%var1% == (%var2% | %var1%)");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
@@ -1248,18 +1270,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public String get_format_str (OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EQ (|java-&| %var1% %var2%) 0)");
-      else if (format == OutputFormat.CSHARPCONTRACT)
+      } else if (format == OutputFormat.CSHARPCONTRACT) {
         return ("(%var1% & %var2%) == 0");
-      else
-        #if defined(TYPEDOUBLE)
-        if (format.isJavaFamily()) {
-          return "daikon.Quant.fuzzy.eq(%var1% & %var2%, 0)";
-        }
-        #endif
-
+      #if defined(TYPEDOUBLE)
+      } else if (format.isJavaFamily()) {
+        return "daikon.Quant.fuzzy.eq(%var1% & %var2%, 0)";
+      #endif
+      } else {
         return ("(%var1% & %var2%) == 0");
+      }
     }
 
     /*@Pure*/ public boolean is_symmetric() {
@@ -1320,10 +1341,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns the prototype invariant **/
     public static /*@Prototype*/ ShiftZero get_proto (boolean swap) {
-      if (swap)
+      if (swap) {
         return proto_swap;
-      else
+      } else {
         return proto;
+      }
     }
 
     // Variables starting with dkconfig_ should only be set via the
@@ -1339,22 +1361,23 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public String get_format_str (OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EQ (|java->>| %var1% %var2%) 0)");
-      else if (format == OutputFormat.CSHARPCONTRACT)
+      } else if (format == OutputFormat.CSHARPCONTRACT) {
         return ("(%var1% >> %var2% == 0)");
-      else
-        #if defined(TYPEDOUBLE)
-        if (format.isJavaFamily()) {
-          return "daikon.Quant.fuzzy.eq(%var1% >> %var2%, 0)";
-        }
-        #endif
+      #if defined(TYPEDOUBLE)
+      } else if (format.isJavaFamily()) {
+        return "daikon.Quant.fuzzy.eq(%var1% >> %var2%, 0)";
+      #endif
+      } else {
         return ("(%var1% >> %var2% == 0)");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
-      if ((y < 0) || (y > 63))
+      if ((y < 0) || (y > 63)) {
         throw new ArithmeticException ("shift op (" + y + ") is out of range");
+      }
       return ((x >> y) == 0);
     }
 

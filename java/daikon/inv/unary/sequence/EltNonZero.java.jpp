@@ -169,10 +169,10 @@ public final class CLASSNAME
     if (var().is_direct_non_slice_array()) {
       VarInfo term = var().get_enclosing_var();
       String esc_name = null;
-      if (term == null)
+      if (term == null) {
         // Only happenes in internal format tests
         esc_name = var().name().replace ("[]", "");
-      else {
+      } else {
         // System.out.printf ("term = %s, var = %s%n", term.name, var().name);
         esc_name = term.esc_name();
       }
@@ -326,12 +326,14 @@ public final class CLASSNAME
     // (a[] > 0) v (a[] < 0) ==> a[] != 0
     ELTLOWERBOUND lb = (ELTLOWERBOUND) ppt.parent.find_inv_by_class
                                                     (vis, ELTLOWERBOUND.class);
-    if ((lb != null) && (lb.min() > 0))
+    if ((lb != null) && (lb.min() > 0)) {
       return new DiscardInfo (this, DiscardCode.obvious, v1 + " > " + lb.min());
+    }
     ELTUPPERBOUND ub = (ELTUPPERBOUND) ppt.parent.find_inv_by_class
                                                     (vis, ELTUPPERBOUND.class);
-    if ((ub != null) && (ub.max() < 0))
+    if ((ub != null) && (ub.max() < 0)) {
       return new DiscardInfo (this, DiscardCode.obvious, v1 + " < " + ub.max());
+    }
 
     // For every other EltNonZero at this program point, see if there is a
     // subsequence relationship between that array and this one.
@@ -349,11 +351,13 @@ public final class CLASSNAME
           debug.fine ("  Have to test: " + inv.repr());
         }
 
-        if (Debug.logOn())
+        if (Debug.logOn()) {
           Daikon.current_inv = this;
-        if (parent.is_subsequence (v1, v2))
+        }
+        if (parent.is_subsequence (v1, v2)) {
           return new DiscardInfo (this, DiscardCode.obvious, v1.name() +
                                   " is a subsequence of " + v2.name());
+        }
       }
     }
 
@@ -364,8 +368,9 @@ public final class CLASSNAME
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof CLASSNAME)
+      if (inv instanceof CLASSNAME) {
         return (CLASSNAME) inv;
+      }
     }
     return null;
   }

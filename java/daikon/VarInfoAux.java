@@ -311,8 +311,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
    **/
   @SuppressWarnings({"interning", "cast"}) // intern method
   private /*@Interned*/ VarInfoAux intern() {
-    if (this.isInterned)
+    if (this.isInterned) {
       return (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
+    }
 
     if (interningMap == null) {
       interningMap = new HashMap<VarInfoAux, /*@Interned*/ VarInfoAux>();

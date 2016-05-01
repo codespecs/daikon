@@ -165,10 +165,11 @@ public class FieldInfo extends DaikonVariableInfo {
 
   /* Don't include 'this' in instance variable names
   public String getName() {
-      if (isStatic())
+      if (isStatic()) {
           return super.getName();
-      else
+      } else {
           return get_relative_name();
+          }
   }
   */
 
