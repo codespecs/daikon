@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.3.2 (scheduled for May 2016)
+5.3.2 (May 2, 2016)
 
 Daikon:
  - Command-line argument --user-defined-invariant makes Daikon compute a
@@ -28,6 +28,16 @@ Daikon:
  - Command-line argument --disable-all-invariants disables all of Daikon's
    built-in invariants.  Subsequent command-line options may enable some of
    them.
+ - The format of the Daikon source files has been modified to be more in
+   line with the Google Java Style Guide.
+
+Fjalar/Kvasir:
+ - Minor changes to support compile on more versions of Linux.
+ - Enforce no support for 32-bit hosts.
+
+Documentation:
+- Improved discussion of problems when running Daikon.
+- Updates to Style Guide and License information.
 
 ===========================================================================
 

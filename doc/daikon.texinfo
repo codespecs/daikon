@@ -1828,7 +1828,7 @@ the @code{ListImplementors} section of the @file{.decls} file.
 See @ref{ListImplementors declaration,,,developer,Daikon Developer Manual}.
 
 @item --user-defined-invariant @var{classname}
-Use a user-defiend invariant that not built into Daikon but
+Use a user-defined invariant that not built into Daikon but
 is defined in the given class.
 The @var{classname} should be in the fully-qualified format expected by
 @uref{https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getName--,,@code{Class.getName()}},
