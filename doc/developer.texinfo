@@ -2762,7 +2762,9 @@ http://plse.cs.washington.edu/daikon/download/
 
   <your name>
 
-<a copy of the current entry from the doc/CHANGES> file>
+<a copy of the current entry from the doc/CHANGES file, with 
+paragraphs refilled (remove unnecessary line breaks that trim lines
+to 80 columns for the CHANGES file but aren't desirable in email)>
 @end example
 
 @end enumerate
