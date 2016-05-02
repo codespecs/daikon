@@ -140,11 +140,13 @@ public class X86Instruction implements IInstruction {
     // Set dllName and address fields.
     String[] dllAddr = tokens[0].split(":");
     if (dllAddr.length != 2) throw new IllegalArgumentException("Invalid instruction string: " + s);
-    if (!(dllAddr[0].endsWith(".dll") || dllAddr[0].endsWith(".exe")))
+    if (!(dllAddr[0].endsWith(".dll") || dllAddr[0].endsWith(".exe"))) {
       throw new IllegalArgumentException("Invalid instruction string: " + s);
+    }
     String inst_dllName = dllAddr[0];
-    if (!dllAddr[1].startsWith("0x"))
+    if (!dllAddr[1].startsWith("0x")) {
       throw new IllegalArgumentException("Invalid instruction string: " + s);
+    }
     try {
       Long.parseLong(dllAddr[1].substring(2), 16);
     } catch (NumberFormatException e) {
@@ -153,8 +155,9 @@ public class X86Instruction implements IInstruction {
     String inst_address = dllAddr[1];
 
     // Set opName field.
-    if (!isValidOp(tokens[1]))
+    if (!isValidOp(tokens[1])) {
       throw new IllegalArgumentException("Invalid instruction string: " + s);
+    }
     String inst_opName = tokens[1];
 
     // Set args
@@ -167,8 +170,9 @@ public class X86Instruction implements IInstruction {
         i++; // Move i to first result var.
         break;
       }
-      if (!isValidLHSOp(tokens[i]))
+      if (!isValidLHSOp(tokens[i])) {
         throw new IllegalArgumentException("Invalid instruction string: " + s);
+      }
       inst_args.add(tokens[i]);
     }
 

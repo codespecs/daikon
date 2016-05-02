@@ -144,15 +144,18 @@ public class DeclReader {
      */
     public /*@Nullable*/ /*@Interned*/ Object read_data(EntryReader reader) throws IOException {
       String var_name = reader.readLine();
-      if (var_name == null)
+      if (var_name == null) {
         throw new Error(
             "file " + reader.getFileName() + " terminated prematurely, expeced var " + this.name);
-      if (!var_name.equals(this.name))
+      }
+      if (!var_name.equals(this.name)) {
         throw new Error(var_name + " found where " + this.name + " expected ");
+      }
       String value = reader.readLine();
       String mod_bit = reader.readLine();
-      if ((value == null) || (mod_bit == null))
+      if ((value == null) || (mod_bit == null)) {
         throw new Error("file " + reader.getFileName() + " terminated prematurely");
+      }
       if (value.equals("nonsensical")) {
         return null;
       } else if (is_int()) {
@@ -168,8 +171,9 @@ public class DeclReader {
           throw new Error("Unexpected string '" + value + "' for double variable " + this.name);
         }
       } else if (is_string()) {
-        if (value.startsWith("\"") && value.endsWith("\""))
+        if (value.startsWith("\"") && value.endsWith("\"")) {
           value = value.substring(1, value.length() - 1);
+        }
         return value.intern();
       } else if (is_string_array()) {
         return (null); // treating arrays as nonsensical for now
@@ -210,8 +214,9 @@ public class DeclReader {
       String type = decl_file.readLine();
       String rep_type = decl_file.readLine();
       String comparability = decl_file.readLine();
-      if ((name == null) || (type == null) || (rep_type == null) || (comparability == null))
+      if ((name == null) || (type == null) || (rep_type == null) || (comparability == null)) {
         throw new Error("File " + decl_file.getFileName() + " ends prematurely");
+      }
 
       // I don't see the point of this interning.  No code seems to take
       // advantage of it.  Is it just for space?  -MDE
@@ -415,8 +420,9 @@ public class DeclReader {
           num_vars++;
           if (vi.get_type_name().equals("int")) num_type_integer_vars++;
           if (vi.get_rep_type().equals("int")) num_rep_type_integer_vars++;
-          if (!vi.get_type_name().equals("int") && vi.get_rep_type().equals("int"))
+          if (!vi.get_type_name().equals("int") && vi.get_rep_type().equals("int")) {
             System.out.printf("huh '%s' - '%s'%n", vi.get_type_name(), vi.rep_type);
+          }
           String comp = vi.get_basic_comparability();
           if (!comp_map.containsKey(comp)) {
             comp_map.put(comp, new ArrayList<DeclVarInfo>());
@@ -440,11 +446,12 @@ public class DeclReader {
                 vi_list);
           }
         }
-        if (print_each_set && (ppt_num_sets > 0))
+        if (print_each_set && (ppt_num_sets > 0)) {
           System.out.printf(
               "  %d sets of average size %f%n",
               ppt_num_sets,
               ((double) ppt_total_set_size) / ppt_num_sets);
+        }
       }
 
       if (avg_size) {

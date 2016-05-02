@@ -291,8 +291,9 @@ public class LOWERBOUNDCORE
 
 
   public double computeConfidence() {
-    if (PrintInvariants.dkconfig_static_const_infer && matchConstant())
+    if (PrintInvariants.dkconfig_static_const_infer && matchConstant()) {
       return Invariant.CONFIDENCE_JUSTIFIED;
+    }
 
     return 1 - computeProbability();
   }
@@ -305,8 +306,9 @@ public class LOWERBOUNDCORE
         if (vi.rep_type == ProglangType.DOUBLE) {
           // If variable is a double, then use fuzzy comparison
           Double constantVal = (Double)vi.constantValue();
-          if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1)))
+          if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1))) {
             return true;
+          }
         } else {
           // Otherwise just use the equals method
           Object constantVal = vi.constantValue();
@@ -395,22 +397,27 @@ public class LOWERBOUNDCORE
 
     // Pass each value and its count to this invariant's add_modified.  Since
     // bound is never destroyed, we don't need to check the results.
-    if (lbc.NUM_MIN1 > 0)
+    if (lbc.NUM_MIN1 > 0) {
       add_modified (lbc.MIN1, lbc.NUM_MIN1);
-    if (lbc.NUM_MIN2 > 0)
+    }
+    if (lbc.NUM_MIN2 > 0) {
       add_modified (lbc.MIN2, lbc.NUM_MIN2);
-    if (lbc.NUM_MIN3 > 0)
+    }
+    if (lbc.NUM_MIN3 > 0) {
       add_modified (lbc.MIN3, lbc.NUM_MIN3);
+    }
     // NUM_MIN1 will be positive if and only if we've ever seen any
     // real samples. Only then does MAX represent a real sample.
-    if (lbc.NUM_MIN1 > 0)
+    if (lbc.NUM_MIN1 > 0) {
       add_modified (lbc.MAX, 1);
-    if (Debug.logDetail())
+    }
+    if (Debug.logDetail()) {
       wrapper.log ("Added vals %s of %s, %s of %s, %s of %s, %s from ppt %s",
                    lbc.NUM_MIN1, lbc.MIN1, lbc.NUM_MIN2, lbc.MIN2,
                    lbc.NUM_MIN3, lbc.MIN3,
                    ((lbc.NUM_MIN1 > 0) ?  "1 of " + lbc.MAX : ""),
                    lbc.wrapper.ppt.parent.ppt_name);
+    }
   }
 
 

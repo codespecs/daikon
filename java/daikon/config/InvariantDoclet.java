@@ -224,14 +224,15 @@ public class InvariantDoclet {
             out.println("@item " + fb_type + "." + last_fb + "_@{" + permutes + "@}");
             out.println(last_comment);
             assert (permute_cnt == 3) || (permute_cnt == 6);
-            if (permute_cnt == 3)
+            if (permute_cnt == 3) {
               out.println(
                   "Since the function is symmetric, only the "
                       + "permutations xyz, yxz, and zxy are checked.");
-            else
+            } else {
               out.println(
                   "Since the function is non-symmetric, all six "
                       + "permutations of the variables are checked.");
+            }
           }
           last_fb = fb_function;
           permutes = fb_permute;

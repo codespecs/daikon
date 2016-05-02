@@ -3549,12 +3549,14 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           if (i == 1 && (adjacent || distinct)) {
             VarInfoName[] _boundv = qret.bound_vars.get(i - 1);
             VarInfoName prev_idx = _boundv[0];
-            if (adjacent)
+            if (adjacent) {
               conditions.append(
                   " (EQ (+ " + prev_idx.simplify_name() + " 1) " + idx.simplify_name() + ")");
-            if (distinct)
+            }
+            if (distinct) {
               conditions.append(
                   " (NEQ " + prev_idx.simplify_name() + " " + idx.simplify_name() + ")");
+            }
           }
         }
       }

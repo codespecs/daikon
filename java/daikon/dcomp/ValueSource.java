@@ -73,8 +73,9 @@ public class ValueSource {
     Set<String> other_compares = new LinkedHashSet<String>();
     for (ValueSource vs : get_node_list()) {
       if (vs.descr.equals("equals")) {
-        if ((vs.left == null_value_source) || (vs.right == null_value_source))
+        if ((vs.left == null_value_source) || (vs.right == null_value_source)) {
           other_compares.add("null");
+        }
       }
     }
 

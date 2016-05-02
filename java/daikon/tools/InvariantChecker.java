@@ -130,8 +130,9 @@ public class InvariantChecker {
             quiet = false;
           } else if (dir_SWITCH.equals(option_name)) {
             dir_file = new File(Daikon.getOptarg(g));
-            if (!dir_file.exists() || !dir_file.isDirectory())
+            if (!dir_file.exists() || !dir_file.isDirectory()) {
               throw new Daikon.TerminationMessage("Error reading the directory " + dir_file);
+            }
 
           } else if (output_SWITCH.equals(option_name)) {
             File output_file = new File(Daikon.getOptarg(g));
@@ -204,27 +205,30 @@ public class InvariantChecker {
 
     // Yoav additions:
     File[] filesInDir = dir_file.listFiles();
-    if (filesInDir == null || filesInDir.length == 0)
+    if (filesInDir == null || filesInDir.length == 0) {
       throw new Daikon.TerminationMessage(
           "The directory " + dir_file + " is empty" + Global.lineSep + usage);
+    }
     ArrayList<File> invariants = new ArrayList<File>();
     for (File f : filesInDir) {
       if (f.toString().indexOf(".inv") != -1) {
         invariants.add(f);
       }
     }
-    if (invariants.size() == 0)
+    if (invariants.size() == 0) {
       throw new Daikon.TerminationMessage(
           "Did not find any invariant files in the directory " + dir_file + Global.lineSep + usage);
+    }
     ArrayList<File> dtraces = new ArrayList<File>();
     for (File f : filesInDir) {
       if (f.toString().indexOf(".dtrace") != -1) {
         dtraces.add(f);
       }
     }
-    if (dtraces.size() == 0)
+    if (dtraces.size() == 0) {
       throw new Daikon.TerminationMessage(
           "Did not find any dtrace files in the directory " + dir_file + Global.lineSep + usage);
+    }
 
     System.out.println(
         "Collecting data for invariants files " + invariants + " and dtrace files " + dtraces);
@@ -398,8 +402,9 @@ public class InvariantChecker {
           debug.fine("Processing enter sample from " + ec.ppt.name);
           add(ec.ppt, ec.vt, all_ppts);
         } else { // didn't find the enter
-          if (!quiet)
+          if (!quiet) {
             System.out.printf("couldn't find enter for nonce %d at ppt %s\n", nonce, ppt.name());
+          }
           return;
         }
       }
@@ -437,40 +442,46 @@ public class InvariantChecker {
       // We should have received sample here before, or there is nothing
       // to check.
       // Yoav added: It can be that the different dtrace and inv files have different program points
-      if (false && ppt.num_samples() <= 0)
+      if (false && ppt.num_samples() <= 0) {
         assert ppt.num_samples() > 0
             : "ppt " + ppt.name + " has 0 samples and " + ppt.var_infos.length + " variables";
+      }
 
       // Loop through each slice
       slice_loop:
       for (PptSlice slice : ppt.views_iterable()) {
-        if (debug_detail.isLoggable(Level.FINE))
+        if (debug_detail.isLoggable(Level.FINE)) {
           debug_detail.fine(
               ": processing slice " + slice + "vars: " + Debug.toString(slice.var_infos, vt));
+        }
 
         // If any variables are missing, skip this slice
         for (int j = 0; j < slice.var_infos.length; j++) {
           VarInfo v = slice.var_infos[j];
           int mod = vt.getModified(v);
           if (v.isMissing(vt)) {
-            if (debug_detail.isLoggable(Level.FINE))
+            if (debug_detail.isLoggable(Level.FINE)) {
               debug_detail.fine(": : Skipping slice, " + v.name() + " missing");
+            }
             continue slice_loop;
           }
           if (v.missingOutOfBounds()) {
-            if (debug_detail.isLoggable(Level.FINE))
+            if (debug_detail.isLoggable(Level.FINE)) {
               debug.fine(": : Skipping slice, " + v.name() + " out of bounds");
+            }
             continue slice_loop;
           }
         }
 
         // Loop through each invariant
         for (Invariant inv : slice.invs) {
-          if (debug_detail.isLoggable(Level.FINE))
+          if (debug_detail.isLoggable(Level.FINE)) {
             debug_detail.fine(": : Processing invariant: " + inv);
+          }
           if (!inv.isActive()) {
-            if (debug_detail.isLoggable(Level.FINE))
+            if (debug_detail.isLoggable(Level.FINE)) {
               debug_detail.fine(": : skipped non-active " + inv);
+            }
             continue;
           }
 

@@ -129,12 +129,13 @@ public final class MergeInvariants {
         case 'o':
           String output_inv_filename = Daikon.getOptarg(g);
 
-          if (output_inv_file != null)
+          if (output_inv_file != null) {
             throw new Daikon.TerminationMessage(
                 "multiple serialization output files supplied on command line: "
                     + output_inv_file
                     + " "
                     + output_inv_filename);
+          }
 
           output_inv_file = new File(output_inv_filename);
 
@@ -168,8 +169,9 @@ public final class MergeInvariants {
       if (file.toString().indexOf(".inv") != -1) {
         inv_files.add(file);
       } else if (file.toString().indexOf(".decls") != -1) {
-        if (decl_file != null)
+        if (decl_file != null) {
           throw new Daikon.TerminationMessage("Only one decl file may be specified");
+        }
         decl_file = file;
       } else if (file.toString().indexOf(".spinfo") != -1) {
         splitter_files.add(file);
@@ -179,10 +181,11 @@ public final class MergeInvariants {
     }
 
     // Make sure at least two files were specified
-    if (inv_files.size() < 2)
+    if (inv_files.size() < 2) {
       throw new Daikon.TerminationMessage(
           "Must specify at least two inv files; only specified "
               + UtilMDE.nplural(inv_files.size(), "file"));
+    }
 
     // Setup the default for guarding
     PrintInvariants.validateGuardNulls();
@@ -206,9 +209,10 @@ public final class MergeInvariants {
 
     // if no decls file was specified
     if (decl_file == null) {
-      if (splitter_files.size() > 0)
+      if (splitter_files.size() > 0) {
         throw new Daikon.TerminationMessage(
             ".spinfo files may only be specified along " + "with a .decls file");
+      }
 
       // Read in each of the maps again to build a template which contains all
       // of the program points from each map.
@@ -232,8 +236,9 @@ public final class MergeInvariants {
             // For example, all possible enter/exit points should be
             // included with each object point.  This is true for Chicory
             // as long as ppt filtering didn't remove some ppts.
-            for (PptRelation rel : ppt.parents)
+            for (PptRelation rel : ppt.parents) {
               assert merge_ppts.get(rel.parent.name()) == rel.parent : ppt + " - " + rel;
+            }
           }
         }
       }
@@ -295,14 +300,14 @@ public final class MergeInvariants {
         PptTopLevel child = pmap.get(ppt.name());
         // System.out.printf ("found child %s from pmap %d\n", child, j);
         if (child == null) continue;
-        if (child.equality_view == null)
+        if (child.equality_view == null) {
           System.out.println(
               "equality_view == null in child ppt: "
                   + child.name()
                   + " ("
                   + inv_files.get(j)
                   + ")");
-        else if (child.equality_view.invs == null)
+        } else if (child.equality_view.invs == null) {
           System.out.println(
               "equality_view.invs == null in child ppt: "
                   + child.name()
@@ -311,6 +316,7 @@ public final class MergeInvariants {
                   + ")"
                   + " samples = "
                   + child.num_samples());
+        }
 
         // Remove the equality invariants added during equality post
         // processing.  These are not over leaders and will cause problems

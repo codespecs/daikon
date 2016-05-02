@@ -358,8 +358,9 @@ public class NISuppression {
         // JHP: this check can be removed if the earlier check for all
         // true antecedents is included.
         if (!false_antecedents && !inv.is_false()) {
-          if (debug)
+          if (debug) {
             System.out.printf("Skipping %s, no false antecedents%n", VarInfo.arrayToString(cvis));
+          }
           continue;
         }
 
@@ -372,7 +373,7 @@ public class NISuppression {
         if (Debug.dkconfig_internal_check) {
           for (NIS.SupInv supinv : new_invs) {
             Invariant cinv = supinv.already_exists();
-            if (cinv != null)
+            if (cinv != null) {
               throw new Error(
                   "inv "
                       + cinv.format()
@@ -380,6 +381,7 @@ public class NISuppression {
                       + supinv.suppressee
                       + " already exists in ppt "
                       + ppt.name);
+            }
           }
         }
       } else {
@@ -441,9 +443,10 @@ public class NISuppression {
     if (supor.v2_index != -1) {
       cvis[supor.v2_index] = inv.ppt.var_infos[1];
     }
-    if (debug)
+    if (debug) {
       System.out.printf(
           "Placed antecedent '%s' into cvis %s%n", inv.format(), VarInfo.arrayToString(cvis));
+    }
 
     // Make sure the resulting variables are in the proper order and are
     // compatible
@@ -477,9 +480,10 @@ public class NISuppression {
       antecedents[i] = alist;
     }
 
-    if (debug)
+    if (debug) {
       System.out.println(
           suppressee.sup_class.getName() + " " + antecedents_for_suppression(antecedents));
+    }
 
     antecedents = castNonNullDeep(antecedents); // issue 154
 
@@ -519,9 +523,9 @@ public class NISuppression {
     if (vis.length == 2) {
       if ((vis[0] == null) || (vis[1] == null)) return true;
 
-      if (vis[0].rep_type.isArray() == vis[1].rep_type.isArray())
+      if (vis[0].rep_type.isArray() == vis[1].rep_type.isArray()) {
         return (vis[0].compatible(vis[1]));
-      else if (vis[0].rep_type.isArray()) return (vis[0].eltsCompatible(vis[1]));
+      } else if (vis[0].rep_type.isArray()) return (vis[0].eltsCompatible(vis[1]));
       else return (vis[1].eltsCompatible(vis[0]));
     }
 

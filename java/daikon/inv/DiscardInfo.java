@@ -91,8 +91,9 @@ public final class DiscardInfo {
    */
   public void add_implied_vis(VarInfo[] vis) {
     for (int i = 0; i < vis.length; i++) {
-      if (inv.ppt.var_infos[i] != vis[i])
+      if (inv.ppt.var_infos[i] != vis[i]) {
         discardString += " and " + inv.ppt.var_infos[i] + "==" + vis[i];
+      }
     }
   }
 }

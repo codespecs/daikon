@@ -82,14 +82,16 @@ public abstract class CLASSNAME
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;
-    if ((mod_index < 0) || (mod_index > 8))
+    if ((mod_index < 0) || (mod_index > 8)) {
       assert (mod_index >= 0) && (mod_index < 8)
         : "var 1 " + ppt.var_infos[0].name() + " value = "
          + val1 + "mod_index = " +  mod_index;
+    }
     PRIMITIVE v1 = ((NUMWRAPPER) val1).LONGVALUE();
     PRIMITIVE v2 = ((NUMWRAPPER) val2).LONGVALUE();
-    if (!(val3 instanceof NUMWRAPPER))
+    if (!(val3 instanceof NUMWRAPPER)) {
       System.out.println ("val3 should be PRIMITIVE, but is " + val3.getClass());
+    }
     PRIMITIVE v3 = ((NUMWRAPPER) val3).LONGVALUE();
     if (mod_index == 0) {
       return check_unmodified(v1, v2, v3, count);
@@ -102,11 +104,12 @@ public abstract class CLASSNAME
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;
-    if ((mod_index < 0) || (mod_index > 8))
+    if ((mod_index < 0) || (mod_index > 8)) {
       assert (mod_index >= 0) && (mod_index < 8)
         : "var 1 " + ppt.var_infos[0].name() + " value = "
          + val1 + "mod_index = " +  mod_index + " line "
          + FileIO.get_linenum();
+    }
     PRIMITIVE v1 = ((NUMWRAPPER) val1).LONGVALUE();
     PRIMITIVE v2 = ((NUMWRAPPER) val2).LONGVALUE();
     if (!(val3 instanceof NUMWRAPPER)) {

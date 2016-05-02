@@ -444,8 +444,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
       // comes from the C++ library.
       if (value.equalsIgnoreCase("NaN")) return DoubleNaN;
       if (value.equalsIgnoreCase("Infinity") || value.equals("inf")) return DoublePositiveInfinity;
-      if (value.equalsIgnoreCase("-Infinity") || value.equals("-inf"))
+      if (value.equalsIgnoreCase("-Infinity") || value.equals("-inf")) {
         return DoubleNegativeInfinity;
+      }
       return Intern.internedDouble(value);
     } else if ((base == BASE_HASHCODE)
         || (base == BASE_LONG)
@@ -541,11 +542,12 @@ public final /*@Interned*/ class ProglangType implements Serializable {
         if (value_strings[i].equals("nonsensical")) return null;
         else if (value_strings[i].equals("null")) result[i] = 0;
         else if (value_strings[i].equalsIgnoreCase("NaN")) result[i] = Double.NaN;
-        else if (value_strings[i].equalsIgnoreCase("Infinity") || value_strings[i].equals("inf"))
+        else if (value_strings[i].equalsIgnoreCase("Infinity") || value_strings[i].equals("inf")) {
           result[i] = Double.POSITIVE_INFINITY;
-        else if (value_strings[i].equalsIgnoreCase("-Infinity") || value_strings[i].equals("-inf"))
+        } else if (value_strings[i].equalsIgnoreCase("-Infinity")
+            || value_strings[i].equals("-inf")) {
           result[i] = Double.NEGATIVE_INFINITY;
-        else result[i] = Double.parseDouble(value_strings[i]);
+        } else result[i] = Double.parseDouble(value_strings[i]);
       }
       return Intern.intern(result);
     } else if (base == BASE_STRING) {

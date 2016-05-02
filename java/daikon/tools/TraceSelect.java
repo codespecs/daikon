@@ -282,7 +282,7 @@ public class TraceSelect {
 
   /** Used when I used to select by probability, not absolute number. */
   private static boolean myRand(String[] args) {
-    if (args.length >= 2)
+    if (args.length >= 2) {
       try {
         double prob = Double.parseDouble(args[3]);
         return Math.random() > prob;
@@ -290,6 +290,7 @@ public class TraceSelect {
 
         return (Math.random() > 0.900);
       }
+    }
     // Defaults to 10% chance of keeping
     return (Math.random() > 0.900);
   }

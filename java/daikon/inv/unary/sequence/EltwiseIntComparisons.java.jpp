@@ -192,12 +192,14 @@ public class CLASSNAME
   /** Non-equality CLASSNAME invariants are only valid on integral types **/
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
     #if !defined(EQUAL) && defined(TYPELONG)
-      if (!vis[0].type.baseIsIntegral())
+      if (!vis[0].type.baseIsIntegral()) {
         return false;
+      }
     #endif
 
     return true;
@@ -318,8 +320,9 @@ public class CLASSNAME
     // This whole approach is wrong in the case when the sequence can
     // ever consist of only one element.  For now, just forget
     // it. -SMcC
-    if (true)
+    if (true) {
       return false;
+    }
 
     if (other instanceof SUPERCLASS) {
 #if defined(EQUAL) || defined(EQUALFLOAT)
@@ -345,8 +348,9 @@ public class CLASSNAME
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof CLASSNAME)
+      if (inv instanceof CLASSNAME) {
         return (CLASSNAME) inv;
+      }
     }
     return null;
   }
@@ -448,10 +452,11 @@ public class CLASSNAME
       // Find the slice with the full sequence, check for an invariant of this type
       PptSlice sliceToCheck;
 
-      if (deriv instanceof SequenceScalarSubsequence)
+      if (deriv instanceof SequenceScalarSubsequence) {
         sliceToCheck = ppt.parent.findSlice(((SequenceScalarSubsequence)deriv).seqvar());
-      else
+      } else {
         sliceToCheck = ppt.parent.findSlice(((SequenceFloatSubsequence)deriv).seqvar());
+      }
 
       if (sliceToCheck != null) {
         for (Invariant inv : sliceToCheck.invs) {

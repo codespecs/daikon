@@ -320,8 +320,9 @@ public class NIS {
     // Process each suppression set
     for (NISuppressionSet ss : ss_list) {
       ss.clear_state();
-      if (debug.isLoggable(Level.FINE))
+      if (debug.isLoggable(Level.FINE)) {
         debug.fine("processing suppression set " + ss + " over falsified inv " + inv.format());
+      }
       ss.falsified(inv, new_invs);
       suppressions_processed += ss.suppression_set.length;
     }
@@ -345,15 +346,17 @@ public class NIS {
   public static void apply_samples(ValueTuple vt, int count) {
     newly_falsified.clear();
 
-    if (NIS.debug.isLoggable(Level.FINE))
+    if (NIS.debug.isLoggable(Level.FINE)) {
       NIS.debug.fine("Applying samples to " + new_invs.size() + " new invariants");
+    }
 
     // Loop through each invariant
     for (Invariant inv : new_invs) {
-      if (inv.is_false())
+      if (inv.is_false()) {
         assert !inv.is_false()
             : String.format(
                 "inv %s in ppt %s is false before sample is applied ", inv.format(), inv.ppt);
+      }
 
       // Looks to see if any variables are missing.  This can happen
       // when a variable not involved in the suppressor is missing on
@@ -370,7 +373,7 @@ public class NIS {
       if (!missing) {
         InvariantStatus result = inv.add_sample(vt, count);
         if (result == InvariantStatus.FALSIFIED) {
-          if (NIS.antecedent_method)
+          if (NIS.antecedent_method) {
             throw new Error(
                 "inv "
                     + inv.format()
@@ -378,7 +381,7 @@ public class NIS {
                     + Debug.toString(inv.ppt.var_infos, vt)
                     + " at ppt "
                     + inv.ppt);
-          else {
+          } else {
             inv.falsify();
             newly_falsified.add(inv);
           }
@@ -386,8 +389,9 @@ public class NIS {
       }
 
       // Add the invariant to its slice
-      if (Debug.dkconfig_internal_check)
+      if (Debug.dkconfig_internal_check) {
         assert inv.ppt.parent.findSlice(inv.ppt.var_infos) == inv.ppt;
+      }
       inv.ppt.addInvariant(inv);
       if (Debug.logOn()) inv.log("%s added to slice", inv.format());
 
@@ -569,8 +573,9 @@ public class NIS {
       return;
     }
 
-    if (debugAnt.isLoggable(Level.FINE))
+    if (debugAnt.isLoggable(Level.FINE)) {
       debugAnt.fine("at ppt " + ppt.name + " false_cnt = " + false_cnt);
+    }
     //false_invs = false_cnt;
 
     if (debugAnt.isLoggable(Level.FINE)) ppt.debug_invs(debugAnt);
@@ -608,10 +613,12 @@ public class NIS {
             IntEqual ie = (IntEqual) inv;
             VarInfo v1 = ie.ppt.var_infos[0];
             VarInfo v2 = ie.ppt.var_infos[1];
-            if (ppt.is_constant(v1) && ppt.is_constant(v2))
+            if (ppt.is_constant(v1) && ppt.is_constant(v2)) {
               System.out.printf("inv %s has two constant variables%n", ie.format());
-            if (!v1.compatible(v2))
+            }
+            if (!v1.compatible(v2)) {
               System.out.printf("inv %s has incompatible variables%n", ie.format());
+            }
             Count cnt = var_map.get(v1);
             if (cnt == null) {
               cnt = new Count(0);
@@ -659,9 +666,10 @@ public class NIS {
       }
     }
 
-    if (debugAnt.isLoggable(Level.FINE))
+    if (debugAnt.isLoggable(Level.FINE)) {
       debugAnt.fine(
           "Found " + unsuppressed_invs.size() + " unsuppressed invariants: " + unsuppressed_invs);
+    }
 
     // Create each new unsuppressed invariant that is not still suppressed
     // by a different suppression.  Skip any that will be falsified by
@@ -683,8 +691,9 @@ public class NIS {
       if (inv != null) {
         if (Debug.dkconfig_internal_check) {
           assert !inv.is_ni_suppressed() : "Still suppressed: " + inv.format();
-          if (inv.ppt.find_inv_exact(inv) != null)
+          if (inv.ppt.find_inv_exact(inv) != null) {
             throw new Error("inv " + inv.format() + " already exists in ppt " + ppt.name);
+          }
         }
         new_invs.add(inv);
       }

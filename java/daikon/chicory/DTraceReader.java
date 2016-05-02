@@ -57,7 +57,7 @@ public class DTraceReader extends DeclReader {
    */
   protected void read_data(String ppt_name, EntryReader dtrace_file) throws IOException {
 
-    if (!ppt_name.contains(":::"))
+    if (!ppt_name.contains(":::")) {
       throw new Error(
           "unexpected program point name "
               + ppt_name
@@ -65,6 +65,7 @@ public class DTraceReader extends DeclReader {
               + dtrace_file.getFileName()
               + ":"
               + dtrace_file.getLineNumber());
+    }
     DeclPpt ppt = ppts.get(ppt_name);
     if (ppt == null) throw new Error("ppt " + ppt_name + " not declared");
 

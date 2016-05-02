@@ -96,8 +96,9 @@ public class Implication extends Joiner {
       return null;
     }
 
-    if (PptSplitter.debug.isLoggable(Level.FINE))
+    if (PptSplitter.debug.isLoggable(Level.FINE)) {
       PptSplitter.debug.fine("Creating implication " + predicate + " ==> " + consequent);
+    }
     return result;
   }
 
@@ -222,9 +223,10 @@ public class Implication extends Joiner {
     // JHP: Seemingly it would be better if this invariant was never
     // created, but somehow that creates other implications.  See the
     // disabled code in PptSplitter.add_implication()
-    if (orig_right.is_ni_suppressed())
+    if (orig_right.is_ni_suppressed()) {
       return (new DiscardInfo(
           this, DiscardCode.obvious, "consequent " + orig_right.format() + " is ni suppressed"));
+    }
 
     return orig_right.isObviousDynamically_SomeInEquality();
     //     DiscardInfo result = isObviousDynamically (orig_right.ppt.var_infos);

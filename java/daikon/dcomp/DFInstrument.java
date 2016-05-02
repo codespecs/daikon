@@ -53,8 +53,9 @@ class DFInstrument extends DCInstrument {
 
     // See if this method has branch information
     CodeRange branch_cr = find_branch(DynComp.branch, gen.getClassName(), m);
-    if (branch_cr != null)
+    if (branch_cr != null) {
       debug.log("branch_cr for method %s.%s = %s", mg.getClassName(), mg.getName(), branch_cr);
+    }
 
     // See if this method is the test sequence
     test_sequence = false;
@@ -352,9 +353,9 @@ class DFInstrument extends DCInstrument {
       case Const.LSTORE_2:
       case Const.LSTORE_3:
         {
-          if (test_sequence)
+          if (test_sequence) {
             return load_store_local((StoreInstruction) inst, tag_frame_local, "pop_local_tag_df");
-          else return load_store_local((StoreInstruction) inst, tag_frame_local, "pop_local_tag");
+          } else return load_store_local((StoreInstruction) inst, tag_frame_local, "pop_local_tag");
         }
 
       case Const.LDC:
@@ -784,8 +785,9 @@ class DFInstrument extends DCInstrument {
     LineNumberTable lnt = m.getLineNumberTable();
     if (lnt == null) throw new RuntimeException("No line number table for " + classname + "." + m);
     LineNumber[] lna = lnt.getLineNumberTable();
-    if ((lna == null) || (lna.length == 0))
+    if ((lna == null) || (lna.length == 0)) {
       throw new RuntimeException("Empty line number table for " + classname + "." + m);
+    }
 
     // Look for the specified line in this method, keep track of min/max
     // line in the method so we can tell if the line falls within the method
@@ -807,10 +809,11 @@ class DFInstrument extends DCInstrument {
     }
 
     // If line is in the method, then there is no code for this line
-    if ((line >= min_line) && (line <= max_line))
+    if ((line >= min_line) && (line <= max_line)) {
       throw new RuntimeException(
           String.format(
               "line %d in %s.%s[%d..%d] has no code", line, classname, m, min_line, max_line));
+    }
 
     System.out.printf(
         "line %d is not in method %s.%s [%d..%d]\n", line, bclassname, bmethod, min_line, max_line);

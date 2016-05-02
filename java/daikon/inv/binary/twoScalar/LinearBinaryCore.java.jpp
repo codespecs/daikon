@@ -80,10 +80,12 @@ public final class CLASSNAME
   /*@SideEffectFree*/ public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
-      if (x_cache != null)
+      if (x_cache != null) {
         result.x_cache = x_cache.clone();
-      if (y_cache != null)
+      }
+      if (y_cache != null) {
         result.y_cache = y_cache.clone();
+      }
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
@@ -166,8 +168,9 @@ public final class CLASSNAME
       // computation of the slope can be non-negligible.
 
       for (int i=0; i<values_seen; i++)
-        if ((x_cache[i] == x) && (y_cache[i] == y))
+        if ((x_cache[i] == x) && (y_cache[i] == y)) {
           return InvariantStatus.NO_CHANGE;
+        }
       x_cache[values_seen] = x;
       y_cache[values_seen] = y;
       values_seen++;
@@ -208,9 +211,10 @@ public final class CLASSNAME
         max_b = b;
         min_c = c;
         max_c = c;
-        if (debug.isLoggable(Level.FINE))
+        if (debug.isLoggable(Level.FINE)) {
             debug.fine (wrapper.ppt.name() + ": Initial a (" + a +
                          ") and b (" + b + ") and c (" + c + ")");
+        }
 
         // Check all values against a, b, and c.
         if (EQUAL(a, 0)) {
@@ -284,9 +288,10 @@ public final class CLASSNAME
         new_a = (min_a + max_a) / 2;
         new_b = (min_b + max_b) / 2;
         new_c = (min_c + max_c) / 2;
-        if (debug.isLoggable(Level.FINE))
+        if (debug.isLoggable(Level.FINE)) {
             debug.fine (wrapper.ppt.name() + ": Trying new a (" + new_a +
                          ") and b (" + new_b + ")");
+        }
 
         // if the new a, b, c are 'equal' to min/max a, b, c and
         // this point fits, then this new equation is good enough both
@@ -299,9 +304,10 @@ public final class CLASSNAME
           a = new_a;
           b = new_b;
           c = new_c;
-          if (debug.isLoggable(Level.FINE))
+          if (debug.isLoggable(Level.FINE)) {
             debug.fine (wrapper.ppt.name() + ": New a (" + a + ") and b ("
                          + b + ") and c (" + c + ")");
+          }
         } else {
           if (debug.isLoggable(Level.FINE)) {
             debug.fine ("Suppressing " + CLASSSTRING + " (" +
@@ -459,8 +465,9 @@ public final class CLASSNAME
                                    boolean first) {
     double ncoeff = coeff;
 
-    if (ncoeff == 0)
+    if (ncoeff == 0) {
       return "";
+    }
     String sign;
     if (ncoeff < 0) {
       if (first) {
@@ -476,12 +483,14 @@ public final class CLASSNAME
 
     //we want to ensure that the positive value is used because the sign has already been determined
     String coeff_string = (ncoeff == (int)ncoeff) ? "" + Math.abs((int)ncoeff) : "" + Math.abs(ncoeff);
-    if (varname == null)
+    if (varname == null) {
       return sign + coeff_string;
-    if (ncoeff == 1 || ncoeff == -1)
+    }
+    if (ncoeff == 1 || ncoeff == -1) {
       return sign + varname;
-    else
+    } else {
       return sign + coeff_string + " * " + varname;
+    }
   }
 
   /*@SideEffectFree*/ public String format_using(OutputFormat format,
@@ -608,11 +617,12 @@ public final class CLASSNAME
     // Look for any active lines.  All must define the same line
     CLASSNAME result = null;
     for (CLASSNAME c : cores) {
-      if (!c.isActive())
+      if (!c.isActive()) {
         continue;
-      if (result == null)
+      }
+      if (result == null) {
         result = c.clone();
-      else {
+      } else {
         if (!Global.fuzzy.eq (result.a, c.a)
             || !Global.fuzzy.eq (result.b, c.b)
             || !Global.fuzzy.eq(result.c, c.c))
@@ -621,15 +631,17 @@ public final class CLASSNAME
     }
 
     // If no active lines were found, created an empty core
-    if (result == null)
+    if (result == null) {
       result = new CLASSNAME (wrapper);
-    else
+    } else {
       result.wrapper = wrapper;
+    }
 
     // Merge in any points from non-active cores
     for (CLASSNAME c : cores) {
-      if (c.isActive())
+      if (c.isActive()) {
         continue;
+      }
       for (int j = 0; j < c.values_seen; j++) {
         if (result.add_modified (c.x_cache[j], c.y_cache[j], 1) ==
             InvariantStatus.FALSIFIED) {

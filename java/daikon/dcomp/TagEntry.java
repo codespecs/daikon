@@ -110,8 +110,9 @@ class TagEntry extends WeakReference<Object> {
     ArrayList<StackTraceElement> blarg =
         new ArrayList<StackTraceElement>(
             Arrays.<StackTraceElement>asList(new Exception().getStackTrace()));
-    if (blarg.get(blarg.size() - 1).getClassName().equals("daikon.dcomp.Premain$ShutdownThread"))
+    if (blarg.get(blarg.size() - 1).getClassName().equals("daikon.dcomp.Premain$ShutdownThread")) {
       return "";
+    }
     do blarg.remove(0);
     while (blarg.get(0).getClassName().equals("daikon.dcomp.DCRuntime")
         || blarg.get(0).getClassName().equals("daikon.dcomp.TagEntry"));
@@ -278,9 +279,9 @@ class TagEntry extends WeakReference<Object> {
       for (Object entry : set) {
         if (line != "") // "interned"
         line += ", ";
-        if (entry instanceof DaikonVariableInfo)
+        if (entry instanceof DaikonVariableInfo) {
           line += String.format("%s ", ((DaikonVariableInfo) entry).getName());
-        else line += String.format("%s [%s]", entry.getClass(), entry);
+        } else line += String.format("%s [%s]", entry.getClass(), entry);
       }
       out += String.format("%s%n", line);
     }

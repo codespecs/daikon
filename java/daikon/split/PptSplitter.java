@@ -108,7 +108,7 @@ public class PptSplitter implements Serializable {
               + "): "
               + parent.var_infos.length
               + " VarInfos");
-      for (int ii = 0; ii < parent.var_infos.length; ii++)
+      for (int ii = 0; ii < parent.var_infos.length; ii++) {
         debug.fine(
             "  VarInfo #"
                 + ii
@@ -118,6 +118,7 @@ public class PptSplitter implements Serializable {
                 + ppts[0].var_infos[ii].name()
                 + " "
                 + ppts[1].var_infos[ii].name());
+      }
     }
   }
 
@@ -334,8 +335,9 @@ public class PptSplitter implements Serializable {
               for (Invariant inv2 : nc_slice.invs) {
                 System.out.println(" -- inv = " + inv2);
               }
-              for (VarInfo cvi : cvis_non_canonical)
+              for (VarInfo cvi : cvis_non_canonical) {
                 System.out.println(" -- equality set = " + cvi.equalitySet.shortString());
+              }
               throw new Error("nc_slice.invs.size() == " + nc_slice.invs.size());
             }
             eq_inv = nc_slice.invs.get(0);
@@ -350,8 +352,9 @@ public class PptSplitter implements Serializable {
             if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
               assert child_ppt.constants != null
                   : "@AssumeAssertion(nullness):  dependent:  config var";
-              for (int i = 0; i < cvis_sorted.length; i++)
+              for (int i = 0; i < cvis_sorted.length; i++) {
                 System.out.println("con val = " + child_ppt.constants.getConstant(cvis_sorted[i]));
+              }
             }
             throw new RuntimeException(
                 "found eq_inv "
@@ -385,9 +388,10 @@ public class PptSplitter implements Serializable {
         continue;
       }
 
-      if (pslice.invs.size() == 0)
+      if (pslice.invs.size() == 0) {
         debug.fine(
             "PptSplitter: created new slice " + VarInfo.arrayToString(vis) + " @" + parent.name);
+      }
 
       // Add any exclusive conditions for this slice to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
@@ -528,8 +532,9 @@ public class PptSplitter implements Serializable {
     // Create double-implications for each exclusive invariant
     for (Invariant[] invs : exclusive_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
-        if (con_invs[jj] != invs[jj])
+        if (con_invs[jj] != invs[jj]) {
           add_implication(parent, con_invs[jj], invs[jj], true, orig_invs);
+        }
       }
     }
 
@@ -570,8 +575,9 @@ public class PptSplitter implements Serializable {
     // Create binary views
     for (int i = 0; i < leaders.length; i++) {
       for (int j = i; j < leaders.length; j++) {
-        if (parent.is_slice_ok(leaders[i], leaders[j]))
+        if (parent.is_slice_ok(leaders[i], leaders[j])) {
           result.add(new VarInfo[] {leaders[i], leaders[j]});
+        }
       }
     }
 
@@ -581,8 +587,9 @@ public class PptSplitter implements Serializable {
     for (int i = 0; i < leaders.length; i++) {
       for (int j = i; j < leaders.length; j++) {
         for (int k = j; k < leaders.length; k++) {
-          if (parent.is_slice_ok(leaders[i], leaders[j], leaders[k]))
+          if (parent.is_slice_ok(leaders[i], leaders[j], leaders[k])) {
             result.add(new VarInfo[] {leaders[i], leaders[j], leaders[k]});
+          }
         }
       }
     }

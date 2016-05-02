@@ -95,18 +95,22 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
 
   public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
     int mod1 = base1.getModified(full_vt);
-    if (mod1 == ValueTuple.MISSING_NONSENSICAL)
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL) {
       return ValueAndModified.MISSING_NONSENSICAL;
+    }
     int mod2 = base2.getModified(full_vt);
-    if (mod2 == ValueTuple.MISSING_NONSENSICAL)
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL) {
       return ValueAndModified.MISSING_NONSENSICAL;
+    }
     int mod3 = base2.getModified(full_vt);
-    if (mod3 == ValueTuple.MISSING_NONSENSICAL)
+    if (mod3 == ValueTuple.MISSING_NONSENSICAL) {
       return ValueAndModified.MISSING_NONSENSICAL;
+    }
 
     Object val1 = base1.getValue(full_vt);
-    if (val1 == null)
+    if (val1 == null) {
       return ValueAndModified.MISSING_NONSENSICAL;
+    }
     SCALAR[] val1_array = (SCALAR[]) val1;
     int val2 = base2.getIndexValue(full_vt);
     int val3 = base3.getIndexValue(full_vt);
@@ -119,10 +123,11 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
     // is a[begin_inclusive..end_exclusive-1],
     // not a[begin_inclusive..end_exclusive].
     int begin_inclusive, end_exclusive;
-    if (left_closed)
+    if (left_closed) {
       begin_inclusive = val2;
-    else
+    } else {
       begin_inclusive = val2 + 1;
+    }
     // begin_inclusive = val1_array.length is acceptable; that means the
     // empty array (given that end_exclusive is val1_arrayl.length)
     // (It is permitted to have a[a.length..a.length-1], which means
@@ -132,10 +137,11 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
       return ValueAndModified.MISSING_NONSENSICAL;
     }
 
-    if (right_closed)
+    if (right_closed) {
       end_exclusive = val3 + 1;
-    else
+    } else {
       end_exclusive = val3;
+    }
     // end_exclusive = 0 is acceptable; that means the empty array (given
     // that begin_inclusive is 0)
     if ((end_exclusive < 0) || (end_exclusive > val1_array.length)) {
@@ -154,8 +160,9 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
                ? ValueTuple.UNMODIFIED
                : ValueTuple.MODIFIED);
 
-    if ((begin_inclusive == 0) && (end_exclusive == val1_array.length))
+    if ((begin_inclusive == 0) && (end_exclusive == val1_array.length)) {
       return new ValueAndModified(val1, mod);
+    }
 
     SCALAR[] subarr = ArraysMDE.subarray(val1_array, begin_inclusive,
                                          end_exclusive - begin_inclusive);

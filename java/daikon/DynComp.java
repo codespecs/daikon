@@ -295,9 +295,10 @@ public class DynComp {
     cmdlist.add("-ea");
     cmdlist.add("-esa");
     cmdlist.add("-Xmx1024m");
-    if (!no_jdk)
+    if (!no_jdk) {
       // prepend to rather than replace bootclasspath
       cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + cp);
+    }
 
     cmdlist.add(String.format("-javaagent:%s=%s", premain, premain_args));
 

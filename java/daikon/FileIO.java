@@ -397,8 +397,9 @@ public final class FileIO {
             decl_error(state, e);
           }
           vardef = new VarDefinition(state, scanner);
-          if (varmap.containsKey(vardef.name))
+          if (varmap.containsKey(vardef.name)) {
             decl_error(state, "var %s declared twice", vardef.name);
+          }
           if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
         } else if (record == "min-value") { // interned
           vardef.parse_min_value(scanner);
@@ -806,8 +807,9 @@ public final class FileIO {
     }
 
     // Make sure that if a format was specified previously, it is the same
-    if ((new_decl_format != null) && (new_df != new_decl_format.booleanValue()))
+    if ((new_decl_format != null) && (new_df != new_decl_format.booleanValue())) {
       decl_error(state, "decl format '%s' does not match previous setting", version);
+    }
 
     // System.out.println("setting new_decl_format = " + new_df);
     new_decl_format = Boolean.valueOf(new_df);
@@ -905,9 +907,9 @@ public final class FileIO {
     /*@Pure*/ public boolean equals(
         /*>>>@GuardSatisfied Invocation this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object other) {
-      if (other instanceof FileIO.Invocation)
+      if (other instanceof FileIO.Invocation) {
         return this.format().equals(((FileIO.Invocation) other).format());
-      else return false;
+      } else return false;
     }
 
     /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied Invocation this,*/ Invocation other) {
@@ -1796,8 +1798,9 @@ public final class FileIO {
 
     ppt.add_bottom_up(vt, 1);
 
-    if (debugVars.isLoggable(Level.FINE))
+    if (debugVars.isLoggable(Level.FINE)) {
       debugVars.fine(ppt.name() + " vars: " + Debug.int_vars(ppt, vt));
+    }
 
     if (Global.debugPrintDtrace) {
       assert Global.dtraceWriter != null
@@ -2119,12 +2122,13 @@ public final class FileIO {
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
           if (vals[val_index] == null) {
-            if (debug_missing && !vi.canBeMissing)
+            if (debug_missing && !vi.canBeMissing) {
               System.out.printf(
                   "Var %s ppt %s at line %d is null, and modbit is not missing%n",
                   vi,
                   ppt.name(),
                   FileIO.get_linenum());
+            }
             // The value in the trace was null even though the modbit was not
             // MISSING_NONSENSICAL.  Set the modbit to MISSING_NONSENSICAL.
             // This can happen for a value like [1 nonsensical 2], because
@@ -2623,16 +2627,20 @@ public final class FileIO {
 
       // Basic checking for sensible input
       assert name != null;
-      if (kind == null)
+      if (kind == null) {
         throw new AssertionError("missing var-kind information for variable " + name);
+      }
       assert (arr_dims == 0) || (arr_dims == 1)
           : String.format("arrdims==%s, should be 0 or 1, for VarDefinition %s", arr_dims, name);
-      if (rep_type == null)
+      if (rep_type == null) {
         throw new AssertionError("missing rep-type information for variable " + name);
-      if (declared_type == null)
+      }
+      if (declared_type == null) {
         throw new AssertionError("missing dec-type information for variable " + name);
-      if (comparability == null)
+      }
+      if (comparability == null) {
         throw new AssertionError("missing comparability information for variable " + name);
+      }
       assert ((kind == VarKind.FUNCTION) || (function_args == null))
           : String.format(
               "incompatible kind=%s and function_args=%s for VarDefinition %s",
@@ -2650,9 +2658,9 @@ public final class FileIO {
       this.parents = new LinkedList<VarParent>();
       name = need(scanner, "name");
       need_eol(scanner);
-      if (state.varcomp_format == VarComparability.IMPLICIT)
+      if (state.varcomp_format == VarComparability.IMPLICIT) {
         comparability = VarComparabilityImplicit.unknown;
-      else comparability = VarComparabilityNone.it;
+      } else comparability = VarComparabilityNone.it;
     }
 
     public VarDefinition(String name, VarKind kind, ProglangType type) {
@@ -2892,8 +2900,9 @@ public final class FileIO {
 
   /** Throws a DeclError if the scanner is not at end of line */
   public static void need_eol(ParseState state, Scanner scanner) throws DeclError {
-    if (scanner.hasNext())
+    if (scanner.hasNext()) {
       decl_error(state, "'%s' found where end-of-line expected", scanner.next());
+    }
   }
 
   /**

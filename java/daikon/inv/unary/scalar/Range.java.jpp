@@ -110,11 +110,13 @@ public abstract class RANGE extends SUPERCLASS {
    */
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
-    if (!vis[0].file_rep_type.BASE_IS_TYPE)
+    if (!vis[0].file_rep_type.BASE_IS_TYPE) {
       return false;
+    }
 
     return true;
   }
@@ -148,8 +150,9 @@ public abstract class RANGE extends SUPERCLASS {
       }
     #endif
 
-    if (v1 == null)
+    if (v1 == null) {
       v1 = var1.name_using(format);
+    }
 
     fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", v1);
     return (fmt_str);
@@ -158,8 +161,9 @@ public abstract class RANGE extends SUPERCLASS {
 #if defined(SEQ)
   public InvariantStatus check_modified (PRIMITIVE /*@Interned*/ [] x, int count) {
     for (int i = 0; i < x.length; i++) {
-      if (!eq_check (x[i]))
+      if (!eq_check (x[i])) {
         return InvariantStatus.FALSIFIED;
+      }
     }
     return InvariantStatus.NO_CHANGE;
   }
@@ -171,10 +175,11 @@ public abstract class RANGE extends SUPERCLASS {
 #else
 
   public InvariantStatus check_modified (PRIMITIVE x, int count) {
-    if (eq_check (x))
+    if (eq_check (x)) {
       return (InvariantStatus.NO_CHANGE);
-    else
+    } else {
       return (InvariantStatus.FALSIFIED);
+    }
   }
 
   public InvariantStatus add_modified (PRIMITIVE x, int count) {
@@ -286,10 +291,11 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     public String get_format_str (/*>>>@GuardSatisfied EqualZero this,*/ OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EQ 0 %var1%)");
-      else
+      } else {
         return ("%var1% == 0");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x) {
@@ -335,10 +341,11 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     public String get_format_str (/*>>>@GuardSatisfied EqualOne this,*/ OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EQ 1 %var1%)");
-      else
+      } else {
         return ("%var1% == 1");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x) {
@@ -384,10 +391,11 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     public String get_format_str (/*>>>@GuardSatisfied EqualMinusOne this,*/ OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EQ -1 %var1%)");
-      else
+      } else {
         return ("%var1% == -1");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x) {
@@ -433,10 +441,11 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     public String get_format_str (/*>>>@GuardSatisfied GreaterEqualZero this,*/ OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(>= %var1% 0)");
-      else
+      } else {
         return ("%var1% >= 0");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x) {
@@ -482,10 +491,11 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     public String get_format_str (/*>>>@GuardSatisfied GreaterEqual64 this,*/ OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(>= 64 %var1%)");
-      else
+      } else {
         return ("%var1% >= 64");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x) {
@@ -532,10 +542,11 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     public String get_format_str (/*>>>@GuardSatisfied BooleanVal this,*/ OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(OR (EQ 0 %var1%) (EQ 1 %var1%))");
-      else
+      } else {
         return ("%var1% is boolean");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x) {
@@ -586,14 +597,17 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     public String get_format_str (/*>>>@GuardSatisfied PowerOfTwo this,*/ OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EXISTS (p) (EQ %var1% (pow 2 p)))");
-      if (format == OutputFormat.JAVA)
+      }
+      if (format == OutputFormat.JAVA) {
         return "daikon.tools.runtimechecker.Runtime.isPowerOfTwo(%var1%)";
-      if (format == OutputFormat.CSHARPCONTRACT)
+      }
+      if (format == OutputFormat.CSHARPCONTRACT) {
         return "%var1%.IsPowerOfTwo()";
-      else
+      } else {
         return ("%var1% is a power of 2");
+      }
     }
 
     /**
@@ -615,8 +629,9 @@ public abstract class RANGE extends SUPERCLASS {
     public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
        ONEOF oneof = find_oneof (vis);
-       if (oneof != null)
+       if (oneof != null) {
          return new DiscardInfo (this, DiscardCode.obvious, "Implied by Oneof");
+       }
 
        return null;
      }
@@ -665,12 +680,14 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     public String get_format_str (/*>>>@GuardSatisfied Even this,*/ OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(EQ (MOD %var1% 2) 0)");
-      if (format == OutputFormat.CSHARPCONTRACT)
+      }
+      if (format == OutputFormat.CSHARPCONTRACT) {
         return "%var1% % 2 == 0";
-      else
+      } else {
         return ("%var1% is even");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x) {
@@ -685,8 +702,9 @@ public abstract class RANGE extends SUPERCLASS {
     public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
        // If there is a oneof, it implies this
        ONEOF oneof = find_oneof (vis);
-       if (oneof != null)
+       if (oneof != null) {
          return new DiscardInfo (this, DiscardCode.obvious, "Implied by Oneof");
+       }
 
        return null;
      }
@@ -730,10 +748,11 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     public String get_format_str (/*>>>@GuardSatisfied Bound0_63 this,*/ OutputFormat format) {
-      if (format == OutputFormat.SIMPLIFY)
+      if (format == OutputFormat.SIMPLIFY) {
         return ("(AND (>= %var1% 0) (>= 63 %var1%))");
-      else
+      } else {
         return ("0 <= %var1% <= 63");
+      }
     }
 
     public boolean eq_check (PRIMITIVE x) {

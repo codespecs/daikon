@@ -140,8 +140,9 @@ public class Premain {
             || className.startsWith("daikon/chicory/")) return (null);
       }
 
-      if (DynComp.verbose)
+      if (DynComp.verbose) {
         System.out.format("In dcomp.Premain.Transform(): class = %s\n", className);
+      }
 
       try {
         // Parse the bytes of the classfile, die on any errors
@@ -257,8 +258,9 @@ public class Premain {
       // If requested, write the comparability data to a file
       if (!DynComp.no_cset_file) {
         if (DynComp.compare_sets_file != null) {
-          if (DynComp.verbose)
+          if (DynComp.verbose) {
             System.out.println("Writing comparability sets to " + DynComp.compare_sets_file);
+          }
           assert DynComp.compare_sets_file != null
               : "@AssumeAssertion(nullness): limited side effects don't change this field";
           PrintWriter compare_out = open(DynComp.compare_sets_file);
@@ -269,27 +271,30 @@ public class Premain {
             DCRuntime.print_all_comparable(compare_out);
           }
           compare_out.close();
-          if (DynComp.verbose)
+          if (DynComp.verbose) {
             System.out.printf("Comparability sets written in %s%n", watch.format());
+          }
         } else {
           System.out.println("Writing comparability sets to standard output");
-          if (DynComp.no_primitives)
+          if (DynComp.no_primitives) {
             DCRuntime.print_all_comparable_refs_only(new PrintWriter(System.out, true));
-          else DCRuntime.print_all_comparable(new PrintWriter(System.out, true));
+          } else DCRuntime.print_all_comparable(new PrintWriter(System.out, true));
         }
       }
 
       if (DynComp.trace_sets_file != null) {
-        if (DynComp.verbose)
+        if (DynComp.verbose) {
           System.out.println("Writing traced comparability sets to " + DynComp.trace_sets_file);
+        }
         assert DynComp.trace_sets_file != null
             : "@AssumeAssertion(nullness): limited side effects don't change this field";
         PrintWriter trace_out = open(DynComp.trace_sets_file);
         Stopwatch watch = new Stopwatch();
         DCRuntime.trace_all_comparable(trace_out);
         trace_out.close();
-        if (DynComp.verbose)
+        if (DynComp.verbose) {
           System.out.printf("Comparability sets written in %s%n", watch.format());
+        }
       } else {
         // Writing comparability sets to standard output?
       }

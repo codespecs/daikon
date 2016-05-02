@@ -18,14 +18,16 @@ import org.checkerframework.dataflow.qual.*;
  */
 public final class SplitDtrace {
   public static void main(String[] args) throws IOException {
-    if (args.length != 1)
+    if (args.length != 1) {
       throw new RuntimeException(
           "You must supply one argument which is the filename of the dtrace file");
+    }
     String filename = args[0].trim();
     boolean isGz = filename.endsWith(".dtrace.gz");
-    if (!filename.endsWith(".dtrace") && !isGz)
+    if (!filename.endsWith(".dtrace") && !isGz) {
       throw new RuntimeException(
           "Filename must end with .dtrace or .dtrace.gz: filename=" + filename);
+    }
     BufferedReader reader = getStream(filename);
     String line;
     int declNum = 1;
@@ -98,8 +100,11 @@ public final class SplitDtrace {
   }
 
   static int getNonce(ArrayList<String> res) {
-    for (int i = 0; i < res.size(); i++)
-      if (res.get(i).equals("this_invocation_nonce")) return Integer.parseInt(res.get(i + 1));
+    for (int i = 0; i < res.size(); i++) {
+      if (res.get(i).equals("this_invocation_nonce")) {
+        return Integer.parseInt(res.get(i + 1));
+      }
+    }
     throw new RuntimeException("no nonce: " + res);
   }
   /*@Pure*/ static boolean isEnter(ArrayList<String> res) {

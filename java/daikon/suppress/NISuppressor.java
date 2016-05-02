@@ -226,7 +226,7 @@ public class NISuppressor {
     // If the underlying invariant is not enabled, we can't possibly be true
     if (!is_enabled()) return (state = NIS.SuppressState.INVALID);
 
-    if (Debug.logDetail() && NIS.debug.isLoggable(Level.FINE))
+    if (Debug.logDetail() && NIS.debug.isLoggable(Level.FINE)) {
       NIS.debug.fine(
           "checking suppressor "
               + this
@@ -236,6 +236,7 @@ public class NISuppressor {
               + VarInfo.arrayToString(vis)
               + " in ppt "
               + ppt.name);
+    }
 
     // If unary
     if (v2_index == -1) {
@@ -332,8 +333,9 @@ public class NISuppressor {
             && match(inv)
             && (v1 == inv.ppt.var_infos[0])
             && (v2 == inv.ppt.var_infos[1])) {
-          if (NIS.debug.isLoggable(Level.FINE))
+          if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine("Matches falsified inv " + inv.format());
+          }
           return (state = NIS.SuppressState.MATCH);
         }
       }
@@ -355,13 +357,14 @@ public class NISuppressor {
                   1);
           valid = (status == InvariantStatus.NO_CHANGE);
         }
-        if (NIS.debug.isLoggable(Level.FINE))
+        if (NIS.debug.isLoggable(Level.FINE)) {
           NIS.debug.fine(
               String.format(
                   "constant args (%s, %s) = %b ",
                   Debug.toString(ppt.constants.constant_value(v1)),
                   Debug.toString(ppt.constants.constant_value(v2)),
                   valid));
+        }
         current_state_str =
             "true over constants "
                 + ppt.constants.constant_value(v1)
@@ -387,9 +390,10 @@ public class NISuppressor {
         for (Invariant slice_inv : slice.invs) {
           // NIS.debug.fine (": processing inv " + slice_inv.format());
           if (match_true(slice_inv)) {
-            if (NIS.debug.isLoggable(Level.FINE))
+            if (NIS.debug.isLoggable(Level.FINE)) {
               NIS.debug.fine(
                   "suppressor matches inv " + slice_inv.format() + " " + !slice_inv.is_false());
+            }
             current_state_str = "invariant " + slice_inv.format();
             return (state = NIS.SuppressState.VALID);
           }
@@ -518,13 +522,14 @@ public class NISuppressor {
     if (v2_index == -1) {
       return (String.format("%s(%s) [%s]", cname, varname[v1_index], status));
     } else if (v3_index == -1) {
-      if (swap && !swap_class)
+      if (swap && !swap_class) {
         return (String.format(
             "%s(%s,%s) [%s]", cname, varname[v2_index], varname[v1_index], status));
-      else
+      } else {
         return (String.format(
             "%s(%s,%s) [%s]", cname, varname[v1_index], varname[v2_index], status));
-    } else
+      }
+    } else {
       return (String.format(
           "%s(%s,%s,%s) [%s]",
           cname,
@@ -532,5 +537,6 @@ public class NISuppressor {
           varname[v2_index],
           varname[v3_index],
           status));
+    }
   }
 }

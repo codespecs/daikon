@@ -98,7 +98,7 @@ public abstract class VarComparability {
   public static /*@Pure*/ boolean comparable(
       /*@GuardSatisfied*/ VarComparability type1, /*@GuardSatisfied*/ VarComparability type2) {
 
-    if (type1 != null && type2 != null && type1.getClass() != type2.getClass())
+    if (type1 != null && type2 != null && type1.getClass() != type2.getClass()) {
       throw new Error(
           String.format(
               "Trying to compare VarComparabilities " + "of different types: %s (%s) and %s (%s)",
@@ -106,6 +106,7 @@ public abstract class VarComparability {
               type1.getClass(),
               type2.toString(),
               type2.getClass()));
+    }
 
     if (type1 instanceof VarComparabilityNone || type1 == null || type2 == null) {
       return VarComparabilityNone.comparable(

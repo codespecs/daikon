@@ -317,7 +317,9 @@ public class AnnotateNullable {
       } else {
         if (vi.isParam()
             && (vi.name() != "this") // interned
-            && !vi.isPrestate()) params.add(vi);
+            && !vi.isPrestate()) {
+          params.add(vi);
+        }
       }
     }
 

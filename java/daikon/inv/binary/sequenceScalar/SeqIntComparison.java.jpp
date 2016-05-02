@@ -192,8 +192,9 @@ public final class SEQINTEQUAL
   /** Non-equal SeqIntComparison is only valid on integral types **/
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
     VarInfo seqvar;
     VarInfo sclvar;
@@ -209,8 +210,9 @@ public final class SEQINTEQUAL
     assert seqvar.rep_type == ProglangType.PROGLANGTYPEARRAY;
 
     #if !defined(EQUAL) && defined(IS_INT)
-      if (!seqvar.type.elementIsIntegral())
+      if (!seqvar.type.elementIsIntegral()) {
         return false;
+      }
     #endif
 
     return true;
@@ -310,8 +312,9 @@ public final class SEQINTEQUAL
       #if (!defined(EQUAL) && !defined(EQUALFLOAT))
         // assert seqvar().type.elementIsIntegral();
       #endif
-      if (!EQUALS(a[i], x))
+      if (!EQUALS(a[i], x)) {
         return InvariantStatus.FALSIFIED;
+      }
     }
     return InvariantStatus.NO_CHANGE;
   }
@@ -323,8 +326,9 @@ public final class SEQINTEQUAL
   protected double computeConfidence() {
 
     // If there are no samples over our variables, its unjustified
-    if (ppt.num_samples() == 0)
+    if (ppt.num_samples() == 0) {
       return CONFIDENCE_UNJUSTIFIED;
+    }
 
     // If the array never has any elements, its unjustified
     VALUE_SET vs = (VALUE_SET) seqvar().get_value_set();
@@ -363,8 +367,9 @@ public final class SEQINTEQUAL
   public static /*@Nullable*/ SEQINTEQUAL find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof SEQINTEQUAL)
+      if (inv instanceof SEQINTEQUAL) {
         return (SEQINTEQUAL) inv;
+      }
     }
     return null;
   }
@@ -417,9 +422,10 @@ public final class SEQINTEQUAL
     // JHP: handled in confidence test now
     // (A[] == []) ==> A[] op x
     if (false) {
-      if (pptt.is_empty (seqvar))
+      if (pptt.is_empty (seqvar)) {
         return new DiscardInfo (this, DiscardCode.obvious, "The sequence "
                                 + seqvar.name() + " is always empty");
+      }
     }
 
     if (isExact()) {

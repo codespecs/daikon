@@ -698,8 +698,9 @@ public final class Daikon {
     if (output_num_samples) {
       Global.output_statistics();
     }
-    if (dkconfig_print_sample_totals)
+    if (dkconfig_print_sample_totals) {
       System.out.println(FileIO.samples_processed + " samples processed");
+    }
 
     // print statistics concerning what invariants are printed
     if (debugStats.isLoggable(Level.FINE)) {
@@ -892,9 +893,10 @@ public final class Daikon {
           } else if (omit_from_output_SWITCH.equals(option_name)) {
             String f = getOptarg(g);
             for (int i = 0; i < f.length(); i++) {
-              if ("0rs".indexOf(f.charAt(i)) == -1)
+              if ("0rs".indexOf(f.charAt(i)) == -1) {
                 throw new Daikon.TerminationMessage(
                     "omit_from_output flag letter '" + f.charAt(i) + "' is unknown");
+              }
               omit_types[f.charAt(i)] = true;
             }
             omit_from_output = true;
@@ -1006,11 +1008,12 @@ public final class Daikon {
 
           // Process only part of the trace file
           else if (ppt_regexp_SWITCH.equals(option_name)) {
-            if (ppt_regexp != null)
+            if (ppt_regexp != null) {
               throw new Daikon.TerminationMessage(
                   "multiple --"
                       + ppt_regexp_SWITCH
                       + " regular expressions supplied on command line");
+            }
             String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage(
@@ -1024,11 +1027,12 @@ public final class Daikon {
             ppt_regexp = Pattern.compile(regexp_string);
             break;
           } else if (ppt_omit_regexp_SWITCH.equals(option_name)) {
-            if (ppt_omit_regexp != null)
+            if (ppt_omit_regexp != null) {
               throw new Daikon.TerminationMessage(
                   "multiple --"
                       + ppt_omit_regexp_SWITCH
                       + " regular expressions supplied on command line");
+            }
             String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage(
@@ -1042,11 +1046,12 @@ public final class Daikon {
             ppt_omit_regexp = Pattern.compile(regexp_string);
             break;
           } else if (var_regexp_SWITCH.equals(option_name)) {
-            if (var_regexp != null)
+            if (var_regexp != null) {
               throw new Daikon.TerminationMessage(
                   "multiple --"
                       + var_regexp_SWITCH
                       + " regular expressions supplied on command line");
+            }
             String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage(
@@ -1060,11 +1065,12 @@ public final class Daikon {
             var_regexp = Pattern.compile(regexp_string);
             break;
           } else if (var_omit_regexp_SWITCH.equals(option_name)) {
-            if (var_omit_regexp != null)
+            if (var_omit_regexp != null) {
               throw new Daikon.TerminationMessage(
                   "multiple --"
                       + var_omit_regexp_SWITCH
                       + " regular expressions supplied on command line");
+            }
             String regexp_string = getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage(
@@ -1080,9 +1086,10 @@ public final class Daikon {
           } else if (server_SWITCH.equals(option_name)) {
             String input_dir = getOptarg(g);
             server_dir = new File(input_dir);
-            if (!server_dir.isDirectory() || !server_dir.canRead() || !server_dir.canWrite())
+            if (!server_dir.isDirectory() || !server_dir.canRead() || !server_dir.canWrite()) {
               throw new RuntimeException(
                   "Could not open config file in server directory " + server_dir);
+            }
             break;
 
             // Configuration options
@@ -1624,8 +1631,9 @@ public final class Daikon {
       PptName exit_name = ppt.ppt_name.makeExit();
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
-      if (debugInit.isLoggable(Level.FINE))
+      if (debugInit.isLoggable(Level.FINE)) {
         debugInit.fine("create_combined_exits: encounted exit " + exitnn_ppt.name());
+      }
 
       // Create the exit, if necessary
       if (exit_ppt == null) {
@@ -1656,8 +1664,9 @@ public final class Daikon {
 
         // exit_ppt.ppt_name.setVisibility(exitnn_name.getVisibility());
         exit_ppts.add(exit_ppt);
-        if (debugInit.isLoggable(Level.FINE))
+        if (debugInit.isLoggable(Level.FINE)) {
           debugInit.fine("create_combined_exits: created exit " + exit_name);
+        }
         init_ppt(exit_ppt, ppts);
       }
     }
@@ -1995,8 +2004,9 @@ public final class Daikon {
                 + (java.lang.Runtime.getRuntime().totalMemory()
                     - java.lang.Runtime.getRuntime().freeMemory()));
         try {
-          if (FileIO.data_trace_state != null)
+          if (FileIO.data_trace_state != null) {
             debugTrace.fine("Active slices: " + FileIO.data_trace_state.all_ppts.countSlices());
+          }
         } catch (ConcurrentModificationException e) {
           // Because this code is a separate thread, the number of ppts
           // could change during countSlices.  Just ignore and continue.
@@ -2344,9 +2354,10 @@ public final class Daikon {
   private static /*@Nullable*/ String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
 
     // Make sure the percentage is valid
-    if ((ppt_perc < 1) || (ppt_perc > 100))
+    if ((ppt_perc < 1) || (ppt_perc > 100)) {
       // The number should already have been checked, so use Error instead of Daikon.TerminationMessage
       throw new Error("ppt_perc of " + ppt_perc + " is out of range 1..100");
+    }
     if (ppt_perc == 100) return null;
 
     // Keep track of all of the ppts in a set ordered by the ppt name
@@ -2364,8 +2375,9 @@ public final class Daikon {
           if (line.equals("") || FileIO.isComment(line)) continue;
           if (!line.equals("DECLARE")) continue;
           String ppt_name = fp.readLine();
-          if (ppt_name == null)
+          if (ppt_name == null) {
             throw new Daikon.TerminationMessage("File " + file + " terminated prematurely");
+          }
           ppts.add(ppt_name);
         }
 
@@ -2380,17 +2392,19 @@ public final class Daikon {
     // return the last exit point from the method (so we don't get half the
     // exits from a method or enters without exits, etc)
     int ppt_cnt = (ppts.size() * ppt_perc) / 100;
-    if (ppt_cnt == 0)
+    if (ppt_cnt == 0) {
       throw new Daikon.TerminationMessage(
           "ppt_perc of " + ppt_perc + "% results in processing 0 out of " + ppts.size() + " ppts");
+    }
     for (Iterator<String> i = ppts.iterator(); i.hasNext(); ) {
       String ppt_name = i.next();
       if (--ppt_cnt <= 0) {
         String last_ppt_name = ppt_name;
         while (i.hasNext()) {
           ppt_name = i.next();
-          if ((last_ppt_name.indexOf("EXIT") != -1) && (ppt_name.indexOf("EXIT") == -1))
+          if ((last_ppt_name.indexOf("EXIT") != -1) && (ppt_name.indexOf("EXIT") == -1)) {
             return (last_ppt_name);
+          }
           last_ppt_name = ppt_name;
         }
         return (ppt_name);

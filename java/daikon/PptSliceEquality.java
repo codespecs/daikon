@@ -259,8 +259,9 @@ public class PptSliceEquality extends PptSlice {
         // Get a list of all of the new non-missing leaders
         List<VarInfo> newInvsLeaders = new ArrayList<VarInfo>(newInvs.size());
         for (Equality eq : newInvs) {
-          if ((parent.constants == null) || !parent.constants.is_missing(eq.leader()))
+          if ((parent.constants == null) || !parent.constants.is_missing(eq.leader())) {
             newInvsLeaders.add(eq.leader());
+          }
         }
 
         //Debug print the new leaders

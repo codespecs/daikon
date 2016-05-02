@@ -430,8 +430,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (vardef.enclosing_var != null) {
       enclosing_var = ppt.find_var_by_name(vardef.enclosing_var);
       if (enclosing_var == null) {
-        for (int i = 0; i < ppt.var_infos.length; i++)
+        for (int i = 0; i < ppt.var_infos.length; i++) {
           System.out.printf("var = '%s'%n", ppt.var_infos[i]);
+        }
         throw new RuntimeException(
             String.format(
                 "enclosing variable '%s' for variable '%s' " + "in ppt '%s' cannot be found",
@@ -520,8 +521,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       boolean parent_vars_specified = false;
       for (VarInfo vi : bases) {
         for (VarParent vp : vi.parents) {
-          if (vp.parent_variable != null && vp.parent_relation_id == p.parent_relation_id)
+          if (vp.parent_variable != null && vp.parent_relation_id == p.parent_relation_id) {
             parent_vars_specified = true;
+          }
         }
       }
       if (!parent_vars_specified) {
@@ -1234,10 +1236,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Convenience methods that return information from the ValueTuple. **/
   /*@Pure*/ public int getModified(ValueTuple vt) {
-    if (is_static_constant)
+    if (is_static_constant) {
       // return ValueTuple.STATIC_CONSTANT;
       return ValueTuple.MODIFIED;
-    else return vt.getModified(value_index);
+    } else return vt.getModified(value_index);
   }
   /*@Pure*/ public boolean isUnmodified(ValueTuple vt) {
     return ValueTuple.modIsUnmodified(getModified(vt));
@@ -1876,12 +1878,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * over time (?).
    **/
   public void simplify_expression() {
-    if (debugSimplifyExpression.isLoggable(Level.FINE))
+    if (debugSimplifyExpression.isLoggable(Level.FINE)) {
       debugSimplifyExpression.fine("** Simplify: " + name());
+    }
 
     if (!isDerived()) {
-      if (debugSimplifyExpression.isLoggable(Level.FINE))
+      if (debugSimplifyExpression.isLoggable(Level.FINE)) {
         debugSimplifyExpression.fine("** Punt because not derived variable");
+      }
       return;
     }
 
@@ -1898,8 +1902,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       }
     }
     if (postexpr == null) {
-      if (debugSimplifyExpression.isLoggable(Level.FINE))
+      if (debugSimplifyExpression.isLoggable(Level.FINE)) {
         debugSimplifyExpression.fine("** Punt because no post()");
+      }
       return;
     }
 
@@ -1930,8 +1935,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // expression.
     VarInfo postvar = post_context.find_var_by_name(postexpr.term.name());
     if (postvar == null) {
-      if (debugSimplifyExpression.isLoggable(Level.FINE))
+      if (debugSimplifyExpression.isLoggable(Level.FINE)) {
         debugSimplifyExpression.fine("** Punt because no VarInfo for postvar " + postexpr.term);
+      }
       return;
     }
     VarInfoName pre_expr = postvar.preStateEquivalent();
@@ -1949,12 +1955,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           (new VarInfoName.Replacer(postexpr, pre_expr))
               .replace(var_info_name)
               .intern(); // vin ok  // interning bugfix
-      if (debugSimplifyExpression.isLoggable(Level.FINE))
+      if (debugSimplifyExpression.isLoggable(Level.FINE)) {
         debugSimplifyExpression.fine("** Replaced with: " + var_info_name); // vin ok
+      }
     }
 
-    if (debugSimplifyExpression.isLoggable(Level.FINE))
+    if (debugSimplifyExpression.isLoggable(Level.FINE)) {
       debugSimplifyExpression.fine("** Nothing to do (no state equlivalent)");
+    }
   }
 
   /**
@@ -2184,9 +2192,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       } else {
         throw new Error("Bad VarInfos");
       }
-      if (result == null)
+      if (result == null) {
         // Return null if NonZero invariant is not applicable to this variable.
         return null;
+      }
       result.isGuardingPredicate = true;
       // System.out.printf("Created a guarding predicate: %s at %s%n", result, slice);
       // new Error().printStackTrace(System.out);
@@ -2236,9 +2245,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                 && (Daikon.dkconfig_guardNulls == "always" // interned
                     || (Daikon.dkconfig_guardNulls == "missing" // interned
                         && vi.canBeMissing)));
-        if (Invariant.debugGuarding.isLoggable(Level.FINE))
+        if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
           Invariant.debugGuarding.fine(
               String.format("shouldBeGuarded(%s) %b %b", vi, result, vi.canBeMissing));
+        }
         return result;
       }
 
@@ -2255,7 +2265,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           VarInfo vi = ppt.find_var_by_name(applyPreMaybe(viname).name());
           // Don't guard variables that don't exist.  This happends when
           // we incorrectly parse static variable package names as field names
-          if (Invariant.debugGuarding.isLoggable(Level.FINE))
+          if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
             Invariant.debugGuarding.fine(
                 String.format(
                     "shouldBeGuarded(%s) [%s] %s %b",
@@ -2263,6 +2273,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                     applyPreMaybe(viname),
                     vi,
                     ((vi == null) ? false : vi.canBeMissing)));
+          }
           if (vi == null) return false;
           return (vi.canBeMissing);
         }
@@ -2833,8 +2844,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       while (var.var_kind != VarKind.ARRAY) {
         if (var.enclosing_var == null) {
           // error condition; print some debugging output before assertion failure
-          for (VarInfo vi = this; vi != null; vi = vi.enclosing_var)
+          for (VarInfo vi = this; vi != null; vi = vi.enclosing_var) {
             System.out.printf("%s %s%n", vi, vi.var_kind);
+          }
           assert var.enclosing_var != null : this + " " + var;
         }
         assert var.enclosing_var != null : "@AssumeAssertion(nullness): just tested";
@@ -3131,12 +3143,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return str_name;
       case FUNCTION:
         //function_args      assert function_args == null : "function args not implemented";
-        if (var_flags.contains(VarFlags.CLASSNAME))
+        if (var_flags.contains(VarFlags.CLASSNAME)) {
           return ("\\typeof(" + enclosing_var.esc_name(index) + ")");
-        if (var_flags.contains(VarFlags.TO_STRING))
+        }
+        if (var_flags.contains(VarFlags.TO_STRING)) {
           return enclosing_var.esc_name(index) + ".toString";
-        if (enclosing_var != null)
+        }
+        if (enclosing_var != null) {
           return enclosing_var.esc_name(index) + "." + relative_name + "()";
+        }
         return str_name;
       case ARRAY:
         if (index == null) return enclosing_var.esc_name(null) + "[]";
@@ -3200,14 +3215,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       case FUNCTION:
         //function_args      assert function_args == null : "function args not implemented";
         if (var_flags.contains(VarFlags.CLASSNAME)) {
-          if (arr_dims > 0)
+          if (arr_dims > 0) {
             return String.format("daikon.Quant.typeArray(%s)", enclosing_var.jml_name(index));
-          else return enclosing_var.jml_name(index) + DaikonVariableInfo.class_suffix;
+          } else return enclosing_var.jml_name(index) + DaikonVariableInfo.class_suffix;
         }
-        if (var_flags.contains(VarFlags.TO_STRING))
+        if (var_flags.contains(VarFlags.TO_STRING)) {
           return enclosing_var.jml_name(index) + ".toString()";
-        if (enclosing_var != null)
+        }
+        if (enclosing_var != null) {
           return enclosing_var.jml_name(index) + "." + relative_name + "()";
+        }
         return str_name;
       case ARRAY:
         if (index == null) return enclosing_var.jml_name(null);
@@ -3247,12 +3264,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return String.format("(select |%s| %s)", relative_name, enclosing_var.simplify_name(index));
       case FUNCTION:
         //function_args      assert function_args == null : "function args not implemented";
-        if (var_flags.contains(VarFlags.CLASSNAME))
+        if (var_flags.contains(VarFlags.CLASSNAME)) {
           return ("(typeof " + enclosing_var.simplify_name(index) + ")");
-        if (var_flags.contains(VarFlags.TO_STRING))
+        }
+        if (var_flags.contains(VarFlags.TO_STRING)) {
           return String.format("(select |toString| %s)", enclosing_var.simplify_name(index));
-        if (enclosing_var != null)
+        }
+        if (enclosing_var != null) {
           return enclosing_var.simplify_name(index) + "." + relative_name + "()";
+        }
         return str_name;
       case ARRAY:
         if (index == null) return String.format("(select elems %s)", enclosing_var.simplify_name());
@@ -3372,19 +3392,20 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (FileIO.new_decl_format) {
       Quantify.ESCQuantification quant =
           new Quantify.ESCQuantification(Quantify.get_flags(elementwise), vars);
-      if (vars.length == 1)
+      if (vars.length == 1) {
         return new String[] {quant.get_quantification(), quant.get_arr_vars_indexed(0), ")"};
-      else if ((vars.length == 2) && vars[1].file_rep_type.isArray())
+      } else if ((vars.length == 2) && vars[1].file_rep_type.isArray()) {
         return new String[] {
           quant.get_quantification(),
           quant.get_arr_vars_indexed(0),
           quant.get_arr_vars_indexed(1),
           ")"
         };
-      else
+      } else {
         return new String[] {
           quant.get_quantification(), quant.get_arr_vars_indexed(0), vars[1].esc_name(), ")"
         };
+      }
     } else {
       VarInfoName vin[] = new VarInfoName[vars.length];
       for (int ii = 0; ii < vars.length; ii++) {
@@ -3401,8 +3422,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * array or slice.
    */
   public String /*@Nullable*/ [] simplifyNameAndBounds() {
-    if (!FileIO.new_decl_format)
+    if (!FileIO.new_decl_format) {
       return VarInfoName.QuantHelper.simplifyNameAndBounds(var_info_name); // vin ok
+    }
 
     String[] results = new String[3];
     if (is_direct_non_slice_array() || (derived instanceof SequenceSubsequence)) {
@@ -3481,9 +3503,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       index += index_off;
       complete_index = String.format("%d", index);
     } else {
-      if (index_off != 0)
+      if (index_off != 0) {
         complete_index = String.format("(+ |%s| %d)", simplify_index_name, index_off);
-      else complete_index = String.format("|%s|", simplify_index_name);
+      } else complete_index = String.format("|%s|", simplify_index_name);
     }
 
     // Return the array properly indexed
@@ -3517,9 +3539,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     String lower_name = lower.simplify_name();
     if (!(lower instanceof Quantify.Constant)) lower_name = String.format("|%s|", lower_name);
     if (index_off != 0) {
-      if (lower instanceof Quantify.Constant)
+      if (lower instanceof Quantify.Constant) {
         complete_index = String.format("%d", ((Quantify.Constant) lower).get_value() + index_off);
-      else complete_index = String.format("(+ %s %d)", lower_name, index_off);
+      } else complete_index = String.format("(+ %s %d)", lower_name, index_off);
     } else complete_index = String.format("%s", lower_name);
 
     // Return the array properly indexed
@@ -3610,18 +3632,18 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     Quantify.SimplifyQuantification quant = new Quantify.SimplifyQuantification(flags, vars);
     boolean include_index = flags.contains(QuantFlags.INCLUDE_INDEX);
-    if ((vars.length == 1) && include_index)
+    if ((vars.length == 1) && include_index) {
       return new String[] {
         quant.get_quantification(),
         quant.get_arr_vars_indexed(0),
         quant.get_index(0),
         quant.get_closer()
       };
-    else if (vars.length == 1)
+    } else if (vars.length == 1) {
       return new String[] {
         quant.get_quantification(), quant.get_arr_vars_indexed(0), quant.get_closer()
       };
-    else if ((vars.length == 2) && include_index)
+    } else if ((vars.length == 2) && include_index) {
       return new String[] {
         quant.get_quantification(),
         quant.get_arr_vars_indexed(0),
@@ -3630,13 +3652,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         quant.get_index(1),
         quant.get_closer()
       };
-    else // must be length 2 and no index
-    return new String[] {
+    } else { // must be length 2 and no index
+      return new String[] {
         quant.get_quantification(),
         quant.get_arr_vars_indexed(0),
         quant.get_arr_vars_indexed(1),
         quant.get_closer()
       };
+    }
   }
 
   /** @see #simplify_quantify(EnumSet, VarInfo[]) */
@@ -3691,9 +3714,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * functions as well
    */
   /*@Pure*/ public boolean is_assignable_var() {
-    if (!FileIO.new_decl_format)
+    if (!FileIO.new_decl_format) {
       return !((var_info_name instanceof VarInfoName.TypeOf) // vin ok
           || (var_info_name instanceof VarInfoName.SizeOf)); // vin ok
+    }
 
     return !(is_typeof() || is_size());
   }
@@ -4201,9 +4225,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Converts a variable name or expression to the old style of names
    */
   public static String old_var_names(String name) {
-    if (PrintInvariants.dkconfig_old_array_names && FileIO.new_decl_format)
+    if (PrintInvariants.dkconfig_old_array_names && FileIO.new_decl_format) {
       return name.replace("[..]", "[]");
-    else return name;
+    } else return name;
   }
 
   /**

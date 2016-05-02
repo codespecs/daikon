@@ -238,26 +238,29 @@ public abstract class DaikonWriter {
     //       + " should not contain a period ('.') character. ";
 
     int lastPeriod = short_name.lastIndexOf(".");
-    if (Chicory.debug_ppt_names)
+    if (Chicory.debug_ppt_names) {
       System.out.printf("  fixdup; '%s' '%s' [%d]%n", name, short_name, lastPeriod);
+    }
 
     if (lastPeriod == -1) {
-      if (Chicory.debug_ppt_names)
+      if (Chicory.debug_ppt_names) {
         System.out.printf(
             "  -1: replace '%s' with '%s'%n",
             short_name + "(",
             short_name + "." + short_name + "(");
+      }
       return name.replace(short_name + "(", short_name + "." + short_name + "(");
     } else {
       // This case could occur for constructor names given as PackageName.ClassName
 
       short_name = short_name.substring(lastPeriod + 1);
 
-      if (Chicory.debug_ppt_names)
+      if (Chicory.debug_ppt_names) {
         System.out.printf(
             "  >0: replace '%s' with '%s'%n",
             "." + short_name + "(",
             "." + short_name + "." + short_name + "(");
+      }
       String result =
           name.replace("." + short_name + "(", "." + short_name + "." + short_name + "(");
       if (Chicory.debug_ppt_names) {
