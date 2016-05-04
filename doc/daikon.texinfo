@@ -3924,9 +3924,8 @@ that contains comparability information.  This information will be
 incorporated in the output of Chicory.  Any variables not included in
 the comparability file will have their comparability set so that they
 are comparable to all other variables of the same type.
-Note that the Java DynComp tool is the most common source for such a
-file.  By default, DynComp writes comparability information to a file
-with the @file{.decls-DynComp} extension.
+The DynComp tool is a common source for such a
+file (see @ref{DynComp for Java} and @ref{DynComp for C/C++}).
 
 @item --output-dir=@var{directory}
 Write the @file{.dtrace} trace output file to the specified directory.
@@ -8253,28 +8252,43 @@ Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 @cindex slow operation, of Daikon
 @cindex runtime, of Daikon
 
-It can sometimes be slow to create a trace for Daikon to analyze, and it
-can be slow for Daikon to analyze that trace.
+If Daikon runs slowly, there are two general possible reasons:
+@itemize
+@item
+The front end, such as Chicory, took a long time to collect, then output,
+large amounts of data about your program execution.
 
-If Daikon runs too slowly, the problem may be that Daikon is
-spending too much time collecting, then outputting, large amounts of
-data about your program execution.
+@item
+It took a long time to analyze that data trace and infer invariants over
+it.
+@end itemize
+
+To understand which part is the bottleneck, you might want to separate the
+creation and analysis of the trace file, so you can compare the time of
+each part.
+The next two sections address each of these issues.
+
+You may find command-line arguments like the following useful when
+debugging Daikon's performance:
+@example
+   --config_option daikon.Daikon.progress_delay=100
+   --show_progress --dbg daikon.init
+@end example
 
 For additional details on improving Daikon's performance, see @ref{Out of
-memory}, and @ref{Large dtrace files}.
+memory}.
 
 
 @subsubsection Slow creation of large trace files
 @cindex large trace files, creating
 
-Creating a trace can take a long time, because of the time to traverse
-and print the values of many variables.  If your invariant detection
-process runs slowly, you might want to separate the creation and
-analysis of the trace file, to help you understand which part (or both)
-are at fault.  Reducing the number of program points or variables can
-speed up both creation and analysis of trace files.  For instance, you
-might eliminate helper procedures from the analysis, or eliminate large
-arrays that get repeatedly output.
+Creating a trace can take a long time, because of the time to traverse and
+print the values of many variables.  Reducing the number of program points
+or variables can speed up both creation and analysis of trace files.  For
+instance, you might configure your front end to skip certain procedures
+(helper procedures, libraries) or not to output certain variables (large
+arrays or static variables).
+For details, see @ref{Large dtrace files}.
 
 
 @subsubsection Slow inference of invariants
