@@ -2047,9 +2047,9 @@ public final class Daikon {
                 + ":");
       }
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
-      fileio_progress.shouldStop = true;
       // Final update, so "100%", not "99.70%", is the last thing printed.
       fileio_progress.display();
+      fileio_progress.shouldStop = true;
       if (!Daikon.dkconfig_quiet) {
         System.out.println();
       }
@@ -2126,6 +2126,7 @@ public final class Daikon {
 
     debugProgress.fine("Create Combined Exits ... ");
     create_combined_exits(all_ppts);
+    debugProgress.fine("Create Combined Exits ... done");
 
     // Post process dynamic constants
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
