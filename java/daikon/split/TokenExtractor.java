@@ -24,7 +24,7 @@ class TokenExtractor extends DepthFirstVisitor {
   /**
    * Extracts all the tokens from expression.
    * @param expression a valid segment of java code from which expression
-   *  should be extracted.
+   *  should be extracted
    * @throws ParseException when expression is not a valid segment of
    *    java code.
    * @return all the tokens of expression.
@@ -39,7 +39,7 @@ class TokenExtractor extends DepthFirstVisitor {
   /**
    * Extracts all the tokens from expression whose jtb syntax tree is
    * rooted at root.
-   * @param root a jtb syntax tree.
+   * @param root a jtb syntax tree
    * @return all the tokens in the tree rooted at root.
    */
   public static NodeToken[] extractTokens(Node root) {

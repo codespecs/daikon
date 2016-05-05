@@ -42,7 +42,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * Creates a new instance of StatementReplacer that makes the
    * replacements specified by the ReplaceStatements of replaceStatements.
    * @param replaceStatements a list of ReplaceStatements specifying the
-   *  replacements to be made by this.
+   *  replacements to be made by this
    */
   public StatementReplacer(List<ReplaceStatement> replaceStatements) {
     statementMap = new ReplaceStatementMap(replaceStatements);
@@ -54,7 +54,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * Makes the replacements in statement that are designated by this.
    * See class description for details.
    * @param expression a segment of valid java code in which the
-   *  the replacements should be made.
+   *  the replacements should be made
    * @return statement with the correct replacements made.
    */
   public String makeReplacements(String expression) throws ParseException {
@@ -98,7 +98,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * to the replace statement.  All the other tokens are set to the
    * empty string by visit(NodeToken n).
    * @param n the possible method call in which replacement may be
-   *  made.
+   *  made
    */
   public void visit(PrimaryExpression n) {
     if (!matchFound) {
@@ -142,7 +142,7 @@ class StatementReplacer extends DepthFirstVisitor {
   /**
    * Returns a List of the parameter names (as Strings) of the
    * MethodParameters of params.
-   * @param params the MethodParameters' whose names are desired.
+   * @param params the MethodParameters' whose names are desired
    */
   private List<String> getParameterNames(ReplaceStatement.MethodParameter[] params) {
     List<String> args = new ArrayList<String>();
@@ -170,7 +170,7 @@ class StatementReplacer extends DepthFirstVisitor {
 
   /**
    * Returns the name of the method call represented by n.
-   * @param n a "non-this" method call.
+   * @param n a "non-this" method call
    */
   private String getNonThisName(PrimaryExpression n) {
     Name nameNode = (Name) n.f0.f0.choice;
@@ -180,7 +180,7 @@ class StatementReplacer extends DepthFirstVisitor {
   /**
    * Returns the name of the method call represented by n including
    * the "this." prefix.
-   * @param n a "this" method call.
+   * @param n a "this" method call
    */
   private String getThisName(PrimaryExpression n) {
     return Ast.format(n.f0) + Ast.format(n.f1.elementAt(0));
@@ -215,7 +215,7 @@ class StatementReplacer extends DepthFirstVisitor {
   /**
    * Returns the arguments from the "this" method call n. For example
    * "method(x, y + 1)" would yield "[(x), (y + 1)]"
-   * @param n the "this" method call from which the arguments should be extracted.
+   * @param n the "this" method call from which the arguments should be extracted
    * @return a list of arguments from the method call n.
    */
   private List<String> getArgs(PrimaryExpression n) {
@@ -241,7 +241,7 @@ class StatementReplacer extends DepthFirstVisitor {
   /**
    * Returns the arguments from the "non-this" method call n. For example
    * "method(x, y)" would yield "[x, y]"
-   * @param n the "non-this" method call from which the arguments should be extracted.
+   * @param n the "non-this" method call from which the arguments should be extracted
    * @return a list of arguments from the method call n.
    */
   private List<String> getNonThisArgs(PrimaryExpression n) {

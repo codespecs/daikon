@@ -601,11 +601,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * on the actual samples seen.  It should be overriden for more complex
    * invariants (eg, bound, oneof, linearbinary, etc).
    *
-   * @param invs        List of invariants to merge.  The invariants must
+   * @param invs        list of invariants to merge.  The invariants must
    *                    all be of the same type and should come from
    *                    the children of parent_ppt.  They should also all be
    *                    permuted to match the variable order in parent_ppt.
-   * @param parent_ppt  Slice that will contain the new invariant
+   * @param parent_ppt  slice that will contain the new invariant
    *
    * @return the merged invariant or null if the invariants didn't represent
    * the same invariant.
@@ -1161,7 +1161,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * do static checking.
    * <p>
    * Precondition: vis.length == this.ppt.var_infos.length
-   * @param vis The VarInfos this invariant is obvious over.  The
+   * @param vis the VarInfos this invariant is obvious over.  The
    * position and data type of the variables is the *same* as that of
    * this.ppt.var_infos.
    **/

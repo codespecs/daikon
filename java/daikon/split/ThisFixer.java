@@ -52,7 +52,7 @@ class ThisFixer extends DepthFirstVisitor {
 
   /**
    * Modifies "this." or inserts "this_" in expression.
-   * @param expression valid segment of java code which should be modified.
+   * @param expression valid segment of java code which should be modified
    * @return expression with instances of "this."
    *    changes to "this_".
    */

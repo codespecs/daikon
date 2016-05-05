@@ -82,7 +82,7 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
    *   a[a.length+1..a.length]
    *
    * @param left_closed true means the range starts at i; false means
-   * it starts at i+1.
+   * it starts at i+1
    * @param right_closed true means the range ends at j; false means
    * it ends at j-1.
    **/

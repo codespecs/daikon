@@ -2147,9 +2147,9 @@ class DCInstrument {
    * of instructions that replaces the specified instruction.  Returns
    * null if the instruction should not be replaced.
    *
-   *    @param mg Method being instrumented
-   *    @param ih Handle of Instruction to translate
-   *    @param stack Current contents of the stack.
+   *    @param mg method being instrumented
+   *    @param ih handle of Instruction to translate
+   *    @param stack current contents of the stack
    */
   /*@Nullable*/ InstructionList xform_inst(MethodGen mg, InstructionHandle ih, OperandStack stack) {
 
@@ -2561,9 +2561,9 @@ class DCInstrument {
    * Like xform_inst, but transforms instructions to track
    * comparability of references only (i.e. primitives are skipped).
    *
-   *    @param mg Method being instrumented
-   *    @param ih Handle of Instruction to translate
-   *    @param stack Current contents of the stack.
+   *    @param mg method being instrumented
+   *    @param ih handle of Instruction to translate
+   *    @param stack current contents of the stack
    */
   InstructionList xform_inst_refs_only(MethodGen mg, InstructionHandle ih, OperandStack stack) {
 
@@ -4458,8 +4458,8 @@ class DCInstrument {
    * TODO: add a way to provide a synopsis for native methods that
    * affect comparability.
    *
-   * @param gen ClassGen for current class
-   * @param mg MethodGen for the interface method. Must be native
+   * @param gen current class
+   * @param mg the interface method. Must be native
    */
   public void fix_native(ClassGen gen, MethodGen mg) {
 
@@ -4553,8 +4553,8 @@ class DCInstrument {
    *
    * (Reference comparability only.)
    *
-   * @param gen ClassGen for current class
-   * @param mg MethodGen for the interface method. Must be native
+   * @param gen current class
+   * @param mg the interface method. Must be native
    */
   public void fix_native_refs_only(ClassGen gen, MethodGen mg) {
 
@@ -4847,10 +4847,10 @@ class DCInstrument {
    *      DCRuntime.push_field_tag (this, tag_offset);
    *  }
    *
-   * @param gen ClassGen of class whose accessors are being built. Not
+   * @param gen class whose accessors are being built. Not
    *          necessarily the class declaring f (if f is inherited)
    * @param f field to build an accessor for
-   * @param tag_offset Offset of f in the tag storage for this field
+   * @param tag_offset offset of f in the tag storage for this field
    */
   public MethodGen create_get_tag(ClassGen gen, Field f, int tag_offset) {
 
@@ -4910,10 +4910,10 @@ class DCInstrument {
    *      DCRuntime.pop_field_tag (this, tag_offset);
    *  }
    *
-   * @param gen ClassGen of class whose accessors are being built. Not
+   * @param gen class whose accessors are being built. Not
    *          necessarily the class declaring f (if f is inherited)
    * @param f field to build an accessor for
-   * @param tag_offset Offset of f in the tag storage for this field
+   * @param tag_offset offset of f in the tag storage for this field
    */
   public MethodGen create_set_tag(ClassGen gen, Field f, int tag_offset) {
 

@@ -568,7 +568,7 @@ public final class DCRuntime {
    * primitive parameters off of the tag stack and store them in the
    * tag frame.
    *
-   * @param params Encodes the position of the primitive parameters into
+   * @param params encodes the position of the primitive parameters into
    * a string.  The first character is size of the tag frame.  The
    * remaining characters indicate where each parameter on the tag stack
    * should be stored into the frame.  For example "20" allocates a tag
@@ -922,10 +922,10 @@ public final class DCRuntime {
    * values are comparable are marked as comparable.
    *
    * @param tag_frame tag_frame containing the tags for the primitive
-   *        arguments of this method.
+   *        arguments of this method
    * @param obj value of 'this'.  Null if the method is static
    * @param mi_index index into the list of all methods (methods)
-   * @param args Array of the arguments to the method.
+   * @param args array of the arguments to the method
    */
   public static void enter(
       Object[] tag_frame, /*@Nullable*/ Object obj, int mi_index, Object[] args) {
@@ -983,7 +983,7 @@ public final class DCRuntime {
    *
    * @param obj value of 'this'.  Null if the method is static
    * @param mi_index index into the list of all methods (methods)
-   * @param args Array of the arguments to the method.
+   * @param args array of the arguments to the method
    */
   public static void enter_refs_only(/*@Nullable*/ Object obj, int mi_index, Object[] args) {
 
@@ -1038,11 +1038,11 @@ public final class DCRuntime {
    * values are comparable are marked as comparable.
    *
    * @param tag_frame tag_frame containing the tags for the primitive
-   * arguments of this method.
+   * arguments of this method
    * @param obj value of 'this'.  Null if the method is static
    * @param mi_index index into the list of all methods (methods)
-   * @param args Array of the arguments to the method.
-   * @param ret_val Value returned by the method.  Null if the method is a
+   * @param args array of the arguments to the method
+   * @param ret_val value returned by the method.  Null if the method is a
    * constructor or void,
    * @param exit_line_number the source line number of this exit point
    */
@@ -1096,8 +1096,8 @@ public final class DCRuntime {
    *
    * @param obj value of 'this'.  Null if the method is static
    * @param mi_index index into the list of all methods (methods)
-   * @param args Array of the arguments to the method.
-   * @param ret_val Value returned by the method.  Null if the method is a
+   * @param args array of the arguments to the method
+   * @param ret_val value returned by the method.  Null if the method is a
    * constructor or void,
    * @param exit_line_number the source line number of this exit point
    */
@@ -1322,8 +1322,8 @@ public final class DCRuntime {
    * The tag for non-primitive fields is the object itself.
    *
    * @param fi     DaikonVariable to process
-   * @param parent Value of dv's parent
-   * @param obj    Value of dv
+   * @param parent value of dv's parent
+   * @param obj    value of dv
    */
   static Object old_get_field_tag(FieldInfo fi, Object parent, Object obj) {
 
@@ -1410,13 +1410,13 @@ public final class DCRuntime {
    * Merges the comparability of the daikon variable dv and its children
    * whose current values are comparable.
    *
-   * @param varmap Map from value set leaders to the first daikon variable
+   * @param varmap map from value set leaders to the first daikon variable
    *               encountered with that leader.  Whenever a second daikon
    *               variable is encountered whose value has the same leader,
    *               that daikon variable is merged with the first daikon
    *               variable
-   * @param parent Value of dv's parent
-   * @param obj    Value of dv
+   * @param parent value of dv's parent
+   * @param obj    value of dv
    * @param dv     DaikonVariable to process
    */
   static void merge_comparability(
@@ -1564,13 +1564,13 @@ public final class DCRuntime {
    * whose current values are comparable.
    * (Reference comparability only.)
    *
-   * @param varmap Map from value set leaders to the first daikon variable
+   * @param varmap map from value set leaders to the first daikon variable
    *               encountered with that leader.  Whenever a second daikon
    *               variable is encountered whose value has the same leader,
    *               that daikon variable is merged with the first daikon
    *               variable
-   * @param parent Value of dv's parent
-   * @param obj    Value of dv
+   * @param parent value of dv's parent
+   * @param obj    value of dv
    * @param dv     DaikonVariable to process
    */
   static void merge_comparability_refs_only(
@@ -2935,8 +2935,8 @@ public final class DCRuntime {
 
     /**
      * Gets the tag for the field
-     * @param parent Object that contains the field (if any)
-     * @param obj Value of the field itself (if available and if its an
+     * @param parent object that contains the field (if any)
+     * @param obj value of the field itself (if available and if its an
      *            object
      */
     abstract Object get_tag(Object parent, Object obj);
@@ -3277,11 +3277,11 @@ public final class DCRuntime {
    * Recursive routine that sets up the length and reference information
    * for an array of possibly multiple dimensions
    *
-   *    @param dim   Index into tags array of the tag for this dimension
+   *    @param dim   index into tags array of the tag for this dimension
    *                 of the array
-   *    @param tags  The tags for the size of each dimension of the array
-   *    @param descr Description of the array allocation
-   *    @param arr   The array.  Should have tags.length - dim dimensions
+   *    @param tags  the tags for the size of each dimension of the array
+   *    @param descr description of the array allocation
+   *    @param arr   the array.  Should have tags.length - dim dimensions
    */
   private static void setup_multiarray_df(int dim, Object[] tags, ValueSource descr, Object arr) {
 

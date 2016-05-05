@@ -90,9 +90,9 @@ public class NISuppression {
    * The results are saved in each suppressor.  The suppressor results
    * are used later by @link{#invalidated()}
    *
-   * @param ppt     Program point in which to check suppression
-   * @param vis     Variables over which to check suppression
-   * @param inv     Falsified invariant (if any).  Any suppressor
+   * @param ppt     program point in which to check suppression
+   * @param vis     variables over which to check suppression
+   * @param inv     falsified invariant (if any).  Any suppressor
    *                that matches inv will be marked as NIS.SuppressState.MATCH
    *
    * @return NIS.SuppressState.VALID if the suppression is valid, NIS.SuppressState.NONSENSICAL if one or
@@ -159,11 +159,11 @@ public class NISuppression {
    * Finds all of the invariants that are suppressed by this
    * suppression.
    *
-   * @param suppressed_invs     Any invariants that are suppressed by
+   * @param suppressed_invs     any invariants that are suppressed by
    *                            the antecedent invariants in ants
    *                            using this suppression are added to
-   *                            this set.
-   * @param ants                Antecedents organized by class
+   *                            this set
+   * @param ants                antecedents organized by class
    */
   public void find_suppressed_invs(Set<NIS.SupInv> suppressed_invs, NIS.Antecedents ants) {
 
@@ -188,12 +188,12 @@ public class NISuppression {
    * their antecedent invariants is falsified).  The invariant may
    * still be suppressed by a different suppression.
    *
-   * @param unsuppressed_invs   Any invariants that are suppressed by
+   * @param unsuppressed_invs   any invariants that are suppressed by
    *                            the antecedent invariants in ants
    *                            using this suppression are added to
    *                            this set if one or more of the antecedents
-   *                            are falsified.
-   * @param ants                Antecedents organized by class
+   *                            are falsified
+   * @param ants                antecedents organized by class
    */
   public void find_unsuppressed_invs(Set<NIS.SupInv> unsuppressed_invs, NIS.Antecedents ants) {
 
@@ -234,13 +234,13 @@ public class NISuppression {
    * of antecedents for each suppressor are examined and each
    * valid combination will yield an entry in suppressed_invs.
    *
-   * @param suppressed_invs     This set is updated with any invariants
+   * @param suppressed_invs     this set is updated with any invariants
    *                            that are suppressed,
-   * @param antecedents         Array of antecedents per suppressor
-   * @param vis                 Current variables for the suppressed invariant
+   * @param antecedents         array of antecedents per suppressor
+   * @param vis                 current variables for the suppressed invariant
    *                            As antecedents are chosen, their variables
-   *                            are placed into vis.
-   * @param idx                 Current index into suppressors and antecedents
+   *                            are placed into vis
+   * @param idx                 current index into suppressors and antecedents
    *
    * @see #find_unsuppressed_invs (Set, List, VarInfo[], int, boolean)
    * @see #consider_inv (Invariant, NISuppressor, VarInfo[])
@@ -303,17 +303,17 @@ public class NISuppression {
    * valid combination with at least one falsified antecedent
    * will yield an entry in unsuppressed_invs.
    *
-   * @param unsuppressed_invs   This set is updated with any invariants
+   * @param unsuppressed_invs   this set is updated with any invariants
    *                            that were suppressed, but one of the
    *                            suppressors is falsified (thus, the invariant
    *                            is no longer suppressed)
-   * @param antecedents         Array of antecedents per suppressor
-   * @param vis                 Current variables for the suppressed invariant
+   * @param antecedents         array of antecedents per suppressor
+   * @param vis                 current variables for the suppressed invariant
    *                            As antecedents are chosen, their variables
-   *                            are placed into vis.
-   * @param idx                 Current index into suppressors and antecedents
-   * @param false_antecedents   True if a false antecedent has been found
-   * @param cinvs               The invariants associated with the current
+   *                            are placed into vis
+   * @param idx                 current index into suppressors and antecedents
+   * @param false_antecedents   true if a false antecedent has been found
+   * @param cinvs               the invariants associated with the current
    *                            set of antecedents.  Used only for debug
    *                            printing.  May be side-effected by having
    *                            cinvs[idx] set to null.
@@ -414,9 +414,9 @@ public class NISuppression {
    * to the same variable more than once.  In those cases, the
    * antecedent invariants must also be over the same variables.
    *
-   * @param inv         The invariant to attempt to add to the suppression.
-   * @param supor       The suppressor we are trying to match.
-   * @param vis         The current variables (if any) that have already
+   * @param inv         the invariant to attempt to add to the suppression
+   * @param supor       the suppressor we are trying to match.
+   * @param vis         the current variables (if any) that have already
    *                    been determined by previous antecedents.
    *
    * @return a new VarInfo[] containing the variables of inv or null if inv

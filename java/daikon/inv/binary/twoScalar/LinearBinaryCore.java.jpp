@@ -607,7 +607,7 @@ public final class CLASSNAME
    * that invariant.  The merged core is returned.  Null is
    * returned if the cores don't describe the same line
    *
-   * @param cores   List of LinearBinary cores to merge.  They should
+   * @param cores   list of LinearBinary cores to merge.  They should
    *                all be permuted to match the variable order in
    *                ppt.
    */

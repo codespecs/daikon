@@ -703,7 +703,7 @@ public class PptSplitter implements Serializable {
    * If the implication specified by predicate and consequent
    * is a valid implication, adds it to the joiner view of
    * parent.
-   * @param orig_invs Maps permuted invariants to their original invariants
+   * @param orig_invs maps permuted invariants to their original invariants
    **/
   public void add_implication(
       PptTopLevel ppt,

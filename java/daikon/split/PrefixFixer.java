@@ -41,7 +41,7 @@ class PrefixFixer extends DepthFirstVisitor {
   /**
    * Fixes prefixes located in statement (see class description).
    * @param expression valid segment of java code from which prefix
-   *  should be fixed.
+   *  should be fixed
    */
   public static String fixPrefix(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);

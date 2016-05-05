@@ -819,12 +819,12 @@ public class LOWERBOUND
    * in each invariant, applies them to a new parent invariant and
    * returns the merged invariant (if any).
    *
-   * @param invs        List of invariants to merge.  The invariants must all
+   * @param invs        list of invariants to merge.  The invariants must all
    *                    be of the same type and should come from the
    *                    children of parent_ppt.  They should also all
    *                    be permuted to match the variable order in
    *                    parent_ppt.
-   * @param parent_ppt  Slice that will contain the new invariant
+   * @param parent_ppt  slice that will contain the new invariant
    */
   public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 

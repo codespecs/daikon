@@ -40,7 +40,7 @@ class OrigFixer extends DepthFirstVisitor {
    * For example, "orig(x + y &gt; z - 3)" would yield,
    * "orig_x + orig_y &gt; orig_z - 3".
    * @param expression a valid segment of java code in which "orig()" is
-   *  being replaced.
+   *  being replaced
    * @return condition with all instances of "orig()" replaced.
    * @throws ParseException if expression is not valid java code.
    */

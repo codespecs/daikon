@@ -304,10 +304,10 @@ public class PptSliceEquality extends PptSlice {
    * <p>
    * pre: vis.size() &gt; 0
    * post: result.size() &gt; 0
-   * @param vis The VarInfos that were different from leader
-   * @param vt The ValueTuple associated with the VarInfos now
-   * @param leader The original leader of VarInfos
-   * @param count The number of samples seen (needed to set the number
+   * @param vis the VarInfos that were different from leader
+   * @param vt the ValueTuple associated with the VarInfos now
+   * @param leader the original leader of VarInfos
+   * @param count the number of samples seen (needed to set the number
    * of samples for the new Equality invariants)
    * @return a List of Equality invariants bundling together same
    * values from vis, and if needed, another representing all the
@@ -382,8 +382,8 @@ public class PptSliceEquality extends PptSlice {
    * <p>
    * pre: vis.size() &gt; 0
    * post: result.size() &gt; 0
-   * @param vis The VarInfos that were different from leader
-   * @param leader The original leader of VarInfos
+   * @param vis the VarInfos that were different from leader
+   * @param leader the original leader of VarInfos
    * @return a List of Equality invariants bundling together same
    * values from vis.
    */
@@ -416,11 +416,11 @@ public class PptSliceEquality extends PptSlice {
    * <p>
    * pre: Each value in map is a list of size 1 or greater
    * post: Each value in map is a list of size 1 or greater
-   * @param map The map to add the bindings to
-   * @param key If there is already a List associated with key, then
+   * @param map the map to add the bindings to
+   * @param key if there is already a List associated with key, then
    * add value to key.  Otherwise create a new List associated with
    * key and insert value.
-   * @param value The value to insert into the List mapped to key.
+   * @param value the value to insert into the List mapped to key.
    **/
   private <T> void addToBindingList(Map<T, List<VarInfo>> map, T key, VarInfo value) {
     assert key != null;
@@ -534,14 +534,14 @@ public class PptSliceEquality extends PptSlice {
    * the end of slice.var_infos, this method attempts to instantiate
    * the slice that has been produced.  The standard start for
    * position is 0, and for loop is -1.
-   * @param leader The variable to replace in slice
+   * @param leader the variable to replace in slice
    * @param newVis of VarInfos that will replace leader in combination in slice
-   * @param slice The slice to clone
-   * @param newSlices Where to put the cloned slices
-   * @param position The position currently being replaced in source.  Starts at 0.
-   * @param loop The iteration of the loop for this position.  If -1,
+   * @param slice the slice to clone
+   * @param newSlices where to put the cloned slices
+   * @param position the position currently being replaced in source.  Starts at 0.
+   * @param loop the iteration of the loop for this position.  If -1,
    * means the previous replacement is leader.
-   * @param soFar Buffer to which assignments temporarily go before
+   * @param soFar buffer to which assignments temporarily go before
    * becoming instantiated.  Has to equal slice.var_infos in length.
    **/
   private void copyInvsFromLeaderHelper(

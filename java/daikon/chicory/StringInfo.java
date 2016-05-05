@@ -42,7 +42,7 @@ public class StringInfo extends DaikonVariableInfo {
    * If theValues is null, returns "null." If theValues is
    * nonsensical, returns "nonsensical".
    *
-   * @param theValues A list of values, each is a String or NonsensicalObject or NonsensicalList.
+   * @param theValues a list of values, each is a String or NonsensicalObject or NonsensicalList
    * @return a space-separated String of the elements in theValues
    */
   public static String getStringList(List<?> theValues) {

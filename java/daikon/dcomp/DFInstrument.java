@@ -130,10 +130,10 @@ class DFInstrument extends DCInstrument {
    * of instructions that replaces the specified instruction.  Returns
    * null if the instruction should not be replaced.
    *
-   *    @param mg Method being instrumented
-   *    @param ih Handle of Instruction to translate
-   *    @param stack Current contents of the stack.
-   *    @param branch_cr Code range of branch whose dataflow is desired.
+   *    @param mg method being instrumented
+   *    @param ih handle of Instruction to translate
+   *    @param stack current contents of the stack
+   *    @param branch_cr code range of branch whose dataflow is desired.
    *    null indicates there are no branches of interest in this method.
    */
   /*@Nullable*/ InstructionList xform_inst(

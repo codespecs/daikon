@@ -58,7 +58,7 @@ class ArrayFixer extends DepthFirstVisitor {
   /**
    * Creates a new instance of ArrayFixer.
    * @param vars is a list of strings
-   *    of possible names of the variables in the condition.
+   *    of possible names of the variables in the condition
    * @param varInfos is a list of the corresponding VarInfos for each of the names
    *    in vars.
    */
@@ -74,7 +74,7 @@ class ArrayFixer extends DepthFirstVisitor {
    * varInfos is the VarInfo for the ith element of names.
    * @param expression a valid segment of java code
    * @param names is a List of Strings that are the names of all the variables
-   *    in statement.
+   *    in statement
    * @param varInfos is a List of VarInfos for all the variables named in names.
    * @return condition with all variable referring to arrays suffixed with
    *   "_identity" or "_array" as needed.
@@ -93,10 +93,10 @@ class ArrayFixer extends DepthFirstVisitor {
    * Fixes the arrays found in statement (see class description).
    * names and varInfos must be in same order s.t. the ith element of
    * varInfos is the VarInfo for the ith element of names.
-   * @param root the root of a jtb syntax tree.
+   * @param root the root of a jtb syntax tree
    * @param names is a List of Strings that are the names of all the variables
    *    in statement.
-   * @param varInfos is a List of VarInfos for all the variables named in names.
+   * @param varInfos is a List of VarInfos for all the variables named in names
    * @return condition with all variable referring to arrays suffixed with
    *   "_identity" or "_array" as needed.
    */

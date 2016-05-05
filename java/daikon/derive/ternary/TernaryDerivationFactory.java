@@ -15,9 +15,9 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
   /**
    * Create a set of derivations from three base variables.  If the
    * base variables aren't worth deriving from, returns null.
-   * @param vi1 The first of the three base variables
-   * @param vi2 The second of the three base variables
-   * @param vi3 The third of the three base variables
+   * @param vi1 the first of the three base variables
+   * @param vi2 the second of the three base variables
+   * @param vi3 the third of the three base variables
    * @return a set of derivations based on three base variables.  We
    * allow more than one because the base variables may have multiple
    * derived variables, per type of derivation.  Can also be null if the

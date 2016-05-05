@@ -359,7 +359,7 @@ public class Runtime {
    * Chicory.checkStaticInit.  When enabled, this method should only
    * be called by the hooks created in the Instrument class.
    *
-   * @param className Fully qualified class name
+   * @param className fully qualified class name
    */
   public static void initNotify(String className) {
     assert !initSet.contains(className) : className + " already exists in initSet";
@@ -372,7 +372,7 @@ public class Runtime {
    * Return true iff the class with fully qualified name className
    * has been initialized.
    *
-   * @param className Fully qualified class name
+   * @param className fully qualified class name
    */
   public static boolean isInitialized(String className) {
     return initSet.contains(className);
