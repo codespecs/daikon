@@ -50,7 +50,7 @@ public class DaikonClassInfo extends DaikonVariableInfo {
    * Get a String representation of the given Object's runtime type and the
    * corresponding "modified" value
    * @param val the Object whose runtime class we wish to get a String representation of
-   * @return String representation (suitable for a .dtrace file) of the
+   * @return string representation (suitable for a .dtrace file) of the
    * given Object's runtime type, and the "modified" value (modbit)
    */
   public String getValueStringNonArr(Object val) {

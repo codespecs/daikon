@@ -2829,7 +2829,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     private Set<String> simples;
 
     /**
-     * @return Collection of simple identifiers used in this
+     * @return collection of simple identifiers used in this
      * expression, as Strings. (Used, for instance, to check for
      * conflict with a quantifier variable name).
      **/
@@ -2889,7 +2889,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     private Set<VarInfoName> /*actually <Elements || Slice>*/ unquant;
 
     /**
-     * @return Collection of the nodes under the root that need
+     * @return collection of the nodes under the root that need
      * quantification.  Each node represents an array; in particular,
      * the values are either of type Elements or Slice.
      **/

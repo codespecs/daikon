@@ -623,8 +623,8 @@ public abstract class DaikonVariableInfo
    * Also adds "derived" variables
    * such as the runtime .class variable.
    *
-   * @return The newly created DaikonVariableInfo object, whose
-   * parent is this.
+   * @return the newly created DaikonVariableInfo object, whose
+   * parent is this
    */
   protected DaikonVariableInfo addDeclVar(
       ClassInfo cinfo,
@@ -724,8 +724,8 @@ public abstract class DaikonVariableInfo
    * as a child of this node.  Also adds "derived" variables
    * such as the runtime .class variable.
    *
-   * @return The newly created DaikonVariableInfo object, whose
-   * parent is this.
+   * @return the newly created DaikonVariableInfo object, whose
+   * parent is this
    */
   protected DaikonVariableInfo addDeclVar(Field field, String offset, StringBuffer buf) {
     debug_vars.log("enter addDeclVar(field):%n");
@@ -843,7 +843,7 @@ public abstract class DaikonVariableInfo
    * @param asArray
    *            Whether the variable is being output as an array (true) or as
    *            a pointer (false).
-   * @return The representation type as a string
+   * @return the representation type as a string
    */
   public static String getRepName(Class<?> type, boolean asArray) {
     if (type == null) {

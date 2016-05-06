@@ -183,11 +183,11 @@ public class Runtime {
   /**
    * Called when a method is entered.
    *
-   * @param obj - Receiver of the method that was entered.  Null if method is
+   * @param obj receiver of the method that was entered.  Null if method is
    *              static
-   * @param nonce - Nonce identifying which enter/exit pair this is
-   * @param mi_index - Index in methods of the MethodInfo for this method
-   * @param args - Array of arguments to method
+   * @param nonce nonce identifying which enter/exit pair this is
+   * @param mi_index index in methods of the MethodInfo for this method
+   * @param args array of arguments to method
    */
   public static synchronized void enter(
       /*@Nullable*/ Object obj, int nonce, int mi_index, Object[] args) {
@@ -261,13 +261,13 @@ public class Runtime {
   /**
    * Called when a method is exited.
    *
-   * @param obj        -  Receiver of the method that was entered.  Null if method is
+   * @param obj receiver of the method that was entered.  Null if method is
    *                      static
-   * @param nonce       - Nonce identifying which enter/exit pair this is
-   * @param mi_index    - Index in methods of the MethodInfo for this method
-   * @param args        - Array of arguments to method
-   * @param ret_val     - Return value of method.  null if method is void
-   * @param exitLineNum - The line number at which this method exited
+   * @param nonce nonce identifying which enter/exit pair this is
+   * @param mi_index index in methods of the MethodInfo for this method
+   * @param args array of arguments to method
+   * @param ret_val return value of method.  null if method is void
+   * @param exitLineNum the line number at which this method exited
    */
   public static synchronized void exit(
       /*@Nullable*/ Object obj,

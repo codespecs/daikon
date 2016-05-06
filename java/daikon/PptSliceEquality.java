@@ -385,7 +385,7 @@ public class PptSliceEquality extends PptSlice {
    * @param vis the VarInfos that were different from leader
    * @param leader the original leader of VarInfos
    * @return a List of Equality invariants bundling together same
-   * values from vis.
+   * values from vis
    */
   public List<Equality> createEqualityInvs(List<VarInfo> vis, Equality leader) {
     assert vis.size() > 0;

@@ -1811,7 +1811,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * a[].b[].c will fail.
    * <p>
    * 
-   * @return If the resulting collection is of non-primitive type, then
+   * @return if the resulting collection is of non-primitive type, then
    * returns an array of type Object[].
    * Returns null if any array or field access causes an exception.
    */

@@ -98,7 +98,7 @@ public abstract class DaikonWriter {
    *    short_name: doNew
    *
    * @param point usually "EXIT" or "ENTER"
-   * @return Same thing as methodName(Member, point)
+   * @return same thing as methodName(Member, point)
    */
   private static String methodName(
       String fullClassName, String[] types, String name, String short_name, String point) {

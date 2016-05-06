@@ -1133,9 +1133,9 @@ public final class PrintInvariants {
 
   /**
    * Parses the variables from varInfo.
-   * @param varInfo - the Daikon variable representation to parse
-   * @param sort - true to parse as a grouping variable, false to parse as a filtering variable
-   * @return - the parsed variable string
+   * @param varInfo the Daikon variable representation to parse
+   * @param sort true to parse as a grouping variable, false to parse as a filtering variable
+   * @return the parsed variable string
    */
   public static String parse_csharp_invariant_variable(VarInfo varInfo, boolean sort) {
     // Do not ever want to sort by old value.
@@ -1185,9 +1185,9 @@ public final class PrintInvariants {
 
   /**
    * Parses the variables from vars.
-   * @param vars - an array of Daikon variable representations
-   * @param variables - the set to store the parsed variables
-   * @param sort - true to parse as group variables, false to parse as filtering variables
+   * @param vars an array of Daikon variable representations
+   * @param variables the set to store the parsed variables
+   * @param sort true to parse as group variables, false to parse as filtering variables
    */
   public static void get_csharp_invariant_variables(
       VarInfo[] vars, Set<String> variables, boolean sort) {
@@ -1202,9 +1202,9 @@ public final class PrintInvariants {
    *  If group is true the invariant's grouping variables are parsed (the variables which the invariant is grouped by in the contract list view).
    *  If group is false the invariant's filtering variables are parsed (the variables for which this invariant can be filtered by).
    *  In the case of implications, only variables on the right side of the implication are parsed.
-   * @param invariant - the invariant to parse
-   * @param variables - the set to store the parsed variables
-   * @param group - true to parse group variables, false to parse filtering variables
+   * @param invariant the invariant to parse
+   * @param variables the set to store the parsed variables
+   * @param group true to parse group variables, false to parse filtering variables
    */
   public static void get_csharp_invariant_variables(
       Invariant invariant, Set<String> variables, boolean group) {
@@ -1228,8 +1228,8 @@ public final class PrintInvariants {
 
   /**
    * Gets the invariant type string (i.e. daikon.inv.binary.inv) of a Daikon invariant.
-   * @param invariant - the Daikon invariant
-   * @return - the invariant type string of the invariant
+   * @param invariant the Daikon invariant
+   * @return the invariant type string of the invariant
    */
   public static String get_csharp_inv_type(Invariant invariant) {
     if (invariant instanceof GuardingImplication) {

@@ -334,7 +334,7 @@ public class PptRelation implements Serializable {
    * @param parent_var      the parent variable being matched
    * @param viname          the name to look for in child variables.
    *
-   * @return true if there was a matching variable, false otherwise.
+   * @return true if there was a matching variable, false otherwise
    */
   private boolean relate(VarInfo parent_var, String viname) {
 

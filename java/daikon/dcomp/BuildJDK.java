@@ -61,7 +61,7 @@ public class BuildJDK {
     }
 
     /**
-     * @return true iff libRt exists in the filesystem.
+     * @return true iff libRt exists in the filesystem
      */
     protected boolean exists(String libRt) {
       return new File(libRt).exists();

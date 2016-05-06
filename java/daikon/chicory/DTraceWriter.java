@@ -236,7 +236,7 @@ public class DTraceWriter extends DaikonWriter {
    * @param theObj the object whose field we are examining.
    * TheoObj must be null, Nonsensical, or of a type which
    * contains the field classField
-   * @return The value of the classField field in theObj
+   * @return the value of the classField field in theObj
    */
   public static Object getValue(Field classField, Object theObj) {
     // if we don't have a real object, return NonsensicalValue
@@ -421,7 +421,7 @@ public class DTraceWriter extends DaikonWriter {
    * @param val the object whose type we are examining
    * @param declared the declared type of the variable corresponding to val
    * @param runtime should we use the runtime type or declared type?
-   * @return The variable's type, with primitive wrappers removed, or null if the value is non-null
+   * @return the variable's type, with primitive wrappers removed, or null if the value is non-null
    */
   public static /*@Nullable*/ Class<?> removeWrappers(
       Object val, Class<?> declared, boolean runtime) {
