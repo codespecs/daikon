@@ -208,10 +208,10 @@ public class NISuppressor {
    * particular permutation ofarguments.  Invariants that have an
    * internal permute variable must match that as well.
    *
-   * @param ppt     The top level program point
-   * @param vis     The slice of the suppressee.  Thus, if the suppressee is
+   * @param ppt     the top level program point
+   * @param vis     the slice of the suppressee.  Thus, if the suppressee is
    *                ternary, vis, should specify three variables.
-   * @param inv     The falsified invariant.  inv_match indicates whether
+   * @param inv     the falsified invariant.  inv_match indicates whether
    *                or not inv matches this suppressor
    *
    * @return the state of this suppressor which is one of (NIS.SuppressState.MATCH,

@@ -57,7 +57,7 @@ public abstract class VarComparability {
    * @return a new comparability that is an array with the same dimensionality
    * and indices as given, but with a different element type.
    *
-   * @param elemTypeName the new type of the elements of return value.
+   * @param elemTypeName the new type of the elements of return value
    * @param old the varcomparability that this is derived from; has
    * the same indices as this.
    **/

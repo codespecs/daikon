@@ -422,7 +422,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     private static final String argDivider = ";";
 
     /**
-     * @return String containing error messages for any
+     * @return string containing error messages for any
      *  failed cases.  In the case that there are no failed
      *  cases, the empty string is returned.  In the case where
      *  commands is empty (there are no more test cases and the

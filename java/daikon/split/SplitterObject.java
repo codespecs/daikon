@@ -44,8 +44,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
   public /*@Nullable*/ String csharpFormat = null;
 
   /**
-   * @param condition The splitting condition of this splitter
-   * @param directory The directory where the source of this splitter is located.
+   * @param condition the splitting condition of this splitter
+   * @param directory the directory where the source of this splitter is located
    */
   public SplitterObject(String pptName, String condition, String directory) {
     this.condition = condition;

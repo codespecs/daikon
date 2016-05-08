@@ -54,7 +54,7 @@ public abstract class DaikonWriter {
    * method entry name for Daikon.  Used when reflection information is
    * not available
    *
-   * @param types Argument types
+   * @param types argument types
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(
@@ -64,7 +64,7 @@ public abstract class DaikonWriter {
   /**
    * Given a method, returns the method exit program point name for Daikon
    * @param method require method != null
-   * @param lineNum The line number of the exit point of the method
+   * @param lineNum the line number of the exit point of the method
    * @return the decorated method exit name for Daikon
    */
   public static String methodExitName(Member method, int lineNum) {
@@ -73,8 +73,8 @@ public abstract class DaikonWriter {
   /**
    * Given a method, returns the method exit program point name for Daikon
    *
-   * @param types Argument types
-   * @param lineNum The line number of the exit point of the method
+   * @param types argument types
+   * @param lineNum the line number of the exit point of the method
    * @return the decorated method entry name for Daikon
    */
   public static String methodExitName(
@@ -87,18 +87,18 @@ public abstract class DaikonWriter {
    * string at the end)
    *
    * @param fullClassName packageName.className
-   * @param types String representation of the declared types of the
+   * @param types string representation of the declared types of the
    *          parameters.  for example: {"int", "java.lang.Object", "float"}
-   * @param name The method with modifiers and parameters
-   * @param short_name Just the method's name (except it is "<init>"
+   * @param name the method with modifiers and parameters
+   * @param short_name just the method's name (except it is "<init>"
    * for constructors)
    *
    * So a corresponding name/short_name pair could be:
    *    name: public static void DataStructures.StackArTester.doNew(int size)
    *    short_name: doNew
    *
-   * @param point Usually "EXIT" or "ENTER"
-   * @return Same thing as methodName(Member, point)
+   * @param point usually "EXIT" or "ENTER"
+   * @return same thing as methodName(Member, point)
    */
   private static String methodName(
       String fullClassName, String[] types, String name, String short_name, String point) {
@@ -151,8 +151,8 @@ public abstract class DaikonWriter {
    * Constructs the program point name (which includes the point
    * string at the end)
    *
-   * @param method Reflection object for the method/constructor
-   * @param point Usually "ENTER" or "EXIT"
+   * @param method reflection object for the method/constructor
+   * @param point usually "ENTER" or "EXIT"
    */
   private static String methodName(Member member, String point) {
 
@@ -187,8 +187,8 @@ public abstract class DaikonWriter {
    * Constructs the program point name (which includes the point
    * string at the end)
    *
-   * @param method Reflection object for the method/constructor
-   * @param point Usually "ENTER" or "EXIT"
+   * @param method reflection object for the method/constructor
+   * @param point usually "ENTER" or "EXIT"
    */
   private static String old_methodName(Member method, String point) {
     String name = method.toString();

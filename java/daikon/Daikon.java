@@ -87,8 +87,8 @@ public final class Daikon {
 
   // Don't change the order of the modifiers on these strings as they
   // are automatically updated as part of the release process
-  public final static String release_version = "5.3.1";
-  public final static String release_date = "April 5, 2016";
+  public final static String release_version = "5.3.3";
+  public final static String release_date = "May 2, 2016";
   public final static String release_string =
       "Daikon version "
           + release_version
@@ -1623,7 +1623,7 @@ public final class Daikon {
     PptMap exit_ppts = new PptMap();
 
     for (PptTopLevel ppt : ppts.pptIterable()) {
-      // skip unless its an EXITnn
+      // skip unless it's an EXITnn
       if (!ppt.is_subexit()) continue;
 
       PptTopLevel exitnn_ppt = ppt;
@@ -1632,7 +1632,7 @@ public final class Daikon {
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
       if (debugInit.isLoggable(Level.FINE)) {
-        debugInit.fine("create_combined_exits: encounted exit " + exitnn_ppt.name());
+        debugInit.fine("create_combined_exits: encountered exit " + exitnn_ppt.name());
       }
 
       // Create the exit, if necessary
@@ -2047,8 +2047,10 @@ public final class Daikon {
                 + ":");
       }
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
-      fileio_progress.shouldStop = true;
       // Final update, so "100%", not "99.70%", is the last thing printed.
+      // (This doesn't seem to achieve that, though...)
+      fileio_progress.display();
+      fileio_progress.shouldStop = true;
       fileio_progress.display();
       if (!Daikon.dkconfig_quiet) {
         System.out.println();
@@ -2122,21 +2124,24 @@ public final class Daikon {
 
     // Postprocessing
 
-    stopwatch.reset();
-
     debugProgress.fine("Create Combined Exits ... ");
+    stopwatch.reset();
     create_combined_exits(all_ppts);
+    debugProgress.fine("Create Combined Exits ... done [" + stopwatch.format() + "]");
 
     // Post process dynamic constants
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
       debugProgress.fine("Constant Post Processing ... ");
+      stopwatch.reset();
       for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         if (ppt.constants != null) ppt.constants.post_process();
       }
+      debugProgress.fine("Constant Post Processing ... done [" + stopwatch.format() + "]");
     }
 
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
+    stopwatch.reset();
     assert FileIO.new_decl_format != null
         : "@AssumeAssertion(nullness): read data, so new_decl_format is set";
     if (FileIO.new_decl_format) {
@@ -2144,24 +2149,26 @@ public final class Daikon {
     } else {
       PptRelation.init_hierarchy(all_ppts);
     }
-    debugProgress.fine("Init Hierarchy ... done");
+    debugProgress.fine("Init Hierarchy ... done [" + stopwatch.format() + "]");
 
     // Calculate invariants at all non-leaf ppts
     if (use_dataflow_hierarchy) {
-      debugProgress.fine("createUpperPpts");
+      debugProgress.fine("createUpperPpts ... ");
+      stopwatch.reset();
       // calculates invariants; does not actually create any ppts
       createUpperPpts(all_ppts);
-      debugProgress.fine("createUpperPpts ... done");
+      debugProgress.fine("createUpperPpts ... done [" + stopwatch.format() + "]");
     }
 
     // Equality data for each PptTopLevel.
     if (Daikon.use_equality_optimization && !Daikon.dkconfig_undo_opts) {
       debugProgress.fine("Equality Post Process ... ");
+      stopwatch.reset();
       for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         // ppt.equality_view can be null here
         ppt.postProcessEquality();
       }
-      debugProgress.fine("Equality Post Process ... done");
+      debugProgress.fine("Equality Post Process ... done [" + stopwatch.format() + "]");
     }
 
     // undo optimizations; results in a more redundant but more complete
@@ -2177,7 +2184,7 @@ public final class Daikon {
       }
     }
 
-    debugProgress.fine("Time spent on non-implication postprocessing: " + stopwatch.format());
+    debugProgress.fine("Non-implication postprocessing ... done");
 
     isInferencing = false;
 

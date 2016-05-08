@@ -65,8 +65,8 @@ public abstract class Derivation implements Serializable, Cloneable {
 
   /**
    * @return a pair of: the derived value and whether the variable
-   * counts as modified.
-   * @param full_vt The set of values in a program point that will be
+   * counts as modified
+   * @param full_vt the set of values in a program point that will be
    * used to derive the value.
    **/
   // I don't provide separate computeModified and computeValue

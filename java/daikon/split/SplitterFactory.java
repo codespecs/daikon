@@ -175,7 +175,7 @@ public class SplitterFactory {
    * @param splitterObjects are the splitterObjects for ppt
    * @param ppt the Ppt for these splitterObjects
    * @param statementReplacer a StatementReplacer for the replace statements
-   *  to be used in these splitterObjects.
+   *  to be used in these splitterObjects
    */
   /*@RequiresNonNull("tempdir")*/
   private static void loadSplitters(
@@ -306,7 +306,7 @@ public class SplitterFactory {
    * guid = 12, then the following would be returned:
    * "myPackage_myClass_someMethod_12".
    * @param ppt_name the name of the Ppt for which the splitter
-   *  java file is going to be used with.
+   *  java file is going to be used with
    */
   private static String getFileName(String ppt_name) {
     String splitterName = clean(ppt_name);
@@ -318,7 +318,7 @@ public class SplitterFactory {
   /**
    * Cleans str by replacing all characters that are not
    * valid java indentifier parts with "_".
-   * @param str the string to be cleaned.
+   * @param str the string to be cleaned
    * @return str with all non java indentifier parts replaced
    *  with "_".
    */

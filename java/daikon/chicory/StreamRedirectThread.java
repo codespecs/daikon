@@ -66,11 +66,11 @@ public class StreamRedirectThread extends Thread {
 
   /**
    * Set up for copy.
-   * @param name  Name of the thread
-   * @param in    Stream to copy from
-   * @param out   Stream to copy to
-   * @param line_by_line   Whether to copy one line at a time
-   * @param debug Whether to enable debugging
+   * @param name  name of the thread
+   * @param in    stream to copy from
+   * @param out   stream to copy to
+   * @param line_by_line   whether to copy one line at a time
+   * @param debug whether to enable debugging
    */
   public StreamRedirectThread(
       String name, InputStream in, OutputStream out, boolean line_by_line, boolean debug) {

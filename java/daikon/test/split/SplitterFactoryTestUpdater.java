@@ -48,7 +48,7 @@ public class SplitterFactoryTestUpdater {
    * target directory, rewrites the code of SplitterFactoryTest
    * to use the new files.  One should recompile SplitterFactoryTest
    * after running this method.
-   * @param args are ignored.
+   * @param args are ignored
    */
   public static void main(String[] args) {
     // For debugging
@@ -78,7 +78,7 @@ public class SplitterFactoryTestUpdater {
   /**
    * Generates the splitter .java files.
    * @param spinfos the spinfo files that should be used in generating
-   *  the splitter java files.
+   *  the splitter java files
    * @param decls the decls files that should be used in generating the
    *  splitter java files.
    */

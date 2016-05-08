@@ -141,7 +141,7 @@ public class CreateSpinfo {
    * Returns the default name for a spinfo file created from
    * a java file named javaFileName.
    * @param javaFileName the name of the java file from which
-   *  this spinfo file is being created.
+   *  this spinfo file is being created
    */
   private static String spinfoFileName(String javaFileName) {
     if (javaFileName.endsWith(".java")) {
@@ -164,7 +164,7 @@ public class CreateSpinfo {
   /**
    * Write splitters for the Java file to the PrintWriter as a spinfo file.
    * @param javaFileName the name of the java file from which this
-   *  spinfo file is being made.
+   *  spinfo file is being made
    * @param output the PrintWriter to which this spinfo file is being wrote.
    */
   private static void writeSplitters(String javaFileName, PrintWriter output) throws IOException {
@@ -228,7 +228,7 @@ public class CreateSpinfo {
   /**
    * Writes the spinfo file specified by conditions, replaceStatements, and
    * package name to output.
-   * @param output the PrintWriter to which the spinfo file is to be written.
+   * @param output the PrintWriter to which the spinfo file is to be written
    * @param conditions the conditions to be included in the spinfo file.
    *  conditions should be a map from method names to the conditional
    *  expressions for that method to split upon.
@@ -236,7 +236,7 @@ public class CreateSpinfo {
    *  spinfo file.  replaceStatements should be a map from method
    *  declarations to method bodies.
    * @param packageName the package name of the java file for which this
-   *  spinfo file is being written.
+   *  spinfo file is being written
    */
   private static void printSpinfoFile(
       PrintWriter output,

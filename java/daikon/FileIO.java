@@ -949,8 +949,8 @@ public final class FileIO {
    * {@link #read_data_trace_file(String,PptMap,Processor,boolean,boolean)}
    * for each element of filenames.
    *
-   * @param ppts_may_be_new - true if declarations of ppts read from the data
-   *                       trace file are new (and thus are not in all_ppts)
+   * @param ppts_may_be_new true if declarations of ppts read from the data
+   *                       trace file are new (and thus are not in all_ppts).
    *                       false if the ppts may already be there.
    *
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)

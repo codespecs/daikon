@@ -16,8 +16,8 @@ public class DaikonClassInfo extends DaikonVariableInfo {
 
   /**
    * Constructs a DaikonClassInfo object
-   * @param theName The name of the variable
-   * @param isArr True iff the variable represents an array of runtime classes
+   * @param theName the name of the variable
+   * @param isArr true iff the variable represents an array of runtime classes
    */
   public DaikonClassInfo(
       String theName, String typeName, String repTypeName, String receiverName, boolean isArr) {
@@ -49,8 +49,8 @@ public class DaikonClassInfo extends DaikonVariableInfo {
   /**
    * Get a String representation of the given Object's runtime type and the
    * corresponding "modified" value
-   * @param val The Object whose runtime class we wish to get a String representation of
-   * @return String representation (suitable for a .dtrace file) of the
+   * @param val the Object whose runtime class we wish to get a String representation of
+   * @return string representation (suitable for a .dtrace file) of the
    * given Object's runtime type, and the "modified" value (modbit)
    */
   public String getValueStringNonArr(Object val) {

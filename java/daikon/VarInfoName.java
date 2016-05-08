@@ -923,7 +923,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for a function applied to more than one argument.
    * The result is like "sum(var1, var2)".
    * @param function the name of the function
-   * @param vars The arguments to the function, of type VarInfoName
+   * @param vars the arguments to the function, of type VarInfoName
    **/
   public static VarInfoName applyFunctionOfN(String function, List<VarInfoName> vars) {
     return (new FunctionOfN(function, vars)).intern();
@@ -933,7 +933,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Returns a name for a function of more than one argument.
    * The result is like "sum(var1, var2)".
    * @param function the name of the function
-   * @param vars The arguments to the function
+   * @param vars the arguments to the function
    **/
   public static VarInfoName applyFunctionOfN(String function, /*@Interned*/ VarInfoName[] vars) {
     // This causes an odd error with the Interned checker:
@@ -2379,7 +2379,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
     /**
      * Creates a new Finder.  Uses equals() to find.
-     * @param argGoals The goals to find
+     * @param argGoals the goals to find
      **/
     public Finder(Set<VarInfoName> argGoals) {
       goals = new HashSet<VarInfoName>();
@@ -2834,7 +2834,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     private Set<String> simples;
 
     /**
-     * @return Collection of simple identifiers used in this
+     * @return collection of simple identifiers used in this
      * expression, as Strings. (Used, for instance, to check for
      * conflict with a quantifier variable name).
      **/
@@ -2894,7 +2894,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     private Set<VarInfoName> /*actually <Elements || Slice>*/ unquant;
 
     /**
-     * @return Collection of the nodes under the root that need
+     * @return collection of the nodes under the root that need
      * quantification.  Each node represents an array; in particular,
      * the values are either of type Elements or Slice.
      **/

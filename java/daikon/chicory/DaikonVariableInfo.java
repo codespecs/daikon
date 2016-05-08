@@ -115,7 +115,7 @@ public abstract class DaikonVariableInfo
   protected static Set<String> ppt_statics = new LinkedHashSet<String>();
 
   /** Constructs a non-array type DaikonVariableInfo object
-   * @param theName The name of the variable
+   * @param theName the name of the variable
    */
   public DaikonVariableInfo(String theName, String typeName, String repTypeName) {
     this(theName, typeName, repTypeName, false);
@@ -123,8 +123,8 @@ public abstract class DaikonVariableInfo
 
   /**
    * Constructs a DaikonVariableInfo object
-   * @param theName The variable's name
-   * @param arr True iff the variable is an array
+   * @param theName the variable's name
+   * @param arr true iff the variable is an array
    */
   public DaikonVariableInfo(String theName, String typeName, String repTypeName, boolean arr) {
     // Intern the names because there will be many of the
@@ -162,7 +162,7 @@ public abstract class DaikonVariableInfo
    * Add a child to this node.
    * Should only be called while the tree is being constructed.
    *
-   * @param info The child object, must be non-null.  The child's
+   * @param info the child object, must be non-null.  The child's
    * fields name, typeName, repTypeName, and compareInfoString
    * should also be non-null.
    */
@@ -194,7 +194,7 @@ public abstract class DaikonVariableInfo
    * and all ancestors of this node.
    * Longer indentations correspond to further distance in the tree.
    *
-   * @param offset The offset to begin each line with.
+   * @param offset the offset to begin each line with
    * @return StringBuffer which contains all children of this node
    */
   private StringBuffer getStringBuffer(StringBuffer offset) {
@@ -238,14 +238,14 @@ public abstract class DaikonVariableInfo
    * For instance, if the variable a has a field b, then calling
    * getMyValFromParentVal(val_of_a) will return the value of a.b
    *
-   * @param parentVal The parent object.  Can be null for static fields.
+   * @param parentVal the parent object.  Can be null for static fields.
    *    (Are there any other circumstances where it can be null?)
    */
   public abstract /*@Nullable*/ Object getMyValFromParentVal(Object parentVal);
 
   /**
    * Returns a String representation of this object suitable for a .dtrace file
-   * @param val The object whose value to print
+   * @param val the object whose value to print
    */
   @SuppressWarnings("unchecked")
   public String getDTraceValueString(Object val) {
@@ -358,7 +358,7 @@ public abstract class DaikonVariableInfo
    * Returns a string representation of the values
    * of a list of values as if it were an array.
    *
-   * @param theValues The values to print out
+   * @param theValues the values to print out
    */
   protected String getValueStringOfList(List<Object> theValues) {
     if (theValues == null) {
@@ -624,8 +624,8 @@ public abstract class DaikonVariableInfo
    * Also adds "derived" variables
    * such as the runtime .class variable.
    *
-   * @return The newly created DaikonVariableInfo object, whose
-   * parent is this.
+   * @return the newly created DaikonVariableInfo object, whose
+   * parent is this
    */
   protected DaikonVariableInfo addDeclVar(
       ClassInfo cinfo,
@@ -725,8 +725,8 @@ public abstract class DaikonVariableInfo
    * as a child of this node.  Also adds "derived" variables
    * such as the runtime .class variable.
    *
-   * @return The newly created DaikonVariableInfo object, whose
-   * parent is this.
+   * @return the newly created DaikonVariableInfo object, whose
+   * parent is this
    */
   protected DaikonVariableInfo addDeclVar(Field field, String offset, StringBuffer buf) {
     debug_vars.log("enter addDeclVar(field):%n");
@@ -844,7 +844,7 @@ public abstract class DaikonVariableInfo
    * @param asArray
    *            Whether the variable is being output as an array (true) or as
    *            a pointer (false).
-   * @return The representation type as a string
+   * @return the representation type as a string
    */
   public static String getRepName(Class<?> type, boolean asArray) {
     if (type == null) {
@@ -1099,9 +1099,9 @@ public abstract class DaikonVariableInfo
    * to print out the arrays's elements as opposed to just the
    * hashcode of the array).
    *
-   * @param theName The name of the variable currently being examined,
+   * @param theName the name of the variable currently being examined,
    *             such as "ballCount"
-   * @param offset The representation of the variables we have
+   * @param offset the representation of the variables we have
    *                previously examined.  For examples, offset could
    *                be "this." in which case offset + name would be
    *                "this.ballCount."

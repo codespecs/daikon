@@ -1073,9 +1073,9 @@ class FormatTestCase {
    * This function instantiates an invariant class by using the
    * static instantiate method with the specified arguments.
    *
-   * @param theClass  - the invariant class to be instantiated
-   * @param arg_types - the types of each argument
-   * @param arg_vals  - the value of each argument
+   * @param theClass the invariant class to be instantiated
+   * @param arg_types the types of each argument
+   * @param arg_vals the value of each argument
    *
    * @return an instance of the class in theClass if one can be constructed,
    *         else throw a RuntimeException

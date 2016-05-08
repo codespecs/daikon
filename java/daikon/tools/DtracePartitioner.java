@@ -18,7 +18,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   // the name of the Daikon trace file
   private String fileName;
 
-  /** @param filename The Daikon trace file to be partitioned
+  /** @param filename the Daikon trace file to be partitioned
    */
   public DtracePartitioner(String filename) {
     try {

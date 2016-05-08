@@ -503,7 +503,7 @@ public final class CLASSNAME
    * Attempts to fit the points in def_point to a plane and calculates the
    * coefficients (a, b, c, d) if possible.
    *
-   * @param def_point  Array of points.  Must have at least 3 elements.
+   * @param def_point  array of points.  Must have at least 3 elements.
    *
    * @return the status of the invariant
    *     (whether the plane fitting was successful)
@@ -607,7 +607,7 @@ public final class CLASSNAME
    * (coefficients[]) if possible.  If not (points in def_point form a plane)
    * resets line_flag to Flag.NO_LINE and coefficients[] elements to -999.
    *
-   * @param def_point  Array of points.  Must have at least 2 elements.
+   * @param def_point  array of points.  Must have at least 2 elements.
    *
    */
   private void linearIntervention(/*@Nullable*/ Point[] def_point) {
@@ -685,7 +685,7 @@ public final class CLASSNAME
   /**
    * Returns the two points that have the maximum separation in pa.
    *
-   * @param ps  Array of points.  Must have at least 2 elements.  Can be any
+   * @param ps  array of points.  Must have at least 2 elements.  Can be any
    *            length and can contain nulls (which will be ignored).
    *
    * @return a 2-element array containing the most-separated elements.
@@ -729,7 +729,7 @@ public final class CLASSNAME
    * Calculates the coefficients for the line in 3D
    * and sets the coefficients[] by side effect.
    *
-   * @param points  2 points to use to calculate the coefficents.
+   * @param points  2 points to use to calculate the coefficents
    */
   //
   //  the line can fall under 3 categories
@@ -911,8 +911,8 @@ public final class CLASSNAME
   /**
    * Calculates the separation between p1 and p2.
    *
-   * @param p1  First point
-   * @param p2  Second point
+   * @param p1  first point
+   * @param p2  second point
    *
    * @return the distance between p1 and p2, or 0 if either point is null,
    * or NaN if either point contains a NaN
@@ -942,7 +942,7 @@ public final class CLASSNAME
    * Calculates the three points that have the maximum separation in pa and
    * places them as the first three elements of pa.
    *
-   * @param pa  Array of points.  Must have at least 3 elements.  Can be any
+   * @param pa  array of points.  Must have at least 3 elements.  Can be any
    *            length and can contain nulls (which will be ignored).
    *            Is side-effected so that the first three elements contain the
    *            points with the maximum total separation; this may introduce
@@ -1334,7 +1334,7 @@ public final class CLASSNAME
    * that invariant.  The merged core is returned.  Null is
    * returned if the cores don't describe the same plane
    *
-   * @param cores   List of LinearTernary cores to merge.  They should
+   * @param cores   list of LinearTernary cores to merge.  They should
    *                all be permuted to match the variable order in
    *                ppt.
    */

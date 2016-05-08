@@ -155,11 +155,11 @@ public class InvMatch {
   /**
    * Recursive routine that tries all possible combination of translations.
    *
-   * @param valid_translations  List of valid translations (updated)
-   * @param current_translation The current translation that is being built
-   * @param xlate_list          The list of possible translations for each
-   *                            invariant.
-   * @param index               The current index in xlate_list.
+   * @param valid_translations  list of valid translations (updated)
+   * @param current_translation the current translation that is being built
+   * @param xlate_list          the list of possible translations for each
+   *                            invariant
+   * @param index               the current index in xlate_list.
    *
    */
   public static void consider_xlate(

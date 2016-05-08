@@ -368,17 +368,17 @@ public final class Debug {
    * parameter and take class, ppt, and vis from the cached values, which
    * were set by the constructor or by the set() method.
    *
-   * @param debug       A second Logger to query if debug tracking is turned
+   * @param debug       a second Logger to query if debug tracking is turned
    *                    off or does not match.  If this logger is
    *                    enabled, the same information will be written
    *                    to it.  Note that the information is never
    *                    written to both loggers.
-   * @param inv_class   The class.  Can be obtained in a static context
+   * @param inv_class   the class.  Can be obtained in a static context
    *                    by ClassName.class
-   * @param ppt         Program point
-   * @param vis         Variables at the program point.  These are sometimes
+   * @param ppt         program point
+   * @param vis         variables at the program point.  These are sometimes
    *                    different from the ones in the ppt itself.
-   * @param msg         String message to log
+   * @param msg         string message to log
    *
    * @see #logOn()
    * @see #logDetail()

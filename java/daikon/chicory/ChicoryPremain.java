@@ -225,7 +225,7 @@ public class ChicoryPremain {
 
   /**
    * Write a *.pure file to the given location
-   * @param fileName Where to write the file to (full path)
+   * @param fileName where to write the file to (full path)
    */
   // not handled: /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
   /*@RequiresNonNull("pureMethods")*/
@@ -249,7 +249,7 @@ public class ChicoryPremain {
   /**
    * Invokes Alexandru Salcianu's purity analysis on given application.
    * Populates the pureMethods Set with pure (non side-effecting) methods.
-   * @param targetApp Name of the class whose main method is the entry point of the application
+   * @param targetApp name of the class whose main method is the entry point of the application
    */
   //  private static void runPurityAnalysis(String targetApp)
   //  {

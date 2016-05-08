@@ -29,7 +29,7 @@ class NullReplacer extends DepthFirstVisitor {
 
   /**
    * Replaces all instance of "null" with "0".
-   * @param expression a valid java expression.
+   * @param expression a valid java expression
    * @return expression with all instances of null replaced by
    *  instances of "0".
    * @throws ParseException if expression is not a valid java expression.
@@ -44,7 +44,7 @@ class NullReplacer extends DepthFirstVisitor {
   /**
    * Replaces all instance of "null" with "0" in the JTB syntax tree rooted
    * at root..
-   * @param root a JTB syntax tree.
+   * @param root a JTB syntax tree
    */
   public static void replaceNull(Node root) {
     NullReplacer replacer = new NullReplacer();

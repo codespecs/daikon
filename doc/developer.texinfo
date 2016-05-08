@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.3.1
+@center Daikon version 5.3.3
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.3.1 release date
-@center April 5, 2016
+@c Print out the Daikon version 5.3.3 release date
+@center May 2, 2016
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.3.1, released April 5, 2016.
+It describes Daikon version 5.3.3, released May 2, 2016.
 
 @menu
 * Introduction::
@@ -2193,7 +2193,7 @@ Make sure this file is not readable by others, for example by running
 
 @item
 Optionally, set environment variable @env{BIBDIR} to a clone of
-@uref{https://github.com/mernst/plume-bib.git}.
+@uref{https://github.com/mernst/plume-bib}.
 
 
 @end itemize
@@ -2762,7 +2762,9 @@ http://plse.cs.washington.edu/daikon/download/
 
   <your name>
 
-<a copy of the current entry from the doc/CHANGES> file>
+<a copy of the current entry from the doc/CHANGES file, with 
+paragraphs refilled (remove unnecessary line breaks that trim lines
+to 80 columns for the CHANGES file but aren't desirable in email)>
 @end example
 
 @end enumerate

@@ -64,7 +64,7 @@ class NameFixer extends DepthFirstVisitor {
    * Fixes unqualifed class member variables
    * @param expression a valid segment of java code
    * @param className is name of the containing class
-   * @param varInfos is a List of VarInfos for all the variables available.
+   * @param varInfos is a List of VarInfos for all the variables available
    * @return condition with all unqualifed variable references now
    *   qualified with className.
    * @throws ParseException when condition is not a valid segment of java code

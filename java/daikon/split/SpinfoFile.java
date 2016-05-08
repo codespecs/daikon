@@ -58,7 +58,7 @@ public class SpinfoFile {
 
   /**
    * Parses file spinfoFile.
-   * @param spinfoFile the file to be parsed.
+   * @param spinfoFile the file to be parsed
    * @param tempDir the directory in which the splitters' java files are created.
    */
   SpinfoFile(File spinfoFile, String tempDir) {
@@ -119,7 +119,7 @@ public class SpinfoFile {
   /**
    * parseFile sets the member fields statementReplacer and splitterObjects,
    * from the spinfoFile.
-   * @param spinfoFile a LineNumberReader for the spinfo file being parsed.
+   * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @throws IOException if an I/O error occurs
    */
   /*@RequiresNonNull("tempDir")*/
@@ -172,7 +172,7 @@ public class SpinfoFile {
    * and the return statement of a replace statement is placed in a
    * ReplaceStatement. The ReplaceStatements are then placed into
    * replaceStatements.
-   * @param spinfoFile a LineNumberReader for the spinfo file being parsed.
+   * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @param replaceStatements the List into which the ReplaceStatements
    *  are added.
    */
@@ -208,10 +208,10 @@ public class SpinfoFile {
    * without the "PPT_NAME" prefix), and whose additional elements are all
    * the non-empty lines up to the next empty line.
    * Puts this list in pptSections.
-   * @param spinfoFile a LineNumberReader for the spinfo file being parsed.
+   * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @param pptSections the List into which the List of lines
    *  for this pptSection are to be added.
-   * @param pptName name of the ppt.
+   * @param pptName name of the ppt
    * @throws IOException if an I/O error occurs.
    */
   private void readPptStatements(
@@ -279,7 +279,7 @@ public class SpinfoFile {
    * Updates obj's fields to take in account the formatting
    * command given by command.  If the command is invalid an
    * error message is given.  Extra white space is ignored.
-   * @param obj the splitterObject for which command is intended.
+   * @param obj the splitterObject for which command is intended
    * @param command the formatting command to be applied to obj.
    */
   static private void setFormatting(SplitterObject obj, String command) {

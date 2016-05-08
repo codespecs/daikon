@@ -2042,11 +2042,11 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
    * a ONEOFSCALAR invariant.  This code finds all of the oneof values
    * from each of the invariants and returns the merged invariant (if any).
    *
-   * @param invs       List of invariants to merge.  The invariants must all be
+   * @param invs       list of invariants to merge.  The invariants must all be
    *                   of the same type and should come from the children of
    *                   parent_ppt.  They should also all be permuted to match
    *                   the variable order in parent_ppt.
-   * @param parent_ppt Slice that will contain the new invariant
+   * @param parent_ppt slice that will contain the new invariant
    */
   @SuppressWarnings("interning") // cloning requires re-interning
   public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {

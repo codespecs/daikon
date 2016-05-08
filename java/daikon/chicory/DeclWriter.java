@@ -161,9 +161,9 @@ public class DeclWriter extends DaikonWriter {
    *
    * This method uses variable information from the traversal tree.
    *
-   * @param root The root of the traversal tree.
-   * @param name The program point name.
-   * @param comp_info Comparability information
+   * @param root the root of the traversal tree
+   * @param name the program point name
+   * @param comp_info comparability information
    */
   private void printMethod(RootInfo root, String name, DeclReader comp_info) {
     outFile.println(declareHeader);
@@ -304,11 +304,11 @@ public class DeclWriter extends DaikonWriter {
    *
    * This method uses variable information from the traversal tree.
    *
-   * @param mi The method information for the method
-   * @param root The root of the traversal tree.
-   * @param name The program point name.
-   * @param ppt_type The type of the program point (enter, exit, etc)
-   * @param comp_info Comparability information
+   * @param mi the method information for the method
+   * @param root the root of the traversal tree
+   * @param name the program point name
+   * @param ppt_type the type of the program point (enter, exit, etc)
+   * @param comp_info comparability information
    */
   private void print_method(
       MethodInfo mi,
@@ -698,10 +698,10 @@ public class DeclWriter extends DaikonWriter {
    * If this is an object ppt (ci != null), then each top level static
    * variable has a relation to the class ppt.
    *
-   * @param cinfo - Class of the object ppt.  Null if this is not an object ppt
-   * @param is_static_method - true if this ppt is a static method enter
-   * @param parent - parent of var in the variable tree
-   * @param var - variable whose relation is desired.
+   * @param cinfo class of the object ppt.  Null if this is not an object ppt
+   * @param is_static_method true if this ppt is a static method enter
+   * @param parent parent of var in the variable tree
+   * @param var variable whose relation is desired
    */
   private /*@Nullable*/ VarRelation find_relation(
       /*@Nullable*/ ClassInfo cinfo,

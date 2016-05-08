@@ -332,10 +332,10 @@ public class PptRelation implements Serializable {
   /**
    * Relates parent_var to a variable in child that matches name.
    *
-   * @param parent_var      The parent variable being matched
-   * @param viname          The name to look for in child variables.
+   * @param parent_var      the parent variable being matched
+   * @param viname          the name to look for in child variables.
    *
-   * @return true if there was a matching variable, false otherwise.
+   * @return true if there was a matching variable, false otherwise
    */
   private boolean relate(VarInfo parent_var, String viname) {
 
@@ -459,9 +459,9 @@ public class PptRelation implements Serializable {
    *   never be null) and it is not obvious that it implies that all
    *   references to the object are not NULL.
    *
-   * @param parent Ppt of the object definition
-   * @param child Ppt of a user of parent's object
-   * @param arg Variable of type object found in child
+   * @param parent ppt of the object definition
+   * @param child ppt of a user of parent's object
+   * @param arg variable of type object found in child
    */
   public static PptRelation newObjectUserRel(PptTopLevel parent, PptTopLevel child, VarInfo arg) {
 

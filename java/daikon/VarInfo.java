@@ -4064,10 +4064,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /*
    * Creates the derived variable func(seq) from seq.
    *
-   * @param func_name Name of the function
-   * @param type Return type of the function.  If null, the return type is
+   * @param func_name name of the function
+   * @param type return type of the function.  If null, the return type is
    *             the element type of the sequence
-   * @param seq Sequence variable
+   * @param seq sequence variable
    * @param shift value to add or subtract from the function.  Legal values
    *              are -1, 0, and 1.
    */
@@ -4153,9 +4153,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /*
    * Creates the derived variable func(str) from string.
    *
-   * @param func_name Name of the function
-   * @param type Return type of the function.
-   * @param str Sequence variable
+   * @param func_name name of the function
+   * @param type return type of the function
+   * @param str sequence variable
    */
   public static VarInfo make_scalar_str_func(String func_name, ProglangType type, VarInfo str) {
 

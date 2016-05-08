@@ -42,7 +42,7 @@ public class ParameterInfo extends DaikonVariableInfo {
 
   /**
    * Constructs an ParameterInfo object with the specified name
-   * @param theName The variable name (used in the declaration)
+   * @param theName the variable name (used in the declaration)
    */
   public ParameterInfo(String theName, int theArgNum, Class<?> argType, int param_offset) {
     super(

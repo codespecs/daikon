@@ -90,7 +90,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /**
-   * @param variables Variables which are equivalent, with the canonical
+   * @param variables variables that are equivalent, with the canonical
    * one first.  Elements must be of type VarInfo.
    **/
   @SuppressWarnings("initialization.invalid.field.write.initialized") // weakness of FBC type system
