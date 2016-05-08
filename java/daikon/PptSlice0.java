@@ -33,7 +33,7 @@ public class PptSlice0 extends PptSlice {
   }
 
   public final int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice0 this*/ ) {
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice0 this*/) {
     return 0;
   }
 

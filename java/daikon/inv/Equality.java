@@ -133,7 +133,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   /*@SuppressWarnings("purity")*/
   // set cache field
   /*@Pure*/ public VarInfo leader(
-      /*>>>@UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this*/ ) {
+      /*>>>@UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this*/) {
     if (leaderCache == null) {
       leaderCache = vars.iterator().next();
     }

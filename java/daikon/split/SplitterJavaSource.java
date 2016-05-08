@@ -151,7 +151,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Writes the field declarations of the class to fileText.
    */
   private void writeFields(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     for (int i = 0; i < vars.length; i++) {
       add("  VarInfo " + vars[i].getFieldName() + "; // " + vars[i].getNormalName());
     }
@@ -161,7 +161,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Writes the body of the of constructor which takes a Ppt in as an argument.
    */
   private void writeConstructorBody(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     for (int i = 0; i < vars.length; i++) {
       add(
           "    "
@@ -176,7 +176,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Writes the body of the valid method to fileText.
    */
   private void writeValidBody(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     if (vars.length > 0) {
       fileText.append("    return (" + vars[0].getFieldName() + " != null)");
       for (int i = 1; i < vars.length; i++) {
@@ -193,7 +193,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Writes the body of the test method to fileText.
    */
   private void writeTestBody(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     add("    " + "/* writeTestBody: " + vars.length + " declarations */");
     for (int i = 0; i < vars.length; i++) {
       String type = vars[i].getType();
@@ -258,7 +258,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Writes the body of the repr method to fileText.
    */
   private void writeReprBody(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     add("    return " + "\"" + fileName + ": \"");
     for (int i = 0; i < vars.length; i++) {
       add(
@@ -275,7 +275,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Writes the body of the instantiateDummy method to fileText.
    */
   private void writeInstantiateDummyBody(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     if (vars.length >= 1 && vars.length <= 3) {
       for (int i = 0; i < vars.length; i++) {
         add(
@@ -315,7 +315,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Skips a line in fileText by adding a black line to fileText.
    */
   private void skipLine(
-      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/ ) {
+      /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     fileText.append(lineSep);
   }
 

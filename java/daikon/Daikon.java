@@ -2124,7 +2124,6 @@ public final class Daikon {
 
     // Postprocessing
 
-
     debugProgress.fine("Create Combined Exits ... ");
     stopwatch.reset();
     create_combined_exits(all_ppts);

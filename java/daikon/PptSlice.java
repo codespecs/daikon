@@ -50,7 +50,7 @@ public abstract class PptSlice extends Ppt {
   public PptTopLevel parent;
 
   public abstract int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/ );
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/);
 
   /**
    * The invariants contained in this slice.
@@ -77,7 +77,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   /*@SideEffectFree*/ public final String name(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/ ) {
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/) {
     return parent.name + varNames(var_infos);
   }
 

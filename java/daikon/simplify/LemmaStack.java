@@ -102,7 +102,7 @@ public class LemmaStack {
   /** Try to start Simplify. */
   /*@EnsuresNonNull("session")*/
   private void startProver(
-      /*>>> @UnknownInitialization @Raw LemmaStack this*/ ) throws SimplifyError {
+      /*>>> @UnknownInitialization @Raw LemmaStack this*/) throws SimplifyError {
     SessionManager session_try = SessionManager.attemptProverStartup();
     if (session_try != null) {
       session = session_try;
@@ -113,7 +113,7 @@ public class LemmaStack {
 
   /** Try to restart Simplify back where we left off, after killing it. */
   private void restartProver(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this*/ )
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this*/)
       throws SimplifyError {
     startProver();
     try {

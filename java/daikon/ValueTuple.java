@@ -291,7 +291,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   public void checkRep(
-      /*>>> @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this*/ ) {
+      /*>>> @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this*/) {
     assert vals.length == mods.length;
     for (int i = 0; i < vals.length; i++) {
       assert 0 <= mods[i] && mods[i] < MODBIT_VALUES

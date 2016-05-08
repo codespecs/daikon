@@ -44,7 +44,7 @@ public abstract class SingleScalarSequence extends SingleSequence {
   // Identical to superclass definition, and therefore gratuitious
   @Override
   public VarInfo var(
-      /*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleScalarSequence this*/ ) {
+      /*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleScalarSequence this*/) {
     return ppt.var_infos[0];
   }
 

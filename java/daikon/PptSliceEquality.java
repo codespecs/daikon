@@ -45,7 +45,7 @@ public class PptSliceEquality extends PptSlice {
   }
 
   public final int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this*/ ) {
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this*/) {
     throw new Error("Don't call arity on PptSliceEquality");
   }
 

@@ -50,7 +50,7 @@ public abstract class Ppt implements Serializable {
   // up too much space in PptSlice objects.
   // This is safe if the receiver is @UnknownInitialization(PptTopLevel.class) OR
   // @UnknownInitialization(PptSlice.class), but annotations cannot express that.
-  public abstract String name(/*>>>@UnknownInitialization(PptTopLevel.class) Ppt this*/ );
+  public abstract String name(/*>>>@UnknownInitialization(PptTopLevel.class) Ppt this*/);
 
   /** Trim the collections used in this Ppt. */
   public void trimToSize() {
@@ -81,7 +81,7 @@ public abstract class Ppt implements Serializable {
 
   /** Return a string representation of the variable names. */
   /*@SideEffectFree*/ public String varNames(
-      /*>>>@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this*/ ) {
+      /*>>>@UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this*/) {
     return (varNames(var_infos));
   }
 

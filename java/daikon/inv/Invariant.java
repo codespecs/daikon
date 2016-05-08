@@ -714,7 +714,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * format gives a high-level representation for user output.
    **/
   // receiver must be fully-initialized because subclasses read their fields
-  /*@SideEffectFree*/ public String format(/*>>>@NonPrototype Invariant this*/ ) {
+  /*@SideEffectFree*/ public String format(/*>>>@NonPrototype Invariant this*/) {
     String result = format_using(OutputFormat.DAIKON);
     if (PrintInvariants.dkconfig_print_inv_class) {
       String classname = getClass().getName();
@@ -1188,7 +1188,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // of VarInfos and their equality set, so a possible conservative
   // approximation is to simply return false.
   /*@Pure*/ public boolean isObviousStatically_AllInEquality(
-      /*>>> @NonPrototype Invariant this*/ ) {
+      /*>>> @NonPrototype Invariant this*/) {
     // If the leaders aren't statically obvious, then clearly not all
     // combinations are.
     if (isObviousStatically() == null) return false;
