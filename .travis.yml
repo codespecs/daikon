@@ -47,3 +47,6 @@ after_success:
         curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
         sh trigger-travis.sh typetools daikon-typecheck $TRAVISTOKEN
       fi
+
+git:
+  depth: 3
