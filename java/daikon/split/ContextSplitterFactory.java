@@ -299,7 +299,7 @@ public class ContextSplitterFactory {
       this.splitters = splitters;
     }
 
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptNameAndSplitters this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptNameAndSplitters this*/) {
       return "PptNameAndSplitters<" + ppt_name + "," + Arrays.asList(splitters).toString() + ">";
     }
   }

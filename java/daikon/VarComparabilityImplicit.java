@@ -61,7 +61,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     this.dimensions = dimensions;
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarComparabilityImplicit this*/ ) {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
     if (base < 0) {
       // This is equals() to everything
       return -1;
@@ -91,7 +91,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     return (base < 0);
   }
 
-  public /*@Pure*/ boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityImplicit this*/ ) {
+  public /*@Pure*/ boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
     return (dimensions == 0) && (base < 0);
   }
 
@@ -122,7 +122,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     return this;
   }
 
-  public VarComparability elementType(/*>>>@GuardSatisfied VarComparabilityImplicit this*/ ) {
+  public VarComparability elementType(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
     if (cached_element_type == null) {
       // When Ajax is modified to output non-atomic info for arrays, this
       // check will no longer be necessary.
@@ -207,7 +207,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
 
   // for debugging
   /*@SideEffectFree*/ public String toString(
-      /*>>>@GuardSatisfied VarComparabilityImplicit this*/ ) {
+      /*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
     String result = "" + base;
     for (int i = 0; i < dimensions; i++) {
       result += "[" + indexType(i) + "]";

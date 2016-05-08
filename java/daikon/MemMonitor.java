@@ -34,7 +34,7 @@ public class MemMonitor implements Runnable {
   }
 
   private long mem_usage(
-      /*>>>@UnknownInitialization(MemMonitor.class) @Raw(MemMonitor.class) MemMonitor this*/ ) {
+      /*>>>@UnknownInitialization(MemMonitor.class) @Raw(MemMonitor.class) MemMonitor this*/) {
     return (java.lang.Runtime.getRuntime().totalMemory()
         - java.lang.Runtime.getRuntime().freeMemory());
   }

@@ -66,11 +66,11 @@ public class CommonStringSequence extends SingleStringSequence {
   // Don't write clone, because this.intersect is read-only
   // protected Object clone();
 
-  public String repr(/*>>>@GuardSatisfied CommonStringSequence this*/ ) {
+  public String repr(/*>>>@GuardSatisfied CommonStringSequence this*/) {
     return "CommonStringSequence " + varNames() + ": " + "elts=\"" + elts;
   }
 
-  private String printIntersect(/*>>>@GuardSatisfied CommonStringSequence this*/ ) {
+  private String printIntersect(/*>>>@GuardSatisfied CommonStringSequence this*/) {
     if (intersect == null) return "{}";
 
     String result = "{";
@@ -90,11 +90,11 @@ public class CommonStringSequence extends SingleStringSequence {
     return format_unimplemented(format);
   }
 
-  public String format_daikon(/*>>>@GuardSatisfied CommonStringSequence this*/ ) {
+  public String format_daikon(/*>>>@GuardSatisfied CommonStringSequence this*/) {
     return (printIntersect() + " subset of " + var().name());
   }
 
-  public String format_csharp_contract(/*>>>@GuardSatisfied CommonStringSequence this*/ ) {
+  public String format_csharp_contract(/*>>>@GuardSatisfied CommonStringSequence this*/) {
     if (intersect == null) return "()";
 
     if (intersect.length == 1) {

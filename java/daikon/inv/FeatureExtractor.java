@@ -759,7 +759,7 @@ public final class FeatureExtractor {
 
     //returns a valid hashCode
     @Override
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/ ) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/) {
       return number;
     }
 

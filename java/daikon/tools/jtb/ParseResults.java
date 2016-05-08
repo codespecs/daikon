@@ -32,7 +32,7 @@ public class ParseResults {
     this.compilationUnit = compilationUnit;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ParseResults this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ParseResults this*/) {
     return "package name: " + packageName + ", " + "file name: " + fileName;
   }
 

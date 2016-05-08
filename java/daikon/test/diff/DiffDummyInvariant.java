@@ -92,7 +92,7 @@ public class DiffDummyInvariant extends Invariant {
     return confidence;
   }
 
-  public String repr(/*>>>@GuardSatisfied DiffDummyInvariant this*/ ) {
+  public String repr(/*>>>@GuardSatisfied DiffDummyInvariant this*/) {
     return "DiffDummyInvariant(" + ppt.arity() + "," + formula + "," + confidence + ")";
   }
 

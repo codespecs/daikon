@@ -148,7 +148,7 @@ public abstract class DaikonVariableInfo
   /**
    * Returns the name of this variable.
    */
-  public /*@Nullable*/ String getName(/*>>>@GuardSatisfied DaikonVariableInfo this*/ ) {
+  public /*@Nullable*/ String getName(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
     if (name == null) return null;
 
     if (Chicory.new_decl_format) {
@@ -180,7 +180,7 @@ public abstract class DaikonVariableInfo
   /**
    * Returns a string representation of this node.
    */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
     return getClass().getName() + ":" + getName();
   }
 

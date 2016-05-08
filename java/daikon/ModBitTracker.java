@@ -94,7 +94,7 @@ public class ModBitTracker implements Serializable, Cloneable {
 
   /** Check the representation invariant. **/
   public void checkRep(
-      /*>>>@UnknownInitialization(ModBitTracker.class) @Raw(ModBitTracker.class) ModBitTracker this*/ ) {
+      /*>>>@UnknownInitialization(ModBitTracker.class) @Raw(ModBitTracker.class) ModBitTracker this*/) {
     assert index.length == num_vars;
     assert modbits_arrays.length == num_vars;
     for (int i = 0; i < num_vars; i++) {

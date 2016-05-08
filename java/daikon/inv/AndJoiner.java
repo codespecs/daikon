@@ -34,7 +34,7 @@ public class AndJoiner extends Joiner {
     return Invariant.confidence_and(left.computeConfidence(), right.computeConfidence());
   }
 
-  public String repr(/*>>>@GuardSatisfied AndJoiner this*/ ) {
+  public String repr(/*>>>@GuardSatisfied AndJoiner this*/) {
     return "[" + left.repr() + " and " + right.repr() + "]";
   }
 
@@ -59,7 +59,7 @@ public class AndJoiner extends Joiner {
     }
   }
 
-  public List<Invariant> conjuncts(/*>>>@GuardSatisfied AndJoiner this*/ ) {
+  public List<Invariant> conjuncts(/*>>>@GuardSatisfied AndJoiner this*/) {
     List<Invariant> result = new ArrayList<Invariant>(2);
     if (left instanceof AndJoiner) {
       result.addAll(((AndJoiner) left).conjuncts());

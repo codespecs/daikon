@@ -951,7 +951,7 @@ public class NIS {
     }
 
     /** Hash on class and variables **/
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied SupInv this*/ ) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied SupInv this*/) {
       int code = suppressee.sup_class.hashCode();
       for (int i = 0; i < vis.length; i++) {
         code += vis[i].hashCode();
@@ -998,7 +998,7 @@ public class NIS {
     }
 
     /** Return string representation of the suppressed invariant **/
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SupInv this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SupInv this*/) {
       String[] names = new String[vis.length];
       for (int i = 0; i < vis.length; i++) {
         names[i] = vis[i].name();
@@ -1103,7 +1103,7 @@ public class NIS {
     /**
      * Returns a string representation of all of the antecedents by class
      */
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Antecedents this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Antecedents this*/) {
 
       String out = "Comparability " + comparability + " : ";
 

@@ -290,7 +290,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * computed constants well-formed.  Is overridden in classes like
    * LinearBinary/Ternary and Upper/LowerBound.
    **/
-  public boolean enoughSamples(/*>>>@GuardSatisfied @NonPrototype Invariant this*/ ) {
+  public boolean enoughSamples(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     return true;
   }
 
@@ -443,7 +443,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Do nothing special, Overridden to remove
    * exception from declaration
    **/
-  /*@SideEffectFree*/ public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/ ) {
+  /*@SideEffectFree*/ public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     try {
       Invariant result = (Invariant) super.clone();
       return result;
@@ -679,7 +679,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // }
 
   /** Return a string representation of the variable names. */
-  public final String varNames(/*>>>@GuardSatisfied @NonPrototype Invariant this*/ ) {
+  public final String varNames(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     return ppt.varNames();
   }
 
@@ -692,7 +692,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  public String repr(/*>>>@GuardSatisfied @NonPrototype Invariant this*/ ) {
+  public String repr(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     // A better default would be to use reflection and print out all
     // the variable names.
     return getClass() + varNames() + ": " + format();
@@ -715,7 +715,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * format gives a high-level representation for user output.
    **/
   // receiver must be fully-initialized because subclasses read their fields
-  /*@SideEffectFree*/ public String format(/*>>>@GuardSatisfied @NonPrototype Invariant this*/ ) {
+  /*@SideEffectFree*/ public String format(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     String result = format_using(OutputFormat.DAIKON);
     if (PrintInvariants.dkconfig_print_inv_class) {
       String classname = getClass().getName();
@@ -1191,7 +1191,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // of VarInfos and their equality set, so a possible conservative
   // approximation is to simply return false.
   /*@Pure*/ public boolean isObviousStatically_AllInEquality(
-      /*>>> @NonPrototype Invariant this*/ ) {
+      /*>>> @NonPrototype Invariant this*/) {
     // If the leaders aren't statically obvious, then clearly not all
     // combinations are.
     if (isObviousStatically() == null) return false;
@@ -1575,7 +1575,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       return (ic.inv.match(inv));
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Match this*/ ) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Match this*/) {
       return (inv.getClass().hashCode());
     }
   }
@@ -1937,7 +1937,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   // Receiver must be fully initialized
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Invariant this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Invariant this*/) {
     return format();
   }
 

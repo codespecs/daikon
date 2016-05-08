@@ -117,7 +117,7 @@ public class CmdCheck implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdCheck this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdCheck this*/) {
     return "CmdCheck: " + proposition;
   }
 }

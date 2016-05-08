@@ -228,7 +228,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * Returns the type of elements of this.
    * They may themselves be arrays if this is multidimensional.
    **/
-  public ProglangType elementType(/*>>>@GuardSatisfied ProglangType this*/ ) {
+  public ProglangType elementType(/*>>>@GuardSatisfied ProglangType this*/) {
     // Presume that if there are no dimensions, this must be a list of
     // objects.  Callers should really find this out from other information
     // in the variable, but this will old code that relied on the pseudo
@@ -734,7 +734,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   // For Java programs, a @BinaryName.
-  /*@SideEffectFree*/ public String format(/*>>>@GuardSatisfied ProglangType this*/ ) {
+  /*@SideEffectFree*/ public String format(/*>>>@GuardSatisfied ProglangType this*/) {
     if (dimensions == 0) return base;
 
     StringBuffer sb = new StringBuffer();
@@ -754,7 +754,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   // For Java programs, a @BinaryName.
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ProglangType this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ProglangType this*/) {
     return format();
   }
 

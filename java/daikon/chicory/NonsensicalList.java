@@ -29,11 +29,11 @@ public class NonsensicalList extends AbstractList<Object> implements List<Object
     return NonsensicalObject.getInstance();
   }
 
-  /*@Pure*/ public int size(/*>>>@GuardSatisfied NonsensicalList this*/ ) {
+  /*@Pure*/ public int size(/*>>>@GuardSatisfied NonsensicalList this*/) {
     return -1;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied NonsensicalList this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied NonsensicalList this*/) {
     return "NonsensicalList";
   }
 

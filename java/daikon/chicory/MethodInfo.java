@@ -217,7 +217,7 @@ public class MethodInfo {
     //                    traversalExit.treeString());
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied MethodInfo this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied MethodInfo this*/) {
     String out = "";
     if (class_info != null) out = class_info.class_name + ".";
     out += method_name + "(";

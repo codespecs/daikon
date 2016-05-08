@@ -76,7 +76,7 @@ public abstract class VarComparability {
 
   public abstract VarComparability makeAlias();
 
-  public abstract VarComparability elementType(/*>>>@GuardSatisfied VarComparability this*/ );
+  public abstract VarComparability elementType(/*>>>@GuardSatisfied VarComparability this*/);
 
   public abstract VarComparability indexType(/*>>>@GuardSatisfied VarComparability this,*/ int dim);
 
@@ -86,7 +86,7 @@ public abstract class VarComparability {
   /**
    * Returns true if this is comparable to everything else.
    */
-  public abstract boolean alwaysComparable(/*>>>@GuardSatisfied VarComparability this*/ );
+  public abstract boolean alwaysComparable(/*>>>@GuardSatisfied VarComparability this*/);
 
   /** Returns whether two variables are comparable. **/
   public static /*@Pure*/ boolean comparable(VarInfo v1, VarInfo v2) {

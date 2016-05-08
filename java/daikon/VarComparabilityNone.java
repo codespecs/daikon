@@ -30,7 +30,7 @@ public final class VarComparabilityNone extends VarComparability implements Seri
     return it;
   }
 
-  public VarComparability elementType(/*>>>@GuardSatisfied VarComparabilityNone this*/ ) {
+  public VarComparability elementType(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return it;
   }
 
@@ -42,11 +42,11 @@ public final class VarComparabilityNone extends VarComparability implements Seri
     return it;
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarComparabilityNone this*/ ) {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return 0;
   }
 
-  public boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityNone this*/ ) {
+  public boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return true;
   }
 
@@ -61,7 +61,7 @@ public final class VarComparabilityNone extends VarComparability implements Seri
     return true;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarComparabilityNone this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return ("no-comparability");
   }
 }

@@ -52,7 +52,7 @@ public abstract class Ppt implements Serializable {
   // This is safe if the receiver is @UnknownInitialization(PptTopLevel.class) OR
   // @UnknownInitialization(PptSlice.class), but annotations cannot express that.
   public abstract String name(
-      /*>>>@GuardSatisfied @UnknownInitialization(PptTopLevel.class) Ppt this*/ );
+      /*>>>@GuardSatisfied @UnknownInitialization(PptTopLevel.class) Ppt this*/);
 
   /** Trim the collections used in this Ppt. */
   public void trimToSize() {
@@ -83,7 +83,7 @@ public abstract class Ppt implements Serializable {
 
   /** Return a string representation of the variable names. */
   /*@SideEffectFree*/ public String varNames(
-      /*>>>@GuardSatisfied @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this*/ ) {
+      /*>>>@GuardSatisfied @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this*/) {
     return (varNames(var_infos));
   }
 

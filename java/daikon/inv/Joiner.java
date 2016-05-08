@@ -35,7 +35,7 @@ public abstract class Joiner extends Invariant {
     this(ppt.joiner_view, left, right);
   }
 
-  public abstract String repr(/*>>>@GuardSatisfied Joiner this*/ );
+  public abstract String repr(/*>>>@GuardSatisfied Joiner this*/);
 
   // I think we don't resurrect joiners
   protected Invariant resurrect_done(int[] permutation) {

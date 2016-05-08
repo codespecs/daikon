@@ -435,7 +435,7 @@ public class PptName implements Serializable {
   // ==================== OBJECT METHODS ====================
 
   /* @return interned string such that this.equals(new PptName(this.toString())) */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptName this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptName this*/) {
     return fullname;
   }
 
@@ -453,7 +453,7 @@ public class PptName implements Serializable {
     return (o != null) && (o.fullname == fullname);
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied PptName this*/ ) {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied PptName this*/) {
     return fullname.hashCode();
   }
 

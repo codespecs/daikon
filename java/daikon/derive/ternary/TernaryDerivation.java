@@ -44,7 +44,7 @@ public abstract class TernaryDerivation extends Derivation {
   }
 
   /*@SideEffectFree*/ public TernaryDerivation clone(
-      /*>>>@GuardSatisfied TernaryDerivation this*/ ) {
+      /*>>>@GuardSatisfied TernaryDerivation this*/) {
     try {
       return (TernaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {

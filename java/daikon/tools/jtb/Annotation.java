@@ -60,19 +60,19 @@ public class Annotation {
   /** Daikon representation (as output by Daikon's default output format). */
   private final String daikonRep;
   /** The way this annotation would be printed by Daikon. */
-  public String daikonRep(/*>>>@GuardSatisfied Annotation this*/ ) {
+  public String daikonRep(/*>>>@GuardSatisfied Annotation this*/) {
     return daikonRep;
   }
 
   private final String method;
   /** The method that this annotation refers to. */
-  public String method(/*>>>@GuardSatisfied Annotation this*/ ) {
+  public String method(/*>>>@GuardSatisfied Annotation this*/) {
     return method;
   }
 
   private final Kind kind;
   /** The kind of this annotation. */
-  public Kind kind(/*>>>@GuardSatisfied Annotation this*/ ) {
+  public Kind kind(/*>>>@GuardSatisfied Annotation this*/) {
     return kind;
   }
 
@@ -243,10 +243,10 @@ public class Annotation {
       this.name = name;
       this.xmlname = xmlname;
     }
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Kind this*/ ) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
       return name.hashCode();
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Kind this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Kind this*/) {
       return name;
     }
 
@@ -260,7 +260,7 @@ public class Annotation {
   }
 
   /** Easy-on-the-eye format. */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Annotation this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Annotation this*/) {
     return kind.toString() + " : " + daikonRep();
   }
 
@@ -283,7 +283,7 @@ public class Annotation {
         && (this.kind().equals(anno.kind())));
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Annotation this*/ ) {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Annotation this*/) {
     return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
   }
 

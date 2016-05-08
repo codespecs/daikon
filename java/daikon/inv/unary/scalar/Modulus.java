@@ -74,7 +74,7 @@ public class Modulus extends SingleScalar {
     return new Modulus(slice);
   }
 
-  public String repr(/*>>>@GuardSatisfied Modulus this*/ ) {
+  public String repr(/*>>>@GuardSatisfied Modulus this*/) {
     return "Modulus" + varNames() + ": " + "modulus=" + modulus + ",remainder=" + remainder;
   }
 

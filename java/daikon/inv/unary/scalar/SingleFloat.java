@@ -36,7 +36,7 @@ public abstract class SingleFloat extends UnaryInvariant {
   }
 
   public VarInfo var(
-      /*>>>@GuardSatisfied @UnknownInitialization(SingleFloat.class) @Raw(SingleFloat.class) SingleFloat this*/ ) {
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleFloat.class) @Raw(SingleFloat.class) SingleFloat this*/) {
     return ppt.var_infos[0];
   }
 

@@ -46,7 +46,7 @@ public class PptSliceEquality extends PptSlice {
   }
 
   public final int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this*/ ) {
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this*/) {
     throw new Error("Don't call arity on PptSliceEquality");
   }
 
@@ -60,7 +60,7 @@ public class PptSliceEquality extends PptSlice {
   }
 
   // Not valid for this type of slice.  Always pretend there are enough.
-  public int num_samples(/*>>>@GuardSatisfied PptSliceEquality this*/ ) {
+  public int num_samples(/*>>>@GuardSatisfied PptSliceEquality this*/) {
     if (true) throw new Error();
     return Integer.MAX_VALUE;
   }
@@ -84,7 +84,7 @@ public class PptSliceEquality extends PptSlice {
   private static class VarInfoAndComparability {
     public VarInfo vi;
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoAndComparability this*/ ) {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoAndComparability this*/) {
       // This is about as good as we can do it.  Can't do hashcode of
       // the comparability because two comparabilities may be
       // comparable and yet be not the same
@@ -625,7 +625,7 @@ public class PptSliceEquality extends PptSlice {
     }
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSliceEquality this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSliceEquality this*/) {
     StringBuffer result = new StringBuffer("PptSliceEquality: [");
     for (Invariant inv : invs) {
       result.append(inv.repr());

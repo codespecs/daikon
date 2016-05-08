@@ -51,7 +51,7 @@ public abstract class PptSlice extends Ppt {
   public PptTopLevel parent;
 
   public abstract int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/ );
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/);
 
   /**
    * The invariants contained in this slice.
@@ -78,7 +78,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   /*@SideEffectFree*/ public final String name(
-      /*>>>@GuardSatisfied @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/ ) {
+      /*>>>@GuardSatisfied @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/) {
     return parent.name + varNames(var_infos);
   }
 
@@ -200,7 +200,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   /** Return an approximation of the number of samples seen on this slice **/
-  public abstract int num_samples(/*>>>@GuardSatisfied PptSlice this*/ );
+  public abstract int num_samples(/*>>>@GuardSatisfied PptSlice this*/);
 
   /**
    * Return an approximation of the number of distinct values seen on
@@ -324,7 +324,7 @@ public abstract class PptSlice extends Ppt {
    * For debugging only.
    **/
   @SuppressWarnings("purity") // string creation
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSlice this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSlice this*/) {
     StringBuffer sb = new StringBuffer();
     for (VarInfo vi : var_infos) {
       sb.append(" " + vi.name());

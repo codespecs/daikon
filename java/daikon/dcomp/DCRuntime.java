@@ -171,7 +171,7 @@ public final class DCRuntime {
       this.value_source = value_source;
       this.compared_to = compared_to;
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied BranchInfo this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied BranchInfo this*/) {
       return String.format("%s:%s", value_source, compared_to);
     }
   }

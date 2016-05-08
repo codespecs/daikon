@@ -237,7 +237,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.testString;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SplitterObject this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SplitterObject this*/) {
     return (className
         + ": "
         + "condition: "

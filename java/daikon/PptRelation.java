@@ -126,7 +126,7 @@ public class PptRelation implements Serializable {
    */
   @SuppressWarnings({"rawness", "initialization"}) // won't be used until initialization is finished
   private void connect(
-      /*>>>@UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/ ) {
+      /*>>>@UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/) {
     assert !child.parents.contains(this);
     assert !parent.children.contains(this);
     child.parents.add(this);
@@ -140,7 +140,7 @@ public class PptRelation implements Serializable {
     return (parent_to_child_map.size());
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptRelation this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptRelation this*/) {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 

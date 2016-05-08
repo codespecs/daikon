@@ -151,7 +151,7 @@ public class ClassInfo {
     assert traversalClass != null : class_name;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ClassInfo this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ClassInfo this*/) {
     return (String.format(
         "ClassInfo %08X [%s] %s", System.identityHashCode(this), class_name, clazz));
   }

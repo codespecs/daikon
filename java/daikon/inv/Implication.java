@@ -113,7 +113,7 @@ public class Implication extends Joiner {
     return result;
   }
 
-  public String repr(/*>>>@GuardSatisfied Implication this*/ ) {
+  public String repr(/*>>>@GuardSatisfied Implication this*/) {
     return "[Implication: " + left.repr() + " => " + right.repr() + "]";
   }
 

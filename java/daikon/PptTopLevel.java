@@ -162,7 +162,7 @@ public class PptTopLevel extends Ppt {
 
   /*@Pure*/
   public String name(
-      /*>>>@GuardSatisfied @UnknownInitialization(PptTopLevel.class) @Raw(PptTopLevel.class) PptTopLevel this*/ ) {
+      /*>>>@GuardSatisfied @UnknownInitialization(PptTopLevel.class) @Raw(PptTopLevel.class) PptTopLevel this*/) {
     return name;
   }
 
@@ -446,7 +446,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns the full name of the ppt **/
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptTopLevel this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptTopLevel this*/) {
     return name();
   }
 

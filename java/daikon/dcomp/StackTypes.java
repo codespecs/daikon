@@ -55,7 +55,7 @@ public final class StackTypes {
     return (os_arr[offset]);
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied StackTypes this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied StackTypes this*/) {
 
     StringBuffer sb = new StringBuffer();
 

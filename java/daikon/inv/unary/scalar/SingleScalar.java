@@ -31,7 +31,7 @@ public abstract class SingleScalar extends UnaryInvariant {
   }
 
   public VarInfo var(
-      /*>>>@GuardSatisfied @UnknownInitialization(SingleScalar.class) @Raw(SingleScalar.class) SingleScalar this*/ ) {
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleScalar.class) @Raw(SingleScalar.class) SingleScalar this*/) {
     return ppt.var_infos[0];
   }
 

@@ -195,7 +195,7 @@ public class CLASSNAME
 
   // This is apparently broken somehow, though from the logs it's not
   // clear how. -- smcc
-  private String format_simplify_explicit(/*>>>@GuardSatisfied CLASSNAME this*/)  {
+  private String format_simplify_explicit(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return "format_simplify disabled";
 
     /* Since this doesn't work (since at least april 2003)

@@ -36,7 +36,7 @@ public abstract class SingleString extends UnaryInvariant {
   }
 
   public VarInfo var(
-      /*>>>@GuardSatisfied @UnknownInitialization(SingleString.class) @Raw(SingleString.class) SingleString this*/ ) {
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleString.class) @Raw(SingleString.class) SingleString this*/) {
     return ppt.var_infos[0];
   }
 

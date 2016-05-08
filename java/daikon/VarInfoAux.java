@@ -281,15 +281,15 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
   /*@SideEffectFree*/ public VarInfoAux clone(
-      /*>>>@GuardSatisfied VarInfoAux this*/ ) throws CloneNotSupportedException {
+      /*>>>@GuardSatisfied VarInfoAux this*/) throws CloneNotSupportedException {
     return (VarInfoAux) super.clone();
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfoAux this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfoAux this*/) {
     return map.toString();
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoAux this*/ ) {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoAux this*/) {
     return map.hashCode();
   }
 

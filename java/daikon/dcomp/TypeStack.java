@@ -63,7 +63,7 @@ public final class TypeStack {
   }
 
   /*@RequiresNonNull("argTypes")*/
-  private OperandStack startMethStack(/*>>>@UnknownInitialization @Raw TypeStack this*/ ) {
+  private OperandStack startMethStack(/*>>>@UnknownInitialization @Raw TypeStack this*/) {
     OperandStack type = new OperandStack(MAX);
 
     for (Type t : argTypes) {
@@ -818,7 +818,7 @@ public final class TypeStack {
   }
 
   /*@RequiresNonNull("stack")*/
-  public Type peek(/*>>>@UnknownInitialization @Raw TypeStack this*/ ) {
+  public Type peek(/*>>>@UnknownInitialization @Raw TypeStack this*/) {
     return stack.peek();
   }
 

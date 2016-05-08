@@ -711,7 +711,7 @@ public class Runtime {
     public BooleanWrap(boolean val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied BooleanWrap this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied BooleanWrap this*/) {
       return Boolean.toString(val);
     }
 
@@ -731,7 +731,7 @@ public class Runtime {
     public ByteWrap(byte val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ByteWrap this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ByteWrap this*/) {
       return Byte.toString(val);
     }
 
@@ -752,7 +752,7 @@ public class Runtime {
       this.val = val;
     }
     // Print characters as integers.
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CharWrap this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CharWrap this*/) {
       return Integer.toString(val);
     }
 
@@ -772,7 +772,7 @@ public class Runtime {
     public FloatWrap(float val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied FloatWrap this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied FloatWrap this*/) {
       return Float.toString(val);
     }
 
@@ -792,7 +792,7 @@ public class Runtime {
     public IntWrap(int val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied IntWrap this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied IntWrap this*/) {
       return Integer.toString(val);
     }
 
@@ -812,7 +812,7 @@ public class Runtime {
     public LongWrap(long val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied LongWrap this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied LongWrap this*/) {
       return Long.toString(val);
     }
 
@@ -832,7 +832,7 @@ public class Runtime {
     public ShortWrap(short val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ShortWrap this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ShortWrap this*/) {
       return Short.toString(val);
     }
 
@@ -852,7 +852,7 @@ public class Runtime {
     public DoubleWrap(double val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DoubleWrap this*/ ) {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DoubleWrap this*/) {
       return Double.toString(val);
     }
 

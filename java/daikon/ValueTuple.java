@@ -292,7 +292,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   public void checkRep(
-      /*>>> @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this*/ ) {
+      /*>>> @UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this*/) {
     assert vals.length == mods.length;
     for (int i = 0; i < vals.length; i++) {
       assert 0 <= mods[i] && mods[i] < MODBIT_VALUES
@@ -321,7 +321,7 @@ public final class ValueTuple implements Cloneable {
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
   /*@SideEffectFree*/ public ValueTuple clone(
-      /*>>>@GuardSatisfied ValueTuple this*/ ) throws CloneNotSupportedException {
+      /*>>>@GuardSatisfied ValueTuple this*/) throws CloneNotSupportedException {
     return (ValueTuple) super.clone();
   }
 
@@ -362,7 +362,7 @@ public final class ValueTuple implements Cloneable {
     ValueTuple other = (ValueTuple) obj;
     return (vals == other.vals) && (mods == other.mods);
   }
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied ValueTuple this*/ ) {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied ValueTuple this*/) {
     return vals.hashCode() * 31 + mods.hashCode();
   }
 
@@ -378,7 +378,7 @@ public final class ValueTuple implements Cloneable {
     return new ValueTuple(new_vals, new_mods);
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ValueTuple this*/ ) {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ValueTuple this*/) {
     return toString(null);
   }
 
