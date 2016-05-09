@@ -66,18 +66,9 @@ else
   JAR ?= jar
 endif
 
-ifdef DAIKON_JAVA7_PATH
-  FIND_VERSION := $(shell javac -version 2>&1)
-  ifneq (1.7,$(findstring 1.7,$(FIND_VERSION)))
-    JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Xlint:-options -Xbootclasspath/a:$(DAIKON_JAVA7_PATH) -Werror -Xlint:-classfile -Xlint:-path ${JAVAC_TARGET_FLAGS}
-  else
-    JAVAC_ARGS ?= -g -XDignore.symbol.file -Werror -Xlint:-classfile -Xlint:-path ${JAVAC_TARGET_FLAGS}
-  endif
-endif
-
 # Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
