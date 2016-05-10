@@ -44,8 +44,8 @@ public class RootInfo extends DaikonVariableInfo {
       root.addClassVars(
           mi.class_info,
           Modifier.isStatic(mi.member.getModifiers()),
-          mi.member.getDeclaringClass(), /*offset = */
-          "",
+          mi.member.getDeclaringClass(),
+          /*offset = */ "",
           depth);
     }
 
