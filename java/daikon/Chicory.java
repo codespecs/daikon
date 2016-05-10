@@ -135,7 +135,7 @@ public class Chicory {
   private static final String traceLimTermString = "DTRACELIMITTERMINATE";
   private static final String traceLimString = "DTRACELIMIT";
 
-  /** flag to use if we want to turn on the static initialization checks**/
+  /** flag to use if we want to turn on the static initialization checks **/
   public static final boolean checkStaticInit = true;
 
   private static final boolean RemoteDebug = false;
