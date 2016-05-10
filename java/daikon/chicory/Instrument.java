@@ -216,11 +216,15 @@ public class Instrument implements ClassFileTransformer {
         // check for static initializer
         boolean hasInit = false;
         for (Method meth : cg.getMethods()) {
-          if (meth.getName().equals("<clinit>")) hasInit = true;
+          if (meth.getName().equals("<clinit>")) {
+            hasInit = true;
+          }
         }
 
         // if not found, add our own!
-        if (!hasInit) cg.addMethod(createClinit(cg, fullClassName));
+        if (!hasInit) {
+          cg.addMethod(createClinit(cg, fullClassName));
+        }
       }
 
       JavaClass njc = cg.getJavaClass();
