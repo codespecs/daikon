@@ -186,7 +186,9 @@ public final class TypeStack {
       return false;
     } else if (h1.equals(h2)) {
       return true;
-    } else return inChainHelper(parentMap.get(h1), h2);
+    } else {
+      return inChainHelper(parentMap.get(h1), h2);
+    }
   }
 
   // initialization helper, sets "stack" field
@@ -697,7 +699,9 @@ public final class TypeStack {
         stack.push(t3);
         stack.push(t2);
         stack.push(t1);
-      } else throw new IllegalStateException("Malformed stack for DUP_X2");
+      } else {
+        throw new IllegalStateException("Malformed stack for DUP_X2");
+      }
     } else if (inst instanceof DUP2) {
       if (isCat2(stack.peek())) {
         stack.push(stack.peek());

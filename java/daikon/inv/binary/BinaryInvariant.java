@@ -106,7 +106,9 @@ public abstract class BinaryInvariant extends Invariant {
     if (v1.varinfo_index > v2.varinfo_index) {
       fswap = true;
       ppt = this.ppt.parent.findSlice(v2, v1);
-    } else ppt = this.ppt.parent.findSlice(v1, v2);
+    } else {
+      ppt = this.ppt.parent.findSlice(v1, v2);
+    }
     if (ppt == null) return null;
 
     // The following is complicated because we are inconsistent in

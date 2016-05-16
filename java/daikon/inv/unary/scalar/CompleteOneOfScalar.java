@@ -80,7 +80,9 @@ public final class CompleteOneOfScalar extends SingleScalar {
         out += String.format(" %s[%d]", val.val, val.cnt);
       }
       return out;
-    } else return format_unimplemented(format);
+    } else {
+      return format_unimplemented(format);
+    }
   }
 
   /** Check to see if a only contains printable ascii characters **/

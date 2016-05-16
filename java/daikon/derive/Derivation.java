@@ -264,7 +264,9 @@ public abstract class Derivation implements Serializable, Cloneable {
       } else {
         return String.format("\\new(%s)%s", vi.esc_name(), shift_str(shift));
       }
-    } else return vi.esc_name() + shift_str(shift);
+    } else {
+      return vi.esc_name() + shift_str(shift);
+    }
   }
 
   /**
@@ -282,7 +284,9 @@ public abstract class Derivation implements Serializable, Cloneable {
       } else {
         return String.format("\\new(%s)%s", vi.jml_name(), shift_str(shift));
       }
-    } else return vi.jml_name() + shift_str(shift);
+    } else {
+      return vi.jml_name() + shift_str(shift);
+    }
   }
 
   /**
@@ -301,6 +305,8 @@ public abstract class Derivation implements Serializable, Cloneable {
         // return String.format ("\\new(%s)%s", vi.csharp_name(), shift_str(shift));
         return String.format("%s%s", vi.csharp_name(), shift_str(shift));
       }
-    } else return vi.csharp_name() + shift_str(shift);
+    } else {
+      return vi.csharp_name() + shift_str(shift);
+    }
   }
 }

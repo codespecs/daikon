@@ -194,7 +194,9 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
             + "; "
             + (can_be_NaN ? "can be " : "never ")
             + "NaN");
-      } else return ("0 values");
+      } else {
+        return "0 values";
+      }
     }
   }
 
@@ -350,7 +352,9 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
             + "; "
             + (can_be_NaN ? "can be " : "never ")
             + "NaN");
-      } else return ("0 values");
+      } else {
+        return "0 values";
+      }
     }
   }
 

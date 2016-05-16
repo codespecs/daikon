@@ -1928,7 +1928,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       String msg = format;
       if (args.length > 0) msg = String.format(format, args);
       return (Debug.log(getClass(), ppt, msg));
-    } else return false;
+    } else {
+      return false;
+    }
   }
 
   // Receiver must be fully initialized

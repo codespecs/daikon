@@ -49,7 +49,9 @@ public class ListInfo extends DaikonVariableInfo {
       } catch (InvocationTargetException e1) {
         throw new Error(e1);
       }
-    } else arrayVal = NonsensicalObject.getInstance();
+    } else {
+      arrayVal = NonsensicalObject.getInstance();
+    }
 
     @SuppressWarnings("nullness") // We just verified (or set) arrayVal in code above.
     Object tmp = DTraceWriter.getListFromArray(arrayVal);

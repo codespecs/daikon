@@ -906,7 +906,9 @@ public final class FileIO {
     /*@Pure*/ public boolean equals(/*@Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation) {
         return this.format().equals(((FileIO.Invocation) other).format());
-      } else return false;
+      } else {
+        return false;
+      }
     }
 
     /*@Pure*/ public int compareTo(Invocation other) {
@@ -2657,7 +2659,9 @@ public final class FileIO {
       need_eol(scanner);
       if (state.varcomp_format == VarComparability.IMPLICIT) {
         comparability = VarComparabilityImplicit.unknown;
-      } else comparability = VarComparabilityNone.it;
+      } else {
+        comparability = VarComparabilityNone.it;
+      }
     }
 
     public VarDefinition(String name, VarKind kind, ProglangType type) {

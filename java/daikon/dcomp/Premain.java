@@ -157,7 +157,9 @@ public class Premain {
         DCInstrument dci;
         if (DynComp.branch != null) {
           dci = new DFInstrument(c, in_jdk, loader);
-        } else dci = new DCInstrument(c, in_jdk, loader);
+        } else {
+          dci = new DCInstrument(c, in_jdk, loader);
+        }
         JavaClass njc;
         if (DynComp.no_primitives) {
           njc = dci.instrument_refs_only();
@@ -278,7 +280,9 @@ public class Premain {
           System.out.println("Writing comparability sets to standard output");
           if (DynComp.no_primitives) {
             DCRuntime.print_all_comparable_refs_only(new PrintWriter(System.out, true));
-          } else DCRuntime.print_all_comparable(new PrintWriter(System.out, true));
+          } else {
+            DCRuntime.print_all_comparable(new PrintWriter(System.out, true));
+          }
         }
       }
 

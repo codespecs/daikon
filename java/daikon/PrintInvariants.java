@@ -899,7 +899,9 @@ public final class PrintInvariants {
       for (int i = 0; i < ppt.var_infos.length; i++) {
         if (dkconfig_old_array_names && FileIO.new_decl_format) {
           out.print(" " + ppt.var_infos[i].name().replace("[..]", "[]"));
-        } else out.print(" " + ppt.var_infos[i].name());
+        } else {
+          out.print(" " + ppt.var_infos[i].name());
+        }
       }
       out.println();
     }

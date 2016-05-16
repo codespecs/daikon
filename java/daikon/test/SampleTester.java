@@ -374,7 +374,9 @@ public class SampleTester extends TestCase {
       result = proc_show_invs_assert(args);
     } else if (name.equals("constant")) {
       result = proc_constant_assert(args);
-    } else parse_error("unknown assertion: " + name);
+    } else {
+      parse_error("unknown assertion: " + name);
+    }
 
     if (negate) result = !result;
 

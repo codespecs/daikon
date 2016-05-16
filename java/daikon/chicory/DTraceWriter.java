@@ -406,7 +406,9 @@ public class DTraceWriter extends DaikonWriter {
         type = ref.getClass();
         type = removeWrappers(ref, type, true);
         typeNames.add(type.getCanonicalName());
-      } else typeNames.add(null);
+      } else {
+        typeNames.add(null);
+      }
     }
 
     return typeNames;

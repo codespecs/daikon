@@ -162,7 +162,9 @@ public class MatchCountVisitor extends PrintAllVisitor {
         if (Character.isDigit(firstChar) || firstChar == '-') {
           if (acceptableNumber(oneToken)) {
             continue;
-          } else return true;
+          } else {
+            return true;
+          }
         }
 
       } catch (NumberFormatException e) {

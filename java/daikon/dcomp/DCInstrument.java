@@ -3942,7 +3942,9 @@ class DCInstrument {
     InstructionList il = new InstructionList();
     if ((type instanceof BasicType) && (type != Type.VOID)) {
       il.append(dcr_call("normal_exit_primitive", Type.VOID, Type.NO_ARGS));
-    } else il.append(dcr_call("normal_exit", Type.VOID, Type.NO_ARGS));
+    } else {
+      il.append(dcr_call("normal_exit", Type.VOID, Type.NO_ARGS));
+    }
     il.append(inst);
     return (il);
   }

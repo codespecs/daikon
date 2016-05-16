@@ -156,7 +156,9 @@ public final class SplitDtrace {
       stream = zipfile.getInputStream(entry);
     } else if (filename.endsWith(".dtrace.gz")) {
       stream = new GZIPInputStream(new FileInputStream(filename));
-    } else stream = new FileInputStream(filename);
+    } else {
+      stream = new FileInputStream(filename);
+    }
     return new BufferedReader(new InputStreamReader(stream, "ISO-8859-1"));
   }
 }

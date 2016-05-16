@@ -355,7 +355,9 @@ class DFInstrument extends DCInstrument {
         {
           if (test_sequence) {
             return load_store_local((StoreInstruction) inst, tag_frame_local, "pop_local_tag_df");
-          } else return load_store_local((StoreInstruction) inst, tag_frame_local, "pop_local_tag");
+          } else {
+            return load_store_local((StoreInstruction) inst, tag_frame_local, "pop_local_tag");
+          }
         }
 
       case Const.LDC:

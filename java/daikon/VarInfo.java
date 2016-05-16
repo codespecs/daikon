@@ -1238,7 +1238,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (is_static_constant) {
       // return ValueTuple.STATIC_CONSTANT;
       return ValueTuple.MODIFIED;
-    } else return vt.getModified(value_index);
+    } else {
+      return vt.getModified(value_index);
+    }
   }
   /*@Pure*/ public boolean isUnmodified(ValueTuple vt) {
     return ValueTuple.modIsUnmodified(getModified(vt));
@@ -2734,7 +2736,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       HashSet<VarInfo> set = new HashSet<VarInfo>();
       set.add(this);
       return set;
-    } else return equalitySet.getVars();
+    } else {
+      return equalitySet.getVars();
+    }
   }
 
   /**
@@ -2745,7 +2749,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // if (equalitySet == null && VarInfo.use_equality_optimization == false) {  // match } for vim
     if (equalitySet == null) {
       return this;
-    } else return equalitySet.leader();
+    } else {
+      return equalitySet.leader();
+    }
   }
 
   private static Set<String> out_strings = new LinkedHashSet<String>();
@@ -3214,7 +3220,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         if (var_flags.contains(VarFlags.CLASSNAME)) {
           if (arr_dims > 0) {
             return String.format("daikon.Quant.typeArray(%s)", enclosing_var.jml_name(index));
-          } else return enclosing_var.jml_name(index) + DaikonVariableInfo.class_suffix;
+          } else {
+            return enclosing_var.jml_name(index) + DaikonVariableInfo.class_suffix;
+          }
         }
         if (var_flags.contains(VarFlags.TO_STRING)) {
           return enclosing_var.jml_name(index) + ".toString()";
@@ -3502,7 +3510,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     } else {
       if (index_off != 0) {
         complete_index = String.format("(+ |%s| %d)", simplify_index_name, index_off);
-      } else complete_index = String.format("|%s|", simplify_index_name);
+      } else {
+        complete_index = String.format("|%s|", simplify_index_name);
+      }
     }
 
     // Return the array properly indexed
@@ -3538,8 +3548,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (index_off != 0) {
       if (lower instanceof Quantify.Constant) {
         complete_index = String.format("%d", ((Quantify.Constant) lower).get_value() + index_off);
-      } else complete_index = String.format("(+ %s %d)", lower_name, index_off);
-    } else complete_index = String.format("%s", lower_name);
+      } else {
+        complete_index = String.format("(+ %s %d)", lower_name, index_off);
+      }
+    } else {
+      complete_index = String.format("%s", lower_name);
+    }
 
     // Return the array properly indexed
     // System.err.printf ("lower bound type = %s [%s] %s\n", lower,
@@ -3587,7 +3601,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                     vars[0].var_info_name, vars[2].var_info_name, index1_vin) // vin ok
                 .simplify_name();
         return new String[] {index1_vin.name(), index2};
-      } else throw new Error("unexpected length " + vars.length);
+      } else {
+        throw new Error("unexpected length " + vars.length);
+      }
     }
 
     // Get a free variable for each variable
@@ -3974,7 +3990,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       } else {
         return String.format("post(%s)%s", vi.name(), shift_str);
       }
-    } else return vi.name() + shift_str;
+    } else {
+      return vi.name() + shift_str;
+    }
   }
 
   /**
@@ -4080,7 +4098,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     } else if (shift == 1) {
       viname = viname.applyIncrement();
       shift_name = "_plus1";
-    } else assert shift == 0;
+    } else {
+      assert shift == 0;
+    }
 
     /*@NonNull*/ ProglangType ptype = type;
     /*@NonNull*/ ProglangType frtype = type;
@@ -4224,7 +4244,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public static String old_var_names(String name) {
     if (PrintInvariants.dkconfig_old_array_names && FileIO.new_decl_format) {
       return name.replace("[..]", "[]");
-    } else return name;
+    } else {
+      return name;
+    }
   }
 
   /**

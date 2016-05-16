@@ -546,7 +546,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
         } else if (value_strings[i].equalsIgnoreCase("-Infinity")
             || value_strings[i].equals("-inf")) {
           result[i] = Double.NEGATIVE_INFINITY;
-        } else result[i] = Double.parseDouble(value_strings[i]);
+        } else {
+          result[i] = Double.parseDouble(value_strings[i]);
+        }
       }
       return Intern.intern(result);
     } else if (base == BASE_STRING) {

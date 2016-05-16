@@ -2934,7 +2934,9 @@ public class PptTopLevel extends Ppt {
         for (Lemma problem : problems) {
           if (demerits.containsKey(problem)) {
             demerits.put(problem, new Integer(demerits.get(problem).intValue() + 1));
-          } else demerits.put(problem, new Integer(1));
+          } else {
+            demerits.put(problem, new Integer(1));
+          }
         }
         int max_demerits = -1;
         Vector<Lemma> worst = new Vector<Lemma>();
@@ -3554,7 +3556,9 @@ public class PptTopLevel extends Ppt {
           // Equivalent to emap.remove(...), but that could throw a
           // ConcurrentModificationException, so must remove via the iterator.
           j.remove();
-        } else curpair.samples += newpair.samples;
+        } else {
+          curpair.samples += newpair.samples;
+        }
       }
     }
     if (debugMerge.isLoggable(Level.FINE)) {

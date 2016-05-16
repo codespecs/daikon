@@ -89,7 +89,9 @@ public final class CompleteOneOfString extends SingleString {
         out.append(String.format(" %s[%d]", val.val, val.cnt));
       }
       return out.toString();
-    } else return format_unimplemented(format);
+    } else {
+      return format_unimplemented(format);
+    }
   }
 
   /** Check to see if a only contains printable ascii characters **/

@@ -1495,7 +1495,9 @@ public class Instrument implements ClassFileTransformer {
     if (mgen.getName().equals("<init>") || mgen.getName().equals("")) {
       // log ("method '%s' is a constructor%n", mgen.getName());
       return true;
-    } else return false;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -1664,7 +1666,9 @@ public class Instrument implements ClassFileTransformer {
             exit_locs.add(new Integer(line_number));
 
             isIncluded.add(true);
-          } else isIncluded.add(false);
+          } else {
+            isIncluded.add(false);
+          }
 
           break;
 
@@ -1676,7 +1680,9 @@ public class Instrument implements ClassFileTransformer {
     if (shouldInclude) {
       return new MethodInfo(
           class_info, mgen.getName(), arg_names, arg_type_strings, exit_locs, isIncluded);
-    } else return null;
+    } else {
+      return null;
+    }
   }
 
   /**

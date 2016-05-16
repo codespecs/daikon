@@ -281,7 +281,9 @@ class TagEntry extends WeakReference<Object> {
         line += ", ";
         if (entry instanceof DaikonVariableInfo) {
           line += String.format("%s ", ((DaikonVariableInfo) entry).getName());
-        } else line += String.format("%s [%s]", entry.getClass(), entry);
+        } else {
+          line += String.format("%s [%s]", entry.getClass(), entry);
+        }
       }
       out += String.format("%s%n", line);
     }

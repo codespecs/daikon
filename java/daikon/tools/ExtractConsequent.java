@@ -425,7 +425,9 @@ public class ExtractConsequent {
         condition = lteq_pattern.matcher(condition).replaceFirst(">");
       } else if (neq_pattern.matcher(condition).find()) {
         condition = neq_pattern.matcher(condition).replaceFirst("==");
-      } else throw new Error("this can't happen");
+      } else {
+        throw new Error("this can't happen");
+      }
     }
     return condition;
   }

@@ -127,7 +127,9 @@ public final class SequenceLength extends UnaryDerivation {
     if (base.isPrestate()) {
       return String.format(
           "\\old(%s.length)%s", base.enclosing_var.postState.esc_name(), shift_str(shift));
-    } else return String.format("%s.length%s", base.enclosing_var.esc_name(), shift_str(shift));
+    } else {
+      return String.format("%s.length%s", base.enclosing_var.esc_name(), shift_str(shift));
+    }
   }
 
   /** Returns the JML name **/

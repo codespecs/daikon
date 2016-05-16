@@ -188,7 +188,9 @@ public final class Debug {
   public static /*@Nullable*/ Debug newDebug(Class<?> c, Ppt ppt, VarInfo[] vis) {
     if (logOn() && class_match(c) && ppt_match(ppt) && var_match(vis)) {
       return new Debug(c, ppt, vis);
-    } else return null;
+    } else {
+      return null;
+    }
   }
 
   /**

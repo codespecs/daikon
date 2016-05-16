@@ -813,7 +813,9 @@ public class PptRelation implements Serializable {
                     + " with connections ["
                     + rel.parent_to_child_var_string()
                     + "]");
-          } else debug.fine(dstr + " No object ppt");
+          } else {
+            debug.fine(dstr + " No object ppt");
+          }
         }
       }
       // Connect any conditional ppt variables.  Only connect to the

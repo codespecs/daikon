@@ -905,7 +905,9 @@ public abstract class DaikonVariableInfo
       Class<?> eltType = type.getComponentType();
       assert eltType != null; // because type is an array
       return !(eltType.isPrimitive());
-    } else return false;
+    } else {
+      return false;
+    }
   }
 
   /**

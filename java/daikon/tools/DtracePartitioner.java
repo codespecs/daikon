@@ -53,7 +53,9 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
       if (ret.indexOf("EXIT") != -1) {
         if (!br.ready()) return "";
         return next();
-      } else return ret;
+      } else {
+        return ret;
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }

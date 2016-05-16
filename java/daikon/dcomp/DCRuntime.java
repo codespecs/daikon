@@ -1473,7 +1473,9 @@ public final class DCRuntime {
         if (current != null) {
           merge_dv.log("**Merging %s and %s\n", current, dv);
           TagEntry.union(current, dv);
-        } else varmap.put(leader, dv);
+        } else {
+          varmap.put(leader, dv);
+        }
       }
     } else if (dv.isArray()) {
       if (tag == null) {
@@ -1509,7 +1511,9 @@ public final class DCRuntime {
         if (current != null) {
           merge_dv.log("**Merging %s and %s\n", current, dv);
           TagEntry.union(current, dv);
-        } else varmap.put(leader, dv);
+        } else {
+          varmap.put(leader, dv);
+        }
       }
     } else {
       // Ignore null and nonsensical tags.  There is no reason to process
@@ -1535,7 +1539,9 @@ public final class DCRuntime {
       if (current != null) {
         merge_dv.log("**Merging variable '%s' and '%s'%n", current, dv);
         TagEntry.union(current, dv);
-      } else varmap.put(leader, dv);
+      } else {
+        varmap.put(leader, dv);
+      }
     }
 
     if (debug_timing.enabled()) {
@@ -1627,7 +1633,9 @@ public final class DCRuntime {
         if (current != null) {
           merge_dv.log("**Merging %s and %s\n", current, dv);
           TagEntry.union(current, dv);
-        } else varmap.put(leader, dv);
+        } else {
+          varmap.put(leader, dv);
+        }
       }
     } else if (dv.isArray()) {
       if (tag == null) {
@@ -1663,7 +1671,9 @@ public final class DCRuntime {
         if (current != null) {
           merge_dv.log("**Merging %s and %s\n", current, dv);
           TagEntry.union(current, dv);
-        } else varmap.put(leader, dv);
+        } else {
+          varmap.put(leader, dv);
+        }
       }
     } else {
       // Ignore null and nonsensical tags.  There is no reason to process
@@ -1689,7 +1699,9 @@ public final class DCRuntime {
       if (current != null) {
         merge_dv.log("**Merging variable '%s' and '%s'%n", current, dv);
         TagEntry.union(current, dv);
-      } else varmap.put(leader, dv);
+      } else {
+        varmap.put(leader, dv);
+      }
     }
 
     if (debug_timing.enabled()) {
@@ -1868,8 +1880,11 @@ public final class DCRuntime {
         else if (Modifier.isStatic(modifiers)) static_cnt++;
         else if (dv.getName().startsWith("this")) this_instance_cnt++;
         else other_instance_cnt++;
-      } else if (dv instanceof ParameterInfo) parameter_cnt++;
-      else other_cnt++;
+      } else if (dv instanceof ParameterInfo) {
+        parameter_cnt++;
+      } else {
+        other_cnt++;
+      }
     }
   }
 
@@ -2074,7 +2089,9 @@ public final class DCRuntime {
           // There is no index comparability, so just set it to a unique value.
           ps.println(comp + "[" + base_comp++ + "]");
         }
-      } else ps.println(comp);
+      } else {
+        ps.println(comp);
+      }
     }
 
     time_decl.log_time("print_decl_vars end%n");

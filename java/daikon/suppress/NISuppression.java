@@ -524,8 +524,11 @@ public class NISuppression {
 
       if (vis[0].rep_type.isArray() == vis[1].rep_type.isArray()) {
         return (vis[0].compatible(vis[1]));
-      } else if (vis[0].rep_type.isArray()) return (vis[0].eltsCompatible(vis[1]));
-      else return (vis[1].eltsCompatible(vis[0]));
+      } else if (vis[0].rep_type.isArray()) {
+        return (vis[0].eltsCompatible(vis[1]));
+      } else {
+        return (vis[1].eltsCompatible(vis[0]));
+      }
     }
 
     // Check ternary
