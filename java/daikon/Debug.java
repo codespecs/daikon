@@ -227,7 +227,9 @@ public final class Debug {
       if (evars != null) {
         for (VarInfo ev : evars) {
           for (int k = 0; k < debugTrackVars.length; k++) {
-            if (ev.name().equals(debugTrackVars[k][0])) return (v);
+            if (ev.name().equals(debugTrackVars[k][0])) {
+              return v;
+            }
           }
         }
       }
@@ -244,20 +246,20 @@ public final class Debug {
 
   public static VarInfo[] vis(VarInfo v1) {
     vis1[0] = v1;
-    return (vis1);
+    return vis1;
   }
 
   public static VarInfo[] vis(VarInfo v1, VarInfo v2) {
     vis2[0] = v1;
     vis2[1] = v2;
-    return (vis2);
+    return vis2;
   }
 
   public static VarInfo[] vis(VarInfo v1, VarInfo v2, VarInfo v3) {
     vis3[0] = v1;
     vis3[1] = v2;
     vis3[2] = v3;
-    return (vis3);
+    return vis3;
   }
 
   /**
@@ -632,7 +634,7 @@ public final class Debug {
       break outer;
     }
 
-    return (match);
+    return match;
   }
 
   /**
@@ -713,11 +715,11 @@ public final class Debug {
       }
     }
 
-    return (out);
+    return out;
   }
 
   public static String toString(/*@Nullable*/ Object val) {
-    if (val == null) return ("none");
+    if (val == null) return "none";
     if (val instanceof String) return "\"" + val + "\"";
     if (val instanceof long[]) return ArraysMDE.toString((long[]) val);
     if (val instanceof String[]) return ArraysMDE.toString((String[]) val);
@@ -732,7 +734,7 @@ public final class Debug {
     for (VarInfo vi : vis) {
       vars += vi.name() + " ";
     }
-    return (vars);
+    return vars;
   }
 
   /**
@@ -756,7 +758,7 @@ public final class Debug {
       out += ": ";
     }
 
-    return (out);
+    return out;
   }
 
   /**

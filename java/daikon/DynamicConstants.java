@@ -446,7 +446,7 @@ public class DynamicConstants implements Serializable {
       if (con.vi.isCanonical()) con_cnt++;
     }
 
-    return (con_cnt);
+    return con_cnt;
   }
 
   /**
@@ -886,16 +886,18 @@ public class DynamicConstants implements Serializable {
     // if (debug.isLoggable (Level.FINE))
     //  debug.fine ("considering slice " + slice);
 
-    if (slice == null) return (null);
+    if (slice == null) {
+      return null;
+    }
 
     for (Invariant inv : slice.invs) {
       // debug.fine ("inv = " + inv.getClass());
       if ((inv.getClass() == LinearBinary.class) || (inv.getClass() == LinearBinaryFloat.class)) {
-        return (inv);
+        return inv;
       }
     }
 
-    return (null);
+    return null;
   }
 
   /**
@@ -1050,7 +1052,7 @@ public class DynamicConstants implements Serializable {
 
     if (debug_on) LogHelper.setLevel("daikon.Debug", Level.FINE);
 
-    return (new_views);
+    return new_views;
   }
 
   public void print_missing(PrintWriter out) {

@@ -306,7 +306,7 @@ public class SEQSEQINTEQUAL
 
   /** Returns the prototype invariant for SEQSEQINTEQUAL **/
   public static /*@Prototype*/ SEQSEQINTEQUAL get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** Returns whether or not this invariant is enabled **/
@@ -591,7 +591,7 @@ public class SEQSEQINTEQUAL
       if (ppt.parent.check_implied (di, vis[0], vis[1],
                                               PAIRWISEINTEQUAL.get_proto())) {
         di.add_implied_vis (vis);
-        return (di);
+        return di;
       }
 
       // If either variable is a subsequence and the original arrays
@@ -742,7 +742,7 @@ public class SEQSEQINTEQUAL
    */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
-    return (suppressions);
+    return suppressions;
   }
 
   /** Definition of this invariant (the suppressee) **/

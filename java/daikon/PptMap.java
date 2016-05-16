@@ -173,7 +173,7 @@ public class PptMap implements Serializable {
         iter_view.next(); // to check for concurrent modifications
         PptTopLevel ppt = iter_sort.next();
         if ((ppt != null) && ppt.has_splitters()) cond_iterator = ppt.cond_iterator();
-        return (ppt);
+        return ppt;
       }
 
       public void remove() {

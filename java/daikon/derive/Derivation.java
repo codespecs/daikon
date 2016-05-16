@@ -124,7 +124,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * (which would require a first pass).
    **/
   public boolean missingOutOfBounds() {
-    return (missing_array_bounds);
+    return missing_array_bounds;
   }
 
   /* *
@@ -246,7 +246,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   protected String shift_str(int shift) {
     String shift_str = "";
     if (shift != 0) shift_str = String.format("%+d", shift);
-    return (shift_str);
+    return shift_str;
   }
 
   /**

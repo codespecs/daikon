@@ -81,7 +81,7 @@ public class NISuppressee {
         Debug.log(sup_class, slice, "Didn't create, instantiate returned null");
       }
     }
-    return (inv);
+    return inv;
   }
 
   /**
@@ -153,7 +153,7 @@ public class NISuppressee {
   //         if (inv != null)
   //           created_list.add (inv);
   //       }
-  //       return (created_list);
+  //       return created_list;
   //     }
   //
   //     // Fill in the missing slot with each possible matching leader and
@@ -171,7 +171,7 @@ public class NISuppressee {
   //         created_list.add (inv);
   //     }
   //
-  //     return (created_list);
+  //     return created_list;
   //   }
 
   /**
@@ -210,7 +210,7 @@ public class NISuppressee {
         sinv.log("Created for invariants: " + Arrays.toString(cinvs));
         created_list.add(sinv);
       }
-      return (created_list);
+      return created_list;
     }
 
     // Fill in the missing slot with each possible matching leader and
@@ -229,7 +229,7 @@ public class NISuppressee {
       sinv.log("Created for invariants: " + Arrays.toString(cinvs));
       created_list.add(sinv);
     }
-    return (created_list);
+    return created_list;
   }
 
   /**

@@ -65,7 +65,7 @@ public final class CompleteOneOfString extends SingleString {
 
   /** Returns the prototype invariant for CompleteOneOFString **/
   public static /*@Prototype*/ CompleteOneOfString get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/

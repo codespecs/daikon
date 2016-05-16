@@ -226,7 +226,7 @@ public abstract class DaikonVariableInfo
     for (DaikonVariableInfo dv : children) {
       list.addAll(dv.tree_as_list());
     }
-    return (list);
+    return list;
   }
 
   /**
@@ -292,7 +292,7 @@ public abstract class DaikonVariableInfo
       //show the full array
       return getValueStringOfArray(theValue);
     } else if (theValue instanceof NonsensicalObject) {
-      return ("nonsensical");
+      return "nonsensical";
     } else {
       //basically, show the hashcode of theValue
       return getObjectHashCode(theValue);
@@ -328,9 +328,9 @@ public abstract class DaikonVariableInfo
    */
   private String getObjectHashCode(Object theObject) {
     if (theObject == null) {
-      return ("null");
+      return "null";
     } else if (theObject instanceof NonsensicalObject) {
-      return ("nonsensical");
+      return "nonsensical";
     } else {
       return Integer.toString(System.identityHashCode(theObject));
     }
@@ -361,11 +361,11 @@ public abstract class DaikonVariableInfo
    */
   protected String getValueStringOfList(List<Object> theValues) {
     if (theValues == null) {
-      return ("null");
+      return "null";
     }
 
     if (theValues instanceof NonsensicalList) {
-      return ("nonsensical");
+      return "nonsensical";
     }
 
     StringBuffer buf = new StringBuffer();

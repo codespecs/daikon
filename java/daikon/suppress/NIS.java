@@ -774,7 +774,7 @@ public class NIS {
       }
     }
 
-    return (created_invs);
+    return created_invs;
   }
 
   /**
@@ -846,7 +846,7 @@ public class NIS {
       }
     }
 
-    return (false_cnt);
+    return false_cnt;
   }
 
   /**
@@ -953,7 +953,7 @@ public class NIS {
       for (int i = 0; i < vis.length; i++) {
         code += vis[i].hashCode();
       }
-      return (code);
+      return code;
     }
 
     /** Check this invariant against the sample and return the result */
@@ -986,12 +986,12 @@ public class NIS {
      */
     public /*@Nullable*/ Invariant already_exists() {
       Invariant cinv = ppt.find_inv_by_class(vis, suppressee.sup_class);
-      if (cinv == null) return (null);
-      if (suppressee.var_count != 2) return (cinv);
+      if (cinv == null) return null;
+      if (suppressee.var_count != 2) return cinv;
       BinaryInvariant binv = (BinaryInvariant) cinv;
-      if (binv.is_symmetric()) return (cinv);
-      if (binv.get_swap() != suppressee.get_swap()) return (null);
-      return (cinv);
+      if (binv.is_symmetric()) return cinv;
+      if (binv.get_swap() != suppressee.get_swap()) return null;
+      return cinv;
     }
 
     /** Return string representation of the suppressed invariant **/
@@ -1117,7 +1117,7 @@ public class NIS {
         out += " : ";
       }
 
-      return (out);
+      return out;
     }
   }
 

@@ -59,6 +59,6 @@ public final class VarComparabilityNone extends VarComparability implements Seri
   }
 
   /*@SideEffectFree*/ public String toString() {
-    return ("no-comparability");
+    return "no-comparability";
   }
 }

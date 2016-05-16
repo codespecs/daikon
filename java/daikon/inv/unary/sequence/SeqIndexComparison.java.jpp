@@ -191,7 +191,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** Returns the prototype invariant for CLASSNAME **/
   public static /*@Prototype*/ CLASSNAME get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not we are enabled **/
@@ -266,7 +266,7 @@ public class CLASSNAME extends SUPERCLASS {
         #endif
         });
     }
-    return (suppressions);
+    return suppressions;
   }
 #else
   /** returns the ni-suppressions for CLASSNAME **/

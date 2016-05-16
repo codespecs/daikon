@@ -39,7 +39,7 @@ public final class PrintableString extends SingleString {
 
   /** Returns the prototype invariant for PrintableString **/
   public static /*@Prototype*/ PrintableString get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/

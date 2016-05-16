@@ -78,7 +78,7 @@ public class FieldInfo extends DaikonVariableInfo {
         if (Modifier.isStatic(f.getModifiers())) continue;
         if (f.getType().isPrimitive()) field_cnt++;
       }
-      return (field_cnt);
+      return field_cnt;
     }
   }
 
@@ -113,7 +113,7 @@ public class FieldInfo extends DaikonVariableInfo {
   }
 
   public int get_field_num() {
-    return (field_num);
+    return field_num;
   }
 
   /*@Pure*/ public boolean isPrimitive() {
@@ -180,6 +180,6 @@ public class FieldInfo extends DaikonVariableInfo {
     EnumSet<VarFlags> flags = super.get_var_flags();
     int modbits = field.getModifiers();
     if (Modifier.isFinal(modbits) && Modifier.isStatic(modbits)) flags.add(VarFlags.NOMOD);
-    return (flags);
+    return flags;
   }
 }

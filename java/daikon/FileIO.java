@@ -471,7 +471,7 @@ public final class FileIO {
     ParentRelation pr = new ParentRelation(rel_type, parent_ppt_name, id);
 
     need_eol(state, scanner);
-    return (pr);
+    return pr;
   }
 
   /**
@@ -491,7 +491,7 @@ public final class FileIO {
 
     PptType ppt_type = parse_enum_val(state, scanner, PptType.class, "ppt type");
     need_eol(state, scanner);
-    return (ppt_type);
+    return ppt_type;
   }
 
   // Read a declaration in the Version 1 format.  For version 2, see
@@ -770,9 +770,9 @@ public final class FileIO {
     }
 
     if (comp_str.equals("none")) {
-      return (VarComparability.NONE);
+      return VarComparability.NONE;
     } else if (comp_str.equals("implicit")) {
-      return (VarComparability.IMPLICIT);
+      return VarComparability.IMPLICIT;
     } else {
       throw new Daikon.TerminationMessage(
           "Unrecognized VarComparability '" + comp_str + "'", state);
@@ -2377,7 +2377,7 @@ public final class FileIO {
         FileIO.new_decl_format = record.new_decl_format;
         // System.err.printf ("Setting FileIO.new_decl_format to %b%n",
         //                   FileIO.new_decl_format);
-        return (record.map);
+        return record.map;
       } else if (obj instanceof InvMap) {
         // System.err.printf ("Restoring an InvMap%n");
         InvMap invs = (InvMap) obj;
@@ -2395,7 +2395,7 @@ public final class FileIO {
         }
         assert FileIO.new_decl_format != null
             : "@AssumeAssertion(nullness): InvMap.readObject() sets FileIO.new_decl_format";
-        return (ppts);
+        return ppts;
       } else {
         throw new IOException("Unexpected serialized file type: " + obj.getClass());
       }
@@ -2917,7 +2917,7 @@ public final class FileIO {
     /*@Interned*/ String str = need(state, scanner, descr);
     try {
       E e = Enum.valueOf(enum_class, str.toUpperCase());
-      return (e);
+      return e;
     } catch (Exception exception) {
       @SuppressWarnings(
           "nullness") // getEnumConstants returns non-null because enum_class is an enum class

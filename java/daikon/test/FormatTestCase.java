@@ -1061,7 +1061,7 @@ class FormatTestCase {
       Invariant inv = proto.instantiate(sl);
 
       if (inv == null) throw new RuntimeException("null inv for " + theClass.getName());
-      return (inv);
+      return inv;
     } catch (Exception e) {
       e.printStackTrace(System.out);
       throw new RuntimeException(

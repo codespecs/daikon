@@ -179,7 +179,7 @@ public class PptSplitter implements Serializable {
             "Exception thrown in " + "PptSplitter.choose_conditional() for " + ppts[0].name());
         System.out.println("Vars = " + Debug.related_vars(ppts[0], vt));
       }
-      return (null);
+      return null;
     }
 
     // Choose the appropriate conditional point based on the condition result
@@ -593,7 +593,7 @@ public class PptSplitter implements Serializable {
       }
     }
 
-    return (result);
+    return result;
   }
 
   // Could be used in assertion that all invariants are at same point.
@@ -796,7 +796,7 @@ public class PptSplitter implements Serializable {
 
     VarInfo v = ppt1.var_infos[ppt2_var.varinfo_index];
     assert v.name().equals(ppt2_var.name());
-    return (v);
+    return v;
   }
 
   /*@SideEffectFree*/ public String toString() {

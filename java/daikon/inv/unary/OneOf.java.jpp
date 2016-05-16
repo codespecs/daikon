@@ -353,7 +353,7 @@ public final class ONEOFSCALAR
 
   /** Returns the prototype invariant for ONEOFSCALAR **/
   public static /*@Prototype*/ ONEOFSCALAR get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -777,7 +777,7 @@ public final class ONEOFSCALAR
         result = collection.esc_name() + ".elementType == "
             + format_esc_string2type(elts[0]);
         // Do not use the \forall, return this directly
-        return (result);
+        return result;
       }
     } else {
       result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
@@ -1504,37 +1504,37 @@ public String format_csharp_contract() {
       //if (logDetail())
       //  log ("add_modified (" + v + ")");
       if (EQUALS(elts[i], v)) {
-        return (InvariantStatus.NO_CHANGE);
+        return InvariantStatus.NO_CHANGE;
       }
     }
 
     if (num_elts == dkconfig_size) {
-      return (InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
     }
 
 #if defined(STRING) || defined(ELTSTRING)
     if (is_type() && (num_elts == 1)) {
-      return (InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
     }
 #elif defined(SEQUENCE)
     if (is_hashcode() && (num_elts == 1)) {
-      return (InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
     }
 #elif defined(SCALAR) || defined(ELT)
     if ((is_boolean() && (num_elts == 1)) || (is_hashcode() && (num_elts == 2))) {
-      return (InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
     }
 
     if (is_hashcode() && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
-        return (InvariantStatus.FALSIFIED);
+        return InvariantStatus.FALSIFIED;
       }
     }
 #endif
 
 
-    return (InvariantStatus.WEAKENED);
+    return InvariantStatus.WEAKENED;
   }
 
 #if defined(IS_ELT)
@@ -2077,13 +2077,13 @@ public String format_csharp_contract() {
         InvariantStatus status = result.add_mod_elem(val, 1);
         if (status == InvariantStatus.FALSIFIED) {
           result.log ("%s", "child value '" + val + "' destroyed oneof");
-          return (null);
+          return null;
         }
       }
     }
 
     result.log ("Merged '%s' from %s child invariants", result.format(), invs.size());
-    return (result);
+    return result;
   }
 
   /**

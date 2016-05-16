@@ -154,7 +154,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", v1);
-    return (fmt_str);
+    return fmt_str;
   }
 
 #if defined(SEQ)
@@ -175,9 +175,9 @@ public abstract class RANGE extends SUPERCLASS {
 
   public InvariantStatus check_modified (PRIMITIVE x, int count) {
     if (eq_check (x)) {
-      return (InvariantStatus.NO_CHANGE);
+      return InvariantStatus.NO_CHANGE;
     } else {
-      return (InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
     }
   }
 
@@ -249,7 +249,7 @@ public abstract class RANGE extends SUPERCLASS {
       result.add (Even.get_proto());
       result.add (Bound0_63.get_proto());
     #endif
-    return (result);
+    return result;
   }
 
   /**
@@ -291,9 +291,9 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EQ 0 %var1%)");
+        return "(EQ 0 %var1%)";
       } else {
-        return ("%var1% == 0");
+        return "%var1% == 0";
       }
     }
 
@@ -341,9 +341,9 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EQ 1 %var1%)");
+        return "(EQ 1 %var1%)";
       } else {
-        return ("%var1% == 1");
+        return "%var1% == 1";
       }
     }
 
@@ -391,9 +391,9 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EQ -1 %var1%)");
+        return "(EQ -1 %var1%)";
       } else {
-        return ("%var1% == -1");
+        return "%var1% == -1";
       }
     }
 
@@ -441,9 +441,9 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(>= %var1% 0)");
+        return "(>= %var1% 0)";
       } else {
-        return ("%var1% >= 0");
+        return "%var1% >= 0";
       }
     }
 
@@ -491,9 +491,9 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(>= 64 %var1%)");
+        return "(>= 64 %var1%)";
       } else {
-        return ("%var1% >= 64");
+        return "%var1% >= 64";
       }
     }
 
@@ -527,7 +527,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ BooleanVal get_proto() {
-      return (proto);
+      return proto;
     }
 
     /** Returns whether or not this invariant is enabled **/
@@ -542,9 +542,9 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(OR (EQ 0 %var1%) (EQ 1 %var1%))");
+        return "(OR (EQ 0 %var1%) (EQ 1 %var1%))";
       } else {
-        return ("%var1% is boolean");
+        return "%var1% is boolean";
       }
     }
 
@@ -582,7 +582,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ PowerOfTwo get_proto() {
-      return (proto);
+      return proto;
     }
 
     /** returns whether or not this invariant is enabled **/
@@ -597,7 +597,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EXISTS (p) (EQ %var1% (pow 2 p)))");
+        return "(EXISTS (p) (EQ %var1% (pow 2 p)))";
       }
       if (format == OutputFormat.JAVA) {
         return "daikon.tools.runtimechecker.Runtime.isPowerOfTwo(%var1%)";
@@ -605,7 +605,7 @@ public abstract class RANGE extends SUPERCLASS {
       if (format == OutputFormat.CSHARPCONTRACT) {
         return "%var1%.IsPowerOfTwo()";
       } else {
-        return ("%var1% is a power of 2");
+        return "%var1% is a power of 2";
       }
     }
 
@@ -680,12 +680,12 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EQ (MOD %var1% 2) 0)");
+        return "(EQ (MOD %var1% 2) 0)";
       }
       if (format == OutputFormat.CSHARPCONTRACT) {
         return "%var1% % 2 == 0";
       } else {
-        return ("%var1% is even");
+        return "%var1% is even";
       }
     }
 
@@ -733,7 +733,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ Bound0_63 get_proto() {
-      return (proto);
+      return proto;
     }
 
     /** Returns whether or not this invariant is enabled **/
@@ -748,9 +748,9 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(AND (>= %var1% 0) (>= 63 %var1%))");
+        return "(AND (>= %var1% 0) (>= 63 %var1%))";
       } else {
-        return ("0 <= %var1% <= 63");
+        return "0 <= %var1% <= 63";
       }
     }
 

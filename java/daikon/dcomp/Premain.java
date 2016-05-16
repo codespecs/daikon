@@ -128,7 +128,7 @@ public class Premain {
       // Check if class is in JDK
       if (BCELUtil.in_jdk_internalform(className)) {
         // If --no-jdk option is active, then skip it.
-        if (DynComp.no_jdk) return (null);
+        if (DynComp.no_jdk) return null;
 
         in_jdk = true;
         if (DynComp.verbose) System.out.printf("Instrumenting JDK class %s%n", className);
@@ -137,7 +137,7 @@ public class Premain {
         // We're not in a JDK class
         // Don't instrument our own classes
         if ((className.startsWith("daikon/dcomp/") && !className.startsWith("daikon/dcomp/Test"))
-            || className.startsWith("daikon/chicory/")) return (null);
+            || className.startsWith("daikon/chicory/")) return null;
       }
 
       if (DynComp.verbose) {
@@ -169,7 +169,7 @@ public class Premain {
 
         if (njc == null) {
           if (DynComp.verbose) System.out.printf("Didn't instrument %s%n", c.getClassName());
-          return (null);
+          return null;
         } else {
           if (DynComp.debug) {
             System.out.printf("Dumping %s to %s%n", njc.getClassName(), debug_bin_dir);
@@ -334,7 +334,7 @@ public class Premain {
     assert local_store.startsWith("local-store");
     int local_index = Integer.decode(local_store.split(" ")[1]);
     String local_name = DFInstrument.test_seq_locals[local_index];
-    return (local_name);
+    return local_name;
   }
 
   public static PrintWriter open(File filename) {

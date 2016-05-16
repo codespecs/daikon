@@ -982,7 +982,7 @@ public final class TypeStack {
   public Type pop_check(Type type) {
     Type top = stack.pop();
     assert type.equals(top) : "expected " + type + " found " + top;
-    return (top);
+    return top;
   }
 
   private static void notSupported(Instruction inst) {

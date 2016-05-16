@@ -57,7 +57,7 @@ public class NonModulus extends SingleScalar {
 
   /** Returns the prototype invariant for NonModulus **/
   public static /*@Prototype*/ NonModulus get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** NonModulus is only valid on integral types **/

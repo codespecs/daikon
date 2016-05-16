@@ -66,7 +66,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
       vi = VarInfo.make_subsequence(seqvar, sclvar, index_shift, null, 0);
     }
 
-    return (vi);
+    return vi;
   }
 
   /** Returns the lower bound of the slice **/

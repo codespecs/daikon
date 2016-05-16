@@ -350,9 +350,9 @@ public class InvariantDoclet {
           @SuppressWarnings("nullness") // f has boolean type, so result is non-null Boolean
           /*@NonNull*/ Object value = f.get(null);
           if (((Boolean) value).booleanValue()) {
-            return (1);
+            return 1;
           } else {
-            return (0);
+            return 0;
           }
         } catch (Exception e) {
           System.err.println(e);
@@ -360,7 +360,7 @@ public class InvariantDoclet {
         }
       }
     }
-    return (-1);
+    return -1;
   }
 
   /**
@@ -382,6 +382,6 @@ public class InvariantDoclet {
       if (f.name().startsWith(prefix)) list.add(f);
     }
 
-    return (list);
+    return list;
   }
 }

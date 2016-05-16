@@ -147,13 +147,13 @@ public abstract class BinaryInvariant extends Invariant {
       BinaryInvariant bi = (BinaryInvariant) inv;
       if (bi.getClass() == cls) {
         if (bi.is_symmetric() || swap_class) {
-          return (bi);
+          return bi;
         } else {
-          if (bi.get_swap() == fswap) return (bi);
+          if (bi.get_swap() == fswap) return bi;
         }
       }
     }
 
-    return (null);
+    return null;
   }
 }

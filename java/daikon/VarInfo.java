@@ -953,7 +953,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     } else {
       vars.add(this);
     }
-    return (vars);
+    return vars;
   }
 
   /**
@@ -980,7 +980,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
       }
     }
-    return (names);
+    return names;
   }
 
   /*@Pure*/ public boolean isClosure() {
@@ -1076,10 +1076,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     for (VarInfo evi = this; evi != null; evi = evi.enclosing_var) {
       // System.out.printf ("%s isParam=%b\n", evi, evi.isParam());
       if (evi.isParam()) {
-        return (evi);
+        return evi;
       }
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -2276,7 +2276,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                     ((vi == null) ? false : vi.canBeMissing)));
           }
           if (vi == null) return false;
-          return (vi.canBeMissing);
+          return vi.canBeMissing;
         }
         return false;
       }
@@ -2552,7 +2552,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         if ((Daikon.dkconfig_guardNulls == "missing") // interned
             && !vi.canBeMissing) break;
       }
-      return (result);
+      return result;
     }
   }
 
@@ -2615,7 +2615,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public /*@Nullable*/ PptTopLevel find_object_ppt(PptMap all_ppts) {
 
     // Arrays don't have types
-    if (is_array()) return (null);
+    if (is_array()) return null;
 
     // build the name of the object ppt based on the variable type
     String type_str = type.base().replaceFirst("\\$", ".");
@@ -2670,7 +2670,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Returns a string containing the names of the vars in the array. **/
   public static String arrayToString(VarInfo[] vis) {
 
-    if (vis == null) return ("null");
+    if (vis == null) return "null";
     ArrayList<String> vars = new ArrayList<String>(vis.length);
     for (int i = 0; i < vis.length; i++) {
       if (vis[i] == null) {
@@ -2685,7 +2685,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Returns a string containing the names of the vars in the list. **/
   public static String listToString(List<VarInfo> vlist) {
 
-    if (vlist == null) return ("null");
+    if (vlist == null) return "null";
     ArrayList<String> vars = new ArrayList<String>(vlist.size());
     for (VarInfo v : vlist) {
       if (v == null) {
@@ -2705,10 +2705,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       assert static_constant_value != null
           : "@AssumeAssertion(nullness): dependent: is_static_constant";
       vs.add(static_constant_value);
-      return (vs);
+      return vs;
     }
 
-    return (ppt.value_sets[value_index]);
+    return ppt.value_sets[value_index];
   }
 
   public String get_value_info() {
@@ -3163,7 +3163,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         assert enclosing_var == null;
         return str_name;
       case RETURN:
-        return ("\\result");
+        return "\\result";
       default:
         throw new Error("can't drop through switch statement");
     }
@@ -3238,7 +3238,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         assert enclosing_var == null;
         return str_name;
       case RETURN:
-        return ("\\result");
+        return "\\result";
       default:
         throw new Error("can't drop through switch statement");
     }
@@ -3308,7 +3308,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         if (postState != null) return "|__orig__" + postState.name() + "|";
         return "|" + str_name + "|";
       case RETURN:
-        return ("|return|");
+        return "|return|";
       default:
         throw new Error("can't drop through switch statement");
     }
@@ -3860,13 +3860,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       List<VarInfoName> traversal = new VarInfoName.InorderFlattener(var_info_name).nodes();
       if (traversal.size() <= 1) {
         // System.out.printf ("size <= 1, traversal = %s%n", traversal);
-        return (null);
+        return null;
       } else {
         VarInfo enclosing_vi = ppt.find_var_by_name(traversal.get(1).name());
         // if (enclosing_vi == null)
         //  System.out.printf ("Can't find '%s' in %s%n",
         //                      traversal.get(1).name(), ppt.varNames());
-        return (enclosing_vi);
+        return enclosing_vi;
       }
     }
   }
@@ -3970,7 +3970,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       //                  vi.parent_ppt, vi.parent_variable);
     }
 
-    return (vi);
+    return vi;
   }
 
   /**
@@ -4050,7 +4050,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         parent.parent_variable = apply_subscript(seq.parent_var_name(rid), subscript_parent);
       }
     }
-    return (vi);
+    return vi;
   }
 
   /**
@@ -4073,7 +4073,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
             vars[0].comparability,
             vars[0].aux);
     vi.setup_derived_function(function_name, vars);
-    return (vi);
+    return vi;
   }
 
   /*
@@ -4164,7 +4164,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
       }
     }
-    return (vi);
+    return vi;
   }
 
   /*
@@ -4201,7 +4201,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
             String.format("%s.%s()", str.get_parent(rid).parent_variable, func_name);
       }
     }
-    return (vi);
+    return vi;
   }
 
   /**

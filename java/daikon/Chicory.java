@@ -519,7 +519,7 @@ public class Chicory {
       System.out.printf("unexpected interrupt %s while waiting for " + "threads to join", e);
     }
 
-    return (result);
+    return result;
   }
 
   public PrintWriter openFileInDirectory(String fileName, String dirName) {

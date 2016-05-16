@@ -127,7 +127,7 @@ public class SampleTester extends TestCase {
     URL input_file_location = ClassLoader.getSystemResource(fname);
 
     if (input_file_location == null) {
-      return (null);
+      return null;
     } else {
       return (input_file_location.toExternalForm());
     }

@@ -607,7 +607,7 @@ public final class DCRuntime {
 
     //debug_print_call_stack();
 
-    return (tag_frame);
+    return tag_frame;
   }
 
   /**
@@ -1391,7 +1391,7 @@ public final class DCRuntime {
     }
 
     merge_dv.log("Tag for field %s = %s%n", fi.getField(), tag);
-    return (tag);
+    return tag;
   }
 
   /**
@@ -1946,7 +1946,7 @@ public final class DCRuntime {
     time_decl.indent("Print decls for method '%s'", mi.method_name);
     List<DVSet> l = get_comparable(mi.traversalEnter);
     // comp_list_ms += watch.snapshot(); watch.reset();
-    if (l == null) return (null);
+    if (l == null) return null;
     time_decl.log_time("got %d comparable sets", l.size());
 
     // Print the enter point
@@ -1977,7 +1977,7 @@ public final class DCRuntime {
 
     // total_ms += System.currentTimeMillis() - start;
     time_decl.exdent_time("Finished processing method '%s'", mi.method_name);
-    return (l);
+    return l;
   }
 
   /**
@@ -2311,7 +2311,7 @@ public final class DCRuntime {
    */
   static /*@Nullable*/ List<DVSet> get_comparable(RootInfo root) {
 
-    if (root == null) return (null);
+    if (root == null) return null;
 
     // List of all of the sets of comparable daikon variables
     Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>();
@@ -2330,7 +2330,7 @@ public final class DCRuntime {
     }
     Collections.sort(set_list);
 
-    return (set_list);
+    return set_list;
   }
 
   /**
@@ -2632,7 +2632,7 @@ public final class DCRuntime {
       for (Field f : clazz.getDeclaredFields()) {
         if (f.getType().isPrimitive()) field_cnt++;
       }
-      return (field_cnt);
+      return field_cnt;
     }
   }
 
@@ -2891,7 +2891,7 @@ public final class DCRuntime {
   private static String obj_str(Object obj) {
 
     if (obj == null) {
-      return ("null");
+      return "null";
     } else {
       String tostring = obj.toString();
       String default_tostring =
@@ -2912,7 +2912,7 @@ public final class DCRuntime {
     for (DaikonVariableInfo child : dvi) {
       list.addAll(varlist(child));
     }
-    return (list);
+    return list;
   }
 
   /**
@@ -2997,7 +2997,7 @@ public final class DCRuntime {
       } catch (Exception e) {
         throw new Error("can't execute tag method " + get_tag, e);
       }
-      return (tag);
+      return tag;
     }
   }
 
@@ -3077,7 +3077,7 @@ public final class DCRuntime {
         if (tags == null) tag_list.add(nonsensical);
         else tag_list.add(tags[field_num]);
       }
-      return (tag_list);
+      return tag_list;
     }
   }
 
@@ -3102,7 +3102,7 @@ public final class DCRuntime {
       // assert obj == null: "primitive object = " + obj_str (obj);
       Object[] tags = field_map.get(parent);
       if (tags == null) return (nonsensical); // happens if field has never been assigned to
-      else return (tags[field_num]);
+      else return tags[field_num];
     }
   }
 
@@ -3117,7 +3117,7 @@ public final class DCRuntime {
     }
 
     public Object get_tag(Object parent, Object obj) {
-      return (obj);
+      return obj;
     }
   }
 
@@ -3730,7 +3730,7 @@ public final class DCRuntime {
   public static Integer Integer_valueOf(int val) {
     Integer obj = Integer.valueOf(val);
     prim_to_obj(obj);
-    return (obj);
+    return obj;
   }
 
   /** DF of result is equal to DF of argument **/
@@ -3738,7 +3738,7 @@ public final class DCRuntime {
   public static Float Float_valueOf(float val) {
     Float obj = Float.valueOf(val);
     prim_to_obj(obj);
-    return (obj);
+    return obj;
   }
 
   /** DF of result is equal to DF of argument **/
@@ -3746,7 +3746,7 @@ public final class DCRuntime {
   public static Double Double_valueOf(double val) {
     Double obj = Double.valueOf(val);
     prim_to_obj(obj);
-    return (obj);
+    return obj;
   }
 
   /** DF of result is equal to DF of argument **/
@@ -3757,7 +3757,7 @@ public final class DCRuntime {
     // Boolean obj = Boolean.valueOf (val);
     Boolean obj = new Boolean(val);
     prim_to_obj(obj);
-    return (obj);
+    return obj;
   }
 
   /** DF of result is equal to DF of argument **/
@@ -3822,7 +3822,7 @@ public final class DCRuntime {
       DCompInstrumented dci = (DCompInstrumented) o1;
       debug_df.log_tb("calling instrumented equals on %s and %s", o1, o2);
       boolean result = dci.equals_dcomp_instrumented(o2);
-      return (result);
+      return result;
     } else { // the equals is not instrumented
       debug_df.log_tb(
           "uninstrumented equals on %X:%s and %X:%s",

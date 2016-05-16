@@ -274,7 +274,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    return (result);
+    return result;
   }
 #endif
 
@@ -299,7 +299,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         }
       }
     }
-    return (result);
+    return result;
   }
 
   /** Permuted result var. */
@@ -397,7 +397,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // If the var order hasn't changed, we don't need to do anything
     if (var_order == get_var_order()) {
-      return (this);
+      return this;
     }
 
     // Find the class that corresponds to the new order

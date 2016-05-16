@@ -272,7 +272,7 @@ public class LOWERBOUND
 
   /** Returns the prototype invariant for LOWERBOUND **/
   public static /*@Prototype*/ LOWERBOUND get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -287,7 +287,7 @@ public class LOWERBOUND
       return false;
     }
 
-    return (vis[0].file_rep_type.BASE_IS_INTEGRAL);
+    return vis[0].file_rep_type.BASE_IS_INTEGRAL;
     }
 
   /** instantiate an invariant on the specified slice **/
@@ -840,6 +840,6 @@ public class LOWERBOUND
     }
 
     result.log ("Merged '%s' from %s child invariants", result.format(),invs.size());
-    return (result);
+    return result;
   }
 }

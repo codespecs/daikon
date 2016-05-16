@@ -370,9 +370,11 @@ public abstract class PptSlice extends Ppt {
   public /*@Nullable*/ Invariant find_inv_exact(Invariant inv) {
 
     for (Invariant mine : invs) {
-      if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv)) return (mine);
+      if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv)) {
+        return mine;
+      }
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -382,9 +384,11 @@ public abstract class PptSlice extends Ppt {
   public /*@Nullable*/ Invariant find_inv_by_class(Class<? extends Invariant> cls) {
 
     for (Invariant inv : invs) {
-      if ((inv.getClass() == cls)) return (inv);
+      if ((inv.getClass() == cls)) {
+        return inv;
+      }
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -417,7 +421,7 @@ public abstract class PptSlice extends Ppt {
     if (suppressed && Debug.logOn() && (Daikon.current_inv != null)) {
       Daikon.current_inv.log("inv %s is ni suppressed", inv.format());
     }
-    return (suppressed);
+    return suppressed;
   }
 
   /**

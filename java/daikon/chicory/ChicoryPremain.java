@@ -431,7 +431,7 @@ public class ChicoryPremain {
       while (enum_urls.hasMoreElements()) {
         urls.add(enum_urls.nextElement());
       }
-      return (urls);
+      return urls;
     }
 
     /**

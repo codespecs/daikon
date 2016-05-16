@@ -329,7 +329,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
           getConfidence(),
           ppt.num_samples());
     }
-    return (just);
+    return just;
   }
 
   // If confidence == CONFIDENCE_NEVER, then this invariant can be eliminated.
@@ -435,7 +435,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
   /** Returns whether or not this invariant has been destroyed. */
   /*@Pure*/ public boolean is_false(/*>>> @NonPrototype Invariant this*/) {
-    return (falsified);
+    return falsified;
   }
 
   /**
@@ -521,7 +521,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
           );
     }
 
-    return (result);
+    return result;
   }
 
   /**
@@ -586,11 +586,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     // Return the first variable that is not always-comparable
     for (int i = 0; i < ppt.var_infos.length; i++) {
       VarComparability vc = ppt.var_infos[i].comparability;
-      if (!vc.alwaysComparable()) return (vc);
+      if (!vc.alwaysComparable()) return vc;
     }
 
     // All the variables are always-comparable, just return the first one
-    // return (ppt.var_infos[0].comparability);
+    // return ppt.var_infos[0].comparability;
     return VarComparabilityImplicit.unknown;
   }
 
@@ -632,7 +632,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       }
     }
 
-    return (result);
+    return result;
   }
 
   /**
@@ -1101,7 +1101,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions(/*>>> @Prototype Invariant this*/) {
-    return (null);
+    return null;
   }
 
   /**
@@ -1120,7 +1120,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     }
     if (Debug.logDetail()) log("suppressed = %s suppression set = %s", suppressed, ss);
 
-    return (suppressed);
+    return suppressed;
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1811,14 +1811,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     }
     assert valid_types(slice.var_infos)
         : String.format("valid_types(%s) = false for %s", slice.var_infos, this);
-    if (!enabled() || !instantiate_ok(slice.var_infos)) return (null);
+    if (!enabled() || !instantiate_ok(slice.var_infos)) return null;
     Invariant inv = instantiate_dyn(slice);
     assert inv != null;
     if (inv.ppt == null) {
       // Avoid creating the message if the check succeeds
       assert inv.ppt != null : "invariant class " + inv.getClass();
     }
-    return (inv);
+    return inv;
   }
 
   /**

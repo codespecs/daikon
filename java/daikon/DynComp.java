@@ -358,7 +358,7 @@ public class DynComp {
       System.out.printf("unexpected interrupt %s while waiting for " + "threads to join", e);
     }
 
-    return (result);
+    return result;
   }
 
   /** Returns elapsed time as a String since the start of the program **/

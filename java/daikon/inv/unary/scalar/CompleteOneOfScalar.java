@@ -58,7 +58,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
 
   /** Returns the prototype invariant for CompleteOneOFScalar **/
   public static /*@Prototype*/ CompleteOneOfScalar get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/

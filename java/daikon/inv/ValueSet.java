@@ -120,18 +120,18 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     }
 
     public long min() {
-      return (min_val);
+      return min_val;
     }
 
     public long max() {
-      return (max_val);
+      return max_val;
     }
 
     public String repr_short() {
       if (size() > 0) {
         return (size() + " values " + min_val + ".." + max_val);
       } else {
-        return ("0 values");
+        return "0 values";
       }
     }
   }
@@ -173,15 +173,15 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     }
 
     public double min() {
-      return (min_val);
+      return min_val;
     }
 
     public double max() {
-      return (max_val);
+      return max_val;
     }
 
     public boolean canBeNaN() {
-      return (can_be_NaN);
+      return can_be_NaN;
     }
 
     public String repr_short() {
@@ -243,30 +243,30 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     }
 
     public long min() {
-      return (min_val);
+      return min_val;
     }
 
     public long max() {
-      return (max_val);
+      return max_val;
     }
 
     public int elem_cnt() {
-      return (elem_cnt);
+      return elem_cnt;
     }
 
     public int multi_arr_cnt() {
-      return (multi_arr_cnt);
+      return multi_arr_cnt;
     }
 
     public int max_length() {
-      return (max_length);
+      return max_length;
     }
 
     public String repr_short() {
       if (size() > 0) {
         return (size() + " values " + min_val + ".." + max_val);
       } else {
-        return ("0 values");
+        return "0 values";
       }
     }
   }
@@ -319,27 +319,27 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     }
 
     public double min() {
-      return (min_val);
+      return min_val;
     }
 
     public double max() {
-      return (max_val);
+      return max_val;
     }
 
     public boolean canBeNaN() {
-      return (can_be_NaN);
+      return can_be_NaN;
     }
 
     public int elem_cnt() {
-      return (elem_cnt);
+      return elem_cnt;
     }
 
     public int multi_arr_cnt() {
-      return (multi_arr_cnt);
+      return multi_arr_cnt;
     }
 
     public int max_length() {
-      return (max_length);
+      return max_length;
     }
 
     public String repr_short() {
@@ -408,11 +408,11 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     }
 
     public int elem_cnt() {
-      return (elem_cnt);
+      return elem_cnt;
     }
 
     public int multi_arr_cnt() {
-      return (multi_arr_cnt);
+      return multi_arr_cnt;
     }
 
     public String repr_short() {

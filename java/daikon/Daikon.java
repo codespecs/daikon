@@ -2410,11 +2410,11 @@ public final class Daikon {
         while (i.hasNext()) {
           ppt_name = i.next();
           if ((last_ppt_name.indexOf("EXIT") != -1) && (ppt_name.indexOf("EXIT") == -1)) {
-            return (last_ppt_name);
+            return last_ppt_name;
           }
           last_ppt_name = ppt_name;
         }
-        return (ppt_name);
+        return ppt_name;
       }
     }
     // Execution should not reach this line

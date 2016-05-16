@@ -334,7 +334,7 @@ public final class CLASSNAME
       assert sts == InvariantStatus.NO_CHANGE;
     }
 
-    return (sts);
+    return sts;
   }
 
   /**
@@ -372,7 +372,7 @@ public final class CLASSNAME
                    oo, con1, con2, sts);
     }
 
-    return (sts);
+    return sts;
   }
 
 
@@ -927,7 +927,7 @@ public final class CLASSNAME
 
     // make sure both points are specified
     if ((p1 == null) || (p2 == null)) {
-      return (0);
+      return 0;
     }
 
     double xsep = (p1.x - p2.x);
@@ -999,7 +999,7 @@ public final class CLASSNAME
    if (Debug.logDetail()) {
      wrapper.log ("maxsep_triples = %s %s %s", pa[0], pa[1], pa[2]);
    }
-   return (max_separation);
+   return max_separation;
 
  }
 
@@ -1352,7 +1352,7 @@ public final class CLASSNAME
             || !Global.fuzzy.eq (first.b, c.b)
             || !Global.fuzzy.eq (first.c, c.c)
             || !Global.fuzzy.eq (first.d, c.d))
-          return (null);
+          return null;
       }
     }
 
@@ -1381,14 +1381,14 @@ public final class CLASSNAME
         }
         InvariantStatus stat = first.add_modified (cp.x, cp.y, cp.z, 1);
         if (stat == InvariantStatus.FALSIFIED) {
-          return (null);
+          return null;
         }
         //if (wrapper.is_false())
-        //  return (null);
+        //  return null;
       }
     }
 
-    return (first);
+    return first;
   }
 
 

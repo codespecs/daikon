@@ -53,7 +53,7 @@ public class IsPointer extends SingleScalar {
 
   /** Returns the prototype invariant for IsPointer **/
   public static /*@Prototype*/ IsPointer get_proto() {
-    return (proto);
+    return proto;
   }
 
   @Override

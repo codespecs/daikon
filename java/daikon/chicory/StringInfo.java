@@ -138,6 +138,6 @@ public class StringInfo extends DaikonVariableInfo {
     EnumSet<VarFlags> flags = super.get_var_flags().clone();
     flags.add(VarFlags.SYNTHETIC);
     flags.add(VarFlags.TO_STRING);
-    return (flags);
+    return flags;
   }
 }

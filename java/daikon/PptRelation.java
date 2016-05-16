@@ -176,7 +176,7 @@ public class PptRelation implements Serializable {
       }
     }
 
-    return (relate_all);
+    return relate_all;
   }
 
   /**
@@ -204,7 +204,7 @@ public class PptRelation implements Serializable {
 
   /** Returns a string describing the parent-child relationship. **/
   public PptRelationType getRelationType() {
-    return (relationship);
+    return relationship;
   }
 
   /**
@@ -325,7 +325,7 @@ public class PptRelation implements Serializable {
         }
       }
     }
-    return (emap);
+    return emap;
   }
 
   /**
@@ -366,7 +366,7 @@ public class PptRelation implements Serializable {
     // that each parent variable should match one in the child.
     boolean relate_all = rel.relate_same_name();
     assert relate_all;
-    return (rel);
+    return rel;
   }
 
   /**
@@ -382,7 +382,7 @@ public class PptRelation implements Serializable {
     // Connect each static variable between parent and child
     // Note that these should be the only variables whose names match
     rel.relate_same_name();
-    return (rel);
+    return rel;
   }
 
   /**
@@ -434,7 +434,7 @@ public class PptRelation implements Serializable {
         rel.parent_to_child_map.put(vp, vc);
       }
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -477,7 +477,7 @@ public class PptRelation implements Serializable {
       //  continue;
       rel.relate(vp, vp.replace_this(arg));
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -572,7 +572,7 @@ public class PptRelation implements Serializable {
       }
       //throw new Error("Missing orig variable in EXIT");
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -597,7 +597,7 @@ public class PptRelation implements Serializable {
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -620,7 +620,7 @@ public class PptRelation implements Serializable {
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -658,7 +658,7 @@ public class PptRelation implements Serializable {
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -678,7 +678,7 @@ public class PptRelation implements Serializable {
       rel.child_to_parent_map.put(new_vc, new_vp);
       rel.parent_to_child_map.put(new_vp, new_vc);
     }
-    return (rel);
+    return rel;
   }
 
   // used by init_hierarchy below

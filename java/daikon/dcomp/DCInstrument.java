@@ -768,7 +768,7 @@ class DCInstrument {
     int con_index = a.getNameIndex();
     Constant c = pool.getConstant(con_index);
     String att_name = ((ConstantUtf8) c).getBytes();
-    return (att_name);
+    return att_name;
   }
 
   //
@@ -876,7 +876,7 @@ class DCInstrument {
         || classname.startsWith("daikon.util")
         || (classname.startsWith("daikon.dcomp") && !classname.startsWith("daikon.dcomp.Test"))) {
       debug_instrument.log("Skipping DynComp class %s%n", gen.getClassName());
-      return (null);
+      return null;
     }
 
     // Don't instrument annotations.  They aren't executed and adding
@@ -1034,7 +1034,7 @@ class DCInstrument {
         || classname.startsWith("daikon.util")
         || (classname.startsWith("daikon.dcomp") && !classname.startsWith("daikon.dcomp.Test"))) {
       debug_instrument.log("(refs_only)Skipping DynComp class %s%n", gen.getClassName());
-      return (null);
+      return null;
     }
 
     // Don't instrument annotations.  They aren't executed and adding
@@ -1959,7 +1959,7 @@ class DCInstrument {
     il.append(InstructionFactory.createStore(object_arr, tag_frame_local.getIndex()));
     debug_instrument_inst.log("Store Tag frame local at index %d%n", tag_frame_local.getIndex());
 
-    return (il);
+    return il;
   }
 
   /**
@@ -2043,7 +2043,7 @@ class DCInstrument {
         ifact.createInvoke(
             DCRuntime.class.getName(), method_name, Type.VOID, method_args, Const.INVOKESTATIC));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -2139,7 +2139,7 @@ class DCInstrument {
         ifact.createInvoke(
             DCRuntime.class.getName(), method_name, Type.VOID, method_args, Const.INVOKESTATIC));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -2549,7 +2549,7 @@ class DCInstrument {
       case Const.NEW:
       case Const.NOP:
       case Const.RET: // this is the internal JSR return
-        return (null);
+        return null;
 
         // Make sure we didn't miss anything
       default:
@@ -2592,7 +2592,7 @@ class DCInstrument {
           InstructionList il = new InstructionList();
           il.append(dcr_call("normal_exit_refs_only", Type.VOID, Type.NO_ARGS));
           il.append(inst);
-          return (il);
+          return il;
         }
 
         // Adds the extra argument to calls to instrumented methods, or
@@ -2606,7 +2606,7 @@ class DCInstrument {
 
         // All other instructions need no instrumentation
       default:
-        return (null);
+        return null;
     }
   }
 
@@ -2780,7 +2780,7 @@ class DCInstrument {
       }
       il.append(invoke);
     }
-    return (il);
+    return il;
   }
 
   /**
@@ -2935,7 +2935,7 @@ class DCInstrument {
       goto_branch.setTarget(endif_target);
     }
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3040,7 +3040,7 @@ class DCInstrument {
       // There are no tags to mess around with
       il.append(invoke);
     }
-    return (il);
+    return il;
   }
 
   /**
@@ -3062,7 +3062,7 @@ class DCInstrument {
             Const.INVOKESTATIC));
     assert branch.getTarget() != null;
     il.append(InstructionFactory.createBranchInstruction(boolean_if, branch.getTarget()));
-    return (il);
+    return il;
   }
 
   /**
@@ -3074,7 +3074,7 @@ class DCInstrument {
   InstructionList load_store_field(MethodGen mg, FieldInstruction f) {
 
     Type field_type = f.getFieldType(pool);
-    if (field_type instanceof ReferenceType) return (null);
+    if (field_type instanceof ReferenceType) return null;
     ObjectType obj_type = (ObjectType) f.getReferenceType(pool);
     InstructionList il = new InstructionList();
     String classname = obj_type.getClassName();
@@ -3090,7 +3090,7 @@ class DCInstrument {
 
       // Perform the normal field command
       il.append(f);
-      return (il);
+      return il;
     }
 
     if (f instanceof GETSTATIC) {
@@ -3148,7 +3148,7 @@ class DCInstrument {
     // Perform the normal field command
     il.append(f);
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3164,7 +3164,7 @@ class DCInstrument {
   InstructionList load_store_static(FieldInstruction f, String method) {
 
     Type field_type = f.getFieldType(pool);
-    if (field_type instanceof ReferenceType) return (null);
+    if (field_type instanceof ReferenceType) return null;
     String name = f.getClassName(pool) + "." + f.getFieldName(pool);
     System.out.printf("static field name for %s = %s%n", f, name);
 
@@ -3188,7 +3188,7 @@ class DCInstrument {
             new Type[] {Type.INT},
             Const.INVOKESTATIC));
     il.append(f);
-    return (il);
+    return il;
   }
 
   /**
@@ -3221,7 +3221,7 @@ class DCInstrument {
             new Type[] {object_arr, Type.INT},
             Const.INVOKESTATIC));
     il.append(lvi);
-    return (il);
+    return il;
   }
 
   /**
@@ -3234,7 +3234,7 @@ class DCInstrument {
     if (obj_type.getClassName().equals(orig_class.getClassName())) {
       int fcnt = 0;
       for (Field f : orig_class.getFields()) {
-        if (f.getName().equals(name)) return (fcnt);
+        if (f.getName().equals(name)) return fcnt;
         if (f.getType() instanceof BasicType) fcnt++;
       }
       throw new Error("Can't find " + name + " in " + obj_type);
@@ -3252,7 +3252,7 @@ class DCInstrument {
     // Loop through all of the fields, counting the number of primitive fields
     int fcnt = 0;
     for (java.lang.reflect.Field f : obj_class.getDeclaredFields()) {
-      if (f.getName().equals(name)) return (fcnt);
+      if (f.getName().equals(name)) return fcnt;
       if (f.getType().isPrimitive()) fcnt++;
     }
     throw new Error("Can't find " + name + " in " + obj_class);
@@ -3273,7 +3273,7 @@ class DCInstrument {
     for (LocalVariableGen lv : mg.getLocalVariables()) {
       if (lv.getName().equals(name)) {
         assert lv.getType().equals(typ) : lv + " " + typ;
-        return (lv);
+        return lv;
       }
     }
 
@@ -3310,7 +3310,7 @@ class DCInstrument {
       return_local = mg.addLocalVariable("return__$trace2_val", return_type, null, null);
     }
 
-    return (return_local);
+    return return_local;
   }
 
   @SuppressWarnings("signature") // conversion routine
@@ -3371,7 +3371,7 @@ class DCInstrument {
     int last_line_number = 0;
     boolean foundLine;
 
-    if (il == null) return (null);
+    if (il == null) return null;
 
     for (InstructionHandle ih = il.getStart(); ih != null; ih = ih.getNext()) {
       foundLine = false;
@@ -3502,7 +3502,7 @@ class DCInstrument {
     // Perform the original instruction
     il.append(inst);
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3517,7 +3517,7 @@ class DCInstrument {
     InstructionList il = new InstructionList();
     Type arr_type = new ArrayType(base_type, 1);
     il.append(dcr_call(method, Type.VOID, new Type[] {arr_type, Type.INT, base_type}));
-    return (il);
+    return il;
   }
 
   /**
@@ -3539,7 +3539,7 @@ class DCInstrument {
     // Perform the original instruction
     il.append(inst);
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3561,7 +3561,7 @@ class DCInstrument {
     // the array and the count off the tag stack.
     il.append(dcr_call("cmp_op", Type.VOID, Type.NO_ARGS));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3584,7 +3584,7 @@ class DCInstrument {
     Type objArray = new ArrayType(Type.OBJECT, 1);
     il.append(dcr_call("multianewarray2", Type.VOID, new Type[] {Type.INT, Type.INT, objArray}));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3701,7 +3701,7 @@ class DCInstrument {
     il.append(ifact.createConstant(tag_count));
     il.append(dcr_call("discard_tag", Type.VOID, integer_arg));
     append_inst(il, inst);
-    return (il);
+    return il;
   }
 
   /**
@@ -3714,7 +3714,7 @@ class DCInstrument {
     if (is_primitive(top)) {
       return build_il(dcr_call("dup", Type.VOID, Type.NO_ARGS), inst);
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -3726,7 +3726,7 @@ class DCInstrument {
    **/
   InstructionList dup_x1_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (!is_primitive(top)) return (null);
+    if (!is_primitive(top)) return null;
     String method = "dup_x1";
     if (!is_primitive(stack.peek(1))) method = "dup";
     return build_il(dcr_call(method, Type.VOID, Type.NO_ARGS), inst);
@@ -3764,7 +3764,7 @@ class DCInstrument {
     if (debug_dup.enabled) debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
 
     if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
-    return (null);
+    return null;
   }
 
   /**
@@ -3781,7 +3781,7 @@ class DCInstrument {
     op = null;
     if (debug_dup.enabled) debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
     if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
-    return (null);
+    return null;
   }
 
   /**
@@ -3799,7 +3799,7 @@ class DCInstrument {
     }
     if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
-    return (null);
+    return null;
   }
 
   /**
@@ -3855,7 +3855,7 @@ class DCInstrument {
     }
     if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
-    return (null);
+    return null;
   }
 
   /**
@@ -3866,7 +3866,7 @@ class DCInstrument {
   InstructionList pop_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     if (is_primitive(top)) return discard_tag_code(inst, 1);
-    return (null);
+    return null;
   }
 
   /**
@@ -3884,7 +3884,7 @@ class DCInstrument {
       if (is_primitive(stack.peek(1))) cnt++;
       if (cnt > 0) return discard_tag_code(inst, cnt);
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -3898,7 +3898,7 @@ class DCInstrument {
     if (is_primitive(type1) && is_primitive(type2)) {
       return build_il(dcr_call("swap", Type.VOID, Type.NO_ARGS), inst);
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -3946,7 +3946,7 @@ class DCInstrument {
       il.append(dcr_call("normal_exit", Type.VOID, Type.NO_ARGS));
     }
     il.append(inst);
-    return (il);
+    return il;
   }
 
   /**
@@ -4010,7 +4010,7 @@ class DCInstrument {
     for (Instruction inst : instructions) {
       append_inst(il, inst);
     }
-    return (il);
+    return il;
   }
 
   /**
@@ -4420,14 +4420,14 @@ class DCInstrument {
 
     if (loader == null) loader = DCInstrument.class.getClassLoader();
 
-    if (t == Type.BOOLEAN) return (Boolean.TYPE);
-    else if (t == Type.BYTE) return (Byte.TYPE);
-    else if (t == Type.CHAR) return (Character.TYPE);
-    else if (t == Type.DOUBLE) return (Double.TYPE);
-    else if (t == Type.FLOAT) return (Float.TYPE);
-    else if (t == Type.INT) return (Integer.TYPE);
-    else if (t == Type.LONG) return (Long.TYPE);
-    else if (t == Type.SHORT) return (Short.TYPE);
+    if (t == Type.BOOLEAN) return Boolean.TYPE;
+    else if (t == Type.BYTE) return Byte.TYPE;
+    else if (t == Type.CHAR) return Character.TYPE;
+    else if (t == Type.DOUBLE) return Double.TYPE;
+    else if (t == Type.FLOAT) return Float.TYPE;
+    else if (t == Type.INT) return Integer.TYPE;
+    else if (t == Type.LONG) return Long.TYPE;
+    else if (t == Type.SHORT) return Short.TYPE;
     else if (t instanceof ObjectType || t instanceof ArrayType) {
       /*@ClassGetName*/ String sig = typeToClassGetName(t);
       try {
@@ -4448,7 +4448,7 @@ class DCInstrument {
       new_arr[ii] = arr[ii];
     }
     new_arr[arr.length] = new_string;
-    return (new_arr);
+    return new_arr;
   }
 
   /**
@@ -4718,7 +4718,7 @@ class DCInstrument {
    */
   public List<MethodGen> create_tag_accessors(ClassGen gen) {
 
-    if (gen.isInterface()) return (null);
+    if (gen.isInterface()) return null;
 
     String classname = gen.getClassName();
     List<MethodGen> mlist = new ArrayList<MethodGen>();
@@ -4783,7 +4783,7 @@ class DCInstrument {
       }
     }
 
-    return (mlist);
+    return mlist;
   }
 
   /**
@@ -4897,7 +4897,7 @@ class DCInstrument {
     get_method.setMaxStack();
     // add_line_numbers(get_method, il);
 
-    return (get_method);
+    return get_method;
   }
 
   /**
@@ -4951,7 +4951,7 @@ class DCInstrument {
     set_method.setMaxStack();
     // add_line_numbers(set_method, il);
 
-    return (set_method);
+    return set_method;
   }
 
   /**
@@ -5320,7 +5320,7 @@ class DCInstrument {
       offset += arg_types[ii].getSize();
     }
 
-    return (locals);
+    return locals;
   }
 
   /**
@@ -5337,13 +5337,13 @@ class DCInstrument {
       System.out.printf("Warning: StackVer exception for %s.%s%n", mg.getClassName(), mg.getName());
       System.out.printf("Exception: %s%n", e);
       System.out.printf("Method is NOT instrumented%n");
-      return (null);
+      return null;
     }
     if (vr != VerificationResult.VR_OK) {
       System.out.printf(
           "Warning: StackVer failed for %s.%s: %s%n", mg.getClassName(), mg.getName(), vr);
       System.out.printf("Method is NOT instrumented%n");
-      return (null);
+      return null;
     }
     assert vr == VerificationResult.VR_OK : " vr failed " + vr;
     return stackver.get_stack_types();
@@ -5395,7 +5395,7 @@ class DCInstrument {
     dcomp_mg.setMaxLocals();
     dcomp_mg.setMaxStack();
 
-    return (dcomp_mg);
+    return dcomp_mg;
   }
 
   /**

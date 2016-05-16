@@ -308,7 +308,7 @@ public class Quantify {
       assert tmp <= 'z' : "Ran out of letters in quantification";
       result[ii].index = new FreeVar(idx_name);
     }
-    return (result);
+    return result;
   }
 
   /**

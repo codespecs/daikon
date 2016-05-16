@@ -124,7 +124,7 @@ public class NISuppression {
         }
       }
     }
-    return (status);
+    return status;
   }
 
   /**
@@ -152,7 +152,7 @@ public class NISuppression {
         return false;
       }
     }
-    return (inv_match);
+    return inv_match;
   }
 
   /**
@@ -427,16 +427,16 @@ public class NISuppression {
     // Make sure this invariant really matches this suppressor.  We know
     // the class already matches, but if the invariant has a swap variable
     // it must match as well
-    if (!supor.match(inv)) return (null);
+    if (!supor.match(inv)) return null;
 
     // Assign the variables from this invariant into vis.  If a variable
     // is already there and doesn't match this variable, then this
     // antecedent can't be used.
     VarInfo v1 = inv.ppt.var_infos[0];
-    if ((vis[supor.v1_index] != null) && (vis[supor.v1_index] != v1)) return (null);
+    if ((vis[supor.v1_index] != null) && (vis[supor.v1_index] != v1)) return null;
     if ((supor.v2_index != -1)
         && (vis[supor.v2_index] != null)
-        && (vis[supor.v2_index] != inv.ppt.var_infos[1])) return (null);
+        && (vis[supor.v2_index] != inv.ppt.var_infos[1])) return null;
     VarInfo cvis[] = vis.clone();
     cvis[supor.v1_index] = v1;
     if (supor.v2_index != -1) {
@@ -451,10 +451,10 @@ public class NISuppression {
     // compatible
     if (!vis_order_ok(cvis) || !vis_compatible(cvis)) {
       if (debug) System.out.println("Skipping, cvis has bad order or is incompatible");
-      return (null);
+      return null;
     }
 
-    return (cvis);
+    return cvis;
   }
 
   /**
@@ -475,7 +475,7 @@ public class NISuppression {
     for (int i = 0; i < suppressors.length; i++) {
       NISuppressor s = suppressors[i];
       List<Invariant> alist = ants.get(s.get_inv_class());
-      if (alist == null) return (null);
+      if (alist == null) return null;
       antecedents[i] = alist;
     }
 
@@ -486,7 +486,7 @@ public class NISuppression {
 
     antecedents = castNonNullDeep(antecedents); // issue 154
 
-    return (antecedents);
+    return antecedents;
   }
 
   /**
@@ -565,7 +565,7 @@ public class NISuppression {
     }
 
     // If we didn't match any suppressor there is nothing to do
-    if (match == null) return (new_suppressions);
+    if (match == null) return new_suppressions;
 
     // Right now this only works if we match exactly one suppressor
     assert (old_sors.size() + 1) == suppressors.length;
@@ -583,7 +583,7 @@ public class NISuppression {
       new_suppressions.add(new NISuppression(sors, suppressee));
     }
 
-    return (new_suppressions);
+    return new_suppressions;
   }
 
   /**
@@ -616,6 +616,6 @@ public class NISuppression {
         out += "    " + inv.format() + (inv.is_false() ? " [false]" : " t") + sep;
       }
     }
-    return (out);
+    return out;
   }
 }

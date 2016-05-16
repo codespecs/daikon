@@ -948,7 +948,7 @@ public class InvariantAddAndCheckTester extends TestCase {
         Method get_proto = theClass.getMethod("get_proto", new Class<?>[] {});
         Invariant proto = (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
         Invariant inv = proto.instantiate(sl);
-        return (inv);
+        return inv;
       } catch (Exception e) {
         e.printStackTrace(System.out);
         throw new RuntimeException(

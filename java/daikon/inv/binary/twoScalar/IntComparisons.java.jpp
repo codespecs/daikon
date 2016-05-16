@@ -404,7 +404,7 @@ public final class INTEQUAL
 
   /** Returns the prototype invariant for INTEQUAL **/
   public static /*@Prototype*/ INTEQUAL get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** Returns whether or not this invariant is enabled **/
@@ -621,7 +621,7 @@ public final class INTEQUAL
     if ((suppressions != null) && suppressions.suppressed (ppt)) {
       INTEQUAL inv = proto.instantiate_dyn (ppt);
       // System.out.printf ("%s is suppressed in ppt %s%n", inv.format(), ppt.name());
-      return (inv);
+      return inv;
     }
 
     return null;
@@ -1023,7 +1023,7 @@ public final class INTEQUAL
       // Check for the same invariant over enclosing arrays
       di = pairwise_implies (vis);
       if (di != null) {
-        return (di);
+        return di;
       }
     #endif
 
@@ -1031,7 +1031,7 @@ public final class INTEQUAL
       // Check for size(A[]) == Size(B[]) where A[] == B[]
       di = array_eq_implies (vis);
       if (di != null) {
-        return (di);
+        return di;
       }
     #endif
 
@@ -1039,7 +1039,7 @@ public final class INTEQUAL
       // (A[] no dups) ^ (i != j) ==> a[i] != a[j]
       di = no_dups_implies (vis);
       if (di != null) {
-        return (di);
+        return di;
       }
     #endif
 
@@ -1049,7 +1049,7 @@ public final class INTEQUAL
         // Check for a linear binary that implies > or <
         di = lb_implies (vis);
         if (di != null) {
-          return (di);
+          return di;
         }
       #endif
 
@@ -1133,17 +1133,17 @@ public final class INTEQUAL
     LINEARBINARY lb = (LINEARBINARY) ppt.parent.find_inv_by_class
                                                     (vis, LINEARBINARY.class);
     if ((lb == null) || !lb.isActive()) {
-      return (null);
+      return null;
     }
 
     // Only 'a == 1' implies a less than or greater than relationship
     if (-lb.core.a/lb.core.b != 1.0) {
-      return (null);
+      return null;
     }
 
     // The b coefficient determines less than or greater than
     if (EQUALS(-lb.core.c/lb.core.b, 0)) {
-      return (null);
+      return null;
     }
 
     return new DiscardInfo (this, DiscardCode.obvious, "implied by "
@@ -1165,29 +1165,29 @@ public final class INTEQUAL
 
     // Make sure v1 and v2 are SEQ_SUBSCRIPT with the same shift
     if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT)) {
-      return (null);
+      return null;
     }
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT)) {
-      return (null);
+      return null;
     }
     @SuppressWarnings("nullness") // checker bug in flow
     /*@NonNull*/ SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
     @SuppressWarnings("nullness") // checker bug in flow
     /*@NonNull*/ SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
     if  (der1.index_shift != der2.index_shift)
-      return (null);
+      return null;
 
     // Make sure that the indices are equal
     if (!ppt.parent.is_equal (der1.sclvar().canonicalRep(),
                               der2.sclvar().canonicalRep())) {
-      return (null);
+      return null;
     }
 
     // See if the same relationship holds over the arrays
     Invariant proto = PAIRWISE_COMPARE.get_proto();
     DiscardInfo di = ppt.parent.check_implied_canonical (this,
                                 der1.seqvar(), der2.seqvar(), proto);
-    return (di);
+    return di;
   }
 #endif
 
@@ -1203,16 +1203,16 @@ public final class INTEQUAL
     // Make sure v1 and v2 are size(array) with the same shift
     VarInfo v1 = vis[0];
     if (!v1.isDerived() || !(v1.derived instanceof SequenceLength)) {
-      return (null);
+      return null;
     }
     VarInfo v2 = vis[1];
     if (!v2.isDerived() || !(v2.derived instanceof SequenceLength)) {
-      return (null);
+      return null;
     }
     assert v1.derived != null : "@AssumeAssertion(nullness): checker bug: flow";
     assert v2.derived != null : "@AssumeAssertion(nullness): checker bug: flow";
     if (!v1.derived.isSameFormula (v2.derived)) {
-      return (null);
+      return null;
     }
 
     VarInfo seqvar1 = v1.derived.getBase(0);
@@ -1224,7 +1224,7 @@ public final class INTEQUAL
                               + var2() + " == " + v2);
     }
 
-    return (null);
+    return null;
   }
 #endif
 
@@ -1241,10 +1241,10 @@ public final class INTEQUAL
     VarInfo v1 = vis[0];
     VarInfo v2 = vis[1];
     if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT)) {
-      return (null);
+      return null;
     }
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT)) {
-      return (null);
+      return null;
     }
     @SuppressWarnings("nullness") // checker bug: flow
     /*@NonNull*/ SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
@@ -1254,20 +1254,20 @@ public final class INTEQUAL
     // The sequence vars must be equal (or the same)
     if (!ppt.parent.is_equal (der1.seqvar().canonicalRep(),
                               der2.seqvar().canonicalRep()))
-      return (null);
+      return null;
 
     // The subscripts must be non_equal
     DiscardInfo di1 = ppt.parent.check_implied_canonical (this, der1.sclvar(),
                                         der2.sclvar(), IntNonEqual.get_proto());
     if (di1 == null) {
-      return (null);
+      return null;
     }
 
     // The array must have no-dups
     DiscardInfo di2 = ppt.parent.check_implied_canonical (this, der1.seqvar(),
                                                           NO_DUPS.get_proto());
     if (di2 == null) {
-      return (null);
+      return null;
     }
 
     return new DiscardInfo (this, DiscardCode.obvious, di1.discardString()
@@ -1317,7 +1317,7 @@ public final class INTEQUAL
         #endif
         });
     }
-    return (suppressions);
+    return suppressions;
   }
 #else
   /** Returns the non-instantiating suppressions for this invariant. **/

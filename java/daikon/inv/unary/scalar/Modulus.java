@@ -52,7 +52,7 @@ public class Modulus extends SingleScalar {
 
   /** Returns the prototype invariant for Modulus **/
   public static /*@Prototype*/ Modulus get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** Returns whether or not this invariant is enabled **/
@@ -278,6 +278,6 @@ public class Modulus extends SingleScalar {
               + x.name()
               + " without the offset"));
     }
-    return (null);
+    return null;
   }
 }
