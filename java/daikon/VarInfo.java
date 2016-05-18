@@ -3270,7 +3270,22 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           return enclosing_var.jml_name(index) + ".toString()";
         }
         if (enclosing_var != null) {
-          return enclosing_var.jml_name(index) + "." + relative_name + "()";
+          StringBuilder formalPara = new StringBuilder();
+          if (!function_args.isEmpty()) {
+            String prefix = "";
+            for (VarInfo fargs : function_args) {
+              if (fargs.equals(enclosing_var)) continue;
+              formalPara.append(prefix);
+              prefix = ",";
+              formalPara.append(fargs.jml_name());
+            }
+          }
+          return enclosing_var.jml_name(index)
+              + "."
+              + relative_name
+              + "("
+              + formalPara.toString()
+              + ")";
         }
         return str_name;
       case ARRAY:
@@ -3282,7 +3297,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         assert enclosing_var == null;
         return str_name;
       case RETURN:
-        return "\\result";
+        if (!name().contains("exception")) {
+          return ("\\result");
+        } else {
+          return ("Exception");
+        }
       default:
         throw new Error("can't drop through switch statement");
     }
