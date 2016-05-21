@@ -994,7 +994,9 @@ public abstract class DaikonVariableInfo
    * and prints associated decls, if necessary
    */
   protected void checkForListDecl(Class<?> type, String theName, String offset) {
-    if (isArray || type.isPrimitive() || type.isArray()) return;
+    if (isArray || type.isPrimitive() || type.isArray()) {
+      return;
+    }
 
     // System.out.printf ("checking %s %sto for list implementation = %b%n",
     //                    type, theName, implementsList (type));

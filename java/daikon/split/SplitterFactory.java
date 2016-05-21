@@ -267,7 +267,9 @@ public class SplitterFactory {
     if (ppt.name.equals(ppt_name)) return true;
     if (ppt_name.endsWith(":::EXIT")) {
       String regex = Pattern.quote(ppt_name) + "[0-9]+";
-      if (matchPptRegex(regex, ppt)) return true;
+      if (matchPptRegex(regex, ppt)) {
+        return true;
+      }
     }
 
     // Look for corresponding EXIT ppt. This is because the exit ppt usually has

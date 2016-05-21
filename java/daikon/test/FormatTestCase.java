@@ -900,7 +900,9 @@ class FormatTestCase {
    *        can be added to the variables involved
    **/
   private static void populateWithSamples(Invariant inv, List<Object[]> samples) {
-    if (samples == null || samples.size() == 0) return;
+    if (samples == null || samples.size() == 0) {
+      return;
+    }
 
     assert inv != null;
 

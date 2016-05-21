@@ -224,7 +224,9 @@ public abstract class Derivation implements Serializable, Cloneable {
     VarInfo[] base1 = getBases();
     VarInfo[] base2 = d.getBases();
     for (int ii = 0; ii < base1.length; ii++) {
-      if (!base1[ii].is_prestate_version(base2[ii])) return false;
+      if (!base1[ii].is_prestate_version(base2[ii])) {
+        return false;
+      }
     }
 
     // The derivations must have the same formula (offset, start_from, etc)

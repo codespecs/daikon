@@ -788,7 +788,9 @@ class DCInstrument {
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     boolean equals(String name, Type[] arg_types) {
       if (!name.equals(this.name)) return false;
-      if (this.arg_types.length != arg_types.length) return false;
+      if (this.arg_types.length != arg_types.length) {
+        return false;
+      }
       for (int ii = 0; ii < arg_types.length; ii++) {
         if (!arg_types[ii].equals(this.arg_types[ii])) {
           return false;
@@ -2812,7 +2814,9 @@ class DCInstrument {
     if (!BCELUtil.in_jdk(classname)) return true;
 
     // If the JDK is instrumented, then everthing but object is instrumented
-    if (jdk_instrumented && (exclude_object && !classname.equals("java.lang.Object"))) return true;
+    if (jdk_instrumented && (exclude_object && !classname.equals("java.lang.Object"))) {
+      return true;
+    }
 
     return false;
   }
@@ -3763,7 +3767,9 @@ class DCInstrument {
     }
     if (debug_dup.enabled) debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
 
-    if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    if (op != null) {
+      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    }
     return null;
   }
 
@@ -3780,7 +3786,9 @@ class DCInstrument {
     else // both of the top two items are not primitive, nothing to dup
     op = null;
     if (debug_dup.enabled) debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
-    if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    if (op != null) {
+      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    }
     return null;
   }
 
@@ -3798,7 +3806,9 @@ class DCInstrument {
       else op = "dup";
     }
     if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
-    if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    if (op != null) {
+      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    }
     return null;
   }
 
@@ -3854,7 +3864,9 @@ class DCInstrument {
       }
     }
     if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
-    if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    if (op != null) {
+      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    }
     return null;
   }
 
@@ -3865,7 +3877,9 @@ class DCInstrument {
    */
   InstructionList pop_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (is_primitive(top)) return discard_tag_code(inst, 1);
+    if (is_primitive(top)) {
+      return discard_tag_code(inst, 1);
+    }
     return null;
   }
 
@@ -3882,7 +3896,9 @@ class DCInstrument {
       int cnt = 0;
       if (is_primitive(top)) cnt++;
       if (is_primitive(stack.peek(1))) cnt++;
-      if (cnt > 0) return discard_tag_code(inst, cnt);
+      if (cnt > 0) {
+        return discard_tag_code(inst, cnt);
+      }
     }
     return null;
   }
@@ -3999,7 +4015,9 @@ class DCInstrument {
       if (inst instanceof InvokeInstruction) {
         return ((InvokeInstruction) inst).getReturnType(pool);
       }
-      if (inst instanceof TypedInstruction) return ((TypedInstruction) inst).getType(pool);
+      if (inst instanceof TypedInstruction) {
+        return ((TypedInstruction) inst).getType(pool);
+      }
     }
     throw new Error("couldn't find any typed instructions");
   }
@@ -4648,16 +4666,26 @@ class DCInstrument {
    */
   public boolean tag_fields_ok(/*@ClassGetName*/ String classname) {
 
-    if (BCELUtil.is_constructor(mgen)) if (!constructor_is_initialized) return false;
+    if (BCELUtil.is_constructor(mgen)) if (!constructor_is_initialized) {
+      return false;
+    }
 
-    if (!jdk_instrumented) if (BCELUtil.in_jdk(classname)) return false;
+    if (!jdk_instrumented) {
+      if (BCELUtil.in_jdk(classname)) {
+        return false;
+      }
+    }
 
-    if (!classname.startsWith("java.lang")) return true;
+    if (!classname.startsWith("java.lang")) {
+      return true;
+    }
 
     if (classname.equals("java.lang.String")
         || classname.equals("java.lang.Class")
         || classname.equals("java.lang.Object")
-        || classname.equals("java.lang.ClassLoader")) return false;
+        || classname.equals("java.lang.ClassLoader")) {
+          return false;
+        }
 
     return true;
   }
@@ -4796,7 +4824,9 @@ class DCInstrument {
   public Map<Field, Integer> build_field_map(JavaClass jc) {
 
     // Object doesn't have any primitive fields
-    if (jc.getClassName().equals("java.lang.Object")) return new LinkedHashMap<Field, Integer>();
+    if (jc.getClassName().equals("java.lang.Object")) {
+      return new LinkedHashMap<Field, Integer>();
+    }
 
     // Get the offsets for each field in the superclasses.
     JavaClass super_jc = null;

@@ -389,7 +389,9 @@ public class ExtractConsequent {
       // possible values are not interesting, and have already been
       // eliminated by the isInteresting check
       long num = ((Long) oneof.elt()).longValue();
-      if (num > 2 || num < -1) return true;
+      if (num > 2 || num < -1) {
+        return true;
+      }
     }
 
     return false;

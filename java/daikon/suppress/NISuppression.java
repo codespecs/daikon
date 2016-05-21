@@ -433,10 +433,14 @@ public class NISuppression {
     // is already there and doesn't match this variable, then this
     // antecedent can't be used.
     VarInfo v1 = inv.ppt.var_infos[0];
-    if ((vis[supor.v1_index] != null) && (vis[supor.v1_index] != v1)) return null;
+    if ((vis[supor.v1_index] != null) && (vis[supor.v1_index] != v1)) {
+      return null;
+    }
     if ((supor.v2_index != -1)
         && (vis[supor.v2_index] != null)
-        && (vis[supor.v2_index] != inv.ppt.var_infos[1])) return null;
+        && (vis[supor.v2_index] != inv.ppt.var_infos[1])) {
+          return null;
+        }
     VarInfo cvis[] = vis.clone();
     cvis[supor.v1_index] = v1;
     if (supor.v2_index != -1) {
@@ -475,7 +479,9 @@ public class NISuppression {
     for (int i = 0; i < suppressors.length; i++) {
       NISuppressor s = suppressors[i];
       List<Invariant> alist = ants.get(s.get_inv_class());
-      if (alist == null) return null;
+      if (alist == null) {
+        return null;
+      }
       antecedents[i] = alist;
     }
 
@@ -516,11 +522,15 @@ public class NISuppression {
   public static boolean vis_compatible(VarInfo[] vis) {
 
     // Unary vis are always compatble
-    if (vis.length == 1) return true;
+    if (vis.length == 1) {
+      return true;
+    }
 
     // Check binary
     if (vis.length == 2) {
-      if ((vis[0] == null) || (vis[1] == null)) return true;
+      if ((vis[0] == null) || (vis[1] == null)) {
+        return true;
+      }
 
       if (vis[0].rep_type.isArray() == vis[1].rep_type.isArray()) {
         return (vis[0].compatible(vis[1]));

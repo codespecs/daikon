@@ -121,14 +121,18 @@ public class Premain {
 
       // If already instrumented, nothing to do
       // (This set will be empty if --no-jdk)
-      if (pre_instrumented.contains(className)) return null;
+      if (pre_instrumented.contains(className)) {
+        return null;
+      }
 
       boolean in_jdk = false;
 
       // Check if class is in JDK
       if (BCELUtil.in_jdk_internalform(className)) {
         // If --no-jdk option is active, then skip it.
-        if (DynComp.no_jdk) return null;
+        if (DynComp.no_jdk) {
+          return null;
+        }
 
         in_jdk = true;
         if (DynComp.verbose) System.out.printf("Instrumenting JDK class %s%n", className);
@@ -137,7 +141,9 @@ public class Premain {
         // We're not in a JDK class
         // Don't instrument our own classes
         if ((className.startsWith("daikon/dcomp/") && !className.startsWith("daikon/dcomp/Test"))
-            || className.startsWith("daikon/chicory/")) return null;
+            || className.startsWith("daikon/chicory/")) {
+              return null;
+            }
       }
 
       if (DynComp.verbose) {

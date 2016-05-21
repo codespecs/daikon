@@ -17,7 +17,9 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
 
     if (vi.rep_type != ProglangType.INT_ARRAY) return null;
     if (!vi.type.isArray()) return null;
-    if (!vi.type.elementIsIntegral() && !vi.type.elementIsFloat()) return null;
+    if (!vi.type.elementIsIntegral() && !vi.type.elementIsFloat()) {
+      return null;
+    }
     if (vi.type.base() == "char") // interned
     return null;
     // Should be reversed at some point; for now, will improve runtime.

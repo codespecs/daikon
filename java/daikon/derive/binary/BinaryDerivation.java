@@ -70,10 +70,18 @@ public abstract class BinaryDerivation extends Derivation {
     int source_mod1 = base1.getModified(vt);
     int source_mod2 = base2.getModified(vt);
     // MISSING_NONSENSICAL takes precedence
-    if (source_mod1 == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
-    if (source_mod2 == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
-    if (source_mod1 == ValueTuple.MISSING_FLOW) return ValueAndModified.MISSING_FLOW;
-    if (source_mod2 == ValueTuple.MISSING_FLOW) return ValueAndModified.MISSING_FLOW;
+    if (source_mod1 == ValueTuple.MISSING_NONSENSICAL) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
+    if (source_mod2 == ValueTuple.MISSING_NONSENSICAL) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
+    if (source_mod1 == ValueTuple.MISSING_FLOW) {
+      return ValueAndModified.MISSING_FLOW;
+    }
+    if (source_mod2 == ValueTuple.MISSING_FLOW) {
+      return ValueAndModified.MISSING_FLOW;
+    }
 
     return computeValueAndModifiedImpl(vt);
   }

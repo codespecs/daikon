@@ -131,7 +131,9 @@ public class NonModulus extends SingleScalar {
 
   // Set either modulus and remainder, or no_result_yet.
   void updateResults() {
-    if (results_accurate) return;
+    if (results_accurate) {
+      return;
+    }
     if (elements.size() == 0) {
       no_result_yet = true;
     } else {
@@ -164,7 +166,9 @@ public class NonModulus extends SingleScalar {
 
   protected double computeConfidence() {
     updateResults();
-    if (no_result_yet) return Invariant.CONFIDENCE_UNJUSTIFIED;
+    if (no_result_yet) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    }
     double probability_one_elt_nonmodulus = 1 - 1.0 / modulus;
     // return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_mod_samples());
     return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_samples());

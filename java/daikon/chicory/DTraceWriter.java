@@ -215,7 +215,9 @@ public class DTraceWriter extends DaikonWriter {
    * @param field which field of theObjects we are probing
    */
   public static List<Object> getFieldValues(Field field, List<Object> theObjects) {
-    if (theObjects == null || theObjects instanceof NonsensicalList) return nonsenseList;
+    if (theObjects == null || theObjects instanceof NonsensicalList) {
+      return nonsenseList;
+    }
 
     List<Object> fieldVals = new ArrayList<Object>();
 
@@ -240,7 +242,9 @@ public class DTraceWriter extends DaikonWriter {
    */
   public static Object getValue(Field classField, Object theObj) {
     // if we don't have a real object, return NonsensicalValue
-    if ((theObj == null) || (theObj instanceof NonsensicalObject)) return nonsenseValue;
+    if ((theObj == null) || (theObj instanceof NonsensicalObject)) {
+      return nonsenseValue;
+    }
 
     Class<?> fieldType = classField.getType();
 
@@ -395,7 +399,9 @@ public class DTraceWriter extends DaikonWriter {
   public static /*@Nullable*/ List<String> getTypeNameList(List<Object> theVals) {
     // Return null rather than NonsensicalList as NonsensicalList is
     // an array of Object and not String.
-    if (theVals == null || theVals instanceof NonsensicalList) return null;
+    if (theVals == null || theVals instanceof NonsensicalList) {
+      return null;
+    }
 
     List<String> typeNames = new ArrayList<String>(theVals.size());
 

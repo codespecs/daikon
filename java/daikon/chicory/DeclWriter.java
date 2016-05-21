@@ -526,7 +526,9 @@ public class DeclWriter extends DaikonWriter {
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
-      if (!(o instanceof VarRelation) || (o == null)) return false;
+      if (!(o instanceof VarRelation) || (o == null)) {
+        return false;
+      }
       VarRelation vr = (VarRelation) o;
       return (vr.parent_ppt_name.equals(parent_ppt_name)
           && (((vr.local_variable == null) && local_variable == null)
@@ -722,7 +724,9 @@ public class DeclWriter extends DaikonWriter {
 
     // If this ppt is the object ppt for this type, don't create a relation
     // to it
-    if ((cinfo != null) && cinfo.class_name.equals(decl_type)) return null;
+    if ((cinfo != null) && cinfo.class_name.equals(decl_type)) {
+      return null;
+    }
 
     // Look to see if we are instrumenting this class.  If we are, then
     // there should be an object ppt for this class.  If this is a static
@@ -739,7 +743,9 @@ public class DeclWriter extends DaikonWriter {
           if (num_class_vars(ci) == 0) return null;
           ppt_marker = ":::CLASS";
         }
-        if (!enable_object_user && !var.getName().equals("this")) return null;
+        if (!enable_object_user && !var.getName().equals("this")) {
+          return null;
+        }
         return new VarRelation(
             decl_type + ppt_marker, "parent", var.getName(), "this", var.getName());
       }

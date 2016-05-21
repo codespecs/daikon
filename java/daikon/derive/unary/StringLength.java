@@ -33,7 +33,9 @@ public final class StringLength extends UnaryDerivation {
 
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
     Object val = base.getValue(vt);
     if (val == null) {
       return ValueAndModified.MISSING_NONSENSICAL;

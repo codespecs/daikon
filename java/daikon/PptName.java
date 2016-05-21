@@ -217,7 +217,9 @@ public class PptName implements Serializable {
    **/
   public /*@Nullable*/ /*@Interned*/ String getNameWithoutPoint() {
     return fn_name;
-    // if (cls == null && method == null) return null;
+    // if (cls == null && method == null) {
+    //   return null;
+    // }
     // if (cls == null) return method;
     // if (method == null) return cls;
     // return (cls + "." + method).intern();
@@ -330,7 +332,9 @@ public class PptName implements Serializable {
    * @see #getPointSubscript()
    **/
   public String exitLine() {
-    if (!isExitPoint()) return "";
+    if (!isExitPoint()) {
+      return "";
+    }
     int non_digit;
     for (non_digit = FileIO.exit_suffix.length(); non_digit < point.length(); non_digit++) {
       if (!Character.isDigit(point.charAt(non_digit))) break;

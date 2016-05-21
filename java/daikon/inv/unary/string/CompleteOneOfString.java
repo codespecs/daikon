@@ -82,7 +82,9 @@ public final class CompleteOneOfString extends SingleString {
   /** return description of invariant.  Only Daikon format is implemented **/
   /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
-      if (vals.size() == 0) return var().name() + "has no values";
+      if (vals.size() == 0) {
+        return var().name() + "has no values";
+      }
       StringBuilder out = new StringBuilder(vals.get(0).val.length() * vals.size());
       out.append(var().name() + " has values: ");
       for (Info val : vals) {
