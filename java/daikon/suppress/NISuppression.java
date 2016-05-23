@@ -439,8 +439,8 @@ public class NISuppression {
     if ((supor.v2_index != -1)
         && (vis[supor.v2_index] != null)
         && (vis[supor.v2_index] != inv.ppt.var_infos[1])) {
-          return null;
-        }
+      return null;
+    }
     VarInfo cvis[] = vis.clone();
     cvis[supor.v1_index] = v1;
     if (supor.v2_index != -1) {

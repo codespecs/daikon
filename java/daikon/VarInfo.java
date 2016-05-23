@@ -2557,8 +2557,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       // If this is never missing, nothing to guard
       if ((Daikon.dkconfig_guardNulls == "missing") // interned
           && !canBeMissing) {
-            return result;
-          }
+        return result;
+      }
 
       // Create a list of variables to be guarded from the list of all
       // enclosing variables.

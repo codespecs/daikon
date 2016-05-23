@@ -2912,8 +2912,7 @@ public final class DCRuntime {
           String.format("%s@%x", obj.getClass().getName(), System.identityHashCode(obj));
       if (tostring.equals(default_tostring)) {
         return tostring;
-      }
-      else {
+      } else {
         return String.format("%s [%s]", default_tostring, tostring);
       }
     }

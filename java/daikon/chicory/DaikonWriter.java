@@ -282,8 +282,8 @@ public abstract class DaikonWriter {
     if (Modifier.isAbstract(modifiers)
         || Modifier.isNative(modifiers)
         || method.getName().equals("<clinit>")) {
-          return false;
-        }
+      return false;
+    }
     return true;
   }
 

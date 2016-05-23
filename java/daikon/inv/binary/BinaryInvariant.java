@@ -72,7 +72,9 @@ public abstract class BinaryInvariant extends Invariant {
 
     // If one argument is scalar and the other an array, put the scalar first.
     if (((val2 instanceof long[]) || (val2 instanceof double[]) || (val2 instanceof String[]))
-        && !((val1 instanceof long[]) || (val1 instanceof String[]) || (val1 instanceof double[]))) {
+        && !((val1 instanceof long[])
+            || (val1 instanceof String[])
+            || (val1 instanceof double[]))) {
       return (check(val2, val1, mod_index, count));
     } else {
       return (check(val1, val2, mod_index, count));

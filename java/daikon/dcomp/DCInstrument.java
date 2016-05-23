@@ -4666,9 +4666,10 @@ class DCInstrument {
    */
   public boolean tag_fields_ok(/*@ClassGetName*/ String classname) {
 
-    if (BCELUtil.is_constructor(mgen)) if (!constructor_is_initialized) {
-      return false;
-    }
+    if (BCELUtil.is_constructor(mgen))
+      if (!constructor_is_initialized) {
+        return false;
+      }
 
     if (!jdk_instrumented) {
       if (BCELUtil.in_jdk(classname)) {
@@ -4684,8 +4685,8 @@ class DCInstrument {
         || classname.equals("java.lang.Class")
         || classname.equals("java.lang.Object")
         || classname.equals("java.lang.ClassLoader")) {
-          return false;
-        }
+      return false;
+    }
 
     return true;
   }

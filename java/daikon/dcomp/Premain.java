@@ -142,8 +142,8 @@ public class Premain {
         // Don't instrument our own classes
         if ((className.startsWith("daikon/dcomp/") && !className.startsWith("daikon/dcomp/Test"))
             || className.startsWith("daikon/chicory/")) {
-              return null;
-            }
+          return null;
+        }
       }
 
       if (DynComp.verbose) {

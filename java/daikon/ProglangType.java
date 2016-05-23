@@ -141,8 +141,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
         || (base == BASE_LONG)
         || (base == BASE_LONG_LONG)
         || (base == BASE_SHORT)) {
-          return intern(BASE_INT, dimensions);
-        }
+      return intern(BASE_INT, dimensions);
+    }
     return this;
   }
 
