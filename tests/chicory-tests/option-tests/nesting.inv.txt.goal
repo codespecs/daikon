@@ -118,7 +118,6 @@ this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStac
 DataStructures.StackAr.push(java.lang.Object):::ENTER
 x != null
 this.theArray.getClass().getName() != x.getClass().getName()
-this.topOfStack < size(this.theArray[])-1
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT
 this.theArray == orig(this.theArray)
@@ -136,6 +135,28 @@ this.topOfStack - orig(this.topOfStack) - 1 == 0
 (size(this.theArray[])-1 == 0) ==> (this.topOfStack == 0)
 orig(this.topOfStack) < size(this.theArray[])-1
 orig(this.theArray[post(this.topOfStack)..]) elements == orig(this.theArray[post(this.topOfStack)])
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::THROW97
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::THROWSCOMBINED
+this == orig(this)
+this.theArray == orig(this.theArray)
+this.theArray[] == orig(this.theArray[])
+this.topOfStack == orig(this.topOfStack)
+this.topOfStack == size(this.theArray[])-1
+this.topOfStack == orig(size(this.theArray[]))-1
+x == orig(x)
+orig(this) == orig(x)
+this.theArray has only one value
+this.theArray[] == []
+this.theArray[].getClass().getName() == []
+exception has only one value
+exception.getClass().getName() == DataStructures.Overflow.class
+orig(this) has only one value
+orig(x) has only one value
+orig(x.getClass().getName()) == DataStructures.StackAr.class
+this.theArray.getClass().getName() == orig(this.theArray.getClass().getName())
+x.getClass().getName() == orig(x.getClass().getName())
 ===========================================================================
 DataStructures.StackAr.top():::ENTER
 ===========================================================================
