@@ -327,7 +327,9 @@ public class InvariantFormatTester extends TestCase {
    **/
   /*@Pure*/ static boolean isWhitespace(String line) {
     for (int x = 0; x < line.length(); x++) {
-      if (!Character.isWhitespace(line.charAt(x))) return false;
+      if (!Character.isWhitespace(line.charAt(x))) {
+        return false;
+      }
     }
     return true;
   }

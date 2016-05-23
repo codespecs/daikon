@@ -74,7 +74,9 @@ public class StringFilter extends InvariantFilter {
           boolean valEq =
               other instanceof StringEqual && other.ppt.var_infos[0].enclosing_var == str;
 
-          if (refEq || (valEq && !(invariant instanceof StringEqual))) return true;
+          if (refEq || (valEq && !(invariant instanceof StringEqual))) {
+            return true;
+          }
         }
       }
     }

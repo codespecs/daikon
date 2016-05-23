@@ -2320,7 +2320,9 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       VarInfoName retval = null;
       for (VarInfoName vin : o.args) {
         retval = vin.accept(this);
-        if (retval != null) return retval;
+        if (retval != null) {
+          return retval;
+        }
       }
       return retval;
     }
@@ -2470,11 +2472,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       if (temp != null) return temp;
       if (o.i != null) {
         temp = o.i.accept(this);
-        if (temp != null) return temp;
+        if (temp != null) {
+          return temp;
+        }
       }
       if (o.j != null) {
         temp = o.j.accept(this);
-        if (temp != null) return temp;
+        if (temp != null) {
+          return temp;
+        }
       }
       return null;
     }
@@ -2499,7 +2505,9 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       for (ListIterator<VarInfoName> i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
         VarInfoName vin = i.previous();
         retval = vin.accept(this);
-        if (retval != null) return null;
+        if (retval != null) {
+          return null;
+        }
       }
       return retval;
     }
@@ -2516,11 +2524,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       if (temp == null) return temp;
       if (o.i != null) {
         temp = o.i.accept(this);
-        if (temp == null) return temp;
+        if (temp == null) {
+          return temp;
+        }
       }
       if (o.j != null) {
         temp = o.j.accept(this);
-        if (temp == null) return temp;
+        if (temp == null) {
+          return temp;
+        }
       }
       return temp;
     }
@@ -2586,7 +2598,9 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       Elements retval = null;
       for (VarInfoName vin : o.args) {
         retval = vin.accept(this);
-        if (retval != null) return retval;
+        if (retval != null) {
+          return retval;
+        }
       }
       return retval;
     }

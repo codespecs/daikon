@@ -377,7 +377,9 @@ public class InvariantAddAndCheckTester extends TestCase {
    **/
   /*@Pure*/ static boolean isWhitespace(String line) {
     for (int x = 0; x < line.length(); x++) {
-      if (!Character.isWhitespace(line.charAt(x))) return false;
+      if (!Character.isWhitespace(line.charAt(x))) {
+        return false;
+      }
     }
     return true;
   }
@@ -948,7 +950,7 @@ public class InvariantAddAndCheckTester extends TestCase {
         Method get_proto = theClass.getMethod("get_proto", new Class<?>[] {});
         Invariant proto = (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
         Invariant inv = proto.instantiate(sl);
-        return (inv);
+        return inv;
       } catch (Exception e) {
         e.printStackTrace(System.out);
         throw new RuntimeException(

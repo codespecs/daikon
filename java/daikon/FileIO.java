@@ -472,7 +472,7 @@ public final class FileIO {
     ParentRelation pr = new ParentRelation(rel_type, parent_ppt_name, id);
 
     need_eol(state, scanner);
-    return (pr);
+    return pr;
   }
 
   /**
@@ -492,7 +492,7 @@ public final class FileIO {
 
     PptType ppt_type = parse_enum_val(state, scanner, PptType.class, "ppt type");
     need_eol(state, scanner);
-    return (ppt_type);
+    return ppt_type;
   }
 
   // Read a declaration in the Version 1 format.  For version 2, see
@@ -608,7 +608,9 @@ public final class FileIO {
     String filename = state.filename;
 
     String line = file.readLine();
-    if ((line == null) || (line.equals(""))) return null;
+    if ((line == null) || (line.equals(""))) {
+      return null;
+    }
     String varname = line;
     String proglang_type_string_and_aux = file.readLine();
     String file_rep_type_string = file.readLine();
@@ -771,9 +773,9 @@ public final class FileIO {
     }
 
     if (comp_str.equals("none")) {
-      return (VarComparability.NONE);
+      return VarComparability.NONE;
     } else if (comp_str.equals("implicit")) {
-      return (VarComparability.IMPLICIT);
+      return VarComparability.IMPLICIT;
     } else {
       throw new Daikon.TerminationMessage(
           "Unrecognized VarComparability '" + comp_str + "'", state);
@@ -909,7 +911,9 @@ public final class FileIO {
         /*@GuardSatisfied*/ /*@Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation) {
         return this.format().equals(((FileIO.Invocation) other).format());
-      } else return false;
+      } else {
+        return false;
+      }
     }
 
     /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied Invocation this,*/ Invocation other) {
@@ -2378,7 +2382,7 @@ public final class FileIO {
         FileIO.new_decl_format = record.new_decl_format;
         // System.err.printf ("Setting FileIO.new_decl_format to %b%n",
         //                   FileIO.new_decl_format);
-        return (record.map);
+        return record.map;
       } else if (obj instanceof InvMap) {
         // System.err.printf ("Restoring an InvMap%n");
         InvMap invs = (InvMap) obj;
@@ -2396,7 +2400,7 @@ public final class FileIO {
         }
         assert FileIO.new_decl_format != null
             : "@AssumeAssertion(nullness): InvMap.readObject() sets FileIO.new_decl_format";
-        return (ppts);
+        return ppts;
       } else {
         throw new IOException("Unexpected serialized file type: " + obj.getClass());
       }
@@ -2546,7 +2550,9 @@ public final class FileIO {
       }
       this_esc = orig.indexOf('\\', post_esc);
     }
-    if (post_esc == 0) return orig;
+    if (post_esc == 0) {
+      return orig;
+    }
     sb.append(orig.substring(post_esc));
     return sb.toString();
   }
@@ -2660,7 +2666,9 @@ public final class FileIO {
       need_eol(scanner);
       if (state.varcomp_format == VarComparability.IMPLICIT) {
         comparability = VarComparabilityImplicit.unknown;
-      } else comparability = VarComparabilityNone.it;
+      } else {
+        comparability = VarComparabilityNone.it;
+      }
     }
 
     public VarDefinition(String name, VarKind kind, ProglangType type) {
@@ -2916,7 +2924,7 @@ public final class FileIO {
     /*@Interned*/ String str = need(state, scanner, descr);
     try {
       E e = Enum.valueOf(enum_class, str.toUpperCase());
-      return (e);
+      return e;
     } catch (Exception exception) {
       @SuppressWarnings(
           "nullness") // getEnumConstants returns non-null because enum_class is an enum class
@@ -2963,7 +2971,9 @@ public final class FileIO {
    */
   public static String user_mod_ppt_name(String ppt_name) {
 
-    if (!dkconfig_rm_stack_dups) return ppt_name;
+    if (!dkconfig_rm_stack_dups) {
+      return ppt_name;
+    }
 
     // System.out.printf ("removing stack dups (%b)in fileio%n",
     //                    dkconfig_rm_stack_dups);

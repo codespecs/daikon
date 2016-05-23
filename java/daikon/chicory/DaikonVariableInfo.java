@@ -227,7 +227,7 @@ public abstract class DaikonVariableInfo
     for (DaikonVariableInfo dv : children) {
       list.addAll(dv.tree_as_list());
     }
-    return (list);
+    return list;
   }
 
   /**
@@ -293,7 +293,7 @@ public abstract class DaikonVariableInfo
       //show the full array
       return getValueStringOfArray(theValue);
     } else if (theValue instanceof NonsensicalObject) {
-      return ("nonsensical");
+      return "nonsensical";
     } else {
       //basically, show the hashcode of theValue
       return getObjectHashCode(theValue);
@@ -329,9 +329,9 @@ public abstract class DaikonVariableInfo
    */
   private String getObjectHashCode(Object theObject) {
     if (theObject == null) {
-      return ("null");
+      return "null";
     } else if (theObject instanceof NonsensicalObject) {
-      return ("nonsensical");
+      return "nonsensical";
     } else {
       return Integer.toString(System.identityHashCode(theObject));
     }
@@ -362,11 +362,11 @@ public abstract class DaikonVariableInfo
    */
   protected String getValueStringOfList(List<Object> theValues) {
     if (theValues == null) {
-      return ("null");
+      return "null";
     }
 
     if (theValues instanceof NonsensicalList) {
-      return ("nonsensical");
+      return "nonsensical";
     }
 
     StringBuffer buf = new StringBuffer();
@@ -906,7 +906,9 @@ public abstract class DaikonVariableInfo
       Class<?> eltType = type.getComponentType();
       assert eltType != null; // because type is an array
       return !(eltType.isPrimitive());
-    } else return false;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -993,7 +995,9 @@ public abstract class DaikonVariableInfo
    * and prints associated decls, if necessary
    */
   protected void checkForListDecl(Class<?> type, String theName, String offset) {
-    if (isArray || type.isPrimitive() || type.isArray()) return;
+    if (isArray || type.isPrimitive() || type.isArray()) {
+      return;
+    }
 
     // System.out.printf ("checking %s %sto for list implementation = %b%n",
     //                    type, theName, implementsList (type));

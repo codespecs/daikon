@@ -131,7 +131,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * for this invariant.
    */
   public boolean get_swap() {
-    return (swap);
+    return swap;
   }
 
   /**

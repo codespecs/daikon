@@ -149,7 +149,7 @@ public class InvMatch {
     List<InvTranslate> current_translation = new ArrayList<InvTranslate>();
     consider_xlate(valid_translations, current_translation, xlate_list, 0);
 
-    return (valid_translations);
+    return valid_translations;
   }
 
   /**
@@ -218,6 +218,6 @@ public class InvMatch {
         best_quality = quality;
       }
     }
-    return (best_translation);
+    return best_translation;
   }
 }

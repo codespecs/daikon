@@ -49,7 +49,7 @@ public class CommonStringSequence extends SingleStringSequence {
 
   /** Returns the prototype invariant for CommonStringSequence **/
   public static /*@Prototype*/ CommonStringSequence get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/

@@ -86,7 +86,7 @@ public class CLASSNAME
 
   /** Returns the prototype invariant for CLASSNAME **/
   public static /*@Prototype*/ CLASSNAME get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** Returns whether or not this invariant is enabled **/
@@ -241,10 +241,10 @@ public class CLASSNAME
     CLASSNAME result = new CLASSNAME (parent_ppt);
     CORECLASS newcore = core.merge (cores, result);
     if (newcore == null) {
-      return (null);
+      return null;
     }
     result.core = newcore;
-    return (result);
+    return result;
   }
 
 }

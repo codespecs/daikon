@@ -62,7 +62,7 @@ public class ClassInfo {
   }
 
   public List<MethodInfo> get_method_infos() {
-    return (method_infos);
+    return method_infos;
   }
 
   /**

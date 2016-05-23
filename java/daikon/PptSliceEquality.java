@@ -517,7 +517,7 @@ public class PptSliceEquality extends PptSlice {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("  new slices count:" + parent.numViews());
     }
-    return (falsified_invs);
+    return falsified_invs;
   }
 
   /**

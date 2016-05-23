@@ -181,7 +181,7 @@ public final class SEQINTEQUAL
 
   /** Returns the prototype invariant for SEQINTEQUAL **/
   public static /*@Prototype*/ SEQINTEQUAL get_proto () {
-    return (proto);
+    return proto;
   }
 
   /** Returns whether or not this invariant is enabled **/
@@ -253,7 +253,7 @@ public final class SEQINTEQUAL
       return new DiscardInfo (this, DiscardCode.obvious,
                               sclvar(vis).name() + " is min/max ");
     }
-    return (null);
+    return null;
   }
 
   /*@SideEffectFree*/ public SEQINTEQUAL clone(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
@@ -471,7 +471,7 @@ public final class SEQINTEQUAL
    */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
-    return (suppressions);
+    return suppressions;
   }
 
   /** definition of this invariant (the suppressee) **/

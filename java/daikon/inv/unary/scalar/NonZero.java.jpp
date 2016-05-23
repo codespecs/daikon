@@ -116,7 +116,7 @@ public class NONZERO
 
   /** Returns the prototype invariant for NONZERO **/
   public static /*@Prototype*/ NONZERO get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/

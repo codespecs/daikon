@@ -626,7 +626,7 @@ public final class CLASSNAME
         if (!Global.fuzzy.eq (result.a, c.a)
             || !Global.fuzzy.eq (result.b, c.b)
             || !Global.fuzzy.eq(result.c, c.c))
-          return (null);
+          return null;
       }
     }
 
@@ -646,12 +646,12 @@ public final class CLASSNAME
         if (result.add_modified (c.x_cache[j], c.y_cache[j], 1) ==
             InvariantStatus.FALSIFIED) {
           //        if (wrapper.falsified)
-          return (null);
+          return null;
         }
       }
     }
 
-    return (result);
+    return result;
   }
 
   /*@Pure*/ public boolean isSameFormula(CLASSNAME other) {

@@ -85,7 +85,7 @@ public class ParameterInfo extends DaikonVariableInfo {
   }
 
   public Class<?> getType() {
-    return (argType);
+    return argType;
   }
 
   /** Returns whether or not this parameter is a primitive type **/
@@ -106,6 +106,6 @@ public class ParameterInfo extends DaikonVariableInfo {
     // System.out.printf ("%s is a parameter%n", this);
     EnumSet<VarFlags> var_flags = super.get_var_flags().clone();
     var_flags.add(VarFlags.IS_PARAM);
-    return (var_flags);
+    return var_flags;
   }
 }

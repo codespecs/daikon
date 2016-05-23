@@ -287,7 +287,7 @@ public final class PPTSLICE1 extends PptSlice {
                           " because var " + var_infos[i].name() +
                           " array index out of bounds");
         }
-        return (result);
+        return result;
       }
     }
 
@@ -357,7 +357,7 @@ public final class PPTSLICE1 extends PptSlice {
       List<Invariant> weakened_invs = add_val_bu (val1, val2, val3, mod1, mod2,
                                        mod3, count);
     #endif
-    return (weakened_invs);
+    return weakened_invs;
   }
 
 #if defined (ARITY1)
@@ -382,7 +382,7 @@ public final class PPTSLICE1 extends PptSlice {
           + (var_infos[0].rep_type.isArray() ? ArraysMDE.toString(val1) : val1));
       }
     }
-    return (result);
+    return result;
   }
 #elif defined (ARITY2)
 
@@ -447,7 +447,7 @@ public final class PPTSLICE1 extends PptSlice {
         }
       }
     }
-    return (result);
+    return result;
   }
 #elif defined (ARITY3)
   public List<Invariant> add_val_bu (/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3,
@@ -484,7 +484,7 @@ public final class PPTSLICE1 extends PptSlice {
           + (var_infos[2].rep_type.isArray() ? ArraysMDE.toString(val3) : val3));
       }
     }
-    return (result);
+    return result;
   }
 #endif
 

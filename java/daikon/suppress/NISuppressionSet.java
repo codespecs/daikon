@@ -586,7 +586,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       swap_sups[i] = new NISuppression(sors, std_sup.suppressee.swap());
     }
     NISuppressionSet new_ss = new NISuppressionSet(swap_sups);
-    return (new_ss);
+    return new_ss;
   }
 
   /** Returns the suppressee **/

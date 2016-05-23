@@ -198,7 +198,9 @@ public final class VarComparabilityImplicit extends VarComparability implements 
           && type1.elementType().equality_set_ok(type2.elementType()));
     }
 
-    if ((type1.dimensions == 0) && (type2.dimensions == 0)) return type1.base == type2.base;
+    if ((type1.dimensions == 0) && (type2.dimensions == 0)) {
+      return type1.base == type2.base;
+    }
 
     // One array, one non-array
     assert type1.dimensions == 0 || type2.dimensions == 0;

@@ -105,7 +105,9 @@ public abstract class PptSlice extends Ppt {
   // Only called right now from tools/ExtractConsequent
   public boolean usesVarDerived(String name) {
     for (VarInfo vi : var_infos) {
-      if (vi.includes_simple_name(name)) return true;
+      if (vi.includes_simple_name(name)) {
+        return true;
+      }
     }
     return false;
   }
@@ -113,7 +115,9 @@ public abstract class PptSlice extends Ppt {
   /** @return true if all of this slice's variables are orig() variables. */
   public boolean allPrestate() {
     for (VarInfo vi : var_infos) {
-      if (!vi.isPrestateDerived()) return false;
+      if (!vi.isPrestateDerived()) {
+        return false;
+      }
     }
     return true;
   }
@@ -255,7 +259,9 @@ public abstract class PptSlice extends Ppt {
 
   public boolean containsOnlyGuardingPredicates() {
     for (Invariant inv : invs) {
-      if (!inv.isGuardingPredicate) return false;
+      if (!inv.isGuardingPredicate) {
+        return false;
+      }
     }
     return true;
   }
@@ -346,7 +352,9 @@ public abstract class PptSlice extends Ppt {
   public boolean contains_inv(Invariant inv) {
 
     for (Invariant mine : invs) {
-      if (mine.match(inv)) return true;
+      if (mine.match(inv)) {
+        return true;
+      }
     }
     return false;
   }
@@ -371,9 +379,11 @@ public abstract class PptSlice extends Ppt {
   public /*@Nullable*/ Invariant find_inv_exact(Invariant inv) {
 
     for (Invariant mine : invs) {
-      if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv)) return (mine);
+      if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv)) {
+        return mine;
+      }
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -383,9 +393,11 @@ public abstract class PptSlice extends Ppt {
   public /*@Nullable*/ Invariant find_inv_by_class(Class<? extends Invariant> cls) {
 
     for (Invariant inv : invs) {
-      if ((inv.getClass() == cls)) return (inv);
+      if ((inv.getClass() == cls)) {
+        return inv;
+      }
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -418,7 +430,7 @@ public abstract class PptSlice extends Ppt {
     if (suppressed && Debug.logOn() && (Daikon.current_inv != null)) {
       Daikon.current_inv.log("inv %s is ni suppressed", inv.format());
     }
-    return (suppressed);
+    return suppressed;
   }
 
   /**

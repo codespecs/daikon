@@ -37,8 +37,12 @@ public abstract class UnaryDerivation extends Derivation {
 
   public ValueAndModified computeValueAndModified(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
-    if (source_mod == ValueTuple.MISSING_FLOW) return ValueAndModified.MISSING_FLOW;
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
+    if (source_mod == ValueTuple.MISSING_FLOW) {
+      return ValueAndModified.MISSING_FLOW;
+    }
 
     return computeValueAndModifiedImpl(vt);
   }

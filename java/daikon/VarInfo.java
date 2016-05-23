@@ -244,7 +244,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * @see Derivation#missingOutOfBounds()
    **/
   public boolean missingOutOfBounds() {
-    if ((derived != null) && derived.missingOutOfBounds()) return true;
+    if ((derived != null) && derived.missingOutOfBounds()) {
+      return true;
+    }
     return false;
   }
 
@@ -590,7 +592,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           break;
         }
       }
-      if (!hasRelId) return false;
+      if (!hasRelId) {
+        return false;
+      }
     }
     return true;
   }
@@ -896,7 +900,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (postState != null) return true;
     if (isDerived()) {
       for (VarInfo vi : derived.getBases()) {
-        if (!vi.isPrestate()) return false;
+        if (!vi.isPrestate()) {
+          return false;
+        }
       }
       return true;
     } else {
@@ -954,7 +960,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     } else {
       vars.add(this);
     }
-    return (vars);
+    return vars;
   }
 
   /**
@@ -981,7 +987,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
       }
     }
-    return (names);
+    return names;
   }
 
   /*@Pure*/ public boolean isClosure() {
@@ -1073,14 +1079,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   private /*@Nullable*/ VarInfo enclosing_param() {
     // System.out.printf ("Considering %s\n", this);
     assert FileIO.new_decl_format;
-    if (isPrestate()) return postState.enclosing_param();
+    if (isPrestate()) {
+      return postState.enclosing_param();
+    }
     for (VarInfo evi = this; evi != null; evi = evi.enclosing_var) {
       // System.out.printf ("%s isParam=%b\n", evi, evi.isParam());
       if (evi.isParam()) {
-        return (evi);
+        return evi;
       }
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -1186,12 +1194,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         assert enclosing_var != null : "@AssumeAssertion(nullness)";
 
         // The class of a parameter can't change in the caller
-        if (var_flags.contains(VarFlags.CLASSNAME) && enclosing_var.isParam()) return true;
+        if (var_flags.contains(VarFlags.CLASSNAME) && enclosing_var.isParam()) {
+          return true;
+        }
 
         // The size of a parameter can't change in the caller.  We shouldn't
         // have the shift==0 test, but need it to match the old code
         if (is_size() && (enclosing_var.get_base_array_hashcode().isParam())) {
-          if (((SequenceLength) derived).shift == 0) return true;
+          if (((SequenceLength) derived).shift == 0) {
+            return true;
+          }
         }
       }
 
@@ -1239,7 +1251,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (is_static_constant) {
       // return ValueTuple.STATIC_CONSTANT;
       return ValueTuple.MODIFIED;
-    } else return vt.getModified(value_index);
+    } else {
+      return vt.getModified(value_index);
+    }
   }
   /*@Pure*/ public boolean isUnmodified(ValueTuple vt) {
     return ValueTuple.modIsUnmodified(getModified(vt));
@@ -1510,7 +1524,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Returns the variable (if any) that represents the size of this sequence **/
   public /*@Nullable*/ VarInfo sequenceSize() {
-    if (sequenceSize != null) return sequenceSize;
+    if (sequenceSize != null) {
+      return sequenceSize;
+    }
     assert rep_type.isArray();
     // we know the size follows the variable itself in the list
     VarInfo[] vis = ppt.var_infos;
@@ -1598,10 +1614,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // of some sort and not an array)
     if (FileIO.new_decl_format) {
       for (VarInfo vi = this; vi != null; vi = vi.enclosing_var) {
-        if (vi.file_rep_type.isArray() && !vi.type.isArray()) return false;
+        if (vi.file_rep_type.isArray() && !vi.type.isArray()) {
+          return false;
+        }
         if (vi.isDerived()) {
           VarInfo base = vi.derived.getBase(0);
-          if (base.file_rep_type.isArray() && !base.type.isArray()) return false;
+          if (base.file_rep_type.isArray() && !base.type.isArray()) {
+            return false;
+          }
         }
       }
     } else {
@@ -2275,7 +2295,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                     ((vi == null) ? false : vi.canBeMissing)));
           }
           if (vi == null) return false;
-          return (vi.canBeMissing);
+          return vi.canBeMissing;
         }
         return false;
       }
@@ -2537,7 +2557,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
       // If this is never missing, nothing to guard
       if ((Daikon.dkconfig_guardNulls == "missing") // interned
-          && !canBeMissing) return result;
+          && !canBeMissing) {
+        return result;
+      }
 
       // Create a list of variables to be guarded from the list of all
       // enclosing variables.
@@ -2551,7 +2573,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         if ((Daikon.dkconfig_guardNulls == "missing") // interned
             && !vi.canBeMissing) break;
       }
-      return (result);
+      return result;
     }
   }
 
@@ -2614,7 +2636,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public /*@Nullable*/ PptTopLevel find_object_ppt(PptMap all_ppts) {
 
     // Arrays don't have types
-    if (is_array()) return (null);
+    if (is_array()) return null;
 
     // build the name of the object ppt based on the variable type
     String type_str = type.base().replaceFirst("\\$", ".");
@@ -2671,7 +2693,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Returns a string containing the names of the vars in the array. **/
   public static String arrayToString(VarInfo[] vis) {
 
-    if (vis == null) return ("null");
+    if (vis == null) return "null";
     ArrayList<String> vars = new ArrayList<String>(vis.length);
     for (int i = 0; i < vis.length; i++) {
       if (vis[i] == null) {
@@ -2686,7 +2708,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Returns a string containing the names of the vars in the list. **/
   public static String listToString(List<VarInfo> vlist) {
 
-    if (vlist == null) return ("null");
+    if (vlist == null) return "null";
     ArrayList<String> vars = new ArrayList<String>(vlist.size());
     for (VarInfo v : vlist) {
       if (v == null) {
@@ -2706,10 +2728,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       assert static_constant_value != null
           : "@AssumeAssertion(nullness): dependent: is_static_constant";
       vs.add(static_constant_value);
-      return (vs);
+      return vs;
     }
 
-    return (ppt.value_sets[value_index]);
+    return ppt.value_sets[value_index];
   }
 
   public String get_value_info() {
@@ -2737,7 +2759,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       HashSet<VarInfo> set = new HashSet<VarInfo>();
       set.add(this);
       return set;
-    } else return equalitySet.getVars();
+    } else {
+      return equalitySet.getVars();
+    }
   }
 
   /**
@@ -2748,7 +2772,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // if (equalitySet == null && VarInfo.use_equality_optimization == false) {  // match } for vim
     if (equalitySet == null) {
       return this;
-    } else return equalitySet.leader();
+    } else {
+      return equalitySet.leader();
+    }
   }
 
   private static Set<String> out_strings = new LinkedHashSet<String>();
@@ -3037,23 +3063,31 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /*@SideEffectFree*/ public String csharp_name(/*@Nullable*/ String index) {
     if (index != null) assert file_rep_type.isArray();
 
-    if (postState != null) return "Contract.OldValue(" + postState.csharp_name(index) + ")";
+    if (postState != null) {
+      return "Contract.OldValue(" + postState.csharp_name(index) + ")";
+    }
 
-    if (derived != null) return derived.csharp_name(index);
+    if (derived != null) {
+      return derived.csharp_name(index);
+    }
 
     switch (var_kind) {
       case FIELD:
         assert relative_name != null : this;
 
         if (enclosing_var != null) {
-          if (isStatic(str_name, enclosing_var.name())) return str_name;
+          if (isStatic(str_name, enclosing_var.name())) {
+            return str_name;
+          }
           return enclosing_var.csharp_name(index) + "." + relative_name;
         }
 
         return str_name;
 
       case FUNCTION:
-        if (var_flags.contains(VarFlags.TO_STRING)) return enclosing_var.csharp_name(index);
+        if (var_flags.contains(VarFlags.TO_STRING)) {
+          return enclosing_var.csharp_name(index);
+        }
 
         if (var_flags.contains(VarFlags.CLASSNAME)) {
           if (arr_dims > 0) {
@@ -3078,7 +3112,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
 
       case ARRAY:
-        if (index == null) return enclosing_var.csharp_name(null);
+        if (index == null) {
+          return enclosing_var.csharp_name(null);
+        }
         return enclosing_var.csharp_name(null) + "[" + index + "]";
 
       case VARIABLE:
@@ -3130,16 +3166,22 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (index != null) assert file_rep_type.isArray();
 
     // If this is an orig variable, use the post version to generate the name
-    if (postState != null) return "\\old(" + postState.esc_name(index) + ")";
+    if (postState != null) {
+      return "\\old(" + postState.esc_name(index) + ")";
+    }
 
     // If this is a derived variable, the derivations builds the name
-    if (derived != null) return derived.esc_name(index);
+    if (derived != null) {
+      return derived.esc_name(index);
+    }
 
     // Build the name by processing back through all of the enclosing variables
     switch (var_kind) {
       case FIELD:
         assert relative_name != null : this;
-        if (enclosing_var != null) return enclosing_var.esc_name(index) + "." + relative_name;
+        if (enclosing_var != null) {
+          return enclosing_var.esc_name(index) + "." + relative_name;
+        }
         return str_name;
       case FUNCTION:
         //function_args      assert function_args == null : "function args not implemented";
@@ -3154,13 +3196,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return str_name;
       case ARRAY:
-        if (index == null) return enclosing_var.esc_name(null) + "[]";
+        if (index == null) {
+          return enclosing_var.esc_name(null) + "[]";
+        }
         return enclosing_var.esc_name(null) + "[" + index + "]";
       case VARIABLE:
         assert enclosing_var == null;
         return str_name;
       case RETURN:
-        return ("\\result");
+        return "\\result";
       default:
         throw new Error("can't drop through switch statement");
     }
@@ -3185,7 +3229,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (index != null) assert file_rep_type.isArray();
 
     // If this is an orig variable, use the post version to generate the name
-    if (postState != null) return "\\old(" + postState.jml_name(index) + ")";
+    if (postState != null) {
+      return "\\old(" + postState.jml_name(index) + ")";
+    }
 
     // If this is a derived variable, the derivations builds the name
     if (derived != null) {
@@ -3210,14 +3256,18 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     switch (var_kind) {
       case FIELD:
         assert relative_name != null : this;
-        if (enclosing_var != null) return enclosing_var.jml_name(index) + "." + relative_name;
+        if (enclosing_var != null) {
+          return enclosing_var.jml_name(index) + "." + relative_name;
+        }
         return str_name;
       case FUNCTION:
         //function_args      assert function_args == null : "function args not implemented";
         if (var_flags.contains(VarFlags.CLASSNAME)) {
           if (arr_dims > 0) {
             return String.format("daikon.Quant.typeArray(%s)", enclosing_var.jml_name(index));
-          } else return enclosing_var.jml_name(index) + DaikonVariableInfo.class_suffix;
+          } else {
+            return enclosing_var.jml_name(index) + DaikonVariableInfo.class_suffix;
+          }
         }
         if (var_flags.contains(VarFlags.TO_STRING)) {
           return enclosing_var.jml_name(index) + ".toString()";
@@ -3227,13 +3277,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return str_name;
       case ARRAY:
-        if (index == null) return enclosing_var.jml_name(null);
+        if (index == null) {
+          return enclosing_var.jml_name(null);
+        }
         return enclosing_var.jml_name(null) + "[" + index + "]";
       case VARIABLE:
         assert enclosing_var == null;
         return str_name;
       case RETURN:
-        return ("\\result");
+        return "\\result";
       default:
         throw new Error("can't drop through switch statement");
     }
@@ -3255,7 +3307,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     assert (index == null) || file_rep_type.isArray() : index + " " + name();
 
     // If this is a derived variable, the derivations builds the name
-    if (derived != null) return derived.simplify_name();
+    if (derived != null) {
+      return derived.simplify_name();
+    }
 
     // Build the name by processing back through all of the enclosing variables
     switch (var_kind) {
@@ -3275,7 +3329,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
         return str_name;
       case ARRAY:
-        if (index == null) return String.format("(select elems %s)", enclosing_var.simplify_name());
+        if (index == null) {
+          return String.format("(select elems %s)", enclosing_var.simplify_name());
+        }
         if (false && index.equals("|0|")) {
           System.err.printf("index = %s\n", index);
           Throwable t = new Throwable();
@@ -3300,10 +3356,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
 
         assert enclosing_var == null;
-        if (postState != null) return "|__orig__" + postState.name() + "|";
+        if (postState != null) {
+          return "|__orig__" + postState.name() + "|";
+        }
         return "|" + str_name + "|";
       case RETURN:
-        return ("|return|");
+        return "|return|";
       default:
         throw new Error("can't drop through switch statement");
     }
@@ -3360,11 +3418,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     if (isDerived()) {
       for (VarInfo base : derived.getBases()) {
-        if (base.includes_simple_name(varname)) return true;
+        if (base.includes_simple_name(varname)) {
+          return true;
+        }
       }
     } else {
       for (VarInfo vi = this; vi != null; vi = vi.enclosing_var)
-        if ((vi.var_kind == VarKind.VARIABLE) && vi.name().equals(varname)) return true;
+        if ((vi.var_kind == VarKind.VARIABLE) && vi.name().equals(varname)) {
+          return true;
+        }
     }
     return false;
   }
@@ -3505,7 +3567,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     } else {
       if (index_off != 0) {
         complete_index = String.format("(+ |%s| %d)", simplify_index_name, index_off);
-      } else complete_index = String.format("|%s|", simplify_index_name);
+      } else {
+        complete_index = String.format("|%s|", simplify_index_name);
+      }
     }
 
     // Return the array properly indexed
@@ -3541,8 +3605,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (index_off != 0) {
       if (lower instanceof Quantify.Constant) {
         complete_index = String.format("%d", ((Quantify.Constant) lower).get_value() + index_off);
-      } else complete_index = String.format("(+ %s %d)", lower_name, index_off);
-    } else complete_index = String.format("%s", lower_name);
+      } else {
+        complete_index = String.format("(+ %s %d)", lower_name, index_off);
+      }
+    } else {
+      complete_index = String.format("%s", lower_name);
+    }
 
     // Return the array properly indexed
     // System.err.printf ("lower bound type = %s [%s] %s\n", lower,
@@ -3590,7 +3658,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                     vars[0].var_info_name, vars[2].var_info_name, index1_vin) // vin ok
                 .simplify_name();
         return new String[] {index1_vin.name(), index2};
-      } else throw new Error("unexpected length " + vars.length);
+      } else {
+        throw new Error("unexpected length " + vars.length);
+      }
     }
 
     // Get a free variable for each variable
@@ -3743,7 +3813,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public boolean has_typeof() {
     if (!FileIO.new_decl_format) return var_info_name.hasTypeOf(); // vin ok
 
-    if (isPrestate()) return postState.has_typeof();
+    if (isPrestate()) {
+      return postState.has_typeof();
+    }
     return is_typeof();
   }
 
@@ -3828,7 +3900,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * If either variable is not a field, returns false
    */
   public boolean has_same_parent(VarInfo other) {
-    if (!is_field() || !other.is_field()) return false;
+    if (!is_field() || !other.is_field()) {
+      return false;
+    }
 
     VarInfoName.Field name1 = (VarInfoName.Field) var_info_name;
     VarInfoName.Field name2 = (VarInfoName.Field) other.var_info_name;
@@ -3847,13 +3921,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       List<VarInfoName> traversal = new VarInfoName.InorderFlattener(var_info_name).nodes();
       if (traversal.size() <= 1) {
         // System.out.printf ("size <= 1, traversal = %s%n", traversal);
-        return (null);
+        return null;
       } else {
         VarInfo enclosing_vi = ppt.find_var_by_name(traversal.get(1).name());
         // if (enclosing_vi == null)
         //  System.out.printf ("Can't find '%s' in %s%n",
         //                      traversal.get(1).name(), ppt.varNames());
-        return (enclosing_vi);
+        return enclosing_vi;
       }
     }
   }
@@ -3957,7 +4031,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       //                  vi.parent_ppt, vi.parent_variable);
     }
 
-    return (vi);
+    return vi;
   }
 
   /**
@@ -3977,7 +4051,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       } else {
         return String.format("post(%s)%s", vi.name(), shift_str);
       }
-    } else return vi.name() + shift_str;
+    } else {
+      return vi.name() + shift_str;
+    }
   }
 
   /**
@@ -4035,7 +4111,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         parent.parent_variable = apply_subscript(seq.parent_var_name(rid), subscript_parent);
       }
     }
-    return (vi);
+    return vi;
   }
 
   /**
@@ -4058,7 +4134,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
             vars[0].comparability,
             vars[0].aux);
     vi.setup_derived_function(function_name, vars);
-    return (vi);
+    return vi;
   }
 
   /*
@@ -4083,7 +4159,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     } else if (shift == 1) {
       viname = viname.applyIncrement();
       shift_name = "_plus1";
-    } else assert shift == 0;
+    } else {
+      assert shift == 0;
+    }
 
     /*@NonNull*/ ProglangType ptype = type;
     /*@NonNull*/ ProglangType frtype = type;
@@ -4147,7 +4225,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
       }
     }
-    return (vi);
+    return vi;
   }
 
   /*
@@ -4184,7 +4262,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
             String.format("%s.%s()", str.get_parent(rid).parent_variable, func_name);
       }
     }
-    return (vi);
+    return vi;
   }
 
   /**
@@ -4227,7 +4305,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public static String old_var_names(String name) {
     if (PrintInvariants.dkconfig_old_array_names && FileIO.new_decl_format) {
       return name.replace("[..]", "[]");
-    } else return name;
+    } else {
+      return name;
+    }
   }
 
   /**

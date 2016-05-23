@@ -202,7 +202,7 @@ public final class CLASSNAME
       VarComparability.makeComparabilitySameIndices (newTypeName,
                                                      var1.comparability);
 
-    return (vi);
+    return vi;
   }
 
   /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CLASSNAME this*/) {

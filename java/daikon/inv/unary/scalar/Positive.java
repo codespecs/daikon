@@ -49,7 +49,7 @@ public class Positive extends SingleScalar {
 
   /** Returns the prototype invariant **/
   public static /*@Prototype*/ Positive get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/

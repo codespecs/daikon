@@ -2365,7 +2365,9 @@ public final class Daikon {
       // The number should already have been checked, so use Error instead of Daikon.TerminationMessage
       throw new Error("ppt_perc of " + ppt_perc + " is out of range 1..100");
     }
-    if (ppt_perc == 100) return null;
+    if (ppt_perc == 100) {
+      return null;
+    }
 
     // Keep track of all of the ppts in a set ordered by the ppt name
     Set<String> ppts = new TreeSet<String>();
@@ -2410,11 +2412,11 @@ public final class Daikon {
         while (i.hasNext()) {
           ppt_name = i.next();
           if ((last_ppt_name.indexOf("EXIT") != -1) && (ppt_name.indexOf("EXIT") == -1)) {
-            return (last_ppt_name);
+            return last_ppt_name;
           }
           last_ppt_name = ppt_name;
         }
-        return (ppt_name);
+        return ppt_name;
       }
     }
     // Execution should not reach this line

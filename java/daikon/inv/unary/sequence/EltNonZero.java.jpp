@@ -254,7 +254,7 @@ public final class CLASSNAME
       //                      + vs.min() + " conf="
       //                      + confidence_one_elt_nonzero() + " range="
       //                      + (vs.max() - vs.min() + 1)/ 1);
-      return (result);
+      return result;
     }
   }
 
@@ -397,7 +397,7 @@ public final class CLASSNAME
         });
     }
 
-    return (suppressions);
+    return suppressions;
   }
 
 }

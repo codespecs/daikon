@@ -133,7 +133,7 @@ public abstract class DaikonWriter {
     // t.printStackTrace();
     // System.out.printf ("ppt name = %s%n", pptname);
 
-    return (pptname);
+    return pptname;
 
     /*
     // Quote dollar signs, which replaceFirst would interpreted as a
@@ -281,7 +281,9 @@ public abstract class DaikonWriter {
     int modifiers = method.getModifiers();
     if (Modifier.isAbstract(modifiers)
         || Modifier.isNative(modifiers)
-        || method.getName().equals("<clinit>")) return false;
+        || method.getName().equals("<clinit>")) {
+      return false;
+    }
     return true;
   }
 
@@ -300,10 +302,12 @@ public abstract class DaikonWriter {
   public String escape(String str) {
 
     // If there is nothing to escape, return the original string
-    if ((str.indexOf('\\') == -1) && (str.indexOf(' ') == -1)) return (str);
+    if ((str.indexOf('\\') == -1) && (str.indexOf(' ') == -1)) {
+      return str;
+    }
 
     str = str.replace("\\", "\\\\");
     str = str.replace(" ", "\\_");
-    return (str);
+    return str;
   }
 }

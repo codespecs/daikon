@@ -133,7 +133,7 @@ public class CLASSNAME
 
   /** Returns the prototype invariant for CLASSNAME **/
   public static /*@Prototype*/ CLASSNAME get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -297,7 +297,7 @@ public class CLASSNAME
            format(), Debug.toString(a1),
            Debug.toString(a2));
     }
-    return (is);
+    return is;
   }
 
   protected double computeConfidence() {
@@ -608,7 +608,9 @@ public class CLASSNAME
            && (rep2 == ProglangType.DOUBLE_ARRAY)) ||
           ((rep1 == ProglangType.STRING_ARRAY)
            && (rep2 == ProglangType.STRING_ARRAY))
-          )) return false;
+          )) {
+            return false;
+          }
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("Checking isObviousSubSequenceDynamically " +
@@ -835,7 +837,7 @@ public class CLASSNAME
   /** returns the ni-suppressions for SubSequence **/
   /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
-    return (suppressions);
+    return suppressions;
   }
 
   /** definition of this invariant (the suppressee) **/

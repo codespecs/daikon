@@ -168,10 +168,10 @@ public class Implication extends Joiner {
     DiscardInfo di = orig_right.isObviousDynamically(vis);
     if (di != null) {
       log("failed isObviousDynamically with vis = %s", VarInfo.arrayToString(vis));
-      return (di);
+      return di;
     }
 
-    return (null);
+    return null;
   }
 
   /**

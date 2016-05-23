@@ -127,7 +127,7 @@ public class SampleTester extends TestCase {
     URL input_file_location = ClassLoader.getSystemResource(fname);
 
     if (input_file_location == null) {
-      return (null);
+      return null;
     } else {
       return (input_file_location.toExternalForm());
     }
@@ -374,7 +374,9 @@ public class SampleTester extends TestCase {
       result = proc_show_invs_assert(args);
     } else if (name.equals("constant")) {
       result = proc_constant_assert(args);
-    } else parse_error("unknown assertion: " + name);
+    } else {
+      parse_error("unknown assertion: " + name);
+    }
 
     if (negate) result = !result;
 
@@ -432,8 +434,12 @@ public class SampleTester extends TestCase {
 
     // Look for a matching invariant in the slices invariant list
     for (Invariant inv : slice.invs) {
-      if (inv.getClass() == cls) return true;
-      if ((format != null) && format.equals(inv.format())) return true;
+      if (inv.getClass() == cls) {
+        return true;
+      }
+      if ((format != null) && format.equals(inv.format())) {
+        return true;
+      }
       debug.fine(String.format("trace %s: '%s'", inv.getClass(), inv.format()));
     }
     return false;

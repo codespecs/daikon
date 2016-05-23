@@ -333,7 +333,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       fmt_str = "[" + getClass() + "]" + fmt_str + " ("
              + var1().get_value_info() + ", " + var2().get_value_info() +  ")";
     }
-    return (fmt_str);
+    return fmt_str;
   }
 
   /**
@@ -347,7 +347,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (Debug.logOn()) {
         log ("Falsified - x length = %s y length = %s", x.length, y.length);
       }
-      return (InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
     }
 
     if (Debug.logDetail()) {
@@ -361,15 +361,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
           if (Debug.logOn()) {
             log ("Falsified - x[%s]=%s y[%s]=%s", i, x[i], i, y[i]);
           }
-          return (InvariantStatus.FALSIFIED);
+          return InvariantStatus.FALSIFIED;
         }
       }
-      return (InvariantStatus.NO_CHANGE);
+      return InvariantStatus.NO_CHANGE;
     } catch (Exception e) {
       if (Debug.logOn()) {
         log ("Falsified - exception %s", e);
       }
-      return (InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
     }
   }
 #else
@@ -377,12 +377,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     try {
       if (eq_check (x, y)) {
-        return (InvariantStatus.NO_CHANGE);
+        return InvariantStatus.NO_CHANGE;
       } else {
-        return (InvariantStatus.FALSIFIED);
+        return InvariantStatus.FALSIFIED;
       }
     } catch (Exception e) {
-      return (InvariantStatus.FALSIFIED);
+      return InvariantStatus.FALSIFIED;
     }
   }
 #endif
@@ -404,10 +404,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Make sure each var is a sequence subsequence
     if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSEQUENCE)) {
-      return (null);
+      return null;
     }
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE)) {
-      return (null);
+      return null;
     }
 
     @SuppressWarnings("nullness") // checker bug: flow
@@ -422,13 +422,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // beginning or finishes at the end must end or start at the same
     // spot (or it would have been falsified when it didn't)
     if (der1.from_start != der2.from_start) {
-      return (null);
+      return null;
     }
 
     // Look up this class over the sequence variables
     Invariant inv = find (getClass(), der1.seqvar(), der2.seqvar());
     if (inv == null) {
-      return (null);
+      return null;
     }
     return new DiscardInfo(this, DiscardCode.obvious, "Implied by " +
                            inv.format());
@@ -447,10 +447,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Make sure each var is a sequence subscript
     if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT)) {
-      return (null);
+      return null;
     }
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT)) {
-      return (null);
+      return null;
     }
 
     @SuppressWarnings("nullness") // checker bug: flow
@@ -460,7 +460,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Make sure the shifts match
     if (der1.index_shift != der2.index_shift) {
-      return (null);
+      return null;
     }
 
     // Look for this invariant over a sequence
@@ -478,13 +478,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
     Invariant inv = find (pairwise_class, der1.seqvar(), der2.seqvar());
     if (inv == null) {
-      return (null);
+      return null;
     }
 
     // Look to see if the subscripts are equal
     Invariant subinv = find (EQUALITY.class, der1.sclvar(), der2.sclvar());
     if (subinv == null) {
-      return (null);
+      return null;
     }
 
     return new DiscardInfo(this, DiscardCode.obvious, "Implied by " +
@@ -535,7 +535,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return new DiscardInfo (this, DiscardCode.obvious, "Implied by " + why);
     }
 
-    return (null);
+    return null;
   }
 
 #if defined (SEQ)
@@ -580,7 +580,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // If either variable is not derived, there is no possible invariant
     // (since we covered all of the direct size comparisons above)
     if ((v1.derived == null) || (v2.derived == null)) {
-      return (null);
+      return null;
     }
 
     // Get the sequence subsequence derivations
@@ -593,7 +593,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         && (v1_ss.index_shift == v2_ss.index_shift))
       return (new InvDef (v1_ss.sclvar(), v2_ss.sclvar(), IntEqual.class));
 
-    return (null);
+    return null;
   }
 
 
@@ -615,7 +615,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    return (null);
+    return null;
   }
 #endif
 
@@ -665,7 +665,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       result.add (ShiftZero.get_proto (true));
     #endif
     // System.out.printf ("%s get proto: %s\n", CLASSNAME.class, result);
-    return (result);
+    return result;
   }
 
   // suppressor definitions, used by many of the classes below
@@ -720,9 +720,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns the prototype invariant **/
     public static /*@Prototype*/ CLASSNAME get_proto (boolean swap) {
       if (swap) {
-        return (proto_swap);
+        return proto_swap;
       } else {
-        return (proto);
+        return proto;
       }
     }
 
@@ -740,15 +740,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (/*>>>@GuardSatisfied Divides this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EQ 0 (MOD %var1% %var2%))");
+        return "(EQ 0 (MOD %var1% %var2%))";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
-        return ("%var1% % %var2% == 0");
+        return "%var1% % %var2% == 0";
       #if defined(TYPEDOUBLE)
       } else if (format.isJavaFamily()) {
         return "daikon.Quant.fuzzy.eq(%var1% % %var2%, 0)";
       #endif
       } else {
-        return ("%var1% % %var2% == 0");
+        return "%var1% % %var2% == 0";
       }
     }
 
@@ -782,9 +782,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) {
-        return (suppressions_swap);
+        return suppressions_swap;
       } else {
-        return (suppressions);
+        return suppressions;
       }
     }
 
@@ -937,17 +937,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (/*>>>@GuardSatisfied Square this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EQ %var1% (* %var2% %var2))");
+        return "(EQ %var1% (* %var2% %var2))";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
         return "%var1% == %var2%*%var2%";
       } else if (format.isJavaFamily()) {
         #if defined(TYPEDOUBLE)
-        return ("daikon.Quant.fuzzy.eq(%var1%, %var2%*%var2%)");
+        return "daikon.Quant.fuzzy.eq(%var1%, %var2%*%var2%)";
         #else
-        return ("%var1% == %var2%*%var2%");
+        return "%var1% == %var2%*%var2%";
         #endif
       } else {
-        return ("%var1% == %var2%**2");
+        return "%var1% == %var2%**2";
       }
     }
 
@@ -1014,11 +1014,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (/*>>>@GuardSatisfied ZeroTrack this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(IMPLIES (EQ %var1% 0) (EQ %var2% 0))");
+        return "(IMPLIES (EQ %var1% 0) (EQ %var2% 0))";
       } else if (format.isJavaFamily() || format == OutputFormat.CSHARPCONTRACT) {
-        return ("(!(%var1% == 0)) || (%var2% == 0)");
+        return "(!(%var1% == 0)) || (%var2% == 0)";
       } else {
-        return ("(%var1% == 0) ==> (%var2% == 0)");
+        return "(%var1% == 0) ==> (%var2% == 0)";
       }
     }
 
@@ -1034,9 +1034,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) {
-        return (suppressions_swap);
+        return suppressions_swap;
       } else {
-        return (suppressions);
+        return suppressions;
       }
     }
 
@@ -1083,7 +1083,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns the prototype invariant **/
     public static /*@Prototype*/ BitwiseComplement get_proto() {
-      return (proto);
+      return proto;
     }
 
     // Variables starting with dkconfig_ should only be set via the
@@ -1104,7 +1104,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (/*>>>@GuardSatisfied BitwiseComplement this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EQ %var1% (~ %var2%))");
+        return "(EQ %var1% (~ %var2%))";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
         return "%var1% == ~%var2%";
       #if defined(TYPEDOUBLE)
@@ -1112,7 +1112,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return "daikon.Quant.fuzzy.eq(%var1%, ~%var2%)";
       #endif
       } else {
-        return ("%var1% == ~%var2%");
+        return "%var1% == ~%var2%";
       }
     }
 
@@ -1167,9 +1167,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (/*>>>@GuardSatisfied BitwiseSubset this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EQ %var1% (|java-bitwise-or| %var2% %var1%))");
+        return "(EQ %var1% (|java-bitwise-or| %var2% %var1%))";
       } else if (format == OutputFormat.DAIKON) {
-        return ("%var2% is a bitwise subset of %var1%");
+        return "%var2% is a bitwise subset of %var1%";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
         return "%var1% == (%var2% | %var1%)";
       #if defined(TYPEDOUBLE)
@@ -1177,7 +1177,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return "daikon.Quant.fuzzy.eq(%var1%, %var2% | %var1%)";
       #endif
       } else {
-        return ("%var1% == (%var2% | %var1%)");
+        return "%var1% == (%var2% | %var1%)";
       }
     }
 
@@ -1206,9 +1206,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) {
-        return (suppressions_swap);
+        return suppressions_swap;
       } else {
-        return (suppressions);
+        return suppressions;
       }
     }
 
@@ -1255,7 +1255,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns the prototype invariant **/
     public static /*@Prototype*/ BitwiseAndZero get_proto () {
-      return (proto);
+      return proto;
     }
 
     // Variables starting with dkconfig_ should only be set via the
@@ -1272,15 +1272,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (/*>>>@GuardSatisfied BitwiseAndZero this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EQ (|java-&| %var1% %var2%) 0)");
+        return "(EQ (|java-&| %var1% %var2%) 0)";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
-        return ("(%var1% & %var2%) == 0");
+        return "(%var1% & %var2%) == 0";
       #if defined(TYPEDOUBLE)
       } else if (format.isJavaFamily()) {
         return "daikon.Quant.fuzzy.eq(%var1% & %var2%, 0)";
       #endif
       } else {
-        return ("(%var1% & %var2%) == 0");
+        return "(%var1% & %var2%) == 0";
       }
     }
 
@@ -1295,7 +1295,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns a list of non-instantiating suppressions for this invariant. */
     /*@Pure*/
     public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
-      return (suppressions);
+      return suppressions;
     }
 
     /** definition of this invariant (the suppressee) (unswapped) **/
@@ -1363,15 +1363,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (/*>>>@GuardSatisfied ShiftZero this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return ("(EQ (|java->>| %var1% %var2%) 0)");
+        return "(EQ (|java->>| %var1% %var2%) 0)";
       } else if (format == OutputFormat.CSHARPCONTRACT) {
-        return ("(%var1% >> %var2% == 0)");
+        return "(%var1% >> %var2% == 0)";
       #if defined(TYPEDOUBLE)
       } else if (format.isJavaFamily()) {
         return "daikon.Quant.fuzzy.eq(%var1% >> %var2%, 0)";
       #endif
       } else {
-        return ("(%var1% >> %var2% == 0)");
+        return "(%var1% >> %var2% == 0)";
       }
     }
 
@@ -1386,9 +1386,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) {
-        return (suppressions_swap);
+        return suppressions_swap;
       } else {
-        return (suppressions);
+        return suppressions;
       }
     }
 
@@ -1436,9 +1436,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns the prototype invariant **/
     public static /*@Prototype*/ SubString get_proto (boolean swap) {
       if (swap) {
-        return (proto_swap);
+        return proto_swap;
       } else {
-        return (proto);
+        return proto;
       }
     }
 
@@ -1489,9 +1489,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) {
-        return (suppressions_swap);
+        return suppressions_swap;
       } else {
-        return (suppressions);
+        return suppressions;
       }
     }
 

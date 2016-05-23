@@ -108,11 +108,13 @@ public abstract class Ppt implements Serializable {
     // System.out.printf ("Ppt.find_var_by_name(%s): %s%n", varname, this);
     int i = indexOf(varname);
     if (i == -1) {
-      if (varname.contains("[]")) return find_var_by_name(varname.replace("[]", "[..]"));
+      if (varname.contains("[]")) {
+        return find_var_by_name(varname.replace("[]", "[..]"));
+      }
       // System.out.printf ("Ppt.find_var_by_name: Didn't find %s or %s in %s%n", varname, varname.replace ("[]", "[..]"), this);
-      return (null);
+      return null;
     } else {
-      return (var_infos[i]);
+      return var_infos[i];
     }
   }
 

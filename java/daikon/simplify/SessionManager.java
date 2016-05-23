@@ -112,7 +112,9 @@ public class SessionManager {
         String fileName;
         if (daikon.inv.Invariant.dkconfig_simplify_define_predicates) {
           fileName = "daikon-background-defined.txt";
-        } else fileName = "daikon-background.txt";
+        } else {
+          fileName = "daikon-background.txt";
+        }
         InputStream bg_stream = SessionManager.class.getResourceAsStream(fileName);
         if (bg_stream == null) {
           throw new RuntimeException(

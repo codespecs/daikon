@@ -900,7 +900,9 @@ class FormatTestCase {
    *        can be added to the variables involved
    **/
   private static void populateWithSamples(Invariant inv, List<Object[]> samples) {
-    if (samples == null || samples.size() == 0) return;
+    if (samples == null || samples.size() == 0) {
+      return;
+    }
 
     assert inv != null;
 
@@ -1061,7 +1063,7 @@ class FormatTestCase {
       Invariant inv = proto.instantiate(sl);
 
       if (inv == null) throw new RuntimeException("null inv for " + theClass.getName());
-      return (inv);
+      return inv;
     } catch (Exception e) {
       e.printStackTrace(System.out);
       throw new RuntimeException(

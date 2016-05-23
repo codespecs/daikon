@@ -331,7 +331,9 @@ public class DtraceDiff {
               ppt_var_value_error(
                     vis1[i], val1, state1, dtracefile1, vis2[i], val2, state2, dtracefile2);
             }
-          } else return; // EOF on both files ==> normal return
+          } else {
+            return; // EOF on both files ==> normal return
+          }
         } else if ((state1.rtype == FileIO.RecordType.TRUNCATED)
             || (state1.rtype == FileIO.RecordType.TRUNCATED))
           return; // either file reached truncation limit, return quietly
@@ -374,7 +376,9 @@ public class DtraceDiff {
         long[] v2 = (long[]) val2;
         if (v1.length != v2.length) return false;
         for (int i = 0; i < v1.length; i++)
-          if (((v1[i] == 0) || (v2[i] == 0)) && (v1[i] != v2[i])) return false;
+          if (((v1[i] == 0) || (v2[i] == 0)) && (v1[i] != v2[i])) {
+            return false;
+          }
         return true;
       } else if (type.baseIsScalar()) {
         long[] v1 = (long[]) val1;
@@ -417,12 +421,15 @@ public class DtraceDiff {
         long v1 = ((Long) val1).longValue();
         long v2 = ((Long) val2).longValue();
         return !(((v1 == 0) || (v2 == 0)) && (v1 != v2));
-      } else if (type.isScalar()) return (((Long) val1).longValue() == ((Long) val2).longValue());
-      else if (type.isFloat()) {
+      } else if (type.isScalar()) {
+        return (((Long) val1).longValue() == ((Long) val2).longValue());
+      } else if (type.isFloat()) {
         double d1 = ((Double) val1).doubleValue();
         double d2 = ((Double) val2).doubleValue();
         return ((Double.isNaN(d1) && Double.isNaN(d2)) || Global.fuzzy.eq(d1, d2));
-      } else if (type.isString()) return (((String) val1).equals((String) val2));
+      } else if (type.isString()) {
+        return (((String) val1).equals((String) val2));
+      }
     }
     throw new Error("Unexpected value type found"); // should never happen
   }

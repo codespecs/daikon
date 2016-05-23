@@ -387,7 +387,9 @@ public class InvariantChecker {
           // and Sung's dtrace files have unterminated calls, and when concatenating two files you can have the same nonce.
           // So I have to remove the nonce found from the call_map
           call_map.remove(nonce);
-        } else assert call_map.get(nonce) == null;
+        } else {
+          assert call_map.get(nonce) == null;
+        }
         call_map.put(nonce, new EnterCall(ppt, vt));
         debug.fine("Skipping enter sample");
         return;

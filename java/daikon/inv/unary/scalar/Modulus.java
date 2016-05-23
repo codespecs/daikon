@@ -53,7 +53,7 @@ public class Modulus extends SingleScalar {
 
   /** Returns the prototype invariant for Modulus **/
   public static /*@Prototype*/ Modulus get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** Returns whether or not this invariant is enabled **/
@@ -205,7 +205,9 @@ public class Modulus extends SingleScalar {
   //  public InvariantStatus check_modified(long value, int count) {}
 
   protected double computeConfidence() {
-    if (modulus == 1) return Invariant.CONFIDENCE_NEVER;
+    if (modulus == 1) {
+      return Invariant.CONFIDENCE_NEVER;
+    }
     if (modulus == 0) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
@@ -231,7 +233,9 @@ public class Modulus extends SingleScalar {
   }
 
   /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
-    if ((modulus == 0) || (modulus == 1)) return false;
+    if ((modulus == 0) || (modulus == 1)) {
+      return false;
+    }
 
     // Weak test, can be strengthened.
     //  * x = 1 mod 4  is exclusive with  x = 6 mod 8
@@ -250,7 +254,9 @@ public class Modulus extends SingleScalar {
   public static /*@Nullable*/ Modulus find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof Modulus) return (Modulus) inv;
+      if (inv instanceof Modulus) {
+        return (Modulus) inv;
+      }
     }
     return null;
   }
@@ -280,6 +286,6 @@ public class Modulus extends SingleScalar {
               + x.name()
               + " without the offset"));
     }
-    return (null);
+    return null;
   }
 }

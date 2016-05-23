@@ -54,7 +54,7 @@ public class IsPointer extends SingleScalar {
 
   /** Returns the prototype invariant for IsPointer **/
   public static /*@Prototype*/ IsPointer get_proto() {
-    return (proto);
+    return proto;
   }
 
   @Override
@@ -98,7 +98,9 @@ public class IsPointer extends SingleScalar {
     if (format == OutputFormat.SIMPLIFY) return "(AND)"; // trivially true
     if (format == OutputFormat.JAVA) {
       return "daikon.tools.runtimechecker.Runtime.isWithinPointerRange(" + varname + ")";
-    } else return varname + " is a pointer";
+    } else {
+      return varname + " is a pointer";
+    }
   }
 
   protected double computeConfidence() {

@@ -72,9 +72,13 @@ public abstract class BinaryInvariant extends Invariant {
 
     // If one argument is scalar and the other an array, put the scalar first.
     if (((val2 instanceof long[]) || (val2 instanceof double[]) || (val2 instanceof String[]))
-        && !((val1 instanceof long[]) || (val1 instanceof String[]) || (val1 instanceof double[])))
+        && !((val1 instanceof long[])
+            || (val1 instanceof String[])
+            || (val1 instanceof double[]))) {
       return (check(val2, val1, mod_index, count));
-    else return (check(val1, val2, mod_index, count));
+    } else {
+      return (check(val1, val2, mod_index, count));
+    }
   }
 
   /**
@@ -106,7 +110,9 @@ public abstract class BinaryInvariant extends Invariant {
     if (v1.varinfo_index > v2.varinfo_index) {
       fswap = true;
       ppt = this.ppt.parent.findSlice(v2, v1);
-    } else ppt = this.ppt.parent.findSlice(v1, v2);
+    } else {
+      ppt = this.ppt.parent.findSlice(v1, v2);
+    }
     if (ppt == null) return null;
 
     // The following is complicated because we are inconsistent in
@@ -145,13 +151,15 @@ public abstract class BinaryInvariant extends Invariant {
       BinaryInvariant bi = (BinaryInvariant) inv;
       if (bi.getClass() == cls) {
         if (bi.is_symmetric() || swap_class) {
-          return (bi);
+          return bi;
         } else {
-          if (bi.get_swap() == fswap) return (bi);
+          if (bi.get_swap() == fswap) {
+            return bi;
+          }
         }
       }
     }
 
-    return (null);
+    return null;
   }
 }

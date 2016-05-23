@@ -59,7 +59,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
 
   /** Returns the prototype invariant for CompleteOneOFScalar **/
   public static /*@Prototype*/ CompleteOneOfScalar get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -82,7 +82,9 @@ public final class CompleteOneOfScalar extends SingleScalar {
         out += String.format(" %s[%d]", val.val, val.cnt);
       }
       return out;
-    } else return format_unimplemented(format);
+    } else {
+      return format_unimplemented(format);
+    }
   }
 
   /** Check to see if a only contains printable ascii characters **/

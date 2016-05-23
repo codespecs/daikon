@@ -211,6 +211,10 @@ suggestions, and the like.  If you are an active contributor to Daikon,
 you may send mail to the list asking to be added.
 @end table
 
+Do @emph{not} send the same message to multiple mailing lists.  Doing so is
+antisocial:  it causes confusion and extra work.  If you do so, your
+question will not be answered.
+
 
 @node    Installing Daikon
 @chapter Installing Daikon

@@ -52,7 +52,7 @@ public final class StackTypes {
 
   /** Returns the stack contents at the specified offset **/
   public OperandStack get(int offset) {
-    return (os_arr[offset]);
+    return os_arr[offset];
   }
 
   /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied StackTypes this*/) {

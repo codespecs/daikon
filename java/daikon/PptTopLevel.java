@@ -233,7 +233,7 @@ public class PptTopLevel extends Ppt {
         splitter_index++;
         ppts_index = 0;
       }
-      return (ppt);
+      return ppt;
     }
 
     public void remove() {
@@ -963,7 +963,9 @@ public class PptTopLevel extends Ppt {
       for (PptSplitter ppt_split : splitters) {
         ppt_split.add_bottom_up(vt, count);
       }
-      if (Daikon.use_dataflow_hierarchy) return (null);
+      if (Daikon.use_dataflow_hierarchy) {
+        return null;
+      }
     }
 
     // If we are not using the hierarchy and this is a numbered exit, also
@@ -1151,7 +1153,7 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    return (weakened_invs);
+    return weakened_invs;
   }
 
   /**
@@ -1195,7 +1197,7 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    return (weakened_invs);
+    return weakened_invs;
   }
 
   /**
@@ -1284,7 +1286,7 @@ public class PptTopLevel extends Ppt {
       PptSlice slice = j.next();
       inv_cnt += slice.invs.size();
     }
-    return (inv_cnt);
+    return inv_cnt;
   }
 
   /** Returns the number of slices that contain one or more constants. **/
@@ -1301,7 +1303,7 @@ public class PptTopLevel extends Ppt {
         }
       }
     }
-    return (const_cnt);
+    return const_cnt;
   }
 
   /** Returns the number of invariants that contain one or more constants. **/
@@ -1318,7 +1320,7 @@ public class PptTopLevel extends Ppt {
         }
       }
     }
-    return (const_cnt);
+    return const_cnt;
   }
 
   static class Cnt {
@@ -1397,7 +1399,7 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    return (inv_map);
+    return inv_map;
   }
 
   /** Returns the number of slices at this ppt. **/
@@ -1637,7 +1639,9 @@ public class PptTopLevel extends Ppt {
   public /*@Nullable*/ Invariant find_inv_by_class(VarInfo[] vis, Class<? extends Invariant> cls) {
 
     PptSlice slice = findSlice(vis);
-    if (slice == null) return (null);
+    if (slice == null) {
+      return null;
+    }
     return slice.find_inv_by_class(cls);
   }
 
@@ -1680,7 +1684,7 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    return (assignment_invs);
+    return assignment_invs;
   }
 
   /**
@@ -1693,7 +1697,7 @@ public class PptTopLevel extends Ppt {
     PptSlice slice = findSlice(v);
     if (slice == null) slice = new PptSlice1(this, v);
 
-    return (slice);
+    return slice;
   }
 
   /**
@@ -1713,7 +1717,7 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    return (slice);
+    return slice;
   }
 
   /**
@@ -1726,19 +1730,19 @@ public class PptTopLevel extends Ppt {
 
     // If there is no proto invariant, we can't look for it.  This happens
     // if the invariant is not enabled.
-    if (proto == null) return (null);
+    if (proto == null) return null;
 
     // Get the slice and instantiate the possible antecedent oer it
     PptSlice slice = get_temp_slice(v);
     Invariant antecedent_inv = proto.instantiate(slice);
-    if (antecedent_inv == null) return (null);
+    if (antecedent_inv == null) return null;
 
     // Check to see if the antecedent is true
     if (slice.is_inv_true(antecedent_inv)) {
       return new DiscardInfo(imp_inv, DiscardCode.obvious, "Implied by " + antecedent_inv.format());
     }
 
-    return (null);
+    return null;
   }
 
   /**
@@ -1752,7 +1756,7 @@ public class PptTopLevel extends Ppt {
     VarInfo leader = v.canonicalRep();
 
     DiscardInfo di = check_implied(imp_inv, leader, proto);
-    if (di == null) return (null);
+    if (di == null) return null;
 
     // Build a new discardString that includes the variable equality
     String reason = di.discardString();
@@ -1770,12 +1774,12 @@ public class PptTopLevel extends Ppt {
 
     // If there is no prototype invariant, we can't look for it.  This happens
     // if the invariant is not enabled.
-    if (proto == null) return (null);
+    if (proto == null) return null;
 
     // Get the slice and instantiate the possible antecedent oer it
     PptSlice slice = get_temp_slice(v1, v2);
     Invariant antecedent_inv = proto.instantiate(slice);
-    if (antecedent_inv == null) return (null);
+    if (antecedent_inv == null) return null;
 
     // Permute the antecedent if necessary
     if (v1.varinfo_index > v2.varinfo_index) antecedent_inv = antecedent_inv.permute(permute_swap);
@@ -1785,7 +1789,7 @@ public class PptTopLevel extends Ppt {
       return new DiscardInfo(imp_inv, DiscardCode.obvious, "Implied by " + antecedent_inv.format());
     }
 
-    return (null);
+    return null;
   }
 
   public boolean check_implied(
@@ -1810,10 +1814,10 @@ public class PptTopLevel extends Ppt {
     VarInfo leader2 = v2.canonicalRep();
 
     DiscardInfo di = check_implied(imp_inv, leader1, leader2, proto);
-    if (di == null) return (null);
+    if (di == null) return null;
 
     // If the variables match the leader, the current reason is good
-    if ((leader1 == v1) && (leader2 == v2)) return (di);
+    if ((leader1 == v1) && (leader2 == v2)) return di;
 
     // Build a new discardString that includes the variable equality
     String reason = di.discardString();
@@ -1996,7 +2000,7 @@ public class PptTopLevel extends Ppt {
       System.out.printf(
           "Searched for invariant %s, found = %b", (inv == null) ? "null" : inv.format(), found);
     }
-    return (found);
+    return found;
   }
 
   /**
@@ -2421,7 +2425,9 @@ public class PptTopLevel extends Ppt {
     VarInfo prev = vis[0];
     for (int i = 1; i < vis.length; i++) {
       if ((prev != null) && (vis[i] != null)) {
-        if (vis[i].varinfo_index < prev.varinfo_index) return false;
+        if (vis[i].varinfo_index < prev.varinfo_index) {
+          return false;
+        }
       }
       if (vis[i] != null) prev = vis[i];
     }
@@ -2935,7 +2941,9 @@ public class PptTopLevel extends Ppt {
         for (Lemma problem : problems) {
           if (demerits.containsKey(problem)) {
             demerits.put(problem, new Integer(demerits.get(problem).intValue() + 1));
-          } else demerits.put(problem, new Integer(1));
+          } else {
+            demerits.put(problem, new Integer(1));
+          }
         }
         int max_demerits = -1;
         Vector<Lemma> worst = new Vector<Lemma>();
@@ -3333,7 +3341,7 @@ public class PptTopLevel extends Ppt {
    */
   public String equality_sets_txt() {
 
-    if (equality_view == null) return ("null");
+    if (equality_view == null) return "null";
 
     StringBuilderDelimited out = new StringBuilderDelimited(", ");
     for (Invariant inv : equality_view.invs) {
@@ -3358,7 +3366,9 @@ public class PptTopLevel extends Ppt {
   public boolean has_parent(VarInfo v) {
 
     for (PptRelation rel : parents) {
-      if (rel.parentVar(v) != null) return true;
+      if (rel.parentVar(v) != null) {
+        return true;
+      }
     }
 
     return false;
@@ -3555,7 +3565,9 @@ public class PptTopLevel extends Ppt {
           // Equivalent to emap.remove(...), but that could throw a
           // ConcurrentModificationException, so must remove via the iterator.
           j.remove();
-        } else curpair.samples += newpair.samples;
+        } else {
+          curpair.samples += newpair.samples;
+        }
       }
     }
     if (debugMerge.isLoggable(Level.FINE)) {
@@ -3812,7 +3824,7 @@ public class PptTopLevel extends Ppt {
         pv = rel.parentVar(cv);
         if (pv != null) break;
       }
-      if (pv == null) return (null);
+      if (pv == null) return null;
 
       // Make sure that the parent equality set is a subset of the child
       // equality set
@@ -3841,7 +3853,7 @@ public class PptTopLevel extends Ppt {
       // assert !pv.missingOutOfBounds();
     }
     pvis = castNonNullDeep(pvis); // issue 154
-    return (pvis);
+    return pvis;
   }
 
   /**
@@ -4036,7 +4048,7 @@ public class PptTopLevel extends Ppt {
       assert vis1[j] == vis2[permute[j]];
     }
 
-    return (permute);
+    return permute;
   }
 
   /** Debug print slice/inv count information to the specified logger **/
@@ -4095,7 +4107,7 @@ public class PptTopLevel extends Ppt {
     } else {
       if (newSlice.invs.size() == 0) newSlice.parent.removeSlice(newSlice);
     }
-    return (newSlice);
+    return newSlice;
   }
 
   /**

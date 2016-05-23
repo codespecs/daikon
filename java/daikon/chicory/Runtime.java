@@ -368,7 +368,9 @@ public class Runtime {
    * @param className fully qualified class name
    */
   public static void initNotify(String className) {
-    assert !initSet.contains(className) : className + " already exists in initSet";
+    if (initSet.contains(className)) {
+      throw new Error("initNotify(" + className + ") when initSet already contains " + className);
+    }
 
     //System.out.println("initialized ---> " + name);
     initSet.add(className);
@@ -679,7 +681,9 @@ public class Runtime {
           assert cinfo.clazz != null
               : "@AssumeAssertion(nullness): checker bug: flow problem (postcondition)";
 
-          if (cinfo.clazz.equals(type)) return cinfo;
+          if (cinfo.clazz.equals(type)) {
+            return cinfo;
+          }
         }
       }
     } catch (ConcurrentModificationException e) {

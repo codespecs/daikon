@@ -233,7 +233,9 @@ public class LemmaStack {
    * (inclusive) are true. */
   private static boolean allTrue(boolean[] bools, int min, int max) {
     for (int i = min; i <= max; i++) {
-      if (!bools[i]) return false;
+      if (!bools[i]) {
+        return false;
+      }
     }
     return true;
   }
@@ -300,7 +302,9 @@ public class LemmaStack {
       // If known and exclude are disjoint, return
       Set<Class<? extends Invariant>> exclude2 = new HashSet<Class<? extends Invariant>>(exclude);
       exclude2.retainAll(known);
-      if (exclude2.isEmpty()) return;
+      if (exclude2.isEmpty()) {
+        return;
+      }
     }
     int mark = markLevel();
     Vector<Lemma> filtered = filterByClass(lems, exclude);

@@ -182,9 +182,9 @@ public class InvDef {
     Invariant inv = ppt.find_inv_by_class(vis, inv_class);
 
     if ((inv != null) && check(inv)) {
-      return (inv);
+      return inv;
     } else {
-      return (null);
+      return null;
     }
   }
 }

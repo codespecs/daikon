@@ -302,7 +302,9 @@ public class TraceSelect {
       product.append(strFileName.substring(0, index));
       product.append(num_reps);
       if (index != strFileName.length()) product.append(strFileName.substring(index));
-    } else product.append(strFileName).append("2");
+    } else {
+      product.append(strFileName).append("2");
+    }
     return product.toString();
   }
 }

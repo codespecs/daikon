@@ -57,7 +57,9 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
       return ProglangType.INT;
     } else if ((vi1.rep_type == ProglangType.INT) && (vi2.rep_type == ProglangType.INT)) {
       return ProglangType.INT_ARRAY;
-    } else return null;
+    } else {
+      return null;
+    }
   }
 
   /**

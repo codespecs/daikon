@@ -85,7 +85,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   /** Returns the prototype invariant for CNAME(FUNCTION,PERM_NAME) **/
   public static /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** instantiate an invariant on the specified slice **/
@@ -104,13 +104,13 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   private static String[] method_name = new String[] METHOD_NAME;
 
   public String[] get_method_name (/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
-    return (method_name);
+    return method_name;
   }
 
   private static int function_id = -1;
 
   public int get_function_id() {
-    return (function_id);
+    return function_id;
   }
 
   public void set_function_id (int function_id) {
@@ -186,9 +186,9 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     if (NIS.dkconfig_enabled && dkconfig_enabled) {
-      return (suppressions);
+      return suppressions;
     } else {
-      return (null);
+      return null;
     }
   }
 

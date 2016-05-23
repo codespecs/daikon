@@ -117,7 +117,7 @@ public final class CLASSNAME
 
   /** Returns the prototype invariant for CLASSNAME **/
   public static /*@Prototype*/ CLASSNAME get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** Returns whether or not this invariant is enabled **/
@@ -276,7 +276,9 @@ public final class CLASSNAME
 
   /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
 
-    if (format.isJavaFamily()) return format_java_family(format);
+    if (format.isJavaFamily()) {
+      return format_java_family(format);
+    }
 
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
@@ -362,7 +364,7 @@ public final class CLASSNAME
       debug.fine ("Member destroyed:  " + format() + " because " + i +
                   " not in " + ArraysMDE.toString(a));
     }
-    return (is);
+    return is;
   }
 
   protected double computeConfidence() {
@@ -398,16 +400,16 @@ public final class CLASSNAME
     // Check for subscript in subsequence
     DiscardInfo di = subscript_in_subsequence (vis);
     if (di != null) {
-      return (di);
+      return di;
     }
 
     // Check for (A subset B) ==> (A[i] member B)
     di = subset_in_subsequence (vis);
     if (di != null) {
-      return (di);
+      return di;
     }
 
-    return (null);
+    return null;
   }
 
   /*
@@ -450,7 +452,7 @@ public final class CLASSNAME
                              + "] member " + seq_var.name());
     }
 
-    return (null);
+    return null;
   }
 
   /*
@@ -468,7 +470,7 @@ public final class CLASSNAME
 
     // Both variables must be derived
     if ((scl_var.derived == null) || (seq_var.derived == null)) {
-      return (null);
+      return null;
     }
 
     // If the scalar is not SequenceScalarSubscript, there is nothing to check.
@@ -479,13 +481,13 @@ public final class CLASSNAME
 
     // If the sequence is not SequenceScalarSubsequence, nothing to check
     if (!(seq_var.derived instanceof SEQ_SUBSEQUENCE)) {
-      return (null);
+      return null;
     }
     SEQ_SUBSEQUENCE ssss = (SEQ_SUBSEQUENCE) seq_var.derived;
 
     // Both variables must be derived from equal sequences
     if (!ppt.parent.is_equal (sssc.seqvar(), ssss.seqvar())) {
-      return (null);
+      return null;
     }
 
     // if a[i] in a[0..n], look for i <= n
@@ -512,7 +514,7 @@ public final class CLASSNAME
                      "i >= n ==> a[i] in a[n..] for "
                      + scl_var.name() + " and " + seq_var.name());
     }
-    return (null);
+    return null;
 
   }
 

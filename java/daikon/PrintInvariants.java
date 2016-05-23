@@ -645,7 +645,9 @@ public final class PrintInvariants {
             + lineSep;
 
     // Will print all discarded Invariants in this case
-    if (arg == null || arg.length() == 0 || arg.equals("all")) return;
+    if (arg == null || arg.length() == 0 || arg.equals("all")) {
+      return;
+    }
 
     // User wishes to specify a classname for the discarded Invariants of
     // interest
@@ -804,7 +806,9 @@ public final class PrintInvariants {
     debugPrint.fine("Considering printing ppt " + ppt.name() + ", samples = " + ppt.num_samples());
 
     // Skip this ppt if it doesn't match ppt regular expression
-    if ((ppt_regexp != null) && !ppt_regexp.matcher(ppt.name()).find()) return;
+    if ((ppt_regexp != null) && !ppt_regexp.matcher(ppt.name()).find()) {
+      return;
+    }
 
     // Skip this ppt if it is an ENTER ppt with a non-object parent
     if (!dkconfig_print_implementer_entry_ppts && ppt.is_enter()) {
@@ -899,7 +903,9 @@ public final class PrintInvariants {
       for (int i = 0; i < ppt.var_infos.length; i++) {
         if (dkconfig_old_array_names && FileIO.new_decl_format) {
           out.print(" " + ppt.var_infos[i].name().replace("[..]", "[]"));
-        } else out.print(" " + ppt.var_infos[i].name());
+        } else {
+          out.print(" " + ppt.var_infos[i].name());
+        }
       }
       out.println();
     }
@@ -1139,7 +1145,9 @@ public final class PrintInvariants {
    */
   public static String parse_csharp_invariant_variable(VarInfo varInfo, boolean sort) {
     // Do not ever want to sort by old value.
-    if (varInfo.postState != null) return parse_csharp_invariant_variable(varInfo.postState, sort);
+    if (varInfo.postState != null) {
+      return parse_csharp_invariant_variable(varInfo.postState, sort);
+    }
 
     // Do not ever want to sort by function.
     if (varInfo.var_kind == VarInfo.VarKind.FUNCTION

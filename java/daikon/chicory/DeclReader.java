@@ -224,7 +224,7 @@ public class DeclReader {
           new DeclVarInfo(
               name.intern(), type.intern(), rep_type.intern(), comparability.intern(), vars.size());
       vars.put(name, var);
-      return (var);
+      return var;
     }
 
     /**
@@ -310,7 +310,7 @@ public class DeclReader {
       line = decl_file.readLine();
     }
 
-    return (ppt);
+    return ppt;
   }
 
   public void dump_decl() {

@@ -102,7 +102,7 @@ public class SUBSET
 
   /** Returns the prototype invariant for SUBSET **/
   public static /*@Prototype*/ SUBSET get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -391,7 +391,7 @@ public class SUBSET
         });
     }
 
-    return (suppressions);
+    return suppressions;
   }
 
 }

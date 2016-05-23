@@ -224,7 +224,9 @@ public class NISuppressor {
     assert v1_index != -1;
 
     // If the underlying invariant is not enabled, we can't possibly be true
-    if (!is_enabled()) return (state = NIS.SuppressState.INVALID);
+    if (!is_enabled()) {
+      return (state = NIS.SuppressState.INVALID);
+    }
 
     if (Debug.logDetail() && NIS.debug.isLoggable(Level.FINE)) {
       NIS.debug.fine(
@@ -454,7 +456,7 @@ public class NISuppressor {
       if (!swap_class) {
         BinaryInvariant binv = (BinaryInvariant) sse.sample_inv;
         boolean match = (binv.is_symmetric() || (swap == binv.get_swap()));
-        return (match);
+        return match;
       }
       return true;
     }
@@ -482,15 +484,15 @@ public class NISuppressor {
   /** Returns the variable index that corresponds to index **/
   private int translate_index(int index) {
 
-    if (index == 0) return (v1_index);
-    else if (index == 1) return (v2_index);
-    else if (index == 2) return (v3_index);
-    else return (index);
+    if (index == 0) return v1_index;
+    else if (index == 1) return v2_index;
+    else if (index == 2) return v3_index;
+    else return index;
   }
 
   /** Returns the invariant class of this suppressor **/
   public Class<? extends Invariant> get_inv_class() {
-    return (inv_class);
+    return inv_class;
   }
 
   /** clears the state of this suppressor to NIS.none **/

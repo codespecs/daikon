@@ -124,7 +124,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * (which would require a first pass).
    **/
   public boolean missingOutOfBounds() {
-    return (missing_array_bounds);
+    return missing_array_bounds;
   }
 
   /* *
@@ -224,7 +224,9 @@ public abstract class Derivation implements Serializable, Cloneable {
     VarInfo[] base1 = getBases();
     VarInfo[] base2 = d.getBases();
     for (int ii = 0; ii < base1.length; ii++) {
-      if (!base1[ii].is_prestate_version(base2[ii])) return false;
+      if (!base1[ii].is_prestate_version(base2[ii])) {
+        return false;
+      }
     }
 
     // The derivations must have the same formula (offset, start_from, etc)
@@ -246,7 +248,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   protected String shift_str(int shift) {
     String shift_str = "";
     if (shift != 0) shift_str = String.format("%+d", shift);
-    return (shift_str);
+    return shift_str;
   }
 
   /**
@@ -264,7 +266,9 @@ public abstract class Derivation implements Serializable, Cloneable {
       } else {
         return String.format("\\new(%s)%s", vi.esc_name(), shift_str(shift));
       }
-    } else return vi.esc_name() + shift_str(shift);
+    } else {
+      return vi.esc_name() + shift_str(shift);
+    }
   }
 
   /**
@@ -282,7 +286,9 @@ public abstract class Derivation implements Serializable, Cloneable {
       } else {
         return String.format("\\new(%s)%s", vi.jml_name(), shift_str(shift));
       }
-    } else return vi.jml_name() + shift_str(shift);
+    } else {
+      return vi.jml_name() + shift_str(shift);
+    }
   }
 
   /**
@@ -301,6 +307,8 @@ public abstract class Derivation implements Serializable, Cloneable {
         // return String.format ("\\new(%s)%s", vi.csharp_name(), shift_str(shift));
         return String.format("%s%s", vi.csharp_name(), shift_str(shift));
       }
-    } else return vi.csharp_name() + shift_str(shift);
+    } else {
+      return vi.csharp_name() + shift_str(shift);
+    }
   }
 }

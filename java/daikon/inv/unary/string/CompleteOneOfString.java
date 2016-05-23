@@ -66,7 +66,7 @@ public final class CompleteOneOfString extends SingleString {
 
   /** Returns the prototype invariant for CompleteOneOFString **/
   public static /*@Prototype*/ CompleteOneOfString get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -84,14 +84,18 @@ public final class CompleteOneOfString extends SingleString {
   /*@SideEffectFree*/ public String format_using(
       /*>>>@GuardSatisfied CompleteOneOfString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
-      if (vals.size() == 0) return var().name() + "has no values";
+      if (vals.size() == 0) {
+        return var().name() + "has no values";
+      }
       StringBuilder out = new StringBuilder(vals.get(0).val.length() * vals.size());
       out.append(var().name() + " has values: ");
       for (Info val : vals) {
         out.append(String.format(" %s[%d]", val.val, val.cnt));
       }
       return out.toString();
-    } else return format_unimplemented(format);
+    } else {
+      return format_unimplemented(format);
+    }
   }
 
   /** Check to see if a only contains printable ascii characters **/

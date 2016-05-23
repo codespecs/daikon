@@ -242,7 +242,7 @@ public final class StackVer {
    * after do_stack_ver() is called.
    */
   public StackTypes get_stack_types() {
-    return (stack_types);
+    return stack_types;
   }
 
   /**

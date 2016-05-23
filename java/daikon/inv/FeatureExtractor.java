@@ -180,7 +180,9 @@ public final class FeatureExtractor {
         File output = new File(output_file + ".data");
         File names = new File(output_file + ".names");
         printC5Output(usefulFeatures, nonusefulFeatures, output, names, lookup);
-      } else System.err.println("Invalid Output Type: " + output_type);
+      } else {
+        System.err.println("Invalid Output Type: " + output_type);
+      }
     }
   }
 
@@ -292,7 +294,9 @@ public final class FeatureExtractor {
         name = ((Class<?>) key).getName() + "Bool";
       } else if (key instanceof String) {
         name = (String) key;
-      } else throw new RuntimeException(key + " object cannot be converted to " + "a feature.");
+      } else {
+        throw new RuntimeException(key + " object cannot be converted to " + "a feature.");
+      }
       numbersToNames.put(pair, name);
     }
 
@@ -321,7 +325,9 @@ public final class FeatureExtractor {
                   + currentName
                   + lineSep);
         }
-      } else throw new IOException("Feature " + current.number + " not included in .names file");
+      } else {
+        throw new IOException("Feature " + current.number + " not included in .names file");
+      }
       //names.println(current.number + ": continuous.");
     }
     names.println("|End of .names file");
@@ -532,7 +538,9 @@ public final class FeatureExtractor {
     Object o = UtilMDE.readObject(file);
     if (o instanceof InvMap) {
       return (InvMap) o;
-    } else throw new ClassNotFoundException("inv file does not contain InvMap");
+    } else {
+      throw new ClassNotFoundException("inv file does not contain InvMap");
+    }
   }
 
   // Calculate a HashMap of every feature to a unique integer.
@@ -754,7 +762,9 @@ public final class FeatureExtractor {
       if (o instanceof IntDoublePair) {
         IntDoublePair other = (IntDoublePair) o;
         return ((number == other.number) && (value == other.value));
-      } else return false;
+      } else {
+        return false;
+      }
     }
 
     //returns a valid hashCode
@@ -904,7 +914,9 @@ public final class FeatureExtractor {
         }
         if (posvectors.size() > negvectors.size()) {
           negrepeat = posvectors.size() / negvectors.size();
-        } else posrepeat = negvectors.size() / posvectors.size();
+        } else {
+          posrepeat = negvectors.size() / posvectors.size();
+        }
       }
 
       // Print the output to the output file.
@@ -1000,7 +1012,9 @@ public final class FeatureExtractor {
           if (type.equals("C5")) {
             if (vector.indexOf("bad") > -1) {
               testBad.add(vector.substring(0, vector.lastIndexOf("bad")));
-            } else testGood.add(vector.substring(0, vector.lastIndexOf("good")));
+            } else {
+              testGood.add(vector.substring(0, vector.lastIndexOf("good")));
+            }
           } else if (type.equals("SVMfu")) {
             int posind = vector.lastIndexOf("1");
             int negind = vector.lastIndexOf("-1");
