@@ -7,6 +7,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -32,11 +33,11 @@ public final class SequencesConcat extends BinaryDerivation {
    **/
   public static boolean dkconfig_enabled = false;
 
-  public VarInfo var1() {
+  public VarInfo var1(/*>>>@GuardSatisfied SequencesConcat this*/) {
     return base1;
   }
 
-  public VarInfo var2() {
+  public VarInfo var2(/*>>>@GuardSatisfied SequencesConcat this*/) {
     return base2;
   }
 
@@ -95,7 +96,7 @@ public final class SequencesConcat extends BinaryDerivation {
     return VarInfo.make_function("concat", var1(), var2());
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SequencesConcat this*/) {
     return "[SequencesConcat of " + var1().name() + " " + var2().name() + "]";
   }
 

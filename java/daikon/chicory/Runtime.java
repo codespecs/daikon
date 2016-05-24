@@ -9,6 +9,7 @@ import java.util.zip.GZIPOutputStream;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -43,16 +44,19 @@ public class Runtime {
    * each enter/exit and the decl information for any new classes are
    * printed out and the class is then removed from the list.
    */
-  public static final List<ClassInfo> new_classes = new LinkedList<ClassInfo>();
+  public static final /*@GuardedBy("itself")*/ List<ClassInfo> new_classes =
+      new LinkedList<ClassInfo>();
 
   /** List of all instrumented classes **/
-  public static final List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
+  public static final /*@GuardedBy("itself")*/ List<ClassInfo> all_classes =
+      new ArrayList<ClassInfo>();
 
   /** flag that indicates when the first class has been processed**/
   static boolean first_class = true;
 
   /** List of all instrumented methods **/
-  public static final List<MethodInfo> methods = new ArrayList<MethodInfo>();
+  public static final /*@GuardedBy("Runtime.class")*/ List<MethodInfo> methods =
+      new ArrayList<MethodInfo>();
 
   //
   // Control over what classes (ppts) are instrumented
@@ -91,7 +95,7 @@ public class Runtime {
   // Not annotated *@MonotonicNonNull* because initialization and use
   // happen in generated instrumentation code that cannot be type-checked
   // by a source code checker.
-  static PrintStream dtrace;
+  static /*@GuardedBy("itself")*/ PrintStream dtrace;
 
   /** Set to true when the dtrace stream is closed **/
   static boolean dtrace_closed = false;
@@ -107,7 +111,7 @@ public class Runtime {
 
   /** Dtrace writer setup for writing to the trace file **/
   // Set in ChicoryPremain.premain().
-  static DTraceWriter dtrace_writer;
+  static /*@GuardedBy("Runtime.class")*/ DTraceWriter dtrace_writer;
 
   /**
    * Which static initializers have been run.
@@ -122,6 +126,7 @@ public class Runtime {
     /** whether or not the call was captured on enter **/
     boolean captured;
 
+    /*@Holding("Runtime.class")*/
     public CallInfo(int nonce, boolean captured) {
       this.nonce = nonce;
       this.captured = captured;
@@ -129,7 +134,7 @@ public class Runtime {
   }
 
   /** Stack of active methods. **/
-  private static Map<Thread, Stack<CallInfo>> thread_to_callstack =
+  private static /*@GuardedBy("Runtime.class")*/ Map<Thread, Stack<CallInfo>> thread_to_callstack =
       new LinkedHashMap<Thread, Stack<CallInfo>>();
 
   /**
@@ -166,16 +171,24 @@ public class Runtime {
   // information about that call to the trace file.  However, if the
   // method is a pure method that is being called to create a value for
   // the trace file, don't record it.
+  // TODO: invokingPure should be annotated with @GuardedByName("Runtime.class")
+  // once that annotation is available.  Currently all the methods that access
+  // invokingPure are annotated with @Holding("Runtime.class"), but annotating
+  // the boolean would prevent any new methods from accessing it without holding
+  // the lock.
   private static boolean invokingPure = false;
 
+  /*@Holding("Runtime.class")*/
   public static boolean dontProcessPpts() {
     return invokingPure;
   }
 
+  /*@Holding("Runtime.class")*/
   public static void startPure() {
     invokingPure = true;
   }
 
+  /*@Holding("Runtime.class")*/
   public static void endPure() {
     invokingPure = false;
   }
@@ -384,6 +397,7 @@ public class Runtime {
    * Writes out decl information for any new classes and removes
    * them from the list.
    */
+  /*@Holding("Runtime.class")*/
   public static void process_new_classes() {
 
     // Processing of the new_classes list must be
@@ -441,7 +455,18 @@ public class Runtime {
     // The incrementRecords method (which calls this) is called inside a
     // synchronized block, but re-synchronize just to be sure, or in case
     // this is called from elsewhere.
-    synchronized (Runtime.dtrace) {
+
+    // Runtime.dtrace should be effectively final in that it refers
+    // to the same value throughout the execution of the synchronized
+    // block below (including the lock acquisition).
+    // Unfortunately, the Lock Checker cannot verify this,
+    // so a final local variable is used to satisfy the Lock Checker's
+    // requirement that all variables used as locks be final or
+    // effectively final.  If a bug exists whereby Runtime.dtrace
+    // is not effectively final, this would unfortunately mask that error.
+    final /*@GuardedBy("itself")*/ PrintStream dtrace = Runtime.dtrace;
+
+    synchronized (dtrace) {
       // The shutdown hook is synchronized on this, so close it up
       // ourselves, lest the call to System.exit cause deadlock.
       dtrace.println();
@@ -584,6 +609,8 @@ public class Runtime {
     java.lang.Runtime.getRuntime()
         .addShutdownHook(
             new Thread() {
+              @SuppressWarnings(
+                  "lock") // TODO: Fix Checker Framework issue 523 and remove this @SuppressWarnings.
               public void run() {
                 if (!dtrace_closed) {
                   // When the program being instrumented exits, the buffers
@@ -701,7 +728,7 @@ public class Runtime {
     public BooleanWrap(boolean val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied BooleanWrap this*/) {
       return Boolean.toString(val);
     }
 
@@ -721,7 +748,7 @@ public class Runtime {
     public ByteWrap(byte val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ByteWrap this*/) {
       return Byte.toString(val);
     }
 
@@ -742,7 +769,7 @@ public class Runtime {
       this.val = val;
     }
     // Print characters as integers.
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CharWrap this*/) {
       return Integer.toString(val);
     }
 
@@ -762,7 +789,7 @@ public class Runtime {
     public FloatWrap(float val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied FloatWrap this*/) {
       return Float.toString(val);
     }
 
@@ -782,7 +809,7 @@ public class Runtime {
     public IntWrap(int val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied IntWrap this*/) {
       return Integer.toString(val);
     }
 
@@ -802,7 +829,7 @@ public class Runtime {
     public LongWrap(long val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied LongWrap this*/) {
       return Long.toString(val);
     }
 
@@ -822,7 +849,7 @@ public class Runtime {
     public ShortWrap(short val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ShortWrap this*/) {
       return Short.toString(val);
     }
 
@@ -842,7 +869,7 @@ public class Runtime {
     public DoubleWrap(double val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DoubleWrap this*/) {
       return Double.toString(val);
     }
 

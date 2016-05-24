@@ -103,7 +103,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   private static String[] method_name = new String[] METHOD_NAME;
 
-  public String[] get_method_name () {
+  public String[] get_method_name (/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
     return method_name;
   }
 
@@ -120,7 +120,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   private static int var_order = PERMUTATION;
 
-  public int get_var_order() {
+  public int get_var_order(/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
     return var_order;
   }
 

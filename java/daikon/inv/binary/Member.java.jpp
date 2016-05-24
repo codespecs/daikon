@@ -75,6 +75,7 @@ import java.util.logging.Level;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -268,12 +269,12 @@ public final class CLASSNAME
     return false;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return "Member" + varNames() + ": "
       + "falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) {
       return format_java_family(format);
@@ -294,7 +295,7 @@ public final class CLASSNAME
     }
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String sclname = sclvar().name();
     String seqname = seqvar().name();
     return sclname + " in " + seqname;
@@ -306,27 +307,27 @@ public final class CLASSNAME
       + " , " + seqvar().name() + " ) == true ) ";
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     String sclname = sclvar().name_using(format);
     String seqname = seqvar().name_using(format);
     return "daikon.Quant.memberOf(" + sclname
       + " , " + seqname + " )";
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied CLASSNAME this*/) {
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
     String[] form = VarInfo.esc_quantify (seqvar(), sclvar());
     return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String sclname = sclvar().csharp_name();
     String[] split = seqvar().csharp_array_split();
     return "Contract.Exists(" + split[0] + ", x => x" + split[1] + ".Equals(" + sclname + "))";
   }
 
 #ifdef IS_SCALAR
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
     if (Invariant.dkconfig_simplify_define_predicates) {
       String[] seq_name = seqvar().simplifyNameAndBounds();
       String scalar_name = sclvar().simplify_name();

@@ -7,6 +7,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -438,21 +439,25 @@ public class PptName implements Serializable {
   // ==================== OBJECT METHODS ====================
 
   /* @return interned string such that this.equals(new PptName(this.toString())) */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptName this*/) {
     return fullname;
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals(
+      /*>>>@GuardSatisfied PptName this,*/
+      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     return (o instanceof PptName) && equals((PptName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(PptName o) {
+  /*@Pure*/ public boolean equals(
+      /*>>>@GuardSatisfied PptName this,*/
+      /*@GuardSatisfied*/ PptName o) {
     return (o != null) && (o.fullname == fullname);
   }
 
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied PptName this*/) {
     return fullname.hashCode();
   }
 

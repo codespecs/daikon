@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -63,8 +64,8 @@ public final class CLASSNAME
    **/
   public static boolean dkconfig_enabled = false;
 
-  public VarInfo var1() { return base1; }
-  public VarInfo var2() { return base2; }
+  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) { return base1; }
+  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) { return base2; }
 
 
   /**
@@ -204,7 +205,7 @@ public final class CLASSNAME
     return vi;
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return "[" + CLASSSTRING + " of " + var1().name() + " " + var2().name()
       + "]";
   }

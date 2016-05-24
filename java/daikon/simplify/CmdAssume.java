@@ -1,6 +1,7 @@
 package daikon.simplify;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -18,7 +19,7 @@ public class CmdAssume implements Cmd {
   }
 
   /** For documentation, read the class overview. */
-  public void apply(Session s) {
+  public void apply(final /*@GuardedBy("itself")*/ Session s) {
 
     synchronized (s) {
       // send out the (BG_PUSH proposition)
@@ -32,7 +33,7 @@ public class CmdAssume implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdAssume this*/) {
     return "CmdAssume: " + proposition;
   }
 }

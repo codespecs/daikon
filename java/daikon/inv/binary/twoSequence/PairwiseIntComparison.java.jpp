@@ -207,6 +207,7 @@ import java.util.logging.Level;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -410,7 +411,7 @@ public class PAIRWISEINTEQUAL
   }
 #endif
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
     return PAIRWISEINTEQUALstring + varNames() + ": ";
   }
 
@@ -418,7 +419,7 @@ public class PAIRWISEINTEQUAL
     return EQUALSstring;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -430,28 +431,28 @@ public class PAIRWISEINTEQUAL
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
     return var1().name() + " " + EQUALSstring + " " + var2().name()
       + " (elementwise)";
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
     String[] form = VarInfo.esc_quantify (var1(), var2());
     return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")" + form[3];
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
     String[] form = VarInfo.simplify_quantify (QuantFlags.element_wise(),
                                                var1(), var2());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this,*/ OutputFormat format) {
     return "daikon.Quant." + EQUALSstringDBC + "(" + var1().name_using(format)
       + ", " + var2().name_using(format) + ")";
   }
 
-  public String format_csharp() {
+  public String format_csharp(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
 
     String[] split1 = var1().csharp_array_split();
     String[] split2 = var2().csharp_array_split();

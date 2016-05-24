@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -487,7 +488,7 @@ public class DeclWriter extends DaikonWriter {
       this(parent_ppt_name, type, null, null, null);
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarRelation this*/) {
       return String.format(
           "VarRelation %s (%s->%s) %s [%s]",
           parent_ppt_name,
@@ -525,7 +526,9 @@ public class DeclWriter extends DaikonWriter {
      */
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals(
+        /*>>>@GuardSatisfied VarRelation this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (!(o instanceof VarRelation) || (o == null)) {
         return false;
       }
@@ -536,7 +539,7 @@ public class DeclWriter extends DaikonWriter {
     }
 
     @Override
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarRelation this*/) {
       return (parent_ppt_name.hashCode()
           + ((local_variable == null) ? 0 : local_variable.hashCode()));
     }

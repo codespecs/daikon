@@ -5,6 +5,7 @@ import daikon.derive.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -42,7 +43,8 @@ public abstract class TernaryDerivation extends Derivation {
     base3 = vi3;
   }
 
-  /*@SideEffectFree*/ public TernaryDerivation clone() {
+  /*@SideEffectFree*/ public TernaryDerivation clone(
+      /*>>>@GuardSatisfied TernaryDerivation this*/) {
     try {
       return (TernaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {

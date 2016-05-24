@@ -3,6 +3,7 @@ package daikon.split;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -59,7 +60,7 @@ class ReplaceStatementMap {
   }
 
   /** For debugging only. **/
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ReplaceStatementMap this*/) {
     return map.toString();
   }
 }

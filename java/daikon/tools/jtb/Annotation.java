@@ -5,6 +5,7 @@ import java.util.regex.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -59,19 +60,19 @@ public class Annotation {
   /** Daikon representation (as output by Daikon's default output format). */
   private final String daikonRep;
   /** The way this annotation would be printed by Daikon. */
-  public String daikonRep() {
+  public String daikonRep(/*>>>@GuardSatisfied Annotation this*/) {
     return daikonRep;
   }
 
   private final String method;
   /** The method that this annotation refers to. */
-  public String method() {
+  public String method(/*>>>@GuardSatisfied Annotation this*/) {
     return method;
   }
 
   private final Kind kind;
   /** The kind of this annotation. */
-  public Kind kind() {
+  public Kind kind(/*>>>@GuardSatisfied Annotation this*/) {
     return kind;
   }
 
@@ -242,10 +243,10 @@ public class Annotation {
       this.name = name;
       this.xmlname = xmlname;
     }
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
       return name.hashCode();
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Kind this*/) {
       return name;
     }
 
@@ -259,7 +260,7 @@ public class Annotation {
   }
 
   /** Easy-on-the-eye format. */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Annotation this*/) {
     return kind.toString() + " : " + daikonRep();
   }
 
@@ -268,7 +269,8 @@ public class Annotation {
    * and "kind" are equal.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(final /*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals(
+      /*>>>@GuardSatisfied Annotation this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o == null) {
       return false;
     }
@@ -281,7 +283,7 @@ public class Annotation {
         && (this.kind().equals(anno.kind())));
   }
 
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Annotation this*/) {
     return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
   }
 

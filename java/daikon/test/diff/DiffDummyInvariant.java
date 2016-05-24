@@ -6,6 +6,7 @@ import daikon.*;
 import daikon.inv.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -91,11 +92,12 @@ public class DiffDummyInvariant extends Invariant {
     return confidence;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied DiffDummyInvariant this*/) {
     return "DiffDummyInvariant(" + ppt.arity() + "," + formula + "," + confidence + ")";
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied DiffDummyInvariant this,*/ OutputFormat format) {
     return repr();
   }
 

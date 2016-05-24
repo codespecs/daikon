@@ -7,6 +7,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import typequals.*;
 */
@@ -44,7 +45,7 @@ public abstract class SingleScalarSequence extends SingleSequence {
   // Identical to superclass definition, and therefore gratuitious
   @Override
   public VarInfo var(
-      /*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleScalarSequence this*/) {
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleScalarSequence this*/) {
     return ppt.var_infos[0];
   }
 

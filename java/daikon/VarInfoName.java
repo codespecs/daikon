@@ -18,6 +18,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -177,7 +178,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * default output format
    **/
   /*@Pure*/
-  public /*@Interned*/ String name() {
+  public /*@Interned*/ String name(/*>>>@GuardSatisfied VarInfoName this*/) {
     if (name_cached == null) {
       try {
         name_cached = name_impl().intern();
@@ -196,7 +197,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * format.  Result is not interned; the client (name()) does so, then
    * caches the interned value.
    */
-  protected abstract String name_impl();
+  protected abstract String name_impl(/*>>>@GuardSatisfied VarInfoName this*/);
 
   /**
    * Return the String representation of this name in the esc style
@@ -399,7 +400,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /** @return the name, in a debugging format **/
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied VarInfoName this*/) {
     // AAD: Used to be interned for space reasons, but removed during
     // profiling when it was determined that the interns are unique
     // anyway.
@@ -412,7 +413,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   private String repr_cached = null;
 
   /** return the name in a verbose debugging format.  Cached by repr **/
-  protected abstract String repr_impl();
+  protected abstract String repr_impl(/*>>>@GuardSatisfied VarInfoName this*/);
 
   // It would be nice if a generalized form of the mechanics of
   // interning were abstracted out somewhere.
@@ -567,12 +568,16 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // The usual Object methods
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals(
+      /*>>>@GuardSatisfied VarInfoName this,*/
+      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     return (o instanceof VarInfoName) && equals((VarInfoName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(/*>>> @Interned VarInfoName this,*/ VarInfoName other) {
+  /*@Pure*/ public boolean equals(
+      /*>>>@GuardSatisfied @Interned VarInfoName this,*/
+      /*@GuardSatisfied*/ VarInfoName other) {
     return ((other == this) // "interned": equality optimization pattern
         || ((other != null) && (this.repr().equals(other.repr()))));
   }
@@ -580,11 +585,11 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // This should be safe even in the absence of caching, because "repr()"
   // returns a new string each time, but it is equal() to any other
   // returned string, so their hashCode()s should be the same.
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoName this*/) {
     return repr().hashCode();
   }
 
-  /*@Pure*/ public int compareTo(VarInfoName other) {
+  /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied VarInfoName this,*/ VarInfoName other) {
     int nameCmp = name().compareTo(other.name());
     if (nameCmp != 0) return nameCmp;
     int reprCmp = repr().compareTo(other.repr());
@@ -594,7 +599,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // This is a debugging method, not intended for ordinary output.
   // Code producing output should usually call name() rather than
   // calling toString (perhaps implicitly).
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfoName this*/) {
     return repr();
   }
 
@@ -636,11 +641,11 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied Simple this*/) {
       return name;
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied Simple this*/) {
       return name;
     }
 
@@ -815,11 +820,11 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.sequence = sequence;
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied SizeOf this*/) {
       return "SizeOf[" + sequence.repr() + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied SizeOf this*/) {
       return "size(" + sequence.name() + ")";
 
       // I'm not sure how to get this right; seems to require info about
@@ -953,11 +958,11 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.argument = argument;
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied FunctionOf this*/) {
       return "FunctionOf{" + function + "}[" + argument.repr() + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied FunctionOf this*/) {
       return function + "(" + argument.name() + ")";
     }
 
@@ -1035,7 +1040,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.function = function;
     }
 
-    private List<String> elts_repr() {
+    private List<String> elts_repr(/*>>>@GuardSatisfied FunctionOfN this*/) {
       List<String> elts = new ArrayList<String>(args.size());
       for (VarInfoName vin : args) {
         elts.add(vin.repr());
@@ -1043,15 +1048,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return elts;
     }
 
-    private String elts_repr_commas() {
+    private String elts_repr_commas(/*>>>@GuardSatisfied FunctionOfN this*/) {
       return UtilMDE.join(elts_repr(), ", ");
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied FunctionOfN this*/) {
       return "FunctionOfN{" + function + "}[" + elts_repr_commas() + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied FunctionOfN this*/) {
       return function + "(" + elts_repr_commas() + ")";
     }
 
@@ -1202,11 +1207,11 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.field = field;
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied Field this*/) {
       return "Field{" + field + "}[" + term.repr() + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied Field this*/) {
       return term.name() + "." + field;
     }
 
@@ -1420,11 +1425,11 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.term = term;
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied TypeOf this*/) {
       return "TypeOf[" + term.repr() + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied TypeOf this*/) {
       return term.name() + DaikonVariableInfo.class_suffix;
     }
 
@@ -1504,11 +1509,11 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.term = term;
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied Prestate this*/) {
       return "Prestate[" + term.repr() + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied Prestate this*/) {
       return "orig(" + term.name() + ")";
     }
 
@@ -1603,11 +1608,11 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.term = term;
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied Poststate this*/) {
       return "Poststate[" + term.repr() + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied Poststate this*/) {
       return "post(" + term.name() + ")";
     }
 
@@ -1670,15 +1675,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.amount = amount;
     }
 
-    private String amount() {
+    private String amount(/*>>>@GuardSatisfied Add this*/) {
       return (amount < 0) ? String.valueOf(amount) : "+" + amount;
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied Add this*/) {
       return "Add{" + amount() + "}[" + term.repr() + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied Add this*/) {
       return term.name() + amount();
     }
 
@@ -1754,15 +1759,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.term = term;
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied Elements this*/) {
       return "Elements[" + term.repr() + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied Elements this*/) {
       return name_impl("");
     }
 
-    protected String name_impl(String index) {
+    protected String name_impl(/*>>>@GuardSatisfied Elements this,*/ String index) {
       return term.name() + "[" + index + "]";
     }
 
@@ -1929,11 +1934,11 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.index = index;
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied Subscript this*/) {
       return "Subscript{" + index.repr() + "}[" + sequence.repr() + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied Subscript this*/) {
       return sequence.name_impl(index.name());
     }
 
@@ -2037,7 +2042,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       this.j = j;
     }
 
-    protected String repr_impl() {
+    protected String repr_impl(/*>>>@GuardSatisfied Slice this*/) {
       return "Slice{"
           + ((i == null) ? "" : i.repr())
           + ","
@@ -2047,7 +2052,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           + "]";
     }
 
-    protected String name_impl() {
+    protected String name_impl(/*>>>@GuardSatisfied Slice this*/) {
       return sequence.name_impl(
           "" + ((i == null) ? "0" : i.name()) + ".." + ((j == null) ? "" : j.name()));
     }
@@ -3006,7 +3011,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         super(name);
       }
 
-      protected String repr_impl() {
+      protected String repr_impl(/*>>>@GuardSatisfied FreeVar this*/) {
         return "Free[" + super.repr_impl() + "]";
       }
 

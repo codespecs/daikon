@@ -111,6 +111,7 @@ import java.text.DecimalFormat;
 import java.io.Serializable;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -159,7 +160,7 @@ public class LOWERBOUNDCORE
     return MIN1;
   }
 
-  /*@SideEffectFree*/ public LOWERBOUNDCORE clone() {
+  /*@SideEffectFree*/ public LOWERBOUNDCORE clone(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
     try {
       return (LOWERBOUNDCORE) super.clone();
     } catch (CloneNotSupportedException e) {
@@ -169,7 +170,7 @@ public class LOWERBOUNDCORE
 
   private static DecimalFormat two_decimals = new java.text.DecimalFormat("#.##");
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
     PRIMITIVE modulus = calc_modulus();
     PRIMITIVE range = calc_range();
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
@@ -183,7 +184,7 @@ public class LOWERBOUNDCORE
       "avg_samp=" + two_decimals.format(avg_samples_per_val);
   }
 
-  private double calc_avg_samples_per_val(PRIMITIVE modulus, double range) {
+  private double calc_avg_samples_per_val(/*>>>@GuardSatisfied LOWERBOUNDCORE this,*/ PRIMITIVE modulus, double range) {
     // int num_samples = wrapper.ppt.num_mod_samples();
     int num_samples = wrapper.ppt.num_samples();
     double avg_samples_per_val =
@@ -197,12 +198,12 @@ public class LOWERBOUNDCORE
     return avg_samples_per_val;
   }
 
-  private PRIMITIVE calc_range() {
+  private PRIMITIVE calc_range(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
     // If I used Math.abs, the order of arguments to minus would not matter.
     return SIGNADJUST(MAX - MIN1) + 1;
   }
 
-  private PRIMITIVE calc_modulus() {
+  private PRIMITIVE calc_modulus(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
     // Need to reinstate this at some point.
     // {
     //   for (Invariant inv : wrapper.ppt.invs) {
@@ -273,7 +274,7 @@ public class LOWERBOUNDCORE
   }
 
 
-  public boolean enoughSamples() {
+  public boolean enoughSamples(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
     return samples > required_samples;
   }
 

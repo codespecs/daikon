@@ -48,6 +48,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -134,10 +135,10 @@ public final class CLASSNAME
     /*@Pure*/ public boolean equals (PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
       return ((this.x == x) && (this.y == y) && (this.z == z));
     }
-    /*@SideEffectFree*/ protected Point clone() throws CloneNotSupportedException {
+    /*@SideEffectFree*/ protected Point clone(/*>>>@GuardSatisfied Point this*/) throws CloneNotSupportedException {
       return (Point) super.clone();
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Point this*/) {
       return ("(" + x + ", " + y + " ," + z + ")");
     }
   }
@@ -163,7 +164,7 @@ public final class CLASSNAME
     this.wrapper = wrapper;
   }
 
-  /*@SideEffectFree*/ public CLASSNAME clone() {
+  /*@SideEffectFree*/ public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
       result.def_points = new Point[MINTRIPLES];
@@ -260,7 +261,7 @@ public final class CLASSNAME
   // the invariant must have seen enough samples and not be a line for all the
   // other calculations and comparisons done to be sensible, meaning that
   // a full linear ternary invariant exists, not a degenerate one
-  /*@Pure*/ public boolean isActive() {
+  /*@Pure*/ public boolean isActive(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return (line_flag == Flag.NO_LINE && values_seen >= MINTRIPLES && a != 0 && b != 0 && c != 0);
   }
 
@@ -1115,7 +1116,7 @@ public final class CLASSNAME
   }
 
 
-  public boolean enoughSamples() {
+  public boolean enoughSamples(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return isActive();
   }
 
@@ -1132,7 +1133,7 @@ public final class CLASSNAME
 
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + wrapper.varNames() + ": "
       + "a=" + a
       + ",b=" + b

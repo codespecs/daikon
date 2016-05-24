@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -28,7 +29,7 @@ public class CmdCheck implements Cmd {
   }
 
   /** For documentation, read the class overview. */
-  public void apply(Session s) {
+  public void apply(final /*@GuardedBy("itself")*/ Session s) {
     try {
 
       String result;
@@ -116,7 +117,7 @@ public class CmdCheck implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CmdCheck this*/) {
     return "CmdCheck: " + proposition;
   }
 }

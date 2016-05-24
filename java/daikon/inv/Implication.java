@@ -9,6 +9,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -112,11 +113,12 @@ public class Implication extends Joiner {
     return result;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied Implication this*/) {
     return "[Implication: " + left.repr() + " => " + right.repr() + "]";
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied Implication this,*/ OutputFormat format) {
     String pred_fmt = left.format_using(format);
     String consq_fmt = right.format_using(format);
     if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {

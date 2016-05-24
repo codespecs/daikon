@@ -11,6 +11,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -122,7 +123,7 @@ public class InvTranslate {
   /**
    * Returns a somewhat verbose description of the translation.
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied InvTranslate this*/) {
     StringBuilder out = new StringBuilder();
 
     List<String> mappings = new ArrayList<String>();

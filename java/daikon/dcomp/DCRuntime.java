@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.regex.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -170,7 +171,7 @@ public final class DCRuntime {
       this.value_source = value_source;
       this.compared_to = compared_to;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied BranchInfo this*/) {
       return String.format("%s:%s", value_source, compared_to);
     }
   }
@@ -2298,7 +2299,7 @@ public final class DCRuntime {
   private static class DVSet extends ArrayList<DaikonVariableInfo> implements Comparable<DVSet> {
     static final long serialVersionUID = 20050923L;
 
-    /*@Pure*/ public int compareTo(DVSet s1) {
+    /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied DVSet this,*/ DVSet s1) {
       if (s1.size() == 0) {
         return 1;
       } else if (size() == 0) {

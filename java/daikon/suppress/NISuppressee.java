@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -261,7 +262,7 @@ public class NISuppressee {
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied NISuppressee this*/) {
 
     String extra = "";
     if (var_count == 2) {

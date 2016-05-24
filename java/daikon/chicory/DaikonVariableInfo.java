@@ -8,6 +8,7 @@ import java.util.regex.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -147,7 +148,7 @@ public abstract class DaikonVariableInfo
   /**
    * Returns the name of this variable.
    */
-  public /*@Nullable*/ String getName() {
+  public /*@Nullable*/ String getName(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
     if (name == null) return null;
 
     if (Chicory.new_decl_format) {
@@ -179,7 +180,7 @@ public abstract class DaikonVariableInfo
   /**
    * Returns a string representation of this node.
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
     return getClass().getName() + ":" + getName();
   }
 
@@ -1283,7 +1284,8 @@ public abstract class DaikonVariableInfo
   /**
    * Compares based on the name of the variable
    */
-  /*@Pure*/ public int compareTo(DaikonVariableInfo dv) {
+  /*@Pure*/ public int compareTo(
+      /*>>>@GuardSatisfied DaikonVariableInfo this,*/ DaikonVariableInfo dv) {
     return name.compareTo(dv.name);
   }
 

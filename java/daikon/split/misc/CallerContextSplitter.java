@@ -6,6 +6,7 @@ import daikon.split.*;
 import plume.ArraysMDE;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -68,7 +69,7 @@ public final class CallerContextSplitter extends Splitter {
     return condition;
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CallerContextSplitter this*/) {
     String attach = "(unattached prototype)";
     if (caller_varinfo != null) {
       attach = "attached to " + caller_varinfo.ppt.name();

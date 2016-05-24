@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 */
@@ -165,7 +166,18 @@ public final class Runtime {
     // The incrementRecords method (which calls this) is called inside a
     // synchronized block, but re-synchronize just to be sure, or in case
     // this is called from elsewhere.
-    synchronized (daikon.Runtime.dtrace) {
+
+    // Runtime.dtrace should be effectively final in that it refers
+    // to the same value throughout the execution of the synchronized
+    // block below (including the lock acquisition).
+    // Unfortunately, the Lock Checker cannot verify this,
+    // so a final local variable is used to satisfy the Lock Checker's
+    // requirement that all variables used as locks be final or
+    // effectively final.  If a bug exists whereby Runtime.dtrace
+    // is not effectively final, this would unfortunately mask that error.
+    final /*@GuardedBy("itself")*/ PrintStream dtrace = Runtime.dtrace;
+
+    synchronized (dtrace) {
       // The shutdown hook is synchronized on this, so close it up
       // ourselves, lest the call to System.exit cause deadlock.
       dtrace.println();
@@ -175,7 +187,7 @@ public final class Runtime {
       // Don't set dtrace to null, because if we continue running, there will
       // be many attempts to synchronize on it.  (Is that a performance
       // bottleneck, if we continue running?)
-      // dtrace = null;
+      // daikon.Runtime.dtrace = null;
       dtrace_closed = true;
 
       if (dtraceLimitTerminate) {
@@ -201,7 +213,7 @@ public final class Runtime {
   // because this is a library; control flow occurs at run time in generated
   // instrumented code that is not checkable by a source code typechecker.
   @SuppressWarnings("nullness") // set and used by run-time instrumentation
-  public static PrintStream dtrace;
+  public static /*@GuardedBy("itself")*/ PrintStream dtrace;
 
   public static boolean dtrace_closed = false;
   // daikon.Daikon should never load daikon.Runtime; but sometimes it
@@ -285,6 +297,8 @@ public final class Runtime {
     java.lang.Runtime.getRuntime()
         .addShutdownHook(
             new Thread() {
+              @SuppressWarnings(
+                  "lock") // TODO: Fix Checker Framework issue 523 and remove this @SuppressWarnings.
               @Override
               public void run() {
                 if (!dtrace_closed) {

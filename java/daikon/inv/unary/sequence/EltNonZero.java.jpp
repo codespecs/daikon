@@ -66,6 +66,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -128,16 +129,16 @@ public final class CLASSNAME
   /**
    * Returns whether or not the variable is a pointer
    */
-  /*@Pure*/ private boolean is_pointer() {
+  /*@Pure*/ private boolean is_pointer(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return (!ppt.var_infos[0].type.BASEISTYPE);
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": "
       + !falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
@@ -148,7 +149,7 @@ public final class CLASSNAME
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return var().name() + " elements " + "!=" + " "
            + (is_pointer() ? "null" : "0");
   }
@@ -159,7 +160,7 @@ public final class CLASSNAME
     return true;
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied CLASSNAME this*/) {
     // If this is an entire array or Collection (not a slice), then
     //  * for arrays: use \nonnullelements(A)
     //  * for Collections: use collection.containsNull == false
@@ -193,7 +194,7 @@ public final class CLASSNAME
            + (is_pointer() ? "null" : "0") + ")" + form[2];
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     String retval =
       "daikon.Quant.eltsNotEqual(" + var().name_using(format)
       + (is_pointer() ? ", null" : ", 0") + ")";
@@ -201,12 +202,12 @@ public final class CLASSNAME
     return retval;
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] split = var().csharp_array_split();
     return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " != " + (is_pointer() ? "null" : "0") + ")";
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] form = VarInfo.simplify_quantify (var());
     return form[0] + "(NEQ " + form[1] + " "
       + (is_pointer() ? "null" : "0") + ")" + form[2];

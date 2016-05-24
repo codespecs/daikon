@@ -12,6 +12,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -139,7 +140,7 @@ public class PptRelation implements Serializable {
     return (parent_to_child_map.size());
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptRelation this*/) {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 

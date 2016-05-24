@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -150,7 +151,7 @@ public class ClassInfo {
     assert traversalClass != null : class_name;
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ClassInfo this*/) {
     return (String.format(
         "ClassInfo %08X [%s] %s", System.identityHashCode(this), class_name, clazz));
   }

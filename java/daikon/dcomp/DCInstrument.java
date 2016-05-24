@@ -19,6 +19,7 @@ import org.apache.commons.bcel6.verifier.structurals.*;
 import org.apache.commons.io.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -786,7 +787,7 @@ class DCInstrument {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    boolean equals(String name, Type[] arg_types) {
+    boolean equals(/*>>>@GuardSatisfied MethodDef this,*/ String name, Type[] arg_types) {
       if (!name.equals(this.name)) return false;
       if (this.arg_types.length != arg_types.length) {
         return false;
@@ -800,13 +801,15 @@ class DCInstrument {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals(
+        /*>>>@GuardSatisfied MethodDef this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof MethodDef)) return false;
       MethodDef md = (MethodDef) obj;
       return equals(md.name, md.arg_types);
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied MethodDef this*/) {
       int code = name.hashCode();
       for (Type arg : arg_types) {
         code += arg.hashCode();
@@ -828,7 +831,7 @@ class DCInstrument {
     public boolean contains(int offset) {
       return (offset >= start_pc) && (offset < (start_pc + len));
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CodeRange this*/) {
       return String.format("Code range: %d..%d", start_pc, start_pc + len - 1);
     }
   }

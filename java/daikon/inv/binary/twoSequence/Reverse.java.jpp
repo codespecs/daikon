@@ -35,6 +35,7 @@ import java.util.logging.Level;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
@@ -106,12 +107,12 @@ public class CLASSNAME
     return this;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": "
       + "falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
@@ -121,22 +122,22 @@ public class CLASSNAME
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return var1().name() + " is the reverse of " + var2().name();
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
           return "daikon.Quant.isReverse(" + var1().name_using(format)
             + ", " + var2().name_using(format) + ")";
   }
 
-  public String format_csharp() {
+  public String format_csharp(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] split1 = var1().csharp_array_split();
     String[] split2 = var2().csharp_array_split();
     return "Contract.ForAll(0, " + split1[0] + ".Count(), i => " + split1[0] + "[i]"  + split1[1] + ".Equals(" + split2[0] + "[" +split1[0] + ".Count()-1-i]" + split2[1] +"))";
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
     if (Invariant.dkconfig_simplify_define_predicates) {
       return format_simplify_defined();
     } else {
@@ -144,7 +145,7 @@ public class CLASSNAME
     }
   }
 
-  private String format_simplify_defined() {
+  private String format_simplify_defined(/*>>>@GuardSatisfied CLASSNAME this*/) {
     VarInfo onevar = var1();
     VarInfo othervar = var2();
     String[] one_name = onevar.simplifyNameAndBounds();
@@ -160,7 +161,7 @@ public class CLASSNAME
       other_name[0] + " " + other_name[1] + " " + other_name[2] + ")";
   }
 
-  private String format_simplify_explicit() {
+  private String format_simplify_explicit(/*>>>@GuardSatisfied CLASSNAME this*/) {
     VarInfo onevar = var1();
     VarInfo othervar = var2();
     String[] one_name = onevar.simplifyNameAndBounds();

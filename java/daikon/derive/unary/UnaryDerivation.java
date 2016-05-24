@@ -5,6 +5,7 @@ import daikon.derive.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -20,7 +21,7 @@ public abstract class UnaryDerivation extends Derivation {
     base = vi;
   }
 
-  /*@SideEffectFree*/ public UnaryDerivation clone() {
+  /*@SideEffectFree*/ public UnaryDerivation clone(/*>>>@GuardSatisfied UnaryDerivation this*/) {
     try {
       return (UnaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -73,11 +74,12 @@ public class Modulus extends SingleScalar {
     return new Modulus(slice);
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied Modulus this*/) {
     return "Modulus" + varNames() + ": " + "modulus=" + modulus + ",remainder=" + remainder;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(
+      /*>>>@GuardSatisfied Modulus this,*/ OutputFormat format) {
     String name = var().name_using(format);
 
     if (format == OutputFormat.DAIKON) {

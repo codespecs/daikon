@@ -3,6 +3,7 @@ package daikon.inv;
 import daikon.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -47,7 +48,7 @@ public class GuardingImplication extends Implication {
     // return !right.isObvious();
   }
 
-  public boolean enoughSamples() {
+  public boolean enoughSamples(/*>>>@GuardSatisfied GuardingImplication this*/) {
     return right.enoughSamples();
   }
 
