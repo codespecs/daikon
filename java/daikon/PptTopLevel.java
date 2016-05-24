@@ -2424,7 +2424,9 @@ public class PptTopLevel extends Ppt {
     VarInfo prev = vis[0];
     for (int i = 1; i < vis.length; i++) {
       if ((prev != null) && (vis[i] != null)) {
-        if (vis[i].varinfo_index < prev.varinfo_index) return false;
+        if (vis[i].varinfo_index < prev.varinfo_index) {
+          return false;
+        }
       }
       if (vis[i] != null) prev = vis[i];
     }
@@ -3363,7 +3365,9 @@ public class PptTopLevel extends Ppt {
   public boolean has_parent(VarInfo v) {
 
     for (PptRelation rel : parents) {
-      if (rel.parentVar(v) != null) return true;
+      if (rel.parentVar(v) != null) {
+        return true;
+      }
     }
 
     return false;

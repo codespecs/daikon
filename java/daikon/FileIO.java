@@ -607,7 +607,9 @@ public final class FileIO {
     String filename = state.filename;
 
     String line = file.readLine();
-    if ((line == null) || (line.equals(""))) return null;
+    if ((line == null) || (line.equals(""))) {
+      return null;
+    }
     String varname = line;
     String proglang_type_string_and_aux = file.readLine();
     String file_rep_type_string = file.readLine();
@@ -2545,7 +2547,9 @@ public final class FileIO {
       }
       this_esc = orig.indexOf('\\', post_esc);
     }
-    if (post_esc == 0) return orig;
+    if (post_esc == 0) {
+      return orig;
+    }
     sb.append(orig.substring(post_esc));
     return sb.toString();
   }
@@ -2964,7 +2968,9 @@ public final class FileIO {
    */
   public static String user_mod_ppt_name(String ppt_name) {
 
-    if (!dkconfig_rm_stack_dups) return ppt_name;
+    if (!dkconfig_rm_stack_dups) {
+      return ppt_name;
+    }
 
     // System.out.printf ("removing stack dups (%b)in fileio%n",
     //                    dkconfig_rm_stack_dups);

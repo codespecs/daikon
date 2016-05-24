@@ -155,7 +155,9 @@ public class DummyInvariant extends Invariant {
       }
       inv.ppt = slice;
     } else if (vars.length == 3) {
-      if (vars[0] == vars[1] || vars[1] == vars[2] || vars[0] == vars[2]) return inv;
+      if (vars[0] == vars[1] || vars[1] == vars[2] || vars[0] == vars[2]) {
+        return inv;
+      }
       // bubble sort
       VarInfo tmp;
       if (vars[0].varinfo_index > vars[1].varinfo_index) {
@@ -220,7 +222,9 @@ public class DummyInvariant extends Invariant {
   }
 
   public String format_java() {
-    if (javaFormat == null) return "format_java not implemented for dummy invariant";
+    if (javaFormat == null) {
+      return "format_java not implemented for dummy invariant";
+    }
     if (negated) {
       return "!(" + javaFormat + ")";
     } else {
@@ -229,7 +233,9 @@ public class DummyInvariant extends Invariant {
   }
 
   public String format_esc() {
-    if (escFormat == null) return "format_esc not implemented for dummy invariant";
+    if (escFormat == null) {
+      return "format_esc not implemented for dummy invariant";
+    }
     if (negated) {
       return "!(" + escFormat + ")";
     } else {
@@ -238,7 +244,9 @@ public class DummyInvariant extends Invariant {
   }
 
   public String format_simplify() {
-    if (simplifyFormat == null) return "format_simplify not implemented for dummy invariant";
+    if (simplifyFormat == null) {
+      return "format_simplify not implemented for dummy invariant";
+    }
     if (negated) {
       return "(NOT " + simplifyFormat + ")";
     } else {
@@ -247,7 +255,9 @@ public class DummyInvariant extends Invariant {
   }
 
   public String format_jml() {
-    if (jmlFormat == null) return "format_jml not implemented for dummy invariant";
+    if (jmlFormat == null) {
+      return "format_jml not implemented for dummy invariant";
+    }
     if (negated) {
       return "!(" + jmlFormat + ")";
     } else {
@@ -256,7 +266,9 @@ public class DummyInvariant extends Invariant {
   }
 
   public String format_dbc() {
-    if (dbcFormat == null) return "format_dbc not implemented for dummy invariant";
+    if (dbcFormat == null) {
+      return "format_dbc not implemented for dummy invariant";
+    }
     if (negated) {
       return "!(" + dbcFormat + ")";
     } else {
@@ -265,7 +277,9 @@ public class DummyInvariant extends Invariant {
   }
 
   public String format_csharp() {
-    if (csharpFormat == null) return "format_csharp not implemented for dummy invariant";
+    if (csharpFormat == null) {
+      return "format_csharp not implemented for dummy invariant";
+    }
     if (negated) {
       return "!(" + csharpFormat + ")";
     } else {

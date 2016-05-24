@@ -104,7 +104,9 @@ public abstract class PptSlice extends Ppt {
   // Only called right now from tools/ExtractConsequent
   public boolean usesVarDerived(String name) {
     for (VarInfo vi : var_infos) {
-      if (vi.includes_simple_name(name)) return true;
+      if (vi.includes_simple_name(name)) {
+        return true;
+      }
     }
     return false;
   }
@@ -112,7 +114,9 @@ public abstract class PptSlice extends Ppt {
   /** @return true if all of this slice's variables are orig() variables. */
   public boolean allPrestate() {
     for (VarInfo vi : var_infos) {
-      if (!vi.isPrestateDerived()) return false;
+      if (!vi.isPrestateDerived()) {
+        return false;
+      }
     }
     return true;
   }
@@ -254,7 +258,9 @@ public abstract class PptSlice extends Ppt {
 
   public boolean containsOnlyGuardingPredicates() {
     for (Invariant inv : invs) {
-      if (!inv.isGuardingPredicate) return false;
+      if (!inv.isGuardingPredicate) {
+        return false;
+      }
     }
     return true;
   }
@@ -345,7 +351,9 @@ public abstract class PptSlice extends Ppt {
   public boolean contains_inv(Invariant inv) {
 
     for (Invariant mine : invs) {
-      if (mine.match(inv)) return true;
+      if (mine.match(inv)) {
+        return true;
+      }
     }
     return false;
   }

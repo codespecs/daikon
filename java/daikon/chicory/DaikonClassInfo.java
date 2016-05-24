@@ -34,12 +34,16 @@ public class DaikonClassInfo extends DaikonVariableInfo {
 
   public String getDTraceValueString(Object val) {
     if (isArray) {
-      if (val instanceof NonsensicalObject) return "nonsensical" + DaikonWriter.lineSep + "2";
+      if (val instanceof NonsensicalObject) {
+        return "nonsensical" + DaikonWriter.lineSep + "2";
+      }
 
       // A list of the runtime type of each value in the array.
       @SuppressWarnings("unchecked")
       List<String> name_list = DTraceWriter.getTypeNameList((List<Object>) val);
-      if (name_list == null) return "nonsensical" + DaikonWriter.lineSep + "2";
+      if (name_list == null) {
+        return "nonsensical" + DaikonWriter.lineSep + "2";
+      }
       return StringInfo.getStringList(name_list);
     } else {
       return getValueStringNonArr(val);

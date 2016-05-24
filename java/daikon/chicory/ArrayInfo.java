@@ -26,10 +26,11 @@ public class ArrayInfo extends DaikonVariableInfo {
       return NonsensicalList.getInstance();
     } else if (value instanceof NonsensicalObject) {
       return NonsensicalList.getInstance();
+    } else {
+      // The "child" value of an array is the actual list of array values
+      // as opposed to just the "hashcode" object.
+      return DTraceWriter.getListFromArray(value);
     }
-    //the "child" value of an array is the actual list of array values
-    //as opposed to just the "hashcode" object
-    else return DTraceWriter.getListFromArray(value);
   }
 
   public Class<?> getType() {

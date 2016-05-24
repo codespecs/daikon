@@ -54,7 +54,9 @@ public class BuildJDK {
       if (!arg.endsWith("jar")) {
         for (String candidate : spaceSeparatedJarLocations.split(" ")) {
           String rt = jarFilename + candidate;
-          if (exists(rt)) return rt;
+          if (exists(rt)) {
+            return rt;
+          }
         }
       }
       return jarFilename;

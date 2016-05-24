@@ -651,7 +651,11 @@ public final class DCRuntime {
   public static void exception_exit() {
 
     if (debug) System.out.printf("Exception exit from %s%n", caller_name());
-    while (!tag_stack.empty()) if (tag_stack.pop() == method_marker) return;
+    while (!tag_stack.empty()) {
+      if (tag_stack.pop() == method_marker) {
+        return;
+      }
+    }
 
     System.out.printf("Method marker not found in exception exit%n");
   }
@@ -2224,7 +2228,9 @@ public final class DCRuntime {
 
     if (depth == 0) {
       ps.printf("%s%n", skinyOutput(node, daikon.DynComp.abridged_vars));
-      if (tree.get(node) == null) return;
+      if (tree.get(node) == null) {
+        return;
+      }
       for (DaikonVariableInfo child : tree.get(node))
         if (child != node) print_tree(ps, tree, child, depth + 1);
     } else {
@@ -2235,7 +2241,9 @@ public final class DCRuntime {
           "%s (%s)%n",
           skinyOutput(node, daikon.DynComp.abridged_vars),
           TagEntry.get_line_trace(node));
-      if (tree.get(node) == null) return;
+      if (tree.get(node) == null) {
+        return;
+      }
       for (DaikonVariableInfo child : tree.get(node))
         if (child != node) print_tree(ps, tree, child, depth + 1);
     }
@@ -2257,7 +2265,9 @@ public final class DCRuntime {
   }
 
   private static String skinyOutput(DaikonVariableInfo dv, boolean on) {
-    if (!on) return dv.toString();
+    if (!on) {
+      return dv.toString();
+    }
     String dvtxt = dv.toString();
     String type = dvtxt.split(":")[0];
     type = type.substring(type.lastIndexOf(".") + 1);
@@ -2289,9 +2299,13 @@ public final class DCRuntime {
     static final long serialVersionUID = 20050923L;
 
     /*@Pure*/ public int compareTo(DVSet s1) {
-      if (s1.size() == 0) return 1;
-      else if (size() == 0) return -1;
-      else return get(0).compareTo(s1.get(0));
+      if (s1.size() == 0) {
+        return 1;
+      } else if (size() == 0) {
+        return -1;
+      } else {
+        return get(0).compareTo(s1.get(0));
+      }
     }
 
     public void sort() {
@@ -2896,8 +2910,11 @@ public final class DCRuntime {
       String tostring = obj.toString();
       String default_tostring =
           String.format("%s@%x", obj.getClass().getName(), System.identityHashCode(obj));
-      if (tostring.equals(default_tostring)) return tostring;
-      else return String.format("%s [%s]", default_tostring, tostring);
+      if (tostring.equals(default_tostring)) {
+        return tostring;
+      } else {
+        return String.format("%s [%s]", default_tostring, tostring);
+      }
     }
   }
 
@@ -3102,7 +3119,9 @@ public final class DCRuntime {
       // assert obj == null: "primitive object = " + obj_str (obj);
       Object[] tags = field_map.get(parent);
       if (tags == null) return (nonsensical); // happens if field has never been assigned to
-      else return tags[field_num];
+      else {
+        return tags[field_num];
+      }
     }
   }
 
@@ -3634,7 +3653,9 @@ public final class DCRuntime {
    */
   private static ValueSource get_value_source(Object tag) {
     assert tag != null; // see whether this fails -MDE
-    if (tag == null) return ValueSource.null_value_source;
+    if (tag == null) {
+      return ValueSource.null_value_source;
+    }
 
     ValueSource val = tag_map.get(tag);
     if (val == null) {

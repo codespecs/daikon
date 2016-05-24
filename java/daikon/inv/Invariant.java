@@ -951,8 +951,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       if (inv2 instanceof GuardingImplication) inv2 = ((GuardingImplication) inv2).right;
 
       // Put equality invariants first
-      if ((inv1 instanceof Comparison) && (!(inv2 instanceof Comparison))) return -1;
-      if ((!(inv1 instanceof Comparison)) && (inv2 instanceof Comparison)) return 1;
+      if ((inv1 instanceof Comparison) && (!(inv2 instanceof Comparison))) {
+        return -1;
+      }
+      if ((!(inv1 instanceof Comparison)) && (inv2 instanceof Comparison)) {
+        return 1;
+      }
 
       // assert inv1.ppt.parent == inv2.ppt.parent;
       VarInfo[] vis1 = inv1.ppt.var_infos;
@@ -992,8 +996,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       }
 
       // Sort OneOf invariants earlier than others
-      if ((inv1 instanceof OneOf) && (!(inv2 instanceof OneOf))) return -1;
-      if ((!(inv1 instanceof OneOf)) && (inv2 instanceof OneOf)) return 1;
+      if ((inv1 instanceof OneOf) && (!(inv2 instanceof OneOf))) {
+        return -1;
+      }
+      if ((!(inv1 instanceof OneOf)) && (inv2 instanceof OneOf)) {
+        return 1;
+      }
 
       // System.out.println("ICFP: default rule yields "
       //                    + inv1.format().compareTo(inv2.format())
@@ -1001,9 +1009,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       // (Actually, FileIO.new_decl_format should always be non-null here.)
       if (PrintInvariants.dkconfig_old_array_names
           && FileIO.new_decl_format != null
-          && FileIO.new_decl_format)
+          && FileIO.new_decl_format) {
         return inv1.format().replace("[..]", "[]").compareTo(inv2.format().replace("[..]", "[]"));
-      else return inv1.format().compareTo(inv2.format());
+      } else {
+        return inv1.format().compareTo(inv2.format());
+      }
     }
   }
 
@@ -1064,7 +1074,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     for (int i = 0; i < vars1.length; i++) {
       VarInfo var1 = vars1[i];
       VarInfo var2 = vars2[i];
-      if (!var1.name().equals(var2.name())) return false;
+      if (!var1.name().equals(var2.name())) {
+        return false;
+      }
     }
 
     return true;
@@ -1089,7 +1101,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // suppression.  We should somehow index invariants by their type.
   public static /*@Nullable*/ Invariant find(Class<? extends Invariant> invclass, PptSlice ppt) {
     for (Invariant inv : ppt.invs) {
-      if (inv.getClass() == invclass) return inv;
+      if (inv.getClass() == invclass) {
+        return inv;
+      }
     }
     return null;
   }
@@ -1194,7 +1208,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     if (isObviousStatically() == null) return false;
 
     for (int i = 0; i < ppt.var_infos.length; i++) {
-      if (ppt.var_infos[i].equalitySet.getVars().size() > 1) return false;
+      if (ppt.var_infos[i].equalitySet.getVars().size() > 1) {
+        return false;
+      }
     }
     return true;
   }
@@ -1246,7 +1262,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       for (VarInfo vi : vis[position].get_equalitySet_vars()) {
         assigned[position] = vi;
         DiscardInfo temp = isObviousStatically_SomeInEqualityHelper(vis, assigned, position + 1);
-        if (temp != null) return temp;
+        if (temp != null) {
+          return temp;
+        }
       }
       return null;
     }
@@ -1395,7 +1413,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       for (VarInfo vi : vis[position].get_equalitySet_vars()) {
         assigned[position] = vi;
         DiscardInfo temp = isObviousDynamically_SomeInEqualityHelper(vis, assigned, position + 1);
-        if (temp != null) return temp;
+        if (temp != null) {
+          return temp;
+        }
       }
       return null;
     }
@@ -1811,7 +1831,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     }
     assert valid_types(slice.var_infos)
         : String.format("valid_types(%s) = false for %s", slice.var_infos, this);
-    if (!enabled() || !instantiate_ok(slice.var_infos)) return null;
+    if (!enabled() || !instantiate_ok(slice.var_infos)) {
+      return null;
+    }
     Invariant inv = instantiate_dyn(slice);
     assert inv != null;
     if (inv.ppt == null) {

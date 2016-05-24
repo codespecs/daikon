@@ -667,7 +667,9 @@ public class Runtime {
           assert cinfo.clazz != null
               : "@AssumeAssertion(nullness): checker bug: flow problem (postcondition)";
 
-          if (cinfo.clazz.equals(type)) return cinfo;
+          if (cinfo.clazz.equals(type)) {
+            return cinfo;
+          }
         }
       }
     } catch (ConcurrentModificationException e) {

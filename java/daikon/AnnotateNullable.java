@@ -435,7 +435,9 @@ public class AnnotateNullable {
    */
   public static String field_name(VarInfo vi) {
 
-    if (vi.relative_name != null) return vi.relative_name;
+    if (vi.relative_name != null) {
+      return vi.relative_name;
+    }
 
     String field_name = vi.name();
     int pt = field_name.lastIndexOf('.');
@@ -457,7 +459,9 @@ public class AnnotateNullable {
 
     assert ppt.is_exit() : ppt;
     for (PptRelation rel : ppt.parents) {
-      if (rel.parent.is_object()) return false;
+      if (rel.parent.is_object()) {
+        return false;
+      }
     }
 
     return true;

@@ -70,8 +70,12 @@ public final class PrintableString extends SingleString {
   public InvariantStatus check_modified(/*@Interned*/ String a, int count) {
     for (int ii = 0; ii < a.length(); ii++) {
       char ch = a.charAt(ii);
-      if (ch > 126) return InvariantStatus.FALSIFIED;
-      if ((ch < 32) && (ch != 9)) return InvariantStatus.FALSIFIED;
+      if (ch > 126) {
+        return InvariantStatus.FALSIFIED;
+      }
+      if ((ch < 32) && (ch != 9)) {
+        return InvariantStatus.FALSIFIED;
+      }
     }
     return InvariantStatus.NO_CHANGE;
   }

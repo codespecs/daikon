@@ -185,7 +185,9 @@ public class DynamicConstants implements Serializable {
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/ public boolean equals(/*@Nullable*/ Object obj) {
-      if (!(obj instanceof Constant)) return false;
+      if (!(obj instanceof Constant)) {
+        return false;
+      }
       Constant c = (Constant) obj;
       return (c.vi == vi);
     }

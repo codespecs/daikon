@@ -643,7 +643,9 @@ public final class Debug {
   private static boolean strContainsElem(String str, String[] arr) {
 
     for (String elt : arr) {
-      if (str.indexOf(elt) >= 0) return true;
+      if (str.indexOf(elt) >= 0) {
+        return true;
+      }
     }
     return false;
   }

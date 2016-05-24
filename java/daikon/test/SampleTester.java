@@ -434,8 +434,12 @@ public class SampleTester extends TestCase {
 
     // Look for a matching invariant in the slices invariant list
     for (Invariant inv : slice.invs) {
-      if (inv.getClass() == cls) return true;
-      if ((format != null) && format.equals(inv.format())) return true;
+      if (inv.getClass() == cls) {
+        return true;
+      }
+      if ((format != null) && format.equals(inv.format())) {
+        return true;
+      }
       debug.fine(String.format("trace %s: '%s'", inv.getClass(), inv.format()));
     }
     return false;

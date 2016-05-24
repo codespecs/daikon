@@ -223,7 +223,9 @@ public class NISuppressor {
     assert v1_index != -1;
 
     // If the underlying invariant is not enabled, we can't possibly be true
-    if (!is_enabled()) return (state = NIS.SuppressState.INVALID);
+    if (!is_enabled()) {
+      return (state = NIS.SuppressState.INVALID);
+    }
 
     if (Debug.logDetail() && NIS.debug.isLoggable(Level.FINE)) {
       NIS.debug.fine(

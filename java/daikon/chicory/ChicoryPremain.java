@@ -276,7 +276,9 @@ public class ChicoryPremain {
 
     //TODO just use Set.contains(member.toString()) ?
     for (String methName : pureMethods) {
-      if (methName.equals(member.toString())) return true;
+      if (methName.equals(member.toString())) {
+        return true;
+      }
     }
 
     return false;
@@ -381,7 +383,9 @@ public class ChicoryPremain {
      * same jar file or the same directory in the filesystem.
      */
     private static boolean same_location(URL url1, URL url2) {
-      if (!url1.getProtocol().equals(url2.getProtocol())) return false;
+      if (!url1.getProtocol().equals(url2.getProtocol())) {
+        return false;
+      }
 
       if (url1.getProtocol().equals("jar")) {
         // System.out.printf ("url1 = %s, file=%s, path=%s, protocol=%s, %s%n",
@@ -446,7 +450,9 @@ public class ChicoryPremain {
         /*@BinaryName*/ String name, boolean resolve) throws java.lang.ClassNotFoundException {
 
       // If we are not loading from our jar, just use the normal mechanism
-      if (bcel_jar == null) return super.loadClass(name, resolve);
+      if (bcel_jar == null) {
+        return super.loadClass(name, resolve);
+      }
 
       // Load non-bcel files via the normal mechanism
       if (!name.startsWith("org.apache.commons.bcel6")

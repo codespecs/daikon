@@ -1315,7 +1315,9 @@ public class Ast {
     // n.getParent won't be an ClassOrInterfaceDeclaration for anonymous
     // class bodies such as in  new List() { ... }  -- anonymous classes can
     // never be interfaces, however, so that's simple enough to handle. :)
-    if (!(n.getParent() instanceof ClassOrInterfaceDeclaration)) return false;
+    if (!(n.getParent() instanceof ClassOrInterfaceDeclaration)) {
+      return false;
+    }
 
     return isInterface((ClassOrInterfaceDeclaration) n.getParent());
   }

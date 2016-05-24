@@ -118,7 +118,9 @@ public class X86Instruction implements IInstruction {
       b.append(" ");
       b.append(a);
     }
-    if (killedVars.isEmpty()) return b.toString();
+    if (killedVars.isEmpty()) {
+      return b.toString();
+    }
 
     b.append(" -> ");
     for (String a : killedVars) {
@@ -231,32 +233,44 @@ public class X86Instruction implements IInstruction {
       if (killedVars.contains(var)
           || killedVars.contains("ax")
           || killedVars.contains("ah")
-          || killedVars.contains("al")) return true;
-      else return false;
+          || killedVars.contains("al")) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     if (var.equals("ebx")) {
       if (killedVars.contains(var)
           || killedVars.contains("bx")
           || killedVars.contains("bh")
-          || killedVars.contains("bl")) return true;
-      else return false;
+          || killedVars.contains("bl")) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     if (var.equals("ecx")) {
       if (killedVars.contains(var)
           || killedVars.contains("cx")
           || killedVars.contains("ch")
-          || killedVars.contains("cl")) return true;
-      else return false;
+          || killedVars.contains("cl")) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     if (var.equals("edx")) {
       if (killedVars.contains(var)
           || killedVars.contains("dx")
           || killedVars.contains("dh")
-          || killedVars.contains("dl")) return true;
-      else return false;
+          || killedVars.contains("dl")) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     if (var.equals("edi")) {
@@ -313,7 +327,9 @@ public class X86Instruction implements IInstruction {
     // It may be something like "16+ebx". Do a quick sanity check.
     if (var.indexOf('+') != -1) {
       for (String reg : Operand.getExtendedRegisters(var)) {
-        if (killedVars.contains(reg)) return true;
+        if (killedVars.contains(reg)) {
+          return true;
+        }
       }
     }
 

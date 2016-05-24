@@ -285,7 +285,9 @@ public class NIS {
   /*@RequiresNonNull("suppressor_map")*/
   public static void falsified(Invariant inv) {
 
-    if (!dkconfig_enabled || antecedent_method) return;
+    if (!dkconfig_enabled || antecedent_method) {
+      return;
+    }
 
     if (NIS.dkconfig_skip_hashcode_type) {
 
@@ -541,7 +543,9 @@ public class NIS {
       }
     }
 
-    if (!dkconfig_enabled || !antecedent_method) return;
+    if (!dkconfig_enabled || !antecedent_method) {
+      return;
+    }
 
     if (false) {
       System.out.println("Variables for ppt " + ppt.name());

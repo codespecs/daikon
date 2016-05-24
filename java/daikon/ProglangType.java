@@ -140,7 +140,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
         || (base == BASE_BOOLEAN)
         || (base == BASE_LONG)
         || (base == BASE_LONG_LONG)
-        || (base == BASE_SHORT)) return intern(BASE_INT, dimensions);
+        || (base == BASE_SHORT)) {
+      return intern(BASE_INT, dimensions);
+    }
     return this;
   }
 
@@ -175,7 +177,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
 
     // now search for the right dimension
     for (ProglangType candidate : v) {
-      if (candidate.dimensions() == t_dims) return candidate;
+      if (candidate.dimensions() == t_dims) {
+        return candidate;
+      }
     }
 
     return null;
@@ -442,7 +446,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
       // outputs "nan".  dfec outputs "nan", because this string
       // comes from the C++ library.
       if (value.equalsIgnoreCase("NaN")) return DoubleNaN;
-      if (value.equalsIgnoreCase("Infinity") || value.equals("inf")) return DoublePositiveInfinity;
+      if (value.equalsIgnoreCase("Infinity") || value.equals("inf")) {
+        return DoublePositiveInfinity;
+      }
       if (value.equalsIgnoreCase("-Infinity") || value.equals("-inf")) {
         return DoubleNegativeInfinity;
       }
@@ -493,7 +499,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
           } else if (parser.ttype == StreamTokenizer.TT_WORD) {
             assert parser.sval != null
                 : "@AssumeAssertion(nullness): dependent: representation invariant of StreamTokenizer";
-            if (parser.sval.equals("nonsensical")) return null;
+            if (parser.sval.equals("nonsensical")) {
+              return null;
+            }
             assert parser.sval.equals("null");
             v.add(null);
           } else if (parser.ttype == StreamTokenizer.TT_NUMBER) {
