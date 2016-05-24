@@ -902,7 +902,6 @@ this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStac
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::ENTER
 (size(this.theArray[]) == 0)  ==>  (size(this.theArray[]) is a pointer)
-(size(this.theArray[]) == 0)  ==>  (size(this.theArray[]) is a pointer)
 (size(this.theArray[]) == 0)  ==>  (this has only one value)
 (size(this.theArray[]) == 0)  ==>  (this.theArray has only one value)
 (size(this.theArray[]) == 0)  ==>  (this.theArray[] == [])
