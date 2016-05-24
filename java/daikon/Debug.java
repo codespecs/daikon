@@ -481,8 +481,8 @@ public final class Debug {
    */
   // 4-argument form
   public static boolean log(
-      /*@Nullable*/ Class<?> inv_class, /*@Nullable*/ /*@UnknownInitialization(PptTopLevel.class)*/
-      Ppt ppt,
+      /*@Nullable*/ Class<?> inv_class,
+      /*@Nullable*/ /*@UnknownInitialization(PptTopLevel.class)*/ Ppt ppt,
       VarInfo /*@Nullable*/ [] vis,
       String msg) {
 
