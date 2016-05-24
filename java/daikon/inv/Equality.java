@@ -130,8 +130,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * changes.
    * @return the canonical VarInfo of this
    **/
-  /*@SuppressWarnings("purity")*/
-  // set cache field
+  @SuppressWarnings("purity") // set cache field
   /*@Pure*/ public VarInfo leader(
       /*>>>@UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this*/) {
     if (leaderCache == null) {

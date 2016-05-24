@@ -1011,8 +1011,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * use these cached values.
    **/
   /*@EnsuresNonNullIf(result=true, expression="getDerivedParam()")*/
-  /*@SuppressWarnings("purity")*/
-  // created object is not returned
+  @SuppressWarnings("purity") // created object is not returned
   /*@Pure*/ public boolean isDerivedParam() {
     if (isDerivedParamCached != null) {
       // System.out.printf ("var %s is-derived-param = %b\n", name(),
@@ -1121,8 +1120,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * In any case, the variable must have a postState VarInfoName, and
    * equality invariants need to have already been computed.
    **/
-  /*@SuppressWarnings("purity")*/
-  // set cache field
+  @SuppressWarnings("purity") // set cache field
   /*@Pure*/ public boolean isDerivedParamAndUninteresting() {
     if (isDerivedParamAndUninterestingCached != null) {
       return isDerivedParamAndUninterestingCached.booleanValue();
