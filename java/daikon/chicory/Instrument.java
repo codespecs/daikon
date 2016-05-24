@@ -131,7 +131,7 @@ public class Instrument implements ClassFileTransformer {
    * Because Chicory is invoked as a javaagent, the transform method is
    * called by the Java runtime each time a new class is loaded.
    */
-  public byte /*@Nullable*/ [] transform(
+  public byte /*@Nullable*/[] transform(
       ClassLoader loader,
       /*@InternalForm*/ String className,
       Class<?> classBeingRedefined,
@@ -687,17 +687,28 @@ public class Instrument implements ClassFileTransformer {
           // Remember the end of the original Code.
           InstructionHandle try_end = il.getEnd();
           InstructionList catch_il = add_tryCatch_instrumentation(fullClassName, context);
-          //        	// Is the method the constructor.
-          //        	if(mg.getName().equals("<init>")){
-          //        		// first command must be super (implicit or direct)
-          //        		if(try_start.getNext().getInstruction().getOpcode() == Const.INVOKESPECIAL){
-          //        			try_start = try_start.getNext().getNext();
-          //        			// step before the return
-          //        			try_end = try_end.getPrev();
-          //        		}else{
-          //        			catch_il = null;
-          //        		}
-          //        	}
+          // Is the method the constructor.
+          if (mg.getName().equals("<init>")) {
+            // first command must be super (implicit or direct)
+            if (try_start.getNext().getInstruction().getOpcode() == Const.INVOKESPECIAL) {
+              try_start = try_start.getNext().getNext();
+              //  			  //find last putfield
+              //  			  InstructionHandle endOfConstruct = null;
+              //  			  // Loop through each instruction looking for the putfield
+              //  		      for (InstructionHandle tmpRun = try_start; tmpRun != null; ) {
+              //  		    	  Short tmpCode = tmpRun.getInstruction().getOpcode();
+              //  		    	  if(tmpCode == Const.PUTFIELD || tmpCode == Const.PUTSTATIC){
+              //  		    		  endOfConstruct = tmpRun;
+              //  		    	  }
+              //  		    	  tmpRun = tmpRun.getNext();
+              //  		      }
+              //  		      if(endOfConstruct != null){
+              //  		    	  try_start = endOfConstruct.getNext();
+              //  		      }
+            } else {
+              catch_il = null;
+            }
+          }
           if (catch_il != null) {
             try_start = try_start == null ? il.getStart() : try_start;
             // Remember the Size of the OriginalCode, to calculate the Offset in the StackMap
@@ -750,9 +761,9 @@ public class Instrument implements ClassFileTransformer {
             // ADD PARAMETERS
             for (int tt = 0; tt < mg.getArgumentTypes().length; tt++) {
               Type runType = mg.getArgumentTypes()[tt];
-              //        	    	if(!runType.getClass().equals(ObjectType.class) ){ //&& !runType.getClass().equals(BasicType.class) ){
-              //        	    			continue;
-              //        	    	}
+              // if(!runType.getClass().equals(ObjectType.class) ){ //&& !runType.getClass().equals(BasicType.class) ){
+              //   continue;
+              // }
               if (runType.getClass().equals(BasicType.class)) {
                 Byte tmpTag = STACKMAP_TYPE.get(runType);
                 if (tmpTag == null) {
@@ -809,7 +820,7 @@ public class Instrument implements ClassFileTransformer {
             int goalOffset = tagetIS - offset;
             //        	    Are the locals the same?
             //        	    create SAME_LOCALS_1_STACK_ITEM_FRAME
-            if (newLocalCnt == runLocalCnt) {
+            if (newLocalCnt == runLocalCnt && !mg.getName().equals("<init>")) {
               int tmpTag =
                   (Const.SAME_LOCALS_1_STACK_ITEM_FRAME + goalOffset)
                           > Const.SAME_LOCALS_1_STACK_ITEM_FRAME_MAX
@@ -821,7 +832,7 @@ public class Instrument implements ClassFileTransformer {
               //        	    	new_map[stack_map_table.length] = new StackMapTableEntry(tmpTag, goalOffset , 0,
               //            	    		null, 1, stackItem_types, pgen.getConstantPool());
             } else {
-              if (localItems_types.size() >= newLocalCnt) {
+              if (localItems_types.size() >= newLocalCnt || mg.getName().equals("<init>")) {
                 // Create FULL-FRAME-Entry
                 int localsCnt = newLocalCnt;
                 while (localItems_types.size() > localsCnt) {
@@ -838,8 +849,6 @@ public class Instrument implements ClassFileTransformer {
                         newlocalItems_types,
                         stackItem_types,
                         pgen.getConstantPool());
-                //	        	    	new_map[stack_map_table.length] = new StackMapTableEntry(Const.FULL_FRAME, goalOffset , localsCnt,
-                //	        	    			newlocalItems_types, 1, stackItem_types, pgen.getConstantPool());
               } else {
                 //ERROR but keep a valid Stackframe
                 // Need to find out if it happens
@@ -1035,9 +1044,9 @@ public class Instrument implements ClassFileTransformer {
   private /*@Nullable*/ InstructionList add_tryCatch_instrumentation(
       String fullClassName, MethodContext c) {
 
-    if (c.mgen.getName().contains("init>"))
-      //			|| c.mgen.getName().contentEquals("<cinit>"))
-      return (null);
+    //    if (c.mgen.getName().contains("init>"))
+    //      //			|| c.mgen.getName().contentEquals("<cinit>"))
+    //      return (null);
 
     Type type = Type.getType(Throwable.class);
     InstructionList il = new InstructionList();
