@@ -44,18 +44,6 @@ public class ChicoryPremain {
    **/
   private static boolean doPurity = false;
 
-  // This @SuppressWarnings is for the two lines
-  // Runtime.decl_writer = new DeclWriter (Runtime.dtrace);
-  // Runtime.dtrace_writer = new DTraceWriter (Runtime.dtrace);
-  //
-  // Runtime.dtrace is @GuardedBy("itself") because in the Runtime class,
-  // dtrace.close() is called only when the monitor of dtrace is held
-  // in order for the closing of the trace to happen only once.  See
-  // Runtime.noMoreOutput() and Runtime.addShutdownHook() for more details.
-  // DeclWriter and DTraceWriter never call close() on the value of dtrace passed in,
-  // therefore they do not need to make use of synchronization and their
-  // references to dtrace do not need to be annotated with @GuardedBy("itself").
-  @SuppressWarnings("lock:argument.type.incompatible")
   /**
    * This method is the entry point of the java agent.  Its main
    * purpose is to set up the transformer so that when classes from
@@ -128,12 +116,7 @@ public class ChicoryPremain {
       doPurity = true;
     }
 
-    // Setup the declaration and dtrace writer.  The include/exclude filter are
-    // implemented in the transform, so they don't need to be handled
-    // here.
-    // (It looks like these can be called even if Runtime.dtrace is null...)
-    Runtime.decl_writer = new DeclWriter(Runtime.dtrace);
-    Runtime.dtrace_writer = new DTraceWriter(Runtime.dtrace);
+    initializeDeclAndDTraceWriters();
 
     // Setup the transformer
     Object transformer = null;
@@ -154,6 +137,27 @@ public class ChicoryPremain {
 
     // Instrument transformer = new Instrument();
     inst.addTransformer((ClassFileTransformer) transformer);
+  }
+
+  /**
+   * Set up the declaration and dtrace writer.
+   */
+  // Runtime.dtrace is @GuardedBy("itself") because in the Runtime class,
+  // the printing of final lines and then closing of dtrace only happens
+  // when the monitor of dtrace is held in order for the closing of the
+  // trace to happen only once.  See Runtime.noMoreOutput() and
+  // Runtime.addShutdownHook() for more details.  DeclWriter and DTraceWriter
+  // never perform this operation (print final lines and close) on the
+  // value of dtrace passed in, therefore they do not need to make use
+  // of synchronization and their references to dtrace do not need to
+  // be annotated with @GuardedBy("itself").
+  @SuppressWarnings("lock:argument.type.incompatible")
+  private static void initializeDeclAndDTraceWriters() {
+    // The include/exclude filter are implemented in the transform,
+    // so they don't need to be handled here.
+    // (It looks like these can be called even if Runtime.dtrace is null...)
+    Runtime.decl_writer = new DeclWriter(Runtime.dtrace);
+    Runtime.dtrace_writer = new DTraceWriter(Runtime.dtrace);
   }
 
   /**

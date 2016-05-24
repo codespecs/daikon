@@ -171,6 +171,11 @@ public class Runtime {
   // information about that call to the trace file.  However, if the
   // method is a pure method that is being called to create a value for
   // the trace file, don't record it.
+  // TODO: invokingPure should be annotated with @GuardedByName("Runtime.class")
+  // once that annotation is available.  Currently all the methods that access
+  // invokingPure are annotated with @Holding("Runtime.class"), but annotating
+  // the boolean would prevent any new methods from accessing it without holding
+  // the lock.
   private static boolean invokingPure = false;
 
   /*@Holding("Runtime.class")*/
@@ -178,10 +183,12 @@ public class Runtime {
     return invokingPure;
   }
 
+  /*@Holding("Runtime.class")*/
   public static void startPure() {
     invokingPure = true;
   }
 
+  /*@Holding("Runtime.class")*/
   public static void endPure() {
     invokingPure = false;
   }
@@ -449,8 +456,14 @@ public class Runtime {
     // synchronized block, but re-synchronize just to be sure, or in case
     // this is called from elsewhere.
 
-    // Ensure that the following method calls on dtrace all occur on the same
-    // instance of dtrace:
+    // Runtime.dtrace should be effectively final in that it refers
+    // to the same value throughout the execution of the synchronized
+    // block below (including the lock acquisition).
+    // Unfortunately, the Lock Checker cannot verify this,
+    // so a final local variable is used to satisfy the Lock Checker's
+    // requirement that all variables used as locks be final or
+    // effectively final.  If a bug exists whereby Runtime.dtrace
+    // is not effectively final, this would unfortunately mask that error.
     final /*@GuardedBy("itself")*/ PrintStream dtrace = Runtime.dtrace;
 
     synchronized (dtrace) {
