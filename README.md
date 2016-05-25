@@ -1,5 +1,8 @@
+[![Build Status](https://travis-ci.org/rarworld/daikon.svg?branch=FeatureExceptionHandling)](https://travis-ci.org/rarworld/daikon)
+
 This is the distribution of a fork of the Daikon invariant detector,
 based on Daikon version 5.3.3, released May 2, 2016.
+Daikon version 5.3.3.1_rar, released Mai 24, 2016;
 
 If you are working with a Daikon distribution downloaded from the Daikon
 website, then most everything is setup and ready to go.  See the 'doc'
