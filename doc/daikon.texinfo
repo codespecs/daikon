@@ -375,6 +375,13 @@ export JAVA_HOME=@var{/usr/lib/jvm/java}
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
+A setting of @env{JAVA_HOME} that @emph{sometimes} works (it might not
+because @command{java} might be the version in the JDK or in the JRE) is:
+
+@smallexample
+export JAVA_HOME=$@{JAVA_HOME:-$(dirname $(dirname $(dirname $(readlink -f $(/usr/bin/which java)))))@}
+@end smallexample
+
 After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
 effect.
