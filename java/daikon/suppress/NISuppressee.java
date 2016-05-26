@@ -188,7 +188,7 @@ public class NISuppressee {
    */
   /*@RequiresNonNull("#2.equality_view")*/
   public List<NIS.SupInv> find_all(
-      VarInfo[] vis, PptTopLevel ppt, final /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
+      VarInfo[] vis, final PptTopLevel ppt, /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
 
     List<NIS.SupInv> created_list = new ArrayList<NIS.SupInv>();
 
