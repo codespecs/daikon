@@ -160,7 +160,8 @@ public class LOWERBOUNDCORE
     return MIN1;
   }
 
-  /*@SideEffectFree*/ public LOWERBOUNDCORE clone(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
+  /*@SideEffectFree*/
+  public LOWERBOUNDCORE clone(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
     try {
       return (LOWERBOUNDCORE) super.clone();
     } catch (CloneNotSupportedException e) {
@@ -384,11 +385,13 @@ public class LOWERBOUNDCORE
 
   }
 
-  /*@Pure*/ public boolean isSameFormula(LOWERBOUNDCORE other) {
+  /*@Pure*/
+  public boolean isSameFormula(LOWERBOUNDCORE other) {
     return MIN1 == other.MIN1;
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     return false;
   }
 

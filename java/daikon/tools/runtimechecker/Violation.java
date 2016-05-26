@@ -70,11 +70,13 @@ public class Violation implements Serializable {
       this.xmlname = xmlname;
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Time this*/) {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied Time this*/) {
       return name.hashCode();
     }
 
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Time this*/) {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied Time this*/) {
       return name;
     }
 
@@ -192,14 +194,16 @@ public class Violation implements Serializable {
   /**
    * String representation.
    */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Violation this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied Violation this*/) {
     return time.toString() + " : " + property.toString();
   }
 
   /**
    * String representation.
    */
-  /*@SideEffectFree*/ public String toStringWithMethod(/*>>>@GuardSatisfied Violation this*/) {
+  /*@SideEffectFree*/
+  public String toStringWithMethod(/*>>>@GuardSatisfied Violation this*/) {
     return time.toString() + "of " + property.method() + " : " + property.toString();
   }
 
@@ -207,7 +211,8 @@ public class Violation implements Serializable {
    * Two violations are equal if their properties and times are equal.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(
+  /*@Pure*/
+  public boolean equals(
       /*>>>@GuardSatisfied Violation this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o == null) {
       return false;
@@ -219,7 +224,8 @@ public class Violation implements Serializable {
     return (this.property.equals(other.property) && this.time.equals(other.time));
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Violation this*/) {
+  /*@Pure*/
+  public int hashCode(/*>>>@GuardSatisfied Violation this*/) {
     return property.hashCode() + time.hashCode();
   }
 

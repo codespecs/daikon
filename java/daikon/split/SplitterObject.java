@@ -237,7 +237,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.testString;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SplitterObject this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied SplitterObject this*/) {
     return (className
         + ": "
         + "condition: "
@@ -248,7 +249,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
         + pptName);
   }
 
-  /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied SplitterObject this,*/ SplitterObject o) {
+  /*@Pure*/
+  public int compareTo(/*>>>@GuardSatisfied SplitterObject this,*/ SplitterObject o) {
     return this.guid - o.getGUID();
   }
 }

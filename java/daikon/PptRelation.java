@@ -136,11 +136,13 @@ public class PptRelation implements Serializable {
   /**
    * Returns the number of parent to child variable relations.
    */
-  /*@Pure*/ public int size() {
+  /*@Pure*/
+  public int size() {
     return (parent_to_child_map.size());
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptRelation this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied PptRelation this*/) {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 
@@ -199,7 +201,8 @@ public class PptRelation implements Serializable {
    * object&rarr;method,and exit&rarr;exitNN) form a simple tree without duplication
    */
 
-  /*@Pure*/ public boolean is_primary() {
+  /*@Pure*/
+  public boolean is_primary() {
     return ((relationship != PptRelationType.USER) && (relationship != PptRelationType.ENTER_EXIT));
   }
 

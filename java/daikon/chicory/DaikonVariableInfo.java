@@ -180,7 +180,8 @@ public abstract class DaikonVariableInfo
   /**
    * Returns a string representation of this node.
    */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
     return getClass().getName() + ":" + getName();
   }
 
@@ -1284,8 +1285,8 @@ public abstract class DaikonVariableInfo
   /**
    * Compares based on the name of the variable
    */
-  /*@Pure*/ public int compareTo(
-      /*>>>@GuardSatisfied DaikonVariableInfo this,*/ DaikonVariableInfo dv) {
+  /*@Pure*/
+  public int compareTo(/*>>>@GuardSatisfied DaikonVariableInfo this,*/ DaikonVariableInfo dv) {
     return name.compareTo(dv.name);
   }
 
@@ -1343,7 +1344,8 @@ public abstract class DaikonVariableInfo
    * Returns true iff the variable is static.  Overridden by subclasses that can
    * be static
    */
-  /*@Pure*/ public boolean isStatic() {
+  /*@Pure*/
+  public boolean isStatic() {
     return false;
   }
 

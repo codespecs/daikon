@@ -55,7 +55,8 @@ public final class StackTypes {
     return os_arr[offset];
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied StackTypes this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied StackTypes this*/) {
 
     StringBuffer sb = new StringBuffer();
 
@@ -77,8 +78,8 @@ public final class StackTypes {
   /**
    * TODO
    */
-  /*@SideEffectFree*/ public String toString(
-      /*>>>@GuardSatisfied StackTypes this,*/ OperandStack os) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied StackTypes this,*/ OperandStack os) {
 
     String buff = "";
 
@@ -98,8 +99,8 @@ public final class StackTypes {
   /**
    * TODO
    */
-  /*@SideEffectFree*/ public String toString(
-      /*>>>@GuardSatisfied StackTypes this,*/ LocalVariables lv) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied StackTypes this,*/ LocalVariables lv) {
 
     String buff = "";
 

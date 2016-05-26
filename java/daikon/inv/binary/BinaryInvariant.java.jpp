@@ -296,7 +296,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Return true if both invariants are the same class and the order
    * of the variables (swap) is the same.
    **/
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     CLASSNAME inv = (CLASSNAME) other;
     return ((this.getClass() == inv.getClass()) && (this.swap == inv.swap));
   }

@@ -82,7 +82,8 @@ public class CommonStringSequence extends SingleStringSequence {
     return result;
   }
 
-  /*@SideEffectFree*/ public String format_using(
+  /*@SideEffectFree*/
+  public String format_using(
       /*>>>@GuardSatisfied CommonStringSequence this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
@@ -167,7 +168,8 @@ public class CommonStringSequence extends SingleStringSequence {
     return null;
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     assert other instanceof CommonStringSequence;
     return true;
   }

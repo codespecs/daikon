@@ -38,8 +38,8 @@ public class AndJoiner extends Joiner {
     return "[" + left.repr() + " and " + right.repr() + "]";
   }
 
-  /*@SideEffectFree*/ public String format_using(
-      /*>>>@GuardSatisfied AndJoiner this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied AndJoiner this,*/ OutputFormat format) {
     List<Invariant> invs = conjuncts();
     List<String> invStrings = new ArrayList<String>(invs.size());
     for (Invariant inv : invs) {
@@ -113,7 +113,8 @@ public class AndJoiner extends Joiner {
     }
   }
 
-  /*@Pure*/ public boolean isSameInvariant(Invariant other) {
+  /*@Pure*/
+  public boolean isSameInvariant(Invariant other) {
     return super.isSameInvariant(other);
   }
 

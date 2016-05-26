@@ -99,7 +99,8 @@ public class CLASSNAME
     return new CLASSNAME (slice);
   }
 
-  /*@SideEffectFree*/ public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  /*@SideEffectFree*/
+  public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;
@@ -117,7 +118,8 @@ public class CLASSNAME
       + "; " + core.repr();
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (core.a == 0 && core.b == 0 && core.c == 0) {
       return format_too_few_samples(format, null);
     }
@@ -180,11 +182,13 @@ public class CLASSNAME
     return core.computeConfidence();
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
       return core.isExclusiveFormula(((CLASSNAME) other).core);
     }
@@ -213,7 +217,8 @@ public class CLASSNAME
     return null;
   }
 
-  /*@Pure*/ public boolean isActive() {
+  /*@Pure*/
+  public boolean isActive() {
     return core.isActive();
   }
 

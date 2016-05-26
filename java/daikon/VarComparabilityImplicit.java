@@ -61,7 +61,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     this.dimensions = dimensions;
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
+  /*@Pure*/
+  public int hashCode(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
     if (base < 0) {
       // This is equals() to everything
       return -1;
@@ -73,7 +74,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(
+  /*@Pure*/
+  public boolean equals(
       /*>>>@GuardSatisfied VarComparabilityImplicit this,*/ final
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (!(o instanceof VarComparabilityImplicit)) return false;
@@ -81,7 +83,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(
+  /*@Pure*/
+  public boolean equals(
       /*>>>@GuardSatisfied VarComparabilityImplicit this,*/ final
       /*@GuardSatisfied*/ VarComparabilityImplicit o) {
     return equality_set_ok(o);
@@ -91,7 +94,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     return (base < 0);
   }
 
-  public /*@Pure*/ boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
+  /*@Pure*/
+  public boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
     return (dimensions == 0) && (base < 0);
   }
 
@@ -146,8 +150,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     return unknown;
   }
 
-  public /*@Pure*/ VarComparability indexType(
-      /*>>>@GuardSatisfied VarComparabilityImplicit this,*/ int dim) {
+  /*@Pure*/
+  public VarComparability indexType(/*>>>@GuardSatisfied VarComparabilityImplicit this,*/ int dim) {
     // When Ajax is modified to output non-atomic info for arrays, this
     // check will no longer be necessary.
     if (dim < dimensions) {
@@ -159,7 +163,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   @SuppressWarnings("purity") // Override the purity checker
-  static /*@Pure*/ boolean comparable(
+  /*@Pure*/
+  static boolean comparable(
       /*@GuardSatisfied*/ VarComparabilityImplicit type1,
       /*@GuardSatisfied*/ VarComparabilityImplicit type2) {
     if (type1.alwaysComparable()) return true;
@@ -208,8 +213,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   // for debugging
-  /*@SideEffectFree*/ public String toString(
-      /*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied VarComparabilityImplicit this*/) {
     String result = "" + base;
     for (int i = 0; i < dimensions; i++) {
       result += "[" + indexType(i) + "]";

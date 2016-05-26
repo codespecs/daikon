@@ -266,7 +266,8 @@ public class PptName implements Serializable {
    * @return true iff this name refers to a synthetic object instance
    * program point
    **/
-  /*@Pure*/ public boolean isObjectInstanceSynthetic() {
+  /*@Pure*/
+  public boolean isObjectInstanceSynthetic() {
     return FileIO.object_suffix.equals(point);
   }
 
@@ -274,14 +275,16 @@ public class PptName implements Serializable {
    * @return true iff this name refers to a synthetic class instance
    * program point
    **/
-  /*@Pure*/ public boolean isClassStaticSynthetic() {
+  /*@Pure*/
+  public boolean isClassStaticSynthetic() {
     return FileIO.class_static_suffix.equals(point);
   }
 
   /**
    * @return true iff this name refers to program globals
    **/
-  /*@Pure*/ public boolean isGlobalPoint() {
+  /*@Pure*/
+  public boolean isGlobalPoint() {
     return FileIO.global_suffix.equals(point);
   }
 
@@ -289,7 +292,8 @@ public class PptName implements Serializable {
    * @return true iff this name refers to a procedure exit point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isExitPoint() {
+  /*@Pure*/
+  public boolean isExitPoint() {
     return (point != null) && point.startsWith(FileIO.exit_suffix);
   }
 
@@ -297,7 +301,8 @@ public class PptName implements Serializable {
    * @return true iff this name refers to an abrupt completion point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isThrowsPoint() {
+  /*@Pure*/
+  public boolean isThrowsPoint() {
     return (point != null) && point.startsWith(FileIO.throws_suffix);
   }
 
@@ -306,7 +311,8 @@ public class PptName implements Serializable {
    *         exit point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isCombinedExitPoint() {
+  /*@Pure*/
+  public boolean isCombinedExitPoint() {
     return (point != null) && point.equals(FileIO.exit_suffix);
   }
 
@@ -315,7 +321,8 @@ public class PptName implements Serializable {
    * procedure exit point (eg, EXIT22)
    */
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isNumberedExitPoint() {
+  /*@Pure*/
+  public boolean isNumberedExitPoint() {
     return ((point != null) && (isExitPoint() && !isCombinedExitPoint()));
   }
 
@@ -323,7 +330,8 @@ public class PptName implements Serializable {
    * @return true iff this name refers to a procedure exit point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isEnterPoint() {
+  /*@Pure*/
+  public boolean isEnterPoint() {
     return (point != null) && point.startsWith(FileIO.enter_suffix);
   }
 
@@ -350,7 +358,8 @@ public class PptName implements Serializable {
    * format does not have &lt;init&gt; but their method name includes the class
    * name.  For compatibility both mechanisms are checked.
    **/
-  /*@Pure*/ public boolean isConstructor() {
+  /*@Pure*/
+  public boolean isConstructor() {
 
     if (method != null) {
 
@@ -439,25 +448,27 @@ public class PptName implements Serializable {
   // ==================== OBJECT METHODS ====================
 
   /* @return interned string such that this.equals(new PptName(this.toString())) */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptName this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied PptName this*/) {
     return fullname;
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(
+  /*@Pure*/
+  public boolean equals(
       /*>>>@GuardSatisfied PptName this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     return (o instanceof PptName) && equals((PptName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(
-      /*>>>@GuardSatisfied PptName this,*/
-      /*@GuardSatisfied*/ PptName o) {
+  /*@Pure*/
+  public boolean equals(/*>>>@GuardSatisfied PptName this,*//*@GuardSatisfied*/ PptName o) {
     return (o != null) && (o.fullname == fullname);
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied PptName this*/) {
+  /*@Pure*/
+  public int hashCode(/*>>>@GuardSatisfied PptName this*/) {
     return fullname.hashCode();
   }
 

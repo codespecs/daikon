@@ -25,15 +25,18 @@ public class NonsensicalList extends AbstractList<Object> implements List<Object
     return theList;
   }
 
-  /*@Pure*/ public Object get(/*>>>@GuardSatisfied NonsensicalList this,*/ int index) {
+  /*@Pure*/
+  public Object get(/*>>>@GuardSatisfied NonsensicalList this,*/ int index) {
     return NonsensicalObject.getInstance();
   }
 
-  /*@Pure*/ public int size(/*>>>@GuardSatisfied NonsensicalList this*/) {
+  /*@Pure*/
+  public int size(/*>>>@GuardSatisfied NonsensicalList this*/) {
     return -1;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied NonsensicalList this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied NonsensicalList this*/) {
     return "NonsensicalList";
   }
 

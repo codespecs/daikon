@@ -14,5 +14,6 @@ public interface Cmd {
   /**
    * @return a string for debugging only.
    **/
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Cmd this*/);
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied Cmd this*/);
 }

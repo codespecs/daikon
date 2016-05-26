@@ -150,7 +150,8 @@ public class CLASSNAME
     return new SUBSEQ_SWAP (ppt);
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
@@ -829,7 +830,8 @@ public class CLASSNAME
     return false;
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant inv) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant inv) {
     assert inv instanceof CLASSNAME;
     return true;
   }

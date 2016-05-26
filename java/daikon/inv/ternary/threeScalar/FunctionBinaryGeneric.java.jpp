@@ -124,7 +124,8 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     return var_order;
   }
 
-  /*@Pure*/ public boolean is_symmetric() {
+  /*@Pure*/
+  public boolean is_symmetric() {
     #ifdef SYMMETRIC
       return true;
     #else
@@ -172,12 +173,14 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     return (add_ordered (resultvar, arg1, arg2, count));
   }
 
-  /*@Pure*/ public boolean is ## FUNCTION() {
+  /*@Pure*/
+  public boolean is ## FUNCTION() {
     return true;
   }
 
   #ifdef EXACT
-    /*@Pure*/ public boolean isExact() { return true; }
+    /*@Pure*/
+    public boolean isExact() { return true; }
   #endif
 
   /**

@@ -84,7 +84,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   public int dimensions() {
     return dimensions;
   }
-  /*@Pure*/ public boolean isArray() {
+  /*@Pure*/
+  public boolean isArray() {
     return dimensions > 0;
   }
 
@@ -606,7 +607,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
         || (base == BASE_SHORT));
   }
 
-  /*@Pure*/ public boolean isPrimitive() {
+  /*@Pure*/
+  public boolean isPrimitive() {
     return ((dimensions == 0) && baseIsPrimitive());
   }
 
@@ -622,7 +624,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
         || (base == BASE_INTEGER));
   }
 
-  /*@Pure*/ public boolean isIntegral() {
+  /*@Pure*/
+  public boolean isIntegral() {
     return ((dimensions == 0) && baseIsIntegral());
   }
 
@@ -640,11 +643,13 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   // Return true if this variable is sensible as an array index.
-  /*@Pure*/ public boolean isIndex() {
+  /*@Pure*/
+  public boolean isIndex() {
     return isIntegral();
   }
 
-  /*@Pure*/ public boolean isScalar() {
+  /*@Pure*/
+  public boolean isScalar() {
     // For reptypes, checking against INT is sufficient, rather than
     // calling isIntegral().
     return (isIntegral() || (this == HASHCODE) || (this == BOOLEAN));
@@ -662,11 +667,13 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     return ((base == BASE_DOUBLE) || (base == BASE_FLOAT));
   }
 
-  /*@Pure*/ public boolean isFloat() {
+  /*@Pure*/
+  public boolean isFloat() {
     return ((dimensions == 0) && baseIsFloat());
   }
 
-  /*@Pure*/ public boolean isObject() {
+  /*@Pure*/
+  public boolean isObject() {
     return ((dimensions == 0) && (baseIsObject()));
   }
 
@@ -678,7 +685,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     return (base == BASE_STRING);
   }
 
-  /*@Pure*/ public boolean isString() {
+  /*@Pure*/
+  public boolean isString() {
     return ((dimensions == 0) && baseIsString());
   }
 
@@ -686,7 +694,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     return (base == BASE_HASHCODE);
   }
 
-  /*@Pure*/ public boolean isHashcode() {
+  /*@Pure*/
+  public boolean isHashcode() {
     return ((dimensions == 0) && baseIsHashcode());
   }
 
@@ -694,7 +703,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * Does this type represent a pointer? Should only be applied to
    * file_rep types.
    **/
-  /*@Pure*/ public boolean isPointerFileRep() {
+  /*@Pure*/
+  public boolean isPointerFileRep() {
     return (base == BASE_HASHCODE);
   }
 
@@ -744,7 +754,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   // For Java programs, a @BinaryName.
-  /*@SideEffectFree*/ public String format(/*>>>@GuardSatisfied ProglangType this*/) {
+  /*@SideEffectFree*/
+  public String format(/*>>>@GuardSatisfied ProglangType this*/) {
     if (dimensions == 0) return base;
 
     StringBuffer sb = new StringBuffer();
@@ -764,7 +775,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   // For Java programs, a @BinaryName.
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ProglangType this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied ProglangType this*/) {
     return format();
   }
 
@@ -773,7 +785,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * Only valid if the front end marks the function pointer with the
    * name '*func'
    **/
-  /*@Pure*/ public boolean is_function_pointer() {
+  /*@Pure*/
+  public boolean is_function_pointer() {
     assert base == base.intern();
     return base == "*func"; // interned
   }

@@ -221,7 +221,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return true;
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     return true;
   }
 
@@ -237,7 +238,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * get_format_str().  Instances of %varN% are replaced by the variable
    * name in the specified format.
    */
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
 
     if (ppt == null) {
       return (String.format ("proto ppt [class %s] format %s", getClass(),
@@ -1098,7 +1100,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return new BitwiseComplement (slice);
     }
 
-    /*@Pure*/ public boolean is_symmetric() {
+    /*@Pure*/
+    public boolean is_symmetric() {
       return true;
     }
 
@@ -1284,7 +1287,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    /*@Pure*/ public boolean is_symmetric() {
+    /*@Pure*/
+    public boolean is_symmetric() {
       return true;
     }
 

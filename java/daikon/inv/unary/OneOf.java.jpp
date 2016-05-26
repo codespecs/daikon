@@ -368,23 +368,28 @@ public final class ONEOFSCALAR
   }
 
 #if defined(SCALAR)
-  /*@Pure*/ public boolean is_boolean(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  /*@Pure*/
+  public boolean is_boolean(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
      return (var().file_rep_type == ProglangType.BOOLEAN);
   }
-  /*@Pure*/ public boolean is_hashcode(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  /*@Pure*/
+  public boolean is_hashcode(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return (var().file_rep_type == ProglangType.HASHCODE);
   }
 #else
-  /*@Pure*/ public boolean is_boolean(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  /*@Pure*/
+  public boolean is_boolean(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
   }
-  /*@Pure*/ public boolean is_hashcode(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  /*@Pure*/
+  public boolean is_hashcode(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return (var().file_rep_type.elementType() == ProglangType.HASHCODE);
   }
 #endif
 
   @SuppressWarnings("interning") // clone method re-does interning
-  /*@SideEffectFree*/ public ONEOFSCALAR clone(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  /*@SideEffectFree*/
+  public ONEOFSCALAR clone(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = elts.clone();
 #ifdef IS_SEQUENCE
@@ -576,7 +581,8 @@ public final class ONEOFSCALAR
   }
 #endif
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ OutputFormat format) {
     sort_rep();
 
     if (format.isJavaFamily()) {
@@ -719,7 +725,8 @@ public final class ONEOFSCALAR
 
 
 #if defined(STRING) || defined(ELTSTRING)
-  /*@Pure*/ private boolean is_type(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
+  /*@Pure*/
+  private boolean is_type(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return var().has_typeof();
   }
 #endif
@@ -755,7 +762,8 @@ public final class ONEOFSCALAR
 #endif
 
 #if defined(ELTSTRING) || defined(STRINGSEQUENCE)
-  /*@Pure*/ public boolean isValidEscExpression() {
+  /*@Pure*/
+  public boolean isValidEscExpression() {
     // format_esc will look at the particulars and decide
     return true;
   }
@@ -1827,7 +1835,8 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return true;
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant o) {
     ONEOFSCALAR other = (ONEOFSCALAR) o;
     if (num_elts != other.num_elts) {
       return false;
@@ -1909,7 +1918,8 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant o) {
     if (o instanceof ONEOFSCALAR) {
       ONEOFSCALAR other = (ONEOFSCALAR) o;
 
@@ -1970,7 +1980,8 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   // OneOf invariants that indicate a small set of possible values are
   // uninteresting.  OneOf invariants that indicate exactly one value
   // are interesting.
-  /*@Pure*/ public boolean isInteresting() {
+  /*@Pure*/
+  public boolean isInteresting() {
     if (num_elts() > 1) {
       return false;
     } else {
@@ -2010,7 +2021,8 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   }
 
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     return (num_elts == 1);
   }
 

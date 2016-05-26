@@ -60,23 +60,30 @@ public class Quantify {
    * for quantification (i, j, etc), and normal daikon variables
    */
   public static abstract class Term {
-    /*@SideEffectFree*/ public abstract String name(/*>>>@GuardSatisfied Term this*/);
-    /*@SideEffectFree*/ public String esc_name() {
+    /*@SideEffectFree*/
+    public abstract String name(/*>>>@GuardSatisfied Term this*/);
+    /*@SideEffectFree*/
+    public String esc_name() {
       return name();
     }
-    /*@SideEffectFree*/ public String jml_name() {
+    /*@SideEffectFree*/
+    public String jml_name() {
       return esc_name();
     }
-    /*@SideEffectFree*/ public String jml_name(boolean in_prestate) {
+    /*@SideEffectFree*/
+    public String jml_name(boolean in_prestate) {
       return jml_name();
     }
-    /*@SideEffectFree*/ public String simplify_name() {
+    /*@SideEffectFree*/
+    public String simplify_name() {
       return name();
     }
-    /*@SideEffectFree*/ public String csharp_name() {
+    /*@SideEffectFree*/
+    public String csharp_name() {
       return name();
     }
-    /*@SideEffectFree*/ protected static String name_with_offset(String name, int offset) {
+    /*@SideEffectFree*/
+    protected static String name_with_offset(String name, int offset) {
       if (offset == 0) {
         return name;
       } else {
@@ -94,10 +101,12 @@ public class Quantify {
     public FreeVar(String name) {
       this.name = name;
     }
-    /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied FreeVar this*/) {
+    /*@SideEffectFree*/
+    public String name(/*>>>@GuardSatisfied FreeVar this*/) {
       return name;
     }
-    /*@SideEffectFree*/ public String simplify_name() {
+    /*@SideEffectFree*/
+    public String simplify_name() {
       return "|" + name + "|";
     }
   }
@@ -109,7 +118,8 @@ public class Quantify {
     public Constant(int val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied Constant this*/) {
+    /*@SideEffectFree*/
+    public String name(/*>>>@GuardSatisfied Constant this*/) {
       return "" + val;
     }
 
@@ -127,13 +137,16 @@ public class Quantify {
       this.sequence = sequence;
       this.offset = offset;
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Length this*/) {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied Length this*/) {
       return name();
     }
-    /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied Length this*/) {
+    /*@SideEffectFree*/
+    public String name(/*>>>@GuardSatisfied Length this*/) {
       return name_with_offset("size(" + sequence.name() + ")", offset);
     }
-    /*@SideEffectFree*/ public String esc_name() {
+    /*@SideEffectFree*/
+    public String esc_name() {
       VarInfo arr_var = get_check_array_var("ESC");
       if (arr_var.isPrestate()) {
         assert arr_var.postState != null; // because isPrestate() = true
@@ -143,7 +156,8 @@ public class Quantify {
         return name_with_offset(arr_var.esc_name() + ".length", offset);
       }
     }
-    /*@SideEffectFree*/ public String jml_name() {
+    /*@SideEffectFree*/
+    public String jml_name() {
       VarInfo arr_var = get_check_array_var("JML");
       if (arr_var.isPrestate()) {
         assert arr_var.postState != null; // because isPrestate() = true
@@ -155,7 +169,8 @@ public class Quantify {
         return name_with_offset(name, offset);
       }
     }
-    /*@SideEffectFree*/ public String jml_name(boolean in_prestate) {
+    /*@SideEffectFree*/
+    public String jml_name(boolean in_prestate) {
       if (!in_prestate) return jml_name();
 
       VarInfo arr_var = get_check_array_var("JML");
@@ -168,7 +183,8 @@ public class Quantify {
         return name_with_offset(name, offset);
       }
     }
-    /*@SideEffectFree*/ public String simplify_name() {
+    /*@SideEffectFree*/
+    public String simplify_name() {
       VarInfo arr_var = get_check_array_var("Simplify");
       String length = String.format("(arrayLength %s)", arr_var.simplify_name());
       if (offset < 0) {
@@ -179,7 +195,8 @@ public class Quantify {
         return length;
       }
     }
-    /*@SideEffectFree*/ public String csharp_name() {
+    /*@SideEffectFree*/
+    public String csharp_name() {
       VarInfo arr_var = get_check_array_var("CHARPCONTRACT");
       return name_with_offset(arr_var.csharp_name() + ".Count()", offset);
     }
@@ -193,7 +210,8 @@ public class Quantify {
      * Throws a TerminationMessage exception if one does not exist.
      **/
     @SuppressWarnings("sideeffectfree") // throws exception in case of error
-    /*@SideEffectFree*/ private VarInfo get_check_array_var(String output_format) {
+    /*@SideEffectFree*/
+    private VarInfo get_check_array_var(String output_format) {
       VarInfo arr_var = sequence.get_base_array_hashcode();
       if (arr_var != null) return arr_var;
 
@@ -225,19 +243,23 @@ public class Quantify {
       this.offset = offset;
     }
 
-    /*@SideEffectFree*/ public String name(/*>>>@GuardSatisfied VarPlusOffset this*/) {
+    /*@SideEffectFree*/
+    public String name(/*>>>@GuardSatisfied VarPlusOffset this*/) {
       return name_with_offset(var.name(), offset);
     }
 
-    /*@SideEffectFree*/ public String esc_name() {
+    /*@SideEffectFree*/
+    public String esc_name() {
       return name_with_offset(var.esc_name(), offset);
     }
 
-    /*@SideEffectFree*/ public String jml_name() {
+    /*@SideEffectFree*/
+    public String jml_name() {
       return name_with_offset(var.jml_name(), offset);
     }
 
-    /*@SideEffectFree*/ public String jml_name(boolean in_prestate) {
+    /*@SideEffectFree*/
+    public String jml_name(boolean in_prestate) {
       if (!in_prestate) return jml_name();
 
       if (var.isPrestate()) {
@@ -248,7 +270,8 @@ public class Quantify {
       }
     }
 
-    /*@SideEffectFree*/ public String simplify_name() {
+    /*@SideEffectFree*/
+    public String simplify_name() {
       if (offset < 0) {
         return String.format("(- %s %d)", var.simplify_name(), -offset);
       } else if (offset > 0) {

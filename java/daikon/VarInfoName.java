@@ -447,7 +447,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   /**
    * @return true when this is "0", "-1", "1", etc.
    **/
-  /*@Pure*/ public boolean isLiteralConstant() {
+  /*@Pure*/
+  public boolean isLiteralConstant() {
     return false;
   }
 
@@ -490,7 +491,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * of a class.  True for both normal and prestate versions of the
    * variable
    */
-  /*@Pure*/ public boolean isThis() {
+  /*@Pure*/
+  public boolean isThis() {
     if (name() == "this") { // interned
       return true;
     }
@@ -514,7 +516,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * @return true if every variable in the name is an orig(...)
    * variable.
    **/
-  /*@Pure*/ public boolean isAllPrestate(/*>>> @Interned VarInfoName this*/) {
+  /*@Pure*/
+  public boolean isAllPrestate(/*>>> @Interned VarInfoName this*/) {
     return new IsAllPrestateVisitor(this).result();
   }
 
@@ -568,14 +571,16 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // The usual Object methods
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(
+  /*@Pure*/
+  public boolean equals(
       /*>>>@GuardSatisfied VarInfoName this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     return (o instanceof VarInfoName) && equals((VarInfoName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(
+  /*@Pure*/
+  public boolean equals(
       /*>>>@GuardSatisfied @Interned VarInfoName this,*/
       /*@GuardSatisfied*/ VarInfoName other) {
     return ((other == this) // "interned": equality optimization pattern
@@ -585,11 +590,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // This should be safe even in the absence of caching, because "repr()"
   // returns a new string each time, but it is equal() to any other
   // returned string, so their hashCode()s should be the same.
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoName this*/) {
+  /*@Pure*/
+  public int hashCode(/*>>>@GuardSatisfied VarInfoName this*/) {
     return repr().hashCode();
   }
 
-  /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied VarInfoName this,*/ VarInfoName other) {
+  /*@Pure*/
+  public int compareTo(/*>>>@GuardSatisfied VarInfoName this,*/ VarInfoName other) {
     int nameCmp = name().compareTo(other.name());
     if (nameCmp != 0) return nameCmp;
     int reprCmp = repr().compareTo(other.repr());
@@ -599,7 +606,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // This is a debugging method, not intended for ordinary output.
   // Code producing output should usually call name() rather than
   // calling toString (perhaps implicitly).
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfoName this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied VarInfoName this*/) {
     return repr();
   }
 
@@ -632,7 +640,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       assert name != null;
       this.name = name;
     }
-    /*@Pure*/ public boolean isLiteralConstant() {
+    /*@Pure*/
+    public boolean isLiteralConstant() {
       try {
         Integer.parseInt(name);
         return true;
@@ -719,7 +728,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * @return true iff applySize will not throw an exception
    * @see #applySize
    **/
-  /*@Pure*/ public boolean isApplySizeSafe() {
+  /*@Pure*/
+  public boolean isApplySizeSafe() {
     return (new ElementsFinder(this)).elems() != null;
   }
 
@@ -844,7 +854,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /** Returns the hashcode that is the base of the array **/
-    /*@Pure*/ public VarInfoName get_term() {
+    /*@Pure*/
+    public VarInfoName get_term() {
       if (sequence instanceof Elements) {
         return ((Elements) sequence).term;
       } else if (sequence instanceof Prestate) {
@@ -1441,7 +1452,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return "(typeof " + term.simplify_name(prestate) + ")";
     }
 
-    /*@SideEffectFree*/ protected String javaFamilyFormat(String varname, boolean isArray) {
+    /*@SideEffectFree*/
+    protected String javaFamilyFormat(String varname, boolean isArray) {
       if (isArray) {
         return "daikon.Quant.typeArray(" + varname + ")";
       } else {
@@ -3913,7 +3925,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * Compare VarInfoNames alphabetically.
    **/
   public static class LexicalComparator implements Comparator<VarInfoName> {
-    /*@Pure*/ public int compare(VarInfoName name1, VarInfoName name2) {
+    /*@Pure*/
+    public int compare(VarInfoName name1, VarInfoName name2) {
       return name1.compareTo(name2);
     }
   }

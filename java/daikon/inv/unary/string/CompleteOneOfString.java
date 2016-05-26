@@ -81,8 +81,8 @@ public final class CompleteOneOfString extends SingleString {
   }
 
   /** return description of invariant.  Only Daikon format is implemented **/
-  /*@SideEffectFree*/ public String format_using(
-      /*>>>@GuardSatisfied CompleteOneOfString this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CompleteOneOfString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       if (vals.size() == 0) {
         return var().name() + "has no values";
@@ -138,7 +138,8 @@ public final class CompleteOneOfString extends SingleString {
    * Same formula if each value is the same and has the same count.
    * Not implemented for now, just presumed to be false.
    */
-  /*@Pure*/ public boolean isSameFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant o) {
     return false;
   }
 }

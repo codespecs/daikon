@@ -71,15 +71,18 @@ public class DiffDummyInvariant extends Invariant {
     throw new UnsupportedOperationException();
   }
 
-  /*@Pure*/ public boolean isInteresting() {
+  /*@Pure*/
+  public boolean isInteresting() {
     return interesting;
   }
 
-  /*@Pure*/ public boolean isSameInvariant(Invariant other) {
+  /*@Pure*/
+  public boolean isSameInvariant(Invariant other) {
     return this.isSameFormula(other);
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     if (other instanceof DiffDummyInvariant) {
       DiffDummyInvariant o = (DiffDummyInvariant) other;
       return this.formula.equals(o.formula);
@@ -96,15 +99,16 @@ public class DiffDummyInvariant extends Invariant {
     return "DiffDummyInvariant(" + ppt.arity() + "," + formula + "," + confidence + ")";
   }
 
-  /*@SideEffectFree*/ public String format_using(
-      /*>>>@GuardSatisfied DiffDummyInvariant this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied DiffDummyInvariant this,*/ OutputFormat format) {
     return repr();
   }
 
   // IsWorthPrinting should not be overridden by subclasses.
   // But this subclass is special:  it's not really an invariant,
   // but is only used for testing.
-  /*@Pure*/ public boolean isWorthPrinting() {
+  /*@Pure*/
+  public boolean isWorthPrinting() {
     return isWorthPrinting;
   }
 

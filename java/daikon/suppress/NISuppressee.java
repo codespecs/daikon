@@ -262,7 +262,8 @@ public class NISuppressee {
     }
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied NISuppressee this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied NISuppressee this*/) {
 
     String extra = "";
     if (var_count == 2) {

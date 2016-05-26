@@ -110,7 +110,8 @@ public class CLASSNAME
     return CLASSSTRING + varNames() + ": ";
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (repr());
     }
@@ -247,7 +248,8 @@ public class CLASSNAME
     return null;
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     assert other instanceof CLASSNAME;
     return true;
   }

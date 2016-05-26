@@ -104,7 +104,8 @@ public class InvMap implements Serializable {
     return answer.iterator();
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied InvMap this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied InvMap this*/) {
     String result = "";
     for (PptTopLevel ppt : pptIterable()) {
       result += ppt.name() + Global.lineSep;
@@ -116,7 +117,8 @@ public class InvMap implements Serializable {
     return result;
   }
 
-  /*@Pure*/ public int size() {
+  /*@Pure*/
+  public int size() {
     int size1 = ppts.size();
     int size2 = pptToInvs.size();
     assert size1 == size2;

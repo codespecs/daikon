@@ -140,7 +140,8 @@ public class SummaryInfo {
    * Returns the full signature of the original method.  Uses reflection
    * to get the parameter types and may change class loading order
    */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SummaryInfo this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied SummaryInfo this*/) {
     List<String> param_names = new ArrayList<String>();
     for (Class<?> p : original_params()) {
       param_names.add(p.getSimpleName());
