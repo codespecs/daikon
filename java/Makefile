@@ -741,15 +741,21 @@ clean-generated-files:
 run:	all
 	${JAVA} daikon.Daikon
 
+ETAGS := $(shell command -v etags 2> /dev/null)
+
 TAGS:	tags
 .PHONY: etags tags
 etags:	tags
 tags: ../plume-lib
+ifndef ETAGS
+	$(error etags is not available, please install it)
+else
 	@echo etags '*.java ...'
 ifneq (,$(findstring Exuberant, $(shell etags --version 2>&1)))
 	@etags --language-force=java ${TAG_FILES}
 else
 	@etags --language=java ${TAG_FILES}
+endif
 endif
 # A TAGS file that does not contain generated files
 tags-sans-generated: clean-generated-files tags
