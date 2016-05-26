@@ -746,7 +746,7 @@ TAGS:	tags
 etags:	tags
 tags: ../plume-lib
 	@echo etags '*.java ...'
-ifneq (,$(findstring Exuberant, $(shell etags --version)))
+ifneq (,$(findstring Exuberant, $(shell etags --version 2>&1)))
 	@etags --language-force=java ${TAG_FILES}
 else
 	@etags --language=java ${TAG_FILES}
