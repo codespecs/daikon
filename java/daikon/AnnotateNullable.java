@@ -204,7 +204,9 @@ public class AnnotateNullable {
     PptTopLevel class_ppt = class_for_object(object_ppt);
 
     String class_samples = "-";
-    if (class_ppt != null) class_samples = String.format("%d", class_ppt.num_samples());
+    if (class_ppt != null) {
+      class_samples = String.format("%d", class_ppt.num_samples());
+    }
     String ppt_package = object_ppt.ppt_name.getPackageName();
     if (ppt_package == null) {
       ppt_package = "";
