@@ -183,7 +183,8 @@ public class InvMatch {
       }
     }
   }
-  /*@Pure*/ public static boolean is_good_translation(List<InvTranslate> translation_list) {
+  /*@Pure*/
+  public static boolean is_good_translation(List<InvTranslate> translation_list) {
 
     Map<String, String> var_map = new LinkedHashMap<String, String>();
 

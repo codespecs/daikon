@@ -289,7 +289,8 @@ public class CLASSNAME extends SUPERCLASS {
     return EQUALSstring;
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     // TODO: Eliminate the unnecessary format_xxx() below if the
@@ -412,11 +413,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 

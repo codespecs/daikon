@@ -52,7 +52,8 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
     return true;
   }
 
-  /*@Pure*/ boolean isConstant(VarInfo vi) {
+  /*@Pure*/
+  boolean isConstant(VarInfo vi) {
     PptTopLevel ppt = vi.ppt;
     boolean isStaticConstant = vi.is_static_constant;
     boolean isDynamicConstant = ((ppt.constants != null) && ppt.constants.is_constant(vi));

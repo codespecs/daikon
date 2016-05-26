@@ -243,10 +243,12 @@ public class Annotation {
       this.name = name;
       this.xmlname = xmlname;
     }
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
       return name.hashCode();
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Kind this*/) {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied Kind this*/) {
       return name;
     }
 
@@ -260,7 +262,8 @@ public class Annotation {
   }
 
   /** Easy-on-the-eye format. */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Annotation this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied Annotation this*/) {
     return kind.toString() + " : " + daikonRep();
   }
 
@@ -269,7 +272,8 @@ public class Annotation {
    * and "kind" are equal.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(
+  /*@Pure*/
+  public boolean equals(
       /*>>>@GuardSatisfied Annotation this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o == null) {
       return false;
@@ -283,7 +287,8 @@ public class Annotation {
         && (this.kind().equals(anno.kind())));
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Annotation this*/) {
+  /*@Pure*/
+  public int hashCode(/*>>>@GuardSatisfied Annotation this*/) {
     return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
   }
 

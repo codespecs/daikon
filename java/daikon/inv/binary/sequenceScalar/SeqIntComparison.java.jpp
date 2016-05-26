@@ -256,7 +256,8 @@ public final class SEQINTEQUAL
     return null;
   }
 
-  /*@SideEffectFree*/ public SEQINTEQUAL clone(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
+  /*@SideEffectFree*/
+  public SEQINTEQUAL clone(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     SEQINTEQUAL result = (SEQINTEQUAL) super.clone();
     return result;
   }
@@ -266,7 +267,8 @@ public final class SEQINTEQUAL
       + ",falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied SEQINTEQUAL this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied SEQINTEQUAL this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -347,7 +349,8 @@ public final class SEQINTEQUAL
     #endif
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
       return true;
     #else
@@ -355,11 +358,13 @@ public final class SEQINTEQUAL
     #endif
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 

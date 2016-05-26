@@ -74,7 +74,8 @@ public final class DiscardInfo {
     return this.inv.getClass().getName();
   }
 
-  /*@SideEffectFree*/ public String format() {
+  /*@SideEffectFree*/
+  public String format() {
     return (discardFormat + Global.lineSep + discardCode + Global.lineSep + discardString);
   }
 

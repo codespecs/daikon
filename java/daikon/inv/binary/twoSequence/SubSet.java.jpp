@@ -156,7 +156,8 @@ public class SUBSET
       + ",falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied SUBSET this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied SUBSET this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
@@ -168,7 +169,8 @@ public class SUBSET
     return format_unimplemented(format);
   }
 
-  /*@SideEffectFree*/ public String format(/*>>>@GuardSatisfied SUBSET this*/) {
+  /*@SideEffectFree*/
+  public String format(/*>>>@GuardSatisfied SUBSET this*/) {
     String v1 = var1().name();
     String v2 = var2().name();
     #if (defined(SUB) || defined(SUBFLOAT))
@@ -363,7 +365,8 @@ public class SUBSET
     return null;
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     assert other instanceof SUBSET;
     return true;
   }

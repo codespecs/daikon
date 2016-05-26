@@ -117,12 +117,14 @@ public final class SCALARSEQUENCESINTERSECTION
     return VarInfo.make_function ("intersection", base1, base2);
   }
 
-  /*@Pure*/ public boolean isSameFormula(Derivation other) {
+  /*@Pure*/
+  public boolean isSameFormula(Derivation other) {
     return (other instanceof SCALARSEQUENCESINTERSECTION);
   }
 
   /** Returns the ESC name for sequence subsequence **/
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     return String.format ("intersection[%s,%s]", base1.esc_name(),
                           base2.esc_name());
   }

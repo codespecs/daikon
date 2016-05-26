@@ -97,7 +97,8 @@ class OrigFixer extends DepthFirstVisitor {
    * Returns in n if an instance of the method "orig".
    * @return true iff n is a instance of the method "orig".
    */
-  /*@Pure*/ private boolean isOrig(PrimaryExpression n) {
+  /*@Pure*/
+  private boolean isOrig(PrimaryExpression n) {
     return ((n.f0.f0.choice instanceof Name)
         && (((Name) n.f0.f0.choice).f0.tokenImage.equals("orig"))
         && (n.f1.size() > 0)
@@ -125,7 +126,8 @@ class OrigFixer extends DepthFirstVisitor {
    * variable name.
    */
   /*@EnsuresNonNullIf(result=true, expression="lastToken")*/
-  /*@Pure*/ private boolean isLastTokenVar(NodeToken n) {
+  /*@Pure*/
+  private boolean isLastTokenVar(NodeToken n) {
     return (lastToken != null
         && Visitors.isIdentifier(lastToken)
         && (twoTokensAgo == null || (!Visitors.isDot(twoTokensAgo)))

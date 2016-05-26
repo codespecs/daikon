@@ -46,11 +46,13 @@ public enum OutputFormat {
     this.name = name;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied OutputFormat this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied OutputFormat this*/) {
     return "OutputFormat:" + name;
   }
 
-  /*@Pure*/ public boolean isJavaFamily() {
+  /*@Pure*/
+  public boolean isJavaFamily() {
     return (this == DBCJAVA || this == JML || this == JAVA);
   }
 

@@ -84,7 +84,8 @@ public class PptSliceEquality extends PptSlice {
   private static class VarInfoAndComparability {
     public VarInfo vi;
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarInfoAndComparability this*/) {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied VarInfoAndComparability this*/) {
       // This is about as good as we can do it.  Can't do hashcode of
       // the comparability because two comparabilities may be
       // comparable and yet be not the same
@@ -93,7 +94,8 @@ public class PptSliceEquality extends PptSlice {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(
+    /*@Pure*/
+    public boolean equals(
         /*>>>@GuardSatisfied VarInfoAndComparability this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (!(o instanceof VarInfoAndComparability)) return false;
@@ -106,7 +108,8 @@ public class PptSliceEquality extends PptSlice {
      * inheritance, we require that the comptability go both ways.
      **/
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(
+    /*@Pure*/
+    public boolean equals(
         /*>>>@GuardSatisfied VarInfoAndComparability this,*/
         /*@GuardSatisfied*/ VarInfoAndComparability o) {
 
@@ -625,7 +628,8 @@ public class PptSliceEquality extends PptSlice {
     }
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSliceEquality this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied PptSliceEquality this*/) {
     StringBuffer result = new StringBuffer("PptSliceEquality: [");
     for (Invariant inv : invs) {
       result.append(inv.repr());
@@ -643,7 +647,8 @@ public class PptSliceEquality extends PptSlice {
 
     private EqualityComparator() {}
 
-    /*@Pure*/ public int compare(Equality eq1, Equality eq2) {
+    /*@Pure*/
+    public int compare(Equality eq1, Equality eq2) {
       return VarInfo.IndexComparator.theInstance.compare(eq1.leader(), eq2.leader());
     }
   }

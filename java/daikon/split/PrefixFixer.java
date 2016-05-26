@@ -98,7 +98,8 @@ class PrefixFixer extends DepthFirstVisitor {
    * that form a prefixed name needing fixing.
    */
   /*@EnsuresNonNullIf(result=true, expression={"lastToken","twoTokensAgo","threeTokensAgo"})*/
-  /*@Pure*/ private boolean isMatch(NodeToken n) {
+  /*@Pure*/
+  private boolean isMatch(NodeToken n) {
     return ((!Visitors.isLParen(n))
         && lastToken != null
         && Visitors.isIdentifier(lastToken)

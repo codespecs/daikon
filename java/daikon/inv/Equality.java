@@ -78,7 +78,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   private TreeSet<VarInfo> vars;
 
   /** Returns the number of variables in the set. **/
-  /*@Pure*/ public int size(/*>>>@GuardSatisfied Equality this*/) {
+  /*@Pure*/
+  public int size(/*>>>@GuardSatisfied Equality this*/) {
     return vars.size();
   }
 
@@ -132,7 +133,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * @return the canonical VarInfo of this
    **/
   @SuppressWarnings("purity") // set cache field
-  /*@Pure*/ public VarInfo leader(
+  /*@Pure*/
+  public VarInfo leader(
       /*>>>@GuardSatisfied @UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this*/) {
     if (leaderCache == null) {
       leaderCache = vars.iterator().next();
@@ -178,8 +180,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         + numSamples();
   }
 
-  /*@SideEffectFree*/ public String format_using(
-      /*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -347,7 +349,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return UtilMDE.join(clauses, " && ");
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Equality this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied Equality this*/) {
     return repr();
   }
 
@@ -436,7 +439,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     throw new UnsupportedOperationException(
         "Equality.isSameFormula(): this method should not be called");
   }

@@ -89,13 +89,15 @@ public abstract class VarComparability {
   public abstract boolean alwaysComparable(/*>>>@GuardSatisfied VarComparability this*/);
 
   /** Returns whether two variables are comparable. **/
-  public static /*@Pure*/ boolean comparable(VarInfo v1, VarInfo v2) {
+  /*@Pure*/
+  public static boolean comparable(VarInfo v1, VarInfo v2) {
     return comparable(v1.comparability, v2.comparability);
   }
 
   /** Returns whether two comparabilities are comparable. **/
   @SuppressWarnings("purity") // Override the purity checker
-  public static /*@Pure*/ boolean comparable(
+  /*@Pure*/
+  public static boolean comparable(
       /*@GuardSatisfied*/ VarComparability type1, /*@GuardSatisfied*/ VarComparability type2) {
 
     if (type1 != null && type2 != null && type1.getClass() != type2.getClass()) {

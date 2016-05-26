@@ -180,12 +180,14 @@ public class DynamicConstants implements Serializable {
      * returns whether the specified variable is currently a constant OR
      * was a constant at the beginning of constants processing.
      **/
-    /*@Pure*/ public boolean is_prev_constant() {
+    /*@Pure*/
+    public boolean is_prev_constant() {
       return constant || previous_constant;
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(
+    /*@Pure*/
+    public boolean equals(
         /*>>>@GuardSatisfied Constant this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof Constant)) {
@@ -195,12 +197,14 @@ public class DynamicConstants implements Serializable {
       return (c.vi == vi);
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Constant this*/) {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied Constant this*/) {
       return (vi.hashCode());
     }
 
     @SuppressWarnings("purity") // side effects to local state (string creation)
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Constant this*/) {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied Constant this*/) {
 
       StringBuffer out = new StringBuffer();
       out.append(vi.name());
@@ -233,7 +237,8 @@ public class DynamicConstants implements Serializable {
 
     private ConIndexComparator() {}
 
-    /*@Pure*/ public int compare(Constant con1, Constant con2) {
+    /*@Pure*/
+    public int compare(Constant con1, Constant con2) {
       return (con1.vi.varinfo_index - con2.vi.varinfo_index);
     }
 
@@ -393,7 +398,8 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns the Constant for the specified variable. */
-  /*@Pure*/ public Constant getConstant(VarInfo vi) {
+  /*@Pure*/
+  public Constant getConstant(VarInfo vi) {
 
     Constant result = all_vars[vi.varinfo_index];
     result.checkRep();
@@ -401,7 +407,8 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns whether the specified variable is currently a constant. **/
-  /*@Pure*/ public boolean is_constant(VarInfo vi) {
+  /*@Pure*/
+  public boolean is_constant(VarInfo vi) {
 
     return getConstant(vi).constant;
   }
@@ -410,7 +417,8 @@ public class DynamicConstants implements Serializable {
    * returns whether the specified variable is currently a constant OR
    * was a constant at the beginning of constants processing.
    **/
-  /*@Pure*/ public boolean is_prev_constant(VarInfo vi) {
+  /*@Pure*/
+  public boolean is_prev_constant(VarInfo vi) {
 
     return getConstant(vi).is_prev_constant();
   }
@@ -428,7 +436,8 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns whether the specified variable missing for all values so far. **/
-  /*@Pure*/ public boolean is_missing(VarInfo vi) {
+  /*@Pure*/
+  public boolean is_missing(VarInfo vi) {
 
     return (getConstant(vi).always_missing);
   }
@@ -437,7 +446,8 @@ public class DynamicConstants implements Serializable {
    * returns whether the specified variable is currently missing OR
    * was missing at the beginning of constants processing.
    **/
-  /*@Pure*/ public boolean is_prev_missing(VarInfo vi) {
+  /*@Pure*/
+  public boolean is_prev_missing(VarInfo vi) {
 
     Constant c = all_vars[vi.varinfo_index];
     return (c.always_missing || c.previous_missing);

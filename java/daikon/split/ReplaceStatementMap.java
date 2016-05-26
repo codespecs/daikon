@@ -60,7 +60,8 @@ class ReplaceStatementMap {
   }
 
   /** For debugging only. **/
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ReplaceStatementMap this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied ReplaceStatementMap this*/) {
     return map.toString();
   }
 }

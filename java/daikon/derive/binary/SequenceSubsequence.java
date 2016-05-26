@@ -93,7 +93,8 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     return seqvar();
   }
 
-  /*@SideEffectFree*/ public String csharp_name(String index) {
+  /*@SideEffectFree*/
+  public String csharp_name(String index) {
     // String lower = get_lower_bound().csharp_name();
     // String upper = get_upper_bound().csharp_name();
     // We do not need to check if seqvar().isPrestate() because it is redundant.
@@ -102,7 +103,8 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   }
 
   /** Returns the ESC name **/
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     return String.format(
         "%s[%s..%s]",
         seqvar().esc_name(),

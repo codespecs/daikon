@@ -63,8 +63,8 @@ public class Positive extends SingleScalar {
   }
 
   // A printed representation for user output
-  /*@SideEffectFree*/ public String format_using(
-      /*>>>@GuardSatisfied Positive this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied Positive this,*/ OutputFormat format) {
     return var().name() + " > 0";
   }
 
@@ -86,7 +86,8 @@ public class Positive extends SingleScalar {
     return 1 - Math.pow(.5, ppt.num_samples());
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     assert other instanceof Positive;
     return true;
   }

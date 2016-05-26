@@ -196,8 +196,8 @@ public class DummyInvariant extends Invariant {
     negated = !negated;
   }
 
-  /*@SideEffectFree*/ public String format_using(
-      /*>>>@GuardSatisfied DummyInvariant this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied DummyInvariant this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();

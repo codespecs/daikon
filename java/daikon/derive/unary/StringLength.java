@@ -49,19 +49,22 @@ public final class StringLength extends UnaryDerivation {
     return VarInfo.make_scalar_str_func("length", ProglangType.INT, base);
   }
 
-  /*@Pure*/ public boolean isSameFormula(Derivation other) {
+  /*@Pure*/
+  public boolean isSameFormula(Derivation other) {
     return (other instanceof StringLength);
   }
 
   /** Returns the ESC name **/
   @SuppressWarnings("nullness")
-  /*@SideEffectFree*/ public String csharp_name(String index) {
+  /*@SideEffectFree*/
+  public String csharp_name(String index) {
     return String.format("%s.Length", base.csharp_name());
   }
 
   /** Returns the ESC name **/
   @SuppressWarnings("nullness")
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     return String.format("%s.length()", base.esc_name());
   }
 
@@ -73,7 +76,8 @@ public final class StringLength extends UnaryDerivation {
 
   /** Returns the simplify name **/
   @SuppressWarnings("nullness")
-  /*@SideEffectFree*/ public String simplify_name() {
+  /*@SideEffectFree*/
+  public String simplify_name() {
     return String.format("(stringLength %s)", base.simplify_name());
   }
 }

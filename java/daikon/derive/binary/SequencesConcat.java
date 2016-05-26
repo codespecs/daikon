@@ -96,16 +96,19 @@ public final class SequencesConcat extends BinaryDerivation {
     return VarInfo.make_function("concat", var1(), var2());
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied SequencesConcat this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied SequencesConcat this*/) {
     return "[SequencesConcat of " + var1().name() + " " + var2().name() + "]";
   }
 
-  /*@Pure*/ public boolean isSameFormula(Derivation other) {
+  /*@Pure*/
+  public boolean isSameFormula(Derivation other) {
     return (other instanceof SequencesConcat);
   }
 
   /** Returns the ESC name for sequence subsequence **/
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     return String.format("SequencesConcat[%s,%s]", var1().esc_name(), var2().esc_name());
   }
 }

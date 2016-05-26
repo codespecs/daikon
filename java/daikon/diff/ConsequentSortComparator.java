@@ -27,7 +27,8 @@ public class ConsequentSortComparator implements Comparator<Invariant> {
     this.c = c;
   }
 
-  /*@Pure*/ public int compare(Invariant inv1, Invariant inv2) {
+  /*@Pure*/
+  public int compare(Invariant inv1, Invariant inv2) {
     Implication imp1 = null;
     Implication imp2 = null;
     ;

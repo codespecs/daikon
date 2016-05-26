@@ -370,7 +370,8 @@ public class SEQSEQINTEQUAL
       ;
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied SEQSEQINTEQUAL this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied SEQSEQINTEQUAL this,*/ OutputFormat format) {
     // System.out.println("Calling " + SEQSEQINTEQUALstring + ".format for: " + repr());
 
     if (format == OutputFormat.SIMPLIFY) {
@@ -515,11 +516,13 @@ public class SEQSEQINTEQUAL
     #endif
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant o) {
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant o) {
     return false;
   }
 
@@ -719,7 +722,8 @@ public class SEQSEQINTEQUAL
     */
   }
 
-  /*@Pure*/ public boolean isEqual() {
+  /*@Pure*/
+  public boolean isEqual() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     return true;
     #else

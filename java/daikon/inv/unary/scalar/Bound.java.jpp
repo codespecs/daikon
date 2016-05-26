@@ -296,7 +296,8 @@ public class LOWERBOUND
     return new LOWERBOUND (slice);
   }
 
-  /*@SideEffectFree*/ public LOWERBOUND clone(/*>>>@GuardSatisfied LOWERBOUND this*/) {
+  /*@SideEffectFree*/
+  public LOWERBOUND clone(/*>>>@GuardSatisfied LOWERBOUND this*/) {
     LOWERBOUND result = (LOWERBOUND) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;
@@ -313,7 +314,8 @@ public class LOWERBOUND
   }
 
 #if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
     String name = var().name_using(format);
     PptTopLevel pptt = ppt.parent;
 
@@ -360,7 +362,8 @@ public class LOWERBOUND
   }
 #else
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) {
       return format_java_family(format);
@@ -600,11 +603,13 @@ public class LOWERBOUND
     return core.computeConfidence();
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     return core.isExact();
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((LOWERBOUND) other).core);
   }
 
@@ -612,7 +617,8 @@ public class LOWERBOUND
 #ifndef IS_ELT
   // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
   // Use hasUninterestingConstant() instead. -SMcC 2/26/2003
-  /*@Pure*/ public boolean isInteresting() {
+  /*@Pure*/
+  public boolean isInteresting() {
     return (-1 < MIN1 && MIN1 < 2);
   }
 #endif
@@ -779,7 +785,8 @@ public class LOWERBOUND
   }
 
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
 #ifdef IS_ELT
     /* N.B. "x[] elements >= 200" is not mutually exclusive with "x[]
      * elements <= 100"; they could both be true if x[] were always

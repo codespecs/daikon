@@ -820,7 +820,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns the name of the variable.  For more info see repr() **/
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarInfo this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied VarInfo this*/) {
     return name();
   }
 
@@ -871,7 +872,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Returns whether or not this variable is a static constant **/
   /*@EnsuresNonNullIf(result=true, expression={"constantValue()", "static_constant_value"})*/
-  /*@Pure*/ public boolean isStaticConstant() {
+  /*@Pure*/
+  public boolean isStaticConstant() {
     return is_static_constant;
   }
 
@@ -890,13 +892,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Returns true if this is an "orig()" variable **/
   /*@EnsuresNonNullIf(result=true, expression="postState")*/
-  /*@Pure*/ public boolean isPrestate() {
+  /*@Pure*/
+  public boolean isPrestate() {
     return postState != null;
   }
 
   /** Returns true if this variable is derived from prestate variables **/
   @SuppressWarnings("not.deterministic") // nondeterminism does not affect result
-  /*@Pure*/ public boolean isPrestateDerived() {
+  /*@Pure*/
+  public boolean isPrestateDerived() {
     if (postState != null) return true;
     if (isDerived()) {
       for (VarInfo vi : derived.getBases()) {
@@ -914,7 +918,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Returns true if this variable is a derived variable **/
   /*@EnsuresNonNullIf(result=true, expression="this.derived")*/
-  /*@Pure*/ public boolean isDerived() {
+  /*@Pure*/
+  public boolean isDerived() {
     return (derived != null);
   }
 
@@ -990,7 +995,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return names;
   }
 
-  /*@Pure*/ public boolean isClosure() {
+  /*@Pure*/
+  public boolean isClosure() {
     // This should eventually turn into
     //   return name.indexOf("closure(") != -1;
     // when I rename those variables to "closure(...)".
@@ -1019,7 +1025,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    **/
   /*@EnsuresNonNullIf(result=true, expression="getDerivedParam()")*/
   @SuppressWarnings("purity") // created object is not returned
-  /*@Pure*/ public boolean isDerivedParam() {
+  /*@Pure*/
+  public boolean isDerivedParam() {
     if (isDerivedParamCached != null) {
       // System.out.printf ("var %s is-derived-param = %b\n", name(),
       //                   isDerivedParamCached);
@@ -1101,7 +1108,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * use these cached values.
    * @return null if the above condition doesn't hold.
    **/
-  /*@Pure*/ public /*@Nullable*/ VarInfo getDerivedParam() {
+  /*@Pure*/
+  public /*@Nullable*/ VarInfo getDerivedParam() {
     if (isDerivedParamCached == null) {
       // fill in the cache
       isDerivedParam();
@@ -1130,7 +1138,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * equality invariants need to have already been computed.
    **/
   @SuppressWarnings("purity") // set cache field
-  /*@Pure*/ public boolean isDerivedParamAndUninteresting() {
+  /*@Pure*/
+  public boolean isDerivedParamAndUninteresting() {
     if (isDerivedParamAndUninterestingCached != null) {
       return isDerivedParamAndUninterestingCached.booleanValue();
     } else {
@@ -1140,7 +1149,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /*@Pure*/ private boolean _isDerivedParamAndUninteresting() {
+  /*@Pure*/
+  private boolean _isDerivedParamAndUninteresting() {
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
       PrintInvariants.debugFiltering.fine("isDPAU: name is " + name());
       PrintInvariants.debugFiltering.fine("  isPrestate is " + String.valueOf(isPrestate()));
@@ -1245,7 +1255,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Convenience methods that return information from the ValueTuple. **/
-  /*@Pure*/ public int getModified(ValueTuple vt) {
+  /*@Pure*/
+  public int getModified(ValueTuple vt) {
     if (is_static_constant) {
       // return ValueTuple.STATIC_CONSTANT;
       return ValueTuple.MODIFIED;
@@ -1253,19 +1264,24 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return vt.getModified(value_index);
     }
   }
-  /*@Pure*/ public boolean isUnmodified(ValueTuple vt) {
+  /*@Pure*/
+  public boolean isUnmodified(ValueTuple vt) {
     return ValueTuple.modIsUnmodified(getModified(vt));
   }
-  /*@Pure*/ public boolean isModified(ValueTuple vt) {
+  /*@Pure*/
+  public boolean isModified(ValueTuple vt) {
     return ValueTuple.modIsModified(getModified(vt));
   }
-  /*@Pure*/ public boolean isMissingNonsensical(ValueTuple vt) {
+  /*@Pure*/
+  public boolean isMissingNonsensical(ValueTuple vt) {
     return ValueTuple.modIsMissingNonsensical(getModified(vt));
   }
-  /*@Pure*/ public boolean isMissingFlow(ValueTuple vt) {
+  /*@Pure*/
+  public boolean isMissingFlow(ValueTuple vt) {
     return ValueTuple.modIsMissingFlow(getModified(vt));
   }
-  /*@Pure*/ public boolean isMissing(ValueTuple vt) {
+  /*@Pure*/
+  public boolean isMissing(ValueTuple vt) {
     return isMissingNonsensical(vt) || isMissingFlow(vt);
   }
 
@@ -1441,7 +1457,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Whether this VarInfo is the leader of its equality set.
    **/
-  /*@Pure*/ public boolean isCanonical() {
+  /*@Pure*/
+  public boolean isCanonical() {
     if (equalitySet == null) return true;
     return (equalitySet.leader() == this);
   }
@@ -1449,7 +1466,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Canonical representative that's equal to this variable.
    **/
-  /*@Pure*/ public VarInfo canonicalRep() {
+  /*@Pure*/
+  public VarInfo canonicalRep() {
     if (equalitySet == null) {
       System.out.println("equality sets = " + ppt.equality_sets_txt());
       assert equalitySet != null
@@ -1461,7 +1479,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Return true if this is a pointer or reference to another object.
    **/
-  /*@Pure*/ public boolean is_reference() {
+  /*@Pure*/
+  public boolean is_reference() {
 
     // This used to check to see if the item was a list and some other
     // odd things, but hashcode seems like the right check.
@@ -1493,7 +1512,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /*@Pure*/ public boolean isDerivedSequenceMinMaxSum() {
+  /*@Pure*/
+  public boolean isDerivedSequenceMinMaxSum() {
     return ((derived != null)
         && ((derived instanceof SequenceMax)
             || (derived instanceof SequenceMin)
@@ -1579,11 +1599,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Should perhaps check Daikon.check_program_types and behave differently
    * depending on that.
    */
-  /*@Pure*/ public boolean isIndex() {
+  /*@Pure*/
+  public boolean isIndex() {
     return ((file_rep_type == ProglangType.INT) && type.isIndex());
   }
 
-  /*@Pure*/ public boolean is_array() {
+  /*@Pure*/
+  public boolean is_array() {
     if (FileIO.new_decl_format) {
       return (arr_dims > 0);
     } else {
@@ -1596,7 +1618,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * syntax, except for any necessary quantifications (subscripting).
    * We err on the side of returning true, for now.
    **/
-  /*@Pure*/ public boolean isValidEscExpression() {
+  /*@Pure*/
+  public boolean isValidEscExpression() {
     // "myVector.length" is invalid
     if (derived instanceof SequenceLength) {
       SequenceLength sl = (SequenceLength) derived;
@@ -1649,7 +1672,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * we'd need to translate "obj == orig(obj)" into something like
    * "location(obj) == location(orig(obj))".
    */
-  /*@Pure*/ public boolean isPointer() {
+  /*@Pure*/
+  public boolean isPointer() {
     // This used to check whether the program type had a higher
     // dimension than the rep type, or if the rep type was integral
     // but the program type wasn't primitive. These rules worked
@@ -1866,7 +1890,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Check if two VarInfos are truly (non guarded) equal to each other
    * right now.
    **/
-  /*@Pure*/ public boolean isEqualTo(VarInfo other) {
+  /*@Pure*/
+  public boolean isEqualTo(VarInfo other) {
     assert equalitySet != null;
     return this.equalitySet == other.equalitySet;
   }
@@ -2151,7 +2176,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   //  * unrelated variables of the same name.
   //  **/
   // public static class LexicalComparator implements Comparator<VarInfo> {
-  //   /*@Pure*/ public int compare(VarInfo vi1, VarInfo vi2) {
+  //   /*@Pure*/
+  //   public int compare(VarInfo vi1, VarInfo vi2) {
   //     VarInfoName name1 = vi1.name;
   //     VarInfoName name2 = vi2.name;
   //     return name1.compareTo(name2);
@@ -2608,7 +2634,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     private IndexComparator() {}
 
-    /*@Pure*/ public int compare(VarInfo vi1, VarInfo vi2) {
+    /*@Pure*/
+    public int compare(VarInfo vi1, VarInfo vi2) {
       if (vi1.varinfo_index < vi2.varinfo_index) {
         return -1;
       } else if (vi1.varinfo_index == vi2.varinfo_index) {
@@ -2670,7 +2697,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(
+    /*@Pure*/
+    public boolean equals(
         /*>>>@GuardSatisfied Pair this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof Pair)) return false;
@@ -2679,11 +2707,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return ((o.v1 == v1) && (o.v2 == v2));
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Pair this*/) {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied Pair this*/) {
       return (v1.hashCode() + v2.hashCode());
     }
 
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Pair this*/) {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied Pair this*/) {
       return (v1.name() + " = " + v2.name());
     }
   }
@@ -2790,7 +2820,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns whether or not this variable is a parameter **/
-  /*@Pure*/ public boolean isParam() {
+  /*@Pure*/
+  public boolean isParam() {
     if (FileIO.new_decl_format) {
       return var_flags.contains(VarFlags.IS_PARAM);
     } else {
@@ -2861,7 +2892,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Returns the VarInfo that represents the base array of this
    * array.  For example, if the array is a[].b.c, returns a[]
    */
-  /*@Pure*/ public VarInfo get_base_array() {
+  /*@Pure*/
+  public VarInfo get_base_array() {
     assert file_rep_type.isArray() : this;
     if (FileIO.new_decl_format) {
       VarInfo var = this;
@@ -2888,7 +2920,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * of this array.  For example, if the array is a[].b.c, returns a.
    * Returns null if there is no such variable.
    */
-  /*@Pure*/ public /*@Nullable*/ VarInfo get_base_array_hashcode() {
+  /*@Pure*/
+  public /*@Nullable*/ VarInfo get_base_array_hashcode() {
     if (FileIO.new_decl_format) {
       return get_base_array().enclosing_var;
     } else {
@@ -3051,14 +3084,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the name of this variable as a valid C# Code Contract.
    **/
-  /*@SideEffectFree*/ public String csharp_name() {
+  /*@SideEffectFree*/
+  public String csharp_name() {
     return csharp_name(null);
   }
 
   /**
    * Returns the name of this variable as a valid C# Code Contract.
    */
-  /*@SideEffectFree*/ public String csharp_name(/*@Nullable*/ String index) {
+  /*@SideEffectFree*/
+  public String csharp_name(/*@Nullable*/ String index) {
     if (index != null) assert file_rep_type.isArray();
 
     if (postState != null) {
@@ -3144,7 +3179,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the name of this variable in ESC format.
    **/
-  /*@SideEffectFree*/ public String esc_name() {
+  /*@SideEffectFree*/
+  public String esc_name() {
     if (!FileIO.new_decl_format) return var_info_name.esc_name(); // vin ok
 
     return (esc_name(null));
@@ -3155,7 +3191,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * is specified, it is used as an array index.  It is an error to
    * specify an index on a non-array variable
    */
-  /*@SideEffectFree*/ public String esc_name(/*@Nullable*/ String index) {
+  /*@SideEffectFree*/
+  public String esc_name(/*@Nullable*/ String index) {
 
     // System.out.printf ("esc_name for %s, flags %s, enclosing-var %s "
     //                  + " poststate %s index %s rname %s ppt %s%n", str_name,
@@ -3211,7 +3248,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the name of this variable in JML format.
    **/
-  /*@SideEffectFree*/ public String jml_name() {
+  /*@SideEffectFree*/
+  public String jml_name() {
     if (!FileIO.new_decl_format) return var_info_name.jml_name(this); // vin ok
 
     return (jml_name(null));
@@ -3290,7 +3328,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns the name of this variable in simplify format **/
-  /*@SideEffectFree*/ public String simplify_name() {
+  /*@SideEffectFree*/
+  public String simplify_name() {
     return simplify_name(null);
   }
 
@@ -3368,7 +3407,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Return the name of this variable in its prestate (orig)
    */
-  /*@SideEffectFree*/ public /*@Interned*/ String prestate_name() {
+  /*@SideEffectFree*/
+  public /*@Interned*/ String prestate_name() {
     return ("orig(" + name() + ")").intern();
   }
 
@@ -3781,7 +3821,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * of a variable and the size of a sequence.  It should include pure
    * functions as well
    */
-  /*@Pure*/ public boolean is_assignable_var() {
+  /*@Pure*/
+  public boolean is_assignable_var() {
     if (!FileIO.new_decl_format) {
       return !((var_info_name instanceof VarInfoName.TypeOf) // vin ok
           || (var_info_name instanceof VarInfoName.SizeOf)); // vin ok
@@ -3795,7 +3836,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * (eg, a.getClass().getName()).  Note that this will miss prestate variables such
    * as 'orig(a.getClass().getName())'.
    */
-  /*@Pure*/ public boolean is_typeof() {
+  /*@Pure*/
+  public boolean is_typeof() {
     if (!FileIO.new_decl_format) return (var_info_name instanceof VarInfoName.TypeOf); // vin ok
 
     // The isPrestate check doesn't seem necessary, but is required to
@@ -3820,7 +3862,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Returns whether or not this variable is the 'this' variable.
    */
-  /*@Pure*/ public boolean is_this() {
+  /*@Pure*/
+  public boolean is_this() {
     return name().equals("this");
     // return (get_VarInfoName().equals (VarInfoName.THIS));
   }
@@ -3829,22 +3872,26 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Returns whether or not this variable is the 'this' variable.
    * True for both normal and prestate versions of the variable.
    */
-  /*@Pure*/ public boolean isThis() {
+  /*@Pure*/
+  public boolean isThis() {
     return var_info_name.isThis();
   }
 
   /** Returns whether this is a size of an array or a prestate thereof **/
-  /*@Pure*/ public boolean is_size() {
+  /*@Pure*/
+  public boolean is_size() {
     return (derived instanceof SequenceLength);
   }
 
   /** Returns wehther or not this variable is a field **/
-  /*@Pure*/ public boolean is_field() {
+  /*@Pure*/
+  public boolean is_field() {
     return (var_info_name instanceof VarInfoName.Field);
   }
 
   /** Returns whether or not this variable has an integer offset (eg, a+2) **/
-  /*@Pure*/ public boolean is_add() {
+  /*@Pure*/
+  public boolean is_add() {
     return (var_info_name instanceof VarInfoName.Add);
   }
 
@@ -3862,7 +3909,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * to an array that is created over fields/methods of an array.  For
    * example, 'a[]' is a direct array, but 'a[].b' is not.
    */
-  /*@Pure*/ public boolean is_direct_array() {
+  /*@Pure*/
+  public boolean is_direct_array() {
     // Must be an array to be a direct array
     if (!rep_type.isArray()) return false;
 
@@ -3889,7 +3937,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * slice.  For example, 'a[]' is a direct array, but 'a[].b' and 'a[i..]'
    * are not.
    */
-  /*@Pure*/ public boolean is_direct_non_slice_array() {
+  /*@Pure*/
+  public boolean is_direct_non_slice_array() {
     return (var_info_name instanceof VarInfoName.Elements);
   }
 
@@ -4268,7 +4317,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * derived variable, vi must be the same derivation using prestate
    * versions of each base variable.
    */
-  /*@Pure*/ public boolean is_prestate_version(VarInfo vi) {
+  /*@Pure*/
+  public boolean is_prestate_version(VarInfo vi) {
 
     // If both variables are not derived
     if ((derived == null) && (vi.derived == null)) {
@@ -4288,12 +4338,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns true if this is an array or a slice **/
-  /*@Pure*/ public boolean isArray() {
+  /*@Pure*/
+  public boolean isArray() {
     return type.isArray();
   }
 
   /** Returns true if this is a slice **/
-  /*@Pure*/ public boolean isSlice() {
+  /*@Pure*/
+  public boolean isSlice() {
     return isArray() && isDerived();
   }
 

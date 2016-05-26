@@ -128,7 +128,8 @@ public abstract class RANGE extends SUPERCLASS {
    * get_format_str().  Instances of %var1% are replaced by the variable
    * name in the specified format.
    */
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied RANGE this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied RANGE this,*/ OutputFormat format) {
 
     String fmt_str = get_format_str (format);
 
@@ -193,11 +194,13 @@ public abstract class RANGE extends SUPERCLASS {
     return CONFIDENCE_JUSTIFIED;
   }
 
-  /*@Pure*/ public boolean isSameFormula (Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula (Invariant other) {
     assert other.getClass() == getClass();
     return true;
   }
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 

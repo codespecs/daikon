@@ -84,7 +84,8 @@ public class Property implements Serializable {
   /**
    * Easy-on-the-eye string representation.
    */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Property this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied Property this*/) {
     return kind.toString() + " : " + daikonRep();
   }
 
@@ -108,11 +109,13 @@ public class Property implements Serializable {
       this.xmlname = xmlname;
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied Kind this*/) {
       return name.hashCode();
     }
 
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied Kind this*/) {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied Kind this*/) {
       return name;
     }
 
@@ -150,7 +153,8 @@ public class Property implements Serializable {
    * The other fields may differ.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(
+  /*@Pure*/
+  public boolean equals(
       /*>>>@GuardSatisfied Property this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o == null) {
       return false;
@@ -164,7 +168,8 @@ public class Property implements Serializable {
         && (this.kind().equals(anno.kind())));
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied Property this*/) {
+  /*@Pure*/
+  public int hashCode(/*>>>@GuardSatisfied Property this*/) {
     return daikonRep.hashCode() + kind.hashCode() + (method == null ? 0 : method.hashCode());
   }
 

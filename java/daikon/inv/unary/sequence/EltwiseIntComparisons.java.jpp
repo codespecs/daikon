@@ -210,7 +210,8 @@ public class CLASSNAME
     return new CLASSNAME(slice);
   }
 
-  /*@SideEffectFree*/ public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
+  /*@SideEffectFree*/
+  public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     return result;
   }
@@ -220,7 +221,8 @@ public class CLASSNAME
       + "falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
@@ -300,7 +302,8 @@ public class CLASSNAME
 #endif
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
 #if defined(EQUAL) || defined(EQUALFLOAT)
     return true;
 #else
@@ -308,7 +311,8 @@ public class CLASSNAME
 #endif
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return (other instanceof CLASSNAME);
   }
 
@@ -316,7 +320,8 @@ public class CLASSNAME
   // Also, reasonably complicated, need to ensure exact correctness, not sure if the
   // regression tests test this functionality
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     // This whole approach is wrong in the case when the sequence can
     // ever consist of only one element.  For now, just forget
     // it. -SMcC

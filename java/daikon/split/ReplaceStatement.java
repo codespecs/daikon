@@ -105,7 +105,8 @@ class ReplaceStatement {
   /**
    * Returns a string representation of this.
    */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied ReplaceStatement this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied ReplaceStatement this*/) {
     StringBuffer params = new StringBuffer();
     for (int i = 0; i < parameters.length; i++) {
       params.append(parameters[i].toString());

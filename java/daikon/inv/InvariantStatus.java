@@ -18,7 +18,8 @@ public final /*@Interned*/ class InvariantStatus {
     this.status = status;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied InvariantStatus this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied InvariantStatus this*/) {
     return status;
   }
 

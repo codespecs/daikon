@@ -43,7 +43,8 @@ public class GuardingImplication extends Implication {
     return result;
   }
 
-  /*@Pure*/ public boolean isWorthPrinting() {
+  /*@Pure*/
+  public boolean isWorthPrinting() {
     return right.isWorthPrinting();
     // return !right.isObvious();
   }

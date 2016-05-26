@@ -77,7 +77,8 @@ public abstract class PptSlice extends Ppt {
     }
   }
 
-  /*@SideEffectFree*/ public final String name(
+  /*@SideEffectFree*/
+  public final String name(
       /*>>>@GuardSatisfied @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/) {
     return parent.name + varNames(var_infos);
   }
@@ -223,7 +224,8 @@ public abstract class PptSlice extends Ppt {
    * It's somewhat less efficient than ArityPptnameComparator.
    **/
   public static final class ArityVarnameComparator implements Comparator<PptSlice> {
-    /*@Pure*/ public int compare(PptSlice slice1, PptSlice slice2) {
+    /*@Pure*/
+    public int compare(PptSlice slice1, PptSlice slice2) {
       if (slice1 == slice2) return 0;
       // Don't do this assert, which prevents comparison across different Ppts.
       // (The assert check may be useful in some situations, though.)
@@ -242,7 +244,8 @@ public abstract class PptSlice extends Ppt {
    * on the same Ppt.
    **/
   public static final class ArityPptnameComparator implements Comparator<PptSlice> {
-    /*@Pure*/ public int compare(PptSlice slice1, PptSlice slice2) {
+    /*@Pure*/
+    public int compare(PptSlice slice1, PptSlice slice2) {
       if (slice1 == slice2) return 0;
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
@@ -330,7 +333,8 @@ public abstract class PptSlice extends Ppt {
    * For debugging only.
    **/
   @SuppressWarnings("purity") // string creation
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied PptSlice this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied PptSlice this*/) {
     StringBuffer sb = new StringBuffer();
     for (VarInfo vi : var_infos) {
       sb.append(" " + vi.name());
@@ -406,7 +410,8 @@ public abstract class PptSlice extends Ppt {
    * or is obvious statically.
    */
   @SuppressWarnings("nullness") // checker bug with flow and static fields
-  /*@Pure*/ public boolean is_inv_true(Invariant inv) {
+  /*@Pure*/
+  public boolean is_inv_true(Invariant inv) {
 
     if (contains_inv_exact(inv)) {
       if (Debug.logOn() && (Daikon.current_inv != null)) {

@@ -123,7 +123,8 @@ public class InvTranslate {
   /**
    * Returns a somewhat verbose description of the translation.
    */
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied InvTranslate this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied InvTranslate this*/) {
     StringBuilder out = new StringBuilder();
 
     List<String> mappings = new ArrayList<String>();

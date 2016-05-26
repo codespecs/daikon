@@ -756,7 +756,8 @@ public final class FeatureExtractor {
 
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(
+    /*@Pure*/
+    public boolean equals(
         /*>>>@GuardSatisfied IntDoublePair this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (o instanceof IntDoublePair) {
@@ -769,13 +770,15 @@ public final class FeatureExtractor {
 
     //returns a valid hashCode
     @Override
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/) {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/) {
       return number;
     }
 
     // Compares an Object to this
     // Throws ClassCastException if argument is not an IntDoublePair
-    /*@Pure*/ public int compareTo(/*>>>@GuardSatisfied IntDoublePair this,*/ IntDoublePair p) {
+    /*@Pure*/
+    public int compareTo(/*>>>@GuardSatisfied IntDoublePair this,*/ IntDoublePair p) {
       if (this.number < p.number) {
         return -1;
       } else if (this.number > p.number) {

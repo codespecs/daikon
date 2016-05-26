@@ -56,12 +56,14 @@ public abstract class Derivation implements Serializable, Cloneable {
   /**
    * @return array of the VarInfos this was derived from
    **/
-  public abstract /*@SideEffectFree*/ VarInfo[] getBases();
+  /*@SideEffectFree*/
+  public abstract VarInfo[] getBases();
 
   /**
    * @return one of the VarInfos this was derived from
    **/
-  public abstract /*@Pure*/ VarInfo getBase(int i);
+  /*@Pure*/
+  public abstract VarInfo getBase(int i);
 
   /**
    * @return a pair of: the derived value and whether the variable
@@ -113,7 +115,8 @@ public abstract class Derivation implements Serializable, Cloneable {
   }
 
   // Set whether the derivation is a param according to aux info
-  /*@Pure*/ protected abstract boolean isParam();
+  /*@Pure*/
+  protected abstract boolean isParam();
 
   public boolean missing_array_bounds = false;
   /**
@@ -134,7 +137,8 @@ public abstract class Derivation implements Serializable, Cloneable {
    * before performing the derivation that this would be the case --
    * for instance, when deriving before any values are seen.
    **/
-  /*@Pure*/ public abstract boolean isDerivedFromNonCanonical();
+  /*@Pure*/
+  public abstract boolean isDerivedFromNonCanonical();
 
   /**
    * Returns how many levels of derivation this Derivation is based
@@ -148,7 +152,8 @@ public abstract class Derivation implements Serializable, Cloneable {
    * will just checks runtime type, but subclasses with state
    * (e.g. SequenceInitial index) should match that, too.
    **/
-  /*@Pure*/ public abstract boolean isSameFormula(Derivation other);
+  /*@Pure*/
+  public abstract boolean isSameFormula(Derivation other);
 
   /** @see VarInfo#canBeMissing */
   public abstract boolean canBeMissing();
@@ -182,7 +187,8 @@ public abstract class Derivation implements Serializable, Cloneable {
    * is specified, it is used as an array index.  It is an error to
    * specify an index on a non-array variable
    */
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     throw new RuntimeException("esc_name not implemented for " + this);
   }
 
@@ -200,12 +206,14 @@ public abstract class Derivation implements Serializable, Cloneable {
    * is specified, it is used as an array index.  It is an error to
    * specify an index on a non-array variable
    */
-  /*@SideEffectFree*/ public String csharp_name(String index) {
+  /*@SideEffectFree*/
+  public String csharp_name(String index) {
     throw new RuntimeException("csharp_name not implemented for " + this);
   }
 
   /** Returns the name of this variable in simplify format **/
-  /*@SideEffectFree*/ public String simplify_name() {
+  /*@SideEffectFree*/
+  public String simplify_name() {
     throw new RuntimeException(
         "simplify_name not implemented for " + this.getClass() + " (" + this + ")");
   }
@@ -215,7 +223,8 @@ public abstract class Derivation implements Serializable, Cloneable {
    * if this and d are of the same derivation with the same formula
    * and have the same bases.
    */
-  /*@Pure*/ public boolean is_prestate_version(Derivation d) {
+  /*@Pure*/
+  public boolean is_prestate_version(Derivation d) {
 
     // The derivations must be of the same type
     if (getClass() != d.getClass()) return false;

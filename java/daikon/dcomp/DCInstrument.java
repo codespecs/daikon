@@ -801,7 +801,8 @@ class DCInstrument {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(
+    /*@Pure*/
+    public boolean equals(
         /*>>>@GuardSatisfied MethodDef this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof MethodDef)) return false;
@@ -809,7 +810,8 @@ class DCInstrument {
       return equals(md.name, md.arg_types);
     }
 
-    /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied MethodDef this*/) {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied MethodDef this*/) {
       int code = name.hashCode();
       for (Type arg : arg_types) {
         code += arg.hashCode();
@@ -831,7 +833,8 @@ class DCInstrument {
     public boolean contains(int offset) {
       return (offset >= start_pc) && (offset < (start_pc + len));
     }
-    /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied CodeRange this*/) {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied CodeRange this*/) {
       return String.format("Code range: %d..%d", start_pc, start_pc + len - 1);
     }
   }
@@ -862,7 +865,8 @@ class DCInstrument {
   }
 
   /** Returns true if we are instrumenting for dataflow **/
-  /*@Pure*/ public boolean is_data_flow() {
+  /*@Pure*/
+  public boolean is_data_flow() {
     return this instanceof DFInstrument;
   }
 
@@ -2825,7 +2829,8 @@ class DCInstrument {
   }
 
   /** Returns true if the specified method is Object.equals() **/
-  /*@Pure*/ boolean is_object_equals(String method_name, Type ret_type, Type[] args) {
+  /*@Pure*/
+  boolean is_object_equals(String method_name, Type ret_type, Type[] args) {
     return (method_name.equals("equals")
         && ret_type == Type.BOOLEAN
         && args.length == 1
@@ -2833,12 +2838,14 @@ class DCInstrument {
   }
 
   /** Returns true if the specified method is Object.clone() **/
-  /*@Pure*/ boolean is_object_clone(String method_name, Type ret_type, Type[] args) {
+  /*@Pure*/
+  boolean is_object_clone(String method_name, Type ret_type, Type[] args) {
     return method_name.equals("clone") && ret_type.equals(javalangObject) && (args.length == 0);
   }
 
   /** Returns true if the specified method is Object.toString() **/
-  /*@Pure*/ boolean is_object_toString(String method_name, Type ret_type, Type[] args) {
+  /*@Pure*/
+  boolean is_object_toString(String method_name, Type ret_type, Type[] args) {
     return method_name.equals("toString") && ret_type.equals(Type.STRING) && (args.length == 0);
   }
 
@@ -3995,7 +4002,8 @@ class DCInstrument {
    * Returns whether or not the specified type is a primitive (int, float,
    * double, etc)
    */
-  /*@Pure*/ protected boolean is_primitive(Type type) {
+  /*@Pure*/
+  protected boolean is_primitive(Type type) {
     return ((type instanceof BasicType) && (type != Type.VOID));
   }
 
@@ -4003,7 +4011,8 @@ class DCInstrument {
    * Returns whether or not the specified type is a category 2 (8 byte)
    * type
    */
-  /*@Pure*/ protected boolean is_category2(Type type) {
+  /*@Pure*/
+  protected boolean is_category2(Type type) {
     return ((type == Type.DOUBLE) || (type == Type.LONG));
   }
 
@@ -4375,7 +4384,8 @@ class DCInstrument {
    * Returns whether or not the invoke specified invokes a native method.
    * This requires that the class that contains the method to be loaded.
    */
-  /*@Pure*/ public boolean is_native(InvokeInstruction invoke) {
+  /*@Pure*/
+  public boolean is_native(InvokeInstruction invoke) {
 
     // Get the class of the method
     ClassLoader loader = getClass().getClassLoader();
@@ -5277,7 +5287,8 @@ class DCInstrument {
   }
 
   /** Returns whether or not the method is defined in Object **/
-  /*@Pure*/ public boolean is_object_method(String method_name, Type[] arg_types) {
+  /*@Pure*/
+  public boolean is_object_method(String method_name, Type[] arg_types) {
     for (MethodDef md : obj_methods) {
       if (md.equals(method_name, arg_types)) {
         return true;
@@ -5290,7 +5301,8 @@ class DCInstrument {
    * Returns whether or not the class is one of those that has values
    * initialized by the JVM or native methods
    */
-  /*@Pure*/ public boolean is_uninit_class(String classname) {
+  /*@Pure*/
+  public boolean is_uninit_class(String classname) {
 
     for (String u_name : uninit_classes) {
       if (u_name.equals(classname)) {

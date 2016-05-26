@@ -65,7 +65,8 @@ public abstract class Ppt implements Serializable {
 
   /** Returns a string rep of the specified variable names **/
   @SuppressWarnings("purity") // Impure side effects do not escape (string creation)
-  /*@SideEffectFree*/ public static String varNames(VarInfo[] infos) {
+  /*@SideEffectFree*/
+  public static String varNames(VarInfo[] infos) {
     StringBuffer sb = new StringBuffer();
     sb.append("(");
     if (infos.length == 0) {
@@ -82,7 +83,8 @@ public abstract class Ppt implements Serializable {
   }
 
   /** Return a string representation of the variable names. */
-  /*@SideEffectFree*/ public String varNames(
+  /*@SideEffectFree*/
+  public String varNames(
       /*>>>@GuardSatisfied @UnknownInitialization(Ppt.class) @Raw(Ppt.class) Ppt this*/) {
     return (varNames(var_infos));
   }
@@ -91,7 +93,8 @@ public abstract class Ppt implements Serializable {
    * Returns the varinfo_index of the variable whose name is varname.
    * Returns -1 if there is no such variable
    */
-  /*@Pure*/ public int indexOf(String varname) {
+  /*@Pure*/
+  public int indexOf(String varname) {
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i].name().equals(varname)) {
         return i;
@@ -104,7 +107,8 @@ public abstract class Ppt implements Serializable {
    * Returns the VarInfo with the specified name.  Null if the name is
    * not found
    */
-  /*@Pure*/ public /*@Nullable*/ VarInfo find_var_by_name(String varname) {
+  /*@Pure*/
+  public /*@Nullable*/ VarInfo find_var_by_name(String varname) {
     // System.out.printf ("Ppt.find_var_by_name(%s): %s%n", varname, this);
     int i = indexOf(varname);
     if (i == -1) {
@@ -139,7 +143,8 @@ public abstract class Ppt implements Serializable {
   // Orders ppts by the name, except . and : are swapped
   //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
   public static final class NameComparator implements Comparator<PptTopLevel> {
-    /*@Pure*/ public int compare(PptTopLevel p1, PptTopLevel p2) {
+    /*@Pure*/
+    public int compare(PptTopLevel p1, PptTopLevel p2) {
       if (p1 == p2) {
         return 0;
       }

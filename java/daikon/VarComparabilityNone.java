@@ -42,7 +42,8 @@ public final class VarComparabilityNone extends VarComparability implements Seri
     return it;
   }
 
-  /*@Pure*/ public int hashCode(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
+  /*@Pure*/
+  public int hashCode(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return 0;
   }
 
@@ -55,13 +56,15 @@ public final class VarComparabilityNone extends VarComparability implements Seri
    * representation types in the data trace file are the same.  This
    * lets us compare integers to longs, but not integers to arrays.
    **/
-  static /*@Pure*/ boolean comparable(
+  /*@Pure*/
+  static boolean comparable(
       /*@GuardSatisfied*/ VarComparabilityNone vcomp1,
       /*@GuardSatisfied*/ VarComparabilityNone vcomp2) {
     return true;
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return "no-comparability";
   }
 }
