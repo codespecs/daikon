@@ -933,7 +933,7 @@ public class NIS {
     /*@Pure*/
     public boolean equals(
         /*>>>@GuardSatisfied SupInv this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+        final /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof SupInv)) return false;
 
       // Class and variables must match

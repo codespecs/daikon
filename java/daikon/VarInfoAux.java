@@ -300,7 +300,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /*@Pure*/
   public boolean equals(
       /*>>>@GuardSatisfied VarInfoAux this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+      final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
     } else {
@@ -310,7 +310,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public boolean equals(/*>>>@GuardSatisfied VarInfoAux this,*//*@GuardSatisfied*/ VarInfoAux o) {
+  public boolean equals(
+      /*>>>@GuardSatisfied VarInfoAux this,*/ final /*@GuardSatisfied*/ VarInfoAux o) {
     return this.map.equals(o.map);
   }
 
