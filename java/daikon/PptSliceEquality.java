@@ -60,7 +60,8 @@ public class PptSliceEquality extends PptSlice {
   }
 
   // Not valid for this type of slice.  Always pretend there are enough.
-  public int num_samples(/*>>>@GuardSatisfied PptSliceEquality this*/) {
+  public int num_samples(
+      /*>>>@UnknownInitialization(PptTopLevel.class) @GuardSatisfied PptSliceEquality this*/) {
     if (true) throw new Error();
     return Integer.MAX_VALUE;
   }

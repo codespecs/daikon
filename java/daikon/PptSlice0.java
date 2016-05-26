@@ -228,7 +228,8 @@ public class PptSlice0 extends PptSlice {
   }
 
   // I need to figure out how to set these.
-  public int num_samples(/*>>>@GuardSatisfied PptSlice0 this*/) {
+  public int num_samples(
+      /*>>>@UnknownInitialization(PptTopLevel.class) @GuardSatisfied PptSlice0 this*/) {
     return 2222;
   }
 

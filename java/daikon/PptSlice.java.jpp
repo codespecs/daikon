@@ -207,7 +207,7 @@ public final class PPTSLICE1 extends PptSlice {
 
   // These accessors are for abstract methods declared in Ppt
   /** Returns the number of (non-missing) samples observed at this slice. **/
-  public int num_samples(/*>>>@GuardSatisfied PPTSLICE1 this*/) {
+  public int num_samples(/*>>>@UnknownInitialization(PptTopLevel.class) @GuardSatisfied PPTSLICE1 this*/) {
     // return an approximation
     #if defined(ARITY1)
       int num_slice_samples = parent.num_samples(var_infos[0]);
