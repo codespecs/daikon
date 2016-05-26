@@ -205,8 +205,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   /** Return an approximation of the number of samples seen on this slice **/
-  public abstract int num_samples(
-      /*>>>@UnknownInitialization(PptTopLevel.class) @GuardSatisfied PptSlice this*/);
+  public abstract int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PptSlice this*/);
 
   /**
    * Return an approximation of the number of distinct values seen on
