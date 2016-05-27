@@ -1880,6 +1880,10 @@ public final class Daikon {
    * over boolean returns or exactly two return statements are enabled
    * by default (though other splitters can be defined by the user)
    */
+  // TODO: When Checker Framework issue 752 is fixed, remove this
+  // @SuppressWarnings and address the type checking error issued
+  // for the call to SplitterFactory.load_splitters.
+  @SuppressWarnings("contracts.precondition.not.satisfied")
   public static void setup_splitters(PptTopLevel ppt) {
     if (PptSplitter.dkconfig_disable_splitting) {
       return;
