@@ -26,15 +26,25 @@ class RatPolyStack : // 825/- obj/class samples
     return: 
   method dup()V : // 3 samples
     return: 
+  method dup()V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
   method get(I)LPolyCalc/RatPoly; : // 99 samples
+    return: 
+    parameter #0 :  // index
+  method get(I)V throws Ljava/lang/Throwable; : // 0 samples
     return: 
     parameter #0 :  // index
   method getCons(I)LPolyCalc/Cons; : // 99 samples
     return: 
     parameter #0 :  // index
+  method getCons(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
+    parameter #0 :  // index
   method mul()V : // 5 samples
     return: 
   method pop()LPolyCalc/RatPoly; : // 41 samples
+    return: 
+  method pop()V throws Ljava/lang/Throwable; : // 0 samples
     return: 
   method push(LPolyCalc/RatPoly;)V : // 84 samples
     return: 
@@ -44,6 +54,8 @@ class RatPolyStack : // 825/- obj/class samples
   method sub()V : // 5 samples
     return: 
   method swap()V : // 3 samples
+    return: 
+  method swap()V throws Ljava/lang/Throwable; : // 0 samples
     return: 
 
 

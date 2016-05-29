@@ -182,7 +182,6 @@ public class StackAr
     /*@ requires \typeof(x).length() == 16 || \typeof(x).length() == 22 || \typeof(x).length() == 24; */
     /*@ requires \typeof(this.theArray) != \typeof(x); */
     /*@ requires this.topOfStack <= \typeof(this.theArray).length(); */
-    /*@ requires this.topOfStack < this.theArray.length-1; */
     /*@ requires \typeof(this.theArray).length() != \typeof(x).length(); */
     /*@ requires this.theArray.length != \typeof(x).length(); */
     /*@ requires this.theArray.length-1 != \typeof(x).length(); */

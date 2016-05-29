@@ -24,6 +24,8 @@ class Vector13 : // 41700/41700 obj/class samples
     return: 
   method clone()Ljava/lang/Object; : // 150 samples
     return: 
+  method clone()V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
   method contains(Ljava/lang/Object;)Z : // 300 samples
     return: 
     parameter #0 :  // elem
@@ -32,6 +34,9 @@ class Vector13 : // 41700/41700 obj/class samples
     parameter #0 :  // anArray
   method elementAt(I)Ljava/lang/Object; : // 375 samples
     return: @Nullable 
+    parameter #0 :  // index
+  method elementAt(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
     parameter #0 :  // index
   method elements()Ljava/util/Enumeration; : // 300 samples
     return: 
@@ -43,6 +48,8 @@ class Vector13 : // 41700/41700 obj/class samples
     parameter #0 :  // minCapacity
   method firstElement()Ljava/lang/Object; : // 125 samples
     return: @Nullable 
+  method firstElement()V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
   method indexOf(Ljava/lang/Object;)I : // 900 samples
     return: 
     parameter #0 :  // elem
@@ -54,10 +61,16 @@ class Vector13 : // 41700/41700 obj/class samples
     return: 
     parameter #0 : @Nullable  // obj
     parameter #1 :  // index
+  method insertElementAt(Ljava/lang/Object;I)V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
+    parameter #0 :  // obj
+    parameter #1 :  // index
   method isEmpty()Z : // 150 samples
     return: 
   method lastElement()Ljava/lang/Object; : // 125 samples
     return: @Nullable 
+  method lastElement()V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
   method lastIndexOf(Ljava/lang/Object;)I : // 750 samples
     return: 
     parameter #0 :  // elem
@@ -73,9 +86,16 @@ class Vector13 : // 41700/41700 obj/class samples
   method removeElementAt(I)V : // 190 samples
     return: 
     parameter #0 :  // index
+  method removeElementAt(I)V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
+    parameter #0 :  // index
   method setElementAt(Ljava/lang/Object;I)V : // 375 samples
     return: 
     parameter #0 : @Nullable  // obj
+    parameter #1 :  // index
+  method setElementAt(Ljava/lang/Object;I)V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
+    parameter #0 :  // obj
     parameter #1 :  // index
   method setSize(I)V : // 150 samples
     return: 

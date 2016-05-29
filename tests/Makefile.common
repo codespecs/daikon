@@ -516,7 +516,6 @@ $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-ti
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 	  --dtrace-file=$(PROJECT_FILE).dtrace.gz \
-	  --ppt-omit-pattern=':::THROW' \
 	  --ppt-select-pattern='$(INST_FILES)' ${MAIN_CLASS} ${MAIN_ARGS}
 	touch $(SCRATCH_FOR_DAIKON)/.run-timestamp
 endif
