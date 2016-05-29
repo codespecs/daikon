@@ -1,0 +1,6341 @@
+// Declarations for ExceptionHandling.DaikonAnalyseExceptions
+// Declarations written Sun May 29 01:08:29 CEST 2016
+
+decl-version 2.0
+var-comparability none
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::ENTER
+ppt-type enter
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::EXIT5
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::THROWS
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.isEvan(int):::ENTER
+ppt-type enter
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.isEvan(int):::EXIT8
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type boolean
+  rep-type boolean
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.isEvan(int):::THROWS
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int):::ENTER
+ppt-type enter
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int):::EXIT12
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type boolean
+  rep-type boolean
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int):::THROWS
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+ppt-type enter
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROWS
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+ppt-type enter
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+ppt-type enter
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT50
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::THROWS
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::ENTER
+ppt-type enter
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXIT68
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXIT70
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXIT73
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::THROW64
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::THROWS
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+ppt-type enter
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW82
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+ppt-type enter
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable return
+  var-kind return 
+  dec-type int
+  rep-type int
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW101
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW98
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROWS
+ppt-type subexit
+parent parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+  parent ExceptionHandling.DaikonAnalyseExceptions:::OBJECT 1
+variable parameter
+  var-kind variable 
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 22
+variable exception
+  var-kind return 
+  dec-type java.lang.Throwable
+  rep-type hashcode
+  comparability 22
+variable exception.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var exception
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  flags synthetic classname
+  comparability 22
+
+ppt ExceptionHandling.DaikonAnalyseExceptions:::OBJECT
+ppt-type object
+variable this
+  var-kind variable 
+  dec-type ExceptionHandling.DaikonAnalyseExceptions
+  rep-type hashcode
+  flags is_param
+  comparability 22
+variable this.classVar
+  var-kind field classVar
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 22
+
+ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::ENTER
+this_invocation_nonce
+0
+
+ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::EXIT5
+this_invocation_nonce
+0
+this
+805547347
+1
+this.classVar
+42
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+1
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+1
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+return
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+2
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+2
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+return
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+3
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+4
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+4
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+return
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+3
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+return
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+5
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+this_invocation_nonce
+5
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+return
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+6
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+this_invocation_nonce
+6
+this
+805547347
+1
+this.classVar
+2
+1
+parameter
+2
+1
+return
+2
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+7
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+7
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+return
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+8
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+8
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+return
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+9
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+10
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+10
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+return
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+9
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+return
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+11
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+11
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+return
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+12
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+12
+this
+805547347
+1
+this.classVar
+3
+1
+parameter
+3
+1
+return
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+13
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+13
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+return
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+14
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+14
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+return
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+15
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+16
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+16
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+return
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+15
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+return
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+17
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+this_invocation_nonce
+17
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+return
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+18
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+this_invocation_nonce
+18
+this
+805547347
+1
+this.classVar
+4
+1
+parameter
+4
+1
+return
+4
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+19
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+19
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+exception
+2087643114
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+20
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+this_invocation_nonce
+20
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+exception
+1429992312
+1
+exception.getClass().getName()
+"java.lang.ArithmeticException"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+21
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+22
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+22
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+exception
+1391294207
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT50
+this_invocation_nonce
+21
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+return
+0
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+23
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW82
+this_invocation_nonce
+23
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+exception
+1679788513
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+24
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW98
+this_invocation_nonce
+24
+this
+805547347
+1
+this.classVar
+5
+1
+parameter
+5
+1
+exception
+1385514529
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+25
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+25
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+return
+6
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+26
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+26
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+return
+6
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+27
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+28
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+28
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+return
+6
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+27
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+return
+6
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+29
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+this_invocation_nonce
+29
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+exception
+1177504482
+1
+exception.getClass().getName()
+"java.lang.ArithmeticException"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+30
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW101
+this_invocation_nonce
+30
+this
+805547347
+1
+this.classVar
+6
+1
+parameter
+6
+1
+exception
+1256021869
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+31
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+31
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+return
+49
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+32
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+32
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+return
+49
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+33
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+34
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+34
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+return
+49
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+33
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+return
+49
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+35
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+35
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+return
+49
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+36
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+36
+this
+805547347
+1
+this.classVar
+7
+1
+parameter
+7
+1
+return
+49
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+37
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+37
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+return
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+38
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+38
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+return
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+39
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+40
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+40
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+return
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+39
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+return
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+41
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+this_invocation_nonce
+41
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+return
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+42
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+this_invocation_nonce
+42
+this
+805547347
+1
+this.classVar
+8
+1
+parameter
+8
+1
+return
+8
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+43
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+43
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+return
+81
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+44
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+44
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+return
+81
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+45
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+46
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+46
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+return
+81
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+45
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+return
+81
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+47
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+47
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+return
+81
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+48
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+48
+this
+805547347
+1
+this.classVar
+9
+1
+parameter
+9
+1
+return
+81
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+49
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+49
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+exception
+195302273
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+50
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+this_invocation_nonce
+50
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+exception
+1090289695
+1
+exception.getClass().getName()
+"java.lang.ArithmeticException"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+51
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+52
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+52
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+exception
+20944014
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT50
+this_invocation_nonce
+51
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+return
+0
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+53
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW82
+this_invocation_nonce
+53
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+exception
+1966208837
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+54
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW98
+this_invocation_nonce
+54
+this
+805547347
+1
+this.classVar
+10
+1
+parameter
+10
+1
+exception
+593563423
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+55
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+55
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+return
+121
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+56
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+56
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+return
+121
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+57
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+58
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+58
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+return
+121
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+57
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+return
+121
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+59
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+59
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+return
+121
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+60
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+60
+this
+805547347
+1
+this.classVar
+11
+1
+parameter
+11
+1
+return
+121
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+61
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+61
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+return
+12
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+62
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+62
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+return
+12
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+63
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+64
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+64
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+return
+12
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+63
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+return
+12
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+65
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+this_invocation_nonce
+65
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+exception
+958910046
+1
+exception.getClass().getName()
+"java.lang.ArithmeticException"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+66
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW101
+this_invocation_nonce
+66
+this
+805547347
+1
+this.classVar
+12
+1
+parameter
+12
+1
+exception
+1683856034
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+67
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+67
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+return
+169
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+68
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+68
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+return
+169
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+69
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+70
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+70
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+return
+169
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+69
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+return
+169
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+71
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+71
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+return
+169
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+72
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+72
+this
+805547347
+1
+this.classVar
+13
+1
+parameter
+13
+1
+return
+169
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+73
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+73
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+return
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+74
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+74
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+return
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+75
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+76
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+76
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+return
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+75
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+return
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+77
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+this_invocation_nonce
+77
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+return
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+78
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+this_invocation_nonce
+78
+this
+805547347
+1
+this.classVar
+14
+1
+parameter
+14
+1
+return
+14
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+79
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+79
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+exception
+1028863272
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+80
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+this_invocation_nonce
+80
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+exception
+566686860
+1
+exception.getClass().getName()
+"java.lang.ArithmeticException"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+81
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+82
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+82
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+exception
+216081575
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT50
+this_invocation_nonce
+81
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+return
+0
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+83
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW82
+this_invocation_nonce
+83
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+exception
+288183948
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+84
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW98
+this_invocation_nonce
+84
+this
+805547347
+1
+this.classVar
+15
+1
+parameter
+15
+1
+exception
+931990051
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+85
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+85
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+return
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+86
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+86
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+return
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+87
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+88
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+88
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+return
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+87
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+return
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+89
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+this_invocation_nonce
+89
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+return
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+90
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+this_invocation_nonce
+90
+this
+805547347
+1
+this.classVar
+16
+1
+parameter
+16
+1
+return
+16
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+91
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+91
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+return
+289
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+92
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+92
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+return
+289
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+93
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+94
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+94
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+return
+289
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+93
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+return
+289
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+95
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+95
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+return
+289
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+96
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+96
+this
+805547347
+1
+this.classVar
+17
+1
+parameter
+17
+1
+return
+289
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+97
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+97
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+return
+18
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+98
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+98
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+return
+18
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+99
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+100
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+100
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+return
+18
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+99
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+return
+18
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+101
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+this_invocation_nonce
+101
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+exception
+211065939
+1
+exception.getClass().getName()
+"java.lang.ArithmeticException"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+102
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW101
+this_invocation_nonce
+102
+this
+805547347
+1
+this.classVar
+18
+1
+parameter
+18
+1
+exception
+1889735576
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+103
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+103
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+return
+361
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+104
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+104
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+return
+361
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+105
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+106
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+106
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+return
+361
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+105
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+return
+361
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+107
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+107
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+return
+361
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+108
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+108
+this
+805547347
+1
+this.classVar
+19
+1
+parameter
+19
+1
+return
+361
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+109
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+109
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+exception
+1650170349
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+110
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+this_invocation_nonce
+110
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+exception
+1809238285
+1
+exception.getClass().getName()
+"java.lang.ArithmeticException"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+111
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+112
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+112
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+exception
+1646898122
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT50
+this_invocation_nonce
+111
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+return
+0
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+113
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW82
+this_invocation_nonce
+113
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+exception
+500010271
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+114
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW98
+this_invocation_nonce
+114
+this
+805547347
+1
+this.classVar
+20
+1
+parameter
+20
+1
+exception
+569113986
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+115
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+115
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+return
+441
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+116
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+116
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+return
+441
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+117
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+118
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+118
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+return
+441
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+117
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+return
+441
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+119
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+119
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+return
+441
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+120
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+120
+this
+805547347
+1
+this.classVar
+21
+1
+parameter
+21
+1
+return
+441
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+121
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+121
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+return
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+122
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+122
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+return
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+123
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+124
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+124
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+return
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+123
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+return
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+125
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+this_invocation_nonce
+125
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+return
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+126
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+this_invocation_nonce
+126
+this
+805547347
+1
+this.classVar
+22
+1
+parameter
+22
+1
+return
+22
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+127
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+127
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+return
+529
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+128
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+128
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+return
+529
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+129
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+130
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+130
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+return
+529
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+129
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+return
+529
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+131
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+131
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+return
+529
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+132
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+132
+this
+805547347
+1
+this.classVar
+23
+1
+parameter
+23
+1
+return
+529
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+133
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+133
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+return
+24
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+134
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+134
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+return
+24
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+135
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+136
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+136
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+return
+24
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+135
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+return
+24
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+137
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROWS
+this_invocation_nonce
+137
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+exception
+206598964
+1
+exception.getClass().getName()
+"java.lang.ArithmeticException"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+138
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW101
+this_invocation_nonce
+138
+this
+805547347
+1
+this.classVar
+24
+1
+parameter
+24
+1
+exception
+1975214396
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+139
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+139
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+exception
+1626138246
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+140
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+this_invocation_nonce
+140
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+exception
+1628608800
+1
+exception.getClass().getName()
+"java.lang.ArithmeticException"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+141
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+142
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+142
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+exception
+201536938
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT50
+this_invocation_nonce
+141
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+return
+0
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+143
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW82
+this_invocation_nonce
+143
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+exception
+649605647
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+144
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW98
+this_invocation_nonce
+144
+this
+805547347
+1
+this.classVar
+25
+1
+parameter
+25
+1
+exception
+115247781
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+145
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+145
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+return
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+146
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+146
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+return
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+147
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+148
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+148
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+return
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+147
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+return
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+149
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+this_invocation_nonce
+149
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+return
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+150
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+this_invocation_nonce
+150
+this
+805547347
+1
+this.classVar
+26
+1
+parameter
+26
+1
+return
+26
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+151
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+151
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+return
+729
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+152
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+152
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+return
+729
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+153
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+154
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+154
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+return
+729
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+153
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+return
+729
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+155
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+155
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+return
+729
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+156
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+156
+this
+805547347
+1
+this.classVar
+27
+1
+parameter
+27
+1
+return
+729
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+157
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+157
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+return
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+158
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this_invocation_nonce
+158
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+return
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+159
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+160
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this_invocation_nonce
+160
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+return
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+159
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+return
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+161
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+this_invocation_nonce
+161
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+return
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+162
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+this_invocation_nonce
+162
+this
+805547347
+1
+this.classVar
+28
+1
+parameter
+28
+1
+return
+28
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+163
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+163
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+return
+841
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+164
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this_invocation_nonce
+164
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+return
+841
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+165
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+166
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this_invocation_nonce
+166
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+return
+841
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this_invocation_nonce
+165
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+return
+841
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+167
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this_invocation_nonce
+167
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+return
+841
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+168
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this_invocation_nonce
+168
+this
+805547347
+1
+this.classVar
+29
+1
+parameter
+29
+1
+return
+841
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+169
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+169
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+exception
+2086689320
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this_invocation_nonce
+170
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::THROWS
+this_invocation_nonce
+170
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+exception
+431962083
+1
+exception.getClass().getName()
+"java.lang.ArithmeticException"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this_invocation_nonce
+171
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this_invocation_nonce
+172
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::THROW21
+this_invocation_nonce
+172
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+exception
+1492002121
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT50
+this_invocation_nonce
+171
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+return
+0
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this_invocation_nonce
+173
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::THROW82
+this_invocation_nonce
+173
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+exception
+2060585275
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this_invocation_nonce
+174
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::THROW98
+this_invocation_nonce
+174
+this
+805547347
+1
+this.classVar
+30
+1
+parameter
+30
+1
+exception
+1935425403
+1
+exception.getClass().getName()
+"java.lang.Exception"
+1
+
