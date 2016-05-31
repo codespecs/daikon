@@ -271,7 +271,7 @@ public final class MergeInvariants {
     debugProgress.fine("Building hierarchy between leaves of the maps");
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
-      // Skip everything that is not a final exit point
+      // Skip everything that is not a final exit or exception point
       if (!ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isExceptionPoint()) {
         assert ppt.children.size() > 0 : ppt;
         continue;

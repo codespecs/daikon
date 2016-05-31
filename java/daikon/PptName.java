@@ -441,9 +441,9 @@ public class PptName implements Serializable {
     // We may wish to have a different exceptional than non-exceptional
     // entry point; in particular, if there was an exception, then perhaps
     // the precondition or object invariant was not met.
-    assert isExitPoint() : fullname;
+    assert isExitPoint() || isExceptionPoint() : fullname;
 
-    assert isExitPoint() || isThrowsPoint();
+    assert isExitPoint() || isExceptionPoint();
     return new PptName(cls, method, FileIO.enter_suffix);
   }
 
@@ -470,7 +470,7 @@ public class PptName implements Serializable {
    * @return a name for the corresponding object invariant
    **/
   public PptName makeObject() {
-    assert isExitPoint() || isEnterPoint() : fullname;
+    assert isExitPoint() || isEnterPoint() || isExceptionPoint() : fullname;
     return new PptName(cls, null, FileIO.object_suffix);
   }
 
@@ -479,7 +479,8 @@ public class PptName implements Serializable {
    * @return a name for the corresponding class-static invariant
    **/
   public PptName makeClassStatic() {
-    assert isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic() : fullname;
+    assert isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic() || isExceptionPoint()
+        : fullname;
     return new PptName(cls, null, FileIO.class_static_suffix);
   }
 

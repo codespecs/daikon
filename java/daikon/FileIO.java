@@ -1047,7 +1047,6 @@ public final class FileIO {
           (ppt_top_level.ppt_name.isExitPoint()
               || ppt_top_level.ppt_name.isExceptionPoint()
               || ppt_top_level.ppt_name.isEnterPoint()
-              //            || ppt_top_level.ppt_name.isThrowsPoint()
               || ppt_top_level.ppt_name.isObjectInstanceSynthetic()
               || ppt_top_level.ppt_name.isClassStaticSynthetic()
               || ppt_top_level.ppt_name.isGlobalPoint());
@@ -1778,9 +1777,9 @@ public final class FileIO {
       //  and :::CLASS program points.  This scheme ensures that arbitrarly
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
+      //  Throws is a LEAF now, like Exit_nn
 
       if (ppt.ppt_name.isEnterPoint()
-          //        || ppt.ppt_name.isThrowsPoint() /* Throws is a LEAF now, like Exit_nn
           || ppt.ppt_name.isObjectInstanceSynthetic()
           || ppt.ppt_name.isClassStaticSynthetic()
           || ppt.ppt_name.isGlobalPoint()) {

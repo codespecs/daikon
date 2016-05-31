@@ -47,7 +47,7 @@ public class MethodInfo {
   /** Array of argument types as classes for this method **/
   public Class<?>[] arg_types;
 
-  /** exit locations for this method **/
+  /** throw locations for this method **/
   public List<Integer> throw_locations;
 
   /** exit locations for this method **/

@@ -117,7 +117,7 @@ public class Chicory {
   public static boolean exception_handling = false;
 
   @Option("Enable remote debug")
-  private static /*final*/ boolean remote_debug = false;
+  public static boolean remote_debug = false;
 
   /**
    * Daikon port number.  Daikon writes this to stdout when it is started

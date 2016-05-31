@@ -4416,7 +4416,7 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /** Is this is an exit ppt (combined or specific)? **/
+  /** Is this is an exception ppt (combined or specific)? **/
   /*@Pure*/ public boolean is_throw() {
     if (type != null) return ((type == PptType.EXIT) || (type == PptType.SUBEXIT));
     else return ppt_name.isThrowPoint();
