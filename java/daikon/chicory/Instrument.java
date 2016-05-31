@@ -131,7 +131,7 @@ public class Instrument implements ClassFileTransformer {
    * Because Chicory is invoked as a javaagent, the transform method is
    * called by the Java runtime each time a new class is loaded.
    */
-  public byte /*@Nullable*/[] transform(
+  public byte /*@Nullable*/ [] transform(
       ClassLoader loader,
       /*@InternalForm*/ String className,
       Class<?> classBeingRedefined,
