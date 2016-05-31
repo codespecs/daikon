@@ -43,6 +43,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
@@ -98,7 +99,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Since the order is determined from the vars and the sequence is always
    * first, this is essentially symmetric.  Subclasses can override if necessary
    */
-  /*@Pure*/ public boolean is_symmetric() {
+  /*@Pure*/
+  public boolean is_symmetric() {
     return true;
   }
 
@@ -122,23 +124,23 @@ public abstract class CLASSNAME extends BinaryInvariant {
     return this;
   }
 
- protected final boolean seq_first() {
+ protected final boolean seq_first(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return (ppt.var_infos[0].rep_type == ProglangType.PROG_LANG_TYPE_ARRAY);
   }
 
-  protected final int seq_index() {
+  protected final int seq_index(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return (seq_first() ? 0 : 1);
   }
 
-  protected final int scl_index() {
+  protected final int scl_index(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return (seq_first() ? 1 : 0);
   }
 
-  public VarInfo seqvar() {
+  public VarInfo seqvar(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return (ppt.var_infos[seq_index()]);
   }
 
-  public VarInfo sclvar() {
+  public VarInfo sclvar(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return (ppt.var_infos[scl_index()]);
   }
 

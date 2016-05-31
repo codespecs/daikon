@@ -24,6 +24,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -241,7 +242,8 @@ public final class FileIO {
       this.parent_ppt_name = parent_ppt_name;
       this.id = id;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied ParentRelation this*/) {
       return parent_ppt_name + "[" + id + "] " + rel_type;
     };
 
@@ -253,7 +255,8 @@ public final class FileIO {
 
   // Utilities
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public static final boolean isComment(/*@Nullable*/ String s) {
+  /*@Pure*/
+  public static final boolean isComment(/*@Nullable*/ String s) {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
 
@@ -855,13 +858,13 @@ public final class FileIO {
 
     // Print the Invocation on two lines, indented by two spaces
     // The receiver Invocation may be canonicalized or not.
-    String format() {
+    String format(/*>>>@GuardSatisfied Invocation this*/) {
       return format(true);
     }
 
     // Print the Invocation on one or two lines, indented by two spaces.
     // The receiver Invocation may be canonicalized or not.
-    String format(boolean show_values) {
+    String format(/*>>>@GuardSatisfied Invocation this,*/ boolean show_values) {
       if (!show_values) {
         return "  " + ppt.ppt_name.getNameWithoutPoint();
       }
@@ -909,7 +912,10 @@ public final class FileIO {
 
     // Return true if the invocations print the same
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object other) {
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied Invocation this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation) {
         return this.format().equals(((FileIO.Invocation) other).format());
       } else {
@@ -917,11 +923,13 @@ public final class FileIO {
       }
     }
 
-    /*@Pure*/ public int compareTo(Invocation other) {
+    /*@Pure*/
+    public int compareTo(/*>>>@GuardSatisfied Invocation this,*/ Invocation other) {
       return ppt.name().compareTo(other.ppt.name());
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied Invocation this*/) {
       return this.format().hashCode();
     }
   }
@@ -2689,7 +2697,8 @@ public final class FileIO {
       comparability = VarComparabilityNone.it;
     }
 
-    /*@SideEffectFree*/ public VarDefinition clone() {
+    /*@SideEffectFree*/
+    public VarDefinition clone(/*>>>@GuardSatisfied VarDefinition this*/) {
       try {
         return (VarDefinition) super.clone();
       } catch (CloneNotSupportedException e) {
@@ -2963,7 +2972,8 @@ public final class FileIO {
 
   /** Returns whether the line is the start of a ppt declaration **/
   /*@RequiresNonNull("FileIO.new_decl_format")*/
-  /*@Pure*/ private static boolean is_declaration_header(String line) {
+  /*@Pure*/
+  private static boolean is_declaration_header(String line) {
     if (new_decl_format) {
       return (line.startsWith("ppt "));
     } else {

@@ -192,14 +192,16 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
     return seqvar();
   }
 
-  /*@Pure*/ public boolean isSameFormula(Derivation other) {
+  /*@Pure*/
+  public boolean isSameFormula(Derivation other) {
     return (other instanceof SEQUENCESCALARARBITRARYSUBSEQUENCE)
       && (((SEQUENCESCALARARBITRARYSUBSEQUENCE)other).left_closed == this.left_closed)
       && (((SEQUENCESCALARARBITRARYSUBSEQUENCE)other).right_closed == this.right_closed);
   }
 
   /** Returns the csharp name **/
-  /*@SideEffectFree*/ public String csharp_name (String index) {
+  /*@SideEffectFree*/
+  public String csharp_name (String index) {
     String lower = get_lower_bound().csharp_name();
     String upper = get_upper_bound().csharp_name();
     // We do not need to check if seqvar().isPrestate() because it is redundant.
@@ -207,7 +209,8 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
   }
 
   /** Returns the ESC name **/
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     return String.format ("%s[%s..%s]", seqvar().esc_name(),
                     get_lower_bound().esc_name(), get_upper_bound().esc_name());
   }

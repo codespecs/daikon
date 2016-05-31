@@ -15,6 +15,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -874,7 +875,8 @@ public class NIS {
    * Returns true if the specified class is an antecedent in any NI suppression
    */
   /*@RequiresNonNull("suppressor_map")*/
-  /*@Pure*/ public static boolean is_suppressor(Class<? extends Invariant> cls) {
+  /*@Pure*/
+  public static boolean is_suppressor(Class<? extends Invariant> cls) {
     return (suppressor_map.containsKey(cls));
   }
 
@@ -928,7 +930,10 @@ public class NIS {
 
     /** Equal iff classes / swap variable / and variables match exactly **/
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object obj) {
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied SupInv this,*/
+        final /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof SupInv)) return false;
 
       // Class and variables must match
@@ -952,7 +957,8 @@ public class NIS {
     }
 
     /** Hash on class and variables **/
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied SupInv this*/) {
       int code = suppressee.sup_class.hashCode();
       for (int i = 0; i < vis.length; i++) {
         code += vis[i].hashCode();
@@ -967,7 +973,8 @@ public class NIS {
 
     /** Returns true if the invariant is still suppressed **/
     @SuppressWarnings("purity") // new object is not returned
-    /*@Pure*/ public boolean is_ni_suppressed() {
+    /*@Pure*/
+    public boolean is_ni_suppressed() {
 
       NISuppressionSet ss = suppressee.sample_inv.get_ni_suppressions();
       assert ss != null
@@ -999,7 +1006,8 @@ public class NIS {
     }
 
     /** Return string representation of the suppressed invariant **/
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied SupInv this*/) {
       String[] names = new String[vis.length];
       for (int i = 0; i < vis.length; i++) {
         names[i] = vis[i].name();
@@ -1104,7 +1112,8 @@ public class NIS {
     /**
      * Returns a string representation of all of the antecedents by class
      */
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied Antecedents this*/) {
 
       String out = "Comparability " + comparability + " : ";
 

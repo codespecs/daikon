@@ -352,12 +352,12 @@ unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-#.#.#.tar.gz
-tar zxf daikon-#.#.#.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-@var{#.#.#}.tar.gz
+tar zxf daikon-@var{#.#.#}.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-#.#.#/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-@var{#.#.#}/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:  
@@ -369,11 +369,18 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-#.#.#
+export DAIKONDIR=@var{daikonparent}/daikon-@var{#.#.#}
 # The full pathname of the directory that contains the Java JDK
-export JAVA_HOME=/usr/lib/jvm/java
+export JAVA_HOME=@var{/usr/lib/jvm/java}
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
+
+A setting of @env{JAVA_HOME} that @emph{sometimes} works (it might not
+because @command{java} might be the version in the JDK or in the JRE) is:
+
+@smallexample
+export JAVA_HOME=$@{JAVA_HOME:-$(dirname $(dirname $(dirname $(readlink -f $(/usr/bin/which java)))))@}
+@end smallexample
 
 After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
@@ -445,12 +452,12 @@ unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-#.#.#.tar.gz
-tar zxf daikon-#.#.#.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-@var{#.#.#}.tar.gz
+tar zxf daikon-@var{#.#.#}.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-#.#.#/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-@var{#.#.#}/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{~/.bashrc}:  
@@ -460,7 +467,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-#.#.#
+export DAIKONDIR=@var{daikonparent}/daikon-@var{#.#.#}
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc

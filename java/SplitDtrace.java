@@ -107,13 +107,16 @@ public final class SplitDtrace {
     }
     throw new RuntimeException("no nonce: " + res);
   }
-  /*@Pure*/ static boolean isEnter(ArrayList<String> res) {
+  /*@Pure*/
+  static boolean isEnter(ArrayList<String> res) {
     return res.get(0).contains(":::ENTER");
   }
-  /*@Pure*/ static boolean isExit(ArrayList<String> res) {
+  /*@Pure*/
+  static boolean isExit(ArrayList<String> res) {
     return res.get(0).contains(":::EXIT");
   }
-  /*@Pure*/ static boolean isDeclare(ArrayList<String> res) {
+  /*@Pure*/
+  static boolean isDeclare(ArrayList<String> res) {
     return res.get(0).equals("DECLARE");
   }
 
@@ -127,7 +130,8 @@ public final class SplitDtrace {
 
   @SuppressWarnings(
       "purity") // non-deterministic call to trim is used only for equals() and does not affect result
-  /*@Pure*/ static boolean isEmpty(String l) {
+  /*@Pure*/
+  static boolean isEmpty(String l) {
     return l.trim().equals("") || l.startsWith("#");
   }
 

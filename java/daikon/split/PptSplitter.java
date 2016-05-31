@@ -13,6 +13,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -355,11 +356,16 @@ public class PptSplitter implements Serializable {
                 System.out.println("con val = " + child_ppt.constants.getConstant(cvis_sorted[i]));
               }
             }
+            // TODO: Once Checker Framework issue 755 has been fixed
+            // ( https://github.com/typetools/checker-framework/issues/755),
+            // this warning suppression should be removed.
+            @SuppressWarnings("lock:cannot.dereference")
+            String eq_inv_ppt = eq_inv.ppt.toString();
             throw new RuntimeException(
                 "found eq_inv "
                     + eq_inv
                     + " @"
-                    + eq_inv.ppt
+                    + eq_inv_ppt
                     + " but can't find slice for "
                     + VarInfo.arrayToString(cvis_sorted));
           }
@@ -799,7 +805,8 @@ public class PptSplitter implements Serializable {
     return v;
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied PptSplitter this*/) {
 
     return "Splitter " + splitter + ": ppt1 " + ppts[0].name() + ": ppt2 " + ppts[1].name;
   }

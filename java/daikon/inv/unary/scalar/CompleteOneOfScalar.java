@@ -7,6 +7,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.framework.qual.*;
@@ -73,7 +74,8 @@ public final class CompleteOneOfScalar extends SingleScalar {
   }
 
   /** return description of invariant.  Only Daikon format is implemented **/
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CompleteOneOfScalar this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       String out = var().name() + " has values: ";
       for (Info val : vals) {
@@ -127,7 +129,8 @@ public final class CompleteOneOfScalar extends SingleScalar {
    * Same formula if each value is the same and has the same count.
    * Not implemented for now, just presumed to be false.
    */
-  /*@Pure*/ public boolean isSameFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant o) {
     return false;
   }
 }

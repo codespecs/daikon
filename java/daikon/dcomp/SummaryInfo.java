@@ -19,6 +19,7 @@ import org.apache.commons.bcel6.verifier.structurals.*;
 import org.apache.commons.io.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
@@ -122,7 +123,7 @@ public class SummaryInfo {
   }
 
   /** Returns the type of each parameter of the original method **/
-  public Class<?>[] original_params() {
+  public Class<?>[] original_params(/*>>>@GuardSatisfied SummaryInfo this*/) {
     if (invoke_type == "static") { // interned
       return method.getParameterTypes();
     } else {
@@ -139,7 +140,8 @@ public class SummaryInfo {
    * Returns the full signature of the original method.  Uses reflection
    * to get the parameter types and may change class loading order
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied SummaryInfo this*/) {
     List<String> param_names = new ArrayList<String>();
     for (Class<?> p : original_params()) {
       param_names.add(p.getSimpleName());

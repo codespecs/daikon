@@ -59,6 +59,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -150,12 +151,13 @@ public class SUBSET
     return new SUBSET_SWAP(ppt);
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied SUBSET this*/) {
     return SUBSETSTRING + varNames() + ": "
       + ",falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied SUBSET this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
@@ -167,7 +169,8 @@ public class SUBSET
     return format_unimplemented(format);
   }
 
-  /*@SideEffectFree*/ public String format() {
+  /*@SideEffectFree*/
+  public String format(/*>>>@GuardSatisfied SUBSET this*/) {
     String v1 = var1().name();
     String v2 = var2().name();
     #if (defined(SUB) || defined(SUBFLOAT))
@@ -177,7 +180,7 @@ public class SUBSET
     #endif
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied SUBSET this*/) {
     String v1 = var1().csharp_collection_string();
     String v2 = var2().csharp_collection_string();
 
@@ -188,12 +191,12 @@ public class SUBSET
     #endif
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied SUBSET this*/) {
     String classname = this.getClass().toString().substring(6); // remove leading "class"
     return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied SUBSET this*/) {
     if (Invariant.dkconfig_simplify_define_predicates) {
       return format_simplify_defined();
     } else {
@@ -201,7 +204,7 @@ public class SUBSET
     }
   }
 
-  private String format_simplify_defined() {
+  private String format_simplify_defined(/*>>>@GuardSatisfied SUBSET this*/) {
 #if defined(SUB) || defined(SUBFLOAT)
     VarInfo subvar = var1();
     VarInfo supervar = var2();
@@ -222,7 +225,7 @@ public class SUBSET
       super_name[0] + " " + super_name[1] + " " + super_name[2] + ")";
   }
 
-  private String format_simplify_explicit() {
+  private String format_simplify_explicit(/*>>>@GuardSatisfied SUBSET this*/) {
 #if defined(SUB) || defined(SUBFLOAT)
     VarInfo subvar = var1();
     VarInfo supervar = var2();
@@ -259,7 +262,7 @@ public class SUBSET
 
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied SUBSET this,*/ OutputFormat format) {
 
     String v1 = var1().name_using(format);
     String v2 = var2().name_using(format);
@@ -362,7 +365,8 @@ public class SUBSET
     return null;
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     assert other instanceof SUBSET;
     return true;
   }

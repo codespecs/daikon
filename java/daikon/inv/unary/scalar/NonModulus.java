@@ -6,6 +6,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
@@ -78,17 +79,19 @@ public class NonModulus extends SingleScalar {
     return new NonModulus(slice);
   }
 
-  /*@SideEffectFree*/ public NonModulus clone() {
+  /*@SideEffectFree*/
+  public NonModulus clone(/*>>>@GuardSatisfied NonModulus this*/) {
     NonModulus result = (NonModulus) super.clone();
     result.elements = new TreeSet<Long>(this.elements);
     return result;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied NonModulus this*/) {
     return "NonModulus" + varNames() + ": " + "m=" + modulus + ",r=" + remainder;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied NonModulus this,*/ OutputFormat format) {
     updateResults();
     String name = var().name_using(format);
 
@@ -130,7 +133,7 @@ public class NonModulus extends SingleScalar {
   }
 
   // Set either modulus and remainder, or no_result_yet.
-  void updateResults() {
+  void updateResults(/*>>>@GuardSatisfied NonModulus this*/) {
     if (results_accurate) {
       return;
     }
@@ -174,7 +177,8 @@ public class NonModulus extends SingleScalar {
     return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_samples());
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant o) {
     NonModulus other = (NonModulus) o;
 
     updateResults();
@@ -197,7 +201,8 @@ public class NonModulus extends SingleScalar {
     return ((modulus == this.modulus) && (remainder == this.remainder));
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant o) {
     updateResults();
     if (no_result_yet) return false;
     if (o instanceof NonModulus) {

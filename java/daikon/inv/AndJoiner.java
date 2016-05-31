@@ -5,6 +5,7 @@ import java.util.*;
 import plume.UtilMDE;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -33,11 +34,12 @@ public class AndJoiner extends Joiner {
     return Invariant.confidence_and(left.computeConfidence(), right.computeConfidence());
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied AndJoiner this*/) {
     return "[" + left.repr() + " and " + right.repr() + "]";
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied AndJoiner this,*/ OutputFormat format) {
     List<Invariant> invs = conjuncts();
     List<String> invStrings = new ArrayList<String>(invs.size());
     for (Invariant inv : invs) {
@@ -57,7 +59,7 @@ public class AndJoiner extends Joiner {
     }
   }
 
-  public List<Invariant> conjuncts() {
+  public List<Invariant> conjuncts(/*>>>@GuardSatisfied AndJoiner this*/) {
     List<Invariant> result = new ArrayList<Invariant>(2);
     if (left instanceof AndJoiner) {
       result.addAll(((AndJoiner) left).conjuncts());
@@ -111,7 +113,8 @@ public class AndJoiner extends Joiner {
     }
   }
 
-  /*@Pure*/ public boolean isSameInvariant(Invariant other) {
+  /*@Pure*/
+  public boolean isSameInvariant(Invariant other) {
     return super.isSameInvariant(other);
   }
 

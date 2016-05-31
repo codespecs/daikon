@@ -89,7 +89,8 @@ public class ParameterInfo extends DaikonVariableInfo {
   }
 
   /** Returns whether or not this parameter is a primitive type **/
-  /*@Pure*/ public boolean isPrimitive() {
+  /*@Pure*/
+  public boolean isPrimitive() {
     return isPrimitive;
   }
 

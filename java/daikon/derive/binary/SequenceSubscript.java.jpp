@@ -42,6 +42,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -63,8 +64,8 @@ public final class SEQUENCESCALARSUBSCRIPT
 
   // base1 is the sequence
   // base2 is the scalar
-  public VarInfo seqvar() { return base1; }
-  public VarInfo sclvar() { return base2; }
+  public VarInfo seqvar(/*>>>@GuardSatisfied SEQUENCESCALARSUBSCRIPT this*/) { return base1; }
+  public VarInfo sclvar(/*>>>@GuardSatisfied SEQUENCESCALARSUBSCRIPT this*/) { return base2; }
 
   public VarInfo seq_enclosing_var() {
     VarInfo result = seqvar().enclosing_var;
@@ -87,7 +88,8 @@ public final class SEQUENCESCALARSUBSCRIPT
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied SEQUENCESCALARSUBSCRIPT this*/) {
     String shift = "";
     if (index_shift < 0) {
       shift = "" + index_shift;
@@ -132,14 +134,16 @@ public final class SEQUENCESCALARSUBSCRIPT
     return VarInfo.make_subscript (seqvar(), sclvar(), index_shift);
   }
 
-  /*@Pure*/ public boolean isSameFormula(Derivation other) {
+  /*@Pure*/
+  public boolean isSameFormula(Derivation other) {
     return (other instanceof SEQUENCESCALARSUBSCRIPT)
       && (((SEQUENCESCALARSUBSCRIPT) other).index_shift == this.index_shift);
   }
 
   /** Returns the ESC name for sequence subscript **/
   @SuppressWarnings("nullness")
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     if (seqvar().isPrestate()) {
       return String.format ("\\old(%s[%s])",
                             seqvar().enclosing_var.postState.esc_name(),
@@ -173,7 +177,8 @@ public final class SEQUENCESCALARSUBSCRIPT
 
   /** Returns the CSHARPCONTRACT name for sequence subscript **/
   @SuppressWarnings("nullness")
-  /*@SideEffectFree*/ public String csharp_name (String index) {
+  /*@SideEffectFree*/
+  public String csharp_name (String index) {
     String[] split = seqvar().csharp_array_split();
     if (seqvar().isPrestate()) {
       return String.format ("Contract.OldValue(%s[%s]%s)", seqvar().enclosing_var.postState.csharp_name(), inside_csharp_name (sclvar(), true, index_shift), split[1]);
@@ -184,7 +189,8 @@ public final class SEQUENCESCALARSUBSCRIPT
 
   /** Return the simplify name for sequence subscript **/
   @SuppressWarnings("nullness")
-  /*@SideEffectFree*/ public String simplify_name() {
+  /*@SideEffectFree*/
+  public String simplify_name() {
     String subscript = sclvar().simplify_name();
     if (index_shift < 0) {
       subscript = String.format ("(- %s %d)", subscript, -index_shift);

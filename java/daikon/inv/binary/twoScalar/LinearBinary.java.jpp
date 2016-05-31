@@ -34,6 +34,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -111,7 +112,8 @@ public class CLASSNAME
     return new CLASSNAME(slice);
   }
 
-  /*@SideEffectFree*/ public CLASSNAME clone() {
+  /*@SideEffectFree*/
+  public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;
@@ -123,18 +125,20 @@ public class CLASSNAME
     return this;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": "
       + "falsified=" + falsified
       + "; " + core.repr();
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     return core.format_using(format, var1().name_using(format),
                              var2().name_using(format));
   }
 
-  /*@Pure*/ public boolean isActive() {
+  /*@Pure*/
+  public boolean isActive() {
     return core.isActive();
   }
 
@@ -176,7 +180,7 @@ public class CLASSNAME
     return core.add_modified(x, y, count);
   }
 
-  public boolean enoughSamples() {
+  public boolean enoughSamples(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return core.enoughSamples();
   }
 
@@ -184,7 +188,8 @@ public class CLASSNAME
     return core.computeConfidence();
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     return true;
   }
 
@@ -245,11 +250,13 @@ public class CLASSNAME
     return null;
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
       return core.isExclusiveFormula(((CLASSNAME) other).core);
     }

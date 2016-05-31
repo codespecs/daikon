@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -46,7 +47,8 @@ public class KillerInstruction implements IInstruction {
     return false;
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied KillerInstruction this*/) {
     StringBuilder b = new StringBuilder();
     for (X86Instruction i : instructions) {
       b.append("(potential)" + i + "\n");

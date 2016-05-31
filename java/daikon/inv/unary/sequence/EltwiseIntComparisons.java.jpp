@@ -134,6 +134,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -209,17 +210,19 @@ public class CLASSNAME
     return new CLASSNAME(slice);
   }
 
-  /*@SideEffectFree*/ public CLASSNAME clone() {
+  /*@SideEffectFree*/
+  public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     return result;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": "
       + "falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
@@ -230,7 +233,7 @@ public class CLASSNAME
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
     if (debugEltwiseIntComparison) {
       System.out.println(repr());
     }
@@ -241,7 +244,7 @@ public class CLASSNAME
 #endif
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] form = VarInfo.esc_quantify (false, var(), var());
     #if defined(EQUAL) || defined(EQUALFLOAT)
       return form[0] + "(" + form[1] + " " + COMPARATORSTRING + " " + form[2] + ")" + form[3];
@@ -250,17 +253,17 @@ public class CLASSNAME
     #endif
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     return "daikon.Quant." + COMPARATORSTRINGQUANT + "(" + var().name_using(format) + ")";
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] split = var().csharp_array_split();
     String name = var().csharp_name();
     return "Contract.ForAll(0, " + split[0] + ".Count()-1, i => " + split[0] + "[i]" + split[1] + " " + COMPARATORSTRING + " " + split[0] + "[i+1]" + split[1] + ")";
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] form = VarInfo.simplify_quantify (QuantFlags.adjacent(),
                                                var(), var());
 #if defined(EQUAL) || defined(EQUALFLOAT)
@@ -299,7 +302,8 @@ public class CLASSNAME
 #endif
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
 #if defined(EQUAL) || defined(EQUALFLOAT)
     return true;
 #else
@@ -307,7 +311,8 @@ public class CLASSNAME
 #endif
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return (other instanceof CLASSNAME);
   }
 
@@ -315,7 +320,8 @@ public class CLASSNAME
   // Also, reasonably complicated, need to ensure exact correctness, not sure if the
   // regression tests test this functionality
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     // This whole approach is wrong in the case when the sequence can
     // ever consist of only one element.  For now, just forget
     // it. -SMcC

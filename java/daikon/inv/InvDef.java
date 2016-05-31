@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -120,7 +121,8 @@ public class InvDef {
   //     this.inv_class = inv_class;
   //   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied InvDef this*/) {
     String out = "v1=" + v1.name();
     if (v2 != null) out += ", v2=" + v2.name();
     return (out

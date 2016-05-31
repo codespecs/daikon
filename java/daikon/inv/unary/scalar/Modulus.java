@@ -7,6 +7,7 @@ import java.util.Iterator;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -73,11 +74,12 @@ public class Modulus extends SingleScalar {
     return new Modulus(slice);
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied Modulus this*/) {
     return "Modulus" + varNames() + ": " + "modulus=" + modulus + ",remainder=" + remainder;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied Modulus this,*/ OutputFormat format) {
     String name = var().name_using(format);
 
     if (format == OutputFormat.DAIKON) {
@@ -214,7 +216,8 @@ public class Modulus extends SingleScalar {
     return 1 - Math.pow(probability_one_elt_modulus, ppt.num_samples());
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     Modulus otherModulus = (Modulus) other;
 
     boolean thisMeaningless = (modulus == 0 || modulus == 1);
@@ -230,7 +233,8 @@ public class Modulus extends SingleScalar {
     }
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     if ((modulus == 0) || (modulus == 1)) {
       return false;
     }

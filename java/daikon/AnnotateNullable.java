@@ -205,7 +205,9 @@ public class AnnotateNullable {
     PptTopLevel class_ppt = class_for_object(object_ppt);
 
     String class_samples = "-";
-    if (class_ppt != null) class_samples = String.format("%d", class_ppt.num_samples());
+    if (class_ppt != null) {
+      class_samples = String.format("%d", class_ppt.num_samples());
+    }
     String ppt_package = object_ppt.ppt_name.getPackageName();
     if (ppt_package == null) {
       ppt_package = "";
@@ -464,7 +466,8 @@ public class AnnotateNullable {
    * This does not work for enter ppts, because constructors do not
    * have the object as a parent on entry.
    */
-  /*@Pure*/ public static boolean is_static_method(PptTopLevel ppt) {
+  /*@Pure*/
+  public static boolean is_static_method(PptTopLevel ppt) {
 
     assert ppt.is_exit() : ppt;
     for (PptRelation rel : ppt.parents) {

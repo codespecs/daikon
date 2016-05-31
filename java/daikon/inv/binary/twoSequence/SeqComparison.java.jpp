@@ -236,6 +236,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -362,14 +363,15 @@ public class SEQSEQINTEQUAL
     #endif
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
     return SEQSEQINTEQUALstring + varNames() + ": "
       + ",orderMatters=" + orderMatters
       + ",enoughSamples=" + enoughSamples()
       ;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied SEQSEQINTEQUAL this,*/ OutputFormat format) {
     // System.out.println("Calling " + SEQSEQINTEQUALstring + ".format for: " + repr());
 
     if (format == OutputFormat.SIMPLIFY) {
@@ -427,7 +429,7 @@ public class SEQSEQINTEQUAL
     return format_unimplemented(format);
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
     if (Invariant.dkconfig_simplify_define_predicates) {
       return format_simplify_defined();
     } else {
@@ -435,7 +437,7 @@ public class SEQSEQINTEQUAL
     }
   }
 
-  private String format_simplify_defined() {
+  private String format_simplify_defined(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
     String[] var1_name = var1().simplifyNameAndBounds();
     String[] var2_name = var2().simplifyNameAndBounds();
     if (var1_name == null || var2_name == null) {
@@ -447,7 +449,7 @@ public class SEQSEQINTEQUAL
       var2_name[0] + " " + var2_name[1] + " " + var2_name[2] + ")";
   }
 
-  private String format_simplify_explicit() {
+  private String format_simplify_explicit(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
     #if (defined(EQUAL) || defined(EQUALSTRING) || defined(EQUALFLOAT))
       // A simple case: if two sequences are lexically equal iff they
       // are elementwise equal.
@@ -514,11 +516,13 @@ public class SEQSEQINTEQUAL
     #endif
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant o) {
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant o) {
     return false;
   }
 
@@ -718,7 +722,8 @@ public class SEQSEQINTEQUAL
     */
   }
 
-  /*@Pure*/ public boolean isEqual() {
+  /*@Pure*/
+  public boolean isEqual() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     return true;
     #else

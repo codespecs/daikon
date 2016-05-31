@@ -85,7 +85,8 @@ public class FieldInfo extends DaikonVariableInfo {
   /**
    * Returns true iff the corresponding field is static.
    */
-  /*@Pure*/ public boolean isStatic() {
+  /*@Pure*/
+  public boolean isStatic() {
     return is_static;
   }
 
@@ -116,7 +117,8 @@ public class FieldInfo extends DaikonVariableInfo {
     return field_num;
   }
 
-  /*@Pure*/ public boolean isPrimitive() {
+  /*@Pure*/
+  public boolean isPrimitive() {
     return is_primitive;
   }
 

@@ -3,6 +3,7 @@ package daikon.asm;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -106,7 +107,8 @@ public class X86Instruction implements IInstruction {
    *
    * @see daikon.IInstruction#toString()
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied X86Instruction this*/) {
     StringBuilder b = new StringBuilder();
     // b.append(owner != null ? owner + ":" : "");
     // b.append(dllName);

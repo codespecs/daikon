@@ -4,6 +4,7 @@ import daikon.inv.Invariant;
 import java.util.Vector;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -25,7 +26,7 @@ public class Lemma implements Comparable<Lemma> {
   }
 
   /** Return a human-readable description. */
-  public String summarize() {
+  public String summarize(/*>>>@GuardSatisfied Lemma this*/) {
     return summary;
   }
 
@@ -34,7 +35,8 @@ public class Lemma implements Comparable<Lemma> {
     return null;
   }
 
-  /*@Pure*/ public int compareTo(Lemma other) {
+  /*@Pure*/
+  public int compareTo(/*>>>@GuardSatisfied Lemma this,*/ Lemma other) {
     return summarize().compareTo(other.summarize());
   }
 

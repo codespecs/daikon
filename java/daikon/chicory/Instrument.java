@@ -941,7 +941,8 @@ public class Instrument implements ClassFileTransformer {
 
   // This method exists only to suppress interning warnings
   @SuppressWarnings("interning") // special, unique value
-  /*@Pure*/ private static boolean isVoid(Type t) {
+  /*@Pure*/
+  private static boolean isVoid(Type t) {
     return t == Type.VOID;
   }
 

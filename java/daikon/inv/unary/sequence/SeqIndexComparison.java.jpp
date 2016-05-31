@@ -150,6 +150,7 @@ import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -288,7 +289,8 @@ public class CLASSNAME extends SUPERCLASS {
     return EQUALSstring;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     // TODO: Eliminate the unnecessary format_xxx() below if the
@@ -302,7 +304,7 @@ public class CLASSNAME extends SUPERCLASS {
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
 
     // If this is an array/container and not a subsequence
     if (var().isDerivedSubSequenceOf() == null) {
@@ -313,22 +315,22 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   // Bad code here: if the first index is changed from i this breaks
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] form = VarInfo.esc_quantify (var());
     return form[0] + "(" + form[1] + " " + EQUALSstring + " i)" + form[2];
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] split = var().csharp_array_split();
     return "Contract.ForAll(0, " + split[0] + ".Count(), i => " + split[0] + "[i]" + split[1] + " " + EQUALSstring + " i)";
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     return "daikon.Quant.elts" + EQUALSQUANTstring + "Index("
       + var().name_using(format) + ")";
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] form = VarInfo.simplify_quantify (QuantFlags.include_index(),
                                                var());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")"
@@ -411,11 +413,13 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 

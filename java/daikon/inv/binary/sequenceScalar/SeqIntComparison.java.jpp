@@ -136,6 +136,7 @@ import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -255,17 +256,19 @@ public final class SEQINTEQUAL
     return null;
   }
 
-  /*@SideEffectFree*/ public SEQINTEQUAL clone() {
+  /*@SideEffectFree*/
+  public SEQINTEQUAL clone(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     SEQINTEQUAL result = (SEQINTEQUAL) super.clone();
     return result;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     return SEQINTEQUALstring + varNames() + ": "
       + ",falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied SEQINTEQUAL this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -277,28 +280,28 @@ public final class SEQINTEQUAL
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     return seqvar().name() + " elements " + EQUALSstring + " " + sclvar().name();
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     String[] form = VarInfo.esc_quantify (seqvar(), sclvar());
     return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")"
       + form[3];
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     String[] form = VarInfo.simplify_quantify (seqvar(), sclvar());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " "
       + form[2] + ")" + form[3];
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied SEQINTEQUAL this,*/ OutputFormat format) {
     return "daikon.Quant." + EQUALSstringDBC + "("
       + seqvar().name_using(format) + ", " + sclvar().name_using(format) + ")";
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     String[] split = seqvar().csharp_array_split();
     return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + EQUALSstring + " " + sclvar().csharp_name() + ")";
   }
@@ -346,7 +349,8 @@ public final class SEQINTEQUAL
     #endif
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
       return true;
     #else
@@ -354,11 +358,13 @@ public final class SEQINTEQUAL
     #endif
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 

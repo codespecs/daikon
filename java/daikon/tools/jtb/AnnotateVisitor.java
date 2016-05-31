@@ -151,7 +151,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     addComment(Ast.nodeTokenAfter(n), comment, true);
   }
 
-  /*@Pure*/ private boolean isOwned(String fieldname) {
+  /*@Pure*/
+  private boolean isOwned(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.ownedFieldNames.contains(fieldname)) {
         return true;
@@ -160,7 +161,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  /*@Pure*/ private boolean isFinal(String fieldname) {
+  /*@Pure*/
+  private boolean isFinal(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.finalFieldNames.contains(fieldname)) {
         return true;
@@ -169,7 +171,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  /*@Pure*/ private boolean isNotContainsNull(String fieldname) {
+  /*@Pure*/
+  private boolean isNotContainsNull(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.notContainsNullFieldNames.contains(fieldname)) {
         return true;
@@ -178,7 +181,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  /*@Pure*/ private boolean isElementType(String fieldname) {
+  /*@Pure*/
+  private boolean isElementType(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.elementTypeFieldNames.containsKey(fieldname)) {
         return true;

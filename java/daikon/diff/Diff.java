@@ -798,7 +798,8 @@ public final class Diff {
     return pptNode;
   }
 
-  /*@Pure*/ private boolean isCond(/*@Nullable*/ PptTopLevel ppt) {
+  /*@Pure*/
+  private boolean isCond(/*@Nullable*/ PptTopLevel ppt) {
     return (ppt instanceof PptConditional);
   }
 

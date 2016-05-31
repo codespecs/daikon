@@ -6,6 +6,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -103,19 +104,23 @@ public class DeclReader {
       return rep_type.replaceFirst(" .*", "");
     }
 
-    /*@Pure*/ public boolean is_double() {
+    /*@Pure*/
+    public boolean is_double() {
       return (rep_type.equals("double") || (rep_type.equals("float")));
     }
 
-    /*@Pure*/ public boolean is_string() {
+    /*@Pure*/
+    public boolean is_string() {
       return (rep_type.equals("string"));
     }
 
-    /*@Pure*/ public boolean is_string_array() {
+    /*@Pure*/
+    public boolean is_string_array() {
       return (rep_type.equals("string[]"));
     }
 
-    /*@Pure*/ public boolean is_int() {
+    /*@Pure*/
+    public boolean is_int() {
       return (rep_type.equals("int"));
     }
 
@@ -132,7 +137,8 @@ public class DeclReader {
       this.comparability = comparability;
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied DeclVarInfo this*/) {
       return String.format("%s [%s] %s", type, rep_type, name);
     }
 
@@ -256,7 +262,8 @@ public class DeclReader {
       return name.replaceFirst(":::.*", "");
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied DeclPpt this*/) {
       return name;
     }
 

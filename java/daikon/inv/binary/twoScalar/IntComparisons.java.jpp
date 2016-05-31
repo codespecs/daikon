@@ -358,6 +358,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -570,7 +571,8 @@ public final class INTEQUAL
   }
 
 #ifdef EQUAL_OP
-  /*@Pure*/ public boolean is_equality_inv() {
+  /*@Pure*/
+  public boolean is_equality_inv() {
     return true;
   }
 #endif
@@ -589,7 +591,8 @@ public final class INTEQUAL
   }
 
 #if (defined(EQUAL_OP) || defined(NONEQUAL_OP))
-  /*@Pure*/ public boolean is_symmetric() {
+  /*@Pure*/
+  public boolean is_symmetric() {
     return true;
   }
 
@@ -627,11 +630,12 @@ public final class INTEQUAL
     return null;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied INTEQUAL this*/) {
     return INTEQUALstring + varNames();
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied INTEQUAL this,*/ OutputFormat format) {
 
     String var1name = var1().name_using(format);
     String var2name = var2().name_using(format);
@@ -786,7 +790,7 @@ public final class INTEQUAL
   }
 
 #if defined(EQUAL_OP)
-  public boolean enoughSamples() {
+  public boolean enoughSamples(/*>>>@GuardSatisfied INTEQUAL this*/) {
     return (ppt.num_samples() > 0);
   }
 #endif
@@ -800,7 +804,8 @@ public final class INTEQUAL
     }
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     #if defined(EQUAL_OP)
       return true;
     #else
@@ -828,11 +833,13 @@ public final class INTEQUAL
     return super.add(v1, v2, mod_index, count);
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
 
     // Also ought to check against LinearBinary, etc.
     #if defined(EQUAL_OP)

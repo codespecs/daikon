@@ -5,6 +5,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -233,7 +234,7 @@ public class PptMap implements Serializable {
   }
 
   /*@SideEffectFree*/
-  public String toString() {
+  public String toString(/*>>>@GuardSatisfied PptMap this*/) {
     return "PptMap: " + nameToPpt.toString();
   }
 

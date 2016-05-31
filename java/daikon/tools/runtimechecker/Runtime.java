@@ -3,6 +3,10 @@ package daikon.tools.runtimechecker;
 import java.util.ArrayList;
 import java.util.List;
 
+/*>>>
+import org.checkerframework.checker.lock.qual.*;
+*/
+
 /**
  * If a class has been instrumented with the instrumenter (
  * invariant violations are added to the <code>violations</code> list.
@@ -15,7 +19,8 @@ public class Runtime {
    */
   public static List<Throwable> internalInvariantEvaluationErrors = new ArrayList<Throwable>();
 
-  private static List<Violation> violations = new ArrayList<Violation>();
+  private static /*@GuardedBy("Runtime.class")*/ List<Violation> violations =
+      new ArrayList<Violation>();
 
   // The number of times that an invariant was checked (whether the
   // check succeeded or failed).

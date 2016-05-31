@@ -63,6 +63,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import typequals.*;
 */
@@ -206,7 +207,10 @@ public final class PPTSLICE1 extends PptSlice {
 
   // These accessors are for abstract methods declared in Ppt
   /** Returns the number of (non-missing) samples observed at this slice. **/
-  public int num_samples() {
+  public int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PPTSLICE1 this*/) {
+    if (parent == null || var_infos == null) { // handle not-yet-initialized slices
+      return 0;
+    }
     // return an approximation
     #if defined(ARITY1)
       int num_slice_samples = parent.num_samples(var_infos[0]);

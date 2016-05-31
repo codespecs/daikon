@@ -7,6 +7,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -265,7 +266,8 @@ public class PptName implements Serializable {
    * @return true iff this name refers to a synthetic object instance
    * program point
    **/
-  /*@Pure*/ public boolean isObjectInstanceSynthetic() {
+  /*@Pure*/
+  public boolean isObjectInstanceSynthetic() {
     return FileIO.object_suffix.equals(point);
   }
 
@@ -273,14 +275,16 @@ public class PptName implements Serializable {
    * @return true iff this name refers to a synthetic class instance
    * program point
    **/
-  /*@Pure*/ public boolean isClassStaticSynthetic() {
+  /*@Pure*/
+  public boolean isClassStaticSynthetic() {
     return FileIO.class_static_suffix.equals(point);
   }
 
   /**
    * @return true iff this name refers to program globals
    **/
-  /*@Pure*/ public boolean isGlobalPoint() {
+  /*@Pure*/
+  public boolean isGlobalPoint() {
     return FileIO.global_suffix.equals(point);
   }
 
@@ -288,7 +292,8 @@ public class PptName implements Serializable {
    * @return true iff this name refers to a procedure exit point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isExitPoint() {
+  /*@Pure*/
+  public boolean isExitPoint() {
     return (point != null) && point.startsWith(FileIO.exit_suffix);
   }
 
@@ -296,7 +301,8 @@ public class PptName implements Serializable {
    * @return true iff this name refers to an abrupt completion point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isThrowPoint() {
+  /*@Pure*/
+  public boolean isThrowPoint() {
     return (point != null) && point.startsWith(FileIO.throw_suffix);
   }
 
@@ -304,7 +310,8 @@ public class PptName implements Serializable {
    * @return true iff this name refers to an abrupt completion point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isThrowsPoint() {
+  /*@Pure*/
+  public boolean isThrowsPoint() {
     return (point != null) && point.startsWith(FileIO.throws_suffix);
   }
 
@@ -312,7 +319,8 @@ public class PptName implements Serializable {
    * @return true iff this name refers to a procedure exception point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isExceptionPoint() {
+  /*@Pure*/
+  public boolean isExceptionPoint() {
     return (point != null)
         && (point.startsWith(FileIO.throw_suffix) || point.equals(FileIO.exception_suffix));
   }
@@ -322,7 +330,8 @@ public class PptName implements Serializable {
    *         exception point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isCombinedThrowPoint() {
+  /*@Pure*/
+  public boolean isCombinedThrowPoint() {
     return (point != null) && point.equals(FileIO.exception_suffix);
   }
 
@@ -331,7 +340,8 @@ public class PptName implements Serializable {
    *         exit point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isCombinedExitPoint() {
+  /*@Pure*/
+  public boolean isCombinedExitPoint() {
     return (point != null) && point.equals(FileIO.exit_suffix);
   }
 
@@ -340,7 +350,8 @@ public class PptName implements Serializable {
    * procedure exit point (eg, EXIT22)
    */
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isNumberedExitPoint() {
+  /*@Pure*/
+  public boolean isNumberedExitPoint() {
     return ((point != null) && (isExitPoint() && !isCombinedExitPoint()));
   }
 
@@ -348,7 +359,8 @@ public class PptName implements Serializable {
    * @return true iff this name refers to a procedure exit point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  /*@Pure*/ public boolean isEnterPoint() {
+  /*@Pure*/
+  public boolean isEnterPoint() {
     return (point != null) && point.startsWith(FileIO.enter_suffix);
   }
 
@@ -375,7 +387,8 @@ public class PptName implements Serializable {
    * format does not have &lt;init&gt; but their method name includes the class
    * name.  For compatibility both mechanisms are checked.
    **/
-  /*@Pure*/ public boolean isConstructor() {
+  /*@Pure*/
+  public boolean isConstructor() {
 
     if (method != null) {
 
@@ -428,9 +441,9 @@ public class PptName implements Serializable {
     // We may wish to have a different exceptional than non-exceptional
     // entry point; in particular, if there was an exception, then perhaps
     // the precondition or object invariant was not met.
-    assert isExitPoint() || isExceptionPoint() : fullname;
+    assert isExitPoint() : fullname;
 
-    assert isExitPoint() || isExceptionPoint();
+    assert isExitPoint() || isThrowsPoint();
     return new PptName(cls, method, FileIO.enter_suffix);
   }
 
@@ -444,20 +457,11 @@ public class PptName implements Serializable {
   }
 
   /**
-   * Requires: this.isThrowPoint() || this.isEnterPoint()
-   * @return a name for the combined exit point
-   **/
-  public PptName makeThrowExit() {
-    assert isThrowPoint() || isEnterPoint() : fullname;
-    return new PptName(cls, method, FileIO.exception_suffix);
-  }
-
-  /**
    * Requires: this.isExitPoint() || this.isEnterPoint()
    * @return a name for the corresponding object invariant
    **/
   public PptName makeObject() {
-    assert isExitPoint() || isEnterPoint() || isExceptionPoint() : fullname;
+    assert isExitPoint() || isEnterPoint() : fullname;
     return new PptName(cls, null, FileIO.object_suffix);
   }
 
@@ -466,29 +470,34 @@ public class PptName implements Serializable {
    * @return a name for the corresponding class-static invariant
    **/
   public PptName makeClassStatic() {
-    assert isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic() || isExceptionPoint()
-        : fullname;
+    assert isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic() : fullname;
     return new PptName(cls, null, FileIO.class_static_suffix);
   }
 
   // ==================== OBJECT METHODS ====================
 
   /* @return interned string such that this.equals(new PptName(this.toString())) */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied PptName this*/) {
     return fullname;
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
+  /*@Pure*/
+  public boolean equals(
+      /*>>>@GuardSatisfied PptName this,*/
+      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     return (o instanceof PptName) && equals((PptName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(PptName o) {
+  /*@Pure*/
+  public boolean equals(/*>>>@GuardSatisfied PptName this,*//*@GuardSatisfied*/ PptName o) {
     return (o != null) && (o.fullname == fullname);
   }
 
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/
+  public int hashCode(/*>>>@GuardSatisfied PptName this*/) {
     return fullname.hashCode();
   }
 

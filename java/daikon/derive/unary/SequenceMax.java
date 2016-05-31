@@ -48,12 +48,14 @@ public final class SequenceMax extends UnaryDerivation {
     return VarInfo.make_scalar_seq_func("max", null, base, 0);
   }
 
-  /*@Pure*/ public boolean isSameFormula(Derivation other) {
+  /*@Pure*/
+  public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceMax);
   }
 
   /** Returns the ESC name **/
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     return String.format("max(%s)", base.esc_name());
   }
 }

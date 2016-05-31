@@ -741,15 +741,21 @@ clean-generated-files:
 run:	all
 	${JAVA} daikon.Daikon
 
+ETAGS := $(shell command -v etags 2> /dev/null)
+
 TAGS:	tags
 .PHONY: etags tags
 etags:	tags
 tags: ../plume-lib
+ifndef ETAGS
+	$(error etags is not available, please install it)
+else
 	@echo etags '*.java ...'
-ifneq (,$(findstring Exuberant, $(shell etags --version)))
+ifneq (,$(findstring Exuberant, $(shell etags --version 2>&1)))
 	@etags --language-force=java ${TAG_FILES}
 else
 	@etags --language=java ${TAG_FILES}
+endif
 endif
 # A TAGS file that does not contain generated files
 tags-sans-generated: clean-generated-files tags
@@ -841,6 +847,12 @@ JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingCh
 JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_REGEX_QUAL_ARGS = -processor org.checkerframework.checker.experimental.regex_qual.RegexCheckerAdapter -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+# -AsuppressWarnings=method.guarantee.violated,override.sideeffect.invalid is temporary.
+# Once the Purity Checker and -AsuggestPureMethods are fixed, they can be run on plume-lib
+# and Daikon and this can be removed. The method.guarantee.violated warning is issued by
+# the Lock Checker when a method calls another method with a weaker side effect guarantee.
+# The override.sideeffect.invalid warning is issued by the Lock Checker when the side effect
+# annotation on the overridder method is weaker than that on the overridden method.
 JAVAC_LOCK_ARGS = -processor org.checkerframework.checker.lock.LockChecker -AsuppressWarnings=method.guarantee.violated,override.sideeffect.invalid -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
@@ -874,7 +886,7 @@ show_nullness_java_files:
 # check-all: check-formatter check-interning check-nullness check-regex check-signature check-prototype check-vindex
 ## check-regex-qual target runs extremely slowly.
 # check-all: check-formatter check-interning check-nullness check-regex check-regex-qual check-signature
-check-all: check-formatter check-interning check-nullness check-regex check-signature
+check-all: check-formatter check-interning check-nullness check-regex check-signature check-lock
 
 intern: check-interning
 interning: check-interning

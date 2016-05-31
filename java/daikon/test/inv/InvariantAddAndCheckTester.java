@@ -365,7 +365,8 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @return true if the line is a comment (that is, not to be interpretted as a command)
    *         false otherwise
    **/
-  /*@Pure*/ static boolean isComment(String line) {
+  /*@Pure*/
+  static boolean isComment(String line) {
     return line.startsWith(COMMENT_STARTER_STRING);
   }
 
@@ -375,7 +376,8 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise
    **/
-  /*@Pure*/ static boolean isWhitespace(String line) {
+  /*@Pure*/
+  static boolean isWhitespace(String line) {
     for (int x = 0; x < line.length(); x++) {
       if (!Character.isWhitespace(line.charAt(x))) {
         return false;
@@ -769,22 +771,26 @@ public class InvariantAddAndCheckTester extends TestCase {
       return InvariantAddAndCheckTester.getNextRealLine(buffer);
     }
 
-    /*@Pure*/ private static boolean isTestTerminator(String command) {
+    /*@Pure*/
+    private static boolean isTestTerminator(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("end");
     }
 
-    /*@Pure*/ private static boolean isAddCommand(String command) {
+    /*@Pure*/
+    private static boolean isAddCommand(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("add");
     }
 
-    /*@Pure*/ private static boolean isCheckCommand(String command) {
+    /*@Pure*/
+    private static boolean isCheckCommand(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("check");
     }
 
-    /*@Pure*/ private static boolean isCompareCommand(String command) {
+    /*@Pure*/
+    private static boolean isCompareCommand(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("compare");
     }

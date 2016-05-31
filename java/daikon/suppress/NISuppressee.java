@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -187,7 +188,7 @@ public class NISuppressee {
    */
   /*@RequiresNonNull("#2.equality_view")*/
   public List<NIS.SupInv> find_all(
-      VarInfo[] vis, PptTopLevel ppt, /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
+      VarInfo[] vis, final PptTopLevel ppt, /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
 
     List<NIS.SupInv> created_list = new ArrayList<NIS.SupInv>();
 
@@ -261,7 +262,8 @@ public class NISuppressee {
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied NISuppressee this*/) {
 
     String extra = "";
     if (var_count == 2) {

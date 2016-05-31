@@ -12,6 +12,7 @@ import java.util.logging.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -172,7 +173,8 @@ public class NISuppressor {
    * Returns whether or not this suppressor is enabled.  A suppressor
    * is enabled if the invariant on which it depends is enabled.
    */
-  /*@Pure*/ public boolean is_enabled() {
+  /*@Pure*/
+  public boolean is_enabled() {
     return (sample_inv.enabled());
   }
 
@@ -507,7 +509,8 @@ public class NISuppressor {
    * var indices as numbers, the variables x, y, and z are shown instead
    * with indices 0, 1, and 2 respectively
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied NISuppressor this*/) {
 
     String cname = inv_class.getCanonicalName();
 
