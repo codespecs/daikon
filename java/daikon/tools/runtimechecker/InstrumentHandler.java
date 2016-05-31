@@ -101,8 +101,11 @@ public class InstrumentHandler extends CommandHandler {
     System.out.println("Reading invariant file: " + arguments.invFile);
     PptMap ppts = null;
     try {
-      ppts =
+      // See the TODO on FileIO.read_serialized_pptmap
+      @SuppressWarnings("flowexpr.parse.error")
+      PptMap pptsLocal =
           FileIO.read_serialized_pptmap(new File(arguments.invFile), true /* use saved config */);
+      ppts = pptsLocal;
     } catch (IOException e) {
       System.err.println("Exception while reading invariant file " + arguments.invFile);
       System.err.println(e.getMessage());

@@ -75,7 +75,11 @@ public class AnnotateNullable {
 
     // Read the serialized invariant file
     File inv_file = new File(inv_files[0]);
-    ppts = FileIO.read_serialized_pptmap(inv_file, true);
+
+    // See the TODO on FileIO.read_serialized_pptmap
+    @SuppressWarnings("flowexpr.parse.error")
+    PptMap pptsLocal = FileIO.read_serialized_pptmap(inv_file, true);
+    ppts = pptsLocal;
     Daikon.all_ppts = ppts;
     verbose.log("Finished reading %d program points", ppts.size());
 

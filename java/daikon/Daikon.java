@@ -517,7 +517,12 @@ public final class Daikon {
    * @see #main(String[])
    * @see TerminationMessage
    **/
-  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings({
+    "contracts.precondition.not.satisfied", // private field
+    "flowexpr.parse.error"
+  }) // TODO: the call to DiscReasonMap.initialize() below
+  // issues this error most likely due to Checker Framework issue 763.
+  // Try switching the build order between Daikon.java and DiscReasonMap.java
   public static void mainHelper(final String[] args) {
     // Cleanup from any previous runs
     cleanup();
@@ -2272,6 +2277,8 @@ public final class Daikon {
   /**
    * Initialize NIS suppression
    */
+  // TODO: Remove this SuppressWarnings when Checker Framework issue 752 is fixed.
+  @SuppressWarnings("flowexpr.parse.error")
   public static void setup_NISuppression() {
     NIS.init_ni_suppression();
   }

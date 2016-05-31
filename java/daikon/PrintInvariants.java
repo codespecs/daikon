@@ -431,6 +431,8 @@ public final class PrintInvariants {
 
     // Read in the invariants
     String filename = args[fileIndex];
+    // See the TODO on FileIO.read_serialized_pptmap
+    @SuppressWarnings("flowexpr.parse.error")
     PptMap ppts =
         FileIO.read_serialized_pptmap(
             new File(filename), true // use saved config

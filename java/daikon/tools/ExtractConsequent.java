@@ -136,6 +136,8 @@ public class ExtractConsequent {
       throw new Daikon.TerminationMessage("Wrong number of arguments." + Daikon.lineSep + usage);
     }
     String filename = args[fileIndex];
+    // See the TODO on FileIO.read_serialized_pptmap
+    @SuppressWarnings("flowexpr.parse.error")
     PptMap ppts =
         FileIO.read_serialized_pptmap(
             new File(filename), true // use saved config

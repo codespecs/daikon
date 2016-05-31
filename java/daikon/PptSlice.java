@@ -369,7 +369,7 @@ public abstract class PptSlice extends Ppt {
    * invariants be of the same class and have the same formula
    */
   /*@EnsuresNonNullIf(result=true, expression="find_inv_exact(#1)")*/
-  public boolean contains_inv_exact(Invariant inv) {
+  public boolean contains_inv_exact(final Invariant inv) {
 
     return (find_inv_exact(inv) != null);
   }

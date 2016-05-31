@@ -97,7 +97,7 @@ public class PptSliceEquality extends PptSlice {
     /*@Pure*/
     public boolean equals(
         /*>>>@GuardSatisfied VarInfoAndComparability this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+        final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (!(o instanceof VarInfoAndComparability)) return false;
       return equals((VarInfoAndComparability) o);
     }
@@ -111,7 +111,7 @@ public class PptSliceEquality extends PptSlice {
     /*@Pure*/
     public boolean equals(
         /*>>>@GuardSatisfied VarInfoAndComparability this,*/
-        /*@GuardSatisfied*/ VarInfoAndComparability o) {
+        final /*@GuardSatisfied*/ VarInfoAndComparability o) {
 
       return (vi.comparableNWay(o.vi) && (vi.comparability.equality_set_ok(o.vi.comparability)));
     }

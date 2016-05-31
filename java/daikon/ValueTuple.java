@@ -117,8 +117,8 @@ public final class ValueTuple implements Cloneable {
   /*@EnsuresNonNullIf(result=false, expression="this.vals[#1]")*/
   /*@Pure*/
   boolean isMissingFlow(
-      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int
-          value_index) {
+      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ final
+      int value_index) {
     return mods[value_index] == MISSING_FLOW;
   }
 
@@ -375,7 +375,7 @@ public final class ValueTuple implements Cloneable {
   /*@Pure*/
   public boolean equals(
       /*>>>@GuardSatisfied ValueTuple this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+      final /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
     if (!(obj instanceof ValueTuple)) return false;
     ValueTuple other = (ValueTuple) obj;
     return (vals == other.vals) && (mods == other.mods);

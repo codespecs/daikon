@@ -188,7 +188,10 @@ public class NIS {
    * up the map from suppressor classes to all of the suppression sets
    * associated with that suppressor invariant
    */
-  /*@EnsuresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions", "suppressor_proto_invs"})*/
+  /*@EnsuresNonNull({"daikon.suppress.NIS.suppressor_map", "daikon.suppress.NIS.suppressor_map_suppression_count",
+  "daikon.suppress.NIS.all_suppressions", "daikon.suppress.NIS.suppressor_proto_invs"})*/
+  // TODO: Remove this @SuppressWarnings when Checker Framework issue 752 is fixed.
+  @SuppressWarnings("flowexpr.parse.error")
   public static void init_ni_suppression() {
 
     // Creating these here, rather than where they are declared, allows
@@ -1060,7 +1063,10 @@ public class NIS {
     public void add(Invariant inv) {
 
       // Only possible antecedents need to be added
-      if (!is_suppressor(inv.getClass())) return;
+      // TODO: Remove this @SuppressWarnings when Checker Framework issue 764 is fixed.
+      @SuppressWarnings("flowexpr.parse.error")
+      boolean result = is_suppressor(inv.getClass());
+      if (!result) return;
 
       // Only antecedents comparable to this one should be added
       assert VarComparability.comparable(inv.get_comparability(), comparability);

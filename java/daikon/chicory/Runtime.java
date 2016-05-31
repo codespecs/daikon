@@ -398,6 +398,10 @@ public class Runtime {
    * them from the list.
    */
   /*@Holding("Runtime.class")*/
+  // TODO: the call to class_info.initViaReflection() below issues this error
+  // most likely due to Checker Framework issue 763. Try switching the
+  // build order between Runtime.java and ClassInfo.java
+  @SuppressWarnings("flowexpr.parse.error")
   public static void process_new_classes() {
 
     // Processing of the new_classes list must be
@@ -491,7 +495,7 @@ public class Runtime {
     }
   }
 
-  /*@EnsuresNonNull("dtrace")*/
+  /*@EnsuresNonNull("Runtime.dtrace")*/
   public static void setDtraceOnlineMode(int port) {
     dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
     dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
@@ -685,6 +689,10 @@ public class Runtime {
    * @param type declaring class
    * @return ClassInfo structure corresponding to type
    */
+  // TODO: the call to cinfo.initViaReflection() below issues this error
+  // most likely due to Checker Framework issue 763. Try switching the
+  // build order between Runtime.java and ClassInfo.java
+  @SuppressWarnings("flowexpr.parse.error")
   public static /*@Nullable*/ ClassInfo getClassInfoFromClass(Class<?> type) {
     try {
       synchronized (Runtime.all_classes) {

@@ -194,7 +194,7 @@ public class PptSlice0 extends PptSlice {
     /*@Pure*/
     public boolean equals(
         /*>>>@GuardSatisfied ImplicationWrapper this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+        final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (o == null) return false;
       assert o instanceof ImplicationWrapper;
       ImplicationWrapper other = (ImplicationWrapper) o;
