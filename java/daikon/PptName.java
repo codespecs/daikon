@@ -457,6 +457,15 @@ public class PptName implements Serializable {
   }
 
   /**
+   * Requires: this.isThrowPoint() || this.isEnterPoint()
+   * @return a name for the combined exit point
+   **/
+  public PptName makeThrowExit() {
+    assert isThrowPoint() || isEnterPoint() : fullname;
+    return new PptName(cls, method, FileIO.exception_suffix);
+  }
+
+  /**
    * Requires: this.isExitPoint() || this.isEnterPoint()
    * @return a name for the corresponding object invariant
    **/
