@@ -8,6 +8,8 @@ if [ -z "${JAVA_HOME+xxx}" ]; then echo JAVA_HOME is not set; exit 1; fi
 
 # Fail the whole script if any command fails
 set -e
+# Fail if any command in a pipeline fails
+set -o pipefail
 # Echo commands before executing them
 set -x
 
