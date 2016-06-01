@@ -56,14 +56,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.3.3
+@center Daikon version 5.3.5
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.3.3 release date
-@center May 2, 2016
+@c Print out the Daikon version 5.3.5 release date
+@center June 1, 2016
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.3.3, released May 2, 2016.
+It describes Daikon version 5.3.5, released June 1, 2016.
 
 @menu
 * Introduction::
@@ -2128,7 +2128,7 @@ These expression are obviously not valid Java code.
 @item JML format
 Produces output in JVM (Java Modeling Language,
 @uref{http://www.jmlspecs.org}); for details, see the
-@uref{http://www.cs.ucf.edu/~leavens/JML/, ,JML Manual}.  @option{JML}
+@uref{http://www.eecs.ucf.edu/~leavens/JML/documentation.shtml, ,JML Manual}.  @option{JML}
 format lets you use the various JVM tools on Daikon invariants,
 including runtime assertion checking and the
 @uref{http://kindsoftware.com/products/opensource/ESCJava2/, ,ESC/Java2}
@@ -8861,7 +8861,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.3.3, released May 2, 2016.
+This manual describes Daikon version 5.3.5, released June 1, 2016.
 A more detailed list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -8875,7 +8875,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.3.3
+@cindex Daikon version 5.3.5
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
