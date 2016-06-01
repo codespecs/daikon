@@ -2128,7 +2128,7 @@ These expression are obviously not valid Java code.
 @item JML format
 Produces output in JVM (Java Modeling Language,
 @uref{http://www.jmlspecs.org}); for details, see the
-@uref{http://www.cs.ucf.edu/~leavens/JML/, ,JML Manual}.  @option{JML}
+@uref{http://www.eecs.ucf.edu/~leavens/JML/documentation.shtml, ,JML Manual}.  @option{JML}
 format lets you use the various JVM tools on Daikon invariants,
 including runtime assertion checking and the
 @uref{http://kindsoftware.com/products/opensource/ESCJava2/, ,ESC/Java2}

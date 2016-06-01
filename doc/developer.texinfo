@@ -2473,7 +2473,8 @@ nothing to commit (use -u to show untracked files)
 @noindent
 If the command output lists any files, they need to be
 committed to the repository and pushed now.
-[TODO:  In that case, does one need to start all over, first waiting 
+In that case, you will need to return to step 1 and wait for the
+Travis jobs to complete.
 
 [Time: moments]
 
@@ -2521,11 +2522,13 @@ build everything to be distributed and copy it to the temporary staging area
 @c not @uref{...} because we don't want robots to notice and crawl the link
 (http://plse.cs.washington.edu/staging-daikon/).
 
+@c can't use 'daikon' as will conflicit with jar build if no '/scratch' on system.
+
 @example
 mkdir -p /tmp/$USER
-rm -rf /tmp/$USER/daikon
-git clone https://github.com/codespecs/daikon /tmp/$USER/daikon
-cd /tmp/$USER/daikon
+rm -rf /tmp/$USER/stage-daikon
+git clone https://github.com/codespecs/daikon /tmp/$USER/stage-daikon
+cd /tmp/$USER/stage-daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/homes/gws/markro/jdk7
 source scripts/daikon.bashrc
@@ -2663,7 +2666,7 @@ and are ready to make the actual release.
 restarted the release process.
 
 At this point we are done building and testing the release candidate and you
-should exit the Bash command shell created in step 15 and return to your
+should exit the Bash command shell created in step 5 and return to your
 original Bash shell.
 
 
