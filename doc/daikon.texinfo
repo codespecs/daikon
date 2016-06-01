@@ -9174,7 +9174,8 @@ Matthew Tschantz,
 Iuliu Vasilescu,
 Chen Xiao,
 Tao Xie,
-Jeff Yuan.
+Jeff Yuan,
+Philipp Hirch
 }
 
 @nospellcheck{Craig Kaplan} carved the Daikon logo.
