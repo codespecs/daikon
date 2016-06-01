@@ -23,6 +23,8 @@ export OSTYPE
 mkdir -p ~/tmp
 cd ~/tmp
 
+# If this fails because the URL doesn't exist and it's a staging URL, then
+# maybe you are not in the middle of creating a release.
 # DAIKONVERSION=`wget -q $DAIKONBASEURL/download/doc/VERSION -O - | xargs echo -n`
 DAIKONVERSION=`curl --fail -s $DAIKONBASEURL/download/doc/VERSION | xargs echo -n`
 
