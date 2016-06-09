@@ -1595,8 +1595,17 @@ were declared, but since every stand-alone program uses the
 @section Detecting invariants in Eiffel programs
 
 CITADEL is an Eiffel front-end to the Daikon invariant detector.
-You can obtain Citadel and its documentation from
+You can obtain Citadel from
 @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
+
+
+@node    Detecting invariants in Simulink/Stateflow programs
+@section Detecting invariants in Simulink/Stateflow programs
+
+Hynger (HYbrid iNvariant GEneratoR) instruments Simulink/Stateflow (SLSF)
+block diagrams to generate Daikon input (dtrace files).  Hynger was created
+by Taylor Johnson, Stanley Bak, and Steven Drager.  You can obtain Hynger
+from @uref{https://bitbucket.org/verivital/hynger}.
 
 
 @node    Running Daikon
@@ -6675,6 +6684,15 @@ separately; see @uref{https://neptuno.uca.es/redmine/projects/takuan-website}.
 
 A front end for the Eiffel programming language, named CITADEL, is distributed
 separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
+
+@cindex Hyger front end for Simulink/Stateflow (SLSF) block diagrams
+@cindex front end for Simulink/Stateflow (SLSF) block diagrams
+@cindex Simulink/Stateflow (SLSF) front end
+@cindex instrumentation, of Simulink/Stateflow (SLSF) block diagrams
+
+A front end for the Simulink/Stateflow (SLSF) programming language, named
+Hynger, is distributed separately; see
+@uref{https://bitbucket.org/verivital/hynger}.
 
 @cindex front end for IOA
 @cindex front end for Input/Output Automata

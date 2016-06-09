@@ -20,6 +20,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.3.6 (July 1, 2016)
+
+A new front end for Simulink/Stateflow (SLSF) block diagrams is available.
+See https://bitbucket.org/verivital/hynger .
+
+===========================================================================
+
 5.3.4 (June 1, 2016)
 
 Miscellaneous bug fixes and minor improvements.
