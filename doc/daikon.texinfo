@@ -743,6 +743,7 @@ Daikon, @pxref{Front ends (instrumentation)}.
 * Detecting invariants in C# programs::
 * Detecting invariants in Perl programs::
 * Detecting invariants in Eiffel programs::
+* Detecting invariants in Simulink/Stateflow programs::
 @end menu
 
 @node    Detecting invariants in Java programs
