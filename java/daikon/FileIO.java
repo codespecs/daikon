@@ -1750,10 +1750,10 @@ public final class FileIO {
    * @param vt trace data only; modified by side effect to add derived vars
    **/
   /*@RequiresNonNull("FileIO.data_trace_state")*/
-  // TODO: Remove this @SuppressWarnings once Checker Framework issue 752 is
-  // fixed, and then fix the expressions in @RequiresNonNull on
+  // TODO: When this @SuppressWarnings is removed,
+  // fix the expressions in @RequiresNonNull on
   // PptTopLevel.add_bottom_up to refer to daikon.suppress.NIS instead of NIS.
-  @SuppressWarnings("flowexpr.parse.error")
+  @SuppressWarnings("flowexpr.parse.error") // TODO: Checker Framework issue 752
   public static void process_sample(
       PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
 
@@ -2377,16 +2377,15 @@ public final class FileIO {
    * Read either a serialized PptMap or a InvMap and return a
    * PptMap.  If an InvMap is specified, it is converted to a PptMap
    */
-  // TODO: Once Checker Framework issue 752 is fixed,
+  // TODO: Once this @SuppressWarnings is removed,
   // search for callers of this method and remove the
   // @SuppressWarnings("flowexpr.parse.error") annotations on the calls.
   // Some of these errors will persist after this, most likely
-  // due to Checker Framework issue 763. Try modifying the build order
+  // due to Checker Framework issue 767. Try modifying the build order
   // so that FileIO.java is built before the source files for which
   // a flowexpr.parse.error is still issued.
   /*@EnsuresNonNull("daikon.FileIO.new_decl_format")*/
-  // TODO: Remove this @SuppressWarnings when Checker Framework issue 752 is fixed.
-  @SuppressWarnings("flowexpr.parse.error")
+  @SuppressWarnings("flowexpr.parse.error") // TODO: Checker Framework issue 752
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
       throws IOException {
 

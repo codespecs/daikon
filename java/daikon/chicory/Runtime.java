@@ -399,7 +399,7 @@ public class Runtime {
    */
   /*@Holding("Runtime.class")*/
   // TODO: the call to class_info.initViaReflection() below issues this error
-  // most likely due to Checker Framework issue 763. Try switching the
+  // most likely due to Checker Framework issue 767. Try switching the
   // build order between Runtime.java and ClassInfo.java
   @SuppressWarnings("flowexpr.parse.error")
   public static void process_new_classes() {
@@ -690,7 +690,7 @@ public class Runtime {
    * @return ClassInfo structure corresponding to type
    */
   // TODO: the call to cinfo.initViaReflection() below issues this error
-  // most likely due to Checker Framework issue 763. Try switching the
+  // most likely due to Checker Framework issue 767. Try switching the
   // build order between Runtime.java and ClassInfo.java
   @SuppressWarnings("flowexpr.parse.error")
   public static /*@Nullable*/ ClassInfo getClassInfoFromClass(Class<?> type) {

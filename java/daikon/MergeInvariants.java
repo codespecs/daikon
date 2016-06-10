@@ -198,8 +198,7 @@ public final class MergeInvariants {
     List<PptMap> pptmaps = new ArrayList<PptMap>();
     for (File file : inv_files) {
       debugProgress.fine("Processing " + file);
-      // See the TODO on FileIO.read_serialized_pptmap
-      @SuppressWarnings("flowexpr.parse.error")
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
       PptMap ppts = FileIO.read_serialized_pptmap(file, true);
       ppts.repCheck();
       pptmaps.add(ppts);
@@ -221,13 +220,11 @@ public final class MergeInvariants {
       for (File file : inv_files) {
         debugProgress.fine("Reading " + file + " as merge template");
         if (merge_ppts == null) {
-          // See the TODO on FileIO.read_serialized_pptmap
-          @SuppressWarnings("flowexpr.parse.error")
+          @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
           PptMap merge_ppts_local = FileIO.read_serialized_pptmap(file, true);
           merge_ppts = merge_ppts_local;
         } else {
-          // See the TODO on FileIO.read_serialized_pptmap
-          @SuppressWarnings("flowexpr.parse.error")
+          @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
           PptMap pmap = FileIO.read_serialized_pptmap(file, true);
           for (PptTopLevel ppt : pmap.pptIterable()) {
             if (merge_ppts.containsName(ppt.name())) {
@@ -416,8 +413,7 @@ public final class MergeInvariants {
   /**
    * Initialize NIS suppression
    */
-  // TODO: Remove this SuppressWarnings when Checker Framework issue 752 is fixed.
-  @SuppressWarnings("flowexpr.parse.error")
+  @SuppressWarnings("flowexpr.parse.error") // TODO: Checker Framework issue 752
   private static void setup_NISuppression() {
     NIS.init_ni_suppression();
   }

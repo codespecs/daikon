@@ -190,8 +190,7 @@ public class NIS {
    */
   /*@EnsuresNonNull({"daikon.suppress.NIS.suppressor_map", "daikon.suppress.NIS.suppressor_map_suppression_count",
   "daikon.suppress.NIS.all_suppressions", "daikon.suppress.NIS.suppressor_proto_invs"})*/
-  // TODO: Remove this @SuppressWarnings when Checker Framework issue 752 is fixed.
-  @SuppressWarnings("flowexpr.parse.error")
+  @SuppressWarnings("flowexpr.parse.error") // TODO: Checker Framework issue 752
   public static void init_ni_suppression() {
 
     // Creating these here, rather than where they are declared, allows
@@ -1063,8 +1062,7 @@ public class NIS {
     public void add(Invariant inv) {
 
       // Only possible antecedents need to be added
-      // TODO: Remove this @SuppressWarnings when Checker Framework issue 764 is fixed.
-      @SuppressWarnings("flowexpr.parse.error")
+      @SuppressWarnings("flowexpr.parse.error") // TODO: Checker Framework issue 764
       boolean result = is_suppressor(inv.getClass());
       if (!result) return;
 

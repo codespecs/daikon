@@ -219,8 +219,7 @@ public class Annotate {
       throw new Daikon.TerminationMessage(
           "Error: No .java file arguments supplied." + Global.lineSep + usage);
     }
-    // See the TODO on FileIO.read_serialized_pptmap
-    @SuppressWarnings("flowexpr.parse.error")
+    @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
     PptMap ppts = FileIO.read_serialized_pptmap(new File(invfile), /*use saved config=*/ true);
 
     Daikon.suppress_implied_controlled_invariants = true;

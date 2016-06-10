@@ -280,8 +280,7 @@ public class InvariantChecker {
 
   private static void checkInvariants(File inv_file) throws IOException {
     // Read the invariant file
-    // See the TODO on FileIO.read_serialized_pptmap
-    @SuppressWarnings("flowexpr.parse.error")
+    @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
     PptMap ppts = FileIO.read_serialized_pptmap(inv_file, true);
 
     //Yoav: make sure we have unique invariants

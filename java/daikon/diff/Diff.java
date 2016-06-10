@@ -383,27 +383,23 @@ public final class Diff {
       String filename2 = args[firstFileIndex + 1];
       String filename3 = args[firstFileIndex + 2];
       String filename4 = args[firstFileIndex + 3];
-      // See the TODO on FileIO.read_serialized_pptmap
-      @SuppressWarnings("flowexpr.parse.error")
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
       PptMap map1 =
           FileIO.read_serialized_pptmap(
               new File(filename1), false // use saved config
               );
-      // See the TODO on FileIO.read_serialized_pptmap
-      @SuppressWarnings("flowexpr.parse.error")
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
       PptMap map2 =
           FileIO.read_serialized_pptmap(
               new File(filename2), false // use saved config
               );
-      // See the TODO on FileIO.read_serialized_pptmap
-      @SuppressWarnings("flowexpr.parse.error")
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
       PptMap manip1Local =
           FileIO.read_serialized_pptmap(
               new File(filename3), false // use saved config
               );
       manip1 = manip1Local;
-      // See the TODO on FileIO.read_serialized_pptmap
-      @SuppressWarnings("flowexpr.parse.error")
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
       PptMap manip2Local =
           FileIO.read_serialized_pptmap(
               new File(filename4), false // use saved config
@@ -471,8 +467,7 @@ public final class Diff {
       for (int i = firstFileIndex; i < args.length; i++) {
         String fileName = args[i];
 
-        // See the TODO on FileIO.read_serialized_pptmap
-        @SuppressWarnings("flowexpr.parse.error")
+        @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
         PptMap mapLocal = FileIO.read_serialized_pptmap(new File(fileName), false);
         mapAr[j++] = mapLocal;
       }
@@ -582,8 +577,7 @@ public final class Diff {
     if (o instanceof InvMap) {
       return (InvMap) o;
     } else {
-      // See the TODO on FileIO.read_serialized_pptmap
-      @SuppressWarnings("flowexpr.parse.error")
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
       PptMap pptMap = FileIO.read_serialized_pptmap(file, false);
       return convertToInvMap(pptMap);
     }

@@ -54,7 +54,7 @@ public class ChicoryPremain {
    * analysis.
    */
   // TODO: the call to Runtime.setDtraceOnlineMode(daikon_port) below
-  // issues this error most likely due to Checker Framework issue 763.
+  // issues this error most likely due to Checker Framework issue 767.
   // Try switching the build order between ChicoryPremain.java and Runtime.java
   @SuppressWarnings("flowexpr.parse.error")
   public static void premain(String agentArgs, Instrumentation inst) throws IOException {
