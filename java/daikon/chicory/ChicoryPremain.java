@@ -142,7 +142,7 @@ public class ChicoryPremain {
   /**
    * Set up the declaration and dtrace writer.
    */
-  // Runtime.dtrace is @GuardedBy("itself") because in the Runtime class,
+  // Runtime.dtrace is @GuardedBy("<self>") because in the Runtime class,
   // the printing of final lines and then closing of dtrace only happens
   // when the monitor of dtrace is held in order for the closing of the
   // trace to happen only once.  See Runtime.noMoreOutput() and
@@ -150,7 +150,7 @@ public class ChicoryPremain {
   // never perform this operation (print final lines and close) on the
   // value of dtrace passed in, therefore they do not need to make use
   // of synchronization and their references to dtrace do not need to
-  // be annotated with @GuardedBy("itself").
+  // be annotated with @GuardedBy("<self>").
   @SuppressWarnings("lock:argument.type.incompatible")
   private static void initializeDeclAndDTraceWriters() {
     // The include/exclude filter are implemented in the transform,
