@@ -174,7 +174,7 @@ public class Session {
   // for testing and playing around, not for real use
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    /*@GuardedBy("itself")*/ Session s = new Session();
+    /*@GuardedBy("<self>")*/ Session s = new Session();
 
     CmdCheck cc;
 
