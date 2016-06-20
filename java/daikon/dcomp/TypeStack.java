@@ -63,7 +63,7 @@ public final class TypeStack {
   }
 
   /*@RequiresNonNull("argTypes")*/
-  private OperandStack startMethStack(/*>>>@UnknownInitialization @Raw TypeStack this*/ ) {
+  private OperandStack startMethStack(/*>>>@UnknownInitialization @Raw TypeStack this*/) {
     OperandStack type = new OperandStack(MAX);
 
     for (Type t : argTypes) {
@@ -186,7 +186,9 @@ public final class TypeStack {
       return false;
     } else if (h1.equals(h2)) {
       return true;
-    } else return inChainHelper(parentMap.get(h1), h2);
+    } else {
+      return inChainHelper(parentMap.get(h1), h2);
+    }
   }
 
   // initialization helper, sets "stack" field
@@ -300,8 +302,9 @@ public final class TypeStack {
   private static OperandStack copyOfStack(OperandStack parent) {
     /*OperandStack copy = new OperandStack(MAX);
 
-    for (Type el : parent)
+    for (Type el : parent) {
         copy.push(el);
+        }
 
 
     return copy;*/
@@ -696,7 +699,9 @@ public final class TypeStack {
         stack.push(t3);
         stack.push(t2);
         stack.push(t1);
-      } else throw new IllegalStateException("Malformed stack for DUP_X2");
+      } else {
+        throw new IllegalStateException("Malformed stack for DUP_X2");
+      }
     } else if (inst instanceof DUP2) {
       if (isCat2(stack.peek())) {
         stack.push(stack.peek());
@@ -817,7 +822,7 @@ public final class TypeStack {
   }
 
   /*@RequiresNonNull("stack")*/
-  public Type peek(/*>>>@UnknownInitialization @Raw TypeStack this*/ ) {
+  public Type peek(/*>>>@UnknownInitialization @Raw TypeStack this*/) {
     return stack.peek();
   }
 
@@ -852,9 +857,11 @@ public final class TypeStack {
     System.out.printf("testing %s...", testClass);
 
     ClassLoaderRepository load;
-    if (testClass.getClassLoader() == null)
+    if (testClass.getClassLoader() == null) {
       load = new ClassLoaderRepository(java.lang.ClassLoader.getSystemClassLoader());
-    else load = new ClassLoaderRepository(testClass.getClassLoader());
+    } else {
+      load = new ClassLoaderRepository(testClass.getClassLoader());
+    }
 
     // How can load be null?  Looks like an error in the test.
     if (load == null) throw new RuntimeException("Null class loader for class " + testClass);
@@ -932,8 +939,9 @@ public final class TypeStack {
       /*>>>@UnknownInitialization @Raw TypeStack this,*/
       Type... types) {
     for (int i = 0; i < types.length; i++) {
-      if (!sameType(top(stack, i), types[i]))
+      if (!sameType(top(stack, i), types[i])) {
         throw new Error("Wanted " + types[i] + " but got " + top(stack, i));
+      }
     }
   }
 
@@ -974,7 +982,7 @@ public final class TypeStack {
   public Type pop_check(Type type) {
     Type top = stack.pop();
     assert type.equals(top) : "expected " + type + " found " + top;
-    return (top);
+    return top;
   }
 
   private static void notSupported(Instruction inst) {

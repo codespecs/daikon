@@ -102,7 +102,7 @@ public class LemmaStack {
   /** Try to start Simplify. */
   /*@EnsuresNonNull("session")*/
   private void startProver(
-      /*>>> @UnknownInitialization @Raw LemmaStack this*/ ) throws SimplifyError {
+      /*>>> @UnknownInitialization @Raw LemmaStack this*/) throws SimplifyError {
     SessionManager session_try = SessionManager.attemptProverStartup();
     if (session_try != null) {
       session = session_try;
@@ -113,7 +113,7 @@ public class LemmaStack {
 
   /** Try to restart Simplify back where we left off, after killing it. */
   private void restartProver(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this*/ )
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this*/)
       throws SimplifyError {
     startProver();
     try {
@@ -233,7 +233,9 @@ public class LemmaStack {
    * (inclusive) are true. */
   private static boolean allTrue(boolean[] bools, int min, int max) {
     for (int i = min; i <= max; i++) {
-      if (!bools[i]) return false;
+      if (!bools[i]) {
+        return false;
+      }
     }
     return true;
   }
@@ -300,7 +302,9 @@ public class LemmaStack {
       // If known and exclude are disjoint, return
       Set<Class<? extends Invariant>> exclude2 = new HashSet<Class<? extends Invariant>>(exclude);
       exclude2.retainAll(known);
-      if (exclude2.isEmpty()) return;
+      if (exclude2.isEmpty()) {
+        return;
+      }
     }
     int mark = markLevel();
     Vector<Lemma> filtered = filterByClass(lems, exclude);
@@ -517,6 +521,14 @@ public class LemmaStack {
   }
 
   public void closeSession() {
+    // this.session should be effectively final in that it refers
+    // to the same value throughout the execution of this method.
+    // Unfortunately, the Lock Checker cannot verify this,
+    // so a final local variable is used to satisfy the Lock Checker's
+    // requirement that all variables used as locks be final or
+    // effectively final.  If a bug exists whereby this.session
+    // is not effectively final, this would unfortunately mask that error.
+    final SessionManager session = this.session;
     session.session_done();
     synchronized (session) {
       session.notifyAll();

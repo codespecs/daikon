@@ -3,6 +3,7 @@ package daikon;
 import java.io.Serializable;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -29,11 +30,11 @@ public final class VarComparabilityNone extends VarComparability implements Seri
     return it;
   }
 
-  public VarComparability elementType() {
+  public VarComparability elementType(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return it;
   }
 
-  public VarComparability indexType(int dim) {
+  public VarComparability indexType(/*>>>@GuardSatisfied VarComparabilityNone this,*/ int dim) {
     return it;
   }
 
@@ -41,11 +42,12 @@ public final class VarComparabilityNone extends VarComparability implements Seri
     return it;
   }
 
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/
+  public int hashCode(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return 0;
   }
 
-  public boolean alwaysComparable() {
+  public boolean alwaysComparable(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
     return true;
   }
 
@@ -54,11 +56,15 @@ public final class VarComparabilityNone extends VarComparability implements Seri
    * representation types in the data trace file are the same.  This
    * lets us compare integers to longs, but not integers to arrays.
    **/
-  static /*@Pure*/ boolean comparable(VarComparabilityNone vcomp1, VarComparabilityNone vcomp2) {
+  /*@Pure*/
+  static boolean comparable(
+      /*@GuardSatisfied*/ VarComparabilityNone vcomp1,
+      /*@GuardSatisfied*/ VarComparabilityNone vcomp2) {
     return true;
   }
 
-  /*@SideEffectFree*/ public String toString() {
-    return ("no-comparability");
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied VarComparabilityNone this*/) {
+    return "no-comparability";
   }
 }

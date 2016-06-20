@@ -4,6 +4,7 @@ import daikon.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
@@ -20,5 +21,6 @@ public interface OneOf {
    **/
   public Object elt();
 
-  public VarInfo var(/*>>>@UnknownInitialization(OneOf.class) @Raw(OneOf.class) OneOf this*/ );
+  public VarInfo var(
+      /*>>>@GuardSatisfied @UnknownInitialization(OneOf.class) @Raw(OneOf.class) OneOf this*/);
 }

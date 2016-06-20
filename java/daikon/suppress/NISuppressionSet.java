@@ -11,6 +11,7 @@ import java.util.logging.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -107,8 +108,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
         // Make sure the slice is interesting and has valid types over the
         // suppressee invariant
         if (!v1.missingOutOfBounds() && (ppt.is_slice_ok(v1))) {
-          if (suppression_set[0].suppressee.sample_inv.valid_types(vis))
+          if (suppression_set[0].suppressee.sample_inv.valid_types(vis)) {
             check_falsified(ppt, vis, inv, new_invs);
+          }
         }
       }
       return;
@@ -126,8 +128,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
         // Make sure the slice is interesting and has valid types over the
         // suppressee invariant
         if (!v1.missingOutOfBounds() && !v2.missingOutOfBounds() && ppt.is_slice_ok(v1, v2)) {
-          if (suppression_set[0].suppressee.sample_inv.valid_types(vis))
+          if (suppression_set[0].suppressee.sample_inv.valid_types(vis)) {
             check_falsified(ppt, vis, inv, new_invs);
+          }
         }
 
       } else /* must be unary */ {
@@ -156,7 +159,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
           if (!suppression_set[0].suppressee.sample_inv.valid_types(vis)) continue;
 
-          if (NIS.debug.isLoggable(Level.FINE))
+          if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine(
                 "processing slice "
                     + Debug.toString(vis)
@@ -164,6 +167,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
                     + ppt.name()
                     + " with "
                     + ppt.numViews());
+          }
 
           check_falsified(ppt, vis, inv, new_invs);
         }
@@ -187,8 +191,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           }
 
           if (!ppt.is_slice_ok(l, v1, v2)) continue;
-          if (l.missingOutOfBounds() || v1.missingOutOfBounds() || v2.missingOutOfBounds())
+          if (l.missingOutOfBounds() || v1.missingOutOfBounds() || v2.missingOutOfBounds()) {
             continue;
+          }
 
           VarInfo[] vis;
 
@@ -203,7 +208,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
           if (!suppression_set[0].suppressee.sample_inv.valid_types(vis)) continue;
 
-          if (NIS.debug.isLoggable(Level.FINE))
+          if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine(
                 "processing slice "
                     + Debug.toString(vis)
@@ -211,6 +216,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
                     + ppt.name()
                     + " with "
                     + ppt.numViews());
+          }
 
           check_falsified(ppt, vis, inv, new_invs);
         }
@@ -232,8 +238,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
             }
 
             // Make sure the slice is interesting
-            if (v1.missingOutOfBounds() || l1.missingOutOfBounds() || l2.missingOutOfBounds())
+            if (v1.missingOutOfBounds() || l1.missingOutOfBounds() || l2.missingOutOfBounds()) {
               continue;
+            }
             if (!ppt.is_slice_ok(v1, l1, l2)) continue;
 
             VarInfo[] vis;
@@ -249,7 +256,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
             if (!suppression_set[0].suppressee.sample_inv.valid_types(vis)) continue;
 
-            if (NIS.debug.isLoggable(Level.FINE))
+            if (NIS.debug.isLoggable(Level.FINE)) {
               NIS.debug.fine(
                   "processing slice "
                       + Debug.toString(vis)
@@ -257,6 +264,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
                       + ppt.name()
                       + " with "
                       + ppt.numViews());
+            }
 
             check_falsified(ppt, vis, inv, new_invs);
           }
@@ -283,8 +291,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
       NIS.SuppressState status = suppression_set[i].check(ppt, vis, inv);
       if (status == NIS.SuppressState.VALID) {
-        if (NIS.debug.isLoggable(Level.FINE))
+        if (NIS.debug.isLoggable(Level.FINE)) {
           NIS.debug.fine("suppression " + suppression_set[i] + " is valid");
+        }
         return;
       }
       assert status != NIS.SuppressState.NONSENSICAL;
@@ -338,7 +347,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     for (int i = 0; i < suppression_set.length; i++) {
       NIS.SuppressState status = suppression_set[i].check(ppt, var_infos, null);
       if (status == NIS.SuppressState.VALID) {
-        if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE))
+        if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE)) {
           Debug.log(
               NIS.debug,
               getClass(),
@@ -352,11 +361,12 @@ public class NISuppressionSet implements Iterable<NISuppression> {
                   + ppt
                   + " with var infos "
                   + VarInfo.arrayToString(var_infos));
+        }
         return true;
       }
     }
 
-    if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE))
+    if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE)) {
       Debug.log(
           NIS.debug,
           getClass(),
@@ -368,6 +378,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
               + ppt
               + " with var infos "
               + VarInfo.arrayToString(var_infos));
+    }
     return false;
   }
 
@@ -377,7 +388,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * suppressions are valid.  A suppression is valid if all of its
    * non-missing suppressors are true.
    */
-  /*@Pure*/ public boolean is_instantiate_ok(PptSlice slice) {
+  /*@Pure*/
+  public boolean is_instantiate_ok(PptSlice slice) {
 
     return (is_instantiate_ok(slice.parent, slice.var_infos));
   }
@@ -388,13 +400,14 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * suppression is invalid.  A suppression is valid if all of
    * its non-missing suppressors are true.
    */
-  /*@Pure*/ public boolean is_instantiate_ok(PptTopLevel ppt, VarInfo[] var_infos) {
+  /*@Pure*/
+  public boolean is_instantiate_ok(PptTopLevel ppt, VarInfo[] var_infos) {
 
     // Check each suppression to see if it is valid
     for (int i = 0; i < suppression_set.length; i++) {
       NIS.SuppressState status = suppression_set[i].check(ppt, var_infos, null);
       if ((status == NIS.SuppressState.VALID) || (status == NIS.SuppressState.NONSENSICAL)) {
-        if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE))
+        if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE)) {
           Debug.log(
               NIS.debug,
               getClass(),
@@ -408,11 +421,12 @@ public class NISuppressionSet implements Iterable<NISuppression> {
                   + ppt
                   + " with var infos "
                   + VarInfo.arrayToString(var_infos));
+        }
         return false;
       }
     }
 
-    if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE))
+    if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE)) {
       Debug.log(
           NIS.debug,
           getClass(),
@@ -424,6 +438,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
               + ppt
               + " with var infos "
               + VarInfo.arrayToString(var_infos));
+    }
     return true;
   }
 
@@ -469,19 +484,21 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
     if (inv != null) {
 
-      if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE))
+      if (Debug.logOn() || NIS.debug.isLoggable(Level.FINE)) {
         inv.log(NIS.debug, "Adding " + inv.format() + " from nis suppression set " + this);
+      }
 
       // Make sure the invariant isn't already in the new_invs list
       if (Debug.dkconfig_internal_check) {
         for (Invariant new_inv : new_invs) {
-          if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice))
+          if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice)) {
             throw new Error(
                 String.format(
                     "inv %s:%s already in new_invs " + "(slice %s)",
                     inv.getClass(),
                     inv.format(),
                     slice));
+          }
         }
       }
 
@@ -547,8 +564,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     for (int i = 0; i < suppression_set.length; i++) {
       new_array[i] = suppression_set[i];
     }
-    for (int i = 0; i < new_suppressions.size(); i++)
+    for (int i = 0; i < new_suppressions.size(); i++) {
       new_array[suppression_set.length + i] = new_suppressions.get(i);
+    }
     new_array = castNonNullDeep(new_array); // issue 154
     suppression_set = new_array;
   }
@@ -570,7 +588,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       swap_sups[i] = new NISuppression(sors, std_sup.suppressee.swap());
     }
     NISuppressionSet new_ss = new NISuppressionSet(swap_sups);
-    return (new_ss);
+    return new_ss;
   }
 
   /** Returns the suppressee **/
@@ -590,7 +608,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   /**
    * Returns a string containing each suppression separated by commas.
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/) {
     return UtilMDE.join(suppression_set, ", ");
   }
 }

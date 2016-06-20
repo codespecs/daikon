@@ -6,6 +6,7 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
@@ -48,7 +49,7 @@ public class Positive extends SingleScalar {
 
   /** Returns the prototype invariant **/
   public static /*@Prototype*/ Positive get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -62,7 +63,8 @@ public class Positive extends SingleScalar {
   }
 
   // A printed representation for user output
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied Positive this,*/ OutputFormat format) {
     return var().name() + " > 0";
   }
 
@@ -84,7 +86,8 @@ public class Positive extends SingleScalar {
     return 1 - Math.pow(.5, ppt.num_samples());
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     assert other instanceof Positive;
     return true;
   }

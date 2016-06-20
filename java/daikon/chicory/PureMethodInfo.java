@@ -131,31 +131,36 @@ public class PureMethodInfo extends DaikonVariableInfo {
 
   private static /*@Nullable*/ Object executePureMethod(
       Method meth, Object receiverVal, /*@Nullable*/ Object[] argVals) {
-    Object retVal = null;
-    try {
-      // TODO is this the best way to handle this problem?
-      // (when we invoke a pure method, Runtime.Enter should not be
-      // called)
-      Runtime.startPure();
+    // Between startPure() and endPure(), no output is done to the trace file.
+    // Without this synchronization, other threads would observe that
+    // startPure has been called and wouldn't do any output.
+    synchronized (Runtime.class) {
+      Object retVal = null;
+      try {
+        // TODO is this the best way to handle this problem?
+        // (when we invoke a pure method, Runtime.Enter should not be
+        // called)
+        Runtime.startPure();
 
-      @SuppressWarnings("nullness") // argVals is declared Nullable
-      /*@NonNull*/ Object tmp_retVal = meth.invoke(receiverVal, argVals);
-      retVal = tmp_retVal;
+        @SuppressWarnings("nullness") // argVals is declared Nullable
+        /*@NonNull*/ Object tmp_retVal = meth.invoke(receiverVal, argVals);
+        retVal = tmp_retVal;
 
-      if (meth.getReturnType().isPrimitive()) retVal = convertWrapper(retVal);
-    } catch (IllegalArgumentException e) {
-      throw new Error(e);
-    } catch (IllegalAccessException e) {
-      throw new Error(e);
-    } catch (InvocationTargetException e) {
-      retVal = NonsensicalObject.getInstance();
-    } catch (Throwable e) {
-      throw new Error(e);
-    } finally {
-      Runtime.endPure();
+        if (meth.getReturnType().isPrimitive()) retVal = convertWrapper(retVal);
+      } catch (IllegalArgumentException e) {
+        throw new Error(e);
+      } catch (IllegalAccessException e) {
+        throw new Error(e);
+      } catch (InvocationTargetException e) {
+        retVal = NonsensicalObject.getInstance();
+      } catch (Throwable e) {
+        throw new Error(e);
+      } finally {
+        Runtime.endPure();
+      }
+
+      return retVal;
     }
-
-    return retVal;
   }
 
   /**
@@ -164,8 +169,9 @@ public class PureMethodInfo extends DaikonVariableInfo {
    * from from a primitive!
    */
   public static Object convertWrapper(Object obj) {
-    if (obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList)
+    if (obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList) {
       return obj;
+    }
 
     if (obj instanceof Integer) {
       return new Runtime.IntWrap((Integer) obj);

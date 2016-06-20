@@ -12,6 +12,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -45,7 +46,7 @@ public class PptSliceEquality extends PptSlice {
   }
 
   public final int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this*/ ) {
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this*/) {
     throw new Error("Don't call arity on PptSliceEquality");
   }
 
@@ -59,7 +60,7 @@ public class PptSliceEquality extends PptSlice {
   }
 
   // Not valid for this type of slice.  Always pretend there are enough.
-  public int num_samples() {
+  public int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PptSliceEquality this*/) {
     if (true) throw new Error();
     return Integer.MAX_VALUE;
   }
@@ -83,7 +84,8 @@ public class PptSliceEquality extends PptSlice {
   private static class VarInfoAndComparability {
     public VarInfo vi;
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied VarInfoAndComparability this*/) {
       // This is about as good as we can do it.  Can't do hashcode of
       // the comparability because two comparabilities may be
       // comparable and yet be not the same
@@ -92,7 +94,10 @@ public class PptSliceEquality extends PptSlice {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied VarInfoAndComparability this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (!(o instanceof VarInfoAndComparability)) return false;
       return equals((VarInfoAndComparability) o);
     }
@@ -103,7 +108,10 @@ public class PptSliceEquality extends PptSlice {
      * inheritance, we require that the comptability go both ways.
      **/
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(VarInfoAndComparability o) {
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied VarInfoAndComparability this,*/
+        /*@GuardSatisfied*/ VarInfoAndComparability o) {
 
       return (vi.comparableNWay(o.vi) && (vi.comparability.equality_set_ok(o.vi.comparability)));
     }
@@ -144,11 +152,12 @@ public class PptSliceEquality extends PptSlice {
       }
     }
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine("PptSliceEquality.instantiate_invariants "
-                 + parent.name()
-                 + ": "
-                 + Integer.toString(multiMap.keySet().size())
-                 + " VarInfoAndComparability keys");
+      debug.fine(
+          "PptSliceEquality.instantiate_invariants "
+              + parent.name()
+              + ": "
+              + Integer.toString(multiMap.keySet().size())
+              + " VarInfoAndComparability keys");
     }
     Equality[] newInvs = new Equality[multiMap.keySet().size()];
     int varCount = 0;
@@ -253,8 +262,9 @@ public class PptSliceEquality extends PptSlice {
         // Get a list of all of the new non-missing leaders
         List<VarInfo> newInvsLeaders = new ArrayList<VarInfo>(newInvs.size());
         for (Equality eq : newInvs) {
-          if ((parent.constants == null) || !parent.constants.is_missing(eq.leader()))
+          if ((parent.constants == null) || !parent.constants.is_missing(eq.leader())) {
             newInvsLeaders.add(eq.leader());
+          }
         }
 
         //Debug print the new leaders
@@ -302,10 +312,10 @@ public class PptSliceEquality extends PptSlice {
    * <p>
    * pre: vis.size() &gt; 0
    * post: result.size() &gt; 0
-   * @param vis The VarInfos that were different from leader
-   * @param vt The ValueTuple associated with the VarInfos now
-   * @param leader The original leader of VarInfos
-   * @param count The number of samples seen (needed to set the number
+   * @param vis the VarInfos that were different from leader
+   * @param vt the ValueTuple associated with the VarInfos now
+   * @param leader the original leader of VarInfos
+   * @param count the number of samples seen (needed to set the number
    * of samples for the new Equality invariants)
    * @return a List of Equality invariants bundling together same
    * values from vis, and if needed, another representing all the
@@ -380,10 +390,10 @@ public class PptSliceEquality extends PptSlice {
    * <p>
    * pre: vis.size() &gt; 0
    * post: result.size() &gt; 0
-   * @param vis The VarInfos that were different from leader
-   * @param leader The original leader of VarInfos
+   * @param vis the VarInfos that were different from leader
+   * @param leader the original leader of VarInfos
    * @return a List of Equality invariants bundling together same
-   * values from vis.
+   * values from vis
    */
   public List<Equality> createEqualityInvs(List<VarInfo> vis, Equality leader) {
     assert vis.size() > 0;
@@ -414,11 +424,11 @@ public class PptSliceEquality extends PptSlice {
    * <p>
    * pre: Each value in map is a list of size 1 or greater
    * post: Each value in map is a list of size 1 or greater
-   * @param map The map to add the bindings to
-   * @param key If there is already a List associated with key, then
+   * @param map the map to add the bindings to
+   * @param key if there is already a List associated with key, then
    * add value to key.  Otherwise create a new List associated with
    * key and insert value.
-   * @param value The value to insert into the List mapped to key.
+   * @param value the value to insert into the List mapped to key.
    **/
   private <T> void addToBindingList(Map<T, List<VarInfo>> map, T key, VarInfo value) {
     assert key != null;
@@ -510,7 +520,7 @@ public class PptSliceEquality extends PptSlice {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("  new slices count:" + parent.numViews());
     }
-    return (falsified_invs);
+    return falsified_invs;
   }
 
   /**
@@ -532,14 +542,14 @@ public class PptSliceEquality extends PptSlice {
    * the end of slice.var_infos, this method attempts to instantiate
    * the slice that has been produced.  The standard start for
    * position is 0, and for loop is -1.
-   * @param leader The variable to replace in slice
+   * @param leader the variable to replace in slice
    * @param newVis of VarInfos that will replace leader in combination in slice
-   * @param slice The slice to clone
-   * @param newSlices Where to put the cloned slices
-   * @param position The position currently being replaced in source.  Starts at 0.
-   * @param loop The iteration of the loop for this position.  If -1,
+   * @param slice the slice to clone
+   * @param newSlices where to put the cloned slices
+   * @param position the position currently being replaced in source.  Starts at 0.
+   * @param loop the iteration of the loop for this position.  If -1,
    * means the previous replacement is leader.
-   * @param soFar Buffer to which assignments temporarily go before
+   * @param soFar buffer to which assignments temporarily go before
    * becoming instantiated.  Has to equal slice.var_infos in length.
    **/
   private void copyInvsFromLeaderHelper(
@@ -618,7 +628,8 @@ public class PptSliceEquality extends PptSlice {
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied PptSliceEquality this*/) {
     StringBuffer result = new StringBuffer("PptSliceEquality: [");
     for (Invariant inv : invs) {
       result.append(inv.repr());
@@ -636,7 +647,8 @@ public class PptSliceEquality extends PptSlice {
 
     private EqualityComparator() {}
 
-    /*@Pure*/ public int compare(Equality eq1, Equality eq2) {
+    /*@Pure*/
+    public int compare(Equality eq1, Equality eq2) {
       return VarInfo.IndexComparator.theInstance.compare(eq1.leader(), eq2.leader());
     }
   }

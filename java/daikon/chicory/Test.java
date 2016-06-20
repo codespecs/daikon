@@ -32,7 +32,7 @@ class Test {
   }
 
   public Test /*@Nullable*/ [] test_array() {
-    return (null);
+    return null;
   }
 
   public double test_d(double d1, double d2) {
@@ -60,9 +60,9 @@ class Test {
   public double sample2() {
 
     if (t1 == 6) {
-      return (5.43);
+      return 5.43;
     } else {
-      return (62.4);
+      return 62.4;
     }
   }
 }

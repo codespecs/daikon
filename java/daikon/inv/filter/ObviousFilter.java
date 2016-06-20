@@ -25,7 +25,9 @@ public class ObviousFilter extends InvariantFilter {
   boolean shouldDiscardInvariant(Invariant invariant) {
     // if ((invariant.ppt.arity() == 1) || IsEqualityComparison.it.accept(invariant)) {
     DiscardInfo discard = invariant.isObvious();
-    if (discard != null) invariant.log("discard because %s", discard.discardString());
+    if (discard != null) {
+      invariant.log("discard because %s", discard.discardString());
+    }
     return (discard != null);
     /* }
     else {
@@ -41,20 +43,24 @@ public class ObviousFilter extends InvariantFilter {
           int num_elts = -1;
           if (var.type.isIntegral()) {
             oo = OneOfScalar.find(slice);
-            if (oo != null)
+            if (oo != null) {
               num_elts = ((OneOfScalar) oo).num_elts();
+              }
           } else if (var.type.isFloat()) {
             oo = OneOfFloat.find(slice);
-            if (oo != null)
+            if (oo != null) {
               num_elts = ((OneOfFloat) oo).num_elts();
+              }
           } else if (var.type.baseIsIntegral()) {
             oo = EltOneOf.find(slice);
-            if (oo != null)
+            if (oo != null) {
               num_elts = ((EltOneOf) oo).num_elts();
+              }
           } else if (var.type.baseIsFloat()) {
               oo = EltOneOfFloat.find(slice);
-              if (oo != null)
+              if (oo != null) {
                 num_elts = ((EltOneOfFloat) oo).num_elts();
+                }
           }
           if ((oo != null) && (num_elts == 1)) {
             invariant.discardCode = DiscardCode.obvious;

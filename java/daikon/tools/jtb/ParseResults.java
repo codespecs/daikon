@@ -8,6 +8,7 @@ import jtb.visitor.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -31,7 +32,8 @@ public class ParseResults {
     this.compilationUnit = compilationUnit;
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied ParseResults this*/) {
     return "package name: " + packageName + ", " + "file name: " + fileName;
   }
 

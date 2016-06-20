@@ -5,6 +5,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -162,18 +163,22 @@ public class PptMap implements Serializable {
       /*@Nullable*/ Iterator<PptConditional> cond_iterator = null;
 
       public boolean hasNext() {
-        if ((cond_iterator != null) && cond_iterator.hasNext()) return true;
+        if ((cond_iterator != null) && cond_iterator.hasNext()) {
+          return true;
+        }
         boolean result = iter_view.hasNext();
         assert result == iter_sort.hasNext();
         return result;
       }
 
       public PptTopLevel next() {
-        if ((cond_iterator != null) && cond_iterator.hasNext()) return (cond_iterator.next());
+        if ((cond_iterator != null) && cond_iterator.hasNext()) {
+          return (cond_iterator.next());
+        }
         iter_view.next(); // to check for concurrent modifications
         PptTopLevel ppt = iter_sort.next();
         if ((ppt != null) && ppt.has_splitters()) cond_iterator = ppt.cond_iterator();
-        return (ppt);
+        return ppt;
       }
 
       public void remove() {
@@ -229,7 +234,7 @@ public class PptMap implements Serializable {
   }
 
   /*@SideEffectFree*/
-  public String toString() {
+  public String toString(/*>>>@GuardSatisfied PptMap this*/) {
     return "PptMap: " + nameToPpt.toString();
   }
 

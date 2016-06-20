@@ -15,6 +15,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -285,7 +286,9 @@ public class NIS {
   /*@RequiresNonNull("suppressor_map")*/
   public static void falsified(Invariant inv) {
 
-    if (!dkconfig_enabled || antecedent_method) return;
+    if (!dkconfig_enabled || antecedent_method) {
+      return;
+    }
 
     if (NIS.dkconfig_skip_hashcode_type) {
 
@@ -319,8 +322,9 @@ public class NIS {
     // Process each suppression set
     for (NISuppressionSet ss : ss_list) {
       ss.clear_state();
-      if (debug.isLoggable(Level.FINE))
+      if (debug.isLoggable(Level.FINE)) {
         debug.fine("processing suppression set " + ss + " over falsified inv " + inv.format());
+      }
       ss.falsified(inv, new_invs);
       suppressions_processed += ss.suppression_set.length;
     }
@@ -344,15 +348,17 @@ public class NIS {
   public static void apply_samples(ValueTuple vt, int count) {
     newly_falsified.clear();
 
-    if (NIS.debug.isLoggable(Level.FINE))
+    if (NIS.debug.isLoggable(Level.FINE)) {
       NIS.debug.fine("Applying samples to " + new_invs.size() + " new invariants");
+    }
 
     // Loop through each invariant
     for (Invariant inv : new_invs) {
-      if (inv.is_false())
+      if (inv.is_false()) {
         assert !inv.is_false()
             : String.format(
                 "inv %s in ppt %s is false before sample is applied ", inv.format(), inv.ppt);
+      }
 
       // Looks to see if any variables are missing.  This can happen
       // when a variable not involved in the suppressor is missing on
@@ -369,7 +375,7 @@ public class NIS {
       if (!missing) {
         InvariantStatus result = inv.add_sample(vt, count);
         if (result == InvariantStatus.FALSIFIED) {
-          if (NIS.antecedent_method)
+          if (NIS.antecedent_method) {
             throw new Error(
                 "inv "
                     + inv.format()
@@ -377,7 +383,7 @@ public class NIS {
                     + Debug.toString(inv.ppt.var_infos, vt)
                     + " at ppt "
                     + inv.ppt);
-          else {
+          } else {
             inv.falsify();
             newly_falsified.add(inv);
           }
@@ -385,8 +391,9 @@ public class NIS {
       }
 
       // Add the invariant to its slice
-      if (Debug.dkconfig_internal_check)
+      if (Debug.dkconfig_internal_check) {
         assert inv.ppt.parent.findSlice(inv.ppt.var_infos) == inv.ppt;
+      }
       inv.ppt.addInvariant(inv);
       if (Debug.logOn()) inv.log("%s added to slice", inv.format());
 
@@ -537,7 +544,9 @@ public class NIS {
       }
     }
 
-    if (!dkconfig_enabled || !antecedent_method) return;
+    if (!dkconfig_enabled || !antecedent_method) {
+      return;
+    }
 
     if (false) {
       System.out.println("Variables for ppt " + ppt.name());
@@ -568,8 +577,9 @@ public class NIS {
       return;
     }
 
-    if (debugAnt.isLoggable(Level.FINE))
+    if (debugAnt.isLoggable(Level.FINE)) {
       debugAnt.fine("at ppt " + ppt.name + " false_cnt = " + false_cnt);
+    }
     //false_invs = false_cnt;
 
     if (debugAnt.isLoggable(Level.FINE)) ppt.debug_invs(debugAnt);
@@ -607,10 +617,12 @@ public class NIS {
             IntEqual ie = (IntEqual) inv;
             VarInfo v1 = ie.ppt.var_infos[0];
             VarInfo v2 = ie.ppt.var_infos[1];
-            if (ppt.is_constant(v1) && ppt.is_constant(v2))
+            if (ppt.is_constant(v1) && ppt.is_constant(v2)) {
               System.out.printf("inv %s has two constant variables%n", ie.format());
-            if (!v1.compatible(v2))
+            }
+            if (!v1.compatible(v2)) {
               System.out.printf("inv %s has incompatible variables%n", ie.format());
+            }
             Count cnt = var_map.get(v1);
             if (cnt == null) {
               cnt = new Count(0);
@@ -658,9 +670,10 @@ public class NIS {
       }
     }
 
-    if (debugAnt.isLoggable(Level.FINE))
+    if (debugAnt.isLoggable(Level.FINE)) {
       debugAnt.fine(
           "Found " + unsuppressed_invs.size() + " unsuppressed invariants: " + unsuppressed_invs);
+    }
 
     // Create each new unsuppressed invariant that is not still suppressed
     // by a different suppression.  Skip any that will be falsified by
@@ -682,8 +695,9 @@ public class NIS {
       if (inv != null) {
         if (Debug.dkconfig_internal_check) {
           assert !inv.is_ni_suppressed() : "Still suppressed: " + inv.format();
-          if (inv.ppt.find_inv_exact(inv) != null)
+          if (inv.ppt.find_inv_exact(inv) != null) {
             throw new Error("inv " + inv.format() + " already exists in ppt " + ppt.name);
+          }
         }
         new_invs.add(inv);
       }
@@ -765,7 +779,7 @@ public class NIS {
       }
     }
 
-    return (created_invs);
+    return created_invs;
   }
 
   /**
@@ -837,7 +851,7 @@ public class NIS {
       }
     }
 
-    return (false_cnt);
+    return false_cnt;
   }
 
   /**
@@ -861,7 +875,8 @@ public class NIS {
    * Returns true if the specified class is an antecedent in any NI suppression
    */
   /*@RequiresNonNull("suppressor_map")*/
-  /*@Pure*/ public static boolean is_suppressor(Class<? extends Invariant> cls) {
+  /*@Pure*/
+  public static boolean is_suppressor(Class<? extends Invariant> cls) {
     return (suppressor_map.containsKey(cls));
   }
 
@@ -915,7 +930,10 @@ public class NIS {
 
     /** Equal iff classes / swap variable / and variables match exactly **/
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object obj) {
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied SupInv this,*/
+        final /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof SupInv)) return false;
 
       // Class and variables must match
@@ -939,12 +957,13 @@ public class NIS {
     }
 
     /** Hash on class and variables **/
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied SupInv this*/) {
       int code = suppressee.sup_class.hashCode();
       for (int i = 0; i < vis.length; i++) {
         code += vis[i].hashCode();
       }
-      return (code);
+      return code;
     }
 
     /** Check this invariant against the sample and return the result */
@@ -954,7 +973,8 @@ public class NIS {
 
     /** Returns true if the invariant is still suppressed **/
     @SuppressWarnings("purity") // new object is not returned
-    /*@Pure*/ public boolean is_ni_suppressed() {
+    /*@Pure*/
+    public boolean is_ni_suppressed() {
 
       NISuppressionSet ss = suppressee.sample_inv.get_ni_suppressions();
       assert ss != null
@@ -977,16 +997,17 @@ public class NIS {
      */
     public /*@Nullable*/ Invariant already_exists() {
       Invariant cinv = ppt.find_inv_by_class(vis, suppressee.sup_class);
-      if (cinv == null) return (null);
-      if (suppressee.var_count != 2) return (cinv);
+      if (cinv == null) return null;
+      if (suppressee.var_count != 2) return cinv;
       BinaryInvariant binv = (BinaryInvariant) cinv;
-      if (binv.is_symmetric()) return (cinv);
-      if (binv.get_swap() != suppressee.get_swap()) return (null);
-      return (cinv);
+      if (binv.is_symmetric()) return cinv;
+      if (binv.get_swap() != suppressee.get_swap()) return null;
+      return cinv;
     }
 
     /** Return string representation of the suppressed invariant **/
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied SupInv this*/) {
       String[] names = new String[vis.length];
       for (int i = 0; i < vis.length; i++) {
         names[i] = vis[i].name();
@@ -1091,7 +1112,8 @@ public class NIS {
     /**
      * Returns a string representation of all of the antecedents by class
      */
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied Antecedents this*/) {
 
       String out = "Comparability " + comparability + " : ";
 
@@ -1108,7 +1130,7 @@ public class NIS {
         out += " : ";
       }
 
-      return (out);
+      return out;
     }
   }
 

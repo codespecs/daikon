@@ -8,6 +8,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import typequals.*;
 */
@@ -35,7 +36,7 @@ public abstract class SingleString extends UnaryInvariant {
   }
 
   public VarInfo var(
-      /*>>>@UnknownInitialization(SingleString.class) @Raw(SingleString.class) SingleString this*/ ) {
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleString.class) @Raw(SingleString.class) SingleString this*/) {
     return ppt.var_infos[0];
   }
 

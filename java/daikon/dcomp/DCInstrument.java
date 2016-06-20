@@ -19,6 +19,7 @@ import org.apache.commons.bcel6.verifier.structurals.*;
 import org.apache.commons.io.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -508,8 +509,9 @@ class DCInstrument {
 
       if ((inst instanceof RET) || (inst instanceof IINC)) {
         IndexedInstruction index_inst = (IndexedInstruction) inst;
-        if (index_inst.getIndex() >= index_first_moved_local)
+        if (index_inst.getIndex() >= index_first_moved_local) {
           index_inst.setIndex(index_inst.getIndex() + size);
+        }
       } else if (inst instanceof LocalVariableInstruction) {
         // BCEL handles all the details of which opcode and if index
         // is implicit or explicit; also, and if needs to be WIDE.
@@ -767,7 +769,7 @@ class DCInstrument {
     int con_index = a.getNameIndex();
     Constant c = pool.getConstant(con_index);
     String att_name = ((ConstantUtf8) c).getBytes();
-    return (att_name);
+    return att_name;
   }
 
   //
@@ -785,9 +787,11 @@ class DCInstrument {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    boolean equals(String name, Type[] arg_types) {
+    boolean equals(/*>>>@GuardSatisfied MethodDef this,*/ String name, Type[] arg_types) {
       if (!name.equals(this.name)) return false;
-      if (this.arg_types.length != arg_types.length) return false;
+      if (this.arg_types.length != arg_types.length) {
+        return false;
+      }
       for (int ii = 0; ii < arg_types.length; ii++) {
         if (!arg_types[ii].equals(this.arg_types[ii])) {
           return false;
@@ -797,13 +801,17 @@ class DCInstrument {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object obj) {
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied MethodDef this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof MethodDef)) return false;
       MethodDef md = (MethodDef) obj;
       return equals(md.name, md.arg_types);
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied MethodDef this*/) {
       int code = name.hashCode();
       for (Type arg : arg_types) {
         code += arg.hashCode();
@@ -825,7 +833,8 @@ class DCInstrument {
     public boolean contains(int offset) {
       return (offset >= start_pc) && (offset < (start_pc + len));
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied CodeRange this*/) {
       return String.format("Code range: %d..%d", start_pc, start_pc + len - 1);
     }
   }
@@ -856,7 +865,8 @@ class DCInstrument {
   }
 
   /** Returns true if we are instrumenting for dataflow **/
-  /*@Pure*/ public boolean is_data_flow() {
+  /*@Pure*/
+  public boolean is_data_flow() {
     return this instanceof DFInstrument;
   }
 
@@ -875,7 +885,7 @@ class DCInstrument {
         || classname.startsWith("daikon.util")
         || (classname.startsWith("daikon.dcomp") && !classname.startsWith("daikon.dcomp.Test"))) {
       debug_instrument.log("Skipping DynComp class %s%n", gen.getClassName());
-      return (null);
+      return null;
     }
 
     // Don't instrument annotations.  They aren't executed and adding
@@ -1033,7 +1043,7 @@ class DCInstrument {
         || classname.startsWith("daikon.util")
         || (classname.startsWith("daikon.dcomp") && !classname.startsWith("daikon.dcomp.Test"))) {
       debug_instrument.log("(refs_only)Skipping DynComp class %s%n", gen.getClassName());
-      return (null);
+      return null;
     }
 
     // Don't instrument annotations.  They aren't executed and adding
@@ -1141,9 +1151,9 @@ class DCInstrument {
         // Remove any LVTT tables
         BCELUtil.remove_local_variable_type_tables(mg);
 
-        if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg))
+        if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg)) {
           gen.addMethod(mg.getMethod());
-        else {
+        } else {
           gen.replaceMethod(m, mg.getMethod());
           if (BCELUtil.is_main(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
         }
@@ -1856,8 +1866,9 @@ class DCInstrument {
     InstructionHandle new_start = il.insert(old_start, new_il);
     if (old_start.hasTargeters()) {
       for (InstructionTargeter it : old_start.getTargeters()) {
-        if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
+        if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen)) {
           it.updateTarget(old_start, new_start);
+        }
       }
     }
 
@@ -1957,7 +1968,7 @@ class DCInstrument {
     il.append(InstructionFactory.createStore(object_arr, tag_frame_local.getIndex()));
     debug_instrument_inst.log("Store Tag frame local at index %d%n", tag_frame_local.getIndex());
 
-    return (il);
+    return il;
   }
 
   /**
@@ -2033,15 +2044,15 @@ class DCInstrument {
 
     // Call the specified method
     Type[] method_args = null;
-    if (method_name.equals("exit"))
+    if (method_name.equals("exit")) {
       method_args =
           new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr, Type.OBJECT, Type.INT};
-    else method_args = new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr};
+    } else method_args = new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr};
     il.append(
         ifact.createInvoke(
             DCRuntime.class.getName(), method_name, Type.VOID, method_args, Const.INVOKESTATIC));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -2120,23 +2131,24 @@ class DCInstrument {
 
     // Call the specified method
     Type[] method_args = null;
-    if (method_name.equals("exit_refs_only"))
+    if (method_name.equals("exit_refs_only")) {
       method_args =
           new Type[] {
             /*object_arr, */
             Type.OBJECT, Type.INT, object_arr, Type.OBJECT, Type.INT
           };
-    else
+    } else {
       method_args =
           new Type[] {
             /*object_arr, */
             Type.OBJECT, Type.INT, object_arr
           };
+    }
     il.append(
         ifact.createInvoke(
             DCRuntime.class.getName(), method_name, Type.VOID, method_args, Const.INVOKESTATIC));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -2144,9 +2156,9 @@ class DCInstrument {
    * of instructions that replaces the specified instruction.  Returns
    * null if the instruction should not be replaced.
    *
-   *    @param mg Method being instrumented
-   *    @param ih Handle of Instruction to translate
-   *    @param stack Current contents of the stack.
+   *    @param mg method being instrumented
+   *    @param ih handle of Instruction to translate
+   *    @param stack current contents of the stack
    */
   /*@Nullable*/ InstructionList xform_inst(MethodGen mg, InstructionHandle ih, OperandStack stack) {
 
@@ -2546,7 +2558,7 @@ class DCInstrument {
       case Const.NEW:
       case Const.NOP:
       case Const.RET: // this is the internal JSR return
-        return (null);
+        return null;
 
         // Make sure we didn't miss anything
       default:
@@ -2558,9 +2570,9 @@ class DCInstrument {
    * Like xform_inst, but transforms instructions to track
    * comparability of references only (i.e. primitives are skipped).
    *
-   *    @param mg Method being instrumented
-   *    @param ih Handle of Instruction to translate
-   *    @param stack Current contents of the stack.
+   *    @param mg method being instrumented
+   *    @param ih handle of Instruction to translate
+   *    @param stack current contents of the stack
    */
   InstructionList xform_inst_refs_only(MethodGen mg, InstructionHandle ih, OperandStack stack) {
 
@@ -2589,7 +2601,7 @@ class DCInstrument {
           InstructionList il = new InstructionList();
           il.append(dcr_call("normal_exit_refs_only", Type.VOID, Type.NO_ARGS));
           il.append(inst);
-          return (il);
+          return il;
         }
 
         // Adds the extra argument to calls to instrumented methods, or
@@ -2603,7 +2615,7 @@ class DCInstrument {
 
         // All other instructions need no instrumentation
       default:
-        return (null);
+        return null;
     }
   }
 
@@ -2714,8 +2726,9 @@ class DCInstrument {
     }
 
     if (invoke instanceof INVOKESPECIAL) {
-      if (classname.equals(gen.getSuperclassName()) && method_name.equals("<init>"))
+      if (classname.equals(gen.getSuperclassName()) && method_name.equals("<init>")) {
         constructor_is_initialized = true;
+      }
     }
 
     if (is_object_method(method_name, invoke.getArgumentTypes(pool))) callee_instrumented = false;
@@ -2776,7 +2789,7 @@ class DCInstrument {
       }
       il.append(invoke);
     }
-    return (il);
+    return il;
   }
 
   /**
@@ -2808,13 +2821,16 @@ class DCInstrument {
     if (!BCELUtil.in_jdk(classname)) return true;
 
     // If the JDK is instrumented, then everthing but object is instrumented
-    if (jdk_instrumented && (exclude_object && !classname.equals("java.lang.Object"))) return true;
+    if (jdk_instrumented && (exclude_object && !classname.equals("java.lang.Object"))) {
+      return true;
+    }
 
     return false;
   }
 
   /** Returns true if the specified method is Object.equals() **/
-  /*@Pure*/ boolean is_object_equals(String method_name, Type ret_type, Type[] args) {
+  /*@Pure*/
+  boolean is_object_equals(String method_name, Type ret_type, Type[] args) {
     return (method_name.equals("equals")
         && ret_type == Type.BOOLEAN
         && args.length == 1
@@ -2822,12 +2838,14 @@ class DCInstrument {
   }
 
   /** Returns true if the specified method is Object.clone() **/
-  /*@Pure*/ boolean is_object_clone(String method_name, Type ret_type, Type[] args) {
+  /*@Pure*/
+  boolean is_object_clone(String method_name, Type ret_type, Type[] args) {
     return method_name.equals("clone") && ret_type.equals(javalangObject) && (args.length == 0);
   }
 
   /** Returns true if the specified method is Object.toString() **/
-  /*@Pure*/ boolean is_object_toString(String method_name, Type ret_type, Type[] args) {
+  /*@Pure*/
+  boolean is_object_toString(String method_name, Type ret_type, Type[] args) {
     return method_name.equals("toString") && ret_type.equals(Type.STRING) && (args.length == 0);
   }
 
@@ -2931,7 +2949,7 @@ class DCInstrument {
       goto_branch.setTarget(endif_target);
     }
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3036,7 +3054,7 @@ class DCInstrument {
       // There are no tags to mess around with
       il.append(invoke);
     }
-    return (il);
+    return il;
   }
 
   /**
@@ -3058,7 +3076,7 @@ class DCInstrument {
             Const.INVOKESTATIC));
     assert branch.getTarget() != null;
     il.append(InstructionFactory.createBranchInstruction(boolean_if, branch.getTarget()));
-    return (il);
+    return il;
   }
 
   /**
@@ -3070,7 +3088,7 @@ class DCInstrument {
   InstructionList load_store_field(MethodGen mg, FieldInstruction f) {
 
     Type field_type = f.getFieldType(pool);
-    if (field_type instanceof ReferenceType) return (null);
+    if (field_type instanceof ReferenceType) return null;
     ObjectType obj_type = (ObjectType) f.getReferenceType(pool);
     InstructionList il = new InstructionList();
     String classname = obj_type.getClassName();
@@ -3086,7 +3104,7 @@ class DCInstrument {
 
       // Perform the normal field command
       il.append(f);
-      return (il);
+      return il;
     }
 
     if (f instanceof GETSTATIC) {
@@ -3144,7 +3162,7 @@ class DCInstrument {
     // Perform the normal field command
     il.append(f);
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3160,7 +3178,7 @@ class DCInstrument {
   InstructionList load_store_static(FieldInstruction f, String method) {
 
     Type field_type = f.getFieldType(pool);
-    if (field_type instanceof ReferenceType) return (null);
+    if (field_type instanceof ReferenceType) return null;
     String name = f.getClassName(pool) + "." + f.getFieldName(pool);
     System.out.printf("static field name for %s = %s%n", f, name);
 
@@ -3184,7 +3202,7 @@ class DCInstrument {
             new Type[] {Type.INT},
             Const.INVOKESTATIC));
     il.append(f);
-    return (il);
+    return il;
   }
 
   /**
@@ -3217,7 +3235,7 @@ class DCInstrument {
             new Type[] {object_arr, Type.INT},
             Const.INVOKESTATIC));
     il.append(lvi);
-    return (il);
+    return il;
   }
 
   /**
@@ -3230,7 +3248,7 @@ class DCInstrument {
     if (obj_type.getClassName().equals(orig_class.getClassName())) {
       int fcnt = 0;
       for (Field f : orig_class.getFields()) {
-        if (f.getName().equals(name)) return (fcnt);
+        if (f.getName().equals(name)) return fcnt;
         if (f.getType() instanceof BasicType) fcnt++;
       }
       throw new Error("Can't find " + name + " in " + obj_type);
@@ -3248,7 +3266,7 @@ class DCInstrument {
     // Loop through all of the fields, counting the number of primitive fields
     int fcnt = 0;
     for (java.lang.reflect.Field f : obj_class.getDeclaredFields()) {
-      if (f.getName().equals(name)) return (fcnt);
+      if (f.getName().equals(name)) return fcnt;
       if (f.getType().isPrimitive()) fcnt++;
     }
     throw new Error("Can't find " + name + " in " + obj_class);
@@ -3269,7 +3287,7 @@ class DCInstrument {
     for (LocalVariableGen lv : mg.getLocalVariables()) {
       if (lv.getName().equals(name)) {
         assert lv.getType().equals(typ) : lv + " " + typ;
-        return (lv);
+        return lv;
       }
     }
 
@@ -3306,7 +3324,7 @@ class DCInstrument {
       return_local = mg.addLocalVariable("return__$trace2_val", return_type, null, null);
     }
 
-    return (return_local);
+    return return_local;
   }
 
   @SuppressWarnings("signature") // conversion routine
@@ -3367,7 +3385,7 @@ class DCInstrument {
     int last_line_number = 0;
     boolean foundLine;
 
-    if (il == null) return (null);
+    if (il == null) return null;
 
     for (InstructionHandle ih = il.getStart(); ih != null; ih = ih.getNext()) {
       foundLine = false;
@@ -3498,7 +3516,7 @@ class DCInstrument {
     // Perform the original instruction
     il.append(inst);
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3513,7 +3531,7 @@ class DCInstrument {
     InstructionList il = new InstructionList();
     Type arr_type = new ArrayType(base_type, 1);
     il.append(dcr_call(method, Type.VOID, new Type[] {arr_type, Type.INT, base_type}));
-    return (il);
+    return il;
   }
 
   /**
@@ -3535,7 +3553,7 @@ class DCInstrument {
     // Perform the original instruction
     il.append(inst);
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3557,7 +3575,7 @@ class DCInstrument {
     // the array and the count off the tag stack.
     il.append(dcr_call("cmp_op", Type.VOID, Type.NO_ARGS));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3580,7 +3598,7 @@ class DCInstrument {
     Type objArray = new ArrayType(Type.OBJECT, 1);
     il.append(dcr_call("multianewarray2", Type.VOID, new Type[] {Type.INT, Type.INT, objArray}));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -3697,7 +3715,7 @@ class DCInstrument {
     il.append(ifact.createConstant(tag_count));
     il.append(dcr_call("discard_tag", Type.VOID, integer_arg));
     append_inst(il, inst);
-    return (il);
+    return il;
   }
 
   /**
@@ -3710,7 +3728,7 @@ class DCInstrument {
     if (is_primitive(top)) {
       return build_il(dcr_call("dup", Type.VOID, Type.NO_ARGS), inst);
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -3722,7 +3740,7 @@ class DCInstrument {
    **/
   InstructionList dup_x1_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (!is_primitive(top)) return (null);
+    if (!is_primitive(top)) return null;
     String method = "dup_x1";
     if (!is_primitive(stack.peek(1))) method = "dup";
     return build_il(dcr_call(method, Type.VOID, Type.NO_ARGS), inst);
@@ -3759,8 +3777,10 @@ class DCInstrument {
     }
     if (debug_dup.enabled) debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
 
-    if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
-    return (null);
+    if (op != null) {
+      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    }
+    return null;
   }
 
   /**
@@ -3776,8 +3796,10 @@ class DCInstrument {
     else // both of the top two items are not primitive, nothing to dup
     op = null;
     if (debug_dup.enabled) debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
-    if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
-    return (null);
+    if (op != null) {
+      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    }
+    return null;
   }
 
   /**
@@ -3794,8 +3816,10 @@ class DCInstrument {
       else op = "dup";
     }
     if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
-    if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
-    return (null);
+    if (op != null) {
+      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    }
+    return null;
   }
 
   /**
@@ -3850,8 +3874,10 @@ class DCInstrument {
       }
     }
     if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
-    if (op != null) return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
-    return (null);
+    if (op != null) {
+      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+    }
+    return null;
   }
 
   /**
@@ -3861,8 +3887,10 @@ class DCInstrument {
    */
   InstructionList pop_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (is_primitive(top)) return discard_tag_code(inst, 1);
-    return (null);
+    if (is_primitive(top)) {
+      return discard_tag_code(inst, 1);
+    }
+    return null;
   }
 
   /**
@@ -3878,9 +3906,11 @@ class DCInstrument {
       int cnt = 0;
       if (is_primitive(top)) cnt++;
       if (is_primitive(stack.peek(1))) cnt++;
-      if (cnt > 0) return discard_tag_code(inst, cnt);
+      if (cnt > 0) {
+        return discard_tag_code(inst, cnt);
+      }
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -3894,7 +3924,7 @@ class DCInstrument {
     if (is_primitive(type1) && is_primitive(type2)) {
       return build_il(dcr_call("swap", Type.VOID, Type.NO_ARGS), inst);
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -3936,11 +3966,13 @@ class DCInstrument {
   InstructionList return_tag(MethodGen mg, Instruction inst) {
     Type type = mg.getReturnType();
     InstructionList il = new InstructionList();
-    if ((type instanceof BasicType) && (type != Type.VOID))
+    if ((type instanceof BasicType) && (type != Type.VOID)) {
       il.append(dcr_call("normal_exit_primitive", Type.VOID, Type.NO_ARGS));
-    else il.append(dcr_call("normal_exit", Type.VOID, Type.NO_ARGS));
+    } else {
+      il.append(dcr_call("normal_exit", Type.VOID, Type.NO_ARGS));
+    }
     il.append(inst);
-    return (il);
+    return il;
   }
 
   /**
@@ -3970,7 +4002,8 @@ class DCInstrument {
    * Returns whether or not the specified type is a primitive (int, float,
    * double, etc)
    */
-  /*@Pure*/ protected boolean is_primitive(Type type) {
+  /*@Pure*/
+  protected boolean is_primitive(Type type) {
     return ((type instanceof BasicType) && (type != Type.VOID));
   }
 
@@ -3978,7 +4011,8 @@ class DCInstrument {
    * Returns whether or not the specified type is a category 2 (8 byte)
    * type
    */
-  /*@Pure*/ protected boolean is_category2(Type type) {
+  /*@Pure*/
+  protected boolean is_category2(Type type) {
     return ((type == Type.DOUBLE) || (type == Type.LONG));
   }
 
@@ -3993,7 +4027,9 @@ class DCInstrument {
       if (inst instanceof InvokeInstruction) {
         return ((InvokeInstruction) inst).getReturnType(pool);
       }
-      if (inst instanceof TypedInstruction) return ((TypedInstruction) inst).getType(pool);
+      if (inst instanceof TypedInstruction) {
+        return ((TypedInstruction) inst).getType(pool);
+      }
     }
     throw new Error("couldn't find any typed instructions");
   }
@@ -4004,7 +4040,7 @@ class DCInstrument {
     for (Instruction inst : instructions) {
       append_inst(il, inst);
     }
-    return (il);
+    return il;
   }
 
   /**
@@ -4348,7 +4384,8 @@ class DCInstrument {
    * Returns whether or not the invoke specified invokes a native method.
    * This requires that the class that contains the method to be loaded.
    */
-  /*@Pure*/ public boolean is_native(InvokeInstruction invoke) {
+  /*@Pure*/
+  public boolean is_native(InvokeInstruction invoke) {
 
     // Get the class of the method
     ClassLoader loader = getClass().getClassLoader();
@@ -4414,14 +4451,14 @@ class DCInstrument {
 
     if (loader == null) loader = DCInstrument.class.getClassLoader();
 
-    if (t == Type.BOOLEAN) return (Boolean.TYPE);
-    else if (t == Type.BYTE) return (Byte.TYPE);
-    else if (t == Type.CHAR) return (Character.TYPE);
-    else if (t == Type.DOUBLE) return (Double.TYPE);
-    else if (t == Type.FLOAT) return (Float.TYPE);
-    else if (t == Type.INT) return (Integer.TYPE);
-    else if (t == Type.LONG) return (Long.TYPE);
-    else if (t == Type.SHORT) return (Short.TYPE);
+    if (t == Type.BOOLEAN) return Boolean.TYPE;
+    else if (t == Type.BYTE) return Byte.TYPE;
+    else if (t == Type.CHAR) return Character.TYPE;
+    else if (t == Type.DOUBLE) return Double.TYPE;
+    else if (t == Type.FLOAT) return Float.TYPE;
+    else if (t == Type.INT) return Integer.TYPE;
+    else if (t == Type.LONG) return Long.TYPE;
+    else if (t == Type.SHORT) return Short.TYPE;
     else if (t instanceof ObjectType || t instanceof ArrayType) {
       /*@ClassGetName*/ String sig = typeToClassGetName(t);
       try {
@@ -4442,7 +4479,7 @@ class DCInstrument {
       new_arr[ii] = arr[ii];
     }
     new_arr[arr.length] = new_string;
-    return (new_arr);
+    return new_arr;
   }
 
   /**
@@ -4454,8 +4491,8 @@ class DCInstrument {
    * TODO: add a way to provide a synopsis for native methods that
    * affect comparability.
    *
-   * @param gen ClassGen for current class
-   * @param mg MethodGen for the interface method. Must be native
+   * @param gen current class
+   * @param mg the interface method. Must be native
    */
   public void fix_native(ClassGen gen, MethodGen mg) {
 
@@ -4486,8 +4523,9 @@ class DCInstrument {
     }
 
     // If the method is not static, push the instance on the stack
-    if (!mg.isStatic())
+    if (!mg.isStatic()) {
       il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
+    }
 
     //System.out.printf ("%s: atc = %d, anc = %d%n", mg.getName(), arg_types.length, arg_names.length);
 
@@ -4548,8 +4586,8 @@ class DCInstrument {
    *
    * (Reference comparability only.)
    *
-   * @param gen ClassGen for current class
-   * @param mg MethodGen for the interface method. Must be native
+   * @param gen current class
+   * @param mg the interface method. Must be native
    */
   public void fix_native_refs_only(ClassGen gen, MethodGen mg) {
 
@@ -4570,11 +4608,13 @@ class DCInstrument {
     // methods
     int primitive_cnt = 0;
     for (Type arg_type : arg_types) {
-      if (arg_type instanceof BasicType)
+      if (arg_type instanceof BasicType) {
         primitive_cnt++;
+        }
     }
-    if (primitive_cnt > 0)
+    if (primitive_cnt > 0) {
       il.append (discard_tag_code (new NOP(), primitive_cnt));
+      }
 
     // push a tag if there is a primitive return value
     Type ret_type = mg.getReturnType();
@@ -4583,8 +4623,9 @@ class DCInstrument {
     }
     */
     // If the method is not static, push the instance on the stack
-    if (!mg.isStatic())
+    if (!mg.isStatic()) {
       il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
+    }
 
     // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
     if (mg.getName().equals("getCallerClass")
@@ -4638,16 +4679,27 @@ class DCInstrument {
    */
   public boolean tag_fields_ok(/*@ClassGetName*/ String classname) {
 
-    if (BCELUtil.is_constructor(mgen)) if (!constructor_is_initialized) return false;
+    if (BCELUtil.is_constructor(mgen))
+      if (!constructor_is_initialized) {
+        return false;
+      }
 
-    if (!jdk_instrumented) if (BCELUtil.in_jdk(classname)) return false;
+    if (!jdk_instrumented) {
+      if (BCELUtil.in_jdk(classname)) {
+        return false;
+      }
+    }
 
-    if (!classname.startsWith("java.lang")) return true;
+    if (!classname.startsWith("java.lang")) {
+      return true;
+    }
 
     if (classname.equals("java.lang.String")
         || classname.equals("java.lang.Class")
         || classname.equals("java.lang.Object")
-        || classname.equals("java.lang.ClassLoader")) return false;
+        || classname.equals("java.lang.ClassLoader")) {
+      return false;
+    }
 
     return true;
   }
@@ -4708,7 +4760,7 @@ class DCInstrument {
    */
   public List<MethodGen> create_tag_accessors(ClassGen gen) {
 
-    if (gen.isInterface()) return (null);
+    if (gen.isInterface()) return null;
 
     String classname = gen.getClassName();
     List<MethodGen> mlist = new ArrayList<MethodGen>();
@@ -4773,7 +4825,7 @@ class DCInstrument {
       }
     }
 
-    return (mlist);
+    return mlist;
   }
 
   /**
@@ -4786,7 +4838,9 @@ class DCInstrument {
   public Map<Field, Integer> build_field_map(JavaClass jc) {
 
     // Object doesn't have any primitive fields
-    if (jc.getClassName().equals("java.lang.Object")) return new LinkedHashMap<Field, Integer>();
+    if (jc.getClassName().equals("java.lang.Object")) {
+      return new LinkedHashMap<Field, Integer>();
+    }
 
     // Get the offsets for each field in the superclasses.
     JavaClass super_jc = null;
@@ -4839,10 +4893,10 @@ class DCInstrument {
    *      DCRuntime.push_field_tag (this, tag_offset);
    *  }
    *
-   * @param gen ClassGen of class whose accessors are being built. Not
+   * @param gen class whose accessors are being built. Not
    *          necessarily the class declaring f (if f is inherited)
    * @param f field to build an accessor for
-   * @param tag_offset Offset of f in the tag storage for this field
+   * @param tag_offset offset of f in the tag storage for this field
    */
   public MethodGen create_get_tag(ClassGen gen, Field f, int tag_offset) {
 
@@ -4887,7 +4941,7 @@ class DCInstrument {
     get_method.setMaxStack();
     // add_line_numbers(get_method, il);
 
-    return (get_method);
+    return get_method;
   }
 
   /**
@@ -4902,10 +4956,10 @@ class DCInstrument {
    *      DCRuntime.pop_field_tag (this, tag_offset);
    *  }
    *
-   * @param gen ClassGen of class whose accessors are being built. Not
+   * @param gen class whose accessors are being built. Not
    *          necessarily the class declaring f (if f is inherited)
    * @param f field to build an accessor for
-   * @param tag_offset Offset of f in the tag storage for this field
+   * @param tag_offset offset of f in the tag storage for this field
    */
   public MethodGen create_set_tag(ClassGen gen, Field f, int tag_offset) {
 
@@ -4941,7 +4995,7 @@ class DCInstrument {
     set_method.setMaxStack();
     // add_line_numbers(set_method, il);
 
-    return (set_method);
+    return set_method;
   }
 
   /**
@@ -5124,10 +5178,12 @@ class DCInstrument {
       if (first_local_index > locals.length) {
         Type[] arg_types = mg.getArgumentTypes();
         String[] arg_names = mg.getArgumentNames();
-        for (int ii = 0; ii < arg_types.length; ii++)
+        for (int ii = 0; ii < arg_types.length; ii++) {
           System.out.printf("param %s %s%n", arg_types[ii], arg_names[ii]);
-        for (LocalVariableGen lvg : locals)
+        }
+        for (LocalVariableGen lvg : locals) {
           System.out.printf("local[%d] = %s%n", lvg.getIndex(), lvg);
+        }
         throw new Error(
             "first_local_index > locals.length: "
                 + mg.getClassName()
@@ -5231,7 +5287,8 @@ class DCInstrument {
   }
 
   /** Returns whether or not the method is defined in Object **/
-  /*@Pure*/ public boolean is_object_method(String method_name, Type[] arg_types) {
+  /*@Pure*/
+  public boolean is_object_method(String method_name, Type[] arg_types) {
     for (MethodDef md : obj_methods) {
       if (md.equals(method_name, arg_types)) {
         return true;
@@ -5244,7 +5301,8 @@ class DCInstrument {
    * Returns whether or not the class is one of those that has values
    * initialized by the JVM or native methods
    */
-  /*@Pure*/ public boolean is_uninit_class(String classname) {
+  /*@Pure*/
+  public boolean is_uninit_class(String classname) {
 
     for (String u_name : uninit_classes) {
       if (u_name.equals(classname)) {
@@ -5308,7 +5366,7 @@ class DCInstrument {
       offset += arg_types[ii].getSize();
     }
 
-    return (locals);
+    return locals;
   }
 
   /**
@@ -5325,13 +5383,13 @@ class DCInstrument {
       System.out.printf("Warning: StackVer exception for %s.%s%n", mg.getClassName(), mg.getName());
       System.out.printf("Exception: %s%n", e);
       System.out.printf("Method is NOT instrumented%n");
-      return (null);
+      return null;
     }
     if (vr != VerificationResult.VR_OK) {
       System.out.printf(
           "Warning: StackVer failed for %s.%s: %s%n", mg.getClassName(), mg.getName(), vr);
       System.out.printf("Method is NOT instrumented%n");
-      return (null);
+      return null;
     }
     assert vr == VerificationResult.VR_OK : " vr failed " + vr;
     return stackver.get_stack_types();
@@ -5383,7 +5441,7 @@ class DCInstrument {
     dcomp_mg.setMaxLocals();
     dcomp_mg.setMaxStack();
 
-    return (dcomp_mg);
+    return dcomp_mg;
   }
 
   /**

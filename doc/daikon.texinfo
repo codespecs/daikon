@@ -56,14 +56,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.3.1
+@center Daikon version 5.3.5
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.3.1 release date
-@center April 5, 2016
+@c Print out the Daikon version 5.3.5 release date
+@center June 1, 2016
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.3.1, released April 5, 2016.
+It describes Daikon version 5.3.5, released June 1, 2016.
 
 @menu
 * Introduction::
@@ -210,6 +210,10 @@ This list goes to the Daikon maintainers.  Use it for bug reports,
 suggestions, and the like.  If you are an active contributor to Daikon,
 you may send mail to the list asking to be added.
 @end table
+
+Do @emph{not} send the same message to multiple mailing lists.  Doing so is
+antisocial:  it causes confusion and extra work.  If you do so, your
+question will not be answered.
 
 
 @node    Installing Daikon
@@ -348,12 +352,12 @@ unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-#.#.#.tar.gz
-tar zxf daikon-#.#.#.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-@var{#.#.#}.tar.gz
+tar zxf daikon-@var{#.#.#}.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-#.#.#/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-@var{#.#.#}/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:  
@@ -365,11 +369,18 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-#.#.#
+export DAIKONDIR=@var{daikonparent}/daikon-@var{#.#.#}
 # The full pathname of the directory that contains the Java JDK
-export JAVA_HOME=/usr/lib/jvm/java
+export JAVA_HOME=@var{/usr/lib/jvm/java}
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
+
+A setting of @env{JAVA_HOME} that @emph{sometimes} works (it might not
+because @command{java} might be the version in the JDK or in the JRE) is:
+
+@smallexample
+export JAVA_HOME=$@{JAVA_HOME:-$(dirname $(dirname $(dirname $(readlink -f $(/usr/bin/which java)))))@}
+@end smallexample
 
 After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
@@ -441,12 +452,12 @@ unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-#.#.#.tar.gz
-tar zxf daikon-#.#.#.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-@var{#.#.#}.tar.gz
+tar zxf daikon-@var{#.#.#}.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-#.#.#/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-@var{#.#.#}/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{~/.bashrc}:  
@@ -456,7 +467,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-#.#.#
+export DAIKONDIR=@var{daikonparent}/daikon-@var{#.#.#}
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -563,7 +574,7 @@ provides a Linux like environment on top of Windows.  So Cygwin mainly
 wants colon separators but @command{java} is a Windows application, so it wants
 semi-colons.  Another point is that when a Cygwin shell starts up, 
 it copies the Windows environment into its Linux like environment with
-no changes - except for the @env{PATH} variable.  This it converts
+no changes --- except for the @env{PATH} variable.  This it converts
 to Linux format (with colons) and adds "/usr/local/bin:/usr/bin:" to
 the front.  Hence, it is all set to run both Cygwin and existing
 Windows applications. 
@@ -732,6 +743,7 @@ Daikon, @pxref{Front ends (instrumentation)}.
 * Detecting invariants in C# programs::
 * Detecting invariants in Perl programs::
 * Detecting invariants in Eiffel programs::
+* Detecting invariants in Simulink/Stateflow programs::
 @end menu
 
 @node    Detecting invariants in Java programs
@@ -823,7 +835,7 @@ java daikon.Chicory --daikon DataStructures.StackArTester
 
 @noindent
 If you have not set the CLASSPATH as yet, you may add it to the command
-line for now - but don't forget to set it later.
+line for now --- but don't forget to set it later.
 
 @smallexample
 java -cp "../../../daikon.jar:." daikon.Chicory --daikon DataStructures.StackArTester
@@ -1584,8 +1596,17 @@ were declared, but since every stand-alone program uses the
 @section Detecting invariants in Eiffel programs
 
 CITADEL is an Eiffel front-end to the Daikon invariant detector.
-You can obtain Citadel and its documentation from
+You can obtain Citadel from
 @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
+
+
+@node    Detecting invariants in Simulink/Stateflow programs
+@section Detecting invariants in Simulink/Stateflow programs
+
+Hynger (HYbrid iNvariant GEneratoR) instruments Simulink/Stateflow (SLSF)
+block diagrams to generate Daikon input (dtrace files).  Hynger was created
+by Taylor Johnson, Stanley Bak, and Steven Drager.  You can obtain Hynger
+from @uref{https://bitbucket.org/verivital/hynger}.
 
 
 @node    Running Daikon
@@ -1828,7 +1849,7 @@ the @code{ListImplementors} section of the @file{.decls} file.
 See @ref{ListImplementors declaration,,,developer,Daikon Developer Manual}.
 
 @item --user-defined-invariant @var{classname}
-Use a user-defiend invariant that not built into Daikon but
+Use a user-defined invariant that not built into Daikon but
 is defined in the given class.
 The @var{classname} should be in the fully-qualified format expected by
 @uref{https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getName--,,@code{Class.getName()}},
@@ -2117,7 +2138,7 @@ These expression are obviously not valid Java code.
 @item JML format
 Produces output in JVM (Java Modeling Language,
 @uref{http://www.jmlspecs.org}); for details, see the
-@uref{http://www.cs.ucf.edu/~leavens/JML/, ,JML Manual}.  @option{JML}
+@uref{http://www.eecs.ucf.edu/~leavens/JML/documentation.shtml, ,JML Manual}.  @option{JML}
 format lets you use the various JVM tools on Daikon invariants,
 including runtime assertion checking and the
 @uref{http://kindsoftware.com/products/opensource/ESCJava2/, ,ESC/Java2}
@@ -3924,9 +3945,8 @@ that contains comparability information.  This information will be
 incorporated in the output of Chicory.  Any variables not included in
 the comparability file will have their comparability set so that they
 are comparable to all other variables of the same type.
-Note that the Java DynComp tool is the most common source for such a
-file.  By default, DynComp writes comparability information to a file
-with the @file{.decls-DynComp} extension.
+The DynComp tool is a common source for such a
+file (see @ref{DynComp for Java} and @ref{DynComp for C/C++}).
 
 @item --output-dir=@var{directory}
 Write the @file{.dtrace} trace output file to the specified directory.
@@ -6658,6 +6678,15 @@ separately; see @uref{https://neptuno.uca.es/redmine/projects/takuan-website}.
 A front end for the Eiffel programming language, named CITADEL, is distributed
 separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
 
+@cindex Hyger front end for Simulink/Stateflow (SLSF) block diagrams
+@cindex front end for Simulink/Stateflow (SLSF) block diagrams
+@cindex Simulink/Stateflow (SLSF) front end
+@cindex instrumentation, of Simulink/Stateflow (SLSF) block diagrams
+
+A front end for the Simulink/Stateflow (SLSF) programming language, named
+Hynger, is distributed separately; see
+@uref{https://bitbucket.org/verivital/hynger}.
+
 @cindex front end for IOA
 @cindex front end for Input/Output Automata
 @cindex IOA front end
@@ -8245,28 +8274,43 @@ Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 @cindex slow operation, of Daikon
 @cindex runtime, of Daikon
 
-It can sometimes be slow to create a trace for Daikon to analyze, and it
-can be slow for Daikon to analyze that trace.
+If Daikon runs slowly, there are two general possible reasons:
+@itemize
+@item
+The front end, such as Chicory, took a long time to collect, then output,
+large amounts of data about your program execution.
 
-If Daikon runs too slowly, the problem may be that Daikon is
-spending too much time collecting, then outputting, large amounts of
-data about your program execution.
+@item
+It took a long time to analyze that data trace and infer invariants over
+it.
+@end itemize
+
+To understand which part is the bottleneck, you might want to separate the
+creation and analysis of the trace file, so you can compare the time of
+each part.
+The next two sections address each of these issues.
+
+You may find command-line arguments like the following useful when
+debugging Daikon's performance:
+@example
+   --config_option daikon.Daikon.progress_delay=100
+   --show_progress --dbg daikon.init
+@end example
 
 For additional details on improving Daikon's performance, see @ref{Out of
-memory}, and @ref{Large dtrace files}.
+memory}.
 
 
 @subsubsection Slow creation of large trace files
 @cindex large trace files, creating
 
-Creating a trace can take a long time, because of the time to traverse
-and print the values of many variables.  If your invariant detection
-process runs slowly, you might want to separate the creation and
-analysis of the trace file, to help you understand which part (or both)
-are at fault.  Reducing the number of program points or variables can
-speed up both creation and analysis of trace files.  For instance, you
-might eliminate helper procedures from the analysis, or eliminate large
-arrays that get repeatedly output.
+Creating a trace can take a long time, because of the time to traverse and
+print the values of many variables.  Reducing the number of program points
+or variables can speed up both creation and analysis of trace files.  For
+instance, you might configure your front end to skip certain procedures
+(helper procedures, libraries) or not to output certain variables (large
+arrays or static variables).
+For details, see @ref{Large dtrace files}.
 
 
 @subsubsection Slow inference of invariants
@@ -8828,7 +8872,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.3.1, released April 5, 2016.
+This manual describes Daikon version 5.3.5, released June 1, 2016.
 A more detailed list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -8842,7 +8886,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.3.1
+@cindex Daikon version 5.3.5
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited

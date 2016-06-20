@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -28,7 +29,7 @@ public class CmdCheck implements Cmd {
   }
 
   /** For documentation, read the class overview. */
-  public void apply(Session s) {
+  public void apply(final /*@GuardedBy("<self>")*/ Session s) {
     try {
 
       String result;
@@ -50,12 +51,13 @@ public class CmdCheck implements Cmd {
         // a previous formula given to Simplify; see the debugging code in
         // simplify.LemmaStack.pushLemmas().
         if (result.startsWith("Bad input:") || result.startsWith("Sx.ReadError in file.")) {
-          if (proposition.equals("(OR)") && !LemmaStack.dkconfig_synchronous_errors)
+          if (proposition.equals("(OR)") && !LemmaStack.dkconfig_synchronous_errors) {
             System.err.println(
                 "For improved error reporting, try using"
                     + " --config_option "
                     + "daikon.simplify.LemmaStack."
                     + "synchronous_errors=true");
+          }
 
           throw new Error("Simplify error: " + result + " on " + proposition);
         }
@@ -115,7 +117,8 @@ public class CmdCheck implements Cmd {
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied CmdCheck this*/) {
     return "CmdCheck: " + proposition;
   }
 }

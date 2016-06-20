@@ -9,6 +9,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -65,7 +66,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     numSamples = sample_cnt;
   }
 
-  public int numSamples() {
+  public int numSamples(/*>>>@GuardSatisfied Equality this*/) {
     return numSamples;
   }
 
@@ -77,7 +78,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   private TreeSet<VarInfo> vars;
 
   /** Returns the number of variables in the set. **/
-  /*@Pure*/ public int size() {
+  /*@Pure*/
+  public int size(/*>>>@GuardSatisfied Equality this*/) {
     return vars.size();
   }
 
@@ -89,7 +91,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /**
-   * @param variables Variables which are equivalent, with the canonical
+   * @param variables variables that are equivalent, with the canonical
    * one first.  Elements must be of type VarInfo.
    **/
   @SuppressWarnings("initialization.invalid.field.write.initialized") // weakness of FBC type system
@@ -130,10 +132,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * changes.
    * @return the canonical VarInfo of this
    **/
-  /*@SuppressWarnings("purity")*/
-  // set cache field
-  /*@Pure*/ public VarInfo leader(
-      /*>>>@UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this*/ ) {
+  @SuppressWarnings("purity") // set cache field
+  /*@Pure*/
+  public VarInfo leader(
+      /*>>>@GuardSatisfied @UnknownInitialization(Equality.class) @Raw(Equality.class) Equality this*/) {
     if (leaderCache == null) {
       leaderCache = vars.iterator().next();
     }
@@ -167,7 +169,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   // convert to normal two-way IntEqual type invariants.  However,
   // they can be called if desired.
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied Equality this*/) {
     return "Equality: size="
         + size()
         + " leader: "
@@ -178,7 +180,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         + numSamples();
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -192,7 +195,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied Equality this*/) {
     StringBuffer result = new StringBuffer();
     boolean start = true;
     for (VarInfo var : vars) {
@@ -220,7 +223,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return UtilMDE.join(clauses, " && ");
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied Equality this*/) {
     String result = "";
 
     List<VarInfo> valid_equiv = new ArrayList<VarInfo>();
@@ -278,7 +281,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   // (hash A) (hash B)).  If we said the former, Simplify would
   // presume that A and B were always interchangeable, which is not
   // the case when your programming language involves mutation.
-  private String format_elt(String simname) {
+  private String format_elt(/*>>>@GuardSatisfied Equality this,*/ String simname) {
     String result = simname;
     if (leader().is_reference()) {
       result = "(hash " + result + ")";
@@ -286,7 +289,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return result;
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied Equality this*/) {
     StringBuffer result = new StringBuffer("(AND");
     VarInfo leader = leader();
     String leaderName = leader.simplify_name();
@@ -318,7 +321,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return format_daikon();
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied Equality this,*/ OutputFormat format) {
     VarInfo leader = leader();
     String leaderName = leader.name_using(format);
     List<String> clauses = new ArrayList<String>();
@@ -346,7 +349,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return UtilMDE.join(clauses, " && ");
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied Equality this*/) {
     return repr();
   }
 
@@ -402,7 +406,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       //         debug.fine ("  vi value: " + viValue);
       //         debug.fine ("  le value: " + leaderValue);
       //       }
-      if (Debug.logOn())
+      if (Debug.logOn()) {
         Debug.log(
             getClass(),
             ppt.parent,
@@ -420,6 +424,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
                 + ","
                 + leaderMod
                 + "]");
+      }
 
       result.add(vi);
       i.remove();
@@ -434,7 +439,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     throw new UnsupportedOperationException(
         "Equality.isSameFormula(): this method should not be called");
   }
@@ -553,5 +559,4 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       /*>>> @Prototype Equality this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
-
 }

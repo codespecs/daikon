@@ -150,17 +150,17 @@ public class Instrument implements ClassFileTransformer {
       if (matcher.find()) {
         debug_transform.log(
             "ignoring sys class %s, " + "matches boot_classes regex", fullClassName);
-        return (null);
+        return null;
       }
     } else if (loader == null) {
       debug_transform.log("ignoring system class %s, class loader == null", fullClassName);
-      return (null);
+      return null;
     } else if (loader.getParent() == null) {
       debug_transform.log("ignoring system class %s, parent loader == null\n", fullClassName);
-      return (null);
+      return null;
     } else if (fullClassName.startsWith("sun.reflect")) {
       debug_transform.log("ignoring system class %s, in sun.reflect package", fullClassName);
-      return (null);
+      return null;
     } else if (fullClassName.startsWith("com.sun")) {
       System.out.printf("Class from com.sun package %s with nonnull loaders\n", fullClassName);
     }
@@ -168,7 +168,7 @@ public class Instrument implements ClassFileTransformer {
     // Don't intrument our code
     if (is_chicory(className)) {
       debug_transform.log("Not considering chicory class %s%n", fullClassName);
-      return (null);
+      return null;
     }
 
     debug_transform.log(
@@ -216,11 +216,15 @@ public class Instrument implements ClassFileTransformer {
         // check for static initializer
         boolean hasInit = false;
         for (Method meth : cg.getMethods()) {
-          if (meth.getName().equals("<clinit>")) hasInit = true;
+          if (meth.getName().equals("<clinit>")) {
+            hasInit = true;
+          }
         }
 
         // if not found, add our own!
-        if (!hasInit) cg.addMethod(createClinit(cg, fullClassName));
+        if (!hasInit) {
+          cg.addMethod(createClinit(cg, fullClassName));
+        }
       }
 
       JavaClass njc = cg.getJavaClass();
@@ -247,7 +251,7 @@ public class Instrument implements ClassFileTransformer {
       out.format("Unexpected error %s in transform of %s", e, fullClassName);
       e.printStackTrace();
       // No changes to the bytecodes
-      return (null);
+      return null;
     }
   }
 
@@ -350,13 +354,13 @@ public class Instrument implements ClassFileTransformer {
         break;
 
       default:
-        return (null);
+        return null;
     }
 
     InstructionList il = new InstructionList();
     il.append(call_initNotify(cg, cp, fullClassName, context.ifact));
     il.append(inst);
-    return (il);
+    return il;
   }
 
   // create a <clinit> method, if none exists; guarantees we have this hook
@@ -725,7 +729,8 @@ public class Instrument implements ClassFileTransformer {
 
   // This method exists only to suppress interning warnings
   @SuppressWarnings("interning") // special, unique value
-  /*@Pure*/ private static boolean isVoid(Type t) {
+  /*@Pure*/
+  private static boolean isVoid(Type t) {
     return t == Type.VOID;
   }
 
@@ -751,7 +756,7 @@ public class Instrument implements ClassFileTransformer {
         break;
 
       default:
-        return (null);
+        return null;
     }
 
     if (!shouldIncIter.hasNext()) throw new RuntimeException("Not enough entries in shouldIncIter");
@@ -768,11 +773,12 @@ public class Instrument implements ClassFileTransformer {
       il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
     }
 
-    if (!exitIter.hasNext())
+    if (!exitIter.hasNext()) {
       throw new RuntimeException("Not enough exit locations in the exitIter");
+    }
 
     il.append(call_enter_exit(c, "exit", exitIter.next()));
-    return (il);
+    return il;
   }
 
   /**
@@ -804,7 +810,7 @@ public class Instrument implements ClassFileTransformer {
       return_local = mgen.addLocalVariable("return__$trace2_val", return_type, null, null);
     }
 
-    return (return_local);
+    return return_local;
   }
 
   /**
@@ -815,11 +821,11 @@ public class Instrument implements ClassFileTransformer {
     // Find the local used for the nonce value
     for (LocalVariableGen lv : mgen.getLocalVariables()) {
       if (lv.getName().equals("this_invocation_nonce")) {
-        return (lv);
+        return lv;
       }
     }
 
-    return (null);
+    return null;
   }
 
   /**
@@ -1238,8 +1244,9 @@ public class Instrument implements ClassFileTransformer {
     InstructionHandle old_start = il.getStart();
     InstructionHandle new_start = il.insert(nl);
     for (InstructionTargeter it : old_start.getTargeters()) {
-      if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
+      if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen)) {
         it.updateTarget(old_start, new_start);
+      }
     }
 
     // For Java 7 and beyond the StackMapTable is part of the
@@ -1415,15 +1422,15 @@ public class Instrument implements ClassFileTransformer {
 
     // Call the specified method
     Type[] method_args = null;
-    if (method_name.equals("exit"))
+    if (method_name.equals("exit")) {
       method_args =
           new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ, Type.OBJECT, Type.INT};
-    else method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
+    } else method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
     il.append(
         c.ifact.createInvoke(
             runtime_classname, method_name, Type.VOID, method_args, Const.INVOKESTATIC));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -1476,7 +1483,7 @@ public class Instrument implements ClassFileTransformer {
         c.ifact.createInvoke(
             classname, "<init>", Type.VOID, new Type[] {prim_type}, Const.INVOKESPECIAL));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -1489,7 +1496,9 @@ public class Instrument implements ClassFileTransformer {
     if (mgen.getName().equals("<init>") || mgen.getName().equals("")) {
       // log ("method '%s' is a constructor%n", mgen.getName());
       return true;
-    } else return false;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -1505,8 +1514,9 @@ public class Instrument implements ClassFileTransformer {
       Type t = arg_types[ii];
       /*if (t instanceof ObjectType)
         arg_type_strings[ii] = ((ObjectType) t).getClassName();
-        else
+        else {
         arg_type_strings[ii] = t.getSignature().replace('/', '.');
+        }
       */
       arg_type_strings[ii] = t.toString();
     }
@@ -1657,7 +1667,9 @@ public class Instrument implements ClassFileTransformer {
             exit_locs.add(new Integer(line_number));
 
             isIncluded.add(true);
-          } else isIncluded.add(false);
+          } else {
+            isIncluded.add(false);
+          }
 
           break;
 
@@ -1666,10 +1678,12 @@ public class Instrument implements ClassFileTransformer {
       }
     }
 
-    if (shouldInclude)
+    if (shouldInclude) {
       return new MethodInfo(
           class_info, mgen.getName(), arg_names, arg_type_strings, exit_locs, isIncluded);
-    else return null;
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -1837,7 +1851,7 @@ public class Instrument implements ClassFileTransformer {
     Constant c = pgen.getConstant(con_index);
     //     out.format ("get_attribute_name %s %s %s%n", a, con_index, c);
     String att_name = ((ConstantUtf8) c).getBytes();
-    return (att_name);
+    return att_name;
   }
 
   /**
@@ -1873,8 +1887,9 @@ public class Instrument implements ClassFileTransformer {
   /*@Pure*/
   private static boolean is_chicory(String classname) {
 
-    if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/Test"))
+    if (classname.startsWith("daikon/chicory") && !classname.equals("daikon/chicory/Test")) {
       return true;
+    }
     if (classname.equals("daikon/PptTopLevel$PptType")) return true;
     if (classname.startsWith("daikon/util/UtilMDE")) return true;
     return false;

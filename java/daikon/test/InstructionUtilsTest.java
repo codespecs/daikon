@@ -37,7 +37,9 @@ public class InstructionUtilsTest extends TestCase {
 
   private static void assertRedundants(
       Map<String, String> redMap, String leader, String... redundantVars) {
-    if (redundantVars.length == 0) return;
+    if (redundantVars.length == 0) {
+      return;
+    }
     Set<String> redExpected = new LinkedHashSet<String>(Arrays.<String>asList(redundantVars));
     Set<String> redActual = new LinkedHashSet<String>(); //redMap.get(leader);
     for (Map.Entry</*@KeyFor("redMap")*/ String, String> e : redMap.entrySet()) {

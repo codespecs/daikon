@@ -151,7 +151,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     addComment(Ast.nodeTokenAfter(n), comment, true);
   }
 
-  /*@Pure*/ private boolean isOwned(String fieldname) {
+  /*@Pure*/
+  private boolean isOwned(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.ownedFieldNames.contains(fieldname)) {
         return true;
@@ -160,7 +161,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  /*@Pure*/ private boolean isFinal(String fieldname) {
+  /*@Pure*/
+  private boolean isFinal(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.finalFieldNames.contains(fieldname)) {
         return true;
@@ -169,7 +171,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  /*@Pure*/ private boolean isNotContainsNull(String fieldname) {
+  /*@Pure*/
+  private boolean isNotContainsNull(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.notContainsNullFieldNames.contains(fieldname)) {
         return true;
@@ -178,7 +181,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  /*@Pure*/ private boolean isElementType(String fieldname) {
+  /*@Pure*/
+  private boolean isElementType(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.elementTypeFieldNames.containsKey(fieldname)) {
         return true;
@@ -382,8 +386,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         Annotate.debug.fine("With " + nlo.nodes.size() + " nodes");
 
         if (nlo.present())
-          for (Enumeration<Node> e = nlo.elements(); e.hasMoreElements(); )
+          for (Enumeration<Node> e = nlo.elements(); e.hasMoreElements(); ) {
             e.nextElement().accept(this);
+          }
 
         if (!behaviorInserted) {
           Annotate.debug.fine("addComment from nlo");
@@ -451,11 +456,12 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       }
     }
 
-    if (!lightweight)
+    if (!lightweight) {
       addComment(
           n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */,
           JML_END_COMMENT,
           true);
+    }
 
     boolean invariantInserted =
         insertInvariants(
@@ -750,8 +756,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
               // It's safe, however.  But does it cause syntax errors if an
               // else clause follows a then clause without braces?
               if (isOwned(fieldname)) {
-                if (lightweight)
+                if (lightweight) {
                   addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this;"));
+                }
               }
               if (isNotContainsNull(fieldname)) {
                 addCommentAfter(
@@ -784,8 +791,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       @SuppressWarnings("nullness") // every expression is within a statement
       /*@NonNull*/ Node stmt = Ast.getParent(Statement.class, n);
       if ((fieldname != null) && isOwned(fieldname)) {
-        if (lightweight)
+        if (lightweight) {
           addCommentAfter(stmt, javaLineComment("@ set " + fieldname + ".owner = this;"));
+        }
       }
     }
   }

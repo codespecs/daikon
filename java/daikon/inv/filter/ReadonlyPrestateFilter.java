@@ -45,10 +45,11 @@ public class ReadonlyPrestateFilter extends InvariantFilter {
           "compared " + var1.prestate_name() + " to " + var2.name());
     }
 
-    if (var1.is_prestate_version(var2) && var1.var_flags.contains(VarFlags.IS_READONLY))
+    if (var1.is_prestate_version(var2) && var1.var_flags.contains(VarFlags.IS_READONLY)) {
       return true;
-    else if (var2.is_prestate_version(var1) && var2.var_flags.contains(VarFlags.IS_READONLY))
+    } else if (var2.is_prestate_version(var1) && var2.var_flags.contains(VarFlags.IS_READONLY)) {
       return true;
+    }
     return false;
   }
 }

@@ -12,6 +12,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -125,7 +126,7 @@ public class PptRelation implements Serializable {
    */
   @SuppressWarnings({"rawness", "initialization"}) // won't be used until initialization is finished
   private void connect(
-      /*>>>@UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/ ) {
+      /*>>>@UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/) {
     assert !child.parents.contains(this);
     assert !parent.children.contains(this);
     child.parents.add(this);
@@ -135,11 +136,13 @@ public class PptRelation implements Serializable {
   /**
    * Returns the number of parent to child variable relations.
    */
-  /*@Pure*/ public int size() {
+  /*@Pure*/
+  public int size() {
     return (parent_to_child_map.size());
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied PptRelation this*/) {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 
@@ -176,7 +179,7 @@ public class PptRelation implements Serializable {
       }
     }
 
-    return (relate_all);
+    return relate_all;
   }
 
   /**
@@ -198,13 +201,14 @@ public class PptRelation implements Serializable {
    * object&rarr;method,and exit&rarr;exitNN) form a simple tree without duplication
    */
 
-  /*@Pure*/ public boolean is_primary() {
+  /*@Pure*/
+  public boolean is_primary() {
     return ((relationship != PptRelationType.USER) && (relationship != PptRelationType.ENTER_EXIT));
   }
 
   /** Returns a string describing the parent-child relationship. **/
   public PptRelationType getRelationType() {
-    return (relationship);
+    return relationship;
   }
 
   /**
@@ -312,7 +316,7 @@ public class PptRelation implements Serializable {
           }
           VarInfo.Pair parent_pair = new VarInfo.Pair(v1, v2, e.numSamples());
           emap.put(parent_pair, parent_pair);
-          if (debug.isLoggable(Level.FINE))
+          if (debug.isLoggable(Level.FINE)) {
             debug.fine(
                 "-- -- "
                     + varr[j].name()
@@ -321,19 +325,20 @@ public class PptRelation implements Serializable {
                     + " in child yield "
                     + parent_pair
                     + " in parent");
+          }
         }
       }
     }
-    return (emap);
+    return emap;
   }
 
   /**
    * Relates parent_var to a variable in child that matches name.
    *
-   * @param parent_var      The parent variable being matched
-   * @param viname          The name to look for in child variables.
+   * @param parent_var      the parent variable being matched
+   * @param viname          the name to look for in child variables.
    *
-   * @return true if there was a matching variable, false otherwise.
+   * @return true if there was a matching variable, false otherwise
    */
   private boolean relate(VarInfo parent_var, String viname) {
 
@@ -365,7 +370,7 @@ public class PptRelation implements Serializable {
     // that each parent variable should match one in the child.
     boolean relate_all = rel.relate_same_name();
     assert relate_all;
-    return (rel);
+    return rel;
   }
 
   /**
@@ -381,7 +386,7 @@ public class PptRelation implements Serializable {
     // Connect each static variable between parent and child
     // Note that these should be the only variables whose names match
     rel.relate_same_name();
-    return (rel);
+    return rel;
   }
 
   /**
@@ -433,7 +438,7 @@ public class PptRelation implements Serializable {
         rel.parent_to_child_map.put(vp, vc);
       }
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -457,9 +462,9 @@ public class PptRelation implements Serializable {
    *   never be null) and it is not obvious that it implies that all
    *   references to the object are not NULL.
    *
-   * @param parent Ppt of the object definition
-   * @param child Ppt of a user of parent's object
-   * @param arg Variable of type object found in child
+   * @param parent ppt of the object definition
+   * @param child ppt of a user of parent's object
+   * @param arg variable of type object found in child
    */
   public static PptRelation newObjectUserRel(PptTopLevel parent, PptTopLevel child, VarInfo arg) {
 
@@ -476,7 +481,7 @@ public class PptRelation implements Serializable {
       //  continue;
       rel.relate(vp, vp.replace_this(arg));
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -571,7 +576,7 @@ public class PptRelation implements Serializable {
       }
       //throw new Error("Missing orig variable in EXIT");
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -596,7 +601,7 @@ public class PptRelation implements Serializable {
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -619,7 +624,7 @@ public class PptRelation implements Serializable {
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -657,7 +662,7 @@ public class PptRelation implements Serializable {
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
     }
-    return (rel);
+    return rel;
   }
 
   /**
@@ -677,7 +682,7 @@ public class PptRelation implements Serializable {
       rel.child_to_parent_map.put(new_vc, new_vp);
       rel.parent_to_child_map.put(new_vp, new_vc);
     }
-    return (rel);
+    return rel;
   }
 
   // used by init_hierarchy below
@@ -723,9 +728,9 @@ public class PptRelation implements Serializable {
         PptTopLevel parent = all_ppts.get(pname.makeObject());
 
         if (parent != null) {
-          if (ppt.find_var_by_name(parent.var_infos[0].name()) != null)
+          if (ppt.find_var_by_name(parent.var_infos[0].name()) != null) {
             rel = newObjectMethodRel(parent, ppt);
-          else {
+          } else {
             parent = all_ppts.get(parent.ppt_name.makeClassStatic());
             if (parent != null) rel = newObjectMethodRel(parent, ppt);
           }
@@ -812,7 +817,9 @@ public class PptRelation implements Serializable {
                     + " with connections ["
                     + rel.parent_to_child_var_string()
                     + "]");
-          } else debug.fine(dstr + " No object ppt");
+          } else {
+            debug.fine(dstr + " No object ppt");
+          }
         }
       }
       // Connect any conditional ppt variables.  Only connect to the
@@ -936,9 +943,10 @@ public class PptRelation implements Serializable {
         if (ppt.is_subexit()) continue;
 
         PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
-        if (parent == null)
+        if (parent == null) {
           throw new RuntimeException(
               "parent ppt " + pr.parent_ppt_name + " not found for ppt " + ppt.name());
+        }
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) continue;
         // System.out.printf ("processing hierarchy rel from '%s' to '%s'%n",
         //                    ppt.name(), pr.parent_ppt_name);

@@ -3,6 +3,7 @@ package daikon.asm;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -106,7 +107,8 @@ public class X86Instruction implements IInstruction {
    *
    * @see daikon.IInstruction#toString()
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied X86Instruction this*/) {
     StringBuilder b = new StringBuilder();
     // b.append(owner != null ? owner + ":" : "");
     // b.append(dllName);
@@ -118,7 +120,9 @@ public class X86Instruction implements IInstruction {
       b.append(" ");
       b.append(a);
     }
-    if (killedVars.isEmpty()) return b.toString();
+    if (killedVars.isEmpty()) {
+      return b.toString();
+    }
 
     b.append(" -> ");
     for (String a : killedVars) {
@@ -139,11 +143,13 @@ public class X86Instruction implements IInstruction {
     // Set dllName and address fields.
     String[] dllAddr = tokens[0].split(":");
     if (dllAddr.length != 2) throw new IllegalArgumentException("Invalid instruction string: " + s);
-    if (!(dllAddr[0].endsWith(".dll") || dllAddr[0].endsWith(".exe")))
+    if (!(dllAddr[0].endsWith(".dll") || dllAddr[0].endsWith(".exe"))) {
       throw new IllegalArgumentException("Invalid instruction string: " + s);
+    }
     String inst_dllName = dllAddr[0];
-    if (!dllAddr[1].startsWith("0x"))
+    if (!dllAddr[1].startsWith("0x")) {
       throw new IllegalArgumentException("Invalid instruction string: " + s);
+    }
     try {
       Long.parseLong(dllAddr[1].substring(2), 16);
     } catch (NumberFormatException e) {
@@ -152,8 +158,9 @@ public class X86Instruction implements IInstruction {
     String inst_address = dllAddr[1];
 
     // Set opName field.
-    if (!isValidOp(tokens[1]))
+    if (!isValidOp(tokens[1])) {
       throw new IllegalArgumentException("Invalid instruction string: " + s);
+    }
     String inst_opName = tokens[1];
 
     // Set args
@@ -166,8 +173,9 @@ public class X86Instruction implements IInstruction {
         i++; // Move i to first result var.
         break;
       }
-      if (!isValidLHSOp(tokens[i]))
+      if (!isValidLHSOp(tokens[i])) {
         throw new IllegalArgumentException("Invalid instruction string: " + s);
+      }
       inst_args.add(tokens[i]);
     }
 
@@ -227,32 +235,44 @@ public class X86Instruction implements IInstruction {
       if (killedVars.contains(var)
           || killedVars.contains("ax")
           || killedVars.contains("ah")
-          || killedVars.contains("al")) return true;
-      else return false;
+          || killedVars.contains("al")) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     if (var.equals("ebx")) {
       if (killedVars.contains(var)
           || killedVars.contains("bx")
           || killedVars.contains("bh")
-          || killedVars.contains("bl")) return true;
-      else return false;
+          || killedVars.contains("bl")) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     if (var.equals("ecx")) {
       if (killedVars.contains(var)
           || killedVars.contains("cx")
           || killedVars.contains("ch")
-          || killedVars.contains("cl")) return true;
-      else return false;
+          || killedVars.contains("cl")) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     if (var.equals("edx")) {
       if (killedVars.contains(var)
           || killedVars.contains("dx")
           || killedVars.contains("dh")
-          || killedVars.contains("dl")) return true;
-      else return false;
+          || killedVars.contains("dl")) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     if (var.equals("edi")) {
@@ -309,7 +329,9 @@ public class X86Instruction implements IInstruction {
     // It may be something like "16+ebx". Do a quick sanity check.
     if (var.indexOf('+') != -1) {
       for (String reg : Operand.getExtendedRegisters(var)) {
-        if (killedVars.contains(reg)) return true;
+        if (killedVars.contains(reg)) {
+          return true;
+        }
       }
     }
 

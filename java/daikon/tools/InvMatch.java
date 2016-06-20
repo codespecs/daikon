@@ -149,17 +149,17 @@ public class InvMatch {
     List<InvTranslate> current_translation = new ArrayList<InvTranslate>();
     consider_xlate(valid_translations, current_translation, xlate_list, 0);
 
-    return (valid_translations);
+    return valid_translations;
   }
 
   /**
    * Recursive routine that tries all possible combination of translations.
    *
-   * @param valid_translations  List of valid translations (updated)
-   * @param current_translation The current translation that is being built
-   * @param xlate_list          The list of possible translations for each
-   *                            invariant.
-   * @param index               The current index in xlate_list.
+   * @param valid_translations  list of valid translations (updated)
+   * @param current_translation the current translation that is being built
+   * @param xlate_list          the list of possible translations for each
+   *                            invariant
+   * @param index               the current index in xlate_list.
    *
    */
   public static void consider_xlate(
@@ -183,7 +183,8 @@ public class InvMatch {
       }
     }
   }
-  /*@Pure*/ public static boolean is_good_translation(List<InvTranslate> translation_list) {
+  /*@Pure*/
+  public static boolean is_good_translation(List<InvTranslate> translation_list) {
 
     Map<String, String> var_map = new LinkedHashMap<String, String>();
 
@@ -218,6 +219,6 @@ public class InvMatch {
         best_quality = quality;
       }
     }
-    return (best_translation);
+    return best_translation;
   }
 }

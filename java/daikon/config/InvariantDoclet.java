@@ -148,9 +148,9 @@ public class InvariantDoclet {
   /**
    * Prints a class and all of its derived classes as a simple indented tree.
    *
-   * @param out     Stream to which to print
-   * @param cd      Starting class
-   * @param indent  Starting indent for the derived class (normally 0)
+   * @param out     stream to which to print
+   * @param cd      starting class
+   * @param indent  starting indent for the derived class (normally 0)
    */
   public void process_class_tree_txt(
       PrintStream out, /*@KeyFor("this.cmap")*/ ClassDoc cd, int indent) {
@@ -185,7 +185,7 @@ public class InvariantDoclet {
    * inclusion in the manual.
    *
    * @param out     stream to which write output
-   * @param cd      Class to process
+   * @param cd      class to process
    */
   public void process_class_sorted_texinfo(PrintStream out, /*@KeyFor("this.cmap")*/ ClassDoc cd) {
 
@@ -224,14 +224,15 @@ public class InvariantDoclet {
             out.println("@item " + fb_type + "." + last_fb + "_@{" + permutes + "@}");
             out.println(last_comment);
             assert (permute_cnt == 3) || (permute_cnt == 6);
-            if (permute_cnt == 3)
+            if (permute_cnt == 3) {
               out.println(
                   "Since the function is symmetric, only the "
                       + "permutations xyz, yxz, and zxy are checked.");
-            else
+            } else {
               out.println(
                   "Since the function is non-symmetric, all six "
                       + "permutations of the variables are checked.");
+            }
           }
           last_fb = fb_function;
           permutes = fb_permute;
@@ -300,8 +301,8 @@ public class InvariantDoclet {
    * Gathers up all of the classes under cd and adds them to the
    * specified TreeSet.  They are sorted by their name.
    *
-   * @param cd      The base class from which to start the search
-   * @param set    The set to add classes to.  Should start out empty.
+   * @param cd      the base class from which to start the search
+   * @param set    the set to add classes to.  Should start out empty.
    */
   public void gather_derived_classes(/*@KeyFor("this.cmap")*/ ClassDoc cd, TreeSet<ClassDoc> set) {
     assert cmap.containsKey(cd);
@@ -318,7 +319,7 @@ public class InvariantDoclet {
    * Looks for a field named dkconfig_enabled in the class and find
    * out what it is initialized to.
    *
-   * @param cd      Class in which to look for dkconfig_enabled
+   * @param cd      class in which to look for dkconfig_enabled
    *
    * @return 1 for true, 0 for false, -1 if there was an error or
    * there was no such field
@@ -349,9 +350,9 @@ public class InvariantDoclet {
           @SuppressWarnings("nullness") // f has boolean type, so result is non-null Boolean
           /*@NonNull*/ Object value = f.get(null);
           if (((Boolean) value).booleanValue()) {
-            return (1);
+            return 1;
           } else {
-            return (0);
+            return 0;
           }
         } catch (Exception e) {
           System.err.println(e);
@@ -359,15 +360,15 @@ public class InvariantDoclet {
         }
       }
     }
-    return (-1);
+    return -1;
   }
 
   /**
    * Look for fields in the specified class that begin with the
    * specified prefix.
    *
-   * @param cd          ClassDoc of the class to search
-   * @param prefix      String that must be at the beginning of the field name
+   * @param cd          the class to search
+   * @param prefix      string that must be at the beginning of the field name
    *
    * @return vector of FieldDoc entries for each field that matches.
    * If no fields are found, a zero length vector is returned (not
@@ -381,6 +382,6 @@ public class InvariantDoclet {
       if (f.name().startsWith(prefix)) list.add(f);
     }
 
-    return (list);
+    return list;
   }
 }

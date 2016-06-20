@@ -12,6 +12,7 @@ import java.util.logging.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -172,7 +173,8 @@ public class NISuppressor {
    * Returns whether or not this suppressor is enabled.  A suppressor
    * is enabled if the invariant on which it depends is enabled.
    */
-  /*@Pure*/ public boolean is_enabled() {
+  /*@Pure*/
+  public boolean is_enabled() {
     return (sample_inv.enabled());
   }
 
@@ -207,10 +209,10 @@ public class NISuppressor {
    * particular permutation ofarguments.  Invariants that have an
    * internal permute variable must match that as well.
    *
-   * @param ppt     The top level program point
-   * @param vis     The slice of the suppressee.  Thus, if the suppressee is
+   * @param ppt     the top level program point
+   * @param vis     the slice of the suppressee.  Thus, if the suppressee is
    *                ternary, vis, should specify three variables.
-   * @param inv     The falsified invariant.  inv_match indicates whether
+   * @param inv     the falsified invariant.  inv_match indicates whether
    *                or not inv matches this suppressor
    *
    * @return the state of this suppressor which is one of (NIS.SuppressState.MATCH,
@@ -223,9 +225,11 @@ public class NISuppressor {
     assert v1_index != -1;
 
     // If the underlying invariant is not enabled, we can't possibly be true
-    if (!is_enabled()) return (state = NIS.SuppressState.INVALID);
+    if (!is_enabled()) {
+      return (state = NIS.SuppressState.INVALID);
+    }
 
-    if (Debug.logDetail() && NIS.debug.isLoggable(Level.FINE))
+    if (Debug.logDetail() && NIS.debug.isLoggable(Level.FINE)) {
       NIS.debug.fine(
           "checking suppressor "
               + this
@@ -235,6 +239,7 @@ public class NISuppressor {
               + VarInfo.arrayToString(vis)
               + " in ppt "
               + ppt.name);
+    }
 
     // If unary
     if (v2_index == -1) {
@@ -331,8 +336,9 @@ public class NISuppressor {
             && match(inv)
             && (v1 == inv.ppt.var_infos[0])
             && (v2 == inv.ppt.var_infos[1])) {
-          if (NIS.debug.isLoggable(Level.FINE))
+          if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine("Matches falsified inv " + inv.format());
+          }
           return (state = NIS.SuppressState.MATCH);
         }
       }
@@ -354,13 +360,14 @@ public class NISuppressor {
                   1);
           valid = (status == InvariantStatus.NO_CHANGE);
         }
-        if (NIS.debug.isLoggable(Level.FINE))
+        if (NIS.debug.isLoggable(Level.FINE)) {
           NIS.debug.fine(
               String.format(
                   "constant args (%s, %s) = %b ",
                   Debug.toString(ppt.constants.constant_value(v1)),
                   Debug.toString(ppt.constants.constant_value(v2)),
                   valid));
+        }
         current_state_str =
             "true over constants "
                 + ppt.constants.constant_value(v1)
@@ -386,9 +393,10 @@ public class NISuppressor {
         for (Invariant slice_inv : slice.invs) {
           // NIS.debug.fine (": processing inv " + slice_inv.format());
           if (match_true(slice_inv)) {
-            if (NIS.debug.isLoggable(Level.FINE))
+            if (NIS.debug.isLoggable(Level.FINE)) {
               NIS.debug.fine(
                   "suppressor matches inv " + slice_inv.format() + " " + !slice_inv.is_false());
+            }
             current_state_str = "invariant " + slice_inv.format();
             return (state = NIS.SuppressState.VALID);
           }
@@ -449,7 +457,7 @@ public class NISuppressor {
       if (!swap_class) {
         BinaryInvariant binv = (BinaryInvariant) sse.sample_inv;
         boolean match = (binv.is_symmetric() || (swap == binv.get_swap()));
-        return (match);
+        return match;
       }
       return true;
     }
@@ -477,15 +485,15 @@ public class NISuppressor {
   /** Returns the variable index that corresponds to index **/
   private int translate_index(int index) {
 
-    if (index == 0) return (v1_index);
-    else if (index == 1) return (v2_index);
-    else if (index == 2) return (v3_index);
-    else return (index);
+    if (index == 0) return v1_index;
+    else if (index == 1) return v2_index;
+    else if (index == 2) return v3_index;
+    else return index;
   }
 
   /** Returns the invariant class of this suppressor **/
   public Class<? extends Invariant> get_inv_class() {
-    return (inv_class);
+    return inv_class;
   }
 
   /** clears the state of this suppressor to NIS.none **/
@@ -501,7 +509,8 @@ public class NISuppressor {
    * var indices as numbers, the variables x, y, and z are shown instead
    * with indices 0, 1, and 2 respectively
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied NISuppressor this*/) {
 
     String cname = inv_class.getCanonicalName();
 
@@ -517,13 +526,14 @@ public class NISuppressor {
     if (v2_index == -1) {
       return (String.format("%s(%s) [%s]", cname, varname[v1_index], status));
     } else if (v3_index == -1) {
-      if (swap && !swap_class)
+      if (swap && !swap_class) {
         return (String.format(
             "%s(%s,%s) [%s]", cname, varname[v2_index], varname[v1_index], status));
-      else
+      } else {
         return (String.format(
             "%s(%s,%s) [%s]", cname, varname[v1_index], varname[v2_index], status));
-    } else
+      }
+    } else {
       return (String.format(
           "%s(%s,%s,%s) [%s]",
           cname,
@@ -531,5 +541,6 @@ public class NISuppressor {
           varname[v2_index],
           varname[v3_index],
           status));
+    }
   }
 }

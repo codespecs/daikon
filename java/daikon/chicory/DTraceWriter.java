@@ -6,6 +6,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
@@ -59,7 +60,11 @@ public class DTraceWriter extends DaikonWriter {
   /**
    * Prints the method entry program point in the dtrace file
    */
-  public void methodEntry(MethodInfo mi, int nonceVal, /*@Nullable*/ Object obj, Object[] args) {
+  public void methodEntry(
+      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
+      int nonceVal,
+      /*@Nullable*/ Object obj,
+      Object[] args) {
     //don't print
     if (Runtime.dtrace_closed) return;
 
@@ -67,8 +72,9 @@ public class DTraceWriter extends DaikonWriter {
 
     //get the root of the method's traversal pattern
     RootInfo root = mi.traversalEnter;
-    if (root == null)
+    if (root == null) {
       throw new RuntimeException("Traversal pattern not initialized at method " + mi.method_name);
+    }
 
     if (debug_vars) {
       System.out.printf("Entering %s%n%s%n", DaikonWriter.methodEntryName(member), root);
@@ -89,6 +95,7 @@ public class DTraceWriter extends DaikonWriter {
    * Prints the method exit program point in the dtrace file
    */
   public void methodExit(
+      /*>>>@GuardSatisfied DTraceWriter this,*/
       MethodInfo mi,
       int nonceVal,
       /*@Nullable*/ Object obj,
@@ -101,9 +108,10 @@ public class DTraceWriter extends DaikonWriter {
 
     //gets the traversal pattern root for this method exit
     RootInfo root = mi.traversalExit;
-    if (root == null)
+    if (root == null) {
       throw new RuntimeException(
           "Traversal pattern not initialized for method " + mi.method_name + " at line " + lineNum);
+    }
 
     //make sure the line number is valid
     //i.e., it is one of the exit locations in the MethodInfo for this method
@@ -127,7 +135,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   //prints an invocation nonce entry in the dtrace
-  private void printNonce(int val) {
+  private void printNonce(/*>>>@GuardSatisfied DTraceWriter this,*/ int val) {
     outFile.println("this_invocation_nonce");
     outFile.println(val);
   }
@@ -135,18 +143,22 @@ public class DTraceWriter extends DaikonWriter {
   /**
    * Prints the method's return value and all relevant variables.
    * Uses the tree of DaikonVariableInfo objects.
-   * @param mi The method whose program point we are printing
-   * @param root The root of the program point's tree.
-   * @param args The arguments to the method corrsponding to mi.
+   * @param mi the method whose program point we are printing
+   * @param root the root of the program point's tree
+   * @param args the arguments to the method corrsponding to mi.
    *             Must be in the same order as the .decls info is in
    *             (which is the declared order in the source code).
-   * @param thisObj The value of the "this" object at this point in the execution.
-   * @param ret_val The value returned from this method, only used for
+   * @param thisObj the value of the "this" object at this point in the execution
+   * @param ret_val the value returned from this method, only used for
    *                exit program points.
    *
    */
   private void traverse(
-      MethodInfo mi, RootInfo root, Object[] args, Object thisObj, Object ret_val) {
+      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
+      RootInfo root,
+      Object[] args,
+      Object thisObj,
+      Object ret_val) {
     //go through all of the node's children
     for (DaikonVariableInfo child : root) {
 
@@ -181,7 +193,10 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   //traverse from the traversal pattern data structure and recurse
-  private void traverseValue(MethodInfo mi, DaikonVariableInfo curInfo, Object val) {
+  private void traverseValue(
+      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
+      DaikonVariableInfo curInfo,
+      Object val) {
 
     if (curInfo.dTraceShouldPrint()) {
       if (!(curInfo instanceof StaticObjInfo)) {
@@ -209,11 +224,13 @@ public class DTraceWriter extends DaikonWriter {
 
   /**
    * Returns a list of values of the field for each Object in theObjects
-   * @param theObjects List of Objects, each must have the Field field
-   * @param field Which field of theObjects we are probing
+   * @param theObjects list of Objects, each must have the Field field
+   * @param field which field of theObjects we are probing
    */
   public static List<Object> getFieldValues(Field field, List<Object> theObjects) {
-    if (theObjects == null || theObjects instanceof NonsensicalList) return nonsenseList;
+    if (theObjects == null || theObjects instanceof NonsensicalList) {
+      return nonsenseList;
+    }
 
     List<Object> fieldVals = new ArrayList<Object>();
 
@@ -231,14 +248,16 @@ public class DTraceWriter extends DaikonWriter {
   /**
    * Get the value of a certain field in theObj.
    * @param classField which field we are interested in
-   * @param theObj The object whose field we are examining.
+   * @param theObj the object whose field we are examining.
    * TheoObj must be null, Nonsensical, or of a type which
    * contains the field classField
-   * @return The value of the classField field in theObj
+   * @return the value of the classField field in theObj
    */
   public static Object getValue(Field classField, Object theObj) {
     // if we don't have a real object, return NonsensicalValue
-    if ((theObj == null) || (theObj instanceof NonsensicalObject)) return nonsenseValue;
+    if ((theObj == null) || (theObj instanceof NonsensicalObject)) {
+      return nonsenseValue;
+    }
 
     Class<?> fieldType = classField.getType();
 
@@ -315,7 +334,7 @@ public class DTraceWriter extends DaikonWriter {
 
   /**
    * Return a List derived from an aray
-   * @param arrayVal Must be an array type
+   * @param arrayVal must be an array type
    * @return a List (with correct primitive wrappers) corresponding to the array
    */
   public static List<Object> getListFromArray(Object arrayVal) {
@@ -386,14 +405,16 @@ public class DTraceWriter extends DaikonWriter {
   /**
    * Returns a list of Strings which are the names of the runtime types in the
    * theVals param
-   * @param theVals List of ObjectReferences
+   * @param theVals list of ObjectReferences
    * @return a list of Strings which are the names of the runtime types in the
    * theVals param
    */
   public static /*@Nullable*/ List<String> getTypeNameList(List<Object> theVals) {
     // Return null rather than NonsensicalList as NonsensicalList is
     // an array of Object and not String.
-    if (theVals == null || theVals instanceof NonsensicalList) return null;
+    if (theVals == null || theVals instanceof NonsensicalList) {
+      return null;
+    }
 
     List<String> typeNames = new ArrayList<String>(theVals.size());
 
@@ -404,7 +425,9 @@ public class DTraceWriter extends DaikonWriter {
         type = ref.getClass();
         type = removeWrappers(ref, type, true);
         typeNames.add(type.getCanonicalName());
-      } else typeNames.add(null);
+      } else {
+        typeNames.add(null);
+      }
     }
 
     return typeNames;
@@ -416,10 +439,10 @@ public class DTraceWriter extends DaikonWriter {
    * where (val instanceof Runtime.PrimitiveWrapper), then the method returns
    * boolean.class
    *
-   * @param val The object whose type we are examining
+   * @param val the object whose type we are examining
    * @param declared the declared type of the variable corresponding to val
-   * @param runtime Should we use the runtime type or declared type?
-   * @return The variable's type, with primitive wrappers removed, or null if the value is non-null
+   * @param runtime should we use the runtime type or declared type?
+   * @return the variable's type, with primitive wrappers removed, or null if the value is non-null
    */
   public static /*@Nullable*/ Class<?> removeWrappers(
       Object val, Class<?> declared, boolean runtime) {

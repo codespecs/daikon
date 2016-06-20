@@ -7,6 +7,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.framework.qual.*;
@@ -58,7 +59,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
 
   /** Returns the prototype invariant for CompleteOneOFScalar **/
   public static /*@Prototype*/ CompleteOneOfScalar get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -73,14 +74,17 @@ public final class CompleteOneOfScalar extends SingleScalar {
   }
 
   /** return description of invariant.  Only Daikon format is implemented **/
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CompleteOneOfScalar this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       String out = var().name() + " has values: ";
       for (Info val : vals) {
         out += String.format(" %s[%d]", val.val, val.cnt);
       }
       return out;
-    } else return format_unimplemented(format);
+    } else {
+      return format_unimplemented(format);
+    }
   }
 
   /** Check to see if a only contains printable ascii characters **/
@@ -125,7 +129,8 @@ public final class CompleteOneOfScalar extends SingleScalar {
    * Same formula if each value is the same and has the same count.
    * Not implemented for now, just presumed to be false.
    */
-  /*@Pure*/ public boolean isSameFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant o) {
     return false;
   }
 }

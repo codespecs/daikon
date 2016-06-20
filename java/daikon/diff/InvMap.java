@@ -7,6 +7,7 @@ import java.util.*;
 import plume.IterableIterator;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -52,7 +53,7 @@ public class InvMap implements Serializable {
     get(ppt).add(inv);
   }
 
-  public List<Invariant> get(PptTopLevel ppt) {
+  public List<Invariant> get(/*>>>@GuardSatisfied InvMap this,*/ PptTopLevel ppt) {
     if (!pptToInvs.containsKey(ppt)) {
       throw new Error("ppt has not yet been added: " + ppt.name());
     }
@@ -66,7 +67,7 @@ public class InvMap implements Serializable {
    * with them in the InvMap!  Use invariantIterator instead.
    * @see #invariantIterator()
    **/
-  public Iterator<PptTopLevel> pptIterator() {
+  public Iterator<PptTopLevel> pptIterator(/*>>>@GuardSatisfied InvMap this*/) {
     return ppts.iterator();
   }
 
@@ -77,7 +78,7 @@ public class InvMap implements Serializable {
    * with them in the InvMap!  Use invariantIterator instead.
    * @see #invariantIterator()
    **/
-  public Iterable<PptTopLevel> pptIterable() {
+  public Iterable<PptTopLevel> pptIterable(/*>>>@GuardSatisfied InvMap this*/) {
     return new IterableIterator<PptTopLevel>(pptIterator());
   }
 
@@ -103,7 +104,8 @@ public class InvMap implements Serializable {
     return answer.iterator();
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied InvMap this*/) {
     String result = "";
     for (PptTopLevel ppt : pptIterable()) {
       result += ppt.name() + Global.lineSep;
@@ -115,7 +117,8 @@ public class InvMap implements Serializable {
     return result;
   }
 
-  /*@Pure*/ public int size() {
+  /*@Pure*/
+  public int size() {
     int size1 = ppts.size();
     int size2 = pptToInvs.size();
     assert size1 == size2;

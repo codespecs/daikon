@@ -136,6 +136,7 @@ import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -180,7 +181,7 @@ public final class SEQINTEQUAL
 
   /** Returns the prototype invariant for SEQINTEQUAL **/
   public static /*@Prototype*/ SEQINTEQUAL get_proto () {
-    return (proto);
+    return proto;
   }
 
   /** Returns whether or not this invariant is enabled **/
@@ -191,8 +192,9 @@ public final class SEQINTEQUAL
   /** Non-equal SeqIntComparison is only valid on integral types **/
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
     VarInfo seqvar;
     VarInfo sclvar;
@@ -208,8 +210,9 @@ public final class SEQINTEQUAL
     assert seqvar.rep_type == ProglangType.PROGLANGTYPEARRAY;
 
     #if !defined(EQUAL) && defined(IS_INT)
-      if (!seqvar.type.elementIsIntegral())
+      if (!seqvar.type.elementIsIntegral()) {
         return false;
+      }
     #endif
 
     return true;
@@ -250,20 +253,22 @@ public final class SEQINTEQUAL
       return new DiscardInfo (this, DiscardCode.obvious,
                               sclvar(vis).name() + " is min/max ");
     }
-    return (null);
+    return null;
   }
 
-  /*@SideEffectFree*/ public SEQINTEQUAL clone() {
+  /*@SideEffectFree*/
+  public SEQINTEQUAL clone(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     SEQINTEQUAL result = (SEQINTEQUAL) super.clone();
     return result;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     return SEQINTEQUALstring + varNames() + ": "
       + ",falsified=" + falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied SEQINTEQUAL this,*/ OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -275,28 +280,28 @@ public final class SEQINTEQUAL
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     return seqvar().name() + " elements " + EQUALSstring + " " + sclvar().name();
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     String[] form = VarInfo.esc_quantify (seqvar(), sclvar());
     return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")"
       + form[3];
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     String[] form = VarInfo.simplify_quantify (seqvar(), sclvar());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " "
       + form[2] + ")" + form[3];
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied SEQINTEQUAL this,*/ OutputFormat format) {
     return "daikon.Quant." + EQUALSstringDBC + "("
       + seqvar().name_using(format) + ", " + sclvar().name_using(format) + ")";
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     String[] split = seqvar().csharp_array_split();
     return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + EQUALSstring + " " + sclvar().csharp_name() + ")";
   }
@@ -309,8 +314,9 @@ public final class SEQINTEQUAL
       #if (!defined(EQUAL) && !defined(EQUALFLOAT))
         // assert seqvar().type.elementIsIntegral();
       #endif
-      if (!EQUALS(a[i], x))
+      if (!EQUALS(a[i], x)) {
         return InvariantStatus.FALSIFIED;
+      }
     }
     return InvariantStatus.NO_CHANGE;
   }
@@ -322,8 +328,9 @@ public final class SEQINTEQUAL
   protected double computeConfidence() {
 
     // If there are no samples over our variables, its unjustified
-    if (ppt.num_samples() == 0)
+    if (ppt.num_samples() == 0) {
       return CONFIDENCE_UNJUSTIFIED;
+    }
 
     // If the array never has any elements, its unjustified
     VALUE_SET vs = (VALUE_SET) seqvar().get_value_set();
@@ -342,7 +349,8 @@ public final class SEQINTEQUAL
     #endif
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
       return true;
     #else
@@ -350,11 +358,13 @@ public final class SEQINTEQUAL
     #endif
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 
@@ -362,8 +372,9 @@ public final class SEQINTEQUAL
   public static /*@Nullable*/ SEQINTEQUAL find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof SEQINTEQUAL)
+      if (inv instanceof SEQINTEQUAL) {
         return (SEQINTEQUAL) inv;
+      }
     }
     return null;
   }
@@ -416,9 +427,10 @@ public final class SEQINTEQUAL
     // JHP: handled in confidence test now
     // (A[] == []) ==> A[] op x
     if (false) {
-      if (pptt.is_empty (seqvar))
+      if (pptt.is_empty (seqvar)) {
         return new DiscardInfo (this, DiscardCode.obvious, "The sequence "
                                 + seqvar.name() + " is always empty");
+      }
     }
 
     if (isExact()) {
@@ -464,7 +476,7 @@ public final class SEQINTEQUAL
    */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
-    return (suppressions);
+    return suppressions;
   }
 
   /** definition of this invariant (the suppressee) **/

@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -48,7 +49,8 @@ class Test {
     public void tta() {
       add(y);
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied A this*/) {
       return ("A " + id);
     }
   }
@@ -66,7 +68,8 @@ class Test {
       long1 = l1;
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied C this*/) {
       return cid;
     }
   }
@@ -259,7 +262,9 @@ class Test {
   // Tests the clone() method
   public static class G {
     static class Uncloneable {
-      /*@SideEffectFree*/ protected Object clone() throws CloneNotSupportedException {
+      /*@SideEffectFree*/
+      protected Object clone(
+          /*>>>@GuardSatisfied Uncloneable this*/) throws CloneNotSupportedException {
         //        return super.clone();
         throw new CloneNotSupportedException();
       }
@@ -318,20 +323,26 @@ class Test {
       this.y = y;
     }
 
-    /*@SideEffectFree*/ protected Object clone() throws CloneNotSupportedException {
+    /*@SideEffectFree*/
+    protected Object clone(/*>>>@GuardSatisfied Obj this*/) throws CloneNotSupportedException {
       return super.clone();
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object obj) {
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied Obj this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       return (obj instanceof Obj) && this.x == ((Obj) obj).x && this.y == ((Obj) obj).y;
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied Obj this*/) {
       return this.x + this.y;
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied Obj this*/) {
       return String.valueOf(this.x) + String.valueOf(this.y);
     }
   }
@@ -346,7 +357,10 @@ class Test {
 
     // Overrides Obj.equals
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object obj) {
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied ObjSub this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       return (obj instanceof ObjSub) && super.equals(obj) && this.z == ((ObjSub) obj).z;
     }
   }

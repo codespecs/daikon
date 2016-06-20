@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.regex.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -72,8 +73,9 @@ public class ValueSource {
     Set<String> other_compares = new LinkedHashSet<String>();
     for (ValueSource vs : get_node_list()) {
       if (vs.descr.equals("equals")) {
-        if ((vs.left == null_value_source) || (vs.right == null_value_source))
+        if ((vs.left == null_value_source) || (vs.right == null_value_source)) {
           other_compares.add("null");
+        }
       }
     }
 
@@ -131,7 +133,8 @@ public class ValueSource {
   public Throwable get_stack_trace() {
     return stack_trace;
   }
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied ValueSource this*/) {
     String left_descr = "-";
     if (left != null) left_descr = left.toString();
     String right_descr = "-";

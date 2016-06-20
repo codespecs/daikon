@@ -78,14 +78,15 @@ public class FieldInfo extends DaikonVariableInfo {
         if (Modifier.isStatic(f.getModifiers())) continue;
         if (f.getType().isPrimitive()) field_cnt++;
       }
-      return (field_cnt);
+      return field_cnt;
     }
   }
 
   /**
    * Returns true iff the corresponding field is static.
    */
-  /*@Pure*/ public boolean isStatic() {
+  /*@Pure*/
+  public boolean isStatic() {
     return is_static;
   }
 
@@ -113,10 +114,11 @@ public class FieldInfo extends DaikonVariableInfo {
   }
 
   public int get_field_num() {
-    return (field_num);
+    return field_num;
   }
 
-  /*@Pure*/ public boolean isPrimitive() {
+  /*@Pure*/
+  public boolean isPrimitive() {
     return is_primitive;
   }
 
@@ -165,10 +167,11 @@ public class FieldInfo extends DaikonVariableInfo {
 
   /* Don't include 'this' in instance variable names
   public String getName() {
-      if (isStatic())
+      if (isStatic()) {
           return super.getName();
-      else
+      } else {
           return get_relative_name();
+          }
   }
   */
 
@@ -179,6 +182,6 @@ public class FieldInfo extends DaikonVariableInfo {
     EnumSet<VarFlags> flags = super.get_var_flags();
     int modbits = field.getModifiers();
     if (Modifier.isFinal(modbits) && Modifier.isStatic(modbits)) flags.add(VarFlags.NOMOD);
-    return (flags);
+    return flags;
   }
 }

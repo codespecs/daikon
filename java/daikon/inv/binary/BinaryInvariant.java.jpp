@@ -68,6 +68,7 @@ import daikon.inv.InvariantStatus;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
@@ -109,8 +110,9 @@ public abstract class CLASSNAME extends BinaryInvariant {
   /** Returns whether or not the specified types are valid **/
   final public boolean valid_types (VarInfo[] vis) {
 
-    if (vis.length != 2)
+    if (vis.length != 2) {
       return false;
+    }
 
     #if defined(TYPELONG) || defined(TYPEDOUBLE) || defined(TYPESTRING)
       boolean dim_ok = !vis[0].file_rep_type.isArray()
@@ -129,7 +131,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * for this invariant.
    */
   public boolean get_swap() {
-    return (swap);
+    return swap;
   }
 
   /**
@@ -139,18 +141,20 @@ public abstract class CLASSNAME extends BinaryInvariant {
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;
     // assert ArraysMDE.fn_is_permutation(permutation);
-    if (permutation[0] == 1)
+    if (permutation[0] == 1) {
       return resurrect_done_swapped();
-    else
+    } else {
       return resurrect_done_unswapped();
+    }
   }
 
   /**
    * Swaps the variables by inverting the state of swap.
    **/
   protected Invariant resurrect_done_swapped() {
-    if (!is_symmetric())
+    if (!is_symmetric()) {
       swap = !swap;
+    }
     return this;
   }
 
@@ -167,22 +171,24 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Returns the first variable.  This is the only mechanism by which
    * subclasses should access variables.
    **/
-  public VarInfo var1() {
-    if (swap)
+  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
+    if (swap) {
       return ppt.var_infos[1];
-    else
+    } else {
       return ppt.var_infos[0];
+    }
   }
 
   /**
    * Returns the first variable.  This is the only mechanism by which
    * subclasses should access variables.
    **/
-  public VarInfo var2() {
-    if (swap)
+  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
+    if (swap) {
       return ppt.var_infos[0];
-    else
+    } else {
       return ppt.var_infos[1];
+    }
   }
 
   /**
@@ -190,10 +196,11 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * only mechanism by which subclasses should access variables.
    **/
   public VarInfo var1 (VarInfo[] vis) {
-    if (swap)
+    if (swap) {
       return vis[1];
-    else
+    } else {
       return vis[0];
+    }
   }
 
   /**
@@ -201,10 +208,11 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * only mechanism by which subclasses should access variables.
    **/
   public VarInfo var2 (VarInfo[] vis) {
-    if (swap)
+    if (swap) {
       return vis[0];
-    else
+    } else {
       return vis[1];
+    }
   }
 
   public InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index,
@@ -216,15 +224,17 @@ public abstract class CLASSNAME extends BinaryInvariant {
     PRIMITIVE v1 = GET_VAL(val1);
     PRIMITIVE v2 = GET_VAL(val2);
     if (mod_index == 0) {
-      if (swap)
+      if (swap) {
         return check_unmodified (v2, v1, count);
-      else
+      } else {
         return check_unmodified(v1, v2, count);
+      }
     } else {
-      if (swap)
+      if (swap) {
         return check_modified (v2, v1, count);
-      else
+      } else {
         return check_modified(v1, v2, count);
+      }
     }
   }
 
@@ -236,15 +246,17 @@ public abstract class CLASSNAME extends BinaryInvariant {
     PRIMITIVE v1 = GET_VAL(val1);
     PRIMITIVE v2 = GET_VAL(val2);
     if (mod_index == 0) {
-      if (swap)
+      if (swap) {
         return add_unmodified(v2, v1, count);
-      else
+      } else {
         return add_unmodified(v1, v2, count);
+      }
     } else {
-      if (swap)
+      if (swap) {
         return add_modified(v2, v1, count);
-      else
+      } else {
         return add_modified(v1, v2, count);
+      }
     }
   }
 
@@ -275,7 +287,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Returns a representation of the class.  This includes the classname,
    * variables, and swap state.
    **/
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return getClass().getName() + " (" + var1().name() + ", "
       + var2().name() + ") [swap=" + swap + "]";
   }
@@ -284,7 +296,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Return true if both invariants are the same class and the order
    * of the variables (swap) is the same.
    **/
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     CLASSNAME inv = (CLASSNAME) other;
     return ((this.getClass() == inv.getClass()) && (this.swap == inv.swap));
   }

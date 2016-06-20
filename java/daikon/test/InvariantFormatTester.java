@@ -143,8 +143,9 @@ public class InvariantFormatTester extends TestCase {
     try {
       while (currentLine != null) {
         currentLine = input.readLine();
-        if (currentLine != null && !isComment(currentLine) && !isWhitespace(currentLine))
+        if (currentLine != null && !isComment(currentLine) && !isWhitespace(currentLine)) {
           return currentLine;
+        }
       }
     } catch (IOException e) {
       throw new RuntimeException(e.toString());
@@ -197,9 +198,10 @@ public class InvariantFormatTester extends TestCase {
       // Can't write the goals into the commands file if it can't be cleared,
       // otherwise not important.  Only matters if output file is the same
       // as the input file
-      if (generate_goals != null)
+      if (generate_goals != null) {
         throw new RuntimeException(
             "Can't close commands file " + InvariantFormatTester.class.getResource(command_file));
+      }
     }
 
     // Get all of the output as a string
@@ -294,8 +296,9 @@ public class InvariantFormatTester extends TestCase {
         String currentLineOfText = commands.readLine();
 
         while (currentLineOfText != null) {
-          if (FormatTestCase.parseGoal(currentLineOfText) == null)
+          if (FormatTestCase.parseGoal(currentLineOfText) == null) {
             output.println(currentLineOfText);
+          }
           currentLineOfText = commands.readLine();
         }
       } catch (IOException e) {
@@ -312,7 +315,8 @@ public class InvariantFormatTester extends TestCase {
    * @return true if the line is a comment (that is, not to be interpretted as a command)
    *         false otherwise
    **/
-  /*@Pure*/ static boolean isComment(String line) {
+  /*@Pure*/
+  static boolean isComment(String line) {
     return line.startsWith(COMMENT_STARTER_STRING);
   }
 
@@ -322,9 +326,12 @@ public class InvariantFormatTester extends TestCase {
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise
    **/
-  /*@Pure*/ static boolean isWhitespace(String line) {
+  /*@Pure*/
+  static boolean isWhitespace(String line) {
     for (int x = 0; x < line.length(); x++) {
-      if (!Character.isWhitespace(line.charAt(x))) return false;
+      if (!Character.isWhitespace(line.charAt(x))) {
+        return false;
+      }
     }
     return true;
   }

@@ -190,7 +190,7 @@ public class VarInfoNameDriver {
     handlers.put("equals", new Equals());
   }
 
-  // int hashCode();
+  // int hashCode(/*>>>@GuardSatisfied VarInfoNameDriver this*/);
   private static class HashCode implements Handler {
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length == 2;
@@ -210,7 +210,7 @@ public class VarInfoNameDriver {
     handlers.put("hash", new HashCode());
   }
 
-  // String toString();
+  // String toString(/*>>>@GuardSatisfied VarInfoNameDriver this*/);
 
   // VarInfoName applySize();
   private static class Size implements Handler {

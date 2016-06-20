@@ -18,14 +18,16 @@ import org.checkerframework.dataflow.qual.*;
  */
 public final class SplitDtrace {
   public static void main(String[] args) throws IOException {
-    if (args.length != 1)
+    if (args.length != 1) {
       throw new RuntimeException(
           "You must supply one argument which is the filename of the dtrace file");
+    }
     String filename = args[0].trim();
     boolean isGz = filename.endsWith(".dtrace.gz");
-    if (!filename.endsWith(".dtrace") && !isGz)
+    if (!filename.endsWith(".dtrace") && !isGz) {
       throw new RuntimeException(
           "Filename must end with .dtrace or .dtrace.gz: filename=" + filename);
+    }
     BufferedReader reader = getStream(filename);
     String line;
     int declNum = 1;
@@ -98,17 +100,23 @@ public final class SplitDtrace {
   }
 
   static int getNonce(ArrayList<String> res) {
-    for (int i = 0; i < res.size(); i++)
-      if (res.get(i).equals("this_invocation_nonce")) return Integer.parseInt(res.get(i + 1));
+    for (int i = 0; i < res.size(); i++) {
+      if (res.get(i).equals("this_invocation_nonce")) {
+        return Integer.parseInt(res.get(i + 1));
+      }
+    }
     throw new RuntimeException("no nonce: " + res);
   }
-  /*@Pure*/ static boolean isEnter(ArrayList<String> res) {
+  /*@Pure*/
+  static boolean isEnter(ArrayList<String> res) {
     return res.get(0).contains(":::ENTER");
   }
-  /*@Pure*/ static boolean isExit(ArrayList<String> res) {
+  /*@Pure*/
+  static boolean isExit(ArrayList<String> res) {
     return res.get(0).contains(":::EXIT");
   }
-  /*@Pure*/ static boolean isDeclare(ArrayList<String> res) {
+  /*@Pure*/
+  static boolean isDeclare(ArrayList<String> res) {
     return res.get(0).equals("DECLARE");
   }
 
@@ -122,7 +130,8 @@ public final class SplitDtrace {
 
   @SuppressWarnings(
       "purity") // non-deterministic call to trim is used only for equals() and does not affect result
-  /*@Pure*/ static boolean isEmpty(String l) {
+  /*@Pure*/
+  static boolean isEmpty(String l) {
     return l.trim().equals("") || l.startsWith("#");
   }
 
@@ -151,7 +160,9 @@ public final class SplitDtrace {
       stream = zipfile.getInputStream(entry);
     } else if (filename.endsWith(".dtrace.gz")) {
       stream = new GZIPInputStream(new FileInputStream(filename));
-    } else stream = new FileInputStream(filename);
+    } else {
+      stream = new FileInputStream(filename);
+    }
     return new BufferedReader(new InputStreamReader(stream, "ISO-8859-1"));
   }
 }

@@ -41,7 +41,7 @@ class PrefixFixer extends DepthFirstVisitor {
   /**
    * Fixes prefixes located in statement (see class description).
    * @param expression valid segment of java code from which prefix
-   *  should be fixed.
+   *  should be fixed
    */
   public static String fixPrefix(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
@@ -98,7 +98,8 @@ class PrefixFixer extends DepthFirstVisitor {
    * that form a prefixed name needing fixing.
    */
   /*@EnsuresNonNullIf(result=true, expression={"lastToken","twoTokensAgo","threeTokensAgo"})*/
-  /*@Pure*/ private boolean isMatch(NodeToken n) {
+  /*@Pure*/
+  private boolean isMatch(NodeToken n) {
     return ((!Visitors.isLParen(n))
         && lastToken != null
         && Visitors.isIdentifier(lastToken)

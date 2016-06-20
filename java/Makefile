@@ -66,18 +66,9 @@ else
   JAR ?= jar
 endif
 
-ifdef DAIKON_JAVA7_PATH
-  FIND_VERSION := $(shell javac -version 2>&1)
-  ifneq (1.7,$(findstring 1.7,$(FIND_VERSION)))
-    JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Xlint:-options -Xbootclasspath/a:$(DAIKON_JAVA7_PATH) -Werror -Xlint:-classfile -Xlint:-path ${JAVAC_TARGET_FLAGS}
-  else
-    JAVAC_ARGS ?= -g -XDignore.symbol.file -Werror -Xlint:-classfile -Xlint:-path ${JAVAC_TARGET_FLAGS}
-  endif
-endif
-
 # Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
@@ -176,6 +167,8 @@ DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | ${SO
 JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 # Copied from
 JAVA_FILES_FOR_STYLE = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
+# This should exclude AUTO_GENERATED_FILES, but I don't know how to do that.
+JAVA_FILES_FOR_FORMAT = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
@@ -522,7 +515,7 @@ chicory-test : ChicoryPremain.jar
 #
 # Dynamic Comparability (DynComp/Java; also Chicory)
 #
-DCOMP_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java daikon/util/*.java
+INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java daikon/util/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
 ORIG_RT ?= $(JAVA_HOME)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
@@ -532,8 +525,8 @@ JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 # Build DynComp/Java, check the DF summary info and run a sanity test
 .PHONY: dyncomp dcomp
 dyncomp dcomp : plume-copy plume-import-check dcomp_premain.jar
-dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
-	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
+dcomp_premain.jar : $(wildcard $(INSTRUMENTATION_JAVA_FILES)) daikon/dcomp/manifest.txt
+	$(JAVAC_COMMAND) $(INSTRUMENTATION_JAVA_FILES)
 	$(JAVA) daikon.dcomp.SummaryInfo
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
 	  daikon/dcomp/Premain.class
@@ -648,18 +641,19 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	$(JAVAC_COMMAND) daikon/util/*.java
 	touch daikon/util/.timestamp-daikonutil
 
-# Checks that daikon.util, rather than plume, is imported by DynComp source files.
-# Should also check that daikon.util is never imported by non-DynComp files.
+# Checks that daikon.util, rather than plume, is imported by source files
+# that do instrumentation.  Should also check that daikon.util is never
+# imported by non-instrumentation files.
 .PHONY: plume-import-check
 plume-import-check :
 	@echo -n "Checking that imports of plume and daikon.util are correct..."
-	@if [ -n "`grep '^import plume' $(DCOMP_JAVA_FILES)`" ]; then \
+	@if [ -n "`grep '^import plume' $(INSTRUMENTATION_JAVA_FILES)`" ]; then \
 	echo ""; \
 	echo "*** ERROR: Do not import plume from DynComp code. It will be"; \
-	echo " instrumented when DynComp is run. Please use the (identical)"; \
-	echo " daikon.util package, which will not be instrumented."; \
+	echo " instrumented when DynComp or Chicory is run. Please use the"; \
+	echo " (identical) daikon.util package, which will not be instrumented."; \
 	echo "The following files import from plume:"; \
-	grep -n '^import plume' $(DCOMP_JAVA_FILES); \
+	grep -n '^import plume' $(INSTRUMENTATION_JAVA_FILES); \
 	else \
 	echo "done"; \
 	fi
@@ -747,15 +741,21 @@ clean-generated-files:
 run:	all
 	${JAVA} daikon.Daikon
 
+ETAGS := $(shell command -v etags 2> /dev/null)
+
 TAGS:	tags
 .PHONY: etags tags
 etags:	tags
 tags: ../plume-lib
+ifndef ETAGS
+	$(error etags is not available, please install it)
+else
 	@echo etags '*.java ...'
-ifneq (,$(findstring Exuberant, $(shell etags --version)))
+ifneq (,$(findstring Exuberant, $(shell etags --version 2>&1)))
 	@etags --language-force=java ${TAG_FILES}
 else
 	@etags --language=java ${TAG_FILES}
+endif
 endif
 # A TAGS file that does not contain generated files
 tags-sans-generated: clean-generated-files tags
@@ -816,10 +816,10 @@ audit:
 
 
 reformat:
-	@../plume-lib/bin/run-google-java-format.py ${JAVA_FILES_FOR_STYLE}
+	@../plume-lib/bin/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
 
 check-format:
-	@../plume-lib/bin/check-google-java-format.py ${JAVA_FILES_FOR_STYLE}
+	@../plume-lib/bin/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && false)
 
 
 ###########################################################################
@@ -847,6 +847,12 @@ JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingCh
 JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_REGEX_QUAL_ARGS = -processor org.checkerframework.checker.experimental.regex_qual.RegexCheckerAdapter -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+# -AsuppressWarnings=method.guarantee.violated,override.sideeffect.invalid is temporary.
+# Once the Purity Checker and -AsuggestPureMethods are fixed, they can be run on plume-lib
+# and Daikon and this can be removed. The method.guarantee.violated warning is issued by
+# the Lock Checker when a method calls another method with a weaker side effect guarantee.
+# The override.sideeffect.invalid warning is issued by the Lock Checker when the side effect
+# annotation on the overridder method is weaker than that on the overridden method.
 JAVAC_LOCK_ARGS = -processor org.checkerframework.checker.lock.LockChecker -AsuppressWarnings=method.guarantee.violated,override.sideeffect.invalid -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
@@ -880,7 +886,7 @@ show_nullness_java_files:
 # check-all: check-formatter check-interning check-nullness check-regex check-signature check-prototype check-vindex
 ## check-regex-qual target runs extremely slowly.
 # check-all: check-formatter check-interning check-nullness check-regex check-regex-qual check-signature
-check-all: check-formatter check-interning check-nullness check-regex check-signature
+check-all: check-formatter check-interning check-nullness check-regex check-signature check-lock
 
 intern: check-interning
 interning: check-interning
@@ -910,7 +916,8 @@ check-signature: ${ALL_GENERATED_FILES} compile
 # This target runs the Signature checker on just one file.
 # Typical command:
 # SIGNATURE_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-signature-onefile
-SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
+# SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
+SIGNATURE_ONEFILE ?= daikon/dcomp/SummaryInfo.java daikon/dcomp/TypeStack.java
 check-signature-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 
@@ -1268,6 +1275,7 @@ showvars:
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo JAVA_FILES_FOR_STYLE = $(JAVA_FILES_FOR_STYLE)
+	@echo JAVA_FILES_FOR_FORMAT = $(JAVA_FILES_FOR_FORMAT)
 	@echo TAG_FILES = $(TAG_FILES)
 	@echo INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)
 	@echo INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)

@@ -66,6 +66,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -128,16 +129,18 @@ public final class CLASSNAME
   /**
    * Returns whether or not the variable is a pointer
    */
-  /*@Pure*/ private boolean is_pointer() {
+  /*@Pure*/
+  private boolean is_pointer(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return (!ppt.var_infos[0].type.BASEISTYPE);
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": "
       + !falsified;
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     if (format == OutputFormat.DAIKON) return format_daikon();
@@ -148,18 +151,19 @@ public final class CLASSNAME
     return format_unimplemented(format);
   }
 
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return var().name() + " elements " + "!=" + " "
            + (is_pointer() ? "null" : "0");
   }
 
   // We are a special case where a ghost field can actually talk about
   // array contents.
-  /*@Pure*/ public boolean isValidEscExpression() {
+  /*@Pure*/
+  public boolean isValidEscExpression() {
     return true;
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied CLASSNAME this*/) {
     // If this is an entire array or Collection (not a slice), then
     //  * for arrays: use \nonnullelements(A)
     //  * for Collections: use collection.containsNull == false
@@ -169,10 +173,10 @@ public final class CLASSNAME
     if (var().is_direct_non_slice_array()) {
       VarInfo term = var().get_enclosing_var();
       String esc_name = null;
-      if (term == null)
+      if (term == null) {
         // Only happenes in internal format tests
         esc_name = var().name().replace ("[]", "");
-      else {
+      } else {
         // System.out.printf ("term = %s, var = %s%n", term.name, var().name);
         esc_name = term.esc_name();
       }
@@ -193,7 +197,7 @@ public final class CLASSNAME
            + (is_pointer() ? "null" : "0") + ")" + form[2];
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     String retval =
       "daikon.Quant.eltsNotEqual(" + var().name_using(format)
       + (is_pointer() ? ", null" : ", 0") + ")";
@@ -201,12 +205,12 @@ public final class CLASSNAME
     return retval;
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] split = var().csharp_array_split();
     return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " != " + (is_pointer() ? "null" : "0") + ")";
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
     String[] form = VarInfo.simplify_quantify (var());
     return form[0] + "(NEQ " + form[1] + " "
       + (is_pointer() ? "null" : "0") + ")" + form[2];
@@ -253,7 +257,7 @@ public final class CLASSNAME
       //                      + vs.min() + " conf="
       //                      + confidence_one_elt_nonzero() + " range="
       //                      + (vs.max() - vs.min() + 1)/ 1);
-      return (result);
+      return result;
     }
   }
 
@@ -284,12 +288,14 @@ public final class CLASSNAME
   }
 
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     assert other instanceof CLASSNAME;
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof ELTONEOF) {
       ELTONEOF eoo = (ELTONEOF) other;
       if ((eoo.num_elts() == 1) && (((NUMWRAPPER)eoo.elt()).PRIMITIVEVALUE == 0)) {
@@ -326,12 +332,14 @@ public final class CLASSNAME
     // (a[] > 0) v (a[] < 0) ==> a[] != 0
     ELTLOWERBOUND lb = (ELTLOWERBOUND) ppt.parent.find_inv_by_class
                                                     (vis, ELTLOWERBOUND.class);
-    if ((lb != null) && (lb.min() > 0))
+    if ((lb != null) && (lb.min() > 0)) {
       return new DiscardInfo (this, DiscardCode.obvious, v1 + " > " + lb.min());
+    }
     ELTUPPERBOUND ub = (ELTUPPERBOUND) ppt.parent.find_inv_by_class
                                                     (vis, ELTUPPERBOUND.class);
-    if ((ub != null) && (ub.max() < 0))
+    if ((ub != null) && (ub.max() < 0)) {
       return new DiscardInfo (this, DiscardCode.obvious, v1 + " < " + ub.max());
+    }
 
     // For every other EltNonZero at this program point, see if there is a
     // subsequence relationship between that array and this one.
@@ -349,11 +357,13 @@ public final class CLASSNAME
           debug.fine ("  Have to test: " + inv.repr());
         }
 
-        if (Debug.logOn())
+        if (Debug.logOn()) {
           Daikon.current_inv = this;
-        if (parent.is_subsequence (v1, v2))
+        }
+        if (parent.is_subsequence (v1, v2)) {
           return new DiscardInfo (this, DiscardCode.obvious, v1.name() +
                                   " is a subsequence of " + v2.name());
+        }
       }
     }
 
@@ -364,8 +374,9 @@ public final class CLASSNAME
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof CLASSNAME)
+      if (inv instanceof CLASSNAME) {
         return (CLASSNAME) inv;
+      }
     }
     return null;
   }
@@ -391,7 +402,7 @@ public final class CLASSNAME
         });
     }
 
-    return (suppressions);
+    return suppressions;
   }
 
 }

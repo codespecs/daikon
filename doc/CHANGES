@@ -20,7 +20,20 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.3.2 (scheduled for May 2016)
+5.3.6 (July 1, 2016)
+
+A new front end for Simulink/Stateflow (SLSF) block diagrams is available.
+See https://bitbucket.org/verivital/hynger .
+
+===========================================================================
+
+5.3.4 (June 1, 2016)
+
+Miscellaneous bug fixes and minor improvements.
+
+===========================================================================
+
+5.3.2 (May 2, 2016)
 
 Daikon:
  - Command-line argument --user-defined-invariant makes Daikon compute a
@@ -28,6 +41,13 @@ Daikon:
  - Command-line argument --disable-all-invariants disables all of Daikon's
    built-in invariants.  Subsequent command-line options may enable some of
    them.
+
+Fjalar/Kvasir:
+ - Minor changes to support Scientific Linux.
+
+Documentation:
+- Improved the discussion in the Troubleshooting chapter of the User Guide
+  on how to respond to "Could not find or load main class."
 
 ===========================================================================
 

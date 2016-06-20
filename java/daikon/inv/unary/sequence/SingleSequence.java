@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import typequals.*;
 */
@@ -41,7 +42,7 @@ public abstract class SingleSequence extends UnaryInvariant {
   }
 
   public VarInfo var(
-      /*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this*/ ) {
+      /*>>>@GuardSatisfied @UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this*/) {
     return ppt.var_infos[0];
   }
 }

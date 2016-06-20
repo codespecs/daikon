@@ -11,6 +11,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -124,13 +125,16 @@ public final class FeatureExtractor {
         }
       } else throw new IOException("Invalid Argument List, {u,n,o,s,t}" + args[i]);
     }
-    if (output_file == null)
+    if (output_file == null) {
       throw new IOException("Invalid Argumnent List, output file not specified");
-    if (output_type == null)
+    }
+    if (output_type == null) {
       throw new IOException("Invalid Argumnent List, output type not specified");
-    if (output_file.equals(output_words))
+    }
+    if (output_file.equals(output_words)) {
       throw new IOException(
           "Invalid Argumnent List, output and description files " + "cannot be the same");
+    }
     // Step 1
     Pair<ArrayList<Invariant>, ArrayList<Invariant>> allInvariants =
         getSimpleUsefulAndNonuseful(usefuls, nonusefuls);
@@ -176,7 +180,9 @@ public final class FeatureExtractor {
         File output = new File(output_file + ".data");
         File names = new File(output_file + ".names");
         printC5Output(usefulFeatures, nonusefulFeatures, output, names, lookup);
-      } else System.err.println("Invalid Output Type: " + output_type);
+      } else {
+        System.err.println("Invalid Output Type: " + output_type);
+      }
     }
   }
 
@@ -288,7 +294,9 @@ public final class FeatureExtractor {
         name = ((Class<?>) key).getName() + "Bool";
       } else if (key instanceof String) {
         name = (String) key;
-      } else throw new RuntimeException(key + " object cannot be converted to " + "a feature.");
+      } else {
+        throw new RuntimeException(key + " object cannot be converted to " + "a feature.");
+      }
       numbersToNames.put(pair, name);
     }
 
@@ -317,7 +325,9 @@ public final class FeatureExtractor {
                   + currentName
                   + lineSep);
         }
-      } else throw new IOException("Feature " + current.number + " not included in .names file");
+      } else {
+        throw new IOException("Feature " + current.number + " not included in .names file");
+      }
       //names.println(current.number + ": continuous.");
     }
     names.println("|End of .names file");
@@ -528,7 +538,9 @@ public final class FeatureExtractor {
     Object o = UtilMDE.readObject(file);
     if (o instanceof InvMap) {
       return (InvMap) o;
-    } else throw new ClassNotFoundException("inv file does not contain InvMap");
+    } else {
+      throw new ClassNotFoundException("inv file does not contain InvMap");
+    }
   }
 
   // Calculate a HashMap of every feature to a unique integer.
@@ -611,18 +623,21 @@ public final class FeatureExtractor {
     if (top.isDirectory()) {
       File[] all = top.listFiles();
       for (int i = 0; i < all.length; i++)
-        if (!(all[i].getAbsolutePath().indexOf("test") > -1))
+        if (!(all[i].getAbsolutePath().indexOf("test") > -1)) {
           answer.addAll(getInvariantClasses(all[i]));
+        }
     } else if (top.getName().endsWith(".class")) {
       String name = top.getAbsolutePath();
       name = name.substring(name.indexOf("daikon"), name.indexOf(".class"));
       name = name.replace('/', '.');
 
       // have to remove the .ver2 or .ver3 tags
-      if (name.indexOf("ver2") > -1)
+      if (name.indexOf("ver2") > -1) {
         name = name.substring(0, name.indexOf(".ver2")) + name.substring(name.indexOf(".ver2") + 5);
-      if (name.indexOf("ver3") > -1)
+      }
+      if (name.indexOf("ver3") > -1) {
         name = name.substring(0, name.indexOf(".ver3")) + name.substring(name.indexOf(".ver3") + 5);
+      }
 
       try {
         @SuppressWarnings("signature")
@@ -662,9 +677,10 @@ public final class FeatureExtractor {
       throws IllegalAccessException, InvocationTargetException {
     TreeSet<IntDoublePair> answer = new TreeSet<IntDoublePair>();
     if (inv instanceof Invariant) {
-      if (lookup.get(inv.getClass()) == null)
+      if (lookup.get(inv.getClass()) == null) {
         throw new NullPointerException(
             "Missing " + inv.getClass().getName() + " class in the lookup Map");
+      }
       answer.add(new IntDoublePair(lookup.get(inv.getClass()).intValue(), 1));
       answer.addAll(getReflectFeatures(((Invariant) inv).ppt, lookup));
       answer.addAll(getReflectFeatures(((Invariant) inv).ppt.var_infos, lookup));
@@ -682,25 +698,27 @@ public final class FeatureExtractor {
 
     for (int i = 0; i < fields.length; i++) {
       if (!BANNED_METHODS.contains(fields[i].getName()))
-        if (fields[i].getType().equals(Boolean.TYPE))
+        if (fields[i].getType().equals(Boolean.TYPE)) {
           answer.add(new IntDoublePair(lookup.get(fields[i].getName() + "Bool").intValue(), 1));
-        else if (TYPES.contains(fields[i].getType()))
+        } else if (TYPES.contains(fields[i].getType())) {
           answer.add(
               new IntDoublePair(
                   lookup.get(fields[i].getName() + "Float").intValue(), fields[i].getDouble(inv)));
+        }
     }
 
     Method[] methods = inv.getClass().getMethods();
     for (int i = 0; i < methods.length; i++) {
       if (methods[i].getParameterTypes().length == 0) {
         if (!BANNED_METHODS.contains(methods[i].getName()))
-          if (methods[i].getReturnType().equals(Boolean.TYPE))
+          if (methods[i].getReturnType().equals(Boolean.TYPE)) {
             answer.add(new IntDoublePair(lookup.get(methods[i].getName() + "Bool").intValue(), 1));
-          else if (TYPES.contains(methods[i].getReturnType()))
+          } else if (TYPES.contains(methods[i].getReturnType())) {
             answer.add(
                 new IntDoublePair(
                     lookup.get(methods[i].getName() + "Float").intValue(),
                     ((Number) methods[i].invoke(inv, new Object[0])).doubleValue()));
+          }
       }
     }
 
@@ -738,22 +756,29 @@ public final class FeatureExtractor {
 
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied IntDoublePair this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
       if (o instanceof IntDoublePair) {
         IntDoublePair other = (IntDoublePair) o;
         return ((number == other.number) && (value == other.value));
-      } else return false;
+      } else {
+        return false;
+      }
     }
 
     //returns a valid hashCode
     @Override
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied IntDoublePair this*/) {
       return number;
     }
 
     // Compares an Object to this
     // Throws ClassCastException if argument is not an IntDoublePair
-    /*@Pure*/ public int compareTo(IntDoublePair p) {
+    /*@Pure*/
+    public int compareTo(/*>>>@GuardSatisfied IntDoublePair this,*/ IntDoublePair p) {
       if (this.number < p.number) {
         return -1;
       } else if (this.number > p.number) {
@@ -884,13 +909,17 @@ public final class FeatureExtractor {
       // Set the appropriate repeat values.
       int posrepeat = 1, negrepeat = 1;
       if (normalize) {
-        if (posvectors.size() == 0)
+        if (posvectors.size() == 0) {
           throw new IOException("There are no positive vectors, " + "cannot normalize");
-        if (negvectors.size() == 0)
+        }
+        if (negvectors.size() == 0) {
           throw new IOException("There are no negative vectors, " + "cannot normalize");
-        if (posvectors.size() > negvectors.size())
+        }
+        if (posvectors.size() > negvectors.size()) {
           negrepeat = posvectors.size() / negvectors.size();
-        else posrepeat = negvectors.size() / posvectors.size();
+        } else {
+          posrepeat = negvectors.size() / posvectors.size();
+        }
       }
 
       // Print the output to the output file.
@@ -948,8 +977,9 @@ public final class FeatureExtractor {
       // Check if the required fields are specified.
       if (type == null) throw new IOException("You must specify a format type (C5 or SVMfu)");
       if (tests.size() == 0) throw new IOException("You must specify at least one test data file");
-      if (trains.size() == 0)
+      if (trains.size() == 0) {
         throw new IOException("You must specify at least one train data file");
+      }
 
       // Load the train files into 2 HashSets, pos and neg.
       HashSet<String> pos = new HashSet<String>();
@@ -983,9 +1013,11 @@ public final class FeatureExtractor {
       for (String s : trains) {
         for (String vector : new EntryReader(s)) {
           if (type.equals("C5")) {
-            if (vector.indexOf("bad") > -1)
+            if (vector.indexOf("bad") > -1) {
               testBad.add(vector.substring(0, vector.lastIndexOf("bad")));
-            else testGood.add(vector.substring(0, vector.lastIndexOf("good")));
+            } else {
+              testGood.add(vector.substring(0, vector.lastIndexOf("good")));
+            }
           } else if (type.equals("SVMfu")) {
             int posind = vector.lastIndexOf("1");
             int negind = vector.lastIndexOf("-1");

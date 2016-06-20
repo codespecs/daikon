@@ -5,6 +5,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
@@ -143,7 +144,8 @@ public class Session {
   }
 
   /* package access */ void sendLine(
-      /*>>>@UnknownInitialization(Session.class) @Raw(Session.class) Session this,*/ String s) {
+      /*>>>@UnknownInitialization(Session.class) @Raw(Session.class) @GuardSatisfied Session this,*/ String
+          s) {
     if (dkconfig_trace_input) {
       assert trace_file != null
           : "@AssumeAssertion(nullness): dependent: trace_file is non-null (set in constructor) if dkconfig_trace_input is true";
@@ -153,12 +155,14 @@ public class Session {
     input.flush();
   }
 
+  /*@Holding("this")*/
   /* package access */
-  /*@Nullable*/ String readLine() throws IOException {
+  /*@Nullable*/ String readLine(/*>>>@GuardSatisfied Session this*/) throws IOException {
     return output.readLine();
   }
 
-  public void kill() {
+  /*@Holding("this")*/
+  public void kill(/*>>>@GuardSatisfied Session this*/) {
     process.destroy();
     if (dkconfig_trace_input) {
       assert trace_file != null
@@ -170,7 +174,7 @@ public class Session {
   // for testing and playing around, not for real use
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    Session s = new Session();
+    /*@GuardedBy("<self>")*/ Session s = new Session();
 
     CmdCheck cc;
 

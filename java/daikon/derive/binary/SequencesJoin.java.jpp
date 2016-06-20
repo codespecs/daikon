@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -63,14 +64,14 @@ public final class CLASSNAME
    **/
   public static boolean dkconfig_enabled = false;
 
-  public VarInfo var1() { return base1; }
-  public VarInfo var2() { return base2; }
+  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) { return base1; }
+  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) { return base2; }
 
 
   /**
    * Create a new SequencesJoin derivation.
-   * @param vi1 The first of the two variables this is based on
-   * @param vi2 The second of the two variables this is based on
+   * @param vi1 the first of the two variables this is based on
+   * @param vi2 the second of the two variables this is based on
    **/
   public CLASSNAME(VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
@@ -201,20 +202,23 @@ public final class CLASSNAME
       VarComparability.makeComparabilitySameIndices (newTypeName,
                                                      var1.comparability);
 
-    return (vi);
+    return vi;
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return "[" + CLASSSTRING + " of " + var1().name() + " " + var2().name()
       + "]";
   }
 
-  /*@Pure*/ public boolean isSameFormula(Derivation other) {
+  /*@Pure*/
+  public boolean isSameFormula(Derivation other) {
     return (other instanceof CLASSNAME);
   }
 
   /** Returns the ESC name **/
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     return String.format ("join[%s,%s]", var1().esc_name(), var2().esc_name());
   }
 }

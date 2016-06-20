@@ -53,8 +53,9 @@ class DFInstrument extends DCInstrument {
 
     // See if this method has branch information
     CodeRange branch_cr = find_branch(DynComp.branch, gen.getClassName(), m);
-    if (branch_cr != null)
+    if (branch_cr != null) {
       debug.log("branch_cr for method %s.%s = %s", mg.getClassName(), mg.getName(), branch_cr);
+    }
 
     // See if this method is the test sequence
     test_sequence = false;
@@ -129,10 +130,10 @@ class DFInstrument extends DCInstrument {
    * of instructions that replaces the specified instruction.  Returns
    * null if the instruction should not be replaced.
    *
-   *    @param mg Method being instrumented
-   *    @param ih Handle of Instruction to translate
-   *    @param stack Current contents of the stack.
-   *    @param branch_cr Code range of branch whose dataflow is desired.
+   *    @param mg method being instrumented
+   *    @param ih handle of Instruction to translate
+   *    @param stack current contents of the stack
+   *    @param branch_cr code range of branch whose dataflow is desired.
    *    null indicates there are no branches of interest in this method.
    */
   /*@Nullable*/ InstructionList xform_inst(
@@ -183,7 +184,7 @@ class DFInstrument extends DCInstrument {
             debug.log("generating code for branch at %s:%s", mg.getName(), inst);
             return build_il(dcr_call("ref_cmp_null_df", Type.OBJECT, object_arg), inst);
           }
-          return (null);
+          return null;
         }
 
         // Instanceof pushes either 0 or 1 on the stack depending on whether
@@ -352,9 +353,11 @@ class DFInstrument extends DCInstrument {
       case Const.LSTORE_2:
       case Const.LSTORE_3:
         {
-          if (test_sequence)
+          if (test_sequence) {
             return load_store_local((StoreInstruction) inst, tag_frame_local, "pop_local_tag_df");
-          else return load_store_local((StoreInstruction) inst, tag_frame_local, "pop_local_tag");
+          } else {
+            return load_store_local((StoreInstruction) inst, tag_frame_local, "pop_local_tag");
+          }
         }
 
       case Const.LDC:
@@ -608,7 +611,7 @@ class DFInstrument extends DCInstrument {
       case Const.MONITOREXIT:
       case Const.NOP:
       case Const.RET: // this is the internal JSR return
-        return (null);
+        return null;
 
         // Make sure we didn't miss anything
       default:
@@ -665,7 +668,7 @@ class DFInstrument extends DCInstrument {
     // Perform the original instruction
     il.append(inst);
 
-    return (il);
+    return il;
   }
 
   /**
@@ -690,7 +693,7 @@ class DFInstrument extends DCInstrument {
     il.append(ifact.createConstant(descr));
     il.append(dcr_call("setup_array_df", Type.VOID, new Type[] {Type.OBJECT, Type.STRING}));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -722,7 +725,7 @@ class DFInstrument extends DCInstrument {
         dcr_call(
             "setup_multiarray_df", Type.VOID, new Type[] {Type.OBJECT, Type.INT, Type.STRING}));
 
-    return (il);
+    return il;
   }
 
   /**
@@ -746,7 +749,7 @@ class DFInstrument extends DCInstrument {
     // Perform the original instruction
     il.append(inst);
 
-    return (il);
+    return il;
   }
 
   /**
@@ -784,8 +787,9 @@ class DFInstrument extends DCInstrument {
     LineNumberTable lnt = m.getLineNumberTable();
     if (lnt == null) throw new RuntimeException("No line number table for " + classname + "." + m);
     LineNumber[] lna = lnt.getLineNumberTable();
-    if ((lna == null) || (lna.length == 0))
+    if ((lna == null) || (lna.length == 0)) {
       throw new RuntimeException("Empty line number table for " + classname + "." + m);
+    }
 
     // Look for the specified line in this method, keep track of min/max
     // line in the method so we can tell if the line falls within the method
@@ -807,14 +811,15 @@ class DFInstrument extends DCInstrument {
     }
 
     // If line is in the method, then there is no code for this line
-    if ((line >= min_line) && (line <= max_line))
+    if ((line >= min_line) && (line <= max_line)) {
       throw new RuntimeException(
           String.format(
               "line %d in %s.%s[%d..%d] has no code", line, classname, m, min_line, max_line));
+    }
 
     System.out.printf(
         "line %d is not in method %s.%s [%d..%d]\n", line, bclassname, bmethod, min_line, max_line);
-    return (null);
+    return null;
   }
 
   /**
@@ -871,7 +876,7 @@ class DFInstrument extends DCInstrument {
             "insert call to replacement method %s(%s)%n",
             replacement_method,
             Arrays.toString(arg_types));
-        return (il);
+        return il;
       }
 
       // Handle equals by calling a static method that calculates DF
@@ -880,12 +885,12 @@ class DFInstrument extends DCInstrument {
 
         if (invoke.getOpcode() == Const.INVOKEVIRTUAL) {
           il.append(dcr_call("equals_df", ret_type, two_objects));
-          return (il);
+          return il;
         } else { // super call
           il.append(new DUP2());
           il.append(dcr_call("super_equals_df", Type.VOID, two_objects));
           il.append(invoke);
-          return (il);
+          return il;
         }
 
       } else if (is_object_clone(method_name, ret_type, arg_types)
@@ -954,7 +959,7 @@ class DFInstrument extends DCInstrument {
       }
     }
 
-    return (il);
+    return il;
   }
 
   /**

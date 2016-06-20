@@ -110,11 +110,12 @@ public class DtraceDiff {
             System.out.println(usage);
             throw new Daikon.TerminationMessage();
           } else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
-            if (Daikon.ppt_regexp != null)
+            if (Daikon.ppt_regexp != null) {
               throw new Error(
                   "multiple --"
                       + Daikon.ppt_regexp_SWITCH
                       + " regular expressions supplied on command line");
+            }
             String regexp_string = Daikon.getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage(
@@ -128,11 +129,12 @@ public class DtraceDiff {
             Daikon.ppt_regexp = Pattern.compile(regexp_string);
             break;
           } else if (Daikon.ppt_omit_regexp_SWITCH.equals(option_name)) {
-            if (Daikon.ppt_omit_regexp != null)
+            if (Daikon.ppt_omit_regexp != null) {
               throw new Error(
                   "multiple --"
                       + Daikon.ppt_omit_regexp_SWITCH
                       + " regular expressions supplied on command line");
+            }
             String regexp_string = Daikon.getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage(
@@ -146,11 +148,12 @@ public class DtraceDiff {
             Daikon.ppt_omit_regexp = Pattern.compile(regexp_string);
             break;
           } else if (Daikon.var_regexp_SWITCH.equals(option_name)) {
-            if (Daikon.var_regexp != null)
+            if (Daikon.var_regexp != null) {
               throw new Error(
                   "multiple --"
                       + Daikon.var_regexp_SWITCH
                       + " regular expressions supplied on command line");
+            }
             String regexp_string = Daikon.getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage(
@@ -164,11 +167,12 @@ public class DtraceDiff {
             Daikon.var_regexp = Pattern.compile(regexp_string);
             break;
           } else if (Daikon.var_omit_regexp_SWITCH.equals(option_name)) {
-            if (Daikon.var_omit_regexp != null)
+            if (Daikon.var_omit_regexp != null) {
               throw new Error(
                   "multiple --"
                       + Daikon.var_omit_regexp_SWITCH
                       + " regular expressions supplied on command line");
+            }
             String regexp_string = Daikon.getOptarg(g);
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage(
@@ -223,8 +227,9 @@ public class DtraceDiff {
         else throw new daikon.Daikon.TerminationMessage(usage);
       }
     }
-    if ((dtracefile1 == null) || (dtracefile2 == null))
+    if ((dtracefile1 == null) || (dtracefile2 == null)) {
       throw new daikon.Daikon.TerminationMessage(usage);
+    }
     dtraceDiff(declsfile1, dtracefile1, declsfile2, dtracefile2);
   }
 
@@ -283,8 +288,9 @@ public class DtraceDiff {
             // Check to see that Ppts match the first time we encounter them
             PptTopLevel foundppt = pptmap.get(ppt1);
             if (foundppt == null) {
-              if (!ppt1.name.equals(ppt2.name))
+              if (!ppt1.name.equals(ppt2.name)) {
                 ppt_mismatch_error(state1, dtracefile1, state2, dtracefile2);
+              }
               for (int i = 0; (i < ppt1.num_tracevars) && (i < ppt2.num_tracevars); i++) {
                 // *** what about comparability and aux info?
                 if ((!vis1[i].name().equals(vis2[i].name()))
@@ -297,8 +303,9 @@ public class DtraceDiff {
                         || (vis1[i].file_rep_type != vis2[i].file_rep_type)))
                   ppt_var_decl_error(vis1[i], state1, dtracefile1, vis2[i], state2, dtracefile2);
               }
-              if (ppt1.num_tracevars != ppt2.num_tracevars)
+              if (ppt1.num_tracevars != ppt2.num_tracevars) {
                 ppt_decl_error(state1, dtracefile1, state2, dtracefile2);
+              }
               pptmap.put(ppt1, ppt2);
             } else if (foundppt != ppt2) {
               ppt_mismatch_error(state1, dtracefile1, state2, dtracefile2);
@@ -324,7 +331,9 @@ public class DtraceDiff {
               ppt_var_value_error(
                     vis1[i], val1, state1, dtracefile1, vis2[i], val2, state2, dtracefile2);
             }
-          } else return; // EOF on both files ==> normal return
+          } else {
+            return; // EOF on both files ==> normal return
+          }
         } else if ((state1.rtype == FileIO.RecordType.TRUNCATED)
             || (state1.rtype == FileIO.RecordType.TRUNCATED))
           return; // either file reached truncation limit, return quietly
@@ -367,7 +376,9 @@ public class DtraceDiff {
         long[] v2 = (long[]) val2;
         if (v1.length != v2.length) return false;
         for (int i = 0; i < v1.length; i++)
-          if (((v1[i] == 0) || (v2[i] == 0)) && (v1[i] != v2[i])) return false;
+          if (((v1[i] == 0) || (v2[i] == 0)) && (v1[i] != v2[i])) {
+            return false;
+          }
         return true;
       } else if (type.baseIsScalar()) {
         long[] v1 = (long[]) val1;
@@ -384,8 +395,9 @@ public class DtraceDiff {
         double[] v2 = (double[]) val2;
         if (v1.length != v2.length) return false;
         for (int i = 0; i < v1.length; i++)
-          if (!((Double.isNaN(v1[i]) && Double.isNaN(v2[i])) || Global.fuzzy.eq(v1[i], v2[i])))
+          if (!((Double.isNaN(v1[i]) && Double.isNaN(v2[i])) || Global.fuzzy.eq(v1[i], v2[i]))) {
             return false;
+          }
         return true;
       } else if (type.baseIsString()) {
         String[] v1 = (String[]) val1;
@@ -409,12 +421,15 @@ public class DtraceDiff {
         long v1 = ((Long) val1).longValue();
         long v2 = ((Long) val2).longValue();
         return !(((v1 == 0) || (v2 == 0)) && (v1 != v2));
-      } else if (type.isScalar()) return (((Long) val1).longValue() == ((Long) val2).longValue());
-      else if (type.isFloat()) {
+      } else if (type.isScalar()) {
+        return (((Long) val1).longValue() == ((Long) val2).longValue());
+      } else if (type.isFloat()) {
         double d1 = ((Double) val1).doubleValue();
         double d2 = ((Double) val2).doubleValue();
         return ((Double.isNaN(d1) && Double.isNaN(d2)) || Global.fuzzy.eq(d1, d2));
-      } else if (type.isString()) return (((String) val1).equals((String) val2));
+      } else if (type.isString()) {
+        return (((String) val1).equals((String) val2));
+      }
     }
     throw new Error("Unexpected value type found"); // should never happen
   }

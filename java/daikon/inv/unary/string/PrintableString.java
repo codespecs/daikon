@@ -7,6 +7,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -39,7 +40,7 @@ public final class PrintableString extends SingleString {
 
   /** Returns the prototype invariant for PrintableString **/
   public static /*@Prototype*/ PrintableString get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -53,7 +54,8 @@ public final class PrintableString extends SingleString {
   }
 
   /** return description of invariant.  Only Daikon format is implemented **/
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied PrintableString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       return var().name() + " is printable";
     } else {
@@ -70,8 +72,12 @@ public final class PrintableString extends SingleString {
   public InvariantStatus check_modified(/*@Interned*/ String a, int count) {
     for (int ii = 0; ii < a.length(); ii++) {
       char ch = a.charAt(ii);
-      if (ch > 126) return InvariantStatus.FALSIFIED;
-      if ((ch < 32) && (ch != 9)) return InvariantStatus.FALSIFIED;
+      if (ch > 126) {
+        return InvariantStatus.FALSIFIED;
+      }
+      if ((ch < 32) && (ch != 9)) {
+        return InvariantStatus.FALSIFIED;
+      }
     }
     return InvariantStatus.NO_CHANGE;
   }
@@ -98,7 +104,8 @@ public final class PrintableString extends SingleString {
     return super.isObviousStatically(vis);
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant o) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant o) {
     assert o instanceof PrintableString;
     return true;
   }

@@ -198,8 +198,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     try {
       while (currentLine != null) {
         currentLine = input.readLine();
-        if (currentLine != null && !isComment(currentLine) && !isWhitespace(currentLine))
+        if (currentLine != null && !isComment(currentLine) && !isWhitespace(currentLine)) {
           return currentLine;
+        }
       }
     } catch (IOException e) {
       throw new RuntimeException(e.toString());
@@ -364,7 +365,8 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @return true if the line is a comment (that is, not to be interpretted as a command)
    *         false otherwise
    **/
-  /*@Pure*/ static boolean isComment(String line) {
+  /*@Pure*/
+  static boolean isComment(String line) {
     return line.startsWith(COMMENT_STARTER_STRING);
   }
 
@@ -374,9 +376,12 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise
    **/
-  /*@Pure*/ static boolean isWhitespace(String line) {
+  /*@Pure*/
+  static boolean isWhitespace(String line) {
     for (int x = 0; x < line.length(); x++) {
-      if (!Character.isWhitespace(line.charAt(x))) return false;
+      if (!Character.isWhitespace(line.charAt(x))) {
+        return false;
+      }
     }
     return true;
   }
@@ -421,7 +426,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     private static final String argDivider = ";";
 
     /**
-     * @return String containing error messages for any
+     * @return string containing error messages for any
      *  failed cases.  In the case that there are no failed
      *  cases, the empty string is returned.  In the case where
      *  commands is empty (there are no more test cases and the
@@ -766,22 +771,26 @@ public class InvariantAddAndCheckTester extends TestCase {
       return InvariantAddAndCheckTester.getNextRealLine(buffer);
     }
 
-    /*@Pure*/ private static boolean isTestTerminator(String command) {
+    /*@Pure*/
+    private static boolean isTestTerminator(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("end");
     }
 
-    /*@Pure*/ private static boolean isAddCommand(String command) {
+    /*@Pure*/
+    private static boolean isAddCommand(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("add");
     }
 
-    /*@Pure*/ private static boolean isCheckCommand(String command) {
+    /*@Pure*/
+    private static boolean isCheckCommand(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("check");
     }
 
-    /*@Pure*/ private static boolean isCompareCommand(String command) {
+    /*@Pure*/
+    private static boolean isCompareCommand(String command) {
       String commandTrimmed = command.trim();
       return commandTrimmed.startsWith("compare");
     }
@@ -947,7 +956,7 @@ public class InvariantAddAndCheckTester extends TestCase {
         Method get_proto = theClass.getMethod("get_proto", new Class<?>[] {});
         Invariant proto = (/*@Prototype*/ Invariant) get_proto.invoke(null, new Object[] {});
         Invariant inv = proto.instantiate(sl);
-        return (inv);
+        return inv;
       } catch (Exception e) {
         e.printStackTrace(System.out);
         throw new RuntimeException(

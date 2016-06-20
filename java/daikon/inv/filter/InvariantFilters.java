@@ -109,8 +109,9 @@ public class InvariantFilters {
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
         for (VariableFilter filter : variableFilters) {
           if (filter.shouldDiscard(invariant)) {
-            if (Invariant.logOn())
+            if (Invariant.logOn()) {
               invariant.log("Failed ALL_VARIABLES filter %s", filter.getClass().getName());
+            }
             return filter;
           }
         }
@@ -126,7 +127,7 @@ public class InvariantFilters {
         invariant.log(df, "applying " + filter.getClass().getName());
       }
       if (filter.shouldDiscard(invariant)) {
-        if (Invariant.logOn() || df.isLoggable(Level.FINE))
+        if (Invariant.logOn() || df.isLoggable(Level.FINE)) {
           invariant.log(
               df,
               "failed "
@@ -135,6 +136,7 @@ public class InvariantFilters {
                   // + ",num_unmod_missing_samples==" + invariant.ppt.num_mod_samples()
                   + ": "
                   + invariant.format());
+        }
         return filter;
       }
     }

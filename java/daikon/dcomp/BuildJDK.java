@@ -54,14 +54,16 @@ public class BuildJDK {
       if (!arg.endsWith("jar")) {
         for (String candidate : spaceSeparatedJarLocations.split(" ")) {
           String rt = jarFilename + candidate;
-          if (exists(rt)) return rt;
+          if (exists(rt)) {
+            return rt;
+          }
         }
       }
       return jarFilename;
     }
 
     /**
-     * @return true iff libRt exists in the filesystem.
+     * @return true iff libRt exists in the filesystem
      */
     protected boolean exists(String libRt) {
       return new File(libRt).exists();
@@ -281,8 +283,9 @@ public class BuildJDK {
         JarEntry entry = entries.nextElement();
         // System.out.printf ("processing entry %s%n", entry);
         final String entryName = entry.getName();
-        if (!entryName.startsWith(prefixOfFilesToInclude) && !entryName.startsWith("META-INF"))
+        if (!entryName.startsWith(prefixOfFilesToInclude) && !entryName.startsWith("META-INF")) {
           continue;
+        }
         if (entryName.endsWith("/")) continue;
         if (entryName.endsWith("~")) continue;
         if (entryName.endsWith(".class")) all_classes.add(entryName.replace(".class", ""));
@@ -386,9 +389,10 @@ public class BuildJDK {
     File classpath = new File(dir, classfile.getName());
     inst_jc.dump(classpath);
     _numFilesProcessed++;
-    if ((_numFilesProcessed % 100) == 0)
+    if ((_numFilesProcessed % 100) == 0) {
       System.out.printf(
           "Processed %d/%d classes at %tc%n", _numFilesProcessed, classmap.size(), new Date());
+    }
   }
 
   /** Copy our various helper classes to java/lang **/

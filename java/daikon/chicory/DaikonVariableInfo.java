@@ -8,6 +8,7 @@ import java.util.regex.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -114,7 +115,7 @@ public abstract class DaikonVariableInfo
   protected static Set<String> ppt_statics = new LinkedHashSet<String>();
 
   /** Constructs a non-array type DaikonVariableInfo object
-   * @param theName The name of the variable
+   * @param theName the name of the variable
    */
   public DaikonVariableInfo(String theName, String typeName, String repTypeName) {
     this(theName, typeName, repTypeName, false);
@@ -122,8 +123,8 @@ public abstract class DaikonVariableInfo
 
   /**
    * Constructs a DaikonVariableInfo object
-   * @param theName The variable's name
-   * @param arr True iff the variable is an array
+   * @param theName the variable's name
+   * @param arr true iff the variable is an array
    */
   public DaikonVariableInfo(String theName, String typeName, String repTypeName, boolean arr) {
     // Intern the names because there will be many of the
@@ -139,14 +140,15 @@ public abstract class DaikonVariableInfo
     children = new ArrayList<DaikonVariableInfo>();
     isArray = arr;
 
-    if ((theName != null) && (theName.contains("[..]") || theName.contains("[]")) && !isArray)
+    if ((theName != null) && (theName.contains("[..]") || theName.contains("[]")) && !isArray) {
       debug_array.log_tb("%s is not an array", theName);
+    }
   }
 
   /**
    * Returns the name of this variable.
    */
-  public /*@Nullable*/ String getName() {
+  public /*@Nullable*/ String getName(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
     if (name == null) return null;
 
     if (Chicory.new_decl_format) {
@@ -160,7 +162,7 @@ public abstract class DaikonVariableInfo
    * Add a child to this node.
    * Should only be called while the tree is being constructed.
    *
-   * @param info The child object, must be non-null.  The child's
+   * @param info the child object, must be non-null.  The child's
    * fields name, typeName, repTypeName, and compareInfoString
    * should also be non-null.
    */
@@ -178,7 +180,8 @@ public abstract class DaikonVariableInfo
   /**
    * Returns a string representation of this node.
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
     return getClass().getName() + ":" + getName();
   }
 
@@ -192,7 +195,7 @@ public abstract class DaikonVariableInfo
    * and all ancestors of this node.
    * Longer indentations correspond to further distance in the tree.
    *
-   * @param offset The offset to begin each line with.
+   * @param offset the offset to begin each line with
    * @return StringBuffer which contains all children of this node
    */
   private StringBuffer getStringBuffer(StringBuffer offset) {
@@ -225,7 +228,7 @@ public abstract class DaikonVariableInfo
     for (DaikonVariableInfo dv : children) {
       list.addAll(dv.tree_as_list());
     }
-    return (list);
+    return list;
   }
 
   /**
@@ -236,14 +239,14 @@ public abstract class DaikonVariableInfo
    * For instance, if the variable a has a field b, then calling
    * getMyValFromParentVal(val_of_a) will return the value of a.b
    *
-   * @param parentVal The parent object.  Can be null for static fields.
+   * @param parentVal the parent object.  Can be null for static fields.
    *    (Are there any other circumstances where it can be null?)
    */
   public abstract /*@Nullable*/ Object getMyValFromParentVal(Object parentVal);
 
   /**
    * Returns a String representation of this object suitable for a .dtrace file
-   * @param val The object whose value to print
+   * @param val the object whose value to print
    */
   @SuppressWarnings("unchecked")
   public String getDTraceValueString(Object val) {
@@ -291,7 +294,7 @@ public abstract class DaikonVariableInfo
       //show the full array
       return getValueStringOfArray(theValue);
     } else if (theValue instanceof NonsensicalObject) {
-      return ("nonsensical");
+      return "nonsensical";
     } else {
       //basically, show the hashcode of theValue
       return getObjectHashCode(theValue);
@@ -327,9 +330,9 @@ public abstract class DaikonVariableInfo
    */
   private String getObjectHashCode(Object theObject) {
     if (theObject == null) {
-      return ("null");
+      return "null";
     } else if (theObject instanceof NonsensicalObject) {
-      return ("nonsensical");
+      return "nonsensical";
     } else {
       return Integer.toString(System.identityHashCode(theObject));
     }
@@ -356,15 +359,15 @@ public abstract class DaikonVariableInfo
    * Returns a string representation of the values
    * of a list of values as if it were an array.
    *
-   * @param theValues The values to print out
+   * @param theValues the values to print out
    */
   protected String getValueStringOfList(List<Object> theValues) {
     if (theValues == null) {
-      return ("null");
+      return "null";
     }
 
     if (theValues instanceof NonsensicalList) {
-      return ("nonsensical");
+      return "nonsensical";
     }
 
     StringBuffer buf = new StringBuffer();
@@ -493,8 +496,9 @@ public abstract class DaikonVariableInfo
       // Skip variables that match the ignore pattern
       if (Chicory.omit_var != null) {
         String fullname = offset + "." + classField.getName();
-        if (is_static)
+        if (is_static) {
           fullname = classField.getDeclaringClass().getName() + "." + classField.getName();
+        }
         Matcher m = Chicory.omit_var.matcher(fullname);
         if (m.find()) {
           System.out.printf("VAR %s matches omit pattern %s%n", fullname, Chicory.omit_var);
@@ -621,8 +625,8 @@ public abstract class DaikonVariableInfo
    * Also adds "derived" variables
    * such as the runtime .class variable.
    *
-   * @return The newly created DaikonVariableInfo object, whose
-   * parent is this.
+   * @return the newly created DaikonVariableInfo object, whose
+   * parent is this
    */
   protected DaikonVariableInfo addDeclVar(
       ClassInfo cinfo,
@@ -686,8 +690,8 @@ public abstract class DaikonVariableInfo
     }
     theName += ")";
 
-    if (offset.length() > 0) // offset already starts with "this"
-    {
+    if (offset.length() > 0) {
+      // offset already starts with "this"
     } else {
       offset = "this.";
     }
@@ -722,8 +726,8 @@ public abstract class DaikonVariableInfo
    * as a child of this node.  Also adds "derived" variables
    * such as the runtime .class variable.
    *
-   * @return The newly created DaikonVariableInfo object, whose
-   * parent is this.
+   * @return the newly created DaikonVariableInfo object, whose
+   * parent is this
    */
   protected DaikonVariableInfo addDeclVar(Field field, String offset, StringBuffer buf) {
     debug_vars.log("enter addDeclVar(field):%n");
@@ -841,7 +845,7 @@ public abstract class DaikonVariableInfo
    * @param asArray
    *            Whether the variable is being output as an array (true) or as
    *            a pointer (false).
-   * @return The representation type as a string
+   * @return the representation type as a string
    */
   public static String getRepName(Class<?> type, boolean asArray) {
     if (type == null) {
@@ -885,8 +889,8 @@ public abstract class DaikonVariableInfo
       return !(eltType.isPrimitive());
     }
 
-    if (type.getName().equals("java.lang.Object")) //Objects
-    {
+    if (type.getName().equals("java.lang.Object")) {
+      // Objects
       // System.out.println ("type is object " + type);
       return true;
     } else if (Modifier.isAbstract(type.getModifiers())) {
@@ -897,13 +901,15 @@ public abstract class DaikonVariableInfo
     } else if (type.isInterface()) {
       // System.out.println ("type is interface " + type);
       return true;
-    } else if (type.isArray()) //arrays of non-primitive types
-    {
+    } else if (type.isArray()) {
+      // Arrays of non-primitive types
       // System.out.println ("type is array " + type);
       Class<?> eltType = type.getComponentType();
       assert eltType != null; // because type is an array
       return !(eltType.isPrimitive());
-    } else return false;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -990,7 +996,9 @@ public abstract class DaikonVariableInfo
    * and prints associated decls, if necessary
    */
   protected void checkForListDecl(Class<?> type, String theName, String offset) {
-    if (isArray || type.isPrimitive() || type.isArray()) return;
+    if (isArray || type.isPrimitive() || type.isArray()) {
+      return;
+    }
 
     // System.out.printf ("checking %s %sto for list implementation = %b%n",
     //                    type, theName, implementsList (type));
@@ -1096,9 +1104,9 @@ public abstract class DaikonVariableInfo
    * to print out the arrays's elements as opposed to just the
    * hashcode of the array).
    *
-   * @param theName The name of the variable currently being examined,
+   * @param theName the name of the variable currently being examined,
    *             such as "ballCount"
-   * @param offset The representation of the variables we have
+   * @param offset the representation of the variables we have
    *                previously examined.  For examples, offset could
    *                be "this." in which case offset + name would be
    *                "this.ballCount."
@@ -1159,8 +1167,9 @@ public abstract class DaikonVariableInfo
         // The offset will only be equal to ""
         // if we are examining a local variable (parameter).
         if (!ignore) {
-          if (!theName.equals("return") && !offset.equals(""))
+          if (!theName.equals("return") && !offset.equals("")) {
             newChild.checkForRuntimeClass(type, theName + "[]", offset);
+          }
 
           newChild.checkForString(eltType, theName + "[]", offset);
         }
@@ -1175,8 +1184,9 @@ public abstract class DaikonVariableInfo
         // don't recurse any more!
         return;
       }
-      if (!systemClass(type))
+      if (!systemClass(type)) {
         addClassVars(cinfo, false, type, offset + theName + ".", depthRemaining - 1);
+      }
     }
     debug_vars.log("exit addChildNodes%n");
   }
@@ -1275,7 +1285,8 @@ public abstract class DaikonVariableInfo
   /**
    * Compares based on the name of the variable
    */
-  /*@Pure*/ public int compareTo(DaikonVariableInfo dv) {
+  /*@Pure*/
+  public int compareTo(/*>>>@GuardSatisfied DaikonVariableInfo this,*/ DaikonVariableInfo dv) {
     return name.compareTo(dv.name);
   }
 
@@ -1333,7 +1344,8 @@ public abstract class DaikonVariableInfo
    * Returns true iff the variable is static.  Overridden by subclasses that can
    * be static
    */
-  /*@Pure*/ public boolean isStatic() {
+  /*@Pure*/
+  public boolean isStatic() {
     return false;
   }
 
@@ -1346,8 +1358,9 @@ public abstract class DaikonVariableInfo
 
     if (ppt_statics.contains(name)) {
       debug_vars.log("ignoring already included variable %s [%s]", name, getClass());
-      if (false && !isStatic())
+      if (false && !isStatic()) {
         System.out.printf("ignoring already included variable %s [%s]", name, getClass());
+      }
       declShouldPrint = false;
       dtraceShouldPrint = false;
       return true;

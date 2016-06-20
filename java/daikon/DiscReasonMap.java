@@ -49,7 +49,9 @@ public final class DiscReasonMap {
     // Let's not keep track of DiscardInfo's from Invariants who have
     // any repeated variables since we don't expect them to print anyway
     for (int i = 1; i < inv.ppt.var_infos.length; i++) {
-      if (inv.ppt.var_infos[i] == inv.ppt.var_infos[i - 1]) return;
+      if (inv.ppt.var_infos[i] == inv.ppt.var_infos[i - 1]) {
+        return;
+      }
     }
 
     if (inv.ppt.var_infos.length == 0) {

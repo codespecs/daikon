@@ -9,6 +9,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -95,8 +96,9 @@ public class Implication extends Joiner {
       return null;
     }
 
-    if (PptSplitter.debug.isLoggable(Level.FINE))
+    if (PptSplitter.debug.isLoggable(Level.FINE)) {
       PptSplitter.debug.fine("Creating implication " + predicate + " ==> " + consequent);
+    }
     return result;
   }
 
@@ -111,11 +113,12 @@ public class Implication extends Joiner {
     return result;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied Implication this*/) {
     return "[Implication: " + left.repr() + " => " + right.repr() + "]";
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied Implication this,*/ OutputFormat format) {
     String pred_fmt = left.format_using(format);
     String consq_fmt = right.format_using(format);
     if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {
@@ -165,10 +168,10 @@ public class Implication extends Joiner {
     DiscardInfo di = orig_right.isObviousDynamically(vis);
     if (di != null) {
       log("failed isObviousDynamically with vis = %s", VarInfo.arrayToString(vis));
-      return (di);
+      return di;
     }
 
-    return (null);
+    return null;
   }
 
   /**
@@ -220,9 +223,10 @@ public class Implication extends Joiner {
     // JHP: Seemingly it would be better if this invariant was never
     // created, but somehow that creates other implications.  See the
     // disabled code in PptSplitter.add_implication()
-    if (orig_right.is_ni_suppressed())
+    if (orig_right.is_ni_suppressed()) {
       return (new DiscardInfo(
           this, DiscardCode.obvious, "consequent " + orig_right.format() + " is ni suppressed"));
+    }
 
     return orig_right.isObviousDynamically_SomeInEquality();
     //     DiscardInfo result = isObviousDynamically (orig_right.ppt.var_infos);
@@ -232,13 +236,15 @@ public class Implication extends Joiner {
     //                                  new VarInfo[right.ppt.var_infos.length], 0);
   }
 
-  /*@Pure*/ public boolean isSameFormula(/*@NonNull*/ Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(/*@NonNull*/ Invariant other) {
     Implication other_implic = (Implication) other;
     return ((iff == other_implic.iff) && super.isSameFormula(other_implic));
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean isSameInvariant(Invariant other) {
+  /*@Pure*/
+  public boolean isSameInvariant(final Invariant other) {
     if (other == null) return false;
     if (!(other instanceof Implication)) return false;
     if (iff != ((Implication) other).iff) return false;
@@ -247,7 +253,8 @@ public class Implication extends Joiner {
 
   // An implication is only interesting if both the predicate and
   // consequent are interesting
-  /*@Pure*/ public boolean isInteresting() {
+  /*@Pure*/
+  public boolean isInteresting() {
     return (predicate().isInteresting() && consequent().isInteresting());
   }
 
@@ -257,7 +264,8 @@ public class Implication extends Joiner {
     return consequent().hasUninterestingConstant();
   }
 
-  /*@Pure*/ public boolean isAllPrestate() {
+  /*@Pure*/
+  public boolean isAllPrestate() {
     return predicate().isAllPrestate() && consequent().isAllPrestate();
   }
 
@@ -323,5 +331,4 @@ public class Implication extends Joiner {
       /*>>> @Prototype Implication this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
-
 }

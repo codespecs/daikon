@@ -195,6 +195,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.framework.qual.*;
@@ -272,7 +273,7 @@ public class LOWERBOUND
 
   /** Returns the prototype invariant for LOWERBOUND **/
   public static /*@Prototype*/ LOWERBOUND get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -283,10 +284,11 @@ public class LOWERBOUND
   /** LOWERBOUND is only valid on integral types **/
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
-    return (vis[0].file_rep_type.BASE_IS_INTEGRAL);
+    return vis[0].file_rep_type.BASE_IS_INTEGRAL;
     }
 
   /** instantiate an invariant on the specified slice **/
@@ -294,7 +296,8 @@ public class LOWERBOUND
     return new LOWERBOUND (slice);
   }
 
-  /*@SideEffectFree*/ public LOWERBOUND clone() {
+  /*@SideEffectFree*/
+  public LOWERBOUND clone(/*>>>@GuardSatisfied LOWERBOUND this*/) {
     LOWERBOUND result = (LOWERBOUND) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;
@@ -305,13 +308,14 @@ public class LOWERBOUND
     return core.MIN();          // i.e., MIN1
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied LOWERBOUND this*/) {
     return LOWERBOUNDSTR + varNames() + ": "
       + core.repr();
   }
 
 #if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
     String name = var().name_using(format);
     PptTopLevel pptt = ppt.parent;
 
@@ -328,8 +332,9 @@ public class LOWERBOUND
             // If variable is a double, then use fuzzy comparison
             if (vi.rep_type == ProglangType.DOUBLE) {
               Double constantVal = (Double)vi.constantValue();
-              if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1)))
+              if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1))) {
                 return name + " " + GTESTR + " " + vi.name();
+              }
             }
             // Otherwise just use the equals method
             else {
@@ -357,9 +362,12 @@ public class LOWERBOUND
   }
 #else
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
 
-    if (format.isJavaFamily()) return format_java_family(format);
+    if (format.isJavaFamily()) {
+      return format_java_family(format);
+    }
 
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
@@ -374,7 +382,7 @@ public class LOWERBOUND
     return format_unimplemented(format);
   }
   // ELTLOWEr || ELTUPPEr
-  public String format_daikon() {
+  public String format_daikon(/*>>>@GuardSatisfied LOWERBOUND this*/) {
     PptTopLevel pptt = ppt.parent;
     String name = var().name();
 
@@ -384,8 +392,9 @@ public class LOWERBOUND
           // If variable is a double, then use fuzzy comparison
           if (vi.rep_type == ProglangType.DOUBLE) {
             Double constantVal = (Double)vi.constantValue();
-            if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1)))
+            if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1))) {
               return name + " " + GTESTR + " " + vi.name();
+            }
           }
           // Otherwise just use the equals method
           else {
@@ -401,7 +410,7 @@ public class LOWERBOUND
     return var().name() + " elements " + GTESTR + " " + MIN1;
   }
 
-  public String format_esc() {
+  public String format_esc(/*>>>@GuardSatisfied LOWERBOUND this*/) {
     PptTopLevel pptt = ppt.parent;
 
     if (PrintInvariants.dkconfig_static_const_infer) {
@@ -445,7 +454,7 @@ public class LOWERBOUND
 #endif
   }
 
-  public String format_csharp_contract() {
+  public String format_csharp_contract(/*>>>@GuardSatisfied LOWERBOUND this*/) {
     PptTopLevel pptt = ppt.parent;
     String name = var().csharp_name();
 
@@ -491,7 +500,7 @@ public class LOWERBOUND
 #endif
   }
 
-  public String format_java_family(OutputFormat format) {
+  public String format_java_family(/*>>>@GuardSatisfied LOWERBOUND this,*/ OutputFormat format) {
     PptTopLevel pptt = ppt.parent;
 
     if (PrintInvariants.dkconfig_static_const_infer) {
@@ -533,7 +542,7 @@ public class LOWERBOUND
 #endif
   }
 
-  public String format_simplify() {
+  public String format_simplify(/*>>>@GuardSatisfied LOWERBOUND this*/) {
 #ifdef BASE_FLOAT
     String value = simplify_format_double(MIN1);
 #else
@@ -586,7 +595,7 @@ public class LOWERBOUND
 #endif
   }
 
-  public boolean enoughSamples() {
+  public boolean enoughSamples(/*>>>@GuardSatisfied LOWERBOUND this*/) {
     return core.enoughSamples();
   }
 
@@ -594,11 +603,13 @@ public class LOWERBOUND
     return core.computeConfidence();
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     return core.isExact();
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((LOWERBOUND) other).core);
   }
 
@@ -606,7 +617,8 @@ public class LOWERBOUND
 #ifndef IS_ELT
   // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
   // Use hasUninterestingConstant() instead. -SMcC 2/26/2003
-  /*@Pure*/ public boolean isInteresting() {
+  /*@Pure*/
+  public boolean isInteresting() {
     return (-1 < MIN1 && MIN1 < 2);
   }
 #endif
@@ -773,15 +785,17 @@ public class LOWERBOUND
   }
 
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
 #ifdef IS_ELT
     /* N.B. "x[] elements >= 200" is not mutually exclusive with "x[]
      * elements <= 100"; they could both be true if x[] were always
      * empty. */
 #else
     if (other instanceof UPPERBOUND) {
-      if (MIN() GT ((UPPERBOUND) other).MAX())
+      if (MIN() GT ((UPPERBOUND) other).MAX()) {
         return true;
+      }
     }
 #endif
     if (other instanceof ONEOFSCALAR) {
@@ -794,8 +808,9 @@ public class LOWERBOUND
   public static /*@Nullable*/ LOWERBOUND find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof LOWERBOUND)
+      if (inv instanceof LOWERBOUND) {
         return (LOWERBOUND) inv;
+      }
     }
     return null;
   }
@@ -814,12 +829,12 @@ public class LOWERBOUND
    * in each invariant, applies them to a new parent invariant and
    * returns the merged invariant (if any).
    *
-   * @param invs        List of invariants to merge.  The invariants must all
+   * @param invs        list of invariants to merge.  The invariants must all
    *                    be of the same type and should come from the
    *                    children of parent_ppt.  They should also all
    *                    be permuted to match the variable order in
    *                    parent_ppt.
-   * @param parent_ppt  Slice that will contain the new invariant
+   * @param parent_ppt  slice that will contain the new invariant
    */
   public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
@@ -835,6 +850,6 @@ public class LOWERBOUND
     }
 
     result.log ("Merged '%s' from %s child invariants", result.format(),invs.size());
-    return (result);
+    return result;
   }
 }

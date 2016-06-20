@@ -6,6 +6,7 @@ import java.io.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -43,8 +44,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
   public /*@Nullable*/ String csharpFormat = null;
 
   /**
-   * @param condition The splitting condition of this splitter
-   * @param directory The directory where the source of this splitter is located.
+   * @param condition the splitting condition of this splitter
+   * @param directory the directory where the source of this splitter is located
    */
   public SplitterObject(String pptName, String condition, String directory) {
     this.condition = condition;
@@ -236,7 +237,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.testString;
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied SplitterObject this*/) {
     return (className
         + ": "
         + "condition: "
@@ -247,7 +249,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
         + pptName);
   }
 
-  /*@Pure*/ public int compareTo(SplitterObject o) {
+  /*@Pure*/
+  public int compareTo(/*>>>@GuardSatisfied SplitterObject this,*/ SplitterObject o) {
     return this.guid - o.getGUID();
   }
 }

@@ -41,6 +41,6 @@ public class ThisObjInfo extends DaikonVariableInfo {
     // System.out.printf ("%s is a parameter%n", this);
     EnumSet<VarFlags> var_flags = super.get_var_flags().clone();
     var_flags.add(VarFlags.IS_PARAM);
-    return (var_flags);
+    return var_flags;
   }
 }

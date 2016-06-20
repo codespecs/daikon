@@ -73,7 +73,9 @@ public final class SequenceLength extends UnaryDerivation {
 
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
     Object val = base.getValue(vt);
     if (val == null) {
       return ValueAndModified.MISSING_NONSENSICAL;
@@ -110,13 +112,15 @@ public final class SequenceLength extends UnaryDerivation {
     return v;
   }
 
-  /*@Pure*/ public boolean isSameFormula(Derivation other) {
+  /*@Pure*/
+  public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceLength) && (((SequenceLength) other).shift == this.shift);
   }
 
   /** Returns the ESC name **/
   @SuppressWarnings("nullness")
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     // This should be able to use Quantify.Length to calculate the name,
     // but it can't because the old version formatted these slightly
     // differently.  But this could be used when the old regression results
@@ -124,10 +128,12 @@ public final class SequenceLength extends UnaryDerivation {
     // Quantify.Length  ql = new Quantify.Length (base, shift);
     // return ql.esc_name();
 
-    if (base.isPrestate())
+    if (base.isPrestate()) {
       return String.format(
           "\\old(%s.length)%s", base.enclosing_var.postState.esc_name(), shift_str(shift));
-    else return String.format("%s.length%s", base.enclosing_var.esc_name(), shift_str(shift));
+    } else {
+      return String.format("%s.length%s", base.enclosing_var.esc_name(), shift_str(shift));
+    }
   }
 
   /** Returns the JML name **/
@@ -137,13 +143,15 @@ public final class SequenceLength extends UnaryDerivation {
   }
 
   /** Returns the Simplify name **/
-  /*@SideEffectFree*/ public String simplify_name() {
+  /*@SideEffectFree*/
+  public String simplify_name() {
     Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.simplify_name();
   }
 
   /** Returns the CSharpContract name **/
-  /*@SideEffectFree*/ public String csharp_name(String index) {
+  /*@SideEffectFree*/
+  public String csharp_name(String index) {
     Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.csharp_name();
   }

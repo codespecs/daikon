@@ -3,6 +3,7 @@ package daikon;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -59,23 +60,30 @@ public class Quantify {
    * for quantification (i, j, etc), and normal daikon variables
    */
   public static abstract class Term {
-    /*@SideEffectFree*/ public abstract String name();
-    /*@SideEffectFree*/ public String esc_name() {
+    /*@SideEffectFree*/
+    public abstract String name(/*>>>@GuardSatisfied Term this*/);
+    /*@SideEffectFree*/
+    public String esc_name() {
       return name();
     }
-    /*@SideEffectFree*/ public String jml_name() {
+    /*@SideEffectFree*/
+    public String jml_name() {
       return esc_name();
     }
-    /*@SideEffectFree*/ public String jml_name(boolean in_prestate) {
+    /*@SideEffectFree*/
+    public String jml_name(boolean in_prestate) {
       return jml_name();
     }
-    /*@SideEffectFree*/ public String simplify_name() {
+    /*@SideEffectFree*/
+    public String simplify_name() {
       return name();
     }
-    /*@SideEffectFree*/ public String csharp_name() {
+    /*@SideEffectFree*/
+    public String csharp_name() {
       return name();
     }
-    /*@SideEffectFree*/ protected static String name_with_offset(String name, int offset) {
+    /*@SideEffectFree*/
+    protected static String name_with_offset(String name, int offset) {
       if (offset == 0) {
         return name;
       } else {
@@ -93,10 +101,12 @@ public class Quantify {
     public FreeVar(String name) {
       this.name = name;
     }
-    /*@SideEffectFree*/ public String name() {
+    /*@SideEffectFree*/
+    public String name(/*>>>@GuardSatisfied FreeVar this*/) {
       return name;
     }
-    /*@SideEffectFree*/ public String simplify_name() {
+    /*@SideEffectFree*/
+    public String simplify_name() {
       return "|" + name + "|";
     }
   }
@@ -108,7 +118,8 @@ public class Quantify {
     public Constant(int val) {
       this.val = val;
     }
-    /*@SideEffectFree*/ public String name() {
+    /*@SideEffectFree*/
+    public String name(/*>>>@GuardSatisfied Constant this*/) {
       return "" + val;
     }
 
@@ -126,13 +137,16 @@ public class Quantify {
       this.sequence = sequence;
       this.offset = offset;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied Length this*/) {
       return name();
     }
-    /*@SideEffectFree*/ public String name() {
+    /*@SideEffectFree*/
+    public String name(/*>>>@GuardSatisfied Length this*/) {
       return name_with_offset("size(" + sequence.name() + ")", offset);
     }
-    /*@SideEffectFree*/ public String esc_name() {
+    /*@SideEffectFree*/
+    public String esc_name() {
       VarInfo arr_var = get_check_array_var("ESC");
       if (arr_var.isPrestate()) {
         assert arr_var.postState != null; // because isPrestate() = true
@@ -142,7 +156,8 @@ public class Quantify {
         return name_with_offset(arr_var.esc_name() + ".length", offset);
       }
     }
-    /*@SideEffectFree*/ public String jml_name() {
+    /*@SideEffectFree*/
+    public String jml_name() {
       VarInfo arr_var = get_check_array_var("JML");
       if (arr_var.isPrestate()) {
         assert arr_var.postState != null; // because isPrestate() = true
@@ -154,7 +169,8 @@ public class Quantify {
         return name_with_offset(name, offset);
       }
     }
-    /*@SideEffectFree*/ public String jml_name(boolean in_prestate) {
+    /*@SideEffectFree*/
+    public String jml_name(boolean in_prestate) {
       if (!in_prestate) return jml_name();
 
       VarInfo arr_var = get_check_array_var("JML");
@@ -167,7 +183,8 @@ public class Quantify {
         return name_with_offset(name, offset);
       }
     }
-    /*@SideEffectFree*/ public String simplify_name() {
+    /*@SideEffectFree*/
+    public String simplify_name() {
       VarInfo arr_var = get_check_array_var("Simplify");
       String length = String.format("(arrayLength %s)", arr_var.simplify_name());
       if (offset < 0) {
@@ -178,7 +195,8 @@ public class Quantify {
         return length;
       }
     }
-    /*@SideEffectFree*/ public String csharp_name() {
+    /*@SideEffectFree*/
+    public String csharp_name() {
       VarInfo arr_var = get_check_array_var("CHARPCONTRACT");
       return name_with_offset(arr_var.csharp_name() + ".Count()", offset);
     }
@@ -192,7 +210,8 @@ public class Quantify {
      * Throws a TerminationMessage exception if one does not exist.
      **/
     @SuppressWarnings("sideeffectfree") // throws exception in case of error
-    /*@SideEffectFree*/ private VarInfo get_check_array_var(String output_format) {
+    /*@SideEffectFree*/
+    private VarInfo get_check_array_var(String output_format) {
       VarInfo arr_var = sequence.get_base_array_hashcode();
       if (arr_var != null) return arr_var;
 
@@ -224,19 +243,23 @@ public class Quantify {
       this.offset = offset;
     }
 
-    /*@SideEffectFree*/ public String name() {
+    /*@SideEffectFree*/
+    public String name(/*>>>@GuardSatisfied VarPlusOffset this*/) {
       return name_with_offset(var.name(), offset);
     }
 
-    /*@SideEffectFree*/ public String esc_name() {
+    /*@SideEffectFree*/
+    public String esc_name() {
       return name_with_offset(var.esc_name(), offset);
     }
 
-    /*@SideEffectFree*/ public String jml_name() {
+    /*@SideEffectFree*/
+    public String jml_name() {
       return name_with_offset(var.jml_name(), offset);
     }
 
-    /*@SideEffectFree*/ public String jml_name(boolean in_prestate) {
+    /*@SideEffectFree*/
+    public String jml_name(boolean in_prestate) {
       if (!in_prestate) return jml_name();
 
       if (var.isPrestate()) {
@@ -247,7 +270,8 @@ public class Quantify {
       }
     }
 
-    /*@SideEffectFree*/ public String simplify_name() {
+    /*@SideEffectFree*/
+    public String simplify_name() {
       if (offset < 0) {
         return String.format("(- %s %d)", var.simplify_name(), -offset);
       } else if (offset > 0) {
@@ -308,7 +332,7 @@ public class Quantify {
       assert tmp <= 'z' : "Ran out of letters in quantification";
       result[ii].index = new FreeVar(idx_name);
     }
-    return (result);
+    return result;
   }
 
   /**
@@ -343,7 +367,7 @@ public class Quantify {
         String quant2 = bld_quant(vars[1], index2);
         indices = new Term[] {index1, index2};
         quants = new String[] {quant1, quant2};
-        if (flags.contains(QuantFlags.ELEMENT_WISE))
+        if (flags.contains(QuantFlags.ELEMENT_WISE)) {
           quant =
               String.format(
                   "(\\forall int %s, %s; (%s && %s && %s == %s)",
@@ -353,7 +377,7 @@ public class Quantify {
                   quant2,
                   index1.esc_name(),
                   index2.esc_name());
-        else
+        } else {
           quant =
               String.format(
                   "(\\forall int %s, %s; (%s && %s)",
@@ -361,6 +385,7 @@ public class Quantify {
                   index2.esc_name(),
                   quant1,
                   quant2);
+        }
 
         VarInfo arr_var2 = vars[1].get_array_var();
         arr_vars = new VarInfo[] {arr_var1, arr_var2};
@@ -427,8 +452,9 @@ public class Quantify {
       assert (vars.length == 1) || (vars.length == 2) : vars.length;
       assert vars[0].file_rep_type.isArray();
 
-      if (flags.contains(QuantFlags.ADJACENT) || flags.contains(QuantFlags.DISTINCT))
+      if (flags.contains(QuantFlags.ADJACENT) || flags.contains(QuantFlags.DISTINCT)) {
         assert vars.length == 2;
+      }
 
       QuantifyReturn[] qrets = quantify(vars);
 
@@ -473,12 +499,14 @@ public class Quantify {
             // Term prev_idx = _boundv[0];
             @SuppressWarnings("nullness")
             /*@NonNull*/ Term prev_idx = qrets[i - 1].index;
-            if (flags.contains(QuantFlags.ADJACENT))
+            if (flags.contains(QuantFlags.ADJACENT)) {
               conditions.append(
                   " (EQ (+ " + prev_idx.simplify_name() + " 1) " + idx.simplify_name() + ")");
-            if (flags.contains(QuantFlags.DISTINCT))
+            }
+            if (flags.contains(QuantFlags.DISTINCT)) {
               conditions.append(
                   " (NEQ " + prev_idx.simplify_name() + " " + idx.simplify_name() + ")");
+            }
           }
         }
       }

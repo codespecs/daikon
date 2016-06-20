@@ -111,10 +111,11 @@ public class SampleTester extends TestCase {
     daikon.LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
 
     InputStream commands = SampleTester.class.getResourceAsStream("SampleTester.commands");
-    if (commands == null)
+    if (commands == null) {
       fail(
           "Input file SampleTester.commands missing."
               + " (Should be in daikon.test and it must be within the classpath)");
+    }
 
     SampleTester ts = new SampleTester();
     ts.proc_sample_file(commands, "SampleTester.commands");
@@ -126,7 +127,7 @@ public class SampleTester extends TestCase {
     URL input_file_location = ClassLoader.getSystemResource(fname);
 
     if (input_file_location == null) {
-      return (null);
+      return null;
     } else {
       return (input_file_location.toExternalForm());
     }
@@ -141,10 +142,11 @@ public class SampleTester extends TestCase {
     FileIO.new_decl_format = null;
 
     InputStream commands = getClass().getResourceAsStream("SampleTester.commands");
-    if (commands == null)
+    if (commands == null) {
       fail(
           "Input file SampleTester.commands missing."
               + " (Should be in daikon.test and it must be within the classpath)");
+    }
 
     SampleTester ts = new SampleTester();
     ts.proc_sample_file(commands, "SampleTester.commands");
@@ -352,8 +354,9 @@ public class SampleTester extends TestCase {
     List<String> args = new ArrayList<String>(10);
     do {
       String arg = stok.nextToken();
-      if (!stok.isWord() && !stok.isQString())
+      if (!stok.isWord() && !stok.isQString()) {
         parse_error(String.format("%s found where argument expected", arg));
+      }
       args.add(arg);
     } while (stok.nextToken() == ","); // interned
     if (stok.token() != ")") // interned
@@ -371,7 +374,9 @@ public class SampleTester extends TestCase {
       result = proc_show_invs_assert(args);
     } else if (name.equals("constant")) {
       result = proc_constant_assert(args);
-    } else parse_error("unknown assertion: " + name);
+    } else {
+      parse_error("unknown assertion: " + name);
+    }
 
     if (negate) result = !result;
 
@@ -390,8 +395,9 @@ public class SampleTester extends TestCase {
    */
   private boolean proc_inv_assert(List<String> args) {
 
-    if ((args.size() < 2) || (args.size() > 4))
+    if ((args.size() < 2) || (args.size() > 4)) {
       parse_error("bad argument count (" + args.size() + ") for invariant assertion");
+    }
 
     Class<?> cls = null;
     String format = null;
@@ -416,9 +422,10 @@ public class SampleTester extends TestCase {
     VarInfo[] vis = new VarInfo[args.size() - 1];
     for (int i = 0; i < vis.length; i++) {
       vis[i] = ppt.find_var_by_name(args.get(i + 1));
-      if (vis[i] == null)
+      if (vis[i] == null) {
         parse_error(
             String.format("Variable '%s' not found at ppt %s", args.get(i + 1), ppt.name()));
+      }
     }
     PptSlice slice = ppt.findSlice(vis);
     if (slice == null) {
@@ -427,8 +434,12 @@ public class SampleTester extends TestCase {
 
     // Look for a matching invariant in the slices invariant list
     for (Invariant inv : slice.invs) {
-      if (inv.getClass() == cls) return true;
-      if ((format != null) && format.equals(inv.format())) return true;
+      if (inv.getClass() == cls) {
+        return true;
+      }
+      if ((format != null) && format.equals(inv.format())) {
+        return true;
+      }
       debug.fine(String.format("trace %s: '%s'", inv.getClass(), inv.format()));
     }
     return false;
@@ -441,8 +452,9 @@ public class SampleTester extends TestCase {
    */
   private boolean proc_show_invs_assert(List<String> args) {
 
-    if ((args.size() < 1) || (args.size() > 3))
+    if ((args.size() < 1) || (args.size() > 3)) {
       parse_error("bad argument count (" + args.size() + ") for show_invs");
+    }
 
     Class<?> cls = null;
     String format = null;
@@ -451,8 +463,9 @@ public class SampleTester extends TestCase {
     VarInfo[] vis = new VarInfo[args.size()];
     for (int i = 0; i < vis.length; i++) {
       vis[i] = ppt.find_var_by_name(args.get(i));
-      if (vis[i] == null)
+      if (vis[i] == null) {
         parse_error(String.format("Variable '%s' not found at ppt %s", args.get(i), ppt.name()));
+      }
     }
     PptSlice slice = ppt.findSlice(vis);
     if (slice == null) {
@@ -478,8 +491,9 @@ public class SampleTester extends TestCase {
 
     for (String arg : args) {
       VarInfo v = ppt.find_var_by_name(arg);
-      if (v == null)
+      if (v == null) {
         parse_error(String.format("Variable '%s' not found at ppt %s", arg, ppt.name()));
+      }
       if (!ppt.constants.is_constant(v)) {
         return false;
       }

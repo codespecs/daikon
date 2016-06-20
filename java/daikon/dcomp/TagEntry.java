@@ -81,7 +81,7 @@ class TagEntry extends WeakReference<Object> {
     assert !object_map.containsKey(obj);
     TagEntry entry = new TagEntry(obj);
     object_map.put(obj, entry);
-    return (entry);
+    return entry;
   }
 
   /**
@@ -110,8 +110,9 @@ class TagEntry extends WeakReference<Object> {
     ArrayList<StackTraceElement> blarg =
         new ArrayList<StackTraceElement>(
             Arrays.<StackTraceElement>asList(new Exception().getStackTrace()));
-    if (blarg.get(blarg.size() - 1).getClassName().equals("daikon.dcomp.Premain$ShutdownThread"))
+    if (blarg.get(blarg.size() - 1).getClassName().equals("daikon.dcomp.Premain$ShutdownThread")) {
       return "";
+    }
     do blarg.remove(0);
     while (blarg.get(0).getClassName().equals("daikon.dcomp.DCRuntime")
         || blarg.get(0).getClassName().equals("daikon.dcomp.TagEntry"));
@@ -149,7 +150,7 @@ class TagEntry extends WeakReference<Object> {
     assert obj != null;
     TagEntry entry = object_map.get(obj);
     if (entry == null) entry = create(obj);
-    return (entry);
+    return entry;
   }
 
   public static String get_line_trace(Object obj) {
@@ -194,14 +195,14 @@ class TagEntry extends WeakReference<Object> {
 
     // It shouldn't matter that this isn't a member of the set, only that
     // it is unique.
-    // return (root);
+    // return root;
 
     // If the root object has been garbage collected, just return
     // a reference to the tag instead.  Since the caller has no references
     // to the root, it can't matter what we returned.
     Object root_ref = root.get();
     if (root_ref == null) root_ref = root;
-    return (root_ref);
+    return root_ref;
   }
 
   public static /*@Nullable*/ Object tracer_find(Object obj) {
@@ -215,7 +216,7 @@ class TagEntry extends WeakReference<Object> {
     }
     Object tr_ref = tracer.get();
     if (tr_ref == null) tr_ref = tracer;
-    return (tr_ref);
+    return tr_ref;
   }
 
   public static Object troot_find(Object obj) {
@@ -226,7 +227,7 @@ class TagEntry extends WeakReference<Object> {
     TagEntry troot = entry.getTraceRoot();
     Object tr_ref = troot.get();
     if (tr_ref == null) tr_ref = troot;
-    return (tr_ref);
+    return tr_ref;
   }
 
   /**
@@ -278,13 +279,15 @@ class TagEntry extends WeakReference<Object> {
       for (Object entry : set) {
         if (line != "") // "interned"
         line += ", ";
-        if (entry instanceof DaikonVariableInfo)
+        if (entry instanceof DaikonVariableInfo) {
           line += String.format("%s ", ((DaikonVariableInfo) entry).getName());
-        else line += String.format("%s [%s]", entry.getClass(), entry);
+        } else {
+          line += String.format("%s [%s]", entry.getClass(), entry);
+        }
       }
       out += String.format("%s%n", line);
     }
-    return (out);
+    return out;
   }
 
   /** Returns the tracer of this node **/

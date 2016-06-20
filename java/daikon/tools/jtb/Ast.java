@@ -1212,9 +1212,10 @@ public class Ast {
       Invariant inv = invs_array[i];
 
       assert !(inv instanceof Equality);
-      for (int j = 0; j < inv.ppt.var_infos.length; j++)
+      for (int j = 0; j < inv.ppt.var_infos.length; j++) {
         assert !inv.ppt.var_infos[j].missingOutOfBounds()
             : "var '" + inv.ppt.var_infos[j].name() + "' out of bounds in " + inv.format();
+      }
       InvariantFilters fi = InvariantFilters.defaultFilters();
 
       boolean fi_accepted = true;
@@ -1314,7 +1315,9 @@ public class Ast {
     // n.getParent won't be an ClassOrInterfaceDeclaration for anonymous
     // class bodies such as in  new List() { ... }  -- anonymous classes can
     // never be interfaces, however, so that's simple enough to handle. :)
-    if (!(n.getParent() instanceof ClassOrInterfaceDeclaration)) return false;
+    if (!(n.getParent() instanceof ClassOrInterfaceDeclaration)) {
+      return false;
+    }
 
     return isInterface((ClassOrInterfaceDeclaration) n.getParent());
   }

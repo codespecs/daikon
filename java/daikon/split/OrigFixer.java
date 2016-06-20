@@ -40,7 +40,7 @@ class OrigFixer extends DepthFirstVisitor {
    * For example, "orig(x + y &gt; z - 3)" would yield,
    * "orig_x + orig_y &gt; orig_z - 3".
    * @param expression a valid segment of java code in which "orig()" is
-   *  being replaced.
+   *  being replaced
    * @return condition with all instances of "orig()" replaced.
    * @throws ParseException if expression is not valid java code.
    */
@@ -97,7 +97,8 @@ class OrigFixer extends DepthFirstVisitor {
    * Returns in n if an instance of the method "orig".
    * @return true iff n is a instance of the method "orig".
    */
-  /*@Pure*/ private boolean isOrig(PrimaryExpression n) {
+  /*@Pure*/
+  private boolean isOrig(PrimaryExpression n) {
     return ((n.f0.f0.choice instanceof Name)
         && (((Name) n.f0.f0.choice).f0.tokenImage.equals("orig"))
         && (n.f1.size() > 0)
@@ -125,7 +126,8 @@ class OrigFixer extends DepthFirstVisitor {
    * variable name.
    */
   /*@EnsuresNonNullIf(result=true, expression="lastToken")*/
-  /*@Pure*/ private boolean isLastTokenVar(NodeToken n) {
+  /*@Pure*/
+  private boolean isLastTokenVar(NodeToken n) {
     return (lastToken != null
         && Visitors.isIdentifier(lastToken)
         && (twoTokensAgo == null || (!Visitors.isDot(twoTokensAgo)))

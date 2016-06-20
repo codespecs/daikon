@@ -70,10 +70,11 @@ public final class CLASSNAME
   public CLASSNAME(VarInfo vi, int index) {
     super(vi);
     this.index = index;
-    if (index < 0)
+    if (index < 0) {
       minLength = -index;
-    else
+    } else {
       minLength = index+1;
+    }
   }
 
   public VarInfo seqvar() {
@@ -99,22 +100,26 @@ public final class CLASSNAME
 
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL)
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) {
       return ValueAndModified.MISSING_NONSENSICAL;
+    }
     Object val = base.getValue(vt);
-    if (val == null)
+    if (val == null) {
       return ValueAndModified.MISSING_NONSENSICAL;
+    }
     if (base.rep_type == PROGLANGTYPE) {
       PRIMITIVE[] val_array = (PRIMITIVE[])val;
-      if (val_array.length < minLength)
+      if (val_array.length < minLength) {
         return ValueAndModified.MISSING_NONSENSICAL;
+      }
       int real_index = (index<0 ? val_array.length + index : index);
       return new ValueAndModified(Intern.INTERNEDLONG(val_array[real_index]), source_mod);
     } else {
       @SuppressWarnings("interning") // object invariant: array elements are interned
       /*@Interned*/ Object[] val_array = (/*@Interned*/ Object[])val;
-      if (val_array.length < minLength)
+      if (val_array.length < minLength) {
         return ValueAndModified.MISSING_NONSENSICAL;
+      }
       int real_index = (index<0 ? val_array.length + index : index);
       return new ValueAndModified(val_array[real_index], source_mod);
     }
@@ -124,13 +129,15 @@ public final class CLASSNAME
     return VarInfo.make_subscript (base, null, index);
   }
 
-  /*@Pure*/ public boolean isSameFormula(Derivation other) {
+  /*@Pure*/
+  public boolean isSameFormula(Derivation other) {
     return (other instanceof CLASSNAME)
       && (((CLASSNAME) other).index == this.index);
   }
 
   /** Returns the ESC name **/
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     return String.format ("%s[0]", base.esc_name());
   }
 

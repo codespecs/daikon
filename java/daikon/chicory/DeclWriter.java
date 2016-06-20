@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -160,9 +161,9 @@ public class DeclWriter extends DaikonWriter {
    *
    * This method uses variable information from the traversal tree.
    *
-   * @param root The root of the traversal tree.
-   * @param name The program point name.
-   * @param comp_info Comparability information
+   * @param root the root of the traversal tree
+   * @param name the program point name
+   * @param comp_info comparability information
    */
   private void printMethod(RootInfo root, String name, DeclReader comp_info) {
     outFile.println(declareHeader);
@@ -303,11 +304,11 @@ public class DeclWriter extends DaikonWriter {
    *
    * This method uses variable information from the traversal tree.
    *
-   * @param mi The method information for the method
-   * @param root The root of the traversal tree.
-   * @param name The program point name.
-   * @param ppt_type The type of the program point (enter, exit, etc)
-   * @param comp_info Comparability information
+   * @param mi the method information for the method
+   * @param root the root of the traversal tree
+   * @param name the program point name
+   * @param ppt_type the type of the program point (enter, exit, etc)
+   * @param comp_info comparability information
    */
   private void print_method(
       MethodInfo mi,
@@ -327,10 +328,12 @@ public class DeclWriter extends DaikonWriter {
 
     // Look for and print any hierarchy relations
     List<VarRelation> relations = new ArrayList<VarRelation>();
-    for (DaikonVariableInfo child : root)
+    for (DaikonVariableInfo child : root) {
       find_relations(null, mi.is_static(), null, child, relations);
-    for (VarRelation relation : relations)
+    }
+    for (VarRelation relation : relations) {
       outFile.println("parent parent " + relation.parent_ppt_name + " " + relation.id);
+    }
 
     // Print each variable
     for (DaikonVariableInfo childOfRoot : root) {
@@ -414,9 +417,10 @@ public class DeclWriter extends DaikonWriter {
     for (DaikonVariableInfo child : root) {
       find_relations(cinfo, false, null, child, relations);
     }
-    for (VarRelation relation : relations)
+    for (VarRelation relation : relations) {
       outFile.println(
           "parent " + relation.type + " " + relation.parent_ppt_name + " " + relation.id);
+    }
 
     // Write out the variables
     for (DaikonVariableInfo childOfRoot : root) {
@@ -484,7 +488,8 @@ public class DeclWriter extends DaikonWriter {
       this(parent_ppt_name, type, null, null, null);
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied VarRelation this*/) {
       return String.format(
           "VarRelation %s (%s->%s) %s [%s]",
           parent_ppt_name,
@@ -498,7 +503,8 @@ public class DeclWriter extends DaikonWriter {
      * Returns whether or not this relation is from a static variable in
      * an object ppt to its matching variable at the class level.
      */
-    /*@Pure*/ public boolean is_class_relation() {
+    /*@Pure*/
+    public boolean is_class_relation() {
       return (parent_ppt_name.endsWith(":::CLASS"));
     }
 
@@ -510,8 +516,9 @@ public class DeclWriter extends DaikonWriter {
      **/
     public String relation_str(DaikonVariableInfo var) {
       String out = parent_ppt_name + " " + id;
-      if (!var.isStatic() && (local_prefix != null) && !local_prefix.equals(parent_prefix))
+      if (!var.isStatic() && (local_prefix != null) && !local_prefix.equals(parent_prefix)) {
         out += " " + var.getName().replaceFirst(Pattern.quote(local_prefix), parent_prefix);
+      }
       return out;
     }
 
@@ -521,8 +528,13 @@ public class DeclWriter extends DaikonWriter {
      */
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
-      if (!(o instanceof VarRelation) || (o == null)) return false;
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied VarRelation this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+      if (!(o instanceof VarRelation) || (o == null)) {
+        return false;
+      }
       VarRelation vr = (VarRelation) o;
       return (vr.parent_ppt_name.equals(parent_ppt_name)
           && (((vr.local_variable == null) && local_variable == null)
@@ -530,7 +542,8 @@ public class DeclWriter extends DaikonWriter {
     }
 
     @Override
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied VarRelation this*/) {
       return (parent_ppt_name.hashCode()
           + ((local_variable == null) ? 0 : local_variable.hashCode()));
     }
@@ -691,10 +704,10 @@ public class DeclWriter extends DaikonWriter {
    * If this is an object ppt (ci != null), then each top level static
    * variable has a relation to the class ppt.
    *
-   * @param cinfo - Class of the object ppt.  Null if this is not an object ppt
-   * @param is_static_method - true if this ppt is a static method enter
-   * @param parent - parent of var in the variable tree
-   * @param var - variable whose relation is desired.
+   * @param cinfo class of the object ppt.  Null if this is not an object ppt
+   * @param is_static_method true if this ppt is a static method enter
+   * @param parent parent of var in the variable tree
+   * @param var variable whose relation is desired
    */
   private /*@Nullable*/ VarRelation find_relation(
       /*@Nullable*/ ClassInfo cinfo,
@@ -710,7 +723,7 @@ public class DeclWriter extends DaikonWriter {
     }
 
     // Only hashcodes have object ppts
-    if (!var.getRepTypeNameOnly().equals("hashcode")) return (null);
+    if (!var.getRepTypeNameOnly().equals("hashcode")) return null;
 
     // Get the type (class) of this variable
     String decl_type = var.getTypeNameOnly();
@@ -718,7 +731,9 @@ public class DeclWriter extends DaikonWriter {
 
     // If this ppt is the object ppt for this type, don't create a relation
     // to it
-    if ((cinfo != null) && cinfo.class_name.equals(decl_type)) return (null);
+    if ((cinfo != null) && cinfo.class_name.equals(decl_type)) {
+      return null;
+    }
 
     // Look to see if we are instrumenting this class.  If we are, then
     // there should be an object ppt for this class.  If this is a static
@@ -735,13 +750,15 @@ public class DeclWriter extends DaikonWriter {
           if (num_class_vars(ci) == 0) return null;
           ppt_marker = ":::CLASS";
         }
-        if (!enable_object_user && !var.getName().equals("this")) return (null);
+        if (!enable_object_user && !var.getName().equals("this")) {
+          return null;
+        }
         return new VarRelation(
             decl_type + ppt_marker, "parent", var.getName(), "this", var.getName());
       }
     }
 
-    return (null);
+    return null;
   }
 
   /**

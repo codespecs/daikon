@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -81,7 +82,7 @@ public class NISuppressee {
         Debug.log(sup_class, slice, "Didn't create, instantiate returned null");
       }
     }
-    return (inv);
+    return inv;
   }
 
   /**
@@ -101,8 +102,9 @@ public class NISuppressee {
       TernaryInvariant ternary_inv = (TernaryInvariant) sample_inv;
       return ternary_inv.check(vt.getValue(vis[0]), vt.getValue(vis[1]), vt.getValue(vis[2]), 1, 1);
     } else if (var_count == 2) {
-      if (!(sample_inv instanceof BinaryInvariant))
+      if (!(sample_inv instanceof BinaryInvariant)) {
         throw new Error("not binary: " + sample_inv.getClass());
+      }
       BinaryInvariant binary_inv = (BinaryInvariant) sample_inv;
       // System.out.printf ("checking %s over %s=%s and %s=%s%n", sample_inv.getClass(),
       //        vis[0].name(), vt.getValue(vis[0]),
@@ -152,7 +154,7 @@ public class NISuppressee {
   //         if (inv != null)
   //           created_list.add (inv);
   //       }
-  //       return (created_list);
+  //       return created_list;
   //     }
   //
   //     // Fill in the missing slot with each possible matching leader and
@@ -170,7 +172,7 @@ public class NISuppressee {
   //         created_list.add (inv);
   //     }
   //
-  //     return (created_list);
+  //     return created_list;
   //   }
 
   /**
@@ -186,7 +188,7 @@ public class NISuppressee {
    */
   /*@RequiresNonNull("#2.equality_view")*/
   public List<NIS.SupInv> find_all(
-      VarInfo[] vis, PptTopLevel ppt, /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
+      VarInfo[] vis, final PptTopLevel ppt, /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
 
     List<NIS.SupInv> created_list = new ArrayList<NIS.SupInv>();
 
@@ -209,7 +211,7 @@ public class NISuppressee {
         sinv.log("Created for invariants: " + Arrays.toString(cinvs));
         created_list.add(sinv);
       }
-      return (created_list);
+      return created_list;
     }
 
     // Fill in the missing slot with each possible matching leader and
@@ -228,7 +230,7 @@ public class NISuppressee {
       sinv.log("Created for invariants: " + Arrays.toString(cinvs));
       created_list.add(sinv);
     }
-    return (created_list);
+    return created_list;
   }
 
   /**
@@ -260,7 +262,8 @@ public class NISuppressee {
     }
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied NISuppressee this*/) {
 
     String extra = "";
     if (var_count == 2) {

@@ -18,7 +18,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   // the name of the Daikon trace file
   private String fileName;
 
-  /** @param filename The Daikon trace file to be partitioned
+  /** @param filename the Daikon trace file to be partitioned
    */
   public DtracePartitioner(String filename) {
     try {
@@ -51,9 +51,13 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     try {
       String ret = grabNextInvocation();
       if (ret.indexOf("EXIT") != -1) {
-        if (!br.ready()) return "";
+        if (!br.ready()) {
+          return "";
+        }
         return next();
-      } else return ret;
+      } else {
+        return ret;
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -166,7 +170,9 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     StringTokenizer st = new StringTokenizer(invocation, lineSep);
     while (st.hasMoreTokens()) {
       String line = st.nextToken();
-      if (line.equals("this_invocation_nonce")) return Integer.parseInt(st.nextToken());
+      if (line.equals("this_invocation_nonce")) {
+        return Integer.parseInt(st.nextToken());
+      }
     }
     throw new RuntimeException("This invocation didn't contain a nonce: " + invocation);
   }

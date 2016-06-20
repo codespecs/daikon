@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -76,8 +77,8 @@ public final class CLASSNAME
 
 
 
-  public VarInfo var1() { return base1; }
-  public VarInfo var2() { return base2; }
+  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) { return base1; }
+  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) { return base2; }
 
   /**
    * What value to predicate on.
@@ -98,8 +99,8 @@ public final class CLASSNAME
 
   /**
    * Create a new SequencesJoin derivation.
-   * @param vi1 The first of the two variables this is based on
-   * @param vi2 The second of the two variables this is based on
+   * @param vi1 the first of the two variables this is based on
+   * @param vi2 the second of the two variables this is based on
    **/
   public CLASSNAME(VarInfo vi1, VarInfo vi2, PRIMITIVE argChoose, String argName) {
     this (vi1, vi2, argChoose, argName, true);
@@ -107,8 +108,8 @@ public final class CLASSNAME
 
   /**
    * Create a new SequencesJoin derivation.
-   * @param vi1 The first of the two variables this is based on
-   * @param vi2 The second of the two variables this is based on
+   * @param vi1 the first of the two variables this is based on
+   * @param vi2 the second of the two variables this is based on
    **/
   public CLASSNAME(VarInfo vi1, VarInfo vi2, PRIMITIVE argChoose, String argName, boolean argKeep) {
     super(vi1, vi2);
@@ -220,12 +221,14 @@ public final class CLASSNAME
     return VarInfo.make_function ("predicateSlice", var1(), var2());
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return "[" + CLASSSTRING + " of " + var1().name() + " " +
       var2().name() + " for " + name + "]";
   }
 
-  /*@Pure*/ public boolean isSameFormula(Derivation other) {
+  /*@Pure*/
+  public boolean isSameFormula(Derivation other) {
     // For Toh (tohn) to do.
     if (other instanceof CLASSNAME) {
       CLASSNAME o = (CLASSNAME) other;
@@ -237,7 +240,8 @@ public final class CLASSNAME
   }
 
   /** Returns the ESC name **/
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     return String.format ("predicate(%s,%s)", var1().esc_name(),
                           var2().esc_name());
   }

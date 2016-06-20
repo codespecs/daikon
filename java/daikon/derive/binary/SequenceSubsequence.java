@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.derive.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -22,11 +23,11 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
 
   // base1 is the sequence
   // base2 is the scalar
-  public VarInfo seqvar() {
+  public VarInfo seqvar(/*>>>@GuardSatisfied SequenceSubsequence this*/) {
     return base1;
   }
 
-  public VarInfo sclvar() {
+  public VarInfo sclvar(/*>>>@GuardSatisfied SequenceSubsequence this*/) {
     return base2;
   }
 
@@ -66,7 +67,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
       vi = VarInfo.make_subsequence(seqvar, sclvar, index_shift, null, 0);
     }
 
-    return (vi);
+    return vi;
   }
 
   /** Returns the lower bound of the slice **/
@@ -92,7 +93,8 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     return seqvar();
   }
 
-  /*@SideEffectFree*/ public String csharp_name(String index) {
+  /*@SideEffectFree*/
+  public String csharp_name(String index) {
     // String lower = get_lower_bound().csharp_name();
     // String upper = get_upper_bound().csharp_name();
     // We do not need to check if seqvar().isPrestate() because it is redundant.
@@ -101,7 +103,8 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   }
 
   /** Returns the ESC name **/
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     return String.format(
         "%s[%s..%s]",
         seqvar().esc_name(),

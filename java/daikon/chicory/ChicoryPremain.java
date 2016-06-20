@@ -116,12 +116,7 @@ public class ChicoryPremain {
       doPurity = true;
     }
 
-    // Setup the declaration and dtrace writer.  The include/exclude filter are
-    // implemented in the transform, so they don't need to be handled
-    // here.
-    // (It looks like these can be called even if Runtime.dtrace is null...)
-    Runtime.decl_writer = new DeclWriter(Runtime.dtrace);
-    Runtime.dtrace_writer = new DTraceWriter(Runtime.dtrace);
+    initializeDeclAndDTraceWriters();
 
     // Setup the transformer
     Object transformer = null;
@@ -142,6 +137,27 @@ public class ChicoryPremain {
 
     // Instrument transformer = new Instrument();
     inst.addTransformer((ClassFileTransformer) transformer);
+  }
+
+  /**
+   * Set up the declaration and dtrace writer.
+   */
+  // Runtime.dtrace is @GuardedBy("<self>") because in the Runtime class,
+  // the printing of final lines and then closing of dtrace only happens
+  // when the monitor of dtrace is held in order for the closing of the
+  // trace to happen only once.  See Runtime.noMoreOutput() and
+  // Runtime.addShutdownHook() for more details.  DeclWriter and DTraceWriter
+  // never perform this operation (print final lines and close) on the
+  // value of dtrace passed in, therefore they do not need to make use
+  // of synchronization and their references to dtrace do not need to
+  // be annotated with @GuardedBy("<self>").
+  @SuppressWarnings("lock:argument.type.incompatible")
+  private static void initializeDeclAndDTraceWriters() {
+    // The include/exclude filter are implemented in the transform,
+    // so they don't need to be handled here.
+    // (It looks like these can be called even if Runtime.dtrace is null...)
+    Runtime.decl_writer = new DeclWriter(Runtime.dtrace);
+    Runtime.dtrace_writer = new DTraceWriter(Runtime.dtrace);
   }
 
   /**
@@ -213,7 +229,7 @@ public class ChicoryPremain {
 
   /**
    * Write a *.pure file to the given location
-   * @param fileName Where to write the file to (full path)
+   * @param fileName where to write the file to (full path)
    */
   // not handled: /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
   /*@RequiresNonNull("pureMethods")*/
@@ -237,7 +253,7 @@ public class ChicoryPremain {
   /**
    * Invokes Alexandru Salcianu's purity analysis on given application.
    * Populates the pureMethods Set with pure (non side-effecting) methods.
-   * @param targetApp Name of the class whose main method is the entry point of the application
+   * @param targetApp name of the class whose main method is the entry point of the application
    */
   //  private static void runPurityAnalysis(String targetApp)
   //  {
@@ -276,7 +292,9 @@ public class ChicoryPremain {
 
     //TODO just use Set.contains(member.toString()) ?
     for (String methName : pureMethods) {
-      if (methName.equals(member.toString())) return true;
+      if (methName.equals(member.toString())) {
+        return true;
+      }
     }
 
     return false;
@@ -381,7 +399,9 @@ public class ChicoryPremain {
      * same jar file or the same directory in the filesystem.
      */
     private static boolean same_location(URL url1, URL url2) {
-      if (!url1.getProtocol().equals(url2.getProtocol())) return false;
+      if (!url1.getProtocol().equals(url2.getProtocol())) {
+        return false;
+      }
 
       if (url1.getProtocol().equals("jar")) {
         // System.out.printf ("url1 = %s, file=%s, path=%s, protocol=%s, %s%n",
@@ -431,7 +451,7 @@ public class ChicoryPremain {
       while (enum_urls.hasMoreElements()) {
         urls.add(enum_urls.nextElement());
       }
-      return (urls);
+      return urls;
     }
 
     /**
@@ -446,7 +466,9 @@ public class ChicoryPremain {
         /*@BinaryName*/ String name, boolean resolve) throws java.lang.ClassNotFoundException {
 
       // If we are not loading from our jar, just use the normal mechanism
-      if (bcel_jar == null) return super.loadClass(name, resolve);
+      if (bcel_jar == null) {
+        return super.loadClass(name, resolve);
+      }
 
       // Load non-bcel files via the normal mechanism
       if (!name.startsWith("org.apache.commons.bcel6")

@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -90,9 +91,9 @@ public class NISuppression {
    * The results are saved in each suppressor.  The suppressor results
    * are used later by @link{#invalidated()}
    *
-   * @param ppt     Program point in which to check suppression
-   * @param vis     Variables over which to check suppression
-   * @param inv     Falsified invariant (if any).  Any suppressor
+   * @param ppt     program point in which to check suppression
+   * @param vis     variables over which to check suppression
+   * @param inv     falsified invariant (if any).  Any suppressor
    *                that matches inv will be marked as NIS.SuppressState.MATCH
    *
    * @return NIS.SuppressState.VALID if the suppression is valid, NIS.SuppressState.NONSENSICAL if one or
@@ -124,7 +125,7 @@ public class NISuppression {
         }
       }
     }
-    return (status);
+    return status;
   }
 
   /**
@@ -152,18 +153,18 @@ public class NISuppression {
         return false;
       }
     }
-    return (inv_match);
+    return inv_match;
   }
 
   /**
    * Finds all of the invariants that are suppressed by this
    * suppression.
    *
-   * @param suppressed_invs     Any invariants that are suppressed by
+   * @param suppressed_invs     any invariants that are suppressed by
    *                            the antecedent invariants in ants
    *                            using this suppression are added to
-   *                            this set.
-   * @param ants                Antecedents organized by class
+   *                            this set
+   * @param ants                antecedents organized by class
    */
   public void find_suppressed_invs(Set<NIS.SupInv> suppressed_invs, NIS.Antecedents ants) {
 
@@ -188,12 +189,12 @@ public class NISuppression {
    * their antecedent invariants is falsified).  The invariant may
    * still be suppressed by a different suppression.
    *
-   * @param unsuppressed_invs   Any invariants that are suppressed by
+   * @param unsuppressed_invs   any invariants that are suppressed by
    *                            the antecedent invariants in ants
    *                            using this suppression are added to
    *                            this set if one or more of the antecedents
-   *                            are falsified.
-   * @param ants                Antecedents organized by class
+   *                            are falsified
+   * @param ants                antecedents organized by class
    */
   public void find_unsuppressed_invs(Set<NIS.SupInv> unsuppressed_invs, NIS.Antecedents ants) {
 
@@ -234,13 +235,13 @@ public class NISuppression {
    * of antecedents for each suppressor are examined and each
    * valid combination will yield an entry in suppressed_invs.
    *
-   * @param suppressed_invs     This set is updated with any invariants
+   * @param suppressed_invs     this set is updated with any invariants
    *                            that are suppressed,
-   * @param antecedents         Array of antecedents per suppressor
-   * @param vis                 Current variables for the suppressed invariant
+   * @param antecedents         array of antecedents per suppressor
+   * @param vis                 current variables for the suppressed invariant
    *                            As antecedents are chosen, their variables
-   *                            are placed into vis.
-   * @param idx                 Current index into suppressors and antecedents
+   *                            are placed into vis
+   * @param idx                 current index into suppressors and antecedents
    *
    * @see #find_unsuppressed_invs (Set, List, VarInfo[], int, boolean)
    * @see #consider_inv (Invariant, NISuppressor, VarInfo[])
@@ -303,17 +304,17 @@ public class NISuppression {
    * valid combination with at least one falsified antecedent
    * will yield an entry in unsuppressed_invs.
    *
-   * @param unsuppressed_invs   This set is updated with any invariants
+   * @param unsuppressed_invs   this set is updated with any invariants
    *                            that were suppressed, but one of the
    *                            suppressors is falsified (thus, the invariant
    *                            is no longer suppressed)
-   * @param antecedents         Array of antecedents per suppressor
-   * @param vis                 Current variables for the suppressed invariant
+   * @param antecedents         array of antecedents per suppressor
+   * @param vis                 current variables for the suppressed invariant
    *                            As antecedents are chosen, their variables
-   *                            are placed into vis.
-   * @param idx                 Current index into suppressors and antecedents
-   * @param false_antecedents   True if a false antecedent has been found
-   * @param cinvs               The invariants associated with the current
+   *                            are placed into vis
+   * @param idx                 current index into suppressors and antecedents
+   * @param false_antecedents   true if a false antecedent has been found
+   * @param cinvs               the invariants associated with the current
    *                            set of antecedents.  Used only for debug
    *                            printing.  May be side-effected by having
    *                            cinvs[idx] set to null.
@@ -357,8 +358,9 @@ public class NISuppression {
         // JHP: this check can be removed if the earlier check for all
         // true antecedents is included.
         if (!false_antecedents && !inv.is_false()) {
-          if (debug)
+          if (debug) {
             System.out.printf("Skipping %s, no false antecedents%n", VarInfo.arrayToString(cvis));
+          }
           continue;
         }
 
@@ -371,7 +373,7 @@ public class NISuppression {
         if (Debug.dkconfig_internal_check) {
           for (NIS.SupInv supinv : new_invs) {
             Invariant cinv = supinv.already_exists();
-            if (cinv != null)
+            if (cinv != null) {
               throw new Error(
                   "inv "
                       + cinv.format()
@@ -379,6 +381,7 @@ public class NISuppression {
                       + supinv.suppressee
                       + " already exists in ppt "
                       + ppt.name);
+            }
           }
         }
       } else {
@@ -412,9 +415,9 @@ public class NISuppression {
    * to the same variable more than once.  In those cases, the
    * antecedent invariants must also be over the same variables.
    *
-   * @param inv         The invariant to attempt to add to the suppression.
-   * @param supor       The suppressor we are trying to match.
-   * @param vis         The current variables (if any) that have already
+   * @param inv         the invariant to attempt to add to the suppression
+   * @param supor       the suppressor we are trying to match.
+   * @param vis         the current variables (if any) that have already
    *                    been determined by previous antecedents.
    *
    * @return a new VarInfo[] containing the variables of inv or null if inv
@@ -425,33 +428,38 @@ public class NISuppression {
     // Make sure this invariant really matches this suppressor.  We know
     // the class already matches, but if the invariant has a swap variable
     // it must match as well
-    if (!supor.match(inv)) return (null);
+    if (!supor.match(inv)) return null;
 
     // Assign the variables from this invariant into vis.  If a variable
     // is already there and doesn't match this variable, then this
     // antecedent can't be used.
     VarInfo v1 = inv.ppt.var_infos[0];
-    if ((vis[supor.v1_index] != null) && (vis[supor.v1_index] != v1)) return (null);
+    if ((vis[supor.v1_index] != null) && (vis[supor.v1_index] != v1)) {
+      return null;
+    }
     if ((supor.v2_index != -1)
         && (vis[supor.v2_index] != null)
-        && (vis[supor.v2_index] != inv.ppt.var_infos[1])) return (null);
+        && (vis[supor.v2_index] != inv.ppt.var_infos[1])) {
+      return null;
+    }
     VarInfo cvis[] = vis.clone();
     cvis[supor.v1_index] = v1;
     if (supor.v2_index != -1) {
       cvis[supor.v2_index] = inv.ppt.var_infos[1];
     }
-    if (debug)
+    if (debug) {
       System.out.printf(
           "Placed antecedent '%s' into cvis %s%n", inv.format(), VarInfo.arrayToString(cvis));
+    }
 
     // Make sure the resulting variables are in the proper order and are
     // compatible
     if (!vis_order_ok(cvis) || !vis_compatible(cvis)) {
       if (debug) System.out.println("Skipping, cvis has bad order or is incompatible");
-      return (null);
+      return null;
     }
 
-    return (cvis);
+    return cvis;
   }
 
   /**
@@ -472,17 +480,20 @@ public class NISuppression {
     for (int i = 0; i < suppressors.length; i++) {
       NISuppressor s = suppressors[i];
       List<Invariant> alist = ants.get(s.get_inv_class());
-      if (alist == null) return (null);
+      if (alist == null) {
+        return null;
+      }
       antecedents[i] = alist;
     }
 
-    if (debug)
+    if (debug) {
       System.out.println(
           suppressee.sup_class.getName() + " " + antecedents_for_suppression(antecedents));
+    }
 
     antecedents = castNonNullDeep(antecedents); // issue 154
 
-    return (antecedents);
+    return antecedents;
   }
 
   /**
@@ -512,16 +523,23 @@ public class NISuppression {
   public static boolean vis_compatible(VarInfo[] vis) {
 
     // Unary vis are always compatble
-    if (vis.length == 1) return true;
+    if (vis.length == 1) {
+      return true;
+    }
 
     // Check binary
     if (vis.length == 2) {
-      if ((vis[0] == null) || (vis[1] == null)) return true;
+      if ((vis[0] == null) || (vis[1] == null)) {
+        return true;
+      }
 
-      if (vis[0].rep_type.isArray() == vis[1].rep_type.isArray())
+      if (vis[0].rep_type.isArray() == vis[1].rep_type.isArray()) {
         return (vis[0].compatible(vis[1]));
-      else if (vis[0].rep_type.isArray()) return (vis[0].eltsCompatible(vis[1]));
-      else return (vis[1].eltsCompatible(vis[0]));
+      } else if (vis[0].rep_type.isArray()) {
+        return (vis[0].eltsCompatible(vis[1]));
+      } else {
+        return (vis[1].eltsCompatible(vis[0]));
+      }
     }
 
     // Check ternary
@@ -558,7 +576,7 @@ public class NISuppression {
     }
 
     // If we didn't match any suppressor there is nothing to do
-    if (match == null) return (new_suppressions);
+    if (match == null) return new_suppressions;
 
     // Right now this only works if we match exactly one suppressor
     assert (old_sors.size() + 1) == suppressors.length;
@@ -576,7 +594,7 @@ public class NISuppression {
       new_suppressions.add(new NISuppression(sors, suppressee));
     }
 
-    return (new_suppressions);
+    return new_suppressions;
   }
 
   /**
@@ -591,7 +609,8 @@ public class NISuppression {
   /**
    * Returns 'suppressor &amp;&amp; suppressor ... ==&gt; suppressee'
    */
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied NISuppression this*/) {
     return (UtilMDE.join(suppressors, " && ") + " ==> " + suppressee);
   }
 
@@ -609,6 +628,6 @@ public class NISuppression {
         out += "    " + inv.format() + (inv.is_false() ? " [false]" : " t") + sep;
       }
     }
-    return (out);
+    return out;
   }
 }

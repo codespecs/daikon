@@ -9,6 +9,7 @@ import daikon.inv.OutputFormat;
 import daikon.inv.ValueSet;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
@@ -53,7 +54,7 @@ public class IsPointer extends SingleScalar {
 
   /** Returns the prototype invariant for IsPointer **/
   public static /*@Prototype*/ IsPointer get_proto() {
-    return (proto);
+    return proto;
   }
 
   @Override
@@ -85,18 +86,22 @@ public class IsPointer extends SingleScalar {
     return InvariantStatus.NO_CHANGE;
   }
 
-  /*@Pure*/ private boolean isWithinPointerRange(long value) {
+  /*@Pure*/
+  private boolean isWithinPointerRange(long value) {
     if (value == 0) return true;
     return (value >= largestNonPointerValue) || (value <= smallestNonPointerValue);
   }
 
   @Override
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied IsPointer this,*/ OutputFormat format) {
     String varname = var().name_using(format);
     if (format == OutputFormat.SIMPLIFY) return "(AND)"; // trivially true
-    if (format == OutputFormat.JAVA)
+    if (format == OutputFormat.JAVA) {
       return "daikon.tools.runtimechecker.Runtime.isWithinPointerRange(" + varname + ")";
-    else return varname + " is a pointer";
+    } else {
+      return varname + " is a pointer";
+    }
   }
 
   protected double computeConfidence() {
@@ -117,7 +122,8 @@ public class IsPointer extends SingleScalar {
     return Invariant.PROBABILITY_JUSTIFIED;
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     assert other instanceof IsPointer;
     return true;
   }

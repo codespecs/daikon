@@ -24,6 +24,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -237,7 +238,8 @@ public final class FileIO {
       this.parent_ppt_name = parent_ppt_name;
       this.id = id;
     }
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied ParentRelation this*/) {
       return parent_ppt_name + "[" + id + "] " + rel_type;
     };
 
@@ -249,7 +251,8 @@ public final class FileIO {
 
   // Utilities
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public static final boolean isComment(/*@Nullable*/ String s) {
+  /*@Pure*/
+  public static final boolean isComment(/*@Nullable*/ String s) {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
 
@@ -396,8 +399,9 @@ public final class FileIO {
             decl_error(state, e);
           }
           vardef = new VarDefinition(state, scanner);
-          if (varmap.containsKey(vardef.name))
+          if (varmap.containsKey(vardef.name)) {
             decl_error(state, "var %s declared twice", vardef.name);
+          }
           if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
         } else if (record == "min-value") { // interned
           vardef.parse_min_value(scanner);
@@ -470,7 +474,7 @@ public final class FileIO {
     ParentRelation pr = new ParentRelation(rel_type, parent_ppt_name, id);
 
     need_eol(state, scanner);
-    return (pr);
+    return pr;
   }
 
   /**
@@ -490,7 +494,7 @@ public final class FileIO {
 
     PptType ppt_type = parse_enum_val(state, scanner, PptType.class, "ppt type");
     need_eol(state, scanner);
-    return (ppt_type);
+    return ppt_type;
   }
 
   // Read a declaration in the Version 1 format.  For version 2, see
@@ -606,7 +610,9 @@ public final class FileIO {
     String filename = state.filename;
 
     String line = file.readLine();
-    if ((line == null) || (line.equals(""))) return null;
+    if ((line == null) || (line.equals(""))) {
+      return null;
+    }
     String varname = line;
     String proglang_type_string_and_aux = file.readLine();
     String file_rep_type_string = file.readLine();
@@ -769,9 +775,9 @@ public final class FileIO {
     }
 
     if (comp_str.equals("none")) {
-      return (VarComparability.NONE);
+      return VarComparability.NONE;
     } else if (comp_str.equals("implicit")) {
-      return (VarComparability.IMPLICIT);
+      return VarComparability.IMPLICIT;
     } else {
       throw new Daikon.TerminationMessage(
           "Unrecognized VarComparability '" + comp_str + "'", state);
@@ -805,8 +811,9 @@ public final class FileIO {
     }
 
     // Make sure that if a format was specified previously, it is the same
-    if ((new_decl_format != null) && (new_df != new_decl_format.booleanValue()))
+    if ((new_decl_format != null) && (new_df != new_decl_format.booleanValue())) {
       decl_error(state, "decl format '%s' does not match previous setting", version);
+    }
 
     // System.out.println("setting new_decl_format = " + new_df);
     new_decl_format = Boolean.valueOf(new_df);
@@ -847,13 +854,13 @@ public final class FileIO {
 
     // Print the Invocation on two lines, indented by two spaces
     // The receiver Invocation may be canonicalized or not.
-    String format() {
+    String format(/*>>>@GuardSatisfied Invocation this*/) {
       return format(true);
     }
 
     // Print the Invocation on one or two lines, indented by two spaces.
     // The receiver Invocation may be canonicalized or not.
-    String format(boolean show_values) {
+    String format(/*>>>@GuardSatisfied Invocation this,*/ boolean show_values) {
       if (!show_values) {
         return "  " + ppt.ppt_name.getNameWithoutPoint();
       }
@@ -901,17 +908,24 @@ public final class FileIO {
 
     // Return true if the invocations print the same
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    /*@Pure*/ public boolean equals(/*@Nullable*/ Object other) {
-      if (other instanceof FileIO.Invocation)
+    /*@Pure*/
+    public boolean equals(
+        /*>>>@GuardSatisfied Invocation this,*/
+        /*@GuardSatisfied*/ /*@Nullable*/ Object other) {
+      if (other instanceof FileIO.Invocation) {
         return this.format().equals(((FileIO.Invocation) other).format());
-      else return false;
+      } else {
+        return false;
+      }
     }
 
-    /*@Pure*/ public int compareTo(Invocation other) {
+    /*@Pure*/
+    public int compareTo(/*>>>@GuardSatisfied Invocation this,*/ Invocation other) {
       return ppt.name().compareTo(other.ppt.name());
     }
 
-    /*@Pure*/ public int hashCode() {
+    /*@Pure*/
+    public int hashCode(/*>>>@GuardSatisfied Invocation this*/) {
       return this.format().hashCode();
     }
   }
@@ -944,8 +958,8 @@ public final class FileIO {
    * {@link #read_data_trace_file(String,PptMap,Processor,boolean,boolean)}
    * for each element of filenames.
    *
-   * @param ppts_may_be_new - true if declarations of ppts read from the data
-   *                       trace file are new (and thus are not in all_ppts)
+   * @param ppts_may_be_new true if declarations of ppts read from the data
+   *                       trace file are new (and thus are not in all_ppts).
    *                       false if the ppts may already be there.
    *
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
@@ -1793,8 +1807,9 @@ public final class FileIO {
 
     ppt.add_bottom_up(vt, 1);
 
-    if (debugVars.isLoggable(Level.FINE))
+    if (debugVars.isLoggable(Level.FINE)) {
       debugVars.fine(ppt.name() + " vars: " + Debug.int_vars(ppt, vt));
+    }
 
     if (Global.debugPrintDtrace) {
       assert Global.dtraceWriter != null
@@ -2116,12 +2131,13 @@ public final class FileIO {
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
           if (vals[val_index] == null) {
-            if (debug_missing && !vi.canBeMissing)
+            if (debug_missing && !vi.canBeMissing) {
               System.out.printf(
                   "Var %s ppt %s at line %d is null, and modbit is not missing%n",
                   vi,
                   ppt.name(),
                   FileIO.get_linenum());
+            }
             // The value in the trace was null even though the modbit was not
             // MISSING_NONSENSICAL.  Set the modbit to MISSING_NONSENSICAL.
             // This can happen for a value like [1 nonsensical 2], because
@@ -2371,7 +2387,7 @@ public final class FileIO {
         FileIO.new_decl_format = record.new_decl_format;
         // System.err.printf ("Setting FileIO.new_decl_format to %b%n",
         //                   FileIO.new_decl_format);
-        return (record.map);
+        return record.map;
       } else if (obj instanceof InvMap) {
         // System.err.printf ("Restoring an InvMap%n");
         InvMap invs = (InvMap) obj;
@@ -2389,7 +2405,7 @@ public final class FileIO {
         }
         assert FileIO.new_decl_format != null
             : "@AssumeAssertion(nullness): InvMap.readObject() sets FileIO.new_decl_format";
-        return (ppts);
+        return ppts;
       } else {
         throw new IOException("Unexpected serialized file type: " + obj.getClass());
       }
@@ -2539,7 +2555,9 @@ public final class FileIO {
       }
       this_esc = orig.indexOf('\\', post_esc);
     }
-    if (post_esc == 0) return orig;
+    if (post_esc == 0) {
+      return orig;
+    }
     sb.append(orig.substring(post_esc));
     return sb.toString();
   }
@@ -2620,16 +2638,20 @@ public final class FileIO {
 
       // Basic checking for sensible input
       assert name != null;
-      if (kind == null)
+      if (kind == null) {
         throw new AssertionError("missing var-kind information for variable " + name);
+      }
       assert (arr_dims == 0) || (arr_dims == 1)
           : String.format("arrdims==%s, should be 0 or 1, for VarDefinition %s", arr_dims, name);
-      if (rep_type == null)
+      if (rep_type == null) {
         throw new AssertionError("missing rep-type information for variable " + name);
-      if (declared_type == null)
+      }
+      if (declared_type == null) {
         throw new AssertionError("missing dec-type information for variable " + name);
-      if (comparability == null)
+      }
+      if (comparability == null) {
         throw new AssertionError("missing comparability information for variable " + name);
+      }
       assert ((kind == VarKind.FUNCTION) || (function_args == null))
           : String.format(
               "incompatible kind=%s and function_args=%s for VarDefinition %s",
@@ -2647,9 +2669,11 @@ public final class FileIO {
       this.parents = new LinkedList<VarParent>();
       name = need(scanner, "name");
       need_eol(scanner);
-      if (state.varcomp_format == VarComparability.IMPLICIT)
+      if (state.varcomp_format == VarComparability.IMPLICIT) {
         comparability = VarComparabilityImplicit.unknown;
-      else comparability = VarComparabilityNone.it;
+      } else {
+        comparability = VarComparabilityNone.it;
+      }
     }
 
     public VarDefinition(String name, VarKind kind, ProglangType type) {
@@ -2662,7 +2686,8 @@ public final class FileIO {
       comparability = VarComparabilityNone.it;
     }
 
-    /*@SideEffectFree*/ public VarDefinition clone() {
+    /*@SideEffectFree*/
+    public VarDefinition clone(/*>>>@GuardSatisfied VarDefinition this*/) {
       try {
         return (VarDefinition) super.clone();
       } catch (CloneNotSupportedException e) {
@@ -2889,8 +2914,9 @@ public final class FileIO {
 
   /** Throws a DeclError if the scanner is not at end of line */
   public static void need_eol(ParseState state, Scanner scanner) throws DeclError {
-    if (scanner.hasNext())
+    if (scanner.hasNext()) {
       decl_error(state, "'%s' found where end-of-line expected", scanner.next());
+    }
   }
 
   /**
@@ -2904,7 +2930,7 @@ public final class FileIO {
     /*@Interned*/ String str = need(state, scanner, descr);
     try {
       E e = Enum.valueOf(enum_class, str.toUpperCase());
-      return (e);
+      return e;
     } catch (Exception exception) {
       @SuppressWarnings(
           "nullness") // getEnumConstants returns non-null because enum_class is an enum class
@@ -2935,7 +2961,8 @@ public final class FileIO {
 
   /** Returns whether the line is the start of a ppt declaration **/
   /*@RequiresNonNull("FileIO.new_decl_format")*/
-  /*@Pure*/ private static boolean is_declaration_header(String line) {
+  /*@Pure*/
+  private static boolean is_declaration_header(String line) {
     if (new_decl_format) {
       return (line.startsWith("ppt "));
     } else {
@@ -2951,7 +2978,9 @@ public final class FileIO {
    */
   public static String user_mod_ppt_name(String ppt_name) {
 
-    if (!dkconfig_rm_stack_dups) return ppt_name;
+    if (!dkconfig_rm_stack_dups) {
+      return ppt_name;
+    }
 
     // System.out.printf ("removing stack dups (%b)in fileio%n",
     //                    dkconfig_rm_stack_dups);

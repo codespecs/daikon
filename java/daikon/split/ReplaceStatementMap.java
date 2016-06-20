@@ -3,6 +3,7 @@ package daikon.split;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -22,7 +23,7 @@ class ReplaceStatementMap {
    * Creates a new instance of ReplaceStatementMap of the replaceStatements
    * of replaceStatements.
    * @param replaceStatements a list of ReplaceStatements that specifies the
-   *  the ReplaceStatements of this.
+   *  the ReplaceStatements of this
    */
   ReplaceStatementMap(List<ReplaceStatement> replaceStatements) {
     map = new HashMap<String, ReplaceStatement>();
@@ -40,7 +41,7 @@ class ReplaceStatementMap {
    * a "dot".)  For example if this contains entries with names "c", "b.c"
    * and "x.y.z", "get(c)" would return "c", "get(a.b.c)" would return "b.c"
    * and "get(y.z)" would return null.
-   * @param name the name of the ReplaceStatement desired.
+   * @param name the name of the ReplaceStatement desired
    */
   public /*@Nullable*/ ReplaceStatement get(String name) {
     ReplaceStatement rs = map.get(name);
@@ -59,7 +60,8 @@ class ReplaceStatementMap {
   }
 
   /** For debugging only. **/
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied ReplaceStatementMap this*/) {
     return map.toString();
   }
 }

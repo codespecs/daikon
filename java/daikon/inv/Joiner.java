@@ -3,6 +3,7 @@ package daikon.inv;
 import daikon.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -34,20 +35,23 @@ public abstract class Joiner extends Invariant {
     this(ppt.joiner_view, left, right);
   }
 
-  public abstract String repr();
+  public abstract String repr(/*>>>@GuardSatisfied Joiner this*/);
 
   // I think we don't resurrect joiners
   protected Invariant resurrect_done(int[] permutation) {
     throw new UnsupportedOperationException();
   }
 
-  /*@SideEffectFree*/ public abstract String format_using(OutputFormat format);
+  /*@SideEffectFree*/
+  public abstract String format_using(/*>>>@GuardSatisfied Joiner this,*/ OutputFormat format);
 
-  /*@Pure*/ public boolean isValidEscExpression() {
+  /*@Pure*/
+  public boolean isValidEscExpression() {
     return left.isValidEscExpression() && right.isValidEscExpression();
   }
 
-  /*@Pure*/ public boolean isObviousDerived() {
+  /*@Pure*/
+  public boolean isObviousDerived() {
     return false;
   }
 
@@ -55,7 +59,8 @@ public abstract class Joiner extends Invariant {
     return null;
   }
 
-  /*@Pure*/ public boolean isSameInvariant(Invariant other) {
+  /*@Pure*/
+  public boolean isSameInvariant(Invariant other) {
     if (!getClass().equals(other.getClass())) {
       return false;
     }
@@ -69,7 +74,8 @@ public abstract class Joiner extends Invariant {
     return left.isSameInvariant(otherAsJoiner.left) && right.isSameInvariant(otherAsJoiner.right);
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     if (!getClass().equals(other.getClass())) return false;
     Joiner other_joiner = (Joiner) other;
     // Guards are necessary because the contract of isSameFormula states
@@ -85,7 +91,8 @@ public abstract class Joiner extends Invariant {
         && right.isSameInvariant(other_joiner.right));
   }
 
-  /*@Pure*/ public boolean isInteresting() {
+  /*@Pure*/
+  public boolean isInteresting() {
     return (left.isInteresting() && right.isInteresting());
   }
 }

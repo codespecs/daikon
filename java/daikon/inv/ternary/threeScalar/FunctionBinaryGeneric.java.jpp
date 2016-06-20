@@ -85,7 +85,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   /** Returns the prototype invariant for CNAME(FUNCTION,PERM_NAME) **/
   public static /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** instantiate an invariant on the specified slice **/
@@ -103,14 +103,14 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   private static String[] method_name = new String[] METHOD_NAME;
 
-  public String[] get_method_name () {
-    return (method_name);
+  public String[] get_method_name (/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
+    return method_name;
   }
 
   private static int function_id = -1;
 
   public int get_function_id() {
-    return (function_id);
+    return function_id;
   }
 
   public void set_function_id (int function_id) {
@@ -120,11 +120,12 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   private static int var_order = PERMUTATION;
 
-  public int get_var_order() {
+  public int get_var_order(/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
     return var_order;
   }
 
-  /*@Pure*/ public boolean is_symmetric() {
+  /*@Pure*/
+  public boolean is_symmetric() {
     #ifdef SYMMETRIC
       return true;
     #else
@@ -134,22 +135,26 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   public PRIMITIVE func (PRIMITIVE arg1, PRIMITIVE arg2) {
     #ifdef ARG1_BOUND
-      if ((arg1 < arg1_bound[0]) || (arg1 > arg1_bound[1]))
+      if ((arg1 < arg1_bound[0]) || (arg1 > arg1_bound[1])) {
         throw new ArithmeticException ("arg1 (" + arg1 + ") out of range "
                                        + arg1_bound[0] + ".." + arg1_bound[1]);
+      }
     #endif
 
     #ifdef ARG2_BOUND
-      if ((arg2 < arg2_bound[0]) || (arg2 > arg2_bound[1]))
+      if ((arg2 < arg2_bound[0]) || (arg2 > arg2_bound[1])) {
         throw new ArithmeticException ("arg2 (" + arg2 + ") out of range "
                                        + arg2_bound[0] + ".." + arg2_bound[1]);
+      }
     #endif
 
     #ifdef BOOLEAN_ARGS
-      if ((arg1 < 0) || (arg1 > 1))
+      if ((arg1 < 0) || (arg1 > 1)) {
         throw new ArithmeticException ("arg1 (" + arg1 + ") is not boolean ");
-      if ((arg2 < 0) || (arg2 > 1))
+      }
+      if ((arg2 < 0) || (arg2 > 1)) {
         throw new ArithmeticException ("arg2 (" + arg2 + ") is not boolean ");
+      }
     #endif
 
     return (FUNC(arg1, arg2));
@@ -162,17 +167,20 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y,
                                       PRIMITIVE z, int count) {
-    if (Debug.logDetail())
+    if (Debug.logDetail()) {
       log ("result=%s, arg1=%s, arg2=%s", resultvar, arg1, arg2);
+    }
     return (add_ordered (resultvar, arg1, arg2, count));
   }
 
-  /*@Pure*/ public boolean is ## FUNCTION() {
+  /*@Pure*/
+  public boolean is ## FUNCTION() {
     return true;
   }
 
   #ifdef EXACT
-    /*@Pure*/ public boolean isExact() { return true; }
+    /*@Pure*/
+    public boolean isExact() { return true; }
   #endif
 
   /**
@@ -180,10 +188,11 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
    */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
-    if (NIS.dkconfig_enabled && dkconfig_enabled)
-      return (suppressions);
-    else
-      return (null);
+    if (NIS.dkconfig_enabled && dkconfig_enabled) {
+      return suppressions;
+    } else {
+      return null;
+    }
   }
 
   /** definition of this invariant (the suppressee) **/

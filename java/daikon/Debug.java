@@ -186,9 +186,11 @@ public final class Debug {
    * doesn't have to
    */
   public static /*@Nullable*/ Debug newDebug(Class<?> c, Ppt ppt, VarInfo[] vis) {
-    if (logOn() && class_match(c) && ppt_match(ppt) && var_match(vis))
+    if (logOn() && class_match(c) && ppt_match(ppt) && var_match(vis)) {
       return new Debug(c, ppt, vis);
-    else return null;
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -225,7 +227,9 @@ public final class Debug {
       if (evars != null) {
         for (VarInfo ev : evars) {
           for (int k = 0; k < debugTrackVars.length; k++) {
-            if (ev.name().equals(debugTrackVars[k][0])) return (v);
+            if (ev.name().equals(debugTrackVars[k][0])) {
+              return v;
+            }
           }
         }
       }
@@ -242,20 +246,20 @@ public final class Debug {
 
   public static VarInfo[] vis(VarInfo v1) {
     vis1[0] = v1;
-    return (vis1);
+    return vis1;
   }
 
   public static VarInfo[] vis(VarInfo v1, VarInfo v2) {
     vis2[0] = v1;
     vis2[1] = v2;
-    return (vis2);
+    return vis2;
   }
 
   public static VarInfo[] vis(VarInfo v1, VarInfo v2, VarInfo v3) {
     vis3[0] = v1;
     vis3[1] = v2;
     vis3[2] = v3;
-    return (vis3);
+    return vis3;
   }
 
   /**
@@ -368,17 +372,17 @@ public final class Debug {
    * parameter and take class, ppt, and vis from the cached values, which
    * were set by the constructor or by the set() method.
    *
-   * @param debug       A second Logger to query if debug tracking is turned
+   * @param debug       a second Logger to query if debug tracking is turned
    *                    off or does not match.  If this logger is
    *                    enabled, the same information will be written
    *                    to it.  Note that the information is never
    *                    written to both loggers.
-   * @param inv_class   The class.  Can be obtained in a static context
+   * @param inv_class   the class.  Can be obtained in a static context
    *                    by ClassName.class
-   * @param ppt         Program point
-   * @param vis         Variables at the program point.  These are sometimes
+   * @param ppt         program point
+   * @param vis         variables at the program point.  These are sometimes
    *                    different from the ones in the ppt itself.
-   * @param msg         String message to log
+   * @param msg         string message to log
    *
    * @see #logOn()
    * @see #logDetail()
@@ -477,8 +481,8 @@ public final class Debug {
    */
   // 4-argument form
   public static boolean log(
-      /*@Nullable*/ Class<?> inv_class, /*@Nullable*/ /*@UnknownInitialization(PptTopLevel.class)*/
-      Ppt ppt,
+      /*@Nullable*/ Class<?> inv_class,
+      /*@Nullable*/ /*@UnknownInitialization(PptTopLevel.class)*/ Ppt ppt,
       VarInfo /*@Nullable*/ [] vis,
       String msg) {
 
@@ -630,7 +634,7 @@ public final class Debug {
       break outer;
     }
 
-    return (match);
+    return match;
   }
 
   /**
@@ -639,7 +643,9 @@ public final class Debug {
   private static boolean strContainsElem(String str, String[] arr) {
 
     for (String elt : arr) {
-      if (str.indexOf(elt) >= 0) return true;
+      if (str.indexOf(elt) >= 0) {
+        return true;
+      }
     }
     return false;
   }
@@ -697,8 +703,9 @@ public final class Debug {
             int mod = vt.getModified(v);
             out += v.name() + "=";
             out += toString(val);
-            if ((mod == ValueTuple.MISSING_FLOW) || (mod == ValueTuple.MISSING_NONSENSICAL))
+            if ((mod == ValueTuple.MISSING_FLOW) || (mod == ValueTuple.MISSING_NONSENSICAL)) {
               out += " (missing)";
+            }
             if (v.missingOutOfBounds()) out += " (out of bounds)";
             if (v.equalitySet != null) {
               if (!v.isCanonical()) out += " (leader=" + v.canonicalRep().name() + ")";
@@ -710,11 +717,11 @@ public final class Debug {
       }
     }
 
-    return (out);
+    return out;
   }
 
   public static String toString(/*@Nullable*/ Object val) {
-    if (val == null) return ("none");
+    if (val == null) return "none";
     if (val instanceof String) return "\"" + val + "\"";
     if (val instanceof long[]) return ArraysMDE.toString((long[]) val);
     if (val instanceof String[]) return ArraysMDE.toString((String[]) val);
@@ -729,7 +736,7 @@ public final class Debug {
     for (VarInfo vi : vis) {
       vars += vi.name() + " ";
     }
-    return (vars);
+    return vars;
   }
 
   /**
@@ -753,7 +760,7 @@ public final class Debug {
       out += ": ";
     }
 
-    return (out);
+    return out;
   }
 
   /**
@@ -819,8 +826,9 @@ public final class Debug {
     debugTrack.fine("After --track: " + def);
     debugTrack.fine("Track Classes: " + ArraysMDE.toString(debugTrackClass, false));
     String vars_out = "";
-    for (int ii = 0; ii < debugTrackVars.length; ii++)
+    for (int ii = 0; ii < debugTrackVars.length; ii++) {
       vars_out += ArraysMDE.toString(debugTrackVars[ii]) + " ";
+    }
     debugTrack.fine("Track Vars: " + vars_out);
     debugTrack.fine("Track Ppts: " + ArraysMDE.toString(debugTrackPpt, false));
 

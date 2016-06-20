@@ -57,6 +57,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -115,7 +116,7 @@ public class NONZERO
 
   /** Returns the prototype invariant for NONZERO **/
   public static /*@Prototype*/ NONZERO get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** returns whether or not this invariant is enabled **/
@@ -126,8 +127,9 @@ public class NONZERO
   /** Make sure the NonZero make sense on these vars **/
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types(vis))
+    if (!valid_types(vis)) {
       return false;
+    }
 
     if (vis[0].aux.isStruct() ||
         !vis[0].aux.hasNull())
@@ -141,7 +143,7 @@ public class NONZERO
     return new NONZERO (slice);
   }
 
-  private String zero(OutputFormat format) {
+  private String zero(/*>>>@GuardSatisfied @Prototype NONZERO this,*/ OutputFormat format) {
 #ifdef SCALAR
     if (is_pointer()) {
       return "null";
@@ -152,7 +154,8 @@ public class NONZERO
     }
   }
 
-  /*@SideEffectFree*/ public String format_using(/*>>> @Prototype NONZERO this,*/ OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied @Prototype NONZERO this,*/ OutputFormat format) {
     // // var() fails for prototype invariants
     // if (ppt == null) {
     //   return "Prototype " + NONZEROSTRING + " invariant (ppt == null)";
@@ -193,8 +196,9 @@ public class NONZERO
   public InvariantStatus add_modified(PRIMITIVE v, int count) {
     InvariantStatus status = check_modified(v, count);
     if (status == InvariantStatus.FALSIFIED) {
-      if (logOn())
+      if (logOn()) {
         log (debug, "falsified (value = " + v + ")");
+      }
     } // else if (logDetail())
       // log ("add_modified (" + v + ")");
     return status;
@@ -203,7 +207,8 @@ public class NONZERO
   /**
    * Returns whether or not the variable is a pointer.
    */
-  /*@Pure*/ private boolean is_pointer() {
+  /*@Pure*/
+  private boolean is_pointer(/*>>>@GuardSatisfied NONZERO this*/) {
     return (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE);
   }
 
@@ -274,9 +279,10 @@ public class NONZERO
     // is a parent for all of the references to the class, those references
     // can be null and the non-null invariant becomes interesting.
     if (this_non_null_obvious) {
-      if (var.isThis())
+      if (var.isThis()) {
         return new DiscardInfo(this, DiscardCode.obvious,
                                "'this' can never be null in Java");
+      }
     }
 
     if (!var.aux.hasNull()) {
@@ -299,8 +305,9 @@ public class NONZERO
 
     Debug dlog = new Debug (getClass(), ppt, vis);
 
-    if (logOn())
+    if (logOn()) {
       dlog.log ("Checking IsObviousDynamically");
+    }
 
     // System.out.println("isObviousImplied: " + format());
 
@@ -316,11 +323,13 @@ public class NONZERO
         // and eliminates desirable invariants such as "return != null".
         if (MEMBER.isObviousMember(var, v2)) {
           // System.out.println(NONZEROSTRING + ".isObviousImplied: " + MEMBERSTRING + ".isObviousMember(" + var.name + ", " + v2.name + ") = true");
-          if (logOn())
+          if (logOn()) {
             dlog.log ("isObvDyn- true, arg is member of nonzero sequence");
+          }
           String discardString = var.name() + " is a member of the non-zero sequence " + v2.name();
-          if (logOn())
+          if (logOn()) {
             log ("%s obviously implied from %s", format(), inv.format());
+          }
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
         }
       }
@@ -342,8 +351,9 @@ public class NONZERO
               SEQINDEXNONEQUAL sine = SEQINDEXNONEQUAL.find(other_slice);
               if ((sine != null) && sine.enoughSamples()) {
                 // System.out.println(NONZEROSTRING + ".isObviousImplied true due to: " + sine.format());
-                if (logOn())
+                if (logOn()) {
                   dlog.log ("isObvDyn- true due to " + sine.format());
+                }
                 String discardString = var.name() + " is a member of the non-zero sequence " + vi.name();
                 return new DiscardInfo(this, DiscardCode.obvious, discardString);
               }
@@ -357,12 +367,14 @@ public class NONZERO
   }
 
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     assert other instanceof NONZERO;
     return true;
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof OneOfScalar) {
       OneOfScalar oos = (OneOfScalar) other;
       if ((oos.num_elts() == 1) && (((WRAPPER)oos.elt()).WRAP_VALUE() == 0)) {

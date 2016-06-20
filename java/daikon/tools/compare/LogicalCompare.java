@@ -452,8 +452,9 @@ public class LogicalCompare {
       return;
     }
 
-    if (opt_show_count)
+    if (opt_show_count) {
       System.out.println("Strong preconditions consist of " + t_pre.size() + " invariants.");
+    }
     Vector<Lemma> pre_assumptions = new Vector<Lemma>();
     pre_assumptions.addAll(translateStraight(a_pre));
     Vector<Lemma> pre_conclusions = new Vector<Lemma>();
@@ -485,9 +486,10 @@ public class LogicalCompare {
     post_conclusions.addAll(translateRemovePre(a_post));
     Collections.sort(post_conclusions);
 
-    if (opt_show_count)
+    if (opt_show_count) {
       System.out.println(
           "Weak postconditions consist of " + post_conclusions.size() + " invariants.");
+    }
 
     evaluateImplicationsCarefully(post_assumptions_safe, post_assumptions_unsafe, post_conclusions);
     long time_elapsed = System.currentTimeMillis() - processing_time_start;

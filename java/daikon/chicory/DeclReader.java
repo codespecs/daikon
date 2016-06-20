@@ -6,6 +6,7 @@ import java.util.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -103,19 +104,23 @@ public class DeclReader {
       return rep_type.replaceFirst(" .*", "");
     }
 
-    /*@Pure*/ public boolean is_double() {
+    /*@Pure*/
+    public boolean is_double() {
       return (rep_type.equals("double") || (rep_type.equals("float")));
     }
 
-    /*@Pure*/ public boolean is_string() {
+    /*@Pure*/
+    public boolean is_string() {
       return (rep_type.equals("string"));
     }
 
-    /*@Pure*/ public boolean is_string_array() {
+    /*@Pure*/
+    public boolean is_string_array() {
       return (rep_type.equals("string[]"));
     }
 
-    /*@Pure*/ public boolean is_int() {
+    /*@Pure*/
+    public boolean is_int() {
       return (rep_type.equals("int"));
     }
 
@@ -132,7 +137,8 @@ public class DeclReader {
       this.comparability = comparability;
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied DeclVarInfo this*/) {
       return String.format("%s [%s] %s", type, rep_type, name);
     }
 
@@ -143,15 +149,18 @@ public class DeclReader {
      */
     public /*@Nullable*/ /*@Interned*/ Object read_data(EntryReader reader) throws IOException {
       String var_name = reader.readLine();
-      if (var_name == null)
+      if (var_name == null) {
         throw new Error(
             "file " + reader.getFileName() + " terminated prematurely, expeced var " + this.name);
-      if (!var_name.equals(this.name))
+      }
+      if (!var_name.equals(this.name)) {
         throw new Error(var_name + " found where " + this.name + " expected ");
+      }
       String value = reader.readLine();
       String mod_bit = reader.readLine();
-      if ((value == null) || (mod_bit == null))
+      if ((value == null) || (mod_bit == null)) {
         throw new Error("file " + reader.getFileName() + " terminated prematurely");
+      }
       if (value.equals("nonsensical")) {
         return null;
       } else if (is_int()) {
@@ -167,8 +176,9 @@ public class DeclReader {
           throw new Error("Unexpected string '" + value + "' for double variable " + this.name);
         }
       } else if (is_string()) {
-        if (value.startsWith("\"") && value.endsWith("\""))
+        if (value.startsWith("\"") && value.endsWith("\"")) {
           value = value.substring(1, value.length() - 1);
+        }
         return value.intern();
       } else if (is_string_array()) {
         return (null); // treating arrays as nonsensical for now
@@ -209,8 +219,9 @@ public class DeclReader {
       String type = decl_file.readLine();
       String rep_type = decl_file.readLine();
       String comparability = decl_file.readLine();
-      if ((name == null) || (type == null) || (rep_type == null) || (comparability == null))
+      if ((name == null) || (type == null) || (rep_type == null) || (comparability == null)) {
         throw new Error("File " + decl_file.getFileName() + " ends prematurely");
+      }
 
       // I don't see the point of this interning.  No code seems to take
       // advantage of it.  Is it just for space?  -MDE
@@ -218,7 +229,7 @@ public class DeclReader {
           new DeclVarInfo(
               name.intern(), type.intern(), rep_type.intern(), comparability.intern(), vars.size());
       vars.put(name, var);
-      return (var);
+      return var;
     }
 
     /**
@@ -251,7 +262,8 @@ public class DeclReader {
       return name.replaceFirst(":::.*", "");
     }
 
-    /*@SideEffectFree*/ public String toString() {
+    /*@SideEffectFree*/
+    public String toString(/*>>>@GuardSatisfied DeclPpt this*/) {
       return name;
     }
 
@@ -304,7 +316,7 @@ public class DeclReader {
       line = decl_file.readLine();
     }
 
-    return (ppt);
+    return ppt;
   }
 
   public void dump_decl() {
@@ -414,8 +426,9 @@ public class DeclReader {
           num_vars++;
           if (vi.get_type_name().equals("int")) num_type_integer_vars++;
           if (vi.get_rep_type().equals("int")) num_rep_type_integer_vars++;
-          if (!vi.get_type_name().equals("int") && vi.get_rep_type().equals("int"))
+          if (!vi.get_type_name().equals("int") && vi.get_rep_type().equals("int")) {
             System.out.printf("huh '%s' - '%s'%n", vi.get_type_name(), vi.rep_type);
+          }
           String comp = vi.get_basic_comparability();
           if (!comp_map.containsKey(comp)) {
             comp_map.put(comp, new ArrayList<DeclVarInfo>());
@@ -439,11 +452,12 @@ public class DeclReader {
                 vi_list);
           }
         }
-        if (print_each_set && (ppt_num_sets > 0))
+        if (print_each_set && (ppt_num_sets > 0)) {
           System.out.printf(
               "  %d sets of average size %f%n",
               ppt_num_sets,
               ((double) ppt_total_set_size) / ppt_num_sets);
+        }
       }
 
       if (avg_size) {

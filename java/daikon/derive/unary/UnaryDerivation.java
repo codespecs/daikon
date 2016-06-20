@@ -5,6 +5,7 @@ import daikon.derive.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -20,7 +21,8 @@ public abstract class UnaryDerivation extends Derivation {
     base = vi;
   }
 
-  /*@SideEffectFree*/ public UnaryDerivation clone() {
+  /*@SideEffectFree*/
+  public UnaryDerivation clone(/*>>>@GuardSatisfied UnaryDerivation this*/) {
     try {
       return (UnaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {
@@ -36,8 +38,12 @@ public abstract class UnaryDerivation extends Derivation {
 
   public ValueAndModified computeValueAndModified(ValueTuple vt) {
     int source_mod = base.getModified(vt);
-    if (source_mod == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
-    if (source_mod == ValueTuple.MISSING_FLOW) return ValueAndModified.MISSING_FLOW;
+    if (source_mod == ValueTuple.MISSING_NONSENSICAL) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
+    if (source_mod == ValueTuple.MISSING_FLOW) {
+      return ValueAndModified.MISSING_FLOW;
+    }
 
     return computeValueAndModifiedImpl(vt);
   }
@@ -51,11 +57,13 @@ public abstract class UnaryDerivation extends Derivation {
     return base;
   }
 
-  /*@SideEffectFree*/ public VarInfo[] getBases() {
+  /*@SideEffectFree*/
+  public VarInfo[] getBases() {
     return new VarInfo[] {base()};
   }
 
-  /*@Pure*/ public VarInfo getBase(int i) {
+  /*@Pure*/
+  public VarInfo getBase(int i) {
     switch (i) {
       case 0:
         return base;
@@ -64,11 +72,13 @@ public abstract class UnaryDerivation extends Derivation {
     }
   }
 
-  /*@Pure*/ protected boolean isParam() {
+  /*@Pure*/
+  protected boolean isParam() {
     return base.isParam();
   }
 
-  /*@Pure*/ public boolean isDerivedFromNonCanonical() {
+  /*@Pure*/
+  public boolean isDerivedFromNonCanonical() {
     return !base.isCanonical();
   }
 

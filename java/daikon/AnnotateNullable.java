@@ -119,8 +119,7 @@ public class AnnotateNullable {
       String name = ppt.name().replaceFirst("[(].*$", "");
       int lastdot = name.lastIndexOf('.');
       @SuppressWarnings("keyfor") // appliction invariant:  KeyFor and substring
-      /*@KeyFor("class_map")*/
-      // class_map has entry per class, and this method is in some class
+      /*@KeyFor("class_map")*/ // class_map has entry per class, and this method is in some class
       String classname = name.substring(0, lastdot);
       // System.out.printf ("classname for ppt %s is '%s'%n", name, classname);
       /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get(classname);
@@ -205,7 +204,9 @@ public class AnnotateNullable {
     PptTopLevel class_ppt = class_for_object(object_ppt);
 
     String class_samples = "-";
-    if (class_ppt != null) class_samples = String.format("%d", class_ppt.num_samples());
+    if (class_ppt != null) {
+      class_samples = String.format("%d", class_ppt.num_samples());
+    }
     String ppt_package = object_ppt.ppt_name.getPackageName();
     if (ppt_package == null) {
       ppt_package = "";
@@ -317,7 +318,9 @@ public class AnnotateNullable {
       } else {
         if (vi.isParam()
             && (vi.name() != "this") // interned
-            && !vi.isPrestate()) params.add(vi);
+            && !vi.isPrestate()) {
+          params.add(vi);
+        }
       }
     }
 
@@ -434,7 +437,9 @@ public class AnnotateNullable {
    */
   public static String field_name(VarInfo vi) {
 
-    if (vi.relative_name != null) return vi.relative_name;
+    if (vi.relative_name != null) {
+      return vi.relative_name;
+    }
 
     String field_name = vi.name();
     int pt = field_name.lastIndexOf('.');
@@ -452,11 +457,14 @@ public class AnnotateNullable {
    * This does not work for enter ppts, because constructors do not
    * have the object as a parent on entry.
    */
-  /*@Pure*/ public static boolean is_static_method(PptTopLevel ppt) {
+  /*@Pure*/
+  public static boolean is_static_method(PptTopLevel ppt) {
 
     assert ppt.is_exit() : ppt;
     for (PptRelation rel : ppt.parents) {
-      if (rel.parent.is_object()) return false;
+      if (rel.parent.is_object()) {
+        return false;
+      }
     }
 
     return true;

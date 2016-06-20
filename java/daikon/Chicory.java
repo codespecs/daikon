@@ -135,7 +135,7 @@ public class Chicory {
   private static final String traceLimTermString = "DTRACELIMITTERMINATE";
   private static final String traceLimString = "DTRACELIMIT";
 
-  /** flag to use if we want to turn on the static initialization checks**/
+  /** flag to use if we want to turn on the static initialization checks **/
   public static final boolean checkStaticInit = true;
 
   private static final boolean RemoteDebug = false;
@@ -260,8 +260,11 @@ public class Chicory {
     if (premain == null) {
       for (String path : cp.split(separator)) {
         File poss_premain = new File(path);
-        if (poss_premain.getName().equals("daikon.jar"))
-          if (poss_premain.canRead()) premain = poss_premain;
+        if (poss_premain.getName().equals("daikon.jar")) {
+          if (poss_premain.canRead()) {
+            premain = poss_premain;
+          }
+        }
       }
     }
 
@@ -516,7 +519,7 @@ public class Chicory {
       System.out.printf("unexpected interrupt %s while waiting for " + "threads to join", e);
     }
 
-    return (result);
+    return result;
   }
 
   public PrintWriter openFileInDirectory(String fileName, String dirName) {

@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -182,18 +183,21 @@ public class MethodInfo {
    * Returns true iff this method is a constructor
    * @return true iff this method is a constructor
    */
-  /*@Pure*/ public boolean is_constructor() {
+  /*@Pure*/
+  public boolean is_constructor() {
     return (method_name.equals("<init>") || method_name.equals(""));
   }
 
   /** Returns whether or not this method is a class initializer **/
-  /*@Pure*/ public boolean is_class_init() {
+  /*@Pure*/
+  public boolean is_class_init() {
     return (method_name.equals("<clinit>"));
   }
 
   /** Returns whether or not this method is static **/
   /*@RequiresNonNull("member")*/
-  /*@Pure*/ public boolean is_static() {
+  /*@Pure*/
+  public boolean is_static() {
     return Modifier.isStatic(member.getModifiers());
   }
 
@@ -216,7 +220,8 @@ public class MethodInfo {
     //                    traversalExit.treeString());
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied MethodInfo this*/) {
     String out = "";
     if (class_info != null) out = class_info.class_name + ".";
     out += method_name + "(";

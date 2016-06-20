@@ -56,17 +56,19 @@ public abstract class Derivation implements Serializable, Cloneable {
   /**
    * @return array of the VarInfos this was derived from
    **/
-  public abstract /*@SideEffectFree*/ VarInfo[] getBases();
+  /*@SideEffectFree*/
+  public abstract VarInfo[] getBases();
 
   /**
    * @return one of the VarInfos this was derived from
    **/
-  public abstract /*@Pure*/ VarInfo getBase(int i);
+  /*@Pure*/
+  public abstract VarInfo getBase(int i);
 
   /**
    * @return a pair of: the derived value and whether the variable
-   * counts as modified.
-   * @param full_vt The set of values in a program point that will be
+   * counts as modified
+   * @param full_vt the set of values in a program point that will be
    * used to derive the value.
    **/
   // I don't provide separate computeModified and computeValue
@@ -113,7 +115,8 @@ public abstract class Derivation implements Serializable, Cloneable {
   }
 
   // Set whether the derivation is a param according to aux info
-  /*@Pure*/ protected abstract boolean isParam();
+  /*@Pure*/
+  protected abstract boolean isParam();
 
   public boolean missing_array_bounds = false;
   /**
@@ -124,7 +127,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * (which would require a first pass).
    **/
   public boolean missingOutOfBounds() {
-    return (missing_array_bounds);
+    return missing_array_bounds;
   }
 
   /* *
@@ -134,7 +137,8 @@ public abstract class Derivation implements Serializable, Cloneable {
    * before performing the derivation that this would be the case --
    * for instance, when deriving before any values are seen.
    **/
-  /*@Pure*/ public abstract boolean isDerivedFromNonCanonical();
+  /*@Pure*/
+  public abstract boolean isDerivedFromNonCanonical();
 
   /**
    * Returns how many levels of derivation this Derivation is based
@@ -148,7 +152,8 @@ public abstract class Derivation implements Serializable, Cloneable {
    * will just checks runtime type, but subclasses with state
    * (e.g. SequenceInitial index) should match that, too.
    **/
-  /*@Pure*/ public abstract boolean isSameFormula(Derivation other);
+  /*@Pure*/
+  public abstract boolean isSameFormula(Derivation other);
 
   /** @see VarInfo#canBeMissing */
   public abstract boolean canBeMissing();
@@ -182,7 +187,8 @@ public abstract class Derivation implements Serializable, Cloneable {
    * is specified, it is used as an array index.  It is an error to
    * specify an index on a non-array variable
    */
-  /*@SideEffectFree*/ public String esc_name(String index) {
+  /*@SideEffectFree*/
+  public String esc_name(String index) {
     throw new RuntimeException("esc_name not implemented for " + this);
   }
 
@@ -200,12 +206,14 @@ public abstract class Derivation implements Serializable, Cloneable {
    * is specified, it is used as an array index.  It is an error to
    * specify an index on a non-array variable
    */
-  /*@SideEffectFree*/ public String csharp_name(String index) {
+  /*@SideEffectFree*/
+  public String csharp_name(String index) {
     throw new RuntimeException("csharp_name not implemented for " + this);
   }
 
   /** Returns the name of this variable in simplify format **/
-  /*@SideEffectFree*/ public String simplify_name() {
+  /*@SideEffectFree*/
+  public String simplify_name() {
     throw new RuntimeException(
         "simplify_name not implemented for " + this.getClass() + " (" + this + ")");
   }
@@ -215,7 +223,8 @@ public abstract class Derivation implements Serializable, Cloneable {
    * if this and d are of the same derivation with the same formula
    * and have the same bases.
    */
-  /*@Pure*/ public boolean is_prestate_version(Derivation d) {
+  /*@Pure*/
+  public boolean is_prestate_version(Derivation d) {
 
     // The derivations must be of the same type
     if (getClass() != d.getClass()) return false;
@@ -224,7 +233,9 @@ public abstract class Derivation implements Serializable, Cloneable {
     VarInfo[] base1 = getBases();
     VarInfo[] base2 = d.getBases();
     for (int ii = 0; ii < base1.length; ii++) {
-      if (!base1[ii].is_prestate_version(base2[ii])) return false;
+      if (!base1[ii].is_prestate_version(base2[ii])) {
+        return false;
+      }
     }
 
     // The derivations must have the same formula (offset, start_from, etc)
@@ -246,7 +257,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   protected String shift_str(int shift) {
     String shift_str = "";
     if (shift != 0) shift_str = String.format("%+d", shift);
-    return (shift_str);
+    return shift_str;
   }
 
   /**
@@ -264,7 +275,9 @@ public abstract class Derivation implements Serializable, Cloneable {
       } else {
         return String.format("\\new(%s)%s", vi.esc_name(), shift_str(shift));
       }
-    } else return vi.esc_name() + shift_str(shift);
+    } else {
+      return vi.esc_name() + shift_str(shift);
+    }
   }
 
   /**
@@ -282,7 +295,9 @@ public abstract class Derivation implements Serializable, Cloneable {
       } else {
         return String.format("\\new(%s)%s", vi.jml_name(), shift_str(shift));
       }
-    } else return vi.jml_name() + shift_str(shift);
+    } else {
+      return vi.jml_name() + shift_str(shift);
+    }
   }
 
   /**
@@ -301,6 +316,8 @@ public abstract class Derivation implements Serializable, Cloneable {
         // return String.format ("\\new(%s)%s", vi.csharp_name(), shift_str(shift));
         return String.format("%s%s", vi.csharp_name(), shift_str(shift));
       }
-    } else return vi.csharp_name() + shift_str(shift);
+    } else {
+      return vi.csharp_name() + shift_str(shift);
+    }
   }
 }

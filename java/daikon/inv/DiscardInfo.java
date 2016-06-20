@@ -74,7 +74,8 @@ public final class DiscardInfo {
     return this.inv.getClass().getName();
   }
 
-  /*@SideEffectFree*/ public String format() {
+  /*@SideEffectFree*/
+  public String format() {
     return (discardFormat + Global.lineSep + discardCode + Global.lineSep + discardString);
   }
 
@@ -91,8 +92,9 @@ public final class DiscardInfo {
    */
   public void add_implied_vis(VarInfo[] vis) {
     for (int i = 0; i < vis.length; i++) {
-      if (inv.ppt.var_infos[i] != vis[i])
+      if (inv.ppt.var_infos[i] != vis[i]) {
         discardString += " and " + inv.ppt.var_infos[i] + "==" + vis[i];
+      }
     }
   }
 }

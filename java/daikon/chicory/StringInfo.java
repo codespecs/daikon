@@ -16,8 +16,9 @@ public class StringInfo extends DaikonVariableInfo {
 
   @Override
   public Object getMyValFromParentVal(Object value) {
-    if ((value == null) || (value instanceof NonsensicalObject))
+    if ((value == null) || (value instanceof NonsensicalObject)) {
       return NonsensicalObject.getInstance();
+    }
     return value;
   }
 
@@ -41,7 +42,7 @@ public class StringInfo extends DaikonVariableInfo {
    * If theValues is null, returns "null." If theValues is
    * nonsensical, returns "nonsensical".
    *
-   * @param theValues A list of values, each is a String or NonsensicalObject or NonsensicalList.
+   * @param theValues a list of values, each is a String or NonsensicalObject or NonsensicalList
    * @return a space-separated String of the elements in theValues
    */
   public static String getStringList(List<?> theValues) {
@@ -137,6 +138,6 @@ public class StringInfo extends DaikonVariableInfo {
     EnumSet<VarFlags> flags = super.get_var_flags().clone();
     flags.add(VarFlags.SYNTHETIC);
     flags.add(VarFlags.TO_STRING);
-    return (flags);
+    return flags;
   }
 }

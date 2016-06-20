@@ -34,6 +34,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
@@ -81,7 +82,7 @@ public class CLASSNAME
 
   /** Returns a prototype CLASSNAME invariant **/
   public static /*@Prototype*/ CLASSNAME get_proto() {
-    return (proto);
+    return proto;
   }
 
   /** Returns whether or not this invariant is enabled **/
@@ -92,8 +93,9 @@ public class CLASSNAME
   /** LinearBinary is only valid on integral types **/
   public boolean instantiate_ok (VarInfo[] vis) {
 
-    if (!valid_types (vis))
+    if (!valid_types (vis)) {
       return false;
+    }
 
     #if defined (TYPELONG)
       // Don't look for linearbinary over hashcodes and booleans
@@ -110,7 +112,8 @@ public class CLASSNAME
     return new CLASSNAME(slice);
   }
 
-  /*@SideEffectFree*/ public CLASSNAME clone() {
+  /*@SideEffectFree*/
+  public CLASSNAME clone(/*>>>@GuardSatisfied CLASSNAME this*/) {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;
@@ -122,18 +125,20 @@ public class CLASSNAME
     return this;
   }
 
-  public String repr() {
+  public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return CLASSSTRING + varNames() + ": "
       + "falsified=" + falsified
       + "; " + core.repr();
   }
 
-  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/
+  public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     return core.format_using(format, var1().name_using(format),
                              var2().name_using(format));
   }
 
-  /*@Pure*/ public boolean isActive() {
+  /*@Pure*/
+  public boolean isActive() {
     return core.isActive();
   }
 
@@ -145,9 +150,9 @@ public class CLASSNAME
    * Merge the invariants in invs to form a new invariant.  Each must be
    * a CLASSNAME invariant.  The work is done by the LinearBinary core
    *
-   * @param invs        List of invariants to merge.  They should all be
+   * @param invs        list of invariants to merge.  They should all be
    *                    permuted to match the variable order in parent_ppt.
-   * @param parent_ppt  Slice that will contain the new invariant
+   * @param parent_ppt  slice that will contain the new invariant
    */
   public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
@@ -160,10 +165,11 @@ public class CLASSNAME
     // Merge the cores and build a new invariant containing the merged core
     CLASSNAME result = new CLASSNAME (parent_ppt);
     CORECLASS newcore = core.merge (cores, result);
-    if (newcore == null)
-      return (null);
+    if (newcore == null) {
+      return null;
+    }
     result.core = newcore;
-    return (result);
+    return result;
   }
 
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, int count) {
@@ -174,7 +180,7 @@ public class CLASSNAME
     return core.add_modified(x, y, count);
   }
 
-  public boolean enoughSamples() {
+  public boolean enoughSamples(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return core.enoughSamples();
   }
 
@@ -182,7 +188,8 @@ public class CLASSNAME
     return core.computeConfidence();
   }
 
-  /*@Pure*/ public boolean isExact() {
+  /*@Pure*/
+  public boolean isExact() {
     return true;
   }
 
@@ -243,11 +250,13 @@ public class CLASSNAME
     return null;
   }
 
-  /*@Pure*/ public boolean isSameFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
-  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/
+  public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
       return core.isExclusiveFormula(((CLASSNAME) other).core);
     }
@@ -259,8 +268,9 @@ public class CLASSNAME
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
-      if (inv instanceof CLASSNAME)
+      if (inv instanceof CLASSNAME) {
         return (CLASSNAME) inv;
+      }
     }
     return null;
   }

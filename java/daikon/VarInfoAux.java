@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -279,20 +280,27 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  /*@SideEffectFree*/ public VarInfoAux clone() throws CloneNotSupportedException {
+  /*@SideEffectFree*/
+  public VarInfoAux clone(
+      /*>>>@GuardSatisfied VarInfoAux this*/) throws CloneNotSupportedException {
     return (VarInfoAux) super.clone();
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied VarInfoAux this*/) {
     return map.toString();
   }
 
-  /*@Pure*/ public int hashCode() {
+  /*@Pure*/
+  public int hashCode(/*>>>@GuardSatisfied VarInfoAux this*/) {
     return map.hashCode();
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(/*@Nullable*/ Object o) {
+  /*@Pure*/
+  public boolean equals(
+      /*>>>@GuardSatisfied VarInfoAux this,*/
+      final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
     } else {
@@ -301,7 +309,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  /*@Pure*/ public boolean equals(VarInfoAux o) {
+  /*@Pure*/
+  public boolean equals(
+      /*>>>@GuardSatisfied VarInfoAux this,*/ final /*@GuardSatisfied*/ VarInfoAux o) {
     return this.map.equals(o.map);
   }
 
@@ -311,8 +321,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
    **/
   @SuppressWarnings({"interning", "cast"}) // intern method
   private /*@Interned*/ VarInfoAux intern() {
-    if (this.isInterned)
+    if (this.isInterned) {
       return (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
+    }
 
     if (interningMap == null) {
       interningMap = new HashMap<VarInfoAux, /*@Interned*/ VarInfoAux>();
@@ -425,7 +436,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @see #HAS_DUPLICATES
    */
   @SuppressWarnings("keyfor") // HAS_DUPLICATES is always a key
-  /*@Pure*/ public boolean hasDuplicates() {
+  /*@Pure*/
+  public boolean hasDuplicates() {
     return getFlag(HAS_DUPLICATES);
   }
 
@@ -433,7 +445,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @see #HAS_ORDER
    */
   @SuppressWarnings("keyfor") // HAS_ORDER is always a key
-  /*@Pure*/ public boolean hasOrder() {
+  /*@Pure*/
+  public boolean hasOrder() {
     return getFlag(HAS_ORDER);
   }
 
@@ -441,7 +454,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @see #HAS_SIZE
    */
   @SuppressWarnings("keyfor") // HAS_SIZE is always a key
-  /*@Pure*/ public boolean hasSize() {
+  /*@Pure*/
+  public boolean hasSize() {
     return getFlag(HAS_SIZE);
   }
 
@@ -449,7 +463,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @see #HAS_NULL
    */
   @SuppressWarnings("keyfor") // HAS_NULL is always a key
-  /*@Pure*/ public boolean hasNull() {
+  /*@Pure*/
+  public boolean hasNull() {
     return getFlag(HAS_NULL);
   }
 
@@ -457,7 +472,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @see #NULL_TERMINATING
    */
   @SuppressWarnings("keyfor") // NULL_TERMINATING is always a key
-  /*@Pure*/ public boolean nullTerminating() {
+  /*@Pure*/
+  public boolean nullTerminating() {
     return getFlag(NULL_TERMINATING);
   }
 
@@ -465,7 +481,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @see #IS_STRUCT
    */
   @SuppressWarnings("keyfor") // IS_PARAM is always a key
-  /*@Pure*/ public boolean isParam() {
+  /*@Pure*/
+  public boolean isParam() {
     return getFlag(IS_PARAM);
   }
 
@@ -473,7 +490,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @see #PACKAGE_NAME
    */
   @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
-  /*@Pure*/ public boolean packageName() {
+  /*@Pure*/
+  public boolean packageName() {
     return getFlag(PACKAGE_NAME);
   }
 
@@ -481,7 +499,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @see #IS_STRUCT
    */
   @SuppressWarnings("keyfor") // IS_STRUCT is always a key
-  /*@Pure*/ public boolean isStruct() {
+  /*@Pure*/
+  public boolean isStruct() {
     return getFlag(IS_STRUCT);
   }
 }

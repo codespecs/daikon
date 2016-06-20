@@ -9,6 +9,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -50,7 +51,7 @@ public abstract class PptSlice extends Ppt {
   public PptTopLevel parent;
 
   public abstract int arity(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/ );
+      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/);
 
   /**
    * The invariants contained in this slice.
@@ -76,8 +77,9 @@ public abstract class PptSlice extends Ppt {
     }
   }
 
-  /*@SideEffectFree*/ public final String name(
-      /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/ ) {
+  /*@SideEffectFree*/
+  public final String name(
+      /*>>>@GuardSatisfied @UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/) {
     return parent.name + varNames(var_infos);
   }
 
@@ -104,7 +106,9 @@ public abstract class PptSlice extends Ppt {
   // Only called right now from tools/ExtractConsequent
   public boolean usesVarDerived(String name) {
     for (VarInfo vi : var_infos) {
-      if (vi.includes_simple_name(name)) return true;
+      if (vi.includes_simple_name(name)) {
+        return true;
+      }
     }
     return false;
   }
@@ -112,7 +116,9 @@ public abstract class PptSlice extends Ppt {
   /** @return true if all of this slice's variables are orig() variables. */
   public boolean allPrestate() {
     for (VarInfo vi : var_infos) {
-      if (!vi.isPrestateDerived()) return false;
+      if (!vi.isPrestateDerived()) {
+        return false;
+      }
     }
     return true;
   }
@@ -199,7 +205,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   /** Return an approximation of the number of samples seen on this slice **/
-  public abstract int num_samples();
+  public abstract int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PptSlice this*/);
 
   /**
    * Return an approximation of the number of distinct values seen on
@@ -218,7 +224,8 @@ public abstract class PptSlice extends Ppt {
    * It's somewhat less efficient than ArityPptnameComparator.
    **/
   public static final class ArityVarnameComparator implements Comparator<PptSlice> {
-    /*@Pure*/ public int compare(PptSlice slice1, PptSlice slice2) {
+    /*@Pure*/
+    public int compare(PptSlice slice1, PptSlice slice2) {
       if (slice1 == slice2) return 0;
       // Don't do this assert, which prevents comparison across different Ppts.
       // (The assert check may be useful in some situations, though.)
@@ -237,7 +244,8 @@ public abstract class PptSlice extends Ppt {
    * on the same Ppt.
    **/
   public static final class ArityPptnameComparator implements Comparator<PptSlice> {
-    /*@Pure*/ public int compare(PptSlice slice1, PptSlice slice2) {
+    /*@Pure*/
+    public int compare(PptSlice slice1, PptSlice slice2) {
       if (slice1 == slice2) return 0;
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
@@ -254,7 +262,9 @@ public abstract class PptSlice extends Ppt {
 
   public boolean containsOnlyGuardingPredicates() {
     for (Invariant inv : invs) {
-      if (!inv.isGuardingPredicate) return false;
+      if (!inv.isGuardingPredicate) {
+        return false;
+      }
     }
     return true;
   }
@@ -323,7 +333,8 @@ public abstract class PptSlice extends Ppt {
    * For debugging only.
    **/
   @SuppressWarnings("purity") // string creation
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString(/*>>>@GuardSatisfied PptSlice this*/) {
     StringBuffer sb = new StringBuffer();
     for (VarInfo vi : var_infos) {
       sb.append(" " + vi.name());
@@ -345,7 +356,9 @@ public abstract class PptSlice extends Ppt {
   public boolean contains_inv(Invariant inv) {
 
     for (Invariant mine : invs) {
-      if (mine.match(inv)) return true;
+      if (mine.match(inv)) {
+        return true;
+      }
     }
     return false;
   }
@@ -370,9 +383,11 @@ public abstract class PptSlice extends Ppt {
   public /*@Nullable*/ Invariant find_inv_exact(Invariant inv) {
 
     for (Invariant mine : invs) {
-      if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv)) return (mine);
+      if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv)) {
+        return mine;
+      }
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -382,9 +397,11 @@ public abstract class PptSlice extends Ppt {
   public /*@Nullable*/ Invariant find_inv_by_class(Class<? extends Invariant> cls) {
 
     for (Invariant inv : invs) {
-      if ((inv.getClass() == cls)) return (inv);
+      if ((inv.getClass() == cls)) {
+        return inv;
+      }
     }
-    return (null);
+    return null;
   }
 
   /**
@@ -393,11 +410,13 @@ public abstract class PptSlice extends Ppt {
    * or is obvious statically.
    */
   @SuppressWarnings("nullness") // checker bug with flow and static fields
-  /*@Pure*/ public boolean is_inv_true(Invariant inv) {
+  /*@Pure*/
+  public boolean is_inv_true(Invariant inv) {
 
     if (contains_inv_exact(inv)) {
-      if (Debug.logOn() && (Daikon.current_inv != null))
+      if (Debug.logOn() && (Daikon.current_inv != null)) {
         Daikon.current_inv.log("inv %s exists", inv.format());
+      }
       return true;
     }
 
@@ -406,15 +425,17 @@ public abstract class PptSlice extends Ppt {
     // over the leaders, it should have been created.
     DiscardInfo di = inv.isObviousStatically(var_infos);
     if (di != null) {
-      if (Debug.logOn() && (Daikon.current_inv != null))
+      if (Debug.logOn() && (Daikon.current_inv != null)) {
         Daikon.current_inv.log("inv %s is obv statically", inv.format());
+      }
       return true;
     }
 
     boolean suppressed = inv.is_ni_suppressed();
-    if (suppressed && Debug.logOn() && (Daikon.current_inv != null))
+    if (suppressed && Debug.logOn() && (Daikon.current_inv != null)) {
       Daikon.current_inv.log("inv %s is ni suppressed", inv.format());
-    return (suppressed);
+    }
+    return suppressed;
   }
 
   /**

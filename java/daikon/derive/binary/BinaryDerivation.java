@@ -5,6 +5,7 @@ import daikon.derive.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -36,7 +37,8 @@ public abstract class BinaryDerivation extends Derivation {
     base2 = vi2;
   }
 
-  /*@SideEffectFree*/ public BinaryDerivation clone() {
+  /*@SideEffectFree*/
+  public BinaryDerivation clone(/*>>>@GuardSatisfied BinaryDerivation this*/) {
     try {
       return (BinaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {
@@ -44,11 +46,13 @@ public abstract class BinaryDerivation extends Derivation {
     }
   }
 
-  /*@SideEffectFree*/ public VarInfo[] getBases() {
+  /*@SideEffectFree*/
+  public VarInfo[] getBases() {
     return new VarInfo[] {base1, base2};
   }
 
-  /*@Pure*/ public VarInfo getBase(int i) {
+  /*@Pure*/
+  public VarInfo getBase(int i) {
     switch (i) {
       case 0:
         return base1;
@@ -70,10 +74,18 @@ public abstract class BinaryDerivation extends Derivation {
     int source_mod1 = base1.getModified(vt);
     int source_mod2 = base2.getModified(vt);
     // MISSING_NONSENSICAL takes precedence
-    if (source_mod1 == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
-    if (source_mod2 == ValueTuple.MISSING_NONSENSICAL) return ValueAndModified.MISSING_NONSENSICAL;
-    if (source_mod1 == ValueTuple.MISSING_FLOW) return ValueAndModified.MISSING_FLOW;
-    if (source_mod2 == ValueTuple.MISSING_FLOW) return ValueAndModified.MISSING_FLOW;
+    if (source_mod1 == ValueTuple.MISSING_NONSENSICAL) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
+    if (source_mod2 == ValueTuple.MISSING_NONSENSICAL) {
+      return ValueAndModified.MISSING_NONSENSICAL;
+    }
+    if (source_mod1 == ValueTuple.MISSING_FLOW) {
+      return ValueAndModified.MISSING_FLOW;
+    }
+    if (source_mod2 == ValueTuple.MISSING_FLOW) {
+      return ValueAndModified.MISSING_FLOW;
+    }
 
     return computeValueAndModifiedImpl(vt);
   }
@@ -83,7 +95,8 @@ public abstract class BinaryDerivation extends Derivation {
    **/
   protected abstract ValueAndModified computeValueAndModifiedImpl(ValueTuple vt);
 
-  /*@Pure*/ protected boolean isParam() {
+  /*@Pure*/
+  protected boolean isParam() {
     return (base1.isParam() || base2.isParam());
   }
 
@@ -95,16 +108,17 @@ public abstract class BinaryDerivation extends Derivation {
     return base1.canBeMissing || base2.canBeMissing;
   }
 
-  /*@Pure*/ public boolean isDerivedFromNonCanonical() {
+  /*@Pure*/
+  public boolean isDerivedFromNonCanonical() {
     // We insist that both are canonical, not just one.
     return !(base1.isCanonical() && base2.isCanonical());
   }
 
-  public VarInfo var1() {
+  public VarInfo var1(/*>>>@GuardSatisfied BinaryDerivation this*/) {
     return base1;
   }
 
-  public VarInfo var2() {
+  public VarInfo var2(/*>>>@GuardSatisfied BinaryDerivation this*/) {
     return base2;
   }
 }

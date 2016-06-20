@@ -121,14 +121,18 @@ public class Premain {
 
       // If already instrumented, nothing to do
       // (This set will be empty if --no-jdk)
-      if (pre_instrumented.contains(className)) return null;
+      if (pre_instrumented.contains(className)) {
+        return null;
+      }
 
       boolean in_jdk = false;
 
       // Check if class is in JDK
       if (BCELUtil.in_jdk_internalform(className)) {
         // If --no-jdk option is active, then skip it.
-        if (DynComp.no_jdk) return (null);
+        if (DynComp.no_jdk) {
+          return null;
+        }
 
         in_jdk = true;
         if (DynComp.verbose) System.out.printf("Instrumenting JDK class %s%n", className);
@@ -137,11 +141,14 @@ public class Premain {
         // We're not in a JDK class
         // Don't instrument our own classes
         if ((className.startsWith("daikon/dcomp/") && !className.startsWith("daikon/dcomp/Test"))
-            || className.startsWith("daikon/chicory/")) return (null);
+            || className.startsWith("daikon/chicory/")) {
+          return null;
+        }
       }
 
-      if (DynComp.verbose)
+      if (DynComp.verbose) {
         System.out.format("In dcomp.Premain.Transform(): class = %s\n", className);
+      }
 
       try {
         // Parse the bytes of the classfile, die on any errors
@@ -156,7 +163,9 @@ public class Premain {
         DCInstrument dci;
         if (DynComp.branch != null) {
           dci = new DFInstrument(c, in_jdk, loader);
-        } else dci = new DCInstrument(c, in_jdk, loader);
+        } else {
+          dci = new DCInstrument(c, in_jdk, loader);
+        }
         JavaClass njc;
         if (DynComp.no_primitives) {
           njc = dci.instrument_refs_only();
@@ -166,7 +175,7 @@ public class Premain {
 
         if (njc == null) {
           if (DynComp.verbose) System.out.printf("Didn't instrument %s%n", c.getClassName());
-          return (null);
+          return null;
         } else {
           if (DynComp.debug) {
             System.out.printf("Dumping %s to %s%n", njc.getClassName(), debug_bin_dir);
@@ -257,8 +266,9 @@ public class Premain {
       // If requested, write the comparability data to a file
       if (!DynComp.no_cset_file) {
         if (DynComp.compare_sets_file != null) {
-          if (DynComp.verbose)
+          if (DynComp.verbose) {
             System.out.println("Writing comparability sets to " + DynComp.compare_sets_file);
+          }
           assert DynComp.compare_sets_file != null
               : "@AssumeAssertion(nullness): limited side effects don't change this field";
           PrintWriter compare_out = open(DynComp.compare_sets_file);
@@ -269,27 +279,32 @@ public class Premain {
             DCRuntime.print_all_comparable(compare_out);
           }
           compare_out.close();
-          if (DynComp.verbose)
+          if (DynComp.verbose) {
             System.out.printf("Comparability sets written in %s%n", watch.format());
+          }
         } else {
           System.out.println("Writing comparability sets to standard output");
-          if (DynComp.no_primitives)
+          if (DynComp.no_primitives) {
             DCRuntime.print_all_comparable_refs_only(new PrintWriter(System.out, true));
-          else DCRuntime.print_all_comparable(new PrintWriter(System.out, true));
+          } else {
+            DCRuntime.print_all_comparable(new PrintWriter(System.out, true));
+          }
         }
       }
 
       if (DynComp.trace_sets_file != null) {
-        if (DynComp.verbose)
+        if (DynComp.verbose) {
           System.out.println("Writing traced comparability sets to " + DynComp.trace_sets_file);
+        }
         assert DynComp.trace_sets_file != null
             : "@AssumeAssertion(nullness): limited side effects don't change this field";
         PrintWriter trace_out = open(DynComp.trace_sets_file);
         Stopwatch watch = new Stopwatch();
         DCRuntime.trace_all_comparable(trace_out);
         trace_out.close();
-        if (DynComp.verbose)
+        if (DynComp.verbose) {
           System.out.printf("Comparability sets written in %s%n", watch.format());
+        }
       } else {
         // Writing comparability sets to standard output?
       }
@@ -325,7 +340,7 @@ public class Premain {
     assert local_store.startsWith("local-store");
     int local_index = Integer.decode(local_store.split(" ")[1]);
     String local_name = DFInstrument.test_seq_locals[local_index];
-    return (local_name);
+    return local_name;
   }
 
   public static PrintWriter open(File filename) {

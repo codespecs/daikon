@@ -108,8 +108,9 @@ class FormatTestCase {
      **/
     public String createTestOutput(Invariant inv) {
       try {
-        if (resultCache == null)
+        if (resultCache == null) {
           resultCache = (String) outputProducer.invoke(inv, outputProducerArgs);
+        }
         if (FileIO.new_decl_format) resultCache = VarInfo.old_var_names(resultCache);
         return resultCache;
       } catch (IllegalAccessException e) {
@@ -383,8 +384,9 @@ class FormatTestCase {
     int arg_index = 0;
     for (int i = 1; i < tokens.length; i += 2) {
       String arg_type_name = tokens[i].intern();
-      if (i + 1 >= tokens.length)
+      if (i + 1 >= tokens.length) {
         throw new RuntimeException("No matching arg val for argument type " + arg_type_name);
+      }
       String arg_val = tokens[i + 1];
       Object val;
       Class<?> val_type;
@@ -898,7 +900,9 @@ class FormatTestCase {
    *        can be added to the variables involved
    **/
   private static void populateWithSamples(Invariant inv, List<Object[]> samples) {
-    if (samples == null || samples.size() == 0) return;
+    if (samples == null || samples.size() == 0) {
+      return;
+    }
 
     assert inv != null;
 
@@ -1059,7 +1063,7 @@ class FormatTestCase {
       Invariant inv = proto.instantiate(sl);
 
       if (inv == null) throw new RuntimeException("null inv for " + theClass.getName());
-      return (inv);
+      return inv;
     } catch (Exception e) {
       e.printStackTrace(System.out);
       throw new RuntimeException(
@@ -1071,9 +1075,9 @@ class FormatTestCase {
    * This function instantiates an invariant class by using the
    * static instantiate method with the specified arguments.
    *
-   * @param theClass  - the invariant class to be instantiated
-   * @param arg_types - the types of each argument
-   * @param arg_vals  - the value of each argument
+   * @param theClass the invariant class to be instantiated
+   * @param arg_types the types of each argument
+   * @param arg_vals the value of each argument
    *
    * @return an instance of the class in theClass if one can be constructed,
    *         else throw a RuntimeException
