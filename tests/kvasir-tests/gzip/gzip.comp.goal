@@ -454,10 +454,8 @@ return
 ::bb
 ::bk
 ::block_mode
-::block_start
-::bytes_in ::bytes_out
+::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::progname ::strstart ::window[..] ::window_size ::z_suffix fname
 ::crc_32_tab
-::crc_32_tab[..] ::d_buf[..] ::inbuf[..] ::outbuf[..] ::prev[..] ::window[..] ::window_size
 ::d_buf
 ::dbits
 ::decompress ::no_name ::no_time
@@ -472,12 +470,10 @@ return
 ::file_type[..]
 ::force
 ::foreground
-::good_match
 ::header_bytes
 ::hufts
 ::ifd
 ::ifile_size ::istat.st_size
-::ifname ::ofname ::progname ::z_suffix fname
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
@@ -515,10 +511,8 @@ return
 ::match_start
 ::max_chain_length
 ::maxbits
-::nice_match
 ::ofd
 ::outbuf
-::outcnt
 ::part_nb
 ::pkzip
 ::prev
@@ -530,7 +524,6 @@ return
 ::remove_ofname
 ::rsync
 ::save_orig_name
-::strstart
 ::test
 ::to_stdout
 ::total_in
@@ -548,10 +541,8 @@ return
 ::bb
 ::bk
 ::block_mode
-::block_start
-::bytes_in ::bytes_out
+::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::progname ::strstart ::window[..] ::window_size ::z_suffix fname return
 ::crc_32_tab
-::crc_32_tab[..] ::d_buf[..] ::inbuf[..] ::outbuf[..] ::prev[..] ::window[..] ::window_size
 ::d_buf
 ::dbits
 ::decompress ::no_name ::no_time
@@ -566,12 +557,10 @@ return
 ::file_type[..]
 ::force
 ::foreground
-::good_match
 ::header_bytes
 ::hufts
 ::ifd
 ::ifile_size ::istat.st_size
-::ifname ::ofname ::progname ::z_suffix fname return
 ::inbuf
 ::inptr ::insize
 ::istat ::istat.st_dev
@@ -609,10 +598,8 @@ return
 ::match_start
 ::max_chain_length
 ::maxbits
-::nice_match
 ::ofd
 ::outbuf
-::outcnt
 ::part_nb
 ::pkzip
 ::prev
@@ -624,7 +611,6 @@ return
 ::remove_ofname
 ::rsync
 ::save_orig_name
-::strstart
 ::test
 ::to_stdout
 ::total_in
@@ -640,12 +626,10 @@ return
 ::args[..]
 ::ascii
 ::bb
-::bi_buf
-::bi_valid
+::bi_buf ::bi_valid ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::ofname ::outbuf[..] ::outcnt ::prev[..] ::window[..] ::window_size ::z_suffix
 ::bk
 ::block_mode
 ::block_start
-::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::ofname ::outbuf[..] ::outcnt ::prev[..] ::window[..] ::window_size ::z_suffix
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -735,12 +719,10 @@ return
 ::args[..]
 ::ascii
 ::bb
-::bi_buf
-::bi_valid
+::bi_buf ::bi_valid ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::ofname ::outbuf[..] ::outcnt ::prev[..] ::window[..] ::window_size ::z_suffix
 ::bk
 ::block_mode
 ::block_start
-::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::ofname ::outbuf[..] ::outcnt ::prev[..] ::window[..] ::window_size ::z_suffix
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -830,7 +812,7 @@ return
 ::args[..]
 ::ascii
 ::bb
-::bi_buf ::bi_valid ::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix len
+::bi_buf ::bi_valid ::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix code len
 ::bk
 ::block_mode
 ::crc_32_tab
@@ -848,7 +830,6 @@ return
 ::file_type[..]
 ::force
 ::foreground
-::header_bytes ::outcnt
 ::hufts
 ::ifd
 ::ifile_size ::istat.st_size
@@ -910,14 +891,13 @@ return
 ::work
 ::work[..]
 ::z_len
-code
 
 ..bi_reverse():::EXIT0
 ::args
 ::args[..]
 ::ascii
 ::bb
-::bi_buf ::bi_valid ::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix len
+::bi_buf ::bi_valid ::block_start ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix code len return
 ::bk
 ::block_mode
 ::crc_32_tab
@@ -935,7 +915,6 @@ code
 ::file_type[..]
 ::force
 ::foreground
-::header_bytes ::outcnt
 ::hufts
 ::ifd
 ::ifile_size ::istat.st_size
@@ -997,7 +976,6 @@ code
 ::work
 ::work[..]
 ::z_len
-code return
 
 ..bi_windup():::ENTER
 ::args
@@ -1408,9 +1386,8 @@ return
 ::bk
 ::block_mode
 ::block_start
-::bytes_in ::bytes_out
+::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::ofname ::outbuf[..] ::prev[..] ::window[..] ::window_size ::z_suffix
 ::crc_32_tab
-::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::ofname ::outbuf[..] ::prev[..] ::window[..] ::window_size ::z_suffix
 ::d_buf
 ::dbits
 ::decompress ::no_name ::no_time
@@ -1503,9 +1480,8 @@ return
 ::bk
 ::block_mode
 ::block_start
-::bytes_in ::bytes_out
+::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::ofname ::outbuf[..] ::prev[..] ::window[..] ::window_size ::z_suffix
 ::crc_32_tab
-::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::ofname ::outbuf[..] ::prev[..] ::window[..] ::window_size ::z_suffix
 ::d_buf
 ::dbits
 ::decompress ::no_name ::no_time
@@ -2068,9 +2044,8 @@ len
 ::args[..]
 ::ascii
 ::base_dist
-::base_dist[..]
+::base_dist[..] ::base_length[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::bytes_in ::bytes_out ::compressed_len ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_length ::d_desc.static_tree ::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::heap[..] ::ifname ::inbuf[..] ::input_len ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_length ::l_desc.static_tree ::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::length_code[..] ::ofname ::opt_len ::outbuf[..] ::outcnt ::prev[..] ::static_dtree[..].dl.dad ::static_dtree[..].dl.len ::static_len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len ::window[..] ::window_size ::z_suffix
 ::base_length
-::base_length[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_length ::d_desc.static_tree ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::heap[..] ::ifname ::inbuf[..] ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_length ::l_desc.static_tree ::ofname ::outbuf[..] ::outcnt ::prev[..] ::window[..] ::window_size ::z_suffix
 ::bb
 ::bk
 ::bl_count
@@ -2095,7 +2070,6 @@ len
 ::bl_tree[..].fc
 ::block_mode
 ::block_start
-::compressed_len ::input_len
 ::crc_32_tab
 ::d_buf
 ::d_desc.dyn_tree[..]
@@ -2104,7 +2078,6 @@ len
 ::d_desc.max_code
 ::d_desc.static_tree[..]
 ::d_desc.static_tree[..].dl
-::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::static_dtree[..].dl.dad ::static_dtree[..].dl.len
 ::d_desc.static_tree[..].fc
 ::d_desc.static_tree[..].fc.code ::d_desc.static_tree[..].fc.freq ::static_dtree[..].fc.code ::static_dtree[..].fc.freq
 ::dbits
@@ -2135,8 +2108,7 @@ len
 ::file_type[..] attr[..]
 ::flag_bit
 ::flag_buf
-::flag_buf[..]
-::flags
+::flag_buf[..] ::flags
 ::force
 ::foreground
 ::good_match
@@ -2174,13 +2146,11 @@ len
 ::l_desc.max_code
 ::l_desc.static_tree[..]
 ::l_desc.static_tree[..].dl
-::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len
 ::l_desc.static_tree[..].fc
 ::last_dist ::last_flags ::last_lit
 ::last_member
 ::lbits
 ::length_code
-::length_code[..]
 ::level
 ::list
 ::longopts
@@ -2197,7 +2167,6 @@ len
 ::maxbits
 ::nice_match
 ::ofd
-::opt_len ::static_len
 ::outbuf
 ::part_nb
 ::pkzip
@@ -2235,9 +2204,8 @@ len
 ::args[..]
 ::ascii
 ::base_dist
-::base_dist[..]
+::base_dist[..] ::base_length[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::bytes_in ::bytes_out ::compressed_len ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_length ::d_desc.static_tree ::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::heap[..] ::ifname ::inbuf[..] ::input_len ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_length ::l_desc.static_tree ::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::length_code[..] ::ofname ::opt_len ::outbuf[..] ::outcnt ::prev[..] ::static_dtree[..].dl.dad ::static_dtree[..].dl.len ::static_len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len ::window[..] ::window_size ::z_suffix
 ::base_length
-::base_length[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::bytes_in ::bytes_out ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_length ::d_desc.static_tree ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::heap[..] ::ifname ::inbuf[..] ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_length ::l_desc.static_tree ::ofname ::outbuf[..] ::outcnt ::prev[..] ::window[..] ::window_size ::z_suffix
 ::bb
 ::bk
 ::bl_count
@@ -2262,7 +2230,6 @@ len
 ::bl_tree[..].fc
 ::block_mode
 ::block_start
-::compressed_len ::input_len
 ::crc_32_tab
 ::d_buf
 ::d_desc.dyn_tree[..]
@@ -2271,7 +2238,6 @@ len
 ::d_desc.max_code
 ::d_desc.static_tree[..]
 ::d_desc.static_tree[..].dl
-::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::static_dtree[..].dl.dad ::static_dtree[..].dl.len
 ::d_desc.static_tree[..].fc
 ::d_desc.static_tree[..].fc.code ::d_desc.static_tree[..].fc.freq ::static_dtree[..].fc.code ::static_dtree[..].fc.freq
 ::dbits
@@ -2302,8 +2268,7 @@ len
 ::file_type[..] attr[..]
 ::flag_bit
 ::flag_buf
-::flag_buf[..]
-::flags
+::flag_buf[..] ::flags
 ::force
 ::foreground
 ::good_match
@@ -2341,13 +2306,11 @@ len
 ::l_desc.max_code
 ::l_desc.static_tree[..]
 ::l_desc.static_tree[..].dl
-::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len
 ::l_desc.static_tree[..].fc
 ::last_dist ::last_flags ::last_lit
 ::last_member
 ::lbits
 ::length_code
-::length_code[..]
 ::level
 ::list
 ::longopts
@@ -2364,7 +2327,6 @@ len
 ::maxbits
 ::nice_match
 ::ofd
-::opt_len ::static_len
 ::outbuf
 ::part_nb
 ::pkzip
@@ -3288,7 +3250,7 @@ m
 ::bb
 ::bk
 ::block_mode
-::block_start ::bytes_in ::bytes_out ::crc ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix buf size
+::block_start ::bytes_in ::bytes_out ::crc ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix buf size
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -3303,7 +3265,6 @@ m
 ::file_type
 ::force
 ::foreground
-::header_bytes ::outcnt
 ::hufts
 ::ifd
 ::ifile_size ::istat.st_size
@@ -3374,7 +3335,7 @@ m
 ::bb
 ::bk
 ::block_mode
-::block_start ::bytes_in ::bytes_out ::crc ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix buf return size
+::block_start ::bytes_in ::bytes_out ::crc ::crc_32_tab[..] ::d_buf[..] ::good_match ::header_bytes ::ifname ::inbuf[..] ::match_start ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::prev_length ::strstart ::window[..] ::window_size ::z_suffix buf return size
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -3389,7 +3350,6 @@ m
 ::file_type
 ::force
 ::foreground
-::header_bytes ::outcnt
 ::hufts
 ::ifd
 ::ifile_size ::istat.st_size
@@ -6732,14 +6692,11 @@ return
 ::bb
 ::bk
 ::block_mode
-::block_start
-::bytes_in ::bytes_out ::lookahead
+::block_start ::bytes_in ::bytes_out ::configuration_table[..].good_length ::configuration_table[..].max_lazy ::configuration_table[..].nice_length ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::ins_h ::lookahead ::max_lazy_match ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::strstart ::window[..] ::window_size ::z_suffix flags[..]
 ::compr_level ::level pack_level
 ::configuration_table
 ::configuration_table[..]
-::configuration_table[..].good_length ::configuration_table[..].nice_length ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::ins_h ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::window[..] ::window_size ::z_suffix flags[..]
 ::configuration_table[..].max_chain ::max_chain_length
-::configuration_table[..].max_lazy ::max_lazy_match
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -6811,7 +6768,6 @@ return
 ::rsync_chunk_end
 ::rsync_sum
 ::save_orig_name
-::strstart
 ::test
 ::to_stdout
 ::total_in
@@ -6830,14 +6786,11 @@ flags
 ::bb
 ::bk
 ::block_mode
-::block_start
-::bytes_in ::bytes_out ::lookahead
+::block_start ::bytes_in ::bytes_out ::configuration_table[..].good_length ::configuration_table[..].max_lazy ::configuration_table[..].nice_length ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::ins_h ::lookahead ::max_lazy_match ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::strstart ::window[..] ::window_size ::z_suffix flags[..]
 ::compr_level ::level pack_level
 ::configuration_table
 ::configuration_table[..]
-::configuration_table[..].good_length ::configuration_table[..].nice_length ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::ins_h ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::window[..] ::window_size ::z_suffix flags[..]
 ::configuration_table[..].max_chain ::max_chain_length
-::configuration_table[..].max_lazy ::max_lazy_match
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -6909,7 +6862,6 @@ flags
 ::rsync_chunk_end
 ::rsync_sum
 ::save_orig_name
-::strstart
 ::test
 ::to_stdout
 ::total_in
@@ -9360,8 +9312,7 @@ return
 ::bb
 ::bk
 ::block_mode
-::block_start
-::bytes_in ::bytes_out ::crc ::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::ofname ::outbuf[..] ::outcnt ::prev[..] ::window[..] ::window_size ::z_suffix s[..]
+::block_start ::bytes_in ::bytes_out ::crc ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::strstart ::window[..] ::window_size ::z_suffix n s[..]
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -9377,7 +9328,6 @@ return
 ::file_type[..]
 ::force
 ::foreground
-::good_match
 ::header_bytes
 ::hufts
 ::ifd
@@ -9419,7 +9369,6 @@ return
 ::match_start
 ::max_chain_length
 ::maxbits
-::nice_match
 ::ofd
 ::outbuf
 ::part_nb
@@ -9434,7 +9383,6 @@ return
 ::remove_ofname
 ::rsync
 ::save_orig_name
-::strstart
 ::test
 ::to_stdout
 ::total_in
@@ -9444,7 +9392,6 @@ return
 ::work
 ::work[..]
 ::z_len
-n
 s
 
 ..updcrc():::EXIT0
@@ -9454,8 +9401,7 @@ s
 ::bb
 ::bk
 ::block_mode
-::block_start
-::bytes_in ::bytes_out ::crc ::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::ofname ::outbuf[..] ::outcnt ::prev[..] ::window[..] ::window_size ::z_suffix return s[..]
+::block_start ::bytes_in ::bytes_out ::crc ::crc_32_tab[..] ::d_buf[..] ::good_match ::ifname ::inbuf[..] ::nice_match ::ofname ::outbuf[..] ::outcnt ::prev[..] ::strstart ::window[..] ::window_size ::z_suffix n return s[..]
 ::crc_32_tab
 ::d_buf
 ::dbits
@@ -9471,7 +9417,6 @@ s
 ::file_type[..]
 ::force
 ::foreground
-::good_match
 ::header_bytes
 ::hufts
 ::ifd
@@ -9513,7 +9458,6 @@ s
 ::match_start
 ::max_chain_length
 ::maxbits
-::nice_match
 ::ofd
 ::outbuf
 ::part_nb
@@ -9528,7 +9472,6 @@ s
 ::remove_ofname
 ::rsync
 ::save_orig_name
-::strstart
 ::test
 ::to_stdout
 ::total_in
@@ -9538,7 +9481,6 @@ s
 ::work
 ::work[..]
 ::z_len
-n
 s
 
 ..warning():::ENTER
@@ -12828,7 +12770,7 @@ gzip.c.get_istat():::ENTER
 ::bytes_in
 ::bytes_out
 ::crc_32_tab
-::crc_32_tab[..] ::d_buf[..] ::inbuf[..] ::outbuf[..] ::prev[..] ::window[..] ::window_size ::z_suffix
+::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::outbuf[..] ::prev[..] ::window[..] ::window_size ::z_suffix iname
 ::d_buf
 ::dbits
 ::decompress ::no_name ::no_time
@@ -12848,7 +12790,6 @@ gzip.c.get_istat():::ENTER
 ::hufts
 ::ifd
 ::ifile_size
-::ifname iname
 ::inbuf
 ::inptr
 ::insize
@@ -12940,7 +12881,7 @@ gzip.c.get_istat():::EXIT0
 ::bytes_in
 ::bytes_out
 ::crc_32_tab
-::crc_32_tab[..] ::d_buf[..] ::inbuf[..] ::outbuf[..] ::prev[..] ::window[..] ::window_size ::z_suffix
+::crc_32_tab[..] ::d_buf[..] ::ifname ::inbuf[..] ::outbuf[..] ::prev[..] ::window[..] ::window_size ::z_suffix iname
 ::d_buf
 ::dbits
 ::decompress ::no_name ::no_time
@@ -12960,7 +12901,6 @@ gzip.c.get_istat():::EXIT0
 ::hufts
 ::ifd
 ::ifile_size
-::ifname iname
 ::inbuf
 ::inptr
 ::insize
@@ -17907,7 +17847,7 @@ trees.c.gen_codes():::ENTER
 ::args[..]
 ::ascii
 ::base_dist
-::base_dist[..] ::base_length[..] ::bl_count[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_code ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::block_start ::bytes_in ::bytes_out ::compressed_len ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_code ::d_desc.max_length ::d_desc.static_tree ::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::good_match ::heap[..] ::ifname ::inbuf[..] ::input_len ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_code ::l_desc.max_length ::l_desc.static_tree ::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::l_desc.static_tree[..].fc.code ::l_desc.static_tree[..].fc.freq ::length_code[..] ::match_start ::nice_match ::ofname ::opt_len ::outbuf[..] ::prev[..] ::prev_length ::static_dtree[..].dl.dad ::static_dtree[..].dl.len ::static_len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len ::static_ltree[..].fc.code ::static_ltree[..].fc.freq ::strstart ::window[..] ::window_size ::z_suffix max_code tree tree[..].dl.dad tree[..].dl.len tree[..].fc.code tree[..].fc.freq
+::base_dist[..] ::base_length[..] ::bl_count[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_code ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::block_start ::bytes_in ::bytes_out ::compressed_len ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_code ::d_desc.max_length ::d_desc.static_tree ::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::good_match ::header_bytes ::heap[..] ::ifname ::inbuf[..] ::input_len ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_code ::l_desc.max_length ::l_desc.static_tree ::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::l_desc.static_tree[..].fc.code ::l_desc.static_tree[..].fc.freq ::length_code[..] ::match_start ::nice_match ::ofname ::opt_len ::outbuf[..] ::outcnt ::prev[..] ::prev_length ::static_dtree[..].dl.dad ::static_dtree[..].dl.len ::static_len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len ::static_ltree[..].fc.code ::static_ltree[..].fc.freq ::strstart ::window[..] ::window_size ::z_suffix max_code tree tree[..].dl.dad tree[..].dl.len tree[..].fc.code tree[..].fc.freq
 ::base_length
 ::bb
 ::bk
@@ -17969,7 +17909,6 @@ trees.c.gen_codes():::ENTER
 ::flag_buf
 ::force
 ::foreground
-::header_bytes ::outcnt
 ::heap
 ::heap_len
 ::heap_max
@@ -18059,7 +17998,7 @@ trees.c.gen_codes():::EXIT0
 ::args[..]
 ::ascii
 ::base_dist
-::base_dist[..] ::base_length[..] ::bl_count[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_code ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::block_start ::bytes_in ::bytes_out ::compressed_len ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_code ::d_desc.max_length ::d_desc.static_tree ::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::good_match ::heap[..] ::ifname ::inbuf[..] ::input_len ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_code ::l_desc.max_length ::l_desc.static_tree ::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::l_desc.static_tree[..].fc.code ::l_desc.static_tree[..].fc.freq ::length_code[..] ::match_start ::nice_match ::ofname ::opt_len ::outbuf[..] ::prev[..] ::prev_length ::static_dtree[..].dl.dad ::static_dtree[..].dl.len ::static_len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len ::static_ltree[..].fc.code ::static_ltree[..].fc.freq ::strstart ::window[..] ::window_size ::z_suffix max_code tree tree[..].dl.dad tree[..].dl.len tree[..].fc.code tree[..].fc.freq
+::base_dist[..] ::base_length[..] ::bl_count[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_code ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::block_start ::bytes_in ::bytes_out ::compressed_len ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_code ::d_desc.max_length ::d_desc.static_tree ::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::good_match ::header_bytes ::heap[..] ::ifname ::inbuf[..] ::input_len ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_code ::l_desc.max_length ::l_desc.static_tree ::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::l_desc.static_tree[..].fc.code ::l_desc.static_tree[..].fc.freq ::length_code[..] ::match_start ::nice_match ::ofname ::opt_len ::outbuf[..] ::outcnt ::prev[..] ::prev_length ::static_dtree[..].dl.dad ::static_dtree[..].dl.len ::static_len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len ::static_ltree[..].fc.code ::static_ltree[..].fc.freq ::strstart ::window[..] ::window_size ::z_suffix max_code tree tree[..].dl.dad tree[..].dl.len tree[..].fc.code tree[..].fc.freq
 ::base_length
 ::bb
 ::bk
@@ -18121,7 +18060,6 @@ trees.c.gen_codes():::EXIT0
 ::flag_buf
 ::force
 ::foreground
-::header_bytes ::outcnt
 ::heap
 ::heap_len
 ::heap_max
@@ -18211,7 +18149,7 @@ trees.c.init_block():::ENTER
 ::args[..]
 ::ascii
 ::base_dist
-::base_dist[..] ::base_length[..] ::bl_count[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_code ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::block_start ::bytes_in ::bytes_out ::compressed_len ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_code ::d_desc.max_length ::d_desc.static_tree ::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::good_match ::heap[..] ::ifname ::inbuf[..] ::input_len ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_code ::l_desc.max_length ::l_desc.static_tree ::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::l_desc.static_tree[..].fc.code ::l_desc.static_tree[..].fc.freq ::length_code[..] ::match_start ::nice_match ::ofname ::opt_len ::outbuf[..] ::prev[..] ::prev_length ::static_dtree[..].dl.dad ::static_dtree[..].dl.len ::static_len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len ::static_ltree[..].fc.code ::static_ltree[..].fc.freq ::strstart ::window[..] ::window_size ::z_suffix
+::base_dist[..] ::base_length[..] ::bl_count[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_code ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::block_start ::bytes_in ::bytes_out ::compressed_len ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_code ::d_desc.max_length ::d_desc.static_tree ::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::good_match ::header_bytes ::heap[..] ::ifname ::inbuf[..] ::input_len ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_code ::l_desc.max_length ::l_desc.static_tree ::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::l_desc.static_tree[..].fc.code ::l_desc.static_tree[..].fc.freq ::length_code[..] ::match_start ::nice_match ::ofname ::opt_len ::outbuf[..] ::outcnt ::prev[..] ::prev_length ::static_dtree[..].dl.dad ::static_dtree[..].dl.len ::static_len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len ::static_ltree[..].fc.code ::static_ltree[..].fc.freq ::strstart ::window[..] ::window_size ::z_suffix
 ::base_length
 ::bb
 ::bk
@@ -18273,7 +18211,6 @@ trees.c.init_block():::ENTER
 ::flag_buf
 ::force
 ::foreground
-::header_bytes ::outcnt
 ::heap
 ::heap_len
 ::heap_max
@@ -18360,7 +18297,7 @@ trees.c.init_block():::EXIT0
 ::args[..]
 ::ascii
 ::base_dist
-::base_dist[..] ::base_length[..] ::bl_count[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_code ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::block_start ::bytes_in ::bytes_out ::compressed_len ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_code ::d_desc.max_length ::d_desc.static_tree ::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::good_match ::heap[..] ::ifname ::inbuf[..] ::input_len ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_code ::l_desc.max_length ::l_desc.static_tree ::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::l_desc.static_tree[..].fc.code ::l_desc.static_tree[..].fc.freq ::length_code[..] ::match_start ::nice_match ::ofname ::opt_len ::outbuf[..] ::prev[..] ::prev_length ::static_dtree[..].dl.dad ::static_dtree[..].dl.len ::static_len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len ::static_ltree[..].fc.code ::static_ltree[..].fc.freq ::strstart ::window[..] ::window_size ::z_suffix
+::base_dist[..] ::base_length[..] ::bl_count[..] ::bl_desc ::bl_desc.dyn_tree ::bl_desc.dyn_tree[..].dl.dad ::bl_desc.dyn_tree[..].dl.len ::bl_desc.dyn_tree[..].fc.code ::bl_desc.dyn_tree[..].fc.freq ::bl_desc.elems ::bl_desc.extra_base ::bl_desc.extra_bits ::bl_desc.extra_bits[..] ::bl_desc.max_code ::bl_desc.max_length ::bl_tree[..].dl.dad ::bl_tree[..].dl.len ::bl_tree[..].fc.code ::bl_tree[..].fc.freq ::block_start ::bytes_in ::bytes_out ::compressed_len ::crc_32_tab[..] ::d_buf[..] ::d_desc ::d_desc.dyn_tree ::d_desc.dyn_tree[..].dl.dad ::d_desc.dyn_tree[..].dl.len ::d_desc.dyn_tree[..].fc.code ::d_desc.dyn_tree[..].fc.freq ::d_desc.elems ::d_desc.extra_base ::d_desc.extra_bits ::d_desc.extra_bits[..] ::d_desc.max_code ::d_desc.max_length ::d_desc.static_tree ::d_desc.static_tree[..].dl.dad ::d_desc.static_tree[..].dl.len ::dyn_dtree[..].dl.dad ::dyn_dtree[..].dl.len ::dyn_dtree[..].fc.code ::dyn_dtree[..].fc.freq ::dyn_ltree[..].dl.dad ::dyn_ltree[..].dl.len ::dyn_ltree[..].fc.code ::dyn_ltree[..].fc.freq ::extra_blbits[..] ::extra_dbits[..] ::extra_lbits[..] ::good_match ::header_bytes ::heap[..] ::ifname ::inbuf[..] ::input_len ::l_desc ::l_desc.dyn_tree ::l_desc.dyn_tree[..].dl.dad ::l_desc.dyn_tree[..].dl.len ::l_desc.dyn_tree[..].fc.code ::l_desc.dyn_tree[..].fc.freq ::l_desc.elems ::l_desc.extra_base ::l_desc.extra_bits ::l_desc.extra_bits[..] ::l_desc.max_code ::l_desc.max_length ::l_desc.static_tree ::l_desc.static_tree[..].dl.dad ::l_desc.static_tree[..].dl.len ::l_desc.static_tree[..].fc.code ::l_desc.static_tree[..].fc.freq ::length_code[..] ::match_start ::nice_match ::ofname ::opt_len ::outbuf[..] ::outcnt ::prev[..] ::prev_length ::static_dtree[..].dl.dad ::static_dtree[..].dl.len ::static_len ::static_ltree[..].dl.dad ::static_ltree[..].dl.len ::static_ltree[..].fc.code ::static_ltree[..].fc.freq ::strstart ::window[..] ::window_size ::z_suffix
 ::base_length
 ::bb
 ::bk
@@ -18422,7 +18359,6 @@ trees.c.init_block():::EXIT0
 ::flag_buf
 ::force
 ::foreground
-::header_bytes ::outcnt
 ::heap
 ::heap_len
 ::heap_max

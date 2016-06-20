@@ -34,6 +34,7 @@
 ::keymem in ::words2ptrs[]
 ::keymem < s
 ::wordsn[] elements > ::largestlet
+::longestlength != ::max_depth
 ::wordsn[] elements <= ::longestlength
 ::wordsn[] elements > ::max_depth
 ::wordsn[] elements > ::maxdepthspec
@@ -110,6 +111,7 @@ s in ::words2ptrs[]
 ::keymem <= orig(::alphstr)
 ::keymem == orig(::keymem)
 ::wordsn[] elements > ::largestlet
+::longestlength != ::max_depth
 ::wordsn[] elements <= ::longestlength
 ::wordsn[] elements > ::max_depth
 ::wordsn[] elements > ::maxdepthspec
@@ -767,6 +769,7 @@ return >= 1
 ::keymem == ::words2mem
 ::keymem < s
 ::wordsn[] elements > ::largestlet
+::longestlength != ::max_depth
 ::longestlength in ::wordsn[]
 ::wordsn[] elements <= ::longestlength
 ::wordsn[] elements > ::max_depth
@@ -836,6 +839,7 @@ s in ::words2[]
 ::keymem <= orig(::upcasestr)
 ::keymem < orig(s)
 ::wordsn[] elements > ::largestlet
+::longestlength != ::max_depth
 ::longestlength in ::wordsn[]
 ::wordsn[] elements <= ::longestlength
 ::wordsn[] elements > ::max_depth

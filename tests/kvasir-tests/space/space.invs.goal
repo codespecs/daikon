@@ -2913,7 +2913,7 @@ return == 0
 ::GLOBLE_FILENAME == "gr2712"
 ::Keywords == ""
 ::MOSErrors == ""
-::UserNames == ""
+::Keywords == ::UserNames
 ===========================================================================
 ..glvainit():::EXIT
 ::ErrorMessages == "** ERROR 0: NO ERRORS"
@@ -2922,6 +2922,7 @@ return == 0
 ::MOSErrors == "** ERROR  B0: Out of memory during MOS."
 ::UserNames == ""
 ::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::UserNames == orig(::Keywords)
 ::UserNames == orig(::UserNames)
 ===========================================================================
 ..grampexc():::ENTER

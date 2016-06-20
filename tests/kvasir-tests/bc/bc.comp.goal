@@ -2984,9 +2984,8 @@ num->n_next[..].n_next->n_value
 num->n_next[..].n_next[0]
 num->n_next[..].n_ptr
 num->n_next[..].n_refs num->n_refs
-num->n_next[..].n_sign
+num->n_next[..].n_sign num->n_sign num[0]
 num->n_next[..].n_value
-num->n_sign num[0]
 
 ..push_num():::EXIT0
 num num->n_next num->n_next[..].n_next
@@ -3003,9 +3002,8 @@ num->n_next[..].n_next->n_value
 num->n_next[..].n_next[0]
 num->n_next[..].n_ptr
 num->n_next[..].n_refs num->n_refs
-num->n_next[..].n_sign
+num->n_next[..].n_sign num->n_sign num[0]
 num->n_next[..].n_value
-num->n_sign num[0]
 
 ..pv():::ENTER
 len
@@ -4157,9 +4155,8 @@ scan.c.yy_flex_alloc():::ENTER
 size
 
 scan.c.yy_flex_alloc():::EXIT0
-return
+return size
 return[0]
-size
 
 scan.c.yy_flex_free():::ENTER
 ptr

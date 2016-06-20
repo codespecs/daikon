@@ -6240,8 +6240,7 @@ bzip2.c.myMalloc():::EXIT0
 ::workFactor
 ::zSuffix
 ::zSuffix[..]
-n
-return
+n return
 return[..]
 
 bzip2.c.mySIGSEGVorSIGBUScatcher():::ENTER
@@ -8737,10 +8736,9 @@ fullProgName
 
 bzlib.c.add_pair_to_block():::ENTER
 ::BZ2_crc32Table
-::BZ2_crc32Table[..] s s[..].arr2[0] s[..].blockCRC s[..].block[0] s[..].state_in_ch s[..].state_in_len s[..].strm->next_in s[..].strm->state
+::BZ2_crc32Table[..] ::blockSize100k s s[..].arr1 s[..].arr2 s[..].arr2[0] s[..].block s[..].blockCRC s[..].blockSize100k s[..].block[0] s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_in_ch s[..].state_in_len s[..].state_out_pos s[..].strm->next_in s[..].strm->state
 ::BZ2_rNums
 ::BZ2_rNums[..]
-::blockSize100k s[..].arr1 s[..].arr2 s[..].block s[..].blockSize100k s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_out_pos
 ::bzerrorstrings
 ::bzerrorstrings[..]
 ::deleteOutputOnInterrupt
@@ -8848,10 +8846,9 @@ s[..].zbits[0]
 
 bzlib.c.add_pair_to_block():::EXIT0
 ::BZ2_crc32Table
-::BZ2_crc32Table[..] s s[..].arr2[0] s[..].blockCRC s[..].block[0] s[..].state_in_ch s[..].state_in_len s[..].strm->next_in s[..].strm->state
+::BZ2_crc32Table[..] ::blockSize100k s s[..].arr1 s[..].arr2 s[..].arr2[0] s[..].block s[..].blockCRC s[..].blockSize100k s[..].block[0] s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_in_ch s[..].state_in_len s[..].state_out_pos s[..].strm->next_in s[..].strm->state
 ::BZ2_rNums
 ::BZ2_rNums[..]
-::blockSize100k s[..].arr1 s[..].arr2 s[..].block s[..].blockSize100k s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_out_pos
 ::bzerrorstrings
 ::bzerrorstrings[..]
 ::deleteOutputOnInterrupt
@@ -9494,10 +9491,9 @@ s[..].unseqToSeq[0]
 
 bzlib.c.default_bzalloc():::ENTER
 ::BZ2_crc32Table
-::BZ2_crc32Table[..]
+::BZ2_crc32Table[..] ::blockSize100k items size
 ::BZ2_rNums
 ::BZ2_rNums[..]
-::blockSize100k items size
 ::bzerrorstrings
 ::bzerrorstrings[..]
 ::deleteOutputOnInterrupt
@@ -9529,10 +9525,9 @@ opaque[..]
 
 bzlib.c.default_bzalloc():::EXIT0
 ::BZ2_crc32Table
-::BZ2_crc32Table[..] return
+::BZ2_crc32Table[..] ::blockSize100k items return size
 ::BZ2_rNums
 ::BZ2_rNums[..]
-::blockSize100k items size
 ::bzerrorstrings
 ::bzerrorstrings[..]
 ::deleteOutputOnInterrupt

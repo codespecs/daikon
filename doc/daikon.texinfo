@@ -5006,14 +5006,6 @@ Enable progress messages meant for debugging problems with Kvasir, Fjalar, or
 DynComp.  By default, they are disabled.  This option is intended mainly
 for Kvasir's developers.
 
-@item --no-path-compression
-@itemx --no-var-leader
-@itemx --no-val-leader
-
-These disable optimizations to DynComp's abstract type inference 
-implementation. These are disabled by default. These options are
-intended mainly for DynComp developers.
-
 @item --dyncomp-trace
 @itemx --dyncomp-trace-merge
 @itemx -- dyncomp-print-inc
