@@ -114,7 +114,7 @@ medium-easy-tests__%: rothermel-tests__% medium-real-easy-tests__% medium-crypto
 # Omits povray and perl
 # Omits flex-pristine and bzip2
 # Omits flex-rothermel, md5 and space
-TEMP-medium-easy-tests__%: TEMP-medium-real-easy-tests__% medium-crypto-tests__% \
+TEMP-medium-easy-tests__%: TEMP-medium-real-easy-tests__% \
                  missing-tests__%
 	@
 
