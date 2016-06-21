@@ -30,7 +30,7 @@ regression-tests:
 
 .PHONY: TEMP-regression-tests
 TEMP-regression-tests:
-	$(MAKE) --jobs=4 $(MPARG) TEMP-nightly-tests__diffs-w-daikon-if-working
+	$(MAKE) --jobs=1 $(MPARG) TEMP-nightly-tests__diffs-w-daikon-if-working
 	$(MAKE) TEMP-nightly-summary-only-w-daikon
 	@$(MAKE) --no-print-directory results
 
