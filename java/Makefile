@@ -1131,6 +1131,8 @@ check-serialize:
 junit:
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA} daikon.test.MasterUnitTester
+# Does not run daikon.util tests because plume-lib/java/Makefile does not
+# get copied over to Daikon.
 
 junit-all: junit
 	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
