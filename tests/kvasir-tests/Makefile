@@ -30,7 +30,7 @@ regression-tests:
 
 .PHONY: TEMP-regression-tests
 TEMP-regression-tests:
-	$(MAKE) --jobs=1 $(MPARG) TEMP-nightly-tests__diffs-w-daikon-if-working
+	$(MAKE) --jobs=4 $(MPARG) TEMP-nightly-tests__diffs-w-daikon-if-working
 	$(MAKE) TEMP-nightly-summary-only-w-daikon
 	@$(MAKE) --no-print-directory results
 
@@ -115,7 +115,7 @@ medium-easy-tests__%: rothermel-tests__% medium-real-easy-tests__% medium-crypto
 # Omits flex-pristine and bzip2
 # Omits flex-rothermel, md5 and space
 TEMP-medium-easy-tests__%: TEMP-medium-real-easy-tests__% \
-                 missing-tests__% small-crypto-tests__% do-space__% do-Dstr__% do-partial-init__%
+                 missing-tests__%
 	@
 
 pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
