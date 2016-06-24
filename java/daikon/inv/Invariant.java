@@ -41,7 +41,8 @@ import typequals.*;
  * variables a and b at PptTopLevel T, there will not be two instances
  * of invariant I(a, b).
  **/
-/*@Prototype*/ /*@UsesObjectEquals*/
+/*@UsesObjectEquals*/
+/*@Prototype*/
 public abstract class Invariant implements Serializable, Cloneable // but don't YOU clone it
 {
   // We are Serializable, so we specify a version to allow changes to
