@@ -244,7 +244,7 @@ public class Implication extends Joiner {
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public boolean isSameInvariant(final Invariant other) {
+  public boolean isSameInvariant(Invariant other) {
     if (other == null) return false;
     if (!(other instanceof Implication)) return false;
     if (iff != ((Implication) other).iff) return false;
