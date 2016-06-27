@@ -517,7 +517,12 @@ public final class Daikon {
    * @see #main(String[])
    * @see TerminationMessage
    **/
-  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings({
+    "contracts.precondition.not.satisfied", // private field
+    "flowexpr.parse.error"
+  }) // TODO: the call to DiscReasonMap.initialize() below
+  // issues this error most likely due to Checker Framework issue 767.
+  // Try switching the build order between Daikon.java and DiscReasonMap.java
   public static void mainHelper(final String[] args) {
     // Cleanup from any previous runs
     cleanup();
@@ -1880,10 +1885,10 @@ public final class Daikon {
    * over boolean returns or exactly two return statements are enabled
    * by default (though other splitters can be defined by the user)
    */
-  // TODO: When Checker Framework issue 752 is fixed, remove this
-  // @SuppressWarnings and address the type checking error issued
+  // TODO: When this @SuppressWarnings is removed,
+  // address the type checking error issued
   // for the call to SplitterFactory.load_splitters.
-  @SuppressWarnings("contracts.precondition.not.satisfied")
+  @SuppressWarnings("contracts.precondition.not.satisfied") // TODO: Checker Framework issue 752
   public static void setup_splitters(PptTopLevel ppt) {
     if (PptSplitter.dkconfig_disable_splitting) {
       return;
@@ -2272,6 +2277,7 @@ public final class Daikon {
   /**
    * Initialize NIS suppression
    */
+  @SuppressWarnings("flowexpr.parse.error") // TODO: Checker Framework issue 752
   public static void setup_NISuppression() {
     NIS.init_ni_suppression();
   }

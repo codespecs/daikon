@@ -118,6 +118,7 @@ public final class UnionInvariants {
     for (int i = fileIndex; i < args.length; i++) {
       String filename = args[i];
       System.out.println("Reading " + filename + "...");
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
       PptMap ppt_map =
           FileIO.read_serialized_pptmap(
               new File(filename), true // use saved config

@@ -189,7 +189,7 @@ public class DynamicConstants implements Serializable {
     /*@Pure*/
     public boolean equals(
         /*>>>@GuardSatisfied Constant this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+        final /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof Constant)) {
         return false;
       }

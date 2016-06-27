@@ -457,13 +457,13 @@ public class PptName implements Serializable {
   /*@Pure*/
   public boolean equals(
       /*>>>@GuardSatisfied PptName this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+      final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     return (o instanceof PptName) && equals((PptName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public boolean equals(/*>>>@GuardSatisfied PptName this,*//*@GuardSatisfied*/ PptName o) {
+  public boolean equals(/*>>>@GuardSatisfied PptName this,*/ final /*@GuardSatisfied*/ PptName o) {
     return (o != null) && (o.fullname == fullname);
   }
 

@@ -682,10 +682,12 @@ public class LogicalCompare {
     String app_filename = args[g.getOptind() + 0];
     String test_filename = args[g.getOptind() + 1];
 
+    @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
     PptMap app_ppts =
         FileIO.read_serialized_pptmap(
             new File(app_filename), true // use saved config
             );
+    @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
     PptMap test_ppts =
         FileIO.read_serialized_pptmap(
             new File(test_filename), true // use saved config

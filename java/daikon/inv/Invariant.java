@@ -1604,7 +1604,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     /*@Pure*/
     public boolean equals(
         /*>>>@GuardSatisfied Match this,*/
-        /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+        final /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
       if (!(obj instanceof Match)) return false;
 
       Match ic = (Match) obj;

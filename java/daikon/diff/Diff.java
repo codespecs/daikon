@@ -383,22 +383,28 @@ public final class Diff {
       String filename2 = args[firstFileIndex + 1];
       String filename3 = args[firstFileIndex + 2];
       String filename4 = args[firstFileIndex + 3];
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
       PptMap map1 =
           FileIO.read_serialized_pptmap(
               new File(filename1), false // use saved config
               );
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
       PptMap map2 =
           FileIO.read_serialized_pptmap(
               new File(filename2), false // use saved config
               );
-      manip1 =
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
+      PptMap manip1Local =
           FileIO.read_serialized_pptmap(
               new File(filename3), false // use saved config
               );
-      manip2 =
+      manip1 = manip1Local;
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
+      PptMap manip2Local =
           FileIO.read_serialized_pptmap(
               new File(filename4), false // use saved config
               );
+      manip2 = manip2Local;
 
       // get the xor from these two manips
       treeManip = false;
@@ -460,7 +466,10 @@ public final class Diff {
       int j = 0;
       for (int i = firstFileIndex; i < args.length; i++) {
         String fileName = args[i];
-        mapAr[j++] = FileIO.read_serialized_pptmap(new File(fileName), false);
+
+        @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
+        PptMap mapLocal = FileIO.read_serialized_pptmap(new File(fileName), false);
+        mapAr[j++] = mapLocal;
       }
 
       // Cascade a lot of the different invariants into one map,
@@ -568,6 +577,7 @@ public final class Diff {
     if (o instanceof InvMap) {
       return (InvMap) o;
     } else {
+      @SuppressWarnings("flowexpr.parse.error") // See the TODO on FileIO.read_serialized_pptmap
       PptMap pptMap = FileIO.read_serialized_pptmap(file, false);
       return convertToInvMap(pptMap);
     }
