@@ -42,8 +42,8 @@ import typequals.*;
  * of invariant I(a, b).
  **/
 /*@UsesObjectEquals*/
-/*@Prototype*/
-public abstract class Invariant implements Serializable, Cloneable // but don't YOU clone it
+/*@Prototype*/ public abstract class Invariant
+    implements Serializable, Cloneable // but don't YOU clone it
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

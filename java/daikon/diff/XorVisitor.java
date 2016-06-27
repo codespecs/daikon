@@ -70,8 +70,7 @@ public class XorVisitor extends DepthFirstVisitor {
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#2")*/
-  private static boolean shouldAddInv2(
-      /*@Nullable*/ Invariant inv1, final /*@Nullable*/ Invariant inv2) {
+  private static boolean shouldAddInv2(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     return ((inv2 != null) && (inv1 == null));
   }
 
