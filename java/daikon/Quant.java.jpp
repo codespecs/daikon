@@ -111,7 +111,7 @@ public final class Quant {
   /** True iff the sequence contains no null elements. */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public static boolean eltsNonNull(final Object[] seq1) {
+  public static boolean eltsNonNull(Object[] seq1) {
     if (seq1 == null) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
       if (seq1[i] == null) {
@@ -176,7 +176,7 @@ public final class Quant {
   @SuppressWarnings("interning") // cast from Object
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public static boolean noDups(final Object seq) {
+  public static boolean noDups(Object seq) {
     if (seq == null) { return false; }
     return noDups(toObjArray(seq));
   }
@@ -195,7 +195,7 @@ public final class Quant {
   @SuppressWarnings("interning") // cast from Object
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public static boolean eltwiseEqual(final Object seq) {
+  public static boolean eltwiseEqual(Object seq) {
     if (seq == null) { return false; }
     return eltwiseEqual(toObjArray(seq));
   }
@@ -205,7 +205,7 @@ public final class Quant {
   @SuppressWarnings("interning") // cast from Object
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public static boolean eltwiseNotEqual(final Object seq) {
+  public static boolean eltwiseNotEqual(Object seq) {
     if (seq == null) { return false; }
     return eltwiseNotEqual(toObjArray(seq));
   }
@@ -259,7 +259,7 @@ public final class Quant {
   @SuppressWarnings("interning")  // cast from Object
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
   /*@Pure*/
-  public static boolean setEqual(/*@Nullable*/ Object seq1, final /*@Nullable*/ Object seq2) {
+  public static boolean setEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
     return setEqual(toObjArray(seq1), toObjArray(seq2));
@@ -335,7 +335,7 @@ public final class Quant {
   @SuppressWarnings("interning")  // cast from Object
   /*TODO: @AssertNonNullIfNonNull("#1")*/
   /*@SideEffectFree*/
-  public static Object /*@PolyNull*/ [] slice(final /*@PolyNull*/ Object seq, int start, int end) {
+  public static Object /*@PolyNull*/ [] slice(/*@PolyNull*/ Object seq, int start, int end) {
     if (seq == null) { return null; }
     return slice(toObjArray(seq), start, end);
   }
@@ -345,7 +345,7 @@ public final class Quant {
   @SuppressWarnings("interning")  // cast from Object
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public static boolean eltsEqual(final /*@Nullable*/ Object arr, Object elt) {
+  public static boolean eltsEqual(/*@Nullable*/ Object arr, Object elt) {
     if (arr == null) { return false; }
     return eltsEqual(toObjArray(arr), elt);
   }
@@ -355,14 +355,14 @@ public final class Quant {
   @SuppressWarnings("interning")  // cast from Object
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public static boolean eltsNotEqual(final /*@Nullable*/ Object arr, Object elt) {
+  public static boolean eltsNotEqual(/*@Nullable*/ Object arr, Object elt) {
     if (arr == null) { return false; }
     return eltsNotEqual(toObjArray(arr), elt);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public static boolean isIntegralType(final /*@Nullable*/ Class<?> c) {
+  public static boolean isIntegralType(/*@Nullable*/ Class<?> c) {
     if (c == null) { return false; }
     return
       (c.equals(Byte.TYPE) ||
@@ -373,7 +373,7 @@ public final class Quant {
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public static boolean isRealType(final /*@Nullable*/ Class<?> c) {
+  public static boolean isRealType(/*@Nullable*/ Class<?> c) {
     if (c == null) { return false; }
     return
       (c.equals(Float.TYPE) ||
@@ -382,7 +382,7 @@ public final class Quant {
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public static boolean isNumericType(final Class<?> c) {
+  public static boolean isNumericType(Class<?> c) {
     if (c == null) { return false; }
     return isIntegralType(c) || isRealType(c);
   }
@@ -391,7 +391,7 @@ public final class Quant {
    * AbstractCollection.
    */
   /*TODO: @AssertNonNullIfNonNull("#1")*/
-  public static Object /*@PolyNull*/ [] toObjArray(final /*@PolyNull*/ Object o) {
+  public static Object /*@PolyNull*/ [] toObjArray(/*@PolyNull*/ Object o) {
     if (o == null) { return null; }
     if (o instanceof java.util.AbstractCollection<?>) {
       @SuppressWarnings({"unchecked", "interning"})

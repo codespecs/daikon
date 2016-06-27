@@ -155,7 +155,8 @@ public class Property implements Serializable {
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
   public boolean equals(
-      /*>>>@GuardSatisfied Property this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+      /*>>>@GuardSatisfied Property this,*/
+      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o == null) {
       return false;
     }

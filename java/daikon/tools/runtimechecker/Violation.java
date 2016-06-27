@@ -213,7 +213,8 @@ public class Violation implements Serializable {
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
   public boolean equals(
-      /*>>>@GuardSatisfied Violation this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+      /*>>>@GuardSatisfied Violation this,*/
+      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o == null) {
       return false;
     }

@@ -1113,7 +1113,7 @@ public abstract class DaikonVariableInfo
    */
   /*@RequiresNonNull("#1.clazz")*/
   protected void addChildNodes(
-      final ClassInfo cinfo, Class<?> type, String theName, String offset, int depthRemaining) {
+      ClassInfo cinfo, Class<?> type, String theName, String offset, int depthRemaining) {
 
     debug_vars.log("enter addChildNodes:%n");
     debug_vars.log("  name: %s, offset: %s%n", theName, offset);

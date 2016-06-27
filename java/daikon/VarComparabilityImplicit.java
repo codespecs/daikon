@@ -76,7 +76,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
   public boolean equals(
-      /*>>>@GuardSatisfied VarComparabilityImplicit this,*/ final
+      /*>>>@GuardSatisfied VarComparabilityImplicit this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (!(o instanceof VarComparabilityImplicit)) return false;
     return equals((VarComparabilityImplicit) o);
@@ -85,7 +85,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
   public boolean equals(
-      /*>>>@GuardSatisfied VarComparabilityImplicit this,*/ final
+      /*>>>@GuardSatisfied VarComparabilityImplicit this,*/
       /*@GuardSatisfied*/ VarComparabilityImplicit o) {
     return equality_set_ok(o);
   }

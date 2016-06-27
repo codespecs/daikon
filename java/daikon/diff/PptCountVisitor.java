@@ -184,8 +184,7 @@ public class PptCountVisitor extends PrintAllVisitor {
 
   /** Returns true if the pair of invariants should be printed **/
   /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
-  protected static boolean shouldPrint(
-      final /*@Nullable*/ Invariant inv1, final /*@Nullable*/ Invariant inv2) {
+  protected static boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 
     if (inv1 == null || inv2 == null) {
       return false;
