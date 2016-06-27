@@ -1603,9 +1603,9 @@ You can obtain Citadel from
 @node    Detecting invariants in Simulink/Stateflow programs
 @section Detecting invariants in Simulink/Stateflow programs
 
-Hynger (HYbrid iNvariant GEneratoR) instruments Simulink/Stateflow (SLSF)
-block diagrams to generate Daikon input (dtrace files).  Hynger was created
-by Taylor Johnson, Stanley Bak, and Steven Drager.  You can obtain Hynger
+@nospellcheck{Hynger (HYbrid iNvariant GEneratoR) instruments Simulink/Stateflow (SLSF)}
+block diagrams to generate Daikon input (@file{.dtrace} files).  Hynger was created
+by @nospellcheck{Taylor Johnson, Stanley Bak, and Steven Drager.}  You can obtain Hynger
 from @uref{https://bitbucket.org/verivital/hynger}.
 
 
@@ -6683,7 +6683,7 @@ separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
 @cindex Simulink/Stateflow (SLSF) front end
 @cindex instrumentation, of Simulink/Stateflow (SLSF) block diagrams
 
-A front end for the Simulink/Stateflow (SLSF) programming language, named
+A front end for the @nospellcheck{Simulink/Stateflow (SLSF)} programming language, named
 Hynger, is distributed separately; see
 @uref{https://bitbucket.org/verivital/hynger}.
 
