@@ -138,7 +138,7 @@ ifeq (tern,$(findstring tern,$(shell uname -n)))
 test-gtest__%:
 	@
 else
-test-gtest__%: do-gtest__%
+test-gtest__%:
 	@
 endif
 else
