@@ -350,34 +350,6 @@ key[..]
 key[..].keySched
 return
 
-..mul():::ENTER
-::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] b
-::Logtable
-::Logtable[..]
-::S
-::Si
-::iG
-::iG[..]
-::rcon
-::shifts
-::shifts[..]
-a
-
-..mul():::EXIT0
-::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] b return
-::Logtable
-::Logtable[..]
-::S
-::Si
-::iG
-::iG[..]
-::rcon
-::shifts
-::shifts[..]
-a
-
 ..rijndaelDecrypt():::ENTER
 ::Alogtable
 ::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
