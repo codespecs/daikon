@@ -2160,7 +2160,7 @@ prover; for details, see the
 @cindex output format, CSharpContract
 @item CSharpContract format
 Produces C# output for use with Microsoft's Code Contracts  
-@uref{http://research.microsoft.com/en-us/projects/contracts/,,}.
+@uref{http://www.microsoft.com/en-us/research/project/code-contracts/,,}.
 The format employs some extension/utility methods to improve contract
 readability; the library containing these methods can be found at
 @uref{https://github.com/twschiller/daikon-code-contract-extensions,,}.
