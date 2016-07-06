@@ -1,9 +1,10 @@
 #!/bin/sh
 
-# This file will be used as .git/hooks/pre-commit.
-# However, it should be edited as scripts/daikon.pre-commit.
+# This file will be used as .git/hooks/post-merge.
+# However, it should be edited as scripts/daikon.post-merge.
 
 # Fail if any command fails
 set -e
 
-make -C java check-format
+# No need to check format after a merge.  We do it before a commit.
+# make -C java check-format
