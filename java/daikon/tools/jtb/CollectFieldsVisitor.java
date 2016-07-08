@@ -36,6 +36,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   // True if the above three lists are up-to-date.
   private boolean cached = false;
 
+  /*@RequiresNonNull("fieldDecls")*/
   /*@EnsuresNonNull({"allNames" , "ownedNames", "finalNames"})*/
   private void updateCache(/*>>> @UnknownInitialization @Raw CollectFieldsVisitor this*/) {
     if (cached) {

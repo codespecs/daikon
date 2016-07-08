@@ -29,7 +29,7 @@ public class CmdCheck implements Cmd {
   }
 
   /** For documentation, read the class overview. */
-  public void apply(final /*@GuardedBy("itself")*/ Session s) {
+  public void apply(final /*@GuardedBy("<self>")*/ Session s) {
     try {
 
       String result;

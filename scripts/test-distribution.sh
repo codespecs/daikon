@@ -8,6 +8,8 @@ if [ -z "${JAVA_HOME+xxx}" ]; then echo JAVA_HOME is not set; exit 1; fi
 
 # Fail the whole script if any command fails
 set -e
+# Fail if any command in a pipeline fails
+set -o pipefail
 # Echo commands before executing them
 set -x
 
@@ -23,6 +25,8 @@ export OSTYPE
 mkdir -p ~/tmp
 cd ~/tmp
 
+# If this fails because the URL doesn't exist and it's a staging URL, then
+# maybe you are not in the middle of creating a release.
 # DAIKONVERSION=`wget -q $DAIKONBASEURL/download/doc/VERSION -O - | xargs echo -n`
 DAIKONVERSION=`curl --fail -s $DAIKONBASEURL/download/doc/VERSION | xargs echo -n`
 

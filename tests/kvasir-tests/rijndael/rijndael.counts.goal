@@ -9,7 +9,6 @@
 ..cipherUpdateRounds() ENTER/99: 72 EXIT0/102: 72
 ..main() ENTER/39: 1 EXIT0/42: 1
 ..makeKey() ENTER/72: 117 EXIT0/75: 117
-..mul() ENTER/51: 100128 EXIT0/54: 100128
 ..rijndaelDecrypt() ENTER/69: 66 EXIT0/72: 66
 ..rijndaelDecryptRound() ENTER/72: 36 EXIT0/75: 36
 ..rijndaelEncrypt() ENTER/69: 90 EXIT0/72: 90

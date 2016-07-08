@@ -175,7 +175,7 @@ public final class Runtime {
     // requirement that all variables used as locks be final or
     // effectively final.  If a bug exists whereby Runtime.dtrace
     // is not effectively final, this would unfortunately mask that error.
-    final /*@GuardedBy("itself")*/ PrintStream dtrace = Runtime.dtrace;
+    final /*@GuardedBy("<self>")*/ PrintStream dtrace = Runtime.dtrace;
 
     synchronized (dtrace) {
       // The shutdown hook is synchronized on this, so close it up
@@ -213,7 +213,7 @@ public final class Runtime {
   // because this is a library; control flow occurs at run time in generated
   // instrumented code that is not checkable by a source code typechecker.
   @SuppressWarnings("nullness") // set and used by run-time instrumentation
-  public static /*@GuardedBy("itself")*/ PrintStream dtrace;
+  public static /*@GuardedBy("<self>")*/ PrintStream dtrace;
 
   public static boolean dtrace_closed = false;
   // daikon.Daikon should never load daikon.Runtime; but sometimes it

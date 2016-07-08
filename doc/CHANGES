@@ -20,6 +20,17 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.3.6 (July 5, 2016)
+
+A new front end for Simulink/Stateflow (SLSF) block diagrams is available.
+See https://bitbucket.org/verivital/hynger .
+
+Fjalar/Kvasir:
+ - DynComp has been modified to improve its accuracy and correct its
+   garbage collection routine.
+
+===========================================================================
+
 5.3.4 (June 1, 2016)
 
 Miscellaneous bug fixes and minor improvements.

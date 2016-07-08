@@ -44,11 +44,11 @@ public class Runtime {
    * each enter/exit and the decl information for any new classes are
    * printed out and the class is then removed from the list.
    */
-  public static final /*@GuardedBy("itself")*/ List<ClassInfo> new_classes =
+  public static final /*@GuardedBy("<self>")*/ List<ClassInfo> new_classes =
       new LinkedList<ClassInfo>();
 
   /** List of all instrumented classes **/
-  public static final /*@GuardedBy("itself")*/ List<ClassInfo> all_classes =
+  public static final /*@GuardedBy("<self>")*/ List<ClassInfo> all_classes =
       new ArrayList<ClassInfo>();
 
   /** flag that indicates when the first class has been processed**/
@@ -95,7 +95,7 @@ public class Runtime {
   // Not annotated *@MonotonicNonNull* because initialization and use
   // happen in generated instrumentation code that cannot be type-checked
   // by a source code checker.
-  static /*@GuardedBy("itself")*/ PrintStream dtrace;
+  static /*@GuardedBy("<self>")*/ PrintStream dtrace;
 
   /** Set to true when the dtrace stream is closed **/
   static boolean dtrace_closed = false;
@@ -535,7 +535,7 @@ public class Runtime {
     // requirement that all variables used as locks be final or
     // effectively final.  If a bug exists whereby Runtime.dtrace
     // is not effectively final, this would unfortunately mask that error.
-    final /*@GuardedBy("itself")*/ PrintStream dtrace = Runtime.dtrace;
+    final /*@GuardedBy("<self>")*/ PrintStream dtrace = Runtime.dtrace;
 
     synchronized (dtrace) {
       // The shutdown hook is synchronized on this, so close it up

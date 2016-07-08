@@ -10,17 +10,15 @@
 ::lindx1[..]
 ::lindx2
 ::lindx2[..]
-::longestlength
-::max_depth ::wordsn[..]
+::longestlength ::max_depth ::wordsn[..]
 ::maxdepthspec
-::ncount ::words2 ::words2ptrs ::wordsn
+::ncount ::words2 ::words2ptrs ::wordsn ::wordss
 ::rec_anag_count
 ::silent
 ::specfirstword
 ::vowelcheck
 ::wordmasks
 ::wordmasks[..]
-::wordss
 ::wordss[..]
 
 ..alphabetic():::EXIT0
@@ -35,17 +33,15 @@
 ::lindx1[..]
 ::lindx2
 ::lindx2[..]
-::longestlength
-::max_depth ::wordsn[..]
+::longestlength ::max_depth ::wordsn[..]
 ::maxdepthspec
-::ncount ::words2 ::words2ptrs ::wordsn
+::ncount ::words2 ::words2ptrs ::wordsn ::wordss
 ::rec_anag_count
 ::silent
 ::specfirstword
 ::vowelcheck
 ::wordmasks
 ::wordmasks[..]
-::wordss
 ::wordss[..]
 
 ..anagramr7():::ENTER
@@ -210,17 +206,15 @@ return
 ::lindx1[..]
 ::lindx2
 ::lindx2[..]
-::longestlength
-::max_depth ::wordsn[..]
+::longestlength ::max_depth ::wordsn[..]
 ::maxdepthspec
-::ncount ::words2 ::words2ptrs ::wordsn
+::ncount ::words2 ::words2ptrs ::wordsn ::wordss
 ::rec_anag_count
 ::silent
 ::specfirstword
 ::vowelcheck
 ::wordmasks
 ::wordmasks[..]
-::wordss
 ::wordss[..]
 
 ..uppercase():::EXIT0
@@ -235,16 +229,14 @@ return
 ::lindx1[..]
 ::lindx2
 ::lindx2[..]
-::longestlength
-::max_depth ::wordsn[..]
+::longestlength ::max_depth ::wordsn[..]
 ::maxdepthspec
-::ncount ::words2 ::words2ptrs ::wordsn
+::ncount ::words2 ::words2ptrs ::wordsn ::wordss
 ::rec_anag_count
 ::silent
 ::specfirstword
 ::vowelcheck
 ::wordmasks
 ::wordmasks[..]
-::wordss
 ::wordss[..]
 

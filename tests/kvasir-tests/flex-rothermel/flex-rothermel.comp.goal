@@ -295,7 +295,7 @@
 ::NUL_ec
 ::accptnum ::accptnum[..] ::accsiz ::action_array ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::infilename ::input_files[..] ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext new_text
 ::accsiz[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss[..]
 ::actvp ::actvsc
 ::anyccl
@@ -376,7 +376,6 @@
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -437,7 +436,7 @@
 ::NUL_ec
 ::accptnum ::accptnum[..] ::accsiz ::action_array ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::infilename ::input_files[..] ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext new_text
 ::accsiz[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss[..]
 ::actvp ::actvsc
 ::anyccl
@@ -518,7 +517,6 @@
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -580,7 +578,7 @@
 ::accptnum ::accptnum[..] ::accsiz ::active_ss ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext int_def str_def sym table[..]->int_val table[..]->name table[..]->next[0] table[..]->str_val
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss[..]
 ::actvp
 ::actvsc
@@ -663,7 +661,6 @@
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -747,7 +744,7 @@ table_size
 ::accptnum ::accptnum[..] ::accsiz ::active_ss ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext int_def str_def sym table[..]->int_val table[..]->name table[..]->next[0] table[..]->str_val
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss[..]
 ::actvp
 ::actvsc
@@ -830,7 +827,6 @@ table_size
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -2117,7 +2113,7 @@ str
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::action_index ::action_offset ::action_size ::active_ss ::actvp ::actvsc ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::base[..] ::ccllen ::ccllen[..] ::cclmap ::cclmap[..] ::cclng ::ccltbl ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_ccl_tbl_size ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::def[..] ::default_rule ::defs1_offset ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::end_of_buffer_state ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::jambase ::jamstate ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::nummecs ::numprots ::numsnpairs ::numtemps ::nxt ::nxt[..] ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::peakpairs ::prolog_offset ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::tnxt[..] ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_ch_buf ::yy_current_buffer[..].yy_n_chars ::yy_hold_char ::yy_n_chars ::yyleng ::yylval ::yytext element_size size
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::action_index ::action_offset ::action_size ::active_ss ::actvp ::actvsc ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::base[..] ::ccllen ::ccllen[..] ::cclmap ::cclmap[..] ::cclng ::ccltbl ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_ccl_tbl_size ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::def[..] ::default_rule ::defs1_offset ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::end_of_buffer_state ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::jambase ::jamstate ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::nummecs ::numprots ::numsnpairs ::numtemps ::nxt ::nxt[..] ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::peakpairs ::prolog_offset ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::skel[..] ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::tnxt[..] ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_ch_buf ::yy_current_buffer[..].yy_n_chars ::yy_hold_char ::yy_n_chars ::yyleng ::yylval ::yytext element_size size
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::active_ss[..]
@@ -2183,7 +2179,6 @@ str
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -2240,7 +2235,7 @@ str
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::action_index ::action_offset ::action_size ::active_ss ::actvp ::actvsc ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::base[..] ::ccllen ::ccllen[..] ::cclmap ::cclmap[..] ::cclng ::ccltbl ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_ccl_tbl_size ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::def[..] ::default_rule ::defs1_offset ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::end_of_buffer_state ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::jambase ::jamstate ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::nummecs ::numprots ::numsnpairs ::numtemps ::nxt ::nxt[..] ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::peakpairs ::prolog_offset ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::tnxt[..] ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_ch_buf ::yy_current_buffer[..].yy_n_chars ::yy_hold_char ::yy_n_chars ::yyleng ::yylval ::yytext element_size return size
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::action_index ::action_offset ::action_size ::active_ss ::actvp ::actvsc ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::base[..] ::ccllen ::ccllen[..] ::cclmap ::cclmap[..] ::cclng ::ccltbl ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_ccl_tbl_size ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::def[..] ::default_rule ::defs1_offset ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::end_of_buffer_state ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::jambase ::jamstate ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::nummecs ::numprots ::numsnpairs ::numtemps ::nxt ::nxt[..] ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::peakpairs ::prolog_offset ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::skel[..] ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::tnxt[..] ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_ch_buf ::yy_current_buffer[..].yy_n_chars ::yy_hold_char ::yy_n_chars ::yyleng ::yylval ::yytext element_size return size
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::active_ss[..]
@@ -2306,7 +2301,6 @@ str
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -3765,7 +3759,7 @@ return[..]
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::chk ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar
+::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
@@ -3777,7 +3771,6 @@ return[..]
 ::base[..]
 ::bol_needed ::variable_trailing_context_rules
 ::caseins ::printstats ::spprdflt ::syntaxerror ::trace
-::ccllen ::cclmap ::cclng ::ccltbl[..] ::csize ::current_maxccls ::ecgroup[..] ::lastccl ::lastchar ::nextecm[..] ::nmstr ::scname[..] ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext
 ::ccllen[..] ::cclmap[..] ::ccltbl ::current_max_ccl_tbl_size
 ::cclng[..]
 ::cclreuse
@@ -3909,7 +3902,7 @@ return[..]
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::chk ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar
+::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext return
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
@@ -3921,7 +3914,6 @@ return[..]
 ::base[..]
 ::bol_needed ::variable_trailing_context_rules
 ::caseins ::printstats ::spprdflt ::syntaxerror ::trace
-::ccllen ::cclmap ::cclng ::ccltbl[..] ::csize ::current_maxccls ::ecgroup[..] ::lastccl ::lastchar ::nextecm[..] ::nmstr ::scname[..] ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext return
 ::ccllen[..] ::cclmap[..] ::ccltbl ::current_max_ccl_tbl_size
 ::cclng[..]
 ::cclreuse
@@ -6964,10 +6956,10 @@ return
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..]
+::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yytext str
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..]
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss
 ::active_ss[..]
 ::actvp
@@ -7025,7 +7017,6 @@ return
 ::ndtbl
 ::ndtbl[..]
 ::nextecm
-::nmstr ::scname[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yytext str
 ::nultrans
 ::nultrans[..]
 ::num_input_files
@@ -7083,7 +7074,6 @@ return
 ::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
 ::yy_current_buffer
 ::yy_current_buffer[..]
-::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::yy_current_buffer[..].yy_buffer_status
 ::yy_current_buffer[..].yy_fill_buffer
 ::yy_current_buffer[..].yy_input_file ::yyin
@@ -7125,10 +7115,10 @@ return
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..]
+::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yytext str
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..]
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss
 ::active_ss[..]
 ::actvp
@@ -7186,7 +7176,6 @@ return
 ::ndtbl
 ::ndtbl[..]
 ::nextecm
-::nmstr ::scname[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yytext str
 ::nultrans
 ::nultrans[..]
 ::num_input_files
@@ -7244,7 +7233,6 @@ return
 ::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
 ::yy_current_buffer
 ::yy_current_buffer[..]
-::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::yy_current_buffer[..].yy_buffer_status
 ::yy_current_buffer[..].yy_fill_buffer
 ::yy_current_buffer[..].yy_input_file ::yyin
@@ -7287,11 +7275,10 @@ return
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol[..] ::scname[..] ::scset[..] ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext str[..]
+::accptnum ::accptnum[..] ::accsiz ::active_ss ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext str[..]
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
-::active_ss ::current_max_scs ::i ::lastsc ::scbol ::sceof ::scname ::scset ::scxclu
 ::active_ss[..]
 ::actvp
 ::actvsc
@@ -7434,11 +7421,10 @@ str
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol[..] ::scname[..] ::scset[..] ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext str[..]
+::accptnum ::accptnum[..] ::accsiz ::active_ss ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext str[..]
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
-::active_ss ::current_max_scs ::i ::lastsc ::scbol ::sceof ::scname ::scset ::scxclu
 ::active_ss[..]
 ::actvp
 ::actvsc
@@ -16049,69 +16035,44 @@ msg
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum
+::accptnum ::accsiz ::assoc_rule ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::firstprot ::firstst ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::nextecm[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::sceof ::scname ::scset ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans2 ::transchar
 ::accptnum[..]
-::accsiz
 ::accsiz[..]
 ::action_array
-::action_index ::action_offset ::defs1_offset ::prolog_offset
-::action_size
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..]
 ::active_ss
 ::active_ss[..]
 ::actvp
 ::actvsc
 ::actvsc[..]
 ::anyccl
-::assoc_rule
 ::assoc_rule[..]
 ::backing_up_file
 ::backing_up_file[..]
-::base
 ::base[..]
 ::bol_needed ::variable_trailing_context_rules
 ::caseins ::printstats ::spprdflt ::syntaxerror ::trace
-::ccllen
 ::ccllen[..]
-::cclmap
 ::cclmap[..]
-::cclng
 ::cclng[..]
 ::cclreuse
 ::cclsorted
 ::ccltab
 ::ccltab[..]
-::ccltbl
+::ccltbl ::current_max_ccl_tbl_size
 ::ccltbl[..]
-::chk
 ::chk[..]
 ::continued_action ::long_align ::nowarn ::reject ::yymore_used
 ::copyright
-::csize ::ecgroup[..] ::nextecm[..]
-::current_max_ccl_tbl_size
-::current_max_dfa_size
-::current_max_dfas
-::current_max_rules
-::current_max_scs
-::current_max_template_xpairs
-::current_max_xpairs
-::current_maxccls
-::current_mns
 ::current_state_type
 ::dataline ::datapos ::eofseen ::hshsave ::numdup ::numuniq
-::def
 ::def[..]
-::default_rule ::num_eof_rules ::num_rules
-::dfaacc
 ::dfaacc[..]
 ::dfaacc[..].dfaacc_set
 ::dfaacc[..].dfaacc_set[0]
 ::dfaacc[..].dfaacc_state
-::dfaeql ::eps2 ::hshcol ::num_reallocs ::numecs ::numeps ::totnst
-::dfasiz
 ::dfasiz[..]
-::dhash
 ::dhash[..]
-::dss
 ::dss[..]
 ::dss[..][0]
 ::ecgroup
@@ -16119,11 +16080,8 @@ msg
 ::eps
 ::err
 ::err[..]
-::finalst
 ::finalst[..]
 ::firstfree
-::firstprot
-::firstst
 ::firstst[..]
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
@@ -16135,12 +16093,8 @@ msg
 ::interactive
 ::jambase
 ::jamstate
-::lastccl
 ::lastchar
-::lastdfa ::lastnfa
 ::lastprot
-::lastsc
-::lastst
 ::lastst[..]
 ::lex_compat
 ::linenum ::sectnum
@@ -16151,16 +16105,12 @@ msg
 ::nmstr
 ::nultrans
 ::nultrans[..]
-::num_backing_up ::numprots ::onesp
 ::num_input_files argc
-::numas ::numsnpairs ::tmpuses
 ::nummecs
 ::nummt
 ::numtemps
-::nxt
 ::nxt[..]
 ::onedef
-::onedef[..] ::onenext[..] ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::tecbck[..] ::tecfwd[..]
 ::onenext
 ::onestate
 ::onesym
@@ -16178,45 +16128,31 @@ msg
 ::prottbl
 ::real_reject
 ::reject_really_used ::yymore_really_used ::yytext_is_array
-::rule_linenum
 ::rule_linenum[..]
-::rule_type
 ::rule_type[..]
-::rule_useful
 ::rule_useful[..]
 ::rulelen
-::scbol
 ::scbol[..]
-::sceof
 ::sceof[..]
-::scname
 ::scname[..]
 ::scnum
-::scset
 ::scset[..]
 ::sctbl
 ::sctbl[..]
-::scxclu
 ::scxclu[..]
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
 ::skelname
-::state_type
 ::state_type[..]
 ::tblend
 ::tecbck
 ::tecfwd
-::tnxt
 ::tnxt[..]
 ::trailcnt
-::trans1
 ::trans1[..]
-::trans2
 ::trans2[..]
-::transchar
 ::transchar[..]
 ::trlcontxt
 ::use_read ::use_stdout
@@ -16286,69 +16222,44 @@ msg
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum
+::accptnum ::accsiz ::assoc_rule ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::firstprot ::firstst ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::nextecm[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::sceof ::scname ::scset ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans2 ::transchar
 ::accptnum[..]
-::accsiz
 ::accsiz[..]
 ::action_array
-::action_index ::action_offset ::defs1_offset ::prolog_offset
-::action_size
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..]
 ::active_ss
 ::active_ss[..]
 ::actvp
 ::actvsc
 ::actvsc[..]
 ::anyccl
-::assoc_rule
 ::assoc_rule[..]
 ::backing_up_file
 ::backing_up_file[..]
-::base
 ::base[..]
 ::bol_needed ::variable_trailing_context_rules
 ::caseins ::printstats ::spprdflt ::syntaxerror ::trace
-::ccllen
 ::ccllen[..]
-::cclmap
 ::cclmap[..]
-::cclng
 ::cclng[..]
 ::cclreuse
 ::cclsorted
 ::ccltab
 ::ccltab[..]
-::ccltbl
+::ccltbl ::current_max_ccl_tbl_size
 ::ccltbl[..]
-::chk
 ::chk[..]
 ::continued_action ::long_align ::nowarn ::reject ::yymore_used
 ::copyright
-::csize ::ecgroup[..] ::nextecm[..]
-::current_max_ccl_tbl_size
-::current_max_dfa_size
-::current_max_dfas
-::current_max_rules
-::current_max_scs
-::current_max_template_xpairs
-::current_max_xpairs
-::current_maxccls
-::current_mns
 ::current_state_type
 ::dataline ::datapos ::eofseen ::hshsave ::numdup ::numuniq
-::def
 ::def[..]
-::default_rule ::num_eof_rules ::num_rules
-::dfaacc
 ::dfaacc[..]
 ::dfaacc[..].dfaacc_set
 ::dfaacc[..].dfaacc_set[0]
 ::dfaacc[..].dfaacc_state
-::dfaeql ::eps2 ::hshcol ::num_reallocs ::numecs ::numeps ::totnst
-::dfasiz
 ::dfasiz[..]
-::dhash
 ::dhash[..]
-::dss
 ::dss[..]
 ::dss[..][0]
 ::ecgroup
@@ -16356,11 +16267,8 @@ msg
 ::eps
 ::err
 ::err[..]
-::finalst
 ::finalst[..]
 ::firstfree
-::firstprot
-::firstst
 ::firstst[..]
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
@@ -16372,12 +16280,8 @@ msg
 ::interactive
 ::jambase
 ::jamstate
-::lastccl
 ::lastchar
-::lastdfa ::lastnfa
 ::lastprot
-::lastsc
-::lastst
 ::lastst[..]
 ::lex_compat
 ::linenum ::sectnum
@@ -16388,16 +16292,12 @@ msg
 ::nmstr
 ::nultrans
 ::nultrans[..]
-::num_backing_up ::numprots ::onesp
 ::num_input_files argc
-::numas ::numsnpairs ::tmpuses
 ::nummecs
 ::nummt
 ::numtemps
-::nxt
 ::nxt[..]
 ::onedef
-::onedef[..] ::onenext[..] ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::tecbck[..] ::tecfwd[..]
 ::onenext
 ::onestate
 ::onesym
@@ -16415,45 +16315,31 @@ msg
 ::prottbl
 ::real_reject
 ::reject_really_used ::yymore_really_used ::yytext_is_array
-::rule_linenum
 ::rule_linenum[..]
-::rule_type
 ::rule_type[..]
-::rule_useful
 ::rule_useful[..]
 ::rulelen
-::scbol
 ::scbol[..]
-::sceof
 ::sceof[..]
-::scname
 ::scname[..]
 ::scnum
-::scset
 ::scset[..]
 ::sctbl
 ::sctbl[..]
-::scxclu
 ::scxclu[..]
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
 ::skelname
-::state_type
 ::state_type[..]
 ::tblend
 ::tecbck
 ::tecfwd
-::tnxt
 ::tnxt[..]
 ::trailcnt
-::trans1
 ::trans1[..]
-::trans2
 ::trans2[..]
-::transchar
 ::transchar[..]
 ::trlcontxt
 ::use_read ::use_stdout
@@ -21790,7 +21676,7 @@ worry_about_NULs
 ::accptnum ::accptnum[..] ::accsiz ::active_ss ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext hash_size str
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss[..]
 ::actvp
 ::actvsc
@@ -21873,7 +21759,6 @@ worry_about_NULs
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -21935,7 +21820,7 @@ worry_about_NULs
 ::accptnum ::accptnum[..] ::accsiz ::active_ss ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext hash_size str
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss[..]
 ::actvp
 ::actvsc
@@ -22018,7 +21903,6 @@ worry_about_NULs
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -23802,7 +23686,7 @@ str
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::numtemps ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
@@ -23839,7 +23723,6 @@ str
 ::eps
 ::err ::yyout
 ::err[..]
-::firstfree ::tblend
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
 ::headcnt ::rulelen ::trailcnt
@@ -23861,7 +23744,6 @@ str
 ::num_input_files
 ::nummecs
 ::nummt
-::numtemps
 ::nxt[..]
 ::onedef
 ::onenext
@@ -23945,7 +23827,7 @@ str
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::numtemps ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
@@ -23982,7 +23864,6 @@ str
 ::eps
 ::err ::yyout
 ::err[..]
-::firstfree ::tblend
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
 ::headcnt ::rulelen ::trailcnt
@@ -24004,7 +23885,6 @@ str
 ::num_input_files
 ::nummecs
 ::nummt
-::numtemps
 ::nxt[..]
 ::onedef
 ::onenext
@@ -30466,7 +30346,7 @@ value
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext first second
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::numtemps ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext first second
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
@@ -30498,7 +30378,6 @@ value
 ::eps
 ::err ::yyout
 ::err[..]
-::firstfree ::tblend
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
 ::headcnt ::rulelen ::trailcnt
@@ -30519,7 +30398,6 @@ value
 ::num_input_files
 ::nummecs
 ::nummt
-::numtemps
 ::nxt[..]
 ::onedef
 ::onenext
@@ -30603,7 +30481,7 @@ value
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext first return second
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::numtemps ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yylval ::yytext first return second
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
@@ -30635,7 +30513,6 @@ value
 ::eps
 ::err ::yyout
 ::err[..]
-::firstfree ::tblend
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
 ::headcnt ::rulelen ::trailcnt
@@ -30656,7 +30533,6 @@ value
 ::num_input_files
 ::nummecs
 ::nummt
-::numtemps
 ::nxt[..]
 ::onedef
 ::onenext
@@ -34091,10 +33967,10 @@ second
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext sym
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::numtemps ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext sym
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss[..]
 ::actvp ::actvsc
 ::anyccl
@@ -34123,7 +33999,6 @@ second
 ::eps
 ::err ::yyout
 ::err[..]
-::firstfree ::tblend
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
 ::headcnt ::rulelen ::trailcnt
@@ -34144,7 +34019,6 @@ second
 ::num_input_files
 ::nummecs
 ::nummt
-::numtemps
 ::nxt[..]
 ::onedef
 ::onenext
@@ -34170,7 +34044,6 @@ second
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -34227,10 +34100,10 @@ second
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext return sym
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::numtemps ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext return sym
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss[..]
 ::actvp ::actvsc
 ::anyccl
@@ -34259,7 +34132,6 @@ second
 ::eps
 ::err ::yyout
 ::err[..]
-::firstfree ::tblend
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
 ::headcnt ::rulelen ::trailcnt
@@ -34280,7 +34152,6 @@ second
 ::num_input_files
 ::nummecs
 ::nummt
-::numtemps
 ::nxt[..]
 ::onedef
 ::onenext
@@ -34306,7 +34177,6 @@ second
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -34627,7 +34497,7 @@ second
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yychar ::yylval ::yytext statefrom stateto
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::numtemps ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yychar ::yylval ::yytext statefrom stateto
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
@@ -34659,7 +34529,6 @@ second
 ::eps
 ::err ::yyout
 ::err[..]
-::firstfree ::tblend
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
 ::headcnt ::rulelen ::trailcnt
@@ -34680,7 +34549,6 @@ second
 ::num_input_files
 ::nummecs
 ::nummt
-::numtemps
 ::nxt[..]
 ::onedef
 ::onenext
@@ -34762,7 +34630,7 @@ second
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yychar ::yylval ::yytext statefrom stateto
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::numtemps ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yychar ::yylval ::yytext statefrom stateto
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
@@ -34794,7 +34662,6 @@ second
 ::eps
 ::err ::yyout
 ::err[..]
-::firstfree ::tblend
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
 ::headcnt ::rulelen ::trailcnt
@@ -34815,7 +34682,6 @@ second
 ::num_input_files
 ::nummecs
 ::nummt
-::numtemps
 ::nxt[..]
 ::onedef
 ::onenext
@@ -39424,7 +39290,7 @@ return
 ::yy_base[..] ::yy_ec[..] ::yy_meta[..]
 ::yy_c_buf_p ::yy_last_accepting_cpos
 ::yy_chk
-::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..]
+::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
 ::yy_current_buffer
 ::yy_current_buffer[..]
 ::yy_current_buffer[..].yy_buffer_status
@@ -39438,7 +39304,6 @@ return
 ::yy_init
 ::yy_meta
 ::yy_nxt
-::yy_start
 ::yy_start_stack
 ::yy_start_stack[..]
 ::yy_start_stack_depth
@@ -39567,7 +39432,7 @@ return
 ::yy_base[..] ::yy_ec[..] ::yy_meta[..]
 ::yy_c_buf_p ::yy_last_accepting_cpos
 ::yy_chk
-::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..]
+::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
 ::yy_current_buffer
 ::yy_current_buffer[..]
 ::yy_current_buffer[..].yy_buffer_status
@@ -39581,7 +39446,6 @@ return
 ::yy_init
 ::yy_meta
 ::yy_nxt
-::yy_start
 ::yy_start_stack
 ::yy_start_stack[..]
 ::yy_start_stack_depth
@@ -40821,10 +40685,10 @@ size
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..]
+::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yytext str
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..]
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss
 ::active_ss[..]
 ::actvp
@@ -40882,7 +40746,6 @@ size
 ::ndtbl
 ::ndtbl[..]
 ::nextecm
-::nmstr ::scname[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yytext str
 ::nultrans
 ::nultrans[..]
 ::num_input_files
@@ -40940,7 +40803,6 @@ size
 ::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
 ::yy_current_buffer
 ::yy_current_buffer[..]
-::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::yy_current_buffer[..].yy_buffer_status
 ::yy_current_buffer[..].yy_fill_buffer
 ::yy_current_buffer[..].yy_input_file ::yyin
@@ -40982,10 +40844,10 @@ size
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..]
+::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yytext str
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..]
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss
 ::active_ss[..]
 ::actvp
@@ -41043,7 +40905,6 @@ size
 ::ndtbl
 ::ndtbl[..]
 ::nextecm
-::nmstr ::scname[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yytext str
 ::nultrans
 ::nultrans[..]
 ::num_input_files
@@ -41101,7 +40962,6 @@ size
 ::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
 ::yy_current_buffer
 ::yy_current_buffer[..]
-::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::yy_current_buffer[..].yy_buffer_status
 ::yy_current_buffer[..].yy_fill_buffer
 ::yy_current_buffer[..].yy_input_file ::yyin
@@ -42254,9 +42114,8 @@ str
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum
+::accptnum ::accsiz ::assoc_rule ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::firstprot ::firstst ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::nextecm[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::sceof ::scname ::scset ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans2 ::transchar
 ::accptnum[..]
-::accsiz
 ::accsiz[..]
 ::action_array
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..]
@@ -42266,54 +42125,33 @@ str
 ::actvsc
 ::actvsc[..]
 ::anyccl
-::assoc_rule
 ::assoc_rule[..]
 ::backing_up_file
 ::backing_up_file[..]
-::base
 ::base[..]
 ::bol_needed ::variable_trailing_context_rules
 ::caseins ::printstats ::spprdflt ::syntaxerror ::trace
-::ccllen
 ::ccllen[..]
-::cclmap
 ::cclmap[..]
-::cclng
 ::cclng[..]
 ::cclreuse
 ::cclsorted
 ::ccltab
 ::ccltab[..]
-::ccltbl
+::ccltbl ::current_max_ccl_tbl_size
 ::ccltbl[..]
-::chk
 ::chk[..]
 ::continued_action ::long_align ::nowarn ::reject ::yymore_used
 ::copyright
-::csize ::default_rule ::dfaeql ::ecgroup[..] ::eps2 ::firstprot ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::nextecm[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::tecbck[..] ::tecfwd[..] ::tmpuses ::totnst
-::current_max_ccl_tbl_size
-::current_max_dfa_size
-::current_max_dfas
-::current_max_rules
-::current_max_scs
-::current_max_template_xpairs
-::current_max_xpairs
-::current_maxccls
-::current_mns
 ::current_state_type
 ::dataline ::datapos ::eofseen ::hshsave ::numdup ::numuniq
-::def
 ::def[..]
-::dfaacc
 ::dfaacc[..]
 ::dfaacc[..].dfaacc_set
 ::dfaacc[..].dfaacc_set[0]
 ::dfaacc[..].dfaacc_state
-::dfasiz
 ::dfasiz[..]
-::dhash
 ::dhash[..]
-::dss
 ::dss[..]
 ::dss[..][0]
 ::ecgroup
@@ -42321,10 +42159,8 @@ str
 ::eps
 ::err
 ::err[..]
-::finalst
 ::finalst[..]
 ::firstfree
-::firstst
 ::firstst[..]
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
@@ -42338,7 +42174,6 @@ str
 ::jamstate
 ::lastchar
 ::lastprot
-::lastst
 ::lastst[..]
 ::lex_compat
 ::linenum ::sectnum
@@ -42353,7 +42188,6 @@ str
 ::nummecs
 ::nummt
 ::numtemps
-::nxt
 ::nxt[..]
 ::onedef
 ::onenext
@@ -42373,44 +42207,31 @@ str
 ::prottbl
 ::real_reject
 ::reject_really_used ::yymore_really_used ::yytext_is_array
-::rule_linenum
 ::rule_linenum[..]
-::rule_type
 ::rule_type[..]
-::rule_useful
 ::rule_useful[..]
 ::rulelen
-::scbol
 ::scbol[..]
-::sceof
 ::sceof[..]
-::scname
 ::scname[..]
 ::scnum
-::scset
 ::scset[..]
 ::sctbl
 ::sctbl[..]
-::scxclu
 ::scxclu[..]
 ::skel
 ::skel_ind
 ::skelfile
 ::skelfile[..]
 ::skelname
-::state_type
 ::state_type[..]
 ::tblend
 ::tecbck
 ::tecfwd
-::tnxt
 ::tnxt[..]
 ::trailcnt
-::trans1
 ::trans1[..]
-::trans2
 ::trans2[..]
-::transchar
 ::transchar[..]
 ::trlcontxt
 ::use_read ::use_stdout
@@ -42480,9 +42301,8 @@ str
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum
+::accptnum ::accsiz ::assoc_rule ::base ::ccllen ::cclmap ::cclng ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::firstprot ::firstst ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::lastst ::nextecm[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::sceof ::scname ::scset ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans2 ::transchar
 ::accptnum[..]
-::accsiz
 ::accsiz[..]
 ::action_array
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..]
@@ -42492,54 +42312,33 @@ str
 ::actvsc
 ::actvsc[..]
 ::anyccl
-::assoc_rule
 ::assoc_rule[..]
 ::backing_up_file
 ::backing_up_file[..]
-::base
 ::base[..]
 ::bol_needed ::variable_trailing_context_rules
 ::caseins ::printstats ::spprdflt ::syntaxerror ::trace
-::ccllen
 ::ccllen[..]
-::cclmap
 ::cclmap[..]
-::cclng
 ::cclng[..]
 ::cclreuse
 ::cclsorted
 ::ccltab
 ::ccltab[..]
-::ccltbl
+::ccltbl ::current_max_ccl_tbl_size
 ::ccltbl[..]
-::chk
 ::chk[..]
 ::continued_action ::long_align ::nowarn ::reject ::yymore_used
 ::copyright
-::csize ::default_rule ::dfaeql ::ecgroup[..] ::eps2 ::firstprot ::hshcol ::lastccl ::lastdfa ::lastnfa ::lastsc ::nextecm[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::tecbck[..] ::tecfwd[..] ::tmpuses ::totnst
-::current_max_ccl_tbl_size
-::current_max_dfa_size
-::current_max_dfas
-::current_max_rules
-::current_max_scs
-::current_max_template_xpairs
-::current_max_xpairs
-::current_maxccls
-::current_mns
 ::current_state_type
 ::dataline ::datapos ::eofseen ::hshsave ::numdup ::numuniq
-::def
 ::def[..]
-::dfaacc
 ::dfaacc[..]
 ::dfaacc[..].dfaacc_set
 ::dfaacc[..].dfaacc_set[0]
 ::dfaacc[..].dfaacc_state
-::dfasiz
 ::dfasiz[..]
-::dhash
 ::dhash[..]
-::dss
 ::dss[..]
 ::dss[..][0]
 ::ecgroup
@@ -42547,10 +42346,8 @@ str
 ::eps
 ::err
 ::err[..]
-::finalst
 ::finalst[..]
 ::firstfree
-::firstst
 ::firstst[..]
 ::flex_version
 ::gen_line_dirs ::useecs ::usemecs
@@ -42564,7 +42361,6 @@ str
 ::jamstate
 ::lastchar
 ::lastprot
-::lastst
 ::lastst[..]
 ::lex_compat
 ::linenum ::sectnum
@@ -42579,7 +42375,6 @@ str
 ::nummecs
 ::nummt
 ::numtemps
-::nxt
 ::nxt[..]
 ::onedef
 ::onenext
@@ -42599,44 +42394,31 @@ str
 ::prottbl
 ::real_reject
 ::reject_really_used ::yymore_really_used ::yytext_is_array
-::rule_linenum
 ::rule_linenum[..]
-::rule_type
 ::rule_type[..]
-::rule_useful
 ::rule_useful[..]
 ::rulelen
-::scbol
 ::scbol[..]
-::sceof
 ::sceof[..]
-::scname
 ::scname[..]
 ::scnum
-::scset
 ::scset[..]
 ::sctbl
 ::sctbl[..]
-::scxclu
 ::scxclu[..]
 ::skel
 ::skel_ind
 ::skelfile
 ::skelfile[..]
 ::skelname
-::state_type
 ::state_type[..]
 ::tblend
 ::tecbck
 ::tecfwd
-::tnxt
 ::tnxt[..]
 ::trailcnt
-::trans1
 ::trans1[..]
-::trans2
 ::trans2[..]
-::transchar
 ::transchar[..]
 ::trlcontxt
 ::use_read ::use_stdout
@@ -42788,7 +42570,7 @@ str
 ::yy_base[..] ::yy_ec[..] ::yy_meta[..]
 ::yy_c_buf_p ::yy_last_accepting_cpos
 ::yy_chk
-::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..]
+::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
 ::yy_current_buffer
 ::yy_current_buffer[..]
 ::yy_current_buffer[..].yy_buffer_status
@@ -42802,7 +42584,6 @@ str
 ::yy_init
 ::yy_meta
 ::yy_nxt
-::yy_start
 ::yy_start_stack
 ::yy_start_stack[..]
 ::yy_start_stack_depth
@@ -42914,7 +42695,7 @@ str
 ::yy_base[..] ::yy_ec[..] ::yy_meta[..]
 ::yy_c_buf_p ::yy_last_accepting_cpos
 ::yy_chk
-::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..]
+::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
 ::yy_current_buffer
 ::yy_current_buffer[..]
 ::yy_current_buffer[..].yy_buffer_status
@@ -42928,7 +42709,6 @@ str
 ::yy_init
 ::yy_meta
 ::yy_nxt
-::yy_start
 ::yy_start_stack
 ::yy_start_stack[..]
 ::yy_start_stack_depth
@@ -49996,11 +49776,10 @@ msg
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::chk ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_template_xpairs ::current_max_xpairs ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastdfa ::lastnfa ::lastst ::lastst[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol[..] ::scset[..] ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar
+::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
-::active_ss ::actvsc[..] ::ccllen ::cclmap ::cclng ::ccltbl[..] ::csize ::current_max_scs ::current_maxccls ::ecgroup[..] ::i ::lastccl ::lastchar ::lastsc ::nextecm[..] ::nmstr ::scbol ::sceof ::scname ::scname[..] ::scset ::scxclu ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss[..]
 ::actvp ::actvsc
 ::anyccl
@@ -50082,7 +49861,6 @@ msg
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -50141,11 +49919,10 @@ msg
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::assoc_rule ::assoc_rule[..] ::base ::chk ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_template_xpairs ::current_max_xpairs ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::lastdfa ::lastnfa ::lastst ::lastst[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol[..] ::scset[..] ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar
+::accptnum ::accptnum[..] ::accsiz ::active_ss ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext return
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
-::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
-::active_ss ::actvsc[..] ::ccllen ::cclmap ::cclng ::ccltbl[..] ::csize ::current_max_scs ::current_maxccls ::ecgroup[..] ::i ::lastccl ::lastchar ::lastsc ::nextecm[..] ::nmstr ::scbol ::sceof ::scname ::scname[..] ::scset ::scxclu ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext return
+::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
 ::active_ss[..]
 ::actvp ::actvsc
 ::anyccl
@@ -50227,7 +50004,6 @@ msg
 ::sctbl[..]
 ::scxclu[..] ::xcluflg
 ::skel
-::skel[..]
 ::skel_ind
 ::skelfile
 ::skelfile[..]
@@ -50386,7 +50162,7 @@ msg
 ::yy_base[..] ::yy_ec[..] ::yy_meta[..]
 ::yy_c_buf_p ::yy_last_accepting_cpos
 ::yy_chk
-::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..]
+::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
 ::yy_current_buffer
 ::yy_current_buffer[..]
 ::yy_current_buffer[..].yy_buffer_status
@@ -50400,7 +50176,6 @@ msg
 ::yy_init
 ::yy_meta
 ::yy_nxt
-::yy_start
 ::yy_start_stack
 ::yy_start_stack[..]
 ::yy_start_stack_depth
@@ -50530,7 +50305,7 @@ msg
 ::yy_base[..] ::yy_ec[..] ::yy_meta[..]
 ::yy_c_buf_p ::yy_last_accepting_cpos
 ::yy_chk
-::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..]
+::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
 ::yy_current_buffer
 ::yy_current_buffer[..]
 ::yy_current_buffer[..].yy_buffer_status
@@ -50544,7 +50319,6 @@ msg
 ::yy_init
 ::yy_meta
 ::yy_nxt
-::yy_start
 ::yy_start_stack
 ::yy_start_stack[..]
 ::yy_start_stack_depth
@@ -51987,7 +51761,7 @@ flex.c.yy_flex_alloc():::ENTER
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::action_index ::action_offset ::action_size ::active_ss ::actvp ::actvsc ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::base[..] ::ccllen ::ccllen[..] ::cclmap ::cclmap[..] ::cclng ::ccltbl ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_ccl_tbl_size ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::def[..] ::default_rule ::defs1_offset ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::end_of_buffer_state ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::jambase ::jamstate ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::nummecs ::numprots ::numsnpairs ::numtemps ::nxt ::nxt[..] ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::peakpairs ::prolog_offset ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::skel[..] ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::tnxt[..] ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_ch_buf ::yy_current_buffer[..].yy_n_chars ::yy_hold_char ::yy_n_chars ::yyleng ::yylval ::yytext size
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::action_index ::action_offset ::action_size ::active_ss ::actvp ::actvsc ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::base[..] ::ccllen ::ccllen[..] ::cclmap ::cclmap[..] ::cclng ::ccltbl ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_ccl_tbl_size ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::def[..] ::default_rule ::defs1_offset ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::end_of_buffer_state ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::jambase ::jamstate ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::nummecs ::numprots ::numsnpairs ::numtemps ::nxt ::nxt[..] ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::peakpairs ::prolog_offset ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::skel[..] ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::tnxt[..] ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_ch_buf ::yy_current_buffer[..].yy_n_chars ::yy_hold_char ::yy_n_chars ::yyleng ::yylval ::yytext size
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::active_ss[..]
@@ -52068,7 +51842,6 @@ flex.c.yy_flex_alloc():::ENTER
 ::yy_c_buf_p ::yy_last_accepting_cpos
 ::yy_chk
 ::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
-::yy_current_buffer
 ::yy_current_buffer[..]
 ::yy_current_buffer[..].yy_buffer_status
 ::yy_current_buffer[..].yy_fill_buffer
@@ -52109,7 +51882,7 @@ flex.c.yy_flex_alloc():::EXIT0
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
 ::C_short_decl
 ::C_state_decl
-::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::action_index ::action_offset ::action_size ::active_ss ::actvp ::actvsc ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::base[..] ::ccllen ::ccllen[..] ::cclmap ::cclmap[..] ::cclng ::ccltbl ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_ccl_tbl_size ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::def[..] ::default_rule ::defs1_offset ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::end_of_buffer_state ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::jambase ::jamstate ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::nummecs ::numprots ::numsnpairs ::numtemps ::nxt ::nxt[..] ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::peakpairs ::prolog_offset ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::skel[..] ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::tnxt[..] ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_ch_buf ::yy_current_buffer[..].yy_n_chars ::yy_hold_char ::yy_n_chars ::yyleng ::yylval ::yytext return size
+::NUL_ec ::accptnum ::accptnum[..] ::accsiz ::action_index ::action_offset ::action_size ::active_ss ::actvp ::actvsc ::actvsc[..] ::assoc_rule ::assoc_rule[..] ::base ::base[..] ::ccllen ::ccllen[..] ::cclmap ::cclmap[..] ::cclng ::ccltbl ::ccltbl[..] ::chk ::chk[..] ::csize ::current_max_ccl_tbl_size ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::def[..] ::default_rule ::defs1_offset ::dfaacc ::dfaacc[..].dfaacc_state ::dfaeql ::dfasiz ::dfasiz[..] ::dhash ::dhash[..] ::dss ::dss[..] ::ecgroup[..] ::end_of_buffer_state ::eps2 ::finalst ::finalst[..] ::firstfree ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::jambase ::jamstate ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::nummecs ::numprots ::numsnpairs ::numtemps ::nxt ::nxt[..] ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::peakpairs ::prolog_offset ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::skel[..] ::state_type ::tblend ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::tnxt[..] ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_current_buffer ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_ch_buf ::yy_current_buffer[..].yy_n_chars ::yy_hold_char ::yy_n_chars ::yyleng ::yylval ::yytext return size
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::active_ss[..]
@@ -52190,7 +51963,6 @@ flex.c.yy_flex_alloc():::EXIT0
 ::yy_c_buf_p ::yy_last_accepting_cpos
 ::yy_chk
 ::yy_chk[..] ::yy_def[..] ::yy_last_accepting_state ::yy_nxt[..] ::yy_start
-::yy_current_buffer
 ::yy_current_buffer[..]
 ::yy_current_buffer[..].yy_buffer_status
 ::yy_current_buffer[..].yy_fill_buffer
@@ -56076,7 +55848,7 @@ flex.c.yyinput():::ENTER
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::active_ss ::assoc_rule ::assoc_rule[..] ::base ::chk ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar
+::accptnum ::accptnum[..] ::accsiz ::active_ss ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
@@ -56090,7 +55862,6 @@ flex.c.yyinput():::ENTER
 ::base[..]
 ::bol_needed ::variable_trailing_context_rules
 ::caseins ::printstats ::spprdflt ::syntaxerror ::trace
-::ccllen ::cclmap ::cclng ::ccltbl[..] ::csize ::current_maxccls ::ecgroup[..] ::lastccl ::lastchar ::nextecm[..] ::nmstr ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext
 ::ccllen[..] ::cclmap[..] ::ccltbl ::current_max_ccl_tbl_size
 ::cclng[..]
 ::cclreuse
@@ -56223,7 +55994,7 @@ flex.c.yyinput():::EXIT0
 ::C_short_decl
 ::C_state_decl
 ::NUL_ec
-::accptnum ::accptnum[..] ::accsiz ::active_ss ::assoc_rule ::assoc_rule[..] ::base ::chk ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar
+::accptnum ::accptnum[..] ::accsiz ::active_ss ::assoc_rule ::assoc_rule[..] ::base ::ccllen ::cclmap ::cclng ::ccltbl[..] ::chk ::csize ::current_max_dfa_size ::current_max_dfas ::current_max_rules ::current_max_scs ::current_max_template_xpairs ::current_max_xpairs ::current_maxccls ::current_mns ::def ::default_rule ::dfaacc ::dfaeql ::dfasiz ::dhash ::dss ::ecgroup[..] ::eps2 ::finalst ::finalst[..] ::firstprot ::firstst ::firstst[..] ::hshcol ::i ::lastccl ::lastchar ::lastdfa ::lastnfa ::lastsc ::lastst ::lastst[..] ::nextecm[..] ::nmstr ::num_backing_up ::num_eof_rules ::num_reallocs ::num_rules ::numas ::numecs ::numeps ::numprots ::numsnpairs ::nxt ::onedef[..] ::onenext[..] ::onesp ::onestate[..] ::onesym[..] ::pat ::protcomst[..] ::protnext[..] ::protprev[..] ::protsave[..] ::prottbl[..] ::rule_linenum ::rule_type ::rule_useful ::scbol ::scbol[..] ::sceof ::scname ::scname[..] ::scset ::scset[..] ::scxclu ::state_type ::tecbck[..] ::tecfwd[..] ::tmpuses ::tnxt ::totnst ::trans1 ::trans1[..] ::trans2 ::trans2[..] ::transchar ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext return
 ::accsiz[..]
 ::action_array ::infilename ::input_files[..]
 ::action_index ::action_offset ::action_size ::defs1_offset ::prolog_offset ::skel[..] ::yy_current_buffer[..].yy_buf_size ::yy_current_buffer[..].yy_n_chars ::yy_n_chars ::yyleng
@@ -56237,7 +56008,6 @@ flex.c.yyinput():::EXIT0
 ::base[..]
 ::bol_needed ::variable_trailing_context_rules
 ::caseins ::printstats ::spprdflt ::syntaxerror ::trace
-::ccllen ::cclmap ::cclng ::ccltbl[..] ::csize ::current_maxccls ::ecgroup[..] ::lastccl ::lastchar ::nextecm[..] ::nmstr ::transchar[..] ::yy_c_buf_p ::yy_current_buffer[..].yy_buf_pos ::yy_current_buffer[..].yy_ch_buf ::yy_hold_char ::yy_last_accepting_cpos ::yylval ::yytext return
 ::ccllen[..] ::cclmap[..] ::ccltbl ::current_max_ccl_tbl_size
 ::cclng[..]
 ::cclreuse

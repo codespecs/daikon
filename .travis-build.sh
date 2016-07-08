@@ -9,3 +9,4 @@ export SHELLOPTS
 export DAIKONDIR=`pwd`
 
 make nightly-test
+

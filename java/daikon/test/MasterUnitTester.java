@@ -9,8 +9,8 @@ import plume.*;
 /**
  * This class runs all the Daikon unit tests.  These tests are small, fast
  * to run, and certainly not comprehensive.  Daikon also has a much more
- * substantial set of regression tests; in the repository, they can be
- * found at daikon/tests/.
+ * substantial set of regression tests.  The regression tests appear at
+ * daikon/tests/ in the repository.
  **/
 public class MasterUnitTester extends TestCase {
 
@@ -78,10 +78,6 @@ public class MasterUnitTester extends TestCase {
     for (int i = 0; i < classes.length; i++) {
       result.addTest(new TestSuite(classes[i]));
     }
-
-    // This is possibly not right; the JIT needs to be disabled in order
-    // for these tests to succeed.
-    result.addTest(new TestSuite(TestPlume.class));
 
     return result;
   }

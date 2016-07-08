@@ -120,8 +120,8 @@ public class AnnotateNullable {
       String name = ppt.name().replaceFirst("[(].*$", "");
       int lastdot = name.lastIndexOf('.');
       @SuppressWarnings("keyfor") // appliction invariant:  KeyFor and substring
-      /*@KeyFor("class_map")*/ // class_map has entry per class, and this method is in some class
-      String classname = name.substring(0, lastdot);
+      // @KeyFor because class_map has entry per class, and this method is in some class
+      /*@KeyFor("class_map")*/ String classname = name.substring(0, lastdot);
       // System.out.printf ("classname for ppt %s is '%s'%n", name, classname);
       /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get(classname);
       assert static_methods != null : classname;

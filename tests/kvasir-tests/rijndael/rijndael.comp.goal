@@ -350,34 +350,6 @@ key[..]
 key[..].keySched
 return
 
-..mul():::ENTER
-::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] b
-::Logtable
-::Logtable[..]
-::S
-::Si
-::iG
-::iG[..]
-::rcon
-::shifts
-::shifts[..]
-a
-
-..mul():::EXIT0
-::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] b return
-::Logtable
-::Logtable[..]
-::S
-::Si
-::iG
-::iG[..]
-::rcon
-::shifts
-::shifts[..]
-a
-
 ..rijndaelDecrypt():::ENTER
 ::Alogtable
 ::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
@@ -585,7 +557,7 @@ hexBlock
 
 rijndaeltest_ref.c.blockPrint():::ENTER
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] block blockBits block[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] block blockBits block[..] tag
 ::Logtable
 ::Logtable[..]
 ::S
@@ -595,11 +567,10 @@ rijndaeltest_ref.c.blockPrint():::ENTER
 ::rcon
 fp
 fp[..]
-tag
 
 rijndaeltest_ref.c.blockPrint():::EXIT0
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] block blockBits block[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] block blockBits block[..] tag
 ::Logtable
 ::Logtable[..]
 ::S
@@ -609,7 +580,6 @@ rijndaeltest_ref.c.blockPrint():::EXIT0
 ::rcon
 fp
 fp[..]
-tag
 
 rijndaeltest_ref.c.makeKATs():::ENTER
 ::Alogtable
