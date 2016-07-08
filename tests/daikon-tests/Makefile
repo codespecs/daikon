@@ -26,7 +26,7 @@ cross-checker:
 
 # (We must use actions for these rules for 'make' to work correctly.)
 
-everything-%: dsaa-% mapquick-% javautil-% 6170-% large-% quick-% new-%
+everything-%: dsaa-% mapquick-% javautil-% 6170-% large-% quick-% new-% newRar-%
 	@echo ${HR}
 quick-%: SQD-% polycalc-% special-cases-% siemens-%
 	@echo ${HR}
@@ -52,6 +52,8 @@ special-cases-%: do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% 
 siemens-%: do-print_tokens-% do-print_tokens2-% do-replace-% do-schedule-% do-schedule2-% do-tcas-% do-tot_info-% do-space-%
 	@echo ${HR}
 new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-%
+	@echo ${HR}
+newRar-%: do-ExceptionHandling-% 
 	@echo ${HR}
 
 # Extra groupings

@@ -125,15 +125,11 @@ DataStructures.StackAr.push(java.lang.Object):::ENTER
 x != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: x.getClass().getName() is printable
 x.getClass().getName().length() == 16 || x.getClass().getName().length() == 22 || x.getClass().getName().length() == 24
-x.getClass().getName().length() % 2 == 0
 this.theArray.getClass().getName() != x.getClass().getName()
 this.topOfStack <= this.theArray.getClass().getName().length()
-this.topOfStack < daikon.Quant.size(this.theArray)-1
-(daikon.Quant.size(this.theArray)-1 >> this.theArray.getClass().getName().length() == 0)
 this.theArray.getClass().getName().length() != x.getClass().getName().length()
 (daikon.Quant.size(this.theArray) >> x.getClass().getName().length() == 0)
 daikon.Quant.size(this.theArray) != x.getClass().getName().length()
-(daikon.Quant.size(this.theArray)-1 >> x.getClass().getName().length() == 0)
 daikon.Quant.size(this.theArray)-1 != x.getClass().getName().length()
 ===========================================================================
 DataStructures.StackAr.push(java.lang.Object):::EXIT
@@ -169,6 +165,36 @@ daikon.Quant.size(this.theArray) != x.getClass().getName().length()
 (daikon.Quant.size(this.theArray)-1 >> x.getClass().getName().length() == 0)
 daikon.Quant.size(this.theArray)-1 != x.getClass().getName().length()
 daikon.Quant.eltsEqual(\old(daikon.Quant.slice(this.theArray, \new(this.topOfStack), daikon.Quant.size(this.theArray))), \old(daikon.Quant.getElement_Object(this.theArray, \new(this.topOfStack))))
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::THROW97
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack x x.getClass().getName() exception exception.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) orig(x) orig(x.getClass().getName()) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 x.getClass().getName().length() exception.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 orig(x.getClass().getName()).length() this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+assignable this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::THROWSCOMBINED
+    Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack x x.getClass().getName() exception exception.getClass().getName() orig(this) orig(this.theArray) orig(this.theArray.getClass().getName()) orig(this.theArray[]) orig(this.theArray[].getClass().getName()) orig(this.topOfStack) orig(x) orig(x.getClass().getName()) this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 x.getClass().getName().length() exception.getClass().getName().length() orig(this.theArray.getClass().getName()).length() orig(size(this.theArray[])) orig(size(this.theArray[]))-1 orig(x.getClass().getName()).length() this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1] this.theArray[orig(this.topOfStack)] this.theArray[orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)..] this.theArray[orig(this.topOfStack)+1..] this.theArray[0..orig(this.topOfStack)] this.theArray[0..orig(this.topOfStack)-1] orig(this.theArray[post(this.topOfStack)]) orig(this.theArray[post(this.topOfStack)-1]) orig(this.theArray[post(this.topOfStack)..]) orig(this.theArray[post(this.topOfStack)+1..]) orig(this.theArray[0..post(this.topOfStack)]) orig(this.theArray[0..post(this.topOfStack)-1]) orig(this.theArray[this.topOfStack]) orig(this.theArray[this.topOfStack-1]) orig(this.theArray[this.topOfStack..]) orig(this.theArray[this.topOfStack+1..]) orig(this.theArray[0..this.topOfStack]) orig(this.theArray[0..this.topOfStack-1]) this.theArray[this.topOfStack+1..orig(this.topOfStack)] this.theArray[this.topOfStack..orig(this.topOfStack)-1] this.theArray[this.topOfStack+1..orig(this.topOfStack)-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack] this.theArray[orig(this.topOfStack)..this.topOfStack-1] this.theArray[orig(this.topOfStack)+1..this.topOfStack-1]
+assignable this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
+this == \old(this)
+this.theArray == \old(this.theArray)
+daikon.Quant.pairwiseEqual(this.theArray, \old(this.theArray))
+this.topOfStack == \old(this.topOfStack)
+this.topOfStack == daikon.Quant.size(this.theArray)-1
+this.topOfStack == \old(daikon.Quant.size(this.theArray))-1
+x == \old(x)
+\old(this) == \old(x)
+this.theArray.getClass().getName().length() == \old(this.theArray.getClass().getName()).length()
+x.getClass().getName().length() == \old(x.getClass().getName()).length()
+this.theArray != null
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.theArray), new String[] {  })
+Exception != null
+Exception.getClass().getName() == DataStructures.Overflow.class.getName()
+\old(this) != null
+\old(x) != null
+\old(x.getClass().getName()) == DataStructures.StackAr.class.getName()
+x.getClass().getName().length() == 22
+Exception.getClass().getName().length() == 23
+this.theArray.getClass().getName() == \old(this.theArray.getClass().getName())
+x.getClass().getName() == \old(x.getClass().getName())
 ===========================================================================
 DataStructures.StackAr.top():::ENTER
     Variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack this.theArray.getClass().getName().length() size(this.theArray[]) size(this.theArray[])-1 this.theArray[this.topOfStack] this.theArray[this.topOfStack-1] this.theArray[this.topOfStack..] this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack] this.theArray[0..this.topOfStack-1]

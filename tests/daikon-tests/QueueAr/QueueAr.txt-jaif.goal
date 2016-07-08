@@ -18,6 +18,9 @@ class QueueAr : // 14931/- obj/class samples
   method enqueue(Ljava/lang/Object;)V : // 673 samples
     return: 
     parameter #0 :  // x
+  method enqueue(Ljava/lang/Object;)V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
+    parameter #0 :  // x
   method getFront()Ljava/lang/Object; : // 1231 samples
     return: @Nullable 
   method isEmpty()Z : // 3070 samples

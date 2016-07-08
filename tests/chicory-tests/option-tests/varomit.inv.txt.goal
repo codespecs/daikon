@@ -68,6 +68,21 @@ DataStructures.StackAr.push(java.lang.Object):::EXIT
 this.topOfStack >= 0
 this.topOfStack - orig(this.topOfStack) - 1 == 0
 ===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::THROW97
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::THROWSCOMBINED
+this == orig(this)
+this.topOfStack == orig(this.topOfStack)
+x == orig(x)
+orig(this) == orig(x)
+this.topOfStack == -1
+exception has only one value
+exception.getClass().getName() == DataStructures.Overflow.class
+orig(this) has only one value
+orig(x) has only one value
+orig(x.getClass().getName()) == DataStructures.StackAr.class
+x.getClass().getName() == orig(x.getClass().getName())
+===========================================================================
 DataStructures.StackAr.top():::ENTER
 ===========================================================================
 DataStructures.StackAr.top():::EXIT74

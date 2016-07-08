@@ -2357,11 +2357,11 @@ Static variables of a class have names of the form
 @cindex pre-state variables
 @code{orig(x)} refers to the value of variable @code{x} upon
 entry to a procedure (because the procedure body might modify the value
-of @code{x}).  These variables appear only at @code{:::EXIT} program
-points.  Typically, @code{orig()} variables do not appear in the trace,
-but are automatically created by Daikon when it matches up
-@code{:::ENTER} and @code{:::EXIT@var{nn}} program points.
-@xref{orig variable example}.
+of @code{x}).  These variables appear only at @code{:::EXIT} and 
+@code{:::THROWCOMBINED} program points.  Typically, @code{orig()} 
+variables do not appear in the trace, but are automatically created by 
+Daikon when it matches up @code{:::ENTER} and @code{:::EXIT@var{nn}} or  
+@code{:::THROW@var{nn}} program points. @xref{orig variable example}.
 
 This variable prints as @code{orig} when using Daikon output format
 (@pxref{Invariant syntax}), but may print differently in other formats
@@ -4009,6 +4009,15 @@ the target program.  Also applies to Daikon, if the @option{--daikon}
 command-line argument is given.
 The size is specified in the same manner as the
 @option{--Xmx} switch to @command{java}; for example: @option{--heap-size=2048m}.
+
+@item --exception-handling
+By default, Chicory only traces the call of an exception 
+(@code{throw new Exception();}) which leads to an exit of the method. 
+With the @code{--exception-handling} parameter, Chicory will catch all 
+uncaught Exceptions (thrown and delagted) in the methods and produce a 
+valid Dataflow hierarchy and trace. To realize it, Chicory encapsulate 
+every method-block with an try-catch-block, which catches the delegated 
+exceptions.
 
 @end table
 
@@ -7996,19 +8005,20 @@ answer is 0, but you believe that there are samples in the file you are
 feeding to Daikon.
 
 Using the normal dataflow hierarchy, Daikon explicitly processes 
-@code{:::EXIT} program points only.  Other program points, such as
-@code{:::ENTER} program points, are processed indirectly when their
-corresponding @code{:::EXIT} points are encountered.  
-(You can disable this behavior with the
+@code{:::EXIT} and @code{:::THROWCOMBINED} program points only. Other 
+program points, such as @code{:::ENTER} program points, are processed 
+indirectly when their corresponding @code{:::EXIT} points are 
+encountered.  (You can disable this behavior with the
 @option{--nohierarchy} switch to Daikon;
 see @ref{Options to control invariant detection}.)
-If no @code{:::EXIT} program points are present (perhaps every
-execution threw an exception, you filtered out all the
-@code{:::EXIT} program points, or the data trace is obtained from
-spreadsheet data instead of from a program execution),
-then Daikon will not process any of the other program points, such as 
-the @code{:::ENTER} program points.  You can make Daikon print information 
-about unmatched procedure entries
+If no @code{:::EXIT}/@code{:::THROWCOMBINED} program points are present 
+(perhaps every execution threw an exception which aren't traced
+(@code{-- exception-handling}), you filtered out 
+all the @code{:::EXIT}/@code{:::THROWCOMBINED} program points, or the 
+data trace is obtained from spreadsheet data instead of from a 
+program execution), then Daikon will not process any of the other 
+program points, such as the @code{:::ENTER} program points.  You can 
+make Daikon print information about unmatched procedure entries
 via the @samp{daikon.FileIO.unmatched_procedure_entries_quiet}
 configuration option (@pxref{General configuration options}).
 
@@ -9156,6 +9166,7 @@ Florian Gross,
 Philip Guo,
 Melissa Hao,
 Michael Harder,
+Philipp Hirch,
 Dieter von Holten,
 Greg Jay,
 Josh Kataoka,
@@ -9185,7 +9196,7 @@ Matthew Tschantz,
 Iuliu Vasilescu,
 Chen Xiao,
 Tao Xie,
-Jeff Yuan.
+Jeff Yuan
 }
 
 @nospellcheck{Craig Kaplan} carved the Daikon logo.

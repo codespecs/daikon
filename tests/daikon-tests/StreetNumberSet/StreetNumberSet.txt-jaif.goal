@@ -12,9 +12,15 @@ class StreetNumberSet : // 41796/- obj/class samples
   method <init>(Ljava/lang/String;)V : // 242 samples
     return: 
     parameter #0 :  // numbers
+  method <init>(Ljava/lang/String;)V throws Ljava/lang/Throwable; : // 0 samples
+    return: 
+    parameter #0 :  // numbers
   method checkRep()V : // 13526 samples
     return: 
   method contains(I)Z : // 2171 samples
+    return: 
+    parameter #0 :  // n
+  method contains(I)V throws Ljava/lang/Throwable; : // 0 samples
     return: 
     parameter #0 :  // n
   method equals(LMapQuick1/StreetNumberSet;)Z : // 364 samples
@@ -26,6 +32,9 @@ class StreetNumberSet : // 41796/- obj/class samples
   method hashCode()I : // 2 samples
     return: 
   method intersects(LMapQuick1/StreetNumberSet;)Z : // 135 samples
+    return: 
+    parameter #0 :  // other
+  method intersects(LMapQuick1/StreetNumberSet;)V throws Ljava/lang/Throwable; : // 0 samples
     return: 
     parameter #0 :  // other
   method isEmpty()Z : // 308 samples

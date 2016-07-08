@@ -1,0 +1,532 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions:::CLASS
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions:::OBJECT
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+2
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+3
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::ENTER
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.DaikonAnalyseExceptions():::EXIT5
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+2
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+3
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.isEvan(int):::ENTER
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+4
+parameter
+int # isParam=true
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.isEvan(int):::EXIT8
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+4
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+5
+parameter
+int # isParam=true
+int
+2
+return
+boolean
+boolean
+3
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int):::ENTER
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+4
+parameter
+int # isParam=true
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.isFiveTimes(int):::EXIT12
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+4
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+5
+parameter
+int # isParam=true
+int
+2
+return
+boolean
+boolean
+3
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::ENTER
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT24
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase1(int):::EXIT26
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::ENTER
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT37
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase2(int):::EXIT39
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::ENTER
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT48
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase3(int):::EXIT50
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::ENTER
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+4
+parameter
+int # isParam=true
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXIT68
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+4
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+5
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+3
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXIT70
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+4
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+5
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+3
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase4(int):::EXIT73
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+4
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+5
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+3
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::ENTER
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT86
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase5(int):::EXIT88
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::ENTER
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT104
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.testCase6(int):::EXIT106
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+2
+parameter
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.equals(java.lang.Object):::ENTER
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.equals(java.lang.Object):::EXIT1
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+4
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+3
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+ExceptionHandling.DaikonAnalyseExceptions.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+ExceptionHandling.DaikonAnalyseExceptions # isParam=true
+hashcode
+4
+this.classVar
+int # declaringClassPackageName=ExceptionHandling, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
