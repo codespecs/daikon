@@ -1305,14 +1305,15 @@ a dataflow hierarchy.
 
 @itemize
 @item
-A program point that represents the @code{ENTRY} or @code{EXIT} of a
-static method will have a @code{parent} record that points to the
-@code{CLASS} program point for the containing class.
+A program point that represents the @code{ENTRY}, @code{THROWCOMBINED} 
+or @code{EXIT} of a static method will have a @code{parent} record that 
+points to the @code{CLASS} program point for the containing class.
 
 @item
-A program point that represents the @code{ENTRY} or @code{EXIT} of a
-non-static (instance) method will have a @code{parent} record that points to the
-@code{OBJECT} program point for the containing object.
+A program point that represents the @code{ENTRY}, @code{THROWCOMBINED} 
+or @code{EXIT} of a non-static (instance) method will have a 
+@code{parent} record that points to the @code{OBJECT} program point for 
+the containing object.
 
 @item
 A program point that represents a @code{CLASS}
@@ -3178,6 +3179,9 @@ The following patterns are for the @code{enter}, @code{subexit},
 @example
 <fully qualified class name>.<method/function name>(<argument types>):::ENTER
 <fully qualified class name>.<method/function name>(<argument types>):::EXIT<id>
+<fully qualified class name>.<method/function name>(<argument types>):::THROWS
+<fully qualified class name>.<method/function name>(<argument types>):::THROW<id>
+<fully qualified class name>.<method/function name>(<argument types>):::THROWCOMBINED
 <fully qualified class name>:::CLASS
 <fully qualified class name>:::OBJECT
 @end example
