@@ -172,6 +172,7 @@ compile-java: git-hooks
 	cd java && $(MAKE) all
 
 very-clean:
+	-rm -rf `findfile '*~'`
 	${MAKE} -C ${DAIKONDIR} clean-everything
 	-cd plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
