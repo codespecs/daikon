@@ -27,7 +27,7 @@ LIBS ?=
 LIBFLAGS ?=
 BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
-DAIKON := java -Xmx768m -XX:MaxPermSize=768M daikon.Daikon --no_text_output --no_show_progress --config_option daikon.Daikon.disable_derived_variables=true --config_option daikon.DynamicConstants.OneOf_only=true
+DAIKON := java -Xmx768m -XX:MaxPermSize=768M daikon.Daikon --no_text_output --no_show_progress --config_option daikon.DynamicConstants.OneOf_only=true
 PRINT_INV := java -Xmx768m -XX:MaxPermSize=768M daikon.PrintInvariants
 default: summary
 
@@ -157,7 +157,7 @@ summary-w-daikon: diffs-w-daikon
 	done
 
 clean:
-	rm -rf $(NAME) $(NAME).*.diff $(NAME).out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp
+	rm -rf $(NAME) $(NAME).*.diff $(NAME).out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts
 
 update-out-goals: $(NAME).out
 	cp $(NAME).out $(NAME).out.goal

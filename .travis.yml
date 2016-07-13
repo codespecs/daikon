@@ -1,52 +1,47 @@
-language: java
-
-## Version for Ubuntu 14.04 Trusty.
-## Problem: The job times out on travis-ci.org, but the container-based version
-## does not.
-# script: make DAIKONDIR=`pwd` nightly-test
-# sudo: required
-# dist: trusty
-# before_install:
-#   - sudo apt-get update -qq
-#   - sudo apt-get install -qq graphviz texinfo texlive
-
-## Version for container-based infrastructure.
-## Skip generating the manual because the version of makeinfo installed
-## on Ubuntu 12.04 Precise doesn't take the --pdf command-line option.
-script: make DAIKONDIR=`pwd` nightly-test-except-doc-pdf
 sudo: false
-addons:
-  apt:
-    packages:
-      - graphviz
-      - texi2html
-      - texinfo
-  ## Enable this when you wish to see JUnit reports.
-  ## Disable to minimize use of Amazon S3.
-  # artifacts:
-  #   paths:
-  #     # "find tests -print" produces too long a command line
-  #     - $(find tests -name '*txt*' -print | tr "\n" ":")
-  #     - $(find tests -name '*decls*' -print | tr "\n" ":")
-  #   s3_region: "us-west-2"
-  #   debug: true
-# On Travis-CI's Ubuntu 12.04 infrastructure, makeinfo does not take the
-# --split=chapter command-line argument but texi2html does.
-env: TEXI2HTML=texi2html
 
-jdk:
-  - oraclejdk8
-#  - oraclejdk7
-  - openjdk7
+language: generic
 
-after_success:
-  - |
-      if [[ ($TRAVIS_BRANCH == master) &&
-            ($TRAVIS_PULL_REQUEST == false) &&
-            ( (! $TRAVIS_JOB_NUMBER == *.*) || ($TRAVIS_JOB_NUMBER == *.1) ) ]] ; then
-        curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
-        sh trigger-travis.sh typetests daikon-typecheck $TRAVISTOKEN
-      fi
+services:
+  - docker
+
+# jdkany contains extra packages that permit it to be used to build the manual
+env:
+  - OS=ubuntu JDKVER=jdk7 GROUP=quick-txt-diff
+  - OS=ubuntu JDKVER=jdk7 GROUP=nonquick-txt-diff
+  - OS=ubuntu JDKVER=jdk7 GROUP=non-txt-diff
+  - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff
+  - OS=ubuntu JDKVER=jdk8 GROUP=nonquick-txt-diff
+  - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff
+  - OS=ubuntu JDKVER=jdkany GROUP=misc
+## It's not trivial to install jdk7 on current fedora.
+#  - OS=fedora JDKVER=jdk7 GROUP=quick-txt-diff
+#  - OS=fedora JDKVER=jdk7 GROUP=nonquick-txt-diff
+#  - OS=fedora JDKVER=jdk7 GROUP=non-txt-diff
+## Disable temporarily to not waste CPU resources
+#   - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
+# # Currently failing
+# #  - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
+#   - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
+#   - OS=fedora JDKVER=jdkany GROUP=misc
+# # Currently failing
+# #  - OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
+
+before_script:
+- docker pull mdernst/$OS-for-daikon-$JDKVER > /dev/null
+
+script:
+- docker run mdernst/$OS-for-daikon-$JDKVER /bin/sh -c "export JAVA_HOME=\`which javac|xargs readlink -f|xargs dirname|xargs dirname\` && git clone --quiet --depth 3 https://github.com/codespecs/daikon.git daikon && cd daikon && java -version && javac -version && ./.travis-build.sh $GROUP"
+
+## TODO: reinstate this
+# after_success:
+#   - |
+#       if [[ ($TRAVIS_BRANCH == master) &&
+#             ($TRAVIS_PULL_REQUEST == false) &&
+#             ( (! $TRAVIS_JOB_NUMBER == *.*) || ($TRAVIS_JOB_NUMBER == *.1) ) ]] ; then
+#         curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
+#         sh trigger-travis.sh typetests daikon-typecheck $TRAVISTOKEN
+#       fi
 
 git:
   depth: 3

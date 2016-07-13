@@ -1,127 +1,147 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
+this_invocation_nonce
+0
 
 ..inc():::ENTER
-a
-1388307348
+this_invocation_nonce
 1
-a[]
+a
+0xffefffc5c
+1
+a[..]
 [ 5 ]
 1
 b
-463708200
+0x51f7040
 1
-b[]
+b[..]
 [ 10 ]
 1
 
 ..inc():::EXIT0
-a
-1388307348
+this_invocation_nonce
 1
-a[]
+a
+0xffefffc5c
+1
+a[..]
 [ 15 ]
 1
 b
-463708200
+0x51f7040
 1
-b[]
+b[..]
 [ 10 ]
 1
 
 ..internalInteraction():::ENTER
+this_invocation_nonce
+2
 x
-1388307336
+0xffefffc58
 1
-x[]
+x[..]
 [ 1 ]
 1
 y
-1388307332
+0xffefffc54
 1
-y[]
+y[..]
 [ 2 ]
 1
 z
-1388307328
+0xffefffc50
 1
-z[]
+z[..]
 [ 3 ]
 1
 oranges
-1388307324
+0xffefffc4c
 1
-oranges[]
+oranges[..]
 [ 10 ]
 1
 
 ..internalInteraction():::EXIT0
+this_invocation_nonce
+2
 x
-1388307336
+0xffefffc58
 1
-x[]
+x[..]
 [ 1 ]
 1
 y
-1388307332
+0xffefffc54
 1
-y[]
+y[..]
 [ 2 ]
 1
 z
-1388307328
+0xffefffc50
 1
-z[]
+z[..]
 [ 3 ]
 1
 oranges
-1388307324
+0xffefffc4c
 1
-oranges[]
+oranges[..]
 [ 10 ]
 1
 
 ..interactAfter():::ENTER
+this_invocation_nonce
+3
 x
-1388307320
+0xffefffc48
 1
-x[]
+x[..]
 [ 10 ]
 1
 y
-1388307316
+0xffefffc44
 1
-y[]
+y[..]
 [ 15 ]
 1
 z
-463708256
+0x51f7090
 1
-z[]
+z[..]
 [ 0 ]
 1
 
 ..interactAfter():::EXIT0
+this_invocation_nonce
+3
 x
-1388307320
+0xffefffc48
 1
-x[]
+x[..]
 [ 10 ]
 1
 y
-1388307316
+0xffefffc44
 1
-y[]
+y[..]
 [ 15 ]
 1
 z
-463708256
+0x51f7090
 1
-z[]
+z[..]
 [ 0 ]
 1
 
 ..main():::EXIT0
+this_invocation_nonce
+0
 return
 0
 1

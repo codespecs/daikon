@@ -1,8 +1,8 @@
-..main() ENTER/13: 1 EXIT0/16: 1
-..simple_strcpy() ENTER/19: 4 EXIT0/22: 4
-..testCalloc() ENTER/25: 1 EXIT0/25: 1
-..testDynamicSimpleStrcpy() ENTER/19: 1 EXIT0/19: 1
-..testGlobalSimpleStrcpy() ENTER/19: 1 EXIT0/19: 1
-..testMalloc() ENTER/25: 1 EXIT0/25: 1
-..testStrCalloc() ENTER/19: 1 EXIT0/19: 1
-..testTrivial() ENTER/19: 2 EXIT0/22: 2
+..main() ENTER/15: 1 EXIT0/18: 1
+..simple_strcpy() ENTER/21: 4 EXIT0/24: 4
+..testCalloc() ENTER/27: 1 EXIT0/27: 1
+..testDynamicSimpleStrcpy() ENTER/21: 1 EXIT0/21: 1
+..testGlobalSimpleStrcpy() ENTER/21: 1 EXIT0/21: 1
+..testMalloc() ENTER/27: 1 EXIT0/27: 1
+..testStrCalloc() ENTER/21: 1 EXIT0/21: 1
+..testTrivial() ENTER/21: 2 EXIT0/24: 2

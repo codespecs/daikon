@@ -1,123 +1,135 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
-/globalD
+this_invocation_nonce
+0
+::globalD
 40
 1
-/globalE
-134517972
+::globalE
+0x601050
 1
-/globalE[]
+::globalE[..]
 [ 1 2 3 4 ]
 1
 argc
 1
 1
 argv
-1388307588
+0xffefffe78
 1
-argv[]
+argv[..]
 [ "./LocalVarTest" ]
 1
 
 ..foo():::ENTER
-/globalD
+this_invocation_nonce
+1
+::globalD
 40
 1
-/globalE
-134517972
+::globalE
+0x601050
 1
-/globalE[]
+::globalE[..]
 [ 1 2 3 4 ]
 1
 a
-1388307492
+0xffefffc6c
 1
-a[]
+a[..]
 [ 10 ]
 1
 b
-1388307488
+0xffefffc68
 1
-b[]
+b[..]
 [ 20 ]
 1
 c
-1388307484
+0xffefffc64
 1
-c[]
+c[..]
 [ 30 ]
 1
 d
-134517968
+0x601040
 1
-d[]
+d[..]
 [ 40 ]
 1
 e
-134517972
+0x601050
 1
-e[]
+e[..]
 [ 1 2 3 4 ]
 1
 
 ..foo():::EXIT0
-/globalD
+this_invocation_nonce
+1
+::globalD
 40
 1
-/globalE
-134517972
+::globalE
+0x601050
 1
-/globalE[]
+::globalE[..]
 [ 1 2 3 4 ]
 1
 a
-1388307492
+0xffefffc6c
 1
-a[]
+a[..]
 [ 10 ]
 1
 b
-1388307488
+0xffefffc68
 1
-b[]
+b[..]
 [ 20 ]
 1
 c
-1388307484
+0xffefffc64
 1
-c[]
+c[..]
 [ 30 ]
 1
 d
-134517968
+0x601040
 1
-d[]
+d[..]
 [ 40 ]
 1
 e
-134517972
+0x601050
 1
-e[]
+e[..]
 [ 1 2 3 4 ]
 1
 
 ..main():::EXIT0
-/globalD
+this_invocation_nonce
+0
+::globalD
 40
 1
-/globalE
-134517972
+::globalE
+0x601050
 1
-/globalE[]
+::globalE[..]
 [ 1 2 3 4 ]
 1
 argc
 1
 1
 argv
-1388307588
+0xffefffe78
 1
-argv[]
+argv[..]
 [ "./LocalVarTest" ]
 1
 return

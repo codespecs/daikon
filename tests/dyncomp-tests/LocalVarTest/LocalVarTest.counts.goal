@@ -1,2 +1,2 @@
-..foo() ENTER/40: 1 EXIT0/40: 1
-..main() ENTER/19: 1 EXIT0/22: 1
+..foo() ENTER/42: 1 EXIT0/42: 1
+..main() ENTER/21: 1 EXIT0/24: 1

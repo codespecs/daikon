@@ -1,64 +1,84 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
+this_invocation_nonce
+0
 
 ..returnInvalidDouble():::ENTER
+this_invocation_nonce
+1
 a
-3.1415899999999999
+3.14159
 1
 b
-2.7181000000000002
+2.7181
 1
 
 ..returnInvalidDouble():::EXIT0
+this_invocation_nonce
+1
 a
-3.1415899999999999
+3.14159
 1
 b
-2.7181000000000002
+2.7181
 1
 return
 nonsensical
 2
 
 ..returnInvalidDouble():::ENTER
+this_invocation_nonce
+2
 a
-100.09999999999999
+100.1
 1
 b
-239.30000000000001
+239.3
 1
 
 ..returnInvalidDouble():::EXIT0
+this_invocation_nonce
+2
 a
-100.09999999999999
+100.1
 1
 b
-239.30000000000001
+239.3
 1
 return
 nonsensical
 2
 
 ..returnDoubleSum():::ENTER
+this_invocation_nonce
+3
 a
-1.2344999999999999
+1.2345
 1
 b
-4.3209999999999997
+4.321
 1
 
 ..returnDoubleSum():::EXIT0
+this_invocation_nonce
+3
 a
-1.2344999999999999
+1.2345
 1
 b
-4.3209999999999997
+4.321
 1
 return
-5.5554999999999994
+5.5555
 1
 
 ..returnInvalidInt():::ENTER
+this_invocation_nonce
+4
 a
 1.111
 1
@@ -67,6 +87,8 @@ b
 1
 
 ..returnInvalidInt():::EXIT0
+this_invocation_nonce
+4
 a
 1.111
 1
@@ -78,25 +100,31 @@ nonsensical
 2
 
 ..returnIntSum():::ENTER
+this_invocation_nonce
+5
 a
-10.199999999999999
+10.2
 1
 b
-6.7000000000000002
+6.7
 1
 
 ..returnIntSum():::EXIT0
+this_invocation_nonce
+5
 a
-10.199999999999999
+10.2
 1
 b
-6.7000000000000002
+6.7
 1
 return
 16
 1
 
 ..main():::EXIT0
+this_invocation_nonce
+0
 return
 0
 1

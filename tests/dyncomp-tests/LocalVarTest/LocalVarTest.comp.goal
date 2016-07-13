@@ -1,43 +1,43 @@
 ..foo():::ENTER
-/globalD d[]
-/globalE
-/globalE[] e[]
+::globalD d[..]
+::globalE
+::globalE[..] e[..]
 a
-a[]
+a[..]
 b
-b[]
+b[..]
 c
-c[]
+c[..]
 d
 e
 
 ..foo():::EXIT0
-/globalD d[]
-/globalE
-/globalE[] e[]
+::globalD d[..]
+::globalE
+::globalE[..] e[..]
 a
-a[]
+a[..]
 b
-b[]
+b[..]
 c
-c[]
+c[..]
 d
 e
 
 ..main():::ENTER
-/globalD
-/globalE
-/globalE[]
+::globalD
+::globalE
+::globalE[..]
 argc
 argv
-argv[]
+argv[..]
 
 ..main():::EXIT0
-/globalD
-/globalE
-/globalE[]
+::globalD
+::globalE
+::globalE[..]
 argc
 argv
-argv[]
+argv[..]
 return
 

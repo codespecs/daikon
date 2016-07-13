@@ -1,7 +1,18 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
+this_invocation_nonce
+0
 
 ..structByValue():::ENTER
+this_invocation_nonce
+1
+x
+0x8020de830
+1
 x.a
 5
 1
@@ -9,10 +20,13 @@ x.b
 1.234567
 1
 x.cPtr
-1388307040
+0xffefffc30
 1
-x.cPtr[]
+x.cPtr[..]
 [ 5 ]
+1
+y
+0x8020de848
 1
 y.a
 5
@@ -21,9 +35,9 @@ y.b
 1.234567
 1
 y.cPtr
-1388307040
+0xffefffc30
 1
-y.cPtr[]
+y.cPtr[..]
 [ 5 ]
 1
 d
@@ -31,6 +45,11 @@ d
 1
 
 ..structByValue():::EXIT0
+this_invocation_nonce
+1
+x
+0x8020de830
+1
 x.a
 5
 1
@@ -38,10 +57,13 @@ x.b
 1.234567
 1
 x.cPtr
-1388307040
+0xffefffc30
 1
-x.cPtr[]
+x.cPtr[..]
 [ 5 ]
+1
+y
+0x8020de848
 1
 y.a
 5
@@ -50,9 +72,9 @@ y.b
 1.234567
 1
 y.cPtr
-1388307040
+0xffefffc30
 1
-y.cPtr[]
+y.cPtr[..]
 [ 5 ]
 1
 d
@@ -60,110 +82,134 @@ d
 1
 
 ..structByPtr():::ENTER
+this_invocation_nonce
+2
 xPtr
-1388307040
+0xffefffc30
 1
-xPtr[].a
+xPtr[..]
+[ 0xffefffc30 ]
+1
+xPtr[..].a
 [ 5 ]
 1
-xPtr[].b
+xPtr[..].b
 [ 1.234567 ]
 1
-xPtr[].cPtr
-[ 1388307040 ]
+xPtr[..].cPtr
+[ 0xffefffc30 ]
 1
-xPtr[].cPtr[0]
+xPtr[..].cPtr[0]
 [ 5 ]
 1
 yPtr
-1388307024
+0xffefffc10
 1
-yPtr[].a
+yPtr[..]
+[ 0xffefffc10 ]
+1
+yPtr[..].a
 [ 5 ]
 1
-yPtr[].b
+yPtr[..].b
 [ 1.234567 ]
 1
-yPtr[].cPtr
-[ 1388307040 ]
+yPtr[..].cPtr
+[ 0xffefffc30 ]
 1
-yPtr[].cPtr[0]
+yPtr[..].cPtr[0]
 [ 5 ]
 1
 dPtr
-1388307016
+0xffefffc08
 1
-dPtr[]
+dPtr[..]
 [ 1.234567 ]
 1
 
 ..structByPtr():::EXIT0
+this_invocation_nonce
+2
 xPtr
-1388307040
+0xffefffc30
 1
-xPtr[].a
+xPtr[..]
+[ 0xffefffc30 ]
+1
+xPtr[..].a
 [ 5 ]
 1
-xPtr[].b
+xPtr[..].b
 [ 1.234567 ]
 1
-xPtr[].cPtr
-[ 1388307040 ]
+xPtr[..].cPtr
+[ 0xffefffc30 ]
 1
-xPtr[].cPtr[0]
+xPtr[..].cPtr[0]
 [ 5 ]
 1
 yPtr
-1388307024
+0xffefffc10
 1
-yPtr[].a
+yPtr[..]
+[ 0xffefffc10 ]
+1
+yPtr[..].a
 [ 5 ]
 1
-yPtr[].b
+yPtr[..].b
 [ 1.234567 ]
 1
-yPtr[].cPtr
-[ 1388307040 ]
+yPtr[..].cPtr
+[ 0xffefffc30 ]
 1
-yPtr[].cPtr[0]
+yPtr[..].cPtr[0]
 [ 5 ]
 1
 dPtr
-1388307016
+0xffefffc08
 1
-dPtr[]
+dPtr[..]
 [ 1.234567 ]
 1
 
 ..assignPtrThenFieldsInteract():::ENTER
+this_invocation_nonce
+3
 aPtr
-463712296
+0x51f7040
 1
-aPtr[].a
+aPtr[..]
+[ 0x51f7040 ]
+1
+aPtr[..].a
 [ 10 ]
 1
-aPtr[].b
+aPtr[..].b
 [ 10 ]
 1
-aPtr[].cPtr
+aPtr[..].cPtr
 nonsensical
 2
-aPtr[].cPtr[0]
+aPtr[..].cPtr[0]
 nonsensical
 2
 bPtr
-463712296
+0x51f7040
 1
-bPtr[].a
+bPtr[..]
+[ 0x51f7040 ]
+1
+bPtr[..].a
 [ 10 ]
 1
-bPtr[].b
+bPtr[..].b
 [ 10 ]
 1
-bPtr[].cPtr
+bPtr[..].cPtr
 nonsensical
 2
-bPtr[].cPtr[0]
+bPtr[..].cPtr[0]
 nonsensical
 2
 c
@@ -171,34 +217,42 @@ c
 1
 
 ..assignPtrThenFieldsInteract():::EXIT0
+this_invocation_nonce
+3
 aPtr
-463712296
+0x51f7040
 1
-aPtr[].a
+aPtr[..]
+[ 0x51f7040 ]
+1
+aPtr[..].a
 [ 10 ]
 1
-aPtr[].b
+aPtr[..].b
 [ 10 ]
 1
-aPtr[].cPtr
+aPtr[..].cPtr
 nonsensical
 2
-aPtr[].cPtr[0]
+aPtr[..].cPtr[0]
 nonsensical
 2
 bPtr
-463712296
+0x51f7040
 1
-bPtr[].a
+bPtr[..]
+[ 0x51f7040 ]
+1
+bPtr[..].a
 [ 10 ]
 1
-bPtr[].b
+bPtr[..].b
 [ 10 ]
 1
-bPtr[].cPtr
+bPtr[..].cPtr
 nonsensical
 2
-bPtr[].cPtr[0]
+bPtr[..].cPtr[0]
 nonsensical
 2
 c
@@ -206,70 +260,88 @@ c
 1
 
 ..assignPtrAwayBeforeFieldsInteract():::ENTER
+this_invocation_nonce
+4
 aPtr
-463712424
+0x51f7100
 1
-aPtr[].a
+aPtr[..]
+[ 0x51f7100 ]
+1
+aPtr[..].a
 [ 3 ]
 1
-aPtr[].b
-[ 3.1415899999999999 ]
+aPtr[..].b
+[ 3.14159 ]
 1
-aPtr[].cPtr
+aPtr[..].cPtr
 nonsensical
 2
-aPtr[].cPtr[0]
+aPtr[..].cPtr[0]
 nonsensical
 2
 bPtr
-1388307040
+0xffefffc30
 1
-bPtr[].a
+bPtr[..]
+[ 0xffefffc30 ]
+1
+bPtr[..].a
 [ 5 ]
 1
-bPtr[].b
+bPtr[..].b
 [ 1.234567 ]
 1
-bPtr[].cPtr
-[ 1388307040 ]
+bPtr[..].cPtr
+[ 0xffefffc30 ]
 1
-bPtr[].cPtr[0]
+bPtr[..].cPtr[0]
 [ 5 ]
 1
 
 ..assignPtrAwayBeforeFieldsInteract():::EXIT0
+this_invocation_nonce
+4
 aPtr
-463712424
+0x51f7100
 1
-aPtr[].a
+aPtr[..]
+[ 0x51f7100 ]
+1
+aPtr[..].a
 [ 3 ]
 1
-aPtr[].b
-[ 3.1415899999999999 ]
+aPtr[..].b
+[ 3.14159 ]
 1
-aPtr[].cPtr
+aPtr[..].cPtr
 nonsensical
 2
-aPtr[].cPtr[0]
+aPtr[..].cPtr[0]
 nonsensical
 2
 bPtr
-1388307040
+0xffefffc30
 1
-bPtr[].a
+bPtr[..]
+[ 0xffefffc30 ]
+1
+bPtr[..].a
 [ 5 ]
 1
-bPtr[].b
+bPtr[..].b
 [ 1.234567 ]
 1
-bPtr[].cPtr
-[ 1388307040 ]
+bPtr[..].cPtr
+[ 0xffefffc30 ]
 1
-bPtr[].cPtr[0]
+bPtr[..].cPtr[0]
 [ 5 ]
 1
 
 ..main():::EXIT0
+this_invocation_nonce
+0
 return
 0
 1

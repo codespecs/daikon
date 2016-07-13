@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 void inc(int* a, int* b) {
   *a += *b;
 }
