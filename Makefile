@@ -172,10 +172,10 @@ compile-java: git-hooks
 	cd java && $(MAKE) all
 
 very-clean:
+	-rm -rf `findfile '*~'`
 	${MAKE} -C ${DAIKONDIR} clean-everything
 	-cd plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
-# You can ignore the warning from tests/Makefile that dcomp_rt.jar is not present.
 	cd tests && $(MAKE) very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
 	-rm -rf examples/java-examples/StackAr/DataStructures/*.class

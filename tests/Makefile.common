@@ -186,7 +186,9 @@ SOURCES?=$(COMMON_HERE)/sources
 # PROJECT is the relative directory for the project resides
 # (e.g. esc-experiments/StackAr or daikon-tests/QueueAr)
 CWD:=$(shell pwd)
-PROJECT?=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[67]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
+# Why is this command echoed in the Travis job output?
+PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[67]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
+PROJECT?=${PROJECT_VIA_COMMAND}
 
 # Function to compute goal filename extension.  If we are using Java8 then
 # if filename.test.goal.j8 exists, use it; otherwise, use filename.test.goal
@@ -546,29 +548,25 @@ DCOMP_ARGS  = '--ppt-select-pattern=$(INST_FILES)' \
               --trace-sets-file=$(PROJECT_FILE).txt-trace \
 			  --abridged-vars=$(SHINY_PRINT)
 DCOMP_RT ?= $(wildcard ${DAIKONDIR}/java/dcomp_rt.jar)
-ifeq ($(DCOMP_RT),)
-  DCOMP_RT := $(wildcard $(pag)/software/pkg/DynComp/dcomp_rt.jar)
-endif
-ifndef DCOMP_RT
-# Some targets, such as clean, don't really need dcomp_rt.jar.
-# It would be nice for them not to issue this warning.
-  $(info dcomp_rt.jar is not in ${DAIKONDIR}/java; it must be on the classpath.)
-endif
 
-dyncomp: $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
-		 $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk
-dyncomp-diff: $(PROJECT_FILE).decls-DynComp.diff \
-			  $(PROJECT_FILE).txt-cset.diff \
-			  $(PROJECT_FILE).decls-DynComp-nojdk.diff \
-			  $(PROJECT_FILE).txt-cset-nojdk.diff \
-			  $(SCRATCH_FOR_DAIKON)/.copy-timestamp
+dyncomp: \
+		 $(PROJECT_FILE).decls-DynComp \
+		 $(PROJECT_FILE).txt-cset \
+		 $(PROJECT_FILE).decls-DynComp-nojdk \
+		 $(PROJECT_FILE).txt-cset-nojdk
+dyncomp-diff: \
+		 $(PROJECT_FILE).decls-DynComp.diff \
+		 $(PROJECT_FILE).txt-cset.diff \
+		 $(PROJECT_FILE).decls-DynComp-nojdk.diff \
+		 $(PROJECT_FILE).txt-cset-nojdk.diff \
+		 $(SCRATCH_FOR_DAIKON)/.copy-timestamp
 
 # If the command fails, then it would be convenient to see its output.  But
 # if it fails, then the whole command fails, and if it does not fail (that
 # is, has normal exit status), then we don't care about the standard output
 # and standard error.
 $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
-  $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk: $(DCOMP_PREMAIN) \
+  $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk: $(DCOMP_PREMAIN) $(DCOMP_RT) \
 				$(SCRATCH_FOR_DAIKON)/.copy-timestamp $(INST_LIST_FILE)
 	@echo
 	@echo "### Run DynComp (${PROJECT_FILE})"
