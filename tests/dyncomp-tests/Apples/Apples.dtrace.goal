@@ -1,7 +1,15 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
+this_invocation_nonce
+0
 
 ..foo():::ENTER
+this_invocation_nonce
+1
 a
 10
 1
@@ -13,6 +21,8 @@ c
 1
 
 ..foo():::EXIT0
+this_invocation_nonce
+1
 a
 10
 1
@@ -24,6 +34,8 @@ c
 1
 
 ..bar():::ENTER
+this_invocation_nonce
+2
 a
 10
 1
@@ -35,6 +47,8 @@ c
 1
 
 ..bar():::EXIT0
+this_invocation_nonce
+2
 a
 10
 1
@@ -46,6 +60,8 @@ c
 1
 
 ..foo():::ENTER
+this_invocation_nonce
+3
 a
 1
 1
@@ -57,6 +73,8 @@ c
 1
 
 ..foo():::EXIT0
+this_invocation_nonce
+3
 a
 1
 1
@@ -68,6 +86,8 @@ c
 1
 
 ..bar():::ENTER
+this_invocation_nonce
+4
 a
 4
 1
@@ -79,6 +99,8 @@ c
 1
 
 ..bar():::EXIT0
+this_invocation_nonce
+4
 a
 4
 1
@@ -90,6 +112,8 @@ c
 1
 
 ..add():::ENTER
+this_invocation_nonce
+5
 a
 10
 1
@@ -98,6 +122,8 @@ b
 1
 
 ..add():::EXIT0
+this_invocation_nonce
+5
 a
 10
 1
@@ -109,6 +135,8 @@ return
 1
 
 ..main():::EXIT0
+this_invocation_nonce
+0
 return
 0
 1

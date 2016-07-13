@@ -1,17 +1,25 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
-/g_x
+this_invocation_nonce
+0
+::g_x
 "AAAA"
 1
-/g_y
+::g_y
 "BBB"
 1
 
 ..simple_strcpy():::ENTER
-/g_x
+this_invocation_nonce
+1
+::g_x
 "AAAA"
 1
-/g_y
+::g_y
 "BBB"
 1
 dst
@@ -22,10 +30,12 @@ src
 1
 
 ..simple_strcpy():::EXIT0
-/g_x
+this_invocation_nonce
+1
+::g_x
 "CC"
 1
-/g_y
+::g_y
 "BBB"
 1
 dst
@@ -39,10 +49,12 @@ return
 1
 
 ..simple_strcpy():::ENTER
-/g_x
+this_invocation_nonce
+2
+::g_x
 "CC"
 1
-/g_y
+::g_y
 "BBB"
 1
 dst
@@ -53,10 +65,12 @@ src
 1
 
 ..simple_strcpy():::EXIT0
-/g_x
+this_invocation_nonce
+2
+::g_x
 "CC"
 1
-/g_y
+::g_y
 "D"
 1
 dst
@@ -70,10 +84,12 @@ return
 1
 
 ..testSimpleStrcpy():::ENTER
-/g_x
+this_invocation_nonce
+3
+::g_x
 "CC"
 1
-/g_y
+::g_y
 "D"
 1
 x
@@ -84,10 +100,12 @@ y
 1
 
 ..testSimpleStrcpy():::EXIT0
-/g_x
+this_invocation_nonce
+3
+::g_x
 "CC"
 1
-/g_y
+::g_y
 "D"
 1
 x
@@ -98,10 +116,12 @@ y
 1
 
 ..main():::EXIT0
-/g_x
+this_invocation_nonce
+0
+::g_x
 "CC"
 1
-/g_y
+::g_y
 "D"
 1
 return

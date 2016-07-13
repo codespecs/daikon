@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <stdio.h>
+
 int totalCost (int d, int base, int tax) {
   int year = 2005;
   if (d > 1000) {

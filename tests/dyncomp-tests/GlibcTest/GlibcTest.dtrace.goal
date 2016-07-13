@@ -1,81 +1,93 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
-/g_x
+this_invocation_nonce
+0
+::g_x
 "my name is"
 1
-/g_y
+::g_y
 "pgbovine"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 
 ..testCalloc():::ENTER
-/g_x
+this_invocation_nonce
+1
+::g_x
 "my name is"
 1
-/g_y
+::g_y
 "pgbovine"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 a
-463708200
+0x51f7040
 1
-a[]
+a[..]
 [ 0 0 ]
 1
 b
-463708256
+0x51f7090
 1
-b[]
+b[..]
 [ 0 0 0 ]
 1
 
 ..testCalloc():::EXIT0
-/g_x
+this_invocation_nonce
+1
+::g_x
 "my name is"
 1
-/g_y
+::g_y
 "pgbovine"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 a
-463708200
+0x51f7040
 1
-a[]
+a[..]
 [ 0 0 ]
 1
 b
-463708256
+0x51f7090
 1
-b[]
+b[..]
 [ 0 0 0 ]
 1
 
 ..testStrCalloc():::ENTER
-/g_x
+this_invocation_nonce
+2
+::g_x
 "my name is"
 1
-/g_y
+::g_y
 "pgbovine"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 a
@@ -86,16 +98,18 @@ b
 1
 
 ..testStrCalloc():::EXIT0
-/g_x
+this_invocation_nonce
+2
+::g_x
 "my name is"
 1
-/g_y
+::g_y
 "pgbovine"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 a
@@ -106,68 +120,74 @@ b
 1
 
 ..testMalloc():::ENTER
-/g_x
+this_invocation_nonce
+3
+::g_x
 "my name is"
 1
-/g_y
+::g_y
 "pgbovine"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 a
-463708320
+0x51f70e0
 1
-a[]
+a[..]
 [ 101 ]
 1
 b
-463708376
+0x51f7130
 1
-b[]
+b[..]
 [ 202 ]
 1
 
 ..testMalloc():::EXIT0
-/g_x
+this_invocation_nonce
+3
+::g_x
 "my name is"
 1
-/g_y
+::g_y
 "pgbovine"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 a
-463708320
+0x51f70e0
 1
-a[]
+a[..]
 [ 101 ]
 1
 b
-463708376
+0x51f7130
 1
-b[]
+b[..]
 [ 202 ]
 1
 
 ..simple_strcpy():::ENTER
-/g_x
+this_invocation_nonce
+4
+::g_x
 "my name is"
 1
-/g_y
+::g_y
 "pgbovine"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 dst
@@ -178,16 +198,18 @@ src
 1
 
 ..simple_strcpy():::EXIT0
-/g_x
+this_invocation_nonce
+4
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "pgbovine"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 dst
@@ -201,16 +223,18 @@ return
 1
 
 ..simple_strcpy():::ENTER
-/g_x
+this_invocation_nonce
+5
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "pgbovine"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 dst
@@ -221,16 +245,18 @@ src
 1
 
 ..simple_strcpy():::EXIT0
-/g_x
+this_invocation_nonce
+5
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 dst
@@ -244,16 +270,18 @@ return
 1
 
 ..testGlobalSimpleStrcpy():::ENTER
-/g_x
+this_invocation_nonce
+6
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 x
@@ -264,16 +292,18 @@ y
 1
 
 ..testGlobalSimpleStrcpy():::EXIT0
-/g_x
+this_invocation_nonce
+6
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 x
@@ -284,16 +314,18 @@ y
 1
 
 ..simple_strcpy():::ENTER
-/g_x
+this_invocation_nonce
+7
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 dst
@@ -304,16 +336,18 @@ src
 1
 
 ..simple_strcpy():::EXIT0
-/g_x
+this_invocation_nonce
+7
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 dst
@@ -327,16 +361,18 @@ return
 1
 
 ..simple_strcpy():::ENTER
-/g_x
+this_invocation_nonce
+8
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 dst
@@ -347,16 +383,18 @@ src
 1
 
 ..simple_strcpy():::EXIT0
-/g_x
+this_invocation_nonce
+8
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 dst
@@ -370,16 +408,18 @@ return
 1
 
 ..testDynamicSimpleStrcpy():::ENTER
-/g_x
+this_invocation_nonce
+9
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 x
@@ -390,16 +430,18 @@ y
 1
 
 ..testDynamicSimpleStrcpy():::EXIT0
-/g_x
+this_invocation_nonce
+9
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 x
@@ -410,16 +452,18 @@ y
 1
 
 ..testTrivial():::ENTER
-/g_x
+this_invocation_nonce
+10
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 a
@@ -430,16 +474,18 @@ b
 1
 
 ..testTrivial():::EXIT0
-/g_x
+this_invocation_nonce
+10
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 a
@@ -453,16 +499,18 @@ return
 1
 
 ..testTrivial():::ENTER
-/g_x
+this_invocation_nonce
+11
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 a
@@ -473,16 +521,18 @@ b
 1
 
 ..testTrivial():::EXIT0
-/g_x
+this_invocation_nonce
+11
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 a
@@ -496,16 +546,18 @@ return
 1
 
 ..main():::EXIT0
-/g_x
+this_invocation_nonce
+0
+::g_x
 "MY"
 1
-/g_y
+::g_y
 "NAME"
 1
-/g_p
+::g_p
 1
 1
-/g_q
+::g_q
 2
 1
 return

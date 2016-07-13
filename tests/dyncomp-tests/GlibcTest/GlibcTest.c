@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <string.h>
 
 char* simple_strcpy (char *dst, const char *src)

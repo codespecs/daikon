@@ -1,40 +1,40 @@
 ..inc():::ENTER
 a
-a[] b[]
+a[..] b[..]
 b
 
 ..inc():::EXIT0
 a
-a[] b[]
+a[..] b[..]
 b
 
 ..interactAfter():::ENTER
 x
-x[] z[]
+x[..] z[..]
 y
-y[]
+y[..]
 z
 
 ..interactAfter():::EXIT0
 x
-x[] z[]
+x[..] z[..]
 y
-y[]
+y[..]
 z
 
 ..internalInteraction():::ENTER
 oranges
-oranges[]
+oranges[..]
 x
-x[] y[] z[]
+x[..] y[..] z[..]
 y
 z
 
 ..internalInteraction():::EXIT0
 oranges
-oranges[]
+oranges[..]
 x
-x[] y[] z[]
+x[..] y[..] z[..]
 y
 z
 

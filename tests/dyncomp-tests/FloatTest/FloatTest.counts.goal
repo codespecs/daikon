@@ -1,5 +1,5 @@
-..main() ENTER/1: 1 EXIT0/4: 1
-..returnDoubleSum() ENTER/7: 1 EXIT0/10: 1
-..returnIntSum() ENTER/7: 1 EXIT0/10: 1
-..returnInvalidDouble() ENTER/7: 2 EXIT0/10: 2
-..returnInvalidInt() ENTER/7: 1 EXIT0/10: 1
+..main() ENTER/3: 1 EXIT0/6: 1
+..returnDoubleSum() ENTER/9: 1 EXIT0/12: 1
+..returnIntSum() ENTER/9: 1 EXIT0/12: 1
+..returnInvalidDouble() ENTER/9: 2 EXIT0/12: 2
+..returnInvalidInt() ENTER/9: 1 EXIT0/12: 1
