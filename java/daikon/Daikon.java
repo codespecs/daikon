@@ -538,7 +538,13 @@ public final class Daikon {
       PptSplitter.dkconfig_disable_splitting = true;
     }
 
-    if (Daikon.dkconfig_quiet) Daikon.dkconfig_progress_delay = -1;
+    if (Daikon.dkconfig_quiet) {
+      Daikon.dkconfig_progress_delay = -1;
+    }
+    if (System.console() == null) {
+      // not connected to a terminal
+      Daikon.dkconfig_progress_delay = -1;
+    }
 
     // Set up debug traces; note this comes after reading command line options.
     LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
