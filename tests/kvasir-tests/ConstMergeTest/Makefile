@@ -1,5 +1,5 @@
 NAME := ConstMergeTest
-CPLUSCPLU := 1
+CPLUSPLUS := 1
 C_EXT := cpp
 CUSTOM_BUILD := 1
 OBJS = file2.o \
