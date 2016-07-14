@@ -1,0 +1,1282 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+MapQuick1.StreetNumberSet:::CLASS
+
+DECLARE
+MapQuick1.StreetNumberSet:::OBJECT
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+
+
+DECLARE
+MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::ENTER
+numbers
+java.lang.String # isParam=true
+hashcode
+2
+numbers.toString
+java.lang.String
+java.lang.String
+3
+
+DECLARE
+MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::EXIT68
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+4
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+5
+this.begins[..]
+int[]
+int[]
+6[7]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+5
+this.ends[..]
+int[]
+int[]
+6[8]
+numbers
+java.lang.String # isParam=true
+hashcode
+2
+numbers.toString
+java.lang.String
+java.lang.String
+3
+
+
+DECLARE
+MapQuick1.StreetNumberSet.parityOf(int):::ENTER
+i
+int # isParam=true
+int
+2
+
+DECLARE
+MapQuick1.StreetNumberSet.parityOf(int):::EXIT72
+i
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+MapQuick1.StreetNumberSet.checkRep():::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+
+DECLARE
+MapQuick1.StreetNumberSet.checkRep():::EXIT104
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+
+
+DECLARE
+MapQuick1.StreetNumberSet.contains(int):::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+3
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.begins[..]
+int[]
+int[]
+2[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.ends[..]
+int[]
+int[]
+2[6]
+n
+int # isParam=true
+int
+2
+
+DECLARE
+MapQuick1.StreetNumberSet.contains(int):::EXIT118
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+4
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+5
+this.begins[..]
+int[]
+int[]
+2[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+5
+this.ends[..]
+int[]
+int[]
+2[7]
+n
+int # isParam=true
+int
+2
+return
+boolean
+boolean
+3
+
+DECLARE
+MapQuick1.StreetNumberSet.contains(int):::EXIT123
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+4
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+5
+this.begins[..]
+int[]
+int[]
+2[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+5
+this.ends[..]
+int[]
+int[]
+2[7]
+n
+int # isParam=true
+int
+2
+return
+boolean
+boolean
+3
+
+
+DECLARE
+MapQuick1.StreetNumberSet.orderStatistic(int):::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+3
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.begins[..]
+int[]
+int[]
+2[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.ends[..]
+int[]
+int[]
+2[6]
+n
+int # isParam=true
+int
+2
+
+DECLARE
+MapQuick1.StreetNumberSet.orderStatistic(int):::EXIT162
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+3
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.begins[..]
+int[]
+int[]
+2[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.ends[..]
+int[]
+int[]
+2[6]
+n
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+MapQuick1.StreetNumberSet.size():::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+
+DECLARE
+MapQuick1.StreetNumberSet.size():::EXIT181
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+3
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.begins[..]
+int[]
+int[]
+2[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.ends[..]
+int[]
+int[]
+2[6]
+return
+int
+int
+2
+
+
+DECLARE
+MapQuick1.StreetNumberSet.isEmpty():::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+
+DECLARE
+MapQuick1.StreetNumberSet.isEmpty():::EXIT190
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+3
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.begins[..]
+int[]
+int[]
+5[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.ends[..]
+int[]
+int[]
+5[7]
+return
+boolean
+boolean
+2
+
+
+DECLARE
+MapQuick1.StreetNumberSet.min():::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+
+DECLARE
+MapQuick1.StreetNumberSet.min():::EXIT210
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+3
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.begins[..]
+int[]
+int[]
+2[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.ends[..]
+int[]
+int[]
+2[6]
+return
+int
+int
+2
+
+
+DECLARE
+MapQuick1.StreetNumberSet.max():::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+
+DECLARE
+MapQuick1.StreetNumberSet.max():::EXIT230
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+3
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.begins[..]
+int[]
+int[]
+2[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.ends[..]
+int[]
+int[]
+2[6]
+return
+int
+int
+2
+
+
+DECLARE
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[7]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[8]
+
+DECLARE
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT239
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+DECLARE
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT240
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+DECLARE
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT253
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+DECLARE
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT257
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+
+DECLARE
+MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT266
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.begins[..]
+int[]
+int[]
+5[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.ends[..]
+int[]
+int[]
+5[7]
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[7]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[8]
+
+DECLARE
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+DECLARE
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT272
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+DECLARE
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT275
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+DECLARE
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT281
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+DECLARE
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT282
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+DECLARE
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT286
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+DECLARE
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT290
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[7]
+other
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+other.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.begins[..]
+int[]
+int[]
+4[8]
+other.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+other.ends[..]
+int[]
+int[]
+4[9]
+return
+boolean
+boolean
+5
+
+
+DECLARE
+MapQuick1.StreetNumberSet.hashCode():::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+2
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.begins[..]
+int[]
+int[]
+4[5]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+3
+this.ends[..]
+int[]
+int[]
+4[6]
+
+DECLARE
+MapQuick1.StreetNumberSet.hashCode():::EXIT295
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+3
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.begins[..]
+int[]
+int[]
+5[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.ends[..]
+int[]
+int[]
+5[7]
+return
+int
+int
+2
+
+
+DECLARE
+MapQuick1.StreetNumberSet.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+3
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.begins[..]
+int[]
+int[]
+5[6]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+4
+this.ends[..]
+int[]
+int[]
+5[7]
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+MapQuick1.StreetNumberSet.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+MapQuick1.StreetNumberSet # isParam=true
+hashcode
+4
+this.begins
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+5
+this.begins[..]
+int[]
+int[]
+6[7]
+this.ends
+int[] # declaringClassPackageName=MapQuick1, 
+hashcode
+5
+this.ends[..]
+int[]
+int[]
+6[8]
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+

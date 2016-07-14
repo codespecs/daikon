@@ -9,12 +9,6 @@ endif
 CC := gcc
 CXX := g++
 CFLAGS += -gdwarf-2
-# Check gcc copyright year as a quick test to see if we are using
-# latest gcc (4.x instead of 3.x)
-# Default inlining has been changed, use std=gnu89 to get old style
-ifeq (2015, $(findstring 2015, $(shell gcc --version)))
-CFLAGS += -std=gnu89
-endif
 # Ubuntu sets -fstack-protector-strong on by default
 # we turn if back off to get baseline results to match Fedora.
 CFLAGS += -fno-stack-protector
@@ -75,6 +69,12 @@ KVASIR_OPTIONS := $(KVASIR_OPTIONS) --object-ppts
 C_EXT ?= cc
 COMPILER := $(CXX)
 else
+# Check gcc copyright year as a quick test to see if we are using
+# latest gcc (4.x instead of 3.x)
+# Default inlining has been changed, use std=gnu89 to get old style
+ifeq (2015, $(findstring 2015, $(shell gcc --version)))
+CFLAGS += -std=gnu89
+endif
 C_EXT ?= c
 COMPILER := $(CC)
 endif
