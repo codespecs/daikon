@@ -30,8 +30,8 @@ matrix:
     - env: OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
     - env: OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
 
-before_install:
-  - npm install --save-dev travis-after-all
+# before_install:
+#   - npm install --save-dev travis-after-all
 
 before_script:
 - docker pull mdernst/$OS-for-daikon-$JDKVER > /dev/null
@@ -42,7 +42,8 @@ script:
 after_script:
   - |
       declare exitCode;
-      $(npm bin)/travis-after-all
+#      $(npm bin)/travis-after-all
+      curl -sSL https://raw.githubusercontent.com/mernst/travis-after-all/master/lib/travis-after-all.js | node
       exitCode=$?
 
       if [ "$exitCode" -eq 0 ]; then
