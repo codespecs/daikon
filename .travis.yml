@@ -30,8 +30,8 @@ matrix:
     - env: OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
     - env: OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
 
-before_install:
-  - npm install --save-dev travis-after-all
+# before_install:
+#   - npm install --save-dev travis-after-all
 
 before_script:
 - docker pull mdernst/$OS-for-daikon-$JDKVER > /dev/null
@@ -39,10 +39,11 @@ before_script:
 script:
 - docker run mdernst/$OS-for-daikon-$JDKVER /bin/sh -c "export JAVA_HOME=\`which javac|xargs readlink -f|xargs dirname|xargs dirname\` && git clone --quiet --depth 3 https://github.com/codespecs/daikon.git daikon && cd daikon && java -version && javac -version && ./.travis-build.sh $GROUP"
 
+#      $(npm bin)/travis-after-all
 after_script:
   - |
       declare exitCode;
-      $(npm bin)/travis-after-all
+      curl -sSL https://raw.githubusercontent.com/mernst/travis-after-all/master/lib/travis-after-all.js | node
       exitCode=$?
 
       if [ "$exitCode" -eq 0 ]; then
