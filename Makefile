@@ -736,7 +736,8 @@ ifndef NONETWORK
 	# if plume-lib/.git does not exist, then directory was created
 	# from a daikon archive file - cannot do a git pull.
 	if test -d plume-lib/.git ; then \
-		(cd plume-lib && git pull ${GIT_OPTIONS}) ; fi
+		echo "in the then branch"; \
+		(cd plume-lib && git pull ${GIT_OPTIONS}) ; echo "done with then branch"; fi
 endif
 
 update-plume-jar: plume-lib-update
