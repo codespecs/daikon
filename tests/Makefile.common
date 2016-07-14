@@ -190,28 +190,6 @@ CWD:=$(shell pwd)
 PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[67]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
 PROJECT?=${PROJECT_VIA_COMMAND}
 
-# Function to compute goal filename extension.  If we are using Java8 then
-# if filename.test.goal.j8 exists, use it; otherwise, use filename.test.goal
-# otherwise (not Java8) use filename.test.goal. 
-# Reasons for different behavior between Java 7 and Java 8 include:
-#  * nondeterministic behavior, such as using a HashMap's iterator.
-#    In this case, don't create a .goal.j8 goal file; instead, change the
-#    subject program to use LinkedHashMap.
-#  * different line numbers for :::EXITnnn program points, when a return
-#    statement spans multiple lines.  In this case, don't create a .goal.j8
-#    goal file; instead, change the subject program to put the entire return
-#    statement on one line.
-#  * different numbers of calls to hashCode, due to differences in Java 7 and
-#    Java 8 HashMap implementations and possibly String.hashCode().
-#    This is currently the only reason to create a .goal.j8 file.
-# The argument ($(1)) is '<filename>.<test>'
-goal_name = $(if $(findstring 1.8, "$(shell java -version 2>&1)"), \
-			  $(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
-				$(1).goal.j8, \
-				$(1).goal), \
-			  $(1).goal \
-			)
-
 # This is the name for the output files ($.inv.gz $.txt-daikon ...)
 # Default is the last name on the path to the project; most projects
 # will not need to override the default.
@@ -293,6 +271,57 @@ export LC_ALL=C
 
 
 default: help
+
+# The general form of a Java version number is n.n.n_nn.
+# To simplify scanning, I only look at the major version
+# number and the update number.  Thus I assume the version
+# number is of the form: 1.<major>.0_<update>
+# Currently, the only versions that matter for Daikon testing
+# is if <major> is 8 or not (this will need to change when
+# Java 9 is released); and, if it is Java 8, if <update> > 91.
+# As of 1.8.0_92 there was a javac change that affects the line
+# numbers assigned to EXIT ppts in a few cases.
+
+JAVA_VERSION_STRING := $(shell $(RUN_JAVA) -version 2>&1 | head -1)
+JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.* 1\.\(.\).*/\1/')
+JAVA_UPDATE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.*_//')
+NEWER_JAVA8_RELEASE := $(shell echo $(JAVA_UPDATE_NUMBER)\>91 | bc)
+
+# Function to compute goal filename extension.  If we are using Java8 then
+# if filename.test.goal.j8 exists, use it; otherwise, use filename.test.goal
+# otherwise (not Java8) use filename.test.goal.
+# Reasons for different behavior between Java 7 and Java 8 include:
+#  * nondeterministic behavior, such as using a HashMap's iterator.
+#    In this case, don't create a .goal.j8 goal file; instead, change the
+#    subject program to use LinkedHashMap.
+#  * different line numbers for :::EXITnnn program points, when a return
+#    statement spans multiple lines.  In this case, don't create a .goal.j8
+#    goal file; instead, change the subject program to put the entire return
+#    statement on one line.
+#  * different numbers of calls to hashCode, due to differences in Java 7 and
+#    Java 8 HashMap implementations and possibly String.hashCode().
+#    This is currently the only reason to create a .goal.j8 file.
+# The argument ($(1)) is '<filename>.<test>'
+
+# Now we have an additional complication.  If we are using a newer Java8
+# (<update> > 91) then if filename.test.goal.j8n exists, use it; otherwise,
+# continue as described above, looking to see if filename.test.goal.j8 exists.
+
+goal_name = $(if ifeq ($(JAVA_RELEASE_NUMBER), 8), \
+				$(if ifeq ($(NEWER_JAVA8_RELEASE), 1), \
+					$(if $(shell if [ -f $(1).goal.j8n ] ; then echo true; fi), \
+						$(1).goal.j8n, \
+						$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
+							$(1).goal.j8, \
+							$(1).goal) \
+					), \
+					$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
+						$(1).goal.j8, \
+						$(1).goal) \
+				), \
+				$(1).goal \
+			)
+
 
 $(PRINT_INVARIANTS_CLASS):
 	make -C ${DAIKONDIR}/java
