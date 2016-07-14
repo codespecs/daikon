@@ -599,7 +599,7 @@ Documentation
   We have enhanced the documentation on using Daikon with Eclipse.
 
   We no longer distribute Texinfo-formatted "info" versions of the
-  documentation.  However, the targets remain in the makefile if you wish
+  documentation.  However, the targets remain in the Makefile if you wish
   to make your own.
 
   We have added a section to the developer documentation on how to make
@@ -2225,7 +2225,7 @@ Daikon
 
     The Daikon code no longer uses any raw generic types.  All uses of
     generic types (such as List) are supplied a type parameter.  When
-    compiled using the supplied makefile, there are no "javac -Xlint"
+    compiled using the supplied Makefile, there are no "javac -Xlint"
     warnings.
 
 Chicory
@@ -3652,7 +3652,7 @@ Discontinued the compiled distribution; now there is only one Daikon
 distribution, the source distribution, which includes both pre-compiled
 files and source files.
 
-Added top-level makefile, which simplifies Daikon installation.
+Added top-level Makefile, which simplifies Daikon installation.
 
 dfec enhancements:
   added --flatten-mdas option
