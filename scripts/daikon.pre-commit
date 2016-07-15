@@ -12,4 +12,3 @@ CHANGED_JAVA_FILES=`git diff --staged --name-only --diff-filter=ACM | grep '\.ja
 if [ ! -z "$CHANGED_JAVA_FILES" ]; then
     plume-lib/bin/check-google-java-format.py ${CHANGED_JAVA_FILES}
 fi
-
