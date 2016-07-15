@@ -25,10 +25,10 @@ env:
   - OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
 
 # Currently-failing jobs
-matrix:
-  allow_failures:
-    - env: OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
-    - env: OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
+# matrix:
+#   allow_failures:
+#     - env: OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
+#     - env: OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
 
 # before_install:
 #   - npm install --save-dev travis-after-all
