@@ -307,8 +307,8 @@ NEWER_JAVA8_RELEASE := $(shell echo $(JAVA_UPDATE_NUMBER)\>91 | bc)
 # (<update> > 91) then if filename.test.goal.j8n exists, use it; otherwise,
 # continue as described above, looking to see if filename.test.goal.j8 exists.
 
-goal_name = $(if ifeq ($(JAVA_RELEASE_NUMBER), 8), \
-				$(if ifeq ($(NEWER_JAVA8_RELEASE), 1), \
+goal_name = $(if $(findstring 8, $(JAVA_RELEASE_NUMBER)), \
+				$(if $(findstring 1, $(NEWER_JAVA8_RELEASE)), \
 					$(if $(shell if [ -f $(1).goal.j8n ] ; then echo true; fi), \
 						$(1).goal.j8n, \
 						$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
