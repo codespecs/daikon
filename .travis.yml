@@ -37,7 +37,7 @@ before_script:
 - docker pull mdernst/$OS-for-daikon-$JDKVER > /dev/null
 
 script:
-- docker run mdernst/$OS-for-daikon-$JDKVER /bin/sh -c "export JAVA_HOME=\`which javac|xargs readlink -f|xargs dirname|xargs dirname\` && git clone --quiet --depth 3 https://github.com/codespecs/daikon.git daikon && cd daikon && java -version && javac -version && ./.travis-build.sh $GROUP"
+- docker run mdernst/$OS-for-daikon-$JDKVER /bin/sh -c "export JAVA_HOME=\`which javac|xargs readlink -f|xargs dirname|xargs dirname\` && git clone --quiet --depth 10 https://github.com/codespecs/daikon.git daikon && cd daikon && java -version && javac -version && ./.travis-build.sh $GROUP"
 
 #      $(npm bin)/travis-after-all
 after_script:
@@ -55,4 +55,4 @@ after_script:
       fi
 
 git:
-  depth: 3
+  depth: 10
