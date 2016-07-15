@@ -13,6 +13,7 @@ RUN dnf -qy upgrade && dnf -qy install \
   automake \
   binutils-devel \
   gcc \
+  gcc-c++ \
   git \
   m4 \
   make \
