@@ -729,10 +729,15 @@ plume-lib:
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib
 ifndef NONETWORK
-	# if plume-lib.git does not exist, then directory was created
+	echo "plume-lib-update:"
+	pwd
+	test -d plume-lib && echo $$?
+	test -d plume-lib/.git && echo $$?
+	# if plume-lib/.git does not exist, then directory was created
 	# from a daikon archive file - cannot do a git pull.
-	if test -e plume-lib/.git ; then \
-		(cd plume-lib; git pull -q ${GIT_OPTIONS}) ; fi
+	if test -d plume-lib/.git ; then \
+		echo "in the then branch"; \
+		cd plume-lib; git pull -q ${GIT_OPTIONS}; cd ..; echo "done with then branch"; fi
 endif
 
 update-plume-jar: plume-lib-update

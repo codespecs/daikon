@@ -34,7 +34,7 @@ if [[ "$1" != "quick-txt-diff" && "$1" != "non-txt-diff" && "$1" != "misc" ]]; t
   # Daikon txt-diff tests
   echo ".travis-build.sh is running nonquick-txt-diff tests"
   make dyncomp-jdk
-  make -C tests MPARG=-Otarget nonquick-txt-diff results
+  make -C tests MPARG=-j1 nonquick-txt-diff results
 fi
 
 # There should be a separate job for Fjalar, or run it here.
