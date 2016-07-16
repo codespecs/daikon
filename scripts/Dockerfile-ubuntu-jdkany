@@ -16,6 +16,7 @@ RUN apt-get -qqy update && apt-get -qqy install \
 && apt-get -qqy update && apt-get -qqy install \
   autoconf \
   automake \
+  bc \
   binutils-dev \
   ctags \
   gcc \
@@ -28,6 +29,7 @@ RUN apt-get -qqy update && apt-get -qqy install \
   openjdk-7-jdk \
 && apt-get -qqy remove openjdk-8-jre-headless:amd64 \
 && apt-get -qqy install \
+  g++ \
   graphviz \
   texi2html \
   texinfo \
