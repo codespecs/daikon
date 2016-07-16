@@ -16,21 +16,21 @@ export DAIKONDIR=`pwd`
 
 ./.travis-build-without-test.sh
 
-# Optional argument $1 is one of:  quick-txt-diff, nonquick-txt-diff, non-txt-diff, misc
+# Optional argument $1 is one of:  quick-txt-diff, nonquick-txt-diff, non-txt-diff, misc, kvasir
 # If it is omitted, this script does everything.
 
 # The JDK was built already; there is no need to rebuild it again.
 # Don't use "-d" to debug ant, because that results in a log so long
 # that Travis truncates the log and terminates the job.
 
-if [[ "$1" != "nonquick-txt-diff" && "$1" != "non-txt-diff" && "$1" != "misc" ]]; then
+if [[ "$1" != "nonquick-txt-diff" && "$1" != "non-txt-diff" && "$1" != "misc" && "$1" != "kvasir" ]]; then
   # Daikon txt-diff tests
   echo ".travis-build.sh is running quick-txt-diff tests"
   make dyncomp-jdk
   make -C tests MPARG=-Otarget quick-txt-diff results
 fi
 
-if [[ "$1" != "quick-txt-diff" && "$1" != "non-txt-diff" && "$1" != "misc" ]]; then
+if [[ "$1" != "quick-txt-diff" && "$1" != "non-txt-diff" && "$1" != "misc" && "$1" != "kvasir" ]]; then
   # Daikon txt-diff tests
   echo ".travis-build.sh is running nonquick-txt-diff tests"
   make dyncomp-jdk
@@ -38,13 +38,13 @@ if [[ "$1" != "quick-txt-diff" && "$1" != "non-txt-diff" && "$1" != "misc" ]]; t
 fi
 
 # There should be a separate job for Fjalar, or run it here.
-if [[ "$1" != "quick-txt-diff" && "$1" != "nonquick-txt-diff" && "$1" != "misc" ]]; then
+if [[ "$1" != "quick-txt-diff" && "$1" != "nonquick-txt-diff" && "$1" != "misc" && "$1" != "kvasir" ]]; then
   # Daikon tests other than txt-diff
   echo ".travis-build.sh is running non-txt-diff tests"
   make -C tests non-txt-diff results
 fi
 
-if [[ "$1" != "quick-txt-diff" && "$1" != "nonquick-txt-diff" && "$1" != "non-txt-diff" ]]; then
+if [[ "$1" != "quick-txt-diff" && "$1" != "nonquick-txt-diff" && "$1" != "non-txt-diff" && "$1" != "kvasir" ]]; then
   ## misc tests: miscellaneous tests that shouldn't depend on JDK version.
   ## (Maybe they don't even need the full ./.travis-build-without-test.sh .)
   echo ".travis-build.sh is running misc tests"
@@ -54,4 +54,14 @@ if [[ "$1" != "quick-txt-diff" && "$1" != "nonquick-txt-diff" && "$1" != "non-tx
 
   # Documentation
   make javadoc doc-all
+fi
+
+# Running Kvasir tests here may seem redundant with the fjalar project's Travis build.
+# Running the Kvasir tests here means that they are run on each branch and pull request.
+if [[ "$1" != "quick-txt-diff" && "$1" != "nonquick-txt-diff" && "$1" != "non-txt-diff" && "$1" != "misc" ]]; then
+  ## Kvasir tests
+  echo ".travis-build.sh is running kvasir tests"
+
+  make kvasir
+  make -C tests/kvasir-tests regression-tests
 fi
