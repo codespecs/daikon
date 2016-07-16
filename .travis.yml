@@ -50,7 +50,7 @@ after_script:
         if [[ ($TRAVIS_BRANCH == master) &&
               ($TRAVIS_PULL_REQUEST == false) ]] ; then
           curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
-          sh trigger-travis.sh typetools fjalar $TRAVISTOKEN
+          sh trigger-travis.sh codespecs fjalar $TRAVISTOKEN
           sh trigger-travis.sh typetests daikon-typecheck $TRAVISTOKEN
         fi
       fi
