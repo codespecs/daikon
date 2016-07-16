@@ -16,18 +16,45 @@ or you can just remove some of them.
 # Create the Docker image, in an empty directory, and upload to Docker Hub.
 # Takes about 12 minutes for jdk7 or jdk8, about 1 hour for jdkany.
 alias create_upload_docker_image=' \
+  rm -rf dockerdir && \
   mkdir -p dockerdir && \
-  cd dockerdir && \
+  (cd dockerdir && \
   \cp -pf ../Dockerfile-$OS-$JDKVER Dockerfile && \
   docker build -t mdernst/$OS-for-$PROJECT-$JDKVER . && \
-  docker push mdernst/$OS-for-$PROJECT-$JDKVER && \
-  cd .. && \
+  docker push mdernst/$OS-for-$PROJECT-$JDKVER) && \
   rm -rf dockerdir'
 
-OS=ubuntu   && JDKVER=jdk7   && PROJECT=daikon && create_upload_docker_image
-OS=ubuntu   && JDKVER=jdk8   && PROJECT=daikon && create_upload_docker_image
-OS=ubuntu   && JDKVER=jdkany && PROJECT=daikon && create_upload_docker_image
-OS=fedora   && JDKVER=jdk8   && PROJECT=daikon && create_upload_docker_image
-OS=fedora   && JDKVER=jdkany && PROJECT=daikon && create_upload_docker_image
-OS=fedora23 && JDKVER=jdk8   && PROJECT=daikon && create_upload_docker_image
-OS=fedora23 && JDKVER=jdkany && PROJECT=daikon && create_upload_docker_image
+export OS=ubuntu
+export JDKVER=jdk7
+export PROJECT=daikon
+create_upload_docker_image
+
+export OS=ubuntu   
+export JDKVER=jdk8   
+export PROJECT=daikon 
+create_upload_docker_image
+
+export OS=ubuntu   
+export JDKVER=jdkany 
+export PROJECT=daikon 
+create_upload_docker_image
+
+export OS=fedora   
+export JDKVER=jdk8   
+export PROJECT=daikon 
+create_upload_docker_image
+
+export OS=fedora   
+export JDKVER=jdkany 
+export PROJECT=daikon 
+create_upload_docker_image
+
+export OS=fedora23 
+export JDKVER=jdk8   
+export PROJECT=daikon 
+create_upload_docker_image
+
+export OS=fedora23 
+export JDKVER=jdkany 
+export PROJECT=daikon 
+create_upload_docker_image

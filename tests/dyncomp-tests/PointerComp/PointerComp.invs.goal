@@ -1,9 +1,11 @@
 ===========================================================================
 ..inc():::ENTER
+size(a[]) == size(b[])
 a has only one value
 a[] == [5]
 b has only one value
 b[] == [10]
+size(a[]) == 1
 ===========================================================================
 ..inc():::EXIT
 b[] == orig(b[])
@@ -11,12 +13,15 @@ a[] == [15]
 b[] == [10]
 ===========================================================================
 ..interactAfter():::ENTER
+size(x[]) == size(y[])
+size(x[]) == size(z[])
 x has only one value
 x[] == [10]
 y has only one value
 y[] == [15]
 z has only one value
 z[] == [0]
+size(x[]) == 1
 ===========================================================================
 ..interactAfter():::EXIT
 x[] == orig(x[])
@@ -27,6 +32,9 @@ y[] == [15]
 z[] == [0]
 ===========================================================================
 ..internalInteraction():::ENTER
+size(x[]) == size(y[])
+size(x[]) == size(z[])
+size(x[]) == size(oranges[])
 x has only one value
 x[] == [1]
 y has only one value
@@ -35,6 +43,7 @@ z has only one value
 z[] == [3]
 oranges has only one value
 oranges[] == [10]
+size(x[]) == 1
 ===========================================================================
 ..internalInteraction():::EXIT
 x[] == orig(x[])
