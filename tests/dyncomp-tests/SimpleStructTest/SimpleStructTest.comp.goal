@@ -1,38 +1,46 @@
 ..assignPtrAwayBeforeFieldsInteract():::ENTER
 aPtr
-aPtr[].a aPtr[].b
-aPtr[].cPtr
-aPtr[].cPtr[0]
+aPtr[..]
+aPtr[..].a aPtr[..].b
+aPtr[..].cPtr
+aPtr[..].cPtr[0]
 bPtr
-bPtr[].a bPtr[].cPtr[0]
-bPtr[].b
-bPtr[].cPtr
+bPtr[..]
+bPtr[..].a bPtr[..].cPtr[0]
+bPtr[..].b
+bPtr[..].cPtr
 
 ..assignPtrAwayBeforeFieldsInteract():::EXIT0
 aPtr
-aPtr[].a aPtr[].b
-aPtr[].cPtr
-aPtr[].cPtr[0]
+aPtr[..]
+aPtr[..].a aPtr[..].b
+aPtr[..].cPtr
+aPtr[..].cPtr[0]
 bPtr
-bPtr[].a bPtr[].cPtr[0]
-bPtr[].b
-bPtr[].cPtr
+bPtr[..]
+bPtr[..].a bPtr[..].cPtr[0]
+bPtr[..].b
+bPtr[..].cPtr
 
 ..assignPtrThenFieldsInteract():::ENTER
 aPtr bPtr
-aPtr[].a aPtr[].b bPtr[].a bPtr[].b c
-aPtr[].cPtr
-aPtr[].cPtr[0]
-bPtr[].cPtr
-bPtr[].cPtr[0]
+aPtr[..]
+aPtr[..].a aPtr[..].b bPtr[..].a bPtr[..].b c
+aPtr[..].cPtr
+aPtr[..].cPtr[0]
+bPtr[..]
+bPtr[..].cPtr
+bPtr[..].cPtr[0]
 
 ..assignPtrThenFieldsInteract():::EXIT0
 aPtr bPtr
-aPtr[].a aPtr[].b bPtr[].a bPtr[].b c
-aPtr[].cPtr
-aPtr[].cPtr[0]
-bPtr[].cPtr
-bPtr[].cPtr[0]
+aPtr[..]
+aPtr[..].a aPtr[..].b bPtr[..].a bPtr[..].b c
+aPtr[..].cPtr
+aPtr[..].cPtr[0]
+bPtr[..]
+bPtr[..].cPtr
+bPtr[..].cPtr[0]
 
 ..main():::ENTER
 
@@ -41,31 +49,31 @@ return
 
 ..structByPtr():::ENTER
 dPtr
-dPtr[] xPtr[].b yPtr[].b
+dPtr[..] xPtr[..].b yPtr[..].b
 xPtr
-xPtr[].a xPtr[].cPtr[0] yPtr[].a yPtr[].cPtr[0]
-xPtr[].cPtr
+xPtr[..]
+xPtr[..].a xPtr[..].cPtr[0] yPtr[..].a yPtr[..].cPtr[0]
+xPtr[..].cPtr yPtr[..].cPtr
 yPtr
-yPtr[].cPtr
+yPtr[..]
 
 ..structByPtr():::EXIT0
 dPtr
-dPtr[] xPtr[].b yPtr[].b
+dPtr[..] xPtr[..].b yPtr[..].b
 xPtr
-xPtr[].a xPtr[].cPtr[0] yPtr[].a yPtr[].cPtr[0]
-xPtr[].cPtr
+xPtr[..]
+xPtr[..].a xPtr[..].cPtr[0] yPtr[..].a yPtr[..].cPtr[0]
+xPtr[..].cPtr yPtr[..].cPtr
 yPtr
-yPtr[].cPtr
+yPtr[..]
 
 ..structByValue():::ENTER
 d x.b y.b
-x.a x.cPtr[] y.a y.cPtr[]
-x.cPtr
-y.cPtr
+x x.a x.cPtr[..] y y.a y.cPtr[..]
+x.cPtr y.cPtr
 
 ..structByValue():::EXIT0
 d x.b y.b
-x.a x.cPtr[] y.a y.cPtr[]
-x.cPtr
-y.cPtr
+x x.a x.cPtr[..] y y.a y.cPtr[..]
+x.cPtr y.cPtr
 

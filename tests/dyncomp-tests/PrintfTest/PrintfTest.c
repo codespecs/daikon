@@ -8,6 +8,10 @@
 // comparable when the format string denotes that they are of the SAME
 // TYPE
 
+// This is no longer true.  markro 07/13/2016
+
+#include <stdio.h>
+
 void printfIntInt(int a, int b) {
   //  int z = 0xBEEF;
   printf("a=%d, b=%d\n", a, b);

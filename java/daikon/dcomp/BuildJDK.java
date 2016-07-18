@@ -389,7 +389,7 @@ public class BuildJDK {
     File classpath = new File(dir, classfile.getName());
     inst_jc.dump(classpath);
     _numFilesProcessed++;
-    if ((_numFilesProcessed % 100) == 0) {
+    if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
       System.out.printf(
           "Processed %d/%d classes at %tc%n", _numFilesProcessed, classmap.size(), new Date());
     }

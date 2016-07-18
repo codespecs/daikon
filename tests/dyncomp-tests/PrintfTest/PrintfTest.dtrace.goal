@@ -1,7 +1,15 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
+this_invocation_nonce
+0
 
 ..printfIntInt():::ENTER
+this_invocation_nonce
+1
 a
 43690
 1
@@ -10,6 +18,8 @@ b
 1
 
 ..printfIntInt():::EXIT0
+this_invocation_nonce
+1
 a
 43690
 1
@@ -18,6 +28,8 @@ b
 1
 
 ..printfIntFloat():::ENTER
+this_invocation_nonce
+2
 a
 43690
 1
@@ -26,6 +38,8 @@ b
 1
 
 ..printfIntFloat():::EXIT0
+this_invocation_nonce
+2
 a
 43690
 1
@@ -34,6 +48,8 @@ b
 1
 
 ..printfIntFloatUInt():::ENTER
+this_invocation_nonce
+3
 a
 43690
 1
@@ -45,6 +61,8 @@ c
 1
 
 ..printfIntFloatUInt():::EXIT0
+this_invocation_nonce
+3
 a
 43690
 1
@@ -56,6 +74,8 @@ c
 1
 
 ..printfIntFloatUIntInt():::ENTER
+this_invocation_nonce
+4
 a
 43690
 1
@@ -70,6 +90,8 @@ d
 1
 
 ..printfIntFloatUIntInt():::EXIT0
+this_invocation_nonce
+4
 a
 43690
 1
@@ -84,6 +106,8 @@ d
 1
 
 ..main():::EXIT0
+this_invocation_nonce
+0
 return
 0
 1

@@ -172,10 +172,10 @@ compile-java: git-hooks
 	cd java && $(MAKE) all
 
 very-clean:
+	-rm -rf `findfile '*~'`
 	${MAKE} -C ${DAIKONDIR} clean-everything
 	-cd plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
-# You can ignore the warning from tests/Makefile that dcomp_rt.jar is not present.
 	cd tests && $(MAKE) very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
 	-rm -rf examples/java-examples/StackAr/DataStructures/*.class
@@ -729,10 +729,11 @@ plume-lib:
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib
 ifndef NONETWORK
-	# if plume-lib.git does not exist, then directory was created
+	# if plume-lib/.git does not exist, then directory was created
 	# from a daikon archive file - cannot do a git pull.
-	if test -e plume-lib/.git ; then \
-		(cd plume-lib; git pull -q ${GIT_OPTIONS}) ; fi
+	# The "git pull" command fails under Fedora 23, for mysterious reasons.
+	if test -d plume-lib/.git ; then \
+		(cd plume-lib && git pull -q ${GIT_OPTIONS}) || true; fi
 endif
 
 update-plume-jar: plume-lib-update

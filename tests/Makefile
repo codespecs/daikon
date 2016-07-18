@@ -25,24 +25,25 @@ help-recurse-list:
 	@echo " which are ones that have been selected as useful tests.)"
 	@echo ""
 
+# To produce incremental output, invoke make as: make MPARG=-Otarget ...
+# To not run in parallel, invoke make as: make MPARG=-j1 ...
 FIND_VERSION := $(shell make --version 2>&1 | head -1)
 ifeq (4.,$(findstring 4.,$(FIND_VERSION)))
-  MPARG := -Orecurse
+  MPARG ?= -Orecurse
 else
-  MPARG :=
+  MPARG ?=
 endif
 
-ifeq (x86_64,$(shell uname -m))
-all diffs: txt-diff diff-tests chicory-tests merge-invariants-tests parser-tests results
-else
-# the merge-invariants-tests take too long on 32 bits
-all diffs: txt-diff diff-tests chicory-tests parser-tests results
-endif
+all diffs: txt-diff non-txt-diff results
+
+# These do not use DynComp
+non-txt-diff: diff-tests chicory-tests merge-invariants-tests parser-tests 
+
 
 quick: quick-txt-diff diff-tests results
 
 # targets that descend to child direcories
-quick-txt-diff txt-diff update-goals merge spinfo-static txt-suppress inv-checker-diff \
+quick-txt-diff nonquick-txt-diff txt-diff update-goals merge spinfo-static txt-suppress inv-checker-diff \
 txt-daikon txt-chicory cross-checker chicory chicory-diff \
 esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff txt-merge-diff \
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:

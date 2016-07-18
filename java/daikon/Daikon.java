@@ -87,8 +87,8 @@ public final class Daikon {
 
   // Don't change the order of the modifiers on these strings as they
   // are automatically updated as part of the release process
-  public final static String release_version = "5.3.5";
-  public final static String release_date = "June 1, 2016";
+  public final static String release_version = "5.3.7";
+  public final static String release_date = "July 5, 2016";
   public final static String release_string =
       "Daikon version "
           + release_version
@@ -538,7 +538,13 @@ public final class Daikon {
       PptSplitter.dkconfig_disable_splitting = true;
     }
 
-    if (Daikon.dkconfig_quiet) Daikon.dkconfig_progress_delay = -1;
+    if (Daikon.dkconfig_quiet) {
+      Daikon.dkconfig_progress_delay = -1;
+    }
+    if (System.console() == null) {
+      // not connected to a terminal
+      Daikon.dkconfig_progress_delay = -1;
+    }
 
     // Set up debug traces; note this comes after reading command line options.
     LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);

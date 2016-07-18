@@ -26,30 +26,44 @@ cross-checker:
 
 # (We must use actions for these rules for 'make' to work correctly.)
 
-everything-%: dsaa-% mapquick-% javautil-% 6170-% large-% quick-% new-%
+# Approximate times as of July 2016:  total 58 minutes, 30 for quick, 28 for nonquick
+# SQD: 6 minutes
+# polycalc: 11 minutes
+# special-cases: 10 minutes
+# siemens: 3 minutes
+# dsaa: 7 minutes
+# mapquick: 9 minutes
+# javautil: 6 minutes
+# 6170: 5 minutes
+# large: 0 minutes
+# new: 1 minute
+
+everything-%: quick-% nonquick-%
 	@echo ${HR}
 quick-%: SQD-% polycalc-% special-cases-% siemens-%
+	@echo ${HR}
+nonquick-%: dsaa-% mapquick-% javautil-% 6170-% large-% new-%
 	@echo ${HR}
 
 # Canonical groupings
 
 SQD-%: do-StackAr-% do-QueueAr-% do-DisjSets-% 
 	@echo ${HR}
+polycalc-%: do-RatNum-% do-RatPoly-% do-RatPolyStack-% do-RatTermVec-%
+	@echo ${HR}
+special-cases-%: do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% do-hanoi-% do-param-% do-suppress01-% do-suppress02-% do-StaticInteresting-% do-pine_mdiep-% do-purity-% do-Smithnosky-%
+	@echo ${HR}
+siemens-%: do-print_tokens-% do-print_tokens2-% do-replace-% do-schedule-% do-schedule2-% do-tcas-% do-tot_info-% do-space-%
+	@echo ${HR}
 dsaa-%: do-BinaryTree-% do-CursorList-% do-LinkedList-% do-redblack-% do-BinaryHeap-%
 	@echo ${HR}
 mapquick-%: do-WeightedNodePath-% do-StreetNumberSet-% do-GeoSegment-% do-Graph-% # do-MapQuick-%
-	@echo ${HR}
-polycalc-%: do-RatNum-% do-RatPoly-% do-RatPolyStack-% do-RatTermVec-%
 	@echo ${HR}
 javautil-%: do-Vector-% do-ArrayList13-% do-ArrayList17-%
 	@echo ${HR}
 6170-%: do-FixedSizeSet-% do-TinySet-% do-Huffman-%
 	@echo ${HR}
 large-%: # do-Flex-% do-JML-%
-	@echo ${HR}
-special-cases-%: do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% do-hanoi-% do-param-% do-suppress01-% do-suppress02-% do-StaticInteresting-% do-pine_mdiep-% do-purity-% do-Smithnosky-%
-	@echo ${HR}
-siemens-%: do-print_tokens-% do-print_tokens2-% do-replace-% do-schedule-% do-schedule2-% do-tcas-% do-tot_info-% do-space-%
 	@echo ${HR}
 new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-%
 	@echo ${HR}

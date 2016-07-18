@@ -1,52 +1,61 @@
+sudo: false
+
 language: java
 
-## Version for Ubuntu 14.04 Trusty.
-## Problem: The job times out on travis-ci.org, but the container-based version
-## does not.
-# script: make DAIKONDIR=`pwd` nightly-test
-# sudo: required
-# dist: trusty
+services:
+  - docker
+
+# jdkany contains extra packages that permit it to be used to build the manual
+env:
+  - OS=ubuntu JDKVER=jdk7 GROUP=quick-txt-diff
+  - OS=ubuntu JDKVER=jdk7 GROUP=nonquick-txt-diff
+  - OS=ubuntu JDKVER=jdk7 GROUP=non-txt-diff
+  - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff
+  - OS=ubuntu JDKVER=jdk8 GROUP=nonquick-txt-diff
+  - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff
+  - OS=ubuntu JDKVER=jdkany GROUP=misc
+  - OS=ubuntu JDKVER=jdkany GROUP=kvasir
+## It's not trivial to install jdk7 on current fedora.
+#  - OS=fedora JDKVER=jdk7 GROUP=quick-txt-diff
+#  - OS=fedora JDKVER=jdk7 GROUP=nonquick-txt-diff
+#  - OS=fedora JDKVER=jdk7 GROUP=non-txt-diff
+  - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
+  - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
+  - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
+  - OS=fedora JDKVER=jdkany GROUP=misc
+  - OS=fedora JDKVER=jdkany GROUP=kvasir
+  - OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
+
+# Currently-failing jobs
+# This section is temporary and should be commented out when no jobs are failing.
+matrix:
+  allow_failures:
+    - env: OS=ubuntu JDKVER=jdkany GROUP=kvasir
+    - env: OS=fedora JDKVER=jdkany GROUP=kvasir
+
 # before_install:
-#   - sudo apt-get update -qq
-#   - sudo apt-get install -qq graphviz texinfo texlive
+#   - npm install --save-dev travis-after-all
 
-## Version for container-based infrastructure.
-## Skip generating the manual because the version of makeinfo installed
-## on Ubuntu 12.04 Precise doesn't take the --pdf command-line option.
-script: make DAIKONDIR=`pwd` nightly-test-except-doc-pdf
-sudo: false
-addons:
-  apt:
-    packages:
-      - graphviz
-      - texi2html
-      - texinfo
-  ## Enable this when you wish to see JUnit reports.
-  ## Disable to minimize use of Amazon S3.
-  # artifacts:
-  #   paths:
-  #     # "find tests -print" produces too long a command line
-  #     - $(find tests -name '*txt*' -print | tr "\n" ":")
-  #     - $(find tests -name '*decls*' -print | tr "\n" ":")
-  #   s3_region: "us-west-2"
-  #   debug: true
-# On Travis-CI's Ubuntu 12.04 infrastructure, makeinfo does not take the
-# --split=chapter command-line argument but texi2html does.
-env: TEXI2HTML=texi2html
+before_script:
+- docker pull mdernst/$OS-for-daikon-$JDKVER > /dev/null
 
-jdk:
-  - oraclejdk8
-#  - oraclejdk7
-  - openjdk7
+script:
+- docker run mdernst/$OS-for-daikon-$JDKVER /bin/sh -c "export JAVA_HOME=\`which javac|xargs readlink -f|xargs dirname|xargs dirname\` && git clone --quiet --depth 10 https://github.com/codespecs/daikon.git daikon && cd daikon && java -version && javac -version && ./.travis-build.sh $GROUP"
 
-after_success:
+#      $(npm bin)/travis-after-all
+after_script:
   - |
-      if [[ ($TRAVIS_BRANCH == master) &&
-            ($TRAVIS_PULL_REQUEST == false) &&
-            ( (! $TRAVIS_JOB_NUMBER == *.*) || ($TRAVIS_JOB_NUMBER == *.1) ) ]] ; then
-        curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
-        sh trigger-travis.sh typetests daikon-typecheck $TRAVISTOKEN
+      declare exitCode;
+      curl -sSL https://raw.githubusercontent.com/mernst/travis-after-all/master/lib/travis-after-all.js | node
+      exitCode=$?
+
+      if [ "$exitCode" -eq 0 ]; then
+        if [[ ($TRAVIS_BRANCH == master) &&
+              ($TRAVIS_PULL_REQUEST == false) ]] ; then
+          curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
+          sh trigger-travis.sh typetests daikon-typecheck $TRAVISTOKEN
+        fi
       fi
 
 git:
-  depth: 3
+  depth: 10

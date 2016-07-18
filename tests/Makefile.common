@@ -186,29 +186,9 @@ SOURCES?=$(COMMON_HERE)/sources
 # PROJECT is the relative directory for the project resides
 # (e.g. esc-experiments/StackAr or daikon-tests/QueueAr)
 CWD:=$(shell pwd)
-PROJECT?=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[67]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
-
-# Function to compute goal filename extension.  If we are using Java8 then
-# if filename.test.goal.j8 exists, use it; otherwise, use filename.test.goal
-# otherwise (not Java8) use filename.test.goal. 
-# Reasons for different behavior between Java 7 and Java 8 include:
-#  * nondeterministic behavior, such as using a HashMap's iterator.
-#    In this case, don't create a .goal.j8 goal file; instead, change the
-#    subject program to use LinkedHashMap.
-#  * different line numbers for :::EXITnnn program points, when a return
-#    statement spans multiple lines.  In this case, don't create a .goal.j8
-#    goal file; instead, change the subject program to put the entire return
-#    statement on one line.
-#  * different numbers of calls to hashCode, due to differences in Java 7 and
-#    Java 8 HashMap implementations and possibly String.hashCode().
-#    This is currently the only reason to create a .goal.j8 file.
-# The argument ($(1)) is '<filename>.<test>'
-goal_name = $(if $(findstring 1.8, "$(shell java -version 2>&1)"), \
-			  $(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
-				$(1).goal.j8, \
-				$(1).goal), \
-			  $(1).goal \
-			)
+# Why is this command echoed in the Travis job output?
+PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[67]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
+PROJECT?=${PROJECT_VIA_COMMAND}
 
 # This is the name for the output files ($.inv.gz $.txt-daikon ...)
 # Default is the last name on the path to the project; most projects
@@ -291,6 +271,57 @@ export LC_ALL=C
 
 
 default: help
+
+# The general form of a Java version number is n.n.n_nn.
+# To simplify scanning, I only look at the major version
+# number and the update number.  Thus I assume the version
+# number is of the form: 1.<major>.0_<update>
+# Currently, the only versions that matter for Daikon testing
+# is if <major> is 8 or not (this will need to change when
+# Java 9 is released); and, if it is Java 8, if <update> > 91.
+# As of 1.8.0_92 there was a javac change that affects the line
+# numbers assigned to EXIT ppts in a few cases.
+
+JAVA_VERSION_STRING := $(shell $(RUN_JAVA) -version 2>&1 | head -1)
+JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.* 1\.\(.\).*/\1/')
+JAVA_UPDATE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.*_//')
+NEWER_JAVA8_RELEASE := $(shell echo $(JAVA_UPDATE_NUMBER)\>91 | bc)
+
+# Function to compute goal filename extension.  If we are using Java8 then
+# if filename.test.goal.j8 exists, use it; otherwise, use filename.test.goal
+# otherwise (not Java8) use filename.test.goal.
+# Reasons for different behavior between Java 7 and Java 8 include:
+#  * nondeterministic behavior, such as using a HashMap's iterator.
+#    In this case, don't create a .goal.j8 goal file; instead, change the
+#    subject program to use LinkedHashMap.
+#  * different line numbers for :::EXITnnn program points, when a return
+#    statement spans multiple lines.  In this case, don't create a .goal.j8
+#    goal file; instead, change the subject program to put the entire return
+#    statement on one line.
+#  * different numbers of calls to hashCode, due to differences in Java 7 and
+#    Java 8 HashMap implementations and possibly String.hashCode().
+#    This is currently the only reason to create a .goal.j8 file.
+# The argument ($(1)) is '<filename>.<test>'
+
+# Now we have an additional complication.  If we are using a newer Java8
+# (<update> > 91) then if filename.test.goal.j8n exists, use it; otherwise,
+# continue as described above, looking to see if filename.test.goal.j8 exists.
+
+goal_name = $(if $(findstring 8, $(JAVA_RELEASE_NUMBER)), \
+				$(if $(findstring 1, $(NEWER_JAVA8_RELEASE)), \
+					$(if $(shell if [ -f $(1).goal.j8n ] ; then echo true; fi), \
+						$(1).goal.j8n, \
+						$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
+							$(1).goal.j8, \
+							$(1).goal) \
+					), \
+					$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
+						$(1).goal.j8, \
+						$(1).goal) \
+				), \
+				$(1).goal \
+			)
+
 
 $(PRINT_INVARIANTS_CLASS):
 	make -C ${DAIKONDIR}/java
@@ -546,29 +577,25 @@ DCOMP_ARGS  = '--ppt-select-pattern=$(INST_FILES)' \
               --trace-sets-file=$(PROJECT_FILE).txt-trace \
 			  --abridged-vars=$(SHINY_PRINT)
 DCOMP_RT ?= $(wildcard ${DAIKONDIR}/java/dcomp_rt.jar)
-ifeq ($(DCOMP_RT),)
-  DCOMP_RT := $(wildcard $(pag)/software/pkg/DynComp/dcomp_rt.jar)
-endif
-ifndef DCOMP_RT
-# Some targets, such as clean, don't really need dcomp_rt.jar.
-# It would be nice for them not to issue this warning.
-  $(info dcomp_rt.jar is not in ${DAIKONDIR}/java; it must be on the classpath.)
-endif
 
-dyncomp: $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
-		 $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk
-dyncomp-diff: $(PROJECT_FILE).decls-DynComp.diff \
-			  $(PROJECT_FILE).txt-cset.diff \
-			  $(PROJECT_FILE).decls-DynComp-nojdk.diff \
-			  $(PROJECT_FILE).txt-cset-nojdk.diff \
-			  $(SCRATCH_FOR_DAIKON)/.copy-timestamp
+dyncomp: \
+		 $(PROJECT_FILE).decls-DynComp \
+		 $(PROJECT_FILE).txt-cset \
+		 $(PROJECT_FILE).decls-DynComp-nojdk \
+		 $(PROJECT_FILE).txt-cset-nojdk
+dyncomp-diff: \
+		 $(PROJECT_FILE).decls-DynComp.diff \
+		 $(PROJECT_FILE).txt-cset.diff \
+		 $(PROJECT_FILE).decls-DynComp-nojdk.diff \
+		 $(PROJECT_FILE).txt-cset-nojdk.diff \
+		 $(SCRATCH_FOR_DAIKON)/.copy-timestamp
 
 # If the command fails, then it would be convenient to see its output.  But
 # if it fails, then the whole command fails, and if it does not fail (that
 # is, has normal exit status), then we don't care about the standard output
 # and standard error.
 $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
-  $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk: $(DCOMP_PREMAIN) \
+  $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk: $(DCOMP_PREMAIN) $(DCOMP_RT) \
 				$(SCRATCH_FOR_DAIKON)/.copy-timestamp $(INST_LIST_FILE)
 	@echo
 	@echo "### Run DynComp (${PROJECT_FILE})"

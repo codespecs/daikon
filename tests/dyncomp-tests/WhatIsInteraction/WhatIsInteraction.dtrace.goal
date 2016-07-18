@@ -1,7 +1,15 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
+this_invocation_nonce
+0
 
 ..add():::ENTER
+this_invocation_nonce
+1
 a
 1
 1
@@ -10,6 +18,8 @@ b
 1
 
 ..add():::EXIT0
+this_invocation_nonce
+1
 a
 1
 1
@@ -18,6 +28,8 @@ b
 1
 
 ..sub():::ENTER
+this_invocation_nonce
+2
 a
 3
 1
@@ -26,6 +38,8 @@ b
 1
 
 ..sub():::EXIT0
+this_invocation_nonce
+2
 a
 3
 1
@@ -34,6 +48,8 @@ b
 1
 
 ..mult():::ENTER
+this_invocation_nonce
+3
 a
 5
 1
@@ -42,6 +58,8 @@ b
 1
 
 ..mult():::EXIT0
+this_invocation_nonce
+3
 a
 5
 1
@@ -50,6 +68,8 @@ b
 1
 
 ..div():::ENTER
+this_invocation_nonce
+4
 a
 7
 1
@@ -58,6 +78,8 @@ b
 1
 
 ..div():::EXIT0
+this_invocation_nonce
+4
 a
 7
 1
@@ -66,6 +88,8 @@ b
 1
 
 ..mod():::ENTER
+this_invocation_nonce
+5
 a
 9
 1
@@ -74,6 +98,8 @@ b
 1
 
 ..mod():::EXIT0
+this_invocation_nonce
+5
 a
 9
 1
@@ -82,6 +108,8 @@ b
 1
 
 ..bitAnd():::ENTER
+this_invocation_nonce
+6
 a
 11
 1
@@ -90,6 +118,8 @@ b
 1
 
 ..bitAnd():::EXIT0
+this_invocation_nonce
+6
 a
 11
 1
@@ -98,6 +128,8 @@ b
 1
 
 ..bitOr():::ENTER
+this_invocation_nonce
+7
 a
 13
 1
@@ -106,6 +138,8 @@ b
 1
 
 ..bitOr():::EXIT0
+this_invocation_nonce
+7
 a
 13
 1
@@ -114,6 +148,8 @@ b
 1
 
 ..bitXor():::ENTER
+this_invocation_nonce
+8
 a
 15
 1
@@ -122,6 +158,8 @@ b
 1
 
 ..bitXor():::EXIT0
+this_invocation_nonce
+8
 a
 15
 1
@@ -130,6 +168,8 @@ b
 1
 
 ..lShift():::ENTER
+this_invocation_nonce
+9
 a
 1
 1
@@ -141,6 +181,8 @@ c
 1
 
 ..lShift():::EXIT0
+this_invocation_nonce
+9
 a
 1
 1
@@ -152,6 +194,8 @@ c
 1
 
 ..rShift():::ENTER
+this_invocation_nonce
+10
 a
 20000
 1
@@ -163,6 +207,8 @@ c
 1
 
 ..rShift():::EXIT0
+this_invocation_nonce
+10
 a
 20000
 1
@@ -174,6 +220,8 @@ c
 1
 
 ..lessThan():::ENTER
+this_invocation_nonce
+11
 a
 10
 1
@@ -185,6 +233,8 @@ res
 1
 
 ..lessThan():::EXIT0
+this_invocation_nonce
+11
 a
 10
 1
@@ -196,6 +246,8 @@ res
 1
 
 ..greaterThan():::ENTER
+this_invocation_nonce
+12
 a
 1000
 1
@@ -207,6 +259,8 @@ res
 1
 
 ..greaterThan():::EXIT0
+this_invocation_nonce
+12
 a
 1000
 1
@@ -218,6 +272,8 @@ res
 1
 
 ..lessThanOrEqualTo():::ENTER
+this_invocation_nonce
+13
 a
 -10
 1
@@ -229,6 +285,8 @@ res
 1
 
 ..lessThanOrEqualTo():::EXIT0
+this_invocation_nonce
+13
 a
 -10
 1
@@ -240,6 +298,8 @@ res
 1
 
 ..greaterThanOrEqualTo():::ENTER
+this_invocation_nonce
+14
 a
 100
 1
@@ -251,6 +311,8 @@ res
 1
 
 ..greaterThanOrEqualTo():::EXIT0
+this_invocation_nonce
+14
 a
 100
 1
@@ -262,6 +324,8 @@ res
 1
 
 ..lessThanFloat():::ENTER
+this_invocation_nonce
+15
 a
 10.2309999
 1
@@ -273,6 +337,8 @@ res
 1
 
 ..lessThanFloat():::EXIT0
+this_invocation_nonce
+15
 a
 10.2309999
 1
@@ -284,6 +350,8 @@ res
 1
 
 ..logicalOr():::ENTER
+this_invocation_nonce
+16
 a
 0
 1
@@ -292,6 +360,8 @@ b
 1
 
 ..logicalOr():::EXIT0
+this_invocation_nonce
+16
 a
 0
 1
@@ -300,6 +370,8 @@ b
 1
 
 ..logicalAnd():::ENTER
+this_invocation_nonce
+17
 a
 120
 1
@@ -308,6 +380,8 @@ b
 1
 
 ..logicalAnd():::EXIT0
+this_invocation_nonce
+17
 a
 120
 1
@@ -316,6 +390,8 @@ b
 1
 
 ..logicalTernaryT():::ENTER
+this_invocation_nonce
+18
 blah
 3
 1
@@ -330,6 +406,8 @@ c
 1
 
 ..logicalTernaryT():::EXIT0
+this_invocation_nonce
+18
 blah
 3
 1
@@ -344,6 +422,8 @@ c
 1
 
 ..logicalTernaryF():::ENTER
+this_invocation_nonce
+19
 blah
 15
 1
@@ -358,6 +438,8 @@ c
 1
 
 ..logicalTernaryF():::EXIT0
+this_invocation_nonce
+19
 blah
 15
 1
@@ -372,6 +454,8 @@ c
 1
 
 ..add16():::ENTER
+this_invocation_nonce
+20
 a
 -1
 1
@@ -380,6 +464,8 @@ b
 1
 
 ..add16():::EXIT0
+this_invocation_nonce
+20
 a
 -1
 1
@@ -388,6 +474,8 @@ b
 1
 
 ..sub16():::ENTER
+this_invocation_nonce
+21
 a
 -2
 1
@@ -396,6 +484,8 @@ b
 1
 
 ..sub16():::EXIT0
+this_invocation_nonce
+21
 a
 -2
 1
@@ -404,6 +494,8 @@ b
 1
 
 ..mult16():::ENTER
+this_invocation_nonce
+22
 a
 -3
 1
@@ -412,6 +504,8 @@ b
 1
 
 ..mult16():::EXIT0
+this_invocation_nonce
+22
 a
 -3
 1
@@ -420,6 +514,8 @@ b
 1
 
 ..div16():::ENTER
+this_invocation_nonce
+23
 a
 -4
 1
@@ -428,6 +524,8 @@ b
 1
 
 ..div16():::EXIT0
+this_invocation_nonce
+23
 a
 -4
 1
@@ -436,6 +534,8 @@ b
 1
 
 ..mod16():::ENTER
+this_invocation_nonce
+24
 a
 -5
 1
@@ -444,6 +544,8 @@ b
 1
 
 ..mod16():::EXIT0
+this_invocation_nonce
+24
 a
 -5
 1
@@ -452,6 +554,8 @@ b
 1
 
 ..main():::EXIT0
+this_invocation_nonce
+0
 return
 0
 1

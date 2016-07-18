@@ -1,7 +1,15 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
+this_invocation_nonce
+0
 
 ..intComp():::ENTER
+this_invocation_nonce
+1
 a
 10
 1
@@ -13,6 +21,8 @@ c
 1
 
 ..intComp():::EXIT0
+this_invocation_nonce
+1
 a
 10
 1
@@ -24,6 +34,8 @@ c
 1
 
 ..floatIntComp():::ENTER
+this_invocation_nonce
+2
 a
 10
 1
@@ -32,6 +44,8 @@ b
 1
 
 ..floatIntComp():::EXIT0
+this_invocation_nonce
+2
 a
 10
 1
@@ -40,6 +54,8 @@ b
 1
 
 ..intNonComp():::ENTER
+this_invocation_nonce
+3
 a
 1
 1
@@ -51,6 +67,8 @@ c
 1
 
 ..intNonComp():::EXIT0
+this_invocation_nonce
+3
 a
 1
 1
@@ -62,6 +80,8 @@ c
 1
 
 ..intNonComp():::ENTER
+this_invocation_nonce
+4
 a
 4
 1
@@ -73,6 +93,8 @@ c
 1
 
 ..intNonComp():::EXIT0
+this_invocation_nonce
+4
 a
 4
 1
@@ -84,6 +106,8 @@ c
 1
 
 ..intNonComp():::ENTER
+this_invocation_nonce
+5
 a
 7
 1
@@ -95,6 +119,8 @@ c
 1
 
 ..intNonComp():::EXIT0
+this_invocation_nonce
+5
 a
 7
 1
@@ -106,6 +132,8 @@ c
 1
 
 ..intNonComp():::ENTER
+this_invocation_nonce
+6
 a
 10
 1
@@ -117,6 +145,8 @@ c
 1
 
 ..intNonComp():::EXIT0
+this_invocation_nonce
+6
 a
 10
 1
@@ -128,6 +158,8 @@ c
 1
 
 ..floatCompInternal():::ENTER
+this_invocation_nonce
+7
 x
 0.233999997
 1
@@ -139,6 +171,8 @@ z
 1
 
 ..floatCompInternal():::EXIT0
+this_invocation_nonce
+7
 x
 0.233999997
 1
@@ -149,10 +183,12 @@ z
 0.101000004
 1
 return
-2.6660000085830688
+2.66599989
 1
 
 ..intCompInternal():::ENTER
+this_invocation_nonce
+8
 x
 1
 1
@@ -164,6 +200,8 @@ z
 1
 
 ..intCompInternal():::EXIT0
+this_invocation_nonce
+8
 x
 1
 1
@@ -178,6 +216,8 @@ return
 1
 
 ..intNonComp():::ENTER
+this_invocation_nonce
+9
 a
 100
 1
@@ -189,6 +229,8 @@ c
 1
 
 ..intNonComp():::EXIT0
+this_invocation_nonce
+9
 a
 100
 1
@@ -200,6 +242,8 @@ c
 1
 
 ..floatNonComp():::ENTER
+this_invocation_nonce
+10
 a
 1.23399997
 1
@@ -211,6 +255,8 @@ c
 1
 
 ..floatNonComp():::EXIT0
+this_invocation_nonce
+10
 a
 1.23399997
 1
@@ -222,6 +268,8 @@ c
 1
 
 ..floatNonComp():::ENTER
+this_invocation_nonce
+11
 a
 1
 1
@@ -233,6 +281,8 @@ c
 1
 
 ..floatNonComp():::EXIT0
+this_invocation_nonce
+11
 a
 1
 1
@@ -244,6 +294,8 @@ c
 1
 
 ..floatNonComp():::ENTER
+this_invocation_nonce
+12
 a
 4
 1
@@ -255,6 +307,8 @@ c
 1
 
 ..floatNonComp():::EXIT0
+this_invocation_nonce
+12
 a
 4
 1
@@ -266,6 +320,8 @@ c
 1
 
 ..floatNonComp():::ENTER
+this_invocation_nonce
+13
 a
 7
 1
@@ -277,6 +333,8 @@ c
 1
 
 ..floatNonComp():::EXIT0
+this_invocation_nonce
+13
 a
 7
 1
@@ -288,6 +346,8 @@ c
 1
 
 ..intCompAfter():::ENTER
+this_invocation_nonce
+14
 a
 1
 1
@@ -299,6 +359,8 @@ c
 1
 
 ..intCompAfter():::EXIT0
+this_invocation_nonce
+14
 a
 1
 1
@@ -310,6 +372,8 @@ c
 1
 
 ..floatCompAfter():::ENTER
+this_invocation_nonce
+15
 a
 0.100000001
 1
@@ -321,6 +385,8 @@ c
 1
 
 ..floatCompAfter():::EXIT0
+this_invocation_nonce
+15
 a
 0.100000001
 1
@@ -332,6 +398,8 @@ c
 1
 
 ..main():::EXIT0
+this_invocation_nonce
+0
 return
 0
 1

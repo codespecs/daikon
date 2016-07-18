@@ -1,7 +1,15 @@
+input-language C/C++
+decl-version 2.0
+var-comparability implicit
+
 
 ..main():::ENTER
+this_invocation_nonce
+0
 
 ..returnIntSum():::ENTER
+this_invocation_nonce
+1
 a
 10
 1
@@ -10,6 +18,8 @@ b
 1
 
 ..returnIntSum():::EXIT0
+this_invocation_nonce
+1
 a
 10
 1
@@ -21,6 +31,8 @@ return
 1
 
 ..main():::EXIT0
+this_invocation_nonce
+0
 return
 0
 1
