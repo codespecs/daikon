@@ -33,14 +33,20 @@ public class PptName implements Serializable {
 
   // These are never changed but cannot be declared "final", because they
   // must be re-interned upon deserialization.
-  private /*@Interned*/ String fullname; // interned full program point name
+  /** Full program point name */
+  private /*@Interned*/ String fullname;
+
   // fn_name and point together comprise fullname
-  private /*@Interned*/ String fn_name; // interned; the part of fullname before ":::"
-  private /*@Interned*/ String point; // interned post-separator (separator is ":::")
+  /** The part of fullname before ":::" */
+  private /*@Interned*/ String fn_name;
+  /** Post-separator (separator is ":::") */
+  private /*@Interned*/ String point;
+
   // cls and method together comprise fn_name
-  private /*@Nullable*/ /*@Interned*/ String cls; // interned fully-qualified class name
-  final private /*@Nullable*/ /*@Interned*/ String
-      method; // interned method signature, including types
+  /** Fully-qualified class name */
+  private /*@Nullable*/ /*@Interned*/ String cls;
+  /** Method signature, including types */
+  final private /*@Nullable*/ /*@Interned*/ String method;
 
   // Representation invariant:
   //
