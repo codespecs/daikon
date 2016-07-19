@@ -424,11 +424,7 @@ public abstract class DaikonVariableInfo
    */
   /*@RequiresNonNull("#1.clazz")*/
   protected void addClassVars(
-      final ClassInfo cinfo,
-      boolean dontPrintInstanceVars,
-      Class<?> type,
-      String offset,
-      int depth) {
+      ClassInfo cinfo, boolean dontPrintInstanceVars, Class<?> type, String offset, int depth) {
 
     //DaikonVariableInfo corresponding to the "this" object
     DaikonVariableInfo thisInfo;

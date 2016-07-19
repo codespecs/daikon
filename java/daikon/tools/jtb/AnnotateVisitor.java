@@ -652,10 +652,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // The "invs" argument may be null, in which case no work is done.
   /*@EnsuresNonNullIf(result=true, expression="#3")*/
   public boolean insertInvariants(
-      Node n,
-      String prefix,
-      final /*@Nullable*/ InvariantsAndModifiedVars invs,
-      boolean useJavaComment) {
+      Node n, String prefix, /*@Nullable*/ InvariantsAndModifiedVars invs, boolean useJavaComment) {
     if (invs == null) {
       return false;
     }
