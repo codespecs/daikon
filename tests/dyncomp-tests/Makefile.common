@@ -28,8 +28,15 @@ LIBS ?=
 LIBFLAGS ?=
 BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
-DAIKON := java -Xmx768m -XX:MaxPermSize=768M daikon.Daikon --no_text_output --no_show_progress --config_option daikon.DynamicConstants.OneOf_only=true
-PRINT_INV := java -Xmx768m -XX:MaxPermSize=768M daikon.PrintInvariants
+
+JAVA  := $(JAVA_HOME)/bin/java
+CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
+CPDAIKON  := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/java-getopt.jar:${DAIKONDIR}/java/lib/junit-4.12.jar:${DAIKONDIR}/java/lib/plume.jar
+CLASSPATH := .:$(CP):$(CPDAIKON)
+
+RUN_JAVA  := $(JAVA) -ea -Xmx1500m -cp "$(CLASSPATH)"
+DAIKON    := $(RUN_JAVA) daikon.Daikon --no_text_output --no_show_progress --config_option daikon.DynamicConstants.OneOf_only=true
+PRINT_INV := $(RUN_JAVA) daikon.PrintInvariants
 default: summary
 
 ifdef COMPRESS_DTRACE
