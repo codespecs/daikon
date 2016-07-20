@@ -19,7 +19,7 @@ KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
 KVASIR_OPTIONS := $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls
 KVASIR_DYNCOMP_OPTIONS := $(KVASIR_OPTIONS) --with-dyncomp
 CLEAN_OUTPUT := ../clean-output.pl
-DECLS_2_COMP ?= decls2comp.py
+DECLS_2_COMP ?= ${DAIKONDIR}/scripts/decls2comp.py
 RUN_MANY := ../run-many.pl
 DTRACE_DIFF ?= dtrace-diff.pl
 INCLUDES ?=
