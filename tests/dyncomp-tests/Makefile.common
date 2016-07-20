@@ -21,7 +21,8 @@ KVASIR_DYNCOMP_OPTIONS := $(KVASIR_OPTIONS) --with-dyncomp
 CLEAN_OUTPUT := ../clean-output.pl
 DECLS_2_COMP ?= ${DAIKONDIR}/scripts/decls2comp.py
 RUN_MANY := ../run-many.pl
-DTRACE_DIFF ?= dtrace-diff.pl
+DTRACE_COUNT ?= ${DAIKONDIR}/scripts/dtrace-count.pl
+DTRACE_DIFF ?= ${DAIKONDIR}/scripts/dtrace-diff.pl
 INCLUDES ?=
 LIBS ?=
 LIBFLAGS ?=
@@ -100,7 +101,7 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN)
 endif
 
 $(NAME).counts: daikon-output/$(NAME)$(DTRACE_EXT)
-	$(ZCAT) $< | dtrace-count.pl >$@
+	$(ZCAT) $< | $(DTRACE_COUNT) >$@
 
 counts: $(NAME).counts
 
