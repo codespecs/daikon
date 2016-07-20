@@ -32,5 +32,6 @@ RUN dnf -qy upgrade && dnf -qy install \
   python \
   texi2html \
   texinfo \
+  texinfo-tex \
   texlive \
 && dnf -q clean all
