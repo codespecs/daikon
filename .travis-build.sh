@@ -65,5 +65,6 @@ if [[ "$1" != "quick-txt-diff" && "$1" != "nonquick-txt-diff" && "$1" != "non-tx
 # The Valgrind configure script fails if SHELLOPTS is defined.
 export -n SHELLOPTS
   make kvasir
-  make -C tests/kvasir-tests regression-tests
+# make -C tests/kvasir-tests regression-tests
+  make -C tests/dyncomp-tests nightly-summary-w-daikon
 fi

@@ -37,7 +37,7 @@ endif
 all diffs: txt-diff non-txt-diff results
 
 # These do not use DynComp
-non-txt-diff: diff-tests chicory-tests merge-invariants-tests parser-tests dyncomp-tests
+non-txt-diff: diff-tests chicory-tests merge-invariants-tests parser-tests 
 
 
 quick: quick-txt-diff diff-tests results
