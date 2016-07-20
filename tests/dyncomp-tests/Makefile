@@ -35,6 +35,8 @@ summary-only-w-daikon: default-projects__summary-w-daikon__quietly
 # second if Daikon didn't build).
 nightly: nightly-summary nightly-summary-w-daikon
 
+all-tests: nightly-tests__diffs-w-daikon
+
 nightly-summary: nightly-tests__diffs
 	$(MAKE) nightly-summary-only
 

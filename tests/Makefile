@@ -37,7 +37,7 @@ endif
 all diffs: txt-diff non-txt-diff results
 
 # These do not use DynComp
-non-txt-diff: diff-tests chicory-tests merge-invariants-tests parser-tests 
+non-txt-diff: diff-tests chicory-tests merge-invariants-tests parser-tests dyncomp-tests
 
 
 quick: quick-txt-diff diff-tests results
@@ -70,12 +70,17 @@ parser-tests:
 	$(MAKE) -C parser-tests
 .PHONY: parser-tests
 
+dyncomp-tests:
+	$(MAKE) -C dyncomp-tests all-tests
+.PHONY: dyncomp-tests
+
 clean:
 	$(MAKE) -C chicory-tests clean
 	$(MAKE) -C daikon-tests clean
 	$(MAKE) -C diff-tests clean
 	$(MAKE) -C merge-invariants-tests clean
 	$(MAKE) -C parser-tests clean
+	$(MAKE) -C dyncomp-tests clean
 
 very-clean: clean
 	$(MAKE) -C kvasir-tests clean-all
@@ -94,6 +99,10 @@ RESULTS_PATTERN :=    -name '*.txt-*.diff' \
                    -o -name '*.decls-DynComp-nojdk.diff' \
                    -o -name '*.txt-cset-nojdk.diff' \
                    -o -name '*.java-parsed.diff' \
+                   -o -name '*.comp.diff' \
+                   -o -name '*.counts.diff' \
+                   -o -name '*.dtrace.diff' \
+                   -o -name '*.invs.diff' \
                    -o -name '*xcheck.diff' \
                    -o -name '*daikon.diff'
 results_header:
