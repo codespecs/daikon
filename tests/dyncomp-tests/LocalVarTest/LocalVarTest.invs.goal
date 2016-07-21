@@ -1,9 +1,6 @@
 ===========================================================================
 ..foo():::ENTER
 ::globalE[] == e[]
-size(a[]) == size(b[])
-size(a[]) == size(c[])
-size(a[]) == size(d[])
 ::globalD == 40
 ::globalE has only one value
 ::globalE[] == [1, 2, 3, 4]
@@ -16,8 +13,6 @@ c[] == [30]
 d has only one value
 d[] == [40]
 e has only one value
-size(::globalE[]) == 4
-size(a[]) == 1
 ===========================================================================
 ..foo():::EXIT
 ::globalD == orig(::globalD)
@@ -36,34 +31,21 @@ a[] == [10]
 b[] == [20]
 c[] == [30]
 d[] == [40]
-size(::globalE[]) == 4
 ===========================================================================
 ..main():::ENTER
-size(argv[]) == ::globalE[argc-1]
 ::globalD == 40
 ::globalE has only one value
 ::globalE[] == [1, 2, 3, 4]
 argc == 1
 argv has only one value
 argv[] == [./LocalVarTest]
-size(::globalE[]) == 4
-size(argv[]) == 1
-::globalE[argc] == 2
 ===========================================================================
 ..main():::EXIT
 ::globalD == orig(::globalD)
 ::globalE == orig(::globalE)
 ::globalE[] == orig(::globalE[])
-orig(size(argv[])) == ::globalE[return]
-orig(size(argv[])) == ::globalE[orig(argc)-1]
-orig(size(argv[])) == orig(::globalE[post(argc)-1])
-orig(size(argv[])) == orig(::globalE[post(return)])
-::globalE[orig(argc)] == orig(::globalE[post(argc)])
-::globalE[orig(argc)] == orig(::globalE[argc])
 ::globalD == 40
 ::globalE has only one value
 ::globalE[] == [1, 2, 3, 4]
 argv[] == [./LocalVarTest]
 return == 0
-size(::globalE[]) == 4
-::globalE[orig(argc)] == 2

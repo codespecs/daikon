@@ -1,0 +1,604 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..assignPtrAwayBeforeFieldsInteract():::ENTER
+  ppt-type enter
+  variable aPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable aPtr[..]
+    var-kind array
+    enclosing-var aPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable aPtr[..].a
+    var-kind field a
+    enclosing-var aPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable aPtr[..].b
+    var-kind field b
+    enclosing-var aPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable aPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var aPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable aPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var aPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable bPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable bPtr[..]
+    var-kind array
+    enclosing-var bPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable bPtr[..].a
+    var-kind field a
+    enclosing-var bPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable bPtr[..].b
+    var-kind field b
+    enclosing-var bPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable bPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var bPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable bPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var bPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+
+ppt ..assignPtrAwayBeforeFieldsInteract():::EXIT0
+  ppt-type subexit
+  variable aPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable aPtr[..]
+    var-kind array
+    enclosing-var aPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable aPtr[..].a
+    var-kind field a
+    enclosing-var aPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable aPtr[..].b
+    var-kind field b
+    enclosing-var aPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable aPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var aPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable aPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var aPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable bPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable bPtr[..]
+    var-kind array
+    enclosing-var bPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable bPtr[..].a
+    var-kind field a
+    enclosing-var bPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable bPtr[..].b
+    var-kind field b
+    enclosing-var bPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable bPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var bPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable bPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var bPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+
+ppt ..assignPtrThenFieldsInteract():::ENTER
+  ppt-type enter
+  variable aPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable aPtr[..]
+    var-kind array
+    enclosing-var aPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable aPtr[..].a
+    var-kind field a
+    enclosing-var aPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable aPtr[..].b
+    var-kind field b
+    enclosing-var aPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable aPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var aPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable aPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var aPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable bPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable bPtr[..]
+    var-kind array
+    enclosing-var bPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable bPtr[..].a
+    var-kind field a
+    enclosing-var bPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable bPtr[..].b
+    var-kind field b
+    enclosing-var bPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable bPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var bPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable bPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var bPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type unsigned\_char
+    flags is_param 
+
+ppt ..assignPtrThenFieldsInteract():::EXIT0
+  ppt-type subexit
+  variable aPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable aPtr[..]
+    var-kind array
+    enclosing-var aPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable aPtr[..].a
+    var-kind field a
+    enclosing-var aPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable aPtr[..].b
+    var-kind field b
+    enclosing-var aPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable aPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var aPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable aPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var aPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable bPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable bPtr[..]
+    var-kind array
+    enclosing-var bPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable bPtr[..].a
+    var-kind field a
+    enclosing-var bPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable bPtr[..].b
+    var-kind field b
+    enclosing-var bPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable bPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var bPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable bPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var bPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type unsigned\_char
+    flags is_param 
+
+ppt ..main():::ENTER
+  ppt-type enter
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..structByPtr():::ENTER
+  ppt-type enter
+  variable dPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type double*
+    flags is_param 
+  variable dPtr[..]
+    var-kind array
+    enclosing-var dPtr
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable xPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable xPtr[..]
+    var-kind array
+    enclosing-var xPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable xPtr[..].a
+    var-kind field a
+    enclosing-var xPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable xPtr[..].b
+    var-kind field b
+    enclosing-var xPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable xPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var xPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable xPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var xPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable yPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable yPtr[..]
+    var-kind array
+    enclosing-var yPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable yPtr[..].a
+    var-kind field a
+    enclosing-var yPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable yPtr[..].b
+    var-kind field b
+    enclosing-var yPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable yPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var yPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable yPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var yPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+
+ppt ..structByPtr():::EXIT0
+  ppt-type subexit
+  variable dPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type double*
+    flags is_param 
+  variable dPtr[..]
+    var-kind array
+    enclosing-var dPtr
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable xPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable xPtr[..]
+    var-kind array
+    enclosing-var xPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable xPtr[..].a
+    var-kind field a
+    enclosing-var xPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable xPtr[..].b
+    var-kind field b
+    enclosing-var xPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable xPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var xPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable xPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var xPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable yPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type record*
+    flags is_param 
+  variable yPtr[..]
+    var-kind array
+    enclosing-var yPtr
+    array 1
+    rep-type hashcode[]
+    dec-type record[]
+  variable yPtr[..].a
+    var-kind field a
+    enclosing-var yPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable yPtr[..].b
+    var-kind field b
+    enclosing-var yPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable yPtr[..].cPtr
+    var-kind field cPtr
+    enclosing-var yPtr[..]
+    array 1
+    rep-type hashcode[]
+    dec-type unsigned\_short*[]
+  variable yPtr[..].cPtr[0]
+    var-kind field [0]
+    enclosing-var yPtr[..].cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+
+ppt ..structByValue():::ENTER
+  ppt-type enter
+  variable d
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+  variable x
+    var-kind variable
+    rep-type hashcode
+    dec-type record
+    flags is_param 
+  variable x.a
+    var-kind field a
+    enclosing-var x
+    rep-type int
+    dec-type unsigned\_short
+  variable x.b
+    var-kind field b
+    enclosing-var x
+    rep-type double
+    dec-type double
+  variable x.cPtr
+    var-kind field cPtr
+    enclosing-var x
+    rep-type hashcode
+    dec-type unsigned\_short*
+  variable x.cPtr[..]
+    var-kind array
+    enclosing-var x.cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable y
+    var-kind variable
+    rep-type hashcode
+    dec-type record
+    flags is_param 
+  variable y.a
+    var-kind field a
+    enclosing-var y
+    rep-type int
+    dec-type unsigned\_short
+  variable y.b
+    var-kind field b
+    enclosing-var y
+    rep-type double
+    dec-type double
+  variable y.cPtr
+    var-kind field cPtr
+    enclosing-var y
+    rep-type hashcode
+    dec-type unsigned\_short*
+  variable y.cPtr[..]
+    var-kind array
+    enclosing-var y.cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+
+ppt ..structByValue():::EXIT0
+  ppt-type subexit
+  variable d
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+  variable x
+    var-kind variable
+    rep-type hashcode
+    dec-type record
+    flags is_param 
+  variable x.a
+    var-kind field a
+    enclosing-var x
+    rep-type int
+    dec-type unsigned\_short
+  variable x.b
+    var-kind field b
+    enclosing-var x
+    rep-type double
+    dec-type double
+  variable x.cPtr
+    var-kind field cPtr
+    enclosing-var x
+    rep-type hashcode
+    dec-type unsigned\_short*
+  variable x.cPtr[..]
+    var-kind array
+    enclosing-var x.cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+  variable y
+    var-kind variable
+    rep-type hashcode
+    dec-type record
+    flags is_param 
+  variable y.a
+    var-kind field a
+    enclosing-var y
+    rep-type int
+    dec-type unsigned\_short
+  variable y.b
+    var-kind field b
+    enclosing-var y
+    rep-type double
+    dec-type double
+  variable y.cPtr
+    var-kind field cPtr
+    enclosing-var y
+    rep-type hashcode
+    dec-type unsigned\_short*
+  variable y.cPtr[..]
+    var-kind array
+    enclosing-var y.cPtr
+    array 1
+    rep-type int[]
+    dec-type unsigned\_short[]
+

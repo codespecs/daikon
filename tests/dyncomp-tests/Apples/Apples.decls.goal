@@ -1,0 +1,116 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..add():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..add():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..bar():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..bar():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..foo():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..foo():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..main():::ENTER
+  ppt-type enter
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

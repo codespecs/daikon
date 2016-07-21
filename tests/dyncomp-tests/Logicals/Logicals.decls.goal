@@ -1,0 +1,222 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..logicalAnd16():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type short
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type short
+    flags is_param 
+
+ppt ..logicalAnd16():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type short
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type short
+    flags is_param 
+
+ppt ..logicalAnd32():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..logicalAnd32():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..logicalAnd64():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type long
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type long
+    flags is_param 
+
+ppt ..logicalAnd64():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type long
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type long
+    flags is_param 
+
+ppt ..logicalAnd8():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+
+ppt ..logicalAnd8():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+
+ppt ..logicalOr16():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type short
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type short
+    flags is_param 
+
+ppt ..logicalOr16():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type short
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type short
+    flags is_param 
+
+ppt ..logicalOr32():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..logicalOr32():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..logicalOr64():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type long
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type long
+    flags is_param 
+
+ppt ..logicalOr64():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type long
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type long
+    flags is_param 
+
+ppt ..logicalOr8():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+
+ppt ..logicalOr8():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type char
+    flags is_param 
+
+ppt ..main():::ENTER
+  ppt-type enter
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

@@ -16,9 +16,15 @@
 #    category to contain it.
 #
 
-# Forked from $INV/tests/kvasir-tests/Makefile (PG)
+# Forked from $DAIKONDIR/tests/kvasir-tests/Makefile
 
 default: summary
+
+.PHONY: regression-tests
+regression-tests:
+	$(MAKE) nightly-tests__diffs-w-daikon
+	$(MAKE) nightly-summary-only-w-daikon
+	@$(MAKE) --no-print-directory results
 
 summary: default-projects__diffs
 	$(MAKE) summary-only
@@ -34,8 +40,6 @@ summary-only-w-daikon: default-projects__summary-w-daikon__quietly
 # it actually makes the two targets separately (so that it can skip the
 # second if Daikon didn't build).
 nightly: nightly-summary nightly-summary-w-daikon
-
-all-tests: nightly-tests__diffs-w-daikon
 
 nightly-summary: nightly-tests__diffs
 	$(MAKE) nightly-summary-only
@@ -53,6 +57,14 @@ clean diffs invs update-goals:
 nightly-tests__%: default-projects__%
 	@
 
+update-all:
+	$(MAKE) nightly-tests__update-goals
+
+.PHONY: clean-all
+clean-all:
+	$(MAKE) --jobs=4 $(MPARG) nightly-tests__clean
+
+
 default-projects__%: pgbovine-tests__%
 	@
 
@@ -66,7 +78,26 @@ pgbovine-tests__%: do-Apples__% do-DerivedComparability__% do-FloatTest__% \
 # 'make do-SomeDiectory_target'
 # e.g. 'make do-bzip2__clean'
 do-%__quietly:
-	@$(MAKE) --no-print-directory -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
+	@$(MAKE) --jobs=1 --no-print-directory -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
 
 do-%:
-	@$(MAKE) -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
+	@$(MAKE) --jobs=1 -C `echo $* | perl -pe 's/(.+?)__/$$1 /;'`
+
+# removes fields before the size (ie, permissions, owner, group).
+PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; if ($$1 > 0) { $$failure++; print "$$1\t$$2\t$$3\n";} END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
+# args to 'find' program, to find files containg results
+RESULTS_PATTERN :=    -name '*.diff'
+
+results_header:
+	@echo ""
+	@echo "=== RESULTS ==="
+
+results_cat:
+	@find . $(RESULTS_PATTERN) | xargs cat
+
+results: results_header results_cat summary_list
+
+summary_list:
+	@ls -l `find . $(RESULTS_PATTERN)` \
+	  | perl -pe 's|\Q${BASE}|.|;' \
+	  | ${PERL_CLEANUP_LS_OUTPUT}

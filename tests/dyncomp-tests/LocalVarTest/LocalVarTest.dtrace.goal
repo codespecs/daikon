@@ -1,7 +1,6 @@
 input-language C/C++
 decl-version 2.0
-var-comparability implicit
-
+var-comparability none
 
 ..main():::ENTER
 this_invocation_nonce
@@ -10,7 +9,7 @@ this_invocation_nonce
 40
 1
 ::globalE
-0x601050
+<STATIC_ADDR>
 1
 ::globalE[..]
 [ 1 2 3 4 ]
@@ -19,7 +18,7 @@ argc
 1
 1
 argv
-0xffefffe78
+<STACK_ADDR>
 1
 argv[..]
 [ "./LocalVarTest" ]
@@ -32,37 +31,37 @@ this_invocation_nonce
 40
 1
 ::globalE
-0x601050
+<STATIC_ADDR>
 1
 ::globalE[..]
 [ 1 2 3 4 ]
 1
 a
-0xffefffc6c
+<STACK_ADDR>
 1
 a[..]
 [ 10 ]
 1
 b
-0xffefffc68
+<STACK_ADDR>
 1
 b[..]
 [ 20 ]
 1
 c
-0xffefffc64
+<STACK_ADDR>
 1
 c[..]
 [ 30 ]
 1
 d
-0x601040
+<STATIC_ADDR>
 1
 d[..]
 [ 40 ]
 1
 e
-0x601050
+<STATIC_ADDR>
 1
 e[..]
 [ 1 2 3 4 ]
@@ -75,37 +74,37 @@ this_invocation_nonce
 40
 1
 ::globalE
-0x601050
+<STATIC_ADDR>
 1
 ::globalE[..]
 [ 1 2 3 4 ]
 1
 a
-0xffefffc6c
+<STACK_ADDR>
 1
 a[..]
 [ 10 ]
 1
 b
-0xffefffc68
+<STACK_ADDR>
 1
 b[..]
 [ 20 ]
 1
 c
-0xffefffc64
+<STACK_ADDR>
 1
 c[..]
 [ 30 ]
 1
 d
-0x601040
+<STATIC_ADDR>
 1
 d[..]
 [ 40 ]
 1
 e
-0x601050
+<STATIC_ADDR>
 1
 e[..]
 [ 1 2 3 4 ]
@@ -118,7 +117,7 @@ this_invocation_nonce
 40
 1
 ::globalE
-0x601050
+<STATIC_ADDR>
 1
 ::globalE[..]
 [ 1 2 3 4 ]
@@ -127,7 +126,7 @@ argc
 1
 1
 argv
-0xffefffe78
+<STACK_ADDR>
 1
 argv[..]
 [ "./LocalVarTest" ]
@@ -135,3 +134,4 @@ argv[..]
 return
 0
 1
+

@@ -1,7 +1,6 @@
 input-language C/C++
 decl-version 2.0
-var-comparability implicit
-
+var-comparability none
 
 ..main():::ENTER
 this_invocation_nonce
@@ -173,6 +172,9 @@ z
 ..floatCompInternal():::EXIT0
 this_invocation_nonce
 7
+return
+2.66599989
+1
 x
 0.233999997
 1
@@ -181,9 +183,6 @@ y
 1
 z
 0.101000004
-1
-return
-2.66599989
 1
 
 ..intCompInternal():::ENTER
@@ -202,6 +201,9 @@ z
 ..intCompInternal():::EXIT0
 this_invocation_nonce
 8
+return
+5
+1
 x
 1
 1
@@ -210,9 +212,6 @@ y
 1
 z
 3
-1
-return
-5
 1
 
 ..intNonComp():::ENTER
@@ -403,3 +402,4 @@ this_invocation_nonce
 return
 0
 1
+

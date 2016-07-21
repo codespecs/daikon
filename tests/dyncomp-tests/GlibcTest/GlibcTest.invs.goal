@@ -1,204 +1,154 @@
 ===========================================================================
 ..main():::ENTER
-::g_x == "my name is"
-::g_y == "pgbovine"
 ::g_p == 1
 ::g_q == 2
+::g_x == "my name is"
+::g_y == "pgbovine"
 ===========================================================================
 ..main():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
-::g_x == "MY"
-::g_y == "NAME"
 ::g_p == 1
 ::g_q == 2
+::g_x == "MY"
+::g_y == "NAME"
 return == 0
 ===========================================================================
 ..simple_strcpy():::ENTER
-::g_x one of { "MY", "my name is" }
-::g_y one of { "NAME", "pgbovine" }
 ::g_p == 1
 ::g_q == 2
+::g_x one of { "MY", "my name is" }
+::g_y one of { "NAME", "pgbovine" }
 dst one of { "", "my name is", "pgbovine" }
 ===========================================================================
 ..simple_strcpy():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
-::g_x == "MY"
-::g_y one of { "NAME", "pgbovine" }
 ::g_p == 1
 ::g_q == 2
+::g_x == "MY"
+::g_y one of { "NAME", "pgbovine" }
 return == orig(src)
 ===========================================================================
 ..testCalloc():::ENTER
-size(a[]) == size(b[])-1
-a[::g_p] == a[::g_p-1]
-a[::g_p] == b[::g_p]
-a[::g_p] == b[::g_p-1]
-a[::g_p] == a[::g_q-1]
-a[::g_p] == b[::g_q]
-a[::g_p] == b[::g_q-1]
-::g_x == "my name is"
-::g_y == "pgbovine"
 ::g_p == 1
 ::g_q == 2
+::g_x == "my name is"
+::g_y == "pgbovine"
 a has only one value
 a[] == [0, 0]
 b has only one value
 b[] == [0, 0, 0]
-size(b[]) == 3
-a[::g_p] == 0
 ===========================================================================
 ..testCalloc():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
 a[] == orig(a[])
 b[] == orig(b[])
-size(b[])-1 == orig(size(a[]))
-a[::g_p] == a[::g_p-1]
-a[::g_p] == b[::g_p]
-a[::g_p] == b[::g_p-1]
-a[::g_p] == orig(a[post(::g_p)])
-a[::g_p] == orig(a[post(::g_p)-1])
-a[::g_p] == orig(b[post(::g_p)])
-a[::g_p] == orig(b[post(::g_p)-1])
-a[::g_p] == a[::g_q-1]
-a[::g_p] == b[::g_q]
-a[::g_p] == b[::g_q-1]
-a[::g_p] == orig(a[post(::g_q)-1])
-a[::g_p] == orig(b[post(::g_q)])
-a[::g_p] == orig(b[post(::g_q)-1])
-a[::g_p] == a[orig(::g_p)]
-a[::g_p] == a[orig(::g_p)-1]
-a[::g_p] == a[orig(::g_q)-1]
-a[::g_p] == b[orig(::g_p)]
-a[::g_p] == b[orig(::g_p)-1]
-a[::g_p] == b[orig(::g_q)]
-a[::g_p] == b[orig(::g_q)-1]
-a[::g_p] == orig(a[::g_p])
-a[::g_p] == orig(a[::g_p-1])
-a[::g_p] == orig(b[::g_p])
-a[::g_p] == orig(b[::g_p-1])
-a[::g_p] == orig(a[::g_q-1])
-a[::g_p] == orig(b[::g_q])
-a[::g_p] == orig(b[::g_q-1])
-::g_x == "my name is"
-::g_y == "pgbovine"
 ::g_p == 1
 ::g_q == 2
+::g_x == "my name is"
+::g_y == "pgbovine"
 a[] == [0, 0]
 b[] == [0, 0, 0]
-a[::g_p] == 0
 ::g_x == orig(::g_x)
 ::g_y == orig(::g_y)
 ===========================================================================
 ..testDynamicSimpleStrcpy():::ENTER
-::g_x == "MY"
-::g_y == "NAME"
 ::g_p == 1
 ::g_q == 2
+::g_x == "MY"
+::g_y == "NAME"
 x == "hello"
 y == "world"
 ===========================================================================
 ..testDynamicSimpleStrcpy():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
-::g_x == "MY"
-::g_y == "NAME"
 ::g_p == 1
 ::g_q == 2
+::g_x == "MY"
+::g_y == "NAME"
 ::g_x == orig(::g_x)
 ::g_y == orig(::g_y)
 ===========================================================================
 ..testGlobalSimpleStrcpy():::ENTER
-::g_x == "MY"
-::g_y == "NAME"
 ::g_p == 1
 ::g_q == 2
+::g_x == "MY"
+::g_y == "NAME"
 ::g_x == x
 ::g_y == y
 ===========================================================================
 ..testGlobalSimpleStrcpy():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
-::g_x == "MY"
-::g_y == "NAME"
 ::g_p == 1
 ::g_q == 2
+::g_x == "MY"
+::g_y == "NAME"
 ::g_x == orig(::g_x)
 ::g_x == orig(x)
 ::g_y == orig(::g_y)
 ::g_y == orig(y)
 ===========================================================================
 ..testMalloc():::ENTER
-size(a[]) == size(b[])
-::g_x == "my name is"
-::g_y == "pgbovine"
 ::g_p == 1
 ::g_q == 2
+::g_x == "my name is"
+::g_y == "pgbovine"
 a has only one value
 a[] == [101]
 b has only one value
 b[] == [202]
-size(a[]) == 1
-a[::g_p-1] == 101
-b[::g_p-1] == 202
 ===========================================================================
 ..testMalloc():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
 a[] == orig(a[])
 b[] == orig(b[])
-a[::g_p-1] == orig(a[post(::g_p)-1])
-a[::g_p-1] == a[orig(::g_p)-1]
-a[::g_p-1] == orig(a[::g_p-1])
-b[::g_p-1] == orig(b[post(::g_p)-1])
-b[::g_p-1] == b[orig(::g_p)-1]
-b[::g_p-1] == orig(b[::g_p-1])
-::g_x == "my name is"
-::g_y == "pgbovine"
 ::g_p == 1
 ::g_q == 2
+::g_x == "my name is"
+::g_y == "pgbovine"
 a[] == [101]
 b[] == [202]
-a[::g_p-1] == 101
-b[::g_p-1] == 202
 ::g_x == orig(::g_x)
 ::g_y == orig(::g_y)
 ===========================================================================
 ..testStrCalloc():::ENTER
-::g_x == "my name is"
-::g_y == "pgbovine"
 ::g_p == 1
 ::g_q == 2
+::g_x == "my name is"
+::g_y == "pgbovine"
 a == ""
 b == ""
 ===========================================================================
 ..testStrCalloc():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
-::g_x == "my name is"
-::g_y == "pgbovine"
 ::g_p == 1
 ::g_q == 2
+::g_x == "my name is"
+::g_y == "pgbovine"
 ::g_x == orig(::g_x)
 ::g_y == orig(::g_y)
 ===========================================================================
 ..testTrivial():::ENTER
-::g_x == "MY"
-::g_y == "NAME"
 ::g_p == 1
 ::g_q == 2
+::g_x == "MY"
+::g_y == "NAME"
 a one of { 1, 2 }
 b one of { 5, 10 }
 ===========================================================================
 ..testTrivial():::EXIT
 ::g_p == orig(::g_p)
 ::g_q == orig(::g_q)
-::g_x == "MY"
-::g_y == "NAME"
 ::g_p == 1
 ::g_q == 2
+::g_x == "MY"
+::g_y == "NAME"
 return one of { 6, 12 }
 ::g_x == orig(::g_x)
 ::g_y == orig(::g_y)

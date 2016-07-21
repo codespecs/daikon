@@ -1,7 +1,6 @@
 input-language C/C++
 decl-version 2.0
-var-comparability implicit
-
+var-comparability none
 
 ..main():::ENTER
 this_invocation_nonce
@@ -128,3 +127,4 @@ this_invocation_nonce
 return
 0
 1
+

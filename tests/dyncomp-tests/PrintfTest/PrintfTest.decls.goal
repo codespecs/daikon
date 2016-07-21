@@ -1,0 +1,148 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..main():::ENTER
+  ppt-type enter
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..printfIntFloat():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..printfIntFloat():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..printfIntFloatUInt():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..printfIntFloatUInt():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..printfIntFloatUIntInt():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable d
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..printfIntFloatUIntInt():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable d
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..printfIntInt():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..printfIntInt():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+

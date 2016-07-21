@@ -1,15 +1,7 @@
 ==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
 ==PID== COPYRIGHT
 ==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
-==PID== Command: ./PricesTest
+==PID== Command: ./FloatTest
 ==PID== 
-&uninitializedStackVar = <STACK_ADDR>
-First try  (stack):  0
-Second try (stack): 0
-Third try  (stack):  0
-uninitializedHeapVarP = <HEAP_ADDR>
-First try  (heap):  0
-Second try (heap): 0
-Third try  (heap):  0
 ==PID== 
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

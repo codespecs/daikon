@@ -1,0 +1,130 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::g_x
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::g_y
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::g_x
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::g_y
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..simple_strcpy():::ENTER
+  ppt-type enter
+  variable ::g_x
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::g_y
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable dst
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable src
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..simple_strcpy():::EXIT0
+  ppt-type subexit
+  variable ::g_x
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::g_y
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable dst
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable src
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..testSimpleStrcpy():::ENTER
+  ppt-type enter
+  variable ::g_x
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::g_y
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable x
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable y
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..testSimpleStrcpy():::EXIT0
+  ppt-type subexit
+  variable ::g_x
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::g_y
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable x
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable y
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+

@@ -1,7 +1,6 @@
 input-language C/C++
 decl-version 2.0
-var-comparability implicit
-
+var-comparability none
 
 ..main():::ENTER
 this_invocation_nonce
@@ -11,13 +10,13 @@ this_invocation_nonce
 this_invocation_nonce
 1
 a
-0xffefffc5c
+<STACK_ADDR>
 1
 a[..]
 [ 5 ]
 1
 b
-0x51f7040
+<HEAP_ADDR>
 1
 b[..]
 [ 10 ]
@@ -27,13 +26,13 @@ b[..]
 this_invocation_nonce
 1
 a
-0xffefffc5c
+<STACK_ADDR>
 1
 a[..]
 [ 15 ]
 1
 b
-0x51f7040
+<HEAP_ADDR>
 1
 b[..]
 [ 10 ]
@@ -42,76 +41,76 @@ b[..]
 ..internalInteraction():::ENTER
 this_invocation_nonce
 2
+oranges
+<STACK_ADDR>
+1
+oranges[..]
+[ 10 ]
+1
 x
-0xffefffc58
+<STACK_ADDR>
 1
 x[..]
 [ 1 ]
 1
 y
-0xffefffc54
+<STACK_ADDR>
 1
 y[..]
 [ 2 ]
 1
 z
-0xffefffc50
+<STACK_ADDR>
 1
 z[..]
 [ 3 ]
-1
-oranges
-0xffefffc4c
-1
-oranges[..]
-[ 10 ]
 1
 
 ..internalInteraction():::EXIT0
 this_invocation_nonce
 2
+oranges
+<STACK_ADDR>
+1
+oranges[..]
+[ 10 ]
+1
 x
-0xffefffc58
+<STACK_ADDR>
 1
 x[..]
 [ 1 ]
 1
 y
-0xffefffc54
+<STACK_ADDR>
 1
 y[..]
 [ 2 ]
 1
 z
-0xffefffc50
+<STACK_ADDR>
 1
 z[..]
 [ 3 ]
-1
-oranges
-0xffefffc4c
-1
-oranges[..]
-[ 10 ]
 1
 
 ..interactAfter():::ENTER
 this_invocation_nonce
 3
 x
-0xffefffc48
+<STACK_ADDR>
 1
 x[..]
 [ 10 ]
 1
 y
-0xffefffc44
+<STACK_ADDR>
 1
 y[..]
 [ 15 ]
 1
 z
-0x51f7090
+<HEAP_ADDR>
 1
 z[..]
 [ 0 ]
@@ -121,19 +120,19 @@ z[..]
 this_invocation_nonce
 3
 x
-0xffefffc48
+<STACK_ADDR>
 1
 x[..]
 [ 10 ]
 1
 y
-0xffefffc44
+<STACK_ADDR>
 1
 y[..]
 [ 15 ]
 1
 z
-0x51f7090
+<HEAP_ADDR>
 1
 z[..]
 [ 0 ]
@@ -145,3 +144,4 @@ this_invocation_nonce
 return
 0
 1
+
