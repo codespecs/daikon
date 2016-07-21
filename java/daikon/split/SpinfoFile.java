@@ -309,7 +309,7 @@ public class SpinfoFile {
    */
   /*@EnsuresNonNullIf(result=false, expression="#1")*/
   /*@Pure*/
-  private static boolean isBlank(final /*@Nullable*/ String line) {
+  private static boolean isBlank(/*@Nullable*/ String line) {
     return (line == null) || line.trim().equals("");
   }
 

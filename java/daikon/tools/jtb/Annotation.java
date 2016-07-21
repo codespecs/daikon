@@ -274,7 +274,8 @@ public class Annotation {
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
   public boolean equals(
-      /*>>>@GuardSatisfied Annotation this,*/ final /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
+      /*>>>@GuardSatisfied Annotation this,*/
+      /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
     if (o == null) {
       return false;
     }
