@@ -17,11 +17,13 @@ int main() {
   int itemPrice = 50;
   int taxPrice = 3;
 
-  int uninitializedStackVar;
-  printf("&uninitializedStackVar = %p\n", &uninitializedStackVar);
-  printf("First try  (stack):  %d\n", uninitializedStackVar);
-  printf("Second try (stack): %d\n", uninitializedStackVar);
-  printf("Third try  (stack):  %d\n", uninitializedStackVar);
+// This is interesting - but expecting all platforms to
+// get the same result is crazy.
+// int uninitializedStackVar;
+// printf("&uninitializedStackVar = %p\n", &uninitializedStackVar);
+// printf("First try  (stack):  %d\n", uninitializedStackVar);
+// printf("Second try (stack): %d\n", uninitializedStackVar);
+// printf("Third try  (stack):  %d\n", uninitializedStackVar);
 
   int* uninitializedHeapVarP =
     (int*)malloc(sizeof(*uninitializedHeapVarP));

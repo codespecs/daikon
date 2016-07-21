@@ -3,10 +3,6 @@
 ==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
 ==PID== Command: ./PricesTest
 ==PID== 
-&uninitializedStackVar = <STACK_ADDR>
-First try  (stack):  0
-Second try (stack): 0
-Third try  (stack):  0
 uninitializedHeapVarP = <HEAP_ADDR>
 First try  (heap):  0
 Second try (heap): 0
