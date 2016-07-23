@@ -1306,7 +1306,7 @@ daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTes
 	${JAVAC_COMMAND} $<
 	rm -f $@
 # Has expected errors while compiling splitter files
-	${JAVA} daikon.test.split.SplitterFactoryTestUpdater > /dev/null
+	${JAVA} daikon.test.split.SplitterFactoryTestUpdater > /dev/null 2>&1
 	chmod a-w $@
 
 ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
