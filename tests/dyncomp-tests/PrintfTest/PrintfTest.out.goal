@@ -4,8 +4,8 @@
 ==PID== Command: ./PrintfTest
 ==PID== 
 a=43690, b=48059
-a=43690, b=0.000000
-a=43690, b=0.000000, c=48059
-a=43690, b=0.000000, c=48059, d52428
+a=43690, b=48059
+a=43690, b=48059, c=52428
+a=43690, b=48059, c=52428, d=56797
 ==PID== 
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

@@ -19,15 +19,15 @@ void printfIntInt(int a, int b) {
 }
 
 void printfIntFloat(int a, int b) {
-  printf("a=%d, b=%f\n", a, b);
+  printf("a=%d, b=%d\n", a, b);
 }
 
 void printfIntFloatUInt(int a, int b, int c) {
-  printf("a=%d, b=%f, c=%u\n", a, b, c);
+  printf("a=%d, b=%d, c=%u\n", a, b, c);
 }
 
 void printfIntFloatUIntInt(int a, int b, int c, int d) {
-  printf("a=%d, b=%f, c=%u, d%d\n", a, b, c, d);
+  printf("a=%d, b=%d, c=%u, d=%d\n", a, b, c, d);
 }
 
 int main() {
