@@ -21409,7 +21409,6 @@ worry_about_NULs
 ::yytranslate
 
 ..gentabs():::ENTER
-::C_char_decl
 ::C_int_decl
 ::C_long_decl
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
@@ -21538,7 +21537,6 @@ worry_about_NULs
 ::yytranslate
 
 ..gentabs():::EXIT0
-::C_char_decl
 ::C_int_decl
 ::C_long_decl
 ::C_plus_plus ::backing_up_report ::ddebug ::fullspd ::fulltbl
