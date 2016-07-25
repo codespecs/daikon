@@ -68,15 +68,11 @@ ifdef CPLUSPLUS
 KVASIR_OPTIONS := $(KVASIR_OPTIONS) --object-ppts
 C_EXT ?= cc
 COMPILER := $(CXX)
+CFLAGS += -std=gnu++98
 else
-# Check gcc copyright year as a quick test to see if we are using
-# latest gcc (4.x instead of 3.x)
-# Default inlining has been changed, use std=gnu89 to get old style
-ifeq (2015, $(findstring 2015, $(shell gcc --version)))
-CFLAGS += -std=gnu89
-endif
 C_EXT ?= c
 COMPILER := $(CC)
+CFLAGS += -std=gnu89
 endif
 
 SOURCES ?= $(NAME).$(C_EXT)
