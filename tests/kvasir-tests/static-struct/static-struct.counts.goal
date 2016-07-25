@@ -1,4 +1,4 @@
 ..examine() ENTER/54: 2 EXIT0/54: 2
 ..main() ENTER/39: 1 EXIT0/42: 1
-..second_examine() ENTER/42: 1 EXIT0/42: 1
+..second_examine() ENTER/39: 1 EXIT0/39: 1
 ..second_examine_int() ENTER/36: 1 EXIT0/42: 1

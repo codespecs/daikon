@@ -358,10 +358,6 @@ ppt ..second_examine():::ENTER
     array 1
     rep-type int[]
     dec-type int[]
-  variable ::count
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::second_int
     var-kind variable
     rep-type int
@@ -434,10 +430,6 @@ ppt ..second_examine():::EXIT0
     array 1
     rep-type int[]
     dec-type int[]
-  variable ::count
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::second_int
     var-kind variable
     rep-type int

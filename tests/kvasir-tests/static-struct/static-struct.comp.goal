@@ -42,7 +42,6 @@ return
 ::array1[..] p[..].dyn_array[0]
 ::array2
 ::array2[..]
-::count
 ::second_int
 ::second_int_array
 ::second_int_array[..]
@@ -56,7 +55,6 @@ p[..].dyn_array
 ::array1[..] p[..].dyn_array[0]
 ::array2
 ::array2[..]
-::count
 ::second_int
 ::second_int_array
 ::second_int_array[..]
