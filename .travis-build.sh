@@ -74,6 +74,6 @@ if [[ "${GROUP}" == "kvasir" || "${GROUP}" == "all" ]]; then
   export -n SHELLOPTS
   make kvasir
 
-  make -C tests/kvasir-tests regression-tests
   make -C tests/dyncomp-tests regression-tests
+  make -C tests/kvasir-tests regression-tests
 fi
