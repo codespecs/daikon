@@ -2278,6 +2278,7 @@ public final class Daikon {
   /**
    * Initialize NIS suppression
    */
+  /*@EnsuresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public static void setup_NISuppression() {
     NIS.init_ni_suppression();
   }
