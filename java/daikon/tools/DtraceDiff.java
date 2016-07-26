@@ -233,6 +233,7 @@ public class DtraceDiff {
     dtraceDiff(declsfile1, dtracefile1, declsfile2, dtracefile2);
   }
 
+  /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public static void dtraceDiff(
       Set<File> declsfile1, String dtracefile1, Set<File> declsfile2, String dtracefile2) {
 

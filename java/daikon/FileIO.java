@@ -290,6 +290,7 @@ public final class FileIO {
    * listed in the argument; connection information (controlling
    * variables and entry ppts) is set correctly upon return.
    **/
+  /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public static PptMap read_declaration_files(Collection<File> files) throws IOException {
     PptMap all_ppts = new PptMap();
     // Read all decls, creating PptTopLevels and VarInfos
@@ -304,6 +305,7 @@ public final class FileIO {
   }
 
   /** Read one decls file; add it to all_ppts. **/
+  /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public static void read_declaration_file(File filename, PptMap all_ppts) throws IOException {
     if (Daikon.using_DaikonSimple) {
       Processor processor = new DaikonSimple.SimpleProcessor();
@@ -965,6 +967,7 @@ public final class FileIO {
    *
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
    **/
+  /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public static void read_data_trace_files(
       Collection<String> files, PptMap all_ppts, Processor processor, boolean ppts_may_be_new)
       throws IOException {
@@ -1135,7 +1138,7 @@ public final class FileIO {
      * {@link FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)}.
      * @see FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)
      */
-    /*@RequiresNonNull("FileIO.data_trace_state")*/
+    /*@RequiresNonNull({"FileIO.data_trace_state", "NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
       FileIO.process_sample(all_ppts, ppt, vt, nonce);
@@ -1404,6 +1407,7 @@ public final class FileIO {
    * {@link FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)}
    * on each record, and ignores records other than samples.
    **/
+  /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public static void read_data_trace_file(String filename, PptMap all_ppts) throws IOException {
     Processor processor = new Processor();
     read_data_trace_file(filename, all_ppts, processor, false, true);
@@ -1414,6 +1418,7 @@ public final class FileIO {
    * imply) from .dtrace file.  For each record read from the file, passes
    * the record to a method of the processor.
    **/
+  /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public static void read_data_trace_file(
       String filename,
       PptMap all_ppts,
@@ -1750,7 +1755,7 @@ public final class FileIO {
    * supply it to the program point for flowing.
    * @param vt trace data only; modified by side effect to add derived vars
    **/
-  /*@RequiresNonNull("FileIO.data_trace_state")*/
+  /*@RequiresNonNull({"FileIO.data_trace_state", "NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public static void process_sample(
       PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
 
