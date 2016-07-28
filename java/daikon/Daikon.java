@@ -1818,7 +1818,7 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
-  /*@RequiresNonNull("fileio_progress")*/
+  /*@RequiresNonNull({"fileio_progress", "NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   // set in mainHelper
   private static PptMap load_decls_files(Set<File> decl_files) {
     stopwatch.reset();
@@ -2278,6 +2278,7 @@ public final class Daikon {
   /**
    * Initialize NIS suppression
    */
+  /*@EnsuresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public static void setup_NISuppression() {
     NIS.init_ni_suppression();
   }
