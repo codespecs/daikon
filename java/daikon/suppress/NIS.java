@@ -875,8 +875,6 @@ public class NIS {
   /**
    * Returns true if the specified class is an antecedent in any NI suppression
    */
-  //Use class name in front of static field to work around Checker Framework issue 764
-  // https://github.com/typetools/checker-framework/issues/764
   /*@RequiresNonNull("NIS.suppressor_map")*/
   /*@Pure*/
   public static boolean is_suppressor(Class<? extends Invariant> cls) {

@@ -1814,7 +1814,7 @@ public final class FileIO {
     // Workaround for Checker Framework issue #862
     // https://github.com/typetools/checker-framework/issues/862
     // Use NIS so that it is in scope to check the precondition below.
-    Object o = NIS.suppressor_map;
+    Object dummy = NIS.suppressor_map;
     ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {
