@@ -14,14 +14,10 @@
 ::globalFoo.double_15[] == [0.0, 3.1415, 6.283, 9.4245, 12.566, 15.7075, 18.849, 21.9905, 25.132, 28.2735, 31.415, 34.5565, 37.698, 40.8395, 43.981]
 ::globalFoo.int_5 has only one value
 ::globalFoo.int_5[] == [0, 1, 2, 3, 0, 0]
-f has only one value
 f.bar_struct has only one value
-f.bar_struct.bar_int_20 has only one value
 f.bar_struct.blah == ""
 f.bar_struct.bleh == 0
 f.char_10 == "!!Hello!!"
-f.double_15 has only one value
-f.int_5 has only one value
 f.int_5[] == [0, 1, 2, 3, 0, 0]
 f.int_5[] elements >= 0
 ::globalFoo.bar_struct.blah == f.bar_struct.blah
@@ -64,12 +60,9 @@ f.int_5[] == orig(f.int_5[])
 ::globalFoo.int_5 has only one value
 ::globalFoo.int_5[] == [0, 1, 2, 3, 0, 0]
 f.bar_struct has only one value
-f.bar_struct.bar_int_20 has only one value
 f.bar_struct.blah == ""
 f.bar_struct.bleh == 0
 f.char_10 == "!!Hello!!"
-f.double_15 has only one value
-f.int_5 has only one value
 f.int_5[] == [0, 1, 2, 3, 0, 0]
 f.int_5[] elements >= 0
 ::globalFoo.bar_struct.blah == f.bar_struct.blah
