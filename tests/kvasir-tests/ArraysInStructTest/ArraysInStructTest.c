@@ -28,11 +28,6 @@ void baz(struct foo f) {
   return;
 }
 
-void dummy_baz(struct foo f) {
-  baz(f);
-  return;
-}
-
 int main() {
   int i;
   struct foo localFoo;
@@ -59,7 +54,7 @@ int main() {
 
   baz(globalFoo);
 
-  dummy_baz(localFoo);
+  baz(localFoo);
 
   return 0;
 }
