@@ -115,7 +115,7 @@ ifneq ($(REMOVE_TIMING_VALUES),)
 	perl -i $(REMOVE_TIMING) $@
 endif
 
-invs-large: $(NAME)
+invs-large: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND)
 	$(BEFORE_RUN)
 	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS)  | $(DAIKON) - -o daikon-output/$(NAME).inv.gz
 	$(AFTER_RUN)
@@ -252,7 +252,7 @@ DIFF_FILES := $(DIFF_NAME).comp.diff $(DIFF_NAME).counts.diff $(DIFF_NAME).out.d
 INV_DIFFS :=
 endif
 
-daikon-output/$(NAME)_2.dtrace: daikon-output/$(NAME).dtrace
+daikon-output/$(NAME)_2.dtrace: daikon-output/$(NAME).dtrace $(KVASIR_SCRIPT) $(VALGRIND)
 	$(BEFORE_RUN)
 	$(KVASIR_SCRIPT) $(KVASIR_DECLS_2) --dtrace-file=daikon-output/$(NAME)_2.dtrace ./$(NAME) $(PROGRAM_ARGS) > kvasir-output.log
 	$(AFTER_RUN)
@@ -260,12 +260,12 @@ daikon-output/$(NAME)_2.dtrace: daikon-output/$(NAME).dtrace
 decls-2-compile: daikon-output/$(NAME)_2.dtrace
 	$(DAIKON)  daikon-output/$(NAME)_2.dtrace -o daikon-output/$(NAME)_2.inv.gz
 
-decls-only-2-large: $(NAME)
+decls-only-2-large: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND)
 	$(BEFORE_RUN)
 	$(KVASIR_SCRIPT) --ignore-globals --decls-only --nesting-depth=1 --decls-file=- ./$(NAME) $(PROGRAM_ARGS) | $(DAIKON) - -o daikon-output/$(NAME)_2.inv.gz
 	$(AFTER_RUN)
 
-decls-2-large: $(NAME)
+decls-2-large: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND)
 	$(BEFORE_RUN)
 	$(KVASIR_SCRIPT) --ignore-globals  --nesting-depth=1 --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) | $(DAIKON) - -o daikon-output/$(NAME)_2.inv.gz
 	$(AFTER_RUN)
@@ -329,13 +329,13 @@ else
 update-goals: update-out-goals update-counts-goals update-comp-goals
 endif
 
-kvasir-DC:
+kvasir-DC: $(KVASIR_SCRIPT) $(VALGRIND)
 	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS)
 
 $(VALGRIND):
 	$(MAKE) -C ${DAIKONDIR} kvasir
 
-trace: $(NAME)
+trace: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND)
 	$(BEFORE_RUN)
 	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --with-dyncomp --decls-only --dyncomp-trace --no-var-leader --no-val-leader --no-path-compression ./$(NAME) $(PROGRAM_ARGS) 2>&1 | ${DAIKONDIR}/scripts/merge_tracker.py - $(NAME).db
 	$(AFTER_RUN)
