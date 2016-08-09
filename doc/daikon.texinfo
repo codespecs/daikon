@@ -4681,7 +4681,7 @@ intermixing it with the trace output.  If the given filename ends in
 @file{.gz}, then @option{--dtrace-gzip} is enabled and the
 @file{.dtrace} file will be compressed.
 
-@item --dtrace-no-decs
+@item --dtrace-no-decls
 
 By default, the @file{.dtrace} file contains both a list of variable
 declarations followed by a trace of variable values
@@ -4928,31 +4928,33 @@ file.
 This option may also be used with @option{--decls-only} to only generate
 a @file{.decls} file without a @file{.dtrace}.
 
-@item --dyncomp-dataflow-only
+@item --dyncomp-interactions=all
+@item --dyncomp-interactions=units
+@item --dyncomp-interactions=comparisons
+@item --dyncomp-interactions=none
 
-When DynComp is operating in this mode, no binary operations qualify as
-interactions between values.  Thus, DynComp only tracks dataflow.
+By default, DynComp considers any binary operation as an interaction
+between its two operands. (@option{=all})
 
-@item --dyncomp-dataflow-comp
-
-When DynComp is operating in this mode, the only binary operations that
-qualify as interactions are comparisons between values (e.g., @code{x <=
-y} or @code{x != y}).
-
-@item --dyncomp-units
-
-When DynComp is operating in this mode, the only binary operations that
+You may restrict this such that the only binary operations that
 qualify as interactions are comparisons, addition, subtraction.
 This ensures that the variables that DynComp groups together into one
-set all have the same units (e.g., physics units).
+set all have the same units (e.g., physics units). (@option{=units})
 
-@item --dyncomp-fast-mode
+A tighter restriction is to stipulate that the only binary operations that
+qualify as interactions are comparisons between values (e.g., @code{x <=
+y} or @code{x != y}). (@option{=comparisons})
+
+Finally, you may specify that no binary operations qualify as
+interactions between values.  Thus, DynComp only tracks dataflow. (@option{=none})
+
+@item --dyncomp-approximate-literals
 
 This option applies an approximation for handling literal values which
 greatly speeds up the performance of DynComp and drastically lowers its
 memory usage, but at the expense of a slight loss in precision of the
 generated comparability sets.  If you cannot get DynComp to successfully
-run on a large program, even after tweaking @option{--gc-num-tags}, try
+run on a large program, even after tweaking @option{--dyncomp-gc-num-tags}, try
 turning on this option.
 
 @item --dyncomp-detailed-mode
@@ -4966,7 +4968,7 @@ more precise algorithm but still use an approximation for handling
 literal values.  (This mode is still experimental and not well-tested
 yet.)
 
-@item --separate-entry-exit-comp
+@item --dyncomp-separate-entry-exit
 
 The default behavior for DynComp is to generate the same comparability
 numbers for Daikon variables at each pair of function entrance and exit
@@ -4975,17 +4977,10 @@ comparability separately for function entrances and exits, which can
 lead to more accurate results, but sometimes generates output @file{.decls}
 files that Daikon cannot accept.
 
-@item --no-dyncomp-gc
+@item --dyncomp-gc-num-tags=@var{N}
 
-By default, DynComp runs with a garbage collector for the tag metadata
-that it uses, but this can cause your program to slow down if it runs
-too often.  This option turns off the garbage collector.  This is not
-recommended for long program runs, because without the garbage
-collector, it will likely run out of memory.
-
-@item --gc-num-tags=@var{N}
-
-The DynComp garbage collector runs once after every 10,000,000 tags have
+By default, DynComp runs a garbage collector for the tag metadata
+once after every 10,000,000 tags have
 been assigned.  This option tells the garbage collector to run once
 after every @var{N} tags have been assigned.  Making the value of
 @var{N} larger allows your program to run faster (because the garbage
@@ -4995,6 +4990,11 @@ program to never terminate if @var{N} is smaller than the total number
 of tags that your program uses in steady state.  You will probably need
 to experiment with tweaking this value in order to get DynComp to work
 properly.
+
+Making the value of @var{N} equal to 0 turns off the garbage collector.
+This may reduce your program's execution time; however, it is not
+recommended for long program runs, because without the garbage
+collector, it will likely run out of memory.
 
 @end table
 
@@ -5028,7 +5028,7 @@ for Kvasir's developers.
 
 @item --dyncomp-trace
 @itemx --dyncomp-trace-merge
-@itemx -- dyncomp-print-inc
+@itemx --dyncomp-print-inc
 
 Enables trace messages to be output to @command{stderr}. These are disabled by
 default. These options are intended mainly for DynComp developers.
@@ -5990,7 +5990,7 @@ This should generate a @file{.decls} file with comparability information
 named @file{daikon-@/output/@/foo.decls}.
 
 @example
-kvasir-dtrace --dtrace-no-decs --dtrace-file=- ./foo \
+kvasir-dtrace --dtrace-no-decls --dtrace-file=- ./foo \
     | java daikon.Daikon daikon-output/foo.decls -
 @end example
 
@@ -5998,7 +5998,7 @@ When you run Kvasir the second time, you don't need to run DynComp
 again since you are only interested in the @file{.dtrace} file.  Notice that
 the @file{.dtrace} output
 is directed to standard out (@option{--dtrace-file=-}) and does not
-contain any declarations (@option{--dtrace-no-decs}) because the @file{.decls} 
+contain any declarations (@option{--dtrace-no-decls}) because the @file{.decls}
 file already contains the declarations.  You can simply
 pipe that @file{.dtrace} output out to Daikon, which is invoked using the
 @file{.decls} file (with comparability information) generated during your
