@@ -497,7 +497,7 @@ public abstract class DaikonVariableInfo
         }
         Matcher m = Chicory.omit_var.matcher(fullname);
         if (m.find()) {
-          System.out.printf("VAR %s matches omit pattern %s%n", fullname, Chicory.omit_var);
+          // System.out.printf("VAR %s matches omit pattern %s%n", fullname, Chicory.omit_var);
           continue;
         }
       }
