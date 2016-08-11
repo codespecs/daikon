@@ -1,3 +1,3 @@
 NAME := Apples
-KVASIR_OPTIONS := --separate-entry-exit-comp
+KVASIR_OPTIONS := --dyncomp-separate-entry-exit
 include ../Makefile.common
