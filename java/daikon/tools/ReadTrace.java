@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 /**
  * A class that gives an example of how to use a FileIO.Processor object to
- * read a trace.  Invoke it like:
+ * read a trace file.  Invoke it like:
  * <pre>
  *   java daikon.tools.ReadTrace file1 file2 ...
  * </pre>
@@ -17,6 +17,9 @@ import org.checkerframework.checker.nullness.qual.*;
  * <pre>
  *   java -cp $DAIKONDIR/daikon.jar daikon.tools.ReadTrace /scratch/$USER/tests/daikon-tests/StackAr/StackAr.dtrace.gz
  * </pre>
+ * You probably won't run this program.  Instead, you will copy
+ * parts of its source code in the process of writing your own program
+ * that reads a dtrace file.
  */
 public class ReadTrace {
 
