@@ -19,7 +19,15 @@ public class ThisObjInfo extends DaikonVariableInfo {
   //     }
 
   public ThisObjInfo(Class<?> type) {
-    super("this", type.getName() + isParamString, getRepName(type, false));
+    this("this", type);
+  }
+
+  /**
+   * thisName is the name to be used to specify the variable.
+   * It's "this" except for outer classes, as in "OuterClass.this".
+   */
+  public ThisObjInfo(String thisName, Class<?> type) {
+    super(thisName, type.getName() + isParamString, getRepName(type, false));
     this.type = type;
   }
 
