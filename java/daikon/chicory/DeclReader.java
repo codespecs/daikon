@@ -404,7 +404,9 @@ public class DeclReader {
 
       // Loop through each ppt
       for (DeclPpt ppt : dr.ppts.values()) {
-        if (print_each_set) System.out.printf("ppt %s%n", ppt.name);
+        if (print_each_set) {
+          System.out.printf("ppt %s%n", ppt.name);
+        }
 
         int ppt_num_sets = 0;
         int ppt_total_set_size = 0;

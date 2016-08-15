@@ -45,14 +45,15 @@ public abstract class DaikonVariableInfo
   protected final boolean isArray;
 
   /** Print debug information about the variables **/
-  static SimpleLog debug_vars = new SimpleLog(false);
+  // "false" argument means it's disabled by default.
+  static SimpleLog debug_vars = new SimpleLog(true);
 
   private static SimpleLog debug_array = new SimpleLog(true);
 
-  /**default string for comparability info**/
+  /** Default string for comparability info. */
   private static final String compareInfoDefaultString = "22";
 
-  /**used to assert that a given variable is a parameter to a method**/
+  /** Indicates that a given variable is a parameter to a method. */
   protected static final String isParamString = " # isParam=true";
 
   // Certain hardcoded class names

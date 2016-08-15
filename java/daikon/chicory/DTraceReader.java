@@ -67,7 +67,9 @@ public class DTraceReader extends DeclReader {
               + dtrace_file.getLineNumber());
     }
     DeclPpt ppt = ppts.get(ppt_name);
-    if (ppt == null) throw new Error("ppt " + ppt_name + " not declared");
+    if (ppt == null) {
+      throw new Error("ppt " + ppt_name + " not declared");
+    }
 
     List<DeclVarInfo> vars = ppt.get_all_vars();
 

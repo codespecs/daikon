@@ -8,7 +8,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 /**
  * The ThisObjInfo class is a subtype of DaikonVariableInfo used for
- * variable types which represent the "this" object.s
+ * variable types which represent the "this" object.
  */
 public class ThisObjInfo extends DaikonVariableInfo {
   public Class<?> type;
