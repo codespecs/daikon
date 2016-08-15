@@ -182,7 +182,7 @@ public class InvariantFormatTester extends TestCase {
     // Run the test
     try {
       result = performTest(commandReader, new PrintStream(out));
-    } catch (RuntimeException e) {
+    } catch (Throwable e) {
       throw new RuntimeException(
           "Error detected on line "
               + commandReader.getLineNumber()

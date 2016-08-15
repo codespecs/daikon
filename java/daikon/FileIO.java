@@ -202,12 +202,14 @@ public final class FileIO {
       super(msg, cause);
     }
 
+    /** Create a DeclError, calling format on the appropriate arguments. */
     @SuppressWarnings("formatter") // acts as format method wrapper
     public static DeclError detail(ParseState state, String format, /*@Nullable*/ Object... args) {
       String msg = String.format(format, args) + state.line_file_message();
       return new DeclError(msg);
     }
 
+    /** Create a DeclError. */
     public static DeclError detail(ParseState state, Throwable cause) {
       String msg = cause.getMessage() + state.line_file_message();
       if (msg.startsWith("null at")) {
@@ -216,6 +218,7 @@ public final class FileIO {
       return new DeclError(msg, cause);
     }
 
+    /** Create a DeclError, calling format on the appropriate arguments. */
     @SuppressWarnings("formatter") // acts as format method wrapper
     public static DeclError detail(
         ParseState state, Throwable cause, String format, /*@Nullable*/ Object... args) {
@@ -2661,6 +2664,9 @@ public final class FileIO {
               kind,
               function_args,
               name);
+      if ((kind == VarKind.FIELD || kind == VarKind.ARRAY) && enclosing_var == null) {
+        throw new AssertionError("enclosing-var not specified for variable " + name);
+      }
     }
 
     /**
@@ -2758,11 +2764,13 @@ public final class FileIO {
     /** Parses the array record **/
     public void parse_array(Scanner scanner) throws DeclError {
       /*@Interned*/ String arr_str = need(scanner, "array dimensions");
-      if (arr_str == "0") // interned
-      arr_dims = 0;
-      else if (arr_str == "1") // interned
-      arr_dims = 1;
-      else decl_error(state, "%s found where 0 or 1 expected", arr_str);
+      if (arr_str == "0") { // interned
+        arr_dims = 0;
+      } else if (arr_str == "1") { // interned
+        arr_dims = 1;
+      } else {
+        decl_error(state, "%s found where 0 or 1 expected", arr_str);
+      }
     }
 
     /** Parses the function-args record **/
@@ -2911,7 +2919,9 @@ public final class FileIO {
    */
   public static /*@Interned*/ String need(ParseState state, Scanner scanner, String description)
       throws DeclError {
-    if (!scanner.hasNext()) decl_error(state, "end-of-line found where %s expected", description);
+    if (!scanner.hasNext()) {
+      decl_error(state, "end-of-line found where %s expected", description);
+    }
     return unescape_decl(scanner.next()).intern();
   }
 
@@ -2947,17 +2957,20 @@ public final class FileIO {
     }
   }
 
+  /** Create a DeclError, which indicates a malformed declaration. */
   private static void decl_error(ParseState state, String format, /*@Nullable*/ Object... args)
       throws DeclError {
     throw DeclError.detail(state, format, args);
   }
 
+  /** Create a DeclError, which indicates a malformed declaration. */
   private static void decl_error(
       ParseState state, Throwable cause, String format, /*@Nullable*/ Object... args)
       throws DeclError {
     throw DeclError.detail(state, cause, format, args);
   }
 
+  /** Create a DeclError, which indicates a malformed declaration. */
   private static void decl_error(ParseState state, Throwable cause) throws DeclError {
     throw DeclError.detail(state, cause);
   }
