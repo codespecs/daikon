@@ -2664,9 +2664,10 @@ public final class FileIO {
               kind,
               function_args,
               name);
-      if ((kind == VarKind.FIELD || kind == VarKind.ARRAY) && enclosing_var == null) {
-        throw new AssertionError("enclosing-var not specified for variable " + name);
-      }
+      // TODO: uncomment the assertion once bugs are fixed.
+      // if ((kind == VarKind.FIELD || kind == VarKind.ARRAY) && enclosing_var == null) {
+      //   throw new AssertionError("enclosing-var not specified for variable " + name);
+      // }
     }
 
     /**
