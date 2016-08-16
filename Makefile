@@ -265,7 +265,7 @@ rebuild-everything:
 	${MAKE} -C ${DAIKONDIR} rebuild-kvasir
 
 rebuild-everything-but-kvasir:
-	${MAKE} -C ${DAIKONDIR}/java tags compile
+	${MAKE} -C ${DAIKONDIR}/java compile
 	${MAKE} -C ${DAIKONDIR} daikon.jar
 	${MAKE} -C ${DAIKONDIR}/java dcomp_rt.jar
 	${MAKE} -C ${DAIKONDIR}/java javadoc
