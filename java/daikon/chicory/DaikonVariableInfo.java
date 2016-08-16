@@ -46,7 +46,7 @@ public abstract class DaikonVariableInfo
 
   /** Print debug information about the variables **/
   // "false" argument means it's disabled by default.
-  static SimpleLog debug_vars = new SimpleLog(true);
+  static SimpleLog debug_vars = new SimpleLog(false);
 
   private static SimpleLog debug_array = new SimpleLog(true);
 
