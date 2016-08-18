@@ -7799,7 +7799,7 @@ classpath is determined from your @env{CLASSPATH} environment variable.
 When investigating such a problem, you should verify that you can run your
 program when not using Daikon; for example, if you are trying to run
 @command{java daikon.Chicory mypackage.MyClass arg1 arg2 arg3}, then make
-sure that the identical command without \command{daikon.Chicory} works, in
+sure that the identical command without @command{daikon.Chicory} works, in
 this case @command{java mypackage.MyClass arg1 arg2 arg3}.  In most
 cases, both commands issue the same error, which is unrelated to Daikon.
 If the two commands behave differently, that is a bug in Daikon.
