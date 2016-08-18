@@ -186,47 +186,6 @@ public final class FileIO {
 
   public static final SimpleLog debug_decl = new SimpleLog(false);
 
-  // Are these supposed to be printed like Daikon.TerminationMessage, or
-  // intended to indicate internal Daikon errors, or both?  There is no
-  // documentation of this.  The latter ("both") would be bad design.
-  /** Errors while processing ppt declarations */
-  public static class DeclError extends IOException {
-
-    static final long serialVersionUID = 20060518L;
-
-    public DeclError(String msg) {
-      super(msg);
-    }
-
-    public DeclError(String msg, Throwable cause) {
-      super(msg, cause);
-    }
-
-    /** Create a DeclError, calling format on the appropriate arguments. */
-    @SuppressWarnings("formatter") // acts as format method wrapper
-    public static DeclError detail(ParseState state, String format, /*@Nullable*/ Object... args) {
-      String msg = String.format(format, args) + state.line_file_message();
-      return new DeclError(msg);
-    }
-
-    /** Create a DeclError. */
-    public static DeclError detail(ParseState state, Throwable cause) {
-      String msg = cause.getMessage() + state.line_file_message();
-      if (msg.startsWith("null at")) {
-        msg = msg.substring(5);
-      }
-      return new DeclError(msg, cause);
-    }
-
-    /** Create a DeclError, calling format on the appropriate arguments. */
-    @SuppressWarnings("formatter") // acts as format method wrapper
-    public static DeclError detail(
-        ParseState state, Throwable cause, String format, /*@Nullable*/ Object... args) {
-      String msg = String.format(format, args) + state.line_file_message();
-      return new DeclError(msg, cause);
-    }
-  }
-
   /**
    * Parents in the ppt/variable hierarchy for a particular program point
    */
@@ -467,8 +426,7 @@ public final class FileIO {
   }
 
   /** Parses a ppt parent hierarchy record and returns it. **/
-  private static ParentRelation parse_ppt_parent(ParseState state, Scanner scanner)
-      throws DeclError {
+  private static ParentRelation parse_ppt_parent(ParseState state, Scanner scanner) {
 
     PptRelationType rel_type =
         parse_enum_val(state, scanner, PptRelationType.class, "relation type");
@@ -484,8 +442,7 @@ public final class FileIO {
    * Parses a program point flag record.  Adds any specified flags to
    * to flags.
    */
-  private static void parse_ppt_flags(ParseState state, Scanner scanner, EnumSet<PptFlags> flags)
-      throws DeclError {
+  private static void parse_ppt_flags(ParseState state, Scanner scanner, EnumSet<PptFlags> flags) {
 
     flags.add(parse_enum_val(state, scanner, PptFlags.class, "ppt flags"));
     while (scanner.hasNext())
@@ -493,7 +450,7 @@ public final class FileIO {
   }
 
   /** Parses a ppt-type record and returns the type **/
-  private static PptType parse_ppt_type(ParseState state, Scanner scanner) throws DeclError {
+  private static PptType parse_ppt_type(ParseState state, Scanner scanner) {
 
     PptType ppt_type = parse_enum_val(state, scanner, PptType.class, "ppt type");
     need_eol(state, scanner);
@@ -2674,7 +2631,7 @@ public final class FileIO {
      * Initialize from the 'variable <em>name</em>' record.  Scanner should be
      * pointing at name.
      */
-    public VarDefinition(ParseState state, Scanner scanner) throws DeclError {
+    public VarDefinition(ParseState state, Scanner scanner) {
       this.state = state;
       this.parents = new LinkedList<VarParent>();
       name = need(scanner, "name");
@@ -2739,7 +2696,7 @@ public final class FileIO {
      * Parse a var-kind record.  Scanner should be pointing at the variable
      * kind.
      */
-    public void parse_var_kind(Scanner scanner) throws DeclError {
+    public void parse_var_kind(Scanner scanner) {
       VarKind kind_local = parse_enum_val(scanner, VarKind.class, "variable kind");
       kind = kind_local;
 
@@ -2750,20 +2707,20 @@ public final class FileIO {
     }
 
     /** Parses the enclosing-var record **/
-    public void parse_enclosing_var(Scanner scanner) throws DeclError {
+    public void parse_enclosing_var(Scanner scanner) {
       enclosing_var = need(scanner, "enclosing variable name");
       need_eol(scanner);
     }
 
     /** Parses the reference-type record **/
-    public void parse_reference_type(Scanner scanner) throws DeclError {
+    public void parse_reference_type(Scanner scanner) {
       RefType ref_type_local = parse_enum_val(scanner, RefType.class, "reference type");
       ref_type = ref_type_local;
       need_eol(scanner);
     }
 
     /** Parses the array record **/
-    public void parse_array(Scanner scanner) throws DeclError {
+    public void parse_array(Scanner scanner) {
       /*@Interned*/ String arr_str = need(scanner, "array dimensions");
       if (arr_str == "0") { // interned
         arr_dims = 0;
@@ -2775,7 +2732,7 @@ public final class FileIO {
     }
 
     /** Parses the function-args record **/
-    public void parse_function_args(Scanner scanner) throws DeclError {
+    public void parse_function_args(Scanner scanner) {
 
       function_args = new ArrayList<String>();
       while (scanner.hasNext()) {
@@ -2783,20 +2740,20 @@ public final class FileIO {
       }
     }
 
-    public void parse_rep_type(Scanner scanner) throws DeclError {
+    public void parse_rep_type(Scanner scanner) {
       /*@Interned*/ String rep_type_str = need(scanner, "rep type");
       need_eol(scanner);
       rep_type = ProglangType.rep_parse(rep_type_str);
     }
 
-    public void parse_dec_type(Scanner scanner) throws DeclError {
+    public void parse_dec_type(Scanner scanner) {
       /*@Interned*/ String declared_type_str = need(scanner, "declaration type");
       need_eol(scanner);
       declared_type = ProglangType.parse(declared_type_str);
     }
 
     /** Parse the flags record.  Multiple flags can be specified **/
-    public void parse_flags(Scanner scanner) throws DeclError {
+    public void parse_flags(Scanner scanner) {
 
       flags.add(parse_enum_val(scanner, VarFlags.class, "Flag"));
       while (scanner.hasNext()) flags.add(parse_enum_val(scanner, VarFlags.class, "Flag"));
@@ -2806,7 +2763,7 @@ public final class FileIO {
     /**
      * Parse the langauge specific flags record.  Multiple flags can
      * be specified **/
-    public void parse_lang_flags(Scanner scanner) throws DeclError {
+    public void parse_lang_flags(Scanner scanner) {
 
       lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));
       while (scanner.hasNext())
@@ -2814,7 +2771,7 @@ public final class FileIO {
     }
 
     /** Parses a comparability record **/
-    public void parse_comparability(Scanner scanner) throws DeclError {
+    public void parse_comparability(Scanner scanner) {
       /*@Interned*/ String comparability_str = need(scanner, "comparability");
       need_eol(scanner);
       comparability =
@@ -2822,7 +2779,7 @@ public final class FileIO {
     }
 
     /** Parse a parent ppt record **/
-    public void parse_parent(Scanner scanner, List<ParentRelation> ppt_parents) throws DeclError {
+    public void parse_parent(Scanner scanner, List<ParentRelation> ppt_parents) {
 
       String parent_ppt = need(scanner, "parent ppt");
       int parent_relation_id = Integer.parseInt(need(scanner, "parent id"));
@@ -2851,7 +2808,7 @@ public final class FileIO {
     }
 
     /** Parse a constant record **/
-    public void parse_constant(Scanner scanner) throws DeclError {
+    public void parse_constant(Scanner scanner) {
       /*@Interned*/ String constant_str = need(scanner, "constant value");
       need_eol(scanner);
       try {
@@ -2862,84 +2819,83 @@ public final class FileIO {
     }
 
     /** Parse a minimum value record */
-    public void parse_min_value(Scanner scanner) throws DeclError {
+    public void parse_min_value(Scanner scanner) {
       this.min_value = need(scanner, "minimum value");
       need_eol(scanner);
     }
 
     /** Parse a maximum value record */
-    public void parse_max_value(Scanner scanner) throws DeclError {
+    public void parse_max_value(Scanner scanner) {
       this.max_value = need(scanner, "maximum value");
       need_eol(scanner);
     }
 
     /** Parse a minimum length record */
-    public void parse_min_length(Scanner scanner) throws DeclError {
+    public void parse_min_length(Scanner scanner) {
       this.min_length = Integer.parseInt(need(scanner, "minimum length"));
       need_eol(scanner);
     }
 
     /** Parse a maximum length record */
-    public void parse_max_length(Scanner scanner) throws DeclError {
+    public void parse_max_length(Scanner scanner) {
       this.max_length = Integer.parseInt(need(scanner, "maximum length"));
       need_eol(scanner);
     }
 
     /** Parse a valid values record */
-    public void parse_valid_values(Scanner scanner) throws DeclError {
+    public void parse_valid_values(Scanner scanner) {
       this.valid_values = scanner.nextLine();
     }
 
     /**
      * Helper function, returns the next string token unescaped and
-     * interned.  Throw a DeclError if there is no next token
+     * interned.  Throw Daikon.TerminationMessage if there is no next token.
      */
-    public /*@Interned*/ String need(Scanner scanner, String description) throws DeclError {
+    public /*@Interned*/ String need(Scanner scanner, String description) {
       return (FileIO.need(state, scanner, description));
     }
 
-    /** Throws a DeclError if the scanner is not at end of line */
-    public void need_eol(Scanner scanner) throws DeclError {
+    /** Throws Daikon.TerminationMessage if the scanner is not at end of line */
+    public void need_eol(Scanner scanner) {
       FileIO.need_eol(state, scanner);
     }
 
     /**
-     * Looks up the next token as a member of enum_class.  A DeclError
+     * Looks up the next token as a member of enum_class.  Throws Daikon.TerminationMessage
      * is thrown if there is no token or if it is not valid member of
-     * the class.  Enums are presumed to be in in upper case
+     * the class.  Enums are presumed to be in in upper case.
      */
-    public <E extends Enum<E>> E parse_enum_val(Scanner scanner, Class<E> enum_class, String descr)
-        throws DeclError {
+    public <E extends Enum<E>> E parse_enum_val(
+        Scanner scanner, Class<E> enum_class, String descr) {
       return FileIO.parse_enum_val(state, scanner, enum_class, descr);
     }
   }
 
   /**
    * Helper function, returns the next string token unescaped and
-   * interned.  Throw a DeclError if there is no next token
+   * interned.  Throws Daikon.TerminationMessage if there is no next token.
    */
-  public static /*@Interned*/ String need(ParseState state, Scanner scanner, String description)
-      throws DeclError {
+  public static /*@Interned*/ String need(ParseState state, Scanner scanner, String description) {
     if (!scanner.hasNext()) {
       decl_error(state, "end-of-line found where %s expected", description);
     }
     return unescape_decl(scanner.next()).intern();
   }
 
-  /** Throws a DeclError if the scanner is not at end of line */
-  public static void need_eol(ParseState state, Scanner scanner) throws DeclError {
+  /** Throws a Daikon.TerminationMessage if the scanner is not at end of line */
+  public static void need_eol(ParseState state, Scanner scanner) {
     if (scanner.hasNext()) {
       decl_error(state, "'%s' found where end-of-line expected", scanner.next());
     }
   }
 
   /**
-   * Looks up the next token as a member of enum_class.  A DeclError
+   * Looks up the next token as a member of enum_class.  A Daikon.TerminationMessage
    * is thrown if there is no token or if it is not valid member of
    * the class.  Enums are presumed to be in in upper case
    */
   public static <E extends Enum<E>> E parse_enum_val(
-      ParseState state, Scanner scanner, Class<E> enum_class, String descr) throws DeclError {
+      ParseState state, Scanner scanner, Class<E> enum_class, String descr) {
 
     /*@Interned*/ String str = need(state, scanner, descr);
     try {
@@ -2958,22 +2914,30 @@ public final class FileIO {
     }
   }
 
-  /** Create a DeclError, which indicates a malformed declaration. */
-  private static void decl_error(ParseState state, String format, /*@Nullable*/ Object... args)
-      throws DeclError {
-    throw DeclError.detail(state, format, args);
+  /** Call this to indicate a malformed declaration. */
+  private static void decl_error(ParseState state, String format, /*@Nullable*/ Object... args) {
+    @SuppressWarnings(
+        "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
+    String msg = String.format(format, args) + state.line_file_message();
+    throw new Daikon.TerminationMessage(msg);
   }
 
-  /** Create a DeclError, which indicates a malformed declaration. */
+  /** Call this to indicate a malformed declaration. */
   private static void decl_error(
-      ParseState state, Throwable cause, String format, /*@Nullable*/ Object... args)
-      throws DeclError {
-    throw DeclError.detail(state, cause, format, args);
+      ParseState state, Throwable cause, String format, /*@Nullable*/ Object... args) {
+    @SuppressWarnings(
+        "format.string.invalid") // need a @FormatFor annotation instead of @FormatMethod
+    String msg = String.format(format, args) + state.line_file_message();
+    throw new Daikon.TerminationMessage(cause, msg);
   }
 
-  /** Create a DeclError, which indicates a malformed declaration. */
-  private static void decl_error(ParseState state, Throwable cause) throws DeclError {
-    throw DeclError.detail(state, cause);
+  /** Call this to indicate a malformed declaration. */
+  private static void decl_error(ParseState state, Throwable cause) {
+    String msg = cause.getMessage() + state.line_file_message();
+    if (msg.startsWith("null at")) {
+      msg = msg.substring(5);
+    }
+    throw new Daikon.TerminationMessage(cause, msg);
   }
 
   /** Returns whether the line is the start of a ppt declaration **/
