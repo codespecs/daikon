@@ -239,7 +239,7 @@ to obtain the latest Daikon source code from its version control repository.
 @end itemize
 
 Differences from previous versions of Daikon appear
-in the file @file{doc/CHANGES} in the distribution.
+in the file @url{CHANGES,,@file{doc/CHANGES}} in the distribution.
 To be notified of new releases, or to join discussions about Daikon,
 subscribe to one of the mailing lists (@pxref{Mailing lists}).
 
@@ -6678,7 +6678,7 @@ separately; see @uref{https://neptuno.uca.es/redmine/projects/takuan-website}.
 A front end for the Eiffel programming language, named CITADEL, is distributed
 separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
 
-@cindex Hyger front end for Simulink/Stateflow (SLSF) block diagrams
+@cindex Hynger front end for Simulink/Stateflow (SLSF) block diagrams
 @cindex front end for Simulink/Stateflow (SLSF) block diagrams
 @cindex Simulink/Stateflow (SLSF) front end
 @cindex instrumentation, of Simulink/Stateflow (SLSF) block diagrams
@@ -7644,7 +7644,7 @@ both files, and that the number, names, types, and values of variables
 at each program point are the same.  The differences are found using a
 content-based, rather than text-based, comparison of the two files.
 
-@command{DtraceDiff} stops by signalling an error when it finds a difference
+@command{DtraceDiff} stops by signaling an error when it finds a difference
 between the two data trace files.  (Once execution paths have
 diverged, continuing to emit record-by-record differences is likely to
 produce output that is far too voluminous to be useful.)  It also
@@ -7770,7 +7770,17 @@ understand Daikon's operation; @pxref{Daikon debugging options}.
 @node       Can't run Daikon
 @subsection Can't run Daikon: could not find or load main class, or NoClassDefFoundError
 
-An error such as one of these:
+Either of these errors:
+@example
+Error: Could not find or load main class daikon.Chicory
+Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
+@end example
+
+@noindent
+means that you have not put @file{daikon.jar} on your classpath;
+@pxref{Installing Daikon}.
+
+More generally, an error such as one of these:
 @example
 Error: Could not find or load main class mypackage.MyClass
 Exception in thread "main" java.lang.NoClassDefFoundError: mypackage/MyClass
@@ -7786,16 +7796,13 @@ The classpath is passed as a command-line argument such as @option{-cp} or
 @option{-classpath}; if no such command-line argument is passed, the
 classpath is determined from your @env{CLASSPATH} environment variable.
 
-@exampleindent 1
-As one specific example, if the error is one of these:
-@example
-Error: Could not find or load main class daikon.Chicory
-Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
-@end example
-
-@noindent
-then you have not put @file{daikon.jar} on your classpath;
-@pxref{Installing Daikon}.
+When investigating such a problem, you should verify that you can run your
+program when not using Daikon; for example, if you are trying to run
+@command{java daikon.Chicory mypackage.MyClass arg1 arg2 arg3}, then make
+sure that the identical command without \command{daikon.Chicory} works, in
+this case @command{java mypackage.MyClass arg1 arg2 arg3}.  In most
+cases, both commands issue the same error, which is unrelated to Daikon.
+If the two commands behave differently, that is a bug in Daikon.
 
 
 @node       File input errors
@@ -8874,7 +8881,8 @@ and about debugging flags.
 
 This manual describes Daikon version 5.3.9, released August 1, 2016.
 A more detailed list of revisions since mid-2001 can be found in file
-@file{daikon/doc/CHANGES} in the distribution; this section gives a
+@url{CHANGES,,@file{daikon/doc/CHANGES}}
+in the distribution; this section gives a
 high-level view of the package's history.
 
 There have been four major releases of Daikon, with different features
@@ -9354,3 +9362,11 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  I' C' S' A' P' superclasses vv1 bzip2 Xmx512m bfd dev ABI
 @c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
 @c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
+@c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak
+@c  LocalWords:  Drager MacOSX I1 I2 invSortComparator1 invSortComparator2
+@c  LocalWords:  Myprog2 isDaikonInstrumented getDaikonInvariants GeoPoint
+@c  LocalWords:  valid'' deserializing declsfiles1 dtracefile1 declsfiles2
+@c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx2048m ps1
+@c  LocalWords:  LIB2 CVC4 unformattable LinkageError SquarePanel Donohue
+@c  LocalWords:  SecurityManager setSecurityManager omitpattern Software''
+@c  LocalWords:  MyProblemMethod Liu Galeotti Mangala Gowri ABB
