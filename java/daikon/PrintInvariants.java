@@ -912,8 +912,8 @@ public final class PrintInvariants {
   }
 
   /**
-   * prints all variables that were modified if the format is ESCJAVA or
-   * DBCJAVA
+   * Prints all variables that were modified if the format is ESCJAVA or
+   * DBCJAVA.
    */
   public static void print_modified_vars(PptTopLevel ppt, PrintWriter out) {
 
@@ -935,7 +935,7 @@ public final class PrintInvariants {
       debugPrintModified.fine("  Considering var: " + vi.name());
 
       // Get the orig version of this variable.  If none is found then this
-      // isn't a variable about which it makes sense to consider modifiability
+      // isn't a variable about which it makes sense to consider modifiability.
       VarInfo vi_orig = ppt.find_var_by_name(vi.prestate_name());
       if (vi_orig == null) {
         debugPrintModified.fine("  skipping " + vi.name() + ": no orig variable");
@@ -946,7 +946,7 @@ public final class PrintInvariants {
       // indicates if a variable is 'final', we should add such a test
       // here.  For now we use the equality invariant between the
       // variable and its orig variable to determine if it has been
-      // modified
+      // modified.
 
       if (ppt.is_equal(vi, vi_orig)) {
         debugPrintModified.fine("  " + vi.name() + " = " + vi_orig.name());

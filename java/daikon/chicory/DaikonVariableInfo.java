@@ -408,7 +408,8 @@ public abstract class DaikonVariableInfo
       if (type.getName().equals("daikon.dcomp.DCompMarker")) continue;
       if (type.getName().equals("java.lang.DCompMarker")) continue;
       debug_vars.indent("processing parameter '%s'%n", name);
-      DaikonVariableInfo theChild = addDeclVar(cinfo, type, name, offset, depth, i, param_offset);
+      DaikonVariableInfo theChild =
+          addParamDeclVar(cinfo, type, name, offset, depth, i, param_offset);
       param_offset++;
       if ((type == Double.TYPE) || (type == Long.TYPE)) param_offset++;
       assert cinfo.clazz != null : "@AssumeAssertion(nullness): need to check justification";
@@ -473,17 +474,14 @@ public abstract class DaikonVariableInfo
 
       debug_vars.log("considering field %s -> %s%n", offset, classField);
 
-      // It turns out that the only synthetic field I've seen so far
-      // is 'this$0'.  This is a field in an inner class that contains
-      // a pointer to the instance of the outer class. And, we would like
-      // to expose the outer class fields of an inner class to allow
-      // Daikon to find related invariants. So we will no longer
-      // exclude synthetic fields.
-      // I will try more testing to see if there are other synthetic
-      // fields that should be skipped.  But for now, there are none.
-      // markro 05/13/2015
-      // 'this$1' for an inner inner class and so on.
-      // markro 05/14/2015
+      // Skip some fields
+
+      // In the future, perhaps skip some synthetic fields.  So far, the
+      // only ones we have seen are 'this$0' (a field in an inner class
+      // that contains a pointer to the instance of the outer class),
+      // 'this$1' for an inner inner class, and so on.  We want these
+      // variables because we would like to expose the outer class fields
+      // of an inner class to Daikon.
 
       if (!is_static && dontPrintInstanceVars) {
         debug_vars.log("--field !static and instance var %b%n", dontPrintInstanceVars);
@@ -523,6 +521,8 @@ public abstract class DaikonVariableInfo
         debug_vars.log("--field not visible%n");
         continue;
       }
+
+      // ... end of code to skip some fields.
 
       Class<?> fieldType = classField.getType();
 
@@ -625,7 +625,7 @@ public abstract class DaikonVariableInfo
    * @return the newly created DaikonVariableInfo object, whose
    * parent is this
    */
-  protected DaikonVariableInfo addDeclVar(
+  protected DaikonVariableInfo addParamDeclVar(
       ClassInfo cinfo,
       Class<?> type,
       String name,
@@ -633,7 +633,7 @@ public abstract class DaikonVariableInfo
       int depth,
       int argNum,
       int param_offset) {
-    debug_vars.log("enter addDeclVar(param)%n");
+    debug_vars.log("enter addParamDeclVar%n");
     // add this variable to the tree as a child of curNode
     DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum, type, param_offset);
 
@@ -642,7 +642,7 @@ public abstract class DaikonVariableInfo
     boolean ignore = newChild.check_for_dup_names();
     if (!ignore) newChild.checkForDerivedVariables(type, name, offset);
 
-    debug_vars.log("exit addDeclVar(param)%n");
+    debug_vars.log("exit addParamDeclVar%n");
     return newChild;
   }
 
@@ -732,35 +732,31 @@ public abstract class DaikonVariableInfo
     String arr_str = "";
     if (isArray) arr_str = "[]";
 
+    // Temporarily make the field accessible.
     boolean changedAccess = false;
-
-    //we want to access all fields...
     if (!field.isAccessible()) {
       changedAccess = true;
       field.setAccessible(true);
     }
 
     Class<?> type = field.getType();
-    String theName = field.getName();
-    int modifiers = field.getModifiers();
+    String type_name = stdClassName(type) + arr_str + appendAuxInfo(field);
 
+    int modifiers = field.getModifiers();
     if (Modifier.isStatic(modifiers)) {
       offset = field.getDeclaringClass().getName() + ".";
     } else if (offset.length() == 0) { // instance fld, 1st recursion step
       offset = "this.";
     }
 
+    String theName = field.getName();
+
     // Convert the internal reflection name for an outer class
     // 'this' field to the Java language format.
     if (theName.startsWith("this$")) {
-      theName = type.getName() + ".this";
       offset = "";
+      theName = type.getName() + ".this";
     }
-
-    String type_name = stdClassName(type) + arr_str;
-
-    // Print auxiliary information.
-    type_name += appendAuxInfo(field);
 
     DaikonVariableInfo newField =
         new FieldInfo(
@@ -812,7 +808,9 @@ public abstract class DaikonVariableInfo
 
     addChild(newField);
 
-    if (!ignore) newField.checkForDerivedVariables(type, theName, offset);
+    if (!ignore) {
+      newField.checkForDerivedVariables(type, theName, offset);
+    }
 
     buf.append(offset);
 

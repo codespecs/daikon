@@ -35,9 +35,9 @@ public class FieldInfo extends DaikonVariableInfo {
   public DCRuntime. /*@MonotonicNonNull*/FieldTag field_tag = null;
 
   public FieldInfo(
-      String theName, Field theField, String typeName, String repTypeName, boolean isArr) {
+      String theName, Field field, String typeName, String repTypeName, boolean isArr) {
     super(theName, typeName, repTypeName, isArr);
-    field = theField;
+    this.field = field;
 
     is_static = Modifier.isStatic(field.getModifiers());
     is_primitive = field.getType().isPrimitive();
@@ -181,7 +181,9 @@ public class FieldInfo extends DaikonVariableInfo {
   public EnumSet<VarFlags> get_var_flags() {
     EnumSet<VarFlags> flags = super.get_var_flags();
     int modbits = field.getModifiers();
-    if (Modifier.isFinal(modbits) && Modifier.isStatic(modbits)) flags.add(VarFlags.NOMOD);
+    if (Modifier.isFinal(modbits) && Modifier.isStatic(modbits)) {
+      flags.add(VarFlags.NOMOD);
+    }
     return flags;
   }
 }
