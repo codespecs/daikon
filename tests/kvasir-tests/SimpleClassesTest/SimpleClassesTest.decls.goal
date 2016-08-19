@@ -23,61 +23,73 @@ ppt ..main():::ENTER
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -121,61 +133,73 @@ ppt ..main():::EXIT0
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -224,61 +248,73 @@ ppt A.setEverything():::ENTER
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -351,61 +387,73 @@ ppt A.setEverything():::EXIT0
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -493,61 +541,73 @@ ppt B.setEverything():::ENTER
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -576,61 +636,73 @@ ppt B.setEverything():::ENTER
     flags is_param 
   variable this->C.privateIntC
     var-kind field privateIntC
+    enclosing-var this
     rep-type int
     dec-type int
     parent C:::OBJECT 2 this->C.privateIntC
   variable this->C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var this
     rep-type int
     dec-type int
     parent C:::OBJECT 2 this->C.protectedIntC
   variable this->C.publicIntC
     var-kind field publicIntC
+    enclosing-var this
     rep-type int
     dec-type int
     parent C:::OBJECT 2 this->C.publicIntC
   variable this->D.privateIntD
     var-kind field privateIntD
+    enclosing-var this
     rep-type int
     dec-type int
     parent D:::OBJECT 3 this->D.privateIntD
   variable this->D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var this
     rep-type int
     dec-type int
     parent D:::OBJECT 3 this->D.protectedIntD
   variable this->D.publicIntD
     var-kind field publicIntD
+    enclosing-var this
     rep-type int
     dec-type int
     parent D:::OBJECT 3 this->D.publicIntD
   variable this->E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->E.A.privateIntA
   variable this->E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->E.A.protectedIntA
   variable this->E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->E.A.publicIntA
   variable this->E.privateIntE
     var-kind field privateIntE
+    enclosing-var this
     rep-type int
     dec-type int
     parent E:::OBJECT 4 this->E.privateIntE
   variable this->E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var this
     rep-type int
     dec-type int
     parent E:::OBJECT 4 this->E.protectedIntE
   variable this->E.publicIntE
     var-kind field publicIntE
+    enclosing-var this
     rep-type int
     dec-type int
     parent E:::OBJECT 4 this->E.publicIntE
@@ -680,61 +752,73 @@ ppt B.setEverything():::EXIT0
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -763,61 +847,73 @@ ppt B.setEverything():::EXIT0
     flags is_param 
   variable this->C.privateIntC
     var-kind field privateIntC
+    enclosing-var this
     rep-type int
     dec-type int
     parent C:::OBJECT 2 this->C.privateIntC
   variable this->C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var this
     rep-type int
     dec-type int
     parent C:::OBJECT 2 this->C.protectedIntC
   variable this->C.publicIntC
     var-kind field publicIntC
+    enclosing-var this
     rep-type int
     dec-type int
     parent C:::OBJECT 2 this->C.publicIntC
   variable this->D.privateIntD
     var-kind field privateIntD
+    enclosing-var this
     rep-type int
     dec-type int
     parent D:::OBJECT 3 this->D.privateIntD
   variable this->D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var this
     rep-type int
     dec-type int
     parent D:::OBJECT 3 this->D.protectedIntD
   variable this->D.publicIntD
     var-kind field publicIntD
+    enclosing-var this
     rep-type int
     dec-type int
     parent D:::OBJECT 3 this->D.publicIntD
   variable this->E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->E.A.privateIntA
   variable this->E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->E.A.protectedIntA
   variable this->E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->E.A.publicIntA
   variable this->E.privateIntE
     var-kind field privateIntE
+    enclosing-var this
     rep-type int
     dec-type int
     parent E:::OBJECT 4 this->E.privateIntE
   variable this->E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var this
     rep-type int
     dec-type int
     parent E:::OBJECT 4 this->E.protectedIntE
   variable this->E.publicIntE
     var-kind field publicIntE
+    enclosing-var this
     rep-type int
     dec-type int
     parent E:::OBJECT 4 this->E.publicIntE
@@ -934,61 +1030,73 @@ ppt C.setEverything():::ENTER
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -1061,61 +1169,73 @@ ppt C.setEverything():::EXIT0
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -1203,61 +1323,73 @@ ppt D.setEverything():::ENTER
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -1330,61 +1462,73 @@ ppt D.setEverything():::EXIT0
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -1472,61 +1616,73 @@ ppt E.setEverything():::ENTER
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -1555,16 +1711,19 @@ ppt E.setEverything():::ENTER
     flags is_param 
   variable this->A.privateIntA
     var-kind field privateIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->A.privateIntA
   variable this->A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->A.protectedIntA
   variable this->A.publicIntA
     var-kind field publicIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->A.publicIntA
@@ -1614,61 +1773,73 @@ ppt E.setEverything():::EXIT0
     dec-type B[]
   variable ::arrayOfBees[..].C.privateIntC
     var-kind field privateIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].C.publicIntC
     var-kind field publicIntC
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.privateIntD
     var-kind field privateIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].D.publicIntD
     var-kind field publicIntD
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.privateIntE
     var-kind field privateIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
   variable ::arrayOfBees[..].E.publicIntE
     var-kind field publicIntE
+    enclosing-var ::arrayOfBees[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -1697,16 +1868,19 @@ ppt E.setEverything():::EXIT0
     flags is_param 
   variable this->A.privateIntA
     var-kind field privateIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->A.privateIntA
   variable this->A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->A.protectedIntA
   variable this->A.publicIntA
     var-kind field publicIntA
+    enclosing-var this
     rep-type int
     dec-type int
     parent A:::OBJECT 5 this->A.publicIntA
