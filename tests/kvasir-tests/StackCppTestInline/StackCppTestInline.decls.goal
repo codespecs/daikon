@@ -37,11 +37,11 @@ ppt ..main():::ENTER
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
 
@@ -80,11 +80,11 @@ ppt ..main():::EXIT0
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable return
@@ -129,11 +129,11 @@ ppt Link.initialize(char*,\_Stack::Link*):::ENTER
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable dat
@@ -351,11 +351,11 @@ ppt Link.initialize(char*,\_Stack::Link*):::EXIT0
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable dat
@@ -645,11 +645,11 @@ ppt Stack.Stack(char*):::ENTER
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable name
@@ -791,11 +791,11 @@ ppt Stack.Stack(char*):::EXIT0
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable name
@@ -937,11 +937,11 @@ ppt Stack.getName():::ENTER
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable this
@@ -1078,11 +1078,11 @@ ppt Stack.getName():::EXIT0
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable return
@@ -1222,11 +1222,11 @@ ppt Stack.getNumStacksCreated():::ENTER
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
 
@@ -1267,11 +1267,11 @@ ppt Stack.getNumStacksCreated():::EXIT0
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable return
@@ -1317,11 +1317,11 @@ ppt Stack.peek():::ENTER
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable this
@@ -1458,11 +1458,11 @@ ppt Stack.peek():::EXIT0
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable return
@@ -1603,11 +1603,11 @@ ppt Stack.pop():::ENTER
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable this
@@ -1744,11 +1744,11 @@ ppt Stack.pop():::EXIT0
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable return
@@ -1889,11 +1889,11 @@ ppt Stack.privateStuff():::ENTER
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable this
@@ -2030,11 +2030,11 @@ ppt Stack.privateStuff():::EXIT0
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable return
@@ -2175,11 +2175,11 @@ ppt Stack.push(char*):::ENTER
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable dat
@@ -2321,11 +2321,11 @@ ppt Stack.push(char*):::EXIT0
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable dat
@@ -2467,11 +2467,11 @@ ppt Stack.~Stack():::ENTER
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable this
@@ -2608,11 +2608,11 @@ ppt Stack.~Stack():::EXIT0
     rep-type int
     dec-type int
   variable Stack::numStacksCreated
-    var-kind field Stack::numStacksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable Stack::publicNumLinksCreated
-    var-kind field Stack::publicNumLinksCreated
+    var-kind variable
     rep-type int
     dec-type int
   variable this
