@@ -44,7 +44,7 @@ public class ThisObjInfo extends DaikonVariableInfo {
     return VarKind.VARIABLE;
   }
 
-  /** Add IS_PARM to list of variable flags **/
+  /** Add IS_PARAM to list of variable flags, because the receiver is a formal parameter. **/
   public EnumSet<VarFlags> get_var_flags() {
     // System.out.printf ("%s is a parameter%n", this);
     EnumSet<VarFlags> var_flags = super.get_var_flags().clone();
