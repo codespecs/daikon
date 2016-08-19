@@ -3083,7 +3083,9 @@ public class PptTopLevel extends Ppt {
 
     paramVars = new LinkedHashSet<VarInfo>();
     for (VarInfo var : var_infos) {
-      if (var.isParam() && !var.isPrestate()) paramVars.add(var);
+      if (var.isParam() && !var.isPrestate()) {
+        paramVars.add(var);
+      }
     }
     return paramVars;
   }

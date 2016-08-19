@@ -1034,7 +1034,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     boolean result = false;
-    if (isParam() && !isPrestate()) result = true;
+    if (isParam() && !isPrestate()) {
+      result = true;
+    }
 
     if (!FileIO.new_decl_format) {
       // Determine the result from VarInfoName
@@ -2832,7 +2834,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Set this variable as a parameter **/
   public void set_is_param() {
     // System.out.printf ("setting is_param for %s %n", name());
-    if (FileIO.new_decl_format) var_flags.add(VarFlags.IS_PARAM);
+    if (FileIO.new_decl_format) {
+      var_flags.add(VarFlags.IS_PARAM);
+    }
     aux = aux.setValue(VarInfoAux.IS_PARAM, VarInfoAux.TRUE); // VIN
   }
 
