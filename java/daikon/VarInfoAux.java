@@ -111,8 +111,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
   public static final String FALSE = "false";
 
   /**
-   * Whether this variable is an inline structure or a reference to
-   * a structure (class).  By default it is a reference.  If it is
+   * Whether this variable is an inline structure.
+   * By default, a variable is a reference to a structure (class).  If it is
    * an inlined structure (or array), it doesn't make sense to look
    * for invariants over its hashcode.  Front ends include references
    * to inlined structures as variables because some tools that follow
@@ -477,7 +477,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * @see #IS_STRUCT
+   * @see #IS_PARAM
    */
   @SuppressWarnings("keyfor") // IS_PARAM is always a key
   /*@Pure*/

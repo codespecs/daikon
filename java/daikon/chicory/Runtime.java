@@ -44,6 +44,8 @@ public class Runtime {
    * each enter/exit and the decl information for any new classes are
    * printed out and the class is then removed from the list.
    */
+  // The order of this list depends on the order of loading by the JVM.
+  // Declared as LinkedList instead of List to permit use of removeFirst().
   public static final /*@GuardedBy("<self>")*/ LinkedList<ClassInfo> new_classes =
       new LinkedList<ClassInfo>();
 
