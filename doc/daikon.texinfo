@@ -6661,6 +6661,15 @@ at all from the Daikon developers.  For more information about building
 a new front end,
 see @ref{New front ends,,,developer,Daikon Developer Manual}.
 
+@cindex Udon front end for LLVM
+@cindex front end for LLVM
+@cindex LLVM front end
+@cindex instrumentation, of LLVM programs
+
+A front end for LLVM, named Udon, is distributed
+separately; see @uref{https://github.com/markus-kusano/udon}.
+It can be used on any programming language that can be compiled to LLVM.
+
 @cindex Takuan front end for WS-BPEL
 @cindex front end for WS-BPEL
 @cindex WS-BPEL front end

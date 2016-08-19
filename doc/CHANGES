@@ -20,6 +20,14 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.3.10 (August 1, 2016)
+
+A new front end for LLVM is available.
+See https://github.com/markus-kusano/udon.
+You can use it with any program that can be compiled to LLVM.
+
+===========================================================================
+
 5.3.8 (August 1, 2016)
 
 Miscellaneous bug fixes and minor improvements.
