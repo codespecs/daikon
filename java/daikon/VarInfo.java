@@ -385,7 +385,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       auxstrs.add(VarInfoAux.IS_PARAM + "=true");
     }
     if (var_flags.contains(VarFlags.NON_NULL)) {
-      auxstrs.add(VarInfoAux.IS_STRUCT + "=true");
+      auxstrs.add(VarInfoAux.IS_NON_NULL + "=true");
     }
     if (vardef.min_value != null) {
       auxstrs.add(VarInfoAux.MINIMUM_VALUE + "=" + vardef.min_value);

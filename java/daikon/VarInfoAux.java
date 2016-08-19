@@ -13,7 +13,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Represents additional information about a VarInfo that frontends
+ * Represents additional information about a VarInfo that front ends
  * tell Daikon.  For example, whether order matters in a collection.
  * This is immutable and interned.
  **/
@@ -119,6 +119,12 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * daikon need other information about the variable.
    */
   public static final String IS_STRUCT = "isStruct";
+
+  /**
+   * Whether this variable is known to be non-null, such as
+   * "this" in a Java program.
+   */
+  public static final String IS_NON_NULL = "isNonNull";
 
   /**
    * Return an interned VarInfoAux that represents a given string.
@@ -266,6 +272,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     defaultMap.put(IS_PARAM, FALSE);
     defaultMap.put(PACKAGE_NAME, NO_PACKAGE_NAME);
     defaultMap.put(IS_STRUCT, FALSE);
+    defaultMap.put(IS_NON_NULL, FALSE);
     this.map = defaultMap;
     this.isInterned = false;
   }
@@ -501,5 +508,14 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /*@Pure*/
   public boolean isStruct() {
     return getFlag(IS_STRUCT);
+  }
+
+  /**
+   * @see #IS_NON_NULL
+   */
+  @SuppressWarnings("keyfor") // IS_NON_NULL is always a key
+  /*@Pure*/
+  public boolean isNonNull() {
+    return getFlag(IS_NON_NULL);
   }
 }
