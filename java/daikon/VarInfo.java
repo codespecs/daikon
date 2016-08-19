@@ -295,9 +295,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         : "" + this + " value_index=" + value_index + ", varinfo_index=" + varinfo_index;
     assert is_static_constant == (value_index == -1);
     assert is_static_constant || (static_constant_value == null);
-    // TODO: uncomment the assertion once bugs are fixed.
-    // assert (! (var_kind == VarKind.FIELD)) || enclosing_var != null
-    //   : "FIELD with no enclosing_var: " + this + " at " + ppt;
+    if ((var_kind == VarKind.FIELD || var_kind == VarKind.ARRAY) && enclosing_var == null) {
+      throw new AssertionError("enclosing-var not specified for variable " + var_info_name);
+    }
   }
 
   /** Returns whether or not rep_type is a legal type **/
@@ -385,7 +385,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       auxstrs.add(VarInfoAux.IS_PARAM + "=true");
     }
     if (var_flags.contains(VarFlags.NON_NULL)) {
-      auxstrs.add(VarInfoAux.IS_STRUCT + "=true");
+      auxstrs.add(VarInfoAux.IS_NON_NULL + "=true");
     }
     if (vardef.min_value != null) {
       auxstrs.add(VarInfoAux.MINIMUM_VALUE + "=" + vardef.min_value);

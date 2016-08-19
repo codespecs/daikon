@@ -13,7 +13,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Represents additional information about a VarInfo that frontends
+ * Represents additional information about a VarInfo that front ends
  * tell Daikon.  For example, whether order matters in a collection.
  * This is immutable and interned.
  **/
@@ -111,14 +111,20 @@ public final class VarInfoAux implements Cloneable, Serializable {
   public static final String FALSE = "false";
 
   /**
-   * Whether this variable is an inline structure or a reference to
-   * a structure (class).  By default it is a reference.  If it is
+   * Whether this variable is an inline structure.
+   * By default, a variable is a reference to a structure (class).  If it is
    * an inlined structure (or array), it doesn't make sense to look
    * for invariants over its hashcode.  Front ends include references
    * to inlined structures as variables because some tools that follow
    * daikon need other information about the variable.
    */
   public static final String IS_STRUCT = "isStruct";
+
+  /**
+   * Whether this variable is known to be non-null, such as
+   * "this" in a Java program.
+   */
+  public static final String IS_NON_NULL = "isNonNull";
 
   /**
    * Return an interned VarInfoAux that represents a given string.
@@ -266,6 +272,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     defaultMap.put(IS_PARAM, FALSE);
     defaultMap.put(PACKAGE_NAME, NO_PACKAGE_NAME);
     defaultMap.put(IS_STRUCT, FALSE);
+    defaultMap.put(IS_NON_NULL, FALSE);
     this.map = defaultMap;
     this.isInterned = false;
   }
@@ -477,7 +484,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * @see #IS_STRUCT
+   * @see #IS_PARAM
    */
   @SuppressWarnings("keyfor") // IS_PARAM is always a key
   /*@Pure*/
@@ -501,5 +508,14 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /*@Pure*/
   public boolean isStruct() {
     return getFlag(IS_STRUCT);
+  }
+
+  /**
+   * @see #IS_NON_NULL
+   */
+  @SuppressWarnings("keyfor") // IS_NON_NULL is always a key
+  /*@Pure*/
+  public boolean isNonNull() {
+    return getFlag(IS_NON_NULL);
   }
 }

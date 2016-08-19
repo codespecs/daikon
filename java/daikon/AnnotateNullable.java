@@ -374,10 +374,11 @@ public class AnnotateNullable {
       // object fields in each method).
       if (!vi.parents.isEmpty()) continue;
 
-      // Skip 'this' variables (we know they are non-null).
+      // Skip variables that are always non-null.
+      // "this" and outer this are always non-null.
       if (vi.name().equals("this")) continue;
-      // Likewise for getClass(), a method call that is supplied to Daikon
-      // like an oddly-named variable.
+      if (vi.name().endsWith(".this")) continue;
+      // getClass() is a method call that is supplied to Daikon like an oddly-named variable.
       if (field_name(vi).equals("getClass()")) continue;
 
       // Skip any variable that is enclosed by a variable other than

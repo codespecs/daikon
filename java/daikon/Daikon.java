@@ -1581,7 +1581,7 @@ public final class Daikon {
   public static void init_ppt(PptTopLevel ppt, PptMap all_ppts) {
 
     if (!Daikon.using_DaikonSimple) {
-      // Create orig variables and setup splitters.
+      // Create orig variables and set up splitters.
       // This must be done before adding derived variables.
       // Do not add splitters to ppts that were already created by splitters!
       // Also, ppts created by splitters already have their orig_vars.

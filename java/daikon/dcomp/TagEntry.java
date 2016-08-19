@@ -113,8 +113,9 @@ class TagEntry extends WeakReference<Object> {
     if (blarg.get(blarg.size() - 1).getClassName().equals("daikon.dcomp.Premain$ShutdownThread")) {
       return "";
     }
-    do blarg.remove(0);
-    while (blarg.get(0).getClassName().equals("daikon.dcomp.DCRuntime")
+    do {
+      blarg.remove(0);
+    } while (blarg.get(0).getClassName().equals("daikon.dcomp.DCRuntime")
         || blarg.get(0).getClassName().equals("daikon.dcomp.TagEntry"));
 
     if (daikon.DynComp.trace_line_depth == 1) {

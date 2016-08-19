@@ -113,7 +113,7 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Given another class, return a transformed version of the class which
+   * Given a class, return a transformed version of the class that
    * contains "hooks" at method entries and exits.
    * Because Chicory is invoked as a javaagent, the transform method is
    * called by the Java runtime each time a new class is loaded.
@@ -445,10 +445,10 @@ public class Instrument implements ClassFileTransformer {
   /**
    * Instrument all the methods in a class.  For each method, add
    * instrumentation code at the entry and at each return from the method.
-   * In additon, changes each return statement to first place the value
+   * In addition, changes each return statement to first place the value
    * being returned into a local and then return. This allows us to work
    * around the JDI deficiency of not being able to query return values.
-   * @param fullClassName must be packageName.className
+   * @param fullClassName must be fully qualified: packageName.className
    */
   private ClassInfo instrument_all_methods(ClassGen cg, String fullClassName, ClassLoader loader) {
 
