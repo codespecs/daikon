@@ -27,6 +27,9 @@ public class FieldInfo extends DaikonVariableInfo {
   /** whether or not this field is of a primitive type **/
   private boolean is_primitive;
 
+  /** whether or not this field is an outer this variable **/
+  private boolean is_outer_this;
+
   /**
    * Class that gets the tags for fields.  Used by DynComp.
    * Accessed only by methods DCRuntime.get_field_tag and
@@ -41,6 +44,7 @@ public class FieldInfo extends DaikonVariableInfo {
 
     is_static = Modifier.isStatic(field.getModifiers());
     is_primitive = field.getType().isPrimitive();
+    is_outer_this = field.getName().startsWith("this$");
 
     // Calculate the offset of this field in its class
     Class<?> clazz = field.getDeclaringClass();
@@ -137,10 +141,10 @@ public class FieldInfo extends DaikonVariableInfo {
 
   /**
    * Returns the kind of this variable.  Statics are top level
-   * variables, instance variables are fields
+   * variables, instance variables are fields.
    **/
   public VarKind get_var_kind() {
-    if (isStatic()) {
+    if (isStatic() || is_outer_this) {
       return VarKind.VARIABLE;
     } else {
       return VarKind.FIELD;
@@ -152,7 +156,7 @@ public class FieldInfo extends DaikonVariableInfo {
    * have no relative name.  Fields return their field name.
    **/
   public /*@Nullable*/ String get_relative_name() {
-    if (isStatic()) {
+    if (isStatic() || is_outer_this) {
       return null;
     } else {
       String theName = field.getName();

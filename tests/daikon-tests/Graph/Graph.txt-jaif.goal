@@ -4,7 +4,6 @@ annotation @NonNull:
 
 package MapQuick1:
 class Graph$DuplicateEdgeException : // 0/- obj/class samples
-  field MapQuick1.Graph.this :  // MapQuick1.Graph
   method DuplicateEdgeException(LMapQuick1/Graph;)V : // 0 samples
     return: 
   method DuplicateEdgeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
@@ -14,7 +13,6 @@ class Graph$DuplicateEdgeException : // 0/- obj/class samples
 
 package MapQuick1:
 class Graph$DuplicateNodeException : // 0/- obj/class samples
-  field MapQuick1.Graph.this :  // MapQuick1.Graph
   method DuplicateNodeException(LMapQuick1/Graph;)V : // 0 samples
     return: 
   method DuplicateNodeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
@@ -25,7 +23,6 @@ class Graph$DuplicateNodeException : // 0/- obj/class samples
 package MapQuick1:
 class Graph$GraphException : // 0/- obj/class samples
   field getClass().getName() :  // java.lang.Class
-  field MapQuick1.Graph.this :  // MapQuick1.Graph
   method GraphException(LMapQuick1/Graph;)V : // 0 samples
     return: 
   method GraphException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
@@ -37,7 +34,6 @@ class Graph$GraphException : // 0/- obj/class samples
 
 package MapQuick1:
 class Graph$NoNodeException : // 0/- obj/class samples
-  field MapQuick1.Graph.this :  // MapQuick1.Graph
   method NoNodeException(LMapQuick1/Graph;)V : // 0 samples
     return: 
   method NoNodeException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples
