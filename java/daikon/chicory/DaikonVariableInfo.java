@@ -479,9 +479,8 @@ public abstract class DaikonVariableInfo
       // In the future, perhaps skip some synthetic fields.  So far, the
       // only ones we have seen are 'this$0' (a field in an inner class
       // that contains a pointer to the instance of the outer class),
-      // 'this$1' for an inner inner class, and so on.  We want these
-      // variables because we would like to expose the outer class fields
-      // of an inner class to Daikon.
+      // 'this$1' for an inner inner class, and so on.  These variables
+      // expose the outer class fields of an inner class to Daikon.
 
       if (!is_static && dontPrintInstanceVars) {
         debug_vars.log("--field !static and instance var %b%n", dontPrintInstanceVars);

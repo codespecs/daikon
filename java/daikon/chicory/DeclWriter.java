@@ -300,7 +300,7 @@ public class DeclWriter extends DaikonWriter {
 
   /**
    * Prints a method's program point.  This includes the ppt declaration,
-   * all of the ppt records and records for each variable.
+   * all of the ppt records, and records for each variable.
    *
    * This method uses variable information from the traversal tree.
    *

@@ -227,7 +227,9 @@ public class Runtime {
       synchronized (new_classes) {
         num_new_classes = new_classes.size();
       }
-      if (num_new_classes > 0) process_new_classes();
+      if (num_new_classes > 0) {
+        process_new_classes();
+      }
 
       MethodInfo mi = methods.get(mi_index);
       mi.call_cnt++;
@@ -313,7 +315,9 @@ public class Runtime {
       synchronized (new_classes) {
         num_new_classes = new_classes.size();
       }
-      if (num_new_classes > 0) process_new_classes();
+      if (num_new_classes > 0) {
+        process_new_classes();
+      }
 
       // Skip this call if it was not sampled at entry to the method
       if (sample_start > 0) {
@@ -394,8 +398,8 @@ public class Runtime {
   }
 
   /**
-   * Writes out decl information for any new classes and removes
-   * them from the list.
+   * Writes out decl information for any new classes (those in the
+   * new_classes field) and removes them from that list.
    */
   /*@Holding("Runtime.class")*/
   public static void process_new_classes() {
@@ -409,8 +413,7 @@ public class Runtime {
       ClassInfo class_info = null;
       synchronized (new_classes) {
         if (new_classes.size() > 0) {
-          class_info = new_classes.get(0);
-          new_classes.remove(0);
+          class_info = new_classes.removeFirst();
         }
       }
       if (class_info == null) break;

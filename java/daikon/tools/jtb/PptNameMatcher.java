@@ -223,7 +223,7 @@ public class PptNameMatcher {
 
     if (pptTypeStrings.size() != method_params.size()) {
 
-      // An inner class constructor may have an extra first parameter
+      // An inner class constructor has an extra first parameter
       // that is an implicit outer this parameter.  If so, remove it
       // before checking for a match.
       boolean OK_outer_this = false;
