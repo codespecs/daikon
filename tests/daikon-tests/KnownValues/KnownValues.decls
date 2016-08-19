@@ -102,6 +102,7 @@ variable a
   comparability 1
 variable a[..]
   var-kind array
+  enclosing-var a
   array 1
   dec-type int[]
   rep-type int[]
@@ -123,6 +124,7 @@ variable a
   comparability 1
 variable a[..]
   var-kind array
+  enclosing-var a
   array 1
   dec-type int[]
   rep-type int[]
@@ -143,6 +145,7 @@ variable a
   comparability 1
 variable a[..]
   var-kind array
+  enclosing-var a
   array 1
   dec-type int[]
   rep-type int[]
@@ -244,6 +247,7 @@ variable a
   comparability 1
 variable a[..]
   var-kind array
+  enclosing-var a
   array 1
   dec-type java.lang.String[]
   rep-type java.lang.String[]
@@ -262,6 +266,7 @@ variable a
   comparability 1
 variable a[..]
   var-kind array
+  enclosing-var a
   array 1
   dec-type java.lang.String[]
   rep-type java.lang.String[]
@@ -304,6 +309,7 @@ variable a
   comparability 1
 variable a[..]
   var-kind array
+  enclosing-var a
   array 1
   dec-type int[]
   rep-type int[]
@@ -322,6 +328,7 @@ variable a
   comparability 1
 variable a[..]
   var-kind array
+  enclosing-var a
   array 1
   dec-type int[]
   rep-type int[]

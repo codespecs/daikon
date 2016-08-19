@@ -44,7 +44,7 @@ public class Runtime {
    * each enter/exit and the decl information for any new classes are
    * printed out and the class is then removed from the list.
    */
-  public static final /*@GuardedBy("<self>")*/ List<ClassInfo> new_classes =
+  public static final /*@GuardedBy("<self>")*/ LinkedList<ClassInfo> new_classes =
       new LinkedList<ClassInfo>();
 
   /** List of all instrumented classes **/

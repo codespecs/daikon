@@ -530,7 +530,8 @@ variable this
   comparability 22
   parent MapQuick1.Graph$DuplicateNodeException:::OBJECT 1
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable 
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -583,7 +584,8 @@ variable this
   comparability 22
   parent MapQuick1.Graph$DuplicateNodeException:::OBJECT 1
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable 
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -619,7 +621,8 @@ variable this
   flags is_param
   comparability 22
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable 
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -665,7 +668,8 @@ variable this.getClass().getName()
   comparability 22
   parent MapQuick1.Graph$GraphException:::OBJECT 1
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -727,7 +731,8 @@ variable this.getClass().getName()
   comparability 22
   parent MapQuick1.Graph$GraphException:::OBJECT 1
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -774,7 +779,8 @@ variable this.getClass().getName()
   comparability 22
   parent MapQuick1.Graph$GraphException:::OBJECT 1
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -807,7 +813,8 @@ variable this.getClass().getName()
   comparability 22
   parent MapQuick1.Graph$GraphException:::OBJECT 1
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -848,7 +855,8 @@ variable this.getClass().getName()
   flags synthetic classname
   comparability 22
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -885,7 +893,8 @@ variable this
   comparability 22
   parent MapQuick1.Graph$NoNodeException:::OBJECT 1
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -938,7 +947,8 @@ variable this
   comparability 22
   parent MapQuick1.Graph$NoNodeException:::OBJECT 1
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -974,7 +984,8 @@ variable this
   flags is_param
   comparability 22
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -1011,7 +1022,8 @@ variable this
   comparability 22
   parent MapQuick1.Graph$DuplicateEdgeException:::OBJECT 1
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -1064,7 +1076,8 @@ variable this
   comparability 22
   parent MapQuick1.Graph$DuplicateEdgeException:::OBJECT 1
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22
@@ -1100,7 +1113,8 @@ variable this
   flags is_param
   comparability 22
 variable MapQuick1.Graph.this
-  var-kind field MapQuick1.Graph.this
+  var-kind variable
+  enclosing-var this
   dec-type MapQuick1.Graph
   rep-type hashcode
   comparability 22

@@ -26,6 +26,10 @@ A new front end for LLVM is available.
 See https://github.com/markus-kusano/udon.
 You can use it with any program that can be compiled to LLVM.
 
+Daikon does stricter checking of its input files.  Older versions of Kvasir
+and Chicory create invalid .decls or .dtrace files, which Daikon now
+rejects.  If this happens, re-run the front end to create new, correct files.
+
 ===========================================================================
 
 5.3.8 (August 1, 2016)
