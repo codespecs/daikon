@@ -1151,6 +1151,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
+  /** Implementation of {@link #isDerivedParamAndUninteresting()}. */
   /*@Pure*/
   private boolean _isDerivedParamAndUninteresting() {
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
@@ -1159,7 +1160,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     // Orig variables are not considered parameters.  We only check the
-    // first variable in a derivation because that is the sequence in
+    // first variable in a derivation because that is the sequence variable in
     // sequence-subscript or sequence-subsequence derivations and we don't
     // care if the index into the sequence is prestate or not.
     if (isPrestate() || (isDerived() && derived.getBase(0).isPrestate())) {

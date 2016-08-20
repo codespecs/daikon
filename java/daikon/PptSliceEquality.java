@@ -86,9 +86,9 @@ public class PptSliceEquality extends PptSlice {
 
     /*@Pure*/
     public int hashCode(/*>>>@GuardSatisfied VarInfoAndComparability this*/) {
-      // This is about as good as we can do it.  Can't do hashcode of
+      // This is very coarse but is about as good as we can do it.  Can't do hashcode of
       // the comparability because two comparabilities may be
-      // comparable and yet be not the same
+      // comparable and yet be not the same.
       // (e.g. VarComparabilityExplicit).
       return vi.file_rep_type.hashCode();
     }
@@ -105,7 +105,7 @@ public class PptSliceEquality extends PptSlice {
     /**
      * Whether two VarInfos can be set to be equal to each other is
      * whether they are comparableNWay.  Since we do not yet handle
-     * inheritance, we require that the comptability go both ways.
+     * inheritance, we require that the comparability go both ways.
      **/
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/

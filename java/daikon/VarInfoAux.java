@@ -41,7 +41,10 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /**
    * Whether this variable is a parameter to a method, or derived from
    * a parameter to a method.  By default, if p is a parameter, then
-   * some EXIT invariants related to p aren't printed.  Frontends are
+   * some EXIT invariants related to p aren't printed.  However, this
+   * does not affect the computation of invariants.
+   * <p>
+   * Frontends are
    * responsible for setting if p is a parameter and if p.a is a
    * parameter.  In Java, p.a is not a parameter, whereas in IOA, it
    * is.
@@ -99,7 +102,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /**
    * Indicates the valid values (using string representation) for the elements
-   * of the vector. Values are enclosed in square brackets, and each element is
+   * of the vector, if there's any. Values are enclosed in square brackets, and each element is
    * quoted separately, e.g.: ["a" "b"]. Parsing will be done upon
    * call of the getList() method.
    *
