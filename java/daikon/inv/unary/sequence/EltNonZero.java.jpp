@@ -307,6 +307,8 @@ public final class CLASSNAME
 
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+    // This test doesn't seem right: the invariant is obvious if the
+    // elements don't have null, not if the collection doesn't have null.
     if (!vis[0].aux.hasNull()) {
       // If it's not a number and null doesn't have special meaning...
       return new DiscardInfo(this, DiscardCode.obvious, "'null' has no special meaning for " + vis[0].name());

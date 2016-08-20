@@ -267,16 +267,17 @@ public class NONZERO
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var = vis[0];
 
-    // While 'this' can clearly not be null, if 'this'
-    // is a parent for all of the references to the class, those references
-    // can be null and the non-null invariant becomes interesting.
-    if (var.aux.isStruct() || var.aux.isNonNull()) {
+    if (var.aux.isStruct()) {
       return new DiscardInfo(this, DiscardCode.obvious,
-                             "'this' can never be null in Java");
+                             var.name() + " is a struct");
+    }
+
+    if (var.aux.isNonNull()) {
+      return new DiscardInfo(this, DiscardCode.obvious,
+                             "aux information says " + var.name() + " is non-null");
     }
 
     if (!var.aux.hasNull()) {
-      // If it's not a number and null doesn't have special meaning...
       return new DiscardInfo(this, DiscardCode.obvious,
                      "'null' has no special meaning for " + var.name());
     }

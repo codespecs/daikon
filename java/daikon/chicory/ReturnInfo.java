@@ -5,18 +5,9 @@ package daikon.chicory;
  * returned from procedures.
  */
 public class ReturnInfo extends DaikonVariableInfo {
-  // Under what circumstances is this null?  Maybe it's unused. -MDE
-  //    Class<?> return_type = null;
-
-  //     public ReturnInfo()
-  //     {
-  //         super("return");
-  //     }
 
   public ReturnInfo(Class<?> returnType) {
     super("return", stdClassName(returnType), getRepName(returnType, false));
-
-    //        this.return_type = returnType;
   }
 
   @Override

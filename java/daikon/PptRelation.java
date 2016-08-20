@@ -444,23 +444,7 @@ public class PptRelation implements Serializable {
   /**
    * Returns a relation in the ppt hierarchy from an object (parent)
    * to a user (child) of that objects (eg, from the object B to the method
-   * A.foo (B arg))
-   *
-   * Note that on Nov 22 2005, jhp removed the exception noted below.
-   * We now think it would be more regular to include this in the relation.
-   * If the output is confusing, we can change the ParentFilter to not
-   * filter out this particular child invariant.
-   *
-   *   Note that only the fields of the object (eg, this.x, this.y)
-   *   and not the object itself (eg, this) are substituted in this
-   *   fashion.  That is because the object and references to it are
-   *   really not the same.
-   *
-   *   For example, assume that every reference to T at all ppts was not
-   *   null.  This invariant would print as 'this != null.'  The
-   *   invariant is both confusing (since in a normal context 'this' can
-   *   never be null) and it is not obvious that it implies that all
-   *   references to the object are not NULL.
+   * A.foo (B arg)).
    *
    * @param parent ppt of the object definition
    * @param child ppt of a user of parent's object
@@ -476,9 +460,6 @@ public class PptRelation implements Serializable {
     // by substituting args name for this in the parent and then looking
     // for a name match in the child
     for (VarInfo vp : parent.var_infos) {
-      // // Don't make any relationship for variable "this".
-      // if (vp.isThis())
-      //  continue;
       rel.relate(vp, vp.replace_this(arg));
     }
     return rel;
