@@ -12,7 +12,7 @@ hashcode
 DECLARE
 misc.StaticInteresting:::OBJECT
 this
-misc.StaticInteresting # isParam=true
+misc.StaticInteresting # isNonNull=true isParam=true
 hashcode
 3
 this.outer
@@ -95,7 +95,7 @@ java.lang.String[]
 DECLARE
 misc.StaticInteresting.work():::ENTER
 this
-misc.StaticInteresting # isParam=true
+misc.StaticInteresting # isNonNull=true isParam=true
 hashcode
 3
 this.outer
@@ -130,7 +130,7 @@ hashcode
 DECLARE
 misc.StaticInteresting.work():::EXIT71
 this
-misc.StaticInteresting # isParam=true
+misc.StaticInteresting # isNonNull=true isParam=true
 hashcode
 3
 this.outer
@@ -169,7 +169,7 @@ misc.StaticInteresting.StaticInteresting():::ENTER
 DECLARE
 misc.StaticInteresting.StaticInteresting():::EXIT78
 this
-misc.StaticInteresting # isParam=true
+misc.StaticInteresting # isNonNull=true isParam=true
 hashcode
 3
 this.outer
@@ -205,7 +205,7 @@ hashcode
 DECLARE
 misc.StaticInteresting.equals(java.lang.Object):::ENTER
 this
-misc.StaticInteresting # isParam=true
+misc.StaticInteresting # isNonNull=true isParam=true
 hashcode
 4
 this.outer
@@ -248,7 +248,7 @@ java.lang.String
 DECLARE
 misc.StaticInteresting.equals(java.lang.Object):::EXIT1
 this
-misc.StaticInteresting # isParam=true
+misc.StaticInteresting # isNonNull=true isParam=true
 hashcode
 5
 this.outer
@@ -296,7 +296,7 @@ boolean
 DECLARE
 misc.StaticInteresting.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.StaticInteresting # isParam=true
+misc.StaticInteresting # isNonNull=true isParam=true
 hashcode
 4
 this.outer
@@ -339,7 +339,7 @@ java.lang.String
 DECLARE
 misc.StaticInteresting.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.StaticInteresting # isParam=true
+misc.StaticInteresting # isNonNull=true isParam=true
 hashcode
 5
 this.outer
@@ -393,7 +393,7 @@ hashcode
 DECLARE
 misc.StaticInteresting2:::OBJECT
 this
-misc.StaticInteresting2 # isParam=true
+misc.StaticInteresting2 # isNonNull=true isParam=true
 hashcode
 3
 this.outer
@@ -476,7 +476,7 @@ java.lang.String[]
 DECLARE
 misc.StaticInteresting2.work():::ENTER
 this
-misc.StaticInteresting2 # isParam=true
+misc.StaticInteresting2 # isNonNull=true isParam=true
 hashcode
 3
 this.outer
@@ -511,7 +511,7 @@ hashcode
 DECLARE
 misc.StaticInteresting2.work():::EXIT115
 this
-misc.StaticInteresting2 # isParam=true
+misc.StaticInteresting2 # isNonNull=true isParam=true
 hashcode
 3
 this.outer
@@ -550,7 +550,7 @@ misc.StaticInteresting2.StaticInteresting2():::ENTER
 DECLARE
 misc.StaticInteresting2.StaticInteresting2():::EXIT122
 this
-misc.StaticInteresting2 # isParam=true
+misc.StaticInteresting2 # isNonNull=true isParam=true
 hashcode
 3
 this.outer
@@ -586,7 +586,7 @@ hashcode
 DECLARE
 misc.StaticInteresting2.equals(java.lang.Object):::ENTER
 this
-misc.StaticInteresting2 # isParam=true
+misc.StaticInteresting2 # isNonNull=true isParam=true
 hashcode
 4
 this.outer
@@ -629,7 +629,7 @@ java.lang.String
 DECLARE
 misc.StaticInteresting2.equals(java.lang.Object):::EXIT1
 this
-misc.StaticInteresting2 # isParam=true
+misc.StaticInteresting2 # isNonNull=true isParam=true
 hashcode
 5
 this.outer
@@ -677,7 +677,7 @@ boolean
 DECLARE
 misc.StaticInteresting2.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.StaticInteresting2 # isParam=true
+misc.StaticInteresting2 # isNonNull=true isParam=true
 hashcode
 4
 this.outer
@@ -720,7 +720,7 @@ java.lang.String
 DECLARE
 misc.StaticInteresting2.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.StaticInteresting2 # isParam=true
+misc.StaticInteresting2 # isNonNull=true isParam=true
 hashcode
 5
 this.outer

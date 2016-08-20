@@ -6,6 +6,8 @@
 ::c == c
 ::f has only one value
 ::f[] elements >= 0
+f has only one value
+f != null
 pdf has only one value
 pdf != null
 pdf[] elements >= 2

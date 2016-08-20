@@ -8,7 +8,7 @@ PolyCalc.RatNum:::CLASS
 DECLARE
 PolyCalc.RatNum:::OBJECT
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -31,7 +31,7 @@ int
 DECLARE
 PolyCalc.RatNum.RatNum(int):::EXIT45
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -62,7 +62,7 @@ int
 DECLARE
 PolyCalc.RatNum.RatNum(int, int):::EXIT55
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -85,7 +85,7 @@ int
 DECLARE
 PolyCalc.RatNum.RatNum(int, int):::EXIT67
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -109,7 +109,7 @@ int
 DECLARE
 PolyCalc.RatNum.isNaN():::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -124,7 +124,7 @@ int
 DECLARE
 PolyCalc.RatNum.isNaN():::EXIT71
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -144,7 +144,7 @@ boolean
 DECLARE
 PolyCalc.RatNum.isNegative():::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -159,7 +159,7 @@ int
 DECLARE
 PolyCalc.RatNum.isNegative():::EXIT77
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -179,7 +179,7 @@ boolean
 DECLARE
 PolyCalc.RatNum.isPositive():::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -194,7 +194,7 @@ int
 DECLARE
 PolyCalc.RatNum.isPositive():::EXIT83
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -214,7 +214,7 @@ boolean
 DECLARE
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -241,7 +241,7 @@ int
 DECLARE
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT94
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -272,7 +272,7 @@ int
 DECLARE
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -303,7 +303,7 @@ int
 DECLARE
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -334,7 +334,7 @@ int
 DECLARE
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT101
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -366,7 +366,7 @@ int
 DECLARE
 PolyCalc.RatNum.approx():::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -381,7 +381,7 @@ int
 DECLARE
 PolyCalc.RatNum.approx():::EXIT117
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -400,7 +400,7 @@ double
 DECLARE
 PolyCalc.RatNum.approx():::EXIT120
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -420,7 +420,7 @@ double
 DECLARE
 PolyCalc.RatNum.unparse():::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -435,7 +435,7 @@ int
 DECLARE
 PolyCalc.RatNum.unparse():::EXIT133
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 4
 this.numer
@@ -458,7 +458,7 @@ java.lang.String
 DECLARE
 PolyCalc.RatNum.unparse():::EXIT135
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 4
 this.numer
@@ -481,7 +481,7 @@ java.lang.String
 DECLARE
 PolyCalc.RatNum.unparse():::EXIT137
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 4
 this.numer
@@ -505,7 +505,7 @@ java.lang.String
 DECLARE
 PolyCalc.RatNum.negate():::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -520,7 +520,7 @@ int
 DECLARE
 PolyCalc.RatNum.negate():::EXIT147
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 4
 this.numer
@@ -548,7 +548,7 @@ int
 DECLARE
 PolyCalc.RatNum.add(PolyCalc.RatNum):::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -575,7 +575,7 @@ int
 DECLARE
 PolyCalc.RatNum.add(PolyCalc.RatNum):::EXIT156
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -615,7 +615,7 @@ int
 DECLARE
 PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -642,7 +642,7 @@ int
 DECLARE
 PolyCalc.RatNum.sub(PolyCalc.RatNum):::EXIT166
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -682,7 +682,7 @@ int
 DECLARE
 PolyCalc.RatNum.mul(PolyCalc.RatNum):::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -709,7 +709,7 @@ int
 DECLARE
 PolyCalc.RatNum.mul(PolyCalc.RatNum):::EXIT175
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -749,7 +749,7 @@ int
 DECLARE
 PolyCalc.RatNum.div(PolyCalc.RatNum):::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -776,7 +776,7 @@ int
 DECLARE
 PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT187
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -815,7 +815,7 @@ int
 DECLARE
 PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT189
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -897,7 +897,7 @@ int
 DECLARE
 PolyCalc.RatNum.hashCode():::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -912,7 +912,7 @@ int
 DECLARE
 PolyCalc.RatNum.hashCode():::EXIT217
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -932,7 +932,7 @@ int
 DECLARE
 PolyCalc.RatNum.equals(java.lang.Object):::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -955,7 +955,7 @@ java.lang.String
 DECLARE
 PolyCalc.RatNum.equals(java.lang.Object):::EXIT230
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -982,7 +982,7 @@ boolean
 DECLARE
 PolyCalc.RatNum.equals(java.lang.Object):::EXIT232
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -1009,7 +1009,7 @@ boolean
 DECLARE
 PolyCalc.RatNum.equals(java.lang.Object):::EXIT235
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -1037,7 +1037,7 @@ boolean
 DECLARE
 PolyCalc.RatNum.debugPrint():::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 2
 this.numer
@@ -1052,7 +1052,7 @@ int
 DECLARE
 PolyCalc.RatNum.debugPrint():::EXIT241
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 4
 this.numer
@@ -1157,7 +1157,7 @@ int
 DECLARE
 PolyCalc.RatNum.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 3
 this.numer
@@ -1180,7 +1180,7 @@ java.lang.String
 DECLARE
 PolyCalc.RatNum.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-PolyCalc.RatNum # isParam=true
+PolyCalc.RatNum # isNonNull=true isParam=true
 hashcode
 4
 this.numer

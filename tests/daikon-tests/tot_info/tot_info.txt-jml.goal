@@ -7,6 +7,8 @@ daikon.Quant.pairwiseEqual(::f, f)
 ::c == c
 ::f != null
 daikon.Quant.eltsGTE(::f, 0)
+f != null
+f != null
 pdf != null
 pdf != null
 (pdf != null)  ==>  (daikon.Quant.eltsGTE(pdf, 2))

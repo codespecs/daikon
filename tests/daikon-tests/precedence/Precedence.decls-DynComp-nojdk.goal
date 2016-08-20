@@ -8,7 +8,7 @@ misc.Precedence:::CLASS
 DECLARE
 misc.Precedence:::OBJECT
 this
-misc.Precedence # isParam=true
+misc.Precedence # isNonNull=true isParam=true
 hashcode
 2
 this.i
@@ -23,7 +23,7 @@ misc.Precedence.Precedence():::ENTER
 DECLARE
 misc.Precedence.Precedence():::EXIT3
 this
-misc.Precedence # isParam=true
+misc.Precedence # isNonNull=true isParam=true
 hashcode
 2
 this.i
@@ -74,7 +74,7 @@ java.lang.String[]
 DECLARE
 misc.Precedence.lets_calculate(int):::ENTER
 this
-misc.Precedence # isParam=true
+misc.Precedence # isNonNull=true isParam=true
 hashcode
 3
 this.i
@@ -89,7 +89,7 @@ int
 DECLARE
 misc.Precedence.lets_calculate(int):::EXIT18
 this
-misc.Precedence # isParam=true
+misc.Precedence # isNonNull=true isParam=true
 hashcode
 3
 this.i
@@ -109,7 +109,7 @@ int
 DECLARE
 misc.Precedence.equals(java.lang.Object):::ENTER
 this
-misc.Precedence # isParam=true
+misc.Precedence # isNonNull=true isParam=true
 hashcode
 3
 this.i
@@ -128,7 +128,7 @@ java.lang.String
 DECLARE
 misc.Precedence.equals(java.lang.Object):::EXIT1
 this
-misc.Precedence # isParam=true
+misc.Precedence # isNonNull=true isParam=true
 hashcode
 4
 this.i
@@ -152,7 +152,7 @@ boolean
 DECLARE
 misc.Precedence.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Precedence # isParam=true
+misc.Precedence # isNonNull=true isParam=true
 hashcode
 3
 this.i
@@ -171,7 +171,7 @@ java.lang.String
 DECLARE
 misc.Precedence.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Precedence # isParam=true
+misc.Precedence # isNonNull=true isParam=true
 hashcode
 4
 this.i

@@ -84,6 +84,7 @@ daikon.Quant.pairwiseEqual(this.ends, \old(other.ends))
 daikon.Quant.size(this.begins) == daikon.Quant.size(other.ends)
 daikon.Quant.size(this.begins) == \old(daikon.Quant.size(other.ends))
 \result == true
+\old(other) != null
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT281
     Variables: this this.begins this.begins[] this.ends this.ends[] other other.begins other.begins[] other.ends other.ends[] return orig(this) orig(this.begins) orig(this.begins[]) orig(this.ends) orig(this.ends[]) orig(other) orig(other.begins) orig(other.begins[]) orig(other.ends) orig(other.ends[]) size(this.begins[]) size(this.begins[])-1 size(this.ends[]) size(this.ends[])-1 size(other.begins[]) size(other.begins[])-1 size(other.ends[]) size(other.ends[])-1 orig(size(this.begins[])) orig(size(this.begins[]))-1 orig(size(this.ends[])) orig(size(this.ends[]))-1 orig(size(other.begins[])) orig(size(other.begins[]))-1 orig(size(other.ends[])) orig(size(other.ends[]))-1

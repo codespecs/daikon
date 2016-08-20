@@ -8,7 +8,7 @@ misc.Param:::CLASS
 DECLARE
 misc.Param:::OBJECT
 this
-misc.Param # isParam=true
+misc.Param # isNonNull=true isParam=true
 hashcode
 2
 this.gi1
@@ -87,7 +87,7 @@ java.lang.String[]
 DECLARE
 misc.Param.main():::ENTER
 this
-misc.Param # isParam=true
+misc.Param # isNonNull=true isParam=true
 hashcode
 2
 this.gi1
@@ -126,7 +126,7 @@ int
 DECLARE
 misc.Param.main():::EXIT26
 this
-misc.Param # isParam=true
+misc.Param # isNonNull=true isParam=true
 hashcode
 2
 this.gi1
@@ -166,7 +166,7 @@ int
 DECLARE
 misc.Param.work(int, int, misc.ParamType, misc.ParamType):::ENTER
 this
-misc.Param # isParam=true
+misc.Param # isNonNull=true isParam=true
 hashcode
 10
 this.gi1
@@ -237,7 +237,7 @@ int
 DECLARE
 misc.Param.work(int, int, misc.ParamType, misc.ParamType):::EXIT41
 this
-misc.Param # isParam=true
+misc.Param # isNonNull=true isParam=true
 hashcode
 10
 this.gi1
@@ -312,7 +312,7 @@ misc.Param.Param():::ENTER
 DECLARE
 misc.Param.Param():::EXIT56
 this
-misc.Param # isParam=true
+misc.Param # isNonNull=true isParam=true
 hashcode
 2
 this.gi1
@@ -352,7 +352,7 @@ int
 DECLARE
 misc.Param.equals(java.lang.Object):::ENTER
 this
-misc.Param # isParam=true
+misc.Param # isNonNull=true isParam=true
 hashcode
 3
 this.gi1
@@ -399,7 +399,7 @@ java.lang.String
 DECLARE
 misc.Param.equals(java.lang.Object):::EXIT1
 this
-misc.Param # isParam=true
+misc.Param # isNonNull=true isParam=true
 hashcode
 4
 this.gi1
@@ -451,7 +451,7 @@ boolean
 DECLARE
 misc.Param.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Param # isParam=true
+misc.Param # isNonNull=true isParam=true
 hashcode
 3
 this.gi1
@@ -498,7 +498,7 @@ java.lang.String
 DECLARE
 misc.Param.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Param # isParam=true
+misc.Param # isNonNull=true isParam=true
 hashcode
 4
 this.gi1
@@ -552,7 +552,7 @@ misc.ParamType:::CLASS
 DECLARE
 misc.ParamType:::OBJECT
 this
-misc.ParamType # isParam=true
+misc.ParamType # isNonNull=true isParam=true
 hashcode
 2
 this.a
@@ -571,7 +571,7 @@ misc.ParamType.ParamType():::ENTER
 DECLARE
 misc.ParamType.ParamType():::EXIT69
 this
-misc.ParamType # isParam=true
+misc.ParamType # isNonNull=true isParam=true
 hashcode
 2
 this.a
@@ -587,7 +587,7 @@ int
 DECLARE
 misc.ParamType.equals(java.lang.Object):::ENTER
 this
-misc.ParamType # isParam=true
+misc.ParamType # isNonNull=true isParam=true
 hashcode
 3
 this.a
@@ -610,7 +610,7 @@ java.lang.String
 DECLARE
 misc.ParamType.equals(java.lang.Object):::EXIT1
 this
-misc.ParamType # isParam=true
+misc.ParamType # isNonNull=true isParam=true
 hashcode
 4
 this.a
@@ -638,7 +638,7 @@ boolean
 DECLARE
 misc.ParamType.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.ParamType # isParam=true
+misc.ParamType # isNonNull=true isParam=true
 hashcode
 3
 this.a
@@ -661,7 +661,7 @@ java.lang.String
 DECLARE
 misc.ParamType.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.ParamType # isParam=true
+misc.ParamType # isNonNull=true isParam=true
 hashcode
 4
 this.a

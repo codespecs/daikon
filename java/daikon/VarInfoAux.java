@@ -28,6 +28,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
    **/
   public static final Logger debug = Logger.getLogger("daikon.VarInfoAux");
 
+  public static final String TRUE = "true";
+  public static final String FALSE = "false";
+
   // The below are all the possible keys for the map, and values tend to be
   // binary.  So could we make it a packed binary array?
 
@@ -67,15 +70,6 @@ public final class VarInfoAux implements Cloneable, Serializable {
   public static final String HAS_SIZE = "hasSize";
 
   /**
-   * Java-specific. The package name of the class that declares this
-   * variable, if the variable is a field. If it's not a field of some
-   * class, the value of this key is "no_package_name_string".
-   */
-  public static final String PACKAGE_NAME = "declaringClassPackageName";
-
-  public static final String NO_PACKAGE_NAME = "no_package_name_string";
-
-  /**
    * Whether null has a special meaning for this variable or its members.
    **/
   public static final String HAS_NULL = "hasNull";
@@ -110,9 +104,6 @@ public final class VarInfoAux implements Cloneable, Serializable {
    */
   public static final String VALID_VALUES = "validvalues";
 
-  public static final String TRUE = "true";
-  public static final String FALSE = "false";
-
   /**
    * Whether this variable is an inline structure.
    * By default, a variable is a reference to a structure (class).  If it is
@@ -128,6 +119,15 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * "this" in a Java program.
    */
   public static final String IS_NON_NULL = "isNonNull";
+
+  /**
+   * Java-specific. The package name of the class that declares this
+   * variable, if the variable is a field. If it's not a field of some
+   * class, the value of this key is "no_package_name_string".
+   */
+  public static final String PACKAGE_NAME = "declaringClassPackageName";
+
+  public static final String NO_PACKAGE_NAME = "no_package_name_string";
 
   /**
    * Return an interned VarInfoAux that represents a given string.
@@ -241,12 +241,21 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * Map for interning.
    **/
   private static /*@MonotonicNonNull*/ Map<VarInfoAux, /*@Interned*/ VarInfoAux> interningMap =
+      // Static fields might not be initialized before static methods (which
+      // call instance methods) are called, so don't bother to initialize here.
       null;
 
   /**
    * Special handler for deserialization.
    **/
   private /*@Interned*/ Object readResolve() throws ObjectStreamException {
+    isInterned = false;
+    Map</*@Interned*/ String, /*@Interned*/ String> newMap =
+        new HashMap</*@Interned*/ String, /*@Interned*/ String>();
+    for (String key : map.keySet()) {
+      newMap.put(key.intern(), map.get(key).intern());
+    }
+    map = newMap;
     return this.intern();
   }
 
@@ -293,7 +302,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /*@SideEffectFree*/
   public VarInfoAux clone(
       /*>>>@GuardSatisfied VarInfoAux this*/) throws CloneNotSupportedException {
-    return (VarInfoAux) super.clone();
+    VarInfoAux result = (VarInfoAux) super.clone();
+    result.isInterned = false;
+    return result;
   }
 
   /*@SideEffectFree*/
@@ -318,10 +329,31 @@ public final class VarInfoAux implements Cloneable, Serializable {
     }
   }
 
-  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
   public boolean equals(/*>>>@GuardSatisfied VarInfoAux this,*//*@GuardSatisfied*/ VarInfoAux o) {
     return this.map.equals(o.map);
+  }
+
+  // Two variables should not be put in the same equality set unless they have the same flags.  For
+  // example, suppose that variable "this" is known to be non-null, but it is initially equal to
+  // another variable.  Then NonZero will not be instantiated over "this", and when the equality set
+  // is broken, there will be no NonZero invariant to copy to the other variable.  We only need to
+  // check equality for every aux field that might affect methods such as instantiate_ok.
+  /*@Pure*/
+  public boolean equals_for_instantiation(
+      /*>>>@GuardSatisfied VarInfoAux this,*/
+      /*@GuardSatisfied*/ VarInfoAux o) {
+    return this.getValue(HAS_DUPLICATES).equals(o.getValue(HAS_DUPLICATES))
+        && this.getValue(HAS_ORDER).equals(o.getValue(HAS_ORDER))
+        && this.getValue(HAS_SIZE).equals(o.getValue(HAS_SIZE))
+        && this.getValue(HAS_NULL).equals(o.getValue(HAS_NULL))
+        && Objects.equals(this.getValueOrNull(MINIMUM_LENGTH), o.getValueOrNull(MINIMUM_LENGTH))
+        && Objects.equals(this.getValueOrNull(MAXIMUM_LENGTH), o.getValueOrNull(MAXIMUM_LENGTH))
+        && Objects.equals(this.getValueOrNull(MINIMUM_VALUE), o.getValueOrNull(MINIMUM_VALUE))
+        && Objects.equals(this.getValueOrNull(MAXIMUM_VALUE), o.getValueOrNull(MAXIMUM_VALUE))
+        && Objects.equals(this.getValueOrNull(VALID_VALUES), o.getValueOrNull(VALID_VALUES))
+        && this.getValue(IS_STRUCT).equals(o.getValue(IS_STRUCT))
+        && this.getValue(IS_NON_NULL).equals(o.getValue(IS_NON_NULL));
   }
 
   /**
@@ -330,10 +362,18 @@ public final class VarInfoAux implements Cloneable, Serializable {
    **/
   @SuppressWarnings({"interning", "cast"}) // intern method
   private /*@Interned*/ VarInfoAux intern() {
+
+    for (/*@Interned*/ String key : map.keySet()) {
+      assert key == key.intern();
+      assert map.get(key) == map.get(key).intern();
+    }
+
     if (this.isInterned) {
       return (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
     }
 
+    // Necessary because various static methods call intern(), possibly before static field
+    // interningMap's initializer would be executed.
     if (interningMap == null) {
       interningMap = new HashMap<VarInfoAux, /*@Interned*/ VarInfoAux>();
     }
@@ -404,7 +444,14 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * Returns the value for the given key.
    **/
   public String getValue(/*@KeyFor("this.map")*/ String key) {
-    assert map.containsKey(key) : "Map contains key " + key;
+    assert map.containsKey(key) : "Map does not contain key " + key;
+    return map.get(key);
+  }
+
+  /**
+   * Returns the value for the given key, or null if it is not present.
+   **/
+  public String getValueOrNull(/*@KeyFor("this.map")*/ String key) {
     return map.get(key);
   }
 
@@ -419,6 +466,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   public boolean getFlag(/*@KeyFor("this.map")*/ String key) {
     assert map.containsKey(key);
     Object value = map.get(key);
+    assert value == TRUE || value == FALSE;
     return value.equals(TRUE);
   }
 
@@ -439,6 +487,33 @@ public final class VarInfoAux implements Cloneable, Serializable {
    */
   public VarInfoAux setInt(String key, int value) {
     return setValue(key, Integer.toString(value));
+  }
+
+  /**
+   * @see #NULL_TERMINATING
+   */
+  @SuppressWarnings("keyfor") // NULL_TERMINATING is always a key
+  /*@Pure*/
+  public boolean nullTerminating() {
+    return getFlag(NULL_TERMINATING);
+  }
+
+  /**
+   * @see #IS_PARAM
+   */
+  @SuppressWarnings("keyfor") // IS_PARAM is always a key
+  /*@Pure*/
+  public boolean isParam() {
+    return getFlag(IS_PARAM);
+  }
+
+  /**
+   * @see #PACKAGE_NAME
+   */
+  @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
+  /*@Pure*/
+  public boolean packageName() {
+    return getFlag(PACKAGE_NAME);
   }
 
   /**
@@ -475,33 +550,6 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /*@Pure*/
   public boolean hasNull() {
     return getFlag(HAS_NULL);
-  }
-
-  /**
-   * @see #NULL_TERMINATING
-   */
-  @SuppressWarnings("keyfor") // NULL_TERMINATING is always a key
-  /*@Pure*/
-  public boolean nullTerminating() {
-    return getFlag(NULL_TERMINATING);
-  }
-
-  /**
-   * @see #IS_PARAM
-   */
-  @SuppressWarnings("keyfor") // IS_PARAM is always a key
-  /*@Pure*/
-  public boolean isParam() {
-    return getFlag(IS_PARAM);
-  }
-
-  /**
-   * @see #PACKAGE_NAME
-   */
-  @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
-  /*@Pure*/
-  public boolean packageName() {
-    return getFlag(PACKAGE_NAME);
   }
 
   /**

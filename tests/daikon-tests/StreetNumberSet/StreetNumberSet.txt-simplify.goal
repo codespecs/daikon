@@ -71,6 +71,7 @@ MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT272
 (EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |other|)))
 (EQ (arrayLength (select |begins| |this|)) (arrayLength (select |ends| |__orig__other|)))
 (EQ |return| |@true|)
+(NEQ (hash |__orig__other|) null)
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT281
 (EQ |return| |@false|)

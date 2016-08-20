@@ -24,7 +24,7 @@ int
 DECLARE
 misc.Fib:::OBJECT
 this
-misc.Fib # isParam=true
+misc.Fib # isNonNull=true isParam=true
 hashcode
 4
 misc.Fib.STEPS
@@ -51,7 +51,7 @@ misc.Fib.Fib():::ENTER
 DECLARE
 misc.Fib.Fib():::EXIT5
 this
-misc.Fib # isParam=true
+misc.Fib # isNonNull=true isParam=true
 hashcode
 4
 misc.Fib.STEPS
@@ -185,7 +185,7 @@ int
 DECLARE
 misc.Fib.equals(java.lang.Object):::ENTER
 this
-misc.Fib # isParam=true
+misc.Fib # isNonNull=true isParam=true
 hashcode
 5
 misc.Fib.STEPS
@@ -216,7 +216,7 @@ java.lang.String
 DECLARE
 misc.Fib.equals(java.lang.Object):::EXIT1
 this
-misc.Fib # isParam=true
+misc.Fib # isNonNull=true isParam=true
 hashcode
 6
 misc.Fib.STEPS
@@ -252,7 +252,7 @@ boolean
 DECLARE
 misc.Fib.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Fib # isParam=true
+misc.Fib # isNonNull=true isParam=true
 hashcode
 5
 misc.Fib.STEPS
@@ -283,7 +283,7 @@ java.lang.String
 DECLARE
 misc.Fib.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Fib # isParam=true
+misc.Fib # isNonNull=true isParam=true
 hashcode
 6
 misc.Fib.STEPS

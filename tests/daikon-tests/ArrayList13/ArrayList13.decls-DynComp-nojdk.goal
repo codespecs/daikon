@@ -8,7 +8,7 @@ javautil.ArrayList13:::CLASS
 DECLARE
 javautil.ArrayList13:::OBJECT
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 2
 this.elementData
@@ -43,7 +43,7 @@ int
 DECLARE
 javautil.ArrayList13.ArrayList13(int):::EXIT101
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -78,7 +78,7 @@ javautil.ArrayList13.ArrayList13():::ENTER
 DECLARE
 javautil.ArrayList13.ArrayList13():::EXIT108
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 2
 this.elementData
@@ -117,7 +117,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.ArrayList13(javautil.Collection13):::EXIT122
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -153,7 +153,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.trimToSize():::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 2
 this.elementData
@@ -180,7 +180,7 @@ int
 DECLARE
 javautil.ArrayList13.trimToSize():::EXIT137
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 2
 this.elementData
@@ -208,7 +208,7 @@ int
 DECLARE
 javautil.ArrayList13.ensureCapacity(int):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -239,7 +239,7 @@ int
 DECLARE
 javautil.ArrayList13.ensureCapacity(int):::EXIT157
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -271,7 +271,7 @@ int
 DECLARE
 javautil.ArrayList13.size():::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 2
 this.elementData
@@ -298,7 +298,7 @@ int
 DECLARE
 javautil.ArrayList13.size():::EXIT165
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -330,7 +330,7 @@ int
 DECLARE
 javautil.ArrayList13.isEmpty():::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 2
 this.elementData
@@ -357,7 +357,7 @@ int
 DECLARE
 javautil.ArrayList13.isEmpty():::EXIT175
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -389,7 +389,7 @@ boolean
 DECLARE
 javautil.ArrayList13.contains(java.lang.Object):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -424,7 +424,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.contains(java.lang.Object):::EXIT184
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -464,7 +464,7 @@ boolean
 DECLARE
 javautil.ArrayList13.indexOf(java.lang.Object):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -499,7 +499,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.indexOf(java.lang.Object):::EXIT200
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -538,7 +538,7 @@ int
 DECLARE
 javautil.ArrayList13.indexOf(java.lang.Object):::EXIT204
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -577,7 +577,7 @@ int
 DECLARE
 javautil.ArrayList13.indexOf(java.lang.Object):::EXIT206
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -617,7 +617,7 @@ int
 DECLARE
 javautil.ArrayList13.lastIndexOf(java.lang.Object):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -652,7 +652,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT221
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -691,7 +691,7 @@ int
 DECLARE
 javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT225
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -730,7 +730,7 @@ int
 DECLARE
 javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT227
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -770,7 +770,7 @@ int
 DECLARE
 javautil.ArrayList13.clone():::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 2
 this.elementData
@@ -797,7 +797,7 @@ int
 DECLARE
 javautil.ArrayList13.clone():::EXIT242
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -833,7 +833,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.toArray():::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 2
 this.elementData
@@ -860,7 +860,7 @@ int
 DECLARE
 javautil.ArrayList13.toArray():::EXIT259
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -900,7 +900,7 @@ hashcode[]
 DECLARE
 javautil.ArrayList13.toArray(java.lang.Object[]):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -939,7 +939,7 @@ hashcode[]
 DECLARE
 javautil.ArrayList13.toArray(java.lang.Object[]):::EXIT293
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 6
 this.elementData
@@ -991,7 +991,7 @@ hashcode[]
 DECLARE
 javautil.ArrayList13.get(int):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1022,7 +1022,7 @@ int
 DECLARE
 javautil.ArrayList13.get(int):::EXIT309
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -1062,7 +1062,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.set(int, java.lang.Object):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -1101,7 +1101,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.set(int, java.lang.Object):::EXIT327
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 5
 this.elementData
@@ -1149,7 +1149,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.add(java.lang.Object):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1184,7 +1184,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.add(java.lang.Object):::EXIT339
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -1224,7 +1224,7 @@ boolean
 DECLARE
 javautil.ArrayList13.add(int, java.lang.Object):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -1263,7 +1263,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.add(int, java.lang.Object):::EXIT362
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -1303,7 +1303,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.remove(int):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1334,7 +1334,7 @@ int
 DECLARE
 javautil.ArrayList13.remove(int):::EXIT386
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -1374,7 +1374,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.clear():::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 2
 this.elementData
@@ -1401,7 +1401,7 @@ int
 DECLARE
 javautil.ArrayList13.clear():::EXIT401
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 2
 this.elementData
@@ -1429,7 +1429,7 @@ int
 DECLARE
 javautil.ArrayList13.addAll(javautil.Collection13):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1464,7 +1464,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.addAll(javautil.Collection13):::EXIT425
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -1504,7 +1504,7 @@ boolean
 DECLARE
 javautil.ArrayList13.addAll(int, javautil.Collection13):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 4
 this.elementData
@@ -1543,7 +1543,7 @@ java.lang.String
 DECLARE
 javautil.ArrayList13.addAll(int, javautil.Collection13):::EXIT460
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 5
 this.elementData
@@ -1587,7 +1587,7 @@ boolean
 DECLARE
 javautil.ArrayList13.removeRange(int, int):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1622,7 +1622,7 @@ int
 DECLARE
 javautil.ArrayList13.removeRange(int, int):::EXIT483
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1658,7 +1658,7 @@ int
 DECLARE
 javautil.ArrayList13.RangeCheck(int):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1689,7 +1689,7 @@ int
 DECLARE
 javautil.ArrayList13.RangeCheck(int):::EXIT493
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1721,7 +1721,7 @@ int
 DECLARE
 javautil.ArrayList13.writeObject(java.io.ObjectOutputStream):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1752,7 +1752,7 @@ hashcode
 DECLARE
 javautil.ArrayList13.writeObject(java.io.ObjectOutputStream):::EXIT514
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1784,7 +1784,7 @@ hashcode
 DECLARE
 javautil.ArrayList13.readObject(java.io.ObjectInputStream):::ENTER
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1815,7 +1815,7 @@ hashcode
 DECLARE
 javautil.ArrayList13.readObject(java.io.ObjectInputStream):::EXIT532
 this
-javautil.ArrayList13 # isParam=true
+javautil.ArrayList13 # isNonNull=true isParam=true
 hashcode
 3
 this.elementData
@@ -1849,7 +1849,7 @@ javautil.AbstractList13:::CLASS
 DECLARE
 javautil.AbstractList13:::OBJECT
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 2
 this.getClass().getName()
@@ -1868,7 +1868,7 @@ javautil.AbstractList13.AbstractList13():::ENTER
 DECLARE
 javautil.AbstractList13.AbstractList13():::EXIT63
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 2
 this.getClass().getName()
@@ -1884,7 +1884,7 @@ int
 DECLARE
 javautil.AbstractList13.add(java.lang.Object):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -1907,7 +1907,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.add(java.lang.Object):::EXIT91
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -1935,7 +1935,7 @@ boolean
 DECLARE
 javautil.AbstractList13.set(int, java.lang.Object):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -1963,7 +1963,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.add(int, java.lang.Object):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -1991,7 +1991,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.remove(int):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -2011,7 +2011,7 @@ int
 DECLARE
 javautil.AbstractList13.indexOf(java.lang.Object):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -2034,7 +2034,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.indexOf(java.lang.Object):::EXIT200
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2061,7 +2061,7 @@ int
 DECLARE
 javautil.AbstractList13.indexOf(java.lang.Object):::EXIT204
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2088,7 +2088,7 @@ int
 DECLARE
 javautil.AbstractList13.indexOf(java.lang.Object):::EXIT206
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2116,7 +2116,7 @@ int
 DECLARE
 javautil.AbstractList13.lastIndexOf(java.lang.Object):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -2139,7 +2139,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT231
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2166,7 +2166,7 @@ int
 DECLARE
 javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT235
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2193,7 +2193,7 @@ int
 DECLARE
 javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT237
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2221,7 +2221,7 @@ int
 DECLARE
 javautil.AbstractList13.clear():::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 2
 this.getClass().getName()
@@ -2236,7 +2236,7 @@ int
 DECLARE
 javautil.AbstractList13.clear():::EXIT260
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 2
 this.getClass().getName()
@@ -2252,7 +2252,7 @@ int
 DECLARE
 javautil.AbstractList13.addAll(int, javautil.Collection13):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2279,7 +2279,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.addAll(int, javautil.Collection13):::EXIT308
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 5
 this.getClass().getName()
@@ -2311,7 +2311,7 @@ boolean
 DECLARE
 javautil.AbstractList13.iterator():::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 2
 this.getClass().getName()
@@ -2326,7 +2326,7 @@ int
 DECLARE
 javautil.AbstractList13.iterator():::EXIT336
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -2350,7 +2350,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.listIterator():::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 2
 this.getClass().getName()
@@ -2365,7 +2365,7 @@ int
 DECLARE
 javautil.AbstractList13.listIterator():::EXIT348
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -2389,7 +2389,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.listIterator(int):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -2408,7 +2408,7 @@ int
 DECLARE
 javautil.AbstractList13.listIterator(int):::EXIT391
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2436,7 +2436,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.subList(int, int):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -2459,7 +2459,7 @@ int
 DECLARE
 javautil.AbstractList13.subList(int, int):::EXIT565
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2491,7 +2491,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.equals(java.lang.Object):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -2514,7 +2514,7 @@ java.lang.String
 DECLARE
 javautil.AbstractList13.equals(java.lang.Object):::EXIT594
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2541,7 +2541,7 @@ boolean
 DECLARE
 javautil.AbstractList13.equals(java.lang.Object):::EXIT596
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2568,7 +2568,7 @@ boolean
 DECLARE
 javautil.AbstractList13.equals(java.lang.Object):::EXIT604
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2595,7 +2595,7 @@ boolean
 DECLARE
 javautil.AbstractList13.equals(java.lang.Object):::EXIT606
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 4
 this.getClass().getName()
@@ -2623,7 +2623,7 @@ boolean
 DECLARE
 javautil.AbstractList13.hashCode():::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 2
 this.getClass().getName()
@@ -2638,7 +2638,7 @@ int
 DECLARE
 javautil.AbstractList13.hashCode():::EXIT625
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -2658,7 +2658,7 @@ int
 DECLARE
 javautil.AbstractList13.removeRange(int, int):::ENTER
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()
@@ -2681,7 +2681,7 @@ int
 DECLARE
 javautil.AbstractList13.removeRange(int, int):::EXIT657
 this
-javautil.AbstractList13 # isParam=true
+javautil.AbstractList13 # isNonNull=true isParam=true
 hashcode
 3
 this.getClass().getName()

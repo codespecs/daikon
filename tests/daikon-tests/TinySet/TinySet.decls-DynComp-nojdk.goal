@@ -8,7 +8,7 @@ six170.TinySet:::CLASS
 DECLARE
 six170.TinySet:::OBJECT
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 2
 this.bits
@@ -23,7 +23,7 @@ six170.TinySet.TinySet():::ENTER
 DECLARE
 six170.TinySet.TinySet():::EXIT25
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 2
 this.bits
@@ -35,7 +35,7 @@ int
 DECLARE
 six170.TinySet.add(int):::ENTER
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 3
 this.bits
@@ -50,7 +50,7 @@ int
 DECLARE
 six170.TinySet.add(int):::EXIT33
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 3
 this.bits
@@ -66,7 +66,7 @@ int
 DECLARE
 six170.TinySet.remove(int):::ENTER
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 3
 this.bits
@@ -81,7 +81,7 @@ int
 DECLARE
 six170.TinySet.remove(int):::EXIT41
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 3
 this.bits
@@ -97,7 +97,7 @@ int
 DECLARE
 six170.TinySet.contains(int):::ENTER
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 3
 this.bits
@@ -112,7 +112,7 @@ int
 DECLARE
 six170.TinySet.contains(int):::EXIT48
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 4
 this.bits
@@ -132,7 +132,7 @@ boolean
 DECLARE
 six170.TinySet.intersect(six170.TinySet):::ENTER
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 4
 this.bits
@@ -151,7 +151,7 @@ int
 DECLARE
 six170.TinySet.intersect(six170.TinySet):::EXIT58
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 4
 this.bits
@@ -171,7 +171,7 @@ int
 DECLARE
 six170.TinySet.union(six170.TinySet):::ENTER
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 4
 this.bits
@@ -190,7 +190,7 @@ int
 DECLARE
 six170.TinySet.union(six170.TinySet):::EXIT67
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 4
 this.bits
@@ -210,7 +210,7 @@ int
 DECLARE
 six170.TinySet.equals(java.lang.Object):::ENTER
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 3
 this.bits
@@ -229,7 +229,7 @@ java.lang.String
 DECLARE
 six170.TinySet.equals(java.lang.Object):::EXIT1
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 4
 this.bits
@@ -253,7 +253,7 @@ boolean
 DECLARE
 six170.TinySet.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 3
 this.bits
@@ -272,7 +272,7 @@ java.lang.String
 DECLARE
 six170.TinySet.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-six170.TinySet # isParam=true
+six170.TinySet # isNonNull=true isParam=true
 hashcode
 4
 this.bits

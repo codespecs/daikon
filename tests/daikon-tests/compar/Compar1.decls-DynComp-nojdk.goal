@@ -8,7 +8,7 @@ misc.Compar1:::CLASS
 DECLARE
 misc.Compar1:::OBJECT
 this
-misc.Compar1 # isParam=true
+misc.Compar1 # isNonNull=true isParam=true
 hashcode
 2
 
@@ -19,7 +19,7 @@ misc.Compar1.Compar1():::ENTER
 DECLARE
 misc.Compar1.Compar1():::EXIT4
 this
-misc.Compar1 # isParam=true
+misc.Compar1 # isNonNull=true isParam=true
 hashcode
 2
 
@@ -105,7 +105,7 @@ int
 DECLARE
 misc.Compar1.equals(java.lang.Object):::ENTER
 this
-misc.Compar1 # isParam=true
+misc.Compar1 # isNonNull=true isParam=true
 hashcode
 3
 obj
@@ -120,7 +120,7 @@ java.lang.String
 DECLARE
 misc.Compar1.equals(java.lang.Object):::EXIT1
 this
-misc.Compar1 # isParam=true
+misc.Compar1 # isNonNull=true isParam=true
 hashcode
 4
 obj
@@ -140,7 +140,7 @@ boolean
 DECLARE
 misc.Compar1.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Compar1 # isParam=true
+misc.Compar1 # isNonNull=true isParam=true
 hashcode
 3
 obj
@@ -155,7 +155,7 @@ java.lang.String
 DECLARE
 misc.Compar1.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Compar1 # isParam=true
+misc.Compar1 # isNonNull=true isParam=true
 hashcode
 4
 obj

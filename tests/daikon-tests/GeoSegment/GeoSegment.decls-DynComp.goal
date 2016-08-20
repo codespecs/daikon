@@ -12,7 +12,7 @@ double
 DECLARE
 MapQuick1.GeoPoint:::OBJECT
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -43,7 +43,7 @@ int
 DECLARE
 MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT47
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 4
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -71,7 +71,7 @@ int
 DECLARE
 MapQuick1.GeoPoint.equals(java.lang.Object):::ENTER
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -98,7 +98,7 @@ java.lang.String
 DECLARE
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT66
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -129,7 +129,7 @@ boolean
 DECLARE
 MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -161,7 +161,7 @@ boolean
 DECLARE
 MapQuick1.GeoPoint.hashCode():::ENTER
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -180,7 +180,7 @@ int
 DECLARE
 MapQuick1.GeoPoint.hashCode():::EXIT77
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 4
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -204,7 +204,7 @@ int
 DECLARE
 MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::ENTER
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -235,7 +235,7 @@ int
 DECLARE
 MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::EXIT91
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -271,7 +271,7 @@ double
 DECLARE
 MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -302,7 +302,7 @@ int
 DECLARE
 MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::EXIT113
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 3
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -338,7 +338,7 @@ double
 DECLARE
 MapQuick1.GeoPoint.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 4
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -365,7 +365,7 @@ java.lang.String
 DECLARE
 MapQuick1.GeoPoint.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-MapQuick1.GeoPoint # isParam=true
+MapQuick1.GeoPoint # isNonNull=true isParam=true
 hashcode
 5
 MapQuick1.GeoPoint.REP_SCALE_FACTOR
@@ -399,7 +399,7 @@ MapQuick1.GeoSegment:::CLASS
 DECLARE
 MapQuick1.GeoSegment:::OBJECT
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -482,7 +482,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::EXIT67
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 7
 this.name
@@ -558,7 +558,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.reverse():::ENTER
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -601,7 +601,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.reverse():::EXIT80
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 12
 this.name
@@ -681,7 +681,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.name():::ENTER
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -724,7 +724,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.name():::EXIT88
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 5
 this.name
@@ -776,7 +776,7 @@ java.lang.String
 DECLARE
 MapQuick1.GeoSegment.p1():::ENTER
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -819,7 +819,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.p1():::EXIT94
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 5
 this.name
@@ -875,7 +875,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.p2():::ENTER
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -918,7 +918,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.p2():::EXIT100
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 5
 this.name
@@ -974,7 +974,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.length():::ENTER
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -1017,7 +1017,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.length():::EXIT106
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 4
 this.name
@@ -1065,7 +1065,7 @@ double
 DECLARE
 MapQuick1.GeoSegment.heading():::ENTER
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -1108,7 +1108,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.heading():::EXIT116
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 4
 this.name
@@ -1156,7 +1156,7 @@ double
 DECLARE
 MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -1207,7 +1207,7 @@ java.lang.String
 DECLARE
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT132
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -1262,7 +1262,7 @@ boolean
 DECLARE
 MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -1318,7 +1318,7 @@ boolean
 DECLARE
 MapQuick1.GeoSegment.hashCode():::ENTER
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 3
 this.name
@@ -1361,7 +1361,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.hashCode():::EXIT144
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 4
 this.name
@@ -1409,7 +1409,7 @@ int
 DECLARE
 MapQuick1.GeoSegment.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 4
 this.name
@@ -1460,7 +1460,7 @@ java.lang.String
 DECLARE
 MapQuick1.GeoSegment.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-MapQuick1.GeoSegment # isParam=true
+MapQuick1.GeoSegment # isNonNull=true isParam=true
 hashcode
 5
 this.name

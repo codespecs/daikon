@@ -336,7 +336,7 @@ int
 DECLARE
 DataStructures.RedBlackTree:::OBJECT
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -747,7 +747,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.RedBlackTree(DataStructures.Comparable):::EXIT32
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -1155,7 +1155,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.insert(DataStructures.Comparable):::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -1562,7 +1562,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.insert(DataStructures.Comparable):::EXIT56
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -1969,7 +1969,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.insert(DataStructures.Comparable):::EXIT65
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -2377,7 +2377,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.remove(DataStructures.Comparable):::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -2784,7 +2784,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.remove(DataStructures.Comparable):::EXIT75
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -3192,7 +3192,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.findMin():::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -3591,7 +3591,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.findMin():::EXIT84
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 8
 this.header
@@ -3998,7 +3998,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.findMin():::EXIT91
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 8
 this.header
@@ -4406,7 +4406,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.findMax():::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -4805,7 +4805,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.findMax():::EXIT101
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 8
 this.header
@@ -5212,7 +5212,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.findMax():::EXIT108
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 8
 this.header
@@ -5620,7 +5620,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.find(DataStructures.Comparable):::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -6027,7 +6027,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.find(DataStructures.Comparable):::EXIT128
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -6442,7 +6442,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.find(DataStructures.Comparable):::EXIT130
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -6858,7 +6858,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.makeEmpty():::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -7257,7 +7257,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.makeEmpty():::EXIT140
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -7657,7 +7657,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.isEmpty():::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -8056,7 +8056,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.isEmpty():::EXIT148
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 8
 this.header
@@ -8460,7 +8460,7 @@ boolean
 DECLARE
 DataStructures.RedBlackTree.printTree():::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -8859,7 +8859,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.printTree():::EXIT160
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -9259,7 +9259,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.printTree(DataStructures.RedBlackNode):::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 20
 this.header
@@ -9722,7 +9722,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.printTree(DataStructures.RedBlackNode):::EXIT174
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 20
 this.header
@@ -10186,7 +10186,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.handleReorient(DataStructures.Comparable):::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -10593,7 +10593,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.handleReorient(DataStructures.Comparable):::EXIT198
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -11001,7 +11001,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.rotate(DataStructures.Comparable, DataStructures.RedBlackNode):::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -11472,7 +11472,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.rotate(DataStructures.Comparable, DataStructures.RedBlackNode):::EXIT211
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -12007,7 +12007,7 @@ int
 DECLARE
 DataStructures.RedBlackTree.rotate(DataStructures.Comparable, DataStructures.RedBlackNode):::EXIT215
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 7
 this.header
@@ -14948,7 +14948,7 @@ java.lang.String[]
 DECLARE
 DataStructures.RedBlackTree.equals(java.lang.Object):::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 8
 this.header
@@ -15355,7 +15355,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.equals(java.lang.Object):::EXIT1
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 9
 this.header
@@ -15767,7 +15767,7 @@ boolean
 DECLARE
 DataStructures.RedBlackTree.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 8
 this.header
@@ -16174,7 +16174,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackTree.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.RedBlackTree # isParam=true
+DataStructures.RedBlackTree # isNonNull=true isParam=true
 hashcode
 9
 this.header
@@ -16588,7 +16588,7 @@ DataStructures.RedBlackNode:::CLASS
 DECLARE
 DataStructures.RedBlackNode:::OBJECT
 this
-DataStructures.RedBlackNode # isParam=true
+DataStructures.RedBlackNode # isNonNull=true isParam=true
 hashcode
 2
 this.element
@@ -16747,7 +16747,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable):::EXIT13
 this
-DataStructures.RedBlackNode # isParam=true
+DataStructures.RedBlackNode # isNonNull=true isParam=true
 hashcode
 3
 this.element
@@ -17042,7 +17042,7 @@ int
 DECLARE
 DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable, DataStructures.RedBlackNode, DataStructures.RedBlackNode):::EXIT21
 this
-DataStructures.RedBlackNode # isParam=true
+DataStructures.RedBlackNode # isNonNull=true isParam=true
 hashcode
 5
 this.element
@@ -17326,7 +17326,7 @@ int
 DECLARE
 DataStructures.RedBlackNode.equals(java.lang.Object):::ENTER
 this
-DataStructures.RedBlackNode # isParam=true
+DataStructures.RedBlackNode # isNonNull=true isParam=true
 hashcode
 3
 this.element
@@ -17481,7 +17481,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackNode.equals(java.lang.Object):::EXIT1
 this
-DataStructures.RedBlackNode # isParam=true
+DataStructures.RedBlackNode # isNonNull=true isParam=true
 hashcode
 4
 this.element
@@ -17641,7 +17641,7 @@ boolean
 DECLARE
 DataStructures.RedBlackNode.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-DataStructures.RedBlackNode # isParam=true
+DataStructures.RedBlackNode # isNonNull=true isParam=true
 hashcode
 3
 this.element
@@ -17796,7 +17796,7 @@ java.lang.String
 DECLARE
 DataStructures.RedBlackNode.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-DataStructures.RedBlackNode # isParam=true
+DataStructures.RedBlackNode # isNonNull=true isParam=true
 hashcode
 4
 this.element

@@ -8,7 +8,7 @@ six170.HuffmanSymbol:::CLASS
 DECLARE
 six170.HuffmanSymbol:::OBJECT
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -43,7 +43,7 @@ int
 DECLARE
 six170.HuffmanSymbol.HuffmanSymbol(java.lang.Object, int):::EXIT26
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 4
 this.symbol
@@ -75,7 +75,7 @@ int
 DECLARE
 six170.HuffmanSymbol.symbol():::ENTER
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -94,7 +94,7 @@ int
 DECLARE
 six170.HuffmanSymbol.symbol():::EXIT32
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 3
 this.symbol
@@ -122,7 +122,7 @@ java.lang.String
 DECLARE
 six170.HuffmanSymbol.frequency():::ENTER
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -141,7 +141,7 @@ int
 DECLARE
 six170.HuffmanSymbol.frequency():::EXIT39
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 3
 this.symbol
@@ -165,7 +165,7 @@ int
 DECLARE
 six170.HuffmanSymbol.checkRep():::ENTER
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -184,7 +184,7 @@ int
 DECLARE
 six170.HuffmanSymbol.checkRep():::EXIT53
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -204,7 +204,7 @@ int
 DECLARE
 six170.HuffmanSymbol.equals(java.lang.Object):::ENTER
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 3
 this.symbol
@@ -231,7 +231,7 @@ java.lang.String
 DECLARE
 six170.HuffmanSymbol.equals(java.lang.Object):::EXIT1
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 4
 this.symbol
@@ -263,7 +263,7 @@ boolean
 DECLARE
 six170.HuffmanSymbol.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 3
 this.symbol
@@ -290,7 +290,7 @@ java.lang.String
 DECLARE
 six170.HuffmanSymbol.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-six170.HuffmanSymbol # isParam=true
+six170.HuffmanSymbol # isNonNull=true isParam=true
 hashcode
 4
 this.symbol
@@ -324,7 +324,7 @@ six170.HuffmanCodec:::CLASS
 DECLARE
 six170.HuffmanCodec:::OBJECT
 this
-six170.HuffmanCodec # isParam=true
+six170.HuffmanCodec # isNonNull=true isParam=true
 hashcode
 2
 this.encodingMap
@@ -411,7 +411,7 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.HuffmanCodec(java.util.List):::EXIT24
 this
-six170.HuffmanCodec # isParam=true
+six170.HuffmanCodec # isNonNull=true isParam=true
 hashcode
 4
 this.encodingMap
@@ -955,7 +955,7 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.encode(java.util.List):::ENTER
 this
-six170.HuffmanCodec # isParam=true
+six170.HuffmanCodec # isNonNull=true isParam=true
 hashcode
 4
 this.encodingMap
@@ -1038,7 +1038,7 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.encode(java.util.List):::EXIT142
 this
-six170.HuffmanCodec # isParam=true
+six170.HuffmanCodec # isNonNull=true isParam=true
 hashcode
 6
 this.encodingMap
@@ -1138,7 +1138,7 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.decode(java.util.List):::ENTER
 this
-six170.HuffmanCodec # isParam=true
+six170.HuffmanCodec # isNonNull=true isParam=true
 hashcode
 4
 this.encodingMap
@@ -1221,7 +1221,7 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.decode(java.util.List):::EXIT174
 this
-six170.HuffmanCodec # isParam=true
+six170.HuffmanCodec # isNonNull=true isParam=true
 hashcode
 6
 this.encodingMap
@@ -1321,7 +1321,7 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.equals(java.lang.Object):::ENTER
 this
-six170.HuffmanCodec # isParam=true
+six170.HuffmanCodec # isNonNull=true isParam=true
 hashcode
 3
 this.encodingMap
@@ -1396,7 +1396,7 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.equals(java.lang.Object):::EXIT1
 this
-six170.HuffmanCodec # isParam=true
+six170.HuffmanCodec # isNonNull=true isParam=true
 hashcode
 4
 this.encodingMap
@@ -1476,7 +1476,7 @@ boolean
 DECLARE
 six170.HuffmanCodec.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-six170.HuffmanCodec # isParam=true
+six170.HuffmanCodec # isNonNull=true isParam=true
 hashcode
 3
 this.encodingMap
@@ -1551,7 +1551,7 @@ java.lang.String
 DECLARE
 six170.HuffmanCodec.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-six170.HuffmanCodec # isParam=true
+six170.HuffmanCodec # isNonNull=true isParam=true
 hashcode
 4
 this.encodingMap
@@ -1633,7 +1633,7 @@ six170.HuffmanTree:::CLASS
 DECLARE
 six170.HuffmanTree:::OBJECT
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -1780,7 +1780,7 @@ int
 DECLARE
 six170.HuffmanTree.HuffmanTree(six170.HuffmanSymbol):::EXIT29
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 5
 this.symbol
@@ -2031,7 +2031,7 @@ hashcode
 DECLARE
 six170.HuffmanTree.HuffmanTree(six170.HuffmanTree, six170.HuffmanTree):::EXIT43
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -2263,7 +2263,7 @@ hashcode
 DECLARE
 six170.HuffmanTree.frequency():::ENTER
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -2390,7 +2390,7 @@ hashcode
 DECLARE
 six170.HuffmanTree.frequency():::EXIT51
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 3
 this.symbol
@@ -2521,7 +2521,7 @@ int
 DECLARE
 six170.HuffmanTree.frequency():::EXIT53
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 3
 this.symbol
@@ -2653,7 +2653,7 @@ int
 DECLARE
 six170.HuffmanTree.symbol():::ENTER
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -2780,7 +2780,7 @@ hashcode
 DECLARE
 six170.HuffmanTree.symbol():::EXIT63
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 3
 this.symbol
@@ -2915,7 +2915,7 @@ java.lang.String
 DECLARE
 six170.HuffmanTree.symbol():::EXIT65
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 3
 this.symbol
@@ -3051,7 +3051,7 @@ java.lang.String
 DECLARE
 six170.HuffmanTree.left():::ENTER
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -3178,7 +3178,7 @@ hashcode
 DECLARE
 six170.HuffmanTree.left():::EXIT74
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -3358,7 +3358,7 @@ hashcode
 DECLARE
 six170.HuffmanTree.right():::ENTER
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -3485,7 +3485,7 @@ hashcode
 DECLARE
 six170.HuffmanTree.right():::EXIT82
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -3665,7 +3665,7 @@ hashcode
 DECLARE
 six170.HuffmanTree.checkRep():::ENTER
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -3792,7 +3792,7 @@ hashcode
 DECLARE
 six170.HuffmanTree.checkRep():::EXIT97
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -3920,7 +3920,7 @@ hashcode
 DECLARE
 six170.HuffmanTree.equals(java.lang.Object):::ENTER
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -4055,7 +4055,7 @@ java.lang.String
 DECLARE
 six170.HuffmanTree.equals(java.lang.Object):::EXIT1
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 2
 this.symbol
@@ -4195,7 +4195,7 @@ boolean
 DECLARE
 six170.HuffmanTree.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 3
 this.symbol
@@ -4330,7 +4330,7 @@ java.lang.String
 DECLARE
 six170.HuffmanTree.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-six170.HuffmanTree # isParam=true
+six170.HuffmanTree # isNonNull=true isParam=true
 hashcode
 4
 this.symbol

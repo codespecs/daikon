@@ -8,7 +8,7 @@ misc.Suppress01:::CLASS
 DECLARE
 misc.Suppress01:::OBJECT
 this
-misc.Suppress01 # isParam=true
+misc.Suppress01 # isNonNull=true isParam=true
 hashcode
 2
 this.theArray
@@ -75,7 +75,7 @@ java.lang.String[]
 DECLARE
 misc.Suppress01.f():::ENTER
 this
-misc.Suppress01 # isParam=true
+misc.Suppress01 # isNonNull=true isParam=true
 hashcode
 2
 this.theArray
@@ -102,7 +102,7 @@ int
 DECLARE
 misc.Suppress01.f():::EXIT35
 this
-misc.Suppress01 # isParam=true
+misc.Suppress01 # isNonNull=true isParam=true
 hashcode
 2
 this.theArray
@@ -133,7 +133,7 @@ misc.Suppress01.Suppress01():::ENTER
 DECLARE
 misc.Suppress01.Suppress01():::EXIT43
 this
-misc.Suppress01 # isParam=true
+misc.Suppress01 # isNonNull=true isParam=true
 hashcode
 2
 this.theArray
@@ -161,7 +161,7 @@ int
 DECLARE
 misc.Suppress01.equals(java.lang.Object):::ENTER
 this
-misc.Suppress01 # isParam=true
+misc.Suppress01 # isNonNull=true isParam=true
 hashcode
 3
 this.theArray
@@ -196,7 +196,7 @@ java.lang.String
 DECLARE
 misc.Suppress01.equals(java.lang.Object):::EXIT1
 this
-misc.Suppress01 # isParam=true
+misc.Suppress01 # isNonNull=true isParam=true
 hashcode
 4
 this.theArray
@@ -236,7 +236,7 @@ boolean
 DECLARE
 misc.Suppress01.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Suppress01 # isParam=true
+misc.Suppress01 # isNonNull=true isParam=true
 hashcode
 3
 this.theArray
@@ -271,7 +271,7 @@ java.lang.String
 DECLARE
 misc.Suppress01.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Suppress01 # isParam=true
+misc.Suppress01 # isNonNull=true isParam=true
 hashcode
 4
 this.theArray

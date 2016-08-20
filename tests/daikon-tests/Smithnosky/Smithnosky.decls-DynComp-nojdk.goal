@@ -8,7 +8,7 @@ misc.Smithnosky:::CLASS
 DECLARE
 misc.Smithnosky:::OBJECT
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 2
 this.a
@@ -67,7 +67,7 @@ int
 DECLARE
 misc.Smithnosky.Smithnosky(int, int, int):::EXIT24
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 3
 this.a
@@ -123,7 +123,7 @@ int
 DECLARE
 misc.Smithnosky.incA():::ENTER
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 2
 this.a
@@ -166,7 +166,7 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.incA():::EXIT29
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 2
 this.a
@@ -210,7 +210,7 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.incB():::ENTER
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 2
 this.a
@@ -253,7 +253,7 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.incB():::EXIT34
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 2
 this.a
@@ -297,7 +297,7 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.incC():::ENTER
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 2
 this.a
@@ -340,7 +340,7 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.incC():::EXIT39
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 2
 this.a
@@ -384,7 +384,7 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.add(java.lang.Object):::ENTER
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 3
 this.a
@@ -435,7 +435,7 @@ java.lang.String
 DECLARE
 misc.Smithnosky.add(java.lang.Object):::EXIT44
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 3
 this.a
@@ -526,7 +526,7 @@ java.lang.String[]
 DECLARE
 misc.Smithnosky.equals(java.lang.Object):::ENTER
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 3
 this.a
@@ -577,7 +577,7 @@ java.lang.String
 DECLARE
 misc.Smithnosky.equals(java.lang.Object):::EXIT1
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 4
 this.a
@@ -633,7 +633,7 @@ boolean
 DECLARE
 misc.Smithnosky.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 3
 this.a
@@ -684,7 +684,7 @@ java.lang.String
 DECLARE
 misc.Smithnosky.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Smithnosky # isParam=true
+misc.Smithnosky # isNonNull=true isParam=true
 hashcode
 4
 this.a

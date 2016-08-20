@@ -56,6 +56,9 @@ public abstract class DaikonVariableInfo
   /** Indicates that a given variable is a parameter to a method. */
   protected static final String isParamString = " # isParam=true";
 
+  /** Indicates that a given variable is non-null and a parameter. */
+  protected static final String isNonNullParamString = " # isNonNull=true isParam=true";
+
   // Certain hardcoded class names
   protected static final String classClassName = "java.lang.Class";
   protected static final String stringClassName = "java.lang.String";

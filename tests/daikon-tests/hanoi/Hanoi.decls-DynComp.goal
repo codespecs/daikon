@@ -8,7 +8,7 @@ six170.Hanoi:::CLASS
 DECLARE
 six170.Hanoi:::OBJECT
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 2
 this.diskLocation
@@ -39,7 +39,7 @@ int
 DECLARE
 six170.Hanoi.Hanoi(int):::EXIT38
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 4
 this.diskLocation
@@ -78,7 +78,7 @@ boolean
 DECLARE
 six170.Hanoi.Hanoi(int, boolean):::EXIT43
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 5
 this.diskLocation
@@ -110,7 +110,7 @@ boolean
 DECLARE
 six170.Hanoi.moveDisk(int, int):::ENTER
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 3
 this.diskLocation
@@ -141,7 +141,7 @@ int
 DECLARE
 six170.Hanoi.moveDisk(int, int):::EXIT57
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 3
 this.diskLocation
@@ -290,7 +290,7 @@ int
 DECLARE
 six170.Hanoi.moveTower(int, int, int):::ENTER
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 3
 this.diskLocation
@@ -325,7 +325,7 @@ int
 DECLARE
 six170.Hanoi.moveTower(int, int, int):::EXIT98
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 3
 this.diskLocation
@@ -361,7 +361,7 @@ int
 DECLARE
 six170.Hanoi.showTowers():::ENTER
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 2
 this.diskLocation
@@ -384,7 +384,7 @@ boolean
 DECLARE
 six170.Hanoi.showTowers():::EXIT136
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 2
 this.diskLocation
@@ -408,7 +408,7 @@ boolean
 DECLARE
 six170.Hanoi.equals(java.lang.Object):::ENTER
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 3
 this.diskLocation
@@ -439,7 +439,7 @@ java.lang.String
 DECLARE
 six170.Hanoi.equals(java.lang.Object):::EXIT1
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 4
 this.diskLocation
@@ -475,7 +475,7 @@ boolean
 DECLARE
 six170.Hanoi.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 3
 this.diskLocation
@@ -506,7 +506,7 @@ java.lang.String
 DECLARE
 six170.Hanoi.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-six170.Hanoi # isParam=true
+six170.Hanoi # isNonNull=true isParam=true
 hashcode
 4
 this.diskLocation

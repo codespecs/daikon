@@ -113,7 +113,9 @@ public class PptSliceEquality extends PptSlice {
         /*>>>@GuardSatisfied VarInfoAndComparability this,*/
         /*@GuardSatisfied*/ VarInfoAndComparability o) {
 
-      return (vi.comparableNWay(o.vi) && (vi.comparability.equality_set_ok(o.vi.comparability)));
+      return (vi.comparableNWay(o.vi)
+          && vi.comparability.equality_set_ok(o.vi.comparability)
+          && vi.aux.equals_for_instantiation(o.vi.aux));
     }
 
     public VarInfoAndComparability(VarInfo vi) {
@@ -169,6 +171,9 @@ public class PptSliceEquality extends PptSlice {
       newInvs[invCount] = eq;
       if (debug.isLoggable(Level.FINE)) {
         debug.fine(" Created: " + eq);
+        for (VarInfo vi : list) {
+          debug.fine("   vi: " + vi + " aux : " + vi.aux);
+        }
       }
       if (Debug.logOn()) Debug.log(getClass(), parent, Debug.vis(eq.leader()), "Created");
       invCount++;

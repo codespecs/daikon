@@ -8,7 +8,7 @@ MapQuick.WeightedNodePath:::CLASS
 DECLARE
 MapQuick.WeightedNodePath:::OBJECT
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 2
 this.node
@@ -59,7 +59,7 @@ hashcode
 DECLARE
 MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::EXIT33
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 3
 this.node
@@ -142,7 +142,7 @@ int
 DECLARE
 MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT51
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 7
 this.node
@@ -218,7 +218,7 @@ int
 DECLARE
 MapQuick.WeightedNodePath.extend(java.lang.Object):::ENTER
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 3
 this.node
@@ -269,7 +269,7 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.extend(java.lang.Object):::EXIT56
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 4
 this.node
@@ -329,7 +329,7 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 3
 this.node
@@ -376,7 +376,7 @@ hashcode
 DECLARE
 MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT63
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 4
 this.node
@@ -432,7 +432,7 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.cost():::ENTER
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 2
 this.node
@@ -475,7 +475,7 @@ int
 DECLARE
 MapQuick.WeightedNodePath.cost():::EXIT68
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 3
 this.node
@@ -523,7 +523,7 @@ double
 DECLARE
 MapQuick.WeightedNodePath.elements():::ENTER
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 2
 this.node
@@ -566,7 +566,7 @@ int
 DECLARE
 MapQuick.WeightedNodePath.elements():::EXIT79
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 3
 this.node
@@ -618,7 +618,7 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.equals(java.lang.Object):::ENTER
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 3
 this.node
@@ -669,7 +669,7 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.equals(java.lang.Object):::EXIT103
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 4
 this.node
@@ -724,7 +724,7 @@ boolean
 DECLARE
 MapQuick.WeightedNodePath.equals(java.lang.Object):::EXIT105
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 4
 this.node
@@ -780,7 +780,7 @@ boolean
 DECLARE
 MapQuick.WeightedNodePath.equals(MapQuick.WeightedNodePath):::ENTER
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 2
 this.node
@@ -851,7 +851,7 @@ int
 DECLARE
 MapQuick.WeightedNodePath.equals(MapQuick.WeightedNodePath):::EXIT113
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 3
 this.node
@@ -927,7 +927,7 @@ boolean
 DECLARE
 MapQuick.WeightedNodePath.hashCode():::ENTER
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 2
 this.node
@@ -970,7 +970,7 @@ int
 DECLARE
 MapQuick.WeightedNodePath.hashCode():::EXIT120
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 3
 this.node
@@ -1018,7 +1018,7 @@ int
 DECLARE
 MapQuick.WeightedNodePath.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 3
 this.node
@@ -1069,7 +1069,7 @@ java.lang.String
 DECLARE
 MapQuick.WeightedNodePath.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-MapQuick.WeightedNodePath # isParam=true
+MapQuick.WeightedNodePath # isNonNull=true isParam=true
 hashcode
 4
 this.node

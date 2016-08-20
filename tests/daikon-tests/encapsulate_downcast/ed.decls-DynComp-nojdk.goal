@@ -24,7 +24,7 @@ hashcode
 DECLARE
 misc.EncapsulateDowncast:::OBJECT
 this
-misc.EncapsulateDowncast # isParam=true
+misc.EncapsulateDowncast # isNonNull=true isParam=true
 hashcode
 6
 misc.EncapsulateDowncast.CASES
@@ -51,7 +51,7 @@ misc.EncapsulateDowncast.EncapsulateDowncast():::ENTER
 DECLARE
 misc.EncapsulateDowncast.EncapsulateDowncast():::EXIT22
 this
-misc.EncapsulateDowncast # isParam=true
+misc.EncapsulateDowncast # isNonNull=true isParam=true
 hashcode
 6
 misc.EncapsulateDowncast.CASES
@@ -209,7 +209,7 @@ java.lang.String[]
 DECLARE
 misc.EncapsulateDowncast.equals(java.lang.Object):::ENTER
 this
-misc.EncapsulateDowncast # isParam=true
+misc.EncapsulateDowncast # isNonNull=true isParam=true
 hashcode
 7
 misc.EncapsulateDowncast.CASES
@@ -240,7 +240,7 @@ java.lang.String
 DECLARE
 misc.EncapsulateDowncast.equals(java.lang.Object):::EXIT1
 this
-misc.EncapsulateDowncast # isParam=true
+misc.EncapsulateDowncast # isNonNull=true isParam=true
 hashcode
 8
 misc.EncapsulateDowncast.CASES
@@ -276,7 +276,7 @@ boolean
 DECLARE
 misc.EncapsulateDowncast.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.EncapsulateDowncast # isParam=true
+misc.EncapsulateDowncast # isNonNull=true isParam=true
 hashcode
 7
 misc.EncapsulateDowncast.CASES
@@ -307,7 +307,7 @@ java.lang.String
 DECLARE
 misc.EncapsulateDowncast.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.EncapsulateDowncast # isParam=true
+misc.EncapsulateDowncast # isNonNull=true isParam=true
 hashcode
 8
 misc.EncapsulateDowncast.CASES
@@ -345,7 +345,7 @@ misc.Person:::CLASS
 DECLARE
 misc.Person:::OBJECT
 this
-misc.Person # isParam=true
+misc.Person # isNonNull=true isParam=true
 hashcode
 2
 this._name
@@ -388,7 +388,7 @@ int
 DECLARE
 misc.Person.Person(java.lang.String, int, int):::EXIT15
 this
-misc.Person # isParam=true
+misc.Person # isNonNull=true isParam=true
 hashcode
 5
 this._name
@@ -428,7 +428,7 @@ int
 DECLARE
 misc.Person.getName():::ENTER
 this
-misc.Person # isParam=true
+misc.Person # isNonNull=true isParam=true
 hashcode
 2
 this._name
@@ -451,7 +451,7 @@ int
 DECLARE
 misc.Person.getName():::EXIT18
 this
-misc.Person # isParam=true
+misc.Person # isNonNull=true isParam=true
 hashcode
 4
 this._name
@@ -483,7 +483,7 @@ java.lang.String
 DECLARE
 misc.Person.equals(java.lang.Object):::ENTER
 this
-misc.Person # isParam=true
+misc.Person # isNonNull=true isParam=true
 hashcode
 3
 this._name
@@ -514,7 +514,7 @@ java.lang.String
 DECLARE
 misc.Person.equals(java.lang.Object):::EXIT1
 this
-misc.Person # isParam=true
+misc.Person # isNonNull=true isParam=true
 hashcode
 4
 this._name
@@ -550,7 +550,7 @@ boolean
 DECLARE
 misc.Person.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Person # isParam=true
+misc.Person # isNonNull=true isParam=true
 hashcode
 3
 this._name
@@ -581,7 +581,7 @@ java.lang.String
 DECLARE
 misc.Person.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Person # isParam=true
+misc.Person # isNonNull=true isParam=true
 hashcode
 4
 this._name

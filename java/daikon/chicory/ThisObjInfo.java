@@ -27,7 +27,7 @@ public class ThisObjInfo extends DaikonVariableInfo {
    * It's "this" except for outer classes, as in "OuterClass.this".
    */
   public ThisObjInfo(String thisName, Class<?> type) {
-    super(thisName, type.getName() + isParamString, getRepName(type, false));
+    super(thisName, type.getName() + isNonNullParamString, getRepName(type, false));
     this.type = type;
   }
 
@@ -44,11 +44,12 @@ public class ThisObjInfo extends DaikonVariableInfo {
     return VarKind.VARIABLE;
   }
 
-  /** Add IS_PARAM to list of variable flags, because the receiver is a formal parameter. **/
+  /** Add IS_PARAM to list of variable flags, because the receiver "this" is a formal parameter. **/
   public EnumSet<VarFlags> get_var_flags() {
     // System.out.printf ("%s is a parameter%n", this);
     EnumSet<VarFlags> var_flags = super.get_var_flags().clone();
     var_flags.add(VarFlags.IS_PARAM);
+    var_flags.add(VarFlags.NON_NULL);
     return var_flags;
   }
 }

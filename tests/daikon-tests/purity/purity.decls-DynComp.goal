@@ -8,7 +8,7 @@ misc.Purity:::CLASS
 DECLARE
 misc.Purity:::OBJECT
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 2
 this.value
@@ -67,7 +67,7 @@ int
 DECLARE
 misc.Purity.Purity(int, int):::EXIT24
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -123,7 +123,7 @@ int
 DECLARE
 misc.Purity.getValue():::ENTER
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 2
 this.value
@@ -170,7 +170,7 @@ java.lang.String
 DECLARE
 misc.Purity.getValue():::EXIT27
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -222,7 +222,7 @@ int
 DECLARE
 misc.Purity.getShift():::ENTER
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 2
 this.value
@@ -269,7 +269,7 @@ java.lang.String
 DECLARE
 misc.Purity.getShift():::EXIT31
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -321,7 +321,7 @@ int
 DECLARE
 misc.Purity.isHeavy():::ENTER
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 2
 this.value
@@ -368,7 +368,7 @@ java.lang.String
 DECLARE
 misc.Purity.isHeavy():::EXIT35
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -420,7 +420,7 @@ boolean
 DECLARE
 misc.Purity.getNum():::ENTER
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 2
 this.value
@@ -467,7 +467,7 @@ java.lang.String
 DECLARE
 misc.Purity.getNum():::EXIT39
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -523,7 +523,7 @@ java.lang.String
 DECLARE
 misc.Purity.getJWrap():::ENTER
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 2
 this.value
@@ -570,7 +570,7 @@ java.lang.String
 DECLARE
 misc.Purity.getJWrap():::EXIT43
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -622,7 +622,7 @@ hashcode
 DECLARE
 misc.Purity.scale(int):::ENTER
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -673,7 +673,7 @@ int
 DECLARE
 misc.Purity.scale(int):::EXIT47
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -729,7 +729,7 @@ int
 DECLARE
 misc.Purity.sum(java.lang.Number):::ENTER
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -784,7 +784,7 @@ java.lang.String
 DECLARE
 misc.Purity.sum(java.lang.Number):::EXIT51
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 4
 this.value
@@ -844,7 +844,7 @@ int
 DECLARE
 misc.Purity.retrieve(java.util.List):::ENTER
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 4
 this.value
@@ -907,7 +907,7 @@ java.lang.String
 DECLARE
 misc.Purity.retrieve(java.util.List):::EXIT55
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 5
 this.value
@@ -975,7 +975,7 @@ int
 DECLARE
 misc.Purity.equals(java.lang.Object):::ENTER
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -1030,7 +1030,7 @@ java.lang.String
 DECLARE
 misc.Purity.equals(java.lang.Object):::EXIT1
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 4
 this.value
@@ -1090,7 +1090,7 @@ boolean
 DECLARE
 misc.Purity.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 3
 this.value
@@ -1145,7 +1145,7 @@ java.lang.String
 DECLARE
 misc.Purity.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-misc.Purity # isParam=true
+misc.Purity # isNonNull=true isParam=true
 hashcode
 4
 this.value
