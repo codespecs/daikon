@@ -1860,7 +1860,7 @@ and its @file{.class} file should appear on the classpath.
 Disable all known invariants:  all those that are built into Daikon, and
 all those that have been specified by @option{--user-defined-invariant} so
 far.  An invariant may be re-enabled after this option is specified,
-see @ref{Options to enable/disable derived variables}.
+see @ref{Options to enable/disable specific invariants}.
 
 @item --nohierarchy
 @cindex hierarchy, disabling
