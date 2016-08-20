@@ -119,7 +119,7 @@ invs-large: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND)
 	$(BEFORE_RUN)
 	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS)  | $(DAIKON) - -o daikon-output/$(NAME).inv.gz
 	$(AFTER_RUN)
-	$(PRINT_INV) daikon-output/$(NAME).inv.gz daikon-output/$(NAME).inv.txt
+	$(PRINT_INV) daikon-output/$(NAME).inv.gz > daikon-output/$(NAME).inv.txt
 
 
 ifdef TESTS_SCRIPT
