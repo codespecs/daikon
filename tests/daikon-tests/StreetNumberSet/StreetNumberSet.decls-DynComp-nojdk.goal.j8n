@@ -8,7 +8,7 @@ MapQuick1.StreetNumberSet:::CLASS
 DECLARE
 MapQuick1.StreetNumberSet:::OBJECT
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -43,7 +43,7 @@ java.lang.String
 DECLARE
 MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::EXIT68
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 4
 this.begins
@@ -94,7 +94,7 @@ int
 DECLARE
 MapQuick1.StreetNumberSet.checkRep():::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -117,7 +117,7 @@ int[]
 DECLARE
 MapQuick1.StreetNumberSet.checkRep():::EXIT104
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -141,7 +141,7 @@ int[]
 DECLARE
 MapQuick1.StreetNumberSet.contains(int):::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 3
 this.begins
@@ -168,7 +168,7 @@ int
 DECLARE
 MapQuick1.StreetNumberSet.contains(int):::EXIT118
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 4
 this.begins
@@ -199,7 +199,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.contains(int):::EXIT123
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 4
 this.begins
@@ -231,7 +231,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.orderStatistic(int):::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 3
 this.begins
@@ -258,7 +258,7 @@ int
 DECLARE
 MapQuick1.StreetNumberSet.orderStatistic(int):::EXIT162
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 3
 this.begins
@@ -290,7 +290,7 @@ int
 DECLARE
 MapQuick1.StreetNumberSet.size():::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -313,7 +313,7 @@ int[]
 DECLARE
 MapQuick1.StreetNumberSet.size():::EXIT181
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 3
 this.begins
@@ -341,7 +341,7 @@ int
 DECLARE
 MapQuick1.StreetNumberSet.isEmpty():::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -364,7 +364,7 @@ int[]
 DECLARE
 MapQuick1.StreetNumberSet.isEmpty():::EXIT190
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 3
 this.begins
@@ -392,7 +392,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.min():::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -415,7 +415,7 @@ int[]
 DECLARE
 MapQuick1.StreetNumberSet.min():::EXIT210
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 3
 this.begins
@@ -443,7 +443,7 @@ int
 DECLARE
 MapQuick1.StreetNumberSet.max():::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -466,7 +466,7 @@ int[]
 DECLARE
 MapQuick1.StreetNumberSet.max():::EXIT230
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 3
 this.begins
@@ -494,7 +494,7 @@ int
 DECLARE
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -537,7 +537,7 @@ int[]
 DECLARE
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT239
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -584,7 +584,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT240
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -631,7 +631,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT253
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -678,7 +678,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT257
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -726,7 +726,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -757,7 +757,7 @@ java.lang.String
 DECLARE
 MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT266
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -793,7 +793,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -836,7 +836,7 @@ int[]
 DECLARE
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -883,7 +883,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT272
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -930,7 +930,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT275
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -977,7 +977,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT281
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -1024,7 +1024,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT282
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -1071,7 +1071,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT286
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -1118,7 +1118,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT290
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -1166,7 +1166,7 @@ boolean
 DECLARE
 MapQuick1.StreetNumberSet.hashCode():::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 2
 this.begins
@@ -1189,7 +1189,7 @@ int[]
 DECLARE
 MapQuick1.StreetNumberSet.hashCode():::EXIT295
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 3
 this.begins
@@ -1217,7 +1217,7 @@ int
 DECLARE
 MapQuick1.StreetNumberSet.equals_dcomp_instrumented(java.lang.Object):::ENTER
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 3
 this.begins
@@ -1248,7 +1248,7 @@ java.lang.String
 DECLARE
 MapQuick1.StreetNumberSet.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 this
-MapQuick1.StreetNumberSet # isParam=true
+MapQuick1.StreetNumberSet # isNonNull=true isParam=true
 hashcode
 4
 this.begins

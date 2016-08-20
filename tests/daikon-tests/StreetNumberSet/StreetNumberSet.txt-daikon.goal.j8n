@@ -83,6 +83,7 @@ orig(this) == orig(other)
 size(this.begins[]) == size(other.ends[])
 size(this.begins[]) == orig(size(other.ends[]))
 return == true
+orig(other) != null
 ===========================================================================
 MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT272;condition="return == true"
 ===========================================================================
