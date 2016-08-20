@@ -178,10 +178,20 @@ public final class Configuration implements Serializable {
       clazz = UtilMDE.classForName(classname);
     } catch (ClassNotFoundException e) {
       throw new ConfigException(
-          "Configuration option attempts to use nonexistent class " + classname, e);
+          String.format(
+              "Configuration option %s=%s attempts to use nonexistent class %s",
+              fieldname,
+              value,
+              classname),
+          e);
     } catch (LinkageError e) {
       throw new ConfigException(
-          "Configuration option attempts to use class with lnkage error " + classname, e);
+          String.format(
+              "Configuration option %s=%s attempts to use class with linkage error %s",
+              fieldname,
+              value,
+              classname),
+          e);
     }
 
     apply(clazz, fieldname, value);
