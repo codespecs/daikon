@@ -22,7 +22,6 @@ class Graph$DuplicateNodeException : // 0/- obj/class samples
 
 package MapQuick1:
 class Graph$GraphException : // 0/- obj/class samples
-  field getClass().getName() :  // java.lang.Class
   method GraphException(LMapQuick1/Graph;)V : // 0 samples
     return: 
   method GraphException(LMapQuick1/Graph;Ljava/lang/String;)V : // 0 samples

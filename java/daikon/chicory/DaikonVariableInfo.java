@@ -53,6 +53,12 @@ public abstract class DaikonVariableInfo
   /** Default string for comparability info. */
   private static final String compareInfoDefaultString = "22";
 
+  // It's not enough to use one of the following 3 strings.
+  // You also need to set the flags that are returned by get_var_flags()!
+
+  /** Indicates that a given variable is non-null. */
+  protected static final String isNonNullString = " # isNonNull=true";
+
   /** Indicates that a given variable is a parameter to a method. */
   protected static final String isParamString = " # isParam=true";
 
@@ -741,15 +747,15 @@ public abstract class DaikonVariableInfo
       field.setAccessible(true);
     }
 
-    Class<?> type = field.getType();
-    String type_name = stdClassName(type) + arr_str + appendAuxInfo(field);
-
     int modifiers = field.getModifiers();
     if (Modifier.isStatic(modifiers)) {
       offset = field.getDeclaringClass().getName() + ".";
     } else if (offset.length() == 0) { // instance fld, 1st recursion step
       offset = "this.";
     }
+
+    Class<?> type = field.getType();
+    String type_name = stdClassName(type) + arr_str + appendAuxInfo(field);
 
     String theName = field.getName();
 
@@ -758,6 +764,11 @@ public abstract class DaikonVariableInfo
     if (theName.startsWith("this$")) {
       offset = "";
       theName = type.getName() + ".this";
+      if (!type_name.contains("#")) {
+        type_name += " # isNonNull=true";
+      } else {
+        type_name += ", isNonNull=true";
+      }
     }
 
     DaikonVariableInfo newField =
