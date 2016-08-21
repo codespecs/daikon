@@ -580,7 +580,7 @@ public class DeclWriter extends DaikonWriter {
       if (relative_name == null) relative_name = "";
       outFile.println("  var-kind " + out_name(kind) + " " + relative_name);
 
-      // Write out the enclosing variable
+      // Write out the enclosing variable.
       // If we are in an inner class, we need to special case the
       // 'hidden' field that holds the outer class 'this' pointer.
       // While 'this.Outer.this' reads well, it is not legal Java.
@@ -717,7 +717,7 @@ public class DeclWriter extends DaikonWriter {
 
     // Look for object->class static relationship.  This starts on each
     // static variable under 'this' (the static variables of a class are
-    // placed in the CLASS ppt)
+    // placed in the CLASS ppt).
     if (cinfo != null && var.isStatic() && (parent instanceof ThisObjInfo)) {
       return new VarRelation(cinfo.class_name + ":::CLASS", "parent");
     }
@@ -730,7 +730,7 @@ public class DeclWriter extends DaikonWriter {
     // System.out.printf ("Looking for hierarchy type %s%n", decl_type);
 
     // If this ppt is the object ppt for this type, don't create a relation
-    // to it
+    // to it.
     if ((cinfo != null) && cinfo.class_name.equals(decl_type)) {
       return null;
     }

@@ -222,7 +222,7 @@ public final class FileIO {
   // without these two lines, since StringBuilderDelimited accepts null values.
   @SuppressWarnings(
       "nullness:contracts.conditional.postcondition.not.satisfied") // readLine() assertion is ensured by call to reset()
-  // can't do this since readLine is not deterministic /*@EnsuresNonNullIf(result=true, expression="#1.readLine()")*/
+  // can't do this since readLine is not deterministic: /*@EnsuresNonNullIf(result=true, expression="#1.readLine()")*/
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
     try {

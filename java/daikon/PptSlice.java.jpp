@@ -185,7 +185,7 @@ public final class PPTSLICE1 extends PptSlice {
 
       // Skip invariant if it is suppressed.  Note that this will work
       // even though we haven't instantiated all of the invariants for this
-      // slice yet because it will check constant values
+      // slice yet because it will check constant values.
       NISuppressionSet ss = proto.get_ni_suppressions();
       if (NIS.dkconfig_enabled && (ss != null) && !ss.is_instantiate_ok (this)) {
         if (Debug.logOn()) // avoid stringify if not logging
