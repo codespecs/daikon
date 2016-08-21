@@ -39,7 +39,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * elements, or whether there is a null at the end of this
    * collection that ends the collection.
    **/
-  public static final String NULL_TERMINATING = "nullTerminating";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String NULL_TERMINATING = "nullTerminating";
 
   /**
    * Whether this variable is a parameter to a method, or derived from
@@ -52,47 +53,56 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * parameter.  In Java, p.a is not a parameter, whereas in IOA, it
    * is.
    **/
-  public static final String IS_PARAM = "isParam";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String IS_PARAM = "isParam";
 
   /**
    * Whether repeated elements can exist in this collection.
    **/
-  public static final String HAS_DUPLICATES = "hasDuplicates";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String HAS_DUPLICATES = "hasDuplicates";
 
   /**
    * Whether order matters.
    **/
-  public static final String HAS_ORDER = "hasOrder";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String HAS_ORDER = "hasOrder";
 
   /**
    * Whether taking the size of this matters.
    **/
-  public static final String HAS_SIZE = "hasSize";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String HAS_SIZE = "hasSize";
 
   /**
    * Whether null has a special meaning for this variable or its members.
    **/
-  public static final String HAS_NULL = "hasNull";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String HAS_NULL = "hasNull";
 
   /**
    * Indicates the minimum size of the vector, if there's any.
    */
-  public static final String MINIMUM_LENGTH = "minlength";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String MINIMUM_LENGTH = "minlength";
 
   /**
    * Indicates the maximum size of the vector, if there's any.
    */
-  public static final String MAXIMUM_LENGTH = "maxlength";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String MAXIMUM_LENGTH = "maxlength";
 
   /**
    * Indicates the minimum value of the scalar variable or the vector elements, if there's any.
    */
-  public static final String MINIMUM_VALUE = "minvalue";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String MINIMUM_VALUE = "minvalue";
 
   /**
    * Indicates the maximum value of the scalar variable or the vector elements, if there's any.
    */
-  public static final String MAXIMUM_VALUE = "maxvalue";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String MAXIMUM_VALUE = "maxvalue";
 
   /**
    * Indicates the valid values (using string representation) for the elements
@@ -102,7 +112,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    *
    * @see #getList(String)
    */
-  public static final String VALID_VALUES = "validvalues";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String VALID_VALUES = "validvalues";
 
   /**
    * Whether this variable is an inline structure.
@@ -112,22 +123,26 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * to inlined structures as variables because some tools that follow
    * daikon need other information about the variable.
    */
-  public static final String IS_STRUCT = "isStruct";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String IS_STRUCT = "isStruct";
 
   /**
    * Whether this variable is known to be non-null, such as
    * "this" in a Java program.
    */
-  public static final String IS_NON_NULL = "isNonNull";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String IS_NON_NULL = "isNonNull";
 
   /**
    * Java-specific. The package name of the class that declares this
    * variable, if the variable is a field. If it's not a field of some
    * class, the value of this key is "no_package_name_string".
    */
-  public static final String PACKAGE_NAME = "declaringClassPackageName";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String PACKAGE_NAME = "declaringClassPackageName";
 
-  public static final String NO_PACKAGE_NAME = "no_package_name_string";
+  @SuppressWarnings("keyfor")
+  public static final /*@KeyFor("this.map")*/ String NO_PACKAGE_NAME = "no_package_name_string";
 
   /**
    * Return an interned VarInfoAux that represents a given string.
@@ -339,6 +354,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   // another variable.  Then NonZero will not be instantiated over "this", and when the equality set
   // is broken, there will be no NonZero invariant to copy to the other variable.  We only need to
   // check equality for every aux field that might affect methods such as instantiate_ok.
+  @SuppressWarnings("keyfor") // https://github.com/typetools/checker-framework/issues/877
   /*@Pure*/
   public boolean equals_for_instantiation(
       /*>>>@GuardSatisfied VarInfoAux this,*/
@@ -441,9 +457,11 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the value for the given key.
+   * Returns the value for the given key, which must be present in the map.
    **/
-  public String getValue(/*@KeyFor("this.map")*/ String key) {
+  public String getValue(
+      /*>>>@GuardSatisfied VarInfoAux this,*/
+      /*@KeyFor("this.map")*/ String key) {
     assert map.containsKey(key) : "Map does not contain key " + key;
     return map.get(key);
   }
@@ -451,7 +469,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /**
    * Returns the value for the given key, or null if it is not present.
    **/
-  public String getValueOrNull(/*@KeyFor("this.map")*/ String key) {
+  public String getValueOrNull(
+      /*>>>@GuardSatisfied VarInfoAux this,*/
+      /*@KeyFor("this.map")*/ String key) {
     return map.get(key);
   }
 
