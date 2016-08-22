@@ -85,6 +85,7 @@ public class DaikonClassInfo extends DaikonVariableInfo {
     EnumSet<VarFlags> flags = super.get_var_flags().clone();
     flags.add(VarFlags.SYNTHETIC);
     flags.add(VarFlags.CLASSNAME);
+    flags.add(VarFlags.NON_NULL);
     return flags;
   }
 }
