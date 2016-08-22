@@ -104,19 +104,11 @@ public class ParentFilter extends InvariantFilter {
 
       // System.out.printf ("  found parent slice (%d invs): %s%n", pslice.invs.size(), pslice.name());
 
-      // Look for a matching invariant in the parent slice.  Don't filter out
-      // NonZero invariants if the parent invariant is 'this != null' since it
-      // it is not obvious to the user that 'this != null' implies that all
-      // references to the class are non null
+      // Look for a matching invariant in the parent slice.
       for (Invariant pinv : pslice.invs) {
         // System.out.printf ("  inv in parent slice: %s%n", pinv.format());
         if (pinv.isGuardingPredicate) continue;
         if (pinv.getClass() != inv.getClass()) continue;
-        if ((pinv.getClass() == daikon.inv.unary.scalar.NonZero.class)
-            && pinv.ppt.var_infos[0].isThis()) {
-          inv.log("Not filtered by %s 'this != null'", pinv.format());
-          continue;
-        }
         if (!pinv.isSameFormula(inv)) continue;
 
         // Check that all the guard variables correspond.

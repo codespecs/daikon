@@ -375,15 +375,10 @@ public class AnnotateNullable {
       if (!vi.parents.isEmpty()) continue;
 
       // Skip variables that are always non-null.
-      // "this" and outer this are always non-null.
-      if (vi.name().equals("this")) continue;
-      if (vi.name().endsWith(".this")) continue;
-      // getClass() is a method call that is supplied to Daikon like an oddly-named variable.
-      if (field_name(vi).equals("getClass()")) continue;
+      if (vi.aux.isNonNull()) continue;
 
-      // Skip any variable that is enclosed by a variable other than
-      // 'this'.  These are fields and can only be annotated where they
-      // are declared
+      // Skip any variable that is enclosed by a variable other than 'this'.
+      // These are fields and can only be annotated where they are declared.
       VarInfo evar = vi.get_enclosing_var();
       if ((evar != null) && (!evar.name().equals("this"))) {
         // System.out.printf ("  enclosed %s %s%n", vi.type, vi.name());

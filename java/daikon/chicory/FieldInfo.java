@@ -188,6 +188,9 @@ public class FieldInfo extends DaikonVariableInfo {
     if (Modifier.isFinal(modbits) && Modifier.isStatic(modbits)) {
       flags.add(VarFlags.NOMOD);
     }
+    if (is_outer_this) {
+      flags.add(VarFlags.NON_NULL);
+    }
     return flags;
   }
 }
