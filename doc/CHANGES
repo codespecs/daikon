@@ -30,9 +30,17 @@ Daikon does stricter checking of its input files.  Older versions of Kvasir
 and Chicory create invalid .decls or .dtrace files, which Daikon now
 rejects.  If this happens, re-run the front end to create new, correct files.
 
+Updated the Binutils-based code in Fjalar/Kvasir to v2.26.1.
+There should be no user-visible differences in the behavior of Kvasir.
+
 ===========================================================================
 
 5.3.8 (August 1, 2016)
+
+Improved portability:
+ * support g++ 6.1
+ * support Fedora 23
+ * support newer version of jdk8
 
 Miscellaneous bug fixes and minor improvements.
 
