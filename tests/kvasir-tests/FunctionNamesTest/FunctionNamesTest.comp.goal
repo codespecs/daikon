@@ -1,17 +1,17 @@
 ..main():::ENTER
-::anotherGlobalIntArray[..]
+::anotherGlobalIntArray
 ::globalIntArray ::globalIntArray[..]
 
 ..main():::EXIT0
-::anotherGlobalIntArray[..]
+::anotherGlobalIntArray
 ::globalIntArray ::globalIntArray[..]
 return
 
 ..secondFileFunction():::ENTER
-::anotherGlobalIntArray[..]
+::anotherGlobalIntArray
 ::globalIntArray ::globalIntArray[..]
 
 ..secondFileFunction():::EXIT0
-::anotherGlobalIntArray[..]
+::anotherGlobalIntArray
 ::globalIntArray ::globalIntArray[..]
 

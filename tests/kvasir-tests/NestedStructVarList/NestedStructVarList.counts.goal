@@ -1,2 +1,2 @@
-..check() ENTER/12: 5 EXIT0/12: 5
-..main() ENTER/12: 1 EXIT0/15: 1
+..check() ENTER/15: 5 EXIT0/15: 5
+..main() ENTER/15: 1 EXIT0/18: 1

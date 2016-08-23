@@ -506,16 +506,23 @@ ppt A.setEverything():::EXIT0
 
 ppt A:::OBJECT
   ppt-type object
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type A*
   variable this->privateIntA
     var-kind field privateIntA
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->protectedIntA
     var-kind field protectedIntA
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->publicIntA
     var-kind field publicIntA
+    enclosing-var this
     rep-type int
     dec-type int
 
@@ -947,64 +954,83 @@ ppt B:::OBJECT
   parent user D:::OBJECT 3
   parent user E:::OBJECT 4
   parent user A:::OBJECT 5
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type B*
   variable this->C.privateIntC
     var-kind field privateIntC
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->C.protectedIntC
     var-kind field protectedIntC
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->C.publicIntC
     var-kind field publicIntC
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->D.privateIntD
     var-kind field privateIntD
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->D.protectedIntD
     var-kind field protectedIntD
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->D.publicIntD
     var-kind field publicIntD
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->E.A.privateIntA
     var-kind field privateIntA
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->E.A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->E.A.publicIntA
     var-kind field publicIntA
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->E.privateIntE
     var-kind field privateIntE
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->E.protectedIntE
     var-kind field protectedIntE
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->E.publicIntE
     var-kind field publicIntE
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->privateIntB
     var-kind field privateIntB
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->protectedIntB
     var-kind field protectedIntB
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->publicIntB
     var-kind field publicIntB
+    enclosing-var this
     rep-type int
     dec-type int
 
@@ -1288,16 +1314,23 @@ ppt C.setEverything():::EXIT0
 
 ppt C:::OBJECT
   ppt-type object
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type C*
   variable this->privateIntC
     var-kind field privateIntC
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->protectedIntC
     var-kind field protectedIntC
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->publicIntC
     var-kind field publicIntC
+    enclosing-var this
     rep-type int
     dec-type int
 
@@ -1581,16 +1614,23 @@ ppt D.setEverything():::EXIT0
 
 ppt D:::OBJECT
   ppt-type object
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type D*
   variable this->privateIntD
     var-kind field privateIntD
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->protectedIntD
     var-kind field protectedIntD
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->publicIntD
     var-kind field publicIntD
+    enclosing-var this
     rep-type int
     dec-type int
 
@@ -1911,28 +1951,38 @@ ppt E.setEverything():::EXIT0
 ppt E:::OBJECT
   ppt-type object
   parent user A:::OBJECT 1
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type E*
   variable this->A.privateIntA
     var-kind field privateIntA
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->A.protectedIntA
     var-kind field protectedIntA
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->A.publicIntA
     var-kind field publicIntA
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->privateIntE
     var-kind field privateIntE
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->protectedIntE
     var-kind field protectedIntE
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->publicIntE
     var-kind field publicIntE
+    enclosing-var this
     rep-type int
     dec-type int
 

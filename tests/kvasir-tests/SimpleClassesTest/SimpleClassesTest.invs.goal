@@ -78,6 +78,7 @@ A.setEverything():::ENTER
 ::arrayOfBees[].protectedIntB sorted by >=
 ::arrayOfBees[].publicIntB elements one of { 0, 1 }
 ::arrayOfBees[].publicIntB sorted by >=
+this != null
 this->privateIntA == 0
 this->protectedIntA == 0
 this->publicIntA == 0
@@ -1379,6 +1380,7 @@ C.setEverything():::ENTER
 ::arrayOfBees[].protectedIntB sorted by >=
 ::arrayOfBees[].publicIntB elements one of { 0, 1 }
 ::arrayOfBees[].publicIntB sorted by >=
+this != null
 this->privateIntC == 0
 this->protectedIntC == 0
 this->publicIntC == 0
@@ -1654,6 +1656,7 @@ D.setEverything():::ENTER
 ::arrayOfBees[].protectedIntB sorted by >=
 ::arrayOfBees[].publicIntB elements one of { 0, 1 }
 ::arrayOfBees[].publicIntB sorted by >=
+this != null
 this->privateIntD == 0
 this->protectedIntD == 0
 this->publicIntD == 0
@@ -1920,6 +1923,7 @@ E.setEverything():::ENTER
 ::arrayOfBees[].protectedIntB sorted by >=
 ::arrayOfBees[].publicIntB elements one of { 0, 1 }
 ::arrayOfBees[].publicIntB sorted by >=
+this != null
 this->A.privateIntA == 0
 this->A.protectedIntA == 0
 this->A.publicIntA == 0

@@ -8,8 +8,15 @@ ppt ..check():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type _counter*
+  variable ::counters[..]
+    var-kind array
+    enclosing-var ::counters
+    array 1
+    rep-type hashcode[]
+    dec-type _counter[]
   variable ::counters[..].a
     var-kind field a
+    enclosing-var ::counters[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -24,8 +31,15 @@ ppt ..check():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type _counter*
+  variable ::counters[..]
+    var-kind array
+    enclosing-var ::counters
+    array 1
+    rep-type hashcode[]
+    dec-type _counter[]
   variable ::counters[..].a
     var-kind field a
+    enclosing-var ::counters[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -40,8 +54,15 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type _counter*
+  variable ::counters[..]
+    var-kind array
+    enclosing-var ::counters
+    array 1
+    rep-type hashcode[]
+    dec-type _counter[]
   variable ::counters[..].a
     var-kind field a
+    enclosing-var ::counters[..]
     array 1
     rep-type int[]
     dec-type int[]
@@ -56,8 +77,15 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type _counter*
+  variable ::counters[..]
+    var-kind array
+    enclosing-var ::counters
+    array 1
+    rep-type hashcode[]
+    dec-type _counter[]
   variable ::counters[..].a
     var-kind field a
+    enclosing-var ::counters[..]
     array 1
     rep-type int[]
     dec-type int[]

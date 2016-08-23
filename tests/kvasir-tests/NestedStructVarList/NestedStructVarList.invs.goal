@@ -1,13 +1,16 @@
 ===========================================================================
 ..check():::ENTER
 ::counters has only one value
+::counters[] contains no nulls and has only one value, of length 10
 ::counters[].a elements >= 0
 ===========================================================================
 ..check():::EXIT
 ::counters == orig(::counters)
+::counters[] == orig(::counters[])
 ::counters[].a == orig(::counters[].a)
 ::sum == orig(::sum)
 ::counters has only one value
+::counters[] contains no nulls and has only one value, of length 10
 ::counters[].a elements >= 0
 ===========================================================================
 ..main():::ENTER
@@ -16,6 +19,7 @@
 ===========================================================================
 ..main():::EXIT
 ::counters has only one value
+::counters[] contains no nulls and has only one value, of length 10
 ::counters[].a == [3, 0, 0, 0, 0, 1, 0, 0, 0, 100]
 ::sum == 104
 return == 0

@@ -4267,8 +4267,13 @@ ppt A:::OBJECT
   parent user unnamed_DWARF_ID_2:::OBJECT 1
   parent user unnamed_DWARF_ID_3:::OBJECT 2
   parent user unnamed_DWARF_ID_1:::OBJECT 3
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type A*
   variable this->B
     var-kind field B
+    enclosing-var this
     rep-type hashcode
     dec-type unnamed_DWARF_ID_1*
     flags non_null 
@@ -4377,10 +4382,12 @@ ppt A:::OBJECT
     dec-type int[]
   variable this->foo_head
     var-kind field foo_head
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->foo_tail
     var-kind field foo_tail
+    enclosing-var this
     rep-type int
     dec-type int
 
@@ -5318,42 +5325,58 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
 
 ppt _buffers:::OBJECT
   ppt-type object
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
   variable this->SS
     var-kind field SS
+    enclosing-var this
     rep-type int
     dec-type unsigned\_long
   variable this->age
     var-kind field age
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->firstName
     var-kind field firstName
+    enclosing-var this
     reference-type offset
     rep-type string
     dec-type char*
   variable this->lastName
     var-kind field lastName
+    enclosing-var this
     reference-type offset
     rep-type string
     dec-type char*
   variable this->mallocMePlease
     var-kind field mallocMePlease
+    enclosing-var this
     rep-type string
     dec-type char*
   variable this->middleName
     var-kind field middleName
+    enclosing-var this
     reference-type offset
     rep-type string
     dec-type char*
   variable this->weight
     var-kind field weight
+    enclosing-var this
     rep-type double
     dec-type double
 
 ppt array_struct:::OBJECT
   ppt-type object
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type array_struct*
   variable this->MIT_id
     var-kind field MIT_id
+    enclosing-var this
     rep-type hashcode
     dec-type int*
     flags non_null 
@@ -5366,6 +5389,7 @@ ppt array_struct:::OBJECT
     dec-type int[]
   variable this->birthday
     var-kind field birthday
+    enclosing-var this
     rep-type hashcode
     dec-type int*
     flags non_null 
@@ -5378,6 +5402,7 @@ ppt array_struct:::OBJECT
     dec-type int[]
   variable this->social_security
     var-kind field social_security
+    enclosing-var this
     rep-type hashcode
     dec-type int*
     flags non_null 
@@ -5393,8 +5418,13 @@ ppt unnamed_DWARF_ID_1:::OBJECT
   ppt-type object
   parent user unnamed_DWARF_ID_2:::OBJECT 4
   parent user unnamed_DWARF_ID_3:::OBJECT 5
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type unnamed_DWARF_ID_1*
   variable this->C
     var-kind field C
+    enclosing-var this
     rep-type hashcode
     dec-type unnamed_DWARF_ID_2
   variable this->C.baz_head
@@ -5414,6 +5444,7 @@ ppt unnamed_DWARF_ID_1:::OBJECT
     dec-type int
   variable this->D
     var-kind field D
+    enclosing-var this
     rep-type hashcode
     dec-type unnamed_DWARF_ID_3*
     flags non_null 
@@ -5432,32 +5463,46 @@ ppt unnamed_DWARF_ID_1:::OBJECT
     dec-type int[]
   variable this->bar_head
     var-kind field bar_head
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->bar_tail
     var-kind field bar_tail
+    enclosing-var this
     rep-type int
     dec-type int
 
 ppt unnamed_DWARF_ID_2:::OBJECT
   ppt-type object
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type unnamed_DWARF_ID_2*
   variable this->baz_head
     var-kind field baz_head
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->baz_tail
     var-kind field baz_tail
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->y
     var-kind field y
+    enclosing-var this
     rep-type int
     dec-type int
 
 ppt unnamed_DWARF_ID_3:::OBJECT
   ppt-type object
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type unnamed_DWARF_ID_3*
   variable this->neverSeeMe
     var-kind field neverSeeMe
+    enclosing-var this
     rep-type int
     dec-type int
 

@@ -522,12 +522,18 @@ ppt Link.initialize(char*,\_Stack::Link*):::EXIT0
 
 ppt Link:::OBJECT
   ppt-type object
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type Link*
   variable this->data
     var-kind field data
+    enclosing-var this
     rep-type string
     dec-type char*
   variable this->next
     var-kind field next
+    enclosing-var this
     rep-type hashcode
     dec-type Link*
   variable this->next[..]
@@ -2698,8 +2704,13 @@ ppt Stack.~Stack():::EXIT0
 ppt Stack:::OBJECT
   ppt-type object
   parent user Link:::OBJECT 1
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type Stack*
   variable this->head
     var-kind field head
+    enclosing-var this
     rep-type hashcode
     dec-type Link*
   variable this->head[..]
@@ -2764,10 +2775,12 @@ ppt Stack:::OBJECT
     dec-type Link[]
   variable this->myName
     var-kind field myName
+    enclosing-var this
     rep-type string
     dec-type char*
   variable this->numElements
     var-kind field numElements
+    enclosing-var this
     rep-type int
     dec-type int
 

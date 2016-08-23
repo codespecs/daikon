@@ -8,6 +8,9 @@ this_invocation_nonce
 ::counters
 0x0
 1
+::counters[..]
+nonsensical
+2
 ::counters[..].a
 nonsensical
 2
@@ -21,6 +24,9 @@ this_invocation_nonce
 ::counters
 <HEAP_ADDR>
 1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
+1
 ::counters[..].a
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
@@ -33,6 +39,9 @@ this_invocation_nonce
 1
 ::counters
 <HEAP_ADDR>
+1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
 1
 ::counters[..].a
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -47,6 +56,9 @@ this_invocation_nonce
 ::counters
 <HEAP_ADDR>
 1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
+1
 ::counters[..].a
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
@@ -59,6 +71,9 @@ this_invocation_nonce
 2
 ::counters
 <HEAP_ADDR>
+1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
 1
 ::counters[..].a
 [ 1 0 0 0 0 0 0 0 0 0 ]
@@ -72,6 +87,9 @@ this_invocation_nonce
 3
 ::counters
 <HEAP_ADDR>
+1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
 1
 ::counters[..].a
 [ 1 0 0 0 0 1 0 0 0 0 ]
@@ -85,6 +103,9 @@ this_invocation_nonce
 3
 ::counters
 <HEAP_ADDR>
+1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
 1
 ::counters[..].a
 [ 1 0 0 0 0 1 0 0 0 0 ]
@@ -98,6 +119,9 @@ this_invocation_nonce
 4
 ::counters
 <HEAP_ADDR>
+1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
 1
 ::counters[..].a
 [ 1 0 0 0 0 1 0 0 0 100 ]
@@ -111,6 +135,9 @@ this_invocation_nonce
 4
 ::counters
 <HEAP_ADDR>
+1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
 1
 ::counters[..].a
 [ 1 0 0 0 0 1 0 0 0 100 ]
@@ -124,6 +151,9 @@ this_invocation_nonce
 5
 ::counters
 <HEAP_ADDR>
+1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
 1
 ::counters[..].a
 [ 3 0 0 0 0 1 0 0 0 100 ]
@@ -137,6 +167,9 @@ this_invocation_nonce
 5
 ::counters
 <HEAP_ADDR>
+1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
 1
 ::counters[..].a
 [ 3 0 0 0 0 1 0 0 0 100 ]
@@ -150,6 +183,9 @@ this_invocation_nonce
 0
 ::counters
 <HEAP_ADDR>
+1
+::counters[..]
+[ <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> <HEAP_ADDR> ]
 1
 ::counters[..].a
 [ 3 0 0 0 0 1 0 0 0 100 ]

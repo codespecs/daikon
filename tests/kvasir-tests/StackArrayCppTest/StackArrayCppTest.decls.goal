@@ -1694,20 +1694,28 @@ ppt Stack.~Stack():::EXIT0
 
 ppt Stack:::OBJECT
   ppt-type object
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type Stack*
   variable this->maxElts
     var-kind field maxElts
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->myName
     var-kind field myName
+    enclosing-var this
     rep-type string
     dec-type char*
   variable this->numElts
     var-kind field numElts
+    enclosing-var this
     rep-type int
     dec-type int
   variable this->stackRep
     var-kind field stackRep
+    enclosing-var this
     rep-type hashcode
     dec-type int*
   variable this->stackRep[..]

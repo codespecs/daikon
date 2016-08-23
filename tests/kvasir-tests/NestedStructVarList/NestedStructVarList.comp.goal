@@ -1,20 +1,24 @@
 ..check():::ENTER
 ::counters
+::counters[..]
 ::counters[..].a
 ::sum
 
 ..check():::EXIT0
 ::counters
+::counters[..]
 ::counters[..].a
 ::sum
 
 ..main():::ENTER
 ::counters
+::counters[..]
 ::counters[..].a
 ::sum
 
 ..main():::EXIT0
 ::counters
+::counters[..]
 ::counters[..].a
 ::sum
 return
