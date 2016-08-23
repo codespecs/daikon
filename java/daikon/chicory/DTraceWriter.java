@@ -66,7 +66,9 @@ public class DTraceWriter extends DaikonWriter {
       /*@Nullable*/ Object obj,
       Object[] args) {
     //don't print
-    if (Runtime.dtrace_closed) return;
+    if (Runtime.dtrace_closed) {
+      return;
+    }
 
     Member member = mi.member;
 
@@ -102,7 +104,9 @@ public class DTraceWriter extends DaikonWriter {
       Object[] args,
       Object ret_val,
       int lineNum) {
-    if (Runtime.dtrace_closed) return;
+    if (Runtime.dtrace_closed) {
+      return;
+    }
 
     Member member = mi.member;
 

@@ -377,8 +377,7 @@ public class Instrument implements ClassFileTransformer {
 
     InstructionList il = new InstructionList();
     il.append(call_initNotify(cg, cg.getConstantPool(), fullClassName, factory));
-    il.append(InstructionFactory.createReturn(Type.VOID)); // need to
-    // return!
+    il.append(InstructionFactory.createReturn(Type.VOID)); // need to return!
 
     MethodGen newMethGen =
         new MethodGen(
@@ -473,23 +472,27 @@ public class Instrument implements ClassFileTransformer {
         MethodGen mg = new MethodGen(methods[i], cg.getClassName(), pgen);
         MethodContext context = new MethodContext(cg, mg);
 
-        // check for the class init method
+        // check for the class static initializer method
         if (mg.getName().equals("<clinit>")) {
           if (Chicory.checkStaticInit) {
             cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
             cg.update();
           }
-          continue;
+          if (!Chicory.instrument_clinit) {
+            continue;
+          }
         }
 
-        // If method is synthetic...
+        // If method is synthetic... (default constructors and <clinit> are not synthetic)
         if ((Const.ACC_SYNTHETIC & mg.getAccessFlags()) > 0) {
           continue;
         }
 
         // Get the instruction list and skip methods with no instructions
         InstructionList il = mg.getInstructionList();
-        if (il == null) continue;
+        if (il == null) {
+          continue;
+        }
 
         fix_local_variable_table(mg);
 
