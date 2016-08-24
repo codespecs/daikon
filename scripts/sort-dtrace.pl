@@ -4,7 +4,9 @@
 # PPT declarations, and the variables within each program point, into
 # alphabetical order. Each continguous series of DECLARE paragraphs is
 # reordered, while trace paragraphs remain in the same order as in the
-# original file. Should be semantics-preserving.
+# original file.
+# This change is semantics-preserving: Daikon produces the same
+# invariants for the original or sorted file.
 
 use strict;
 use 5.006;
