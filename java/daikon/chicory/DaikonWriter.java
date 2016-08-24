@@ -126,7 +126,9 @@ public abstract class DaikonWriter {
     paramTypes.append(")");
     String pptname = fullClassName + "." + short_name + paramTypes + ":::" + point;
 
-    if (Chicory.debug_ppt_names) System.out.printf("methodName1 final ppt name = '%s'%n", pptname);
+    if (Chicory.debug_ppt_names) {
+      System.out.printf("methodName1 final ppt name = '%s'%n", pptname);
+    }
 
     //Throwable t = new Throwable("debug");
     //t.fillInStackTrace();
@@ -278,10 +280,11 @@ public abstract class DaikonWriter {
    * Determines if the given method should be instrumented
    */
   protected boolean shouldInstrumentMethod(Member method) {
+    if (method == null) { // <clinit>
+      return Chicory.instrument_clinit;
+    }
     int modifiers = method.getModifiers();
-    if (Modifier.isAbstract(modifiers)
-        || Modifier.isNative(modifiers)
-        || method.getName().equals("<clinit>")) {
+    if (Modifier.isAbstract(modifiers) || Modifier.isNative(modifiers)) {
       return false;
     }
     return true;

@@ -26,6 +26,10 @@ A new front end for LLVM is available.
 See https://github.com/markus-kusano/udon.
 You can use it with any program that can be compiled to LLVM.
 
+Chicory command-line argument --instrument-clinit causes Chicory to output
+empty dtrace records when static initializers are entered and exited.  This
+is useful for clients that use Chicory to trace method entry and exit.
+
 Daikon does stricter checking of its input files.  Older versions of Kvasir
 and Chicory create invalid .decls or .dtrace files, which Daikon now
 rejects.  If this happens, re-run the front end to create new, correct files.

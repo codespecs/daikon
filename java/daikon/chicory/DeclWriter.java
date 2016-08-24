@@ -1,6 +1,7 @@
 package daikon.chicory;
 
 import daikon.Chicory;
+import daikon.FileIO;
 import daikon.PptTopLevel.PptType;
 import daikon.util.SimpleLog;
 import java.io.*;
@@ -129,7 +130,9 @@ public class DeclWriter extends DaikonWriter {
       Member member = mi.member;
 
       // Don't want to instrument these types of methods
-      if (!shouldInstrumentMethod(member)) continue;
+      if (!shouldInstrumentMethod(member)) {
+        continue;
+      }
 
       // Gset the root of the method's traversal pattern
       RootInfo enterRoot = mi.traversalEnter;
@@ -139,7 +142,7 @@ public class DeclWriter extends DaikonWriter {
       printMethod(enterRoot, methodEntryName(member), comp_info);
 
       // Print exit program point for EACH exit location in the method
-      // (that was encountered during this execution of the program)
+      // (that was encountered during this execution of the program).
       Set<Integer> theExits = new HashSet<Integer>(mi.exit_locations);
       assert theExits.size() > 0 : mi;
       for (Integer exitLoc : theExits) {
@@ -275,7 +278,11 @@ public class DeclWriter extends DaikonWriter {
       assert enterRoot != null
           : "Traversal pattern not initialized " + "at method " + mi.method_name;
 
-      print_method(mi, enterRoot, methodEntryName(member), PptType.ENTER, comp_info);
+      String entryName =
+          (member != null
+              ? methodEntryName(member)
+              : mi.class_info.class_name + "<clinit>" + FileIO.enter_tag);
+      print_method(mi, enterRoot, entryName, PptType.ENTER, comp_info);
 
       // Print exit program point for EACH exit location in the method
       // Note that there may not be any exits.  They may get filtered out,
@@ -287,8 +294,11 @@ public class DeclWriter extends DaikonWriter {
         assert enterRoot != null
             : "Traversal pattern not initialized at " + "method " + mi.method_name;
 
-        print_method(
-            mi, exitRoot, methodExitName(member, exitLoc.intValue()), PptType.SUBEXIT, comp_info);
+        String exitName =
+            (member != null
+                ? methodExitName(member, exitLoc)
+                : mi.class_info.class_name + "<clinit>" + FileIO.exit_tag + exitLoc);
+        print_method(mi, exitRoot, exitName, PptType.SUBEXIT, comp_info);
       }
     }
 
@@ -739,14 +749,16 @@ public class DeclWriter extends DaikonWriter {
     // method and the relation is over the dummy static variable, it
     // relates directly to the class ppt, otherwise to the object
     // ppt.  Note that a relation to the class ppt is returned only if there
-    // are static variables
+    // are static variables.
     for (ClassInfo ci : Runtime.all_classes) {
       if (ci.class_name.equals(decl_type)) {
         // System.out.printf ("*Found match for %s : %s%n", decl_type, ci);
         String ppt_marker = ":::OBJECT";
         if (is_static_method && (var instanceof StaticObjInfo)) {
           // System.out.printf ("num_class_vars for classinfo %s%n", ci);
-          if (num_class_vars(ci) == 0) return null;
+          if (num_class_vars(ci) == 0) {
+            return null;
+          }
           ppt_marker = ":::CLASS";
         }
         if (!enable_object_user && !var.getName().equals("this")) {
@@ -801,7 +813,7 @@ public class DeclWriter extends DaikonWriter {
 
   /**
    * Returns the number of variables in the CLASS program point.  The
-   * CLASS ppt contains all of the static variables in the class (if any)
+   * CLASS ppt contains all of the static variables in the class (if any).
    */
   private int num_class_vars(ClassInfo cinfo) {
 
