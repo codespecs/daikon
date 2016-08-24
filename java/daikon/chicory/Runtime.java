@@ -262,7 +262,11 @@ public class Runtime {
       if (capture) {
         mi.capture_cnt++;
         // long start = System.currentTimeMillis();
-        dtrace_writer.methodEntry(mi, nonce, obj, args);
+        if (mi.member == null) {
+          dtrace_writer.clinitEntry(mi.class_info.class_name + ".<clinit>:::ENTER", nonce);
+        } else {
+          dtrace_writer.methodEntry(mi, nonce, obj, args);
+        }
         // long duration = System.currentTimeMillis() - start;
         //System.out.println ("Enter " + mi + " " + duration + "ms"
         //                 + " " + mi.capture_cnt + "/" + mi.call_cnt);
@@ -341,7 +345,12 @@ public class Runtime {
       // Write out the infromation for this method
       MethodInfo mi = methods.get(mi_index);
       // long start = System.currentTimeMillis();
-      dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, exitLineNum);
+      if (mi.member == null) {
+        dtrace_writer.clinitExit(
+            mi.class_info.class_name + ".<clinit>:::EXIT" + exitLineNum, nonce);
+      } else {
+        dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, exitLineNum);
+      }
       // long duration = System.currentTimeMillis() - start;
       // System.out.println ("Exit " + mi + " " + duration + "ms");
     } finally {

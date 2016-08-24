@@ -3737,6 +3737,11 @@ of 10 each time another @var{sample-cnt} samples have been recorded.  If
 Chicory treats classes that match the @var{regex} as boot classes.
 Such classes are not instrumented.
 
+@item --instrument-clinit
+Causes Chicory to output empty dtrace records when static initializers are
+entered and exited.  This is useful for clients that use Chicory to trace
+method entry and exit.
+
 @end table
 
 

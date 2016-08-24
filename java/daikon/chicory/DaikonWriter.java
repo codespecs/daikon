@@ -280,10 +280,11 @@ public abstract class DaikonWriter {
    * Determines if the given method should be instrumented
    */
   protected boolean shouldInstrumentMethod(Member method) {
+    if (method == null) { // <clinit>
+      return Chicory.instrument_clinit;
+    }
     int modifiers = method.getModifiers();
-    if (Modifier.isAbstract(modifiers)
-        || Modifier.isNative(modifiers)
-        || method.getName().equals("<clinit>")) {
+    if (Modifier.isAbstract(modifiers) || Modifier.isNative(modifiers)) {
       return false;
     }
     return true;

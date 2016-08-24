@@ -1,6 +1,7 @@
 package daikon.chicory;
 
 import daikon.Chicory;
+import daikon.FileIO;
 import daikon.PptTopLevel.PptType;
 import daikon.util.SimpleLog;
 import java.io.*;
@@ -277,7 +278,11 @@ public class DeclWriter extends DaikonWriter {
       assert enterRoot != null
           : "Traversal pattern not initialized " + "at method " + mi.method_name;
 
-      print_method(mi, enterRoot, methodEntryName(member), PptType.ENTER, comp_info);
+      String entryName =
+          (member != null
+              ? methodEntryName(member)
+              : mi.class_info.class_name + "<clinit>" + FileIO.enter_tag);
+      print_method(mi, enterRoot, entryName, PptType.ENTER, comp_info);
 
       // Print exit program point for EACH exit location in the method
       // Note that there may not be any exits.  They may get filtered out,
@@ -289,8 +294,11 @@ public class DeclWriter extends DaikonWriter {
         assert enterRoot != null
             : "Traversal pattern not initialized at " + "method " + mi.method_name;
 
-        print_method(
-            mi, exitRoot, methodExitName(member, exitLoc.intValue()), PptType.SUBEXIT, comp_info);
+        String exitName =
+            (member != null
+                ? methodExitName(member, exitLoc)
+                : mi.class_info.class_name + "<clinit>" + FileIO.exit_tag + exitLoc);
+        print_method(mi, exitRoot, exitName, PptType.SUBEXIT, comp_info);
       }
     }
 

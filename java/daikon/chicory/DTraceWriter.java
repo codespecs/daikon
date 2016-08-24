@@ -94,6 +94,20 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
+   * Prints an entry program point for a static initializer in the dtrace file.
+   */
+  public void clinitEntry(/*>>>@GuardSatisfied DTraceWriter this,*/ String pptname, int nonceVal) {
+    //don't print
+    if (Runtime.dtrace_closed) {
+      return;
+    }
+    outFile.println(pptname);
+    printNonce(nonceVal);
+    outFile.println();
+    Runtime.incrementRecords();
+  }
+
+  /**
    * Prints the method exit program point in the dtrace file
    */
   public void methodExit(
@@ -135,6 +149,20 @@ public class DTraceWriter extends DaikonWriter {
 
     outFile.println();
 
+    Runtime.incrementRecords();
+  }
+
+  /**
+   * Prints an exit program point for a static initializer in the dtrace file.
+   */
+  public void clinitExit(/*>>>@GuardSatisfied DTraceWriter this,*/ String pptname, int nonceVal) {
+    //don't print
+    if (Runtime.dtrace_closed) {
+      return;
+    }
+    outFile.println(pptname);
+    printNonce(nonceVal);
+    outFile.println();
     Runtime.incrementRecords();
   }
 

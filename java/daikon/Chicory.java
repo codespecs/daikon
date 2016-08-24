@@ -44,11 +44,22 @@ public class Chicory {
   @Option("Decl formatted file containing comparability information")
   public static /*@Nullable*/ File comparability_file = null;
 
-  @Option("Print progress information")
-  public static boolean verbose = true;
+  /**
+   * If true, no variable values are printed.  Static variables are not
+   * initialized yet when the routine is entered, and static variable are
+   * not necessarily initialized to their final values when the routine is
+   * exited.  These .dtrace entries are purely for the benefit of tools
+   * that use Chicory for program tracing, to determine when methods are
+   * entered and exited.
+   */
+  @Option("Write static initialzer program points")
+  public static boolean instrument_clinit = false;
 
   @Option("Include variables that are visible under normal java access rules")
   public static boolean std_visibility = false;
+
+  @Option("Print progress information")
+  public static boolean verbose = true;
 
   @Option("Print debug information and save instrumented classes")
   public static boolean debug = false;
