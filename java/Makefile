@@ -544,6 +544,7 @@ daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	  > daikon/dcomp/std_dcomp_out.diff
 	@if test ! -s daikon/dcomp/std_dcomp_out.diff ; then echo No Errors; \
 	else echo Errors: more daikon/dcomp/std_dcomp_out.diff for details; fi
+	@rm -f Test.decls-DynComp
 
 dyncomp-test-jdk dcomp-test-jdk : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
