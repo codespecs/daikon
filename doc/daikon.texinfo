@@ -1737,9 +1737,9 @@ of all variables is not the union of the modified and unmodified
 variables.
 
 @item --files_from @var{filename}
-Read a list of @file{.decls}, @file{.dtrace}, or @file{.spinfo} files from the
+Read a list of @file{.decls}, @file{.dtrace}, or @file{.spinfo} file names from the
 given text file, one filename per line, as an alternative to providing
-them on the command line.
+the file names on the command line.
 
 
 @item --server @var{dirname}
