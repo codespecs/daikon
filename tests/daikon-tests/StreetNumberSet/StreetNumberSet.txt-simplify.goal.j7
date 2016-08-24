@@ -30,10 +30,10 @@ MapQuick1.StreetNumberSet.checkRep():::EXIT
 MapQuick1.StreetNumberSet.contains(int):::ENTER
 (>= |n| 0)
 ===========================================================================
-MapQuick1.StreetNumberSet.contains(int):::EXIT118
+MapQuick1.StreetNumberSet.contains(int):::EXIT126
 (EQ |return| |@true|)
 ===========================================================================
-MapQuick1.StreetNumberSet.contains(int):::EXIT123
+MapQuick1.StreetNumberSet.contains(int):::EXIT127
 (EQ |return| |@false|)
 ===========================================================================
 MapQuick1.StreetNumberSet.contains(int):::EXIT
@@ -160,10 +160,10 @@ MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::ENTER
 (>= (arrayLength (select |begins| |other|)) 1)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |begins| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |ends| |other|)) 1)) (EQ |i| |j|)) (<= (select (select elems (select |begins| |other|)) |i|) (select (select elems (select |ends| |other|)) |j|))))
 ===========================================================================
-MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT253
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT260
 (EQ |return| |@true|)
 ===========================================================================
-MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT257
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT261
 (EQ |return| |@false|)
 ===========================================================================
 MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT

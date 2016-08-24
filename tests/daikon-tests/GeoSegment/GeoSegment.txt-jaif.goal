@@ -3,7 +3,7 @@ annotation @Nullable:
 annotation @NonNull:
 
 package MapQuick1:
-class GeoPoint : // 474314/474314 obj/class samples
+class GeoPoint : // 475142/475142 obj/class samples
   field REP_SCALE_FACTOR :  // double
   field latitude :  // int
   field longitude :  // int
@@ -17,7 +17,7 @@ class GeoPoint : // 474314/474314 obj/class samples
   method equals(Ljava/lang/Object;)Z : // 5871 samples
     return: 
     parameter #0 :  // o
-  method hashCode()I : // 227776 samples
+  method hashCode()I : // 228190 samples
     return: 
   method headingTo(LMapQuick1/GeoPoint;)D : // 296 samples
     return: 
@@ -27,7 +27,7 @@ class GeoPoint : // 474314/474314 obj/class samples
 
 
 package MapQuick1:
-class GeoSegment : // 259838/- obj/class samples
+class GeoSegment : // 260252/- obj/class samples
   field name :  // java.lang.String
   field p1 :  // MapQuick1.GeoPoint
   field REP_SCALE_FACTOR :  // double
@@ -40,7 +40,7 @@ class GeoSegment : // 259838/- obj/class samples
   method equals(Ljava/lang/Object;)Z : // 611 samples
     return: 
     parameter #0 :  // o
-  method hashCode()I : // 113888 samples
+  method hashCode()I : // 114095 samples
     return: 
   method heading()D : // 296 samples
     return: 

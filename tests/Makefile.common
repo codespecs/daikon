@@ -287,9 +287,9 @@ JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.* 1\.\(.\)
 JAVA_UPDATE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/^.*_//')
 NEWER_JAVA8_RELEASE := $(shell echo $(JAVA_UPDATE_NUMBER)\>91 | bc)
 
-# Function to compute goal filename extension.  If we are using Java8 then
-# if filename.test.goal.j8 exists, use it; otherwise, use filename.test.goal
-# otherwise (not Java8) use filename.test.goal.
+# Function to compute goal filename extension.  Java 8 is now the default.
+# If we are running Java 7 and if filename.test.goal.j7 exists, use it;
+# otherwise, use filename.test.goal
 # Reasons for different behavior between Java 7 and Java 8 include:
 #  * nondeterministic behavior, such as using a HashMap's iterator.
 #    In this case, don't create a .goal.j8 goal file; instead, change the
@@ -303,24 +303,36 @@ NEWER_JAVA8_RELEASE := $(shell echo $(JAVA_UPDATE_NUMBER)\>91 | bc)
 #    This is currently the only reason to create a .goal.j8 file.
 # The argument ($(1)) is '<filename>.<test>'
 
-# Now we have an additional complication.  If we are using a newer Java8
-# (<update> > 91) then if filename.test.goal.j8n exists, use it; otherwise,
-# continue as described above, looking to see if filename.test.goal.j8 exists.
+# Now we have an additional complication.  If we are using an older Java8
+# (<update> < 92) then if filename.test.goal.j8o exists, use it;
+# otherwise, use filename.test.goal
 
 goal_name = $(if $(findstring 8, $(JAVA_RELEASE_NUMBER)), \
 				$(if $(findstring 1, $(NEWER_JAVA8_RELEASE)), \
-					$(if $(shell if [ -f $(1).goal.j8n ] ; then echo true; fi), \
-						$(1).goal.j8n, \
-						$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
-							$(1).goal.j8, \
-							$(1).goal) \
-					), \
-					$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
-						$(1).goal.j8, \
+					$(1).goal, \
+					$(if $(shell if [ -f $(1).goal.j8o ] ; then echo true; fi), \
+						$(1).goal.j8o, \
 						$(1).goal) \
-				), \
-				$(1).goal \
+					), \
+				$(if $(shell if [ -f $(1).goal.j7 ] ; then echo true; fi), \
+					$(1).goal.j7, \
+					$(1).goal) \
 			)
+
+#goal_name = $(if $(findstring 8, $(JAVA_RELEASE_NUMBER)), \
+#				$(if $(findstring 1, $(NEWER_JAVA8_RELEASE)), \
+#					$(if $(shell if [ -f $(1).goal.j8n ] ; then echo true; fi), \
+#						$(1).goal.j8n, \
+#						$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
+#							$(1).goal.j8, \
+#							$(1).goal) \
+#					), \
+#					$(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
+#						$(1).goal.j8, \
+#						$(1).goal) \
+#				), \
+#				$(1).goal \
+#			)
 
 
 $(PRINT_INVARIANTS_CLASS):
