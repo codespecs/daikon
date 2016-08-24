@@ -221,8 +221,6 @@ public class Annotate {
     }
     PptMap ppts = FileIO.read_serialized_pptmap(new File(invfile), /*use saved config=*/ true);
 
-    Daikon.suppress_implied_controlled_invariants = true;
-    Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
     Daikon.suppress_redundant_invariants_with_simplify = true;
 
     for (; argindex < args.length; argindex++) {

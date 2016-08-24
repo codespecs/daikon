@@ -230,17 +230,6 @@ public final class Daikon {
    **/
   // public static boolean dkconfig_df_bottom_up = true;
 
-  // When true, don't print invariants when their controlling ppt
-  // already has them.  For example, this is the case for invariants
-  // in public methods which are already given as part of the object
-  // invariant for that class.
-  public static boolean suppress_implied_controlled_invariants = true;
-
-  // When true, don't print EXIT invariants over strictly orig()
-  // variables when the corresponding entry ppt already has the
-  // invariant.
-  public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
-
   // When true, use the Simplify theorem prover (not part of Daikon)
   // to locate logically redundant invariants, and flag them as
   // redundant, so that they are removed from the printed output.

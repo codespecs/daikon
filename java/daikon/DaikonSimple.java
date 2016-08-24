@@ -116,7 +116,6 @@ public class DaikonSimple {
     // optimizations are turned off.
     Daikon.use_equality_optimization = false;
     DynamicConstants.dkconfig_use_dynamic_constant_optimization = false;
-    Daikon.suppress_implied_controlled_invariants = false;
     NIS.dkconfig_enabled = false;
 
     // The flag tells FileIO and Daikon to use DaikonSimple
