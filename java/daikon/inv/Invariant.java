@@ -338,28 +338,46 @@ import typequals.*;
   /**
    * Given that this invariant has been true for all values seen so far,
    * this method returns the confidence that that situation has occurred
-   * by chance alone.  The result is a value between 0 and 1 inclusive.  0
+   * by chance alone.
+   * <p>
+   *
+   * Returns the probability that the observed data did not happen by
+   * chance alone. The result is a value between 0 and 1 inclusive.  0
    * means that this invariant could never have occurred by chance alone;
    * we are fully confident that its truth is no coincidence.  1 means that
    * the invariant is certainly a happenstance, so the truth of the
    * invariant is not relevant and it should not be reported.  Values
-   * between 0 and 1 give differing confidences in the invariant.
+   * between 0 and 1 give differing confidences in the invariant.  The
+   * method may also return {@link #CONFIDENCE_NEVER}, meaning the
+   * invariant has been falsified.
+   * <p>
+   * An invariant is printed only if its probability of not occurring by
+   * chance alone is large enough (by default, greater than .99; see
+   * Daikon's --conf_limit command-line option.
    * <p>
    *
-   * As an example, if the invariant is "x!=0", and only one value, 22, has
-   * been seen for x, then the conclusion "x!=0" is not justified.  But if
-   * there have been 1,000,000 values, and none of them were 0, then we may
-   * be confident that the property "x!=0" is not a coincidence.
+   * As an example, consider the invariant "x!=0".  If only one value, 22,
+   * has been seen for x, then the conclusion "x!=0" is not justified.  But
+   * if there have been 1,000,000 values, and none of them were 0, then we
+   * may be confident that the property "x!=0" is not a coincidence.
    * <p>
    *
-   * This method need not check the value of field "falsified", as the
-   * caller does that.
+   * This method is a wrapper around {@link #computeConfidence()}, which
+   * does the actual work.
    * <p>
    *
-   * This method is a wrapper around computeConfidence(), which does the
-   * actual work.
+   * Consider the invariant is 'x is even', which has a 50% chance of being
+   * true by chance for each sample.  Then a reasonable body for
+   * {@link #computeConfidence} would be
+   *
+   * <pre>return 1 - Math.pow(.5, ppt.num_samples());</pre>
+   *
+   * If 5 values had been seen, then this implementation would return
+   * 31/32, which is the likelihood that all 5 values seen so far were even
+   * not purely by chance.
+   *
    * @see #computeConfidence()
-   **/
+   */
   public final double getConfidence(/*>>> @NonPrototype Invariant this*/) {
     assert !falsified;
     // if (falsified)
@@ -385,7 +403,11 @@ import typequals.*;
 
   /**
    * This method computes the confidence that this invariant occurred by chance.
-   * Users should use getConfidence() instead.
+   * Clients should call {@link #getConfidence()} instead.
+   * <p>
+   * This method need not check the value of field "falsified", as the
+   * caller does that.
+   *
    * @see     #getConfidence()
    **/
   protected abstract double computeConfidence(/*>>> @NonPrototype Invariant this*/);
@@ -694,8 +716,8 @@ import typequals.*;
   /**
    * For printing invariants, there are two interfaces:
    * repr gives a low-level representation
-   * (repr_prop also prints the confidence), and
-   * format gives a high-level representation for user output.
+   * ({@link #repr_prob} also prints the confidence), and
+   * {@link #format} gives a high-level representation for user output.
    **/
   public String repr(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     // A better default would be to use reflection and print out all
@@ -705,19 +727,19 @@ import typequals.*;
 
   /**
    * For printing invariants, there are two interfaces:
-   * repr gives a low-level representation
-   * (repr_prop also prints the confidence), and
-   * format gives a high-level representation for user output.
+   * {@link #repr} gives a low-level representation
+   * (repr_prob also prints the confidence), and
+   * {@link #format} gives a high-level representation for user output.
    **/
   public String repr_prob(/*>>> @NonPrototype Invariant this*/) {
     return repr() + "; confidence = " + getConfidence();
   }
 
   /**
-   * For printing invariants, there are two interfaces:
-   * repr gives a low-level representation
-   * (repr_prop also prints the confidence), and
-   * format gives a high-level representation for user output.
+   * Returns a high-level printed representation of the invariant, for user
+   * output. format produces normal output, while the {@link #repr}
+   * formatting routine produces low-level, detailed output for
+   * debugging, and {@link #repr_prob} also prints the confidence.
    **/
   // receiver must be fully-initialized because subclasses read their fields
   /*@SideEffectFree*/
@@ -1767,18 +1789,24 @@ import typequals.*;
   }
 
   /**
-   * Instantiates an invariant of the same class on the specified
+   * Instantiates (creates) an invariant of the same class on the specified
    * slice.  Must be overridden in each class.  Must be used rather
-   * than clone so that checks in instantiate for reasonable invariants
-   * are done.
+   * than {@link #clone} so that checks in {@link #instantiate} for
+   * reasonable invariants are done.
+   * <p>
+   * The implementation of this method is almost always
+   * {@code return new <em>InvName</em>(slice);}
    * @return the new invariant
    */
   abstract protected /*@NonPrototype*/ Invariant instantiate_dyn(
       /*>>> @Prototype Invariant this,*/ PptSlice slice);
 
   /**
-   * Returns whether or not this class of invariants are currently
-   * enabled
+   * Returns whether or not this class of invariants is currently
+   * enabled.
+   * <p>
+   * Its implementation is almost always
+   * {@code return dkconfig_enabled;}
    */
   public abstract boolean enabled(/*>>> @Prototype Invariant this*/);
 
@@ -1787,18 +1815,21 @@ import typequals.*;
    * in vis.  This only checks basic types (scalar, string, array, etc)
    * and should match the basic superclasses of invariant (SingleFloat,
    * SingleScalarSequence, ThreeScalar, etc).  More complex checks
-   * that depend on variable details can be implemented in instantiate_ok()
+   * that depend on variable details can be implemented in instantiate_ok().
    *
    * @see #instantiate_ok(VarInfo[])
    */
   public abstract boolean valid_types(/*>>> @Prototype Invariant this,*/ VarInfo[] vis);
 
   /**
-   * Checks to see if the invariant can reasonably be instantiated over
+   * Returns true if it makes sense to instantiate this invariant over
    * the specified variables.  Checks details beyond what is provided
-   * by valid_types.  This should never be called without calling
-   * valid_types first (implementations should be able to presume that
-   * valid_types is true).
+   * by {@link #valid_types}.  This should never be called without calling
+   * valid_types() first (implementations should be able to presume that
+   * valid_types() returns true).
+   * <p>
+   * This method does not have to be overridden;
+   * the default implementation in Invariant returns true.
    *
    * @see #valid_types(VarInfo[])
    */

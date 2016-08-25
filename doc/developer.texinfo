@@ -384,40 +384,23 @@ appropriate line in @code{Daikon.setup_proto_invs()}, then recompile
 Daikon.
 
 
-A Java class defining an invariant is a concrete subclass of one of
-the following abstract classes:
-@table @code
-@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/scalar/SingleScalar.html,@code{SingleScalar}}
-Invariants over a single numeric (scalar) variable,
-such as @samp{x != 0}.
-@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/twoScalar/TwoScalar.html,@code{TwoScalar}}
-Invariants over two numeric variables, such as @samp{y
-= abs(x)}.
-@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/ternary/threeScalar/ThreeScalar.html,@code{ThreeScalar}}
-Invariants over three numeric variables, such as
-@samp{z = ax + by + c}.
-@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/sequence/SingleSequence.html,@code{SingleSequence}}
-Invariants over one sequence (array)
-variable, such as @samp{a[] contains no duplicates}.
-@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/twoSequence/TwoSequence.html,@code{TwoSequence}}
-Invariants over two sequences, such as @samp{a[] is a
-subsequence of b[]}.
-@item @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/sequenceScalar/SequenceScalar.html,@code{SequenceScalar}}
-Invariants over a scalar and a sequence, such
-as @samp{x is a member of a[]}.
-@end table
-
-@noindent
+A Java class defining an invariant is a concrete subclass of one of the direct subclasses of 
+@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/UnaryInvariant.html,@code{UnaryInvariant}},
+@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/BinaryInvariant.html,@code{UnaryInvariant}},
+or
+@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/ternary/TernaryInvariant.html,@code{UnaryInvariant}}.
 A complete list of invariants appears in @code{Daikon.setup_proto_invs()}.
 
 Daikon's invariants are first instantiated, then are presented samples
 (tuples of values for all the variables of interest to the invariant;
 this might be a 1-tuple, a 2-tuple, or a 3-tuple) in turn.  If any
 sample falsifies the invariant, the invariant destroys itself.  All
-remaining invariants at the end of the program run can be reported as
+remaining invariants at the end of the program run can be queried for 
+their statistical confidence, then reported as
 likely to be true.
 
-The key methods of the new invariant class @var{InvName} are
+You need to implement the abstract methods of @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/Invariant.html,@code{Invariant}} that are not defined in one of the subclasses listed above.  You also need to define a constructor and a static method:
+
 @table @code
 @item protected @var{InvName}(PptSlice ppt)
 Constructor for class @var{InvName}.  Should only be called from 
@@ -425,13 +408,6 @@ Constructor for class @var{InvName}.  Should only be called from
 Its typical implementation is
 @example
 super(ppt);
-@end example
-
-@item protected Invariant instantiate_dyn(PptSlice slice)
-Returns an invariant of this class on the specified slice.  Its implementation
-is almost always
-@example
-return new InvName(slice);
 @end example
 
 @item public static @var{InvName} get_proto()
@@ -443,69 +419,26 @@ if (proto == null)
 return (proto);
 @end example
 
-@item public boolean enabled() 
-Returns whether or not this invariant is enabled.  Its implementation is
-almost always
-@example
-return dkconfig_enabled;
-@end example
+@end table
 
-@item public boolean instantiate_ok(VarInfo[] vis)
-Returns whether or not it makes sense to instantiate this invariant
-over the specified variables.  If not present, the invariant is
-created over all comparable variables of the correct types.
+Methods that need to be overridden that are defined in a subclass of
+@samp{Invariant} include:
 
+@table @code
 @item public InvariantStatus check_modified(..., int count)
-Presents a tuple of values to the invariant; these are the first 
-N arguments, which have appropriate types for the particular invariant.  
-The @code{count} argument indicates how many samples have this value.  
-For example, three calls to
-@code{check_modified} with a @code{count} parameter of 1 is equivalent to
-one call to @code{check_modified} with a @code{count} parameter of 3.
-Returns whether or not the sample is consistent with the invariant.
-Does not change the state of the invariant.
+@itemx public InvariantStatus add_modified(..., int count)
+Determines whether the invariant is true for a sample (a tuple of values).
+@end table
 
-@item public InvariantStatus add_modified(..., int count)
-Similar to @code{check_modified} except that it can change the state
-of the invariant if necessary.  If the invariant doesn't have any
-state, then simply calls @code{check_modified}.
 
-@item protected double computeConfidence()
-Returns the probability that the observed data could not have happened by
-chance alone.  The result usually falls between 0 and 1, where 0 means
-the values seen so far certainly happened by chance and 1 means they
-could never have happened by chance.  The method may also return one of
-the following constants in the @code{Invariant} class (see the class for
-documentation): @code{CONFIDENCE_JUSTIFIED},
-@code{CONFIDENCE_UNJUSTIFIED}, @code{CONFIDENCE_NEVER}.
+You will eventually want to override one or more of these methods (@pxref{New formatting for invariants}):
 
-For example, suppose your new invariant has a 50% chance of being true
-by chance for each sample.  (@samp{x is even} is an example of such an
-invariant.)  Then a reasonable body for @code{computeConfidence} would
-be
-
-@example
-return 1 - Math.pow(.5, ppt.num_samples());
-@end example
-
-@noindent
-If 5 values had been seen, then this implementation would return 31/32,
-which is the likelihood that all 5 values seen so far were even not purely
-by chance.  An invariant is printed only if its probability of not
-occurring by chance alone is large enough (by default, greater than .99;
-see Daikon's @option{--conf_limit} command-line option.
-
+@table @code
 @item public String format()
 @itemx public String repr()
 @itemx public String format_using(OutputFormat format)
 Returns a high-level printed representation of the
-invariant, for user output.  @code{format} produces @dfn{normal} output, while
-the @code{repr} formatting routine produces low-level, detailed output for 
-debugging.  When first writing
-an invariant, you can make @code{repr} and @code{format_using}
-simply call @code{format}, then fix up the
-implementations for the different output formats later as needed.
-See also @ref{New formatting for invariants}.
+invariant, for user output.
 @end table
 
 

@@ -9,6 +9,7 @@
   #define CLASSNAME TwoFloat
   #define PRIMITIVE double
   #define PRIMITIVENONCOMMENT double
+  #define EXAMPLE_INVARIANT An example is {@code y = abs(x)}.
   #define GET_VAL(obj) (((Double) obj).doubleValue())
   #define BASE_IS_TYPE baseIsFloat()
 #elif defined(TYPELONG)
@@ -16,6 +17,7 @@
   #define CLASSNAME TwoScalar
   #define PRIMITIVE long
   #define PRIMITIVENONCOMMENT long
+  #define EXAMPLE_INVARIANT An example is {@code y = abs(x)}.
   #define GET_VAL(obj) (((Long) obj).longValue())
   #define BASE_IS_TYPE baseIsScalar()
 #elif defined(TYPESTRING)
@@ -24,6 +26,7 @@
   #define PRIMITIVE /*@Interned*/ String
   #define PRIMITIVE_SUPPRESS_INTERNED @SuppressWarnings("interned") // cast from interned value
   #define PRIMITIVENONCOMMENT String
+  #define EXAMPLE_INVARIANT
   #define GET_VAL(obj) ((PRIMITIVE) obj)
   #define BASE_IS_TYPE baseIsString()
 #elif defined(TYPEDOUBLESEQ)
@@ -31,6 +34,7 @@
   #define CLASSNAME TwoSequenceFloat
   #define PRIMITIVE double /*@Interned*/ []
   #define PRIMITIVENONCOMMENT double[]
+  #define EXAMPLE_INVARIANT An example is {@code a[] is a subsequence of b[]}.
   #define GET_VAL(obj) ((PRIMITIVE) obj)
   #define BASE_IS_TYPE baseIsFloat()
 #elif defined(TYPELONGSEQ)
@@ -38,6 +42,7 @@
   #define CLASSNAME TwoSequence
   #define PRIMITIVE long /*@Interned*/ []
   #define PRIMITIVENONCOMMENT long[]
+  #define EXAMPLE_INVARIANT An example is {@code a[] is a subsequence of b[]}.
   #define GET_VAL(obj) ((PRIMITIVE) obj)
   #define BASE_IS_TYPE baseIsScalar()
 #elif defined(TYPESTRINGSEQ)
@@ -45,6 +50,7 @@
   #define CLASSNAME TwoSequenceString
   #define PRIMITIVE /*@Interned*/ String /*@Interned*/ []
   #define PRIMITIVENONCOMMENT String[]
+  #define EXAMPLE_INVARIANT An example is {@code a[] is a subsequence of b[]}.
   #define GET_VAL(obj) ((PRIMITIVE) obj)
   #define BASE_IS_TYPE baseIsString()
 #else
@@ -74,15 +80,21 @@ import typequals.*;
 */
 
 /**
- * Base class for two variable PRIMITIVENONCOMMENT invariants.  Provides a simpler
+ * Base class for invariants over two variables of type PRIMITIVENONCOMMENT.
+ * EXAMPLE_INVARIANT
+ * <p>
+ *
+ * Provides a simpler
  * mechanism for non-symmetric invariants to function over both permutations
  * of their variables.
+ * <p>
  *
  * Non-symmetric invariants must instantiate two objects (one for each
  * argument order).  This is tracked by the variable swap.  They must always
  * access their variables via the methods var1() and var2() which return
  * the correct variable (based on the swap setting).  No other work is
  * necessary, all permuations and resurrection is handled here.
+ * <p>
  *
  * Symmetric invariants should define symmetric() to return true or
  * override resurrect_done_swapped to do nothing.  Non-symmetric
@@ -260,6 +272,15 @@ public abstract class CLASSNAME extends BinaryInvariant {
     }
   }
 
+  /**
+   * Presents a sample to the invariant.
+   * Returns whether the sample is consistent with the invariant.
+   * Does not change the state of the invariant.
+   * @param count how many identical samples were observed in a row.
+   * For example, three calls to check_modified with a count parameter of 1 is
+   * equivalent to one call to check_modified with a count parameter of 3.
+   * @return whether or not the sample is consistent with the invariant.
+   */
   public abstract InvariantStatus check_modified(PRIMITIVE v1,
                                                  PRIMITIVE v2, int count);
 

@@ -14,8 +14,8 @@ import typequals.*;
 */
 
 /**
- * Abstract base class used to evaluate single string sequences.
- **/
+ * Abstract base class for invariants over one variable of type {@code String[]}.
+ */
 public abstract class SingleStringSequence extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -74,6 +74,15 @@ public abstract class SingleStringSequence extends UnaryInvariant {
     }
   }
 
+  /**
+   * Presents a sample to the invariant.
+   * Returns whether the sample is consistent with the invariant.
+   * Does not change the state of the invariant.
+   * @param count how many identical samples were observed in a row.
+   * For example, three calls to check_modified with a count parameter of 1 is
+   * equivalent to one call to check_modified with a count parameter of 3.
+   * @return whether or not the sample is consistent with the invariant.
+   */
   public abstract InvariantStatus check_modified(
       /*@Interned*/ String /*@Interned*/ [] value, int count);
 
@@ -82,8 +91,11 @@ public abstract class SingleStringSequence extends UnaryInvariant {
   }
 
   /**
-   * This method need not check for falsified;
-   * that is done by the caller.
+   * Similar to {@link #check_modified} except that it can change the state
+   * of the invariant if necessary.  If the invariant doesn't have any
+   * state, then the implementation should simply call {@link
+   * #check_modified}.  This method need not check for falsification; that
+   * is done by the caller.
    **/
   public abstract InvariantStatus add_modified(
       /*@Interned*/ String /*@Interned*/ [] value, int count);
