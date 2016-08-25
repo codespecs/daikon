@@ -878,15 +878,16 @@ public final class TypeStack {
 
       //System.out.printf("\tTesting method %s...", mg);
 
-      TypeStack stack =
-          new TypeStack(
-              clazz.getConstantPool(),
-              mg.getInstructionList(),
-              mg.getExceptionHandlers(),
-              mg.getArgumentTypes(),
-              mg.getReturnType());
-
+      //abstract methods have no code
       if (mg.getInstructionList() != null) {
+        TypeStack stack =
+            new TypeStack(
+                clazz.getConstantPool(),
+                mg.getInstructionList(),
+                mg.getExceptionHandlers(),
+                mg.getArgumentTypes(),
+                mg.getReturnType());
+
         for (InstructionHandle inst : mg.getInstructionList().getInstructionHandles()) {
           try {
             OperandStack s = stack.getAfterInst(inst);
