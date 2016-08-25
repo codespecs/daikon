@@ -75,8 +75,6 @@ public class BuildJDK {
   /** Whether or not to instrument java.lang.Object **/
   private static boolean skip_object = true;
 
-  private static boolean test_stack = false;
-
   private int _numFilesProcessed = 0;
 
   private static String static_map_fname = "dcomp_jdk_static_map";
@@ -325,15 +323,6 @@ public class BuildJDK {
       // Process each file read.
       for (String classname : classmap.keySet()) {
         JavaClass jc = classmap.get(classname);
-        if (test_stack) {
-          System.out.printf("Testing class %s%n", classname);
-          try {
-            TypeStack.testJavaClass(jc);
-          } catch (Throwable t) {
-            t.printStackTrace();
-          }
-          continue;
-        }
         try {
           processClassFile(classmap, dfile, classname);
         } catch (Throwable e) {
