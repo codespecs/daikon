@@ -386,10 +386,11 @@ Daikon.
 
 A Java class defining an invariant is a concrete subclass of one of the direct subclasses of 
 @uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/unary/UnaryInvariant.html,@code{UnaryInvariant}},
-@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/BinaryInvariant.html,@code{UnaryInvariant}},
+@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/binary/BinaryInvariant.html,@code{BinaryInvariant}},
 or
-@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/ternary/TernaryInvariant.html,@code{UnaryInvariant}}.
-A complete list of invariants appears in @code{Daikon.setup_proto_invs()}.
+@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/ternary/TernaryInvariant.html,@code{TernaryInvariant}}.
+A complete list of invariants appears in the body of
+@code{Daikon.setup_proto_invs()}.
 
 Daikon's invariants are first instantiated, then are presented samples
 (tuples of values for all the variables of interest to the invariant;
