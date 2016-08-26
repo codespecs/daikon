@@ -35,7 +35,8 @@ Projects
     to do in the future
 
   - Process daikon itself (at least the main directory) over a real test
-    case.  Fix problems encountered.
+    case.  Fix problems encountered.  A start to this process is in
+    daikon/tests/daikon-tests/Daikon.  It is incomplete.
 
   - Use ourselves as test case.  This requires daikon to work on
     itself, but also will require other usability work.  In
@@ -43,28 +44,34 @@ Projects
 
 ===========================================================================
 
-  - Testing/Validation
+Testing/Validation
 
-      - Create unit tests for more of Daikon.  Either by hand or by using
-        automated tools (such as Randoop)
-      - Add additional internal consistency checks that can be checked
-        during system tests
-      - Run Daikon on itself and add invariants (perhaps only class
-        invariants) as additional assertions.
-      - Add JSR308 style annotations for nullness, readonly, and possibly
-        other checks.
-      - Enhance track debugging to ensure that the specified ppt/class/variables
-        were reasonable and existed.
+  - Create unit tests for more of Daikon.  Either by hand or by using
+    automated tools (such as Randoop)
+  - Add additional internal consistency checks that can be checked
+    during system tests
+  - Run Daikon on itself and add invariants (perhaps only class
+    invariants) as additional assertions.
+  - Add JSR308 style annotations for nullness, readonly, and possibly
+    other checks.
+  - Enhance track debugging to ensure that the specified ppt/class/variables
+    were reasonable and existed.
       
+===========================================================================
+
+Documentation
+
+  - The JDK8 javadoc produces hundreds of warnings. A primary cause in that
+    method @param and @return tags are now required.  To correct them all at
+    once would be too large a task with too little concrete benefit.
+    Whenever we edit a file/method for some other reason, we should ensure
+    that it has complete javadoc tags.
+
 ===========================================================================
 
 Front ends
 
   - Add support for loop invariants.
-
-  - C front end
-
-      - Convert Kvasir to using the new decl format.
 
   - C/C++ front end for Windows
 
