@@ -1,9 +1,4 @@
-Todo list sorted in approximate order of importance.
-
-Add your name/initials to an item when you are actively working on it.
-When the task is complete, remove it and update the manual and/or changelog.
-
-Longer-term issues
+Chicory todo list sorted in approximate order of importance.
 
   - Add switch (--enable-globals or --enable-static-variables) to allow
     instrumentation of static fields (Java's name for global variables).
@@ -14,6 +9,7 @@ Longer-term issues
     To handle exceptional exits, Chicory would need to put a catch statement
     around every method body in the subject program, and add a new program
     point for each thrown exception.
+This item is in progress as daikon pull request #56.
 
   - Consider choosing a new file representation that would be both more
     compact and faster to read and write.  For instance, there is no need
@@ -21,10 +17,3 @@ Longer-term issues
     ASCII printed representations.  The major benefit might be smaller
     dtrace files, but another benefit would be less time on file I/O and on
     parsing/unparsing.
-
-  - Java 1.5 defines a new code attribute: Local Variable Type Table.
-    I think this is there to help debuggers handle local variable that are
-    generic (it only appears on methods with generics).  Unfortunately, this
-    attribute is not supported by BCEL.  For now we are just removing it
-    (because something we are doing makes it inconsistent).  A better
-    solution would be to update it correctly.
