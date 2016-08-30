@@ -106,7 +106,7 @@ medium-tests__%: rothermel-tests__% medium-real-tests__% medium-crypto-tests__% 
                  missing-tests__% small-crypto-tests__% do-space__% test-gtest__% do-Dstr__% do-partial-init__%
 	@
 
-# Omits povray and perl
+# Omits povray
 medium-easy-tests__%: rothermel-tests__% medium-real-easy-tests__% medium-crypto-tests__% \
                  missing-tests__% small-crypto-tests__% do-space__% test-gtest__% do-Dstr__% do-partial-init__%
 	@
@@ -198,8 +198,8 @@ medium-real-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  d
                       do-tcas__%
 	@
 
-# Omits povray and perl
-medium-real-easy-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-tcas__%
+# Omits povray
+medium-real-easy-tests__%: test-gzip__% do-flex-pristine__% do-bzip2__% do-perl__% do-tcas__%
 	@
 
 # Omits povray and perl
