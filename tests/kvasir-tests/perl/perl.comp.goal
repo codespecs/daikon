@@ -1490,9 +1490,8 @@ return
 ..PerlIOBase_pushed():::ENTER
 arg
 arg[..]
-arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f
+arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f f[..] f[..]->flags f[..]->next f[..]->next->flags f[..]->next->next f[..]->next->tab f[..]->tab f[..]->tab->fsize f[..]->tab->name f[..]->tab->size tab tab[..].fsize tab[..].name tab[..].size
 arg[..].sv_any[0]
-f[..] f[..]->flags f[..]->next f[..]->next->flags f[..]->next->next f[..]->next->tab f[..]->tab f[..]->tab->fsize f[..]->tab->name f[..]->tab->size tab tab[..].fsize tab[..].name tab[..].size
 f[..]->next->next[0]
 f[..]->next->tab[0]
 f[..]->next[0]
@@ -1577,9 +1576,8 @@ tab[..].Write[0]
 ..PerlIOBase_pushed():::EXIT0
 arg
 arg[..]
-arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f
+arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f f[..] f[..]->flags f[..]->next f[..]->next->flags f[..]->next->next f[..]->next->tab f[..]->tab f[..]->tab->fsize f[..]->tab->name f[..]->tab->size tab tab[..].fsize tab[..].name tab[..].size
 arg[..].sv_any[0]
-f[..] f[..]->flags f[..]->next f[..]->next->flags f[..]->next->next f[..]->next->tab f[..]->tab f[..]->tab->fsize f[..]->tab->name f[..]->tab->size tab tab[..].fsize tab[..].name tab[..].size
 f[..]->next->next[0]
 f[..]->next->tab[0]
 f[..]->next[0]
@@ -13252,7 +13250,7 @@ f[..]->tab[0]
 f[..][0]
 
 ..PerlIOUnix_tell():::EXIT0
-f f[..] f[..]->flags f[..]->next f[..]->tab
+f f[..] f[..]->flags f[..]->next f[..]->tab return
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -13312,7 +13310,6 @@ f[..]->tab->kind
 f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
-return
 
 ..PerlIOUnix_write():::ENTER
 count f f[..] f[..]->flags f[..]->next f[..]->tab vbuf
@@ -14808,7 +14805,7 @@ return[..].array[0]
 return[..].refcnt
 
 ..PerlIO_define_layer():::ENTER
-tab
+tab tab[..].Unread tab[..].fsize tab[..].name tab[..].size
 tab[..]
 tab[..].Binmode
 tab[..].Binmode[0]
@@ -14854,16 +14851,13 @@ tab[..].Setlinebuf
 tab[..].Setlinebuf[0]
 tab[..].Tell
 tab[..].Tell[0]
-tab[..].Unread
 tab[..].Unread[0]
 tab[..].Write
 tab[..].Write[0]
-tab[..].fsize tab[..].name
 tab[..].kind
-tab[..].size
 
 ..PerlIO_define_layer():::EXIT0
-tab
+tab tab[..].Unread tab[..].fsize tab[..].name tab[..].size
 tab[..]
 tab[..].Binmode
 tab[..].Binmode[0]
@@ -14909,13 +14903,10 @@ tab[..].Setlinebuf
 tab[..].Setlinebuf[0]
 tab[..].Tell
 tab[..].Tell[0]
-tab[..].Unread
 tab[..].Unread[0]
 tab[..].Write
 tab[..].Write[0]
-tab[..].fsize tab[..].name
 tab[..].kind
-tab[..].size
 
 ..PerlIO_destruct():::ENTER
 
@@ -15607,8 +15598,7 @@ name
 ..PerlIO_find_layer():::EXIT0
 len
 load
-name return[..].fsize return[..].name
-return
+name return return[..].fsize return[..].name return[..].size
 return[..]
 return[..].Binmode
 return[..].Binmode[0]
@@ -15659,7 +15649,6 @@ return[..].Unread[0]
 return[..].Write
 return[..].Write[0]
 return[..].kind
-return[..].size
 
 ..PerlIO_get_layers():::ENTER
 f
@@ -16701,7 +16690,7 @@ av[..]
 av[..].array av[..].cur av[..].len n
 av[..].array->arg
 av[..].array->arg[0]
-av[..].array->funcs def def[..].fsize def[..].name
+av[..].array->funcs def def[..].fsize def[..].name def[..].size
 av[..].array->funcs[0]
 av[..].array[0]
 av[..].refcnt
@@ -16755,7 +16744,6 @@ def[..].Unread[0]
 def[..].Write
 def[..].Write[0]
 def[..].kind
-def[..].size
 
 ..PerlIO_layer_fetch():::EXIT0
 av
@@ -16763,7 +16751,7 @@ av[..]
 av[..].array av[..].cur av[..].len n
 av[..].array->arg
 av[..].array->arg[0]
-av[..].array->funcs def def[..].fsize def[..].name return return[..].fsize return[..].name
+av[..].array->funcs def def[..].fsize def[..].name def[..].size return return[..].fsize return[..].name return[..].size
 av[..].array->funcs[0]
 av[..].array[0]
 av[..].refcnt
@@ -16817,7 +16805,6 @@ def[..].Unread[0]
 def[..].Write return[..].Write
 def[..].Write[0]
 def[..].kind return[..].kind
-def[..].size return[..].size
 return[..]
 return[..].Binmode[0]
 return[..].Clearerr[0]
@@ -16885,7 +16872,7 @@ Perl_list[..]
 Perl_list[..].array Perl_list[..].cur Perl_list[..].len
 Perl_list[..].array->arg arg
 Perl_list[..].array->arg[0]
-Perl_list[..].array->funcs arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt funcs
+Perl_list[..].array->funcs arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt funcs funcs[..].Unread funcs[..].fsize funcs[..].name funcs[..].size
 Perl_list[..].array->funcs[0]
 Perl_list[..].array[0]
 Perl_list[..].refcnt
@@ -16936,13 +16923,10 @@ funcs[..].Setlinebuf
 funcs[..].Setlinebuf[0]
 funcs[..].Tell
 funcs[..].Tell[0]
-funcs[..].Unread
 funcs[..].Unread[0]
 funcs[..].Write
 funcs[..].Write[0]
-funcs[..].fsize funcs[..].name
 funcs[..].kind
-funcs[..].size
 
 ..PerlIO_list_push():::EXIT0
 Perl_list
@@ -16950,7 +16934,7 @@ Perl_list[..]
 Perl_list[..].array Perl_list[..].cur Perl_list[..].len
 Perl_list[..].array->arg arg
 Perl_list[..].array->arg[0]
-Perl_list[..].array->funcs arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt funcs
+Perl_list[..].array->funcs arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt funcs funcs[..].Unread funcs[..].fsize funcs[..].name funcs[..].size
 Perl_list[..].array->funcs[0]
 Perl_list[..].array[0]
 Perl_list[..].refcnt
@@ -17001,13 +16985,10 @@ funcs[..].Setlinebuf
 funcs[..].Setlinebuf[0]
 funcs[..].Tell
 funcs[..].Tell[0]
-funcs[..].Unread
 funcs[..].Unread[0]
 funcs[..].Write
 funcs[..].Write[0]
-funcs[..].fsize funcs[..].name
 funcs[..].kind
-funcs[..].size
 
 ..PerlIO_modestr():::ENTER
 buf
@@ -23638,13 +23619,13 @@ effective
 mode
 statbufp
 statbufp[..]
+statbufp[..].__glibc_reserved[0]
+statbufp[..].__glibc_reserved[0][0]
+statbufp[..].__glibc_reserved[1]
+statbufp[..].__glibc_reserved[1][0]
+statbufp[..].__glibc_reserved[2]
+statbufp[..].__glibc_reserved[2][0]
 statbufp[..].__pad0
-statbufp[..].__unused[0]
-statbufp[..].__unused[0][0]
-statbufp[..].__unused[1]
-statbufp[..].__unused[1][0]
-statbufp[..].__unused[2]
-statbufp[..].__unused[2][0]
 statbufp[..].st_atim
 statbufp[..].st_atim.tv_nsec
 statbufp[..].st_atim.tv_sec
@@ -23671,13 +23652,13 @@ mode
 return
 statbufp
 statbufp[..]
+statbufp[..].__glibc_reserved[0]
+statbufp[..].__glibc_reserved[0][0]
+statbufp[..].__glibc_reserved[1]
+statbufp[..].__glibc_reserved[1][0]
+statbufp[..].__glibc_reserved[2]
+statbufp[..].__glibc_reserved[2][0]
 statbufp[..].__pad0
-statbufp[..].__unused[0]
-statbufp[..].__unused[0][0]
-statbufp[..].__unused[1]
-statbufp[..].__unused[1][0]
-statbufp[..].__unused[2]
-statbufp[..].__unused[2][0]
 statbufp[..].st_atim
 statbufp[..].st_atim.tv_nsec
 statbufp[..].st_atim.tv_sec
@@ -23877,10 +23858,8 @@ return[..].op_sibling->op_type
 return[..].op_sibling[0]
 
 ..Perl_ck_concat():::ENTER
-o
+o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
-o[..].op_flags o[..].op_private
-o[..].op_next o[..].op_seq o[..].op_sibling o[..].op_targ
 o[..].op_next->op_flags
 o[..].op_next->op_next
 o[..].op_next->op_next[0]
@@ -23893,7 +23872,6 @@ o[..].op_next->op_sibling[0]
 o[..].op_next->op_targ
 o[..].op_next->op_type
 o[..].op_next[0]
-o[..].op_ppaddr
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
 o[..].op_sibling->op_next
@@ -23907,13 +23885,10 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-o[..].op_type
 
 ..Perl_ck_concat():::EXIT0
-o return
+o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
-o[..].op_flags o[..].op_private return[..].op_flags return[..].op_private
-o[..].op_next o[..].op_seq o[..].op_sibling o[..].op_targ return[..].op_next return[..].op_seq return[..].op_sibling return[..].op_targ
 o[..].op_next->op_flags
 o[..].op_next->op_next
 o[..].op_next->op_next[0]
@@ -23926,7 +23901,6 @@ o[..].op_next->op_sibling[0]
 o[..].op_next->op_targ
 o[..].op_next->op_type
 o[..].op_next[0]
-o[..].op_ppaddr return[..].op_ppaddr
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
 o[..].op_sibling->op_next
@@ -23940,7 +23914,6 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-o[..].op_type return[..].op_type
 return[..]
 return[..].op_next->op_flags
 return[..].op_next->op_next
@@ -24883,9 +24856,8 @@ return[..].op_targ
 return[..].op_type
 
 ..Perl_ck_fun():::ENTER
-o
+o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
-o[..].op_flags o[..].op_next o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ
 o[..].op_next->op_flags
 o[..].op_next->op_next
 o[..].op_next->op_next[0]
@@ -24898,7 +24870,6 @@ o[..].op_next->op_sibling[0]
 o[..].op_next->op_targ
 o[..].op_next->op_type
 o[..].op_next[0]
-o[..].op_ppaddr
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
 o[..].op_sibling->op_next
@@ -24912,12 +24883,10 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-o[..].op_type
 
 ..Perl_ck_fun():::EXIT0
-o return
+o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
-o[..].op_flags o[..].op_next o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return[..].op_flags return[..].op_next return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ
 o[..].op_next->op_flags
 o[..].op_next->op_next
 o[..].op_next->op_next[0]
@@ -24930,7 +24899,6 @@ o[..].op_next->op_sibling[0]
 o[..].op_next->op_targ
 o[..].op_next->op_type
 o[..].op_next[0]
-o[..].op_ppaddr return[..].op_ppaddr
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
 o[..].op_sibling->op_next
@@ -24944,7 +24912,6 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-o[..].op_type return[..].op_type
 return[..]
 return[..].op_next->op_flags
 return[..].op_next->op_next
@@ -25488,10 +25455,8 @@ return[..].op_targ
 return[..].op_type
 
 ..Perl_ck_lfun():::ENTER
-o
+o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
-o[..].op_flags o[..].op_private
-o[..].op_next o[..].op_seq o[..].op_sibling o[..].op_targ
 o[..].op_next->op_flags
 o[..].op_next->op_next
 o[..].op_next->op_next[0]
@@ -25504,7 +25469,6 @@ o[..].op_next->op_sibling[0]
 o[..].op_next->op_targ
 o[..].op_next->op_type
 o[..].op_next[0]
-o[..].op_ppaddr
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
 o[..].op_sibling->op_next
@@ -25518,13 +25482,10 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-o[..].op_type
 
 ..Perl_ck_lfun():::EXIT0
-o return
+o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
-o[..].op_flags o[..].op_private return[..].op_flags return[..].op_private
-o[..].op_next o[..].op_seq o[..].op_sibling o[..].op_targ return[..].op_next return[..].op_seq return[..].op_sibling return[..].op_targ
 o[..].op_next->op_flags
 o[..].op_next->op_next
 o[..].op_next->op_next[0]
@@ -25537,7 +25498,6 @@ o[..].op_next->op_sibling[0]
 o[..].op_next->op_targ
 o[..].op_next->op_type
 o[..].op_next[0]
-o[..].op_ppaddr return[..].op_ppaddr
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
 o[..].op_sibling->op_next
@@ -25551,7 +25511,6 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-o[..].op_type return[..].op_type
 return[..]
 return[..].op_next->op_flags
 return[..].op_next->op_next
@@ -26420,9 +26379,8 @@ return[..].op_sibling->op_type
 return[..].op_sibling[0]
 
 ..Perl_ck_rvconst():::ENTER
-o o[..].op_flags o[..].op_ppaddr o[..].op_private
+o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
-o[..].op_next o[..].op_seq o[..].op_sibling o[..].op_targ
 o[..].op_next->op_flags
 o[..].op_next->op_next
 o[..].op_next->op_next[0]
@@ -26448,12 +26406,10 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-o[..].op_type
 
 ..Perl_ck_rvconst():::EXIT0
-o o[..].op_flags o[..].op_ppaddr o[..].op_private return return[..].op_flags return[..].op_ppaddr return[..].op_private
+o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
-o[..].op_next o[..].op_seq o[..].op_sibling o[..].op_targ return[..].op_next return[..].op_seq return[..].op_sibling return[..].op_targ
 o[..].op_next->op_flags
 o[..].op_next->op_next
 o[..].op_next->op_next[0]
@@ -26479,7 +26435,6 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-o[..].op_type return[..].op_type
 return[..]
 return[..].op_next->op_flags
 return[..].op_next->op_next
@@ -27288,15 +27243,11 @@ return[..].op_targ
 return[..].op_type
 
 ..Perl_ck_svconst():::ENTER
-o o[..].op_next o[..].op_next->op_next
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
-o[..].op_flags o[..].op_next->op_flags
 o[..].op_next->op_next[0]
-o[..].op_next->op_ppaddr o[..].op_ppaddr
 o[..].op_next->op_ppaddr[0]
-o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -27313,15 +27264,11 @@ o[..].op_sibling->op_type
 o[..].op_sibling[0]
 
 ..Perl_ck_svconst():::EXIT0
-o o[..].op_next o[..].op_next->op_next return return[..].op_next return[..].op_next->op_next
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
-o[..].op_flags o[..].op_next->op_flags return[..].op_flags return[..].op_next->op_flags
 o[..].op_next->op_next[0]
-o[..].op_next->op_ppaddr o[..].op_ppaddr return[..].op_next->op_ppaddr return[..].op_ppaddr
 o[..].op_next->op_ppaddr[0]
-o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type return[..].op_next->op_type return[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -28031,15 +27978,13 @@ return
 return
 
 ..Perl_delimcpy():::ENTER
-delim from fromend to
+delim from fromend retlen[..] to
 retlen
-retlen[..]
 toend
 
 ..Perl_delimcpy():::EXIT0
-delim from fromend return to
+delim from fromend retlen[..] return to
 retlen
-retlen[..]
 toend
 
 ..Perl_deprecate():::ENTER
@@ -32020,13 +31965,6 @@ gv[..].sv_refcnt
 ..Perl_dump_vindent():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 file
 file[..]
 file[..]->flags
@@ -32098,13 +32036,6 @@ pat
 ..Perl_dump_vindent():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 file
 file[..]
 file[..]->flags
@@ -32321,12 +32252,11 @@ search_ext
 search_ext[..]
 
 ..Perl_fold_constants():::ENTER
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -32343,12 +32273,11 @@ o[..].op_sibling->op_type
 o[..].op_sibling[0]
 
 ..Perl_fold_constants():::EXIT0
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type return[..].op_next->op_type return[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -36552,12 +36481,11 @@ ver[..].sv_refcnt
 
 ..Perl_localize():::ENTER
 lex
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -36575,12 +36503,11 @@ o[..].op_sibling[0]
 
 ..Perl_localize():::EXIT0
 lex
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type return[..].op_next->op_type return[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -42006,7 +41933,7 @@ ptm[..].tm_year
 ptm[..].tm_zone
 
 ..Perl_mod():::ENTER
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_targ type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
@@ -42018,10 +41945,9 @@ o[..].op_sibling->op_next[0]
 o[..].op_sibling->op_ppaddr[0]
 o[..].op_sibling->op_sibling[0]
 o[..].op_sibling[0]
-type
 
 ..Perl_mod():::EXIT0
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_targ type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
@@ -42043,7 +41969,6 @@ return[..].op_sibling->op_next[0]
 return[..].op_sibling->op_ppaddr[0]
 return[..].op_sibling->op_sibling[0]
 return[..].op_sibling[0]
-type
 
 ..Perl_mode_from_discipline():::ENTER
 discp
@@ -42070,12 +41995,11 @@ return
 s
 
 ..Perl_my():::ENTER
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -42092,12 +42016,11 @@ o[..].op_sibling->op_type
 o[..].op_sibling[0]
 
 ..Perl_my():::EXIT0
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type return[..].op_next->op_type return[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -42184,12 +42107,11 @@ attrs[..].op_sibling->op_type
 attrs[..].op_sibling[0]
 attrs[..].op_targ
 attrs[..].op_type
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -42241,12 +42163,11 @@ attrs[..].op_sibling->op_type
 attrs[..].op_sibling[0]
 attrs[..].op_targ
 attrs[..].op_type
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type return[..].op_next->op_type return[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -43311,7 +43232,7 @@ right[..].op_sibling->op_sibling[0]
 right[..].op_sibling[0]
 
 ..Perl_newASSIGNOP():::EXIT0
-flags left left[..].op_flags left[..].op_next left[..].op_next->op_flags left[..].op_next->op_next left[..].op_next->op_ppaddr left[..].op_next->op_private left[..].op_next->op_seq left[..].op_next->op_sibling left[..].op_next->op_targ left[..].op_next->op_type left[..].op_ppaddr left[..].op_private left[..].op_seq left[..].op_sibling left[..].op_sibling->op_flags left[..].op_sibling->op_next left[..].op_sibling->op_ppaddr left[..].op_sibling->op_private left[..].op_sibling->op_seq left[..].op_sibling->op_sibling left[..].op_sibling->op_targ left[..].op_sibling->op_type left[..].op_targ left[..].op_type optype return return[..].op_flags return[..].op_next return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type right right[..].op_flags right[..].op_next right[..].op_next->op_flags right[..].op_next->op_next right[..].op_next->op_ppaddr right[..].op_next->op_private right[..].op_next->op_seq right[..].op_next->op_sibling right[..].op_next->op_targ right[..].op_next->op_type right[..].op_ppaddr right[..].op_private right[..].op_seq right[..].op_sibling right[..].op_sibling->op_flags right[..].op_sibling->op_next right[..].op_sibling->op_ppaddr right[..].op_sibling->op_private right[..].op_sibling->op_seq right[..].op_sibling->op_sibling right[..].op_sibling->op_targ right[..].op_sibling->op_type right[..].op_targ right[..].op_type
+flags left left[..].op_flags left[..].op_next left[..].op_next->op_flags left[..].op_next->op_next left[..].op_next->op_ppaddr left[..].op_next->op_private left[..].op_next->op_seq left[..].op_next->op_sibling left[..].op_next->op_targ left[..].op_next->op_type left[..].op_ppaddr left[..].op_private left[..].op_seq left[..].op_sibling left[..].op_sibling->op_flags left[..].op_sibling->op_next left[..].op_sibling->op_ppaddr left[..].op_sibling->op_private left[..].op_sibling->op_seq left[..].op_sibling->op_sibling left[..].op_sibling->op_targ left[..].op_sibling->op_type left[..].op_targ left[..].op_type optype return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type right right[..].op_flags right[..].op_next right[..].op_next->op_flags right[..].op_next->op_next right[..].op_next->op_ppaddr right[..].op_next->op_private right[..].op_next->op_seq right[..].op_next->op_sibling right[..].op_next->op_targ right[..].op_next->op_type right[..].op_ppaddr right[..].op_private right[..].op_seq right[..].op_sibling right[..].op_sibling->op_flags right[..].op_sibling->op_next right[..].op_sibling->op_ppaddr right[..].op_sibling->op_private right[..].op_sibling->op_seq right[..].op_sibling->op_sibling right[..].op_sibling->op_targ right[..].op_sibling->op_type right[..].op_targ right[..].op_type
 left[..]
 left[..].op_next->op_next[0]
 left[..].op_next->op_ppaddr[0]
@@ -43323,7 +43244,6 @@ left[..].op_sibling->op_ppaddr[0]
 left[..].op_sibling->op_sibling[0]
 left[..].op_sibling[0]
 return[..]
-return[..].op_next->op_flags return[..].op_next->op_private
 return[..].op_next->op_next[0]
 return[..].op_next->op_ppaddr[0]
 return[..].op_next->op_sibling[0]
@@ -43932,8 +43852,7 @@ sv[..].sv_flags
 sv[..].sv_refcnt
 
 ..Perl_newCVREF():::ENTER
-flags o[..].op_next->op_ppaddr o[..].op_ppaddr
-o o[..].op_next o[..].op_next->op_next
+flags o o[..].op_next o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_ppaddr
 o[..]
 o[..].op_flags o[..].op_next->op_flags
 o[..].op_next->op_next[0]
@@ -43958,8 +43877,7 @@ o[..].op_sibling->op_type
 o[..].op_sibling[0]
 
 ..Perl_newCVREF():::EXIT0
-flags o[..].op_next->op_ppaddr o[..].op_ppaddr return[..].op_flags return[..].op_private
-o o[..].op_next o[..].op_next->op_next
+flags o o[..].op_next o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_ppaddr return return[..].op_flags return[..].op_private
 o[..]
 o[..].op_flags o[..].op_next->op_flags
 o[..].op_next->op_next[0]
@@ -43982,7 +43900,6 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-return
 return[..]
 return[..].op_next return[..].op_seq return[..].op_sibling return[..].op_targ
 return[..].op_next->op_flags
@@ -44594,7 +44511,7 @@ o[..].op_sibling->op_type
 o[..].op_sibling[0]
 
 ..Perl_newGVREF():::EXIT0
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return[..].op_flags return[..].op_ppaddr return[..].op_private type
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return return[..].op_flags return[..].op_ppaddr return[..].op_private type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
@@ -44614,7 +44531,6 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-return
 return[..]
 return[..].op_next return[..].op_seq return[..].op_sibling return[..].op_targ
 return[..].op_next->op_flags
@@ -45650,18 +45566,14 @@ return[..].op_sibling->op_type
 return[..].op_sibling[0]
 
 ..Perl_newOP():::ENTER
-flags
-type
+flags type
 
 ..Perl_newOP():::EXIT0
-flags return[..].op_flags return[..].op_next->op_flags return[..].op_next->op_private return[..].op_private
-return return[..].op_next return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_ppaddr
+flags return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type type
 return[..]
 return[..].op_next->op_next[0]
 return[..].op_next->op_ppaddr[0]
-return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_seq return[..].op_sibling return[..].op_targ
 return[..].op_next->op_sibling[0]
-return[..].op_next->op_type return[..].op_type type
 return[..].op_next[0]
 return[..].op_ppaddr[0]
 return[..].op_sibling->op_flags
@@ -46586,21 +46498,16 @@ return[..]
 return[..].sv_any[0]
 
 ..Perl_newSVOP():::ENTER
-flags
-sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+flags sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt type
 sv[..]
 sv[..].sv_any[0]
-type
 
 ..Perl_newSVOP():::EXIT0
-flags return[..].op_flags return[..].op_next->op_flags
-return return[..].op_next return[..].op_next->op_next
+flags return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt type
 return[..]
 return[..].op_next->op_next[0]
-return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 return[..].op_next->op_ppaddr[0]
 return[..].op_next->op_sibling[0]
-return[..].op_next->op_type return[..].op_type type
 return[..].op_next[0]
 return[..].op_ppaddr[0]
 return[..].op_sibling->op_flags
@@ -46619,12 +46526,11 @@ sv[..]
 sv[..].sv_any[0]
 
 ..Perl_newSVREF():::ENTER
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -46641,12 +46547,11 @@ o[..].op_sibling->op_type
 o[..].op_sibling[0]
 
 ..Perl_newSVREF():::EXIT0
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type return[..].op_next->op_type return[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -46849,7 +46754,7 @@ return[..].op_sibling->op_type
 return[..].op_sibling[0]
 
 ..Perl_newWHILEOP():::ENTER
-block block[..].op_flags block[..].op_next block[..].op_next->op_flags block[..].op_next->op_next block[..].op_next->op_ppaddr block[..].op_next->op_private block[..].op_next->op_seq block[..].op_next->op_sibling block[..].op_next->op_targ block[..].op_next->op_type block[..].op_ppaddr block[..].op_private block[..].op_seq block[..].op_sibling block[..].op_sibling->op_flags block[..].op_sibling->op_next block[..].op_sibling->op_ppaddr block[..].op_sibling->op_private block[..].op_sibling->op_seq block[..].op_sibling->op_sibling block[..].op_sibling->op_targ block[..].op_sibling->op_type block[..].op_targ block[..].op_type cont cont[..].op_next->op_next cont[..].op_next->op_ppaddr cont[..].op_sibling->op_next cont[..].op_sibling->op_ppaddr cont[..].op_targ cont[..].op_type flags
+block block[..].op_flags block[..].op_next block[..].op_next->op_flags block[..].op_next->op_next block[..].op_next->op_ppaddr block[..].op_next->op_private block[..].op_next->op_seq block[..].op_next->op_sibling block[..].op_next->op_targ block[..].op_next->op_type block[..].op_ppaddr block[..].op_private block[..].op_seq block[..].op_sibling block[..].op_sibling->op_flags block[..].op_sibling->op_next block[..].op_sibling->op_ppaddr block[..].op_sibling->op_private block[..].op_sibling->op_seq block[..].op_sibling->op_sibling block[..].op_sibling->op_targ block[..].op_sibling->op_type block[..].op_targ block[..].op_type cont cont[..].op_next->op_next cont[..].op_next->op_ppaddr cont[..].op_ppaddr cont[..].op_sibling->op_next cont[..].op_sibling->op_ppaddr cont[..].op_targ cont[..].op_type expr[..].op_next->op_ppaddr expr[..].op_ppaddr flags whileline
 block[..]
 block[..].op_next->op_next[0]
 block[..].op_next->op_ppaddr[0]
@@ -46870,7 +46775,6 @@ cont[..].op_next->op_seq cont[..].op_next->op_sibling cont[..].op_next->op_targ 
 cont[..].op_next->op_sibling[0]
 cont[..].op_next->op_type cont[..].op_sibling->op_type
 cont[..].op_next[0]
-cont[..].op_ppaddr
 cont[..].op_ppaddr[0]
 cont[..].op_sibling->op_next[0]
 cont[..].op_sibling->op_ppaddr[0]
@@ -46881,7 +46785,6 @@ expr expr[..].op_next expr[..].op_next->op_next
 expr[..]
 expr[..].op_flags expr[..].op_next->op_flags
 expr[..].op_next->op_next[0]
-expr[..].op_next->op_ppaddr expr[..].op_ppaddr whileline
 expr[..].op_next->op_ppaddr[0]
 expr[..].op_next->op_private expr[..].op_next->op_seq expr[..].op_next->op_sibling expr[..].op_next->op_targ expr[..].op_private expr[..].op_seq expr[..].op_sibling expr[..].op_targ
 expr[..].op_next->op_sibling[0]
@@ -46947,7 +46850,7 @@ loop[..].op_targ
 loop[..].op_type
 
 ..Perl_newWHILEOP():::EXIT0
-block block[..].op_flags block[..].op_next block[..].op_next->op_flags block[..].op_next->op_next block[..].op_next->op_ppaddr block[..].op_next->op_private block[..].op_next->op_seq block[..].op_next->op_sibling block[..].op_next->op_targ block[..].op_next->op_type block[..].op_ppaddr block[..].op_private block[..].op_seq block[..].op_sibling block[..].op_sibling->op_flags block[..].op_sibling->op_next block[..].op_sibling->op_ppaddr block[..].op_sibling->op_private block[..].op_sibling->op_seq block[..].op_sibling->op_sibling block[..].op_sibling->op_targ block[..].op_sibling->op_type block[..].op_targ block[..].op_type cont cont[..].op_next->op_next cont[..].op_next->op_ppaddr cont[..].op_sibling->op_next cont[..].op_sibling->op_ppaddr cont[..].op_targ cont[..].op_type flags return return[..].op_flags return[..].op_next return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
+block block[..].op_flags block[..].op_next block[..].op_next->op_flags block[..].op_next->op_next block[..].op_next->op_ppaddr block[..].op_next->op_private block[..].op_next->op_seq block[..].op_next->op_sibling block[..].op_next->op_targ block[..].op_next->op_type block[..].op_ppaddr block[..].op_private block[..].op_seq block[..].op_sibling block[..].op_sibling->op_flags block[..].op_sibling->op_next block[..].op_sibling->op_ppaddr block[..].op_sibling->op_private block[..].op_sibling->op_seq block[..].op_sibling->op_sibling block[..].op_sibling->op_targ block[..].op_sibling->op_type block[..].op_targ block[..].op_type cont cont[..].op_next->op_next cont[..].op_next->op_ppaddr cont[..].op_ppaddr cont[..].op_sibling->op_next cont[..].op_sibling->op_ppaddr cont[..].op_targ cont[..].op_type expr[..].op_next->op_ppaddr expr[..].op_ppaddr flags return return[..].op_flags return[..].op_next return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type whileline
 block[..]
 block[..].op_next->op_next[0]
 block[..].op_next->op_ppaddr[0]
@@ -46968,7 +46871,6 @@ cont[..].op_next->op_seq cont[..].op_next->op_sibling cont[..].op_next->op_targ 
 cont[..].op_next->op_sibling[0]
 cont[..].op_next->op_type cont[..].op_sibling->op_type
 cont[..].op_next[0]
-cont[..].op_ppaddr
 cont[..].op_ppaddr[0]
 cont[..].op_sibling->op_next[0]
 cont[..].op_sibling->op_ppaddr[0]
@@ -46979,7 +46881,6 @@ expr expr[..].op_next expr[..].op_next->op_next
 expr[..]
 expr[..].op_flags expr[..].op_next->op_flags
 expr[..].op_next->op_next[0]
-expr[..].op_next->op_ppaddr expr[..].op_ppaddr whileline
 expr[..].op_next->op_ppaddr[0]
 expr[..].op_next->op_private expr[..].op_next->op_seq expr[..].op_next->op_sibling expr[..].op_next->op_targ expr[..].op_private expr[..].op_seq expr[..].op_sibling expr[..].op_targ
 expr[..].op_next->op_sibling[0]
@@ -48181,12 +48082,10 @@ typestash[..].sv_flags
 typestash[..].sv_refcnt
 
 ..Perl_pad_alloc():::ENTER
-optype
-tmptype
+optype tmptype
 
 ..Perl_pad_alloc():::EXIT0
-optype
-return tmptype
+optype return tmptype
 
 ..Perl_pad_block_start():::ENTER
 full
@@ -60410,9 +60309,8 @@ return[..].op_type
 ..Perl_pp_stringify():::ENTER
 
 ..Perl_pp_stringify():::EXIT0
-return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_sibling->op_type return[..].op_targ return[..].op_type
+return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_sibling->op_type return[..].op_targ return[..].op_type
 return[..]
-return[..].op_next->op_next return[..].op_sibling->op_next
 return[..].op_next->op_next[0]
 return[..].op_next->op_ppaddr[0]
 return[..].op_next->op_sibling[0]
@@ -64632,27 +64530,23 @@ start
 ..Perl_scan_num():::ENTER
 lvalp
 lvalp[..]
-lvalp[..].gvval lvalp[..].gvval->sv_any lvalp[..].ival lvalp[..].opval lvalp[..].opval->op_next lvalp[..].pval
+lvalp[..].gvval lvalp[..].gvval->sv_any lvalp[..].gvval->sv_flags lvalp[..].gvval->sv_refcnt lvalp[..].ival lvalp[..].opval lvalp[..].opval->op_flags lvalp[..].opval->op_next lvalp[..].opval->op_ppaddr lvalp[..].opval->op_private lvalp[..].opval->op_seq lvalp[..].opval->op_sibling lvalp[..].opval->op_targ lvalp[..].opval->op_type lvalp[..].pval start
 lvalp[..].gvval->sv_any[0]
-lvalp[..].gvval->sv_flags lvalp[..].gvval->sv_refcnt lvalp[..].opval->op_flags lvalp[..].opval->op_ppaddr lvalp[..].opval->op_private lvalp[..].opval->op_seq lvalp[..].opval->op_sibling lvalp[..].opval->op_targ start
 lvalp[..].gvval[0]
 lvalp[..].opval->op_next[0]
 lvalp[..].opval->op_ppaddr[0]
 lvalp[..].opval->op_sibling[0]
-lvalp[..].opval->op_type
 lvalp[..].opval[0]
 
 ..Perl_scan_num():::EXIT0
 lvalp
 lvalp[..]
-lvalp[..].gvval lvalp[..].gvval->sv_any lvalp[..].ival lvalp[..].opval lvalp[..].opval->op_next lvalp[..].pval
+lvalp[..].gvval lvalp[..].gvval->sv_any lvalp[..].gvval->sv_flags lvalp[..].gvval->sv_refcnt lvalp[..].ival lvalp[..].opval lvalp[..].opval->op_flags lvalp[..].opval->op_next lvalp[..].opval->op_ppaddr lvalp[..].opval->op_private lvalp[..].opval->op_seq lvalp[..].opval->op_sibling lvalp[..].opval->op_targ lvalp[..].opval->op_type lvalp[..].pval return start
 lvalp[..].gvval->sv_any[0]
-lvalp[..].gvval->sv_flags lvalp[..].gvval->sv_refcnt lvalp[..].opval->op_flags lvalp[..].opval->op_ppaddr lvalp[..].opval->op_private lvalp[..].opval->op_seq lvalp[..].opval->op_sibling lvalp[..].opval->op_targ return start
 lvalp[..].gvval[0]
 lvalp[..].opval->op_next[0]
 lvalp[..].opval->op_ppaddr[0]
 lvalp[..].opval->op_sibling[0]
-lvalp[..].opval->op_type
 lvalp[..].opval[0]
 
 ..Perl_scan_oct():::ENTER
@@ -65623,14 +65517,12 @@ sv[..].sv_flags
 sv[..].sv_refcnt
 
 ..Perl_sv_catpvf():::ENTER
-pat
-sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
 
 ..Perl_sv_catpvf():::EXIT0
-pat
-sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
 
@@ -65821,8 +65713,7 @@ sv2[..]
 sv2[..].sv_any[0]
 
 ..Perl_sv_cmp():::EXIT0
-return
-sv1 sv1[..].sv_any sv1[..].sv_flags sv1[..].sv_refcnt sv2 sv2[..].sv_any sv2[..].sv_flags sv2[..].sv_refcnt
+return sv1 sv1[..].sv_any sv1[..].sv_flags sv1[..].sv_refcnt sv2 sv2[..].sv_any sv2[..].sv_flags sv2[..].sv_refcnt
 sv1[..]
 sv1[..].sv_any[0]
 sv2[..]
@@ -66394,29 +66285,25 @@ sv[..].sv_flags
 sv[..].sv_refcnt
 
 ..Perl_sv_magic():::ENTER
-how
-name namlen obj obj[..].sv_any obj[..].sv_flags obj[..].sv_refcnt sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+how name namlen obj obj[..].sv_any obj[..].sv_flags obj[..].sv_refcnt sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 obj[..]
 obj[..].sv_any[0]
 sv[..]
 sv[..].sv_any[0]
 
 ..Perl_sv_magic():::EXIT0
-how
-name namlen obj obj[..].sv_any obj[..].sv_flags obj[..].sv_refcnt sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+how name namlen obj obj[..].sv_any obj[..].sv_flags obj[..].sv_refcnt sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 obj[..]
 obj[..].sv_any[0]
 sv[..]
 sv[..].sv_any[0]
 
 ..Perl_sv_magicext():::ENTER
-how
-name namlen obj obj[..].sv_any obj[..].sv_flags obj[..].sv_refcnt sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+how name namlen obj obj[..].sv_any obj[..].sv_flags obj[..].sv_refcnt sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt vtable
 obj[..]
 obj[..].sv_any[0]
 sv[..]
 sv[..].sv_any[0]
-vtable
 vtable[..]
 vtable[..].svt_clear
 vtable[..].svt_clear[0]
@@ -66434,12 +66321,10 @@ vtable[..].svt_set
 vtable[..].svt_set[0]
 
 ..Perl_sv_magicext():::EXIT0
-how return[..].mg_type
-name namlen obj obj[..].sv_any obj[..].sv_flags obj[..].sv_refcnt return return[..].mg_len return[..].mg_moremagic return[..].mg_obj return[..].mg_obj->sv_any return[..].mg_obj->sv_flags return[..].mg_obj->sv_refcnt return[..].mg_ptr sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+how name namlen obj obj[..].sv_any obj[..].sv_flags obj[..].sv_refcnt return return[..].mg_flags return[..].mg_len return[..].mg_moremagic return[..].mg_obj return[..].mg_obj->sv_any return[..].mg_obj->sv_flags return[..].mg_obj->sv_refcnt return[..].mg_private return[..].mg_ptr return[..].mg_type return[..].mg_virtual sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt vtable
 obj[..]
 obj[..].sv_any[0]
 return[..]
-return[..].mg_flags return[..].mg_private
 return[..].mg_moremagic->mg_flags
 return[..].mg_moremagic->mg_len
 return[..].mg_moremagic->mg_moremagic
@@ -66454,7 +66339,6 @@ return[..].mg_moremagic->mg_virtual[0]
 return[..].mg_moremagic[0]
 return[..].mg_obj->sv_any[0]
 return[..].mg_obj[0]
-return[..].mg_virtual vtable
 return[..].mg_virtual->svt_clear vtable[..].svt_clear
 return[..].mg_virtual->svt_clear[0]
 return[..].mg_virtual->svt_copy vtable[..].svt_copy
@@ -67726,13 +67610,6 @@ sv[..].sv_refcnt
 ..Perl_sv_vcatpvf():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
@@ -67740,13 +67617,6 @@ sv[..].sv_any[0]
 ..Perl_sv_vcatpvf():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
@@ -67754,13 +67624,6 @@ sv[..].sv_any[0]
 ..Perl_sv_vcatpvf_mg():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 sv
 sv[..]
@@ -67772,13 +67635,6 @@ sv[..].sv_refcnt
 ..Perl_sv_vcatpvf_mg():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 sv
 sv[..]
@@ -67790,13 +67646,6 @@ sv[..].sv_refcnt
 ..Perl_sv_vcatpvfn():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 maybe_tainted
 pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
@@ -67813,13 +67662,6 @@ svmax
 ..Perl_sv_vcatpvfn():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 maybe_tainted
 pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
@@ -67836,13 +67678,6 @@ svmax
 ..Perl_sv_vsetpvf():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 sv
 sv[..]
@@ -67854,13 +67689,6 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvf():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 sv
 sv[..]
@@ -67872,13 +67700,6 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvf_mg():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 sv
 sv[..]
@@ -67890,13 +67711,6 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvf_mg():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 sv
 sv[..]
@@ -67908,13 +67722,6 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvfn():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 maybe_tainted
 pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
@@ -67931,13 +67738,6 @@ svmax
 ..Perl_sv_vsetpvfn():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 maybe_tainted
 pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
@@ -68681,73 +68481,31 @@ return[..]
 ..Perl_vcroak():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 
 ..Perl_vcroak():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 
 ..Perl_vdeb():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 
 ..Perl_vdeb():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 
 ..Perl_vdie():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 
 ..Perl_vdie():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 return
 return[..]
@@ -68788,25 +68546,11 @@ return[..].op_type
 ..Perl_vform():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 
 ..Perl_vform():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 return
 
@@ -68847,13 +68591,6 @@ to_what
 ..Perl_vload_module():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 flags
 name
 name[..]
@@ -68871,13 +68608,6 @@ ver[..].sv_refcnt
 ..Perl_vload_module():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 flags
 name
 name[..]
@@ -68895,25 +68625,11 @@ ver[..].sv_refcnt
 ..Perl_vmess():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 
 ..Perl_vmess():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat return return[..].sv_any return[..].sv_flags return[..].sv_refcnt
 return[..]
 return[..].sv_any[0]
@@ -68921,25 +68637,11 @@ return[..].sv_any[0]
 ..Perl_vnewSVpvf():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 
 ..Perl_vnewSVpvf():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 return
 return[..]
@@ -68951,50 +68653,22 @@ return[..].sv_refcnt
 ..Perl_vwarn():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 
 ..Perl_vwarn():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 pat
 
 ..Perl_vwarner():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 err
 pat
 
 ..Perl_vwarner():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 err
 pat
 
@@ -69099,13 +68773,6 @@ utf8
 ..S_vdie_croak_common():::ENTER
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 msglen
 msglen[..] pat utf8[..]
 utf8
@@ -69113,13 +68780,6 @@ utf8
 ..S_vdie_croak_common():::EXIT0
 args
 args[..]
-args[..]->fp_offset
-args[..]->gp_offset
-args[..]->overflow_arg_area
-args[..]->overflow_arg_area[0]
-args[..]->reg_save_area
-args[..]->reg_save_area[0]
-args[..][0]
 msglen
 msglen[..] pat return utf8[..]
 utf8
@@ -72955,10 +72615,8 @@ o[..].op_sibling[0]
 return
 
 op.c.S_modkids():::ENTER
-o
+o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type type
 o[..]
-o[..].op_flags o[..].op_private
-o[..].op_next o[..].op_seq o[..].op_sibling o[..].op_targ
 o[..].op_next->op_flags
 o[..].op_next->op_next
 o[..].op_next->op_next[0]
@@ -72971,7 +72629,6 @@ o[..].op_next->op_sibling[0]
 o[..].op_next->op_targ
 o[..].op_next->op_type
 o[..].op_next[0]
-o[..].op_ppaddr
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
 o[..].op_sibling->op_next
@@ -72985,13 +72642,10 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-o[..].op_type type
 
 op.c.S_modkids():::EXIT0
-o return
+o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type type
 o[..]
-o[..].op_flags o[..].op_private return[..].op_flags return[..].op_private
-o[..].op_next o[..].op_seq o[..].op_sibling o[..].op_targ return[..].op_next return[..].op_seq return[..].op_sibling return[..].op_targ
 o[..].op_next->op_flags
 o[..].op_next->op_next
 o[..].op_next->op_next[0]
@@ -73004,7 +72658,6 @@ o[..].op_next->op_sibling[0]
 o[..].op_next->op_targ
 o[..].op_next->op_type
 o[..].op_next[0]
-o[..].op_ppaddr return[..].op_ppaddr
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
 o[..].op_sibling->op_next
@@ -73018,7 +72671,6 @@ o[..].op_sibling->op_sibling[0]
 o[..].op_sibling->op_targ
 o[..].op_sibling->op_type
 o[..].op_sibling[0]
-o[..].op_type return[..].op_type type
 return[..]
 return[..].op_next->op_flags
 return[..].op_next->op_next
@@ -73118,12 +72770,11 @@ imopsp[..]->op_sibling[0]
 imopsp[..]->op_targ
 imopsp[..]->op_type
 imopsp[..][0]
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_sibling->op_type o[..].op_targ o[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_sibling->op_type o[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_next[0]
@@ -73203,12 +72854,11 @@ imopsp[..]->op_sibling[0]
 imopsp[..]->op_targ
 imopsp[..]->op_type
 imopsp[..][0]
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_sibling->op_type o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_sibling->op_type return[..].op_targ return[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_sibling->op_type o[..].op_type return[..].op_next->op_type return[..].op_sibling->op_type return[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_next[0]
@@ -77462,8 +77112,7 @@ sv[..].sv_refcnt
 regcomp.c.S_nextchar():::ENTER
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].rx pRExC_state[..].rx->offsets
-pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
+pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].extralen
@@ -77491,8 +77140,7 @@ pRExC_state[..].whilem_seen
 regcomp.c.S_nextchar():::EXIT0
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].rx pRExC_state[..].rx->offsets
-pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8 return
+pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8 return
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].extralen
@@ -78649,11 +78297,10 @@ data[..]
 data[..].flags
 data[..].last_closep
 data[..].last_closep[0]
-data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].pos_min data[..].start_class pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
+data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].last_start_min data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].offset_fixed data[..].pos_min data[..].start_class pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 data[..].last_found->sv_any[0]
 data[..].last_found[0]
 data[..].last_start_max
-data[..].last_start_min data[..].offset_fixed
 data[..].len_delta
 data[..].len_min
 data[..].longest
@@ -78706,11 +78353,10 @@ data[..]
 data[..].flags
 data[..].last_closep
 data[..].last_closep[0]
-data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].pos_min data[..].start_class pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
+data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].last_start_min data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].offset_fixed data[..].pos_min data[..].start_class pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 data[..].last_found->sv_any[0]
 data[..].last_found[0]
 data[..].last_start_max
-data[..].last_start_min data[..].offset_fixed
 data[..].len_delta
 data[..].len_min
 data[..].longest
