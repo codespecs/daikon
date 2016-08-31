@@ -59,7 +59,7 @@ public class Chicory {
   public static boolean std_visibility = false;
 
   @Option("Print progress information")
-  public static boolean verbose = true;
+  public static boolean verbose = false;
 
   @Option("Print debug information and save instrumented classes")
   public static boolean debug = false;
