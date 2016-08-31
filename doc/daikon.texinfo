@@ -4527,7 +4527,7 @@ If you want to run tests using JUnit, then explicitly create a Suite that
 contains the tests you want to run, rather than annotating methods with
 @code{@@Test} and depending on JUnit to find them and call them via reflection.
 If you are generating JUnit test suites with 
-@uref{http://randoop.github.io/randoop/, ,Randoop}, then supply the
+@uref{https://randoop.github.io/randoop/, ,Randoop}, then supply the
 @option{--junit-reflection-allowed=false} command-line option to Randoop.
 @item
 @c The manual should be more specific about how a user can know this is the
