@@ -4,19 +4,47 @@
 ::globalIntArray[] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 ::globalX == 5
 ::whatsUp == "what's up dawg!!!"
+size(::globalIntArray[]) == 18
+::globalIntArray[::globalX] == 6
+::globalIntArray[::globalX-1] == 5
+::globalIntArray[::globalX..] == [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalIntArray[::globalX+1..] == [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalIntArray[0..::globalX] == [1, 2, 3, 4, 5, 6]
+::globalIntArray[0..::globalX-1] == [1, 2, 3, 4, 5]
 ===========================================================================
 ..main():::EXIT
 ::globalIntArray == orig(::globalIntArray)
 ::globalIntArray[] == orig(::globalIntArray[])
 ::globalX == orig(::globalX)
+::globalIntArray[::globalX] == ::globalIntArray[orig(::globalX)]
+::globalIntArray[::globalX] == orig(::globalIntArray[post(::globalX)])
+::globalIntArray[::globalX] == orig(::globalIntArray[::globalX])
+::globalIntArray[::globalX-1] == ::globalIntArray[orig(::globalX)-1]
+::globalIntArray[::globalX-1] == orig(::globalIntArray[post(::globalX)-1])
+::globalIntArray[::globalX-1] == orig(::globalIntArray[::globalX-1])
+::globalIntArray[return] == orig(::globalIntArray[post(return)])
 ::globalIntArray has only one value
 ::globalIntArray[] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 ::globalX == 5
 ::whatsUp == "what's up dawg!!!"
 return == 0
+size(::globalIntArray[]) == 18
+::globalIntArray[::globalX] == 6
+::globalIntArray[::globalX-1] == 5
+::globalIntArray[::globalX..] == [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalIntArray[::globalX+1..] == [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalIntArray[0..::globalX] == [1, 2, 3, 4, 5, 6]
+::globalIntArray[0..::globalX-1] == [1, 2, 3, 4, 5]
+::globalIntArray[return] == 1
+::globalIntArray[return+1..] == [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalIntArray[0..return] == [1]
+::globalIntArray[0..return-1] == []
 ::whatsUp == orig(::whatsUp)
 ===========================================================================
 ..returnIntSum():::ENTER
+size(a[]) == size(b[])
+size(b[]) == size(dummy[])
+size(b[]) == size(dummy[][0])
 ::globalIntArray has only one value
 ::globalIntArray[] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 ::globalX == 5
@@ -32,7 +60,65 @@ dummy[][0] == [what's up dawg!!!]
 str one of { "t's up dawg!!!", "what's up dawg!!!" }
 u[] == [13, 12, 11, 10, 9, 8, 6, 5, 4, 3, 0, 0, 0]
 u[] elements >= 0
+size(::globalIntArray[]) == 18
+size(a[]) == 1
+size(b[]) == 1
+size(u[]) == 13
+::globalIntArray[::globalX] == 6
+::globalIntArray[::globalX-1] == 5
+::globalIntArray[::globalX..] == [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalIntArray[::globalX+1..] == [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalIntArray[0..::globalX] == [1, 2, 3, 4, 5, 6]
+::globalIntArray[0..::globalX-1] == [1, 2, 3, 4, 5]
+u[::globalX] == 8
+u[::globalX-1] == 9
+u[::globalX..] == [8, 6, 5, 4, 3, 0, 0, 0]
+u[::globalX+1..] == [6, 5, 4, 3, 0, 0, 0]
+u[0..::globalX] == [13, 12, 11, 10, 9, 8]
+u[0..::globalX-1] == [13, 12, 11, 10, 9]
+size(a[]) in ::globalIntArray[]
+size(u[]) in ::globalIntArray[]
+size(u[])-1 in ::globalIntArray[]
+u[::globalX] in ::globalIntArray[]
+u[::globalX-1] in ::globalIntArray[]
 ::globalX in u[]
+::globalX in u[::globalX..]
+::globalX in u[::globalX+1..]
+size(a[]) in u[]
+size(a[])-1 in u[]
+size(b[])-1 in u[]
+size(u[]) in u[]
+size(u[])-1 in u[]
+::globalIntArray[::globalX] in u[]
+::globalIntArray[::globalX-1] in u[]
+size(a[]) in ::globalIntArray[0..::globalX]
+size(a[]) in ::globalIntArray[0..::globalX-1]
+size(a[]) in u[::globalX..]
+size(a[]) in u[::globalX+1..]
+size(a[]) in u[0..::globalX]
+size(a[]) in u[0..::globalX-1]
+size(a[])-1 in u[::globalX..]
+size(a[])-1 in u[::globalX+1..]
+size(a[])-1 in u[0..::globalX]
+size(a[])-1 in u[0..::globalX-1]
+size(b[])-1 in u[::globalX..]
+size(b[])-1 in u[::globalX+1..]
+size(u[]) in ::globalIntArray[::globalX..]
+size(u[]) in ::globalIntArray[::globalX+1..]
+size(u[]) in u[0..::globalX]
+size(u[]) in u[0..::globalX-1]
+size(u[])-1 in ::globalIntArray[::globalX..]
+size(u[])-1 in ::globalIntArray[::globalX+1..]
+size(u[])-1 in u[0..::globalX]
+size(u[])-1 in u[0..::globalX-1]
+::globalIntArray[::globalX] in u[::globalX..]
+::globalIntArray[::globalX] in u[::globalX+1..]
+::globalIntArray[::globalX-1] in u[::globalX..]
+::globalIntArray[::globalX-1] in u[::globalX+1..]
+u[::globalX] in ::globalIntArray[::globalX..]
+u[::globalX-1] in ::globalIntArray[::globalX..]
+u[::globalX] in ::globalIntArray[::globalX+1..]
+u[::globalX-1] in ::globalIntArray[::globalX+1..]
 ===========================================================================
 ..returnIntSum():::EXIT
 ::globalIntArray == orig(::globalIntArray)
@@ -41,6 +127,12 @@ u[] elements >= 0
 b[] == orig(b[])
 dummy[] == orig(dummy[])
 u[] == orig(u[])
+::globalIntArray[::globalX] == ::globalIntArray[orig(::globalX)]
+::globalIntArray[::globalX] == orig(::globalIntArray[post(::globalX)])
+::globalIntArray[::globalX] == orig(::globalIntArray[::globalX])
+::globalIntArray[::globalX-1] == ::globalIntArray[orig(::globalX)-1]
+::globalIntArray[::globalX-1] == orig(::globalIntArray[post(::globalX)-1])
+::globalIntArray[::globalX-1] == orig(::globalIntArray[::globalX-1])
 ::globalIntArray has only one value
 ::globalIntArray[] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 ::globalX == 5
@@ -51,7 +143,62 @@ dummy[] contains no nulls and has only one value, of length 1
 dummy[][0] == [what's up dawg!!!]
 u[] == [13, 12, 11, 10, 9, 8, 6, 5, 4, 3, 0, 0, 0]
 u[] elements >= 0
+size(::globalIntArray[]) == 18
+::globalIntArray[::globalX] == 6
+::globalIntArray[::globalX-1] == 5
+::globalIntArray[::globalX..] == [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalIntArray[::globalX+1..] == [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalIntArray[0..::globalX] == [1, 2, 3, 4, 5, 6]
+::globalIntArray[0..::globalX-1] == [1, 2, 3, 4, 5]
+u[::globalX] == 8
+u[::globalX-1] == 9
+u[::globalX..] == [8, 6, 5, 4, 3, 0, 0, 0]
+u[::globalX+1..] == [6, 5, 4, 3, 0, 0, 0]
+u[0..::globalX] == [13, 12, 11, 10, 9, 8]
+u[0..::globalX-1] == [13, 12, 11, 10, 9]
+size(u[])-1 in ::globalIntArray[]
+orig(size(a[])) in ::globalIntArray[]
+orig(size(u[])) in ::globalIntArray[]
+u[::globalX] in ::globalIntArray[]
+u[::globalX-1] in ::globalIntArray[]
 ::globalX in u[]
+::globalX in u[::globalX..]
+::globalX in u[::globalX+1..]
 ::whatsUp == orig(::whatsUp)
 a[] == orig(a[]) (elementwise)
 a[] is the reverse of orig(a[])
+size(a[])-1 in u[]
+size(u[])-1 in u[]
+orig(size(a[])) in u[]
+orig(size(a[]))-1 in u[]
+orig(size(u[])) in u[]
+::globalIntArray[::globalX] in u[]
+::globalIntArray[::globalX-1] in u[]
+size(a[])-1 in u[::globalX..]
+size(a[])-1 in u[::globalX+1..]
+size(u[])-1 in ::globalIntArray[::globalX..]
+size(u[])-1 in ::globalIntArray[::globalX+1..]
+size(u[])-1 in u[0..::globalX]
+size(u[])-1 in u[0..::globalX-1]
+orig(size(a[])) in ::globalIntArray[0..::globalX]
+orig(size(a[])) in ::globalIntArray[0..::globalX-1]
+orig(size(a[])) in u[::globalX..]
+orig(size(a[])) in u[::globalX+1..]
+orig(size(a[])) in u[0..::globalX]
+orig(size(a[])) in u[0..::globalX-1]
+orig(size(a[]))-1 in u[::globalX..]
+orig(size(a[]))-1 in u[::globalX+1..]
+orig(size(a[]))-1 in u[0..::globalX]
+orig(size(a[]))-1 in u[0..::globalX-1]
+orig(size(u[])) in ::globalIntArray[::globalX..]
+orig(size(u[])) in ::globalIntArray[::globalX+1..]
+orig(size(u[])) in u[0..::globalX]
+orig(size(u[])) in u[0..::globalX-1]
+::globalIntArray[::globalX] in u[::globalX..]
+::globalIntArray[::globalX] in u[::globalX+1..]
+::globalIntArray[::globalX-1] in u[::globalX..]
+::globalIntArray[::globalX-1] in u[::globalX+1..]
+u[::globalX] in ::globalIntArray[::globalX..]
+u[::globalX-1] in ::globalIntArray[::globalX..]
+u[::globalX] in ::globalIntArray[::globalX+1..]
+u[::globalX-1] in ::globalIntArray[::globalX+1..]

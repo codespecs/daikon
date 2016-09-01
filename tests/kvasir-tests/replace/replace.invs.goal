@@ -1,14 +1,35 @@
 ===========================================================================
 ..addstr():::ENTER
 maxset == 100
+size(j[]) == 1
+c != size(j[])
+c >= size(j[])-1
 j[] elements < maxset
+j[] elements >= size(j[])-1
 ===========================================================================
 ..addstr():::EXIT
 return == 1
+j[return..] == []
 j[] elements >= return
 j[] - orig(j[]) - 1 == 0
-j[] > orig(j[]) (elementwise)
 j[] elements < orig(maxset)
+j[] elements >= orig(size(j[]))
+j[] elements == j[return-1]
+j[] elements > orig(j[post(return)-1])
+return <= j[return-1]
+orig(c) >= size(j[])-1
+orig(c) != j[return-1]
+orig(c) != orig(j[post(return)-1])
+orig(j[]) elements >= size(j[])-1
+orig(j[]) elements < j[return-1]
+orig(j[]) elements == orig(j[post(return)-1])
+orig(maxset) > j[return-1]
+orig(maxset) > orig(j[post(return)-1])
+size(j[])-1 <= orig(j[post(return)-1])
+orig(size(j[])) <= j[return-1]
+j[return-1] - orig(j[post(return)-1]) - 1 == 0
+return == (plume.MathMDE.gcd(j[return-1], orig(j[post(return)-1])))
+orig(size(j[])) == (plume.MathMDE.gcd(j[return-1], orig(j[post(return)-1])))
 ===========================================================================
 ..amatch():::ENTER
 j == 0
@@ -32,6 +53,7 @@ sub == "NEW"
 i[] elements one of { 0, 1, 2 }
 i[] one of { [0], [1], [2] }
 s one of { "NEW", "X" }
+size(i[]) == 1
 ===========================================================================
 ..esc():::EXIT
 i[] == orig(i[])
@@ -60,6 +82,7 @@ return == 1
 argc == 3
 argv has only one value
 argv[] == [./replace]
+size(argv[]) == 1
 ===========================================================================
 ..main():::EXIT
 argv[] == [./replace]
@@ -90,22 +113,55 @@ return one of { 0, 1 }
 ===========================================================================
 ..omatch():::ENTER
 i has only one value
-i[] elements >= 0
 i[i] >= i
 j == 0
 lin one of { "UW=Fq9MPD@sF6X@g|76zA\":NFc_4vtv%>/L>/W\n", "j+X+RpIPzC8;tLH#@;j+X+RpIPzC8;tLH#@;\n" }
 pat == "cX"
+size(i[]) == 1
+i[j+1..] == []
 i[] elements >= j
+i[] elements >= size(i[])-1
+i[] elements == i[j]
+j <= i[j]
 lin != pat
+size(i[])-1 <= i[j]
 ===========================================================================
 ..omatch():::EXIT
-i[] elements >= 0
+i[return..] == orig(i[post(return)..])
 i[i] >= i
 return one of { 0, 1 }
+i[0..return-1] elements one of { 3, 14, 21 }
+i[orig(j)+1..] == []
+orig(i[0..post(return)-1]) elements one of { 2, 13, 20 }
 i[] elements >= return
-i[] >= orig(i[]) (elementwise)
 i[] elements >= orig(j)
+i[] elements >= size(i[])-1
+i[] elements == i[orig(j)]
+i[] elements >= orig(i[j])
 orig(i[]) elements >= return
+return >= size(i[])-1
+return <= orig(size(i[]))
+i[0..return-1] elements > return
+(i[orig(j)] == 0) ==> (return == 0)
+return <= i[orig(j)]
+orig(i[0..post(return)-1]) elements > return
+(orig(i[j]) == 0) ==> (return == 0)
+return <= orig(i[j])
+orig(i[]) elements >= size(i[])-1
+orig(i[]) elements <= i[orig(j)]
+i[0..return-1] elements > orig(j)
+orig(j) <= i[orig(j)]
+orig(i[0..post(return)-1]) elements > orig(j)
+size(i[])-1 <= i[orig(j)]
+size(i[])-1 <= orig(i[j])
+i[0..return-1] elements > orig(size(i[]))
+orig(i[0..post(return)-1]) elements > orig(size(i[]))
+i[0..return-1] elements > orig(i[j])
+orig(i[0..post(return)-1]) elements < i[orig(j)]
+(i[orig(j)] == 0) ==> (orig(i[j]) == 0)
+(i[orig(j)] >> orig(i[j]) == 0)
+(orig(i[j]) == 0) ==> (i[orig(j)] == 0)
+return - i[orig(j)] + orig(i[j]) == 0
 ===========================================================================
 ..patsize():::ENTER
 n == 0
