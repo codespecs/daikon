@@ -42,13 +42,13 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.3.10
+@center Daikon version 5.3.11
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.3.10 release date
+@c Print out the Daikon version 5.3.11 release date
 @center September 1, 2016
 @end ifset
 
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.3.10, released September 1, 2016.
+It describes Daikon version 5.3.11, released September 1, 2016.
 
 @menu
 * Introduction::
