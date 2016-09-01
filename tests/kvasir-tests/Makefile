@@ -20,7 +20,7 @@ else
   MPARG :=
 endif
 
-default: summary
+default: summary-w-daikon
 
 .PHONY: regression-tests
 regression-tests:

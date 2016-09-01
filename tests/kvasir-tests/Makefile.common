@@ -42,7 +42,7 @@ DAIKON := java -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon
 PRINT_INV := java -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
 endif
 
-default: summary
+default: summary-w-daikon
 
 # Function to compute goal filename extension.  If we are on x86_64 then
 # use filename.test.goal.  If not x86_64 (which we assume means 386) then
