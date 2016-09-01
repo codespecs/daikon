@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.3.10 (August 1, 2016)
+5.3.10 (September 1, 2016)
 
 A new front end for LLVM is available.
 See https://github.com/markus-kusano/udon.
@@ -36,6 +36,17 @@ rejects.  If this happens, re-run the front end to create new, correct files.
 
 Updated the Binutils-based code in Fjalar/Kvasir to v2.26.1.
 There should be no user-visible differences in the behavior of Kvasir.
+
+Several options to the Kvasir DynComp feature (--with-dyncomp) were renamed
+to be more consistent:
+  --gc-num-tags                => --dyncomp-gc-num-tags
+  --no-dyncomp-gc              => --dyncomp-gc-num-tags=0
+  --dyncomp-fast-mode          => --dyncomp-approximate-literals
+  --separate-entry-exit-comp   => --dyncomp-separate-entry-exit
+  --dyncomp-dataflow-only      => --dyncomp-interactions=none
+  --dyncomp-dataflow-comp      => --dyncomp-interactions=comparisons
+  --dyncomp-units              => --dyncomp-interactions=units
+  [new option; is the default] => --dyncomp-interactions=all
 
 ===========================================================================
 

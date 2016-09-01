@@ -1,6 +1,7 @@
 ABI
 accessor
 accessors
+ADDR
 AFS
 AMD
 amd64
@@ -48,6 +49,7 @@ deserializing
 dimensionality
 disambiguated
 disambiguates
+dtrace
 DynComp
 DynComp's
 edu
@@ -73,6 +75,8 @@ inline
 instantiation
 instrumenter
 instrumenters
+initializer
+initializers
 invariant
 invariants
 invariant's
@@ -91,6 +95,7 @@ kvasir
 Kvasir
 Kvasir's
 lexicographically
+LLVM
 MacOSX
 Makefile
 Makefiles
@@ -162,6 +167,7 @@ TODO
 toolset
 tuple
 tuples
+Udon
 unannotated
 unary
 unformattable
