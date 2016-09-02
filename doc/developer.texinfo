@@ -2309,6 +2309,7 @@ GNU Texinfo Manual (@uref{http://www.gnu.org/software/texinfo/manual/texinfo/tex
 
 @end itemize
 
+@noindent
 TODO: it would be good to build the staging release the day before, too, so
 that links can be fixed the day before the release or at least very early
 in the process.
@@ -2417,13 +2418,19 @@ Travis jobs to complete.
 @item
 Set the version number in file @file{$DAIKONDIR/doc/VERSION}
 to an even number.
-You may do this manually, or if the value just needs to be incremented
+You may do this manually, or if the revision number just needs to be incremented
 by 1 (to go from odd to even) you may use:
 
 @c "cd $DAIKONDIR" because the previous commands changed the working directory
 @example
 make update-dist-version-file
 @end example
+
+Note that if a new feature has been added, or if some change has made
+the current version incompatible from the previous release (such a
+change in the dtrace file format or revised names for tool options),
+then you should manually edit the VERSION file to increment the minor
+version number and reset the revision number to zero.
 
 Optionally, override the distribution date (default: today) by
 redefining the environment variable @command{TODAY}:
@@ -2699,10 +2706,16 @@ http://plse.cs.washington.edu/daikon/download/
 
   <your name>
 
-<a copy of the current entry from the doc/CHANGES file, with 
+<a copy of the current entry from the doc/CHANGES file, with
 paragraphs refilled (remove unnecessary line breaks that trim lines
 to 80 columns for the CHANGES file but aren't desirable in email)>
 @end example
+
+Note that if you use Microsoft Outlook 2010 or 2013 as your mailer,
+by default it will insert hard breaks in your outgoing message. See
+@uref{http://blog.techhit.com/551102-how-to-prevent-outlook-2010-and-2013-from-adding-line-breaks-to-sent-plain-text-messages}
+for a work around.  You must quit and restart Outlook to activate
+the change.
 
 @end enumerate
 
