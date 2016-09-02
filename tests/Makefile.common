@@ -1047,7 +1047,7 @@ txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 	@([ -f $@ ] && mv -f $@ $@-implementation) || true
 	@echo "Failed to build $*" > $@
 	$(MAKE) $@-implementation
-	@mv -f $@-implementation $@
+	mv -f $@-implementation $@
 	cat $@
 
 .PHONY: %.diff-implementation
