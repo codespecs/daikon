@@ -434,7 +434,10 @@ public final class Daikon {
     //    public TerminationMessage(Exception e) {
     //      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
     public TerminationMessage(Throwable e, String msg) {
-      super(msg.contains(e.getMessage()) ? msg : msg + ": " + e.getMessage());
+      super(
+          (e.getMessage() != null && msg.contains(e.getMessage()))
+              ? msg
+              : msg + ": " + e.getMessage());
     }
 
     public TerminationMessage(Throwable e, FileIO.ParseState state) {
