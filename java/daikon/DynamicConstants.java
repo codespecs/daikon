@@ -1126,16 +1126,34 @@ public class DynamicConstants implements Serializable {
     ProglangType rep_type = con.vi.rep_type;
     boolean is_scalar = rep_type.isScalar();
     if (is_scalar) {
+      if (!OneOfScalar.dkconfig_enabled) {
+        return;
+      }
       inv = OneOfScalar.get_proto().instantiate(slice1);
     } else if (rep_type == ProglangType.INT_ARRAY) {
+      if (!OneOfSequence.dkconfig_enabled) {
+        return;
+      }
       inv = OneOfSequence.get_proto().instantiate(slice1);
-    } else if (Daikon.dkconfig_enable_floats && rep_type == ProglangType.DOUBLE) {
+    } else if (rep_type == ProglangType.DOUBLE) {
+      if (!Daikon.dkconfig_enable_floats || !OneOfFloat.dkconfig_enabled) {
+        return;
+      }
       inv = OneOfFloat.get_proto().instantiate(slice1);
-    } else if (Daikon.dkconfig_enable_floats && rep_type == ProglangType.DOUBLE_ARRAY) {
+    } else if (rep_type == ProglangType.DOUBLE_ARRAY) {
+      if (!Daikon.dkconfig_enable_floats || !OneOfFloatSequence.dkconfig_enabled) {
+        return;
+      }
       inv = OneOfFloatSequence.get_proto().instantiate(slice1);
     } else if (rep_type == ProglangType.STRING) {
+      if (!OneOfString.dkconfig_enabled) {
+        return;
+      }
       inv = OneOfString.get_proto().instantiate(slice1);
     } else if (rep_type == ProglangType.STRING_ARRAY) {
+      if (!OneOfStringSequence.dkconfig_enabled) {
+        return;
+      }
       inv = OneOfStringSequence.get_proto().instantiate(slice1);
     } else {
       throw new Error("Unrecognized rep_type in instantiate_oneof");
