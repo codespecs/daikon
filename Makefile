@@ -322,8 +322,10 @@ nightly-test-except-doc-pdf:
 
 tags: TAGS
 
-TAGS:
+TAGS: java/TAGS
 	cd java && $(MAKE) tags
+	etags --include=java/TAGS
+
 
 ###########################################################################
 ### Test the distribution
