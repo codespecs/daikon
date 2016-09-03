@@ -481,9 +481,11 @@ public final class Daikon {
       mainHelper(args);
     } catch (Configuration.ConfigException e) {
       // I don't think this can happen.  -MDE
+      System.err.println();
       System.err.println(e.getMessage());
       System.exit(1);
     } catch (TerminationMessage e) {
+      System.err.println();
       if (e.getMessage() != null) {
         System.err.println(e.getMessage());
         if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
