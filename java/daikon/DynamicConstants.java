@@ -41,7 +41,7 @@ public class DynamicConstants implements Serializable {
 
   // If true don't create any invariants (including OneOfs) over dynamic
   // constants during post processing.  Normally, the configuration
-  // variable OneOf_only is more appropriate
+  // variable OneOf_only is more appropriate.
   static final boolean no_post_process = false;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -57,9 +57,11 @@ public class DynamicConstants implements Serializable {
   public static boolean dkconfig_use_dynamic_constant_optimization = true;
 
   /**
-   * Boolean. If true only create OneOf invariants for variables that
-   * are constant for the entire run.  If false, all possible invariants
-   * are created between constants.  Note that setting this to true only
+   * Boolean. Controls which invariants are created for variables that
+   * are constant for the entire run.  If true, create only OneOf
+   * invariants.  If false, create all possible invariants.
+   *
+   * Note that setting this to true only
    * fails to create invariants between constants.  Invariants between
    * constants and non-constants are created regardless.
    *
@@ -917,7 +919,7 @@ public class DynamicConstants implements Serializable {
 
   /**
    * Create invariants for any remaining constants.  Right now, this looks
-   * for invariants between all of the constants.  Its not clear that
+   * for invariants between all of the constants.  It's not clear that invariants
    * between constants are interesting, but to match previous behavior, this
    * is what we will do for now.
    */
@@ -937,7 +939,7 @@ public class DynamicConstants implements Serializable {
     }
 
     // If specified, create only OneOf invariants.  Also create a reflexive
-    // equality invariant, since that is assumed to exist in many places
+    // equality invariant, since that is assumed to exist in many places.
     if (dkconfig_OneOf_only) {
       for (Constant con : con_list) {
         if (!con.vi.isCanonical()) continue;
@@ -949,7 +951,7 @@ public class DynamicConstants implements Serializable {
 
     // Get a list of all remaining constants and clear the existing list
     // (if the existing list is not cleared, constant slices will not
-    // be created)
+    // be created).
     List<Constant> noncons = con_list;
     for (Constant con : con_list) {
       con.constant = false;
