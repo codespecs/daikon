@@ -258,12 +258,8 @@ public class Instrument implements ClassFileTransformer {
   // used to add a "hook" into the <clinit> static initializer
   private Method addInvokeToClinit(ClassGen cg, MethodGen mg, String fullClassName) {
 
-    call_initNotify(cg, cg.getConstantPool(), fullClassName, new MethodContext(cg, mg).ifact);
-
-    InstructionList newList = mg.getInstructionList();
-    mg.update();
-
     InstructionList il = mg.getInstructionList();
+    mg.update();
     MethodContext context = new MethodContext(cg, mg);
 
     for (InstructionHandle ih = il.getStart(); ih != null; ) {
@@ -322,8 +318,6 @@ public class Instrument implements ClassFileTransformer {
       // Go on to the next instruction in the list
       ih = next_ih;
     }
-
-    mg.setInstructionList(newList);
 
     Attribute a = get_local_variable_type_table_attribute(mg);
     if (a != null) mg.removeCodeAttribute(a);
