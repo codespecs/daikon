@@ -434,19 +434,22 @@ public final class Daikon {
     //    public TerminationMessage(Exception e) {
     //      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
     public TerminationMessage(Throwable e, String msg) {
-      super(msg + ": " + e.getMessage());
+      super(
+          (e.getMessage() != null && msg.contains(e.getMessage()))
+              ? msg
+              : msg + ": " + e.getMessage());
     }
 
     public TerminationMessage(Throwable e, FileIO.ParseState state) {
-      super(error_at_line_file(state.reader, state.filename, e), e);
+      this(e, error_at_line_file(state.reader, state.filename, e));
     }
 
     public TerminationMessage(Throwable e, LineNumberReader reader, String filename) {
-      super(error_at_line_file(reader, filename, e), e);
+      this(e, error_at_line_file(reader, filename, e));
     }
 
     public TerminationMessage(Throwable e, String msg, LineNumberReader reader, String filename) {
-      super(error_at_line_file(reader, filename, msg), e);
+      this(e, error_at_line_file(reader, filename, msg));
     }
 
     /// Constructors that do not take a Throwable
@@ -481,9 +484,11 @@ public final class Daikon {
       mainHelper(args);
     } catch (Configuration.ConfigException e) {
       // I don't think this can happen.  -MDE
+      System.err.println();
       System.err.println(e.getMessage());
       System.exit(1);
     } catch (TerminationMessage e) {
+      System.err.println();
       if (e.getMessage() != null) {
         System.err.println(e.getMessage());
         if (Debug.dkconfig_show_stack_trace) e.printStackTrace();

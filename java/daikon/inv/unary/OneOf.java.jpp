@@ -345,8 +345,8 @@ public final class ONEOFSCALAR
 #if defined(IS_ELT) || defined(IS_SEQUENCE)
     // var() is initialized by the super constructor
     assert var().is_array() :
-      String.format ("ProglangType (var %s type %s) must be pseudo-array for %s",
-                     var().name(), var().type, ONEOFSCALAR_STRING);
+      String.format ("In %s constructor, var %s (type=%s, rep_type=%s) should be an array",
+                     ONEOFSCALAR_STRING, var().name(), var().type, var().rep_type);
 #endif
   }
 
