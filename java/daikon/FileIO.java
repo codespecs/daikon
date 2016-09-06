@@ -2607,9 +2607,8 @@ public final class FileIO {
       assert (arr_dims == 0) || (arr_dims == 1)
           : String.format(
               "array dimensions==%s, should be 0 or 1, for variable %s", arr_dims, name);
-      // Enable when issue #68 is fixed: https://github.com/codespecs/daikon/issues/68
-      // assert !rep_type.isArray() || arr_dims == 1
-      //     : String.format("array dimensions is 0, should be 1, for variable %s", name);
+      assert !rep_type.isArray() || arr_dims == 1
+          : String.format("array dimensions is 0, should be 1, for variable %s", name);
       if (rep_type == null) {
         throw new AssertionError("missing rep-type information for variable " + name);
       }

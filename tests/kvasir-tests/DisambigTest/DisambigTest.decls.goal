@@ -102,6 +102,7 @@ ppt ..fooMultiple():::ENTER
   variable ::globalTB.string_A
     var-kind field string_A
     enclosing-var ::globalTB
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::globalTB.string_C
@@ -212,6 +213,7 @@ ppt ..fooMultiple():::ENTER
     dec-type char*
   variable ::string_A
     var-kind variable
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::string_C
@@ -435,6 +437,7 @@ ppt ..fooMultiple():::EXIT0
   variable ::globalTB.string_A
     var-kind field string_A
     enclosing-var ::globalTB
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::globalTB.string_C
@@ -545,6 +548,7 @@ ppt ..fooMultiple():::EXIT0
     dec-type char*
   variable ::string_A
     var-kind variable
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::string_C
@@ -768,6 +772,7 @@ ppt ..fooSingle():::ENTER
   variable ::globalTB.string_A
     var-kind field string_A
     enclosing-var ::globalTB
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::globalTB.string_C
@@ -878,6 +883,7 @@ ppt ..fooSingle():::ENTER
     dec-type char*
   variable ::string_A
     var-kind variable
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::string_C
@@ -960,6 +966,7 @@ ppt ..fooSingle():::ENTER
   variable tb->string_A
     var-kind field string_A
     enclosing-var tb
+    array 1
     rep-type int[]
     dec-type int[]
   variable tb->string_C
@@ -1083,6 +1090,7 @@ ppt ..fooSingle():::EXIT0
   variable ::globalTB.string_A
     var-kind field string_A
     enclosing-var ::globalTB
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::globalTB.string_C
@@ -1193,6 +1201,7 @@ ppt ..fooSingle():::EXIT0
     dec-type char*
   variable ::string_A
     var-kind variable
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::string_C
@@ -1275,6 +1284,7 @@ ppt ..fooSingle():::EXIT0
   variable tb->string_A
     var-kind field string_A
     enclosing-var tb
+    array 1
     rep-type int[]
     dec-type int[]
   variable tb->string_C
@@ -1398,6 +1408,7 @@ ppt ..main():::ENTER
   variable ::globalTB.string_A
     var-kind field string_A
     enclosing-var ::globalTB
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::globalTB.string_C
@@ -1508,6 +1519,7 @@ ppt ..main():::ENTER
     dec-type char*
   variable ::string_A
     var-kind variable
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::string_C
@@ -1631,6 +1643,7 @@ ppt ..main():::EXIT0
   variable ::globalTB.string_A
     var-kind field string_A
     enclosing-var ::globalTB
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::globalTB.string_C
@@ -1741,6 +1754,7 @@ ppt ..main():::EXIT0
     dec-type char*
   variable ::string_A
     var-kind variable
+    array 1
     rep-type int[]
     dec-type int[]
   variable ::string_C
