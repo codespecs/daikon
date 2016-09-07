@@ -321,8 +321,7 @@ nightly-test-except-doc-pdf:
 ### Tags
 
 tags: TAGS
-
-TAGS: java/TAGS
+TAGS:
 	cd java && $(MAKE) tags
 	etags --include=java/TAGS
 
