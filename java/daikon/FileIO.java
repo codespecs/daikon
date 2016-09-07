@@ -2605,7 +2605,10 @@ public final class FileIO {
         throw new AssertionError("missing var-kind information for variable " + name);
       }
       assert (arr_dims == 0) || (arr_dims == 1)
-          : String.format("arrdims==%s, should be 0 or 1, for VarDefinition %s", arr_dims, name);
+          : String.format(
+              "array dimensions==%s, should be 0 or 1, for variable %s", arr_dims, name);
+      assert !rep_type.isArray() || arr_dims == 1
+          : String.format("array dimensions is 0, should be 1, for variable %s", name);
       if (rep_type == null) {
         throw new AssertionError("missing rep-type information for variable " + name);
       }

@@ -281,7 +281,7 @@ public class DeclWriter extends DaikonWriter {
       String entryName =
           (member != null
               ? methodEntryName(member)
-              : mi.class_info.class_name + "<clinit>" + FileIO.enter_tag);
+              : mi.class_info.class_name + ".<clinit>" + FileIO.enter_tag);
       print_method(mi, enterRoot, entryName, PptType.ENTER, comp_info);
 
       // Print exit program point for EACH exit location in the method
@@ -297,7 +297,7 @@ public class DeclWriter extends DaikonWriter {
         String exitName =
             (member != null
                 ? methodExitName(member, exitLoc)
-                : mi.class_info.class_name + "<clinit>" + FileIO.exit_tag + exitLoc);
+                : mi.class_info.class_name + ".<clinit>" + FileIO.exit_tag + exitLoc);
         print_method(mi, exitRoot, exitName, PptType.SUBEXIT, comp_info);
       }
     }

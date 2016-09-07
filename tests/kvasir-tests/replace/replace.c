@@ -2,6 +2,7 @@
 
 extern void	exit();
 # include <stdio.h>
+# include <stdlib.h>
 
 void	Caseerror();
 
