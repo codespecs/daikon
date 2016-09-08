@@ -334,8 +334,8 @@ public final class CLASSNAME
       String[] seq_name = seqvar().simplifyNameAndBounds();
       String scalar_name = sclvar().simplify_name();
       if (seq_name == null) {
-        return "format_simplify can't handle this sequence: "
-          + format();
+        return String.format("%s.format_simplify(%s): null seq_name for %s",
+                             getClass().getSimpleName(), this, format());
       }
       return "(member " + scalar_name + " " +
         seq_name[0] + " " + seq_name[1] + " " + seq_name[2] + ")";
