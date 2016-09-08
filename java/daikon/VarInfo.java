@@ -214,9 +214,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public EnumSet<LangFlags> lang_flags = EnumSet.noneOf(LangFlags.class);
 
   public VarDefinition vardef;
-  // For documentation, see get_enclosing_var().
-  // Null if no variable encloses this one -- that is, this is not a field
-  // of another variable, nor a "method call" like tostring or class.
+  /**
+   * For documentation, see {@link #get_enclosing_var()}.
+   * Null if no variable encloses this one -- that is, this is not a field
+   * of another variable, nor a "method call" like tostring or class.
+   */
   public /*@Nullable*/ VarInfo enclosing_var;
   public int arr_dims = 0;
   /** The arguments that were used to create this function application.
