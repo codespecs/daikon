@@ -2679,8 +2679,12 @@ public final class FileIO {
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
       name = name.intern();
-      if (enclosing_var != null) enclosing_var = enclosing_var.intern();
-      if (relative_name != null) relative_name = relative_name.intern();
+      if (enclosing_var != null) {
+        enclosing_var = enclosing_var.intern();
+      }
+      if (relative_name != null) {
+        relative_name = relative_name.intern();
+      }
       for (VarParent parent : parents) {
         parent.parent_ppt.intern();
         if (parent.parent_variable != null) {
