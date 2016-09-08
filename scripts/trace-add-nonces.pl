@@ -3,6 +3,9 @@
 # Adds nonces to a dtrace file.
 # Nonces associate a procedure exit with a procedure entry, and some parts
 # of Daikon's toolset require .dtrace files to contain nonces.
+# This script is useful if you have an old trace file, or one created by a
+# tool that does not write nonces into the trace file, and yo uwish to add
+# nonce entries to the file.
 
 # Reads trace file from STDIN and writes new trace file to STDOUT.
 
