@@ -83,13 +83,7 @@ public class DaikonSimple {
     try {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
-      String message = e.getMessage();
-      if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
-      if (message != null) {
-        System.err.println(message);
-        System.exit(1);
-      }
-      System.exit(0);
+      Daikon.handleTerminationMessage(e);
     }
     // Any exception other than Daikon.TerminationMessage gets propagated.
     // This simplifies debugging by showing the stack trace.

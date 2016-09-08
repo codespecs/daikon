@@ -488,19 +488,24 @@ public final class Daikon {
       System.err.println(e.getMessage());
       System.exit(1);
     } catch (TerminationMessage e) {
-      System.err.println();
-      if (e.getMessage() != null) {
-        System.err.println(e.getMessage());
-        if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
-        System.exit(1);
-      } else {
-        if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
-        System.exit(0);
-      }
+      handleTerminationMessage(e);
     }
     // Any exception other than TerminationMessage gets propagated.
     // This simplifies debugging by showing the stack trace.
     // (TerminationMessages should be clear enough not to need a stack trace.)
+  }
+
+  /** Print a termination message and exit the JVM. */
+  public static void handleTerminationMessage(TerminationMessage e) {
+    System.err.println();
+    if (e.getMessage() != null) {
+      System.err.println(e.getMessage());
+      if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
+      System.exit(1);
+    } else {
+      if (Debug.dkconfig_show_stack_trace) e.printStackTrace();
+      System.exit(0);
+    }
   }
 
   /**

@@ -102,8 +102,7 @@ public class Annotate {
     try {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
-      System.err.println(e.getMessage());
-      System.exit(1);
+      Daikon.handleTerminationMessage(e);
     }
     // Any exception other than Daikon.TerminationMessage gets propagated.
     // This simplifies debugging by showing the stack trace.
