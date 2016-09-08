@@ -18,7 +18,7 @@ PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |wrapped| |this|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |wrapped| |this|)) |i|) (select (select elems (select |wrapped| |this|)) |j|))))
 (>= (arrayLength (select |wrapped| |this|)) 1)
 format_simplify disabled
-format_simplify can't handle one of these sequences: this.wrapped[] is a superset of orig(this.wrapped[])
+SuperSet.format_simplify_explicit(this.wrapped[] is a superset of orig(this.wrapped[])): sub_name=null, super_name=[Ljava.lang.String;@38bc8ab5, for this.wrapped[] is a superset of orig(this.wrapped[])
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| |this|)) 1))) (NEQ (select (select elems (select |wrapped| |this|)) |i|) |__orig__t|))))
 ===========================================================================
 PolyCalc.RatTermVec.copy():::ENTER
@@ -70,7 +70,7 @@ PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__index| 1)) (<= 0 |j|) (<= |j| (- |__orig__index| 1)) (EQ |i| |j|)) (EQ (select (select elems (select |wrapped| |this|)) |i|) (select (select elems (select |wrapped| |__orig__this|)) |j|))))
 (>= (arrayLength (select |wrapped| |this|)) 1)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__index| 1)) (<= 0 |j|) (<= |j| (- |__orig__index| 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |wrapped| |this|)) |i|) (select (select elems (select |wrapped| |this|)) |j|))))
-format_simplify can't handle one of these sequences: this.wrapped[] is a superset of orig(this.wrapped[])
+SuperSet.format_simplify_explicit(this.wrapped[] is a superset of orig(this.wrapped[])): sub_name=null, super_name=[Ljava.lang.String;@687080dc, for this.wrapped[] is a superset of orig(this.wrapped[])
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| |this|)) 1))) (NEQ (select (select elems (select |wrapped| |this|)) |i|) |__orig__t|))))
 (NOT (FORALL (|i|) (IMPLIES (AND (<= |__orig__index| |i|) (<= |i| (- (arrayLength (select |wrapped| |this|)) 1))) (NEQ (select (select elems (select |wrapped| |this|)) |i|) |__orig__t|))))
 (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| |__orig__index|)) (NEQ (select (select elems (select |wrapped| |this|)) |i|) |__orig__t|))))
@@ -100,7 +100,7 @@ PolyCalc.RatTermVec.remove(int):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__index| 1)) (<= 0 |j|) (<= |j| (- |index| 1)) (EQ |i| |j|)) (EQ (select (select elems (select |wrapped| |this|)) |i|) (select (select elems (select |wrapped| |__orig__this|)) |j|))))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__index| 1)) (<= 0 |j|) (<= |j| (- |__orig__index| 1)) (EQ |i| |j|)) (EQ (select (select elems (select |wrapped| |this|)) |i|) (select (select elems (select |wrapped| |__orig__this|)) |j|))))
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |wrapped| |this|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |wrapped| |this|)) |i|) (select (select elems (select |wrapped| |this|)) |j|))))
-format_simplify can't handle one of these sequences: this.wrapped[] is a subset of orig(this.wrapped[])
+SubSet.format_simplify_explicit(this.wrapped[] is a subset of orig(this.wrapped[])): sub_name=[Ljava.lang.String;@23d2a7e8, super_name=null, for this.wrapped[] is a subset of orig(this.wrapped[])
 (IMPLIES (EQ (arrayLength (select |wrapped| |this|)) 0) (EQ |__orig__index| 0))
 (<= |__orig__index| (arrayLength (select |wrapped| |this|)))
 ===========================================================================

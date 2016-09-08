@@ -59,9 +59,9 @@ six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT
 (EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__other|)))
 (NEQ (hash (select |bits| |other|)) null)
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |other|)) 1))(EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |other|)) |j|))))))
-format_simplify can't handle one of these sequences: this.bits[] is a subset of orig(this.bits[])
-format_simplify can't handle one of these sequences: other.bits[] is a subset of orig(this.bits[])
-format_simplify can't handle one of these sequences: other.bits[] is a superset of orig(this.bits[])
+SubSet.format_simplify_explicit(this.bits[] is a subset of orig(this.bits[])): sub_name=[Ljava.lang.String;@167fdd33, super_name=null, for this.bits[] is a subset of orig(this.bits[])
+SubSet.format_simplify_explicit(other.bits[] is a subset of orig(this.bits[])): sub_name=[Ljava.lang.String;@1e965684, super_name=null, for other.bits[] is a subset of orig(this.bits[])
+SuperSet.format_simplify_explicit(other.bits[] is a superset of orig(this.bits[])): sub_name=null, super_name=[Ljava.lang.String;@4d95d2a2, for other.bits[] is a superset of orig(this.bits[])
 ===========================================================================
 six170.FixedSizeSet.remove(int):::ENTER
 (EQ (hash |this|) (hashcode 1001))
@@ -100,6 +100,6 @@ six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT
 (EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__other|)))
 (NEQ (hash (select |bits| |other|)) null)
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |other|)) 1))(EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |other|)) |j|))))))
-format_simplify can't handle one of these sequences: this.bits[] is a subset of orig(this.bits[])
-format_simplify can't handle one of these sequences: other.bits[] is a subset of orig(this.bits[])
-format_simplify can't handle one of these sequences: other.bits[] is a superset of orig(this.bits[])
+SubSet.format_simplify_explicit(this.bits[] is a subset of orig(this.bits[])): sub_name=[Ljava.lang.String;@53f65459, super_name=null, for this.bits[] is a subset of orig(this.bits[])
+SubSet.format_simplify_explicit(other.bits[] is a subset of orig(this.bits[])): sub_name=[Ljava.lang.String;@3b088d51, super_name=null, for other.bits[] is a subset of orig(this.bits[])
+SuperSet.format_simplify_explicit(other.bits[] is a superset of orig(this.bits[])): sub_name=null, super_name=[Ljava.lang.String;@1786dec2, for other.bits[] is a superset of orig(this.bits[])
