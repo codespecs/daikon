@@ -909,6 +909,10 @@ middle of.  Therefore, it is better to throw an exception and let the
 program handle it appropriately.  (This is true of instrumentation code
 as well.)
 
+To see the stack trace for a @code{TerminationMessage}, pass
+@option{--config_option daikon.Debug.show_stack_trace=true} on the command
+line.
+
 
 @node    Debugging Daikon
 @chapter Debugging Daikon
