@@ -179,7 +179,7 @@ javautil.Vector13.ensureCapacity(int):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1)) (<= 0 |j|) (<= |j| (- (select |elementCount| |__orig__this|) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
 format_simplify disabled
-SuperSet.format_simplify_explicit(this.elementData[] is a superset of orig(this.elementData[])): sub_name=null, super_name=[Ljava.lang.String;@11841b15, for this.elementData[] is a superset of orig(this.elementData[])
+SuperSet.format_simplify_explicit(this.elementData[] is a superset of orig(this.elementData[])): sub_name=null, super_name=[(select |elementData| |this|), 0, (- (arrayLength (select |elementData| |this|)) 1)], for this.elementData[] is a superset of orig(this.elementData[])
 (IMPLIES (EQ (arrayLength (select |elementData| |__orig__this|)) 0) (EQ (select |elementCount| |this|) 0))
 (<= (select |elementCount| |this|) (arrayLength (select |elementData| |__orig__this|)))
 (IMPLIES (EQ (arrayLength (select |elementData| |this|)) 0) (EQ |__orig__minCapacity| 0))
@@ -203,16 +203,16 @@ javautil.Vector13.ensureCapacityHelper(int):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1)) (<= 0 |j|) (<= |j| (- (select |elementCount| |__orig__this|) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (>= (arrayLength (select |elementData| |this|)) 1)
 (EQ (typeof (select |elementData| |this|)) (typeof (select |elementData| |__orig__this|)))
-SuperSet.format_simplify_explicit(this.elementData[] is a superset of orig(this.elementData[])): sub_name=null, super_name=[Ljava.lang.String;@73877e19, for this.elementData[] is a superset of orig(this.elementData[])
+SuperSet.format_simplify_explicit(this.elementData[] is a superset of orig(this.elementData[])): sub_name=null, super_name=[(select |elementData| |this|), 0, (- (arrayLength (select |elementData| |this|)) 1)], for this.elementData[] is a superset of orig(this.elementData[])
 (< (select |elementCount| |this|) |__orig__minCapacity|)
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ (select |elementCount| |this|) 0))
 (<= (select |elementCount| |this|) (- (arrayLength (select |elementData| |this|)) 1))
 (IMPLIES (EQ (arrayLength (select |elementData| |__orig__this|)) 0) (EQ (select |elementCount| |this|) 0))
 (<= (select |elementCount| |this|) (arrayLength (select |elementData| |__orig__this|)))
 (<= (select |capacityIncrement| |this|) (arrayLength (select |elementData| |this|)))
-SubSet.format_simplify_explicit(orig(this.elementData[]) is a subset of this.elementData[0..this.elementCount]): sub_name=null, super_name=[Ljava.lang.String;@7b208b45, for orig(this.elementData[]) is a subset of this.elementData[0..this.elementCount]
+SubSet.format_simplify_explicit(orig(this.elementData[]) is a subset of this.elementData[0..this.elementCount]): sub_name=null, super_name=[(select |elementData| |this|), 0, (select |elementCount| |this|)], for orig(this.elementData[]) is a subset of this.elementData[0..this.elementCount]
 format_simplify disabled
-SubSet.format_simplify_explicit(orig(this.elementData[]) is a subset of this.elementData[0..orig(minCapacity)-1]): sub_name=null, super_name=[Ljava.lang.String;@5bfc257, for orig(this.elementData[]) is a subset of this.elementData[0..orig(minCapacity)-1]
+SubSet.format_simplify_explicit(orig(this.elementData[]) is a subset of this.elementData[0..orig(minCapacity)-1]): sub_name=null, super_name=[(select |elementData| |this|), 0, (- |__orig__minCapacity| 1)], for orig(this.elementData[]) is a subset of this.elementData[0..orig(minCapacity)-1]
 (<= |__orig__minCapacity| (arrayLength (select |elementData| |this|)))
 (IMPLIES (EQ (- (arrayLength (select |elementData| |this|)) 1) 0) (EQ (arrayLength (select |elementData| |__orig__this|)) 0))
 (>= (- (arrayLength (select |elementData| |this|)) 1) (arrayLength (select |elementData| |__orig__this|)))
