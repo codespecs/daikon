@@ -217,7 +217,8 @@ public class SUBSET
 
     if (sub_name == null || super_name == null) {
       return String.format("%s.format_simplify_defined(%s): sub_name=%s, super_name=%s, for %s",
-                           getClass().getSimpleName(), this, sub_name, super_name, format());
+                           getClass().getSimpleName(), this,
+                           Arrays.toString(sub_name), Arrays.toString(super_name), format());
     }
 
     return "(subset " +
@@ -238,7 +239,8 @@ public class SUBSET
 
     if (sub_name == null || super_name == null) {
       return String.format("%s.format_simplify_explicit(%s): sub_name=%s, super_name=%s, for %s",
-                           getClass().getSimpleName(), this, sub_name, super_name, format());
+                           getClass().getSimpleName(), this,
+                           Arrays.toString(sub_name), Arrays.toString(super_name), format());
     }
 
     String indices[] = VarInfo.get_simplify_free_indices (subvar, supervar);
