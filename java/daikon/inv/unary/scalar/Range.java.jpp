@@ -495,7 +495,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (/*>>>@GuardSatisfied GreaterEqual64 this,*/ OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
-        return "(>= 64 %var1%)";
+        return "(>= %var1% 64)";
       } else {
         return "%var1% >= 64";
       }

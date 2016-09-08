@@ -57,8 +57,7 @@ public class TraceSelect {
     try {
       mainHelper(args);
     } catch (daikon.Daikon.TerminationMessage e) {
-      System.err.println(e.getMessage());
-      System.exit(1);
+      daikon.Daikon.handleTerminationMessage(e);
     }
     // Any exception other than daikon.Daikon.TerminationMessage gets propagated.
     // This simplifies debugging by showing the stack trace.

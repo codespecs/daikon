@@ -279,8 +279,7 @@ public final class PrintInvariants {
     } catch (Configuration.ConfigException e) {
       System.err.println(e.getMessage());
     } catch (Daikon.TerminationMessage e) {
-      System.err.println(e.getMessage());
-      System.exit(1);
+      Daikon.handleTerminationMessage(e);
     }
     // Any exception other than Daikon.TerminationMessage gets propagated.
     // This simplifies debugging by showing the stack trace.
