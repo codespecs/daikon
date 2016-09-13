@@ -719,6 +719,7 @@ public class NIS {
    * other invariants, they must be added to each of set of comparable
    * antecedents.
    */
+  /*@RequiresNonNull("NIS.suppressor_map")*/
   static void merge_always_comparable(Map<VarComparability, Antecedents> comp_ants) {
 
     // Find the antecedents that are always comparable (if any)
@@ -1057,6 +1058,7 @@ public class NIS {
      * invariants are added to the beginning of the list, non-falsified
      * ones to the end.
      */
+    /*@RequiresNonNull("NIS.suppressor_map")*/
     public void add(Invariant inv) {
 
       // Only possible antecedents need to be added
@@ -1091,6 +1093,7 @@ public class NIS {
     /**
      * Adds all of the antecedents specified to the lists for their class
      */
+    /*@RequiresNonNull("NIS.suppressor_map")*/
     public void add(Antecedents ants) {
 
       for (List<Invariant> invs : ants.antecedent_map.values()) {
