@@ -1059,12 +1059,8 @@ public class NIS {
      */
     public void add(Invariant inv) {
 
-      // See Checker Framework Issue 767
-      // https://github.com/typetools/checker-framework/issues/764
-      @SuppressWarnings("contracts.precondition.not.satisfied")
-      boolean is_suppressor = is_suppressor(inv.getClass());
       // Only possible antecedents need to be added
-      if (!is_suppressor) return;
+      if (!is_suppressor(inv.getClass())) return;
 
       // Only antecedents comparable to this one should be added
       assert VarComparability.comparable(inv.get_comparability(), comparability);
