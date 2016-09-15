@@ -320,8 +320,9 @@ nightly-test-except-doc-pdf:
 
 ### Tags
 
-tags: TAGS
-TAGS:
+TAGS: tags
+.PHONY: tags
+tags:
 	cd java && $(MAKE) tags
 	etags --include=java/TAGS
 
