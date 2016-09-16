@@ -136,7 +136,7 @@ public class LogicalCompare {
           || simp.indexOf("OutputFormat:Simplify") != -1
           || simp.indexOf("Simplify not implemented") != -1) {
         // Noisy, since we should be able to handle most invariants now
-        System.out.println("Can't handle " + inv.format() + ": " + simp);
+        System.out.println("Bad Simplify formatting:\n  " + inv.format() + "\n  " + simp);
         continue;
       }
       if (inv.format_using(OutputFormat.DAIKON).indexOf("warning: too few samples") != -1) continue;
