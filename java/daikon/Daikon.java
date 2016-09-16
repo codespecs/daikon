@@ -1761,7 +1761,7 @@ public final class Daikon {
         // Fix comparability
         VarInfo postvar = exit_ppt.find_var_by_name(vi.name());
         if (postvar == null) {
-          System.out.printf("Cant find var %s in exit of ppt %s%n", vi, exit_ppt.name());
+          System.out.printf("Can't find var %s in exit of ppt %s%n", vi, exit_ppt.name());
           for (VarInfo cvi : entry_ppt.var_infos) {
             System.out.printf("  entry var = %s%n", cvi);
           }
