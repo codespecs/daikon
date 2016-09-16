@@ -3428,6 +3428,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * (it seems) the same length approach for both, so we don't check isArray()
    */
   public /*@Nullable*/ String get_simplify_size_name() {
+    // Implement the method in two ways, to double-check results.
+
     /*@Interned*/ String result = null;
     if (!file_rep_type.isArray() || isDerived()) {
       result = null;
