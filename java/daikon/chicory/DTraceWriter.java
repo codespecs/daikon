@@ -43,7 +43,7 @@ public class DTraceWriter extends DaikonWriter {
   /**Where to print output*/
   private PrintStream outFile;
 
-  /** debug information about daikon variables  **/
+  /** debug information about daikon variables  */
   private boolean debug_vars = false;
 
   /**

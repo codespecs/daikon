@@ -171,28 +171,28 @@ public final class Global {
     LogHelper.setupLogs(debugAll ? LogHelper.FINE : LogHelper.INFO);
   }
 
-  /** Debug tracer for debugging statistics output. **/
+  /** Debug tracer for debugging statistics output. */
   public static final Logger debugStatistics = Logger.getLogger("daikon.statistics");
 
-  /** Debug tracer for debugging Simplify output. **/
+  /** Debug tracer for debugging Simplify output. */
   public static final Logger debugSimplify = Logger.getLogger("daikon.simplify");
 
-  /** Debug tracer for debugging derived vars. **/
+  /** Debug tracer for debugging derived vars. */
   public static Logger debugDerive = Logger.getLogger("daikon.derive");
 
-  /** Debug tracer for debugging splitting. **/
+  /** Debug tracer for debugging splitting. */
   public static Logger debugSplit = Logger.getLogger("daikon.split");
 
-  /** Debug tracer for debugging general invariant inference. **/
+  /** Debug tracer for debugging general invariant inference. */
   public static Logger debugInfer = Logger.getLogger("daikon.infer");
 
-  /** Debug tracer for debugging invariant suppression. **/
+  /** Debug tracer for debugging invariant suppression. */
   public static Logger debugSuppress = Logger.getLogger("daikon.suppress");
 
-  /** Debug tracer for debugging invariant suppression by using parameters. **/
+  /** Debug tracer for debugging invariant suppression by using parameters. */
   public static Logger debugSuppressParam = Logger.getLogger("daikon.suppress.param");
 
-  /** Debug tracer for debugging invariant printing. **/
+  /** Debug tracer for debugging invariant printing. */
   public static Logger debugPrint = Logger.getLogger("daikon.print");
 
   public static final boolean debugPrintDtrace = false;

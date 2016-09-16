@@ -26,7 +26,7 @@ import org.checkerframework.dataflow.qual.*;
  * and {C,D}.
  * There would be 4 ternary slices -- for {A,B,C}, {A,B,D}, {A,C,D}, and
  * {B,C,D}.
- **/
+ */
 public abstract class PptSlice extends Ppt {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -36,10 +36,10 @@ public abstract class PptSlice extends Ppt {
   // Permit subclasses to use it.
   protected static final String lineSep = Global.lineSep;
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.PptSlice");
 
-  /** Debug tracer for debugging both this and PptSlices. **/
+  /** Debug tracer for debugging both this and PptSlices. */
   public static final Logger debugGeneral = Logger.getLogger("daikon.PptSlice.general");
   public static final Logger debugFlow = Logger.getLogger("daikon.flow.flow");
 
@@ -59,7 +59,7 @@ public abstract class PptSlice extends Ppt {
    * subclasses such as PptSlice0 need to synchronize it with other values.
    * Therefore, it should be manipulated via addInvariant() and
    * removeInvariant().
-   **/
+   */
   public List<Invariant> invs;
 
   PptSlice(PptTopLevel parent, VarInfo[] var_infos) {
@@ -104,7 +104,7 @@ public abstract class PptSlice extends Ppt {
   /**
    * @return true if any of our variables is named NAME, or is derived
    * from a variable named NAME.
-   **/
+   */
   // Only called right now from tools/ExtractConsequent
   public boolean usesVarDerived(String name) {
     for (VarInfo vi : var_infos) {
@@ -127,7 +127,7 @@ public abstract class PptSlice extends Ppt {
 
   public abstract void addInvariant(Invariant inv);
 
-  /** This method actually removes the invariant from its PptSlice. **/
+  /** This method actually removes the invariant from its PptSlice. */
   // I don't just use ppt.invs.remove because I want to be able to defer
   // and to take action if the vector becomes void.
   public void removeInvariant(Invariant inv) {
@@ -167,7 +167,7 @@ public abstract class PptSlice extends Ppt {
    * invariants proper.  (The invariants accept typed values rather than a
    * ValueTuple that encapsulates objects of any type whatever.)
    * @return a List of Invariants that weakened due to the processing.
-   **/
+   */
   abstract List<Invariant> add(ValueTuple full_vt, int count);
 
   /**
@@ -192,7 +192,7 @@ public abstract class PptSlice extends Ppt {
    * destination more than once due to equality splitting.  The fix is
    * to, for each repeat, increment the value.  So 0, 0, 2 becomes 0,
    * 1, 2.
-   **/
+   */
   private void fixPermutation(int[] permutation) {
     for (int i = 0; i < permutation.length; i++) {
       int count = 0;
@@ -206,25 +206,25 @@ public abstract class PptSlice extends Ppt {
     assert ArraysMDE.fn_is_permutation(permutation);
   }
 
-  /** Return an approximation of the number of samples seen on this slice **/
+  /** Return an approximation of the number of samples seen on this slice */
   public abstract int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PptSlice this*/);
 
   /**
    * Return an approximation of the number of distinct values seen on
    * this slice
-   **/
+   */
   public abstract int num_values();
 
   /**
    * Instantiate invariants on the VarInfos this slice contains.
-   **/
+   */
   abstract void instantiate_invariants();
 
   /**
    * This class is used for comparing PptSlice objects.
    * It orders by arity, then by variable names.
    * It's somewhat less efficient than ArityPptnameComparator.
-   **/
+   */
   public static final class ArityVarnameComparator implements Comparator<PptSlice> {
     /*@Pure*/
     public int compare(PptSlice slice1, PptSlice slice2) {
@@ -244,7 +244,7 @@ public abstract class PptSlice extends Ppt {
    * It orders by arity, then by name.
    * Because of the dependence on name, it should be used only for slices
    * on the same Ppt.
-   **/
+   */
   public static final class ArityPptnameComparator implements Comparator<PptSlice> {
     /*@Pure*/
     public int compare(PptSlice slice1, PptSlice slice2) {
@@ -322,7 +322,7 @@ public abstract class PptSlice extends Ppt {
    *
    * @param newVis to replace this.var_infos.
    * @return a new PptSlice that satisfies the characteristics above.
-   **/
+   */
   PptSlice cloneAndPivot(VarInfo[] newVis) {
     throw new Error("Shouldn't get called");
   }
@@ -333,7 +333,7 @@ public abstract class PptSlice extends Ppt {
 
   /**
    * For debugging only.
-   **/
+   */
   @SuppressWarnings("purity") // string creation
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied PptSlice this*/) {

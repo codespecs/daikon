@@ -20,7 +20,7 @@ import plume.*;
  * Invariant objects.  All subsequent arguments are Foo.java files that are
  * rewritten into Foo.java-jmlannotated versions; alternately, use the -r
  * flag to process every .java file under the current directory.
- **/
+ */
 public class Annotate {
 
   // ESC format: Invariants are inserted as follows:
@@ -115,7 +115,7 @@ public class Annotate {
    * throwing Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(final String[] args) throws Exception {
     boolean slashslash = false;
     boolean insert_inexpressible = false;

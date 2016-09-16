@@ -45,7 +45,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * This represents a sequence element at a particular offset (such as
  * first, second, penultimate, last).
- **/
+ */
 public final class CLASSNAME
   extends UnaryDerivation
 {
@@ -58,7 +58,7 @@ public final class CLASSNAME
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SequenceInitial derived variables should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   /** Typically 0, 1, -1, or -2.  A negative number means counting from end. */
@@ -135,7 +135,7 @@ public final class CLASSNAME
       && (((CLASSNAME) other).index == this.index);
   }
 
-  /** Returns the ESC name **/
+  /** Returns the ESC name */
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format ("%s[0]", base.esc_name());

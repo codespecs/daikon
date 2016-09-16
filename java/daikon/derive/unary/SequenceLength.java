@@ -21,7 +21,7 @@ public final class SequenceLength extends UnaryDerivation {
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SequenceLength derived variables should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = true;
 
   public final int shift;
@@ -117,7 +117,7 @@ public final class SequenceLength extends UnaryDerivation {
     return (other instanceof SequenceLength) && (((SequenceLength) other).shift == this.shift);
   }
 
-  /** Returns the ESC name **/
+  /** Returns the ESC name */
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String esc_name(String index) {
@@ -136,27 +136,27 @@ public final class SequenceLength extends UnaryDerivation {
     }
   }
 
-  /** Returns the JML name **/
+  /** Returns the JML name */
   public String jml_name(String index) {
     Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.jml_name();
   }
 
-  /** Returns the Simplify name **/
+  /** Returns the Simplify name */
   /*@SideEffectFree*/
   public String simplify_name() {
     Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.simplify_name();
   }
 
-  /** Returns the CSharpContract name **/
+  /** Returns the CSharpContract name */
   /*@SideEffectFree*/
   public String csharp_name(String index) {
     Quantify.Length ql = new Quantify.Length(base, shift);
     return ql.csharp_name();
   }
 
-  /** Adds one to the default complexity if shift is not 0 **/
+  /** Adds one to the default complexity if shift is not 0 */
   public int complexity() {
     return super.complexity() + ((shift != 0) ? 1 : 0);
   }

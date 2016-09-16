@@ -23,7 +23,7 @@ import junit.framework.Assert;
  * approximately 69.023 miles per degree of latitude and 51.075 miles per
  * degree of longitude.  An implementation may use these values when
  * determining distances and headings.
- **/
+ */
 public class GeoPoint {
 
   private final static double REP_SCALE_FACTOR = 1000000.0;
@@ -36,7 +36,7 @@ public class GeoPoint {
   /**
    * @requires the point given by (latitude, longitude) is near Boston
    * @effects constructs a GeoPoint from a latitude and longitude given in degrees East and North.
-   **/
+   */
   public GeoPoint(int latitude, int longitude)
   {
     this.latitude = latitude;
@@ -56,7 +56,7 @@ public class GeoPoint {
    * Compares the specified Object with this GeoPoint for equality.
    * @return    gp != null && (gp instanceof GeoPoint)
    *         && gp.latitude == this.latitude && gp.longitude == this.longitude
-   **/
+   */
   public boolean equals(Object o)
   {
     if(!(o instanceof GeoPoint))
@@ -78,7 +78,7 @@ public class GeoPoint {
    * @requires gp != null
    * @return a close approximation of as-the-crow-flies distance, in
    *         miles, from this to gp
-   **/
+   */
   public double distanceTo(GeoPoint gp)
   {
     Assert.assertNotNull(gp);
@@ -94,7 +94,7 @@ public class GeoPoint {
    *         gp, in degrees, such that 0 <= h < 360.  In compass
    *         headings, * north = 0, east = 90, south = 180, and west =
    *         270.
-   **/
+   */
   public double headingTo(GeoPoint gp)
   {
 Assert.assertNotNull(gp);

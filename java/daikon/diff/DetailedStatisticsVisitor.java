@@ -15,7 +15,7 @@ import org.checkerframework.dataflow.qual.*;
  * Computes statistics about the differences between the sets of
  * invariants.  The statistics can be printed as a human-readable
  * table or a tab-separated list suitable for further processing.
- **/
+ */
 public class DetailedStatisticsVisitor extends DepthFirstVisitor {
 
   public static final Logger debug = Logger.getLogger("daikon.diff.DetailedStatisticsVisitor");
@@ -90,7 +90,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   /**
    * Adds the difference between the two invariants to the appropriate
    * entry in the frequencies table.
-   **/
+   */
   private void addFrequency(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     if (continuousJustification) {
       addFrequencyContinuous(inv1, inv2);
@@ -102,7 +102,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   /**
    * Treats justification as a binary value.  The table entry is
    * incremented by 1 regardless of the difference in justifications.
-   **/
+   */
   private void addFrequencyBinary(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = determineType(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
@@ -113,7 +113,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Treats justification as a continuous value.  If one invariant is
    * justified but the other is unjustified, the table entry is
    * incremented by the difference in justifications.
-   **/
+   */
   private void addFrequencyContinuous(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = determineType(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
@@ -134,7 +134,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Returns the difference in the probabilites of the two invariants.
    * Confidence values less than 0 (i.e. CONFIDENCE_NEVER) are
    * rounded up to 0.
-   **/
+   */
   private static double calculateConfidenceDifference(Invariant inv1, Invariant inv2) {
     assert inv1 != null && inv2 != null;
     double diff;
@@ -149,7 +149,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * number of variables (0,1,2,3) and whether the pair is interesting
    * or not.  A pair is interesting if at least one invariant is
    * interesting.
-   **/
+   */
   public static int determineType(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type;
 
@@ -198,7 +198,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Returns the relationship between the two invariants.  There are
    * twelve possible relationships, described at the beginning of this
    * file.
-   **/
+   */
   public static int determineRelationship(
       /*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int relationship;
@@ -240,7 +240,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   /**
    * Returns a tab-separated listing of its data, suitable for
    * post-processing.
-   **/
+   */
   public String repr() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -259,7 +259,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     return sw.toString();
   }
 
-  /** Returns a human-readable table of its data. **/
+  /** Returns a human-readable table of its data. */
   /*@SideEffectFree*/
   public String format() {
     StringWriter sw = new StringWriter();
@@ -304,7 +304,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Returns the frequency of pairs of invariants we have seen with
    * this type and relationship.  May be a non-integer, since we may
    * be treating justification as a continuous value.
-   **/
+   */
   public double freq(int type, int relationship) {
     return freq[type][relationship];
   }
@@ -312,7 +312,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   /**
    * Returns true if the pair of invariants should be added to the
    * frequency table, based on their printability.
-   **/
+   */
   private static boolean shouldAddFrequency(
       /*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     return (inv1 != null && inv1.isWorthPrinting()) || (inv2 != null && inv2.isWorthPrinting());

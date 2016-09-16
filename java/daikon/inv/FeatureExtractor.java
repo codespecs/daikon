@@ -24,7 +24,7 @@ import org.checkerframework.dataflow.qual.*;
  * on which of the two input files the invariant came from.
  * The output goes to file in one of the following formats:
  * SVM-Light, SVMfu, or C5 uses.
- **/
+ */
 @SuppressWarnings({"unchecked", "rawtypes", "nullness"}) // not actively maintained
 public final class FeatureExtractor {
   private FeatureExtractor() {
@@ -76,7 +76,7 @@ public final class FeatureExtractor {
    * throwing Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(final String[] args)
       throws IOException, ClassNotFoundException, IllegalAccessException,
           InvocationTargetException {
@@ -199,7 +199,7 @@ public final class FeatureExtractor {
    * Takes two vectors of file names and loads the invariants in those
    * files into two vectors, first the useful invariants and then the
    * nonuseful invariants.
-   **/
+   */
   private static Pair<ArrayList<Invariant>, ArrayList<Invariant>> getSimpleUsefulAndNonuseful(
       ArrayList<String> usefuls, ArrayList<String> nonusefuls)
       throws IOException, ClassNotFoundException {
@@ -823,7 +823,7 @@ public final class FeatureExtractor {
      * throwing Daikon.TerminationMessage.
      * @see #main(String[])
      * @see daikon.Daikon.TerminationMessage
-     **/
+     */
     public static void mainHelper(final String[] args) throws IOException, ClassNotFoundException {
 
       // First parse the arguments

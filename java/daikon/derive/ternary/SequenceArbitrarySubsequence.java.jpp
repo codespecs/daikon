@@ -49,7 +49,7 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
   /**
    * Boolean.  True iff SEQUENCESCALARARBITRARYSUBSEQUENCE derived variables
    * should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   // base1 is the sequence
@@ -85,7 +85,7 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
    * it starts at i+1
    * @param right_closed true means the range ends at j; false means
    * it ends at j-1.
-   **/
+   */
   public SEQUENCESCALARARBITRARYSUBSEQUENCE(VarInfo vi1, VarInfo vi2, VarInfo vi3,
                                    boolean left_closed, boolean right_closed) {
     super(vi1, vi2, vi3);
@@ -177,17 +177,17 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
                                      endvar(), (right_closed ? 0 : -1));
   }
 
-    /** Returns the lower bound of the slice **/
+    /** Returns the lower bound of the slice */
   public Quantify.Term get_lower_bound() {
     return new Quantify.VarPlusOffset (startvar(), (left_closed ? 0 : 1));
   }
 
-  /** Returns the upper bound of the slice **/
+  /** Returns the upper bound of the slice */
   public Quantify.Term get_upper_bound() {
     return new Quantify.VarPlusOffset (endvar(), (right_closed ? 0 : 1));
   }
 
-  /** Returns the array variable for this slice **/
+  /** Returns the array variable for this slice */
   public VarInfo get_array_var() {
     return seqvar();
   }
@@ -199,7 +199,7 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
       && (((SEQUENCESCALARARBITRARYSUBSEQUENCE)other).right_closed == this.right_closed);
   }
 
-  /** Returns the csharp name **/
+  /** Returns the csharp name */
   /*@SideEffectFree*/
   public String csharp_name (String index) {
     String lower = get_lower_bound().csharp_name();
@@ -208,7 +208,7 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
     return seqvar().csharp_name() + ".Slice(" + lower + ", " + upper + ")";
   }
 
-  /** Returns the ESC name **/
+  /** Returns the ESC name */
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format ("%s[%s..%s]", seqvar().esc_name(),

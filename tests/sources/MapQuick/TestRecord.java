@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 /**
  * A test record is a fairly simple record type to hold a query and its expected results
- **/
+ */
 public final class TestRecord
 {
   /** original of the query; non-null */

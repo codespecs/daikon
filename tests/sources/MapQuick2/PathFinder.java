@@ -8,7 +8,7 @@ import junit.framework.Assert;
  * PathFinder is a procedural abstraction which searches Graphs for a
  * shortest path.  The search is uses a greedy algorithm, which means
  * that the search space must support dynamic programming.
- **/
+ */
 public class PathFinder
 {
 
@@ -31,7 +31,7 @@ public class PathFinder
    *
    * @throws IllegalArgumentException if any start or goal node is not a node in the graph
    * @throws IllegalArgumentException if any start path does not have exactly one element
-   **/
+   */
   public static Path findPath(Graph g, Set starts, Set goals)
     throws NoPathException
   {

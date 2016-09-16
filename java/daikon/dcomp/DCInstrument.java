@@ -40,7 +40,7 @@ class DCInstrument {
   protected /*@Nullable*/ ClassLoader loader;
   protected boolean constructor_is_initialized;
 
-  /** Local that stores the tag frame for the current method **/
+  /** Local that stores the tag frame for the current method */
   protected LocalVariableGen tag_frame_local;
 
   // Argument descriptors
@@ -115,7 +115,7 @@ class DCInstrument {
    * accessor methods must be added in each subclass and each should
    * return the same id.  We thus will lookup the same name multiple
    * times.
-   **/
+   */
   static Map<String, Integer> static_map = new LinkedHashMap<String, Integer>();
 
   /**
@@ -776,7 +776,7 @@ class DCInstrument {
   // End of common code.
   //
 
-  /** Class that defines a method (by its name and argument types) **/
+  /** Class that defines a method (by its name and argument types) */
   static class MethodDef {
     String name;
     Type[] arg_types;
@@ -820,7 +820,7 @@ class DCInstrument {
     }
   }
 
-  /** Class that defines a range of byte code within a method **/
+  /** Class that defines a range of byte code within a method */
   static class CodeRange {
     int start_pc;
     int len;
@@ -864,7 +864,7 @@ class DCInstrument {
     debug_native.enabled = DynComp.debug;
   }
 
-  /** Returns true if we are instrumenting for dataflow **/
+  /** Returns true if we are instrumenting for dataflow */
   /*@Pure*/
   public boolean is_data_flow() {
     return this instanceof DFInstrument;
@@ -2808,7 +2808,7 @@ class DCInstrument {
     return il;
   }
 
-  /** Returns whether or not the specified classname is instrumented **/
+  /** Returns whether or not the specified classname is instrumented */
   boolean callee_instrumented(/*@ClassGetName*/ String classname) {
 
     // System.out.printf ("Checking callee instrumented on %s\n", classname);
@@ -2828,7 +2828,7 @@ class DCInstrument {
     return false;
   }
 
-  /** Returns true if the specified method is Object.equals() **/
+  /** Returns true if the specified method is Object.equals() */
   /*@Pure*/
   boolean is_object_equals(String method_name, Type ret_type, Type[] args) {
     return (method_name.equals("equals")
@@ -2837,13 +2837,13 @@ class DCInstrument {
         && args[0].equals(javalangObject));
   }
 
-  /** Returns true if the specified method is Object.clone() **/
+  /** Returns true if the specified method is Object.clone() */
   /*@Pure*/
   boolean is_object_clone(String method_name, Type ret_type, Type[] args) {
     return method_name.equals("clone") && ret_type.equals(javalangObject) && (args.length == 0);
   }
 
-  /** Returns true if the specified method is Object.toString() **/
+  /** Returns true if the specified method is Object.toString() */
   /*@Pure*/
   boolean is_object_toString(String method_name, Type ret_type, Type[] args) {
     return method_name.equals("toString") && ret_type.equals(Type.STRING) && (args.length == 0);
@@ -3699,7 +3699,7 @@ class DCInstrument {
         + DaikonWriter.methodEntryName(fullClassName, type_names, full_name, m.getName());
   }
 
-  /** Convenience function to call a static method in DCRuntime **/
+  /** Convenience function to call a static method in DCRuntime */
   protected InvokeInstruction dcr_call(String method_name, Type ret_type, Type[] arg_types) {
 
     return ifact.createInvoke(
@@ -3737,7 +3737,7 @@ class DCInstrument {
    * is not a primitive, there is nothing to do here.  If the second
    * value is not a primitive, then we need only to insert the duped
    * value down 1 on the tag stack (which contains only primitives)
-   **/
+   */
   InstructionList dup_x1_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     if (!is_primitive(top)) return null;
@@ -4034,7 +4034,7 @@ class DCInstrument {
     throw new Error("couldn't find any typed instructions");
   }
 
-  /** Convenience function to build an instruction list **/
+  /** Convenience function to build an instruction list */
   protected InstructionList build_il(Instruction... instructions) {
     InstructionList il = new InstructionList();
     for (Instruction inst : instructions) {
@@ -5131,7 +5131,7 @@ class DCInstrument {
     il.dispose();
   }
 
-  /** Returns the tag accessor method name **/
+  /** Returns the tag accessor method name */
   public static String tag_method_name(String typ, String classname, String fname) {
     return fname + "_" + classname.replace('.', '_') + "__$" + typ;
   }
@@ -5286,7 +5286,7 @@ class DCInstrument {
     debug_add_dcomp.log("new mg: %s [%d locals]%n", mg, mg.getMaxLocals());
   }
 
-  /** Returns whether or not the method is defined in Object **/
+  /** Returns whether or not the method is defined in Object */
   /*@Pure*/
   public boolean is_object_method(String method_name, Type[] arg_types) {
     for (MethodDef md : obj_methods) {

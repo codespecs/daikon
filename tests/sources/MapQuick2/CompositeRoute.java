@@ -16,7 +16,7 @@ import junit.framework.*;
  * from Route<p>.
  *
  * CompositeRoutes are immutable.<p>
- **/
+ */
 
 public class CompositeRoute
   extends Route
@@ -30,7 +30,7 @@ public class CompositeRoute
   /**
    * @effects Constructs a new CompositeRoute.
    * @see Route#Route(GeoSegment gs)
-   **/
+   */
   public CompositeRoute(GeoSegment gs){
     //assert in the constructor
     super(gs);
@@ -74,7 +74,7 @@ public class CompositeRoute
    *       r.end = gs.p2
    *    && r.endHeading = gs.heading
    *    && r.length = this.length + gs.length
-   **/
+   */
   public CompositeRoute addSegment(GeoSegment gs){
     return new CompositeRoute(this,gs);
   }
@@ -118,7 +118,7 @@ public class CompositeRoute
    * Compares the specified Object with this CompositeRoute for equality.
    * @return true iff (o instanceof CompositeRoute) && (o.elemRoutes and
    * this.elemRoutes contain the same elements in the same order).
-   **/
+   */
   public boolean equals(Object o){
     Assert.assertTrue(o != null);
     Assert.assertTrue(o instanceof CompositeRoute);
@@ -143,7 +143,7 @@ public class CompositeRoute
   }
   /**
    * @return a valid hash code for this.
-   **/
+   */
   public int hashCode() {
     // This implementation will work, but you may want to modify it later
     // for improved performance.  If you do change the implementation, make
@@ -154,7 +154,7 @@ public class CompositeRoute
 
   /**
    * @return a string representation of this.
-   **/
+   */
   public String toString(){
     String routeString = "";
 

@@ -19,7 +19,7 @@ import org.checkerframework.dataflow.qual.*;
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
 public final class DCRuntime {
 
-  /** List of all instrumented methods **/
+  /** List of all instrumented methods */
   public static final List<MethodInfo> methods = new ArrayList<MethodInfo>();
 
   /**
@@ -29,19 +29,19 @@ public final class DCRuntime {
    */
   private static boolean in_enter_exit = false;
 
-  /** Object used to represent nonsensical values **/
+  /** Object used to represent nonsensical values */
   private static final Object nonsensical = new Object();
 
-  /** Object used to represent nonsensical list values **/
+  /** Object used to represent nonsensical list values */
   private static final Object nonsensical_list = new Object();
 
-  /** Depth to follow fields in classes **/
+  /** Depth to follow fields in classes */
   public static int depth = 2;
 
-  /** static count of tags in the JDK.  Used as an offset for non-JDK code. **/
+  /** static count of tags in the JDK.  Used as an offset for non-JDK code. */
   static int max_jdk_static = 100000;
 
-  /** If the application exits with an exception, it should be placed here **/
+  /** If the application exits with an exception, it should be placed here */
   public static /*@Nullable*/ Throwable exit_exception = null;
 
   /**
@@ -50,10 +50,10 @@ public final class DCRuntime {
   // public static Map<String,Integer> static_map
   //   = new LinkedHashMap<String,Integer>();
 
-  /** Storage for each static tag **/
+  /** Storage for each static tag */
   public static List</*@Nullable*/ Object> static_tags = new ArrayList</*@Nullable*/ Object>();
 
-  /** Tag stack **/
+  /** Tag stack */
   public static Stack<Object> tag_stack = new Stack<Object>();
 
   /**
@@ -78,10 +78,10 @@ public final class DCRuntime {
   public static final SimpleLog debug_df = new SimpleLog(false);
   public static final SimpleLog debug_df_branch = new SimpleLog(false, true);
 
-  /** Simplifies printouts for debugging if we ignore toString **/
+  /** Simplifies printouts for debugging if we ignore toString */
   private static boolean ignore_toString = true;
 
-  /** If true, merge arrays and their indices **/
+  /** If true, merge arrays and their indices */
   private static boolean merge_arrays_and_indices = true;
 
   /**
@@ -94,10 +94,10 @@ public final class DCRuntime {
   /**
    * List of all classes encountered.  These are the classes that will
    * have comparability output
-   **/
+   */
   private static List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
 
-  /** Set of classes whose static initializer has run **/
+  /** Set of classes whose static initializer has run */
   private static Set<String> init_classes = new HashSet<String>();
 
   /**
@@ -154,7 +154,7 @@ public final class DCRuntime {
   /**
    * Map from tag to dataflow values for the length of an array.  There
    * should only be entries for arrays
-   **/
+   */
   public static WeakIdentityHashMap<Object, ValueSource> df_arrlen_map =
       new WeakIdentityHashMap<Object, ValueSource>();
 
@@ -162,9 +162,9 @@ public final class DCRuntime {
    * Information about a value encountered at a branch.
    */
   public static class BranchInfo {
-    /** the sources of the value **/
+    /** the sources of the value */
     public ValueSource value_source;
-    /** What the value was compared to in the branch **/
+    /** What the value was compared to in the branch */
     public String compared_to;
 
     public BranchInfo(ValueSource value_source, String compared_to) {
@@ -180,10 +180,10 @@ public final class DCRuntime {
   /** Information about each of the values encountered at a frontier branch**/
   public static List<BranchInfo> branch_tags = new ArrayList<BranchInfo>();
 
-  /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker **/
+  /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
   public static Class<?> dcompmarker = null;
 
-  /** Perform any initialization required before instrumentation begins **/
+  /** Perform any initialization required before instrumentation begins */
   public static void init() {
 
     if (Premain.debug_dcruntime) {
@@ -292,7 +292,7 @@ public final class DCRuntime {
 
     boolean return_val;
     Class<Object> javalangobject;
-    /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker **/
+    /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
     Class<?> dcompmarker;
 
     try {
@@ -688,7 +688,7 @@ public final class DCRuntime {
     tag_stack.push(tag_frame[index]);
   }
 
-  /** Pops the top of the tag stack into tag_frame[index] **/
+  /** Pops the top of the tag stack into tag_frame[index] */
   public static void pop_local_tag(Object[] tag_frame, int index) {
 
     check_method_marker();
@@ -699,12 +699,12 @@ public final class DCRuntime {
     }
   }
 
-  /** Pushes the argument tag on the tag stack **/
+  /** Pushes the argument tag on the tag stack */
   public static void push_tag(Object tag) {
     tag_stack.push(tag);
   }
 
-  /** Pops the top tag from the tag stack and returns it **/
+  /** Pops the top tag from the tag stack and returns it */
   public static Object pop_tag() {
     return pop_check();
   }
@@ -727,7 +727,7 @@ public final class DCRuntime {
     debug_arr_index.log("push_array_tag %s%n", arr_ref);
   }
 
-  /** Pops the top of the tag stack into the tag storage for static_num **/
+  /** Pops the top of the tag stack into the tag storage for static_num */
   public static void pop_static_tag(int static_num) {
 
     check_method_marker();
@@ -2681,13 +2681,13 @@ public final class DCRuntime {
     TagEntry.union(tag1, pop_check());
   }
 
-  /** Handles a dup opcode on a primitive **/
+  /** Handles a dup opcode on a primitive */
   public static void dup() {
     check_method_marker();
     tag_stack.push(tag_stack.peek());
   }
 
-  /** Handles a dup_x1 opcode on a primitive **/
+  /** Handles a dup_x1 opcode on a primitive */
   public static void dup_x1() {
     Object top = pop_check();
     Object nxt = pop_check();
@@ -2699,7 +2699,7 @@ public final class DCRuntime {
   /**
    * Handles a dup_x2 opcode on a primitive.  Currently only support
    * category 1 computational types
-   **/
+   */
   public static void dup_x2() {
     Object top = pop_check();
     Object tag1 = pop_check();
@@ -2743,7 +2743,7 @@ public final class DCRuntime {
     tag_stack.push(top);
   }
 
-  /** swaps the two elements on the top of the tag stack **/
+  /** swaps the two elements on the top of the tag stack */
   public static void swap() {
     Object top = pop_check();
     Object tag1 = pop_check();
@@ -2989,7 +2989,7 @@ public final class DCRuntime {
 
     Method get_tag;
 
-    /** Initialize with information from the field **/
+    /** Initialize with information from the field */
     StaticPrimitiveTag(FieldInfo fi) {
       assert fi.isStatic();
       assert fi.isPrimitive();
@@ -3004,7 +3004,7 @@ public final class DCRuntime {
       }
     }
 
-    /** Return the tag associated with this field **/
+    /** Return the tag associated with this field */
     Object get_tag(Object parent, Object obj) {
       Object tag = null;
       // jhp - not sure why these are not null...
@@ -3029,16 +3029,16 @@ public final class DCRuntime {
    */
   public static class StaticReferenceTag extends FieldTag {
 
-    /** Corresponding java field **/
+    /** Corresponding java field */
     Field field;
 
-    /** Set to true when the class containing the field is initialized **/
+    /** Set to true when the class containing the field is initialized */
     boolean is_class_initialized = false;
 
-    /** Class that contains the field **/
+    /** Class that contains the field */
     Class<?> declaring_class;
 
-    /** Initialize for this field **/
+    /** Initialize for this field */
     public StaticReferenceTag(FieldInfo fi) {
 
       assert fi.isStatic();
@@ -3047,7 +3047,7 @@ public final class DCRuntime {
       declaring_class = field.getDeclaringClass();
     }
 
-    /** Gets the tag for this static reference **/
+    /** Gets the tag for this static reference */
     public Object get_tag(Object parent, Object obj) {
 
       // assert parent == null && obj == null;
@@ -3076,7 +3076,7 @@ public final class DCRuntime {
    */
   public static class PrimitiveArrayTag extends FieldTag {
 
-    /** The field number for this field inside its object **/
+    /** The field number for this field inside its object */
     int field_num;
 
     public PrimitiveArrayTag(FieldInfo fi) {
@@ -3084,7 +3084,7 @@ public final class DCRuntime {
       field_num = fi.get_field_num();
     }
 
-    /** Returns a list of object tags **/
+    /** Returns a list of object tags */
     public Object get_tag(Object parent, Object obj) {
 
       // Object is an array of objects containing each item
@@ -3221,7 +3221,7 @@ public final class DCRuntime {
    * Adds the local's index to the DF.  Used to determine what
    * variables in the test sequence have seen this value.  Should
    * only be called if the pop is in the test sequence method
-   **/
+   */
   public static void pop_local_tag_df(Object[] tag_frame, int index) {
 
     check_method_marker();
@@ -3617,7 +3617,7 @@ public final class DCRuntime {
   /**
    * Captures the DF information for a branch that compares the specified
    * object to null.  Returns the object so it can be used in the comparison
-   **/
+   */
   public static Object ref_cmp_null_df(Object obj) {
     BranchInfo bi = new BranchInfo(tag_map.get(obj), "null");
     branch_tags.add(bi);
@@ -3632,7 +3632,7 @@ public final class DCRuntime {
    * it only accepts a single string.  We find the dataflow of both objects
    * that are compared, because a BranchInfo is added to the list for both
    * of the objects.
-   **/
+   */
   public static void ref2_branch_df(Object obj1, Object obj2) {
     if (obj1 != null) {
       BranchInfo bi1 = new BranchInfo(tag_map.get(obj1), ((obj2 == null) ? "null" : "object"));
@@ -3712,7 +3712,7 @@ public final class DCRuntime {
    * Handle tags for uninstrumented methods that take one primitive
    * argument (tag on the tag stack) and return an object.  The DF of
    * the argument is passed to the returned object.
-   **/
+   */
   private static void prim_to_obj(Object obj) {
     Object tag = pop_check();
     ValueSource vs = tag_map.get(tag);
@@ -3743,14 +3743,14 @@ public final class DCRuntime {
     push_tag(tag);
   }
 
-  /** DF of result is equal to DF of argument **/
+  /** DF of result is equal to DF of argument */
   @DFSum("instance-java.lang.Integer.intValue")
   public static int Integer_intValue(Integer obj) {
     obj_to_prim(obj);
     return obj.intValue();
   }
 
-  /** DF of result is equal to DF of argument **/
+  /** DF of result is equal to DF of argument */
   @DFSum("static-java.lang.Integer.valueOf")
   public static Integer Integer_valueOf(int val) {
     Integer obj = Integer.valueOf(val);
@@ -3758,7 +3758,7 @@ public final class DCRuntime {
     return obj;
   }
 
-  /** DF of result is equal to DF of argument **/
+  /** DF of result is equal to DF of argument */
   @DFSum("static-java.lang.Float.valueOf")
   public static Float Float_valueOf(float val) {
     Float obj = Float.valueOf(val);
@@ -3766,7 +3766,7 @@ public final class DCRuntime {
     return obj;
   }
 
-  /** DF of result is equal to DF of argument **/
+  /** DF of result is equal to DF of argument */
   @DFSum("static-java.lang.Double.valueOf")
   public static Double Double_valueOf(double val) {
     Double obj = Double.valueOf(val);
@@ -3774,7 +3774,7 @@ public final class DCRuntime {
     return obj;
   }
 
-  /** DF of result is equal to DF of argument **/
+  /** DF of result is equal to DF of argument */
   @DFSum("static-java.lang.Boolean.valueOf")
   public static Boolean Boolean_valueOf(boolean val) {
     // DynComp creates a unique object rather than re-using, so that it can
@@ -3785,7 +3785,7 @@ public final class DCRuntime {
     return obj;
   }
 
-  /** DF of result is equal to DF of argument **/
+  /** DF of result is equal to DF of argument */
   @DFSum("static-java.lang.Integer.decode")
   public static Integer Integer_decode(String str) {
     Integer val = Integer.decode(str);
@@ -3793,7 +3793,7 @@ public final class DCRuntime {
     return val;
   }
 
-  /** DF of result is equal to DF of argument **/
+  /** DF of result is equal to DF of argument */
   @DFSum("static-java.lang.Long.valueOf")
   public static Long Long_valueOf(long val) {
     Long obj = Long.valueOf(val);
@@ -3801,7 +3801,7 @@ public final class DCRuntime {
     return obj;
   }
 
-  /** DF of result is equal to DF of argument **/
+  /** DF of result is equal to DF of argument */
   @DFSum("static-java.lang.Short.valueOf")
   public static Short Short_valueOf(short val) {
     Short obj = Short.valueOf(val);
@@ -3809,7 +3809,7 @@ public final class DCRuntime {
     return obj;
   }
 
-  /** DF of result is equal to DF of argument **/
+  /** DF of result is equal to DF of argument */
   @DFSum("static-java.lang.String.valueOf")
   public static String String_valueOf(Object obj) {
     String str = String.valueOf(obj);
@@ -3817,7 +3817,7 @@ public final class DCRuntime {
     return str;
   }
 
-  /** DF of result is equal to the union of the DF of the two arguments **/
+  /** DF of result is equal to the union of the DF of the two arguments */
   @DFSum("instance-java.lang.StringBuffer.append")
   public static StringBuffer StringBuffer_append(StringBuffer buff, CharSequence s) {
     System.out.printf("Append '%s' to '%s'%n", s, buff);
@@ -3826,7 +3826,7 @@ public final class DCRuntime {
     return result;
   }
 
-  /** DF of result is equal to the union of the DF of the two arguments **/
+  /** DF of result is equal to the union of the DF of the two arguments */
   @DFSum("instance-java.lang.StringBuffer.append")
   public static StringBuffer StringBuffer_append(StringBuffer buff, String s) {
     System.out.printf("Append '%s' to '%s'%n", s, buff);

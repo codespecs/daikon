@@ -9,7 +9,7 @@ import org.checkerframework.dataflow.qual.*;
  * A Raw command provides no additional structure, allowing arbitrary
  * commands (as long as they have no output) to be sent to the
  * prover. It will not block.
- **/
+ */
 public class CmdRaw implements Cmd {
   public final String cmd;
 

@@ -40,7 +40,7 @@ import typequals.*;
  * no more than one invariant of its type.  For example, between
  * variables a and b at PptTopLevel T, there will not be two instances
  * of invariant I(a, b).
- **/
+ */
 /*@UsesObjectEquals*/
 /*@Prototype*/ public abstract class Invariant
     implements Serializable, Cloneable // but don't YOU clone it
@@ -52,38 +52,38 @@ import typequals.*;
 
   /**
    * General debug tracer.
-   **/
+   */
   public static final Logger debug = Logger.getLogger("daikon.inv.Invariant");
 
   /**
    * Debug tracer for printing invariants.
-   **/
+   */
   public static final Logger debugPrint = Logger.getLogger("daikon.print");
 
   /**
    * Debug tracer for invariant flow.
-   **/
+   */
   public static final Logger debugFlow = Logger.getLogger("daikon.flow.flow");
 
   /**
    * Debug tracer for printing equality invariants.
-   **/
+   */
   public static final Logger debugPrintEquality = Logger.getLogger("daikon.print.equality");
 
   /**
    * Debug tracer for isWorthPrinting() checks.
-   **/
+   */
   public static final Logger debugIsWorthPrinting =
       Logger.getLogger("daikon.print.isWorthPrinting");
 
   /**
    * Debug tracer for guarding.
-   **/
+   */
   public static final Logger debugGuarding = Logger.getLogger("daikon.guard");
 
   /**
    * Debug tracer for isObvious checks.
-   **/
+   */
   public static final Logger debugIsObvious = Logger.getLogger("daikon.inv.Invariant.isObvious");
 
   /**
@@ -91,7 +91,7 @@ import typequals.*;
    * the confidence that the invariant did not occur by chance is
    * greater than this.  (May also be set
    * via the <tt>--conf_limit</tt> switch to Daikon; refer to manual.)
-   **/
+   */
   public static double dkconfig_confidence_limit = .99;
 
   /**
@@ -106,7 +106,7 @@ import typequals.*;
    * to make more inferences, allowing <tt>--suppress_redundant</tt> to
    * suppress more redundant invariants, but Simplify may also run
    * more slowly.
-   **/
+   */
   public static boolean dkconfig_simplify_define_predicates = false;
 
   /**
@@ -130,7 +130,7 @@ import typequals.*;
   /**
    * The program point for this invariant; includes values, number of
    * samples, VarInfos, etc.  Can be null for a "prototype" invariant.
-   **/
+   */
   /*@Unused(when=Prototype.class)*/
   public PptSlice ppt;
 
@@ -140,7 +140,7 @@ import typequals.*;
    * never to hold (and should be either in the process of being destroyed
    * or about to be destroyed.  This should never be set directly; instead,
    * call destroy().
-   **/
+   */
   protected boolean falsified = false;
 
   // Whether an invariant is a guarding predicate, that is, creately solely
@@ -153,36 +153,36 @@ import typequals.*;
    * The probability that this could have happened by chance alone. <br>
    *   1 = could never have happened by chance; that is, we are fully confident
    *       that this invariant is a real invariant
-   **/
+   */
   public static final double CONFIDENCE_JUSTIFIED = 1;
 
   /**
    * (0..1) = greater to lesser likelihood of coincidence <br>
    *      0 = must have happened by chance
-   **/
+   */
   public static final double CONFIDENCE_UNJUSTIFIED = 0;
 
   /**
    * -1 = delete this invariant; we know it's not true
-   **/
+   */
   public static final double CONFIDENCE_NEVER = -1;
 
   /**
    * The probability that this could have happened by chance alone. <br>
    *   0 = could never have happened by chance; that is, we are fully confident
    *       that this invariant is a real invariant
-   **/
+   */
   public static final double PROBABILITY_JUSTIFIED = 0;
 
   /**
    * (0..1) = lesser to greater likelihood of coincidence <br>
    *      1 = must have happened by chance
-   **/
+   */
   public static final double PROBABILITY_UNJUSTIFIED = 1;
 
   /**
    * 3 = delete this invariant; we know it's not true
-   **/
+   */
   public static final double PROBABILITY_NEVER = 3;
 
   /**
@@ -191,7 +191,7 @@ import typequals.*;
    * For intermediate inputs, the result gives confidence that grades
    * between the two extremes.
    * See the discussion of gradual vs. sudden confidence transitions.
-   **/
+   */
   public static final double conf_is_ge(double x, double goal) {
     if (x >= goal) return 1;
     if (x <= 1) return 0;
@@ -207,7 +207,7 @@ import typequals.*;
    * For intermediate inputs, the result gives probability that grades
    * between the two extremes.
    * See the discussion of gradual vs. sudden probability transitions.
-   **/
+   */
   public static final double prob_is_ge(double x, double goal) {
     if (x >= goal) return 0;
     if (x <= 1) return 1;
@@ -283,14 +283,14 @@ import typequals.*;
   /**
    * At least this many samples are required, or else we don't report any
    * invariant at all.  (Except that OneOf invariants are treated differently.)
-   **/
+   */
   public static final int min_mod_non_missing_samples = 5;
 
   /**
    * @return true if the invariant has enough samples to have its
    * computed constants well-formed.  Is overridden in classes like
    * LinearBinary/Ternary and Upper/LowerBound.
-   **/
+   */
   public boolean enoughSamples(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     return true;
   }
@@ -321,7 +321,7 @@ import typequals.*;
   //    justification.
   //  - The code is a bit more complicated.
 
-  /** A wrapper around getConfidence() or getConfidence(). **/
+  /** A wrapper around getConfidence() or getConfidence(). */
   public final boolean justified(/*>>> @NonPrototype Invariant this*/) {
     boolean just = (!falsified && (getConfidence() >= dkconfig_confidence_limit));
     if (logOn()) {
@@ -409,7 +409,7 @@ import typequals.*;
    * caller does that.
    *
    * @see     #getConfidence()
-   **/
+   */
   protected abstract double computeConfidence(/*>>> @NonPrototype Invariant this*/);
 
   /**
@@ -420,7 +420,7 @@ import typequals.*;
    * OneOf is treated differently, as an interface.
    * The result of this method does not depend on whether the invariant is
    * justified, destroyed, etc.
-   **/
+   */
   /*@Pure*/
   public boolean isExact(/*>>> @Prototype Invariant this*/) {
     return false;
@@ -468,7 +468,7 @@ import typequals.*;
   /**
    * Do nothing special, Overridden to remove
    * exception from declaration
-   **/
+   */
   /*@SideEffectFree*/
   public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     try {
@@ -484,7 +484,7 @@ import typequals.*;
    * @param new_ppt must have the same arity and types
    * @param permutation gives the varinfo array index mapping in the
    * new ppt
-   **/
+   */
   public Invariant transfer(
       /*>>> @NonPrototype Invariant this,*/ PptSlice new_ppt, int[] permutation) {
     // Check some sanity conditions
@@ -556,7 +556,7 @@ import typequals.*;
    * Take a falsified invariant and resurrect it in a new PptSlice.
    * @param new_ppt must have the same arity and types
    * @param permutation gives the varinfo array index mapping
-   **/
+   */
   public Invariant resurrect(
       /*>>> @NonPrototype Invariant this,*/ PptSlice new_ppt, int[] permutation) {
     // Check some sanity conditions
@@ -676,7 +676,7 @@ import typequals.*;
    * Called on the new invariant just before resurrect() returns it to
    * allow subclasses to fix any information they might have cached
    * from the old Ppt and VarInfos.
-   **/
+   */
   protected abstract Invariant resurrect_done(
       /*>>> @NonPrototype Invariant this, */ int[] permutation);
 
@@ -718,7 +718,7 @@ import typequals.*;
    * repr gives a low-level representation
    * ({@link #repr_prob} also prints the confidence), and
    * {@link #format} gives a high-level representation for user output.
-   **/
+   */
   public String repr(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     // A better default would be to use reflection and print out all
     // the variable names.
@@ -730,7 +730,7 @@ import typequals.*;
    * {@link #repr} gives a low-level representation
    * (repr_prob also prints the confidence), and
    * {@link #format} gives a high-level representation for user output.
-   **/
+   */
   public String repr_prob(/*>>> @NonPrototype Invariant this*/) {
     return repr() + "; confidence = " + getConfidence();
   }
@@ -740,7 +740,7 @@ import typequals.*;
    * output. format produces normal output, while the {@link #repr}
    * formatting routine produces low-level, detailed output for
    * debugging, and {@link #repr_prob} also prints the confidence.
-   **/
+   */
   // receiver must be fully-initialized because subclasses read their fields
   /*@SideEffectFree*/
   public String format(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
@@ -765,7 +765,7 @@ import typequals.*;
    * special-case ways.
    *
    * @see VarInfo#isValidEscExpression
-   **/
+   */
   /*@Pure*/
   public boolean isValidEscExpression(/*>>> @NonPrototype Invariant this*/) {
     for (int i = 0; i < ppt.var_infos.length; i++) {
@@ -776,12 +776,12 @@ import typequals.*;
     return true;
   }
 
-  /** A "\type(...)" construct where the "..." contains a "$". **/
+  /** A "\type(...)" construct where the "..." contains a "$". */
   private static Pattern anontype_pat = Pattern.compile("\\\\type\\([^\\)]*\\$");
 
   /**
    * @return true if this Invariant can be properly formatted for Java output.
-   **/
+   */
   /*@Pure*/
   public boolean isValidExpression(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) {
     if ((format == OutputFormat.ESCJAVA) && (!isValidEscExpression())) {
@@ -815,7 +815,7 @@ import typequals.*;
   /**
    * @return standard "format needs to be implemented" for the given
    * requested format.  Made public so cores can call it.
-   **/
+   */
   public String format_unimplemented(
       /*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat request) {
     String classname = this.getClass().getName();
@@ -834,7 +834,7 @@ import typequals.*;
    * formats, this is just "true". An optional string argument, if
    * supplied, is a human-readable description of the invariant in its
    * uninformative state, which will be added to the message.
-   **/
+   */
   public String format_too_few_samples(
       /*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat request,
       /*@Nullable*/ String attempt) {
@@ -879,7 +879,7 @@ import typequals.*;
   /**
    * Conver a long integer value into a format that Simplify can
    * use. If the value is too big, we have to print it in a weird way,
-   * then tell Simplify about its properties specially. **/
+   * then tell Simplify about its properties specially. */
   public static String simplify_format_long(long l) {
     LemmaStack.noticeInt(l);
     if (l > -LemmaStack.SMALL_INTEGER && l < LemmaStack.SMALL_INTEGER) {
@@ -971,7 +971,7 @@ import typequals.*;
   // This should perhaps be merged with some kind of PptSlice comparator.
   /**
    * Compare based on arity, then printed representation.
-   **/
+   */
   public static final class InvariantComparatorForPrinting implements Comparator<Invariant> {
     /*@Pure*/
     public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
@@ -1061,7 +1061,7 @@ import typequals.*;
    * returns true.
    *
    * @exception RuntimeException if other.getClass() != this.getClass()
-   **/
+   */
   public abstract boolean isSameFormula(/*>>> @Prototype Invariant this,*/ Invariant other);
 
   /**
@@ -1081,7 +1081,7 @@ import typequals.*;
    * @return true iff the argument is the "same" invariant as this.
    * Same, in this case, means a matching type, formula, and variable
    * names.
-   **/
+   */
   /*@Pure*/
   public boolean isSameInvariant(/*>>> @NonPrototype Invariant this,*/ Invariant inv2) {
     // return isSameInvariant(inv2, defaultIsSameInvariantNameExtractor);
@@ -1122,7 +1122,7 @@ import typequals.*;
    * other must be false.  This method does not consider the context such
    * as variable names, confidences, sample counts, value counts, or
    * related quantities.
-   **/
+   */
   /*@Pure*/
   public boolean isExclusiveFormula(/*>>> @NonPrototype Invariant this,*/ Invariant other) {
     return false;
@@ -1130,7 +1130,7 @@ import typequals.*;
 
   /**
    * Look up a previously instantiated Invariant.
-   **/
+   */
   // This implementation should be made more efficient, because it's used in
   // suppression.  We should somehow index invariants by their type.
   public static /*@Nullable*/ Invariant find(Class<? extends Invariant> invclass, PptSlice ppt) {
@@ -1195,7 +1195,7 @@ import typequals.*;
    * <p> This method is final because children of Invariant should be
    * extending isObviousStatically(VarInfo[]) because it is more
    * general.
-   **/
+   */
   /*@Pure*/
   public final /*@Nullable*/ DiscardInfo isObviousStatically(
       /*>>> @NonPrototype Invariant this */ ) {
@@ -1214,7 +1214,7 @@ import typequals.*;
    * @param vis the VarInfos this invariant is obvious over.  The
    * position and data type of the variables is the *same* as that of
    * this.ppt.var_infos.
-   **/
+   */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(
       /*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
@@ -1228,7 +1228,7 @@ import typequals.*;
    * b, and f(a) is obvious, but f(b) is not.  In that case, this
    * method on f(a) would return false.  If f(b) is also obvious, then
    * this method would return true.
-   **/
+   */
   // This is used because we cannot decide to non-instantiate some
   // invariants just because isObviousStatically is true, since some
   // of the member variables may be equal to non-obvious varInfos.  If
@@ -1263,7 +1263,7 @@ import typequals.*;
    * this invariant to be obvious.  The contains variables that are
    * elementwise in the same equality set as this.ppt.var_infos.  Can
    * be null if no such assignment exists.
-   **/
+   */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality(
       /*>>> @NonPrototype Invariant this */ ) {
@@ -1276,7 +1276,7 @@ import typequals.*;
   // TODO: finish this comment.
   /**
    * Recurse through vis and generate the cartesian product of ...
-   **/
+   */
   /*@Pure*/
   protected /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEqualityHelper(
       /*>>> @NonPrototype Invariant this,*/ VarInfo[] vis,
@@ -1312,7 +1312,7 @@ import typequals.*;
    * checking data).  Intended not to be overriden, because sub-classes
    * should override isObviousStatically or isObviousDynamically.  Wherever
    * possible, suppression, rather than this, should do the dynamic checking.
-   **/
+   */
   /*@Pure*/
   public final /*@Nullable*/ DiscardInfo isObvious(/*>>> @NonPrototype Invariant this*/) {
     // Actually actually, we'll eliminate invariants as they become obvious
@@ -1349,7 +1349,7 @@ import typequals.*;
    * invariants after checking; the overriding method should first call
    * "super.isObviousDynamically(vis)".  Since this method is
    * dynamic, it should only be called after all processing.
-   **/
+   */
   public /*@Nullable*/ DiscardInfo isObviousDynamically(
       /*>>> @NonPrototype Invariant this,*/ VarInfo[] vis) {
     assert !Daikon.isInferencing;
@@ -1374,7 +1374,7 @@ import typequals.*;
    * Actually, this isn't strictly true: we don't have an invariant
    * "a[] is a palindrome" corresponding to "a[] is the reverse of
    * a[]", for instance.
-   **/
+   */
   /*@Pure*/
   public boolean isReflexive(/*>>> @NonPrototype Invariant this*/) {
     return !ArraysMDE.noDuplicates(ppt.var_infos);
@@ -1395,7 +1395,7 @@ import typequals.*;
    *
    * <p> This method is final because subclasses should extend
    * isObviousDynamically(VarInfo[]) since that method is more general.
-   **/
+   */
   public final /*@Nullable*/ DiscardInfo isObviousDynamically(
       /*>>> @NonPrototype Invariant this */ ) {
     assert !Daikon.isInferencing;
@@ -1414,7 +1414,7 @@ import typequals.*;
    * this invariant to be obvious.  The contains variables that are
    * elementwise in the same equality set as this.ppt.var_infos.  Can
    * be null if no such assignment exists.
-   **/
+   */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality(
       /*>>> @NonPrototype Invariant this */ ) {
@@ -1431,7 +1431,7 @@ import typequals.*;
    * isObviousDynamically; if any test is true, then return that
    * combination.  The combinations are generated via recursive calls to
    * this routine.
-   **/
+   */
   protected /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEqualityHelper(
       /*>>> @NonPrototype Invariant this,*/ VarInfo[] vis, VarInfo[] assigned, int position) {
     if (position == vis.length) {
@@ -1564,7 +1564,7 @@ import typequals.*;
    * Orders invariants by class, then variable names, then formula.
    * If the formulas are the same, compares the printed representation
    * obtained from the format() method.
-   **/
+   */
   public static final class ClassVarnameFormulaComparator implements Comparator<Invariant> {
 
     Comparator<Invariant> classVarnameComparator = new ClassVarnameComparator();
@@ -1669,7 +1669,7 @@ import typequals.*;
   /**
    * Create a guarding predicate for a given invariant.
    * Returns null if no guarding is needed.
-   **/
+   */
   public /*@Nullable*/ /*@NonPrototype*/ Invariant createGuardingPredicate(boolean install) {
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine("Guarding predicate being created for: ");
@@ -1750,7 +1750,7 @@ import typequals.*;
    * invariant (implication), without placing it in any slice and without
    * modifying the original invariant.
    * Returns null if the invariant does not need to be guarded.
-   **/
+   */
   public /*@Nullable*/ /*@NonPrototype*/ Invariant createGuardedInvariant(boolean install) {
     if (Daikon.dkconfig_guardNulls == "never") { // interned
       return null;
@@ -1930,7 +1930,7 @@ import typequals.*;
 
   /**
    * Check the rep invariants of this.
-   **/
+   */
   public void repCheck(/*>>> @Prototype Invariant this*/) {}
 
   /**

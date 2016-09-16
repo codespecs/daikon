@@ -47,7 +47,7 @@ import typequals.*;
  * The constants <code>a</code>, <code>b</code> and <code>c</code> are
  * mutually relatively prime,
  * and the constant <code>a</code> is always positive.
- **/
+ */
 public class CLASSNAME
   extends SUPERCLASS
 {
@@ -60,7 +60,7 @@ public class CLASSNAME
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff LinearBinary invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CORECLASS core;
@@ -80,17 +80,17 @@ public class CLASSNAME
 
   private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
-  /** Returns a prototype CLASSNAME invariant **/
+  /** Returns a prototype CLASSNAME invariant */
   public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled **/
+  /** Returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** LinearBinary is only valid on integral types **/
+  /** LinearBinary is only valid on integral types */
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis)) {
@@ -107,7 +107,7 @@ public class CLASSNAME
     return true;
   }
 
-  /** Instantiate an invariant on the specified slice **/
+  /** Instantiate an invariant on the specified slice */
   protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }

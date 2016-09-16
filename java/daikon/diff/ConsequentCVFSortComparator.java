@@ -12,7 +12,7 @@ import org.checkerframework.dataflow.qual.*;
  * ConsequentSortComparator, initialized with the
  * ClassVarnameFormulaComparator.  See the documentation for those two
  * classes to figure out what this class does.
- **/
+ */
 public class ConsequentCVFSortComparator implements Comparator<Invariant> {
   private Comparator<Invariant> c =
       new ConsequentSortComparator(new Invariant.ClassVarnameFormulaComparator());

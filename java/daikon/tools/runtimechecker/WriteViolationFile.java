@@ -13,7 +13,7 @@ import org.checkerframework.checker.signature.qual.*;
  * classes that have been instrumented with the runtimechecker
  * instrumentation tool) and prints a list of all the invariant violations
  * that occur during execution.
- **/
+ */
 class WriteViolationFile {
 
   public static void usage() {

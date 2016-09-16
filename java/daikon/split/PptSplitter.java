@@ -37,7 +37,7 @@ public class PptSplitter implements Serializable {
    * splitting rules are disabled.  The built-in rules look for implications
    * based on boolean return values and also when there are exactly two
    * exit points from a method.
-   **/
+   */
   public static boolean dkconfig_disable_splitting = false;
 
   /**
@@ -46,13 +46,13 @@ public class PptSplitter implements Serializable {
    * should be created only when no suitable condition was found in
    * the regular output. A value of two indicates that dummy
    * invariants should be created for each splitting condition.
-   **/
+   */
   public static int dkconfig_dummy_invariant_level = 0;
 
   /**
    * Split bi-implications ("a &lt;==&gt; b") into two separate implications
    * ("a ==&gt; b" and "b ==&gt; a").
-   **/
+   */
   public static boolean dkconfig_split_bi_implications = false;
 
   /**
@@ -61,7 +61,7 @@ public class PptSplitter implements Serializable {
    */
   public static boolean dkconfig_suppressSplitterErrors = true;
 
-  /** General debug tracer. **/
+  /** General debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.split.PptSplitter");
 
   /** PptTopLevel that contains this split. */
@@ -80,7 +80,7 @@ public class PptSplitter implements Serializable {
    * contents are PptConditional objects if the splitter is valid, but are
    * PptTopLevel if the PptSplitter represents two exit points (for which
    * no splitter is required).
-   **/
+   */
   public PptTopLevel[] ppts;
 
   private static final Comparator<Invariant> icfp = new Invariant.InvariantComparatorForPrinting();
@@ -561,7 +561,7 @@ public class PptSplitter implements Serializable {
    * slices that only exist in one child (and thus don't exists in the parent)
    * because there may be implications created from invariants in child
    * slices that only exist in one child.
-   **/
+   */
   /*@RequiresNonNull("parent.equality_view")*/
   private List<VarInfo[]> possible_slices() {
 
@@ -710,7 +710,7 @@ public class PptSplitter implements Serializable {
    * is a valid implication, adds it to the joiner view of
    * parent.
    * @param orig_invs maps permuted invariants to their original invariants
-   **/
+   */
   public void add_implication(
       PptTopLevel ppt,
       Invariant predicate,

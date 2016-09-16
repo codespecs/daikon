@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 public final class StringLengthFactory extends UnaryDerivationFactory {
 
-  /** Debug output **/
+  /** Debug output */
   public static final Logger debug = Logger.getLogger("daikon.derive.unary.StringLengthFactory");
 
   public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {

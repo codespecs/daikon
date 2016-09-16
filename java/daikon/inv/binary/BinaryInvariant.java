@@ -18,7 +18,7 @@ import typequals.*;
 /**
  * Provides a class that defines the functions that must exist
  * for each two variable invariant.
- **/
+ */
 public abstract class BinaryInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

@@ -105,10 +105,10 @@ public final class PrintInvariants {
    * Print invariant classname with invariants in output of
    * <code>format()</code> method, normally used only for debugging output
    * rather than ordinary printing of invariants.
-   **/
+   */
   public static boolean dkconfig_print_inv_class = false;
 
-  /** If true, print all invariants without any filtering.  **/
+  /** If true, print all invariants without any filtering.  */
   public static boolean dkconfig_print_all = false;
 
   /**
@@ -156,36 +156,36 @@ public final class PrintInvariants {
 
   /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
-   **/
+   */
   public static final Logger debug = Logger.getLogger("daikon.PrintInvariants");
 
-  /** Debug tracer for printing. **/
+  /** Debug tracer for printing. */
   public static final Logger debugRepr = Logger.getLogger("daikon.PrintInvariants.repr");
 
-  /** Debug tracer for printing. **/
+  /** Debug tracer for printing. */
   public static final Logger debugPrint = Logger.getLogger("daikon.print");
 
-  /** Debug tracer for printing modified variables in ESC/JML/DBC output. **/
+  /** Debug tracer for printing modified variables in ESC/JML/DBC output. */
   public static final Logger debugPrintModified = Logger.getLogger("daikon.print.modified");
 
-  /** Debug tracer for printing equality. **/
+  /** Debug tracer for printing equality. */
   public static final Logger debugPrintEquality = Logger.getLogger("daikon.print.equality");
 
-  /** Debug tracer for filtering. **/
+  /** Debug tracer for filtering. */
   public static final Logger debugFiltering = Logger.getLogger("daikon.filtering");
 
-  /** Debug tracer for variable bound information. **/
+  /** Debug tracer for variable bound information. */
   public static final Logger debugBound = Logger.getLogger("daikon.bound");
 
   private static final String lineSep = Global.lineSep;
 
-  /** Regular expression that ppts must match to be printed **/
+  /** Regular expression that ppts must match to be printed */
   private static /*@Nullable*/ Pattern ppt_regexp;
 
   /**
    * Switch for whether to print discarded Invariants or not, default is false.
    * True iff --disc_reason switch was supplied on the command line.
-   **/
+   */
   public static boolean print_discarded_invariants = false;
 
   /**
@@ -292,7 +292,7 @@ public final class PrintInvariants {
    * throwing Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   public static void mainHelper(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
@@ -478,7 +478,7 @@ public final class PrintInvariants {
   /**
    * Prints out all the discardCodes and discardStrings of the Invariants
    * that will not be printed if the --disc_reason switch is used.
-   **/
+   */
   public static void print_reasons(PptMap ppts) {
     if (!print_discarded_invariants || Daikon.no_text_output) {
       return;
@@ -528,7 +528,7 @@ public final class PrintInvariants {
     }
   }
 
-  /** Validate guardNulls config option. **/
+  /** Validate guardNulls config option. */
   public static void validateGuardNulls() {
     Daikon.dkconfig_guardNulls = Daikon.dkconfig_guardNulls.intern();
     // Complicated default!
@@ -798,7 +798,7 @@ public final class PrintInvariants {
   /**
    * Print invariants for a single program point and its conditionals.
    * Does no output if no samples or no views.
-   **/
+   */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariants_maybe(PptTopLevel ppt, PrintWriter out, PptMap all_ppts) {
 
@@ -1020,7 +1020,7 @@ public final class PrintInvariants {
     }
   }
 
-  /** Count statistics (via Global) on variables (canonical, missing, etc.) **/
+  /** Count statistics (via Global) on variables (canonical, missing, etc.) */
   public static void count_global_stats(PptTopLevel ppt) {
     for (int i = 0; i < ppt.var_infos.length; i++) {
       if (ppt.var_infos[i].isDerived()) {
@@ -1033,7 +1033,7 @@ public final class PrintInvariants {
   // reason invariants are rejected.
   private static String reason = "";
 
-  /** Prints the specified invariant to out. **/
+  /** Prints the specified invariant to out. */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariant(
       Invariant inv, PrintWriter out, int invCounter, PptTopLevel ppt) {
@@ -1274,7 +1274,7 @@ public final class PrintInvariants {
   /**
    * Print invariants for a single program point, once we know that
    * this ppt is worth printing.
-   **/
+   */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariants(PptTopLevel ppt, PrintWriter out, PptMap ppt_map) {
 
@@ -1394,7 +1394,7 @@ public final class PrintInvariants {
 
   /**
    * Does the actual printing of the invariants.
-   **/
+   */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   private static void finally_print_the_invariants(
       List<Invariant> invariants, PrintWriter out, PptTopLevel ppt) {
@@ -1528,14 +1528,14 @@ public final class PrintInvariants {
     }
   }
 
-  /** Prints all of the binary invariants over the specified variables **/
+  /** Prints all of the binary invariants over the specified variables */
   public static void print_all_invs(PptTopLevel ppt, VarInfo v1, VarInfo v2, String indent) {
     // Get any invariants in the local slice
     PptSlice slice = ppt.findSlice(v1, v2);
     print_all_invs(slice, indent);
   }
 
-  /** Prints all of the invariants in the specified slice **/
+  /** Prints all of the invariants in the specified slice */
   public static void print_all_invs(/*@Nullable*/ PptSlice slice, String indent) {
 
     if (slice == null) return;

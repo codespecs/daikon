@@ -35,7 +35,7 @@ public final class StackTypes {
     if (track_locals) loc_arr = new LocalVariables[size + 1];
   }
 
-  /** Sets the stack for the instruction at the specified offset **/
+  /** Sets the stack for the instruction at the specified offset */
   public void set(int offset, Frame f) {
 
     OperandStack os = f.getStack();
@@ -50,7 +50,7 @@ public final class StackTypes {
     os_arr[offset] = (OperandStack) (os.clone());
   }
 
-  /** Returns the stack contents at the specified offset **/
+  /** Returns the stack contents at the specified offset */
   public OperandStack get(int offset) {
     return os_arr[offset];
   }

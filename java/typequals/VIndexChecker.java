@@ -13,7 +13,12 @@ import org.checkerframework.framework.qual.TypeQualifiers;
  * declaration of Invariant (and its subclasses) are explicitly marked
  * as @Prototype, so that it is possible for instances to be marked either
  * with @Prototype or @NonPrototype.
- **/
-
-@TypeQualifiers({ VIndexTop.class, ValueIndex.class, VarIndex.class, VIndexUnqualified.class, VIndexBottom.class })
-public final class VIndexChecker extends BaseTypeChecker { }
+ */
+@TypeQualifiers({
+  VIndexTop.class,
+  ValueIndex.class,
+  VarIndex.class,
+  VIndexUnqualified.class,
+  VIndexBottom.class
+})
+public final class VIndexChecker extends BaseTypeChecker {}

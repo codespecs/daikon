@@ -12,5 +12,5 @@ package daikon.derive;
  * methods because UnaryDervationFactory and BinaryDerivationFactory
  * have instantiate() methods that take a different number of
  * arguments.
- **/
+ */
 public interface DerivationFactory {}

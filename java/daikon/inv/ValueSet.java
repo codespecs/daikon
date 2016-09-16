@@ -27,7 +27,7 @@ import plume.*;
  *   <li>ValueSetStringArray
  * </ul>
  * These subclasses store a hashcode.
- **/
+ */
 public abstract class ValueSet extends LimitedSizeIntSet implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -71,13 +71,13 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     }
   }
 
-  /** Add the specified object (really, its hashcode) to the set. **/
+  /** Add the specified object (really, its hashcode) to the set. */
   public abstract void add(Object v1);
 
   /** Add stats from the specified value set. */
   protected abstract void add_stats(ValueSet other);
 
-  /** Returns a short description of the values seen. **/
+  /** Returns a short description of the values seen. */
   public abstract String repr_short();
 
   public void add(ValueSet other) {

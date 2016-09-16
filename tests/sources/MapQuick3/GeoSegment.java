@@ -41,7 +41,7 @@ package MapQuick3;
  * @specfield  p2 : GeoPoint       // second endpoint of the segment
  * @derivedfield length : real     // straight-line distance between p1 and p2, in miles
  * @derivedfield  heading : angle  // compass heading from p1 to p2, in degrees
- **/
+ */
 public class GeoSegment  {
 
     // FIELDS
@@ -67,7 +67,7 @@ public class GeoSegment  {
      * @requires name != null && p1 != null && p2 != null
      * @effects constructs a new GeoSegment with the specified
      * name and endpoints
-     **/
+     */
     public GeoSegment(String name, GeoPoint p1, GeoPoint p2) {
         this.name = name;
         this.p1 = p1;
@@ -79,7 +79,7 @@ public class GeoSegment  {
     /**
      * ensures that the representation invariant holds (if any), and
      * throws a RuntimeException if not.
-     **/
+     */
     private void checkRep() throws RuntimeException {
         if (this.name == null)
             throw new RuntimeException("name cannot be null");
@@ -103,7 +103,7 @@ public class GeoSegment  {
      *      gs.name = this.name
      *   && gs.p1 = this.p2
      *   && gs.p2 = this.p1
-     **/
+     */
     public GeoSegment reverse() {
         checkRep();
         return new GeoSegment(this.name, this.p2, this.p1);
@@ -114,7 +114,7 @@ public class GeoSegment  {
 
     /**
      * @return the name of this GeoSegment.
-     **/
+     */
     public String getName() {
         checkRep();
         return this.name;
@@ -123,7 +123,7 @@ public class GeoSegment  {
 
     /**
      * @return first endpoint of the segment.
-     **/
+     */
     public GeoPoint getP1() {
         checkRep();
         return this.p1;
@@ -132,7 +132,7 @@ public class GeoSegment  {
 
     /**
      * @return second endpoint of the segment.
-     **/
+     */
     public GeoPoint getP2() {
         checkRep();
         return this.p2;
@@ -141,7 +141,7 @@ public class GeoSegment  {
 
     /**
      * @return the length of the segment.
-     **/
+     */
     public double getLength() {
         checkRep();
         return p1.distanceTo(p2);
@@ -151,7 +151,7 @@ public class GeoSegment  {
     /**
      * @requires this.length != 0
      * @return the compass heading from p1 to p2, in degrees.
-     **/
+     */
     public double getHeading() {
         checkRep();
         return p1.headingTo(p2);
@@ -163,7 +163,7 @@ public class GeoSegment  {
      * equality.
      * @return    gs != null && (gs instanceof GeoSegment)
      *         && gs.name = this.name && gs.p1 = this.p1 && gs.p2 = this.p2
-     **/
+     */
     public boolean equals(Object gs) {
         if (gs != null && (gs instanceof GeoSegment)) {
             GeoSegment seg = (GeoSegment)gs;
@@ -176,7 +176,7 @@ public class GeoSegment  {
 
     /**
      * @return a valid hashcode for this.
-     **/
+     */
     public int hashCode() {
         // This implementation will work, but you may want to modify
         // it later for improved performance.  If you do change the
@@ -189,7 +189,7 @@ public class GeoSegment  {
 
     /**
      * @return a string representation of this.
-     **/
+     */
     public String toString() {
         // "[name, p1, p2]"
         return "[" + this.name + ", " + this.p1.toString() + ", " + this.p2.toString() + "]";

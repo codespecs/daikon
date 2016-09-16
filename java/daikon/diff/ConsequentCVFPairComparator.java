@@ -12,7 +12,7 @@ import org.checkerframework.dataflow.qual.*;
  * ConsequentPairComparator, initialized with the
  * ClassVarnameFormulaComparator.  See the documentation for those two
  * classes to figure out what this class does.
- **/
+ */
 public class ConsequentCVFPairComparator implements Comparator<Invariant> {
   private Comparator<Invariant> c =
       new ConsequentPairComparator(new Invariant.ClassVarnameFormulaComparator());

@@ -30,14 +30,14 @@ public abstract class SingleScalarSequence extends SingleSequence {
   }
 
   /** Returns whether or not the specified types are valid.
-   * (Static version of method.) **/
+   * (Static version of method.) */
   public static final boolean valid_types_static(VarInfo[] vis) {
     return ((vis.length == 1)
         && vis[0].file_rep_type.baseIsScalar()
         && vis[0].file_rep_type.isArray());
   }
 
-  /** Returns whether or not the specified types are valid  **/
+  /** Returns whether or not the specified types are valid  */
   public final boolean valid_types(VarInfo[] vis) {
     return valid_types_static(vis);
   }
@@ -88,13 +88,13 @@ public abstract class SingleScalarSequence extends SingleSequence {
    * state, then the implementation should simply call {@link
    * #check_modified}.  This method need not check for falsification; that
    * is done by the caller.
-   **/
+   */
   public abstract InvariantStatus add_modified(long /*@Interned*/ [] value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
-   **/
+   */
   public InvariantStatus add_unmodified(long /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }

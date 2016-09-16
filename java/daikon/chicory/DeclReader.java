@@ -124,7 +124,7 @@ public class DeclReader {
       return (rep_type.equals("int"));
     }
 
-    /** Returns the comparability string from the decl file **/
+    /** Returns the comparability string from the decl file */
     public String get_comparability() {
       return comparability;
     }
@@ -202,7 +202,7 @@ public class DeclReader {
      * the list for each time the program point is executed.  That
      * entry is a list of the values for each variable in the same
      * order as the variables were defined
-     **/
+     */
     List<List</*@Interned*/ Object>> data_values = new ArrayList<List</*@Interned*/ Object>>();
 
     public DeclPpt(String name) {
@@ -252,12 +252,12 @@ public class DeclReader {
       return vars.get(var_name);
     }
 
-    /** Returns the ppt name **/
+    /** Returns the ppt name */
     public String get_name() {
       return name;
     }
 
-    /** Returns the name without the :::EXIT, :::ENTER, etc **/
+    /** Returns the name without the :::EXIT, :::ENTER, etc */
     public String get_short_name() {
       return name.replaceFirst(":::.*", "");
     }
@@ -267,7 +267,7 @@ public class DeclReader {
       return name;
     }
 
-    /** Returns the list of variables in their standard order **/
+    /** Returns the list of variables in their standard order */
     public List<DeclVarInfo> get_all_vars() {
       return new ArrayList<DeclVarInfo>(vars.values());
     }
@@ -620,7 +620,7 @@ public class DeclReader {
     decl_file.close();
   }
 
-  /** Returns a list of all of the program points **/
+  /** Returns a list of all of the program points */
   public List<DeclPpt> get_all_ppts() {
     return new ArrayList<DeclPpt>(ppts.values());
   }

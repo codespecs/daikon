@@ -25,7 +25,7 @@ public class DerivedVariableFilter extends InvariantFilter {
    * Regular expression to match against the class name of derived
    * variables.  Invariants that contain derived variables that match will
    * be filtered out.  If null, nothing will be filtered out.
-   **/
+   */
   // dkconfig_* means a configuration option, set from command line or file
   public static /*@Nullable*/ /*@Regex*/ String dkconfig_class_re = null;
   public static /*@Nullable*/ Pattern class_re = null;

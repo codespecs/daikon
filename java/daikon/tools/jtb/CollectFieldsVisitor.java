@@ -12,7 +12,7 @@ import org.checkerframework.checker.nullness.qual.*;
 /**
  * Method "fieldDeclarations" returns a list of all FieldDeclarations
  * declared in this class (or, optionally, in nested classes).
- **/
+ */
 class CollectFieldsVisitor extends DepthFirstVisitor {
 
   public CollectFieldsVisitor(ClassOrInterfaceDeclaration n, boolean include_nested_classes) {
@@ -23,7 +23,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
     updateCache();
   }
 
-  /** True if this visitor should include nested classes, false otherwise. **/
+  /** True if this visitor should include nested classes, false otherwise. */
   private boolean include_nested_classes;
 
   private List<FieldDeclaration> fieldDecls = new ArrayList<FieldDeclaration>();
@@ -95,25 +95,25 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   }
 
   /** Returns a list of all FieldDeclarations declared in this class or in
-   * nested/inner classes. **/
+   * nested/inner classes. */
   public List<FieldDeclaration> fieldDeclarations() {
     updateCache();
     return fieldDecls;
   }
 
-  /** Returns a list of all fields. **/
+  /** Returns a list of all fields. */
   public List<String> allFieldNames() {
     updateCache();
     return allNames;
   }
 
-  /** Returns a list of names of all fields with owner annotations. **/
+  /** Returns a list of names of all fields with owner annotations. */
   public List<String> ownedFieldNames() {
     updateCache();
     return ownedNames;
   }
 
-  /** Returns a list of all final fields. **/
+  /** Returns a list of all final fields. */
   public List<String> finalFieldNames() {
     updateCache();
     return finalNames;

@@ -52,7 +52,7 @@ import typequals.*;
  * Abstract base class for comparing PRIMITIVE sequences to PRIMITIVE
  * variables.  Note that the sequence must always be passed in first.
  * An example is {@code x is a member of a[]}.
- **/
+ */
 public abstract class CLASSNAME extends BinaryInvariant {
 
   // We are Serializable, so we specify a version to allow changes to
@@ -118,7 +118,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    /**
    * Subclasses can override in the rare cases they need to fix things
    * even when not swapped.
-   **/
+   */
   protected Invariant resurrect_done_unswapped() {
     // do nothing
     return this;
@@ -147,7 +147,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   /**
    * Return the sequence variable in the tuple whose VarInfos are
    * corresponds to this.ppt.var_infos.
-   **/
+   */
   public VarInfo seqvar(VarInfo[] vis) {
     return (vis[seq_index()]);
   }
@@ -155,7 +155,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   /**
    * Return the scalar variable in the tuple whose VarInfos are
    * corresponds to this.ppt.var_infos.
-   **/
+   */
   public VarInfo sclvar(VarInfo[] vis) {
     return vis[scl_index()];
   }
@@ -210,13 +210,13 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * state, then the implementation should simply call {@link
    * #check_modified}.  This method need not check for falsification; that
    * is done by the caller.
-   **/
+   */
   public abstract InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
-   **/
+   */
   public InvariantStatus add_unmodified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }

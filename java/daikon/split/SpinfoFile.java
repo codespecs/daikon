@@ -28,7 +28,7 @@ public class SpinfoFile {
   /**
    * The path of the file being parsed.
    * This is used only for debugging output.
-   **/
+   */
   private String spinfoFileName;
 
   /**

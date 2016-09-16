@@ -10,7 +10,7 @@ import junit.framework.Assert;
  * is passed off to userland.
  *
  * @author Jeremy Nimmer (ST01)
- **/
+ */
 public class IntSet
 {
   private final int[][] elts = new int[2][];
@@ -57,7 +57,7 @@ public class IntSet
    *
    * @effects Creates a new IntSet containing every other number from
    * low to high, inclusive
-   **/
+   */
   public IntSet(int low, int high)
   {
     this();
@@ -94,7 +94,7 @@ public class IntSet
    * @requires other != null
    *
    * @returns an IntSet which is the set union of this and other
-   **/
+   */
   public IntSet union(IntSet other)
   {
     // handle degerate cases without blowing memory
@@ -172,7 +172,7 @@ public class IntSet
 
   /**
    * @returns the number of elements in this
-   **/
+   */
   public int size()
   {
     return span[0] + span[1];
@@ -180,7 +180,7 @@ public class IntSet
 
   /**
    * @returns true iff i is in this
-   **/
+   */
   public boolean contains(int i)
   {
     return Arrays.binarySearch(elts[parity(i)], i) >= 0;
@@ -189,7 +189,7 @@ public class IntSet
   /**
    * @requires other != null
    * @returns true iff this and other are disjoint
-   **/
+   */
   public boolean isDisjoint(IntSet other)
   {
     return
@@ -239,7 +239,7 @@ public class IntSet
    * same parity, and na < nb.  The result will have the minimal
    * number of terms possible (and therefore, the result will not
    * imply any number more than once).
-   **/
+   */
   public String unparse()
   {
     if (this.size() == 0) {

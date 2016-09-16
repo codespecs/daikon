@@ -2,7 +2,7 @@ package daikon.diff;
 
 /**
  * All visitors must implement this interface.
- **/
+ */
 public interface Visitor {
 
   public void visit(RootNode node);

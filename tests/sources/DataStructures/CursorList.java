@@ -25,7 +25,7 @@ package DataStructures;
  * Access to the list is via CursorListItr.
  * @author Mark Allen Weiss
  * @see CursorListItr
- **/
+ */
 public class CursorList
 {
   private static int alloc( )
@@ -46,7 +46,7 @@ public class CursorList
 
   /**
    * Construct the list.
-   **/
+   */
   public CursorList( )
   {
     header = alloc( );
@@ -56,7 +56,7 @@ public class CursorList
   /**
    * Test if the list is logically empty.
    * @return true if empty, false otherwise.
-   **/
+   */
   public boolean isEmpty( )
   {
     return cursorSpace[ header ].next == 0;
@@ -64,7 +64,7 @@ public class CursorList
 
   /**
    * Make the list logically empty.
-   **/
+   */
   public void makeEmpty( )
   {
     while( !isEmpty( ) )
@@ -74,7 +74,7 @@ public class CursorList
 
   /**
    * Return an iterator representing the header node.
-   **/
+   */
   public CursorListItr zeroth( )
   {
     return new CursorListItr( header );
@@ -83,7 +83,7 @@ public class CursorList
   /**
    * Return an iterator representing the first node in the list.
    * This operation is valid for empty lists.
-   **/
+   */
   public CursorListItr first( )
   {
     return new CursorListItr( cursorSpace[ header ].next );
@@ -93,7 +93,7 @@ public class CursorList
    * Insert after p.
    * @param x the item to insert.
    * @param p the position prior to the newly inserted item.
-   **/
+   */
   public void insert( Object x, CursorListItr p )
   {
     if( p != null && p.current != 0 )
@@ -111,7 +111,7 @@ public class CursorList
    * Return iterator corresponding to the first node containing an item.
    * @param x the item to search for.
    * @return an iterator; iterator isPastEnd if item is not found.
-   **/
+   */
   public CursorListItr find( Object x )
   {
     int itr = cursorSpace[ header ].next;
@@ -127,7 +127,7 @@ public class CursorList
    * @param x the item to search for.
    * @return appropriate iterator if the item is found. Otherwise, the
    * iterator corresponding to the last element in the list is returned.
-   **/
+   */
   public CursorListItr findPrevious( Object x )
   {
     int itr = header;
@@ -142,7 +142,7 @@ public class CursorList
   /**
    * Remove the first occurrence of an item.
    * @param x the item to remove.
-   **/
+   */
   public void remove( Object x )
   {
     CursorListItr p = findPrevious( x );

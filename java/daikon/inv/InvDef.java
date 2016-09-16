@@ -20,7 +20,7 @@ import org.checkerframework.dataflow.qual.*;
  */
 public class InvDef {
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.inv.InvDef");
 
   /**
@@ -37,16 +37,16 @@ public class InvDef {
   int v2_index = -1;
   int v3_index = -1;
 
-  /** invariant class. **/
+  /** invariant class. */
   Class<? extends Invariant> inv_class;
 
-  /** State to check.  Only for invariants with state. **/
+  /** State to check.  Only for invariants with state. */
   /*@Nullable*/ Object state;
 
-  /** True if the order of the variables was swapped. **/
+  /** True if the order of the variables was swapped. */
   boolean swap = false;
 
-  /** True if invariant permutes by changing its class. **/
+  /** True if invariant permutes by changing its class. */
   boolean swap_class = false;
 
   public static final long[] elts_zero = {0};

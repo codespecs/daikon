@@ -126,7 +126,7 @@ public final class DiscReasonMap {
    * Invariant from discPpt whose class and vars match the params passed
    * into the method call. If the user wishes for any of the 3 params to be
    * a wildcard, they can pass that/those param(s) in as null.
-   **/
+   */
   public static List<DiscardInfo> returnMatches_from_ppt(InvariantInfo invInfo) {
     ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
     HashMap<String, List<DiscardInfo>> vars_map_from_ppt = the_map.get(invInfo.ppt());

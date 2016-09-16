@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 /**
  * Unit tests for the Route class
- **/
+ */
 public class RouteTest extends TestCase {
 
     /** A Route with zero length * */

@@ -1214,7 +1214,7 @@ public class TreeMap extends AbstractMap
 	return (p == null)? null: p.right;
     }
 
-    /** From CLR **/
+    /** From CLR */
     private void rotateLeft(Entry p) {
 	Entry r = p.right;
 	p.right = r.left;
@@ -1231,7 +1231,7 @@ public class TreeMap extends AbstractMap
 	p.parent = r;
     }
 
-    /** From CLR **/
+    /** From CLR */
     private void rotateRight(Entry p) {
 	Entry l = p.left;
 	p.left = l.right;
@@ -1247,7 +1247,7 @@ public class TreeMap extends AbstractMap
     }
 
 
-    /** From CLR **/
+    /** From CLR */
     private void fixAfterInsertion(Entry x) {
 	x.color = RED;
 
@@ -1342,7 +1342,7 @@ public class TreeMap extends AbstractMap
 	}
     }
 
-    /** From CLR **/
+    /** From CLR */
     private void fixAfterDeletion(Entry x) {
 	while (x != root && colorOf(x) == BLACK) {
 	    if (x == leftOf(parentOf(x))) {
@@ -1528,13 +1528,13 @@ public class TreeMap extends AbstractMap
         buildFromSorted(size, null, s, null);
     }
 
-    /** Intended to be called only from TreeSet.readObject **/
+    /** Intended to be called only from TreeSet.readObject */
     void readTreeSet(int size, java.io.ObjectInputStream s, Object defaultVal)
         throws java.io.IOException, ClassNotFoundException {
         buildFromSorted(size, null, s, defaultVal);
     }
 
-    /** Intended to be called only from TreeSet.addAll **/
+    /** Intended to be called only from TreeSet.addAll */
     void addAllForTreeSet(SortedSet set, Object defaultVal) {
       try {
           buildFromSorted(set.size(), set.iterator(), null, defaultVal);

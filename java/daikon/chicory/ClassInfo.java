@@ -20,29 +20,29 @@ import org.checkerframework.dataflow.qual.*;
  */
 public class ClassInfo {
 
-  /** binary name of the class **/
+  /** binary name of the class */
   public /*@BinaryNameForNonArray*/ String class_name;
 
   // set by initViaReflection()
-  /** reflection object for this class **/
+  /** reflection object for this class */
   public /*@MonotonicNonNull*/ Class<?> clazz;
 
   // Does not include class initializers, so each element's .member field
   // is non-null.
-  /** list of methods in the class **/
+  /** list of methods in the class */
   public List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
 
-  /** this class's classloader **/
+  /** this class's classloader */
   private ClassLoader loader;
 
   // traversalClass and traversalObject are set by init_traversal().
-  /** DaikonVariables for the object (instance and static) **/
+  /** DaikonVariables for the object (instance and static) */
   public /*@MonotonicNonNull*/ RootInfo traversalObject;
 
-  /** DaikonVariables for the class (static vars only) **/
+  /** DaikonVariables for the class (static vars only) */
   public /*@MonotonicNonNull*/ RootInfo traversalClass;
 
-  /** Whether or not any methods in this class were instrumented **/
+  /** Whether or not any methods in this class were instrumented */
   public boolean shouldInclude = false;
 
   /** Mapping from field name to string representation of its value**/
@@ -50,13 +50,13 @@ public class ClassInfo {
   //which are declared by a CONSTANT VALUE in the code
   public Map<String, String> staticMap = new HashMap<String, String>();
 
-  /** Create ClassInfo with specified name **/
+  /** Create ClassInfo with specified name */
   public ClassInfo(/*@BinaryNameForNonArray*/ String class_name, ClassLoader theLoader) {
     this.class_name = class_name;
     loader = theLoader;
   }
 
-  /** Set the list of methods **/
+  /** Set the list of methods */
   public void set_method_infos(List<MethodInfo> method_infos) {
     this.method_infos = method_infos;
   }
@@ -125,7 +125,7 @@ public class ClassInfo {
     return methodName.matches(".*" + Pattern.quote(class_name) + "\\..*\\(.*");
   }
 
-  /** dumps all of the class info to the specified stream **/
+  /** dumps all of the class info to the specified stream */
   public void dump(PrintStream ps) {
     ps.printf("ClassInfo for %s [%s]%n", class_name, clazz);
     for (MethodInfo mi : method_infos) {
@@ -143,7 +143,7 @@ public class ClassInfo {
     }
   }
 
-  /** Initializes the daikon variables for the object and class ppts **/
+  /** Initializes the daikon variables for the object and class ppts */
   public void init_traversal(int depth) {
     if (traversalObject == null) traversalObject = RootInfo.getObjectPpt(this, depth);
     if (traversalClass == null) traversalClass = RootInfo.getClassPpt(this, depth);

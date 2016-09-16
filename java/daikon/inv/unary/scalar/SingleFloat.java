@@ -30,7 +30,7 @@ public abstract class SingleFloat extends UnaryInvariant {
     super();
   }
 
-  /** Returns whether or not the specified types are valid for unary float **/
+  /** Returns whether or not the specified types are valid for unary float */
   public final boolean valid_types(VarInfo[] vis) {
     return ((vis.length == 1) && vis[0].file_rep_type.isFloat());
   }
@@ -71,13 +71,13 @@ public abstract class SingleFloat extends UnaryInvariant {
    * state, then the implementation should simply call {@link
    * #check_modified}.  This method need not check for falsification; that
    * is done by the caller.
-   **/
+   */
   public abstract InvariantStatus add_modified(double value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
-   **/
+   */
   public InvariantStatus add_unmodified(double value, int count) {
     // System.out.println("SingleFloat.add_unmodified " + ppt.name() + ": parent=" + ppt.parent);
     return InvariantStatus.NO_CHANGE;

@@ -22,7 +22,7 @@ import org.checkerframework.dataflow.qual.*;
  * and errors that occur are written to the InvariantFormatTest.diffs
  * file. More detail on the expected formats of these files is in
  * Daikon developer manual
- **/
+ */
 public class InvariantFormatTester extends TestCase {
 
   /**
@@ -35,18 +35,18 @@ public class InvariantFormatTester extends TestCase {
   /**
    * Indicates a string that when it starts a line signifies that the
    * line is a comment.
-   **/
+   */
   public static final String COMMENT_STARTER_STRING = ";";
 
   /**
    * A list containing all of the test formats.
-   **/
+   */
   public static final List<String> TEST_FORMAT_LIST = getTestFormatList();
 
   /**
    * File that contains the format test commands.  Must be found as a
    * resource
-   **/
+   */
   private static String command_file = "InvariantFormatTest.commands";
 
   @Option("-d File to write any differences to.  Will be deleted on success")
@@ -54,7 +54,7 @@ public class InvariantFormatTester extends TestCase {
 
   /**
    * Determines whether the object will generate goal statements.
-   **/
+   */
   @Option("-g Filename to write goals to")
   public static /*@Nullable*/ File generate_goals = null;
 
@@ -68,7 +68,7 @@ public class InvariantFormatTester extends TestCase {
    *        "--generate_goals", which will generate goal information for
    *        the selected tests assuming the output that the tests provide
    *        is the correct output
-   **/
+   */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
@@ -88,7 +88,7 @@ public class InvariantFormatTester extends TestCase {
    * MasterTester class.
    *
    * @param name the desired name of the test case
-   **/
+   */
   public InvariantFormatTester(String name) {
     super(name);
   }
@@ -96,7 +96,7 @@ public class InvariantFormatTester extends TestCase {
   /**
    * This function produces the format list for intialization of the
    * static format list variable.
-   **/
+   */
   static List<String> getTestFormatList() {
     List<String> result = new Vector<String>();
 
@@ -115,7 +115,7 @@ public class InvariantFormatTester extends TestCase {
   /**
    * This function is the actual function performed when this class is
    * run through JUnit.
-   **/
+   */
   public void testFormats() {
 
     // Don't care about comparability info because we are only
@@ -136,7 +136,7 @@ public class InvariantFormatTester extends TestCase {
    * @param input the input buffer
    * @return the next non-comment, non-whitespace line of the input buffer or
    *         null if the end of the buffer is reached before such a line can be found
-   **/
+   */
   static /*@Nullable*/ String getNextRealLine(BufferedReader input) {
     String currentLine = "";
 
@@ -160,7 +160,7 @@ public class InvariantFormatTester extends TestCase {
    * performs the test, and the compares the test results to the
    * goals.  If the goals differ from the actual results the test
    * fails.
-   **/
+   */
   private boolean execute() {
 
     // Open the input stream.
@@ -245,7 +245,7 @@ public class InvariantFormatTester extends TestCase {
    *
    * @param commands the input that decides which tests to perform
    * @param output the place to where the test output is written
-   **/
+   */
   private boolean performTest(LineNumberReader commands, PrintStream output) {
     List<FormatTestCase> invariantTestCases = new Vector<FormatTestCase>();
     boolean noTestFailed = true;
@@ -314,7 +314,7 @@ public class InvariantFormatTester extends TestCase {
    * @param line the line in question
    * @return true if the line is a comment (that is, not to be interpretted as a command)
    *         false otherwise
-   **/
+   */
   /*@Pure*/
   static boolean isComment(String line) {
     return line.startsWith(COMMENT_STARTER_STRING);
@@ -325,7 +325,7 @@ public class InvariantFormatTester extends TestCase {
    *
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise
-   **/
+   */
   /*@Pure*/
   static boolean isWhitespace(String line) {
     for (int x = 0; x < line.length(); x++) {

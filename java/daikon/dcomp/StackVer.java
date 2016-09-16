@@ -226,7 +226,7 @@ public final class StackVer {
   /** The Verifier that created this. */
   // private Verifier myOwner;
 
-  /** The types on the stack for each instruction by byte code offset **/
+  /** The types on the stack for each instruction by byte code offset */
   // Set by do_stack_ver().
   private /*@MonotonicNonNull*/ StackTypes stack_types;
 

@@ -19,7 +19,7 @@ public class TinySet {
 
   /**
    * @effects Creates a new, empty TinySet (this.elements_post = {})
-   **/
+   */
   public TinySet() {
     this.bits = 0;
   }
@@ -52,7 +52,7 @@ public class TinySet {
    * @requires other != null
    * @modifies this
    * @effects this.elements_post = this.elements ^ other.elements
-   **/
+   */
   public void intersect(TinySet other) {
     bits = bits & other.bits;
   }
@@ -61,7 +61,7 @@ public class TinySet {
    * @requires other != null
    * @modifies this
    * @effects this.elements_post = this.elements U other.elements
-   **/
+   */
   public void union(TinySet other) {
     bits = bits | other.bits;
   }

@@ -62,7 +62,7 @@ public final class SCALARSEQUENCESUNION
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SCALARSEQUENCESUNION derived variables should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public SCALARSEQUENCESUNION(VarInfo vi1, VarInfo vi2) {
@@ -124,7 +124,7 @@ public final class SCALARSEQUENCESUNION
     return (other instanceof SCALARSEQUENCESUNION);
   }
 
-  /** Returns the ESC name **/
+  /** Returns the ESC name */
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format ("union(%s,%s)", var1().esc_name(),

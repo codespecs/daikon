@@ -23,10 +23,10 @@ import org.checkerframework.dataflow.qual.*;
  */
 public class NISuppression {
 
-  /** Set of suppressor invariants. **/
+  /** Set of suppressor invariants. */
   NISuppressor[] suppressors;
 
-  /** Suppressee invariant. **/
+  /** Suppressee invariant. */
   NISuppressee suppressee;
 
   private boolean debug = false;

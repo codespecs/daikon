@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * A WeightedNodePath characterizes a path of WeightedNodes.  The cost
  * for a path is the sum of the costs of the WeightedNodes it contains.
- **/
+ */
 
 public class WeightedNodePath implements Path {
 
@@ -27,7 +27,7 @@ public class WeightedNodePath implements Path {
    * @requires node != null
    * @effects Creates a new WeightedNodePath which originates at
    * <code>node</code>.
-   **/
+   */
   public WeightedNodePath(WeightedNode node) {
     this(node, null);
   }
@@ -36,7 +36,7 @@ public class WeightedNodePath implements Path {
    * @requires node != null
    * @effects Creates a new WeightedNodePath 'res' such that
    * res.elements = path.elements + [ node ]
-   **/
+   */
   private WeightedNodePath(WeightedNode node, WeightedNodePath path) {
     if (node == null) {
       throw new IllegalArgumentException();
@@ -97,7 +97,7 @@ public class WeightedNodePath implements Path {
   /**
    * @return true iff o is a WeightedNodePath and o.elements is the
    * same sequence as this.elements
-   **/
+   */
   public boolean equals(Object o) {
     if (o instanceof WeightedNodePath) {
       return this.equals((WeightedNodePath) o);
@@ -108,7 +108,7 @@ public class WeightedNodePath implements Path {
 
   /**
    * @return true iff wnp.elements is the same sequence as this.elements
-   **/
+   */
   public boolean equals(WeightedNodePath wnp) {
     return (wnp != null) && this.node.equals(wnp.node) && (this.path == null ? wnp.path==null : this.path.equals(wnp.path));
     // Java 7 and Java 8 assign different line numbers

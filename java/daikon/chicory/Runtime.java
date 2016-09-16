@@ -22,10 +22,10 @@ import org.checkerframework.dataflow.qual.*;
 @SuppressWarnings(
     "initialization.fields.uninitialized") // library initialized in code added by run-time instrumentation
 public class Runtime {
-  /** Unique id for method entry/exit (so they can be matched up) **/
+  /** Unique id for method entry/exit (so they can be matched up) */
   public static int nonce = 0;
 
-  /** debug flag **/
+  /** debug flag */
   public static boolean debug = false;
 
   /**
@@ -36,7 +36,7 @@ public class Runtime {
    */
   public static boolean in_dtrace = false;
 
-  /** True if ChicoryPremain was unable to load. **/
+  /** True if ChicoryPremain was unable to load. */
   public static boolean chicoryLoaderInstantiationError = false;
 
   /**
@@ -49,83 +49,83 @@ public class Runtime {
   public static final /*@GuardedBy("<self>")*/ LinkedList<ClassInfo> new_classes =
       new LinkedList<ClassInfo>();
 
-  /** List of all instrumented classes **/
+  /** List of all instrumented classes */
   public static final /*@GuardedBy("<self>")*/ List<ClassInfo> all_classes =
       new ArrayList<ClassInfo>();
 
   /** flag that indicates when the first class has been processed**/
   static boolean first_class = true;
 
-  /** List of all instrumented methods **/
+  /** List of all instrumented methods */
   public static final /*@GuardedBy("Runtime.class")*/ List<MethodInfo> methods =
       new ArrayList<MethodInfo>();
 
   //
   // Control over what classes (ppts) are instrumented
   //
-  /** Ppts to omit (regular expression) **/
+  /** Ppts to omit (regular expression) */
   public static List<Pattern> ppt_omit_pattern = new ArrayList<Pattern>();
 
-  /** Ppts to include (regular expression) **/
+  /** Ppts to include (regular expression) */
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
 
-  /** Comparability information (if any) **/
+  /** Comparability information (if any) */
   static /*@Nullable*/ DeclReader comp_info = null;
 
   //
   // Setups that control what information is written
   //
-  /** Render linked lists as vectors **/
+  /** Render linked lists as vectors */
   static boolean linked_lists = true;
 
-  /** Depth to wich to examine structure components **/
+  /** Depth to wich to examine structure components */
   static int nesting_depth = 2;
 
   //
   // Dtrace file vars
   //
-  /** Max number of records in dtrace file **/
+  /** Max number of records in dtrace file */
   static long dtraceLimit = Long.MAX_VALUE;
 
-  /** Number of records printed to date **/
+  /** Number of records printed to date */
   static long printedRecords = 0;
 
-  /** Terminate the program when the dtrace limit is reached **/
+  /** Terminate the program when the dtrace limit is reached */
   static boolean dtraceLimitTerminate = false;
 
-  /** Dtrace output stream.  Null if no_dtrace is true. **/
+  /** Dtrace output stream.  Null if no_dtrace is true. */
   // Not annotated *@MonotonicNonNull* because initialization and use
   // happen in generated instrumentation code that cannot be type-checked
   // by a source code checker.
   static /*@GuardedBy("<self>")*/ PrintStream dtrace;
 
-  /** Set to true when the dtrace stream is closed **/
+  /** Set to true when the dtrace stream is closed */
   static boolean dtrace_closed = false;
 
-  /** True if no dtrace is being generated.  **/
+  /** True if no dtrace is being generated.  */
   static boolean no_dtrace = false;
 
   static String method_indent = "";
 
-  /** Decl writer setup for writing to the trace file **/
+  /** Decl writer setup for writing to the trace file */
   // Set in ChicoryPremain.premain().
   static DeclWriter decl_writer;
 
-  /** Dtrace writer setup for writing to the trace file **/
+  /** Dtrace writer setup for writing to the trace file */
   // Set in ChicoryPremain.premain().
   static /*@GuardedBy("Runtime.class")*/ DTraceWriter dtrace_writer;
 
   /**
    * Which static initializers have been run.
    * Each element of the Set is a fully qualified class name.
-   **/
+   */
   private static Set<String> initSet = new HashSet<String>();
 
-  /** Class of information about each active call **/
+  /** Class of information about each active call */
   private static class CallInfo {
-    /** nonce of call **/
+    /** nonce of call */
     int nonce;
-    /** whether or not the call was captured on enter **/
+    /** whether or not the call was captured on enter */
     boolean captured;
 
     /*@Holding("Runtime.class")*/
@@ -135,7 +135,7 @@ public class Runtime {
     }
   }
 
-  /** Stack of active methods. **/
+  /** Stack of active methods. */
   private static /*@GuardedBy("Runtime.class")*/ Map<Thread, Stack<CallInfo>> thread_to_callstack =
       new LinkedHashMap<Thread, Stack<CallInfo>>();
 
@@ -156,7 +156,7 @@ public class Runtime {
    * Thrown to indicate that main should not print a stack trace, but only
    * print the message itself to the user.
    * If the string is null, then this is normal termination, not an error.
-   **/
+   */
   public static class TerminationMessage extends RuntimeException {
     static final long serialVersionUID = 20050923L;
 
@@ -447,7 +447,7 @@ public class Runtime {
     }
   }
 
-  /** Increment the number of records that have been printed. **/
+  /** Increment the number of records that have been printed. */
   public static void incrementRecords() {
     printedRecords++;
 
@@ -543,7 +543,7 @@ public class Runtime {
   }
 
   // Copied from daikon.Runtime
-  /** Specify the dtrace file to which to write **/
+  /** Specify the dtrace file to which to write */
   /*@EnsuresNonNull("dtrace")*/
   public static void setDtrace(String filename, boolean append) {
     System.out.printf("entered daikon.chicory.Runtime.setDtrace(%s, %b)...%n", filename, append);
@@ -590,7 +590,7 @@ public class Runtime {
    * The value of the DTRACEFILE environment variable is used;
    * if that environment variable is not set, then the argument
    * to this method is used instead.
-   **/
+   */
   public static void setDtraceMaybe(String default_filename) {
     // Copied from daikon.Runtime
     // System.out.println ("Setting dtrace maybe: " + default_filename);
@@ -735,7 +735,7 @@ public class Runtime {
     public Class<?> primitiveClass();
   }
 
-  /** wrapper used for boolean arguments **/
+  /** wrapper used for boolean arguments */
   public static class BooleanWrap implements PrimitiveWrapper {
     boolean val;
 
@@ -756,7 +756,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments **/
+  /** wrapper used for int arguments */
   public static class ByteWrap implements PrimitiveWrapper {
     byte val;
 
@@ -777,7 +777,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments **/
+  /** wrapper used for int arguments */
   public static class CharWrap implements PrimitiveWrapper {
     char val;
 
@@ -799,7 +799,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments **/
+  /** wrapper used for int arguments */
   public static class FloatWrap implements PrimitiveWrapper {
     float val;
 
@@ -820,7 +820,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments **/
+  /** wrapper used for int arguments */
   public static class IntWrap implements PrimitiveWrapper {
     int val;
 
@@ -841,7 +841,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments **/
+  /** wrapper used for int arguments */
   public static class LongWrap implements PrimitiveWrapper {
     long val;
 
@@ -862,7 +862,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments **/
+  /** wrapper used for int arguments */
   public static class ShortWrap implements PrimitiveWrapper {
     short val;
 
@@ -883,7 +883,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for double arguments **/
+  /** wrapper used for double arguments */
   public static class DoubleWrap implements PrimitiveWrapper {
     double val;
 
@@ -910,7 +910,7 @@ public class Runtime {
 
   // Lifted directly from plume/UtilMDE.java, where it is called
   // escapeNonJava(), but repeated here to make this class self-contained.
-  /** Quote \, ", \n, and \r characters in the target; return a new string. **/
+  /** Quote \, ", \n, and \r characters in the target; return a new string. */
   public static String quote(String orig) {
     StringBuffer sb = new StringBuffer();
     // The previous escape (or escaped) character was seen right before
@@ -971,7 +971,7 @@ public class Runtime {
    * <p>
    * If the argument is not a field descriptor, returns it as is.
    * This enables this method to be used on the output of {@link Class#getName()}.
-   **/
+   */
   @Deprecated
   public static String classnameFromJvm(/*@FieldDescriptor*/ String classname) {
     return fieldDescriptorToBinaryName(classname);
@@ -983,7 +983,7 @@ public class Runtime {
    * <p>
    * If the argument is not a field descriptor, returns it as is.
    * This enables this method to be used on the output of {@link Class#getName()}.
-   **/
+   */
   @SuppressWarnings("signature") // conversion routine
   public static String fieldDescriptorToBinaryName(/*@FieldDescriptor*/ String classname) {
 

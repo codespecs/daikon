@@ -17,14 +17,14 @@ import org.checkerframework.checker.signature.qual.*;
  * the runtime configuration options for the Daikon tools.  Refer to
  * the "--config" switch in the Daikon manual for an introduction to
  * the configuration system.
- **/
+ */
 public class ParameterDoclet {
 
   private static final String lineSep = System.getProperty("line.separator");
 
   /**
    * Entry point for this doclet (invoked by javadoc).
-   **/
+   */
   public static boolean start(RootDoc doc) throws IOException {
     ParameterDoclet pd = new ParameterDoclet(doc);
 
@@ -62,7 +62,7 @@ public class ParameterDoclet {
   /**
    * Invoked by javadoc to query whether an option is allowed.
    * @return number of tokens used by one option.
-   **/
+   */
   public static int optionLength(String opt) {
     if ("--texinfo".equals(opt)) return 2; // == 1 tag + 1 argument
 
@@ -163,7 +163,7 @@ public class ParameterDoclet {
 
   /**
    * Process a javadoc tree and call processField for each field found.
-   **/
+   */
   public void process() {
     ClassDoc[] clazzes = root.classes();
     for (int i = 0; i < clazzes.length; i++) {
@@ -178,7 +178,7 @@ public class ParameterDoclet {
   /**
    * Call Process(String, String, String) for each configuration field found.
    * Intended to be overridden.
-   **/
+   */
   public void processField(FieldDoc field) {
     String name = field.name();
     if (name.startsWith(Configuration.PREFIX)) {
@@ -202,7 +202,7 @@ public class ParameterDoclet {
   /**
    * Add (name, desc) pair to the map field 'fields' for the appropriate
    * category.
-   **/
+   */
   public void process(String fullname, String name, String desc) {
     // System.out.printf ("%s - %s%n", fullname, name);
 

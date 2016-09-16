@@ -5,7 +5,7 @@ import junit.framework.Assert;
 
 /**
  * TODO
- **/
+ */
 public class StreetNumberSet
 {
 
@@ -32,7 +32,7 @@ public class StreetNumberSet
    * hyphen-separated pair of nonnegative integers "m-n", where m and n
    * have the same parity and m is no greater than n.  For instance, legal
    * arguments include "5", "22,253", "3-101", and "1914-1918,1939-1945".
-   **/
+   */
   public StreetNumberSet(String numbers) throws IllegalArgumentException
   {
     Assert.assert(numbers != null);
@@ -203,7 +203,7 @@ public class StreetNumberSet
   /*@ ensures \result == false */
   /**
    * @returns true iff the set is the empty set
-   **/
+   */
   public boolean isEmpty()
   {
     checkRep();
@@ -217,7 +217,7 @@ public class StreetNumberSet
   /**
    * @requires !this.isEmpty()
    * @returns the minimal number in the set
-   **/
+   */
   public int min()
   {
     checkRep();
@@ -241,7 +241,7 @@ public class StreetNumberSet
   /**
    * @requires !this.isEmpty()
    * @returns the maximal number in the set
-   **/
+   */
   public int max()
   {
     checkRep();

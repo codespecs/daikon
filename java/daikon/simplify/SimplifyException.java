@@ -2,7 +2,7 @@ package daikon.simplify;
 
 /**
  * Superclass of all checked exceptions in this package.
- **/
+ */
 public class SimplifyException extends Exception {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

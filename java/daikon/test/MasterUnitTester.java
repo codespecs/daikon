@@ -11,7 +11,7 @@ import plume.*;
  * to run, and certainly not comprehensive.  Daikon also has a much more
  * substantial set of regression tests.  The regression tests appear at
  * daikon/tests/ in the repository.
- **/
+ */
 public class MasterUnitTester extends TestCase {
 
   public static void main(String[] args) {

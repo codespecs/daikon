@@ -15,7 +15,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * ModBitTracker maintains a BitSet for each variable at a program point.
  * The BitSet indicates, for each sample seen in order, whether that
  * variable was present or not.
- **/
+ */
 public class ModBitTracker implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -25,12 +25,12 @@ public class ModBitTracker implements Serializable, Cloneable {
   // Should make this a configuration option.
   private static boolean debug = false;
 
-  /** The maximum number of BitSets; the size of modbits_arrays. **/
+  /** The maximum number of BitSets; the size of modbits_arrays. */
   private int num_vars;
-  /** The size of each BitSet in modbits_arrays. **/
+  /** The size of each BitSet in modbits_arrays. */
   private int num_samples;
 
-  /** The BitSets themselves. **/
+  /** The BitSets themselves. */
   // In the future, I could imagine trying to optimize this with (say)
   // run-length encoding; but it's probably not worth it.
   // All elements of modbits_arrays at or past num_sets are null.
@@ -42,25 +42,25 @@ public class ModBitTracker implements Serializable, Cloneable {
    * BitSet; we say the variables are in an equivalence set.  "index"
    * indicates, for each variable, which BitSet it should use; it is the
    * identifier of the variable's equivalence set.
-   **/
+   */
   private int[] index;
 
   /**
    * The number of BitSets (equivalence sets) in use.  All elements of
    * modbits_arrays at or past this index are null.
-   **/
+   */
   private int num_sets;
 
   // Member variables to avoid re-allocating every time "add" is entered.
-  /** The bits for this ValueTuple (indexed by equivalence set. **/
+  /** The bits for this ValueTuple (indexed by equivalence set. */
   private boolean[] this_bits;
-  /** True if the corresponding element of this_bits has a valid value. **/
+  /** True if the corresponding element of this_bits has a valid value. */
   private boolean[] this_bits_valid;
   /**
    * The equivalence set for when an equivalence set is split:  if a
    * variable has a conflicting bit, then it goes to the specified index
    * instead.
-   **/
+   */
   private int[] this_bits_exception_index;
 
   public ModBitTracker(int num_vars) {
@@ -87,12 +87,12 @@ public class ModBitTracker implements Serializable, Cloneable {
     return num_samples;
   }
 
-  /** Accessor for testing only. **/
+  /** Accessor for testing only. */
   public int num_sets() {
     return num_sets;
   }
 
-  /** Check the representation invariant. **/
+  /** Check the representation invariant. */
   public void checkRep(
       /*>>>@UnknownInitialization(ModBitTracker.class) @Raw(ModBitTracker.class) ModBitTracker this*/) {
     assert index.length == num_vars;
@@ -122,7 +122,7 @@ public class ModBitTracker implements Serializable, Cloneable {
   /**
    * Returns a BitSet of modbit values for the given variable.
    * The caller must not modify the returned value!
-   **/
+   */
   @SuppressWarnings(
       "nullness") // application invariant: index[varindex] is an index for a non-null BitSet in modbits_arrays
   public BitSet get(int varindex) {
@@ -131,7 +131,7 @@ public class ModBitTracker implements Serializable, Cloneable {
 
   /**
    * Returns the modbit for the given variable and sample number.
-   **/
+   */
   public boolean get(int varindex, int sampleno) {
     return get(varindex).get(sampleno);
   }
@@ -139,7 +139,7 @@ public class ModBitTracker implements Serializable, Cloneable {
   /**
    * Split the specified equivalence set into two pieces.
    * Returns the index of the copy.
-   **/
+   */
   private int split(int split_index) {
     @SuppressWarnings("nullness") // application invariant: split_index is in range
     /*@NonNull*/ BitSet bs = (BitSet) modbits_arrays[split_index].clone();
@@ -148,7 +148,7 @@ public class ModBitTracker implements Serializable, Cloneable {
     return num_sets - 1;
   }
 
-  /** Add to this the modbits for the given ValueTuple. **/
+  /** Add to this the modbits for the given ValueTuple. */
   public void add(ValueTuple vt, int count) {
     if (debug) checkRep();
     assert vt.size() == num_vars : "vt.size()=" + vt.size() + ", num_vars = " + num_vars;

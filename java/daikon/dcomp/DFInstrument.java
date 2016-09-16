@@ -30,10 +30,10 @@ class DFInstrument extends DCInstrument {
 
   public static SimpleLog debug = new SimpleLog(false);
 
-  /** True if the current method is the test sequence **/
+  /** True if the current method is the test sequence */
   private static boolean test_sequence = false;
 
-  /** Array from local variable index to local variable name in the test seq **/
+  /** Array from local variable index to local variable name in the test seq */
   public static String[] test_seq_locals = null;
 
   /**

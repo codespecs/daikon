@@ -16,7 +16,7 @@ import org.checkerframework.dataflow.qual.*;
  * Represents the type of a variable, for its declared, dtrace file
  * representation, and internal representations.  ProgLangTypes are
  * interned, so they can be == compared.
- **/
+ */
 
 // I could also consider using Class; however:
 //  * that ties this to a Java front end, as Class can't represent types of
@@ -93,7 +93,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * No public constructor:  use parse() instead to get a canonical
    * representation.
    * basetype should be interned.
-   **/
+   */
   private ProglangType(/*@Interned*/ String basetype, int dimensions) {
     assert basetype == basetype.intern();
     this.base = basetype;
@@ -106,7 +106,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * object.
    *  @param rep the name of the type, optionally suffixed by
    *  (possibly multiple) "[]"
-   **/
+   */
   public static ProglangType parse(String rep) {
     String new_base = rep;
     int dims = 0;
@@ -122,7 +122,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * "float" to "double"), in order to return real file representation types
    * even if the file contains something slightly different than the
    * prescribed format.
-   **/
+   */
   public static ProglangType rep_parse(String rep) {
     ProglangType candidate = parse(rep);
     if ((candidate.base == "address") || (candidate.base == "pointer")) { // interned
@@ -136,7 +136,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     }
   }
 
-  /** Convert a file representation type to an internal representation type. **/
+  /** Convert a file representation type to an internal representation type. */
   public ProglangType fileTypeToRepType() {
     if ((base == BASE_HASHCODE)
         || (base == BASE_BOOLEAN)
@@ -152,7 +152,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * For serialization; indicates which object to return instead of the
    * one that was just read from the file.  This obviates the need to write
    * a readObject method that interns the interned fields (just "base").
-   **/
+   */
   public Object readResolve() throws ObjectStreamException {
     return intern(base.intern(), dimensions);
   }
@@ -168,7 +168,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   // THIS CODE IS A HOT SPOT (~33% of runtime) [as of January 2002].
-  /** @param t_base must be interned **/
+  /** @param t_base must be interned */
   private static /*@Nullable*/ ProglangType find(/*@Interned*/ String t_base, int t_dims) {
     // Disabled for performance reasons! this assertion is sound though:
     //    assert t_base == t_base.intern();
@@ -232,7 +232,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   /**
    * Returns the type of elements of this.
    * They may themselves be arrays if this is multidimensional.
-   **/
+   */
   public ProglangType elementType(/*>>>@GuardSatisfied ProglangType this*/) {
     // Presume that if there are no dimensions, this must be a list of
     // objects.  Callers should really find this out from other information
@@ -702,7 +702,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   /**
    * Does this type represent a pointer? Should only be applied to
    * file_rep types.
-   **/
+   */
   /*@Pure*/
   public boolean isPointerFileRep() {
     return (base == BASE_HASHCODE);
@@ -716,7 +716,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * but not a transitive one because it might not be true for two
    * children of a superclass, even though it's true for the
    * superclass.
-   **/
+   */
   public boolean comparableOrSuperclassEitherWay(ProglangType other) {
     if (this == other) // ProglangType objects are interned
     return true;
@@ -738,7 +738,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * of other.  A List is comparableOrSuperclassOf to a Vector, but
    * not the other way around.  This is a transitive method, but not
    * reflexive.
-   **/
+   */
   public boolean comparableOrSuperclassOf(ProglangType other) {
     if (this == other) // ProglangType objects are interned
     return true;
@@ -784,7 +784,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * Returns whether or not this declared type is a function pointer
    * Only valid if the front end marks the function pointer with the
    * name '*func'
-   **/
+   */
   /*@Pure*/
   public boolean is_function_pointer() {
     assert base == base.intern();

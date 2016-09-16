@@ -29,7 +29,7 @@ import org.checkerframework.dataflow.qual.*;
  * Soon, this will probably be modified to permit the group identifiers to
  * be arbitrary strings (not containing square brackets) instead of
  * arbitrary integers.
- **/
+ */
 public final class VarComparabilityImplicit extends VarComparability implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -39,7 +39,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   /**
    * The number that indicates which comparable set the VarInfo
    * belongs to.
-   **/
+   */
   int base;
   /** indexTypes[0] is comparability of the first index of this array. */
   // null only for the "unknown" type??

@@ -22,7 +22,7 @@ import java.lang.Comparable;
  * <p> The ordering given by the <code>compareTo</code> method of this
  * class is consistent with equals, and gives the following ordering:
  * PRIM_HWY, SEC_HWY, LOCAL_ROAD, UNKNOWN.
- **/
+ */
 public final class StreetClassification
   implements Comparable
 {
@@ -31,20 +31,20 @@ public final class StreetClassification
    * include interstate highways and some toll highways; these
    * highways are accesed by way of ramps and have multiple lanes of
    * traffic.
-   **/
+   */
   public static final StreetClassification PRIM_HWY = new StreetClassification("Primary Highway", "PRIM_HWY", 0);
 
   /**
    * Classification indicating a secondary highway.  Secondary
    * highways include state highways and some county highways.
-   **/
+   */
   public static final StreetClassification SEC_HWY = new StreetClassification("Secondary Highway", "SEC_HWY", 1);
 
   /**
    * Classification indicating a local road.  Local roads are for
    * local traffic.  Scenic park roads and unpaved roads are also
    * included in this category.
-   **/
+   */
   public static final StreetClassification LOCAL_ROAD = new StreetClassification("Local Road", "LOCAL_ROAD", 2);
 
   /**
@@ -52,14 +52,14 @@ public final class StreetClassification
    * classificiation is given to streets that do not fall within one
    * of the other three categories or to streets for which not enough
    * information is known to classify them.
-   **/
+   */
   public static final StreetClassification UNKNOWN = new StreetClassification("Unknown", "UNKNOWN", 99);
 
 
   /**
    * @requires type is one of {"PRIM_HWY", "SEC_HWY", "LOCAL_ROAD", "UNKNOWN"}.
    * @returns result such that result.unparse().equals(type)
-   **/
+   */
   public static StreetClassification parse(String type)
   {
     if (PRIM_HWY.unparse().equals(type)) return PRIM_HWY;
@@ -73,7 +73,7 @@ public final class StreetClassification
   /**
    * @returns string respresentation of this.  Result will be one of
    * {"PRIM_HWY", "SEC_HWY", "LOCAL_ROAD", "UNKNOWN"}.
-   **/
+   */
   public String unparse()
   {
     return repr;
@@ -94,7 +94,7 @@ public final class StreetClassification
 
   /**
    * @returns a String representation of this
-   **/
+   */
   public String toString()
   {
     return "StreetClassification[" + name + "]";
@@ -107,7 +107,7 @@ public final class StreetClassification
    * the argument, as defined by the class overview.
    *
    * @see Comparable#compareTo(Object)
-   **/
+   */
   public int compareTo(Object o)
   {
     return priority - ((StreetClassification) o).priority;

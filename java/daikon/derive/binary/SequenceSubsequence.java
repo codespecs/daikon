@@ -11,7 +11,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * Derivations of the form A[0..i] or A[i..<em>end</em>], derived from A and
  * i.
- **/
+ */
 public abstract class SequenceSubsequence extends BinaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -45,7 +45,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
    * range goes n..end.  (n might be fudged through off_by_one)
    * @param off_by_one true means we should exclude the scalar from
    * the range; false means we should include it
-   **/
+   */
   public SequenceSubsequence(VarInfo vi1, VarInfo vi2, boolean from_start, boolean off_by_one) {
     super(vi1, vi2);
     this.from_start = from_start;
@@ -70,7 +70,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     return vi;
   }
 
-  /** Returns the lower bound of the slice **/
+  /** Returns the lower bound of the slice */
   public Quantify.Term get_lower_bound() {
     if (from_start) {
       return new Quantify.Constant(0);
@@ -79,7 +79,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     }
   }
 
-  /** Returns the upper bound of the slice **/
+  /** Returns the upper bound of the slice */
   public Quantify.Term get_upper_bound() {
     if (from_start) {
       return new Quantify.VarPlusOffset(sclvar(), index_shift);
@@ -88,7 +88,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     }
   }
 
-  /** Returns the array variable for this slice **/
+  /** Returns the array variable for this slice */
   public VarInfo get_array_var() {
     return seqvar();
   }
@@ -102,7 +102,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     return "\"SequenceSubsequence.java.jpp unimplemented\" != null"; // "interned"
   }
 
-  /** Returns the ESC name **/
+  /** Returns the ESC name */
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format(
@@ -112,7 +112,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
         get_upper_bound().esc_name());
   }
 
-  /** returns the JML name for the slice **/
+  /** returns the JML name for the slice */
   @SuppressWarnings("nullness")
   public String jml_name(String index) {
 
@@ -138,7 +138,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     }
   }
 
-  /** Adds one to the default complexity if index_shift is not 0 **/
+  /** Adds one to the default complexity if index_shift is not 0 */
   public int complexity() {
     return super.complexity() + ((index_shift != 0) ? 1 : 0);
   }

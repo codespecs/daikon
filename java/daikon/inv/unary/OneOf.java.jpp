@@ -270,7 +270,7 @@ public final class ONEOFSCALAR
 
   /**
    * Debugging logger.
-   **/
+   */
   public static final Logger debug
     = Logger.getLogger (ONEOFSCALAR.class.getName());
 
@@ -278,13 +278,13 @@ public final class ONEOFSCALAR
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff OneOf invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * Positive integer.  Specifies the maximum set size for this type
    * of invariant (x is one of <code>size</code> items).
-   **/
+   */
 #if defined(STRINGSEQUENCE)
   public static int dkconfig_size = 2;
 #else
@@ -305,7 +305,7 @@ public final class ONEOFSCALAR
    * this is the same reason they print in the native Daikon format,
    * for instance, as <code>var has only one value</code> rather than
    * <code>var == 150924732</code>.
-   **/
+   */
   public static boolean dkconfig_omit_hashcode_values_Simplify = false;
 #endif
 
@@ -352,17 +352,17 @@ public final class ONEOFSCALAR
 
   private static /*@Prototype*/ ONEOFSCALAR proto = new /*@Prototype*/ ONEOFSCALAR ();
 
-  /** Returns the prototype invariant for ONEOFSCALAR **/
+  /** Returns the prototype invariant for ONEOFSCALAR */
   public static /*@Prototype*/ ONEOFSCALAR get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   public ONEOFSCALAR instantiate_dyn (/*>>> @Prototype ONEOFSCALAR this,*/ PptSlice slice) {
     return new ONEOFSCALAR(slice);
   }

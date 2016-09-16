@@ -15,7 +15,7 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
    * Debug output.
    *
    *
-   **/
+   */
   public static final Logger debug = Logger.getLogger("daikon.derive.unary.SequenceLengthFactory");
 
   public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {

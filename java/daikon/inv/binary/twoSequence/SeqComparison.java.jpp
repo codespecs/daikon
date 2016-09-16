@@ -258,7 +258,7 @@ import typequals.*;
  * If the auxiliary information (e.g., order matters)
  * doesn't match between two variables, then this invariant cannot
  * apply to those variables.
- **/
+ */
 public class SEQSEQINTEQUAL
   extends SUPERCLASS
   implements Comparison
@@ -272,12 +272,12 @@ public class SEQSEQINTEQUAL
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SEQSEQINTEQUAL invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
    * Debugging logger.
-   **/
+   */
   static final Logger debug = Logger.getLogger ("daikon.inv.binary.twoSequence." + SEQSEQINTEQUALstring);
 
   @SuppressWarnings("interning")  // bug with generics
@@ -305,17 +305,17 @@ public class SEQSEQINTEQUAL
 
   private static /*@Prototype*/ SEQSEQINTEQUAL proto = new /*@Prototype*/ SEQSEQINTEQUAL (true);
 
-  /** Returns the prototype invariant for SEQSEQINTEQUAL **/
+  /** Returns the prototype invariant for SEQSEQINTEQUAL */
   public static /*@Prototype*/ SEQSEQINTEQUAL get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled **/
+  /** Returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Non-Equal SeqComparison is only valid on integral types **/
+  /** Non-Equal SeqComparison is only valid on integral types */
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis)) {
@@ -348,7 +348,7 @@ public class SEQSEQINTEQUAL
     return true;
   }
 
-  /** Instantiates the invariant on the specified slice **/
+  /** Instantiates the invariant on the specified slice */
   protected SEQSEQINTEQUAL instantiate_dyn (/*>>> @Prototype SEQSEQINTEQUAL this,*/ PptSlice slice) {
     boolean has_order = slice.var_infos[0].aux.hasOrder()
                       && slice.var_infos[1].aux.hasOrder();
@@ -531,7 +531,7 @@ public class SEQSEQINTEQUAL
    *  Since this invariant can be a postProcessed equality, we have to
    *  handle isObvious especially to avoid circular isObvious
    *  relations.
-   **/
+   */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
@@ -545,7 +545,7 @@ public class SEQSEQINTEQUAL
    *  Since this invariant can be a postProcessed equality, we have to
    *  handle isObvious especially to avoid circular isObvious
    *  relations.
-   **/
+   */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     if (logOn()) {
@@ -751,7 +751,7 @@ public class SEQSEQINTEQUAL
     return suppressions;
   }
 
-  /** Definition of this invariant (the suppressee) **/
+  /** Definition of this invariant (the suppressee) */
   private static NISuppressee suppressee
     = new NISuppressee (SEQSEQINTEQUAL.class, 2);
 

@@ -20,7 +20,7 @@ public class FixedSizeSet {
 
   /**
    * @effects Creates a new, empty FixedSizeSet (this.elements_post = {})
-   **/
+   */
   public FixedSizeSet() {
     this.bits = new boolean[8]; 
   }
@@ -53,7 +53,7 @@ public class FixedSizeSet {
    * @requires other != null
    * @modifies this
    * @effects this.elements_post = this.elements ^ other.elements
-   **/
+   */
   public void intersect(FixedSizeSet other) {
     for (int i=0; i<bits.length; i++) {
       if (! other.bits[i])
@@ -65,7 +65,7 @@ public class FixedSizeSet {
    * @requires other != null
    * @modifies this
    * @effects this.elements_post = this.elements U other.elements
-   **/
+   */
   public void union(FixedSizeSet other) {
     for (int i=0; i<bits.length; i++) {
       if (other.bits[i])

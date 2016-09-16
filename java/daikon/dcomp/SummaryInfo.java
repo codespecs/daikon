@@ -45,7 +45,7 @@ public class SummaryInfo {
 
   public static final String synopsis = "daikon.dcomp.SummaryInfo [options]";
 
-  /** Map from JDK classname to summary map for that class **/
+  /** Map from JDK classname to summary map for that class */
   static Map<String, Map<MethodDef, String>> jdk_method_map =
       new LinkedHashMap<String, Map<MethodDef, String>>();
 
@@ -122,7 +122,7 @@ public class SummaryInfo {
     }
   }
 
-  /** Returns the type of each parameter of the original method **/
+  /** Returns the type of each parameter of the original method */
   public Class<?>[] original_params(/*>>>@GuardSatisfied SummaryInfo this*/) {
     if (invoke_type == "static") { // interned
       return method.getParameterTypes();

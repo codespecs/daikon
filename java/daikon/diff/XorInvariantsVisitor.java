@@ -18,7 +18,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * the first of the two PptMaps.  This might be an undesirable
  * design call, but creating a PptMap from scratch is difficult
  * given the constraining creational pattern in place.
- **/
+ */
 public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 
   public XorInvariantsVisitor(
@@ -51,7 +51,7 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
   /**
    * Returns true if the pair of invariants should be printed,
    * depending on their type, relationship, and printability.
-   **/
+   */
   protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
     if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING

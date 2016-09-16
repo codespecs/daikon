@@ -33,7 +33,7 @@ import java.text.DecimalFormat;
  * newline and should include no extra spaces other than those shown
  * above.
  * </p>
- **/
+ */
 public class DrivingRouteFormatter extends RouteFormatter {
 
     // You can use this object to round floating point values to one
@@ -74,7 +74,7 @@ public class DrivingRouteFormatter extends RouteFormatter {
      * @param origHeading The initial heading
      * @return A newline-terminated <tt>String</tt> that gives
      * directions on how to traverse this geographical feature.
-     **/
+     */
     public String computeLine(GeoFeature geoFeature, double origHeading) {
         String line;
 

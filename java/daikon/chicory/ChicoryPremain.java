@@ -25,7 +25,7 @@ public class ChicoryPremain {
    * Any command line options declared here are 'hidden' as they cannot
    * be accessed from Chicory.  These are internal debugging options that
    * may be used when ChicoryPremain is invoked directly from the command line.
-   **/
+   */
   @Option("socket port to communicate with Daikon")
   public static int daikon_port = -1;
 
@@ -34,14 +34,14 @@ public class ChicoryPremain {
 
   public static boolean debug = false;
 
-  /** Set of pure methods returned by Alexandru Salcianu's purity analysis **/
+  /** Set of pure methods returned by Alexandru Salcianu's purity analysis */
   // Non-null if doPurity == true
   private static /*@MonotonicNonNull*/ Set<String> pureMethods = null;
 
   /**
    * True iff Chicory should add variables based on pure methods
    * during instrumentation
-   **/
+   */
   private static boolean doPurity = false;
 
   /**
@@ -328,7 +328,7 @@ public class ChicoryPremain {
    */
   public static class ChicoryLoader extends ClassLoader {
 
-    /** Jar file that contains BCEL.  If null, use the normal classpath **/
+    /** Jar file that contains BCEL.  If null, use the normal classpath */
     /*@Nullable*/ JarFile bcel_jar = null;
 
     public static final SimpleLog debug = new SimpleLog(Chicory.verbose);

@@ -64,7 +64,7 @@ public class CreateSpinfo {
    * throwing Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(final String[] args) throws IOException {
 
     // If not set, put output in files named after the input (source) files.

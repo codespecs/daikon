@@ -10,12 +10,12 @@ import org.checkerframework.checker.nullness.qual.*;
 
 /**
  * Factory for SequencesConcat derived variables.
- **/
+ */
 public final class SequencesConcatFactory extends BinaryDerivationFactory {
 
   /**
    * Debug tracer.
-   **/
+   */
   public static final Logger debug =
       Logger.getLogger("daikon.derive.binary.SequencesConcatFactory");
 

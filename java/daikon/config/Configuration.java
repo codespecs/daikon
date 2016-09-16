@@ -24,7 +24,7 @@ import org.checkerframework.checker.signature.qual.*;
  * in their static initializers, since Global loads the default
  * configuration, which classloads that class, and we would have a
  * classloading circularity.
- **/
+ */
 public final class Configuration implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -53,7 +53,7 @@ public final class Configuration implements Serializable {
 
   /**
    * @return singleton instance of this class
-   **/
+   */
   public static Configuration getInstance() {
     return instance;
   }
@@ -76,7 +76,7 @@ public final class Configuration implements Serializable {
    */
   private Configuration() {}
 
-  /** Lets callers differentiate between configuration problems and all others. **/
+  /** Lets callers differentiate between configuration problems and all others. */
   public static class ConfigException extends RuntimeException {
     public ConfigException(String s, Throwable t) {
       super(s, t);
@@ -113,7 +113,7 @@ public final class Configuration implements Serializable {
    * this in the process).  This method is intended for loading a saved
    * configuration from a file, since calling this method with the
    * Configuration singleton makes no sense.
-   **/
+   */
   public void overlap(Configuration config) {
     assert config != null;
     for (String statement : config.statements) {

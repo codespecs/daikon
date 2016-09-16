@@ -22,7 +22,7 @@ import typequals.*;
  * The Implication invariant class is used internally within Daikon to
  * handle invariants that are only true when certain other conditions are
  * also true (splitting).
- **/
+ */
 public class Implication extends Joiner {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -72,7 +72,7 @@ public class Implication extends Joiner {
    *
    * @return null if predicate and the consequent are the same, or if
    * the PptTopLevel already contains this Implication.
-   **/
+   */
   public static /*@Nullable*/ Implication makeImplication(
       PptTopLevel ppt,
       Invariant predicate,
@@ -187,7 +187,7 @@ public class Implication extends Joiner {
    * This must be overridden for Implication because the right side is
    * the invariant of interest.  The standard version passes the vis
    * from the slice containing the implication itself (slice 0).
-   **/
+   */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     return orig_right.isObviousStatically_SomeInEquality();
@@ -212,7 +212,7 @@ public class Implication extends Joiner {
    * This must be overridden for Implication because the right side is
    * the invariant of interest.  The standard version passes the vis
    * from the slice containing the implication itself (slice 0).
-   **/
+   */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
 

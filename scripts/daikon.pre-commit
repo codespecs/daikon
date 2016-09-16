@@ -7,7 +7,7 @@ set -e
 
 # "make -C java check-format" would check every file; on commit we only need to
 # check files that changed.
-CHANGED_JAVA_FILES=`git diff --staged --name-only --diff-filter=ACM | grep '\.java$' | grep -v '^java/jtb/' || true`
+CHANGED_JAVA_FILES=`git diff --staged --name-only --diff-filter=ACM | grep '\.java$' | grep '^java/' | grep -v '^java/jtb/' || true`
 if [ ! -z "$CHANGED_JAVA_FILES" ]; then
     plume-lib/bin/check-google-java-format.py ${CHANGED_JAVA_FILES}
 fi

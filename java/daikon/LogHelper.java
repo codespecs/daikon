@@ -10,7 +10,7 @@ import java.util.logging.*;
  * Logger methods should only be called in a shell class
  * at setup, after which Logger calls should be used
  * for logging.
- **/
+ */
 public final class LogHelper {
   private LogHelper() {
     throw new Error("do not instantiate");
@@ -27,7 +27,7 @@ public final class LogHelper {
    * pattern.  Creates one ConsoleHandler at root to receive default
    * messages, setting priority to INFO.  Removes previous appenders
    * at root.
-   **/
+   */
   public static void setupLogs(Level l, Formatter formatter) {
     // Send debug and other info messages to System.err
     Handler app = new ConsoleHandler();
@@ -126,7 +126,7 @@ public final class LogHelper {
 
   /**
    * Default method for setting up global logs.
-   **/
+   */
   public static void setupLogs() {
     setupLogs(INFO);
   }
@@ -134,7 +134,7 @@ public final class LogHelper {
   /**
    * Sets up global logs with a given priority.
    * Creates one ConsoleHandler.  Removes previous appenders at root.
-   **/
+   */
   public static void setupLogs(Level l) {
     setupLogs(l, new DaikonLogFormatter());
   }
@@ -144,7 +144,7 @@ public final class LogHelper {
   /**
    * Changes the logging priority of a sub category.  Also caches the
    * logger to avoid garbage-collection and recreation with the old level.
-   **/
+   */
   public static void setLevel(Logger lg, Level l) {
     lg.setLevel(l);
     allLoggers.add(lg); // to prevent garbage-collection and re-initialization
@@ -153,7 +153,7 @@ public final class LogHelper {
   /**
    * Changes the logging priority of a sub category.  Also caches the
    * logger to avoid garbage-collection and recreation with the old level.
-   **/
+   */
   public static void setLevel(String s, Level l) {
     setLevel(Logger.getLogger(s), l);
   }

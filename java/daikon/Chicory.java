@@ -88,7 +88,7 @@ public class Chicory {
    * Path to java agent jar file that performs the transformation.
    * The "main" procedure is ChicoryPremain.premain().
    * @see ChicoryPremain#premain
-   **/
+   */
   @Option("Path to the Chicory agent jar file")
   public static /*@MonotonicNonNull*/ File premain = null;
 
@@ -130,33 +130,33 @@ public class Chicory {
    */
   private static int daikon_port = -1;
 
-  /** Thread that copies output from target to our output **/
+  /** Thread that copies output from target to our output */
   public static /*@MonotonicNonNull*/ StreamRedirectThread out_thread;
 
-  /** Thread that copies stderr from target to our stderr **/
+  /** Thread that copies stderr from target to our stderr */
   public static /*@MonotonicNonNull*/ StreamRedirectThread err_thread;
 
-  /** starting time (msecs) **/
+  /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
 
-  /** daikon process for --daikon switch **/
+  /** daikon process for --daikon switch */
   // non-null if either daikon==true or daikon_online==true
   public static /*@MonotonicNonNull*/ Process daikon_proc;
 
   private static final String traceLimTermString = "DTRACELIMITTERMINATE";
   private static final String traceLimString = "DTRACELIMIT";
 
-  /** flag to use if we want to turn on the static initialization checks **/
+  /** flag to use if we want to turn on the static initialization checks */
   public static final boolean checkStaticInit = true;
 
   private static final boolean RemoteDebug = false;
 
-  /** Flag to initiate a purity analysis and use results to create add vars **/
+  /** Flag to initiate a purity analysis and use results to create add vars */
   private static boolean purityAnalysis = false;
 
   private static final SimpleLog basic = new SimpleLog(false);
 
-  /** Synopsis for the chicory command line **/
+  /** Synopsis for the chicory command line */
   public static final String synopsis = "daikon.Chicory [options] target [target-args]";
 
   /**
@@ -489,14 +489,14 @@ public class Chicory {
     }
   }
 
-  /** Wait for daikon to complete and return its exit status **/
+  /** Wait for daikon to complete and return its exit status */
   /*@RequiresNonNull("daikon_proc")*/
   private int waitForDaikon() {
     int result = redirect_wait(daikon_proc);
     return result;
   }
 
-  /** Wait for stream redirect threads to complete and return its exit status **/
+  /** Wait for stream redirect threads to complete and return its exit status */
   public int redirect_wait(Process p) {
 
     // Create the redirect theads and start them
@@ -555,7 +555,7 @@ public class Chicory {
     return outFile;
   }
 
-  /** Returns elapsed time as a String since the start of the program **/
+  /** Returns elapsed time as a String since the start of the program */
   public static String elapsed() {
     return ("[" + (System.currentTimeMillis() - start) + " msec]");
   }
@@ -567,7 +567,7 @@ public class Chicory {
   /**
    * Convert a list of arguments into a command-line string.
    * Only used for debugging output.
-   **/
+   */
   public String args_to_string(List<String> args) {
     String str = "";
     for (String arg : args) {

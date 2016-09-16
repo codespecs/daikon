@@ -20,7 +20,7 @@ import plume.*;
  *
  * The caller must supply the collection of inserted comments for
  * recognition by this visitor.
- **/
+ */
 public class InsertCommentFormatter extends DepthFirstVisitor {
   private boolean debug = false;
 

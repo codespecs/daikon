@@ -37,7 +37,7 @@ import org.checkerframework.dataflow.qual.*;
  * Invariants in the two PptMaps.  Finally, the tree is traversed via
  * the Visitor pattern to produce output.  The Visitor pattern makes
  * it easy to extend the program, simply by writing a new Visitor.
- **/
+ */
 public final class Diff {
 
   public static final Logger debug = Logger.getLogger("daikon.diff.Diff");
@@ -58,7 +58,7 @@ public final class Diff {
   private static /*@MonotonicNonNull*/ PptMap manip1 = null;
   private static /*@MonotonicNonNull*/ PptMap manip2 = null;
 
-  /** The long command line options. **/
+  /** The long command line options. */
   private static final String HELP_SWITCH = "help";
   private static final String INV_SORT_COMPARATOR1_SWITCH = "invSortComparator1";
   private static final String INV_SORT_COMPARATOR2_SWITCH = "invSortComparator2";
@@ -66,13 +66,13 @@ public final class Diff {
   private static final String IGNORE_UNJUSTIFIED_SWITCH = "ignore_unjustified";
   private static final String IGNORE_NUMBERED_EXITS_SWITCH = "ignore_exitNN";
 
-  /** Determine which ppts should be paired together in the tree. **/
+  /** Determine which ppts should be paired together in the tree. */
   private static final Comparator<PptTopLevel> PPT_COMPARATOR = new Ppt.NameComparator();
 
   /**
    * Comparators to sort the sets of invs, and to combine the two sets
    * into the pair tree.  Can be overriden by command-line options.
-   **/
+   */
   private Comparator<Invariant> invSortComparator1;
   private Comparator<Invariant> invSortComparator2;
   private Comparator<Invariant> invPairComparator;
@@ -118,7 +118,7 @@ public final class Diff {
    * Read two PptMap or InvMap objects from their respective files.
    * Convert the PptMaps to InvMaps as necessary, and diff the
    * InvMaps.
-   **/
+   */
   public static void main(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -138,7 +138,7 @@ public final class Diff {
    * throwing Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -561,7 +561,7 @@ public final class Diff {
   /**
    * Reads an InvMap from a file that contains a serialized InvMap or
    * PptMap.
-   **/
+   */
   private InvMap readInvMap(File file) throws IOException, ClassNotFoundException {
     Object o = UtilMDE.readObject(file);
     if (o instanceof InvMap) {
@@ -581,7 +581,7 @@ public final class Diff {
    * Conditional program points are also added as keys.  Filtering is
    * done when creating the pair tree.  The ppts in the InvMap must be
    * sorted, but the invariants need not be sorted.
-   **/
+   */
   public InvMap convertToInvMap(PptMap pptMap) {
     InvMap map = new InvMap();
 
@@ -613,7 +613,7 @@ public final class Diff {
    * corresponding invariants at each program point.  This tree can be
    * walked to determine differences between the sets of invariants.
    * Calls diffInvMap and asks to include all justified invariants
-   **/
+   */
   public RootNode diffInvMap(InvMap map1, InvMap map2) {
     return diffInvMap(map1, map2, true);
   }
@@ -624,7 +624,7 @@ public final class Diff {
    * walked to determine differences between the sets of invariants.
    * The tree consists of the invariants in map1 and map2.  If
    * includeUnjustified is true, the unjustified invariants are included.
-   **/
+   */
   public RootNode diffInvMap(InvMap map1, InvMap map2, boolean includeUnjustified) {
     RootNode root = new RootNode();
 
@@ -650,7 +650,7 @@ public final class Diff {
    * Diffs two PptMaps by converting them to InvMaps.  Provided for
    * compatibiliy with legacy code.
    * Calls diffPptMap and asks to include all invariants.
-   **/
+   */
   public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2) {
     return diffPptMap(pptMap1, pptMap2, true);
   }
@@ -659,7 +659,7 @@ public final class Diff {
    * Diffs two PptMaps by converting them to InvMaps.  Provided for
    * compatibiliy with legacy code.
    * If includeUnjustified is true, the unjustified invariants are included.
-   **/
+   */
   public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2, boolean includeUnjustified) {
     InvMap map1 = convertToInvMap(pptMap1);
     InvMap map2 = convertToInvMap(pptMap2);
@@ -669,7 +669,7 @@ public final class Diff {
   /**
    * Returns true if the program point should be added to the tree,
    * false otherwise.
-   **/
+   */
   private boolean shouldAdd(/*@Nullable*/ PptTopLevel ppt) {
     if (examineAllPpts) {
       return true;
@@ -691,7 +691,7 @@ public final class Diff {
    * and returns a tree of the corresponding invariants.  Either of
    * the program points may be null.
    * If includeUnjustied is true, the unjustified invariants are included.
-   **/
+   */
   private PptNode diffPptTopLevel(
       /*@Nullable*/ PptTopLevel ppt1,
       /*@Nullable*/ PptTopLevel ppt2,
@@ -843,7 +843,7 @@ public final class Diff {
   /**
    * Use the comparator for sorting both sets and creating the pair
    * tree.
-   **/
+   */
   /*@EnsuresNonNull({"invSortComparator1", "invSortComparator2", "invPairComparator"})*/
   public void setAllInvComparators(
       /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
@@ -855,7 +855,7 @@ public final class Diff {
   /**
    * If the classname is non-null, returns the comparator named by the
    * classname.  Else, returns the default.
-   **/
+   */
   private static Comparator<Invariant> selectComparator(
       /*@Nullable*/ /*@ClassGetName*/ String classname, Comparator<Invariant> defaultComparator)
       throws ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -870,21 +870,21 @@ public final class Diff {
     }
   }
 
-  /** Use the comparator for sorting the first set. **/
+  /** Use the comparator for sorting the first set. */
   /*@EnsuresNonNull("invSortComparator1")*/
   public void setInvSortComparator1(
       /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
     invSortComparator1 = c;
   }
 
-  /** Use the comparator for sorting the second set. **/
+  /** Use the comparator for sorting the second set. */
   /*@EnsuresNonNull("invSortComparator2")*/
   public void setInvSortComparator2(
       /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
     invSortComparator2 = c;
   }
 
-  /** Use the comparator for creating the pair tree. **/
+  /** Use the comparator for creating the pair tree. */
   /*@EnsuresNonNull("invPairComparator")*/
   public void setInvPairComparator(
       /*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {

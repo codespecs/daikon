@@ -87,13 +87,13 @@ public class NONZERO
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff NONZERO invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.inv.unary.scalar." + NONZEROSTRING);
 
-  /** Maximum value ever used for max-min in confidence calculation. **/
+  /** Maximum value ever used for max-min in confidence calculation. */
   static long range_max = 50;
 
   private NONZERO(PptSlice ppt) {
@@ -106,17 +106,17 @@ public class NONZERO
 
   private static /*@Prototype*/ NONZERO proto = new /*@Prototype*/ NONZERO ();
 
-  /** Returns the prototype invariant for NONZERO **/
+  /** Returns the prototype invariant for NONZERO */
   public static /*@Prototype*/ NONZERO get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Make sure the NonZero make sense on these vars **/
+  /** Make sure the NonZero make sense on these vars */
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types(vis)) {
@@ -131,7 +131,7 @@ public class NONZERO
     return true;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   public NONZERO instantiate_dyn (/*>>> @Prototype NONZERO this,*/ PptSlice slice) {
     return new NONZERO (slice);
   }

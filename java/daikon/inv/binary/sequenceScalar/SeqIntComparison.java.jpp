@@ -148,7 +148,7 @@ import typequals.*;
  * a sequence of PRIMITIVE values.
  * Prints as <code>x[] elements EQUALShtml y</code> where <code>x</code> is a
  * PRIMITIVE sequence and <code>y</code> is a PRIMITIVE scalar.
- **/
+ */
 public final class SEQINTEQUAL
   extends SUPERCLASS
 {
@@ -161,7 +161,7 @@ public final class SEQINTEQUAL
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SEQINTEQUAL invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public static final Logger debug
@@ -179,17 +179,17 @@ public final class SEQINTEQUAL
 
   private static /*@Prototype*/ SEQINTEQUAL proto = new /*@Prototype*/ SEQINTEQUAL ();
 
-  /** Returns the prototype invariant for SEQINTEQUAL **/
+  /** Returns the prototype invariant for SEQINTEQUAL */
   public static /*@Prototype*/ SEQINTEQUAL get_proto () {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled **/
+  /** Returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Non-equal SeqIntComparison is only valid on integral types **/
+  /** Non-equal SeqIntComparison is only valid on integral types */
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis)) {
@@ -218,7 +218,7 @@ public final class SEQINTEQUAL
     return true;
   }
 
-  /** instantiates the invariant on the specified slice **/
+  /** instantiates the invariant on the specified slice */
   protected SEQINTEQUAL instantiate_dyn (/*>>> @Prototype SEQINTEQUAL this,*/ PptSlice slice) {
     return new SEQINTEQUAL (slice);
   }
@@ -479,7 +479,7 @@ public final class SEQINTEQUAL
     return suppressions;
   }
 
-  /** definition of this invariant (the suppressee) **/
+  /** definition of this invariant (the suppressee) */
   private static NISuppressee suppressee
     = new NISuppressee (SEQINTEQUAL.class, 2);
 

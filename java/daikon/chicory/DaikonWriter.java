@@ -15,10 +15,10 @@ public abstract class DaikonWriter {
   /**
    * Controls whether modifiers and the return type are included in
    * the decl output
-   **/
+   */
   protected static final boolean no_modifiers_ppt = true;
 
-  /** Platform dependent line separator.  Should be "\n" on Unix **/
+  /** Platform dependent line separator.  Should be "\n" on Unix */
   public static final String lineSep = System.getProperty("line.separator");
 
   protected DaikonWriter() {}

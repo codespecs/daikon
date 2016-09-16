@@ -50,7 +50,7 @@ public final class SEQUENCESCALARSUBSEQUENCE
   /**
    * Boolean.  True iff SEQUENCESCALARSUBSEQUENCE derived variables
    * should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   /**
@@ -73,7 +73,7 @@ public final class SEQUENCESCALARSUBSEQUENCE
    * range goes n..end.  (n might be fudged through off_by_one)
    * @param off_by_one true means we should exclude the scalar from
    * the range; false means we should include it
-   **/
+   */
   public SEQUENCESCALARSUBSEQUENCE(VarInfo vi1, VarInfo vi2, boolean from_start, boolean off_by_one) {
     super (vi1, vi2, from_start, off_by_one);
   }

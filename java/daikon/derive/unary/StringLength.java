@@ -10,7 +10,7 @@ import plume.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/** Length of String variables **/
+/** Length of String variables */
 public final class StringLength extends UnaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -19,7 +19,7 @@ public final class StringLength extends UnaryDerivation {
 
   /**
    * Boolean.  True iff StringLength derived variables should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public StringLength(VarInfo vi) {
@@ -54,27 +54,27 @@ public final class StringLength extends UnaryDerivation {
     return (other instanceof StringLength);
   }
 
-  /** Returns the ESC name **/
+  /** Returns the ESC name */
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String csharp_name(String index) {
     return String.format("%s.Length", base.csharp_name());
   }
 
-  /** Returns the ESC name **/
+  /** Returns the ESC name */
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format("%s.length()", base.esc_name());
   }
 
-  /** Returns the JML name **/
+  /** Returns the JML name */
   @SuppressWarnings("nullness")
   public String jml_name(String index) {
     return String.format("%s.length()", base.jml_name());
   }
 
-  /** Returns the simplify name **/
+  /** Returns the simplify name */
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String simplify_name() {

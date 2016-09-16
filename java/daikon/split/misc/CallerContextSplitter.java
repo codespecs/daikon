@@ -13,7 +13,7 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * This splitter tests the condition "$caller one of { some set of integers }".
- **/
+ */
 public final class CallerContextSplitter extends Splitter {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -22,7 +22,7 @@ public final class CallerContextSplitter extends Splitter {
 
   /**
    * Create a new splitter for the given ppt using this as a prototype.
-   **/
+   */
   public Splitter instantiate(Ppt ppt) {
     return new CallerContextSplitter(ppt, ids, condition);
   }
@@ -30,7 +30,7 @@ public final class CallerContextSplitter extends Splitter {
   /**
    * Name of the variable used by the front end to store caller
    * (callsite) information.
-   **/
+   */
   public final String CALLER_INDICATOR_NAME_STRING = "daikon_callsite_id";
   private final /*@Nullable*/ VarInfo caller_varinfo;
   private final long[] ids;
@@ -45,7 +45,7 @@ public final class CallerContextSplitter extends Splitter {
 
   /**
    * Create a prototype splitter for the given set of ids and condition.
-   **/
+   */
   public CallerContextSplitter(long[] ids, String condition) {
     this.caller_varinfo = null;
     this.ids = ids.clone();

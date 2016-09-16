@@ -3131,7 +3131,7 @@ class simpleStack @{
 
   /** Adds an element to the back of the stack, if the stack is
     * not full.
-    * Returns true if this succeeds, false otherwise.  **/
+    * Returns true if this succeeds, false otherwise.  */
   public String push(int x) @{
     if ( !isFull() && x >= 0) @{
       myArray[currentSize] = x;
@@ -3143,7 +3143,7 @@ class simpleStack @{
   @}
 
   /** Returns the most recently inserted stack element.
-    * Returns -1 if the stack is empty. **/
+    * Returns -1 if the stack is empty. */
   public int pop() @{
     if ( !isEmpty() ) @{
       currentSize--;
@@ -3153,12 +3153,12 @@ class simpleStack @{
     @}
   @}
 
- /** Returns true if the stack is empty, false otherwise. **/
+ /** Returns true if the stack is empty, false otherwise. */
   private boolean isEmpty() @{
     return (currentSize == 0);
   @}
 
-  /** Returns true if the stack is full, false otherwise. **/
+  /** Returns true if the stack is full, false otherwise. */
   private boolean isFull() @{
     return (currentSize == myArray.length);
   @}

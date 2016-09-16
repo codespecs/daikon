@@ -7,7 +7,7 @@ import daikon.inv.*;
 /**
  * Filter for not printing an Invariant if its VarInfos return
  * isDerivedParameterAndUninteresting == true.
- **/
+ */
 public class DerivedParameterFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress parameter-derived postcondition invariants";

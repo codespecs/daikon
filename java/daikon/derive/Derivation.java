@@ -19,7 +19,7 @@ import org.checkerframework.dataflow.qual.*;
  * variables and finds the value of the derived variable.  Use
  * computeValueandModified() to get value.  Derivations are created by
  * DerivationFactory.
- **/
+ */
 public abstract class Derivation implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -38,12 +38,12 @@ public abstract class Derivation implements Serializable, Cloneable {
    * memory usage, sometimes dramatically. If false, individual kinds of
    * derived variables can be enabled or disabled individually using
    * configuration options under <code>daikon.derive</code>.
-   **/
+   */
   public static boolean dkconfig_disable_derived_variables = false;
 
   /**
    * Debug tracer.
-   **/
+   */
   public static final Logger debug = Logger.getLogger("daikon.derive.Derivation");
 
   // This is static, so we can't mention it here.
@@ -55,13 +55,13 @@ public abstract class Derivation implements Serializable, Cloneable {
 
   /**
    * @return array of the VarInfos this was derived from
-   **/
+   */
   /*@SideEffectFree*/
   public abstract VarInfo[] getBases();
 
   /**
    * @return one of the VarInfos this was derived from
-   **/
+   */
   /*@Pure*/
   public abstract VarInfo getBase(int i);
 
@@ -70,7 +70,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * counts as modified
    * @param full_vt the set of values in a program point that will be
    * used to derive the value.
-   **/
+   */
   // I don't provide separate computeModified and computeValue
   // functions: they aren't so useful, and the same computation must
   // usually be done in both functions.
@@ -83,7 +83,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * the VarInfo can't be used to obtain values without further
    * modification -- use computeValueAndModified() for this.
    * @see Derivation#computeValueAndModified
-   **/
+   */
   public VarInfo getVarInfo() {
     if (this_var_info == null) {
       this_var_info = makeVarInfo();
@@ -97,7 +97,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   /**
    * Used by all child classes to actually create the VarInfo this
    * represents, after which it is interned for getVarInfo().
-   **/
+   */
   // This is in each class, but I can't have a private abstract method.
   protected abstract VarInfo makeVarInfo();
 
@@ -125,7 +125,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * happen with both simple subscripts and subsequences.  Note that
    * this becomes true as we are running, it cannot be set in advance
    * (which would require a first pass).
-   **/
+   */
   public boolean missingOutOfBounds() {
     return missing_array_bounds;
   }
@@ -136,14 +136,14 @@ public abstract class Derivation implements Serializable, Cloneable {
    * variable uninteresting).  We might not have been able to know
    * before performing the derivation that this would be the case --
    * for instance, when deriving before any values are seen.
-   **/
+   */
   /*@Pure*/
   public abstract boolean isDerivedFromNonCanonical();
 
   /**
    * Returns how many levels of derivation this Derivation is based
    * on.  The depth counts this as well as the depths of its bases.
-   **/
+   */
   public abstract int derivedDepth();
 
   /**
@@ -151,7 +151,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * (modulo the variable they are applied to).  Default implentation
    * will just checks runtime type, but subclasses with state
    * (e.g. SequenceInitial index) should match that, too.
-   **/
+   */
   /*@Pure*/
   public abstract boolean isSameFormula(Derivation other);
 
@@ -211,7 +211,7 @@ public abstract class Derivation implements Serializable, Cloneable {
     throw new RuntimeException("csharp_name not implemented for " + this);
   }
 
-  /** Returns the name of this variable in simplify format **/
+  /** Returns the name of this variable in simplify format */
   /*@SideEffectFree*/
   public String simplify_name() {
     throw new RuntimeException(
@@ -253,7 +253,7 @@ public abstract class Derivation implements Serializable, Cloneable {
     return 1;
   }
 
-  /** Returns a string that corresponds to the the specified shift **/
+  /** Returns a string that corresponds to the the specified shift */
   protected String shift_str(int shift) {
     String shift_str = "";
     if (shift != 0) shift_str = String.format("%+d", shift);

@@ -39,12 +39,12 @@ public class ThisObjInfo extends DaikonVariableInfo {
     throw new Error("shouldn't be called");
   }
 
-  /** 'this' is a top level variable **/
+  /** 'this' is a top level variable */
   public VarKind get_var_kind() {
     return VarKind.VARIABLE;
   }
 
-  /** Add IS_PARAM to list of variable flags, because the receiver "this" is a formal parameter. **/
+  /** Add IS_PARAM to list of variable flags, because the receiver "this" is a formal parameter. */
   public EnumSet<VarFlags> get_var_flags() {
     // System.out.printf ("%s is a parameter%n", this);
     EnumSet<VarFlags> var_flags = super.get_var_flags().clone();

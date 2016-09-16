@@ -144,13 +144,13 @@ import typequals.*;
   /**
    * Represents equality between adjacent elements (x[i], x[i+1]) of a
    * PRIMITIVE sequence.  Prints as <code>x[] elements are equal</code>.
-   **/
+   */
 #else
   /**
    * Represents the invariant COMPARATORhtml between adjacent elements
    * (x[i], x[i+1]) of a PRIMITIVE sequence.  Prints as
    * <code>x[] sorted by COMPARATORhtml</code>.
-   **/
+   */
 #endif
 public class CLASSNAME
   extends SUPERCLASS
@@ -164,7 +164,7 @@ public class CLASSNAME
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff EltwiseIntComparison invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   static final boolean debugEltwiseIntComparison = false;
@@ -179,17 +179,17 @@ public class CLASSNAME
 
   private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
-  /** Returns the prototype invariant for CLASSNAME **/
+  /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Non-equality CLASSNAME invariants are only valid on integral types **/
+  /** Non-equality CLASSNAME invariants are only valid on integral types */
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis)) {
@@ -205,7 +205,7 @@ public class CLASSNAME
     return true;
   }
 
-  /** Instantiate the invariant on the specified slice **/
+  /** Instantiate the invariant on the specified slice */
   protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }

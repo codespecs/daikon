@@ -17,7 +17,7 @@ import org.checkerframework.dataflow.qual.*;
  * PptCountVisitor is currently not documented.
  *
  * @author Lee Lin
- **/
+ */
 public class PptCountVisitor extends PrintAllVisitor {
 
   // amount of invariants needed for a program point to be
@@ -182,7 +182,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     return cut + lastPart.indexOf("(");
   }
 
-  /** Returns true if the pair of invariants should be printed **/
+  /** Returns true if the pair of invariants should be printed */
   /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
   protected static boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 

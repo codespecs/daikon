@@ -160,14 +160,14 @@ import typequals.*;
  * Represents an invariant over sequences of PRIMITIVE values between the
  * index of an element of the sequence and the element itself.
  * Prints as <code>x[i] EQUALShtml i</code>.
- **/
+ */
 public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040203L;
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug
     = Logger.getLogger ("daikon.inv.unary.sequence." + STRING(CLASSNAME));
 
@@ -175,7 +175,7 @@ public class CLASSNAME extends SUPERCLASS {
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff CLASSNAME invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   private /*@Prototype*/ CLASSNAME () {
@@ -190,17 +190,17 @@ public class CLASSNAME extends SUPERCLASS {
 
   private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
-  /** Returns the prototype invariant for CLASSNAME **/
+  /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
-  /** returns whether or not we are enabled **/
+  /** returns whether or not we are enabled */
   public boolean enabled() {
     return (dkconfig_enabled && !dkconfig_SeqIndexDisableAll);
   }
 
-  /** Check that SeqIndex comparisons make sense over these vars **/
+  /** Check that SeqIndex comparisons make sense over these vars */
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis)) {
@@ -225,16 +225,16 @@ public class CLASSNAME extends SUPERCLASS {
     return true;
   }
 
-  /** Instantiate the invariant on the specified slice **/
+  /** Instantiate the invariant on the specified slice */
   public CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME (slice);
   }
 
 #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
-  /** NI suppressions, initialized in get_ni_suppressions() **/
+  /** NI suppressions, initialized in get_ni_suppressions() */
   private static /*@Nullable*/ NISuppressionSet suppressions = null;
 
-  /** returns the ni-suppressions for CLASSNAME **/
+  /** returns the ni-suppressions for CLASSNAME */
   /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
@@ -270,7 +270,7 @@ public class CLASSNAME extends SUPERCLASS {
     return suppressions;
   }
 #else
-  /** returns the ni-suppressions for CLASSNAME **/
+  /** returns the ni-suppressions for CLASSNAME */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;

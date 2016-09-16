@@ -34,7 +34,7 @@ import junit.framework.Assert;
  * could be represented by the following GeoSegments:
  * ("Penny Lane", a, i), ("Penny Lane", z, i),
  * ("Abbey Road", i, j), and ("Abbey Road", j, k).
- **/
+ */
 public class GeoSegment  {
 
   /*@ invariant this.name != null; */
@@ -84,7 +84,7 @@ public class GeoSegment  {
   /**
    * @requires name != null && p1 != null && p2 != null
    * @effects constructs a new GeoSegment with the specified name and endpoints
-   **/
+   */
   public GeoSegment(String name, GeoPoint p1, GeoPoint p2)
   {
     Assert.assertNotNull(name);
@@ -112,7 +112,7 @@ public class GeoSegment  {
    *      gs.name = this.name
    *   && gs.p1 = this.p2
    *   && gs.p2 = this.p1
-   **/
+   */
   public GeoSegment reverse()
   {
     return new GeoSegment(name, p2, p1);
@@ -190,7 +190,7 @@ public class GeoSegment  {
   /**
    * @requires this.length != 0
    * @return this.heading
-   **/
+   */
   public double heading()
   {
     Assert.assertTrue(length() != 0.0);
@@ -210,7 +210,7 @@ public class GeoSegment  {
    * Compares the specified Object with with this GeoSegment for equality.
    * @return    gs != null && (gs instanceof GeoSegment)
    *         && gs.name = this.name && gs.p1 = this.p1 && gs.p2 = this.p2
-   **/
+   */
   public boolean equals(Object o)
   {
     if (!(o instanceof GeoSegment))
@@ -264,7 +264,7 @@ import junit.framework.Assert;
  * approximately 69.023 miles per degree of latitude and 51.075 miles per
  * degree of longitude.  An implementation may use these values when
  * determining distances and headings.
- **/
+ */
 public class GeoPoint {
 
   /*@ invariant this.latitude is a pointer; */
@@ -285,7 +285,7 @@ public class GeoPoint {
   /**
    * @requires the point given by (latitude, longitude) is near Boston
    * @effects constructs a GeoPoint from a latitude and longitude given in degrees East and North.
-   **/
+   */
   public GeoPoint(int latitude, int longitude)
   {
     Assert.assertTrue((41000000 <= latitude) && (latitude <= 43000000));
@@ -309,7 +309,7 @@ public class GeoPoint {
    * Compares the specified Object with this GeoPoint for equality.
    * @return    gp != null && (gp instanceof GeoPoint)
    *         && gp.latitude == this.latitude && gp.longitude == this.longitude
-   **/
+   */
   public boolean equals(Object o)
   {
     if(!(o instanceof GeoPoint))
@@ -347,7 +347,7 @@ public class GeoPoint {
    * @requires gp != null
    * @return a close approximation of as-the-crow-flies distance, in
    *         miles, from this to gp
-   **/
+   */
   public double distanceTo(GeoPoint gp)
   {
     Assert.assertNotNull(gp);
@@ -379,7 +379,7 @@ public class GeoPoint {
    *         gp, in degrees, such that 0 <= h < 360.  In compass
    *         headings, * north = 0, east = 90, south = 180, and west =
    *         270.
-   **/
+   */
   public double headingTo(GeoPoint gp)
   {
     Assert.assertNotNull(gp);

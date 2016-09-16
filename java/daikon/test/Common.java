@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * A collection of useful helper methods that are common to many
  * different individual tests.
- **/
+ */
 public class Common {
   private Common() {
     throw new Error("do not instantiate");

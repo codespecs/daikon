@@ -19,7 +19,7 @@ import org.checkerframework.dataflow.qual.*;
  * The ppts are used only as keys in this data structure.  Do not attempt
  * to look up invariants stored in the ppts; instead, obtain invariants via
  * the get() method.
- **/
+ */
 public class InvMap implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -66,7 +66,7 @@ public class InvMap implements Serializable {
    * keys:  do not look in these Ppts to find the invariants associated
    * with them in the InvMap!  Use invariantIterator instead.
    * @see #invariantIterator()
-   **/
+   */
   public Iterator<PptTopLevel> pptIterator(/*>>>@GuardSatisfied InvMap this*/) {
     return ppts.iterator();
   }
@@ -77,7 +77,7 @@ public class InvMap implements Serializable {
    * keys:  do not look in these Ppts to find the invariants associated
    * with them in the InvMap!  Use invariantIterator instead.
    * @see #invariantIterator()
-   **/
+   */
   public Iterable<PptTopLevel> pptIterable(/*>>>@GuardSatisfied InvMap this*/) {
     return new IterableIterator<PptTopLevel>(pptIterator());
   }
@@ -91,7 +91,7 @@ public class InvMap implements Serializable {
 
   /**
    * Returns an iterator over the invariants in this.
-   **/
+   */
   // The ppts are in the order added, and the invariants are in the order
   // added within each ppt, but the order of all invariants is not
   // necessarily that in which they were added, depending on calling
@@ -125,14 +125,14 @@ public class InvMap implements Serializable {
     return size1;
   }
 
-  /** Include FileIO.new_decl_format in the stream **/
+  /** Include FileIO.new_decl_format in the stream */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   private void writeObject(ObjectOutputStream oos) throws IOException {
     oos.defaultWriteObject();
     oos.writeObject(FileIO.new_decl_format);
   }
 
-  /** Serialize pptmap and FileIO.new_decl_format **/
+  /** Serialize pptmap and FileIO.new_decl_format */
   /*@EnsuresNonNull("FileIO.new_decl_format")*/
   private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
     ois.defaultReadObject();

@@ -43,7 +43,7 @@ import typequals.*;
 /**
  * Represents two sequences of PRIMITIVE where one is in the reverse order
  * of the other.  Prints as <code>x[] is the reverse of y[]</code>.
- **/
+ */
 public class CLASSNAME
   extends SUPERCLASS
 {
@@ -59,7 +59,7 @@ public class CLASSNAME
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff Reverse invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   protected CLASSNAME(PptSlice ppt) {
@@ -72,17 +72,17 @@ public class CLASSNAME
 
   private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
-  /** Returns the prototype invariant for CLASSNAME **/
+  /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Reverse only makes sense on ordered arrays **/
+  /** Reverse only makes sense on ordered arrays */
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis)) {
@@ -97,7 +97,7 @@ public class CLASSNAME
     return true;
   }
 
-  /** instantiates the invariant on the specified slice **/
+  /** instantiates the invariant on the specified slice */
   public CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }

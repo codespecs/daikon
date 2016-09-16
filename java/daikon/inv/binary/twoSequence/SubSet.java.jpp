@@ -71,7 +71,7 @@ import typequals.*;
  * other.
  * Prints as either <code>x[] is a subset of y[]</code> or as
  * <code>x[] is a superset of y[]</code>.
- **/
+ */
 public class SUBSET
   extends TWOSEQUENCE
 {
@@ -87,7 +87,7 @@ public class SUBSET
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SubSet invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   protected SUBSET(PptSlice ppt) {
@@ -100,12 +100,12 @@ public class SUBSET
 
   private static /*@Prototype*/ SUBSET proto = new /*@Prototype*/ SUBSET ();
 
-  /** Returns the prototype invariant for SUBSET **/
+  /** Returns the prototype invariant for SUBSET */
   public static /*@Prototype*/ SUBSET get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -142,7 +142,7 @@ public class SUBSET
     return true;
   }
 
-  /** instantiates the invariant on the specified slice **/
+  /** instantiates the invariant on the specified slice */
   public SUBSET instantiate_dyn (/*>>> @Prototype SUBSET this,*/ PptSlice slice) {
     return new SUBSET (slice);
   }
@@ -373,10 +373,10 @@ public class SUBSET
     return true;
   }
 
-  /** NI suppressions, initialized in get_ni_suppressions() **/
+  /** NI suppressions, initialized in get_ni_suppressions() */
   private static /*@Nullable*/ NISuppressionSet suppressions = null;
 
-  /** returns the ni-suppressions for SUBSET **/
+  /** returns the ni-suppressions for SUBSET */
   /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {

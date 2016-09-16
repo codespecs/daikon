@@ -26,7 +26,7 @@ public abstract class SingleFloatSequence extends SingleSequence {
     super();
   }
 
-  /** Returns whether or not the specified types are valid  **/
+  /** Returns whether or not the specified types are valid  */
   public final boolean valid_types(VarInfo[] vis) {
     return ((vis.length == 1)
         && vis[0].file_rep_type.baseIsFloat()
@@ -71,13 +71,13 @@ public abstract class SingleFloatSequence extends SingleSequence {
    * state, then the implementation should simply call {@link
    * #check_modified}.  This method need not check for falsification; that
    * is done by the caller.
-   **/
+   */
   public abstract InvariantStatus add_modified(double /*@Interned*/ [] value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
-   **/
+   */
   public InvariantStatus add_unmodified(double /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }

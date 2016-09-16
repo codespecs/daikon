@@ -70,7 +70,7 @@ import typequals.*;
 /**
  * The "main" method is the main entry point for the Daikon invariant detector.
  * The "mainHelper" method is the entry point, when called programmatically.
- **/
+ */
 @SuppressWarnings("initialization.fields.uninitialized") // field all_ppts; deal with it later
 public final class Daikon {
 
@@ -82,7 +82,7 @@ public final class Daikon {
    * The amount of time to wait between updates of the progress
    * display, measured in milliseconds. A value of -1 means do not
    * print the progress display at all.
-   **/
+   */
   public static int dkconfig_progress_delay = 1000;
 
   // Don't change the order of the modifiers on these strings as they
@@ -101,7 +101,7 @@ public final class Daikon {
   /**
    * Boolean.  Controls whether conditional program points
    * are displayed.
-   **/
+   */
   public static boolean dkconfig_output_conditionals = true;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -109,7 +109,7 @@ public final class Daikon {
   /**
    * Boolean.  Controls whether invariants are reported over floating-point
    * values.
-   **/
+   */
   public static boolean dkconfig_enable_floats = true;
 
   /**
@@ -140,7 +140,7 @@ public final class Daikon {
    * Boolean.  Controls whether or not processing information is printed out.
    * Setting this variable to true also automatically sets
    * <code>progress_delay</code> to -1.
-   **/
+   */
   public static boolean dkconfig_quiet = false;
 
   // Change this at your peril; high costs in time and space for "false",
@@ -174,7 +174,7 @@ public final class Daikon {
    * Whether to use the "new" equality set mechanism for handling
    * equality, using canonicals to have instantiation of invariants
    * only over equality sets.
-   **/
+   */
   public static boolean use_equality_optimization = true;
 
   /**
@@ -183,14 +183,14 @@ public final class Daikon {
    * complete set of invariants.  Output does not include
    * conditional program points, implications, reflexive and
    * partially reflexive invariants.
-   **/
+   */
   public static boolean dkconfig_undo_opts = false;
 
   /**
    * Boolean.  Indicates to Daikon classes and methods that the methods
    * calls should be compatible to DaikonSimple because Daikon and DaikonSimple share
    * methods.  Default value is 'false'.
-   **/
+   */
   public static boolean using_DaikonSimple = false;
 
   /**
@@ -210,7 +210,7 @@ public final class Daikon {
    * (To do:  Some configuration option (maybe this one) should add guards for
    * other reasons that lead to nonsensical values (@pxref{Variable names}).)
    * &#64;cindex nonsensical values for variables, guarding
-   **/
+   */
   // Perhaps a better default would be "missing".
   public static /*@Interned*/ String dkconfig_guardNulls = "default";
 
@@ -218,7 +218,7 @@ public final class Daikon {
    * Whether to associate the program points in a dataflow hierarchy,
    * as via Nimmer's thesis.  Deactivate only for languages and
    * analyses where flow relation is nonsensical.
-   **/
+   */
   public static boolean use_dataflow_hierarchy = true;
 
   /**
@@ -227,7 +227,7 @@ public final class Daikon {
    * only at the leaves of the partial order.  Upper points are
    * calculated by joining the invariants from each of their children
    * points.
-   **/
+   */
   // public static boolean dkconfig_df_bottom_up = true;
 
   // When true, use the Simplify theorem prover (not part of Daikon)
@@ -264,13 +264,13 @@ public final class Daikon {
 
   /**
    * Whether Daikon should print its version number and date.
-   **/
+   */
   public static boolean noversion_output = false;
 
   /**
    * Whether Daikon is in its inferencing loop.  Used only for
    * assertion checks.
-   **/
+   */
   public static boolean isInferencing = false;
 
   /**
@@ -282,14 +282,14 @@ public final class Daikon {
    * with more data from an .inv file). These invariants can increase
    * the size of the .inv file, though, so when only limited further
    * processing is needed, it can save space to omit them.
-   **/
+   */
   public static boolean omit_from_output = false;
 
   /**
    * An array of flags, indexed by characters, in which a true entry
    * means that invariants of that sort should be omitted from the
    * output .inv file.
-   **/
+   */
   public static boolean[] omit_types = new boolean[256];
 
   // Command-line options / command-line arguments
@@ -361,24 +361,24 @@ public final class Daikon {
   // Set in mainHelper().
   public static PptMap all_ppts;
 
-  /** current invariant (used for debugging) **/
+  /** current invariant (used for debugging) */
   public static /*@Nullable*/ Invariant current_inv = null;
 
   /* List of prototype invariants (one for each type of invariant) */
   public static ArrayList</*@Prototype*/ Invariant> proto_invs =
       new ArrayList</*@Prototype*/ Invariant>();
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
 
   public static final Logger debugProgress = Logger.getLogger("daikon.Progress");
 
   public static final Logger debugEquality = Logger.getLogger("daikon.Equality");
 
-  /** Debug tracer for ppt initialization. **/
+  /** Debug tracer for ppt initialization. */
   public static final Logger debugInit = Logger.getLogger("daikon.init");
 
-  /** Prints out statistics concerning equality sets, suppressions, etc. **/
+  /** Prints out statistics concerning equality sets, suppressions, etc. */
   public static final Logger debugStats = Logger.getLogger("daikon.stats");
 
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
@@ -411,7 +411,7 @@ public final class Daikon {
    * (like unpredictable IOExceptions).
    * If the string is null, then this is normal termination, not an error;
    * no message is printed.
-   **/
+   */
   public static class TerminationMessage extends RuntimeException {
     static final long serialVersionUID = 20050923L;
 
@@ -478,7 +478,7 @@ public final class Daikon {
   /**
    * The arguments to daikon.Daikon are file names.  Declaration file names
    * end in ".decls", and data trace file names end in ".dtrace".
-   **/
+   */
   public static void main(final String[] args) {
     try {
       mainHelper(args);
@@ -515,7 +515,7 @@ public final class Daikon {
    * throwing TerminationMessage.
    * @see #main(String[])
    * @see TerminationMessage
-   **/
+   */
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   public static void mainHelper(final String[] args) {
     // Cleanup from any previous runs
@@ -1947,7 +1947,7 @@ public final class Daikon {
      * Clients should set this variable instead of calling Thread.stop(),
      * which is deprecated.  Typically a client calls "display()" before
      * setting this.  The stopping happens later, and calls clear() anyway.
-     **/
+     */
     public boolean shouldStop = false;
     private final DateFormat df;
 
@@ -1967,7 +1967,7 @@ public final class Daikon {
         }
       }
     }
-    /** Clear the display; good to do before printing to System.out. **/
+    /** Clear the display; good to do before printing to System.out. */
     public void clear() {
       if (dkconfig_progress_delay == -1) return;
       // "display("");" is wrong becuase it leaves the timestamp and writes
@@ -1980,7 +1980,7 @@ public final class Daikon {
     /**
      * Displays the current status.
      * Call this if you don't want to wait until the next automatic display.
-     **/
+     */
     public void display() {
       if (dkconfig_progress_delay == -1) return;
 
@@ -1996,7 +1996,7 @@ public final class Daikon {
       }
       display(message);
     }
-    /** Displays the given message. **/
+    /** Displays the given message. */
     public void display(String message) {
       if (dkconfig_progress_delay == -1) return;
       String status =
@@ -2030,7 +2030,7 @@ public final class Daikon {
    * program points have been setup, and candidate invariants have
    * been instantiated.  This routine processes data to falsify the
    * candidate invariants.
-   **/
+   */
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   /*@RequiresNonNull("fileio_progress")*/
   // set in mainHelper

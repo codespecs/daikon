@@ -221,7 +221,7 @@ import typequals.*;
  * Thus, <code>x[0]</code> is compared to <code>y[0]</code>,
  * <code>x[1]</code> to <code>y[1]</code>, and so forth.
  * Prints as <code>x[] EQUALShtml y[]</code>.
- **/
+ */
 
 public class PAIRWISEINTEQUAL
   extends SUPERCLASS
@@ -231,7 +231,7 @@ public class PAIRWISEINTEQUAL
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug =
     Logger.getLogger("daikon.inv.binary.twoSequence." + PAIRWISEINTEQUALstring);
 
@@ -239,7 +239,7 @@ public class PAIRWISEINTEQUAL
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff PairwiseIntComparison invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   static final boolean debugPairwiseIntComparison = false;
@@ -254,17 +254,17 @@ public class PAIRWISEINTEQUAL
 
   private static /*@Prototype*/ PAIRWISEINTEQUAL proto = new /*@Prototype*/ PAIRWISEINTEQUAL ();
 
-  /** Returns the prototype invariant for PAIRWISEINTEQUAL **/
+  /** Returns the prototype invariant for PAIRWISEINTEQUAL */
   public static /*@Prototype*/ PAIRWISEINTEQUAL get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled **/
+  /** Returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** PAIRWISEINTEQUAL is only valid on integral types **/
+  /** PAIRWISEINTEQUAL is only valid on integral types */
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis)) {
@@ -280,7 +280,7 @@ public class PAIRWISEINTEQUAL
     return true;
   }
 
-  /** instantiates the invariant on the specified slice **/
+  /** instantiates the invariant on the specified slice */
   protected PAIRWISEINTEQUAL instantiate_dyn (/*>>> @Prototype PAIRWISEINTEQUAL this,*/ PptSlice slice) {
     PAIRWISEINTEQUAL inv = new PAIRWISEINTEQUAL(slice);
     if (logOn()) {
@@ -549,7 +549,7 @@ public class PAIRWISEINTEQUAL
     return suppressions;
   }
 
-  /** Definition of this invariant (the suppressee) **/
+  /** Definition of this invariant (the suppressee) */
   private static NISuppressee suppressee
     = new NISuppressee (PAIRWISEINTEQUAL.class, 2);
 

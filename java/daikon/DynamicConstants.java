@@ -31,7 +31,7 @@ import org.checkerframework.dataflow.qual.*;
  * variable receives a second value, invariants are instantiated and
  * are given the sample representing the previous constant value.
  * Each DynamicConstants object is associated with a single program point, ppt.
- **/
+ */
 public class DynamicConstants implements Serializable {
 
   // We are Serializable, so we specify a version to allow changes to
@@ -53,7 +53,7 @@ public class DynamicConstants implements Serializable {
    * variables (i.e., that that have only seen one value).  When the
    * variable receives a second value, invariants are instantiated and
    * are given the sample representing the previous constant value.
-   **/
+   */
   public static boolean dkconfig_use_dynamic_constant_optimization = true;
 
   /**
@@ -73,30 +73,30 @@ public class DynamicConstants implements Serializable {
    */
   public static boolean dkconfig_OneOf_only = false;
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.DynamicConstants");
 
   /**
    * List of dynamic constants.
    * Each element, c, has c.constant = true, c.count &gt; 0, elt.val != null.
-   **/
+   */
   List<Constant> con_list = new ArrayList<Constant>();
 
   /**
    * List of variables that have always been missing.
    * For each element c, c.always_missing = true or con.vi.missingOutOfBounds().
-   **/
+   */
   List<Constant> missing_list = new ArrayList<Constant>();
 
   // Same contents in both.  Why two data structures?
-  /** List of all variables.  Some may be non-constant. **/
+  /** List of all variables.  Some may be non-constant. */
   Constant[] all_vars;
   List<Constant> all_list = new ArrayList<Constant>();
 
-  /** Program point of these constants. **/
+  /** Program point of these constants. */
   PptTopLevel ppt;
 
-  /** Number of samples received. **/
+  /** Number of samples received. */
   int sample_cnt = 0;
 
   /**
@@ -108,7 +108,7 @@ public class DynamicConstants implements Serializable {
    * Note that two objects of this class are equal if they refer
    * to the same variable.  This allows these to be stored in
    * sets.
-   **/
+   */
   public static /*@Interned*/ class Constant implements Serializable {
 
     // We are Serializable, so we specify a version to allow changes to
@@ -121,19 +121,19 @@ public class DynamicConstants implements Serializable {
     // being set?
     /** The value of the constant, or the previous constant value if
      * constant==false  and  previous_constant==true.  Null iff count=0.
-     **/
+     */
     public /*@MonotonicNonNull*/ /*@Interned*/ Object val = null;
 
-    /** The sample count of the constant. **/
+    /** The sample count of the constant. */
     public int count = 0;
 
-    /** The variable that has this value. **/
+    /** The variable that has this value. */
     public VarInfo vi;
 
-    /** Whether or not this has been missing for every sample to date. **/
+    /** Whether or not this has been missing for every sample to date. */
     boolean always_missing = true;
 
-    /** Whether or not this is constant. **/
+    /** Whether or not this is constant. */
     boolean constant = false;
 
     /**
@@ -181,7 +181,7 @@ public class DynamicConstants implements Serializable {
     /**
      * returns whether the specified variable is currently a constant OR
      * was a constant at the beginning of constants processing.
-     **/
+     */
     /*@Pure*/
     public boolean is_prev_constant() {
       return constant || previous_constant;
@@ -230,7 +230,7 @@ public class DynamicConstants implements Serializable {
     }
   }
 
-  /** Compares two constants based on the vi_index of their variable. **/
+  /** Compares two constants based on the vi_index of their variable. */
   public static final class ConIndexComparator implements Comparator<Constant>, Serializable {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -392,7 +392,7 @@ public class DynamicConstants implements Serializable {
     }
   }
 
-  /** Returns whether the specified variable is missing in this ValueTuple. **/
+  /** Returns whether the specified variable is missing in this ValueTuple. */
   private boolean missing(VarInfo vi, ValueTuple vt) {
 
     int mod = vt.getModified(vi);
@@ -408,7 +408,7 @@ public class DynamicConstants implements Serializable {
     return result;
   }
 
-  /** Returns whether the specified variable is currently a constant. **/
+  /** Returns whether the specified variable is currently a constant. */
   /*@Pure*/
   public boolean is_constant(VarInfo vi) {
 
@@ -418,7 +418,7 @@ public class DynamicConstants implements Serializable {
   /**
    * returns whether the specified variable is currently a constant OR
    * was a constant at the beginning of constants processing.
-   **/
+   */
   /*@Pure*/
   public boolean is_prev_constant(VarInfo vi) {
 
@@ -429,7 +429,7 @@ public class DynamicConstants implements Serializable {
    * Returns the constant value of the specified variable, or null if
    * the variable is not constant or prev_constant.  But, it is apparently
    * only called on constants with a value.
-   **/
+   */
   public /*@Interned*/ Object constant_value(VarInfo vi) {
 
     @SuppressWarnings("nullness") // non-missing value, so non-null val field
@@ -437,7 +437,7 @@ public class DynamicConstants implements Serializable {
     return result;
   }
 
-  /** Returns whether the specified variable missing for all values so far. **/
+  /** Returns whether the specified variable missing for all values so far. */
   /*@Pure*/
   public boolean is_missing(VarInfo vi) {
 
@@ -447,7 +447,7 @@ public class DynamicConstants implements Serializable {
   /**
    * returns whether the specified variable is currently missing OR
    * was missing at the beginning of constants processing.
-   **/
+   */
   /*@Pure*/
   public boolean is_prev_missing(VarInfo vi) {
 
@@ -455,7 +455,7 @@ public class DynamicConstants implements Serializable {
     return (c.always_missing || c.previous_missing);
   }
 
-  /** Returns the number of constants that are leaders. **/
+  /** Returns the number of constants that are leaders. */
   public int constant_leader_cnt() {
 
     int con_cnt = 0;

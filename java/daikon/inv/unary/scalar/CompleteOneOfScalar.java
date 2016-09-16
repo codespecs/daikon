@@ -24,7 +24,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20091210L;
 
-  /** Information about each value encountered **/
+  /** Information about each value encountered */
   public static class Info implements Serializable {
     static final long serialVersionUID = 20091210L;
     public long val;
@@ -36,13 +36,13 @@ public final class CompleteOneOfScalar extends SingleScalar {
     }
   }
 
-  /** List of values seen **/
+  /** List of values seen */
   /*@Unused(when=Prototype.class)*/
   public List<Info> vals;
 
   /**
    * Boolean.  True iff CompleteOneOfScalar invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public CompleteOneOfScalar(PptSlice slice) {
@@ -57,23 +57,23 @@ public final class CompleteOneOfScalar extends SingleScalar {
   private static /*@Prototype*/ CompleteOneOfScalar proto =
       new /*@Prototype*/ CompleteOneOfScalar();
 
-  /** Returns the prototype invariant for CompleteOneOFScalar **/
+  /** Returns the prototype invariant for CompleteOneOFScalar */
   public static /*@Prototype*/ CompleteOneOfScalar get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   public CompleteOneOfScalar instantiate_dyn(
       /*>>> @Prototype CompleteOneOfScalar this,*/ PptSlice slice) {
     return new CompleteOneOfScalar(slice);
   }
 
-  /** return description of invariant.  Only Daikon format is implemented **/
+  /** return description of invariant.  Only Daikon format is implemented */
   /*@SideEffectFree*/
   public String format_using(/*>>>@GuardSatisfied CompleteOneOfScalar this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
@@ -87,12 +87,12 @@ public final class CompleteOneOfScalar extends SingleScalar {
     }
   }
 
-  /** Check to see if a only contains printable ascii characters **/
+  /** Check to see if a only contains printable ascii characters */
   public InvariantStatus add_modified(long a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters **/
+  /** Check to see if a only contains printable ascii characters */
   public InvariantStatus check_modified(long a, int count) {
     for (Info val : vals) {
       if (val.val == a) {

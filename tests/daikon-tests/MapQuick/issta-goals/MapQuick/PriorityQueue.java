@@ -9,7 +9,7 @@ import java.util.*;
  * @specfield elements : set                // contents of the priority queue
  * @specfield priority : Object -> double   // priority of each element
  * @endspec
- **/
+ */
 public class PriorityQueue
 {
 
@@ -30,7 +30,7 @@ public class PriorityQueue
 
     /**
      * @effects creates a PriorityQueue p, where p.elements is empty
-     **/
+     */
     public PriorityQueue()
     {
         heap = new ArrayList();
@@ -46,7 +46,7 @@ public class PriorityQueue
     /*@ requires elt != null; */
     /**
      * @returns true iff elt is in this.elements
-     **/
+     */
     public boolean contains(Object elt)
     {
         return elts.contains(elt);
@@ -55,7 +55,7 @@ public class PriorityQueue
     //@ ensures \result >= 0 // Daikon has >=1 unjustified
     /**
      * @returns the size of this.elements
-     **/
+     */
     public int size()
     {
         // the heap has a dummy element
@@ -72,7 +72,7 @@ public class PriorityQueue
      * = priority
      *
      * @throws DuplicateElementException if this.elements contains elt
-     **/
+     */
     public void insert(double priority, Object elt) throws DuplicateElementException
     {
         if (contains(elt)) {
@@ -102,7 +102,7 @@ public class PriorityQueue
      * @effects removes elt from this.elements and from the domain of priority
      *
      * @throws NoSuchElementException if this.elements is empty
-     **/
+     */
     public Object extractMin() throws NoSuchElementException
     {
         if (heap.size() <= 1) {
@@ -125,7 +125,7 @@ public class PriorityQueue
      * @requies 1 &lt;= i &lt; heap.size();
      *
      * @returns the ith element of the heap
-     **/
+     */
     private Entry heapGet(int i)
     {
       return (Entry) heap.get(i); //@ nowarn Cast; // inexpressible: heterogenous container
@@ -140,7 +140,7 @@ public class PriorityQueue
      *
      * @effects rearranges the subtree routed at i so that the min
      * heap property is satisfied
-     **/
+     */
     private void heapify(int i)
     {
         int smallest;
@@ -169,7 +169,7 @@ public class PriorityQueue
 
     /**
      * Entry is a record class for the storage of elements in PriorityQueue.
-     **/
+     */
     private class Entry
     {
         /*@ invariant this.value != null; */
@@ -187,7 +187,7 @@ public class PriorityQueue
     /**
      * DuplicateElementException is an unchecked exception which
      * signals that an element is already in a PriorityQueue.
-     **/
+     */
     public class DuplicateElementException extends RuntimeException
     {
         DuplicateElementException() { }

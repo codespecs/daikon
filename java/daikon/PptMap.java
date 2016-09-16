@@ -70,7 +70,7 @@ public class PptMap implements Serializable {
     return nameToPpt.containsKey(name);
   }
 
-  /** Returns all of the program points in the map **/
+  /** Returns all of the program points in the map */
   public Collection<PptTopLevel> all_ppts() {
     return (nameToPpt.values());
   }
@@ -78,7 +78,7 @@ public class PptMap implements Serializable {
   /**
    * @return unstably-ordered collection of PptTopLevels
    * @see #pptIterator()
-   **/
+   */
   public Collection<PptTopLevel> asCollection() {
     return Collections.unmodifiableCollection(nameToPpt.values());
   }
@@ -105,7 +105,7 @@ public class PptMap implements Serializable {
    * If you wish to merely iterate over the result in a Java new-style for
    * loop ("foreach loop"), use {@link #pptIterable()} instead.
    * @see #pptIterable()
-   **/
+   */
   public Iterator<PptTopLevel> pptIterator() {
     TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
@@ -151,7 +151,7 @@ public class PptMap implements Serializable {
    * If you wish to merely iterate over the result in a Java new-style for
    * loop ("foreach loop"), use {@link #ppt_all_iterable()} instead.
    * @see #ppt_all_iterable()
-   **/
+   */
   public Iterator<PptTopLevel> ppt_all_iterator() {
     TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
@@ -209,7 +209,7 @@ public class PptMap implements Serializable {
 
   /**
    * Check the rep invariant of this.  Throws an Error if incorrect.
-   **/
+   */
   public void repCheck() {
     for (PptTopLevel ppt : this.pptIterable()) {
       ppt.repCheck();
@@ -218,7 +218,7 @@ public class PptMap implements Serializable {
 
   /**
    * Return the number of active PptSlices.
-   **/
+   */
   /*@Pure*/
   public int countSlices() {
     int result = 0;
@@ -240,7 +240,7 @@ public class PptMap implements Serializable {
 
   /**
    * Blow away any PptTopLevels that never saw any samples (to reclaim space).
-   **/
+   */
   public void removeUnsampled() {
     Iterator<PptTopLevel> iter = nameToPpt.values().iterator();
     while (iter.hasNext()) {

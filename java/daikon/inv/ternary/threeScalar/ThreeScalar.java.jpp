@@ -58,7 +58,7 @@ public abstract class CLASSNAME
     super();
   }
 
-  /** Returns whether or not the specified types are valid **/
+  /** Returns whether or not the specified types are valid */
   public final boolean valid_types (VarInfo[] vis) {
 
     return ((vis.length == 3)
@@ -156,13 +156,13 @@ public abstract class CLASSNAME
    * state, then the implementation should simply call {@link
    * #check_modified}.  This method need not check for falsification; that
    * is done by the caller.
-   **/
+   */
   public abstract InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, PRIMITIVE v3, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
-   **/
+   */
   public InvariantStatus add_unmodified(PRIMITIVE v1, PRIMITIVE v2, PRIMITIVE v3, int count) {
     return InvariantStatus.NO_CHANGE;
   }

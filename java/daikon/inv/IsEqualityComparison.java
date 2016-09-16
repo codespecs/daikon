@@ -9,7 +9,7 @@ import plume.*;
  *  <li> the relationship reported by the comparison is = (not &lt;, &le;, &gt;, or &ge;)
  * </ul>
  * This does not consider PairwiseIntComparison to be an equality invariant.
- **/
+ */
 public final class IsEqualityComparison implements Filter<Invariant> {
 
   // Don't create new instances, just use this existing one

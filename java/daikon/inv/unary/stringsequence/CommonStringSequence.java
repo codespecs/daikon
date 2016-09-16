@@ -15,7 +15,7 @@ import typequals.*;
 /**
  * Represents string sequences that contain a common subset.  Prints as
  * <code>{s1, s2, s3, ...} subset of x[]</code>.
- **/
+ */
 public class CommonStringSequence extends SingleStringSequence {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -26,7 +26,7 @@ public class CommonStringSequence extends SingleStringSequence {
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff CommonStringSequence invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   private int elts = 0;
@@ -47,17 +47,17 @@ public class CommonStringSequence extends SingleStringSequence {
   private static /*@Prototype*/ CommonStringSequence proto =
       new /*@Prototype*/ CommonStringSequence();
 
-  /** Returns the prototype invariant for CommonStringSequence **/
+  /** Returns the prototype invariant for CommonStringSequence */
   public static /*@Prototype*/ CommonStringSequence get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   protected CommonStringSequence instantiate_dyn(
       /*>>> @Prototype CommonStringSequence this,*/ PptSlice slice) {
     return new CommonStringSequence(slice);

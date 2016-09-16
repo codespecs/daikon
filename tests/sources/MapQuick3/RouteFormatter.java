@@ -17,7 +17,7 @@ import java.util.Iterator;
  * href="http://java.sun.com/blueprints/patterns/MVC-detailed.html">Sun's
  * buzzword-filled explanation</a> of this design pattern)
  * </p>
- **/
+ */
 public abstract class RouteFormatter {
 
     /**
@@ -37,7 +37,7 @@ public abstract class RouteFormatter {
      * @param heading The initial heading.
      * @return A newline-terminated directions <tt>String</tt> giving
      * human-readable directions from start to end along this route.
-     **/
+     */
     public String computeDirections(Route route, double heading) {
         String directions = "";
         GeoFeature gf;
@@ -60,7 +60,7 @@ public abstract class RouteFormatter {
      * @param origHeading The initial heading
      * @return A newline-terminated <tt>String</tt> that gives
      * directions on how to traverse this geographical feature.
-     **/
+     */
     public abstract String computeLine(GeoFeature geoFeature,
                                        double origHeading);
 

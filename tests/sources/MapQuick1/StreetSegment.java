@@ -5,7 +5,7 @@ import junit.framework.Assert;
 
 /**
  * Class overview to be written by student.
- **/
+ */
 public class StreetSegment extends GeoSegment
 {
 
@@ -26,7 +26,7 @@ public class StreetSegment extends GeoSegment
    * @param increasingAddresses true if addresses increase from p1 to p2
    * <p>
    * The left and right sides of the street are as viewed from p1 to p2.
-   **/
+   */
   public StreetSegment(GeoPoint p1, GeoPoint p2, String name,
 		       StreetNumberSet leftNumbers, StreetNumberSet rightNumbers,
 		       String leftZip, String rightZip,
@@ -102,7 +102,7 @@ public class StreetSegment extends GeoSegment
    * @requires this.containsNumber(sn)
    * @return the fraction of the distance of this segment that is from
    *     p1 to the address sn
-   **/
+   */
   public double fractionDist(int n)
   {
     checkRep();

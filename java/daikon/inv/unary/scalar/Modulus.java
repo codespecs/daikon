@@ -17,7 +17,7 @@ import typequals.*;
  * Represents the invariant <code>x == r (mod m)</code> where <code>x</code>
  * is a long scalar variable, <code>r</code> is the (constant) remainder,
  * and <code>m</code> is the (constant) modulus.
- **/
+ */
 public class Modulus extends SingleScalar {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -28,7 +28,7 @@ public class Modulus extends SingleScalar {
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff Modulus invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   long modulus = 0;
@@ -51,17 +51,17 @@ public class Modulus extends SingleScalar {
 
   private static /*@Prototype*/ Modulus proto = new /*@Prototype*/ Modulus();
 
-  /** Returns the prototype invariant for Modulus **/
+  /** Returns the prototype invariant for Modulus */
   public static /*@Prototype*/ Modulus get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled **/
+  /** Returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Modulus is only valid on integral types **/
+  /** Modulus is only valid on integral types */
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) return false;
@@ -69,7 +69,7 @@ public class Modulus extends SingleScalar {
     return (vis[0].file_rep_type.baseIsIntegral());
   }
 
-  /** Instantiate an invariant on the specified slice **/
+  /** Instantiate an invariant on the specified slice */
   protected Modulus instantiate_dyn(/*>>> @Prototype Modulus this,*/ PptSlice slice) {
     return new Modulus(slice);
   }
@@ -269,7 +269,7 @@ public class Modulus extends SingleScalar {
    * <pre>
    *    size(x[]) = r (mod m) &rArr; size(x[])-1 = (r-1) (mod m)
    * </pre>
-   **/
+   */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 

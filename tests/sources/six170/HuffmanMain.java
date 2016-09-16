@@ -50,7 +50,7 @@ public class HuffmanMain {
    * @requires: s != null
    * @effects: creates a List of the characters in the same order in
    * <code>s</code> as <code>Character</code> objects.
-   **/
+   */
   private static List stringToList(String s) {
     List l = new ArrayList();
     for (int i=0; i < s.length(); i++) {
@@ -63,7 +63,7 @@ public class HuffmanMain {
    * @requires: l is a list containing Character objects
    * @return a string of the concatenation of the Character objects in
    * <code>l</code> into a String.
-   **/
+   */
   private static String listToString(List l) {
     StringBuffer sb = new StringBuffer();
     Iterator iter = l.iterator();
@@ -78,7 +78,7 @@ public class HuffmanMain {
    * @return a string of the same length as <code>l</code> which
    * contains a 1 for each true Boolean in <code>l</code> and a 0 for
    * each false Boolean.
-   **/
+   */
   private static String booleanListToString(List l) {
     StringBuffer sb = new StringBuffer();
     Iterator iter = l.iterator();
@@ -99,7 +99,7 @@ public class HuffmanMain {
    * <code>s</code>.  Returns a Map mapping Characters to Integers
    * where the Integer represent the number of times that Character
    * appears in <code>s</code>.
-   **/
+   */
   private static List getHuffmanSymbols(String s) {
     LinkedHashMap map = new LinkedHashMap();
 

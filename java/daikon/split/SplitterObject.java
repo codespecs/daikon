@@ -18,7 +18,7 @@ import typequals.*;
  * have about a splitting condition. It is created immediately when
  * the condition is read from the .spinfo file, and later contains a
  * reference to the compiled "Splitter" object.
- **/
+ */
 public class SplitterObject implements Comparable<SplitterObject> {
 
   private /*@MonotonicNonNull*/ Splitter splitter;
@@ -59,7 +59,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   /**
    * @param fileName the pathname of a .class file
    * @return a Java Class corresponding to the .class file, or null
-   **/
+   */
   static /*@Nullable*/ Class<?> defineSplitterClass(
       /*@BinaryName*/ String className, String fileName) {
     try {

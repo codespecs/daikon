@@ -26,7 +26,7 @@ import typequals.*;
  */
 public class NISuppressor {
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.inv.NISuppressor");
 
   /**
@@ -36,19 +36,19 @@ public class NISuppressor {
   int v2_index = -1;
   int v3_index = -1;
 
-  /** Invariant class. **/
+  /** Invariant class. */
   Class<? extends Invariant> inv_class;
 
-  /** True if the order of the variables was swapped. **/
+  /** True if the order of the variables was swapped. */
   boolean swap = false;
 
-  /** True if invariant permutes by changing its class. **/
+  /** True if invariant permutes by changing its class. */
   boolean swap_class = false;
 
   /**
    * State of the suppressor for the current check.  The state must be
    * one of the defined above.  They can always be compared with ==.
-   **/
+   */
   NIS.SuppressState state = NIS.SuppressState.NONE;
 
   /**
@@ -60,7 +60,7 @@ public class NISuppressor {
   /**
    * Sample invariant - used to check the suppressor over constants.
    * this is a prototype invariant; that is, sample_inv.ppt == null.
-   **/
+   */
   /*@Prototype*/ Invariant sample_inv;
 
   /**
@@ -482,7 +482,7 @@ public class NISuppressor {
     }
   }
 
-  /** Returns the variable index that corresponds to index **/
+  /** Returns the variable index that corresponds to index */
   private int translate_index(int index) {
 
     if (index == 0) return v1_index;
@@ -491,12 +491,12 @@ public class NISuppressor {
     else return index;
   }
 
-  /** Returns the invariant class of this suppressor **/
+  /** Returns the invariant class of this suppressor */
   public Class<? extends Invariant> get_inv_class() {
     return inv_class;
   }
 
-  /** clears the state of this suppressor to NIS.none **/
+  /** clears the state of this suppressor to NIS.none */
   public void clear_state() {
     state = NIS.SuppressState.NONE;
     current_state_str = null;
