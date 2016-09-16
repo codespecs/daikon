@@ -9,6 +9,10 @@ import jtb.ParseException;
 
 public class JavaParserTest {
 
+   /**
+    * Reads the .java file given on the command line, and writes a
+    * .java-parsed file that should be identical.
+    */
    public static void main(String args[]) {
       JavaParser parser = null;
       Node root;
