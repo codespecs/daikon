@@ -34,11 +34,11 @@ BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
 ifeq (i386, $(shell uname -i))
-DAIKON := java -Xmx960m -XX:MaxPermSize=480M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true ${DAIKON_OPTIONS}
+DAIKON := java -Xmx960m -XX:MaxPermSize=480M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
 PRINT_INV := java -Xmx960m -XX:MaxPermSize=480M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
 else
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := java -ea -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true ${DAIKON_OPTIONS}
+DAIKON := java -ea -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
 PRINT_INV := java -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
 endif
 

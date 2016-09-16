@@ -68,6 +68,7 @@ SEP_TXTE:=$(subst .inv.gz,.txt-esc,${SET_INVS})
 
 %.inv.gz: ${SCRATCH_FOR_DAIKON}/%.dtrace.gz #${DAIKON_CLASS}
 	(${DAIKON} -o $@ ${DAIKON_OPTIONS} ${USER_DAIKON_OPTIONS} --no_text_output --no_show_progress \
+	  --config_option daikon.Debug.show_stack_trace=true \
 	  --show_progress $< ${DECLS_FILES}) || (rm -f $@ && false)
 
 invs: ${SEP_INVS}

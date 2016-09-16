@@ -17,7 +17,7 @@ SRC_FILES = DataStructures/Comparable.java \
 			DataStructures/Underflow.java
 CLASS_FILES = $(subst .java,.class,$(SRC_FILES))
 TARGET_ARGS = DataStructures.StackArTester
-DAIKON_ARGS = --no_text_output --no_show_progress --config config.txt -o $@
+DAIKON_ARGS = --no_text_output --no_show_progress --config config.txt --config_option daikon.Debug.show_stack_trace=true -o $@
 CHICORY     = $(DAIKONDIR)/java/ChicoryPremain.jar
 PREMAIN		= $(CHICORY)
 CP          = $(DAIKONDIR)/java:$(CLASSPATH)

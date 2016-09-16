@@ -12,7 +12,7 @@ DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
 # DAIKONDIR is where the 'daikon' project is cloned
 DAIKONDIR?=${DAIKONDIR_DEFAULT}
 
-DAIKON_ARGS = '--ppt-omit-pattern=^org\.'  --no_text_output --no_show_progress
+DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
 DAIKON = ${DAIKONDIR}/java/daikon/Daikon.class
 CP     = $(DAIKONDIR)/java:$(CLASSPATH)
 

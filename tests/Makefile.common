@@ -706,6 +706,7 @@ ${INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES} ${MAP_FILES}
 		${PERSONAL_DAIKON_OPTIONS} \
 		--no_text_output \
 		--no_show_progress \
+		--config_option daikon.Debug.show_stack_trace=true \
 		${DTRACE_FILES} \
 		${DECLS_FILES} \
 		${SPINFO_FILES} \
@@ -729,6 +730,7 @@ ${SPINFO_INV_FILE}: ${PROJECT_FILE}.decls-DynComp ${PROJECT_FILE}.spinfo-static 
 		${PERSONAL_DAIKON_OPTIONS} \
 		--no_text_output \
 		--no_show_progress \
+		--config_option daikon.Debug.show_stack_trace=true \
 		$(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE)-dyncomp.dtrace.gz \
 		${CWD}/${PROJECT_FILE}.spinfo-static \
 		${MAP_FILES}) \
@@ -785,6 +787,7 @@ txt-jaif: $(PROJECT_FILE).txt-jaif
 	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.Daikon --no_text_output --no_show_progress \
 	  $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz \
 	  --config ${DAIKONDIR}/java/daikon/annotate_nullable.config \
+	  --config_option daikon.Debug.show_stack_trace=true \
 	  -o $(PROJECT_FILE)-jaif.inv.gz
 	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
 	  > $@-failed 2>&1
@@ -853,6 +856,7 @@ txt-simplify: ${PROJECT_FILE}.txt-simplify
 	-rm -f $@-failed
 	(${PRINT_INVARIANTS} --format simplify \
 	  --config_option daikon.inv.unary.scalar.OneOfScalar.omit_hashcode_values_Simplify=true \
+	  --config_option daikon.Debug.show_stack_trace=true \
 	  ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
@@ -1367,7 +1371,8 @@ ${PROJECT_FILE}.checker.diff: ${INV_FILE}
 	$(RUN_JAVA) $(USER_JAVA_FLAGS) \
 		daikon.tools.InvariantChecker $^ $(DTRACE_FILES) \
 		--output $@ \
-		--config daikon.FileIO.unmatched_procedure_entries_quiet=true
+		--config daikon.FileIO.unmatched_procedure_entries_quiet=true \
+		--config_option daikon.Debug.show_stack_trace=true
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make cross-checker  : cross checks Daikon's optimizations by comparing its output with DaikonSimple"

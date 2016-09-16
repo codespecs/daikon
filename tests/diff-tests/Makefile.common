@@ -54,7 +54,7 @@ inv: $(INV_FILES)
 # the % substitutions only work on the dependency line.
 $(INV_FILES): %.inv.gz: %.dtrace.gz $(PROGRAM).decls $(DAIKON_CLASS)
 	@echo "Temporary debugging output in daikon/tests/diff-tests/Makefile.common:  CLASSPATH = ${CLASSPATH}"
-	$(DAIKON) --config ../config.txt --no_text_output --no_show_progress -o $@ \
+	$(DAIKON) --config ../config.txt --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true -o $@ \
 		$(subst $(DAIKON_CLASS),,$^)
 
 .PRECIOUS: $(OUTPUT)
