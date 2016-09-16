@@ -59,29 +59,29 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
-import org.apache.commons.bcel6.Const;
-import org.apache.commons.bcel6.generic.ConstantPoolGen;
-import org.apache.commons.bcel6.generic.InstructionHandle;
-import org.apache.commons.bcel6.generic.JsrInstruction;
-import org.apache.commons.bcel6.generic.MethodGen;
-import org.apache.commons.bcel6.generic.ObjectType;
-import org.apache.commons.bcel6.generic.RET;
-import org.apache.commons.bcel6.generic.ReturnInstruction;
-import org.apache.commons.bcel6.generic.ReturnaddressType;
-import org.apache.commons.bcel6.generic.Type;
-import org.apache.commons.bcel6.verifier.VerificationResult;
-import org.apache.commons.bcel6.verifier.exc.AssertionViolatedException;
-import org.apache.commons.bcel6.verifier.exc.VerifierConstraintViolatedException;
-import org.apache.commons.bcel6.verifier.statics.Pass2Verifier; // for Javadoc
-import org.apache.commons.bcel6.verifier.structurals.ControlFlowGraph;
-import org.apache.commons.bcel6.verifier.structurals.ExceptionHandler;
-import org.apache.commons.bcel6.verifier.structurals.ExecutionVisitor;
-import org.apache.commons.bcel6.verifier.structurals.Frame;
-import org.apache.commons.bcel6.verifier.structurals.InstConstraintVisitor;
-import org.apache.commons.bcel6.verifier.structurals.InstructionContext;
-import org.apache.commons.bcel6.verifier.structurals.LocalVariables;
-import org.apache.commons.bcel6.verifier.structurals.OperandStack;
-import org.apache.commons.bcel6.verifier.structurals.UninitializedObjectType;
+import org.apache.bcel.Const;
+import org.apache.bcel.generic.ConstantPoolGen;
+import org.apache.bcel.generic.InstructionHandle;
+import org.apache.bcel.generic.JsrInstruction;
+import org.apache.bcel.generic.MethodGen;
+import org.apache.bcel.generic.ObjectType;
+import org.apache.bcel.generic.RET;
+import org.apache.bcel.generic.ReturnInstruction;
+import org.apache.bcel.generic.ReturnaddressType;
+import org.apache.bcel.generic.Type;
+import org.apache.bcel.verifier.VerificationResult;
+import org.apache.bcel.verifier.exc.AssertionViolatedException;
+import org.apache.bcel.verifier.exc.VerifierConstraintViolatedException;
+import org.apache.bcel.verifier.statics.Pass2Verifier; // for Javadoc
+import org.apache.bcel.verifier.structurals.ControlFlowGraph;
+import org.apache.bcel.verifier.structurals.ExceptionHandler;
+import org.apache.bcel.verifier.structurals.ExecutionVisitor;
+import org.apache.bcel.verifier.structurals.Frame;
+import org.apache.bcel.verifier.structurals.InstConstraintVisitor;
+import org.apache.bcel.verifier.structurals.InstructionContext;
+import org.apache.bcel.verifier.structurals.LocalVariables;
+import org.apache.bcel.verifier.structurals.OperandStack;
+import org.apache.bcel.verifier.structurals.UninitializedObjectType;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -233,7 +233,7 @@ public final class StackVer {
   /**
    * This class should only be instantiated by a Verifier.
    *
-   * @see org.apache.commons.bcel6.verifier.Verifier
+   * @see org.apache.bcel.verifier.Verifier
    */
   public StackVer() {}
 
@@ -422,7 +422,7 @@ public final class StackVer {
    * Java Virtual Machine Specification, Second Edition.  As it is doing
    * so it keeps track of the stack and local variables at each instruction.
    *
-   * @see org.apache.commons.bcel6.verifier.statics.Pass2Verifier#getLocalVariablesInfo(int)
+   * @see org.apache.bcel.verifier.statics.Pass2Verifier#getLocalVariablesInfo(int)
    */
   public VerificationResult do_stack_ver(MethodGen mg) {
 
@@ -462,7 +462,7 @@ public final class StackVer {
             f.getLocals().set(0, Frame.getThis());
           } else {
             @SuppressWarnings(
-                "nullness") // unannotated: org.apache.commons.bcel6.verifier.structurals.Frame is not yet annotated
+                "nullness") // unannotated: org.apache.bcel.verifier.structurals.Frame is not yet annotated
             /*@NonNull*/ UninitializedObjectType dummy = null;
             Frame.setThis(dummy);
             f.getLocals().set(0, new ObjectType(mg.getClassName()));

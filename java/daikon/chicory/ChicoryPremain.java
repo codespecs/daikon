@@ -120,19 +120,16 @@ public class ChicoryPremain {
 
     // Setup the transformer
     Object transformer = null;
-    if (Chicory.default_bcel) {
-      transformer = new Instrument();
-    } else { // use a special classloader to ensure our files are used
-      ClassLoader loader = new ChicoryLoader();
-      try {
-        transformer = loader.loadClass("daikon.chicory.Instrument").newInstance();
-        @SuppressWarnings("unchecked")
-        Class<Instrument> c = (Class<Instrument>) transformer.getClass();
-        // System.out.printf ("Classloader of tranformer = %s%n",
-        //                    c.getClassLoader());
-      } catch (Exception e) {
-        throw new RuntimeException("Unexpected error loading Instrument", e);
-      }
+    // use a special classloader to ensure correct version of BCEL is used
+    ClassLoader loader = new ChicoryLoader();
+    try {
+      transformer = loader.loadClass("daikon.chicory.Instrument").newInstance();
+      @SuppressWarnings("unchecked")
+      Class<Instrument> c = (Class<Instrument>) transformer.getClass();
+      // System.out.printf ("Classloader of tranformer = %s%n",
+      //                    c.getClassLoader());
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error loading Instrument", e);
     }
 
     // Instrument transformer = new Instrument();
@@ -311,20 +308,30 @@ public class ChicoryPremain {
 
   /**
    * Classloader for the BCEL code.  Using this classloader guarantees
-   * that we get the PLSE version of the BCEL code and not a possible
+   * that we get the 6.0 release version of BCEL and not a possible
    * incompatible version from elsewhere on the users classpath.  We
    * also load daikon.chicory.Instrument via this (since that class is
    * the user of all of the BCEL classes).  All references to BCEL
    * must be within that class (so that all references to BCEL will
    * get resolved by this classloader).
    *
-   * The PLSE version of BCEL is identified by the presence of the
-   * PLSE marker class (org.apache.commons.bcel6.PLSEMarker).  Other versions of
-   * BCEL will not contain this class.  If other versions of BCEL are
-   * present, they must appear before the PLSE versions in the classpath
-   * (so that the users application will see them first).  If only the
-   * PLSE version is in the classpath, then the normal loader is used
-   * for all of the classes.
+   * There are three general versions of BCEL to consider:
+   * - the original 5.2 version
+   * - the interim 6.0 version
+   * - the offical 6.0 release version
+   * We are looking for the latter one.  The first and third versions
+   * use the package name of org.apache.bcel while the interim version
+   * uses the package name of org.apache.commons.bcel6.  Also, there
+   * are several classes present in the 6.0 release version that are
+   * not in the original version. Thus, we can identify the correct
+   * version of BCEL by the presence of the class:
+   *   org.apache.bcel.util.ClassPathRepository.class
+   *
+   * Earlier versions of Chicory inspected all version of BCEL found
+   * on the path and selected the correct one, if present.
+   * We now (9/15/16) simplify this to say the first BCEL found
+   * must be the correct one.
+   * This allows us to use the normal loader for all of the classes.
    */
   public static class ChicoryLoader extends ClassLoader {
 
@@ -335,8 +342,8 @@ public class ChicoryPremain {
 
     public ChicoryLoader() throws IOException {
 
-      String bcel_classname = "org.apache.commons.bcel6.Const";
-      String plse_marker_classname = "org.apache.commons.bcel6.PLSEMarker";
+      String bcel_classname = "org.apache.bcel.Constants";
+      String plse_marker_classname = "org.apache.bcel.util.ClassPathRepository";
 
       List<URL> bcel_urls = get_resource_list(bcel_classname);
       List<URL> plse_urls = get_resource_list(plse_marker_classname);
@@ -356,40 +363,22 @@ public class ChicoryPremain {
       // No need to do anything if only our versions of bcel are present
       if (bcel_urls.size() == plse_urls.size()) return;
 
-      int bcel_index = 0;
-      int plse_index = 0;
-      while (bcel_index < bcel_urls.size()) {
-        URL bcel = bcel_urls.get(bcel_index);
-        URL plse = plse_urls.get(plse_index);
-        if (!plse.getProtocol().equals("jar")) {
-          System.err.printf("%nDaikon BCEL must be in jar file. " + " Found at %s%n", plse);
-          Runtime.chicoryLoaderInstantiationError = true;
-          System.exit(1);
-        }
-        if (same_location(bcel, plse)) {
-          if (bcel_index == plse_index) {
-            URL first_bcel = bcel;
-            while ((plse != null) && same_location(bcel, plse)) {
-              bcel = bcel_urls.get(++bcel_index);
-              plse_index++;
-              plse = (plse_index < plse_urls.size()) ? plse_urls.get(plse_index) : null;
-            }
-            System.err.printf(
-                "%nDaikon BCEL (%s) appears before target BCEL "
-                    + "(%s).%nPlease reorder classpath to put daikon.jar at the end.%n",
-                first_bcel,
-                bcel);
-            Runtime.chicoryLoaderInstantiationError = true;
-            System.exit(1);
-          } else {
-            bcel_jar = new JarFile(extract_jar_path(plse));
-            debug.log("Daikon BCEL found in jar %s%n", bcel_jar.getName());
-            break;
-          }
-        } else { // non plse bcel found
-          debug.log("Found non-PLSE BCEL at %s%n", bcel);
-          bcel_index++;
-        }
+      URL bcel = bcel_urls.get(0);
+      URL plse = plse_urls.get(0);
+      if (!plse.getProtocol().equals("jar")) {
+        System.err.printf("%nDaikon BCEL must be in jar file. " + " Found at %s%n", plse);
+        Runtime.chicoryLoaderInstantiationError = true;
+        System.exit(1);
+      }
+      if (!same_location(bcel, plse)) {
+        System.err.printf(
+            "%nDaikon BCEL (%s) is not first BCEL on the classpath " + "(%s).%n", plse, bcel);
+        Runtime.chicoryLoaderInstantiationError = true;
+        System.exit(1);
+      } else {
+        // UNDOONE - bcel_jar should always be null with new system?
+        bcel_jar = new JarFile(extract_jar_path(plse));
+        debug.log("Daikon BCEL found in jar %s%n", bcel_jar.getName());
       }
     }
 
@@ -414,8 +403,8 @@ public class ChicoryPremain {
         String jar2 = extract_jar_path(url2);
         return (jar1.equals(jar2));
       } else if (url1.getProtocol().equals("file")) {
-        String loc1 = url1.getFile().replaceFirst("org\\.apache\\.commons.bcel6\\..*$", "");
-        String loc2 = url2.getFile().replaceFirst("org\\.apache\\.commons.bcel6\\..*$", "");
+        String loc1 = url1.getFile().replaceFirst("org\\.apache\\.bcel\\..*$", "");
+        String loc2 = url2.getFile().replaceFirst("org\\.apache\\.bcel\\..*$", "");
         return (loc1.equals(loc2));
       } else {
         throw new Error("unexpected protocol " + url1.getProtocol());
@@ -440,7 +429,7 @@ public class ChicoryPremain {
     /**
      * Get all of the URLs that match the specified name in the
      * classpath.  The name should be in normal classname format (eg,
-     * org.apache.commons.bcel6.Const).  An empty list is returned if no
+     * org.apache.bcel.Const).  An empty list is returned if no
      * names match.
      */
     static List<URL> get_resource_list(String classname) throws IOException {
@@ -455,8 +444,8 @@ public class ChicoryPremain {
     }
 
     /**
-     * Changs a class name in the normal format (eg, org.apache.commons.bcel6.Const)
-     * to that used to lookup resources (eg. org/apache/commons.bcel6/Const.class)
+     * Changes a class name in the normal format (eg, org.apache.bcel.Const)
+     * to that used to lookup resources (eg. org/apache/bcel/Const.class)
      */
     private static String classname_to_resource_name(String name) {
       return (name.replace(".", "/") + ".class");
@@ -471,8 +460,7 @@ public class ChicoryPremain {
       }
 
       // Load non-bcel files via the normal mechanism
-      if (!name.startsWith("org.apache.commons.bcel6")
-          && (!name.startsWith("daikon.chicory.Instrument"))) {
+      if (!name.startsWith("org.apache.bcel") && (!name.startsWith("daikon.chicory.Instrument"))) {
         // System.out.printf ("loading standard %s%n", name);
         return super.loadClass(name, resolve);
       }

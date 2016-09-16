@@ -54,11 +54,11 @@ package daikon.dcomp;
  * <http://www.apache.org/>.
  */
 
-import org.apache.commons.bcel6.generic.*;
-import org.apache.commons.bcel6.verifier.structurals.Frame;
-import org.apache.commons.bcel6.verifier.structurals.InstConstraintVisitor;
-import org.apache.commons.bcel6.verifier.structurals.LocalVariables;
-import org.apache.commons.bcel6.verifier.structurals.OperandStack;
+import org.apache.bcel.generic.*;
+import org.apache.bcel.verifier.structurals.Frame;
+import org.apache.bcel.verifier.structurals.InstConstraintVisitor;
+import org.apache.bcel.verifier.structurals.LocalVariables;
+import org.apache.bcel.verifier.structurals.OperandStack;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -71,7 +71,7 @@ import org.checkerframework.checker.nullness.qual.*;
  */
 public class LimitedConstraintVisitor extends InstConstraintVisitor {
 
-  // private static ObjectType GENERIC_ARRAY = new ObjectType("org.apache.commons.bcel6.verifier.structurals.GenericArray");
+  // private static ObjectType GENERIC_ARRAY = new ObjectType("org.apache.bcel.verifier.structurals.GenericArray");
 
   /**
    * The constructor. Constructs a new instance of this class.
@@ -125,7 +125,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
    * This method is called by the visitXXX() to notify the acceptor of this InstConstraintVisitor
    * that a constraint violation has occured. This is done by throwing an instance of a
    * StructuralCodeConstraintException.
-   * @throws org.apache.commons.bcel6.verifier.exc.StructuralCodeConstraintException always.
+   * @throws org.apache.bcel.verifier.exc.StructuralCodeConstraintException always.
    */
   //	private void constraintViolated(Instruction violator, String description) {
   //		String fq_classname = violator.getClass().getName();
@@ -164,7 +164,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
 
   //	/**
   //	 * Assures index is of type INT.
-  //	 * @throws org.apache.commons.bcel6.verifier.exc.StructuralCodeConstraintException if the above constraint is not satisfied.
+  //	 * @throws org.apache.bcel.verifier.exc.StructuralCodeConstraintException if the above constraint is not satisfied.
   //	 */
   //	private void indexOfInt(Instruction o, Type index) {
   //		if (! index.equals(Type.INT))
@@ -175,7 +175,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
   //	 * Assures the ReferenceType r is initialized (or Type.NULL).
   //	 * Formally, this means (!(r instanceof UninitializedObjectType)), because
   //	 * there are no uninitialized array types.
-  //	 * @throws org.apache.commons.bcel6.verifier.exc.StructuralCodeConstraintException if the above constraint is not satisfied.
+  //	 * @throws org.apache.bcel.verifier.exc.StructuralCodeConstraintException if the above constraint is not satisfied.
   //	 */
   //	private void referenceTypeIsInitialized(Instruction o, ReferenceType r) {
   //		if (r instanceof UninitializedObjectType) {
@@ -192,7 +192,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
   //	/**
   //	 * Assures arrayref is of ArrayType or NULL;
   //	 * returns true if and only if arrayref is non-NULL.
-  //	 * @throws org.apache.commons.bcel6.verifier.exc.StructuralCodeConstraintException if the above constraint is violated.
+  //	 * @throws org.apache.bcel.verifier.exc.StructuralCodeConstraintException if the above constraint is violated.
   // 	 */
   //	private boolean arrayrefOfArrayType(Instruction o, Type arrayref) {
   //		if (! ((arrayref instanceof ArrayType) || arrayref.equals(Type.NULL)) )

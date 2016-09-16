@@ -81,9 +81,6 @@ public class Chicory {
   @Option("Create the new declaration record format")
   public static boolean new_decl_format = true;
 
-  @Option("Use first BCEL on classpath rather than PLSE's version")
-  public static boolean default_bcel = false;
-
   /**
    * Path to java agent jar file that performs the transformation.
    * The "main" procedure is ChicoryPremain.premain().
