@@ -739,7 +739,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   //   return (VarInfo) super.clone();
   // }
 
-  /** Create the prestate, or "orig()", version of the variable. */
+  /**
+   * Create the prestate, or "orig()", version of the variable.
+   * Note that the returned value is not completely initialized.
+   * The caller is still responsible for setting some fields of it,
+   * such as enclosing_var.
+   */
   public static VarInfo origVarInfo(VarInfo vi) {
     // At an exit point, parameters are uninteresting, but orig(param) is not.
     // So don't call orig(param) a parameter.
