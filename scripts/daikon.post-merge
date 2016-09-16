@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # This file will be used as .git/hooks/post-merge.
-# However, it should be edited as scripts/daikon.post-merge.
 
 # Fail if any command fails
 set -e
