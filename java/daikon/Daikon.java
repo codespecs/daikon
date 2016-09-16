@@ -424,6 +424,9 @@ public final class Daikon {
     }
 
     public static String error_at_line_file(LineNumberReader reader, String filename, String msg) {
+      if (msg == null) {
+        throw new Error("Null message supplied to error_at_line_file()");
+      }
       return "Error at line " + reader.getLineNumber() + " in file " + filename + ": " + msg;
     }
 
@@ -435,9 +438,10 @@ public final class Daikon {
     //      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
     public TerminationMessage(Throwable e, String msg) {
       super(
-          (e.getMessage() != null && msg.contains(e.getMessage()))
+          ((e.getMessage() != null && msg.contains(e.getMessage()))
               ? msg
-              : msg + ": " + e.getMessage());
+              : msg + ": " + e.getMessage()),
+          e);
     }
 
     public TerminationMessage(Throwable e, FileIO.ParseState state) {
