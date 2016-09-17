@@ -3,7 +3,7 @@ package misc;
 /**
  * For testing of isParam flag to Daikon.  We change the param with
  * "2" in it and see what Daikon produces.
- **/
+ */
 
 public class Param
 {
@@ -70,7 +70,7 @@ public class Param
   /*@ ensures ps1.a - \old(ps1.a) - 1 == 0; */
   /**
    *
-   **/
+   */
   public void work(int pi1, int pi2, ParamType ps1, ParamType ps2)
   {
     pi2 ++;

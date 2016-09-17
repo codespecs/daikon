@@ -22,7 +22,7 @@ import org.checkerframework.dataflow.qual.*;
  * <p>
  * PptName is deprecated, because declaration file format 2 should not need
  * it.  Uses of PptName should be eliminated.
- **/
+ */
 // No "@Deprecated" annotation yet, but we should add it once support for
 // file format 1 is removed from Daikon.
 public class PptName implements Serializable {
@@ -63,7 +63,7 @@ public class PptName implements Serializable {
 
   /**
    * @param name non-null ppt name as given in the decls file
-   **/
+   */
   public PptName(String name) {
     // If the name is well-formed, like "mvspc.setupGUI()V:::EXIT75",
     // then this constructor will extract the class and method names.
@@ -101,7 +101,7 @@ public class PptName implements Serializable {
 
   /**
    * className or methodName (or both) must be non-null
-   **/
+   */
   public PptName(
       /*@Nullable*/ String className, /*@Nullable*/ String methodName, String pointName) {
     if ((className == null) && (methodName == null)) {
@@ -137,7 +137,7 @@ public class PptName implements Serializable {
   /**
    * @return getName() [convenience accessor]
    * @see #getName()
-   **/
+   */
   /*@Pure*/
   public String name() {
     return getName();
@@ -146,7 +146,7 @@ public class PptName implements Serializable {
   /**
    * @return the complete program point name
    * e.g. "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT84"
-   **/
+   */
   /*@Pure*/
   public String getName() {
     return fullname;
@@ -157,7 +157,7 @@ public class PptName implements Serializable {
    * a given class.
    * May be null.
    * e.g. "DataStructures.StackAr"
-   **/
+   */
   public /*@Nullable*/ String getFullClassName() {
     return cls;
   }
@@ -167,7 +167,7 @@ public class PptName implements Serializable {
    * additional context, such as the package it is in.
    * May be null.
    * e.g. "StackAr"
-   **/
+   */
   public /*@Nullable*/ String getShortClassName() {
     if (cls == null) return null;
     int pt = cls.lastIndexOf('.');
@@ -181,7 +181,7 @@ public class PptName implements Serializable {
   /**
    * @return a guess at the package name.
    * May be null.
-   **/
+   */
   public /*@Nullable*/ String getPackageName() {
     if (cls == null) return null;
     int pt = cls.lastIndexOf('.');
@@ -198,7 +198,7 @@ public class PptName implements Serializable {
    * return type.
    * May be null.
    * e.g. "pop()Ljava/lang/Object;"
-   **/
+   */
   public /*@Nullable*/ String getSignature() {
     return method;
   }
@@ -208,7 +208,7 @@ public class PptName implements Serializable {
    * account any arguments, return values, etc.
    * May be null.
    * e.g. "pop"
-   **/
+   */
   public /*@Nullable*/ String getMethodName() {
     if (method == null) return null;
     int lparen = method.indexOf('(');
@@ -221,7 +221,7 @@ public class PptName implements Serializable {
    * Does not include any point information (such as ENTER or EXIT).
    * May be null.
    * e.g. "DataStructures.StackAr.pop()Ljava/lang/Object;"
-   **/
+   */
   public /*@Nullable*/ /*@Interned*/ String getNameWithoutPoint() {
     return fn_name;
     // if (cls == null && method == null) {
@@ -239,7 +239,7 @@ public class PptName implements Serializable {
    * aynthing useful with this result.
    * May be null.
    * e.g. "EXIT84"
-   **/
+   */
   public /*@Nullable*/ String getPoint() {
     return point;
   }
@@ -249,7 +249,7 @@ public class PptName implements Serializable {
    * Integer.MIN_VALUE if none exists.
    * e.g. "84"
    * @see #exitLine()
-   **/
+   */
   public int getPointSubscript() {
     int result = Integer.MIN_VALUE;
     if (point != null) {
@@ -271,7 +271,7 @@ public class PptName implements Serializable {
   /**
    * @return true iff this name refers to a synthetic object instance
    * program point
-   **/
+   */
   /*@Pure*/
   public boolean isObjectInstanceSynthetic() {
     return FileIO.object_suffix.equals(point);
@@ -280,7 +280,7 @@ public class PptName implements Serializable {
   /**
    * @return true iff this name refers to a synthetic class instance
    * program point
-   **/
+   */
   /*@Pure*/
   public boolean isClassStaticSynthetic() {
     return FileIO.class_static_suffix.equals(point);
@@ -288,7 +288,7 @@ public class PptName implements Serializable {
 
   /**
    * @return true iff this name refers to program globals
-   **/
+   */
   /*@Pure*/
   public boolean isGlobalPoint() {
     return FileIO.global_suffix.equals(point);
@@ -296,7 +296,7 @@ public class PptName implements Serializable {
 
   /**
    * @return true iff this name refers to a procedure exit point
-   **/
+   */
   /*@EnsuresNonNullIf(result=true, expression="point")*/
   /*@Pure*/
   public boolean isExitPoint() {
@@ -305,7 +305,7 @@ public class PptName implements Serializable {
 
   /**
    * @return true iff this name refers to an abrupt completion point
-   **/
+   */
   /*@EnsuresNonNullIf(result=true, expression="point")*/
   /*@Pure*/
   public boolean isThrowsPoint() {
@@ -315,7 +315,7 @@ public class PptName implements Serializable {
   /**
    * @return true iff this name refers to a combined (synthetic) procedure
    *         exit point
-   **/
+   */
   /*@EnsuresNonNullIf(result=true, expression="point")*/
   /*@Pure*/
   public boolean isCombinedExitPoint() {
@@ -334,7 +334,7 @@ public class PptName implements Serializable {
 
   /**
    * @return true iff this name refers to a procedure exit point
-   **/
+   */
   /*@EnsuresNonNullIf(result=true, expression="point")*/
   /*@Pure*/
   public boolean isEnterPoint() {
@@ -345,7 +345,7 @@ public class PptName implements Serializable {
    * @return a string containing the line number, if this is an exit point;
    *         otherwise, return an empty string
    * @see #getPointSubscript()
-   **/
+   */
   public String exitLine() {
     if (!isExitPoint()) {
       return "";
@@ -363,7 +363,7 @@ public class PptName implements Serializable {
    * format, the method name starts with &lt;init&gt;.  The newer declaration
    * format does not have &lt;init&gt; but their method name includes the class
    * name.  For compatibility both mechanisms are checked.
-   **/
+   */
   /*@Pure*/
   public boolean isConstructor() {
 
@@ -393,7 +393,7 @@ public class PptName implements Serializable {
     return false;
   }
 
-  /** Debugging output **/
+  /** Debugging output */
   public String repr() {
     return "PptName: fullname="
         + fullname
@@ -412,7 +412,7 @@ public class PptName implements Serializable {
   /**
    * Requires: this.isExitPoint()
    * @return a name for the corresponding enter point
-   **/
+   */
   public PptName makeEnter() {
     // This associates throw points with the main entry point.
     // We may wish to have a different exceptional than non-exceptional
@@ -427,7 +427,7 @@ public class PptName implements Serializable {
   /**
    * Requires: this.isExitPoint() || this.isEnterPoint()
    * @return a name for the combined exit point
-   **/
+   */
   public PptName makeExit() {
     assert isExitPoint() || isEnterPoint() : fullname;
     return new PptName(cls, method, FileIO.exit_suffix);
@@ -436,7 +436,7 @@ public class PptName implements Serializable {
   /**
    * Requires: this.isExitPoint() || this.isEnterPoint()
    * @return a name for the corresponding object invariant
-   **/
+   */
   public PptName makeObject() {
     assert isExitPoint() || isEnterPoint() : fullname;
     return new PptName(cls, null, FileIO.object_suffix);
@@ -445,7 +445,7 @@ public class PptName implements Serializable {
   /**
    * Requires: this.isExitPoint() || this.isEnterPoint() || this.isObjectInstanceSynthetic()
    * @return a name for the corresponding class-static invariant
-   **/
+   */
   public PptName makeClassStatic() {
     assert isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic() : fullname;
     return new PptName(cls, null, FileIO.class_static_suffix);

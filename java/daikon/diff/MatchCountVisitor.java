@@ -19,7 +19,7 @@ import org.checkerframework.checker.nullness.qual.*;
  *
  *
  * @author Lee Lin
- **/
+ */
 public class MatchCountVisitor extends PrintAllVisitor {
 
   // invariants found by the splitting
@@ -117,7 +117,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return cut + lastPart.indexOf("(");
   }
 
-  /** Returns true if the pair of invariants should be printed **/
+  /** Returns true if the pair of invariants should be printed */
   /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
   protected static boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 

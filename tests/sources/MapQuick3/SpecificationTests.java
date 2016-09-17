@@ -8,7 +8,7 @@ import junit.framework.*;
  * the tests in {@link GeoPointTest}, {@link GeoSegmentTest}, {@link
  * GeoFeatureTest}, {@link RouteTest}, {@link
  * WalkingRouteFormatterTest}, and {@link DrivingRouteFormatterTest}.
- **/
+ */
 public final class SpecificationTests extends TestSuite {
 
     public SpecificationTests() {

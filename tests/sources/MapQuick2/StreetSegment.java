@@ -6,7 +6,7 @@ import MapQuick.*;
 
 /**
  * Class overview to be written by student.
- **/
+ */
 public class StreetSegment extends GeoSegment
 {
 
@@ -34,7 +34,7 @@ public class StreetSegment extends GeoSegment
    * @param increasingAddresses true if addresses increase from p1 to p2
    * <p>
    * The left and right sides of the street are as viewed from p1 to p2.
-   **/
+   */
 
   public StreetSegment(String name, GeoPoint p1, GeoPoint p2) {
     super(name, p1, p2);
@@ -72,7 +72,7 @@ public class StreetSegment extends GeoSegment
    * @requires this.containsNumber(sn)
    * @return the fraction of the distance of this segment that is from
    *     p1 to the address sn
-   **/
+   */
   public double fractionDist(int sn) {
     double frac = 0;
     if (leftNumbers.contains(sn)) {

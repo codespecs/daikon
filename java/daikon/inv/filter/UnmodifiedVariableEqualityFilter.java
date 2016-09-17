@@ -8,7 +8,7 @@ import java.util.logging.Level;
 /**
  * Suppress invariants that merely indicate that a variable was
  * unmodified.  Used only for ESC output.
- **/
+ */
 public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress invariants that merely indicate that a variable was unmodified";

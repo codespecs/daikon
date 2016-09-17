@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 /**
  * Computes A union B, where A and B are the two sets of invariants.
- **/
+ */
 public class UnionVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
@@ -22,7 +22,7 @@ public class UnionVisitor extends DepthFirstVisitor {
   /**
    * Every node has at least one non-null ppt.  Add one of the
    * non-null ppt to the result.
-   **/
+   */
   public void visit(PptNode node) {
     PptTopLevel ppt1 = node.getPpt1();
     PptTopLevel ppt2 = node.getPpt2();
@@ -38,7 +38,7 @@ public class UnionVisitor extends DepthFirstVisitor {
    * If only one invariant is non-null, always add it. If two
    * invariants are non-null, add the invariant with the better
    * (higher) confidence.
-   **/
+   */
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode has already been visited
   /*@RequiresNonNull("currentPpt")*/

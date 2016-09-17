@@ -18,7 +18,7 @@ import org.checkerframework.checker.nullness.qual.*;
  *  and extract it for later use.  The implementation completely replaces
  *  the previous inv tree with the a new inv tree.  The new inv tree
  *  contains only the extracted consequents of the original inv tree.
- **/
+ */
 public class ConsequentExtractorVisitor extends DepthFirstVisitor {
 
   private int nonce;
@@ -97,7 +97,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor {
   /**
    * Returns true if the pair of invariants should be printed,
    * depending on their type, relationship, and printability.
-   **/
+   */
   protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
     if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING

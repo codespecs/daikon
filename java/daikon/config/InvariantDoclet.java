@@ -21,7 +21,7 @@ import org.checkerframework.checker.signature.qual.*;
  *   --texinfo FILENAME   Texinfo format, for inclusion in the manual.
  *   --text FILENAME      Text format, with each name preceded by "+"
  *                        characters to indicate depth in the tree.
- **/
+ */
 public class InvariantDoclet {
 
   private static final String lineSep = System.getProperty("line.separator");
@@ -45,7 +45,7 @@ public class InvariantDoclet {
 
   /**
    * Entry point for this doclet (invoked by javadoc).
-   **/
+   */
   public static boolean start(RootDoc doc) throws IOException {
     InvariantDoclet pd = new InvariantDoclet(doc);
     pd.process();
@@ -56,7 +56,7 @@ public class InvariantDoclet {
   /**
    * Invoked by javadoc to query whether an option is allowed.
    * @return number of tokens used by one option.
-   **/
+   */
   public static int optionLength(String opt) {
     if ("--texinfo".equals(opt)) return 2; // == 1 tag + 1 argument
 
@@ -79,7 +79,7 @@ public class InvariantDoclet {
 
   /**
    * Process a javadoc tree and create the specified invariant output.
-   **/
+   */
   public void process() throws IOException {
 
     @SuppressWarnings("keyfor") // the loop below makes all these keys to cmap

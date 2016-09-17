@@ -12,7 +12,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * Enumeration type for output style.
  * (Should this be somewhere else?)
- **/
+ */
 public enum OutputFormat {
 
   /** The standard, concise Daikon output format.
@@ -62,7 +62,7 @@ public enum OutputFormat {
   /**
    * Return the appropriate OutputFormat for the given name, or throw
    * an error if no such OutputFormat exists.
-   **/
+   */
   public static OutputFormat get(String name) {
     // if (name == null) { return null; }
     if (name.compareToIgnoreCase(DAIKON.name) == 0) {

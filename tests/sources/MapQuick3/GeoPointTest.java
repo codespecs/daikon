@@ -7,80 +7,80 @@ import junit.framework.*;
 
 /**
  * Unit tests for the GeoPoint class.
- **/
+ */
 public class GeoPointTest extends TestCase {
 
-    /** A GeoPoint object with the same data as eq2 **/
+    /** A GeoPoint object with the same data as eq2 */
     private final GeoPoint eq1;
 
-    /** A GeoPoint object with the same data as eq1 **/
+    /** A GeoPoint object with the same data as eq1 */
     private final GeoPoint eq2;
 
-    /** A GeoPoint object with different data than eq1 **/
+    /** A GeoPoint object with different data than eq1 */
     private final GeoPoint diff;
 
 
-    /** A GeoPoint representing the center of boston **/
+    /** A GeoPoint representing the center of boston */
     private final GeoPoint p1;
 
 
-    /** A GeoPoint due north of boston **/
+    /** A GeoPoint due north of boston */
     private final GeoPoint north;
 
-    /** Heading, in degrees,  between p1 and north **/
+    /** Heading, in degrees,  between p1 and north */
     private final double nHeading;
 
-    /** Distance, in miles,  between p1 and north **/
+    /** Distance, in miles,  between p1 and north */
     private final double nDist;
 
 
-    /** A GeoPodouble due south of boston **/
+    /** A GeoPodouble due south of boston */
     private final GeoPoint south;
 
-    /** Heading, in degrees,  between p1 and south **/
+    /** Heading, in degrees,  between p1 and south */
     private final double sHeading;
 
-    /** Distance, in miles,  between p1 and south **/
+    /** Distance, in miles,  between p1 and south */
     private final double sDist;
 
 
-    /** A GeoPoint due east of boston **/
+    /** A GeoPoint due east of boston */
     private final GeoPoint east;
 
-    /** Heading, in degrees,  between p1 and east **/
+    /** Heading, in degrees,  between p1 and east */
     private final double eHeading;
 
-    /** Distance, in miles,  between p1 and east **/
+    /** Distance, in miles,  between p1 and east */
     private final double eDist;
 
 
-    /** A GeoPoint due west of boston **/
+    /** A GeoPoint due west of boston */
     private final GeoPoint west;
 
-    /** Heading, in degrees,  between p1 and west **/
+    /** Heading, in degrees,  between p1 and west */
     private final double wHeading;
 
-    /** Distance, in miles,  between p1 and west **/
+    /** Distance, in miles,  between p1 and west */
     private final double wDist;
 
 
-    /** A GeoPoint due north east of boston **/
+    /** A GeoPoint due north east of boston */
     private final GeoPoint northEast;
 
-    /** Heading, in degrees,  between p1 and north east **/
+    /** Heading, in degrees,  between p1 and north east */
     private final double neHeading;
 
-    /** Distance, in miles,  between p1 and north east **/
+    /** Distance, in miles,  between p1 and north east */
     private final double neDist;
 
 
-    /** A GeoPoint due south west of boston **/
+    /** A GeoPoint due south west of boston */
     private final GeoPoint southWest;
 
-    /** Heading, in degrees,  between p1 and south west **/
+    /** Heading, in degrees,  between p1 and south west */
     private final double swHeading;
 
-    /** Distance, in miles,  between p1 and south west **/
+    /** Distance, in miles,  between p1 and south west */
     private final double swDist;
 
 
@@ -140,7 +140,7 @@ public class GeoPointTest extends TestCase {
      * to its associated integer value (to millionths of a degree).
      * Allows invalid locations to be specified for testing, but
      * doesn't allow negative minute/second values.
-     **/
+     */
     protected static int locationToInt(int deg, int min, int sec) {
         if (min < 0 || sec < 0) {
             throw new RuntimeException("min and sec must be positive!");
@@ -159,7 +159,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Sanity check for our locationToInt() method
-     **/
+     */
     public void testLocationToIntMethod() {
         int lat = locationToInt(42, 21, 30);
         int lng = locationToInt(-71, 3, 37);
@@ -173,7 +173,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * JUnit calls this before each testXXX method is run
-     **/
+     */
     protected void setUp() {
 
     }
@@ -188,7 +188,7 @@ public class GeoPointTest extends TestCase {
      * Tests that GeoPoints can be created with some legal latitude
      * and longitude values that are in the greater boston area, and
      * that the values it's provided are returned unchanged.
-     **/
+     */
     public void testLegalValues1() {
         int valLat = locationToInt(42, 21, 30);
         int valLong = locationToInt(-71, 3, 37);
@@ -200,7 +200,7 @@ public class GeoPointTest extends TestCase {
      * Tests that GeoPoints can be created with some legal latitude
      * and longitude values that are in the greater boston area, and
      * that the values it's provided are returned unchanged.
-     **/
+     */
     public void testLegalValues2() {
         int valLat = locationToInt(42, 21, 60);
         int valLong = locationToInt(-71, 14, 7);
@@ -212,7 +212,7 @@ public class GeoPointTest extends TestCase {
      * Helper method for asserting that a legal latitude/longitude
      * pair can be used to create a GeoPoint and that those exact same
      * values are then returned.
-     **/
+     */
     protected void checkLegal(int lat, int lng) {
         GeoPoint g = null;
         try {
@@ -241,7 +241,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that distance 0 is handled correctly: same object
-     **/
+     */
     public void testDistance01() {
         assertEquals("Distance between a GeoPoint and itself must be 0",
                      0.0, p1.distanceTo(p1), TOLERANCE);
@@ -250,7 +250,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that distance 0 is handled correctly: equal objects
-     **/
+     */
     public void testDistance02() {
         assertEquals("Distance between two equal GeoPoints must be 0",
                      0.0, eq1.distanceTo(eq2), TOLERANCE);
@@ -259,7 +259,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points due north are handled correctly
-     **/
+     */
     public void testDistanceDueNorth() {
         checkDist(p1, north, nDist);
     }
@@ -267,7 +267,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points due south are handled correctly
-     **/
+     */
     public void testDistanceDueSouth() {
         checkDist(p1, south, sDist);
     }
@@ -275,7 +275,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points due east are handled correctly
-     **/
+     */
     public void testDistanceDueEast() {
         checkDist(p1, east, eDist);
     }
@@ -283,7 +283,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points due west are handled correctly
-     **/
+     */
     public void testDistanceDueWest() {
         checkDist(p1, west, wDist);
     }
@@ -291,7 +291,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points north east are handled correctly
-     **/
+     */
     public void testDistanceDueNorthEast() {
         checkDist(p1, northEast, neDist);
     }
@@ -299,7 +299,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points south west are handled correctly
-     **/
+     */
     public void testDistanceDueSouthWest() {
         checkDist(p1, southWest, swDist);
     }
@@ -308,7 +308,7 @@ public class GeoPointTest extends TestCase {
     /**
      * Helper method that asserts that the distance between p1 and p2
      * is dist AND that the distance between p2 and p1 is also dist.
-     **/
+     */
     protected void checkDist(GeoPoint p1, GeoPoint p2, double dist) {
         assertEquals("Distance between these two points is " +
                      dist + ", not " + p1.distanceTo(p2),
@@ -325,7 +325,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points due north are handled correctly
-     **/
+     */
     public void testHeadingDueNorth() {
         checkHeading(p1, north, nHeading);
     }
@@ -333,7 +333,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points due south are handled correctly
-     **/
+     */
     public void testHeadingDueSouth() {
         checkHeading(p1, south, sHeading);
     }
@@ -341,7 +341,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points due east are handled correctly
-     **/
+     */
     public void testHeadingDueEast() {
         checkHeading(p1, east, eHeading);
     }
@@ -349,7 +349,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points due west are handled correctly
-     **/
+     */
     public void testHeadingDueWest() {
         checkHeading(p1, west, wHeading);
     }
@@ -357,7 +357,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points north east are handled correctly
-     **/
+     */
     public void testHeadingNorthEast() {
         checkHeading(p1, northEast, neHeading);
     }
@@ -365,7 +365,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that points south west are handled correctly
-     **/
+     */
     public void testHeadingSouthWest() {
         checkHeading(p1, southWest, swHeading);
     }
@@ -374,7 +374,7 @@ public class GeoPointTest extends TestCase {
     /**
      * Helper method that asserts that the heading between p1 and p2
      * is heading AND that the distance between p2 and p1 is heading + 180.
-     **/
+     */
     protected void checkHeading(GeoPoint p1, GeoPoint p2, double heading) {
         assertEquals("Heading between these two points is " +
                      heading + ", not " + p1.headingTo(p2),
@@ -391,7 +391,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test positive case: same object
-     **/
+     */
     public void testEquals1() {
         assertTrue("A GeoPoint must be equal() to itself",
                    eq1.equals(eq1));
@@ -400,7 +400,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test positive case: equal objects
-     **/
+     */
     public void testEquals2() {
         assertTrue("Two GeoPoints with the same data must be equal()",
                    eq1.equals(eq2));
@@ -409,7 +409,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test that null values are handled correctly
-     **/
+     */
     public void testNotEqualsNull() {
         try {
             if (!eq1.equals(null)) {
@@ -430,7 +430,7 @@ public class GeoPointTest extends TestCase {
     /**
      * Test that two GeoPoints with different data do not register as
      * equal.
-     **/
+     */
     public void testNotEqualsDiff() {
         assertFalse("Two GeoPoints with different data must not be equal()",
                     eq1.equals(diff));
@@ -441,7 +441,7 @@ public class GeoPointTest extends TestCase {
      * Test that two GeoPoints with "swapped" latitude and longitude
      * values (i.e., they both sum to the same value) do not register
      * as equal.
-     **/
+     */
     public void testNotEqualsSwapped() {
         int lat = locationToInt(42, 21, 30);
         int lng = locationToInt(-71, 3, 37);
@@ -458,7 +458,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test positive case: same object
-     **/
+     */
     public void testHashCode1() {
         assertEquals("A GeoPoint's hashCode must remain constant",
                      eq1.hashCode(), eq1.hashCode());
@@ -467,7 +467,7 @@ public class GeoPointTest extends TestCase {
 
     /**
      * Test positive case: equal objects
-     **/
+     */
     public void testHashCode2() {
         assertEquals("GeoPoints with same data must have the same hashCode",
                      eq1.hashCode(), eq2.hashCode());

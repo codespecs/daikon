@@ -15,26 +15,26 @@ import org.checkerframework.dataflow.qual.*;
  * variable types which are class fields.
  */
 public class FieldInfo extends DaikonVariableInfo {
-  /** The corresponding Field **/
+  /** The corresponding Field */
   private Field field;
 
-  /** The offset of this field in its containing class **/
+  /** The offset of this field in its containing class */
   private int field_num;
 
-  /** whether or not this is a static field **/
+  /** whether or not this is a static field */
   private boolean is_static;
 
-  /** whether or not this field is of a primitive type **/
+  /** whether or not this field is of a primitive type */
   private boolean is_primitive;
 
-  /** whether or not this field is an outer this variable **/
+  /** whether or not this field is an outer this variable */
   private boolean is_outer_this;
 
   /**
    * Class that gets the tags for fields.  Used by DynComp.
    * Accessed only by methods DCRuntime.get_field_tag and
    * DCRuntime.get_field_tag_refs_only.
-   **/
+   */
   public DCRuntime. /*@MonotonicNonNull*/FieldTag field_tag = null;
 
   public FieldInfo(
@@ -142,7 +142,7 @@ public class FieldInfo extends DaikonVariableInfo {
   /**
    * Returns the kind of this variable.  Statics are top level
    * variables, instance variables are fields.
-   **/
+   */
   public VarKind get_var_kind() {
     if (isStatic() || is_outer_this) {
       return VarKind.VARIABLE;
@@ -154,7 +154,7 @@ public class FieldInfo extends DaikonVariableInfo {
   /**
    * Returns the name of this field.  Since statics are top level, they
    * have no relative name.  Fields return their field name.
-   **/
+   */
   public /*@Nullable*/ String get_relative_name() {
     if (isStatic() || is_outer_this) {
       return null;

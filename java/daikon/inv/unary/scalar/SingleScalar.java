@@ -38,12 +38,12 @@ public abstract class SingleScalar extends UnaryInvariant {
 
   /** Returns whether or not the specified types are valid for unary scalar.
    *  (Static version of method.)
-   **/
+   */
   public static final boolean valid_types_static(VarInfo[] vis) {
     return ((vis.length == 1) && vis[0].file_rep_type.isScalar());
   }
 
-  /** Returns whether or not the specified types are valid for unary scalar **/
+  /** Returns whether or not the specified types are valid for unary scalar */
   public final boolean valid_types(VarInfo[] vis) {
     return valid_types_static(vis);
   }
@@ -79,13 +79,13 @@ public abstract class SingleScalar extends UnaryInvariant {
    * state, then the implementation should simply call {@link
    * #check_modified}.  This method need not check for falsification; that
    * is done by the caller.
-   **/
+   */
   public abstract InvariantStatus add_modified(long value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
-   **/
+   */
   public InvariantStatus add_unmodified(long value, int count) {
     // System.out.println("SingleScalar.add_unmodified " + ppt.name() + ": parent=" + ppt.parent);
     return InvariantStatus.NO_CHANGE;

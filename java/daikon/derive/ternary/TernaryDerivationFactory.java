@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 /**
  * Factory to produce TernaryDerivations.
- **/
+ */
 public abstract class TernaryDerivationFactory implements DerivationFactory {
 
   /**
@@ -22,7 +22,7 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
    * allow more than one because the base variables may have multiple
    * derived variables, per type of derivation.  Can also be null if the
    * variables have nothing to derive from.
-   **/
+   */
   public abstract TernaryDerivation /*@Nullable*/ [] instantiate(
       VarInfo vi1, VarInfo vi2, VarInfo vi3);
 

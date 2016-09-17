@@ -51,7 +51,7 @@ import typequals.*;
  * Thus, <code>x[0]</code> is compared to <code>y[0]</code>,
  * <code>x[1]</code> to <code>y[1]</code> and so forth.
  * Prints as <code>y[] = a * x[] + b</code>.
- **/
+ */
 public class CLASSNAME
   extends SUPERCLASS
 {
@@ -64,7 +64,7 @@ public class CLASSNAME
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff PairwiseLinearBinary invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CORECLASS core;
@@ -84,17 +84,17 @@ public class CLASSNAME
 
   private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
-  /** Returns the prototype invariant for CLASSNAME **/
+  /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled **/
+  /** Returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Instantiates the invariant on the specified slice **/
+  /** Instantiates the invariant on the specified slice */
   protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME (slice);
   }

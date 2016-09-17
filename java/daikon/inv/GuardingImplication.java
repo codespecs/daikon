@@ -12,7 +12,7 @@ import org.checkerframework.dataflow.qual.*;
  *  are over variables that are sometimes missing.  For example, if the
  *  invariant <code>a.x = 0</code> is true, the guarded implication is
  *  <code>a != null \rArr; a.x = 0</code>.
- **/
+ */
 public class GuardingImplication extends Implication {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

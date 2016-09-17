@@ -123,7 +123,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Boolean. True if CLASSNAME invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public static Logger debug
@@ -148,12 +148,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     super ();
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** CLASSNAME is only valid on IS_INTEGRAL types **/
+  /** CLASSNAME is only valid on IS_INTEGRAL types */
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis)) {
@@ -584,7 +584,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * If the arg is a sequence size, return the sequence; otherwise return null.
-   **/
+   */
   private /*@Nullable*/ VarInfo sized_sequence(VarInfo size) {
     if (size.derived instanceof SequenceLength) {
       return ((SequenceLength)size.derived).base;

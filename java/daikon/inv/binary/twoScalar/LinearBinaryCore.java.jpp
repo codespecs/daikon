@@ -48,7 +48,7 @@ public final class CLASSNAME
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug =
     Logger.getLogger("daikon.inv.binary.twoScalar." + CLASSSTRING);
 
@@ -331,7 +331,7 @@ public final class CLASSNAME
    * Returns a 2-element int array of the indices of the most separated
    * pair of points between the points represented by x_array and y_array.
    * Requires that x_array and y_array are the same length.
-   **/
+   */
   static int[] maxsep_point(PRIMITIVE[] x_array, PRIMITIVE[] y_array) {
     // Find the most separated pair.
     // Do I really need to check in two dimensions, or would one be enough?
@@ -426,7 +426,7 @@ public final class CLASSNAME
 
   /**
    * Given ((x0,y0),(x1,y1)), set a, b and c such that ax + by + c = 0.
-   **/
+   */
   private InvariantStatus set_bi_linear(PRIMITIVE x0, PRIMITIVE x1, PRIMITIVE y0, PRIMITIVE y1) {
     double[] AandBandC = new double[3];
     if (! find_bi_linear(x0, x1, y0, y1, AandBandC)) {

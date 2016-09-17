@@ -46,16 +46,16 @@ public class InvTranslate {
    */
   int quality = 0;
 
-  /** Map of variables from inv to inv **/
+  /** Map of variables from inv to inv */
   Map<String, String> var_map = new LinkedHashMap<String, String>();
 
-  /** source invariant **/
+  /** source invariant */
   Invariant inv1;
 
-  /** destination invariant **/
+  /** destination invariant */
   Invariant inv2;
 
-  // /** an empty translation **/
+  // /** an empty translation */
   // private InvTranslate () {
   //   inv1 = null;
   //   inv2 = null;

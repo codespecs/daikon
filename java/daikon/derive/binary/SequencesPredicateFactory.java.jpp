@@ -35,10 +35,10 @@ import org.checkerframework.checker.nullness.qual.*;
 
 /**
  * Factory for SequencesPredicate derived variables.
- **/
+ */
 public final class CLASSNAME extends BinaryDerivationFactory {
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug =
     Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
 

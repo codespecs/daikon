@@ -31,7 +31,7 @@ import org.checkerframework.dataflow.qual.*;
 
 public final class FileIO {
 
-  /** Nobody should ever instantiate a FileIO. **/
+  /** Nobody should ever instantiate a FileIO. */
   private FileIO() {
     throw new Error();
   }
@@ -74,7 +74,7 @@ public final class FileIO {
    * Boolean.  When false, set modbits to 1 iff the printed
    * representation has changed.  When true, set modbits to 1 if the
    * printed representation has changed; leave other modbits as is.
-   **/
+   */
   public static boolean dkconfig_add_changed = true;
 
   /**
@@ -98,13 +98,13 @@ public final class FileIO {
   /** Boolean.  When true, don't print a warning about unmatched procedure
    * entries, which are ignored by Daikon (unless the --nohierarchy switch
    * is provided).
-   **/
+   */
   public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
 
   /**
    * Boolean.  If true, prints the unmatched procedure entries
    * verbosely.
-   **/
+   */
   public static boolean dkconfig_verbose_unmatched_procedure_entries = false;
 
   /**
@@ -113,7 +113,7 @@ public final class FileIO {
    * file.  Use this with care:  in general, it is better to fix the
    * problem that caused a bad trace file, rather than to suppress the
    * exception.
-   **/
+   */
   public static boolean dkconfig_continue_after_file_exception = false;
 
   /**
@@ -124,7 +124,7 @@ public final class FileIO {
    */
   public static long dkconfig_dtrace_line_count = 0;
 
-  /** True if declaration records are in the new format -- that is, decl-version 2.0. **/
+  /** True if declaration records are in the new format -- that is, decl-version 2.0. */
   // Set by read_decl_version; by read_data_trace_record if the file is non-empty;
   // by read_serialized_pptmap; and by InvMap.readObject.
   public static /*@MonotonicNonNull*/ Boolean new_decl_format = null;
@@ -173,15 +173,15 @@ public final class FileIO {
   /**
    * If true, then print the variable name each time the variable's value
    * is first missing/nonsensical.
-   **/
+   */
   public static boolean debug_missing = false;
 
-  /** Debug tracer for reading. **/
+  /** Debug tracer for reading. */
   public static final Logger debugRead = Logger.getLogger("daikon.FileIO.read");
-  /** Debug tracer for printing. **/
+  /** Debug tracer for printing. */
   public static final Logger debugPrint = Logger.getLogger("daikon.FileIO.printDtrace");
 
-  /** Debug tracer for printing variable values. **/
+  /** Debug tracer for printing variable values. */
   public static final Logger debugVars = Logger.getLogger("daikon.FileIO.vars");
 
   public static final SimpleLog debug_decl = new SimpleLog(false);
@@ -250,7 +250,7 @@ public final class FileIO {
    * @return a new PptMap containing declarations read from the files
    * listed in the argument; connection information (controlling
    * variables and entry ppts) is set correctly upon return.
-   **/
+   */
   public static PptMap read_declaration_files(Collection<File> files) throws IOException {
     PptMap all_ppts = new PptMap();
     // Read all decls, creating PptTopLevels and VarInfos
@@ -264,7 +264,7 @@ public final class FileIO {
     return all_ppts;
   }
 
-  /** Read one decls file; add it to all_ppts. **/
+  /** Read one decls file; add it to all_ppts. */
   public static void read_declaration_file(File filename, PptMap all_ppts) throws IOException {
     if (Daikon.using_DaikonSimple) {
       Processor processor = new DaikonSimple.SimpleProcessor();
@@ -425,7 +425,7 @@ public final class FileIO {
     return newppt;
   }
 
-  /** Parses a ppt parent hierarchy record and returns it. **/
+  /** Parses a ppt parent hierarchy record and returns it. */
   private static ParentRelation parse_ppt_parent(ParseState state, Scanner scanner) {
 
     PptRelationType rel_type =
@@ -449,7 +449,7 @@ public final class FileIO {
       flags.add(parse_enum_val(state, scanner, PptFlags.class, "ppt flags"));
   }
 
-  /** Parses a ppt-type record and returns the type **/
+  /** Parses a ppt-type record and returns the type */
   private static PptType parse_ppt_type(ParseState state, Scanner scanner) {
 
     PptType ppt_type = parse_enum_val(state, scanner, PptType.class, "ppt type");
@@ -562,7 +562,7 @@ public final class FileIO {
    * Read a variable name, type, and comparability; construct a VarInfo.
    * Return null after reading the last variable in this program point
    * declaration.
-   **/
+   */
   private static /*@Nullable*/ VarInfo read_VarInfo(ParseState state, String ppt_name)
       throws IOException {
     LineNumberReader file = state.reader;
@@ -852,7 +852,7 @@ public final class FileIO {
       return sw.toString();
     }
 
-    /** Change uses of hashcodes to canonical_hashcode. **/
+    /** Change uses of hashcodes to canonical_hashcode. */
     public /*@Interned*/ Invocation canonicalize() {
       /*@Nullable*/ Object[] new_vals = new /*@Nullable*/ Object[vals.length];
       System.arraycopy(vals, 0, new_vals, 0, vals.length);
@@ -904,7 +904,7 @@ public final class FileIO {
    * For each record in the files, calls the appropriate callback in the processor.
    * @see #read_data_trace_files(Collection,PptMap,Processor,boolean)
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
-   **/
+   */
   public static void read_data_trace_files(Collection<String> files, PptMap all_ppts)
       throws IOException {
 
@@ -923,7 +923,7 @@ public final class FileIO {
    *                       false if the ppts may already be there.
    *
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
-   **/
+   */
   public static void read_data_trace_files(
       Collection<String> files, PptMap all_ppts, Processor processor, boolean ppts_may_be_new)
       throws IOException {
@@ -1168,7 +1168,7 @@ public final class FileIO {
    *   ParseState is what is returned (actually, side-effected) by
    *   method read_data_trace_record when it reads a record.
    * </ol>
-   **/
+   */
   /*@UsesObjectEquals*/
   public static class ParseState {
 
@@ -1176,10 +1176,10 @@ public final class FileIO {
     // This is the global information about the state of the parser.
     //
 
-    /** Name of input file **/
+    /** Name of input file */
     public String filename;
 
-    /** True if the current file is a declaration file. **/
+    /** True if the current file is a declaration file. */
     public boolean is_decl_file;
 
     /** True if ppts may be new.  If a duplicate is seen, it must match
@@ -1188,13 +1188,13 @@ public final class FileIO {
      */
     public boolean ppts_may_be_new;
 
-    /** All of the ppts seen so far **/
+    /** All of the ppts seen so far */
     public PptMap all_ppts;
 
-    /** Input stream **/
+    /** Input stream */
     public LineNumberReader reader;
 
-    /** Total number of lines in the input file **/
+    /** Total number of lines in the input file */
     public long total_lines;
 
     /** Comparability format, either VarComparability.IMPLICIT or
@@ -1222,7 +1222,7 @@ public final class FileIO {
     /** The current set of values.  Used when status=SAMPLE. */
     public /*@Nullable*/ ValueTuple vt;
 
-    /** Miscellaneous text in the parsed item **/
+    /** Miscellaneous text in the parsed item */
     public /*@Nullable*/ Object payload; // used when status=COMMENT
 
     /** Start parsing the given file. */
@@ -1300,7 +1300,7 @@ public final class FileIO {
       ppt = null;
     }
 
-    /** Returns the current line number in the input file, or -1 if not available. **/
+    /** Returns the current line number in the input file, or -1 if not available. */
     public int get_linenum() {
       return reader.getLineNumber();
     }
@@ -1334,7 +1334,7 @@ public final class FileIO {
     }
   }
 
-  /** Returns the current line number in the input file, or -1 if not available. **/
+  /** Returns the current line number in the input file, or -1 if not available. */
   public static int get_linenum() {
     if (FileIO.data_trace_state == null) {
       return -1;
@@ -1362,7 +1362,7 @@ public final class FileIO {
    * Uses the standard data processor which calls
    * {@link FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)}
    * on each record, and ignores records other than samples.
-   **/
+   */
   public static void read_data_trace_file(String filename, PptMap all_ppts) throws IOException {
     Processor processor = new Processor();
     read_data_trace_file(filename, all_ppts, processor, false, true);
@@ -1372,7 +1372,7 @@ public final class FileIO {
    * Read declarations AND samples (not just sample data as the name might
    * imply) from .dtrace file.  For each record read from the file, passes
    * the record to a method of the processor.
-   **/
+   */
   public static void read_data_trace_file(
       String filename,
       PptMap all_ppts,
@@ -1708,7 +1708,7 @@ public final class FileIO {
    * Add orig() and derived variables to vt (by side effect), then
    * supply it to the program point for flowing.
    * @param vt trace data only; modified by side effect to add derived vars
-   **/
+   */
   /*@RequiresNonNull("FileIO.data_trace_state")*/
   public static void process_sample(
       PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {
@@ -1781,7 +1781,7 @@ public final class FileIO {
     }
   }
 
-  /** Returns true if this procedure has an unmatched entry. **/
+  /** Returns true if this procedure has an unmatched entry. */
   static boolean has_unmatched_procedure_entry(PptTopLevel ppt) {
     for (Invocation invok : call_hashmap.values()) {
       if (invok.ppt == ppt) {
@@ -1846,7 +1846,7 @@ public final class FileIO {
     }
   }
 
-  /** Print all the invocations in the collection, in order. **/
+  /** Print all the invocations in the collection, in order. */
   static void print_invocations_verbose(Collection<Invocation> invocations) {
     for (Invocation invok : invocations) {
       System.out.println(invok.format());
@@ -1856,7 +1856,7 @@ public final class FileIO {
   /**
    * Print the invocations in the collection, in order, and
    * suppressing duplicates.
-   **/
+   */
   static void print_invocations_grouped(Collection<Invocation> invocations) {
     Map</*@Interned*/ Invocation, Integer> counter =
         new HashMap</*@Interned*/ Invocation, Integer>();
@@ -2164,7 +2164,7 @@ public final class FileIO {
    * Normally returns false.  Returns true if this is an exit without
    * a matching enter.  See dkconfig_ignore_missing_enter for more info.
    * If true is returned, this ppt should be ignored by the caller.
-   **/
+   */
   /*@RequiresNonNull("FileIO.data_trace_state")*/
   public static boolean compute_orig_variables(
       PptTopLevel ppt,
@@ -2278,7 +2278,7 @@ public final class FileIO {
     return false;
   }
 
-  /** Computes values of derived variables **/
+  /** Computes values of derived variables */
   public static void compute_derived_variables(
       PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods) {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,
@@ -2308,7 +2308,7 @@ public final class FileIO {
    * reference-sharing, easier saves and loads, and potential for
    * later overriding of SerialFormat.readObject if the save format
    * changes (ick).
-   **/
+   */
   static final class SerialFormat implements Serializable {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -2407,7 +2407,7 @@ public final class FileIO {
   /**
    * Returns true if the given variable is included, according to Daikon's
    * --var-select-pattern and --var-omit-pattern flags.
-   **/
+   */
   public static boolean var_included(String var_name) {
     assert !var_name.equals("");
     if (((Daikon.var_omit_regexp != null) && Daikon.var_omit_regexp.matcher(var_name).find())
@@ -2554,36 +2554,36 @@ public final class FileIO {
       "nullness") // undocumented class needs documentation before annotating with nullness
   public static class VarDefinition implements java.io.Serializable, Cloneable {
     static final long serialVersionUID = 20060524L;
-    /** Current information about input file and previously parsed values **/
+    /** Current information about input file and previously parsed values */
     transient ParseState state;
-    /** Name of the variable (required) **/
+    /** Name of the variable (required) */
     public String name;
-    /** Type of the variable (required) **/
+    /** Type of the variable (required) */
     public VarKind kind = null;
-    /** Variable that contains this variable (optional) **/
+    /** Variable that contains this variable (optional) */
     public /*@Nullable*/ String enclosing_var;
-    /** the simple (not fully specified) name of this variable (optional) **/
+    /** the simple (not fully specified) name of this variable (optional) */
     public /*@Nullable*/ String relative_name = null;
-    /** Type of reference for structure/class variables **/
+    /** Type of reference for structure/class variables */
     public RefType ref_type = RefType.POINTER;
-    /** Number of array dimensions (0 or 1) **/
+    /** Number of array dimensions (0 or 1) */
     public int arr_dims = 0;
     /** Non-null iff (vardef.kind == VarKind.FUNCTION).
-     * The arguments that were used to create this function application. **/
+     * The arguments that were used to create this function application. */
     public /*@Nullable*/ List<String> function_args = null;
-    /** The type of the variable as stored in the dtrace file (required) **/
+    /** The type of the variable as stored in the dtrace file (required) */
     public ProglangType rep_type = null;
-    /** Declared type of the variable as an arbitrary string (required) **/
+    /** Declared type of the variable as an arbitrary string (required) */
     public ProglangType declared_type = null;
-    /** Variable flags (optional) **/
+    /** Variable flags (optional) */
     public EnumSet<VarFlags> flags = EnumSet.noneOf(VarFlags.class);
-    /** Language specific variable flags (optional) **/
+    /** Language specific variable flags (optional) */
     public EnumSet<LangFlags> lang_flags = EnumSet.noneOf(LangFlags.class);
-    /** Comparability of this variable (required **/
+    /** Comparability of this variable (required */
     public VarComparability comparability = null;
-    /** Parent program points in ppt hierarchy (optional) **/
+    /** Parent program points in ppt hierarchy (optional) */
     public List<VarParent> parents;
-    /** Non-null if this 'variable' always has the same value (optional) **/
+    /** Non-null if this 'variable' always has the same value (optional) */
     public /*@Nullable*/ /*@Interned*/ Object static_constant_value = null;
     /** Non-null if it is statically known that the value of the variable will be always greater than or equal to this value. */
     public /*@Nullable*/ String min_value = null;
@@ -2675,7 +2675,7 @@ public final class FileIO {
       }
     }
 
-    /** Restore interned strings **/
+    /** Restore interned strings */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
       name = name.intern();
@@ -2693,7 +2693,7 @@ public final class FileIO {
       }
     }
 
-    /** Clears the parent relations, if any existed **/
+    /** Clears the parent relations, if any existed */
     public void clear_parent_relation() {
       parents.clear();
     }
@@ -2712,20 +2712,20 @@ public final class FileIO {
       need_eol(scanner);
     }
 
-    /** Parses the enclosing-var record **/
+    /** Parses the enclosing-var record */
     public void parse_enclosing_var(Scanner scanner) {
       enclosing_var = need(scanner, "enclosing variable name");
       need_eol(scanner);
     }
 
-    /** Parses the reference-type record **/
+    /** Parses the reference-type record */
     public void parse_reference_type(Scanner scanner) {
       RefType ref_type_local = parse_enum_val(scanner, RefType.class, "reference type");
       ref_type = ref_type_local;
       need_eol(scanner);
     }
 
-    /** Parses the array record **/
+    /** Parses the array record */
     public void parse_array(Scanner scanner) {
       /*@Interned*/ String arr_str = need(scanner, "array dimensions");
       if (arr_str == "0") { // interned
@@ -2737,7 +2737,7 @@ public final class FileIO {
       }
     }
 
-    /** Parses the function-args record **/
+    /** Parses the function-args record */
     public void parse_function_args(Scanner scanner) {
 
       function_args = new ArrayList<String>();
@@ -2758,7 +2758,7 @@ public final class FileIO {
       declared_type = ProglangType.parse(declared_type_str);
     }
 
-    /** Parse the flags record.  Multiple flags can be specified **/
+    /** Parse the flags record.  Multiple flags can be specified */
     public void parse_flags(Scanner scanner) {
 
       flags.add(parse_enum_val(scanner, VarFlags.class, "Flag"));
@@ -2768,7 +2768,7 @@ public final class FileIO {
 
     /**
      * Parse the langauge specific flags record.  Multiple flags can
-     * be specified **/
+     * be specified */
     public void parse_lang_flags(Scanner scanner) {
 
       lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));
@@ -2776,7 +2776,7 @@ public final class FileIO {
         lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));
     }
 
-    /** Parses a comparability record **/
+    /** Parses a comparability record */
     public void parse_comparability(Scanner scanner) {
       /*@Interned*/ String comparability_str = need(scanner, "comparability");
       need_eol(scanner);
@@ -2784,7 +2784,7 @@ public final class FileIO {
           VarComparability.parse(state.varcomp_format, comparability_str, declared_type);
     }
 
-    /** Parse a parent ppt record **/
+    /** Parse a parent ppt record */
     public void parse_parent(Scanner scanner, List<ParentRelation> ppt_parents) {
 
       String parent_ppt = need(scanner, "parent ppt");
@@ -2813,7 +2813,7 @@ public final class FileIO {
       need_eol(scanner);
     }
 
-    /** Parse a constant record **/
+    /** Parse a constant record */
     public void parse_constant(Scanner scanner) {
       /*@Interned*/ String constant_str = need(scanner, "constant value");
       need_eol(scanner);
@@ -2946,7 +2946,7 @@ public final class FileIO {
     throw new Daikon.TerminationMessage(cause, msg);
   }
 
-  /** Returns whether the line is the start of a ppt declaration **/
+  /** Returns whether the line is the start of a ppt declaration */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   /*@Pure*/
   private static boolean is_declaration_header(String line) {

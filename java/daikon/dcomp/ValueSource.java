@@ -23,19 +23,19 @@ import org.checkerframework.dataflow.qual.*;
 @SuppressWarnings("interning")
 public class ValueSource {
 
-  /** Description of the value, includes its source if it is a constant **/
+  /** Description of the value, includes its source if it is a constant */
   String descr;
 
-  /** Stack trace of the location where this node was created. **/
+  /** Stack trace of the location where this node was created. */
   Throwable stack_trace;
 
-  /** Left subtree for binary/unary operations **/
+  /** Left subtree for binary/unary operations */
   /*@Nullable*/ ValueSource left;
 
-  /** Right subtree for binary operations **/
+  /** Right subtree for binary operations */
   /*@Nullable*/ ValueSource right;
 
-  /** ValueSet used for the null reference value **/
+  /** ValueSet used for the null reference value */
   public static ValueSource null_value_source =
       new ValueSource("null", new Throwable().fillInStackTrace());
 
@@ -147,7 +147,7 @@ public class ValueSource {
     return tree_dump(out, 0).toString();
   }
 
-  /** make sure that the blank string is long enough for the specified size **/
+  /** make sure that the blank string is long enough for the specified size */
   private void ensure_blank_len(int size) {
     if (size > blank_string.length()) {
       while (blank_string.length() < size) blank_string += " ";

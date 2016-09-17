@@ -19,7 +19,7 @@ public final class SequenceMin extends UnaryDerivation {
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SequenceMin derived variables should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public SequenceMin(VarInfo vi) {
@@ -54,7 +54,7 @@ public final class SequenceMin extends UnaryDerivation {
     return (other instanceof SequenceMin);
   }
 
-  /** Returns the ESC name **/
+  /** Returns the ESC name */
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format("min(%s)", base.esc_name());

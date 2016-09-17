@@ -17,7 +17,7 @@ public class HuffmanCodec {
    *
    * @effects: constructs a new HuffmanCodec capable of encoding the
    * symbols contained in <code>huffmanSymbols</code>.
-   **/
+   */
   public HuffmanCodec(List huffmanSymbols) {
     decodingTree = buildDecodingTree(huffmanSymbols);
     encodingMap = buildEncodingMap(decodingTree);
@@ -29,7 +29,7 @@ public class HuffmanCodec {
    * @effects: builds an decoding tree of the symbols contained in
    * <code>huffmanSymbols</code> using a Huffman scheme based on the
    * frequencies reported by the symbols.
-   **/
+   */
   private static HuffmanTree buildDecodingTree(List huffmanSymbols) {
     // this method works by creating a list of subtrees and repeatedly
     // merging the two with the highest frequencies under one parent
@@ -62,7 +62,7 @@ public class HuffmanCodec {
    * @effects: removes and returns the element of
    * <code>nodeList</code> which has the smallest
    * <code>frequency</code> value.
-   **/
+   */
   private static HuffmanTree extractSmallest(List nodeList) {
     HuffmanTree smallest = null;
     Iterator iter = nodeList.iterator();
@@ -96,7 +96,7 @@ public class HuffmanCodec {
 
   /**
    * implements the recursive portion of buildEncodingMap
-   **/
+   */
   private static void addToMap(Map encodingMap,
                                HuffmanTree subTree,
                                List bitStack) {
@@ -131,7 +131,7 @@ public class HuffmanCodec {
    *
    * @return a List containing Boolean objects representing the bits
    * of the encoded data.
-   **/
+   */
   public List encode(List inputStream) {
     List outputStream = new ArrayList();
     Iterator iter = inputStream.iterator();
@@ -147,7 +147,7 @@ public class HuffmanCodec {
    * @effects: decodes the bitStream using the huffman encoding
    * specified by this codec.
    * @return a List containing the symbols resulting from the decoding
-   **/
+   */
   public List decode(List inputBitStream) {
     int offset = 0;
     List outputList = new ArrayList();

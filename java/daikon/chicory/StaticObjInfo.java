@@ -35,7 +35,7 @@ public class StaticObjInfo extends DaikonVariableInfo {
     return null;
   }
 
-  /** 'this' is a top level variable **/
+  /** 'this' is a top level variable */
   public VarKind get_var_kind() {
     return VarKind.VARIABLE;
   }

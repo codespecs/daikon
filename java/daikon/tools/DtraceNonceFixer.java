@@ -47,7 +47,7 @@ public class DtraceNonceFixer {
    * throwing daikon.Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(final String[] args) {
     if (args.length != 1) {
       throw new daikon.Daikon.TerminationMessage(usage);

@@ -83,12 +83,12 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   private static /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) proto = new /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) ();
 
-  /** Returns the prototype invariant for CNAME(FUNCTION,PERM_NAME) **/
+  /** Returns the prototype invariant for CNAME(FUNCTION,PERM_NAME) */
   public static /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) get_proto() {
     return proto;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn (/*>>> @Prototype CNAME(FUNCTION,PERM_NAME) this,*/ PptSlice slice) {
     return new CNAME(FUNCTION,PERM_NAME) (slice);
   }
@@ -195,7 +195,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     }
   }
 
-  /** definition of this invariant (the suppressee) **/
+  /** definition of this invariant (the suppressee) */
   private static NISuppressee suppressee
                     = new NISuppressee (CNAME(FUNCTION,PERM_NAME).class, 3);
 

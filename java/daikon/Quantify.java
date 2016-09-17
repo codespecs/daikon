@@ -13,39 +13,39 @@ import org.checkerframework.dataflow.qual.*;
  */
 public class Quantify {
 
-  /** Flags describing how quantifications are to be built **/
+  /** Flags describing how quantifications are to be built */
   public enum QuantFlags {
-    /** two indices where they refer to corresponding positions **/
+    /** two indices where they refer to corresponding positions */
     ELEMENT_WISE,
-    /** two indices where the second is one more than the first **/
+    /** two indices where the second is one more than the first */
     ADJACENT,
-    /** two indices are different **/
+    /** two indices are different */
     DISTINCT,
-    /** Return the names of the index variables **/
+    /** Return the names of the index variables */
     INCLUDE_INDEX;
 
-    /** set with just ELEMENT_WISE turned on **/
+    /** set with just ELEMENT_WISE turned on */
     public static EnumSet<QuantFlags> element_wise() {
       return EnumSet.of(QuantFlags.ELEMENT_WISE);
     }
 
-    /** set with just ADJACENT turned on **/
+    /** set with just ADJACENT turned on */
     public static EnumSet<QuantFlags> adjacent() {
       return EnumSet.of(QuantFlags.ADJACENT);
     }
 
-    /** set with just DISTINCT turned on **/
+    /** set with just DISTINCT turned on */
     public static EnumSet<QuantFlags> distinct() {
       return EnumSet.of(QuantFlags.DISTINCT);
     }
 
-    /** set with just INCLUDE_INDEX turned on **/
+    /** set with just INCLUDE_INDEX turned on */
     public static EnumSet<QuantFlags> include_index() {
       return EnumSet.of(QuantFlags.INCLUDE_INDEX);
     }
   }
 
-  /** Returns a set with ELEMENT_WISE turned on if specified **/
+  /** Returns a set with ELEMENT_WISE turned on if specified */
   public static EnumSet<QuantFlags> get_flags(boolean elementwise) {
     if (elementwise) {
       return EnumSet.of(QuantFlags.ELEMENT_WISE);
@@ -111,7 +111,7 @@ public class Quantify {
     }
   }
 
-  /** Represents a constant integer **/
+  /** Represents a constant integer */
   public static class Constant extends Term {
     int val;
 
@@ -128,7 +128,7 @@ public class Quantify {
     }
   }
 
-  /** Represents the length of a sequence  and an optional offset **/
+  /** Represents the length of a sequence  and an optional offset */
   public static class Length extends Term {
     VarInfo sequence;
     int offset;
@@ -208,7 +208,7 @@ public class Quantify {
     /**
      * Looks up the array variable which is the base of this array.
      * Throws a TerminationMessage exception if one does not exist.
-     **/
+     */
     @SuppressWarnings("sideeffectfree") // throws exception in case of error
     /*@SideEffectFree*/
     private VarInfo get_check_array_var(String output_format) {
@@ -283,9 +283,9 @@ public class Quantify {
   }
 
   public static class QuantifyReturn {
-    /** variable being quantified **/
+    /** variable being quantified */
     public VarInfo var;
-    /** index into the variable.  If null, variable is not a sequence. **/
+    /** index into the variable.  If null, variable is not a sequence. */
     public /*@Nullable*/ Term index;
 
     public QuantifyReturn(VarInfo var) {
@@ -297,7 +297,7 @@ public class Quantify {
    * Given a list of sequences, determines a free variable that can be
    * used as a subscript for each sequence.  If any of the vars are not
    * sequences, no index is calculated for them.
-   **/
+   */
   public static QuantifyReturn[] quantify(VarInfo[] vars) {
     assert vars != null;
 
@@ -420,7 +420,7 @@ public class Quantify {
      * <pre>
      * '(\forall int i; (0 &lt;= i &lt;= size(a[]) ==&gt; '
      * </pre>
-     **/
+     */
     public String get_quantification() {
       return quant + " ==> ";
     }
@@ -429,7 +429,7 @@ public class Quantify {
      * Returns the specified array variable indexed by its index.
      * For example, if the array variable is 'a.b[]' and the index is 'i',
      * returns a.b[i]
-     **/
+     */
     public String get_arr_vars_indexed(int num) {
       return arr_vars_indexed[num];
     }
@@ -548,7 +548,7 @@ public class Quantify {
     /**
      * Returns the quantification string that quantifies over each of the
      * free variables.
-     **/
+     */
     public String get_quantification() {
       return quantification;
     }
@@ -557,19 +557,19 @@ public class Quantify {
      * Returns the specified array variable indexed by its index.
      * For example, if the array variable is 'a[]' and the index is 'i',
      * returns 'select i a'
-     **/
+     */
     public String get_arr_vars_indexed(int num) {
       return arr_vars_indexed[num];
     }
 
-    /** Returns the specified index **/
+    /** Returns the specified index */
     @SuppressWarnings("nullness:return.type.incompatible") // possible application invariant?
     public String get_index(int num) {
       assert indices[num] != null; // will this assertion fail?
       return indices[num];
     }
 
-    /** Returns the string to be appended to the end of the quantification **/
+    /** Returns the string to be appended to the end of the quantification */
     public String get_closer() {
       return "))"; // close IMPLIES, FORALL
     }

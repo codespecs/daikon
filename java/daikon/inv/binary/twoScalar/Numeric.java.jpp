@@ -188,7 +188,7 @@ import typequals.*;
  * this file).  The subclass must provide the methods instantiate(),
  * check(), and format(). Symmetric functions should define
  * is_symmetric() to return true.
- **/
+ */
 public abstract class CLASSNAME extends SUPERCLASS {
 
   // We are Serializable, so we specify a version to allow changes to
@@ -719,7 +719,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ Divides proto = new /*@Prototype*/ Divides (false);
     private static /*@Prototype*/ Divides proto_swap = new /*@Prototype*/ Divides (true);
 
-    /** Returns the prototype invariant **/
+    /** Returns the prototype invariant */
     public static /*@Prototype*/ CLASSNAME get_proto (boolean swap) {
       if (swap) {
         return proto_swap;
@@ -730,10 +730,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff divides invariants should be considered. **/
+    /** Boolean.  True iff divides invariants should be considered. */
     public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-    /** Returns whether or not this invariant is enabled **/
+    /** Returns whether or not this invariant is enabled */
     public boolean enabled() { return dkconfig_enabled; }
 
     protected Divides instantiate_dyn (/*>>> @Prototype Divides this,*/ PptSlice slice) {
@@ -790,7 +790,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    /** definition of this invariant (the suppressee) (unswapped) **/
+    /** definition of this invariant (the suppressee) (unswapped) */
     private static NISuppressee suppressee
       = new NISuppressee (Divides.class, false);
 
@@ -829,7 +829,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
      *
      * @return non-null value iff this invariant is obvious from
      *          other invariants in the same slice
-     **/
+     */
     /*@Pure*/
     public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
       // First call super type's method, and if it returns non-null, then
@@ -899,7 +899,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /**
    * Represents the square invariant between
    * COMMENT_TXT.  Prints as <code>VAR1 = VAR2**2</code>.
-   **/
+   */
   public static class Square extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -917,7 +917,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ Square proto = new /*@Prototype*/ Square (false);
     private static /*@Prototype*/ Square proto_swap = new /*@Prototype*/ Square (true);
 
-    /** Returns the prototype invariant **/
+    /** Returns the prototype invariant */
     public static /*@Prototype*/ Square get_proto (boolean swap) {
       if (swap) {
         return proto_swap;
@@ -928,10 +928,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff square invariants should be considered. **/
+    /** Boolean.  True iff square invariants should be considered. */
     public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-    /** Returns whether or not this invariant is enabled **/
+    /** Returns whether or not this invariant is enabled */
     public boolean enabled() { return dkconfig_enabled; }
     protected Square instantiate_dyn (/*>>> @Prototype Square this,*/ PptSlice slice) {
       return new Square (slice, swap);
@@ -953,7 +953,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    /** Check to see if x == y squared. **/
+    /** Check to see if x == y squared. */
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
       return (EQUALS(x, y*y));
     }
@@ -975,7 +975,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * COMMENT_TXT; that is, when <code>VAR1</code> is zero,
    * <code>VAR2</code> is also zero.
    * Prints as <code>VAR1 = 0 &rArr; VAR2 = 0</code>.
-   **/
+   */
   public static class ZeroTrack extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -993,7 +993,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ ZeroTrack proto = new /*@Prototype*/ ZeroTrack (false);
     private static /*@Prototype*/ ZeroTrack proto_swap = new /*@Prototype*/ ZeroTrack (true);
 
-    /** Returns the prototype invariant **/
+    /** Returns the prototype invariant */
     public static /*@Prototype*/ ZeroTrack get_proto (boolean swap) {
       if (swap) {
         return proto_swap;
@@ -1004,10 +1004,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff zero-track invariants should be considered. **/
+    /** Boolean.  True iff zero-track invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled **/
+    /** Returns whether or not this invariant is enabled */
     public boolean enabled() { return dkconfig_enabled; }
 
     protected ZeroTrack instantiate_dyn (/*>>> @Prototype ZeroTrack this,*/ PptSlice slice) {
@@ -1042,7 +1042,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    /** definition of this invariant (the suppressee) (unswapped) **/
+    /** definition of this invariant (the suppressee) (unswapped) */
     private static NISuppressee suppressee
       = new NISuppressee (ZeroTrack.class, false);
 
@@ -1066,7 +1066,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /**
    * Represents the bitwise complement invariant between
    * COMMENT_TXT.  Prints as <code>VAR1 = ~VAR2</code>.
-   **/
+   */
   public static class BitwiseComplement extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1083,17 +1083,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     private static /*@Prototype*/ BitwiseComplement proto = new /*@Prototype*/ BitwiseComplement ();
 
-    /** Returns the prototype invariant **/
+    /** Returns the prototype invariant */
     public static /*@Prototype*/ BitwiseComplement get_proto() {
       return proto;
     }
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff bitwise complement invariants should be considered. **/
+    /** Boolean.  True iff bitwise complement invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled **/
+    /** Returns whether or not this invariant is enabled */
     public boolean enabled() { return dkconfig_enabled; }
 
     protected BitwiseComplement instantiate_dyn (/*>>> @Prototype BitwiseComplement this,*/ PptSlice slice) {
@@ -1119,7 +1119,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    /** Check to see if x == ~y . **/
+    /** Check to see if x == ~y . */
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
       return (EQUALS(x, ~y));
     }
@@ -1129,7 +1129,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Represents the bitwise subset invariant between
    * COMMENT_TXT; that is, the bits of <code>VAR2</code> are a subset of the
    * bits of <code>VAR1</code>.  Prints as <code>VAR1 = VAR2 | VAR1</code>.
-   **/
+   */
   public static class BitwiseSubset extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1147,7 +1147,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ BitwiseSubset proto = new /*@Prototype*/ BitwiseSubset (false);
     private static /*@Prototype*/ BitwiseSubset proto_swap = new /*@Prototype*/ BitwiseSubset (true);
 
-    /** Returns the prototype invariant **/
+    /** Returns the prototype invariant */
     public static /*@Prototype*/ BitwiseSubset get_proto (boolean swap) {
       if (swap) {
         return proto_swap;
@@ -1158,10 +1158,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff bitwise subset invariants should be considered. **/
+    /** Boolean.  True iff bitwise subset invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled **/
+    /** Returns whether or not this invariant is enabled */
     public boolean enabled() { return dkconfig_enabled; }
 
     public BitwiseSubset instantiate_dyn (/*>>> @Prototype BitwiseSubset this,*/ PptSlice slice) {
@@ -1215,7 +1215,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    /** definition of this invariant (the suppressee) (unswapped) **/
+    /** definition of this invariant (the suppressee) (unswapped) */
     private static NISuppressee suppressee
       = new NISuppressee (BitwiseSubset.class, false);
 
@@ -1239,7 +1239,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Represents the BitwiseAnd == 0 invariant between
    * COMMENT_TXT; that is, <code>VAR1</code> and <code>VAR2</code> have no
    * bits in common.  Prints as <code>VAR1 &amp; VAR2 == 0</code>.
-   **/
+   */
   public static class BitwiseAndZero extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1256,17 +1256,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     private static /*@Prototype*/ BitwiseAndZero proto = new /*@Prototype*/ BitwiseAndZero ();
 
-    /** Returns the prototype invariant **/
+    /** Returns the prototype invariant */
     public static /*@Prototype*/ BitwiseAndZero get_proto () {
       return proto;
     }
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff BitwiseAndZero invariants should be considered. **/
+    /** Boolean.  True iff BitwiseAndZero invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled **/
+    /** Returns whether or not this invariant is enabled */
     public boolean enabled() { return dkconfig_enabled; }
 
     public BitwiseAndZero instantiate_dyn (/*>>> @Prototype BitwiseAndZero this,*/ PptSlice slice) {
@@ -1302,7 +1302,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return suppressions;
     }
 
-    /** definition of this invariant (the suppressee) (unswapped) **/
+    /** definition of this invariant (the suppressee) (unswapped) */
     private static NISuppressee suppressee
       = new NISuppressee (BitwiseAndZero.class, 2);
 
@@ -1326,7 +1326,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * COMMENT_TXT;
    * that is, <code>VAR1</code> right-shifted by <code>VAR2</code>
    * is always zero.  Prints as <code>VAR1 &gt;&gt; VAR2 = 0</code>.
-   **/
+   */
   public static class ShiftZero  extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -1344,7 +1344,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ ShiftZero proto = new /*@Prototype*/ ShiftZero (false);
     private static /*@Prototype*/ ShiftZero proto_swap = new /*@Prototype*/ ShiftZero (true);
 
-    /** Returns the prototype invariant **/
+    /** Returns the prototype invariant */
     public static /*@Prototype*/ ShiftZero get_proto (boolean swap) {
       if (swap) {
         return proto_swap;
@@ -1355,10 +1355,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff ShiftZero invariants should be considered. **/
+    /** Boolean.  True iff ShiftZero invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled **/
+    /** Returns whether or not this invariant is enabled */
     public boolean enabled() { return dkconfig_enabled; }
 
     protected ShiftZero instantiate_dyn (/*>>> @Prototype ShiftZero this,*/ PptSlice slice) {
@@ -1396,7 +1396,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    /** definition of this invariant (the suppressee) (unswapped) **/
+    /** definition of this invariant (the suppressee) (unswapped) */
     private static NISuppressee suppressee
       = new NISuppressee (ShiftZero.class, false);
 
@@ -1437,7 +1437,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ SubString proto = new /*@Prototype*/ SubString (false);
     private static /*@Prototype*/ SubString proto_swap = new /*@Prototype*/ SubString (true);
 
-    /** Returns the prototype invariant **/
+    /** Returns the prototype invariant */
     public static /*@Prototype*/ SubString get_proto (boolean swap) {
       if (swap) {
         return proto_swap;
@@ -1448,10 +1448,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff SubString invariants should be considered. **/
+    /** Boolean.  True iff SubString invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled **/
+    /** Returns whether or not this invariant is enabled */
     public boolean enabled() { return dkconfig_enabled; }
 
     protected SubString instantiate_dyn (/*>>> @Prototype SubString this,*/ PptSlice slice) {
@@ -1478,7 +1478,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return (y.contains (x));
     }
 
-    /** Justified as long as there are samples **/
+    /** Justified as long as there are samples */
     protected double computeConfidence() {
       if (ppt.num_samples() == 0) {
         return Invariant.CONFIDENCE_UNJUSTIFIED;
@@ -1499,7 +1499,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
-    /** definition of this invariant (the suppressee) (unswapped) **/
+    /** definition of this invariant (the suppressee) (unswapped) */
     private static NISuppressee suppressee
       = new NISuppressee (SubString.class, false);
 

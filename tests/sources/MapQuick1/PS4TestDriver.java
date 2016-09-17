@@ -7,7 +7,7 @@ import junit.framework.Assert;
 
 /**
  * This class implements a testing driver which reads test scripts...
- **/
+ */
 
 public class PS4TestDriver extends PS3TestDriver
 {
@@ -70,7 +70,7 @@ public class PS4TestDriver extends PS3TestDriver
    *
    * @effects Creates a new PS4TestDriver which reads command from
    * <tt>r</tt> and writes results to <tt>w</tt>.
-   **/
+   */
   public PS4TestDriver(Reader r, Writer w)
   {
     super(r, w);

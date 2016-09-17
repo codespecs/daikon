@@ -57,11 +57,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public List<String> javaFileLines;
 
   public PptMap ppts;
-  /** if true, use "//" comments; if false, use "/*" comments. **/
+  /** if true, use "//" comments; if false, use "/*" comments. */
   public boolean slashslash;
-  /** If true, insert annotations not supported by ESC. **/
+  /** If true, insert annotations not supported by ESC. */
   public boolean insert_inexpressible;
-  /** If false, use full JML specs; if true, use lightweight ESC specs. **/
+  /** If false, use full JML specs; if true, use lightweight ESC specs. */
   public boolean lightweight;
 
   /**
@@ -70,13 +70,13 @@ public class AnnotateVisitor extends DepthFirstVisitor {
    * false, then Annotate will not try to determine if a method
    * overrides/implements another method, which means that it will not
    * try to add "also" tags to its output.
-   **/
+   */
   public boolean useReflection;
 
   /**
    * If the --max_invariants_pp option is given, this variable is set
    * to the maximum number of invariants output by annotate per program point.
-   **/
+   */
   public int maxInvariantsPP;
 
   public Vector<NodeToken> addedComments = new Vector<NodeToken>();
@@ -817,7 +817,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
    * Find a Daikon variable for the given field.  The variable is either
    * "this.field" (for instance variables) or "ClassName.field" (for static
    * variables).
-   **/
+   */
   private VarInfo findVar(String field, PptTopLevel ppt) {
     String varname = "this." + field;
     VarInfo vi = ppt.find_var_by_name(varname);
@@ -1043,7 +1043,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return index;
   }
 
-  /** Return the whitespace at the front of the string. **/
+  /** Return the whitespace at the front of the string. */
   public static String precedingWhitespace(String s) {
     for (int i = 0; i < s.length(); i++) {
       if (!Character.isWhitespace(s.charAt(i))) {

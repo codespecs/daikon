@@ -77,14 +77,14 @@ import typequals.*;
 /**
  * Represents the invariant "x != 0" where x represents all of the elements
  * of a sequence of PRIMITIVE.  Prints as <code>x[] elements != 0</code>.
- **/
+ */
 
 public final class CLASSNAME
   extends SUPERCLASS
 {
   /**
    * Debug tracer.
-   **/
+   */
   public static final Logger debug =
     Logger.getLogger("daikon.inv.unary.sequence." + CLASSSTRING);
 
@@ -98,7 +98,7 @@ public final class CLASSNAME
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff EltNonZero invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CLASSNAME(PptSlice ppt) {
@@ -111,17 +111,17 @@ public final class CLASSNAME
 
   private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
-  /** Returns the prototype invariant for CLASSNAME **/
+  /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME (slice);
   }
@@ -383,10 +383,10 @@ public final class CLASSNAME
     return null;
   }
 
-  /** NI suppressions, initialized in get_ni_suppressions() **/
+  /** NI suppressions, initialized in get_ni_suppressions() */
   private static /*@Nullable*/ NISuppressionSet suppressions = null;
 
-  /** returns the ni-suppressions for CLASSNAME **/
+  /** returns the ni-suppressions for CLASSNAME */
   /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {

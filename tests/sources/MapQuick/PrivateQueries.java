@@ -3,7 +3,7 @@ package MapQuick;
 /**
  * PrivateQueries contains static fields which hold candidate test
  * queries
- **/
+ */
 public final class PrivateQueries
 {
   

@@ -43,7 +43,7 @@ import org.checkerframework.dataflow.qual.*;
  * predicate if we know that both sequences came from the same
  * original data structure.  Derived type is the same as that of
  * the first sequence.
- **/
+ */
 public final class CLASSNAME
   extends BinaryDerivation
 {
@@ -52,7 +52,7 @@ public final class CLASSNAME
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug
     = Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
 
@@ -60,19 +60,19 @@ public final class CLASSNAME
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SequencesPredicate derived variables should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   /**
    * Boolean.  True if Daikon should only generate derivations on fields
    * of the same data structure.
-   **/
+   */
   public static boolean dkconfig_fieldOnly = true;
 
   /**
    * Boolean.  True if Daikon should only generate derivations on boolean
    * predicates.
-   **/
+   */
   public static boolean dkconfig_boolOnly = true;
 
 
@@ -82,26 +82,26 @@ public final class CLASSNAME
 
   /**
    * What value to predicate on.
-   **/
+   */
   private PRIMITIVE choose;
 
   /**
    * Whether we keep or discard values that match this.choose.
-   **/
+   */
   private boolean keep;
 
 
   /**
    * What this predication is called (e.g. for choose == 0 and 1, use "false"
    * and "true").
-   **/
+   */
   private String name;
 
   /**
    * Create a new SequencesJoin derivation.
    * @param vi1 the first of the two variables this is based on
    * @param vi2 the second of the two variables this is based on
-   **/
+   */
   public CLASSNAME(VarInfo vi1, VarInfo vi2, PRIMITIVE argChoose, String argName) {
     this (vi1, vi2, argChoose, argName, true);
   }
@@ -110,7 +110,7 @@ public final class CLASSNAME
    * Create a new SequencesJoin derivation.
    * @param vi1 the first of the two variables this is based on
    * @param vi2 the second of the two variables this is based on
-   **/
+   */
   public CLASSNAME(VarInfo vi1, VarInfo vi2, PRIMITIVE argChoose, String argName, boolean argKeep) {
     super(vi1, vi2);
     choose = argChoose;
@@ -124,7 +124,7 @@ public final class CLASSNAME
    * originated from the same, larger data structure.
    * @param full_vt the value tuple of a program point to compute the
    * derived value from.
-   **/
+   */
   public ValueAndModified computeValueAndModifiedImpl (ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);
     Object val2 = var2().getValue(full_vt);
@@ -239,7 +239,7 @@ public final class CLASSNAME
     return false;
   }
 
-  /** Returns the ESC name **/
+  /** Returns the ESC name */
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format ("predicate(%s,%s)", var1().esc_name(),

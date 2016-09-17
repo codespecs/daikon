@@ -19,7 +19,7 @@ import org.checkerframework.checker.signature.qual.*;
  * This class contains static methods parse_spinfofile(spinfofile) and
  * load_splitters() which respectively creates Splitters from a .spinfo file
  * and load the splitters for a given Ppt.
- **/
+ */
 public class SplitterFactory {
   private SplitterFactory() {
     throw new Error("do not instantiate");
@@ -36,7 +36,7 @@ public class SplitterFactory {
   /**
    * Boolean.  If true, the temporary Splitter files are deleted on exit.
    * Set it to "false" if you are debugging splitters.
-   **/
+   */
   public static boolean dkconfig_delete_splitters_on_exit = true;
 
   /**
@@ -52,7 +52,7 @@ public class SplitterFactory {
    * The default value is
    * "javac -classpath $DAIKONDIR/daikon.jar:$DAIKONDIR/java"
    * (with appropriate classpath separator for the operating system).
-   **/
+   */
   public static String dkconfig_compiler
       // "-source 6 -target 6" is a hack for when using a Java 8 compiler but
       // a -Java 6 or Java 7 runtime.  A better solution would be to add
@@ -68,7 +68,7 @@ public class SplitterFactory {
    * Positive integer.  Specifies the Splitter compilation timeout, in
    * seconds, after which the compilation process is terminated and
    * retried, on the assumption that it has hung.
-   **/
+   */
   public static int dkconfig_compile_timeout = 20;
 
   private static /*@MonotonicNonNull*/ FileCompiler fileCompiler; // lazily initialized
@@ -340,7 +340,7 @@ public class SplitterFactory {
    * be stored.
    * @return the name of the temporary directory. This is where
    *  the Splitters are created.
-   **/
+   */
   private static String createTempDir() {
     try {
       File tmpDir = UtilMDE.createTempDir("daikon", "split");

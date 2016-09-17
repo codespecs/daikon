@@ -59,7 +59,7 @@ public final class SEQUENCESCALARSUBSCRIPT
   /**
    * Boolean.  True iff SEQUENCESCALARSUBSCRIPT derived variables should be
    * generated.
-   **/
+   */
   public static boolean dkconfig_enabled = true;
 
   // base1 is the sequence
@@ -140,7 +140,7 @@ public final class SEQUENCESCALARSUBSCRIPT
       && (((SEQUENCESCALARSUBSCRIPT) other).index_shift == this.index_shift);
   }
 
-  /** Returns the ESC name for sequence subscript **/
+  /** Returns the ESC name for sequence subscript */
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String esc_name(String index) {
@@ -155,7 +155,7 @@ public final class SEQUENCESCALARSUBSCRIPT
 
   }
 
-  /** Returns the JML name for sequence subscript **/
+  /** Returns the JML name for sequence subscript */
   @SuppressWarnings("nullness")
   public String jml_name (String index) {
     String get_element = GET_ELEMENT;
@@ -175,7 +175,7 @@ public final class SEQUENCESCALARSUBSCRIPT
     }
   }
 
-  /** Returns the CSHARPCONTRACT name for sequence subscript **/
+  /** Returns the CSHARPCONTRACT name for sequence subscript */
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String csharp_name (String index) {
@@ -187,7 +187,7 @@ public final class SEQUENCESCALARSUBSCRIPT
     }
   }
 
-  /** Return the simplify name for sequence subscript **/
+  /** Return the simplify name for sequence subscript */
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/
   public String simplify_name() {
@@ -203,7 +203,7 @@ public final class SEQUENCESCALARSUBSCRIPT
                           subscript);
   }
 
-  /** Adds one to the default complexity if index_shift is not 0 **/
+  /** Adds one to the default complexity if index_shift is not 0 */
   public int complexity() {
     return super.complexity() + ((index_shift != 0) ? 1 : 0);
   }

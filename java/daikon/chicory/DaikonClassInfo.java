@@ -70,12 +70,12 @@ public class DaikonClassInfo extends DaikonVariableInfo {
     return valString;
   }
 
-  /** Returns function since essentially this is a call to a pure function **/
+  /** Returns function since essentially this is a call to a pure function */
   public VarKind get_var_kind() {
     return VarKind.FUNCTION;
   }
 
-  /** Returns the name of this field **/
+  /** Returns the name of this field */
   public String get_relative_name() {
     // need to skip the leading "."
     return DaikonVariableInfo.class_suffix.substring(1);

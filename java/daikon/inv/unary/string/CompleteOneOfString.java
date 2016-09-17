@@ -26,7 +26,7 @@ public final class CompleteOneOfString extends SingleString {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20091210L;
 
-  /** Information about each value encountered **/
+  /** Information about each value encountered */
   public static class Info implements Serializable {
     static final long serialVersionUID = 20091210L;
     public String val;
@@ -43,13 +43,13 @@ public final class CompleteOneOfString extends SingleString {
     }
   }
 
-  /** List of values seen **/
+  /** List of values seen */
   /*@Unused(when=Prototype.class)*/
   public List<Info> vals;
 
   /**
    * Boolean.  True iff PrintableString invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public CompleteOneOfString(PptSlice slice) {
@@ -64,23 +64,23 @@ public final class CompleteOneOfString extends SingleString {
   private static /*@Prototype*/ CompleteOneOfString proto =
       new /*@Prototype*/ CompleteOneOfString();
 
-  /** Returns the prototype invariant for CompleteOneOFString **/
+  /** Returns the prototype invariant for CompleteOneOFString */
   public static /*@Prototype*/ CompleteOneOfString get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   public CompleteOneOfString instantiate_dyn(
       /*>>> @Prototype CompleteOneOfString this,*/ PptSlice slice) {
     return new CompleteOneOfString(slice);
   }
 
-  /** return description of invariant.  Only Daikon format is implemented **/
+  /** return description of invariant.  Only Daikon format is implemented */
   /*@SideEffectFree*/
   public String format_using(/*>>>@GuardSatisfied CompleteOneOfString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
@@ -98,12 +98,12 @@ public final class CompleteOneOfString extends SingleString {
     }
   }
 
-  /** Check to see if a only contains printable ascii characters **/
+  /** Check to see if a only contains printable ascii characters */
   public InvariantStatus add_modified(/*@Interned*/ String a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters **/
+  /** Check to see if a only contains printable ascii characters */
   public InvariantStatus check_modified(/*@Interned*/ String a, int count) {
     for (Info val : vals) {
       if (val.val.equals(a)) {

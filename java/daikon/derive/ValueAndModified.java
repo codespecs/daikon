@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.*;
 /**
  * This is a temporary structure for grouping elements to be returned
  * from computeValueAndModified, not for permanent storage.
- **/
+ */
 public final class ValueAndModified {
   // The constructor checks that it is interned, contradicting the comment.
   public /*@Nullable*/ /*@Interned*/ Object value; // not necessarily an interned value

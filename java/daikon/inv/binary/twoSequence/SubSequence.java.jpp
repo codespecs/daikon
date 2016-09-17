@@ -101,7 +101,7 @@ import typequals.*;
  * Represents two sequences of PRIMITIVE values where one sequence is a
  * subsequence of the other.  Prints as
  * <code>x[] is a subsequence of y[]</code>.
- **/
+ */
 
 public class CLASSNAME
   extends SUPERCLASS
@@ -118,7 +118,7 @@ public class CLASSNAME
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SubSequence invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   protected CLASSNAME(PptSlice ppt) {
@@ -131,17 +131,17 @@ public class CLASSNAME
 
   private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
-  /** Returns the prototype invariant for CLASSNAME **/
+  /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiates the invariant on the specified slice **/
+  /** instantiates the invariant on the specified slice */
   protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME (slice);
   }
@@ -309,7 +309,7 @@ public class CLASSNAME
   /**
    * @return a DiscardInfo,
    * or null if the Invariant is not an obvious subsequence
-   **/
+   */
   /*@Pure*/
   public static /*@Nullable*/ DiscardInfo isObviousSubSequence(Invariant inv, VarInfo subvar, VarInfo supervar) {
     Pair<DiscardCode,String> pcds = isObviousSubSequence(subvar, supervar);
@@ -323,7 +323,7 @@ public class CLASSNAME
   /**
    * @return a Pair of a DiscardCode and a discardReason string,
    * or null if the Invariant is not an obvious subsequence
-   **/
+   */
   /*@Pure*/
   public static /*@Nullable*/ Pair<DiscardCode,String> isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
     // Must typecheck since this could be called with non-sequence variables in
@@ -596,7 +596,7 @@ public class CLASSNAME
   /**
    * Returns true if the two original variables are related in a way
    * that makes subsequence or subset detection not informative.
-   **/
+   */
   public static boolean isObviousSubSequenceDynamically (Invariant inv,
                             VarInfo subvar, VarInfo supervar) {
 
@@ -837,13 +837,13 @@ public class CLASSNAME
     return true;
   }
 
-  /** returns the ni-suppressions for SubSequence **/
+  /** returns the ni-suppressions for SubSequence */
   /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }
 
-  /** definition of this invariant (the suppressee) **/
+  /** definition of this invariant (the suppressee) */
   private static NISuppressee suppressee
     = new NISuppressee (CLASSNAME.class, 2);
 

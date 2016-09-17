@@ -3,7 +3,7 @@ package MapQuick;
 /**
  * A WeightedNode class is a simple record type which contains a name
  * and a cost 
- **/
+ */
 
 public class WeightedNode implements Comparable {
   public final String name;
@@ -15,7 +15,7 @@ public class WeightedNode implements Comparable {
    * @effects constructs a new WeightedNode with the name
    * <code>name</code> and the cost <code>cost</code>.
    *
-   **/
+   */
   public WeightedNode(String name, int cost) {
     this.name = name;
     this.cost = cost;
@@ -23,14 +23,14 @@ public class WeightedNode implements Comparable {
   
   /**
    * @return this.name
-   **/
+   */
   public String name() {
     return name;
   }
 
   /**
    * @return this.cost
-   **/
+   */
   public int cost() {
     return cost;
   }
@@ -58,7 +58,7 @@ public class WeightedNode implements Comparable {
    * WeightedNodes are ordered lexicographically by their name.  When
    * two nodes share a name, their ordering is determined by the
    * numeric ordering of their costs.
-   **/
+   */
   public int compareTo(Object o) {
     if (o instanceof WeightedNode) {
       WeightedNode t = (WeightedNode) o;

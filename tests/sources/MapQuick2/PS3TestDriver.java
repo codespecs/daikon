@@ -8,7 +8,7 @@ import junit.framework.Assert;
 /**
  * This class implements a testing driver which reads test scripts
  * from files for testing Graph and PathFinder.
- **/
+ */
 
 public class PS3TestDriver {
 
@@ -26,9 +26,9 @@ public class PS3TestDriver {
     }
   }
 
-  /** String -> Graph: maps the names of graphs to the actual graph **/
+  /** String -> Graph: maps the names of graphs to the actual graph */
   protected final LinkedHashMap graphs = new LinkedHashMap();
-  /** String -> Object: maps the names of nodes to the actual node **/
+  /** String -> Object: maps the names of nodes to the actual node */
   protected final LinkedHashMap nodes = new LinkedHashMap();
   protected final PrintWriter output;
   protected final BufferedReader input;
@@ -38,7 +38,7 @@ public class PS3TestDriver {
    *
    * @effects Creates a new PS3TestDriver which reads command from
    * <tt>r</tt> and writes results to <tt>w</tt>.
-   **/
+   */
   public PS3TestDriver(Reader r, Writer w) {
     input = new BufferedReader(r);
     output = new PrintWriter(w);
@@ -47,7 +47,7 @@ public class PS3TestDriver {
   /**
    * @effects Executes the commands read from the input and writes results to the output
    * @throws IOException if the input or output sources encounter an IOException
-   **/
+   */
   public void runTests()
     throws IOException
   {
@@ -318,7 +318,7 @@ public class PS3TestDriver {
 
 /**
  * This exception results when the input file cannot be parsed properly
- **/
+ */
 class CommandException extends RuntimeException {
 
   public CommandException() {

@@ -10,7 +10,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * Used when no VarComparability information is available (in the .dtrace file).
  * Every variable is considered comparable to every other variable.
- **/
+ */
 public final class VarComparabilityNone extends VarComparability implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -55,7 +55,7 @@ public final class VarComparabilityNone extends VarComparability implements Seri
    * The best we can do without comparability info is to check if the
    * representation types in the data trace file are the same.  This
    * lets us compare integers to longs, but not integers to arrays.
-   **/
+   */
   /*@Pure*/
   static boolean comparable(
       /*@GuardSatisfied*/ VarComparabilityNone vcomp1,

@@ -15,7 +15,7 @@ import java.util.Iterator;
  *
  * The cost of traversing a path must not decrease as the path is
  * extended with new nodes.<p>
- **/
+ */
 public interface Path {
 
     // Producers
@@ -28,7 +28,7 @@ public interface Path {
      * @return a new Path p such that
      *       p.elements = this.elements + [ n ]
      *    && p.cost >= this.cost
-     **/
+     */
     Path extend(Object n);
 
     // Observers
@@ -36,10 +36,10 @@ public interface Path {
     /**
      * @return an Iterator that produces the contents of this.elements,
      *            in order
-     **/
+     */
     Iterator elements();
 
-    /** @return this.cost **/
+    /** @return this.cost */
     double cost();
 
 } // Path

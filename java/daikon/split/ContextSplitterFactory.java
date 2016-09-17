@@ -16,9 +16,9 @@ import org.checkerframework.dataflow.qual.*;
  * This factory creates Splitters from map files.  The splitters
  * partition the data based upon the the caller (i.e., which static
  * callgraph edge was taken).
- **/
+ */
 public class ContextSplitterFactory {
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.split.ContextSplitterFactory");
 
   /** Callsite granularity at the line level. */
@@ -36,7 +36,7 @@ public class ContextSplitterFactory {
    * invariants for a method that are dependent on where the method
    * was called from.)  0 is line-level granularity; 1 is
    * method-level granularity; 2 is class-level granularity.
-   **/
+   */
   public static int dkconfig_granularity = GRAIN_METHOD;
 
   /**
@@ -45,7 +45,7 @@ public class ContextSplitterFactory {
    *
    * Read all the map files in the given collection, create callsite
    * splitters from them, and put the splitters into SplitterList.
-   **/
+   */
   public static void load_mapfiles_into_splitterlist(Collection<File> files, int grain) {
     for (File file : files) {
       String filename = file.getName();
@@ -70,7 +70,7 @@ public class ContextSplitterFactory {
 
   /**
    * Simple record type to store a map file entry.
-   **/
+   */
   public static final class MapfileEntry {
     public final long id;
     public final String fromclass;
@@ -109,7 +109,7 @@ public class ContextSplitterFactory {
 
   /**
    * Read and parse a map file.
-   **/
+   */
   public static MapfileEntry[] parse_mapfile(File mapfile) throws IOException {
     ArrayList<MapfileEntry> result = new ArrayList<MapfileEntry>();
 
@@ -192,7 +192,7 @@ public class ContextSplitterFactory {
    *
    * Given map file data, create splitters given the requested
    * granularity.
-   **/
+   */
   public static PptNameAndSplitters[] make_context_splitters(MapfileEntry[] entries, int grain) {
     // Use a 2-deep map structure.  First key is an identifier
     // (~pptname) for the callee.  Second key is an idenfier for the
@@ -289,7 +289,7 @@ public class ContextSplitterFactory {
 
   /**
    * Simple record type to store a PptName and Splitter array.
-   **/
+   */
   public static final class PptNameAndSplitters {
     public final String ppt_name; // really more like a regexp
     public final Splitter[] splitters;

@@ -24,7 +24,7 @@ public abstract class SplitterList {
    * Boolean.  Enables indiscriminate splitting
    * (see Daikon manual, @ref{Indiscriminate splitting},
    * for an explanation of this technique).
-   **/
+   */
   public static boolean dkconfig_all_splitters = true;
 
   private static final HashMap<String, Splitter[]> ppt_splitters =

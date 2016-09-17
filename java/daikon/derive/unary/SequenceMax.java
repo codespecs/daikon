@@ -19,7 +19,7 @@ public final class SequenceMax extends UnaryDerivation {
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SequencesMax derived variables should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public SequenceMax(VarInfo vi) {
@@ -53,7 +53,7 @@ public final class SequenceMax extends UnaryDerivation {
     return (other instanceof SequenceMax);
   }
 
-  /** Returns the ESC name **/
+  /** Returns the ESC name */
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format("max(%s)", base.esc_name());

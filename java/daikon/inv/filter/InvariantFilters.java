@@ -261,7 +261,7 @@ public class InvariantFilters {
    * Equality invariant is always the canonical variable of the group.
    * The Equality invariants are inserted into the beginning.  Equality
    * invariants are useful when it comes to displaying invariants.
-   **/
+   */
   public static List<Invariant> addEqualityInvariants(List<Invariant> invariants) {
 
     return invariants;

@@ -31,7 +31,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * that each application postcondition (EXIT point invariant) must be
  * implied by some combination of test postconditions and application
  * preconditions.
- **/
+ */
 public class LogicalCompare {
   private LogicalCompare() {
     throw new Error("do not instantiate");
@@ -570,7 +570,7 @@ public class LogicalCompare {
    * throwing Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException, IOException, SimplifyError {
     LongOpt[] longopts =

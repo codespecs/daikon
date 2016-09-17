@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 /**
  * StreetNumberSet is immutible.
- **/
+ */
 public class StreetNumberSet {
   
   private final SimpleParitySet[] sets;
@@ -21,7 +21,7 @@ public class StreetNumberSet {
    * hyphen-separated pair of nonnegative integers "m-n", where m and n
    * have the same parity and m is no greater than n.  For instance, legal
    * arguments include "5", "22,253", "3-101", and "1914-1918,1939-1945".
-   **/
+   */
   public StreetNumberSet(String numbers) {
     StringTokenizer items = new StringTokenizer(numbers, ",", false);
 
@@ -47,7 +47,7 @@ public class StreetNumberSet {
 
   /**
    * Creates a new StreetNumberSet from the given array of sets.
-   **/
+   */
   private StreetNumberSet(SimpleParitySet[] sets) {
     this.sets = sets;
   }
@@ -72,7 +72,7 @@ public class StreetNumberSet {
 
   /**
    * @return the number of elements in this
-   **/
+   */
   public int size() {
     int result = 0;
     for (int i=0; i<sets.length; i++) {
@@ -85,7 +85,7 @@ public class StreetNumberSet {
    * @requires numbers be well formed as in the constructor.
    * @return a new StreetNumberSet which is the union
    *         of this and the numbers specified in the argument.
-   **/
+   */
   public StreetNumberSet union(String numbers) {
     StreetNumberSet givenNumbers = new StreetNumberSet(numbers);
     return union(givenNumbers);
@@ -94,7 +94,7 @@ public class StreetNumberSet {
   /**
    * @return a new StreetNumberSet which is the union of this
    *         and the argument.
-   **/
+   */
   public StreetNumberSet union(StreetNumberSet numbers) {
     SimpleParitySet[] newSets =
       new SimpleParitySet[numbers.sets.length +
@@ -141,7 +141,7 @@ public class StreetNumberSet {
      * numbers from low to high inclusive.  If low is odd, then it contains
      * all of the odd numbers from low to high.  Low and high must either
      * both be even, or both be odd.
-     **/
+     */
     
     public final int low;
     public final int high;
@@ -149,7 +149,7 @@ public class StreetNumberSet {
     /**
      * @requires low and high are of the same parity
      * @effects Creates a new SimpleParitySet ranging from low to high.
-     **/
+     */
     public SimpleParitySet(int low, int high) {
       if ((low & 1) != (high & 1))
         throw new RuntimeException("low and high have different parities.");

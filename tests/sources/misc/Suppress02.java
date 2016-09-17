@@ -6,7 +6,7 @@ import java.util.*;
  * <br>
  *   0<=i<=j  ==>  b[i] in b[0..j]         
  *
- **/
+ */
 
 
 class Suppress02 extends Object {

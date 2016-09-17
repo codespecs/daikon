@@ -21,7 +21,7 @@ import junit.framework.*;
  * implementation to VarInfoNameDriver modeled after one of the ones
  * already present and add a static {} line after to add the handler
  * to the list of handlers.
- **/
+ */
 public class VarInfoNameTest extends TestCase {
 
   private static final String lineSep = daikon.Global.lineSep;

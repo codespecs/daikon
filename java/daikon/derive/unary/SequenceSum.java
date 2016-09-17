@@ -18,7 +18,7 @@ public final class SequenceSum extends UnaryDerivation {
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SequenceSum derived variables should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public SequenceSum(VarInfo vi) {

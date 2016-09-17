@@ -25,12 +25,12 @@ package DataStructures;
  * Access to the list is via LinkedListItr.
  * @author Mark Allen Weiss
  * @see LinkedListItr
- **/
+ */
 public class LinkedList
 {
   /**
    * Construct the list
-   **/
+   */
   public LinkedList( )
   {
     header = new ListNode( null );
@@ -39,7 +39,7 @@ public class LinkedList
   /**
    * Test if the list is logically empty.
    * @return true if empty, false otherwise.
-   **/
+   */
   public boolean isEmpty( )
   {
     return header.next == null;
@@ -47,7 +47,7 @@ public class LinkedList
 
   /**
    * Make the list logically empty.
-   **/
+   */
   public void makeEmpty( )
   {
     header.next = null;
@@ -56,7 +56,7 @@ public class LinkedList
 
   /**
    * Return an iterator representing the header node.
-   **/
+   */
   public LinkedListItr zeroth( )
   {
     return new LinkedListItr( header );
@@ -65,7 +65,7 @@ public class LinkedList
   /**
    * Return an iterator representing the first node in the list.
    * This operation is valid for empty lists.
-   **/
+   */
   public LinkedListItr first( )
   {
     return new LinkedListItr( header.next );
@@ -75,7 +75,7 @@ public class LinkedList
    * Insert after p.
    * @param x the item to insert.
    * @param p the position prior to the newly inserted item.
-   **/
+   */
   public void insert( Object x, LinkedListItr p )
   {
     if( p != null && p.current != null )
@@ -86,7 +86,7 @@ public class LinkedList
    * Return iterator corresponding to the first node containing an item.
    * @param x the item to search for.
    * @return an iterator; iterator isPastEnd if item is not found.
-   **/
+   */
   public LinkedListItr find( Object x )
   {
     ListNode itr = header.next;
@@ -102,7 +102,7 @@ public class LinkedList
    * @param x the item to search for.
    * @return appropriate iterator if the item is found. Otherwise, the
    * iterator corresponding to the last element in the list is returned.
-   **/
+   */
   public LinkedListItr findPrevious( Object x )
   {
     ListNode itr = header;
@@ -116,7 +116,7 @@ public class LinkedList
   /**
    * Remove the first occurrence of an item.
    * @param x the item to remove.
-   **/
+   */
   public void remove( Object x )
   {
     LinkedListItr p = findPrevious( x );

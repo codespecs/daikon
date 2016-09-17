@@ -100,23 +100,23 @@ public class DynComp {
    * Path to java agent jar file that performs the transformation.
    * The "main" procedure is Premain.premain().
    * @see Premain#premain
-   **/
+   */
   // Set by start_target()
   @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
   public static /*@MonotonicNonNull*/ File premain = null;
 
-  // /** Thread that copies output from target to our output **/
+  // /** Thread that copies output from target to our output */
   // public static StreamRedirectThread out_thread;
 
-  // /** Thread that copies stderr from target to our stderr **/
+  // /** Thread that copies stderr from target to our stderr */
   // public static StreamRedirectThread err_thread;
 
-  /** starting time (msecs) **/
+  /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
 
   private static final SimpleLog basic = new SimpleLog(false);
 
-  /** Synopsis for the dcomp command line **/
+  /** Synopsis for the dcomp command line */
   public static final String synopsis = "daikon.DynComp [options] target [target-args]";
 
   /**
@@ -324,7 +324,7 @@ public class DynComp {
     // XXX check result!
   }
 
-  /** Wait for stream redirect threads to complete **/
+  /** Wait for stream redirect threads to complete */
   public int redirect_wait(Process p) {
 
     // Create the redirect theads and start them
@@ -361,7 +361,7 @@ public class DynComp {
     return result;
   }
 
-  /** Returns elapsed time as a String since the start of the program **/
+  /** Returns elapsed time as a String since the start of the program */
   public static String elapsed() {
     return ("[" + (System.currentTimeMillis() - start) + " msec]");
   }
@@ -370,7 +370,7 @@ public class DynComp {
     return (System.currentTimeMillis() - start);
   }
 
-  /** convert a list of arguments into a command line string **/
+  /** convert a list of arguments into a command line string */
   public String args_to_string(List<String> args) {
     String str = "";
     for (String arg : args) {

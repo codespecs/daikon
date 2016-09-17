@@ -25,7 +25,7 @@ import org.checkerframework.checker.nullness.qual.*;
  *
  * Note that each of the three items (class, ppt, variable) must match
  * in order for a print to occur.
- **/
+ */
 public final class Debug {
 
   /** Debug Logger. */
@@ -149,7 +149,7 @@ public final class Debug {
   /**
    * True if the cached values should be printed --- that is, they match
    * what is currently being debugged.
-   **/
+   */
   public boolean cache_match = true;
 
   // Note that throughout this file, inv_class is not necessarily a
@@ -174,7 +174,7 @@ public final class Debug {
    * vis that is on the debugTrackVar list.  Essentially this creates
    * a debug object that will print if any of the variables in vis are
    * being tracked (and c and ppt match)
-   **/
+   */
   public Debug(Class<?> c, Ppt ppt, VarInfo[] vis) {
     set(c, ppt, vis);
   }
@@ -266,7 +266,7 @@ public final class Debug {
    * Sets the cache for class, ppt, and vis so that future calls to log
    * don't have to set them -- in other words, future calls can use the
    * versions of log with fewer arguments.
-   **/
+   */
   void set(
       /*>>>@UnknownInitialization Debug this,*/
       /*@Nullable*/ Class<?> c, /*@Nullable*/ Ppt ppt, VarInfo /*@Nullable*/ [] vis) {
@@ -291,7 +291,7 @@ public final class Debug {
    */
   public static boolean dkconfig_internal_check = false;
 
-  /** If true, show stack traces for errors such as file format errors. **/
+  /** If true, show stack traces for errors such as file format errors. */
   public static boolean dkconfig_show_stack_trace = false;
 
   /**

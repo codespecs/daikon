@@ -28,7 +28,7 @@ import org.checkerframework.checker.signature.qual.*;
  * class.  Neither Chicory nor Daikon calls the methods of the Runtime
  * class; only the target program (as instrumented by Chicory) does, in
  * order to create input to Daikon.
- **/
+ */
 // I don't see a way to suppress per-field rather than on the whole class.
 // See Checker Framework test case
 @SuppressWarnings("initialization.fields.uninitialized") // for the dtrace field.
@@ -93,7 +93,7 @@ public final class Runtime {
    * <p>
    * If the argument is not a field descriptor, returns it as is.
    * This enables this method to be used on the output of {@link Class#getName()}.
-   **/
+   */
   @Deprecated
   public static /*@BinaryName*/ String classnameFromJvm(/*@FieldDescriptor*/ String classname) {
     return fieldDescriptorToBinaryName(classname);
@@ -105,7 +105,7 @@ public final class Runtime {
    * <p>
    * If the argument is not a field descriptor, returns it as is.
    * This enables this method to be used on the output of {@link Class#getName()}.
-   **/
+   */
   @SuppressWarnings("signature") // conversion function
   public static /*@BinaryName*/ String fieldDescriptorToBinaryName(
       /*@FieldDescriptor*/ String classname) {
@@ -270,7 +270,7 @@ public final class Runtime {
    * The value of the DTRACEFILE environment variable is used;
    * if that environment variable is not set, then the argument
    * to this method is used instead.
-   **/
+   */
   public static void setDtraceMaybe(String default_filename) {
     // System.out.println("setDtraceMaybe(" + default_filename + "); old = " + dtrace);
     if ((dtrace == null) && (!no_dtrace)) {
@@ -419,7 +419,7 @@ public final class Runtime {
 
   // Lifted directly from plume/UtilMDE.java, where it is called
   // escapeNonJava(), but repeated here to make this class self-contained.
-  /** Quote \, ", \n, and \r characters in the target; return a new string. **/
+  /** Quote \, ", \n, and \r characters in the target; return a new string. */
   public static String quote(String orig) {
     StringBuffer sb = new StringBuffer();
     // The previous escape (or escaped) character was seen right before

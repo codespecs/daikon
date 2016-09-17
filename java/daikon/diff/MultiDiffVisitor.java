@@ -17,7 +17,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * across multiple files regardless of the current two-file infrastructure.
  * This allows the selection of very unique invariants that occur once over
  * an entire set of trace files
- **/
+ */
 public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
   protected PptMap currMap;

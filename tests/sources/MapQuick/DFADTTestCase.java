@@ -19,7 +19,7 @@ class DFADTTestCase extends DFAnyTestCase
   
   /**
    * Runs the test against getDirections(Address x 2)
-   **/
+   */
   public void testProgADT()
   {
     loadDatabase();

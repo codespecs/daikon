@@ -9,7 +9,7 @@ import java.io.*;
  * invariant as different when its existence in one set is not in another
  * set.  This avoids reported differences simply in confidence changes
  * and other extra-sensitive reports.
- **/
+ */
 public class PrintNullDiffVisitor extends PrintDifferingInvariantsVisitor {
 
   public PrintNullDiffVisitor(PrintStream ps, boolean verbose) {

@@ -16,7 +16,7 @@ import org.checkerframework.dataflow.qual.*;
  * Represents additional information about a VarInfo that front ends
  * tell Daikon.  For example, whether order matters in a collection.
  * This is immutable and interned.
- **/
+ */
 public final class VarInfoAux implements Cloneable, Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -25,7 +25,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /**
    * General debug tracer.
-   **/
+   */
   public static final Logger debug = Logger.getLogger("daikon.VarInfoAux");
 
   public static final String TRUE = "true";
@@ -38,7 +38,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * Whether the elements in this collection are all the meaningful
    * elements, or whether there is a null at the end of this
    * collection that ends the collection.
-   **/
+   */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String NULL_TERMINATING = "nullTerminating";
 
@@ -52,31 +52,31 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * responsible for setting if p is a parameter and if p.a is a
    * parameter.  In Java, p.a is not a parameter, whereas in IOA, it
    * is.
-   **/
+   */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String IS_PARAM = "isParam";
 
   /**
    * Whether repeated elements can exist in this collection.
-   **/
+   */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String HAS_DUPLICATES = "hasDuplicates";
 
   /**
    * Whether order matters.
-   **/
+   */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String HAS_ORDER = "hasOrder";
 
   /**
    * Whether taking the size of this matters.
-   **/
+   */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String HAS_SIZE = "hasSize";
 
   /**
    * Whether null has a special meaning for this variable or its members.
-   **/
+   */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String HAS_NULL = "hasNull";
 
@@ -152,7 +152,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * <p>
    * Parse allow for quoted elements.  White space to the left and
    * right of keys and values do not matter, but inbetween does.
-   **/
+   */
   public static /*@Interned*/ VarInfoAux parse(String inString) throws IOException {
     Reader inStringReader = new StringReader(inString);
     StreamTokenizer tok = new StreamTokenizer(inStringReader);
@@ -242,19 +242,19 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /**
    * Interned default options.
-   **/
+   */
   private static /*@Interned*/ VarInfoAux theDefault = new VarInfoAux().intern();
 
   /**
    * Create a new VarInfoAux with default options.
-   **/
+   */
   public static /*@Interned*/ VarInfoAux getDefault() {
     return theDefault;
   }
 
   /**
    * Map for interning.
-   **/
+   */
   private static /*@MonotonicNonNull*/ Map<VarInfoAux, /*@Interned*/ VarInfoAux> interningMap =
       // Static fields might not be initialized before static methods (which
       // call instance methods) are called, so don't bother to initialize here.
@@ -262,7 +262,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /**
    * Special handler for deserialization.
-   **/
+   */
   private /*@Interned*/ Object readResolve() throws ObjectStreamException {
     isInterned = false;
     Map</*@Interned*/ String, /*@Interned*/ String> newMap =
@@ -276,17 +276,17 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /**
    * Contains the actual hashMap for this.
-   **/
+   */
   private Map</*@Interned*/ String, /*@Interned*/ String> map;
 
   /**
    * Whether this is interned.
-   **/
+   */
   private boolean isInterned = false;
 
   /**
    * Make the default map here.
-   **/
+   */
   private VarInfoAux() {
     HashMap</*@Interned*/ String, /*@Interned*/ String> defaultMap =
         new HashMap</*@Interned*/ String, /*@Interned*/ String>();
@@ -306,13 +306,13 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /**
    * Create a new VarInfoAux with default options.
-   **/
+   */
   private VarInfoAux(Map</*@Interned*/ String, /*@Interned*/ String> map) {
     this.map = map;
     this.isInterned = false;
   }
 
-  /** Creates and returns a copy of this. **/
+  /** Creates and returns a copy of this. */
   // Default implementation to quiet Findbugs.
   /*@SideEffectFree*/
   public VarInfoAux clone(
@@ -375,7 +375,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /**
    * Returns canonical representation of this.  Doesn't need to be
    * called by outside classes because these are always interned.
-   **/
+   */
   @SuppressWarnings({"interning", "cast"}) // intern method
   private /*@Interned*/ VarInfoAux intern() {
 
@@ -458,7 +458,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /**
    * Returns the value for the given key, which must be present in the map.
-   **/
+   */
   public String getValue(
       /*>>>@GuardSatisfied VarInfoAux this,*/
       /*@KeyFor("this.map")*/ String key) {
@@ -468,7 +468,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /**
    * Returns the value for the given key, or null if it is not present.
-   **/
+   */
   public String getValueOrNull(
       /*>>>@GuardSatisfied VarInfoAux this,*/
       /*@KeyFor("this.map")*/ String key) {
@@ -493,7 +493,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /**
    * Return a new VarInfoAux with the desired value set.
    * Does not modify this.
-   **/
+   */
   public /*@Interned*/ VarInfoAux setValue(String key, String value) {
     HashMap</*@Interned*/ String, /*@Interned*/ String> newMap =
         new HashMap</*@Interned*/ String, /*@Interned*/ String>(this.map);

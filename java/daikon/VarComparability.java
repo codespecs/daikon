@@ -21,10 +21,10 @@ import org.checkerframework.dataflow.qual.*;
  * succeed exactly if the two VarComparabilitys are identical.<p>
  *
  * VarComparabilityNone means no comparability information was provided.
- **/
+ */
 public abstract class VarComparability {
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.VarComparability");
 
   public static final int NONE = 0;
@@ -40,7 +40,7 @@ public abstract class VarComparability {
    * of the element, b is the type of the first index, c the type of
    * the second, etc.  Index variables only apply if this is an array.
    * @param vartype the declared type of the variable
-   **/
+   */
   public static VarComparability parse(int format, String rep, ProglangType vartype) {
     if (format == NONE) {
       return VarComparabilityNone.parse(rep, vartype);
@@ -60,7 +60,7 @@ public abstract class VarComparability {
    * @param elemTypeName the new type of the elements of return value
    * @param old the varcomparability that this is derived from; has
    * the same indices as this.
-   **/
+   */
   public static VarComparability makeComparabilitySameIndices(
       String elemTypeName, VarComparability old) {
     if (old instanceof VarComparabilityNone) {
@@ -88,13 +88,13 @@ public abstract class VarComparability {
    */
   public abstract boolean alwaysComparable(/*>>>@GuardSatisfied VarComparability this*/);
 
-  /** Returns whether two variables are comparable. **/
+  /** Returns whether two variables are comparable. */
   /*@Pure*/
   public static boolean comparable(VarInfo v1, VarInfo v2) {
     return comparable(v1.comparability, v2.comparability);
   }
 
-  /** Returns whether two comparabilities are comparable. **/
+  /** Returns whether two comparabilities are comparable. */
   @SuppressWarnings("purity") // Override the purity checker
   /*@Pure*/
   public static boolean comparable(

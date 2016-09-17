@@ -10,7 +10,7 @@ import jtb.visitor.*;
  * tokens from a expression in the order they appear in the expression.
  * For example on "x &gt; someMethod(i[3])" would yield an array of the
  * following elements: x, &gt;, someMethod,(, i, [, 3, ], ).
- **/
+ */
 class TokenExtractor extends DepthFirstVisitor {
 
   /** The tokens of expression. */

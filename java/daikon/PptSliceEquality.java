@@ -19,7 +19,7 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * Holds Equality invariants.
- **/
+ */
 public class PptSliceEquality extends PptSlice {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -80,7 +80,7 @@ public class PptSliceEquality extends PptSlice {
    * be used to create sets of VarInfos that are initially equal. Two
    * VarInfoAndComparability's are true iff they are
    * VarComparability.comparable() to each other.
-   **/
+   */
   private static class VarInfoAndComparability {
     public VarInfo vi;
 
@@ -106,7 +106,7 @@ public class PptSliceEquality extends PptSlice {
      * Whether two VarInfos can be set to be equal to each other is
      * whether they are comparableNWay.  Since we do not yet handle
      * inheritance, we require that the comparability go both ways.
-     **/
+     */
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
     public boolean equals(
@@ -125,7 +125,7 @@ public class PptSliceEquality extends PptSlice {
 
   /**
    * Actually instantiate the equality sets.
-   **/
+   */
   void instantiate_invariants() {
 
     // If each variable gets its own set, create those sets and return
@@ -237,7 +237,7 @@ public class PptSliceEquality extends PptSlice {
    * However, this handles the creation of new Equality invariants and
    * the instantiation of other invariants.
    * @return a List of invariants that have been weakened
-   **/
+   */
   // The basic approach is as follows:
   //    - Loop through each equality set
   //        - look for any variables that are no longer equal
@@ -305,7 +305,7 @@ public class PptSliceEquality extends PptSlice {
   /**
    * Dummy value that's incomparable to everything else to indicate
    * missings in createEqualityInvs.
-   **/
+   */
   private static final Object dummyMissing = new Object(); // StringBuffer("Dummy missing");
 
   /**
@@ -325,7 +325,7 @@ public class PptSliceEquality extends PptSlice {
    * @return a List of Equality invariants bundling together same
    * values from vis, and if needed, another representing all the
    * missing values.
-   **/
+   */
   private List<Equality> createEqualityInvs(
       List<VarInfo> vis, ValueTuple vt, Equality leader, int count) {
     assert vis.size() > 0;
@@ -434,7 +434,7 @@ public class PptSliceEquality extends PptSlice {
    * add value to key.  Otherwise create a new List associated with
    * key and insert value.
    * @param value the value to insert into the List mapped to key.
-   **/
+   */
   private <T> void addToBindingList(Map<T, List<VarInfo>> map, T key, VarInfo value) {
     assert key != null;
     List<VarInfo> elements = map.get(key);
@@ -458,7 +458,7 @@ public class PptSliceEquality extends PptSlice {
    * @param newVis a List of new VarInfos that used to be equal to
    * leader.  Actually, it's the list of canonical that were equal to
    * leader, representing their own newly-created equality sets.
-   **/
+   */
   public List<Invariant> copyInvsFromLeader(VarInfo leader, List<VarInfo> newVis) {
 
     List<Invariant> falsified_invs = new ArrayList<Invariant>();
@@ -556,7 +556,7 @@ public class PptSliceEquality extends PptSlice {
    * means the previous replacement is leader.
    * @param soFar buffer to which assignments temporarily go before
    * becoming instantiated.  Has to equal slice.var_infos in length.
-   **/
+   */
   private void copyInvsFromLeaderHelper(
       VarInfo leader,
       List<VarInfo> newVis,
@@ -646,7 +646,7 @@ public class PptSliceEquality extends PptSlice {
 
   /**
    * Order Equality invariants by the indices of leaders.
-   **/
+   */
   public static final class EqualityComparator implements Comparator<Equality> {
     public static final EqualityComparator theInstance = new EqualityComparator();
 

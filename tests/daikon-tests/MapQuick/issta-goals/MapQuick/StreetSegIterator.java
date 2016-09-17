@@ -11,7 +11,7 @@ import MapQuick.tigerdb.DatabaseReader.GeoChain;
 
 /**
  * TODO
- **/
+ */
 public class StreetSegIterator
   extends ImmIterator
 {
@@ -37,7 +37,7 @@ public class StreetSegIterator
    * 
    * @effects creates a new iterator over which produces segments read
    *          in from the given files
-   **/
+   */
   public StreetSegIterator(Iterator files, StreetSegmentFilter filter)
   {
     this.files = files;

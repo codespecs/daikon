@@ -24,7 +24,7 @@ import org.checkerframework.checker.signature.qual.*;
  * processing.
  *
  * The input file format is documented in the developer manual.
- **/
+ */
 @SuppressWarnings("nullness")
 public class SampleTester extends TestCase {
 
@@ -136,7 +136,7 @@ public class SampleTester extends TestCase {
   /**
    * This function is the actual function performed when this class is
    * run through JUnit.
-   **/
+   */
   public void test_samples() throws IOException {
 
     FileIO.new_decl_format = null;

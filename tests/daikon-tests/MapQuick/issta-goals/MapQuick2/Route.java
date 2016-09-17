@@ -26,7 +26,7 @@ import junit.framework.Assert;
  * distance traveled by following the path from start to end -- is not
  * necessarily the same as the distance along a straight line between its
  * endpoints.<p>
- **/
+ */
 public abstract class Route {
 
   /*@ invariant this.start != null; */
@@ -57,7 +57,7 @@ public abstract class Route {
    *   && this.endHeading = gs.heading
    *   && this.length = gs.length
    * </pre>
-   **/
+   */
   public Route(GeoSegment gs){
     Assert.assertNotNull(gs);
     this.start = gs.p1();
@@ -148,7 +148,7 @@ public abstract class Route {
    * Each line of the directions is of the form described in
    * ElementaryRoute.directions(double heading).
    * @see ElementaryRoute#directions(double heading)
-   **/
+   */
   public abstract String directions(double heading);
 
   /**
@@ -168,7 +168,7 @@ public abstract class Route {
    *      ( 0 <= i < a.length - 1 => ( a[i].name != a[i+1].name &&
    *                                   a[i].end   = a[i+1].start ) )
    * </pre>
-   **/
+   */
   public abstract ElementaryRoute[] elementaryRoutes();
 
   /**
@@ -176,7 +176,7 @@ public abstract class Route {
    * @return true iff o has the same runtime class as this and all of
    * o's specification fields are value equivalent to the specation fields
    * of this.
-   **/
+   */
   public boolean equals(Object o) {
     if (o instanceof Route) {
       Route r = (Route)o;
@@ -188,7 +188,7 @@ public abstract class Route {
 
   /**
    * @return a valid hashcode for this.
-   **/
+   */
   public int hashCode() {
     // This implementation will work, but you may want to modify it later
     // for improved performance.  If you do change the implementation, make
@@ -199,7 +199,7 @@ public abstract class Route {
 
   /**
    * @return a string representation of this.
-   **/
+   */
   public String toString(){
 
     return "Route{" + start + "," + end + "," + startHeading + "->" + endHeading + "," + length;

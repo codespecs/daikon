@@ -9,7 +9,7 @@ import jtb.visitor.*;
  * and correspondingly corrects positioning fields of all the tokens in
  * tree to accomodate the change.  For example, the expression get(this.x)
  * would be changed to get(orig(this.x)).
- **/
+ */
 public class OrigModifier extends DepthFirstVisitor {
 
   private int columnshift = 0;

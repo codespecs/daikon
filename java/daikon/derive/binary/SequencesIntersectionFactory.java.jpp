@@ -53,7 +53,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFactory {
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   private static final Logger debug =
     Logger.getLogger("daikon.derive.binary." + SCALARSEQUENCESINTERSECTIONFACTORY_STRING);
 

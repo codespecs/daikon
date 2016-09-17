@@ -18,7 +18,7 @@ import typequals.*;
  * <code>max(x)</code>) are equal to <code>r (mod m)</code>.
  * Prints as <code>x != r (mod m)</code>, where <code>r</code>
  * is the remainder and <code>m</code> is the modulus.
- **/
+ */
 public class NonModulus extends SingleScalar {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -29,7 +29,7 @@ public class NonModulus extends SingleScalar {
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff NonModulus invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   // Set elements = new HashSet();
@@ -56,12 +56,12 @@ public class NonModulus extends SingleScalar {
 
   private static /*@Prototype*/ NonModulus proto = new /*@Prototype*/ NonModulus();
 
-  /** Returns the prototype invariant for NonModulus **/
+  /** Returns the prototype invariant for NonModulus */
   public static /*@Prototype*/ NonModulus get_proto() {
     return proto;
   }
 
-  /** NonModulus is only valid on integral types **/
+  /** NonModulus is only valid on integral types */
   public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) return false;
@@ -69,12 +69,12 @@ public class NonModulus extends SingleScalar {
     return (vis[0].file_rep_type.baseIsIntegral());
   }
 
-  /** Returns whether or not this invariant is enabled **/
+  /** Returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   protected NonModulus instantiate_dyn(/*>>> @Prototype NonModulus this,*/ PptSlice slice) {
     return new NonModulus(slice);
   }
@@ -193,7 +193,7 @@ public class NonModulus extends SingleScalar {
     }
   }
 
-  /** Returns true if this has the given modulus and remainder. **/
+  /** Returns true if this has the given modulus and remainder. */
   public boolean hasModulusRemainder(long modulus, long remainder) {
     updateResults();
     if (no_result_yet) return false;

@@ -46,7 +46,7 @@ import typequals.*;
  * the Equality will internally convert into binary comparison invariants
  * that print as <code>x == y</code> and <code>x == z</code>.
  *
- **/
+ */
 public final /*(at)Interned*/ class Equality extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -59,7 +59,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
 
   /**
    * How many samples this has seen.
-   **/
+   */
   private int numSamples;
 
   public void setSamples(int sample_cnt) {
@@ -74,10 +74,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * The Set of VarInfos that this represents equality for.  Can
    * change over time as this invariant weakens.  Sorted by index
    * until pivoting.
-   **/
+   */
   private TreeSet<VarInfo> vars;
 
-  /** Returns the number of variables in the set. **/
+  /** Returns the number of variables in the set. */
   /*@Pure*/
   public int size(/*>>>@GuardSatisfied Equality this*/) {
     return vars.size();
@@ -85,7 +85,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
 
   /**
    * Returns the variables in their index order.  Unmodifiable.
-   **/
+   */
   public Set<VarInfo> getVars() {
     return Collections.unmodifiableSet(vars);
   }
@@ -93,7 +93,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   /**
    * @param variables variables that are equivalent, with the canonical
    * one first.  Elements must be of type VarInfo.
-   **/
+   */
   @SuppressWarnings("initialization.invalid.field.write.initialized") // weakness of FBC type system
   public Equality(Collection<VarInfo> variables, PptSlice ppt) {
     super(ppt);
@@ -131,7 +131,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * Return the canonical VarInfo of this.  Note that the leader never
    * changes.
    * @return the canonical VarInfo of this
-   **/
+   */
   @SuppressWarnings("purity") // set cache field
   /*@Pure*/
   public VarInfo leader(
@@ -150,7 +150,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * Always return JUSTIFIED because we aggregate Comparison
    * invariants that are all justified to the confidence_limit
    * threshold.
-   **/
+   */
   public double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
@@ -365,7 +365,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * set when one is missing and the other is not.  Its possible we should
    * go farther and break out of the equality set any variable that is
    * missingOutOfBounds (JHP)
-   **/
+   */
   public List<VarInfo> add(ValueTuple vt, int count) {
     // Need to handle specially if leader is missing.
     VarInfo leader = leader();
@@ -452,7 +452,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * If the leader was changed to not be the first member of the group
    * adds leader == leader invariant as well since that invariant is
    * used in suppressions and obvious tests.
-   **/
+   */
   public void postProcess() {
     if (this.numSamples() == 0) return; // All were missing or not present
     PptTopLevel parent = this.ppt.parent;
@@ -503,7 +503,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * is the leader, but not interesting, we still want to print f(b)
    * as an invariant.  Thus we pivot b to be the leader.  Later on,
    * each relevant PptSlice gets pivoted.  But not here.
-   **/
+   */
   public void pivot() {
     VarInfo newLeader = null;
     for (VarInfo var : vars) {

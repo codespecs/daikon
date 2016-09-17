@@ -24,7 +24,7 @@ public class CompositeRoutePath implements Path
    *
    * @effects Creates a new path which originates at node, and uses
    * the A* metric towards the given goals
-   **/
+   */
   public CompositeRoutePath(GeoSegment node, Set goals)
   {
     this(node, new LinkedHashSet(goals), null);
@@ -36,7 +36,7 @@ public class CompositeRoutePath implements Path
    *
    * @effects Creates a new CompositeRoutePath 'res' such that
    * res.elements = path.elements + [ node ]
-   **/
+   */
   private CompositeRoutePath(GeoSegment node, Set goals, CompositeRoutePath path)
   {
     Assert.assertTrue(node != null);
@@ -170,7 +170,7 @@ public class CompositeRoutePath implements Path
   /**
    * @return true iff o is a CompositeRoutePath and o.elements is the
    * same sequence as this.elements
-   **/
+   */
   public boolean equals(Object o)
   {
     return (o instanceof CompositeRoutePath) && equals((CompositeRoutePath) o);
@@ -178,7 +178,7 @@ public class CompositeRoutePath implements Path
 
   /**
    * @return true iff other.elements is the same sequence as this.elements
-   **/
+   */
   public boolean equals(CompositeRoutePath other)
   {
     return (other != null) &&

@@ -7,7 +7,7 @@ import java.io.IOException;
 
 /**
  * Unit tests for the WalkingRouteFormatter class.
- **/
+ */
 public class WalkingRouteFormatterTest extends TestCase {
 
     private WalkingRouteFormatter mDirections;
@@ -28,7 +28,7 @@ public class WalkingRouteFormatterTest extends TestCase {
 
     /**
      * Test simple directions with one distance and one origHeading.
-     **/
+     */
     public void testShortDirections() throws IOException {
         assertEquals(new Double(90.0),
                      new Double(mShortRoute.getStartHeading()));
@@ -67,7 +67,7 @@ public class WalkingRouteFormatterTest extends TestCase {
 
     /**
      * Test turning directions, with different origHeadings.
-     **/
+     */
     public void testTurning() {
 
         // Left turn
@@ -145,7 +145,7 @@ public class WalkingRouteFormatterTest extends TestCase {
     /**
      * Test rounding distance, specifically if it rounds up to 0.1 and
      * rounds down to 0.0.  Should compute time before rounding.
-     **/
+     */
     public void testDistance() {
         // 0.08 miles
         mShortRoute = new Route(new GeoSegment(mName,
@@ -165,7 +165,7 @@ public class WalkingRouteFormatterTest extends TestCase {
 
     /**
      * Two step route with one geo feature.
-     **/
+     */
     public void testRepeatedSegment() {
         Route route = new Route(new GeoSegment(mName,
                                                new GeoPoint(0,0),
@@ -181,7 +181,7 @@ public class WalkingRouteFormatterTest extends TestCase {
 
     /**
      * Long route with no repeats.
-     **/
+     */
     public void testLongRoute() {
         Route route = new Route(new GeoSegment("Penny Lane",
                                                new GeoPoint(0,0),
@@ -218,7 +218,7 @@ public class WalkingRouteFormatterTest extends TestCase {
 
     /**
      * Just like long route, but different makeup of geosegements.
-     **/
+     */
     public void testRepeatedRoute() {
         Route route = new Route(new GeoSegment("Penny Lane",
                                                new GeoPoint(0,0),

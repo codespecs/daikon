@@ -73,7 +73,7 @@ public class Address {
   /**
    * @return a String representation of this address in the format:
    * "num name zipcode"
-   **/
+   */
   public String toString () {
     return new String (streetNum + " " + streetName + " " + zipcode);
   }

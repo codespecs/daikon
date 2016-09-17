@@ -30,7 +30,7 @@ import java.util.*;
  *
  * <p> Member is just one example of this.  Others include
  * subsequence.
- **/
+ */
 
 public class StaticInteresting {
   public int[] outer = new int[100];
@@ -62,7 +62,7 @@ public class StaticInteresting {
 
   /**
    *
-   **/
+   */
   public  void work() {
     for (int i = 0; i < outer.length; i++) {
       outer[i] = rand.nextInt();
@@ -84,7 +84,7 @@ public class StaticInteresting {
  *  this.inner[this.x] in this.outer[]
  * <p>
  * should not be reported because this.inner[this.x] == this.outer[this.y]
- **/
+ */
 class StaticInteresting2 {
   public int[] outer = new int[100];
   public int[] inner = new int[1];
@@ -106,7 +106,7 @@ class StaticInteresting2 {
 
   /**
    *
-   **/
+   */
   public  void work() {
     for (int i = 0; i < outer.length; i++) {
       outer[i] = rand.nextInt();

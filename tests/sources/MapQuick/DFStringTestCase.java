@@ -17,7 +17,7 @@ class DFStringTestCase extends DFAnyTestCase
   
   /**
    * Runs the test against getDirections(String x 6)
-   **/
+   */
   public void testProgString()
   {
     loadDatabase();

@@ -7,7 +7,7 @@ package misc;
  * x[] == y[] => x subset y (and vice versa)
  * x[] == y[] => x subseq y (and vice versa)
  * x is a constant => all functionBinary invariants with x are uninteresting.
- **/
+ */
 
 
 class Suppress01 extends Object {

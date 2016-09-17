@@ -25,7 +25,7 @@ public final class PrintableString extends SingleString {
 
   /**
    * Boolean.  True iff PrintableString invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public PrintableString(PptSlice slice) {
@@ -38,22 +38,22 @@ public final class PrintableString extends SingleString {
 
   private static /*@Prototype*/ PrintableString proto = new /*@Prototype*/ PrintableString();
 
-  /** Returns the prototype invariant for PrintableString **/
+  /** Returns the prototype invariant for PrintableString */
   public static /*@Prototype*/ PrintableString get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   public PrintableString instantiate_dyn(/*>>> @Prototype PrintableString this,*/ PptSlice slice) {
     return new PrintableString(slice);
   }
 
-  /** return description of invariant.  Only Daikon format is implemented **/
+  /** return description of invariant.  Only Daikon format is implemented */
   /*@SideEffectFree*/
   public String format_using(/*>>>@GuardSatisfied PrintableString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
@@ -63,12 +63,12 @@ public final class PrintableString extends SingleString {
     }
   }
 
-  /** Check to see if a only contains printable ascii characters **/
+  /** Check to see if a only contains printable ascii characters */
   public InvariantStatus add_modified(/*@Interned*/ String a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters **/
+  /** Check to see if a only contains printable ascii characters */
   public InvariantStatus check_modified(/*@Interned*/ String a, int count) {
     for (int ii = 0; ii < a.length(); ii++) {
       char ch = a.charAt(ii);

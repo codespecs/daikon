@@ -59,7 +59,7 @@ import typequals.*;
  * invariant (ax + by + cz + d = 0) by processing samples and
  * computing coefficients.  The resulting coefficients a, b, c, and d are
  * mutually relatively prime, and the coefficient a is always p
- **/
+ */
 
 // Originally, LinearTernaryCore code was not dealing with degenerate
 // linear ternary invariants correct, namely when the plane
@@ -84,7 +84,7 @@ public final class CLASSNAME
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   static final Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar." + CLASSSTRING);
 
   // ax + by + cz + d = 0; first argument is x, second is y, third is z
@@ -187,7 +187,7 @@ public final class CLASSNAME
   /**
    * Reorganize our already-seen state as if the variables had shifted
    * order underneath us (rearrangement given by the permutation).
-   **/
+   */
   public void permute(int[] permutation) {
     assert permutation.length == 3;
     assert ArraysMDE.fn_is_permutation(permutation);
@@ -847,7 +847,7 @@ public final class CLASSNAME
    *  ones.  Kills off the invariant if they are not.
    *
    *  @return true if the new equation worked, false otherwise.
-   **/
+   */
   public boolean try_new_equation (PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
 
     // Calculate max separation using this point and the existing 3 points.

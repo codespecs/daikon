@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 /**
  * Computes A xor B, where A and B are the two sets of invariants.
- **/
+ */
 public class XorVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
@@ -22,7 +22,7 @@ public class XorVisitor extends DepthFirstVisitor {
   /**
    * Every node has at least one non-null ppt.  Add one of the
    * non-null ppt to the result.
-   **/
+   */
   public void visit(PptNode node) {
     PptTopLevel ppt1 = node.getPpt1();
     PptTopLevel ppt2 = node.getPpt2();
@@ -37,7 +37,7 @@ public class XorVisitor extends DepthFirstVisitor {
   /**
    * If one invariant is null and the other is not, add the non-null
    * invariant to the result set.
-   **/
+   */
   @SuppressWarnings(
       "nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode has already been visited
   /*@RequiresNonNull("currentPpt")*/
@@ -73,7 +73,7 @@ public class XorVisitor extends DepthFirstVisitor {
     return ((inv2 != null) && (inv1 == null));
   }
 
-  /** Returns the InvMap generated as a result of the traversal. **/
+  /** Returns the InvMap generated as a result of the traversal. */
   public InvMap getResult() {
     return result;
   }

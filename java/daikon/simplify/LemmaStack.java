@@ -22,7 +22,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * to restart Simplify from where we left off after it hangs, but it's
  * also a convenient place to hang routines that any Simplify client
  * can use.
- **/
+ */
 public class LemmaStack {
   /**
    * Boolean. Controls Daikon's response when inconsistent invariants
@@ -32,7 +32,7 @@ public class LemmaStack {
    * contradiction and avoid them, to allow processing to
    * continue. For more information, see the section on
    * troubleshooting contradictory invariants in the Daikon manual.
-   **/
+   */
   public static boolean dkconfig_remove_contradictions = true;
 
   /**
@@ -43,7 +43,7 @@ public class LemmaStack {
    * Daikon itself, but can sometimes be helpful in tracing down other
    * problems. For more information, see the section on
    * troubleshooting contradictory invariants in the Daikon manual.
-   **/
+   */
   public static boolean dkconfig_print_contradictions = false;
 
   /**
@@ -55,7 +55,7 @@ public class LemmaStack {
    * arrives, it's not clear which input caused the error. Of course,
    * Daikon's input to Simplify isn't supposed to cause errors, so
    * this option should only be needed for debugging.
-   **/
+   */
   public static boolean dkconfig_synchronous_errors = false;
 
   private Stack<Lemma> lemmas;

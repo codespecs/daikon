@@ -11,7 +11,7 @@ import org.checkerframework.checker.lock.qual.*;
 
 /** InvariantLemmas are Lemmas created by printing a Daikon invariant
  * in Simplify format, sometimes with some hacks.
- **/
+ */
 public class InvariantLemma extends Lemma {
   public String from; // A note explaining our derivation
   public Invariant invariant; // A pointer back to the invariant we
@@ -47,7 +47,7 @@ public class InvariantLemma extends Lemma {
    * Make a lemma corresponding to the given invariant, except
    * referring to the prestate versions of all the variables that inv
    * referred to.
-   **/
+   */
   // The argument is an invariant at the entry point, where no orig(...) variables exist.
   public static InvariantLemma makeLemmaAddOrig(Invariant inv) {
     // XXX Side-effecting the invariant to change its ppt (and then

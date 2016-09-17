@@ -15,7 +15,6 @@ import org.checkerframework.framework.qual.TypeQualifiers;
  * declaration of Invariant (and its subclasses) are explicitly marked
  * as @Prototype, so that it is possible for instances to be marked either
  * with @Prototype or @NonPrototype.
- **/
-
-@TypeQualifiers({ Prototype.class, NonPrototype.class })
-public final class PrototypeChecker extends BaseTypeChecker { }
+ */
+@TypeQualifiers({Prototype.class, NonPrototype.class})
+public final class PrototypeChecker extends BaseTypeChecker {}

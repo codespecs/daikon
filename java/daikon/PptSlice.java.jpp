@@ -77,7 +77,7 @@ public final class PPTSLICE1 extends PptSlice {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debugSpecific
                     = Logger.getLogger("daikon." + PPTSLICE1STRING);
 
@@ -87,7 +87,7 @@ public final class PPTSLICE1 extends PptSlice {
   /**
    * Create a new PPTSLICE1.  The var_infos must be in varinfo_index
    * order.
-   **/
+   */
   public PPTSLICE1(PptTopLevel parent, VarInfo[] var_infos) {
 
     super(parent, var_infos);
@@ -123,7 +123,7 @@ public final class PPTSLICE1 extends PptSlice {
    * slice.  No invariants are created unless the variables in the
    * slice are compatible.  If the variables are compatible, invariants
    * that match the type of the slices variables are created.
-   **/
+   */
   public void instantiate_invariants() {
     instantiate_invariants(Daikon.proto_invs);
   }
@@ -134,7 +134,7 @@ public final class PPTSLICE1 extends PptSlice {
    * No invariants are created unless the variables in the
    * slice are compatible.  If the variables are compatible, invariants
    * that match the type of the slices variables are created.
-   **/
+   */
   public void instantiate_invariants(List</*@Prototype*/ Invariant> proto_invs) {
 
     if (Debug.logOn()) {
@@ -206,7 +206,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 
   // These accessors are for abstract methods declared in Ppt
-  /** Returns the number of (non-missing) samples observed at this slice. **/
+  /** Returns the number of (non-missing) samples observed at this slice. */
   public int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PPTSLICE1 this*/) {
     if (parent == null || var_infos == null) { // handle not-yet-initialized slices
       return 0;
@@ -226,7 +226,7 @@ public final class PPTSLICE1 extends PptSlice {
   /**
    * Returns an upper bound on the number of distinct values observed
    * at this slice.  This is not the number of samples observed.
-   **/
+   */
   public int num_values() {
     // return an approximation
     #if defined(ARITY1)
@@ -245,7 +245,7 @@ public final class PPTSLICE1 extends PptSlice {
    * from it, casts them to the proper types, and passes them along to the
    * invariants proper.  (The invariants accept typed values rather than a
    * ValueTuple that encapsulates objects of any type whatever.)
-   **/
+   */
   public List<Invariant> add(ValueTuple full_vt, int count) {
 
     assert invs.size() > 0;
@@ -522,7 +522,7 @@ public final class PPTSLICE1 extends PptSlice {
   /**
    * Copy invariants from this slice to a new slice over the variables
    * argNewVarInfos.  The new slice should not already exist.
-   **/
+   */
   protected PptSlice cloneAndPivot (VarInfo[] argNewVarInfos) {
 
     // Sort the VarInfos by var_index and build a matching permutation

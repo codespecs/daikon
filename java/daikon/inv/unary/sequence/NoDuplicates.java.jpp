@@ -61,7 +61,7 @@ import typequals.*;
 /**
  * Represents sequences of PRIMITIVE that contain no duplicate elements.
  * Prints as <code>x[] contains no duplicates</code>.
- **/
+ */
 
 public class CLASSNAME
   extends SUPERCLASS
@@ -75,10 +75,10 @@ public class CLASSNAME
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff NoDuplicates invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
-  /** Debug tracer. **/
+  /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.inv.unary.sequence." + CLASSSTRING);
 
   protected CLASSNAME(PptSlice ppt) {
@@ -91,17 +91,17 @@ public class CLASSNAME
 
   private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
-  /** Returns the prototype invariant for CLASSNAME **/
+  /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   public CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME (slice);
   }

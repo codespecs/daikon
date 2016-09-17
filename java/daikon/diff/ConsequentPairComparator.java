@@ -14,7 +14,7 @@ import org.checkerframework.dataflow.qual.*;
  *
  * this.compare(A, B&rArr;A) == c.compare(A, A)
  * this.compare(C, D) == c.compare(C, D)
- **/
+ */
 public class ConsequentPairComparator implements Comparator<Invariant> {
 
   private Comparator<Invariant> c;

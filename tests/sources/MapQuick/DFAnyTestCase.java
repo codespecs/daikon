@@ -13,7 +13,7 @@ public class DFAnyTestCase
 {
   /**
    * @effects creates a new test which runs the given test in the given mode
-   **/
+   */
   public DFAnyTestCase(String name, TestRecord test)
   {
     super(name);
@@ -23,7 +23,7 @@ public class DFAnyTestCase
   /**
    * @requires name = "testLoadDatabase"
    * @effects creates a new test which attemps to load the database
-   **/
+   */
   public DFAnyTestCase(String name)
   {
     super(name);
@@ -67,7 +67,7 @@ public class DFAnyTestCase
 
   /**
    * Attempts to load the database
-   **/
+   */
   public void testLoadDatabase()
   {
     loadDatabase();

@@ -12,7 +12,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * Abstract class to represent a derived variable that came from
  * two base variables.
- **/
+ */
 public abstract class BinaryDerivation extends Derivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -21,17 +21,17 @@ public abstract class BinaryDerivation extends Derivation {
 
   /**
    * Original variable 1.
-   **/
+   */
   public VarInfo base1;
 
   /**
    * Original variable 2.
-   **/
+   */
   public VarInfo base2;
 
   /**
    * Create a new BinaryDerivation from two varinfos.
-   **/
+   */
   public BinaryDerivation(VarInfo vi1, VarInfo vi2) {
     base1 = vi1;
     base2 = vi2;
@@ -92,7 +92,7 @@ public abstract class BinaryDerivation extends Derivation {
 
   /**
    * Actual implementation once mods are handled.
-   **/
+   */
   protected abstract ValueAndModified computeValueAndModifiedImpl(ValueTuple vt);
 
   /*@Pure*/

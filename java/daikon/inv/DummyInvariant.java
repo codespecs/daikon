@@ -33,7 +33,7 @@ import typequals.*;
  * by Daikon during invariant detection, then the configuration option
  * <code>daikon.split.PptSplitter.dummy_invariant_level</code> must be set,
  * and formatting information must be supplied in the splitter info file.
- **/
+ */
 public class DummyInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

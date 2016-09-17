@@ -48,7 +48,7 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * Intersection between two comparable sequences.
- **/
+ */
 public final class SCALARSEQUENCESINTERSECTION
   extends BinaryDerivation
 {
@@ -64,7 +64,7 @@ public final class SCALARSEQUENCESINTERSECTION
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SCALARSEQUENCESINTERSECTION derived variables should be generated.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public SCALARSEQUENCESINTERSECTION(VarInfo vi1, VarInfo vi2) {
@@ -122,7 +122,7 @@ public final class SCALARSEQUENCESINTERSECTION
     return (other instanceof SCALARSEQUENCESINTERSECTION);
   }
 
-  /** Returns the ESC name for sequence subsequence **/
+  /** Returns the ESC name for sequence subsequence */
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format ("intersection[%s,%s]", base1.esc_name(),

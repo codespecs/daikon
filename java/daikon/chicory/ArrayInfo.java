@@ -5,7 +5,7 @@ package daikon.chicory;
  * variable types which are arrays (i.e., their name ends with "[]").
  */
 public class ArrayInfo extends DaikonVariableInfo {
-  /** Component type of the array **/
+  /** Component type of the array */
   Class<?> array_type;
 
   /**

@@ -43,7 +43,7 @@ public class StreetSegReader
    *
    * @throws InvalidSourceException if sourceDirectory is not a
    *   directory.
-   **/
+   */
   public StreetSegReader(File sourceDirectory)
     throws InvalidSourceException
   {
@@ -69,7 +69,7 @@ public class StreetSegReader
    * @returns an iterator that produces the contents of
    *   this.streetSegs.  Each element produced by the Iterator is a
    *   ps4.StreetSegment.
-   **/
+   */
   public StreetSegIterator streetSegments()
   {
     File[] filesToRead = sourceDirectory.listFiles(zip_filter);
@@ -90,7 +90,7 @@ public class StreetSegReader
 
   /**
    * Exception indicating that the requsted source for a tiger database is invalid
-   **/
+   */
   public static class InvalidSourceException
     extends Exception
   {

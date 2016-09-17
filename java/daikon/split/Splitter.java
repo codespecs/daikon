@@ -23,7 +23,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * corresponding Splitter. One instance of each Splitter subclass is
  * then created for each program point at which the splitting
  * condition is applicable.
- **/
+ */
 
 // Should not be "implements Serializable":  the classes are created on
 // demand, so the class doesn't exist when a serialized object is being
@@ -41,7 +41,7 @@ public abstract class Splitter implements Serializable {
    * should not do any splitting itself.)  There is no need for subclasses
    * to override this (but most will have to, since they will add
    * their own constructors as well).
-   **/
+   */
   public Splitter() {}
 
   /**
@@ -56,7 +56,7 @@ public abstract class Splitter implements Serializable {
   /**
    * Returns true for an instantiated (non-"factory") splitter.
    * Clients also need to check valid().
-   **/
+   */
   public boolean instantiated() {
     return instantiated;
   }

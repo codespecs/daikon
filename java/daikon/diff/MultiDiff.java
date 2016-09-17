@@ -8,7 +8,7 @@ import java.io.*;
  *  functionality as Diff with a few key change.  First, it always outputs
  *  the histogram even when two files are called.  Second, it allows the
  *  option of creating *.spinfo based on the invariants found
- **/
+ */
 public class MultiDiff {
   private MultiDiff() {
     throw new Error("do not instantiate");
@@ -32,7 +32,7 @@ public class MultiDiff {
    * throwing daikon.Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(final String[] args)
       throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
     PrintStream out = new PrintStream(new FileOutputStream("rand_sel.spinfo"));

@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.*;
 /**
  * Filter for not printing invariants that have a matching invariant
  * at their parent PPT.
- **/
+ */
 public class ParentFilter extends InvariantFilter {
   public String getDescription() {
     return "Filter invariants that match a parent program point invariant";

@@ -27,20 +27,20 @@ import org.checkerframework.checker.nullness.qual.*;
  * program point, as well as the relationship id. If the name of the
  * variable at the parent program point is different, the parent
  * variable name is also specified.
- **/
+ */
 public class VarParent implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   private static final long serialVersionUID = 20130425L;
 
-  /** Parent ppt for this variable **/
+  /** Parent ppt for this variable */
   public String parent_ppt;
 
-  /** Parent variable (within parent_ppt) (if any) **/
+  /** Parent variable (within parent_ppt) (if any) */
   public /*@Nullable*/ String parent_variable;
 
-  /** Parent ppt relation id **/
+  /** Parent ppt relation id */
   public int parent_relation_id;
 
   public VarParent(

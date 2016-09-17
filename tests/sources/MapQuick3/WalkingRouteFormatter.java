@@ -33,7 +33,7 @@ package MapQuick3;
  * be terminated by a newline and should include no extra spaces other
  * than those shown above.
  * </p>
- **/
+ */
 public class WalkingRouteFormatter extends RouteFormatter {
 
     /**
@@ -70,7 +70,7 @@ public class WalkingRouteFormatter extends RouteFormatter {
      * @param origHeading The initial heading
      * @return A newline-terminated <tt>String</tt> that gives
      * directions on how to walk along this geographical feature.
-     **/
+     */
     public String computeLine(GeoFeature geoFeature, double origHeading) {
         String line;
         long time = Math.round(geoFeature.getLength()*20);

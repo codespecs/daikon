@@ -124,12 +124,12 @@ public class StringInfo extends DaikonVariableInfo {
     return Runtime.quote(input);
   }
 
-  /** toString is a function **/
+  /** toString is a function */
   public VarKind get_var_kind() {
     return VarKind.FUNCTION;
   }
 
-  /** Returns the name of this function **/
+  /** Returns the name of this function */
   public String get_relative_name() {
     return "toString()";
   }

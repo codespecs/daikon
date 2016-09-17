@@ -81,7 +81,7 @@ import typequals.*;
  *
  * Note: no test case should contain the character ';' in any way
  * other than to divide arguments with in a command line.
- **/
+ */
 @SuppressWarnings("nullness")
 public class InvariantAddAndCheckTester extends TestCase {
 
@@ -95,17 +95,17 @@ public class InvariantAddAndCheckTester extends TestCase {
   /**
    * Indicates a string that when it starts a line signifies that the
    * line is a comment.
-   **/
+   */
   public static final String COMMENT_STARTER_STRING = "#";
 
   /**
    * A list containing all of the test formats.
-   **/
+   */
   public static final List<String> TEST_FORMAT_LIST = getTestFormatList();
 
   /**
    * Allows for the configuring of Daikon options.
-   **/
+   */
   static Configuration config = Configuration.getInstance();
 
   private static final String inputFileName = "daikon/test/inv/InvariantTest.input";
@@ -124,7 +124,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    *        "--generate_goals", which will generate goal information for
    *        the selected tests assuming the output that the tests provide
    *        is the correct output
-   **/
+   */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     if (args.length == 1 && args[0].equalsIgnoreCase("--generate_goals")) {
@@ -142,7 +142,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * MasterTester class.
    *
    * @param name the desired name of the test case
-   **/
+   */
   public InvariantAddAndCheckTester(String name) {
     super(name);
   }
@@ -150,7 +150,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   /**
    * This function produces the format list for intialization of the
    * static format list variable.
-   **/
+   */
   static List<String> getTestFormatList() {
     List<String> result = new Vector<String>();
 
@@ -168,7 +168,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   /**
    * This function is the actual function performed when this class is
    * run through JUnit.
-   **/
+   */
   public static void testFormats() {
 
     // Don't care about comparability info because we are only
@@ -191,7 +191,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @param input the input buffer
    * @return the next non-comment, non-whitespace line of the input buffer or
    *         null if the end of the buffer is reached before such a line can be found
-   **/
+   */
   static /*@Nullable*/ String getNextRealLine(BufferedReader input) {
     String currentLine = "";
 
@@ -216,7 +216,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * goals.  If the goals differ from the actual results the test
    * fails.
    * @return false if any tests fail.
-   **/
+   */
   private static boolean execute() {
     LineNumberReader commandReader = getCommands();
     String output = performTest(commandReader);
@@ -256,7 +256,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @param commands the input that decides which tests to perform
    * @return a String holding the error messages for any failed tests
    *  or null if no tests are failed.
-   **/
+   */
   private static /*@Nullable*/ String performTest(LineNumberReader commands) {
     StringBuffer output = new StringBuffer();
     //  List invariantTestCases = new Vector();
@@ -364,7 +364,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @param line the line in question
    * @return true if the line is a comment (that is, not to be interpretted as a command)
    *         false otherwise
-   **/
+   */
   /*@Pure*/
   static boolean isComment(String line) {
     return line.startsWith(COMMENT_STARTER_STRING);
@@ -375,7 +375,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    *
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise
-   **/
+   */
   /*@Pure*/
   static boolean isWhitespace(String line) {
     for (int x = 0; x < line.length(); x++) {
@@ -390,7 +390,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     /**
      * The Invariant object to be tested.
-     **/
+     */
     private static Invariant invariantToTest;
 
     /**
@@ -754,7 +754,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @param classInfo the fully-qualified class name
      * @return a Class object representing the class name if such a class is
      *         defined, otherwise null
-     **/
+     */
     private static Class<?> getClass(/*@BinaryName*/ String classInfo) {
       try {
         return ClassLoader.getSystemClassLoader().loadClass(classInfo);
@@ -766,7 +766,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     /**
      * This function is an alias for the {@link #getNextRealLine(BufferedReader) getNextRealLine}
      * method.
-     **/
+     */
     static String getNextRealLine(BufferedReader buffer) {
       return InvariantAddAndCheckTester.getNextRealLine(buffer);
     }
@@ -805,7 +805,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @param types the types that the VarInfos must have
      * @return an array of VarInfo objects that have the types corresponding
      *         to those in types
-     **/
+     */
     private static VarInfo[] getVarInfos(
         Class<? extends Invariant> classToTest, ProglangType[] types) {
       int numInfos = getArity(classToTest);
@@ -829,7 +829,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @param type the desired type that the VarInfo will represent
      * @param i a unique identifier that determines the name to be used
      * @return a VarInfo object that described the type
-     **/
+     */
     private static VarInfo getVarInfo(ProglangType type, int i) {
       assert type != null : "Unexpected null variable type passed to getVarInfo";
 
@@ -863,7 +863,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      *
      * @param classToTest the invariant type in question
      * @return the arity of the invariant if it can be determined, -1 otherwise
-     **/
+     */
     private static int getArity(Class<? extends Invariant> classToTest) {
       if (UnaryInvariant.class.isAssignableFrom(classToTest)) return 1;
       if (BinaryInvariant.class.isAssignableFrom(classToTest)) return 2;
@@ -878,7 +878,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      *
      * @param typeNames the type string for an invariant
      * @return an array of ProglangTypes representing the data in typeNames
-     **/
+     */
     private static ProglangType[] getTypes(String typeNames) {
       StringTokenizer stok = new StringTokenizer(typeNames);
       ProglangType[] result = new ProglangType[stok.countTokens()];

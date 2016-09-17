@@ -53,7 +53,7 @@ import junit.framework.Assert;
  *   <pre>
  *   Turn right onto Mass Ave and go 0.8 miles.</pre>
  * <p>
- **/
+ */
 
 public class ElementaryRoute extends Route {
 
@@ -76,7 +76,7 @@ public class ElementaryRoute extends Route {
    *	      from Route are set according to the specification of
    *	      Route(GeoSegment gs).
    * @see Route#Route(GeoSegment gs)
-   **/
+   */
   public ElementaryRoute(GeoSegment gs){
     super(gs);
     this.name = gs.name();
@@ -116,7 +116,7 @@ public class ElementaryRoute extends Route {
    *       r.end = gs.p2
    *    && r.endHeading = gs.heading
    *    && r.length = this.length + gs.length
-   **/
+   */
   public ElementaryRoute addSegment(GeoSegment gs){
     // the assert is done in the constructor
     return new ElementaryRoute(this,gs);
@@ -154,7 +154,7 @@ public class ElementaryRoute extends Route {
    *   U-turn            if 179 <= a
    * </pre>
    * and likewise for left turns.<p>
-   **/
+   */
   public String directions(double heading){
 
     Assert.assert((0<= heading) && (heading<360));
@@ -221,7 +221,7 @@ public class ElementaryRoute extends Route {
    *         && r.name = this.name && r.start = this.start && r.end = this.end
    *         && r.startHeading = this.startHeading
    *         && r.endHeading = this.endHeading && r.length = this.length
-   **/
+   */
 
   public boolean equals(Object er){
     Assert.assert(er != null);
@@ -237,7 +237,7 @@ public class ElementaryRoute extends Route {
 
   /**
    * @return a valid hashcode for this.
-   **/
+   */
   public int hashCode() {
     // 2 ElementaryRoutes are equal if they have the same name, the same start,
     // the same end, the same startHeading, the same endHeading and the same
@@ -247,7 +247,7 @@ public class ElementaryRoute extends Route {
 
   /**
    * @return a string representation of this.
-   **/
+   */
   public String toString(){
     return "Elementary"+super.toString()+ this.name()+ "}";
   }

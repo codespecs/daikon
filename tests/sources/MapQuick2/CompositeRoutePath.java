@@ -39,7 +39,7 @@ public class CompositeRoutePath implements Path {
    *           path implementation
    * @return a new Path p such that p.elements = this.elements + [ n ]
    *         && p.cost >= this.cost
-   **/
+   */
   public Path extend(Object n) {
     if (n == null)
       throw new NullPointerException("Cannot extend with a null node.");
@@ -54,7 +54,7 @@ public class CompositeRoutePath implements Path {
   /**
    * @return an Iterator that produces the contents of this.elements,
    *            in order
-   **/
+   */
   public Iterator elements() {
 
     if (gsArray == null) {
@@ -68,7 +68,7 @@ public class CompositeRoutePath implements Path {
     return new UnmodifyableArrayIterator(gsArray);
   }
   
-  /** @return this.cost **/
+  /** @return this.cost */
   public double cost() {
     return length;
   }

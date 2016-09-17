@@ -27,7 +27,7 @@ import typequals.*;
  * This class is used by InvariantFormatTester to store data
  * representing test cases and for formatting results related to that
  * data. This class is related to tests performed on one invariant.
- **/
+ */
 @SuppressWarnings("nullness")
 class FormatTestCase {
 
@@ -39,38 +39,38 @@ class FormatTestCase {
    * can easily be extended to incorporating more than one test case
    * under an invariant heading, such as what is currently done in the
    * main code with having multiple goal outputs per invariant.
-   **/
+   */
   static class SingleOutputTestCase {
 
     /**
      * A method that produces the formatting output when invoked.
-     **/
+     */
     private Method outputProducer;
 
     /**
      * The arguments that must be passed to outputProducer to create the output.
-     **/
+     */
     private Object[] outputProducerArgs;
 
     /**
      * The goal output for this particular test case.
-     **/
+     */
     private String goalOutput;
 
     /**
      * The line number in the input file in which the goalOutput should occur in
      * the output file.
-     **/
+     */
     private int goalLineNumber;
 
     /**
      * A cached copy of the result achieved by invoking the output method.
-     **/
+     */
     private /*@MonotonicNonNull*/ String resultCache;
 
     /**
      * A string containing the format that this particular test case represented.
-     **/
+     */
     private String formatString;
 
     /**
@@ -85,7 +85,7 @@ class FormatTestCase {
      * @param goalLineNumber the line number in the input file in which the goal
      * should occur
      * @param formatString the format that this test case belongs to
-     **/
+     */
     public SingleOutputTestCase(
         Method outputProducer,
         Object[] outputProducerArgs,
@@ -105,7 +105,7 @@ class FormatTestCase {
      *
      * @param inv the Invariant object on which to invoke the function
      * @return a String representing the output
-     **/
+     */
     public String createTestOutput(Invariant inv) {
       try {
         if (resultCache == null) {
@@ -133,7 +133,7 @@ class FormatTestCase {
      *
      * @param inv the Invariant object on which to perform the test
      * @return true if the test is passed, false otherwise
-     **/
+     */
     public boolean performTest(Invariant inv) {
       return createTestOutput(inv).equals(goalOutput);
     }
@@ -144,7 +144,7 @@ class FormatTestCase {
      *
      * @return the line number that the goal should be listed on
      *         in the commands file
-     **/
+     */
     public int getGoalLineNumber() {
       return goalLineNumber;
     }
@@ -153,7 +153,7 @@ class FormatTestCase {
      * This function returns the format string of which the test case is a part.
      *
      * @return the format string of which the test case is a part
-     **/
+     */
     public String getFormatString() {
       return formatString;
     }
@@ -163,7 +163,7 @@ class FormatTestCase {
      * goal output and the actual output; empty if there are no differences.
      *
      * @return a String as described above
-     **/
+     */
     public String getDiffString() {
       if (resultCache != null && !resultCache.equals(goalOutput)) {
         return "Error on line "
@@ -185,18 +185,18 @@ class FormatTestCase {
 
   /**
    * Prefix to each goal line in the file for identitication.
-   **/
+   */
   private static final String GOAL_PREFIX = "Goal";
 
   /**
    * A list of all of the test cases (which are SingleOutputTestCase
    * objects) that are to be performed on the contained Invariant.
-   **/
+   */
   private List<SingleOutputTestCase> testCases;
 
   /**
    * The Invariant object to be tested.
-   **/
+   */
   private Invariant invariantToTest;
 
   /**
@@ -208,7 +208,7 @@ class FormatTestCase {
    *        on an Invariant
    * @param invariantToTest the Invariant on which the tests are to be
    *        performed
-   **/
+   */
   private FormatTestCase(List<SingleOutputTestCase> testCases, Invariant invariantToTest) {
     this.testCases = testCases;
     this.invariantToTest = invariantToTest;
@@ -229,7 +229,7 @@ class FormatTestCase {
    * @param theInputFile a LineNumberReader object representing the input file
    * @throws IOException if reading operations from the input buffer fail
    * @return a String representing the goal output file object
-   **/
+   */
   public String generateGoalOutput(LineNumberReader theInputFile) throws IOException {
     StringBuffer output = new StringBuffer();
     String currentLineOfText = null;
@@ -261,7 +261,7 @@ class FormatTestCase {
    * Checks to see whether all tests on this invariant are passed.
    *
    * @return true if all the tests on this invariant passed, false otherwise
-   **/
+   */
   public boolean passes() {
     boolean passTest = true;
     boolean currentResult;
@@ -279,7 +279,7 @@ class FormatTestCase {
    *
    * @return a String representing the difference between the test
    * result and the desired result
-   **/
+   */
   public String getDiffString() {
     StringBuffer result = new StringBuffer();
     String currentDiffString;
@@ -302,7 +302,7 @@ class FormatTestCase {
    * @param classInfo the fully-qualified class name
    * @return a Class object representing the class name if such a class is
    *         defined, otherwise null
-   **/
+   */
   private static Class<?> getClass(/*@BinaryName*/ String classInfo) {
     try {
       return ClassLoader.getSystemClassLoader().loadClass(classInfo);
@@ -317,7 +317,7 @@ class FormatTestCase {
    *
    * @return the actual result String represented by the goal statement or
    *          null if the String isn't actually a goal statement
-   **/
+   */
   static /*@Nullable*/ String parseGoal(String goalString) {
     if (goalString.startsWith(GOAL_PREFIX)) {
       return goalString.substring(GOAL_PREFIX.length(), goalString.length());
@@ -348,7 +348,7 @@ class FormatTestCase {
   /**
    * This function is an alias for the {@link #getNextRealLine(BufferedReader) getNextRealLine}
    * method.
-   **/
+   */
   static String getNextRealLine(BufferedReader buffer) {
     return InvariantFormatTester.getNextRealLine(buffer);
   }
@@ -364,7 +364,7 @@ class FormatTestCase {
    * @param generateGoals true if goal generation is desired, false if goal testing
    *        is desired
    * @return a new FormatTestCase instance
-   **/
+   */
   public static /*@Nullable*/ FormatTestCase instantiate(
       LineNumberReader commands, boolean generateGoals) {
     List<SingleOutputTestCase> testCases = new Vector<SingleOutputTestCase>();
@@ -561,7 +561,7 @@ class FormatTestCase {
    * @param types the types that the VarInfos must have
    * @return an array of VarInfo objects that have the types corresponding
    *         to those in types
-   **/
+   */
   private static VarInfo[] getVarInfos(
       Class<? extends Invariant> classToTest, ProglangType[] types) {
     int numInfos = getArity(classToTest);
@@ -582,7 +582,7 @@ class FormatTestCase {
    *
    * @param classToTest the invariant type in question
    * @return the arity of the invariant if it can be determined, -1 otherwise
-   **/
+   */
   private static int getArity(Class<? extends Invariant> classToTest) {
     if (UnaryInvariant.class.isAssignableFrom(classToTest)) return 1;
     if (BinaryInvariant.class.isAssignableFrom(classToTest)) return 2;
@@ -599,7 +599,7 @@ class FormatTestCase {
    * @param type the desired type that the VarInfo will represent
    * @param i a unique identifier that determines the name to be used
    * @return a VarInfo object that described the type
-   **/
+   */
   private static VarInfo getVarInfo(ProglangType type, int i) {
     assert type != null : "Unexpected null variable type passed to getVarInfo";
 
@@ -652,7 +652,7 @@ class FormatTestCase {
    *
    * @param typeNames the type string for an invariant
    * @return an array of ProglangTypes representing the data in typeNames
-   **/
+   */
   private static ProglangType[] getTypes(String typeNames) {
     StringTokenizer stok = new StringTokenizer(typeNames);
     ProglangType[] result = new ProglangType[stok.countTokens()];
@@ -899,7 +899,7 @@ class FormatTestCase {
    * @param inv an invariant to which samples are added
    * @param samples a list of samples (each entry of type Object []) that
    *        can be added to the variables involved
-   **/
+   */
   private static void populateWithSamples(Invariant inv, List<Object[]> samples) {
     if (samples == null || samples.size() == 0) {
       return;

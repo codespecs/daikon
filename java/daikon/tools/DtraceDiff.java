@@ -59,7 +59,7 @@ public class DtraceDiff {
   /**
    * This entry point is useful for testing.  It returns a boolean to indicate
    * return status instead of croaking with an error.
-   **/
+   */
   public static boolean mainTester(String[] args) {
     try {
       mainHelper(args);
@@ -78,7 +78,7 @@ public class DtraceDiff {
    * throwing daikon.Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(final String[] args) {
     Set<File> declsfile1 = new HashSet<File>();
     String dtracefile1 = null;

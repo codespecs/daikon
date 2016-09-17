@@ -367,7 +367,7 @@ import typequals.*;
 /**
  * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars.
  * Prints as <code>x EQUALShtml y</code>.
- **/
+ */
 public final class INTEQUAL
   extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
@@ -380,7 +380,7 @@ public final class INTEQUAL
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff INTEQUAL invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public static final Logger debug
@@ -389,7 +389,7 @@ public final class INTEQUAL
 #if (defined(NONEQUAL))
   /**
    * Boolean.  True iff INTEQUAL invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_integral_only = true;
 #endif
 
@@ -403,17 +403,17 @@ public final class INTEQUAL
 
   private static /*@Prototype*/ INTEQUAL proto = new /*@Prototype*/ INTEQUAL ();
 
-  /** Returns the prototype invariant for INTEQUAL **/
+  /** Returns the prototype invariant for INTEQUAL */
   public static /*@Prototype*/ INTEQUAL get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled **/
+  /** Returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Returns whether or not the specified var types are valid for INTEQUAL **/
+  /** Returns whether or not the specified var types are valid for INTEQUAL */
   public boolean instantiate_ok (VarInfo[] vis) {
 
     if (!valid_types (vis)) {
@@ -561,7 +561,7 @@ public final class INTEQUAL
 
   }
 
-  /** Instantiate an invariant on the specified slice **/
+  /** Instantiate an invariant on the specified slice */
   protected INTEQUAL instantiate_dyn (/*>>> @Prototype INTEQUAL this,*/ PptSlice slice) {
     #if defined (NONEQUAL)
     // System.out.printf ("Instantiating non-equal on %s and %s%n",
@@ -967,7 +967,7 @@ public final class INTEQUAL
    *  relations.  We only check if this.ppt.var_infos imply
    *  obviousness rather than the cartesian product on the equality
    *  set.
-   **/
+   */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
@@ -983,7 +983,7 @@ public final class INTEQUAL
    *  relations.  We only check if this.ppt.var_infos imply
    *  obviousness rather than the cartesian product on the equality
    *  set.
-   **/
+   */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
@@ -1282,11 +1282,11 @@ public final class INTEQUAL
   }
 #endif
 
-  /** NI suppressions, initialized in get_ni_suppressions() **/
+  /** NI suppressions, initialized in get_ni_suppressions() */
   private static /*@Nullable*/ NISuppressionSet suppressions = null;
 
 #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
-  /** Returns the non-instantiating suppressions for this invariant. **/
+  /** Returns the non-instantiating suppressions for this invariant. */
   /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
@@ -1327,7 +1327,7 @@ public final class INTEQUAL
     return suppressions;
   }
 #else
-  /** Returns the non-instantiating suppressions for this invariant. **/
+  /** Returns the non-instantiating suppressions for this invariant. */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;

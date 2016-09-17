@@ -14,7 +14,7 @@ import org.checkerframework.dataflow.qual.*;
  * node:  they are Pair&lt;CONTENT,CONTENT&gt;.
  * The type parameter CHILD is the type of the children (and is ignored if
  * there are no children).
- **/
+ */
 public abstract class Node<CONTENT extends /*@Nullable*/ Object, CHILD> {
 
   private List<CHILD> children = new ArrayList<CHILD>();

@@ -31,7 +31,7 @@ public final class DiscardInfo {
    */
   private String discardFormat;
 
-  /** Invariant for which the DiscardInfo applies **/
+  /** Invariant for which the DiscardInfo applies */
   public Invariant inv;
 
   // Rarely used, so no need to precompute. -MDE

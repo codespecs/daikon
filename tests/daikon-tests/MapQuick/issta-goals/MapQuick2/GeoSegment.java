@@ -34,7 +34,7 @@ import junit.framework.Assert;
  * could be represented by the following GeoSegments:
  * ("Penny Lane", a, i), ("Penny Lane", z, i),
  * ("Abbey Road", i, j), and ("Abbey Road", j, k).
- **/
+ */
 public class GeoSegment  {
 
   /*@ invariant this.name != null; */
@@ -60,7 +60,7 @@ public class GeoSegment  {
   /**
    * @requires name != null && p1 != null && p2 != null
    * @effects constructs a new GeoSegment with the specified name and endpoints
-   **/
+   */
   public GeoSegment(String name, GeoPoint p1, GeoPoint p2)
   {
     Assert.assertNotNull(name);
@@ -81,7 +81,7 @@ public class GeoSegment  {
    *      gs.name = this.name
    *   && gs.p1 = this.p2
    *   && gs.p2 = this.p1
-   **/
+   */
   public GeoSegment reverse()
   {
     return new GeoSegment(name, p2, p1);
@@ -130,7 +130,7 @@ public class GeoSegment  {
   /**
    * @requires this.length != 0
    * @return this.heading
-   **/
+   */
   public double heading()
   {
     Assert.assert(length() != 0.0);
@@ -147,7 +147,7 @@ public class GeoSegment  {
    * Compares the specified Object with with this GeoSegment for equality.
    * @return    gs != null && (gs instanceof GeoSegment)
    *         && gs.name = this.name && gs.p1 = this.p1 && gs.p2 = this.p2
-   **/
+   */
   public boolean equals(Object o)
   {
     if (!(o instanceof GeoSegment))

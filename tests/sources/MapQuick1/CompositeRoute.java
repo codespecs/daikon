@@ -16,7 +16,7 @@ import junit.framework.Assert;
  * Note that CompositeRoute inherits specification fields <b>start</b>,
  * <b>end</b>, <b>startHeading</b>, <b>endHeading</b>, and <b>length</b>
  * from Route.<p>
- **/
+ */
 public class CompositeRoute extends Route
 {
 
@@ -27,7 +27,7 @@ public class CompositeRoute extends Route
    * @requires gs != null
    * @effects Constructs a new CompositeRoute.
    * @see Route#Route(GeoSegment gs)
-   **/
+   */
   public CompositeRoute(GeoSegment gs)
   {
     super(gs);
@@ -58,7 +58,7 @@ public class CompositeRoute extends Route
    *       r.end = gs.p2
    *    && r.endHeading = gs.heading
    *    && r.length = this.length + gs.length
-   **/
+   */
   public CompositeRoute addSegment(GeoSegment gs)
   {
     return new CompositeRoute(this, gs);
@@ -68,7 +68,7 @@ public class CompositeRoute extends Route
    * Compares the specified Object with this CompositeRoute for equality.
    * @return true iff (o instanceof CompositeRoute) && (o.elemRoutes and
    * this.elemRoutes contain the same elements in the same order).
-   **/
+   */
   public boolean equals(Object o)
   {
     return (o instanceof CompositeRoute) &&

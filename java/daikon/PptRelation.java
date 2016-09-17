@@ -43,17 +43,17 @@ public class PptRelation implements Serializable {
    * MERGE_CHILD is not used by Daikon.
    */
   public enum PptRelationType {
-    /** Acyclic relationship to a parent, eg, method to its object **/
+    /** Acyclic relationship to a parent, eg, method to its object */
     PARENT,
-    /** Possibly cyclic relationship, eg. nested object instances **/
+    /** Possibly cyclic relationship, eg. nested object instances */
     USER,
-    /** Entrance of method to exit of method **/
+    /** Entrance of method to exit of method */
     ENTER_EXIT,
-    /** Combined exit to numbered exit of a method **/
+    /** Combined exit to numbered exit of a method */
     EXIT_EXITNN,
-    /** Relation between the same ppt in two different PptMaps **/
+    /** Relation between the same ppt in two different PptMaps */
     MERGE_CHILD,
-    /** Relation from a program point to its conditional ppts **/
+    /** Relation from a program point to its conditional ppts */
     PPT_PPTCOND
   };
 
@@ -61,13 +61,13 @@ public class PptRelation implements Serializable {
 
   /**
    * Description of type of parent-child relationship (debug output only).
-   **/
+   */
   PptRelationType relationship;
 
-  /** Parent of relation. **/
+  /** Parent of relation. */
   public PptTopLevel parent;
 
-  /** Child of relation. **/
+  /** Child of relation. */
   public PptTopLevel child;
 
   /** Map from parent vars to matching child vars. */
@@ -79,7 +79,7 @@ public class PptRelation implements Serializable {
   /**
    * Boolean.  Controls whether the object-user relation is created in the
    * variable hierarchy.
-   **/
+   */
   public static boolean dkconfig_enable_object_user = false;
 
   /**
@@ -206,7 +206,7 @@ public class PptRelation implements Serializable {
     return ((relationship != PptRelationType.USER) && (relationship != PptRelationType.ENTER_EXIT));
   }
 
-  /** Returns a string describing the parent-child relationship. **/
+  /** Returns a string describing the parent-child relationship. */
   public PptRelationType getRelationType() {
     return relationship;
   }
@@ -223,7 +223,7 @@ public class PptRelation implements Serializable {
    * Like parentVar(VarInfo), but if no parent is found, tries every
    * variable in the equality set and returns null only if none of them has
    * a parent.
-   **/
+   */
   public /*@Nullable*/ VarInfo parentVarAnyInEquality(VarInfo childVar) {
     VarInfo result = parentVar(childVar);
     if (result != null) {

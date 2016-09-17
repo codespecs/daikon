@@ -38,13 +38,13 @@ public class Instrument implements ClassFileTransformer {
   /** current Constant Pool * */
   static ConstantPoolGen pgen = null;
 
-  /** the index of this method into Runtime.methods **/
+  /** the index of this method into Runtime.methods */
   int cur_method_info_index = 0;
 
-  /** the location of the runtime support class **/
+  /** the location of the runtime support class */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
-  /** Debug information about which classes are transformed and why **/
+  /** Debug information about which classes are transformed and why */
   public static SimpleLog debug_transform = new SimpleLog(Chicory.debug_transform);
 
   public Instrument() {

@@ -14,7 +14,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * Represents the concatenation of two base variables.  This derived
  * variable works for both sequences of numbers and strings.
- **/
+ */
 public final class SequencesConcat extends BinaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -23,14 +23,14 @@ public final class SequencesConcat extends BinaryDerivation {
 
   /**
    * Debug tracer.
-   **/
+   */
   public static final Logger debug = Logger.getLogger("daikon.derive.binary.SequencesConcat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff SequencesConcat derived variables should be created.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   public VarInfo var1(/*>>>@GuardSatisfied SequencesConcat this*/) {
@@ -46,7 +46,7 @@ public final class SequencesConcat extends BinaryDerivation {
    * of two base variables.
    * @param vi1 base variable 1
    * @param vi2 base variable 2
-   **/
+   */
   public SequencesConcat(VarInfo vi1, VarInfo vi2) {
     super(vi1, vi2);
   }
@@ -106,7 +106,7 @@ public final class SequencesConcat extends BinaryDerivation {
     return (other instanceof SequencesConcat);
   }
 
-  /** Returns the ESC name for sequence subsequence **/
+  /** Returns the ESC name for sequence subsequence */
   /*@SideEffectFree*/
   public String esc_name(String index) {
     return String.format("SequencesConcat[%s,%s]", var1().esc_name(), var2().esc_name());

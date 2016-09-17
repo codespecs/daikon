@@ -29,7 +29,7 @@ public class PS6TestCase
   /**
    * @requires mode is one of the MODE_* constants defined in by this class
    * @effects creates a new test which runs the given test in the given mode
-   **/
+   */
   public PS6TestCase(TestRecord test, int mode)
   {
     super(modeToTest[mode]);
@@ -39,7 +39,7 @@ public class PS6TestCase
   /**
    * @requires name = "testLoadDatabase"
    * @effects creates a new test which attemps to load the database
-   **/
+   */
   public PS6TestCase(String name)
   {
     super(name);
@@ -83,7 +83,7 @@ public class PS6TestCase
 
   /**
    * Attempts to load the database
-   **/
+   */
   public void testLoadDatabase()
   {
     loadDatabase();
@@ -91,7 +91,7 @@ public class PS6TestCase
 
   /**
    * Runs the test against getDirections(Address x 2)
-   **/
+   */
   public void testProgADT()
   {
     loadDatabase();
@@ -198,7 +198,7 @@ public class PS6TestCase
 
   /**
    * Runs the test against getDirections(String x 6)
-   **/
+   */
   public void testProgString()
   {
     loadDatabase();
@@ -266,7 +266,7 @@ public class PS6TestCase
 
   /**
    * Runs the test against the TextUI
-   **/
+   */
   public void testTextUI()
   {
     // TODO ...

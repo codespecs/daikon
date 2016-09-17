@@ -15,13 +15,13 @@ import junit.framework.Assert;
  * The equality of the nodes stored in this graph, as determined by
  * their equals(Object) method, must not change while the node is in
  * the Graph.
- **/
+ */
 public class Graph
 {
 
   /**
    * @effects Creates a new, empty Graph
-   **/
+   */
   public Graph()
   {
     adjMap = new LinkedHashMap();
@@ -53,7 +53,7 @@ public class Graph
    * @modifies this.nodes
    * @effects adds the node to this.nodes
    * @throws DuplicateNodeException if node is already in in this.nodes
-   **/
+   */
   public void addNode(Object node) throws DuplicateNodeException
   {
     Assert.assertNotNull(node);
@@ -70,7 +70,7 @@ public class Graph
   /**
    * @requires node != null
    * @returns true iff node in this.nodes
-   **/
+   */
   public boolean containsNode(Object node)
   {
     return adjMap.containsKey(node);
@@ -80,7 +80,7 @@ public class Graph
    * @requires node != null
    * @returns an immutable view of the nodes in this.
    * Changes which are made to the graph are reflected in this view.
-   **/
+   */
   public Set nodeSet()
   {
     // ESC can't handle the Collections class from JDK1.3
@@ -92,7 +92,7 @@ public class Graph
    * @returns a reference to the adjacency list for the given node
    *          (which then may be mutated directly)
    * @throws NoNodeException if node not in this.nodes
-   **/
+   */
   private Set adjTo(Object node) throws NoNodeException
   {
     Assert.assertNotNull(node);
@@ -108,7 +108,7 @@ public class Graph
    * @effects adds an edge from "from" to "to"
    * @throws NoNodeException if from or to not in this.nodes
    * @throws DuplicateEdgeException if (from, to) already in this.edges
-   **/
+   */
   public void addEdge(Object from, Object to) throws NoNodeException, DuplicateEdgeException
   {
     Assert.assertNotNull(from);
@@ -132,7 +132,7 @@ public class Graph
    * @returns an immutable view of the children of the given node.
    * Changes which are made to the graph are reflected in this view.
    * @thows NoNodeException if node not in this.nodes
-   **/
+   */
   public Collection childrenOf(Object node) throws NoNodeException
   {
     Assert.assertNotNull(node);

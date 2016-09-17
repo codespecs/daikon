@@ -21,7 +21,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * executions of the program point to which the Implication belongs.  These
  * resulting implications are written to standard output in the format of a
  * splitter info file.
- **/
+ */
 public class ExtractConsequent {
 
   public static final Logger debug = Logger.getLogger("daikon.ExtractConsequent");
@@ -84,7 +84,7 @@ public class ExtractConsequent {
    * throwing Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException, IOException, ClassNotFoundException {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
@@ -243,7 +243,7 @@ public class ExtractConsequent {
    * Extract consequents from a implications at a single program
    * point. It only searches for top level Program points because
    * Implications are produced only at those points.
-   **/
+   */
   public static void extract_consequent_maybe(PptTopLevel ppt, PptMap all_ppts) {
     ppt.simplify_variable_names();
 
@@ -417,7 +417,7 @@ public class ExtractConsequent {
    * with "==" so that the occurence of equivalent inequalities can be
    * detected. However it tries not to be smart ... If there is more than
    * one inequality in the expression, it doesn't perform a substitution.
-   **/
+   */
   private static String simplify_inequalities(String condition) {
     if (contains_exactly_one(condition, inequality_pattern)) {
       if (gteq_pattern.matcher(condition).find()) {

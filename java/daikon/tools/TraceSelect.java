@@ -70,7 +70,7 @@ public class TraceSelect {
    * throwing daikon.Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(final String[] args) {
     argles = args;
     if (args.length == 0) {

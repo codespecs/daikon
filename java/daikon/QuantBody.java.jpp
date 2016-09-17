@@ -165,7 +165,7 @@ The correct way to build the system is to run 'make'.
   /** Returns the ith element of the array or collection argument.
    * If the argument is null or not an array or collection, returns a
    * default value (BAD_VALUE).
-   **/
+   */
   @SuppressWarnings("interning") // reflection
 #if defined(BOOLEAN)
   /*@EnsuresNonNullIf(result=true, expression="#1")*/

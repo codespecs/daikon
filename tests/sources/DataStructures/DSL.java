@@ -17,13 +17,13 @@ package DataStructures;
  * Implements a deterministic skip list.
  * Note that all "matching" is based on the compareTo method.
  * @author Mark Allen Weiss
- **/
+ */
 public class DSL
 {
   /**
    * Construct the DSL.
    * @param inf the largest Comparable.
-   **/
+   */
   public DSL( Comparable inf )
   {
     infinity = inf;
@@ -37,7 +37,7 @@ public class DSL
   /**
    * Insert into the DSL.
    * @param x the item to insert.
-   **/
+   */
   public void insert( Comparable x )
   {
     SkipNode current = header;
@@ -68,7 +68,7 @@ public class DSL
   /**
    * Remove from the DSL. Unimplemented.
    * @param x the item to remove.
-   **/
+   */
   public void remove( Comparable x )
   {
     System.out.println( "Sorry, remove unimplemented" );
@@ -77,7 +77,7 @@ public class DSL
   /**
    * Find the smallest item in the DSL.
    * @return smallest item, or null if empty.
-   **/
+   */
   public Comparable findMin( )
   {
     if( isEmpty( ) )
@@ -93,7 +93,7 @@ public class DSL
   /**
    * Find the largest item in the DSL.
    * @return the largest item, or null if empty.
-   **/
+   */
   public Comparable findMax( )
   {
     if( isEmpty( ) )
@@ -113,7 +113,7 @@ public class DSL
    * Find an item in the DSL.
    * @param x the item to search for.
    * @return the matching item, or null if not found.
-   **/
+   */
   public Comparable find( Comparable x )
   {
     SkipNode current = header;
@@ -130,7 +130,7 @@ public class DSL
 
   /**
    * Make the DSL logically empty.
-   **/
+   */
   public void makeEmpty( )
   {
     header.right = tail;
@@ -140,7 +140,7 @@ public class DSL
   /**
    * Test if the DSL is logically empty.
    * @return true if empty, false otherwise.
-   **/
+   */
   public boolean isEmpty( )
   {
     return header.right == tail && header.down == bottom;
@@ -150,7 +150,7 @@ public class DSL
    * Internal method to get element field.
    * @param t the node.
    * @return the element field, or null if t is null.
-   **/
+   */
   private Comparable elementAt( SkipNode t )
   {
     return t == bottom ? null : t.element;
@@ -158,7 +158,7 @@ public class DSL
 
   /**
    * Print the DSL.
-   **/
+   */
   private void printList( )
   {
     SkipNode current = header;
@@ -173,7 +173,7 @@ public class DSL
       }
   }
 
-  /** The DSL header. **/
+  /** The DSL header. */
   private SkipNode header;
   private Comparable infinity;
   private SkipNode bottom = null;

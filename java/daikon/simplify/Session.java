@@ -13,7 +13,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * A session is a channel to the Simplify theorem-proving tool.  Once
  * a session is started, commands may be applied to the session to make
  * queries and manipulate its state.
- **/
+ */
 public class Session {
   /**
    * A non-negative integer, representing the largest number of
@@ -26,7 +26,7 @@ public class Session {
    * simple facts without getting bogged down in long searches. A
    * value of 0 means not to bound the number of iterations at all,
    * though see also the <code>simplify_timeout</code> parameter..
-   **/
+   */
   public static int dkconfig_simplify_max_iterations = 1000;
 
   /**
@@ -42,7 +42,7 @@ public class Session {
    * <code>simplify_max_iterations</code>.
    * Beware that using this option might make Daikon's output depend
    * on the speed of the machine it's run on.
-   **/
+   */
   public static int dkconfig_simplify_timeout = 0;
 
   /**
@@ -62,7 +62,7 @@ public class Session {
    * assumption stack. This option is mainly intended for debugging
    * purposes, but can also provide something to watch when Simplify
    * takes a long time.
-   **/
+   */
   public static int dkconfig_verbose_progress = 0;
 
   /**
@@ -73,7 +73,7 @@ public class Session {
    * <code>Simplify -nosc &lt;simplify0.in</code>.
    * This is intended primarily for debugging
    * when Simplify fails.
-   **/
+   */
   public static boolean dkconfig_trace_input = false;
 
   // non-null if dkconfig_trace_input==true
@@ -89,7 +89,7 @@ public class Session {
    * this process will block.  Initializes the simplify environment
    * for interaction.  Use <code>Cmd</code> objects to interact with
    * this Session.
-   **/
+   */
   public Session() {
     try {
       Vector<String> newEnv = new Vector<String>();

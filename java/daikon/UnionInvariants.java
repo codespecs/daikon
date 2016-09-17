@@ -19,7 +19,7 @@ import plume.UtilMDE;
  * believe invariant context from other types will suppress some
  * invariants.  (This tool is also a nice way to run Simplify on a
  * single inv file.)
- **/
+ */
 public final class UnionInvariants {
   private UnionInvariants() {
     throw new Error("do not instantiate");
@@ -51,7 +51,7 @@ public final class UnionInvariants {
    * throwing Daikon.TerminationMessage.
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
-   **/
+   */
   public static void mainHelper(String[] args) throws Exception {
     File inv_file = null;
 
@@ -151,7 +151,7 @@ public final class UnionInvariants {
 
   /**
    * Union multiple PptMaps into one.
-   **/
+   */
   public static void union(
       PptMap collector, // mutated
       PptMap

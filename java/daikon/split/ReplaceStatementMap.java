@@ -59,7 +59,7 @@ class ReplaceStatementMap {
     return null;
   }
 
-  /** For debugging only. **/
+  /** For debugging only. */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied ReplaceStatementMap this*/) {
     return map.toString();

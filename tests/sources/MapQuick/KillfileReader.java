@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * Abstraction to read and return filters based on killfiles
- **/
+ */
 public class KillfileReader
 {
   private static boolean debug = false;
@@ -16,7 +16,7 @@ public class KillfileReader
 
   /**
    * @return a filter which passes segments not listed in the given killfile
-   **/
+   */
   public static StreetSegmentFilter fromFile(File killfile)
   {
     debugln("Reading " + killfile);
@@ -25,7 +25,7 @@ public class KillfileReader
 
   /**
    * @return a filter which passes segments not listed in $(dbdir)/*killfile.txt
-   **/
+   */
   public static StreetSegmentFilter fromDir(File dbdir)
   {
     if (!dbdir.isDirectory()) {
@@ -59,7 +59,7 @@ public class KillfileReader
 
   /**
    * Indicates that a killfile was non-existant, malformed, etc.
-   **/
+   */
   public static class KillfileException
     extends RuntimeException
   {
@@ -68,7 +68,7 @@ public class KillfileReader
 
   /**
    * Filter which allows all segments through
-   **/
+   */
   private static class AllPassStreetSegmentFilter
     implements StreetSegmentFilter
   {
@@ -80,7 +80,7 @@ public class KillfileReader
 
   /**
    * Filter which composes two other filters
-   **/
+   */
   private static class CompositeStreetSegmentFilter
     implements StreetSegmentFilter
   {
@@ -102,7 +102,7 @@ public class KillfileReader
 
   /**
    * Filter which filters based on some killfile
-   **/
+   */
   private static class KillfileFilter
     implements StreetSegmentFilter
   {

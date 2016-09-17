@@ -58,7 +58,7 @@ public class ListInfo extends DaikonVariableInfo {
     return tmp;
   }
 
-  /** Lists are arrays from Daikon's point of view **/
+  /** Lists are arrays from Daikon's point of view */
   public VarKind get_var_kind() {
     return VarKind.ARRAY;
   }

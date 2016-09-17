@@ -47,7 +47,7 @@ import typequals.*;
 /**
  * Represents sequences of PRIMITIVE values that contain a common subset.
  * Prints as <code>{e1, e2, e3, ...} subset of x[]</code>.
- **/
+ */
 
 public class CLASSNAME
   extends SUPERCLASS
@@ -61,7 +61,7 @@ public class CLASSNAME
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff CommonSequence invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = false;
 
   /**
@@ -89,12 +89,12 @@ public class CLASSNAME
 
   private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
-  /** Returns the prototype invariant for CLASSNAME **/
+  /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
@@ -112,7 +112,7 @@ public class CLASSNAME
     return (dkconfig_hashcode_seqs || vis[0].file_rep_type.BASE_IS_INTEGRAL);
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }

@@ -64,7 +64,7 @@ public class ElementaryRoute extends Route
    * U-turn               if 179 &lt;= a </pre>
    *
    * and likewise for left turns.
-   **/
+   */
   public String directions(double heading)
   {
     Assert.assertTrue((0 <= heading) && (heading < 360));

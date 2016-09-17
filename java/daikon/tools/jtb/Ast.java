@@ -126,13 +126,13 @@ public class Ast {
     return print(current);
   }
 
-  /** @deprecated Use format(Node) instead **/
+  /** @deprecated Use format(Node) instead */
   @Deprecated
   public static String print(Node n) {
     return format(n);
   }
 
-  /** @deprecated Use formatCurrentLine(Node) instead **/
+  /** @deprecated Use formatCurrentLine(Node) instead */
   @Deprecated
   public static String printCurrentLine(Node n) {
     return formatCurrentLine(n);
@@ -465,7 +465,7 @@ public class Ast {
    * Postcondition (make sure you preserve it if you modify this method):
    * comment.beginLine and comment.beginColumn have been assigned the line
    * and column number where this comment will go.
-   **/
+   */
   public static void addComment(Node n, NodeToken comment, boolean first) {
     class AddCommentVisitor extends DepthFirstVisitor {
       private boolean seenToken = false;
@@ -527,7 +527,7 @@ public class Ast {
    * Postcondition (make sure you preserve it if you modify this method):
    * comment.beginLine and comment.beginColumn have been assigned the line
    * and column number where this comment will go.
-   **/
+   */
   public static void findLineAndCol(Node n, NodeToken comment, boolean first) {
     class AddCommentVisitor extends DepthFirstVisitor {
       private boolean seenToken = false;
@@ -579,7 +579,7 @@ public class Ast {
   /**
    * Adds the comment to the first regular token in the tree, before the
    * ith special token.
-   **/
+   */
   public static void addNthSpecial(NodeToken n, NodeToken s, int i) {
     if (n.specialTokens == null) n.specialTokens = new Vector<NodeToken>();
     n.specialTokens.insertElementAt(s, i);
@@ -589,7 +589,7 @@ public class Ast {
   /**
    * Adds the comment to the first regular token in the tree, *before* all
    * other special tokens.
-   **/
+   */
   public static void addFirstSpecial(NodeToken n, NodeToken s) {
     addNthSpecial(n, s, 0);
   }
@@ -1141,7 +1141,7 @@ public class Ast {
   /**
    * Returns an Enumeration of PrimarySuffix objects (but the static type
    * of the elements is only known to be Node).
-   **/
+   */
   public static Enumeration getPrimarySuffixes(PrimaryExpression p) {
     return p.f1.elements();
   }
@@ -1161,7 +1161,7 @@ public class Ast {
     return false;
   }
 
-  /** Return true if this is the main method for this class. **/
+  /** Return true if this is the main method for this class. */
   public static boolean isMain(MethodDeclaration md) {
     if (Ast.getName(md).equals("main")) {
       List<FormalParameter> params = Ast.getParameters(md);
@@ -1188,7 +1188,7 @@ public class Ast {
    * to PrintInvariants (or wherever it belongs) and have
    * PrintInvariants.print_invariants call it. ]]
    *
-   **/
+   */
   public static List<Invariant> getInvariants(PptTopLevel ppt, PptMap ppt_map) {
 
     // make names easier to read before printing

@@ -30,7 +30,7 @@ public abstract class SingleString extends UnaryInvariant {
     super();
   }
 
-  /** Returns whether or not the specified types are valid for unary string **/
+  /** Returns whether or not the specified types are valid for unary string */
   public final boolean valid_types(VarInfo[] vis) {
     return ((vis.length == 1) && vis[0].file_rep_type.isString());
   }
@@ -71,13 +71,13 @@ public abstract class SingleString extends UnaryInvariant {
    * state, then the implementation should simply call {@link
    * #check_modified}.  This method need not check for falsification; that
    * is done by the caller.
-   **/
+   */
   public abstract InvariantStatus add_modified(/*@Interned*/ String value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
-   **/
+   */
   public InvariantStatus add_unmodified(/*@Interned*/ String value, int count) {
     return InvariantStatus.NO_CHANGE;
   }

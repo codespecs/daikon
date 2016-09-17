@@ -19,7 +19,7 @@ import typequals.*;
  * is a long scalar.  This exists
  * only as an example for the purposes of the manual.  It isn't actually
  * used (it is replaced by the more general invariant LowerBound).
- **/
+ */
 public class Positive extends SingleScalar {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -30,7 +30,7 @@ public class Positive extends SingleScalar {
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff Positive invariants should be considered.
-   **/
+   */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   ///
@@ -47,17 +47,17 @@ public class Positive extends SingleScalar {
 
   private static /*@Prototype*/ Positive proto = new /*@Prototype*/ Positive();
 
-  /** Returns the prototype invariant **/
+  /** Returns the prototype invariant */
   public static /*@Prototype*/ Positive get_proto() {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled **/
+  /** returns whether or not this invariant is enabled */
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice **/
+  /** instantiate an invariant on the specified slice */
   public Positive instantiate_dyn(/*>>> @Prototype Positive this,*/ PptSlice slice) {
     return new Positive(slice);
   }
