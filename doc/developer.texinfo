@@ -3273,9 +3273,10 @@ type @code{array}.  A var-kind entry is required in each variable block.
 @item @code{enclosing-var <enclosing-var-name>}
 
 The variable that contains this variable.  Required for fields and
-arrays, and optional for functions.  If specified for functions, the
-function is an instance method.  If not specified the function is
-static.  A variable is specified by its name.  The enclosing-var must
+arrays.  Required for funtions that represent an instance method.
+Forbidden for functions that specify a static method or a function in
+a non-object-oriented language.
+A variable is specified by its name.  The named variable must
 be defined.  If a variable is omitted (e.g., by the omit-var switch),
 any variable for which it is the enclosing variable must be omitted as
 well.
