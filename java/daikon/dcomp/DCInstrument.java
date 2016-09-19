@@ -10,12 +10,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.regex.*;
-import org.apache.commons.bcel6.*;
-import org.apache.commons.bcel6.classfile.*;
-import org.apache.commons.bcel6.generic.*;
-import org.apache.commons.bcel6.verifier.*;
-import org.apache.commons.bcel6.verifier.exc.AssertionViolatedException;
-import org.apache.commons.bcel6.verifier.structurals.*;
+import org.apache.bcel.*;
+import org.apache.bcel.classfile.*;
+import org.apache.bcel.generic.*;
+import org.apache.bcel.verifier.*;
+import org.apache.bcel.verifier.exc.AssertionViolatedException;
+import org.apache.bcel.verifier.structurals.*;
 import org.apache.commons.io.*;
 
 /*>>>
@@ -991,6 +991,9 @@ class DCInstrument {
 
         // Remove any LVTT tables
         BCELUtil.remove_local_variable_type_tables(mg);
+        // In future version of BCEL the line above
+        // will probably be replace by:
+        // mg.removeLocalVariableTypeTable();
 
         if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg)) {
           // doubling
@@ -1150,6 +1153,9 @@ class DCInstrument {
 
         // Remove any LVTT tables
         BCELUtil.remove_local_variable_type_tables(mg);
+        // In future version of BCEL the line above
+        // will probably be replace by:
+        // mg.removeLocalVariableTypeTable();
 
         if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg)) {
           gen.addMethod(mg.getMethod());
@@ -1283,6 +1289,9 @@ class DCInstrument {
 
         // Remove any LVTT tables
         BCELUtil.remove_local_variable_type_tables(mg);
+        // In future version of BCEL the line above
+        // will probably be replace by:
+        // mg.removeLocalVariableTypeTable();
 
         gen.addMethod(mg.getMethod());
 
@@ -1409,6 +1418,9 @@ class DCInstrument {
 
         // Remove any LVTT tables
         BCELUtil.remove_local_variable_type_tables(mg);
+        // In future version of BCEL the line above
+        // will probably be replace by:
+        // mg.removeLocalVariableTypeTable();
 
         gen.addMethod(mg.getMethod());
 

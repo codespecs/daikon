@@ -10,11 +10,11 @@ import java.lang.reflect.Modifier;
 import java.security.*;
 import java.util.*;
 import java.util.regex.*;
-import org.apache.commons.bcel6.*;
-import org.apache.commons.bcel6.classfile.*;
-import org.apache.commons.bcel6.generic.*;
-import org.apache.commons.bcel6.generic.InstructionFactory;
-import org.apache.commons.bcel6.verifier.VerificationResult;
+import org.apache.bcel.*;
+import org.apache.bcel.classfile.*;
+import org.apache.bcel.generic.*;
+import org.apache.bcel.generic.InstructionFactory;
+import org.apache.bcel.verifier.VerificationResult;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
@@ -319,8 +319,12 @@ public class Instrument implements ClassFileTransformer {
       ih = next_ih;
     }
 
+    // Current way to remove the LocalVariableTypeTable:
     Attribute a = get_local_variable_type_table_attribute(mg);
     if (a != null) mg.removeCodeAttribute(a);
+    // In future version of BCEL the two lines above
+    // will probably be replace by:
+    // mg.removeLocalVariableTypeTable();
 
     // Update the max stack and Max Locals
     mg.setMaxLocals();
@@ -384,9 +388,6 @@ public class Instrument implements ClassFileTransformer {
             il,
             cg.getConstantPool());
     newMethGen.update();
-
-    Attribute a = get_local_variable_type_table_attribute(newMethGen);
-    if (a != null) newMethGen.removeCodeAttribute(a);
 
     // MethodContext context = new MethodContext (cg, newMethGen);
     // InstructionFactory ifact = context.ifact;
@@ -668,8 +669,12 @@ public class Instrument implements ClassFileTransformer {
         // without BCEL support, that would be hard to do.  Just delete it
         // for now (since it is optional, and we are unlikely to be used by
         // a debugger)
+        // Current way to remove the LocalVariableTypeTable:
         Attribute a = get_local_variable_type_table_attribute(mg);
         if (a != null) mg.removeCodeAttribute(a);
+        // In future version of BCEL the two lines above
+        // will probably be replace by:
+        // mg.removeLocalVariableTypeTable();
 
         // Update the instruction list
         mg.setInstructionList(il);
@@ -1136,6 +1141,7 @@ public class Instrument implements ClassFileTransformer {
           nonce_index = var_index;
         }
         lv.setIndex(lv.getIndex() + 1);
+        // UNDONE: need to update matching lvtt entry, if there is one
       }
       // need to add 1 if type is double or long
       max_index = lv.getIndex() + lv.getType().getSize() - 1;

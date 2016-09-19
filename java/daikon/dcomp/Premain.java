@@ -10,9 +10,9 @@ import java.lang.instrument.*;
 import java.security.*;
 import java.util.*;
 import java.util.regex.*;
-import org.apache.commons.bcel6.*;
-import org.apache.commons.bcel6.classfile.*;
-import org.apache.commons.bcel6.generic.*;
+import org.apache.bcel.*;
+import org.apache.bcel.classfile.*;
+import org.apache.bcel.generic.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;

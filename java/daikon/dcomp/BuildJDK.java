@@ -9,10 +9,10 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipException;
-import org.apache.commons.bcel6.*;
-import org.apache.commons.bcel6.classfile.ClassParser;
-import org.apache.commons.bcel6.classfile.JavaClass;
-import org.apache.commons.bcel6.generic.*;
+import org.apache.bcel.*;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.generic.*;
 
 /**
  * Converts each file in the JDK.  Each method is doubled.  The new methods
