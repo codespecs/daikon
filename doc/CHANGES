@@ -20,6 +20,15 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.4.0 (October ?, 2016)
+
+We have updated the Daikon tool set to use the Apache Commons BCEL 6.0.
+In addition, we have removed the "--default-bcel" option and will now fail
+if this version of BCEL is not the first found on the classpath. Normally
+it will be found in daikon.jar.
+
+===========================================================================
+
 5.3.10 (September 1, 2016)
 
 A new front end for LLVM is available.
