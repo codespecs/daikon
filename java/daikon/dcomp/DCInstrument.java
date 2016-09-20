@@ -2832,6 +2832,15 @@ class DCInstrument {
     // If its not a JDK class, presume its instrumented.
     if (!BCELUtil.in_jdk(classname)) return true;
 
+    // We have decided not to use the instrumented version of Random as
+    // the method generates values based on an initial seed value.
+    // (Typical of random() algorithms.) This has the undesirable side
+    // effect of putting all the generated values in the same comparison
+    // set when they should be distinct.
+    // NOTE: If we find other classes that should not use the instrumented
+    // versions, we should consider making this a searchable list.
+    if (classname.equals("java.util.Random")) return false;
+
     // If the JDK is instrumented, then everthing but object is instrumented
     if (jdk_instrumented && (exclude_object && !classname.equals("java.lang.Object"))) {
       return true;

@@ -5733,17 +5733,13 @@ return.coeff.numer == 0
 return.coeff.denom == 1
 orig(i) >= 1
 return.coeff.numer <= return.expt
-return.coeff.numer < orig(i)
-return.coeff.denom <= orig(i)
 ===========================================================================
 PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec, int, int):::EXIT
 ts.wrapped == orig(ts.wrapped)
 ts.wrapped[] == orig(ts.wrapped[])
 return.expt == orig(expt)
 (return.coeff.numer == 0)  ==>  (orig(i) >= 1)
-(return.coeff.numer == 0)  ==>  (return.coeff.denom <= orig(i))
 (return.coeff.numer == 0)  ==>  (return.coeff.denom == 1)
-(return.coeff.numer == 0)  ==>  (return.coeff.numer < orig(i))
 (return.coeff.numer == 0)  ==>  (return.coeff.numer < return.coeff.denom)
 (return.coeff.numer == 0)  ==>  (return.coeff.numer <= return.expt)
 (return.coeff.numer == 0)  ==>  (return.coeff.numer is a pointer)
@@ -6214,9 +6210,7 @@ return.coeff.denom >= 0
 return.expt >= 0
 size(this.wrapped[]) >= 1
 (return.coeff.numer == 0) ==> (return.expt == 0)
-(return.coeff.numer == 0) ==> (orig(index) == 0)
 (return.coeff.denom == 0) ==> (return.expt == 0)
-(return.coeff.denom == 0) ==> (orig(index) == 0)
 ===========================================================================
 PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::ENTER
 t != null
@@ -6224,7 +6218,6 @@ t.coeff != null
 t.coeff.denom >= 1
 t.expt >= 0
 index >= 0
-(index == 0) ==> (t.expt == 0)
 ===========================================================================
 PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::EXIT
 this.wrapped == orig(this.wrapped)
@@ -6238,7 +6231,6 @@ t.coeff.denom >= 1
 t.expt >= 0
 size(this.wrapped[]) >= 1
 this.wrapped[] is a superset of orig(this.wrapped[])
-(orig(index) == 0) ==> (t.expt == 0)
 ===========================================================================
 PolyCalc.RatTermVec.printDebug():::ENTER
 ===========================================================================
@@ -6268,7 +6260,6 @@ t.expt >= 0
 index >= 0
 size(this.wrapped[]) >= 1
 (t.coeff.denom == 0) ==> (t.expt == 0)
-(t.coeff.denom == 0) ==> (index == 0)
 ===========================================================================
 PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::EXIT
 this.wrapped == orig(this.wrapped)
@@ -6283,7 +6274,6 @@ t.coeff.numer != 0
 t.expt >= 0
 size(this.wrapped[]) >= 1
 (t.coeff.denom == 0) ==> (t.expt == 0)
-(t.coeff.denom == 0) ==> (orig(index) == 0)
 ===========================================================================
 PolyCalc.RatTermVec.size():::ENTER
 this.wrapped[] contains no duplicates
