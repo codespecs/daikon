@@ -335,9 +335,6 @@ public class ChicoryPremain {
    */
   public static class ChicoryLoader extends ClassLoader {
 
-    /** Jar file that contains BCEL.  If null, use the normal classpath */
-    /*@Nullable*/ JarFile bcel_jar = null;
-
     public static final SimpleLog debug = new SimpleLog(Chicory.verbose);
 
     public ChicoryLoader() throws IOException {
@@ -376,8 +373,7 @@ public class ChicoryPremain {
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       } else {
-        // UNDOONE - bcel_jar should always be null with new system?
-        bcel_jar = new JarFile(extract_jar_path(plse));
+        JarFile bcel_jar = new JarFile(extract_jar_path(plse));
         debug.log("Daikon BCEL found in jar %s%n", bcel_jar.getName());
       }
     }
@@ -454,58 +450,7 @@ public class ChicoryPremain {
     protected Class<?> loadClass(
         /*@BinaryName*/ String name, boolean resolve) throws java.lang.ClassNotFoundException {
 
-      // If we are not loading from our jar, just use the normal mechanism
-      if (bcel_jar == null) {
-        return super.loadClass(name, resolve);
-      }
-
-      // Load non-bcel files via the normal mechanism
-      if (!name.startsWith("org.apache.bcel") && (!name.startsWith("daikon.chicory.Instrument"))) {
-        // System.out.printf ("loading standard %s%n", name);
-        return super.loadClass(name, resolve);
-      }
-
-      // If we've already loaded the class, just return that one
-      Class<?> c = findLoadedClass(name);
-      if (c != null) {
-        if (resolve) resolveClass(c);
-        return c;
-      }
-
-      // Find our version of the class and return it.
-      try {
-        InputStream is = null;
-        if (name.startsWith("daikon.chicory.Instrument")) {
-          String resource_name = classname_to_resource_name(name);
-          @SuppressWarnings("nullness") // should always find daikon.chicory.Instrument classes
-          /*@NonNull*/ URL url = ClassLoader.getSystemResource(resource_name);
-          assert url != null : "couldn't find resource " + resource_name;
-          is = url.openStream();
-        } else { //  Read the BCEL class from the jar file
-          String entry_name = classname_to_resource_name(name);
-          @SuppressWarnings("nullness") // bcel_jar should be properly set
-          JarEntry entry = bcel_jar.getJarEntry(entry_name);
-          if (entry == null) {
-            throw new Error("Can't find " + entry_name);
-          }
-          is = bcel_jar.getInputStream(entry);
-        }
-        int available = is.available();
-        byte[] bytes = new byte[available];
-        int total = 0;
-        while (total < available) {
-          int len = is.read(bytes, total, available - total);
-          total += len;
-        }
-        assert total == bytes.length : "only read " + total;
-        assert is.read() == -1 : "more data left in stream";
-        // System.out.printf ("Defining class %s size %d%n", name, available);
-        c = defineClass(name, bytes, 0, bytes.length);
-        if (resolve) resolveClass(c);
-        return c;
-      } catch (Exception e) {
-        throw new RuntimeException("Unexpected exception loading class " + name, e);
-      }
+      return super.loadClass(name, resolve);
     }
   }
 }

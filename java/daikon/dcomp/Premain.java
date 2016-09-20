@@ -33,7 +33,7 @@ public class Premain {
    * Set of pre_instrumented jdk classes.  Needed so that we will instrument
    * classes generated on the fly in the jdk.
    */
-  static Set<String> pre_instrumented = new LinkedHashSet<String>();
+  public static Set<String> pre_instrumented = new LinkedHashSet<String>();
 
   public static void premain(String agentArgs, Instrumentation inst) throws IOException {
 
@@ -84,112 +84,23 @@ public class Premain {
     Thread shutdown_thread = new ShutdownThread();
     java.lang.Runtime.getRuntime().addShutdownHook(shutdown_thread);
 
-    Transform transformer = new Transform();
-    inst.addTransformer(transformer);
+    // Setup the transformer
+    Object transformer = null;
+    // use a special classloader to ensure correct version of BCEL is used
+    ClassLoader loader = new daikon.chicory.ChicoryPremain.ChicoryLoader();
+    try {
+      transformer = loader.loadClass("daikon.dcomp.Instrument").newInstance();
+      @SuppressWarnings("unchecked")
+      Class<Instrument> c = (Class<Instrument>) transformer.getClass();
+      // System.out.printf ("Classloader of tranformer = %s%n",
+      //                    c.getClassLoader());
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error loading Instrument", e);
+    }
+    inst.addTransformer((ClassFileTransformer) transformer);
 
     // Initialize the static tag array
     DCRuntime.init();
-  }
-
-  static public class Transform implements ClassFileTransformer {
-
-    File debug_dir;
-    File debug_bin_dir;
-    File debug_orig_dir;
-
-    public Transform() {
-      debug_dir = DynComp.debug_dir;
-      debug_bin_dir = new File(debug_dir, "bin");
-      debug_orig_dir = new File(debug_dir, "orig");
-
-      if (DynComp.debug) {
-        debug_bin_dir.mkdirs();
-        debug_orig_dir.mkdirs();
-      }
-    }
-
-    @SuppressWarnings("nullness") // bug: java.lang.instrument is not yet annotated
-    public byte /*@Nullable*/ [] transform(
-        ClassLoader loader,
-        /*@InternalForm*/ String className,
-        Class<?> classBeingRedefined,
-        ProtectionDomain protectionDomain,
-        byte[] classfileBuffer)
-        throws IllegalClassFormatException {
-
-      // System.out.printf ("transform on %s%n", className);
-
-      // If already instrumented, nothing to do
-      // (This set will be empty if --no-jdk)
-      if (pre_instrumented.contains(className)) {
-        return null;
-      }
-
-      boolean in_jdk = false;
-
-      // Check if class is in JDK
-      if (BCELUtil.in_jdk_internalform(className)) {
-        // If --no-jdk option is active, then skip it.
-        if (DynComp.no_jdk) {
-          return null;
-        }
-
-        in_jdk = true;
-        if (DynComp.verbose) System.out.printf("Instrumenting JDK class %s%n", className);
-      } else {
-
-        // We're not in a JDK class
-        // Don't instrument our own classes
-        if ((className.startsWith("daikon/dcomp/") && !className.startsWith("daikon/dcomp/Test"))
-            || className.startsWith("daikon/chicory/")) {
-          return null;
-        }
-      }
-
-      if (DynComp.verbose) {
-        System.out.format("In dcomp.Premain.Transform(): class = %s\n", className);
-      }
-
-      try {
-        // Parse the bytes of the classfile, die on any errors
-        ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
-        JavaClass c = parser.parse();
-
-        if (DynComp.debug) {
-          c.dump(new File(debug_orig_dir, c.getClassName() + ".class"));
-        }
-
-        // Transform the file
-        DCInstrument dci;
-        if (DynComp.branch != null) {
-          dci = new DFInstrument(c, in_jdk, loader);
-        } else {
-          dci = new DCInstrument(c, in_jdk, loader);
-        }
-        JavaClass njc;
-        if (DynComp.no_primitives) {
-          njc = dci.instrument_refs_only();
-        } else {
-          njc = dci.instrument();
-        }
-
-        if (njc == null) {
-          if (DynComp.verbose) System.out.printf("Didn't instrument %s%n", c.getClassName());
-          return null;
-        } else {
-          if (DynComp.debug) {
-            System.out.printf("Dumping %s to %s%n", njc.getClassName(), debug_bin_dir);
-            njc.dump(new File(debug_bin_dir, njc.getClassName() + ".class"));
-            BCELUtil.dump(njc, debug_bin_dir);
-          }
-          return (njc.getBytes());
-        }
-      } catch (Throwable e) {
-        System.out.printf("Unexpected Error: %s%n", e);
-        e.printStackTrace();
-        throw new RuntimeException("Unexpected error", e);
-      }
-    }
   }
 
   /**
