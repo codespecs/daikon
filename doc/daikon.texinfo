@@ -3912,16 +3912,6 @@ Print a help message.
 Produce debugging information.  For other debugging options, run Chicory
 with the @option{--help} option.
 
-@item --default-bcel
-Chicory uses the Byte Code Engineering Library (BCEL) to instrument
-class files.  Errors can occur if the application uses an incompatible
-version of BCEL@.  By default, Chicory identifies and loads its 
-copy of BCEL when multiple copies of BCEL are in the classpath.  It will
-also issue a warning if multiple copies of BCEL are in the classpath and
-the application version is not the first one.  When this option is
-chosen, Chicory will simply use whatever version of BCEL is found on
-the classpath.
-
 @item --dtrace-file=@var{filename}
 @cindex DTRACEFILE environment variable
 @cindex environment variable DTRACEFILE
@@ -8675,6 +8665,7 @@ when running Chicory, as described in @ref{Simple installation}.)
 @menu
 * BCEL must be in the classpath::
 * VerifyError constant pool index error::
+* ClassFormatError LVTT entry does not match::
 * Attempted duplicate class definition error::
 @end menu
 
@@ -8692,7 +8683,6 @@ then the problem is most likely that your classpath does not contain
 daikon.jar.  If you are running a Daikon version post 5.2.20, then it
 could be caused by your classpath containing a previous version of
 daikon.jar or plume.jar.
-
 
 @node       VerifyError constant pool index error
 @subsection VerifyError constant pool index error
@@ -8715,7 +8705,32 @@ of the BCEL library that is not compatible with Java 7.  The
 incompatible version might appear in @file{bcel.jar}, in Java's
 @file{rt.jar}, or elsewhere.  You should either remove that version of
 BCEL from your classpath, or you should ensure that it appears after
-@file{daikon.jar}, which contains its own version of BCEL@.  (If you
+@file{daikon.jar}, which contains the correct version of BCEL@.  (If you
+are running Daikon from sources rather than from @file{daikon.jar}, then
+ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
+BCEL on your classpath.)
+
+@node       ClassFormatError LVTT entry does not match
+@subsection ClassFormatError LVTT entry does not match
+
+@cindex ClassFormatError, when running Chicory
+@cindex java.lang.ClassFormatError, when running Chicory
+@cindex LVTT entry does not match
+
+If Chicory throws an error such as the following:
+@smallexample
+Exception in thread "main" java.lang.ClassFormatError:
+  LVTT entry for 'v' in class file javautil/ArrayList17 does not match any LVT entry
+@end smallexample
+
+@noindent
+then the problem is most likely that your classpath contains a version
+of the BCEL library that is newer than the 6.0 Release.  A modification
+was made to Apache BCEL after the 6.0 release that causes this problem.
+The incompatible version might appear in @file{bcel.jar}, in Java's
+@file{rt.jar}, or elsewhere.  You should either remove that version of
+BCEL from your classpath, or you should ensure that it appears after
+@file{daikon.jar}, which contains the correct version of BCEL@.  (If you
 are running Daikon from sources rather than from @file{daikon.jar}, then
 ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
 BCEL on your classpath.)

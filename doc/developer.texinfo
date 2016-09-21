@@ -3273,7 +3273,7 @@ type @code{array}.  A var-kind entry is required in each variable block.
 @item @code{enclosing-var <enclosing-var-name>}
 
 The variable that contains this variable.  Required for fields and
-arrays.  Required for funtions that represent an instance method.
+arrays.  Required for functions that represent an instance method.
 Forbidden for functions that specify a static method or a function in
 a non-object-oriented language.
 A variable is specified by its name.  The named variable must
