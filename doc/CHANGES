@@ -22,23 +22,10 @@ Further documentation can be found in:
 
 5.4.0 (October ?, 2016)
 
-We have updated the Daikon tool set to use the Apache Commons BCEL 6.0.
-In addition, we have removed the "--default-bcel" option and will now fail
-if this version of BCEL is not the first found on the classpath. Normally
-it will be found in daikon.jar.
-
-Not sure if should mention this issue here or its inclusion in user guide is enough:
-
-If Chicory throws an error such as the following:
-  Exception in thread "main" java.lang.ClassFormatError:
-    LVTT entry for 'v' in class file javautil/ArrayList17 does not match any LVT entry
-then the problem is most likely that your classpath contains a version
-of the BCEL library that is newer than the 6.0 Release.  A modification
-was made to Apache BCEL after the 6.0 release that causes this problem.
-The incompatible version might appear in bcel.jar, or elsewhere.
-You should either remove that version of BCEL from your classpath, or
-you should ensure that it appears after daikon.jar, which contains
-the correct version of BCEL.
+daikon.jar now includes Apache Commons BCEL 6.0; previously it used a
+locally-modified version of BCEL.  We have removed the "--default-bcel"
+command-line option; Daikon will fail if some other version of BCEL is
+found on the classpath.
 
 ===========================================================================
 
