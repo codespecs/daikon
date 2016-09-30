@@ -3277,7 +3277,8 @@ arrays.  Required for functions that represent an instance method.
 Forbidden for functions that specify a static method or a function in
 a non-object-oriented language.
 A variable is specified by its name.  The named variable must
-be defined.  If a variable is omitted (e.g., by the omit-var switch),
+be defined at the same program point.
+If a variable is omitted (e.g., by the omit-var switch),
 any variable for which it is the enclosing variable must be omitted as
 well.
 
