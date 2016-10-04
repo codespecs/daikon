@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.4.0 (October ?, 2016)
+5.4.0 (October 4, 2016)
 
 daikon.jar now includes Apache Commons BCEL 6.0; previously it used a
 locally-modified version of BCEL.  We have removed the "--default-bcel"
