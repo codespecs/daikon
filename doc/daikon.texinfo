@@ -8910,7 +8910,7 @@ and about debugging flags.
 
 This manual describes Daikon version 5.4.0, released October 4, 2016.
 A more detailed list of revisions since mid-2001 can be found in file
-@url{CHANGES,,@file{daikon/doc/CHANGES}}
+@url{CHANGES,,@file{doc/CHANGES}}
 in the distribution; this section gives a
 high-level view of the package's history.
 

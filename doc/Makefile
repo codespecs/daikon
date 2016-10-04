@@ -87,8 +87,9 @@ html-chap: daikon/index.html developer/index.html
 daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
 	rm -rf daikon/*
 	${TEXI2HTML} --split=chapter -o daikon $<
-	# Fixup 'bad' href inserted by makeinfo.
+	# Fixup 'bad' href(s) inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' daikon/index.html
+	perl -pi -e 's|href="CHANGES"|href="../CHANGES"|;' daikon/*.html
 	mkdir daikon/images
 	cp images/*.png daikon/images
 	cp images/*.jpg daikon/images
