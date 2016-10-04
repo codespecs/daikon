@@ -87,7 +87,7 @@ public final class Daikon {
 
   // Don't change the order of the modifiers on these strings as they
   // are automatically updated as part of the release process
-  public final static String release_version = "5.4.0";
+  public final static String release_version = "5.4.1";
   public final static String release_date = "October 4, 2016";
   public final static String release_string =
       "Daikon version "
