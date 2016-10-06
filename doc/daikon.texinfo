@@ -3779,7 +3779,7 @@ class Link @{
   Link next;
 @}
 
-void foo(A myA, Link myList) { ... }
+void foo(A myA, Link myList) @{ ... @}
 @end example
 
 Consider what variables would be output at the entry to method @code{foo}:
