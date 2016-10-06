@@ -3763,7 +3763,7 @@ Chicory's output.
 Depth to which to examine structure components (default 2).
 This parameter determines which variables the front end causes to be output at
 runtime.  For instance, suppose that a program contained the following
-data structures and variables:
+data structures and a method @code{foo}:
 @example
 class A @{
   int x;
@@ -3773,14 +3773,16 @@ class B @{
   int y;
   int z;
 @}
-A myA;
 
 class Link @{
   int val;
   Link next;
 @}
-Link myList;
+
+void foo(A myA, Link myList) { ... }
 @end example
+
+Consider what variables would be output at the entry to method @code{foo}:
 
 @itemize @bullet
 @item
@@ -3788,11 +3790,13 @@ If depth=0, only the identities (hash codes) of @code{myA} and
 @code{myList} would be examined; those variables could be determined to
 be equal or not equal to other variables.
 @item
-If depth=1, then also @code{MyA.b}, @code{myList.next}, and the integers
-@code{myA.x} and @code{myList.val} would be examined.
+If depth=1, then in addition to the above, @code{myA.x}, the identity of
+@code{myA.b}, @code{myList.val}, and the identity of @code{myList.next}
+would be examined.
 @item
-If depth=2, then, in addition to the above, also @code{MyA.b.y}, @code{MyA.b.z},
-@code{myList.next.next}, and @code{myList.next.val} would be examined.
+If depth=2, then, in addition to the above, also @code{myA.b.y},
+@code{myA.b.z}, the identity of @code{myList.next.next}, and
+@code{myList.next.val} would be examined.
 @end itemize
 
 Values whose value is undefined are not examined.  For instance, if @code{myA}
