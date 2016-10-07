@@ -24,6 +24,9 @@ public class FieldInfo extends DaikonVariableInfo {
   /** whether or not this is a static field */
   private boolean is_static;
 
+  /** whether or not this field is final */
+  private boolean is_final;
+
   /** whether or not this field is of a primitive type */
   private boolean is_primitive;
 
@@ -43,6 +46,7 @@ public class FieldInfo extends DaikonVariableInfo {
     this.field = field;
 
     is_static = Modifier.isStatic(field.getModifiers());
+    is_final = Modifier.isFinal(field.getModifiers());
     is_primitive = field.getType().isPrimitive();
     is_outer_this = field.getName().startsWith("this$");
 
@@ -92,6 +96,14 @@ public class FieldInfo extends DaikonVariableInfo {
   /*@Pure*/
   public boolean isStatic() {
     return is_static;
+  }
+
+  /**
+   * Returns true iff the corresponding field is final.
+   */
+  /*@Pure*/
+  public boolean isFinal() {
+    return is_final;
   }
 
   @SuppressWarnings("unchecked")

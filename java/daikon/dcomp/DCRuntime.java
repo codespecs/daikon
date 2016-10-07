@@ -1266,6 +1266,8 @@ public final class DCRuntime {
     if (fi.field_tag == null) {
       if (fi.isStatic()) {
         if (fi.isPrimitive()) {
+          // a static final primitive is a constant and there is no tag
+          if (fi.isFinal()) return null;
           fi.field_tag = new StaticPrimitiveTag(fi);
         } else {
           fi.field_tag = new StaticReferenceTag(fi);
@@ -1296,6 +1298,8 @@ public final class DCRuntime {
     if (fi.field_tag == null) {
       if (fi.isStatic()) {
         if (fi.isPrimitive()) {
+          // a static final primitive is a constant and there is no tag
+          if (fi.isFinal()) return null;
           //          fi.field_tag = new StaticPrimitiveTag (fi);
           throw new RuntimeException("fi should not be primitive!");
         } else {
