@@ -34,7 +34,7 @@ public class DynComp {
   public static File output_dir = new File(".");
 
   @Option("-f Output filename for Daikon decl file")
-  public static /*@Nullable*/ File decl_file = null;
+  public static /*@Nullable*/ String decl_file = null;
 
   @Option("Don't output a comparability sets file")
   public static boolean no_cset_file = false;
@@ -186,7 +186,7 @@ public class DynComp {
 
     // Default the decls file to <target-program-name>.decls-DynComp
     if (decl_file == null) {
-      decl_file = new File(String.format("%s.decls-DynComp", target_class));
+      decl_file = String.format("%s.decls-DynComp", target_class);
       premain_args = "--decl-file=" + decl_file + " " + premain_args;
     }
 

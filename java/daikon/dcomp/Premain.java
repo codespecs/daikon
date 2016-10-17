@@ -223,10 +223,7 @@ public class Premain {
       if (DynComp.verbose) DCRuntime.decl_stats();
 
       // Write the decl file out
-      File decl_file = DynComp.decl_file;
-      if (decl_file == null) {
-        decl_file = new File(DynComp.output_dir, "comparability.decls");
-      }
+      File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
       if (DynComp.verbose) System.out.println("Writing decl file to " + decl_file);
       PrintWriter decl_fp = open(decl_file);
       Stopwatch watch = new Stopwatch();
