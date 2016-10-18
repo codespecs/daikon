@@ -108,6 +108,7 @@ public class Premain {
    */
   public static class ShutdownThread extends Thread {
 
+    /*@RequiresNonNull("DynComp.decl_file")*/
     public void run() {
 
       // If DataFlow, print out the DF for the specified branch
@@ -220,7 +221,9 @@ public class Premain {
         // Writing comparability sets to standard output?
       }
 
-      if (DynComp.verbose) DCRuntime.decl_stats();
+      if (DynComp.verbose) {
+        DCRuntime.decl_stats();
+      }
 
       // Write the decl file out
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
