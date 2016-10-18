@@ -108,7 +108,6 @@ public class Premain {
    */
   public static class ShutdownThread extends Thread {
 
-    /*@RequiresNonNull("DynComp.decl_file")*/
     public void run() {
 
       // If DataFlow, print out the DF for the specified branch
@@ -226,6 +225,7 @@ public class Premain {
       }
 
       // Write the decl file out
+      @SuppressWarnings("nullness") //DynComp guarantees decl_file is non null
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
       if (DynComp.verbose) System.out.println("Writing decl file to " + decl_file);
       PrintWriter decl_fp = open(decl_file);
