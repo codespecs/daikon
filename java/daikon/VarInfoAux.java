@@ -287,6 +287,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /**
    * Make the default map here.
    */
+  // https://github.com/typetools/checker-framework/issues/877
+  @SuppressWarnings("keyfor:flowexpr.parse.error")
   private VarInfoAux() {
     HashMap</*@Interned*/ String, /*@Interned*/ String> defaultMap =
         new HashMap</*@Interned*/ String, /*@Interned*/ String>();
