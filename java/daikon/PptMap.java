@@ -86,16 +86,8 @@ public class PptMap implements Serializable {
   /**
    * @return an unmodifiable version of the keySet
    */
-  // daikon/tools/compare/LogicalCompare.java:745 does not typecheck, no
-  // matter whether the annotation argument is "this.nameToPpt" or
-  // "nameToPpt".  This method only typechecks if the annotation argument
-  // is "nameToPpt", not "this.nameToPpt".  (Yes, nameToPpt is a private
-  // variable, but I'd like the annotation to work anyway, at least for the
-  // moment.)
   public Collection</*@KeyFor("nameToPpt")*/ String> nameStringSet() {
-    // return Collections.unmodifiableSet(nameToPpt.keySet());
-    Set</*@KeyFor("nameToPpt")*/ String> s = nameToPpt.keySet();
-    return Collections.unmodifiableSet(s);
+    return Collections.unmodifiableSet(nameToPpt.keySet());
   }
 
   /**
