@@ -120,7 +120,7 @@ public class DynComp {
   public static final String synopsis = "daikon.DynComp [options] target [target-args]";
 
   /**
-   * Entry point of DynComp <p>
+   * Entry point of DynComp
    * @param args see usage for argument descriptions
    */
   public static void main(String[] args) {
@@ -145,7 +145,7 @@ public class DynComp {
 
   /**
    * Check the resulting arguments for legality.  Prints a message and
-   * Returns false if there was an error
+   * returns false if there was an error.
    */
   public static boolean check_args(Options options, String[] target_args) {
 

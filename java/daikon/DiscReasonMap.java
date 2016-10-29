@@ -40,6 +40,7 @@ public final class DiscReasonMap {
    * Adds disc_info to DiscReasonMap's internal data structure, unless
    * a reason already exists for inv, in which case the old reason is kept and
    * disc_info is discarded.
+   *
    * Requires: inv != null &and; disc_info != null &and; disc_info.shouldDiscard()
    */
   public static void put(Invariant inv, DiscardInfo disc_info) {

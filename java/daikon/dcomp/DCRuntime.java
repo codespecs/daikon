@@ -2260,6 +2260,7 @@ public final class DCRuntime {
    * DVInfo.toString() output to a more readable form
    *
    * e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
+   *
    *    "daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
    */
   private static ArrayList<String> skinyOutput(DVSet l, boolean on) {

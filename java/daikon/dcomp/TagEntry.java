@@ -22,6 +22,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * the relevant interaction occurred.
  *
  * TODO:
+ *
  *   Let A &rarr; B and C &rarr; D be in the same tree, where D is not a child of A
  *   and B is not a child of C. When union(A, C), consider x = rank(C) - rank(B)
  *   and y = rank(A) - rank(D). If either x or y is greater than 0, then A &rarr; C

@@ -27,7 +27,7 @@ import typequals.*;
  * This is a tester for the results of adding or checking an sample
  * to an invariant.  It can test practically
  * any invariant in the Daikon system given the appropriate commands.
- * The test are configured from the InvariantTest.commands file
+ * The test are configured from the {@code InvariantTest.commands} file
  * and errors that occur are written to the InvariantTest.diffs
  * file. For conveince a partcailly complete file InvariantTest.input
  * can be used to generate a complete commands file.  To generate
@@ -121,7 +121,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    *
    * @param args arguments to the main function, which control options
    *        to the program. As of now there is only one option,
-   *        "--generate_goals", which will generate goal information for
+   *        {@code --generate_goals}, which will generate goal information for
    *        the selected tests assuming the output that the tests provide
    *        is the correct output
    */
@@ -620,7 +620,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     /**
      * @return an array of the arguments to be passed into
-     *  check_modified or add_modified produced from tokens.
+     *  check_modified or add_modified produced from tokens
      */
     private static Object[] getParams(StringTokenizer tokens) {
       // add one for the "count" argument
@@ -634,7 +634,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     /**
      * @return the InvariantStatus produced by invoking invariantToTest's
-     *  add_modified method on the arguments represented by params.
+     *  add_modified method on the arguments represented by params
      */
     private static InvariantStatus getAddStatus(Object[] params) {
       try {
@@ -646,7 +646,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     /**
      * @return the InvariantStatus produced by invoking invariantToTest's
-     *  check_modified method on the arguments represented by params.
+     *  check_modified method on the arguments represented by params
      */
     private static InvariantStatus getCheckStatus(Object[] params) {
       try {
@@ -660,7 +660,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return a String representation of the invariantToTest.
      *  This String is produced by invoking the invariant's
      *  format_using with method with the argument
-     *  OutputFormat.Daikon.
+     *  {@code OutputFormat.Daikon}.
      */
     private static String getInvariantFormat() {
       try {
@@ -731,7 +731,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     /**
      * @return the method of invariant named by theClass
-     *  that produces a String representation of the invariant.
+     *  that produces a String representation of the invariant
      */
     private static Method getOutputProducer(Class<? extends Invariant> theClass) {
       Method[] methods = theClass.getMethods();

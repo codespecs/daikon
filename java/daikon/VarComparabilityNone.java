@@ -8,7 +8,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Used when no VarComparability information is available (in the .dtrace file).
+ * Used when no VarComparability information is available (in the {@code .dtrace} file).
  * Every variable is considered comparable to every other variable.
  */
 public final class VarComparabilityNone extends VarComparability implements Serializable {

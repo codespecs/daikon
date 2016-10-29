@@ -268,6 +268,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   private VarInfo sequenceSize;
 
   /** non-null if this is an orig() variable.
+   *
    *  <b>Do not test equality!  Only use its .name slot.</b>
    */
   public /*@Nullable*/ VarInfo postState;
@@ -1720,8 +1721,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    *  Given two variables I and J, indicate whether it is necessarily the
    *  case that i&le;j or i&ge;j.  The variables also each have a shift, so the
    *  test can really be something like (i+1)&le;(j-1).
-   *  The test is either:  i + i_shift &le; j + j_shift (if test_lessequal)
-   *                       i + i_shift &ge; j + j_shift (if !test_lessequal)
+   *  The test is one of:
+   *  <ul>
+   *    <li>i + i_shift &le; j + j_shift (if test_lessequal)
+   *    <li>i + i_shift &ge; j + j_shift (if !test_lessequal)
+   *  </ul>
    *  This is a dynamic check, and so must not be called while Daikon is
    *  inferencing.
    */

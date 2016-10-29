@@ -193,10 +193,13 @@ public class DaikonSimple {
    * Install views and the invariants. Duplicated from PptTopLevel's version
    * because DaikonSimple needs to use its own version of slice checking code.
    *
-   * Difference from PptTopLevel's version: 1. canonical (leader of equality
-   * set) check of variables is turned off because every variable is in its own
-   * equality set 2. debugging information turned off because DaikonSimple's
-   * code is more contained 3. less constraints on the slices
+   * Difference from PptTopLevel's version:
+   * <ol>
+   *   <li>canonical (leader of equality set) check of variables is turned off because every
+   *       variable is in its own equality set
+   *   <li>debugging information turned off because DaikonSimple's code is more contained
+   *   <li>less constraints on the slices
+   * </ol>
    *
    * @see daikon.PptTopLevel#instantiate_views_and_invariants()
    */
@@ -321,7 +324,7 @@ public class DaikonSimple {
 
   /**
    * Returns whether or not the specified binary slice should be created. The
-   * slice should not be created if the vars not compatible.
+   * slice should not be created if the vars are not compatible.
    *
    * Since we are trying to create all of the invariants, the variables does not
    * have to be a leader and can be a constant. Note that the always missing
@@ -339,9 +342,12 @@ public class DaikonSimple {
 
   /**
    * Returns whether or not the specified ternary slice should be created. The
-   * slice should not be created if any of the following are true - Any var is
-   * an array - Any of the vars are not compatible with the others - Any var is
-   * not (integral or float)
+   * slice should not be created if any of the following are true
+   * <ul>
+   *   <li>Any var is an array
+   *   <li>Any of the vars are not compatible with the others
+   *   <li>Any var is not (integral or float)
+   * </ul>
    *
    * Since we are trying to create all of the invariants, the variables does not
    * have to be a leader and can be a constant. Note that the always missing

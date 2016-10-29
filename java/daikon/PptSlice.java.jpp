@@ -586,17 +586,19 @@ public final class PPTSLICE1 extends PptSlice {
    *
    * The basic steps are:
    *
-   *    1)  Find all of the child invariants.  These are the invariants in
+   * <ol>
+   *    <li>  Find all of the child invariants.  These are the invariants in
    *        the matching slice of each child.
    *
-   *    2)  For each invariant class, build a list of all of the invariants
+   *    <li>  For each invariant class, build a list of all of the invariants
    *        of that class.  Note that some invariant classes
    *        (eg, functionBinary) contain distinct invariants, each of which
    *        must be merged separately.  See Invariant.Match for more
    *        information concerning what makes an invariant the 'same'
    *
-   *    3)  Each invariant that is found at each of the children is then
+   *    <li>  Each invariant that is found at each of the children is then
    *        merged to possibly create a parent invariant.
+   * </ol>
    */
   public void merge_invariants() {
 

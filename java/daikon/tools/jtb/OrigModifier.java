@@ -39,7 +39,8 @@ public class OrigModifier extends DepthFirstVisitor {
   /**
    * Checks if n is a variable name.  If so adds "orig(" to the
    *          front of the name and ")" to the end.
-   * modifies n, this
+   *
+   * Modifies: n, this
    */
   // f0 -> PrimaryPrefix()
   // f1 -> ( PrimarySuffix() )*

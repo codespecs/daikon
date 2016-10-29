@@ -255,7 +255,7 @@ public abstract class DaikonVariableInfo
   public abstract /*@Nullable*/ Object getMyValFromParentVal(Object parentVal);
 
   /**
-   * Returns a String representation of this object suitable for a .dtrace file
+   * Returns a String representation of this object suitable for a {@code .dtrace} file
    * @param val the object whose value to print
    */
   @SuppressWarnings("unchecked")
@@ -351,7 +351,7 @@ public abstract class DaikonVariableInfo
   /**
    *
    *  Gets the list of values (as a string) from getValueStringOfList
-   *  and concatenates the "modified" value
+   *  and concatenates the "modified" value.
    */
   private String getValueStringOfListWithMod(List<Object> theValues) {
     String retString = getValueStringOfList(theValues) + DaikonWriter.lineSep;

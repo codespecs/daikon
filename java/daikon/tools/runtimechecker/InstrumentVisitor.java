@@ -139,11 +139,14 @@ public class InstrumentVisitor extends DepthFirstVisitor {
    *
    * checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time time)
    *   Checks the class invariants.
+   *
    * checkObjectInvariants_instrument(daikon.tools.runtimechecker.Violation.Time time)
    *   Check the object invariants
+   *
    * isDaikonInstrumented()
    *   returns true (you can imagine calling this method to see if the class has been
    *   instrumented).
+   *
    * getDaikonInvariants()
    *   Returns th array of properties being checked.
    *
@@ -152,7 +155,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
    * daikon.tools.runtimechecker.Property[] daikonProperties
    *   The properties being checked.
    *
-   * Add code that initializes the properties array.
+   * Adds code that initializes the properties array.
    */
   @Override
   public void visit(ClassOrInterfaceBody clazz) {

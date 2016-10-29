@@ -11,13 +11,15 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * ArrayFixer is a visitor for a jtb syntax tree that adds the
+ * ArrayFixer is a visitor for a JTB syntax tree that adds the
  * "_identity" and "_array" suffixes to an expression as needed.
  * For example, the condition:
- *   "this_a[2] == 3 && this_a.length == 3 && this_a == this_b"
+ *   <pre>this_a[2] == 3 && this_a.length == 3 && this_a == this_b</pre>
  * (where a and b are int arrays) would be changed to:
- *   "this_a_array[2] == 3 && this_a_array.length == 3 &&
- *    this_a_identity == this_b_identity".
+ * <pre>
+ *    this_a_array[2] == 3 && this_a_array.length == 3 &&
+ *    this_a_identity == this_b_identity
+ * </pre>
  */
 class ArrayFixer extends DepthFirstVisitor {
 

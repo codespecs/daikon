@@ -94,8 +94,10 @@ public abstract class DaikonWriter {
    * for constructors)
    *
    * So a corresponding name/short_name pair could be:
+   * <pre>
    *    name: public static void DataStructures.StackArTester.doNew(int size)
    *    short_name: doNew
+   * </pre>
    *
    * @param point usually "EXIT" or "ENTER"
    * @return same thing as methodName(Member, point)

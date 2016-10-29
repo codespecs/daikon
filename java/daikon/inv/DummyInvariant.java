@@ -21,7 +21,7 @@ import typequals.*;
  * <p>
  *
  * The main use for a dummy invariant is to represent a splitting condition
- * that appears in a .spinfo file.  The .spinfo file can indicate an
+ * that appears in a {@code .spinfo} file.  The {@code .spinfo} file can indicate an
  * arbitrary Java expression, which might not be equivalent to any
  * invariant in Daikon's grammar.
  * <p>

@@ -52,8 +52,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param fileName the name of the file that should be written by the new
    *  SplitterJavaSource
    * @param varInfos the varInfos for this the Ppt to which splitObj belongs.
-   * @param statementReplacer a statementReplacer for the .spinfo file from
-   *  which splitObj is being created from.
+   * @param statementReplacer a statementReplacer for the {@code .spinfo} file from
+   *  which {@code splitObj} is being created from.
    */
   public SplitterJavaSource(
       SplitterObject splitObj,
@@ -469,7 +469,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * Return str with the char at index removed.
-   * This method requires: 0 &le; index &lt; str.length
+   *
+   * This method requires: <code>0 &le; index &lt; str.length</code>
    * @param str the String from which the char at index should be removed
    * @param index the index of the char that should be removed from str.
    * @return str with the char at index removed.
@@ -480,7 +481,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * Returns str with chr inserted at index.
-   * This method requires: 0 <= index &le; str.length
+   * This method requires: <code>0 &le; index &le; str.length</code>
    * @param str the String in which chr should be inserted
    * @param chr the char that should be inserted into str.
    * @param index the index of the position where chr should be
@@ -525,7 +526,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    *
    * @param varInfo the VarInfo for the variable whose base name is
    *  desired
-   * @return the base name of the variable represented by varInfo.
+   * @return the base name of the variable represented by varInfo
    */
   private static String getBaseName(VarInfo varInfo, String className) {
     String name = varInfo.name();
@@ -585,7 +586,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo representing the variable for which the
    *  field name is desired
    * @return the name of the variable represented by varInfo as it would
-   *  appear in the field declaration of a java splitter file.
+   *  appear in the field declaration of a java splitter file
    */
   private static String fieldName(VarInfo varInfo, String className) throws ParseException {
     return compilableName(varInfo, className) + "_varinfo";
@@ -596,7 +597,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * java splitter file.
    * @param varInfo the VarInfo for which the name of the variable is desired
    * @return the name of the variable used to hold this varInfo in a java
-   *  splitter file.
+   *  splitter file
    */
   private static String varName(VarInfo varInfo, String className) throws ParseException {
     return compilableName(varInfo, className) + "_vi";

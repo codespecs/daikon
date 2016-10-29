@@ -12,34 +12,34 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * Utility class to parse annotations generated with the Annotate program
- * using --wrap_xml flag.
+ * using {@code --wrap_xml} flag.
  *
  * An example of the String representation of an annotation, as output
- * with the --wrap_xml flag, is:
- * <pre>
- *  &lt;INVINFO&gt;
- *  &lt;INV&gt; this.topOfStack &le; this.theArray.length-1 &lt;/INV&gt;
- *  &lt;ENTER&gt;
- *  &lt;DAIKON&gt;  this.topOfStack &le; size(this.theArray[])-1  &lt;/DAIKON&gt;
- *  &lt;DAIKONCLASS&gt;class daikon.inv.binary.twoScalar.IntLessEqual&lt;/DAIKONCLASS&gt;
- *  &lt;METHOD&gt;  isEmpty()  &lt;/METHOD&gt;
- *  &lt;/INVINFO&gt;
- * </pre>
+ * with the {@code --wrap_xml} flag, is:
+ * <pre>{@code
+ *  <INVINFO>
+ *  <INV> this.topOfStack <= this.theArray.length-1 </INV>
+ *  <ENTER>
+ *  <DAIKON>  this.topOfStack <= size(this.theArray[])-1  </DAIKON>
+ *  <DAIKONCLASS>class daikon.inv.binary.twoScalar.IntLessEqual</DAIKONCLASS>
+ *  <METHOD>  isEmpty()  </METHOD>
+ *  </INVINFO>
+ * }</pre>
  * The above string should actually span only one line.
  *
- * To be well-formed, an annotation should be enclosed in &lt;INVINFO&gt;
+ * To be well-formed, an annotation should be enclosed in <INVINFO>
  * tags, contain
- * <pre>
- *   &lt;DAIKON&gt; and
- *   &lt;METHOD&gt; tags,
- * </pre>
- * and exactly one of
- * <pre>
- *   &lt;ENTER&gt;,
- *   &lt;EXIT&gt;,
- *   &lt;OBJECT&gt;, or
- *   &lt;CLASS&gt;.
- * </pre>
+ * <pre>{@code
+ *   <DAIKON> and
+ *   <METHOD>
+ * }</pre>
+ * tags, and exactly one of
+ * <pre>{@code
+ *   <ENTER>,
+ *   <EXIT>,
+ *   <OBJECT>, or
+ *   <CLASS>.
+ * }</pre>
  *
  * Obviously, the tool Annotate outputs well-formed annotations, so
  * the user shouldn't have to worry too much about well-formedness.
@@ -229,9 +229,11 @@ public class Annotation {
    *
    * For well-formed Annotations, the following holds:
    *
+   * <pre>
    *    a.kind == Kind.enter
    * || a.kind == Kind.exit
    * || a.kind == Kind.objectInvariant
+   * </pre>
    *
    */
   /*@UsesObjectEquals*/

@@ -25,7 +25,7 @@ public class Chicory {
   @Option("File in which to put dtrace output")
   public static /*@MonotonicNonNull*/ File dtrace_file = null;
 
-  /** Also see Daikon's --var-omit-pattern command-line argument. */
+  /** Also see Daikon's {@code --var-omit-pattern} command-line argument. */
   @Option("Omit variables that match this regular expression.")
   public static /*@Nullable*/ Pattern omit_var = null;
 
@@ -83,8 +83,7 @@ public class Chicory {
 
   /**
    * Path to java agent jar file that performs the transformation.
-   * The "main" procedure is ChicoryPremain.premain().
-   * @see ChicoryPremain#premain
+   * The "main" procedure is {@link ChicoryPremain#premain}.
    */
   @Option("Path to the Chicory agent jar file")
   public static /*@MonotonicNonNull*/ File premain = null;
@@ -109,8 +108,8 @@ public class Chicory {
 
   /**
    * Specifies Daikon arguments to be used if Daikon is run on a generated
-   * trace file or online via a socket.  If neither --daikon or --daikon-online
-   * is chosen, this option will select --daikon
+   * trace file or online via a socket.  If neither {@code --daikon} or {@code --daikon-online}
+   * is chosen, this option will select {@code --daikon}.
    */
   @Option("Specify Daikon arguments for either --daikon or --daikon-online")
   public static String daikon_args = "";
@@ -136,7 +135,7 @@ public class Chicory {
   /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
 
-  /** daikon process for --daikon switch */
+  /** daikon process for {@code --daikon} switch */
   // non-null if either daikon==true or daikon_online==true
   public static /*@MonotonicNonNull*/ Process daikon_proc;
 
@@ -157,7 +156,7 @@ public class Chicory {
   public static final String synopsis = "daikon.Chicory [options] target [target-args]";
 
   /**
-   * Entry point of Chicory <p>
+   * Entry point of Chicory
    * @param args see usage for argument descriptions
    */
   public static void main(String[] args) {
@@ -181,8 +180,8 @@ public class Chicory {
   }
 
   /**
-   * Check the resulting arguments for legality.  Prints a messagen and
-   * Returns false if there was an error
+   * Check the resulting arguments for legality.  Prints a message and
+   * returns false if there was an error.
    */
   public static boolean check_args(Options options, String[] target_args) {
 
@@ -199,8 +198,9 @@ public class Chicory {
     return true;
   }
 
-  /** Return true iff argument was given to run a purity analysis
-   *  Only run after running parse_args
+  /** Return true iff argument was given to run a purity analysis.
+   *
+   * You should only call this after parsing arguments.
    */
   public static boolean doPurity() {
     return purityAnalysis;
@@ -217,7 +217,7 @@ public class Chicory {
   /**
    * Starts the target program with the java agent setup to do the
    * transforms.  All java agent arguments are passed to it.  Our
-   * classpath is passed to the new jvm
+   * classpath is passed to the new JVM.
    */
   void start_target(String premain_args, String[] target_args) {
 

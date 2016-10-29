@@ -14,7 +14,7 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * ReplaceStatement is an immutable data structure for holding
- * the information of a replace statement from a .spinfo file.
+ * the information of a replace statement from a {@code .spinfo} file.
  * See "The Daikon Invariant Detector User Manual" for more information
  * on replace statements.
  */

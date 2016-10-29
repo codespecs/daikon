@@ -16,9 +16,9 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * This class contains static methods parse_spinfofile(spinfofile) and
- * load_splitters() which respectively creates Splitters from a .spinfo file
- * and load the splitters for a given Ppt.
+ * This class contains static methods {@link #parse_spinfofile(File)}
+ * which  creates Splitterss from a {@code .spinfo} file, and
+ * {@link #load_splitters}  which loads the splitters for a given Ppt.
  */
 public class SplitterFactory {
   private SplitterFactory() {
@@ -170,7 +170,7 @@ public class SplitterFactory {
   }
 
   /**
-   * Writes, compiles, and loads the splitter .java files for each
+   * Writes, compiles, and loads the splitter {@code .java} files for each
    * splitterObject in splitterObjects.
    * @param splitterObjects are the splitterObjects for ppt
    * @param ppt the Ppt for these splitterObjects
@@ -307,8 +307,8 @@ public class SplitterFactory {
    * For example if ppt_name is "myPackage.myClass.someMethod" and
    * guid = 12, then the following would be returned:
    * "myPackage_myClass_someMethod_12".
-   * @param ppt_name the name of the Ppt for which the splitter
-   *  java file is going to be used with
+   * @param ppt_name the name of the Ppt that the splitter
+   *  Java file wil be used with
    */
   private static String getFileName(String ppt_name) {
     String splitterName = clean(ppt_name);
@@ -321,7 +321,7 @@ public class SplitterFactory {
    * Cleans str by replacing all characters that are not
    * valid java indentifier parts with "_".
    * @param str the string to be cleaned
-   * @return str with all non java indentifier parts replaced
+   * @return str with all non-Java-indentifier parts replaced
    *  with "_".
    */
   private static String clean(String str) {

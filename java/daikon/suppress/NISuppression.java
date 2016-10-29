@@ -161,7 +161,7 @@ public class NISuppression {
    * suppression.
    *
    * @param suppressed_invs     any invariants that are suppressed by
-   *                            the antecedent invariants in ants
+   *                            the antecedent invariants in {@code ants}
    *                            using this suppression are added to
    *                            this set
    * @param ants                antecedents organized by class

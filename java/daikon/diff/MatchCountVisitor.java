@@ -147,7 +147,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return false;
   }
 
-  /** returns true iff any token of inv.format_java() contains
+  /** returns true iff any token of {@code inv.format_java()} contains
    *  a number other than -1, 0, 1 or is null. */
   private static boolean filterOut(Invariant inv) {
     assert inv != null : "@AssumeAssertion(nullness): precondition";

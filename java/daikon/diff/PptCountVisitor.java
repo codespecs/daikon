@@ -164,7 +164,7 @@ public class PptCountVisitor extends PrintAllVisitor {
   }
 
   /** s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)"
-   *  find the point just after the EXIT107 */
+   *  find the point in the string just after the EXIT107 */
   private int findCutoff(String s) {
     String lastPart = "";
     int cut = 0;

@@ -17,7 +17,7 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  *
- * DeclWriter writes the .decls file to a stream.  It
+ * DeclWriter writes the {@code .decls} file to a stream.  It
  * uses traversal pattern trees (see {@link DaikonVariableInfo})  for each
  * program point.  These are also used by the {@link DTraceWriter}.
  *

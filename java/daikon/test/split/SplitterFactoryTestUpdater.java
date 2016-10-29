@@ -27,7 +27,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * To add additional tests to this test program, place the .spinfo
  * and decls files into the "targets" directory then add a call to
  * generateSplitters with the new files.  generateSplitters is
- * overloaded, and takes either one .spinfo file and
+ * overloaded, and takes either one {@code .spinfo} file and
  * one decls file, or else a list of each.
  */
 public class SplitterFactoryTestUpdater {
@@ -76,7 +76,7 @@ public class SplitterFactoryTestUpdater {
   }
 
   /**
-   * Generates the splitter .java files.
+   * Generates the splitter {@code .java} files.
    * @param spinfos the spinfo files that should be used in generating
    *  the splitter java files
    * @param decls the decls files that should be used in generating the

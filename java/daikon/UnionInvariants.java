@@ -7,8 +7,8 @@ import plume.UtilMDE;
 
 /**
  * UnionInvariants is a command-line tool that will read in one (or
- * more) .inv files (possibly gzipped) and write their union into a
- * new .inv file (possibly gzipped).  Run with -h flag to view the
+ * more) {@code .inv} files (possibly gzipped) and write their union into a
+ * new {@code .inv} file (possibly gzipped).  Run with {@code -h} flag to view the
  * command line syntax.
  *
  * <p> Currently, UnionInvariants works at program point granularity,

@@ -24,7 +24,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * of data considered).
  *
  * Note that each of the three items (class, ppt, variable) must match
- * in order for a print to occur.
+ * in order for printing to occur.
  */
 public final class Debug {
 
@@ -97,7 +97,7 @@ public final class Debug {
    * Restrict function binary prints to the specified method.  Implementation
    * is in the FunctionBinary specific log functions.  If null, there is no
    * restriction (all function binary methods are printed).  See Functions.java
-   * for a list of function names
+   * for a list of function names.
    */
   public static /*@Nullable*/ String function_binary_method = null
   // "java.lang.Math.max("
@@ -110,7 +110,7 @@ public final class Debug {
    * List of Ppts for logging. Each name listed is compared to
    * the full program point name. If it matches (shows up anywhere in
    * the ppt name) it will be included in the debug prints.  This is
-   * not a regular expression match
+   * not a regular expression match.
    *
    * @see #log(Logger, Class, Ppt, String)
    */
@@ -183,7 +183,7 @@ public final class Debug {
    * Returns a Debug object if the specified class, ppt, and vis match
    * what is being tracked.  Otherwise, return NULL.  Preferred over calling
    * the constructor directly, since it doesn't create the object if it
-   * doesn't have to
+   * doesn't have to.
    */
   public static /*@Nullable*/ Debug newDebug(Class<?> c, Ppt ppt, VarInfo[] vis) {
     if (logOn() && class_match(c) && ppt_match(ppt) && var_match(vis)) {
@@ -199,7 +199,7 @@ public final class Debug {
    * This constructor sets as defaults c, ppt, and whatever variable (if any) from
    * vis that is on the debugTrackVar list.  Essentially this creates
    * a debug object that will print if any of the variables in vis are
-   * being tracked (and c and ppt match)
+   * being tracked (and c and ppt match).
    */
   public Debug(Class<?> c, Ppt ppt, List<VarInfo> vis) {
 
@@ -215,7 +215,7 @@ public final class Debug {
 
   /**
    * Looks for each of the variables in vis in the DebugTrackVar list.  If
-   * any match, returns that variable.  Null is returned if there are no
+   * any match, returns that variable.  Returns null if there are no
    * matches.
    */
   public /*@Nullable*/ VarInfo visTracked(
@@ -552,7 +552,7 @@ public final class Debug {
 
   /**
    * Returns whether or not the specified class matches the classes being
-   * tracked
+   * tracked.
    */
   public static boolean class_match(/*@Nullable*/ Class<?> inv_class) {
 
@@ -563,7 +563,7 @@ public final class Debug {
   }
 
   /**
-   * Returns whether or not the specified ppt matches the ppts being tracked
+   * Returns whether or not the specified ppt matches the ppts being tracked.
    */
   public static boolean ppt_match(/*@Nullable*/ Ppt ppt) {
 
@@ -576,7 +576,7 @@ public final class Debug {
   /**
    * Returns whether or not the specified vars match the ones being tracked.
    * Also, sets Debug.ourvars with the names of the variables matched if they
-   * are not the leader of their equality sets
+   * are not the leader of their equality sets.
    */
   public static boolean var_match(VarInfo /*@Nullable*/ [] vis) {
 
@@ -671,8 +671,7 @@ public final class Debug {
   }
 
   /**
-   * Returns a string containing the integer variables and their
-   * values
+   * Returns a string containing the integer variables and their values.
    */
   public static String int_vars(PptTopLevel ppt, ValueTuple vt) {
 
@@ -764,10 +763,10 @@ public final class Debug {
   }
 
   /**
-   * Parses the specified argument to --track and sets up the track arrays
+   * Parses the specified argument to {@code --track} and sets up the track arrays
    * accordingly.  The syntax of the argument is
    *
-   *    class|class|...&lt;var,var,var&gt;@ppt
+   * <pre>{@code class|class|...<var,var,var>@ppt}</pre>
    *
    * As shown, multiple class arguments can be specified separated by pipe
    * symbols (|).  The variables are specified in angle brackets (&lt;&gt;) and

@@ -179,24 +179,24 @@ public class Property implements Serializable {
    * Parse a String and return the property that it represents. An example of
    * the String representation of an property is:
    *
-   * <pre>
-   *     &lt;INVINFO&gt;
-   *     &lt;INV&gt; this.topOfStack &lt;= this.theArray.length-1 &lt;/INV&gt;
-   *     &lt;ENTER&gt;
-   *     &lt;DAIKON&gt;  this.topOfStack &lt;= size(this.theArray[])-1  &lt;/DAIKON&gt;
-   *     &lt;DAIKONCLASS&gt;class daikon.inv.binary.twoScalar.IntLessEqual&lt;/DAIKONCLASS&gt;
-   *     &lt;METHOD&gt;  isEmpty()  &lt;/METHOD&gt;
-   *     &lt;/INVINFO&gt;
-   * </pre>
+   * <pre>{@code
+   *     <INVINFO>
+   *     <INV> this.topOfStack <= this.theArray.length-1 </INV>
+   *     <ENTER>
+   *     <DAIKON>  this.topOfStack <= size(this.theArray[])-1  </DAIKON>
+   *     <DAIKONCLASS>class daikon.inv.binary.twoScalar.IntLessEqual</DAIKONCLASS>
+   *     <METHOD>  isEmpty()  </METHOD>
+   *     </INVINFO>
+   * }</pre>
    *
    * <p>
    * The above string should actually span only one line.
    *
    * <p>
    * To be well-formed, a property should be enclosed in
-   * <code>&lt;INVINFO&gt;</code> tags, contain <code>&lt;DAIKON&gt;</code> and
-   * <code>&lt;METHOD&gt;</code> tags, and exactly one of <code>&lt;ENTER&gt;</code>,
-   * <code>&lt;EXIT&gt;</code>,<code>&lt;OBJECT&gt;</code>, or <code>&lt;CLASS&gt;</code>.
+   * {@code <INVINFO>} tags, contain {@code <DAIKON>} and
+   * {@code <METHOD>} tags, and exactly one of {@code <ENTER>},
+   * {@code <EXIT>}, {@code <OBJECT>}, or {@code <CLASS>}.
    */
   // [[ Using an XML parser seems like too strong a hammer here.
   //    But should do some profiling to see if all the string
@@ -267,8 +267,8 @@ public class Property implements Serializable {
   }
 
   /**
-   * Similar to <code>xmlString()</code>, but without a
-   * <code>&lt;INV&gt;...&lt;/INV&gt;</code> tag (the JML representation).
+   * Similar to {@link #xmlString()}, but without a
+   * {@code <INV>...</INV>} tag (the JML representation).
    *
    * Invariant:
    * <p>

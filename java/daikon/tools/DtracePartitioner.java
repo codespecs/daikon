@@ -97,12 +97,13 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   }
 
   /** Finds the exits that correspond to Enters.
-   *  <br>Modifies: none
-   *  <br>Returns: An ArrayList containing all of the elements of 'enters'
-   *  <br> @param includeUnreturnedEnters
+   *
+   *  Modifies: none
+   *  @param includeUnreturnedEnters
    *    ensures that any ENTER ppt invocations will definitely have
    *    a corresponding EXIT ppt invocation following them.
-   *  <p> The original order is NOT guaranteed.
+   *  @return an ArrayList containing all of the elements of 'enters'.
+   *    The original order is NOT guaranteed.
    */
   public List<String> patchValues(List<String> enters, boolean includeUnreturnedEnters) {
     try {

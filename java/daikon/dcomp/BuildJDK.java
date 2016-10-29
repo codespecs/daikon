@@ -31,8 +31,8 @@ public class BuildJDK {
       "daikon.BuildJDK [options] src dest [class_prefix | classfiles...]";
 
   /**
-   * Given an explicit rt.jar filename, or a root JDK or JRE directory, finds
-   * the rt.jar file.
+   * Given an explicit {@code rt.jar} filename, or a root JDK or JRE directory, finds
+   * the {@code rt.jar} file.
    */
   public static class RtJarFinder {
     private final String arg;
@@ -114,10 +114,11 @@ public class BuildJDK {
    * Invoke as:
    * BuildJDK jarfile dest prefix
    *
-   *    jarfile     - jarfile to process
-   *    dest        - destination directory in which to place instrumented
-   *                  classes
-   *    prefix      - optional prefix of classes to be translated
+   * <dl>
+   *    <dt>jarfile     <dd>jarfile to process
+   *    <dt>dest        <dd>destination directory in which to place instrumented classes
+   *    <dt>prefix      <dd>optional prefix of classes to be translated
+   * </dl>
    *
    * Instruments each class file in jarfile that begins with prefix
    * and puts the results in dest.
@@ -208,7 +209,7 @@ public class BuildJDK {
 
   /**
    * Check the resulting arguments for legality.  Prints a message and
-   * Returns false if there was an error
+   * returns false if there was an error.
    */
   public static boolean check_args(Options options, String[] target_args) {
 

@@ -41,7 +41,7 @@ class TokenReplacer extends DepthFirstVisitor {
    * @param oldVars the variable names, as Strings, that should
    *  be replaced by newVars
    * @param newVars the variable names, as Strings, that oldVars
-   *  are replaced with.
+   *  are replaced with
    */
   private TokenReplacer(List<String> oldVars, List<String> newVars) {
     super();
@@ -60,7 +60,7 @@ class TokenReplacer extends DepthFirstVisitor {
    * @param newVars the variable names, as Strings, that oldVars
    *  are replaced with
    * @return expression with all instances of an element of oldVars replaced
-   *  by the corresponding element of newVars.
+   *  by the corresponding element of newVars
    */
   public static String replaceTokens(String expression, List<String> oldVars, List<String> newVars)
       throws ParseException {

@@ -282,7 +282,7 @@ public class PptTopLevel extends Ppt {
    *  Flag that indicates whether or not invariants have been merged
    *  from all of this ppts children to form the invariants here.  Necessary
    *  because a ppt can have multiple parents and otherwise we'd needlessly
-   *  merge multiple times
+   *  merge multiple times.
    */
   public boolean invariants_merged = false;
 
@@ -2392,13 +2392,15 @@ public class PptTopLevel extends Ppt {
    * by checking the variables' qualifications.  In addition,
    * The slice should not be created if any of the following are true:
    *
-   * - One of the variables does not meet qualifications for the ternary slice
-   * - All of the vars are constants
-   * - Any var is not (integral or float)
-   * - Each var is the same and its equality set has only two variables
-   * - Two of the vars are the same and its equality has only one variable
-   *   (this last one is currently disabled as x = func(x,y) might still
-   *   be interesting even if x is the same.
+   * <ul>
+   *   <li>One of the variables does not meet qualifications for the ternary slice
+   *   <li>All of the vars are constants
+   *   <li>Any var is not (integral or float)
+   *   <li>Each var is the same and its equality set has only two variables
+   *   <li>Two of the vars are the same and its equality has only one variable.
+   *   (This last one is currently disabled as x = func(x,y) might still
+   *   be interesting even if x is the same.)
+   * </ul>
    *
    * @see #is_var_ok_ternary(VarInfo)
    */

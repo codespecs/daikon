@@ -68,23 +68,29 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
   /**
    * Represents a subsequence of a sequence.  The subsequence a[i..j]
    * includes the endpoints i and j.  The subsequence is meaningful if:
+   * <pre>
    *  i &ge; 0
    *  i &le; a.length
    *  j &ge; -1
    *  j &le; a.length-1
    *  i &le; j+1
+   * </pre>
    * These are the empty array:
+   * <pre>
    *   a[0..-1]
    *   a[a.length..a.length-1]
+   * </pre>
    * These are illegal:
+   * <pre>
    *   a[1..-1]
    *   a[a.length..a.length-2]
    *   a[a.length+1..a.length]
+   * </pre>
    *
    * @param left_closed true means the range starts at i; false means
    * it starts at i+1
    * @param right_closed true means the range ends at j; false means
-   * it ends at j-1.
+   * it ends at j-1
    */
   public SEQUENCESCALARARBITRARYSUBSEQUENCE(VarInfo vi1, VarInfo vi2, VarInfo vi3,
                                    boolean left_closed, boolean right_closed) {

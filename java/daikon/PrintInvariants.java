@@ -24,7 +24,7 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * PrintInvariants prints a set of invariants from a .inv file.
+ * PrintInvariants prints a set of invariants from a {@code .inv} file.
  * For documentation, see section "Printing Invariants" in the Daikon
  * manual.
  * Invoke the program as follows:

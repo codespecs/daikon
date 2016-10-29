@@ -12,14 +12,14 @@ import plume.*;
 
 /**
  * Merge Daikon-generated invariants into Java source code as ESC/JML/DBC
- * annotations.  All original .java files are left unmodified; copies are
+ * annotations.  All original {@code .java} files are left unmodified; copies are
  * created.
  * <p>
  *
- * The first argument is a Daikon .inv file -- a serialized file of
- * Invariant objects.  All subsequent arguments are Foo.java files that are
- * rewritten into Foo.java-jmlannotated versions; alternately, use the -r
- * flag to process every .java file under the current directory.
+ * The first argument is a Daikon {@code .inv} file -- a serialized file of
+ * Invariant objects.  All subsequent arguments are {@code Foo.java} files that are
+ * rewritten into {@code Foo.java-jmlannotated} versions; alternately, use the {@code -r}
+ * flag to process every {@code .java} file under the current directory.
  */
 public class Annotate {
 

@@ -4907,12 +4907,14 @@ class DCInstrument {
    * Creates a get tag method for field f.   The tag corresponding to field
    * f will be pushed on the tag stack.
    *
+   * <pre>{@code
    *  void <field>_<class>__$get_tag() {
    *    #if f.isStatic()
    *      DCRuntime.push_static_tag (tag_offset)
    *    #else
    *      DCRuntime.push_field_tag (this, tag_offset);
    *  }
+   * }</pre>
    *
    * @param gen class whose accessors are being built. Not
    *          necessarily the class declaring f (if f is inherited)
@@ -4970,12 +4972,14 @@ class DCInstrument {
    * stack will be popped off and placed in the tag storeage corresponding
    * to field
    *
+   * <pre>{@code
    *  void <field>_<class>__$set_tag() {
    *    #if f.isStatic()
    *      DCRuntime.pop_static_tag (tag_offset)
    *    #else
    *      DCRuntime.pop_field_tag (this, tag_offset);
    *  }
+   * }</pre>
    *
    * @param gen class whose accessors are being built. Not
    *          necessarily the class declaring f (if f is inherited)
@@ -5023,9 +5027,11 @@ class DCInstrument {
    * Adds the DCompInstrumented interface to the given class.
    * Adds the following method to the class, so that it implements the
    * DCompInstrumented interface:
+   * <pre>{@code
    *   public boolean equals_dcomp_instrumented(Object o) {
    *     return this.equals(o, null);
    *   }
+   * }</pre>
    * The method does nothing except call the instrumented equals
    * method (boolean equals(Object, DCompMarker)).
    */
@@ -5066,9 +5072,11 @@ class DCInstrument {
 
   /**
    * Adds the following method to a class:
+   * <pre>{@code
    *   public boolean equals (Object obj) {
    *     return super.equals(obj);
    *   }
+   * }</pre>
    * Must only be called if the Object equals method has not been
    * overridden; if the equals method is already defined in the class,
    * a ClassFormatError will result because of the duplicate method.
@@ -5119,9 +5127,11 @@ class DCInstrument {
 
   /**
    * Adds the following method to a class:
+   * <pre>{@code
    *   protected Object clone() throws CloneNotSupportedException {
    *     return super.clone();
    *   }
+   * }</pre>
    * Must only be called if the Object clone method has not been
    * overridden; if the clone method is already defined in the class,
    * a ClassFormatError will result because of the duplicate method.

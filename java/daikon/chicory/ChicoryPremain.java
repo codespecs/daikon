@@ -225,7 +225,7 @@ public class ChicoryPremain {
   }
 
   /**
-   * Write a *.pure file to the given location
+   * Write a {@code *.pure} file to the given location.
    * @param fileName where to write the file to (full path)
    */
   // not handled: /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
@@ -267,7 +267,7 @@ public class ChicoryPremain {
   //  }
 
   /**
-   * Return true iff Chicory has run a purity analysis or read a *.pure file
+   * Return true iff Chicory has run a purity analysis or read a {@code *.pure} file.
    */
   @SuppressWarnings("nullness") // dependent:  pureMethods is non-null if doPurity is true
   // /*@EnsuresNonNullIf(result=true, expression="ChicoryPremain.pureMethods")*/
@@ -278,7 +278,7 @@ public class ChicoryPremain {
 
   /**
    * Checks if member is one of the pure methods found in a purity analysis
-   * or supplied from a *.pure file.
+   * or supplied from a {@code *.pure} file.
    *
    * @return true iff member is a pure method
    */
@@ -316,9 +316,11 @@ public class ChicoryPremain {
    * get resolved by this classloader).
    *
    * There are three general versions of BCEL to consider:
-   * - the original 5.2 version
-   * - the interim 6.0 version
-   * - the offical 6.0 release version
+   * <ul>
+   *   <li>the original 5.2 version
+   *   <li>the interim 6.0 version
+   *   <li>the offical 6.0 release version
+   * </ul>
    * We are looking for the latter one.  The first and third versions
    * use the package name of org.apache.bcel while the interim version
    * uses the package name of org.apache.commons.bcel6.  Also, there

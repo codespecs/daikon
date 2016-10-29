@@ -78,12 +78,14 @@ public class DynamicConstants implements Serializable {
 
   /**
    * List of dynamic constants.
+   *
    * Each element, c, has c.constant = true, c.count &gt; 0, elt.val != null.
    */
   List<Constant> con_list = new ArrayList<Constant>();
 
   /**
    * List of variables that have always been missing.
+   *
    * For each element c, c.always_missing = true or con.vi.missingOutOfBounds().
    */
   List<Constant> missing_list = new ArrayList<Constant>();
@@ -179,7 +181,7 @@ public class DynamicConstants implements Serializable {
     }
 
     /**
-     * returns whether the specified variable is currently a constant OR
+     * Returns whether the specified variable is currently a constant OR
      * was a constant at the beginning of constants processing.
      */
     /*@Pure*/
@@ -416,7 +418,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * returns whether the specified variable is currently a constant OR
+   * Returns whether the specified variable is currently a constant OR
    * was a constant at the beginning of constants processing.
    */
   /*@Pure*/
@@ -445,7 +447,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * returns whether the specified variable is currently missing OR
+   * Returns whether the specified variable is currently missing OR
    * was missing at the beginning of constants processing.
    */
   /*@Pure*/
@@ -530,9 +532,11 @@ public class DynamicConstants implements Serializable {
    * was a constant, the constant values are applied.
    *
    * The following slices will be created:
+   * <pre>
    *    unary:   list1-vars
    *    binary:  list1-vars X list2-vars
    *    ternary: list1-vars X list2-vars X list2-vars
+   * </pre>
    */
   private void instantiate_views(List<Constant> list1, List<Constant> list2) {
 

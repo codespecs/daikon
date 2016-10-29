@@ -14,7 +14,7 @@ import org.checkerframework.dataflow.qual.*;
  * Maps from a program point name (a String) to a PptTopLevel.<p>
  *
  * This is the major data structure of Daikon.  All the invariants can be
- * found in it, and an .inv file contains (only) the serialized form of
+ * found in it, and an {@code .inv} file contains (only) the serialized form of
  * this object.
  */
 // Why doesn't this implement Map<String,PptTopLevel> or extend

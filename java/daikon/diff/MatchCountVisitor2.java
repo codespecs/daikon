@@ -121,8 +121,10 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     return s.substring(cut + 12, s.lastIndexOf('"'));
   }
 
-  /** s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)"
-   *  find the point just after the EXIT107 */
+  /**
+   * Find the point in the string just after the EXIT107, where
+   * s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)"
+   */
   private int findCutoff(String s) {
     String lastPart = "";
     int cut = 0;

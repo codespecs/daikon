@@ -11,14 +11,14 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * NameFixer is a visitor for a jtb syntax tree that checks for
+ * NameFixer is a visitor for a JTB syntax tree that checks for
  * unqualifed class member variables and adds the className as
  * a qualifier.
  * For example, the condition:
- *   "D[a]"
+ *   <pre>D[a]</pre>
  * (where D is a member variable of the current class and a is a local)
- * would be changed to :
- *    "className.D[a]
+ * would be changed to:
+ *   <pre>className.D[a]</pre>
  */
 class NameFixer extends DepthFirstVisitor {
 

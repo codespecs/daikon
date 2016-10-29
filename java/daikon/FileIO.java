@@ -900,7 +900,7 @@ public final class FileIO {
   static HashMap<Integer, Invocation> call_hashmap = new HashMap<Integer, Invocation>();
 
   /**
-   * Reads data from .dtrace files.
+   * Reads data from {@code .dtrace} files.
    * For each record in the files, calls the appropriate callback in the processor.
    * @see #read_data_trace_files(Collection,PptMap,Processor,boolean)
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
@@ -913,7 +913,7 @@ public final class FileIO {
   }
 
   /**
-   * Reads data from .dtrace files.
+   * Reads data from {@code .dtrace} files.
    * Calls
    * {@link #read_data_trace_file(String,PptMap,Processor,boolean,boolean)}
    * for each element of filenames.
@@ -1358,7 +1358,7 @@ public final class FileIO {
   }
 
   /**
-   * Read only samples from .dtrace file.
+   * Read only samples from {@code .dtrace} file.
    * Uses the standard data processor which calls
    * {@link FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)}
    * on each record, and ignores records other than samples.
@@ -1370,7 +1370,7 @@ public final class FileIO {
 
   /**
    * Read declarations AND samples (not just sample data as the name might
-   * imply) from .dtrace file.  For each record read from the file, passes
+   * imply) from {@code .dtrace} file.  For each record read from the file, passes
    * the record to a method of the processor.
    */
   public static void read_data_trace_file(

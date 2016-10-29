@@ -18,9 +18,13 @@ import org.checkerframework.checker.signature.qual.*;
  * about each class that is derived (either directly or indirectly) from
  * daikon.inv.Invariant.
  * To specify the output format, use one of the following:
- *   --texinfo FILENAME   Texinfo format, for inclusion in the manual.
- *   --text FILENAME      Text format, with each name preceded by "+"
+ * <dl>
+ *   <dt>{@code --texinfo FILENAME}
+ *   <dd>Texinfo format, for inclusion in the manual.
+ *   <dt>{@code --text FILENAME}
+ *   <dd>Text format, with each name preceded by "+"
  *                        characters to indicate depth in the tree.
+ * </dl>
  */
 public class InvariantDoclet {
 

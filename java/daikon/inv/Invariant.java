@@ -2037,8 +2037,6 @@ import typequals.*;
    *
    *  Where v1_name and v2_name are the properly formatted
    *  varinfos v1 and v2, under the given format.
-   *
-   *  Author: Carlos Pacheco
    */
   // [[ This method doesn't belong here. But where? ]]
   public static String formatFuzzy(String method, VarInfo v1, VarInfo v2, OutputFormat format) {

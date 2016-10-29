@@ -16,7 +16,7 @@ import typequals.*;
 /**
  * A SplitterObject is the starting point for all the information we
  * have about a splitting condition. It is created immediately when
- * the condition is read from the .spinfo file, and later contains a
+ * the condition is read from the {@code .spinfo} file, and later contains a
  * reference to the compiled "Splitter" object.
  */
 public class SplitterObject implements Comparable<SplitterObject> {
@@ -57,8 +57,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
-   * @param fileName the pathname of a .class file
-   * @return a Java Class corresponding to the .class file, or null
+   * @param fileName the pathname of a {@code .class} file
+   * @return a Java Class corresponding to the {@code .class} file, or null
    */
   static /*@Nullable*/ Class<?> defineSplitterClass(
       /*@BinaryName*/ String className, String fileName) {
@@ -137,7 +137,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
-   * @return true if the .class file exists for the Splitter
+   * @return true if the {@code .class} file exists for the Splitter
    * represented by this SplitterObject, false otherwise
    */
   public boolean compiled() {

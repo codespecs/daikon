@@ -18,9 +18,9 @@ import org.checkerframework.checker.nullness.qual.*;
  * Create a splitter info file from Java source.
  * <p>
  *
- * The argument is a list of .java files.  The original .java files are
- * left unmodified.  A .spinfo file is written for every .java file, or
- * in the single file indicated as the -o command-line argument..
+ * The argument is a list of {@code .java} files.  The original {@code .java} files are
+ * left unmodified.  A {@code .spinfo} file is written for every {@code .java} file, or
+ * in the single file indicated as the {@code -o} command-line argument..
  */
 public class CreateSpinfo {
 

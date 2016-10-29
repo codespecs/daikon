@@ -68,8 +68,8 @@ import typequals.*;
 */
 
 /**
- * The "main" method is the main entry point for the Daikon invariant detector.
- * The "mainHelper" method is the entry point, when called programmatically.
+ * The {@link #main} method is the main entry point for the Daikon invariant detector.
+ * The {@link #mainHelper} method is the entry point, when called programmatically.
  */
 @SuppressWarnings("initialization.fields.uninitialized") // field all_ppts; deal with it later
 public final class Daikon {
@@ -87,9 +87,9 @@ public final class Daikon {
 
   // Don't change the order of the modifiers on these strings as they
   // are automatically updated as part of the release process
-  public final static String release_version = "5.4.1";
-  public final static String release_date = "October 4, 2016";
-  public final static String release_string =
+  public static final String release_version = "5.4.1";
+  public static final String release_date = "October 4, 2016";
+  public static final String release_string =
       "Daikon version "
           + release_version
           + ", released "
@@ -274,13 +274,13 @@ public final class Daikon {
   public static boolean isInferencing = false;
 
   /**
-   * When true, omit certain invariants from the output .inv
+   * When true, omit certain invariants from the output {@code .inv}
    * file. Generally these are invariants that wouldn't be printed in
-   * any case; but by default, they're retained in the .inv file in
+   * any case; but by default, they're retained in the {@code .inv} file in
    * case they would be useful for later processing. (For instance, we
    * might at some point in the future support resuming processing
-   * with more data from an .inv file). These invariants can increase
-   * the size of the .inv file, though, so when only limited further
+   * with more data from an {@code .inv} file). These invariants can increase
+   * the size of the {@code .inv} file, though, so when only limited further
    * processing is needed, it can save space to omit them.
    */
   public static boolean omit_from_output = false;
@@ -288,7 +288,7 @@ public final class Daikon {
   /**
    * An array of flags, indexed by characters, in which a true entry
    * means that invariants of that sort should be omitted from the
-   * output .inv file.
+   * output {@code .inv} file.
    */
   public static boolean[] omit_types = new boolean[256];
 
@@ -1243,7 +1243,7 @@ public final class Daikon {
   }
 
   /**
-   * Just like g.getOptarg(), but only to be called in circumstances when
+   * Just like {@code g.getOptarg()}, but only to be called in circumstances when
    * the programmer knows that the return value is non-null.
    */
   public static String getOptarg(Getopt g) {
@@ -1256,7 +1256,7 @@ public final class Daikon {
 
   /**
    * Invariants passed on the command line with the
-   * --user_defined_invariant option.  A list of class names in the format
+   * {@code --user_defined_invariant} option.  A list of class names in the format
    * required by {@link Class#forName(String)}.
    */
   private static List</*@ClassGetName*/ String> userDefinedInvariants =
@@ -1887,7 +1887,7 @@ public final class Daikon {
   /**
    * Sets up splitting on all ppts.  Currently only binary splitters
    * over boolean returns or exactly two return statements are enabled
-   * by default (though other splitters can be defined by the user)
+   * by default (though other splitters can be defined by the user).
    */
   // TODO: When Checker Framework issue 752 is fixed, remove this
   // @SuppressWarnings and address the type checking error issued
@@ -1929,7 +1929,7 @@ public final class Daikon {
 
   /**
    * Human-friendly progress status message.
-   * If fileio_progress is non-null, then this is ignored.
+   * If {@code fileio_progress} is non-null, then this is ignored.
    * So this is primarily for progress reports that are not IO-related.
    */
   public static String progress = "";
@@ -2224,7 +2224,7 @@ public final class Daikon {
 
   /**
    * Print out basic statistics (samples, invariants, variables, etc)
-   * about each ppt
+   * about each ppt.
    */
   public static void ppt_stats(PptMap all_ppts) {
 
@@ -2259,7 +2259,7 @@ public final class Daikon {
   }
 
   /**
-   * Process the invariants with simplify to remove redundant invariants
+   * Process the invariants with simplify to remove redundant invariants.
    */
   private static void suppressWithSimplify(PptMap all_ppts) {
     System.out.print("Invoking Simplify to identify redundant invariants");
@@ -2279,14 +2279,14 @@ public final class Daikon {
   }
 
   /**
-   * Initialize NIS suppression
+   * Initialize NIS suppression.
    */
   public static void setup_NISuppression() {
     NIS.init_ni_suppression();
   }
 
   /**
-   * Initialize the equality sets for each variable
+   * Initialize the equality sets for each variable.
    */
   public static void setupEquality(PptTopLevel ppt) {
 
@@ -2357,7 +2357,7 @@ public final class Daikon {
   //   }
 
   /**
-   * Removed invariants as specified in omit_types
+   * Removed invariants as specified in omit_types.
    */
   private static void processOmissions(PptMap allPpts) {
     if (omit_types['0']) allPpts.removeUnsampled();
@@ -2439,7 +2439,7 @@ public final class Daikon {
   /**
    * Undoes the invariants suppressed for the dynamic constant,
    * suppression and equality set optimizations (should yield the same
-   * invariants as the simple incremental algorithm
+   * invariants as the simple incremental algorithm.
    */
   @SuppressWarnings("flowexpr.parse.error") // private field
   /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/

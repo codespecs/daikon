@@ -12,7 +12,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * SpinfoFile stores information parsed from a .spinfo file.
+ * SpinfoFile stores information parsed from a {@code .spinfo} file.
  * The constructor parses the file; then clients can make calls to
  * retrieve the parsed information.
  * <p>

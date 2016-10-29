@@ -18,7 +18,7 @@ import org.checkerframework.dataflow.qual.*;
  * This is a tester for the formatting of invariants in different
  * modes that is configurable by file input. It can test practically
  * any invariant in the Daikon system given the appropriate commands.
- * The test are configured from the InvariantFormatTest.commands file
+ * The test are configured from the {@code InvariantFormatTest.commands} file
  * and errors that occur are written to the InvariantFormatTest.diffs
  * file. More detail on the expected formats of these files is in
  * Daikon developer manual
@@ -312,7 +312,7 @@ public class InvariantFormatTester extends TestCase {
    * Determines whether a line is a comment or not.
    *
    * @param line the line in question
-   * @return true if the line is a comment (that is, not to be interpretted as a command)
+   * @return true if the line is a comment (that is, not to be interpretted as a command);
    *         false otherwise
    */
   /*@Pure*/

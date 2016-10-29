@@ -1692,15 +1692,19 @@ public class Instrument implements ClassFileTransformer {
   /**
    * Under some circumstances, there may be problems with the local
    * variable table.
-   * 1) In some special cases where parameters are added by the Java
+   * <ol>
+   * <li> In some special cases where parameters are added by the Java
    *    compiler (eg, constructors for inner classes), the local
    *    variable table is missing the entry for this additional
    *    parameter.
-   * 2) The Java compiler allocates unnamed local temps for:
-   *      saving the exception in a finally clause
-   *      the lock for a synchronized block
-   *      (others?)
+   * <li> The Java compiler allocates unnamed local temps for:
+   *   <ul>
+   *     <li>saving the exception in a finally clause
+   *     <li>the lock for a synchronized block
+   *     <li>(others?)
+   *   </ul>
    *    We will create a 'fake' local for these cases.
+   * </ol>
    */
   protected void fix_local_variable_table(MethodGen mg) {
 
