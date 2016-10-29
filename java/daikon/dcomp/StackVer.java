@@ -72,7 +72,7 @@ import org.apache.bcel.generic.Type;
 import org.apache.bcel.verifier.VerificationResult;
 import org.apache.bcel.verifier.exc.AssertionViolatedException;
 import org.apache.bcel.verifier.exc.VerifierConstraintViolatedException;
-import org.apache.bcel.verifier.statics.Pass2Verifier; // for Javadoc
+import org.apache.bcel.verifier.statics.Pass2Verifier;
 import org.apache.bcel.verifier.structurals.ControlFlowGraph;
 import org.apache.bcel.verifier.structurals.ExceptionHandler;
 import org.apache.bcel.verifier.structurals.ExecutionVisitor;
