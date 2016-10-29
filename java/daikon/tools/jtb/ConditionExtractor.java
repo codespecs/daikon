@@ -150,7 +150,7 @@ class ConditionExtractor extends DepthFirstVisitor {
 
   /**
    * extracts the values for the different cases and creates splitting
-   * conditions out of them
+   * conditions out of them.
    */
   public void visit(SwitchStatement n) {
     String switchExpression = Ast.format(n.f2);

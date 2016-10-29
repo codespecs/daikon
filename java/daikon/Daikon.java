@@ -1264,7 +1264,7 @@ public final class Daikon {
 
   /**
    * Creates the list of prototype invariants for all Daikon invariants.
-   * New invariants must be added to this list
+   * New invariants must be added to this list.
    */
   public static void setup_proto_invs() {
 

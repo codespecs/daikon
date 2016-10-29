@@ -18,7 +18,7 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * Stores the types on the stack at each instruction (identified by
- * byte code offset) in a method
+ * byte code offset) in a method.
  */
 public final class StackTypes {
 

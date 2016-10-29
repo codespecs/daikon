@@ -312,7 +312,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Get value string for a primitive (wrapped) object
+   * Get value string for a primitive (wrapped) object.
    */
   private String getPrimitiveValueString(Object obj) {
     assert (obj instanceof Runtime.PrimitiveWrapper)
@@ -326,7 +326,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Gets a string representation of the values in an array
+   * Gets a string representation of the values in an array.
    */
   private String getValueStringOfArray(Object array) {
     List<Object> theList = DTraceWriter.getListFromArray(array);
@@ -336,7 +336,7 @@ public abstract class DaikonVariableInfo
   /**
    *
    *  Gets the Object's unique ID as a string.
-   *  In other words, a "hash code"
+   *  In other words, a "hash code".
    */
   private String getObjectHashCode(Object theObject) {
     if (theObject == null) {
@@ -838,7 +838,7 @@ public abstract class DaikonVariableInfo
   /**
    * Returns the class name of the specified class as a binary name
    * (i.e., as the class would have been declared in Java source code,
-   * except with '$' instead of '.' separating outer and inner classes)
+   * except with '$' instead of '.' separating outer and inner classes).
    */
   public static /*@BinaryName*/ String stdClassName(Class<?> type) {
     return Runtime.classGetNameToBinaryName(type.getName());
@@ -883,8 +883,7 @@ public abstract class DaikonVariableInfo
    * and possibly more useful, heuristic would be to print the .class
    * variable for any type that has subtypes.
    *
-   * @param type
-   *            The variable's Type
+   * @param type the variable's type
    */
   protected static boolean shouldAddRuntimeClass(Class<?> type) {
     // For some reason, abstracts seems to be set on arrays
@@ -923,7 +922,7 @@ public abstract class DaikonVariableInfo
   /**
    * Returns whether or not the specified field is visible from the Class
    * current.  All fields within instrumented classes are considered
-   * visible from everywhere (to match dfej behavior)
+   * visible from everywhere (to match dfej behavior).
    */
   public static boolean isFieldVisible(Class<?> current, Field field) {
     Class<?> fclass = field.getDeclaringClass();
@@ -1001,7 +1000,7 @@ public abstract class DaikonVariableInfo
 
   /**
    * Determines if type implements list
-   * and prints associated decls, if necessary
+   * and prints associated decls, if necessary.
    */
   protected void checkForListDecl(Class<?> type, String theName, String offset) {
     if (isArray || type.isPrimitive() || type.isArray()) {
@@ -1117,7 +1116,7 @@ public abstract class DaikonVariableInfo
    * @param offset the representation of the variables we have
    *                previously examined.  For examples, offset could
    *                be "this." in which case offset + name would be
-   *                "this.ballCount."
+   *                "this.ballCount.".
    */
   /*@RequiresNonNull("#1.clazz")*/
   protected void addChildNodes(
@@ -1204,7 +1203,7 @@ public abstract class DaikonVariableInfo
    * should be included, based on whether the Class type
    * is a system class or not.  Right now, any system classes are
    * excluded, but a better way of determining this is probably
-   * necessary
+   * necessary.
    */
   public static boolean systemClass(Class<?> type) {
     String class_name = type.getName();
@@ -1291,7 +1290,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Compares based on the name of the variable
+   * Compares based on the name of the variable.
    */
   /*@Pure*/
   public int compareTo(/*>>>@GuardSatisfied DaikonVariableInfo this,*/ DaikonVariableInfo dv) {
@@ -1342,7 +1341,7 @@ public abstract class DaikonVariableInfo
 
   /**
    * Returns the variable flags for this variable.  Subclasses should call
-   * super() and or in any flags that they add
+   * super() and or in any flags that they add.
    */
   public EnumSet<VarFlags> get_var_flags() {
     return empty_var_flags;
@@ -1350,7 +1349,7 @@ public abstract class DaikonVariableInfo
 
   /**
    * Returns true iff the variable is static.  Overridden by subclasses that can
-   * be static
+   * be static.
    */
   /*@Pure*/
   public boolean isStatic() {
@@ -1360,7 +1359,7 @@ public abstract class DaikonVariableInfo
   /**
    * If the variable name has been seen before (which can happen with statics
    * and children of statics, set the flags so that the variable is not considered
-   * for decl or dtrace and return true.  Otherwise, do nothing and return false
+   * for decl or dtrace and return true.  Otherwise, do nothing and return false.
    */
   private boolean check_for_dup_names() {
 

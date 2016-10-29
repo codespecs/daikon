@@ -30,7 +30,7 @@ public class MethodInfo {
 
   /**
    * Method name.  For example: "public static void sort(int[] arr)"
-   * would have method_name "sort"
+   * would have method_name "sort".
    */
   public String method_name;
 
@@ -40,7 +40,7 @@ public class MethodInfo {
   /**
    * Array of argument types for this method (fully qualified).  For
    * example: "public static void examineObject(Object x)" would have
-   * arg_types {"java.lang.Object"}
+   * arg_types {"java.lang.Object"}.
    */
   public /*@ClassGetName*/ String[] arg_type_strings;
 
@@ -79,13 +79,13 @@ public class MethodInfo {
    * Whether or not the method is pure (has no side-effects).
    * Will only be set to true if the --purity-analysis switch is given
    * to Chicory, and the method returns some value.
-   * Only set during initViaReflection() method
+   * Only set during initViaReflection() method.
    */
   private boolean isPure;
 
   /**
    * Creates a MethodInfo with the specified class, arg_names, and
-   * exit locations
+   * exit locations.
    */
   public MethodInfo(
       ClassInfo class_info,

@@ -2155,7 +2155,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
    * seen is assigned a small integer in the order they are seen.  These
    * values will be consistent as long as new hashcodes do not appear
    * in the output.  Not a perfect fix for regressions consistency, but
-   * workable
+   * workable.
    */
   private static Map<Long,Long> dummy_hashcode_vals
     = new LinkedHashMap<Long,Long>();

@@ -58,7 +58,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Prints the method entry program point in the dtrace file
+   * Prints the method entry program point in the dtrace file.
    */
   public void methodEntry(
       /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
@@ -108,7 +108,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Prints the method exit program point in the dtrace file
+   * Prints the method exit program point in the dtrace file.
    */
   public void methodExit(
       /*>>>@GuardSatisfied DTraceWriter this,*/
@@ -183,7 +183,6 @@ public class DTraceWriter extends DaikonWriter {
    * @param thisObj the value of the "this" object at this point in the execution
    * @param ret_val the value returned from this method, only used for
    *                exit program points.
-   *
    */
   private void traverse(
       /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
@@ -323,7 +322,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Similar to getValue, but used for static fields
+   * Similar to {@link DTraceWriter#getValue}, but used for static fields.
    */
   public static Object getStaticValue(Field classField) {
     if (!classField.isAccessible()) classField.setAccessible(true);

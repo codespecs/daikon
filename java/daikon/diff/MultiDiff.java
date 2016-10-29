@@ -7,7 +7,7 @@ import java.io.*;
 /** <B>MultiDiff</B> is an executable application that performs the same
  *  functionality as Diff with a few key change.  First, it always outputs
  *  the histogram even when two files are called.  Second, it allows the
- *  option of creating *.spinfo based on the invariants found
+ *  option of creating *.spinfo based on the invariants found.
  */
 public class MultiDiff {
   private MultiDiff() {

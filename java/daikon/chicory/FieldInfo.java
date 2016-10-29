@@ -74,7 +74,7 @@ public class FieldInfo extends DaikonVariableInfo {
 
   /**
    * Return the number of primitive fields in clazz and all of its
-   * superclasses
+   * superclasses.
    */
   public static int num_prim_fields(Class<?> clazz) {
     if (clazz == Object.class) {
@@ -192,7 +192,7 @@ public class FieldInfo extends DaikonVariableInfo {
   */
 
   /**
-   * static final fields are NOMOD
+   * static final fields are NOMOD.
    */
   public EnumSet<VarFlags> get_var_flags() {
     EnumSet<VarFlags> flags = super.get_var_flags();

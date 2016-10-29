@@ -12,8 +12,10 @@ import org.checkerframework.dataflow.qual.*;
  * implication, its consequent is used instead of the whole invariant.
  * In set1, the whole invariant is always used.  Some examples:
  *
+ * <pre>
  * this.compare(A, B&rArr;A) == c.compare(A, A)
  * this.compare(C, D) == c.compare(C, D)
+ * </pre>
  */
 public class ConsequentPairComparator implements Comparator<Invariant> {
 

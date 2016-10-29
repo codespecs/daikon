@@ -600,7 +600,7 @@ public final class INTEQUAL
 
   /**
    * Returns the class that corresponds to this class with its variable
-   * order swapped
+   * order swapped.
    */
   public static Class<? extends Invariant> swap_class () {
     return INTEQUAL_SWAP.class;

@@ -40,7 +40,7 @@ public class ChicoryPremain {
 
   /**
    * True iff Chicory should add variables based on pure methods
-   * during instrumentation
+   * during instrumentation.
    */
   private static boolean doPurity = false;
 
@@ -177,7 +177,7 @@ public class ChicoryPremain {
    * The access modifiers are placed in canonical order as specified
    * by "The Java Language Specification".  This is public, protected
    * or private first, and then other modifiers in the following
-   * order: abstract, static, final, synchronized native."
+   * order: abstract, static, final, synchronized native.
    */
   private static void readPurityFile(File purityFileName, /*@Nullable*/ File pathLoc) {
     pureMethods = new HashSet<String>();
@@ -298,7 +298,7 @@ public class ChicoryPremain {
   }
 
   /**
-   * Return an unmodifiable Set of the pure methods
+   * Return an unmodifiable Set of the pure methods.
    */
   // /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
   /*@RequiresNonNull("pureMethods")*/
@@ -443,7 +443,7 @@ public class ChicoryPremain {
 
     /**
      * Changes a class name in the normal format (eg, org.apache.bcel.Const)
-     * to that used to lookup resources (eg. org/apache/bcel/Const.class)
+     * to that used to lookup resources (eg, org/apache/bcel/Const.class).
      */
     private static String classname_to_resource_name(String name) {
       return (name.replace(".", "/") + ".class");

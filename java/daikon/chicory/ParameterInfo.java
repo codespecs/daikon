@@ -30,7 +30,7 @@ public class ParameterInfo extends DaikonVariableInfo {
   /**
    * Offset of this parameter in the local table.  This is similar to
    * the argument number except that doubles and longs take up two slots
-   * each
+   * each.
    */
   private final int param_offset;
 
@@ -65,14 +65,14 @@ public class ParameterInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Returns the argument number for this parameter
+   * Returns the argument number for this parameter.
    */
   public int getArgNum() {
     return argNum;
   }
 
   /**
-   * Returns the offset in the local table for this parameter
+   * Returns the offset in the local table for this parameter.
    */
   public int get_param_offset() {
     return param_offset;
@@ -96,7 +96,7 @@ public class ParameterInfo extends DaikonVariableInfo {
 
   /**
    * Parameters are not enclosed in other variable, so they are of
-   * kind VARIABLE
+   * kind VARIABLE.
    */
   public VarKind get_var_kind() {
     return VarKind.VARIABLE;

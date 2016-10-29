@@ -307,8 +307,7 @@ public class CLASSNAME
   }
 
   /**
-   * @return a DiscardInfo,
-   * or null if the Invariant is not an obvious subsequence
+   * @return a DiscardInfo, or null if the Invariant is not an obvious subsequence
    */
   /*@Pure*/
   public static /*@Nullable*/ DiscardInfo isObviousSubSequence(Invariant inv, VarInfo subvar, VarInfo supervar) {

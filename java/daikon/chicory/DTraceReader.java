@@ -83,7 +83,7 @@ public class DTraceReader extends DeclReader {
   }
 
   /**
-   * Dumps out each record of data for each ppt and variable
+   * Dumps out each record of data for each ppt and variable.
    */
   public void dump_data() {
 

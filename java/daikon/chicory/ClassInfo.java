@@ -116,7 +116,7 @@ public class ClassInfo {
   /**
    * Determines if fully qualified method name is in this class.
    * Example methodName:
-   * public static String mypackage.MyClass.doStuff(int, java.lang.Object)
+   * <pre>public static String mypackage.MyClass.doStuff(int, java.lang.Object)</pre>
    */
   private boolean isInThisClass(String methodName) {
     // A heuristical way to determine if the method is in this class.

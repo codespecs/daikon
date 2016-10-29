@@ -173,7 +173,7 @@ public final class Debug {
    * This constructor sets as defaults c, ppt, and whatever variable (if any) from
    * vis that is on the debugTrackVar list.  Essentially this creates
    * a debug object that will print if any of the variables in vis are
-   * being tracked (and c and ppt match)
+   * being tracked (and c and ppt match).
    */
   public Debug(Class<?> c, Ppt ppt, VarInfo[] vis) {
     set(c, ppt, vis);

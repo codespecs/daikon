@@ -29,8 +29,8 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
   /**
    * Check if vi1 and vi2 can be a part of a VarInfo triple based on
    * their types.
-   * @return a boolean which is true if vi1 and vi2 can belong to
-   * a valid VarInfo triple. (false otherwise)
+   * @return true if vi1 and vi2 can belong to
+   * a valid VarInfo triple; false otherwise
    */
   public static boolean checkType(VarInfo vi1, VarInfo vi2) {
     if ((vi1.rep_type == ProglangType.INT_ARRAY) && (vi2.rep_type == ProglangType.INT)) {
@@ -65,8 +65,7 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
   /**
    * Checks if two base variables are comparable to each other.
    *
-   * @return a boolean which is true if vi1 and vi2 are comparable
-   * (false otherwise).
+   * @return true if vi1 and vi2 are comparable; false otherwise
    */
   public static boolean checkComparability(VarInfo vi1, VarInfo vi2) {
     return (vi1.indexCompatible(vi2));

@@ -100,7 +100,7 @@ public class PptName implements Serializable {
   }
 
   /**
-   * className or methodName (or both) must be non-null
+   * className or methodName (or both) must be non-null.
    */
   public PptName(
       /*@Nullable*/ String className, /*@Nullable*/ String methodName, String pointName) {
@@ -269,8 +269,7 @@ public class PptName implements Serializable {
   }
 
   /**
-   * @return true iff this name refers to a synthetic object instance
-   * program point
+   * @return true iff this name refers to a synthetic object instance program point
    */
   /*@Pure*/
   public boolean isObjectInstanceSynthetic() {
@@ -278,8 +277,7 @@ public class PptName implements Serializable {
   }
 
   /**
-   * @return true iff this name refers to a synthetic class instance
-   * program point
+   * @return true iff this name refers to a synthetic class instance program point
    */
   /*@Pure*/
   public boolean isClassStaticSynthetic() {
@@ -313,8 +311,7 @@ public class PptName implements Serializable {
   }
 
   /**
-   * @return true iff this name refers to a combined (synthetic) procedure
-   *         exit point
+   * @return true iff this name refers to a combined (synthetic) procedure exit point
    */
   /*@EnsuresNonNullIf(result=true, expression="point")*/
   /*@Pure*/

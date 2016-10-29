@@ -222,7 +222,7 @@ public final class PrintInvariants {
   private static String output_SWITCH = "output";
 
   /**
-   * --extra_csharp_contract_data to print extra data for contracts when the format is CSHARP_CONTRACT
+   * --print_csharp_metadata flag to print extra data for contracts when the format is CSHARP_CONTRACT
    */
   private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
 
@@ -552,7 +552,7 @@ public final class PrintInvariants {
   }
 
   /**
-   * Add discard reasons for invariants that are filtered out
+   * Add discard reasons for invariants that are filtered out.
    */
   private static void add_filter_reasons(PptTopLevel ppt, PptMap ppts) {
     InvariantFilters fi = InvariantFilters.defaultFilters();
@@ -1423,8 +1423,8 @@ public final class PrintInvariants {
   /**
    * Prints all invariants for ternary slices (organized by slice) and
    * all of the unary and binary invariants over the same variables.
-   * The purpose of this is to look for possible ni-suppressions.  Its
-   * not intended as a normal output mechanism
+   * The purpose of this is to look for possible ni-suppressions.  It's
+   * not intended as a normal output mechanism.
    */
   public static void print_all_ternary_invs(PptMap all_ppts) {
 
@@ -1509,7 +1509,7 @@ public final class PrintInvariants {
   }
 
   /**
-   * Prints all of the unary invariants over the specified variable
+   * Prints all of the unary invariants over the specified variable.
    */
   public static void print_all_invs(PptTopLevel ppt, VarInfo vi, String indent) {
     String name = String.format("%s [%s]", vi.name(), vi.file_rep_type);
@@ -1546,7 +1546,7 @@ public final class PrintInvariants {
   }
 
   /**
-   * Prints how many invariants are filtered by each filter
+   * Prints how many invariants are filtered by each filter.
    */
   public static void print_filter_stats(Logger log, PptTopLevel ppt, PptMap ppt_map) {
 

@@ -17,7 +17,7 @@ import org.checkerframework.checker.nullness.qual.*;
  * java (which allows classes to be instrumented as they are loaded).
  * This class parses the command line arguments and starts java with the
  * javaagent switch on the target program.
- * Code based largely on daikon.Chicory
+ * Code based largely on daikon.Chicory.
  */
 public class DynComp {
 

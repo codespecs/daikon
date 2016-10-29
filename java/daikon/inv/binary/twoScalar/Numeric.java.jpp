@@ -397,7 +397,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * if 'x[] op y[]'  This can't fully be handled as a suppression since
    * a suppression needs to insure that foo == bar as well.  But that
    * is not a requirement here (the fact that 'x[] op y[]' implies that
-   * foo == bar when x[] and y[] are not missing)
+   * foo == bar when x[] and y[] are not missing).
    */
   public /*@Nullable*/ DiscardInfo is_subsequence (VarInfo[] vis) {
 
@@ -567,7 +567,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * </pre>
    * NOTE: this is not currently used.  Many (if not all) of the missing
    * table cells above could be filled in with linear binary invariants
-   * (eg, m = n + 1)
+   * (eg, m = n + 1).
    */
   public /*@Nullable*/ InvDef array_sizes_eq (VarInfo v1, VarInfo v2) {
 
@@ -601,8 +601,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Returns a variable that corresponds to the size of v.  Returns null
-   * if no such variable exists.  There are two cases that are
-   * not handled:  x[..n] with an index shift and x[n..]
+   * if no such variable exists.
+   *
+   * There are two cases that are
+   * not handled:  x[..n] with an index shift and x[n..].
    */
   public /*@Nullable*/ VarInfo get_array_size (VarInfo v) {
 

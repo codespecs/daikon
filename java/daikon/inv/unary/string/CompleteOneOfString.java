@@ -127,7 +127,7 @@ public final class CompleteOneOfString extends SingleString {
   /**
    * Returns whether or not this is obvious statically.  The only check
    * is for static constants which are obviously printable (or not)
-   * from their values
+   * from their values.
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {

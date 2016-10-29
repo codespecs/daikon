@@ -14,8 +14,6 @@ import org.checkerframework.checker.nullness.qual.*;
 /**
  * Replaces uses of generic type parameters with versions that do not
  * use generics.
- *
- * For example:
  */
 public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 

@@ -14,7 +14,7 @@ import org.checkerframework.checker.signature.qual.*;
 public abstract class DaikonWriter {
   /**
    * Controls whether modifiers and the return type are included in
-   * the decl output
+   * the decl output.
    */
   protected static final boolean no_modifiers_ppt = true;
 
@@ -235,7 +235,6 @@ public abstract class DaikonWriter {
    * DataStructures.StackAr.StackAr().  This makes it clear
    * that SomePackage.ClassName.ClassName and SomePackage.ClassName.OtherMethod
    * are in the same class. Mimic that behavior.
-   *
    */
   private static String fixDuplicateConstructorName(String name, String short_name) {
     // assert short_name.lastIndexOf(".") == -1 : "short_name: " + short_name
@@ -279,7 +278,7 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Determines if the given method should be instrumented
+   * Determines if the given method should be instrumented.
    */
   protected boolean shouldInstrumentMethod(Member method) {
     if (method == null) { // <clinit>
@@ -295,14 +294,14 @@ public abstract class DaikonWriter {
   /**
    * Returns the class name of the specified class as a binary name
    * (i.e., as the class would have been declared in Java source code,
-   * except with '$' instead of '.' separating outer and inner classes)
+   * except with '$' instead of '.' separating outer and inner classes).
    */
   public static /*@BinaryName*/ String stdClassName(Class<?> type) {
     return Runtime.classGetNameToBinaryName(type.getName());
   }
 
   /**
-   * Escapes blanks and backslashes in names written to the decl/dtrace files
+   * Escapes blanks and backslashes in names written to the decl/dtrace files.
    */
   public String escape(String str) {
 

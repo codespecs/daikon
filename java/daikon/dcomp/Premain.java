@@ -104,7 +104,7 @@ public class Premain {
   }
 
   /**
-   * Shutdown thread that writes out the comparability results
+   * Shutdown thread that writes out the comparability results.
    */
   public static class ShutdownThread extends Thread {
 
@@ -246,7 +246,7 @@ public class Premain {
 
   /**
    * Returns the local name (eg, var0, var1) that corresponds to a specific
-   * local-store
+   * local-store.
    */
   public static String seq_local_name(String local_store) {
     assert local_store.startsWith("local-store");

@@ -127,7 +127,7 @@ public final class CLASSNAME
   }
 
   /**
-   * Returns whether or not the variable is a pointer
+   * Returns whether or not the variable is a pointer.
    */
   /*@Pure*/
   private boolean is_pointer(/*>>>@GuardSatisfied CLASSNAME this*/) {

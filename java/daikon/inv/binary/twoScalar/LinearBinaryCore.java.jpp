@@ -137,7 +137,7 @@ public final class CLASSNAME
   /**
    * Returns whether or not the invariant is currently active.  We become
    * active after MINPAIRS values have been seen and a line calculated.
-   * Before that, a and b are uninitialized
+   * Before that, a and b are uninitialized.
    */
   /*@Pure*/
   public boolean isActive() {

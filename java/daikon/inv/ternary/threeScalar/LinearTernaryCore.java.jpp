@@ -58,7 +58,7 @@ import typequals.*;
  * The LinearTernaryCore class is acts as the backend for the
  * invariant (ax + by + cz + d = 0) by processing samples and
  * computing coefficients.  The resulting coefficients a, b, c, and d are
- * mutually relatively prime, and the coefficient a is always p
+ * mutually relatively prime, and the coefficient a is always p.
  */
 
 // Originally, LinearTernaryCore code was not dealing with degenerate

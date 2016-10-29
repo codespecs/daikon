@@ -164,7 +164,7 @@ public class PptRelation implements Serializable {
   /**
    * Relates all of the variables with the same name in parent and child.
    * Returns true if each non-static parent variable was related to a
-   * child variable
+   * child variable.
    */
   public boolean relate_same_name() {
 
@@ -198,7 +198,7 @@ public class PptRelation implements Serializable {
    *
    * Somewhat arbitrarily, Object&rarr;User and Enter&rarr;Exit are not considered
    * primary while all others are.  The remaining relations (class&rarr;object,
-   * object&rarr;method,and exit&rarr;exitNN) form a simple tree without duplication
+   * object&rarr;method,and exit&rarr;exitNN) form a simple tree without duplication.
    */
 
   /*@Pure*/
@@ -683,7 +683,7 @@ public class PptRelation implements Serializable {
    * contains only the immediate descendants of the ppt.
    *
    * This version should be used with the old version of declaration
-   * records.  Use init_hierarchy_new() with new declararation records
+   * records.  Use init_hierarchy_new() with new declararation records.
    */
   public static void init_hierarchy(PptMap all_ppts) {
 

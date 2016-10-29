@@ -19,7 +19,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * Class that defines a single non-instantiating suppression.  A suppression
  * consists of one or more suppressors and a suppressee.  If each of the
- * suppressors is true they imply the suppressee
+ * suppressors is true they imply the suppressee.
  */
 public class NISuppression {
 
@@ -466,7 +466,7 @@ public class NISuppression {
    * Builds an array of lists of antecedents that corresponds to each
    * suppressor in this suppression.  Returns null if the list is
    * empty for any suppressor (because that means there can't be
-   * any suppressions based on these antecedents)
+   * any suppressions based on these antecedents).
    */
   List<Invariant> /*@Nullable*/ [] antecedents_for_suppressors(NIS.Antecedents ants) {
 
@@ -499,7 +499,7 @@ public class NISuppression {
   /**
    * Determines whether the order of the variables in vis a valid
    * permutations (i.e., their varinfo_index's are ordered).  Null
-   * elements are ignored (and an all-null list is ok)
+   * elements are ignored (and an all-null list is ok).
    */
   private boolean vis_order_ok(VarInfo[] vis) {
 
@@ -518,7 +518,8 @@ public class NISuppression {
   /**
    * Determines if the non-null entries in vis are comparable.  Returns
    * true if they are, false if they are not.
-   * JHP: this should really be part of is_slice_ok
+   *
+   * JHP: This should really be part of is_slice_ok.
    */
   public static boolean vis_compatible(VarInfo[] vis) {
 
@@ -607,7 +608,7 @@ public class NISuppression {
   }
 
   /**
-   * Returns 'suppressor &amp;&amp; suppressor ... ==&gt; suppressee'
+   * Returns 'suppressor &amp;&amp; suppressor ... ==&gt; suppressee'.
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied NISuppression this*/) {
@@ -615,7 +616,7 @@ public class NISuppression {
   }
 
   /**
-   * Returns a string describing each of the antecedents for each suppressor
+   * Returns a string describing each of the antecedents for each suppressor.
    */
   public String antecedents_for_suppression(List<Invariant> antecedents[]) {
 

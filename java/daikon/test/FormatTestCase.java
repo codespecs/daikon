@@ -206,8 +206,7 @@ class FormatTestCase {
    *
    * @param testCases a List of SingleOutputTestCase objects to be performed
    *        on an Invariant
-   * @param invariantToTest the Invariant on which the tests are to be
-   *        performed
+   * @param invariantToTest the Invariant on which the tests are to be performed
    */
   private FormatTestCase(List<SingleOutputTestCase> testCases, Invariant invariantToTest) {
     this.testCases = testCases;

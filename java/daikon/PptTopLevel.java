@@ -106,7 +106,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Possible types of program points.  POINT is a generic, non-program
    * language point.  It is the default and can be used when the others
-   * are not appropriate
+   * are not appropriate.
    */
   public enum PptType {
     POINT,
@@ -192,7 +192,7 @@ public class PptTopLevel extends Ppt {
   /**
    * All the Views (that is, slices) on this are stored as values in
    * the HashMap.  Indexed by a Arrays.asList array list of Integers
-   * holding varinfo_index values
+   * holding varinfo_index values.
    */
   private Map<List<Integer>, PptSlice> views;
 
@@ -274,7 +274,7 @@ public class PptTopLevel extends Ppt {
   /**
    * List of parent relations in the variable/ppt hierarchy as specified
    * in the declaration record.  These are used to build the detailed
-   * parents/children lists of PptRelation above
+   * parents/children lists of PptRelation above.
    */
   public List<ParentRelation> parent_relations;
 
@@ -476,7 +476,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Return the number of samples where vi1 and vi2 are both present
-   * (not missing)
+   * (not missing).
    */
   public int num_samples(VarInfo vi1, VarInfo vi2) {
     if (vi1.is_static_constant) {
@@ -493,7 +493,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Return the number of samples where vi1, vi2, and vi3 are all present
-   * (not missing)
+   * (not missing).
    */
   public int num_samples(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
     if (vi1.is_static_constant) {
@@ -1334,7 +1334,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Debug print to the specified logger information about each
-   * invariant at this ppt
+   * invariant at this ppt.
    */
   /*@RequiresNonNull("NIS.suppressor_map")*/
   public void debug_invs(Logger log) {
@@ -1355,7 +1355,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Debug print to the specified logger information about each variable
    * in this ppt.  Currently only prints integer and float information
-   * using the bound invariants
+   * using the bound invariants.
    */
   public void debug_unary_info(Logger log) {
 
@@ -1502,7 +1502,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Add a single slice to the views variable
+   * Add a single slice to the views variable.
    */
   public void addSlice(PptSlice slice) {
 
@@ -1535,7 +1535,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Remove a list of invariants
+   * Remove a list of invariants.
    */
   public void remove_invs(List<Invariant> rm_list) {
     for (Invariant inv : rm_list) {
@@ -1909,7 +1909,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Returns whether or not the specified variables are equal (ie,
-   * an equality invariant exists between them)
+   * an equality invariant exists between them).
    */
   /*@Pure*/
   public boolean is_equal(VarInfo v1, VarInfo v2) {
@@ -2017,7 +2017,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns true if v1 is known to be a subsequence of v2.  This
    * is true if the subsequence invariant exists or if it it
-   * suppressed
+   * suppressed.
    */
   /*@Pure*/
   public boolean is_subsequence(VarInfo v1, VarInfo v2) {
@@ -2440,7 +2440,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Determines whether the order of the variables in vis is a valid
    * permutation (i.e., their varinfo_index's are ordered).  Null
-   * elements are ignored (and an all-null list is ok)
+   * elements are ignored (and an all-null list is ok).
    */
   public boolean vis_order_ok(VarInfo[] vis) {
 
@@ -3112,7 +3112,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Vector version of getInvariants()
+   * Vector version of getInvariants().
    */
   public Vector<Invariant> invariants_vector() {
     return new Vector<Invariant>(getInvariants());
@@ -3241,7 +3241,7 @@ public class PptTopLevel extends Ppt {
   //   }
 
   /**
-   * remove invariants that are marked for ommission in omitTypes
+   * Remove invariants that are marked for ommission in omitTypes.
    */
   public void processOmissions(boolean[] omitTypes) {
     // Avoid concurrent modification exceptions using arrays
@@ -3774,7 +3774,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Merges one child.  Since there is only one child, the merge
-   * is trivial (each invariant can be just copied to the parent)
+   * is trivial (each invariant can be just copied to the parent).
    */
   public void merge_invs_one_child() {
 
@@ -3981,7 +3981,7 @@ public class PptTopLevel extends Ppt {
    * Also, the dynamic obvious code doesn't work anymore (because it is
    * missing the appropriate invariants).  This could be fixed by changing
    * dynamic obvious to search up the tree (blecho!).  Fix this by
-   * only doing this for ppts whose parent only has one child
+   * only doing this for ppts whose parent only has one child.
    */
   public void remove_child_invs(PptRelation rel) {
 
@@ -4050,7 +4050,7 @@ public class PptTopLevel extends Ppt {
   }
   /**
    * Builds a permutation from vis1 to vis2. The result is
-   * vis1[i] = vis2[permute[i]]
+   * vis1[i] = vis2[permute[i]].
    */
   public static int[] build_permute(VarInfo[] vis1, VarInfo[] vis2) {
 
@@ -4404,7 +4404,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Increments the number of samples processed by the program point by 1
+   * Increments the number of samples processed by the program point by 1.
    */
   public void incSampleNumber() {
     values_num_samples++;

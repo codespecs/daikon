@@ -783,7 +783,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   /**
    * Returns whether or not this declared type is a function pointer
    * Only valid if the front end marks the function pointer with the
-   * name '*func'
+   * name '*func'.
    */
   /*@Pure*/
   public boolean is_function_pointer() {

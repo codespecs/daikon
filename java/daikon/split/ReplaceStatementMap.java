@@ -15,7 +15,7 @@ import org.checkerframework.dataflow.qual.*;
 class ReplaceStatementMap {
 
   /**
-   * Contains the ReplaceStatements of this, indexed by their names
+   * Contains the ReplaceStatements of this, indexed by their names.
    */
   private Map<String, ReplaceStatement> map;
 

@@ -612,7 +612,7 @@ public final class Diff {
    * Returns a pair tree of corresponding program points, and
    * corresponding invariants at each program point.  This tree can be
    * walked to determine differences between the sets of invariants.
-   * Calls diffInvMap and asks to include all justified invariants
+   * Calls diffInvMap and asks to include all justified invariants.
    */
   public RootNode diffInvMap(InvMap map1, InvMap map2) {
     return diffInvMap(map1, map2, true);

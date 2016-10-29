@@ -21,7 +21,7 @@ import org.checkerframework.dataflow.qual.*;
  * The test are configured from the {@code InvariantFormatTest.commands} file
  * and errors that occur are written to the InvariantFormatTest.diffs
  * file. More detail on the expected formats of these files is in
- * Daikon developer manual
+ * Daikon developer manual.
  */
 public class InvariantFormatTester extends TestCase {
 
@@ -45,7 +45,7 @@ public class InvariantFormatTester extends TestCase {
 
   /**
    * File that contains the format test commands.  Must be found as a
-   * resource
+   * resource.
    */
   private static String command_file = "InvariantFormatTest.commands";
 
@@ -67,7 +67,7 @@ public class InvariantFormatTester extends TestCase {
    *        to the program. As of now there is only one option,
    *        "--generate_goals", which will generate goal information for
    *        the selected tests assuming the output that the tests provide
-   *        is the correct output
+   *        is the correct output.
    */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);

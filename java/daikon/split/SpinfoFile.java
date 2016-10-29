@@ -21,7 +21,7 @@ import org.checkerframework.dataflow.qual.*;
  * section" and "replace section" to describe what is refered to as a
  * "Program Point Section" and "replacement sections" in the Daikon User
  * Manual, respectively.  A "ppt statement" is a single line from a
- * "ppt section."
+ * "ppt section.".
  */
 public class SpinfoFile {
 

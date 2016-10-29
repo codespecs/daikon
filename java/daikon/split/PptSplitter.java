@@ -88,7 +88,7 @@ public class PptSplitter implements Serializable {
   /**
    * Create a binary PptSplitter with the specied splitter for the specified
    * PptTopLevel parent.  The parent should be a leaf (i.e., a numbered
-   * exit point)
+   * exit point).
    */
   public PptSplitter(PptTopLevel parent, Splitter splitter) {
 
@@ -189,7 +189,7 @@ public class PptSplitter implements Serializable {
 
   /**
    * Adds implication invariants based on the invariants found on each
-   * side of the split
+   * side of the split.
    */
   @SuppressWarnings("flowexpr.parse.error") // private field
   /*@RequiresNonNull({"parent.equality_view", "NIS.all_suppressions", "NIS.suppressor_map"})*/

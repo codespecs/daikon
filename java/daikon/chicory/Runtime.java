@@ -32,7 +32,7 @@ public class Runtime {
    * Flag indicating that a dtrace record is currently being written
    * used to prevent a call to instrumented code that occurs as part
    * of generating a dtrace record (eg, toArray when processing lists
-   * or pure functions) from generating a nested dtrace record
+   * or pure functions) from generating a nested dtrace record.
    */
   public static boolean in_dtrace = false;
 
@@ -674,7 +674,7 @@ public class Runtime {
   }
 
   /**
-   * Wait for Daikon to terminate
+   * Wait for Daikon to terminate.
    */
   public static void endDaikon() {
     try {

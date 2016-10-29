@@ -106,7 +106,7 @@ public abstract class RANGE extends SUPERCLASS {
 
   /**
    * Check that instantiation is ok.  The type must be integral
-   * (not boolean or hash code)
+   * (not boolean or hash code).
    */
   public boolean instantiate_ok (VarInfo[] vis) {
 
@@ -218,7 +218,7 @@ public abstract class RANGE extends SUPERCLASS {
 
   /**
    * Looks for a OneOf invariant over vis.  Used by Even and PowerOfTwo
-   * to dynamically suppress those invariants if a OneOf exists
+   * to dynamically suppress those invariants if a OneOf exists.
    */
   protected /*@Nullable*/ ONEOF find_oneof (VarInfo[] vis) {
     return (ONEOF) ppt.parent.find_inv_by_class (vis, ONEOF.class);
@@ -237,7 +237,7 @@ public abstract class RANGE extends SUPERCLASS {
 
   /**
    * Returns a list of prototypes of all of the range
-   * invariants
+   * invariants.
    */
   public static List</*@Prototype*/ Invariant> get_proto_all () {
 
@@ -309,7 +309,7 @@ public abstract class RANGE extends SUPERCLASS {
   /**
    * Internal invariant representing PRIMITIVE scalars that are equal
    * to one.  Used for non-instantiating suppressions.  Will never
-   * print since OneOf accomplishes the same thing
+   * print since OneOf accomplishes the same thing.
    */
   public static class EqualOne extends RANGE {
 
@@ -359,7 +359,7 @@ public abstract class RANGE extends SUPERCLASS {
   /**
    * Internal invariant representing PRIMITIVE scalars that are equal
    * to minus one.  Used for non-instantiating suppressions.  Will never
-   * print since OneOf accomplishes the same thing
+   * print since OneOf accomplishes the same thing.
    */
   public static class EqualMinusOne extends RANGE {
 
@@ -409,7 +409,7 @@ public abstract class RANGE extends SUPERCLASS {
   /**
    * Internal invariant representing PRIMITIVE scalars that are greater
    * than or equal to 0.  Used for non-instantiating suppressions.  Will never
-   * print since Bound accomplishes the same thing
+   * print since Bound accomplishes the same thing.
    */
   public static class GreaterEqualZero extends RANGE {
 
@@ -459,7 +459,7 @@ public abstract class RANGE extends SUPERCLASS {
   /**
    * Internal invariant representing PRIMITIVE scalars that are greater
    * than or equal to 64.  Used for non-instantiating suppressions.  Will never
-   * print since Bound accomplishes the same thing
+   * print since Bound accomplishes the same thing.
    */
   public static class GreaterEqual64 extends RANGE {
 
@@ -626,7 +626,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     /**
      * Since PowerOfTwo is not covered by Bound or OneOf, it is not obvious
-     * (and should thus be printed)
+     * (and should thus be printed).
      */
     /*@Pure*/
     public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
@@ -699,7 +699,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     /**
      * Since Even is not covered by Bound or OneOf, it is not obvious
-     * (and should thus be printed)
+     * (and should thus be printed).
      */
     /*@Pure*/
     public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {

@@ -369,7 +369,6 @@ public class DaikonSimple {
    * The Call class helps the SimpleProcessor keep track of matching enter and
    * exit program points and also object program points. Each Call object
    * represents one entry in the dtrace file, i.e. enter, exit, object entry.
-   *
    */
   static final class Call {
 
@@ -386,7 +385,6 @@ public class DaikonSimple {
 
   /**
    * The SimpleProcessor class processes each sample in the dtrace file.
-   *
    */
   public static class SimpleProcessor extends FileIO.Processor {
     PptMap all_ppts = null;

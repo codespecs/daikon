@@ -25,7 +25,7 @@ public class InvDef {
 
   /**
    * Variables used by the invariant.  If v2 is null, this is a unary
-   * invariant, if v2 is not null, then this is a binary invariant
+   * invariant, if v2 is not null, then this is a binary invariant.
    */
   VarInfo v1;
   /*@Nullable*/ VarInfo v2;
@@ -167,7 +167,7 @@ public class InvDef {
 
   /**
    * Looks for this invariant (in this ppt).  Returns the invariant if it
-   * finds it, null  otherwise
+   * finds it, null otherwise.
    */
   public /*@Nullable*/ Invariant find() {
 

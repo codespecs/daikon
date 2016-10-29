@@ -44,7 +44,7 @@ public class AnnotateNullable {
   static SimpleLog debug = new SimpleLog(/*enabled=*/ false);
 
   /**
-   * Map from a class name to the list of static functions for that class
+   * Map from a class name to the list of static functions for that class.
    */
   static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<String, List<PptTopLevel>>();
 

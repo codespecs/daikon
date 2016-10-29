@@ -16,11 +16,9 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- *
  * DeclWriter writes the {@code .decls} file to a stream.  It
  * uses traversal pattern trees (see {@link DaikonVariableInfo})  for each
  * program point.  These are also used by the {@link DTraceWriter}.
- *
  */
 @SuppressWarnings("nullness") // to do
 public class DeclWriter extends DaikonWriter {
@@ -51,7 +49,7 @@ public class DeclWriter extends DaikonWriter {
 
   /**
    * Enable parent relations other than methods to their class objects.
-   * Turned off for now to match previous behavior
+   * Turned off for now to match previous behavior.
    */
   private static boolean enable_object_user = false;
 
@@ -117,7 +115,6 @@ public class DeclWriter extends DaikonWriter {
    *
    * @param cinfo
    *        Class whose declarations should be printed.
-   *
    */
   public void printDeclClass(ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
     if (Chicory.new_decl_format) {
@@ -259,7 +256,6 @@ public class DeclWriter extends DaikonWriter {
    *
    * @param cinfo
    *        Class whose declarations should be printed.
-   *
    */
   public void print_decl_class(ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
 
@@ -522,7 +518,7 @@ public class DeclWriter extends DaikonWriter {
      * Returns the string defining the relation for the specified variable
      * The format is parent-ppt-name id parent-variable-name.  If the
      * variable is static, it always has the same name in the parent (since
-     * fully specified names are used for static variables)
+     * fully specified names are used for static variables).
      */
     public String relation_str(DaikonVariableInfo var) {
       String out = parent_ppt_name + " " + id;
@@ -534,7 +530,7 @@ public class DeclWriter extends DaikonWriter {
 
     /**
      * Two VarRelations are equal if the refer to the same program point and
-     * local variable
+     * local variable.
      */
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -699,7 +695,7 @@ public class DeclWriter extends DaikonWriter {
 
   /**
    * Returns the string to write to the output file for the specified
-   * enum.  Currently this is just the name of the enum in lower case
+   * enum.  Currently this is just the name of the enum in lower case.
    */
   private String out_name(Enum<?> e) {
     return e.name().toLowerCase();
@@ -782,7 +778,7 @@ public class DeclWriter extends DaikonWriter {
    * a class not to have an object ppt while multiple children do have
    * object ppts.
    *
-   * Any relations that are found are added to the relations list
+   * Any relations that are found are added to the relations list.
    */
   private void find_relations(
       ClassInfo ci,

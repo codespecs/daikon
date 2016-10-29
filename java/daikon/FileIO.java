@@ -146,7 +146,7 @@ public final class FileIO {
    * If true, modified all ppt names to remove duplicate routine
    * names within the ppt name.  This is used when a stack trace
    * (of active methods) is used as the ppt name.  The routine names
-   * must be separated by vertical bars (|)
+   * must be separated by vertical bars (|).
    */
   public static boolean dkconfig_rm_stack_dups = false;
 
@@ -187,7 +187,7 @@ public final class FileIO {
   public static final SimpleLog debug_decl = new SimpleLog(false);
 
   /**
-   * Parents in the ppt/variable hierarchy for a particular program point
+   * Parents in the ppt/variable hierarchy for a particular program point.
    */
   public static final class ParentRelation implements java.io.Serializable {
     static final long serialVersionUID = 20060622L;
@@ -1198,7 +1198,7 @@ public final class FileIO {
     public long total_lines;
 
     /** Comparability format, either VarComparability.IMPLICIT or
-     * VarComparability.NONE
+     * VarComparability.NONE.
      */
     public int varcomp_format;
 
@@ -1797,7 +1797,7 @@ public final class FileIO {
   }
 
   /**
-   * Print each call that does not have a matching exit
+   * Print each call that does not have a matching exit.
    */
   public static void process_unmatched_procedure_entries() {
 
@@ -2334,7 +2334,7 @@ public final class FileIO {
 
   /**
    * Read either a serialized PptMap or a InvMap and return a
-   * PptMap.  If an InvMap is specified, it is converted to a PptMap
+   * PptMap.  If an InvMap is specified, it is converted to a PptMap.
    */
   /*@EnsuresNonNull("FileIO.new_decl_format")*/
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
@@ -2898,7 +2898,7 @@ public final class FileIO {
   /**
    * Looks up the next token as a member of enum_class.  A Daikon.TerminationMessage
    * is thrown if there is no token or if it is not valid member of
-   * the class.  Enums are presumed to be in in upper case
+   * the class.  Enums are presumed to be in in upper case.
    */
   public static <E extends Enum<E>> E parse_enum_val(
       ParseState state, Scanner scanner, Class<E> enum_class, String descr) {

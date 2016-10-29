@@ -24,7 +24,8 @@ public class OrigModifier extends DepthFirstVisitor {
 
   /**
    * Corrects column fields of n.
-   * modifies n, this
+   *
+   * Modifies: n, this.
    */
   public void visit(NodeToken n) {
     if (n.beginLine == columnshiftline) {
@@ -40,7 +41,7 @@ public class OrigModifier extends DepthFirstVisitor {
    * Checks if n is a variable name.  If so adds "orig(" to the
    *          front of the name and ")" to the end.
    *
-   * Modifies: n, this
+   * Modifies: n, this.
    */
   // f0 -> PrimaryPrefix()
   // f1 -> ( PrimarySuffix() )*

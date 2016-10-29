@@ -447,7 +447,7 @@ import typequals.*;
 
   /**
    * Marks the invariant as falsified.  Should always be called rather
-   * than just setting the flag so that we can track when this happens
+   * than just setting the flag so that we can track when this happens.
    */
   public void falsify(/*>>> @NonPrototype Invariant this*/) {
     falsified = true;
@@ -467,7 +467,7 @@ import typequals.*;
 
   /**
    * Do nothing special, Overridden to remove
-   * exception from declaration
+   * exception from declaration.
    */
   /*@SideEffectFree*/
   public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
@@ -482,8 +482,7 @@ import typequals.*;
   /**
    * Take an invariant and transfer it into a new PptSlice.
    * @param new_ppt must have the same arity and types
-   * @param permutation gives the varinfo array index mapping in the
-   * new ppt
+   * @param permutation gives the varinfo array index mapping in the new ppt
    */
   public Invariant transfer(
       /*>>> @NonPrototype Invariant this,*/ PptSlice new_ppt, int[] permutation) {
@@ -665,7 +664,7 @@ import typequals.*;
 
   /**
    * Permutes the invariant as specified.  Often creates a new invariant
-   * (with a different class)
+   * (with a different class).
    */
   public /*@NonPrototype*/ Invariant permute(
       /*>>> @NonPrototype Invariant this,*/ int[] permutation) {
@@ -1071,7 +1070,7 @@ import typequals.*;
    * have this characteristic (eg, bound, oneof) should override this
    * function.  Note that invariants that can do this, normally need special
    * merge code as well (to merge the different formulas into a single formula
-   * at the upper point
+   * at the upper point.
    */
   public boolean mergeFormulasOk(/*>>> @Prototype Invariant this*/) {
     return false;
@@ -1806,7 +1805,7 @@ import typequals.*;
    * enabled.
    * <p>
    * Its implementation is almost always
-   * {@code return dkconfig_enabled;}
+   * {@code return dkconfig_enabled;}.
    */
   public abstract boolean enabled(/*>>> @Prototype Invariant this*/);
 
@@ -1939,7 +1938,7 @@ import typequals.*;
    * of points before they actually do computation (eg, LinearBinary)
    *
    * This is used during suppresion.  Any invariant that is not active
-   * cannot suppress another invariant
+   * cannot suppress another invariant.
    */
   /*@Pure*/
   public boolean isActive(/*>>> @NonPrototype Invariant this*/) {

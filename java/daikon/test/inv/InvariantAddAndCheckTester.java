@@ -123,7 +123,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    *        to the program. As of now there is only one option,
    *        {@code --generate_goals}, which will generate goal information for
    *        the selected tests assuming the output that the tests provide
-   *        is the correct output
+   *        is the correct output.
    */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
@@ -362,7 +362,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * Determines whether a line is a comment or not.
    *
    * @param line the line in question
-   * @return true if the line is a comment (that is, not to be interpretted as a command)
+   * @return true if the line is a comment (that is, not to be interpretted as a command);
    *         false otherwise
    */
   /*@Pure*/

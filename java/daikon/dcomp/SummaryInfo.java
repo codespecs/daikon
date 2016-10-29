@@ -60,7 +60,7 @@ public class SummaryInfo {
   java.lang.reflect.Method method;
 
   /**
-   * Exception thrown if the summary annotation cannot be correctly parsed
+   * Exception thrown if the summary annotation cannot be correctly parsed.
    */
   public static class BadSummaryAnnotation extends RuntimeException {
     static final long serialVersionUID = 20080703L;
@@ -138,7 +138,7 @@ public class SummaryInfo {
 
   /**
    * Returns the full signature of the original method.  Uses reflection
-   * to get the parameter types and may change class loading order
+   * to get the parameter types and may change class loading order.
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied SummaryInfo this*/) {
@@ -156,7 +156,7 @@ public class SummaryInfo {
   }
 
   /**
-   * Initializes the map that specifies each JDK routine that has a summary
+   * Initializes the map that specifies each JDK routine that has a summary.
    */
   public static void init() {
 
@@ -185,7 +185,7 @@ public class SummaryInfo {
   /**
    * Checks all of the summaries in DCRuntime to ensure that they
    * are syntactically correct and that the methods they describe
-   * exist
+   * exist.
    */
   public static void main(String[] args) throws ClassNotFoundException {
 

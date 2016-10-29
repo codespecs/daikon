@@ -962,7 +962,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Returns a list of all of the basic (non-derived) variables that
    * are used to make up this variable.  If this variable is not
    * derived, it is just this variable.  Otherwise it is all of the
-   * the bases of this derivation
+   * the bases of this derivation.
    */
   public List<VarInfo> get_all_constituent_vars() {
     List<VarInfo> vars = new ArrayList<VarInfo>();
@@ -1321,7 +1321,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns the parent relation with the specified parent_relation_id;
-   * returns null if the relation is not specified
+   * returns null if the relation is not specified.
    */
   private /*@Nullable*/ VarParent get_parent(int parent_relation_id) {
     for (VarParent vp : parents) {
@@ -2618,7 +2618,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Returns a list of all of the variables that enclose this one.  If
    * this is derived, this includes all of the enclosing variables of all
-   * of the bases
+   * of the bases.
    */
   public List<VarInfo> get_all_enclosing_vars() {
     List<VarInfo> result = new ArrayList<VarInfo>();
@@ -2782,7 +2782,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns the number of elements in the variable's equality set.
-   * Returns 1 if the equality optimization is turned off
+   * Returns 1 if the equality optimization is turned off.
    */
   public int get_equalitySet_size() {
     if (equalitySet == null) {
@@ -2794,7 +2794,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns the vars_info in the variable's equality set.
-   * Returns a set with just itself if the equality optimization is turned off
+   * Returns a set with just itself if the equality optimization is turned off.
    */
   public Set<VarInfo> get_equalitySet_vars() {
     if (equalitySet == null) {
@@ -2808,7 +2808,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns the leader in the variable's equality set.
-   * Returns itself if the equality optimization is turned off
+   * Returns itself if the equality optimization is turned off.
    */
   public VarInfo get_equalitySet_leader() {
     // if (equalitySet == null && VarInfo.use_equality_optimization == false) {  // match } for vim
@@ -2906,7 +2906,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns the VarInfo that represents the base array of this
-   * array.  For example, if the array is a[].b.c, returns a[]
+   * array.  For example, if the array is a[].b.c, returns a[].
    */
   /*@Pure*/
   public VarInfo get_base_array() {
@@ -2985,7 +2985,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * ppt by looking them up within the ppt.  Necessary if a variable is
    * moved to a different program point or if cloned variable is placed
    * in a new program point (such as is done when combined exits are
-   * created)
+   * created).
    */
   public void update_after_moving_to_new_ppt() {
     if (enclosing_var != null) {
@@ -3047,13 +3047,17 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Splits an array variable into the array and field portions.
    * For example, if the variable this.Array[].field then
+   * <pre>
    * result[0] = this.Array[]
    * result[1] = field
+   * </pre>
    *
    * If the variable is not an array then
+   * <pre>
    * result[0] = csharp_name()
    * result[1] = ""
-   * (there is no splitting)
+   * </pre>
+   * (there is no splitting).
    */
   public String[] csharp_array_split() {
     String[] results = new String[2];
@@ -3084,7 +3088,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the name of this variable in the specified format
+   * Returns the name of this variable in the specified format.
    */
   public String name_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return name();
@@ -3205,7 +3209,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the name of this variable in ESC format.  If an index
    * is specified, it is used as an array index.  It is an error to
-   * specify an index on a non-array variable
+   * specify an index on a non-array variable.
    */
   /*@SideEffectFree*/
   public String esc_name(/*@Nullable*/ String index) {
@@ -3274,7 +3278,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the name of this variable in JML format.  If an index
    * is specified, it is used as an array index.  It is an error to
-   * specify an index on a non-array variable
+   * specify an index on a non-array variable.
    */
   public String jml_name(/*@Nullable*/ String index) {
 
@@ -3421,7 +3425,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Return the name of this variable in its prestate (orig)
+   * Return the name of this variable in its prestate (orig).
    */
   /*@SideEffectFree*/
   public /*@Interned*/ String prestate_name() {
@@ -3434,7 +3438,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * is not an array or the size name can't be constructed for other
    * reasons.  Note that isArray seems to distinguish between actual
    * arrays and other sequences (such as java.util.list).  Simplify uses
-   * (it seems) the same length approach for both, so we don't check isArray()
+   * (it seems) the same length approach for both, so we don't check isArray().
    */
   public /*@Nullable*/ String get_simplify_size_name() {
     // Implement the method in two ways, to double-check results.
@@ -3467,7 +3471,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns true if this variable contains a simple variable whose
-   * name is varname
+   * name is varname.
    */
   public boolean includes_simple_name(String varname) {
     if (!FileIO.new_decl_format) return var_info_name.includesSimpleName(varname); // vin ok
@@ -3676,7 +3680,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Get a fresh variable name that doesn't appear in the given
-   * variable in simplify format
+   * variable in simplify format.
    */
   public static String get_simplify_free_index(VarInfo... vars) {
     if (!FileIO.new_decl_format) {
@@ -3694,7 +3698,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Get a 2 fresh variable names that doesn't appear in the given
-   * variable in simplify format
+   * variable in simplify format.
    */
   public static String[] get_simplify_free_indices(VarInfo... vars) {
     if (!FileIO.new_decl_format) {
@@ -3837,7 +3841,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Returns true if this variable can be assigned to.  Currently this is
    * presumed true of all variable except the special variable for the type
    * of a variable and the size of a sequence.  It should include pure
-   * functions as well
+   * functions as well.
    */
   /*@Pure*/
   public boolean is_assignable_var() {
@@ -3916,7 +3920,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the integer offset if this variable is an addition such
    * as a+2.  Throws an exception of this variable is not an addition.
-   * see #is_add()
+   * @see #is_add()
    */
   public int get_add_amount() {
     return ((VarInfoName.Add) var_info_name).amount;
@@ -3962,7 +3966,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns whether or not two variables have the same enclosing variable.
-   * If either variable is not a field, returns false
+   * If either variable is not a field, returns false.
    */
   public boolean has_same_parent(VarInfo other) {
     if (!is_field() || !other.is_field()) {
@@ -3999,7 +4003,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Replaces all instances of 'this' in the variable with the
-   * name of arg.  Used to match up enter/exit variables with object variables
+   * name of arg.  Used to match up enter/exit variables with object variables.
    */
   public String replace_this(VarInfo arg) {
     VarInfoName parent_name = var_info_name.replaceAll(VarInfoName.THIS, arg.var_info_name);
@@ -4368,7 +4372,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Converts a variable name or expression to the old style of names
+   * Converts a variable name or expression to the old style of names.
    */
   public static String old_var_names(String name) {
     if (PrintInvariants.dkconfig_old_array_names && FileIO.new_decl_format) {
@@ -4379,7 +4383,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the old style variable name for this name
+   * Returns the old style variable name for this name.
    */
   public String old_var_name() {
     return old_var_names(name());
@@ -4387,7 +4391,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Rough check to ensure that the variable name and derivation match
-   * up
+   * up.
    */
   public void var_check() {
 

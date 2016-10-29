@@ -80,7 +80,7 @@ public final class DiscardInfo {
   }
 
   /**
-   * Adds the specified string as an additional reason
+   * Adds the specified string as an additional reason.
    */
   public void add_implied(String reason) {
     discardString += " and " + reason;
@@ -88,7 +88,7 @@ public final class DiscardInfo {
 
   /**
    * Adds an equality string to the discardString for each variable in
-   * in vis which is different from the leader
+   * in vis which is different from the leader.
    */
   public void add_implied_vis(VarInfo[] vis) {
     for (int i = 0; i < vis.length; i++) {

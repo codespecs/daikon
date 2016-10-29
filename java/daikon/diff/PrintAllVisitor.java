@@ -157,7 +157,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
   /**
    * Prints an invariant, including its printability and possibly its
-   * confidence.  Example: "argv != null {0.9999+}"
+   * confidence.  Example: "argv != null {0.9999+}".
    */
   protected void printInvariant(Invariant inv) {
     if (verbose) {

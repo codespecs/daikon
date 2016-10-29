@@ -207,7 +207,7 @@ public class Chicory {
   }
 
   /**
-   * Return true iff a file name was specified to supply pure method names
+   * Return true iff a file name was specified to supply pure method names.
    */
   /*@Pure*/
   public static /*@Nullable*/ File get_purity_file() {

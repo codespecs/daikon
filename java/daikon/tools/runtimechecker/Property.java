@@ -93,7 +93,7 @@ public class Property implements Serializable {
    * <p>
    * A class representing the kind of an property. An invariant is either
    * <code>Kind.enter</code>,<code>Kind.exit</code>, or
-   * <code>Kind.objectInvariant</code>
+   * <code>Kind.objectInvariant</code>.
    */
   // This should be an enum.
   /*@UsesObjectEquals*/
@@ -271,7 +271,6 @@ public class Property implements Serializable {
    * {@code <INV>...</INV>} tag (the JML representation).
    *
    * Invariant:
-   * <p>
    * <code>this.equals(Property.get(this.xmlStringNoJml())</code>
    */
   public String xmlStringNoJml() {

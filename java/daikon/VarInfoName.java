@@ -53,7 +53,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   /**
    * When true, apply orig directly to variables, do not apply
    * orig to derived variables.  For example, create 'size(orig(a[]))'
-   * rather than 'orig(size(a[]))'
+   * rather than 'orig(size(a[]))'.
    */
   static boolean dkconfig_direct_orig = false;
 
@@ -222,7 +222,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /**
    * Returns the String representation of this name in the ESC style
-   * output format.  Cached by esc_name()
+   * output format.  Cached by {@link #esc_name()}.
    */
   protected abstract String esc_name_impl();
 
@@ -256,7 +256,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /**
    * Returns the String representation of this name in the simplify
-   * output format in either prestate or poststate context
+   * output format in either prestate or poststate context.
    */
   protected abstract String simplify_name_impl(boolean prestate);
 
@@ -283,13 +283,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /**
    * Return the String representation of this name in java format.
-   * Cached and interned by java_name()
+   * Cached and interned by {@link #java_name}.
    */
   protected abstract String java_name_impl(VarInfo v);
 
   /**
    * Return the String representation of this name in the JML style output
-   * format
+   * format.
    */
   public /*@Interned*/ String jml_name(VarInfo v) {
     if (jml_name_cached == null) {
@@ -307,7 +307,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   private /*@Interned*/ String jml_name_cached = null; // interned
   /**
    * Returns the name in JML style output format.  Cached and interned by
-   * jml_name()
+   * {@link #jml_name}.
    */
   protected abstract String jml_name_impl(VarInfo v);
 
@@ -356,7 +356,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   private /*@Interned*/ String dbc_name_cached = null; // interned
   /**
    * Return the name in the DBC style output format.  If v is null, uses
-   * JML style instead.  Cached and interned by dbc_name()
+   * JML style instead.  Cached and interned by {@link #dbc_name}.
    */
   protected abstract String dbc_name_impl(VarInfo v);
 
@@ -381,7 +381,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /**
    * Returns the name using only letters, numbers, and underscores.  Cached
-   * and interned by identifier_name()
+   * and interned by {@link #identifier_name()}.
    */
   protected abstract String identifier_name_impl();
 
@@ -489,7 +489,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   /**
    * Returns whether or not this name refers to the 'this' variable
    * of a class.  True for both normal and prestate versions of the
-   * variable
+   * variable.
    */
   /*@Pure*/
   public boolean isThis() {
@@ -3005,7 +3005,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   public static class QuantHelper {
 
     /**
-     * Debug tracer
+     * Debug tracer.
      */
     public static final Logger debug = Logger.getLogger("daikon.inv.Invariant.print.QuantHelper");
 

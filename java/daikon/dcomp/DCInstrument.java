@@ -100,7 +100,7 @@ class DCInstrument {
    * Double client methods like we do in the JDK.  This allows our
    * non-instrumentation of object methods to work better in client
    * code when they call other methods (because original versions of
-   * those other methods will exist
+   * those other methods will exist).
    */
   protected static boolean double_client = true;
 
@@ -123,7 +123,7 @@ class DCInstrument {
    * the fields are not initialized from java, their tag storage is not
    * allocated as part of a store, but rather must be allocated as part
    * of a load.  We call a special runtime method for this so that we
-   * can check for this in other cases
+   * can check for this in other cases.
    */
   protected static String[] uninit_classes =
       new String[] {
@@ -158,7 +158,7 @@ class DCInstrument {
   protected static InstructionList global_catch_il;
   protected static CodeExceptionGen global_exception_handler;
 
-  /**
+  /*
    * NOMENCLATURE
    *
    * I (markro) realized that this code was not consistent with
@@ -182,7 +182,6 @@ class DCInstrument {
    * to refer to 'offset's into the local stack frame.
    * It uses getPosition and setPosition to refer to 'offset's into
    * the byte codes.
-   *
    */
 
   //
@@ -228,7 +227,7 @@ class DCInstrument {
   }
 
   /**
-   * Find the StackMap entry who's offset matches the input argument
+   * Find the StackMap entry who's offset matches the input argument.
    */
   private StackMapEntry find_stack_map_equal(int offset) {
 
@@ -680,7 +679,7 @@ class DCInstrument {
   }
 
   /**
-   * Get existing StackMapTable (if present)
+   * Get existing StackMapTable (if present).
    */
   private void fetch_current_stack_map_table(MethodGen mg) {
 
@@ -763,7 +762,7 @@ class DCInstrument {
   }
 
   /**
-   * Returns the attribute name for the specified attribute
+   * Returns the attribute name for the specified attribute.
    */
   private String get_attribute_name(Attribute a) {
     int con_index = a.getNameIndex();
@@ -841,7 +840,7 @@ class DCInstrument {
 
   /**
    * Initialize with the original class and whether or not the class
-   * is part of the JDK
+   * is part of the JDK.
    */
   public DCInstrument(JavaClass orig_class, boolean in_jdk, /*@Nullable*/ ClassLoader loader) {
     this.orig_class = orig_class;
@@ -872,7 +871,7 @@ class DCInstrument {
 
   /**
    * Instruments the original class to perform dynamic comparabilty and
-   * returns the new class definition
+   * returns the new class definition.
    */
   public JavaClass instrument() {
 
@@ -1193,7 +1192,7 @@ class DCInstrument {
   /**
    * Instruments the original class to perform dynamic comparabilty and
    * returns the new class definition.  A second version of each method
-   * in the class is created which is instrumented for comparability
+   * in the class is created which is instrumented for comparability.
    */
   public JavaClass instrument_jdk() {
 
@@ -1444,7 +1443,7 @@ class DCInstrument {
   }
 
   /**
-   * Instrument the specified method for dynamic comparability
+   * Instrument the specified method for dynamic comparability.
    */
   public void instrument_method(Method m, MethodGen mg) {
 
@@ -1523,7 +1522,7 @@ class DCInstrument {
 
   /**
    * Instrument the specified method for dynamic comparability
-   * (reference comparability only)
+   * (reference comparability only).
    */
   public void instrument_method_refs_only(MethodGen mg) {
 
@@ -1927,7 +1926,7 @@ class DCInstrument {
   }
 
   /**
-   * Creates the local used to store the tag frame and returns it
+   * Creates the local used to store the tag frame and returns it.
    */
   LocalVariableGen create_tag_frame_local(MethodGen mg) {
     return create_method_scope_local(mg, "dcomp_tag_frame$5a", object_arr);
@@ -1935,7 +1934,7 @@ class DCInstrument {
 
   /**
    * Creates code to create the tag frame for this method and store it
-   * in tag_frame_local
+   * in tag_frame_local.
    */
   InstructionList create_tag_frame(MethodGen mg, LocalVariableGen tag_frame_local) {
 
@@ -2635,7 +2634,7 @@ class DCInstrument {
    * Adds a call to DCruntime.exit() at each return from the
    * method.  This call calculates comparability on the daikon
    * variables.  It is only necessary if we are tracking comparability
-   * for the variables of this method
+   * for the variables of this method.
    */
   public void add_exit(MethodGen mg, MethodInfo mi, int method_info_index) {
 
@@ -2714,7 +2713,7 @@ class DCInstrument {
   /**
    * Discards primitive tags for each primitive argument to a non-instrumented
    * method and adds a tag for a primitive return value.  Insures that the
-   * tag stack is correct for non-instrumented methods
+   * tag stack is correct for non-instrumented methods.
    */
   InstructionList handle_invoke(InvokeInstruction invoke) {
     boolean callee_instrumented;
@@ -2807,7 +2806,7 @@ class DCInstrument {
   /**
    * Return instructions that will discard any primitive tags corresponding
    * to the specified arguments.  An empty instruction list will be returned
-   * if there are now primitive arguments
+   * if there are now primitive arguments.
    */
   InstructionList discard_primitive_tags(Type[] arg_types) {
 
@@ -3082,7 +3081,7 @@ class DCInstrument {
    * Create the instructions that replace the object eq or ne branch
    * instruction.  They are replaced by a call to the specified
    * compare_method (which returns a boolean) followed by the specified
-   * boolean ifeq or ifne instruction
+   * boolean ifeq or ifne instruction.
    */
   InstructionList object_comparison(
       BranchInstruction branch, String compare_method, short boolean_if) {
@@ -3231,7 +3230,7 @@ class DCInstrument {
    * be augmented to either push (load) or pop (store) the tag on the
    * tag stack.  This is accomplished by calling the specified method
    * in DCRuntime and passing that method the tag frame and the offset
-   * of local/parameter
+   * of local/parameter.
    */
   InstructionList load_store_local(
       LocalVariableInstruction lvi, LocalVariableGen tag_frame_local, String method) {
@@ -3261,7 +3260,7 @@ class DCInstrument {
 
   /**
    * Returns the number of the specified field in the primitive fields
-   * of obj_type
+   * of obj_type.
    */
   int get_field_num(String name, ObjectType obj_type) {
 
@@ -3296,7 +3295,7 @@ class DCInstrument {
   /**
    * Gets the local variable used to store a category2 temporary.
    * This is used in the PUTFIELD code to temporarily store the value
-   * being placed in the field
+   * being placed in the field.
    */
   LocalVariableGen get_tmp2_local(MethodGen mg, Type typ) {
 
@@ -3454,7 +3453,7 @@ class DCInstrument {
   /**
    * Adds a call to DCRuntime.class_init (String classname) to the
    * class initializer for this class.  Creates a class initializer if
-   * one is not currently present
+   * one is not currently present.
    */
   public void track_class_init() {
 
@@ -3697,7 +3696,7 @@ class DCInstrument {
   }
 
   /**
-   * Constructs a ppt entry name from a Method
+   * Constructs a ppt entry name from a Method.
    */
   public static String methodEntryName(String fullClassName, Method m) {
 
@@ -3729,7 +3728,7 @@ class DCInstrument {
 
   /**
    * Create the code to call discard_tag(tag_count) and append inst to the
-   * end of that code
+   * end of that code.
    */
   protected InstructionList discard_tag_code(Instruction inst, int tag_count) {
     InstructionList il = new InstructionList();
@@ -3757,7 +3756,7 @@ class DCInstrument {
    * values down in the stack.  If the value at the top of the stack
    * is not a primitive, there is nothing to do here.  If the second
    * value is not a primitive, then we need only to insert the duped
-   * value down 1 on the tag stack (which contains only primitives)
+   * value down 1 on the tag stack (which contains only primitives).
    */
   InstructionList dup_x1_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
@@ -3845,7 +3844,7 @@ class DCInstrument {
 
   /**
    * Duplicate the top one or two operand stack values and insert two, three,
-   * or four values down
+   * or four values down.
    */
   InstructionList dup2_x2(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
@@ -3951,7 +3950,7 @@ class DCInstrument {
   /**
    * Adjusts the tag stack for load constant opcodes.  If the constant is
    * a primitive, pushes its tag on the tag stack.  If the constant is a
-   * reference (string, class), does nothing
+   * reference (string, class), does nothing.
    */
   /*@Nullable*/ InstructionList ldc_tag(Instruction inst, OperandStack stack) {
     Type type;
@@ -3969,7 +3968,7 @@ class DCInstrument {
    * For any other number of dimensions, discard the tags for the
    * arguments.  Higher dimensions should really be handled as well,
    * but there are very few cases of this and the resulting code would
-   * be quite complex (see multiarray2 for details)
+   * be quite complex (see multiarray2 for details).
    */
   InstructionList multi_newarray_dc(Instruction inst) {
     int dims = ((MULTIANEWARRAY) inst).getDimensions();
@@ -3982,7 +3981,7 @@ class DCInstrument {
 
   /**
    * Prefix the call to return with a call that handles returns for the
-   * tag stack
+   * tag stack.
    */
   InstructionList return_tag(MethodGen mg, Instruction inst) {
     Type type = mg.getReturnType();
@@ -4021,7 +4020,7 @@ class DCInstrument {
 
   /**
    * Returns whether or not the specified type is a primitive (int, float,
-   * double, etc)
+   * double, etc).
    */
   /*@Pure*/
   protected boolean is_primitive(Type type) {
@@ -4030,7 +4029,7 @@ class DCInstrument {
 
   /**
    * Returns whether or not the specified type is a category 2 (8 byte)
-   * type
+   * type.
    */
   /*@Pure*/
   protected boolean is_category2(Type type) {
@@ -4066,7 +4065,7 @@ class DCInstrument {
 
   /**
    * Replace instruction ih in list il with the instructions in new_il.  If
-   * new_il is null, do nothing
+   * new_il is null, do nothing.
    */
   protected void replace_instructions(
       InstructionList il, InstructionHandle ih, InstructionList new_il) {
@@ -4492,7 +4491,7 @@ class DCInstrument {
     }
   }
   /**
-   * Returns a String array with new_string added to the end of arr
+   * Returns a String array with new_string added to the end of arr.
    */
   public static String[] add_string(String[] arr, String new_string) {
     String[] new_arr = new String[arr.length + 1];
@@ -4696,7 +4695,7 @@ class DCInstrument {
 
   /**
    * Returns whether or not tag fields are used within the specified class.
-   * We can safely use class fields except in Object, String, and Class
+   * We can safely use class fields except in Object, String, and Class.
    */
   public boolean tag_fields_ok(/*@ClassGetName*/ String classname) {
 
@@ -4728,7 +4727,7 @@ class DCInstrument {
   /**
    * Adds a tag field that parallels each primitive field in the class.
    * The tag field is of type object and holds the tag associated with that
-   * primitive
+   * primitive.
    */
   public void add_tag_fields() {
 
@@ -4777,7 +4776,7 @@ class DCInstrument {
    * not hidden by a field in this class.  These accessors just call the
    * superclasses accessor.
    *
-   * Returns the list of new accessors and adds them to the class
+   * Returns the list of new accessors and adds them to the class.
    */
   public List<MethodGen> create_tag_accessors(ClassGen gen) {
 
@@ -4854,7 +4853,7 @@ class DCInstrument {
    * superclasses to a unique offset.  The offset can be used to
    * index into a tag array for this class.  Instance fields are
    * placed in the returned map and static fields are placed in static
-   * map (shared between all classes)
+   * map (shared between all classes).
    */
   public Map<Field, Integer> build_field_map(JavaClass jc) {
 
@@ -5115,7 +5114,7 @@ class DCInstrument {
   /**
    * Marks the class as implementing various object methods (currently clone
    * and toString).  Callers will call the instrumented version of the
-   * method if it exists, otherwise they will call the uninstrumented version
+   * method if it exists, otherwise they will call the uninstrumented version.
    */
   public void handle_object(ClassGen gen) {
     Method cl = gen.containsMethod("clone", "()Ljava/lang/Object;");
@@ -5330,7 +5329,7 @@ class DCInstrument {
 
   /**
    * Returns whether or not the class is one of those that has values
-   * initialized by the JVM or native methods
+   * initialized by the JVM or native methods.
    */
   /*@Pure*/
   public boolean is_uninit_class(String classname) {
@@ -5402,7 +5401,7 @@ class DCInstrument {
 
   /**
    * Calculates the types on the stack for each instruction using the
-   * BCEL stack verification routines
+   * BCEL stack verification routines.
    */
   protected StackTypes bcel_calc_stack_types(MethodGen mg) {
 
@@ -5428,7 +5427,7 @@ class DCInstrument {
 
   /**
    * Creates a method with a DcompMarker argument that does nothing but
-   * call the corresponding method without the DCompMarker argument
+   * call the corresponding method without the DCompMarker argument.
    */
   protected MethodGen create_dcomp_stub(MethodGen mg) {
 
@@ -5504,7 +5503,7 @@ class DCInstrument {
   }
 
   /**
-   * Return the fully qualified fieldname of the specified field
+   * Return the fully qualified fieldname of the specified field.
    */
   protected String full_name(JavaClass jc, Field f) {
     return jc.getClassName() + "." + f.getName();

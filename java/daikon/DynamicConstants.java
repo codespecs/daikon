@@ -278,7 +278,7 @@ public class DynamicConstants implements Serializable {
    * insure that it is still missing.
    *
    * Creates all new views required for the newly non constants (noncons)
-   * and the newly non-missing (non_missing)
+   * and the newly non-missing (non_missing).
    */
   public void add(ValueTuple vt, int count) {
 
@@ -900,7 +900,7 @@ public class DynamicConstants implements Serializable {
 
   /**
    * Looks for a LinearBinary invariant in the specified slice.
-   * Will match either float or integer versions
+   * Will match either float or integer versions.
    */
   private /*@Nullable*/ Invariant find_linear_binary(/*@Nullable*/ PptSlice slice) {
 
@@ -1117,7 +1117,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Creates OneOf invariants for each constant
+   * Creates OneOf invariants for each constant.
    */
   public void instantiate_oneof(Constant con) {
     assert con.val != null : "@AssumeAssertion(nullness)";

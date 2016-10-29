@@ -91,7 +91,7 @@ public abstract class Ppt implements Serializable {
 
   /**
    * Returns the varinfo_index of the variable whose name is varname.
-   * Returns -1 if there is no such variable
+   * Returns -1 if there is no such variable.
    */
   /*@Pure*/
   public int indexOf(String varname) {
@@ -105,7 +105,7 @@ public abstract class Ppt implements Serializable {
 
   /**
    * Returns the VarInfo with the specified name.  Null if the name is
-   * not found
+   * not found.
    */
   /*@Pure*/
   public /*@Nullable*/ VarInfo find_var_by_name(String varname) {

@@ -53,7 +53,7 @@ public class NISuppressor {
 
   /**
    * information about the suppressor for the current check.  This is just
-   * used for debugging purposes
+   * used for debugging purposes.
    */
   /*@Nullable*/ String current_state_str = null;
 
@@ -423,7 +423,7 @@ public class NISuppressor {
   /**
    * Returns true if inv matches this suppressor.  It is assumed that
    * inv's variables already match (i.e., that it was looked up in
-   * compatible slice
+   * compatible slice).
    */
   public boolean match(Invariant inv) {
 
@@ -444,7 +444,7 @@ public class NISuppressor {
   /**
    * Returns true if the suppressee matches this suppressor.  Currently
    * only checks that the class matches but this will need to be expanded
-   * to check for a permutation match as well
+   * to check for a permutation match as well.
    */
   public boolean match(NISuppressee sse) {
 
@@ -507,7 +507,7 @@ public class NISuppressor {
   /**
    * Returns a string representation of the suppressor.  Rather than show
    * var indices as numbers, the variables x, y, and z are shown instead
-   * with indices 0, 1, and 2 respectively
+   * with indices 0, 1, and 2 respectively.
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied NISuppressor this*/) {

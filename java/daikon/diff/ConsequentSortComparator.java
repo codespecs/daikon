@@ -14,10 +14,12 @@ import org.checkerframework.dataflow.qual.*;
  * compared.  The predicates and consequents themselves are compared
  * using the Comparator c passed to the constructor.  Some examples:
  *
+ * <pre>
  * this.compare(A&rArr;B, A&rArr;C) == c.compare(B, C)
  * this.compare(B, A&rArr;C) == c.compare(B, C)
  * this.compare(B, C) == c.compare(B, C)
  * this.compare(A&rArr;C, B&rArr;C) == c.compare(A, B)
+ * </pre>
  */
 public class ConsequentSortComparator implements Comparator<Invariant> {
 

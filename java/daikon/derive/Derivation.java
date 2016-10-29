@@ -185,7 +185,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   /**
    * Returns the name of this variable in ESC format.  If an index
    * is specified, it is used as an array index.  It is an error to
-   * specify an index on a non-array variable
+   * specify an index on a non-array variable.
    */
   /*@SideEffectFree*/
   public String esc_name(String index) {
@@ -195,7 +195,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   /**
    * Returns the name of this variable in JML format.  If an index
    * is specified, it is used as an array index.  It is an error to
-   * specify an index on a non-array variable
+   * specify an index on a non-array variable.
    */
   public String jml_name(String index) {
     return esc_name(index);
@@ -204,7 +204,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   /**
    * Returns the name of this variable in CSHARPCONTRACT format.  If an index
    * is specified, it is used as an array index.  It is an error to
-   * specify an index on a non-array variable
+   * specify an index on a non-array variable.
    */
   /*@SideEffectFree*/
   public String csharp_name(String index) {
@@ -247,7 +247,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * derivation itself and not for the variables included in the derivation.
    * The default implementation returns 1 (which is the added complexity of
    * an derivation).  Subclasses that add additional complexity (such as an
-   * offset) should override
+   * offset) should override.
    */
   public int complexity() {
     return 1;

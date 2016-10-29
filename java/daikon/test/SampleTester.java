@@ -233,7 +233,7 @@ public class SampleTester extends TestCase {
   /**
    * Processes a variable list.  Sets up the vars[] array to point to the
    * matching variables in the ppt.  The ppt must have been previously
-   * specified.  Variables are separated by spaces
+   * specified.  Variables are separated by spaces.
    */
   private void proc_vars(String var_names) {
 
@@ -311,7 +311,7 @@ public class SampleTester extends TestCase {
 
   /**
    * Processes a string of possibly multiple assertions.  If any are false,
-   * throws an error
+   * throws an error.
    */
   private void proc_assertions(String assertions) throws IOException {
 
@@ -323,7 +323,7 @@ public class SampleTester extends TestCase {
 
   /**
    * Processes a single assertion.  If the assertion is false, throws
-   * an error
+   * an error.
    */
   private void proc_assert(String assertion) throws IOException {
 

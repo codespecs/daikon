@@ -46,7 +46,7 @@ class TagEntry extends WeakReference<Object> {
 
   /**
    * Parent in the tree that represents the set for this element.  If this,
-   * this entry is the representative one
+   * this entry is the representative one.
    */
   private /*@Nullable*/ TagEntry parent;
 
@@ -76,7 +76,7 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /**
-   * Creates a set that only contains obj
+   * Creates a set that only contains obj.
    */
   public static TagEntry create(Object obj) {
     assert !object_map.containsKey(obj);
@@ -145,7 +145,7 @@ class TagEntry extends WeakReference<Object> {
 
   /**
    * Find the entry associated with obj.  If an entry does not currently
-   * exist, create it
+   * exist, create it.
    */
   public static TagEntry get_entry(Object obj) {
 
@@ -235,7 +235,7 @@ class TagEntry extends WeakReference<Object> {
   /**
    * Recursively traces from this object to the root of its tracer tree,
    * and reverses the direction of every pointer on the path, such that
-   * this object is now the root of its tracer tree. (Imprecise wording, I know)
+   * this object is now the root of its tracer tree. (Imprecise wording, I know.)
    */
   @SuppressWarnings("nullness") // catches NullPointerException
   public void reroute(/*@Nullable*/ TagEntry newTracer, String tloc) {

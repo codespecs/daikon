@@ -850,7 +850,7 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Find the StackMap entry who's offset matches the input argument
+   * Find the StackMap entry who's offset matches the input argument.
    */
   private StackMapEntry find_stack_map_equal(int offset) {
 
@@ -1349,7 +1349,7 @@ public class Instrument implements ClassFileTransformer {
    * on the stack and calls the specified Method (normally
    * enter or exit) in Runtime.  The parameters are passed
    * as an array of objects.  Any primitive values are wrapped
-   * in the appropriate Runtime wrapper (IntWrap, FloatWrap, etc)
+   * in the appropriate Runtime wrapper (IntWrap, FloatWrap, etc).
    */
   private InstructionList call_enter_exit(MethodContext c, String method_name, int line) {
 
@@ -1850,7 +1850,7 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Returns the attribute name for the specified attribute
+   * Returns the attribute name for the specified attribute.
    */
   public String get_attribute_name(Attribute a) {
 
@@ -1863,7 +1863,7 @@ public class Instrument implements ClassFileTransformer {
 
   /**
    * Any information needed by InstTransform routines about the method
-   * and class
+   * and class.
    */
   private static class MethodContext {
 
@@ -1888,8 +1888,8 @@ public class Instrument implements ClassFileTransformer {
 
   /**
    * Returns whether or not the specified class is part of chicory
-   * itself (and thus should not be instrumented).  Some daikon classes
-   * that are used by Chicory are included here as well
+   * itself (and thus should not be instrumented).  Some Daikon classes
+   * that are used by Chicory are included here as well.
    */
   /*@Pure*/
   private static boolean is_chicory(String classname) {

@@ -144,7 +144,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   /**
    * Determines the comparability of the length of this string.  Currently
    * always returns unknown, but it would be best if string lengths were
-   * only comparable with other string lengths (or perhaps nothing)
+   * only comparable with other string lengths (or perhaps nothing).
    */
   public VarComparability string_length_type() {
     return unknown;

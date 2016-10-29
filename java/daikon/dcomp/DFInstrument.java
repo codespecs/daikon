@@ -38,7 +38,7 @@ class DFInstrument extends DCInstrument {
 
   /**
    * Initialize with the original class and whether or not the class
-   * is part of the JDK
+   * is part of the JDK.
    */
   public DFInstrument(JavaClass orig_class, boolean in_jdk, ClassLoader loader) {
     super(orig_class, in_jdk, loader);
@@ -47,7 +47,7 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * Instrument the specified method for DataFlow
+   * Instrument the specified method for DataFlow.
    */
   public void instrument_method(Method m, MethodGen mg) {
 
@@ -104,7 +104,7 @@ class DFInstrument extends DCInstrument {
   /**
    * Post processes instrumented methods.  If the method is the test
    * sequence, the local variable table is saved so that we can
-   * translate from indices back to variables
+   * translate from indices back to variables.
    */
   public void post_process(Method m, MethodGen mg) {
 
@@ -623,7 +623,7 @@ class DFInstrument extends DCInstrument {
    * Adjusts the tag stack for load constant opcodes.  If the constant is
    * a primitive, creates a new tag and pushes it on the tag stack.
    * A string description of the constant is included.
-   * If the constant is a reference (string, class), does nothing
+   * If the constant is a reference (string, class), does nothing.
    */
   InstructionList ldc_tag_df(MethodGen mg, Instruction inst, OperandStack stack) {
     Type type;
@@ -825,7 +825,7 @@ class DFInstrument extends DCInstrument {
   /**
    * Discards primitive tags for each primitive argument to a non-instrumented
    * method and adds a tag for a primitive return value.  Insures that the
-   * tag stack is correct for non-instrumented methods
+   * tag stack is correct for non-instrumented methods.
    */
   InstructionList handle_invoke_df(
       MethodGen mg, InvokeInstruction invoke, OperandStack stack, int position) {

@@ -30,7 +30,7 @@ public class DtraceDiffTester extends TestCase {
   /**
    * Returns the URL string for the specified file.  A URL is used because
    * the tests can be run from a jarfile and the 'filename' in that case
-   * is a jar URL
+   * is a jar URL.
    */
   private static String find(String file) {
     String file1 = "daikon/test/dtracediff/" + file;

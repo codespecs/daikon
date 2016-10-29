@@ -573,7 +573,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
   /**
    * Swaps each suppressor and suppressee to the opposite variable
-   * order.  Valid only on unary and binary suppressors and suppressees
+   * order.  Valid only on unary and binary suppressors and suppressees.
    */
   public NISuppressionSet swap() {
 

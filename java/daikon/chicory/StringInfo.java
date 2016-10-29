@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * The StringInfo class is a subtype of DaikonVariableInfo used for
- * variable types that can be converted into strings (.toString())
+ * variable types that can be converted into strings (.toString()).
  */
 public class StringInfo extends DaikonVariableInfo {
   public StringInfo(

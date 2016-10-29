@@ -93,7 +93,7 @@ public abstract class BinaryInvariant extends Invariant {
   /**
    * Returns the swap setting for invariants that support a swap boolean
    * to handle different permutations.  This version should never
-   * be called
+   * be called.
    */
   public boolean get_swap() {
     throw new Error("swap called in BinaryInvariant");
@@ -101,7 +101,7 @@ public abstract class BinaryInvariant extends Invariant {
 
   /**
    * Searches for the specified binary invariant (by class) in the
-   * specified slice.  Returns null if the invariant is not found
+   * specified slice.  Returns null if the invariant is not found.
    */
   protected /*@Nullable*/ Invariant find(Class<? extends Invariant> cls, VarInfo v1, VarInfo v2) {
 

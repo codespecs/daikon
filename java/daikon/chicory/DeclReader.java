@@ -19,7 +19,7 @@ import org.checkerframework.dataflow.qual.*;
 public class DeclReader {
 
   /**
-   * Prints only the average set size for each specified file
+   * Prints only the average set size for each specified file.
    */
   @Option("Print average set size (only) for each specified file")
   public static boolean avg_size = false;
@@ -61,7 +61,7 @@ public class DeclReader {
   public HashMap<String, DeclPpt> ppts = new LinkedHashMap<String, DeclPpt>();
 
   /**
-   * Information about variables within a program point
+   * Information about variables within a program point.
    */
   public static class DeclVarInfo {
     public String name;
@@ -191,7 +191,7 @@ public class DeclReader {
   /**
    * Information about the program point that is contained in the decl
    * file.  This consists of the ppt name and a list of the declared
-   * variables
+   * variables.
    */
   public static class DeclPpt {
     public String name;
@@ -201,7 +201,7 @@ public class DeclReader {
      * List of values for the program point.  There is one entry in
      * the list for each time the program point is executed.  That
      * entry is a list of the values for each variable in the same
-     * order as the variables were defined
+     * order as the variables were defined.
      */
     List<List</*@Interned*/ Object>> data_values = new ArrayList<List</*@Interned*/ Object>>();
 
@@ -211,7 +211,7 @@ public class DeclReader {
 
     /**
      * Read a single variable declaration from decl_file.  The file
-     * must be positioned immediately before the variable name
+     * must be positioned immediately before the variable name.
      */
     public DeclVarInfo read_var(EntryReader decl_file) throws java.io.IOException {
 
@@ -234,7 +234,7 @@ public class DeclReader {
 
     /**
      * Adds a record of data for this ppt.  The data must have one element
-     * for each variable in the ppt and be ordered in the same way
+     * for each variable in the ppt and be ordered in the same way.
      */
     public void add_var_data(List</*@Interned*/ Object> var_data_list) {
       assert var_data_list.size() == vars.size();
@@ -246,7 +246,7 @@ public class DeclReader {
     }
 
     /**
-     * Returns the DeclVarInfo named var_name or null if it doesn't exist
+     * Returns the DeclVarInfo named var_name or null if it doesn't exist.
      */
     public /*@Nullable*/ DeclVarInfo find_var(String var_name) {
       return vars.get(var_name);
@@ -276,7 +276,7 @@ public class DeclReader {
   public DeclReader() {}
 
   /**
-   * Read declarations from the specified pathname
+   * Read declarations from the specified pathname.
    */
   public void read(File pathname) {
     try {
@@ -342,7 +342,7 @@ public class DeclReader {
   }
 
   /**
-   * Reads a decl file and dumps statistics
+   * Reads a decl file and dumps statistics.
    */
   public static void main(String[] args) throws IOException {
 
@@ -520,7 +520,7 @@ public class DeclReader {
    * Sets the comparability to match primitive declaration types.
    * The comparability for each non-hashcode is set so that each
    * declaration type is in a separate set.  Hashcodes are all set
-   * to a single comparability regardless of their declared type
+   * to a single comparability regardless of their declared type.
    */
   public void primitive_declaration_types() {
 

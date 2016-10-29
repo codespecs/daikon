@@ -9,7 +9,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Helper classes for quantification for various output formats
+ * Helper classes for quantification for various output formats.
  */
 public class Quantify {
 
@@ -57,7 +57,7 @@ public class Quantify {
   /**
    * Class the represents terms that can be used in variable expressions.
    * These include constants (such as 0 and 1), free variables used
-   * for quantification (i, j, etc), and normal daikon variables
+   * for quantification (i, j, etc), and normal daikon variables.
    */
   public static abstract class Term {
     /*@SideEffectFree*/
@@ -93,7 +93,7 @@ public class Quantify {
   }
 
   /**
-   * Free variable normally used for quantification
+   * Free variable normally used for quantification.
    */
   public static class FreeVar extends Term {
     String name;
@@ -336,7 +336,7 @@ public class Quantify {
   }
 
   /**
-   * Class that represents an ESC quantification over one or two variables
+   * Class that represents an ESC quantification over one or two variables.
    */
   public static class ESCQuantification {
 
@@ -403,7 +403,7 @@ public class Quantify {
     /**
      * Returns a string quantification expression for the array variable
      * var using index.  The expression is of the form
-     * lower_bound <= index && index &le; upper_bound
+     * <pre>{@code lower_bound <= index && index <= upper_bound}</pre>
      */
     private static String bld_quant(VarInfo var, Term index) {
       return String.format(
@@ -428,7 +428,7 @@ public class Quantify {
     /**
      * Returns the specified array variable indexed by its index.
      * For example, if the array variable is 'a.b[]' and the index is 'i',
-     * returns a.b[i]
+     * returns a.b[i].
      */
     public String get_arr_vars_indexed(int num) {
       return arr_vars_indexed[num];
@@ -436,7 +436,7 @@ public class Quantify {
   }
 
   /**
-   * Class that represents an Simplify quantification over one or two variables
+   * Class that represents an Simplify quantification over one or two variables.
    */
   public static class SimplifyQuantification {
 
@@ -556,7 +556,7 @@ public class Quantify {
     /**
      * Returns the specified array variable indexed by its index.
      * For example, if the array variable is 'a[]' and the index is 'i',
-     * returns 'select i a'
+     * returns 'select i a'.
      */
     public String get_arr_vars_indexed(int num) {
       return arr_vars_indexed[num];

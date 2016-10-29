@@ -123,7 +123,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
   /**
    * Find the point in the string just after the EXIT107, where
-   * s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)"
+   * s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)".
    */
   private int findCutoff(String s) {
     String lastPart = "";

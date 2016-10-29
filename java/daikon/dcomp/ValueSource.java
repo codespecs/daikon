@@ -96,7 +96,7 @@ public class ValueSource {
    * Returns a set of all of the test sequence variables in the tree
    * The source name of the variable is placed in the set.  This is
    * obtained from the local variable table information for the test
-   * sequence
+   * sequence.
    */
   public Set<String> get_vars() {
 
@@ -113,7 +113,7 @@ public class ValueSource {
   }
 
   /**
-   * Returns a list of all of the nodes in the tree
+   * Returns a list of all of the nodes in the tree.
    */
   public List<ValueSource> get_node_list() {
     List<ValueSource> vs_list = new ArrayList<ValueSource>();
@@ -122,7 +122,7 @@ public class ValueSource {
   }
 
   /**
-   * Add all of the nodes in this tree to vs_list
+   * Add all of the nodes in this tree to vs_list.
    */
   private void add_node_list(List<ValueSource> vs_list) {
     vs_list.add(this);

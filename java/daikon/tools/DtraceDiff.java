@@ -513,7 +513,7 @@ public class DtraceDiff {
 
   /**
    * Exception thrown for diffs.  Allows differences to be distinguished
-   * from other exceptions that might occur
+   * from other exceptions that might occur.
    */
   public static class DiffError extends Error {
     static final long serialVersionUID = 20071203L;

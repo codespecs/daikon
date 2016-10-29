@@ -141,8 +141,8 @@ public class NIS {
 
   /**
    * List of invariants that are unsuppressed by the current sample.
-   * The falsified() and process_falsified_invs() methods add created
-   * invariants to this list.  This list is cleared by apply_samples()
+   * The {@link #falsified} and {@link #process_falsified_invs} methods add created
+   * invariants to this list.  This list is cleared by {@link #apply_samples}.
    */
   public static List<Invariant> new_invs = new ArrayList<Invariant>();
 
@@ -186,7 +186,7 @@ public class NIS {
   /**
    * Sets up non-instantiation suppression.  Primarily this includes setting
    * up the map from suppressor classes to all of the suppression sets
-   * associated with that suppressor invariant
+   * associated with that suppressor invariant.
    */
   /*@EnsuresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions", "suppressor_proto_invs"})*/
   public static void init_ni_suppression() {
@@ -281,7 +281,7 @@ public class NIS {
    * inv has been falsified.
    *
    * Note: this method is should NOT be used with the antecedent approach.
-   * See NIS.process_falsified_invs()
+   * @see #process_falsified_invs
    */
   /*@RequiresNonNull("suppressor_map")*/
   public static void falsified(Invariant inv) {
@@ -420,7 +420,7 @@ public class NIS {
   }
 
   /**
-   * Clears the current NIS statistics and enables the keeping of statistics
+   * Clears the current NIS statistics and enables the keeping of statistics.
    */
   public static void clear_stats() {
 
@@ -462,7 +462,7 @@ public class NIS {
   }
 
   /**
-   * dump statistics on NIS to the specified logger
+   * dump statistics on NIS to the specified logger.
    */
   public static void dump_stats(Logger log, PptTopLevel ppt) {
 
@@ -856,7 +856,7 @@ public class NIS {
   }
 
   /**
-   * Removes any invariants in the specified ppt that are suppressed
+   * Removes any invariants in the specified ppt that are suppressed.
    */
   public static void remove_suppressed_invs(PptTopLevel ppt) {
 
@@ -873,7 +873,7 @@ public class NIS {
   }
 
   /**
-   * Returns true if the specified class is an antecedent in any NI suppression
+   * Returns true if the specified class is an antecedent in any NI suppression.
    */
   /*@RequiresNonNull("NIS.suppressor_map")*/
   /*@Pure*/
@@ -907,7 +907,7 @@ public class NIS {
    * invariant.  The invariant is defined by its NISuppressee and variables
    * (Its ppt is also stored, but not used in comparisions, its
    * presumed that only SupInvs from the same ppt will every be
-   * compared)
+   * compared.)
    */
   static class SupInv {
     NISuppressee suppressee;
@@ -1032,7 +1032,7 @@ public class NIS {
     /**
      * Map from the antecedent invariants class to a list of the
      * antecedent invariants of that class.  Allows fast access to
-     * invariants by type
+     * invariants by type.
      */
     Map<Class<? extends Invariant>, List<Invariant>> antecedent_map;
 
@@ -1047,7 +1047,7 @@ public class NIS {
     }
 
     /**
-     * Returns true if this contains antecedents that are always comparable
+     * Returns true if this contains antecedents that are always comparable.
      */
     public boolean alwaysComparable() {
       return comparability.alwaysComparable();
@@ -1091,7 +1091,7 @@ public class NIS {
     }
 
     /**
-     * Adds all of the antecedents specified to the lists for their class
+     * Adds all of the antecedents specified to the lists for their class.
      */
     /*@RequiresNonNull("NIS.suppressor_map")*/
     public void add(Antecedents ants) {
@@ -1113,7 +1113,7 @@ public class NIS {
     }
 
     /**
-     * Returns a string representation of all of the antecedents by class
+     * Returns a string representation of all of the antecedents by class.
      */
     /*@SideEffectFree*/
     public String toString(/*>>>@GuardSatisfied Antecedents this*/) {

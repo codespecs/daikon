@@ -211,7 +211,7 @@ public abstract class PptSlice extends Ppt {
 
   /**
    * Return an approximation of the number of distinct values seen on
-   * this slice
+   * this slice.
    */
   public abstract int num_values();
 
@@ -275,7 +275,7 @@ public abstract class PptSlice extends Ppt {
   /// Miscellaneous
 
   /**
-   * Remove the invariants noted in omitTypes
+   * Remove the invariants noted in omitTypes.
    */
   public void processOmissions(boolean[] omitTypes) {
     if (invs.size() == 0) return;
@@ -288,7 +288,7 @@ public abstract class PptSlice extends Ppt {
 
   /**
    * Check the internals of this slice.  Each invariant in the slice
-   * is checked for consistency and each inv.ppt must equal this
+   * is checked for consistency and each inv.ppt must equal this.
    */
   public void repCheck() {
 
@@ -353,7 +353,7 @@ public abstract class PptSlice extends Ppt {
    * Returns whether or not this slice already contains the specified
    * invariant.  Whether not invariants match is determine by Invariant.match()
    * This will return true for invariants of the same kind with different
-   * formulas (eg, one_of, bound, linearbinary)
+   * formulas (eg, one_of, bound, linearbinary).
    */
   public boolean contains_inv(Invariant inv) {
 
@@ -368,7 +368,7 @@ public abstract class PptSlice extends Ppt {
   /**
    * Returns whether or not this slice contains an exact match
    * for the specified invariant.  An exact match requires that the
-   * invariants be of the same class and have the same formula
+   * invariants be of the same class and have the same formula.
    */
   /*@EnsuresNonNullIf(result=true, expression="find_inv_exact(#1)")*/
   public boolean contains_inv_exact(Invariant inv) {
@@ -379,7 +379,7 @@ public abstract class PptSlice extends Ppt {
   /**
    * Returns the invariant that matches the specified invariant if it
    * exists.  Otherwise returns null.  An exact match requires that
-   * the invariants be of the same class and have the same formula
+   * the invariants be of the same class and have the same formula.
    */
   /*@Pure*/
   public /*@Nullable*/ Invariant find_inv_exact(Invariant inv) {
@@ -442,7 +442,7 @@ public abstract class PptSlice extends Ppt {
 
   /**
    * Output specified log information if the PtpSlice class, and this ppt
-   * and variables are enabled for logging
+   * and variables are enabled for logging.
    */
   public void log(String msg) {
     Debug.log(getClass(), this, msg);

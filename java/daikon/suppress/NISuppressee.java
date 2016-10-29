@@ -50,7 +50,7 @@ public class NISuppressee {
 
   /**
    * Define a binary suppressee on the specified class with the
-   * specified variable order
+   * specified variable order.
    */
   public NISuppressee(Class<? extends Invariant> cls, boolean swap) {
     sup_class = cls;
@@ -87,7 +87,7 @@ public class NISuppressee {
 
   /**
    * Checks this invariant against the specified sample and returns
-   * the status
+   * the status.
    */
   public InvariantStatus check(ValueTuple vt, VarInfo[] vis) {
 
@@ -236,7 +236,7 @@ public class NISuppressee {
   /**
    * Returns the swap variable setting  for the suppressee.  Returns false
    * if the suppressee is not a binary invariant, is symmetric, or permutes
-   * by changing classes
+   * by changing classes.
    */
   public boolean get_swap() {
 

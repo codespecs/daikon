@@ -15,7 +15,7 @@ import typequals.*;
 
 /**
  * Represents a string that contains only printable ascii characters
- * (values 32 through 126 plus 9 (tab)
+ * (values 32 through 126 plus 9 (tab).
  */
 public final class PrintableString extends SingleString {
   // We are Serializable, so we specify a version to allow changes to
@@ -94,7 +94,7 @@ public final class PrintableString extends SingleString {
   /**
    * Returns whether or not this is obvious statically.  The only check
    * is for static constants which are obviously printable (or not)
-   * from their values
+   * from their values.
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {

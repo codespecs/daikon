@@ -45,7 +45,6 @@ import typequals.*;
  * of the Equality set and <code>x</code> is chosen as the leader, then
  * the Equality will internally convert into binary comparison invariants
  * that print as <code>x == y</code> and <code>x == z</code>.
- *
  */
 public final /*(at)Interned*/ class Equality extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -364,7 +363,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * It seems however, quite wrong to leave variables in the same equality
    * set when one is missing and the other is not.  Its possible we should
    * go farther and break out of the equality set any variable that is
-   * missingOutOfBounds (JHP)
+   * missingOutOfBounds (JHP).
    */
   public List<VarInfo> add(ValueTuple vt, int count) {
     // Need to handle specially if leader is missing.
