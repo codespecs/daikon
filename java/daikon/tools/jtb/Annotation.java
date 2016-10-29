@@ -27,7 +27,7 @@ import org.checkerframework.dataflow.qual.*;
  * }</pre>
  * The above string should actually span only one line.
  *
- * To be well-formed, an annotation should be enclosed in <INVINFO>
+ * To be well-formed, an annotation should be enclosed in {@code <INVINFO>}
  * tags, contain
  * <pre>{@code
  *   <DAIKON> and
