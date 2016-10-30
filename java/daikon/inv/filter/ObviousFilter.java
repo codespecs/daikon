@@ -11,9 +11,7 @@ public class ObviousFilter extends InvariantFilter {
     return "Suppress obvious invariants";
   }
 
-  /**
-   * Boolean. If true, ObviousFilter is initially turned on.
-   */
+  /** Boolean. If true, ObviousFilter is initially turned on. */
   public static boolean dkconfig_enabled = true;
 
   public ObviousFilter() {

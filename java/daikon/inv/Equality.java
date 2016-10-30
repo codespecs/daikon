@@ -39,12 +39,11 @@ import typequals.*;
 // need to be pivoted.
 
 /**
- * Keeps track of sets of variables that are equal.  Other invariants are
- * instantiated for only one member of the Equality set, the leader.  If
- * variables <code>x</code>, <code>y</code>, and <code>z</code> are members
- * of the Equality set and <code>x</code> is chosen as the leader, then
- * the Equality will internally convert into binary comparison invariants
- * that print as <code>x == y</code> and <code>x == z</code>.
+ * Keeps track of sets of variables that are equal. Other invariants are instantiated for only one
+ * member of the Equality set, the leader. If variables <code>x</code>, <code>y</code>, and <code>z
+ * </code> are members of the Equality set and <code>x</code> is chosen as the leader, then the
+ * Equality will internally convert into binary comparison invariants that print as <code>x == y
+ * </code> and <code>x == z</code>.
  */
 public final /*(at)Interned*/ class Equality extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -56,9 +55,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
 
   public static final Logger debugPostProcess = Logger.getLogger("daikon.inv.Equality.postProcess");
 
-  /**
-   * How many samples this has seen.
-   */
+  /** How many samples this has seen. */
   private int numSamples;
 
   public void setSamples(int sample_cnt) {
@@ -70,9 +67,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /**
-   * The Set of VarInfos that this represents equality for.  Can
-   * change over time as this invariant weakens.  Sorted by index
-   * until pivoting.
+   * The Set of VarInfos that this represents equality for. Can change over time as this invariant
+   * weakens. Sorted by index until pivoting.
    */
   private TreeSet<VarInfo> vars;
 
@@ -82,16 +78,14 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return vars.size();
   }
 
-  /**
-   * Returns the variables in their index order.  Unmodifiable.
-   */
+  /** Returns the variables in their index order. Unmodifiable. */
   public Set<VarInfo> getVars() {
     return Collections.unmodifiableSet(vars);
   }
 
   /**
-   * @param variables variables that are equivalent, with the canonical
-   * one first.  Elements must be of type VarInfo.
+   * @param variables variables that are equivalent, with the canonical one first. Elements must be
+   *     of type VarInfo.
    */
   @SuppressWarnings("initialization.invalid.field.write.initialized") // weakness of FBC type system
   public Equality(Collection<VarInfo> variables, PptSlice ppt) {
@@ -127,8 +121,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
 
   private /*@Nullable*/ VarInfo leaderCache = null;
   /**
-   * Return the canonical VarInfo of this.  Note that the leader never
-   * changes.
+   * Return the canonical VarInfo of this. Note that the leader never changes.
+   *
    * @return the canonical VarInfo of this
    */
   @SuppressWarnings("purity") // set cache field
@@ -146,9 +140,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /**
-   * Always return JUSTIFIED because we aggregate Comparison
-   * invariants that are all justified to the confidence_limit
-   * threshold.
+   * Always return JUSTIFIED because we aggregate Comparison invariants that are all justified to
+   * the confidence_limit threshold.
    */
   public double computeConfidence() {
     return Invariant.CONFIDENCE_JUSTIFIED;
@@ -358,12 +351,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
 
   /**
    * @return a List of VarInfos that do not fit into this set anymore
-   *
-   * Originally (8/14/2003), this did not check for the modified bits.
-   * It seems however, quite wrong to leave variables in the same equality
-   * set when one is missing and the other is not.  Its possible we should
-   * go farther and break out of the equality set any variable that is
-   * missingOutOfBounds (JHP).
+   *     <p>Originally (8/14/2003), this did not check for the modified bits. It seems however,
+   *     quite wrong to leave variables in the same equality set when one is missing and the other
+   *     is not. Its possible we should go farther and break out of the equality set any variable
+   *     that is missingOutOfBounds (JHP).
    */
   public List<VarInfo> add(ValueTuple vt, int count) {
     // Need to handle specially if leader is missing.
@@ -445,12 +436,11 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /**
-   * Convert Equality invariants into normal IntEqual type for
-   * filtering, printing, etc.  Add these to parent.
+   * Convert Equality invariants into normal IntEqual type for filtering, printing, etc. Add these
+   * to parent.
    *
-   * If the leader was changed to not be the first member of the group
-   * adds leader == leader invariant as well since that invariant is
-   * used in suppressions and obvious tests.
+   * <p>If the leader was changed to not be the first member of the group adds leader == leader
+   * invariant as well since that invariant is used in suppressions and obvious tests.
    */
   public void postProcess() {
     if (this.numSamples() == 0) return; // All were missing or not present
@@ -492,16 +482,13 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /**
-   * Switch the leader of this invariant, if possible, to a more canonical
-   * VarInfo:  a VarInfo that is not isDerived() is better than one that is;
-   * one that is not isDerivedParamAndUninteresting() is better than one that
-   * is; and other things being equal, choose the least complex name.
-   * Call this only after postProcess has been called.
-   * We do a pivot so that anything that's interesting to be printed
-   * gets printed and not filtered out.  For example, if a == b and a
-   * is the leader, but not interesting, we still want to print f(b)
-   * as an invariant.  Thus we pivot b to be the leader.  Later on,
-   * each relevant PptSlice gets pivoted.  But not here.
+   * Switch the leader of this invariant, if possible, to a more canonical VarInfo: a VarInfo that
+   * is not isDerived() is better than one that is; one that is not isDerivedParamAndUninteresting()
+   * is better than one that is; and other things being equal, choose the least complex name. Call
+   * this only after postProcess has been called. We do a pivot so that anything that's interesting
+   * to be printed gets printed and not filtered out. For example, if a == b and a is the leader,
+   * but not interesting, we still want to print f(b) as an invariant. Thus we pivot b to be the
+   * leader. Later on, each relevant PptSlice gets pivoted. But not here.
    */
   public void pivot() {
     VarInfo newLeader = null;

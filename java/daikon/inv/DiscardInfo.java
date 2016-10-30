@@ -8,16 +8,15 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * A class used for holding a DiscardCode and a string
- * that contains more detailed information about why an Invariant
- * was discarded, as well as the classname and what would be returned
- * by the Invariant's format() method.
+ * A class used for holding a DiscardCode and a string that contains more detailed information about
+ * why an Invariant was discarded, as well as the classname and what would be returned by the
+ * Invariant's format() method.
  */
 public final class DiscardInfo {
 
   /**
-   * The DiscardCode describing this DiscardInfo.  It should never be null;
-   * if an invariant isn't being discarded, use null as its DiscardInfo.
+   * The DiscardCode describing this DiscardInfo. It should never be null; if an invariant isn't
+   * being discarded, use null as its DiscardInfo.
    */
   private DiscardCode discardCode;
 
@@ -25,9 +24,8 @@ public final class DiscardInfo {
   private String discardString;
 
   /**
-   * The String that would have resulted from calling format() on the
-   * Invariant being discarded.  This does not have to be maintained
-   * if the Invariant isn't discarded.
+   * The String that would have resulted from calling format() on the Invariant being discarded.
+   * This does not have to be maintained if the Invariant isn't discarded.
    */
   private String discardFormat;
 
@@ -79,16 +77,14 @@ public final class DiscardInfo {
     return (discardFormat + Global.lineSep + discardCode + Global.lineSep + discardString);
   }
 
-  /**
-   * Adds the specified string as an additional reason.
-   */
+  /** Adds the specified string as an additional reason. */
   public void add_implied(String reason) {
     discardString += " and " + reason;
   }
 
   /**
-   * Adds an equality string to the discardString for each variable in
-   * in vis which is different from the leader.
+   * Adds an equality string to the discardString for each variable in in vis which is different
+   * from the leader.
    */
   public void add_implied_vis(VarInfo[] vis) {
     for (int i = 0; i < vis.length; i++) {

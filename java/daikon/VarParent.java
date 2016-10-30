@@ -1,8 +1,5 @@
 package daikon;
 
-import static daikon.FileIO.VarDefinition;
-
-import daikon.PrintInvariants;
 import daikon.VarInfoName.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
@@ -14,8 +11,6 @@ import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
@@ -23,9 +18,8 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * Represents a parent of a variable. Includes the name of the parent
- * program point, as well as the relationship id. If the name of the
- * variable at the parent program point is different, the parent
+ * Represents a parent of a variable. Includes the name of the parent program point, as well as the
+ * relationship id. If the name of the variable at the parent program point is different, the parent
  * variable name is also specified.
  */
 public class VarParent implements Serializable {

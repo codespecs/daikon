@@ -5,10 +5,9 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
 /**
- * OrigModifier is a visitor that places "orig()" around varible names
- * and correspondingly corrects positioning fields of all the tokens in
- * tree to accomodate the change.  For example, the expression get(this.x)
- * would be changed to get(orig(this.x)).
+ * OrigModifier is a visitor that places "orig()" around varible names and correspondingly corrects
+ * positioning fields of all the tokens in tree to accomodate the change. For example, the
+ * expression get(this.x) would be changed to get(orig(this.x)).
  */
 public class OrigModifier extends DepthFirstVisitor {
 
@@ -25,7 +24,7 @@ public class OrigModifier extends DepthFirstVisitor {
   /**
    * Corrects column fields of n.
    *
-   * Modifies: n, this.
+   * <p>Modifies: n, this.
    */
   public void visit(NodeToken n) {
     if (n.beginLine == columnshiftline) {
@@ -38,10 +37,9 @@ public class OrigModifier extends DepthFirstVisitor {
   }
 
   /**
-   * Checks if n is a variable name.  If so adds "orig(" to the
-   *          front of the name and ")" to the end.
+   * Checks if n is a variable name. If so adds "orig(" to the front of the name and ")" to the end.
    *
-   * Modifies: n, this.
+   * <p>Modifies: n, this.
    */
   // f0 -> PrimaryPrefix()
   // f1 -> ( PrimarySuffix() )*

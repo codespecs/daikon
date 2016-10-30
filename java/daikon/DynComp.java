@@ -6,18 +6,15 @@ import daikon.util.*;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * This is the main class for DynComp. It uses the javaagent switch to
- * java (which allows classes to be instrumented as they are loaded).
- * This class parses the command line arguments and starts java with the
- * javaagent switch on the target program.
- * Code based largely on daikon.Chicory.
+ * This is the main class for DynComp. It uses the javaagent switch to java (which allows classes to
+ * be instrumented as they are loaded). This class parses the command line arguments and starts java
+ * with the javaagent switch on the target program. Code based largely on daikon.Chicory.
  */
 public class DynComp {
 
@@ -97,8 +94,9 @@ public class DynComp {
   public static String usage_synopsis = "java daikon.DynComp [options]";
 
   /**
-   * Path to java agent jar file that performs the transformation.
-   * The "main" procedure is Premain.premain().
+   * Path to java agent jar file that performs the transformation. The "main" procedure is
+   * Premain.premain().
+   *
    * @see Premain#premain
    */
   // Set by start_target()
@@ -121,6 +119,7 @@ public class DynComp {
 
   /**
    * Entry point of DynComp
+   *
    * @param args see usage for argument descriptions
    */
   public static void main(String[] args) {
@@ -144,8 +143,8 @@ public class DynComp {
   }
 
   /**
-   * Check the resulting arguments for legality.  Prints a message and
-   * returns false if there was an error.
+   * Check the resulting arguments for legality. Prints a message and returns false if there was an
+   * error.
    */
   public static boolean check_args(Options options, String[] target_args) {
 
@@ -175,9 +174,8 @@ public class DynComp {
   }
 
   /**
-   * Starts the target program with the java agent setup to do the
-   * transforms.  All java agent arguments are passed to it.  Our
-   * classpath is passed to the new JVM.
+   * Starts the target program with the java agent setup to do the transforms. All java agent
+   * arguments are passed to it. Our classpath is passed to the new JVM.
    */
   /*TO DO: @PostNonNull("premain")*/
   void start_target(String premain_args, String[] target_args) {

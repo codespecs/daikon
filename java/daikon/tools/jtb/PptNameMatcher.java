@@ -12,22 +12,18 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * Matches program point names with their corresponding MethodDeclaration's
- * (or ConstructorDeclaration's) in an AST.
+ * Matches program point names with their corresponding MethodDeclaration's (or
+ * ConstructorDeclaration's) in an AST.
  *
- * There are a number of issues in matching, for example, ASTs contain
- * generics, and program point names do not. This implementation
- * handles such issues.
+ * <p>There are a number of issues in matching, for example, ASTs contain generics, and program
+ * point names do not. This implementation handles such issues.
  */
 public class PptNameMatcher {
 
   // Output debugging information when matching a PptName to an AST.
   private static boolean debug_getMatches = false;
 
-  /**
-   * Create an AST matcher that will match program points against
-   * AST elements rooted at `root'.
-   */
+  /** Create an AST matcher that will match program points against AST elements rooted at `root'. */
   public PptNameMatcher(Node root) {
     root.accept(new ClassOrInterfaceTypeDecorateVisitor());
   }
@@ -105,17 +101,13 @@ public class PptNameMatcher {
     }
   }
 
-  /**
-   * Iterates through program points and returns those that match the
-   * given method declaration.
-   */
+  /** Iterates through program points and returns those that match the given method declaration. */
   public List<PptTopLevel> getMatches(PptMap ppts, MethodDeclaration methdecl) {
     return getMatchesInternal(ppts, methdecl);
   }
 
   /**
-   * Iterates through program points and returns those that match the
-   * given constructor declaration.
+   * Iterates through program points and returns those that match the given constructor declaration.
    */
   public List<PptTopLevel> getMatches(PptMap ppts, ConstructorDeclaration constrdecl) {
     return getMatchesInternal(ppts, constrdecl);
@@ -207,16 +199,14 @@ public class PptNameMatcher {
       if (debug_getMatches) {
         System.out.printf(
             "getMatch: class name %s and method name %s DO NOT match candidate.%n",
-            pptClassName,
-            pptMethodName);
+            pptClassName, pptMethodName);
       }
       return false;
     }
     if (debug_getMatches) {
       System.out.printf(
           "getMatch: class name %s and method name %s DO match candidate.%n",
-          classname,
-          methodname);
+          classname, methodname);
     }
 
     List<String> pptTypeStrings = extractPptArgs(pptName);
@@ -328,10 +318,7 @@ public class PptNameMatcher {
     return Arrays.<String>asList(ppt_args);
   }
 
-  /**
-   * Returns simple name of inner class, or null if ppt_name is not an
-   * inner constructor.
-   */
+  /** Returns simple name of inner class, or null if ppt_name is not an inner constructor. */
   private static /*@Nullable*/ String innerConstructorName(PptName pptName) {
     String mname = pptName.getMethodName();
     if (mname == null) {
@@ -345,8 +332,8 @@ public class PptNameMatcher {
   }
 
   /**
-   * Returns the simple name of a possibly-fully-qualified class name.
-   * The argument can be a fully-qualified name or a binary name.
+   * Returns the simple name of a possibly-fully-qualified class name. The argument can be a
+   * fully-qualified name or a binary name.
    */
   private static String simpleName(String classname) {
     int dotpos = classname.lastIndexOf('.');

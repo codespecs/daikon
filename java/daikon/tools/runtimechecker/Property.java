@@ -2,14 +2,11 @@ package daikon.tools.runtimechecker;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -18,9 +15,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * A program property (currently, derived by Daikon).
- */
+/** A program property (currently, derived by Daikon). */
 public class Property implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -30,10 +25,7 @@ public class Property implements Serializable {
 
   // The name of the method that this property describes.
   private final String method;
-  /**
-   * The name of the method that this property describes. ("null" for object
-   * invariants.)
-   */
+  /** The name of the method that this property describes. ("null" for object invariants.) */
   public String method(/*>>>@GuardSatisfied Property this*/) {
     return method;
   }
@@ -56,9 +48,8 @@ public class Property implements Serializable {
   public String jmlRep;
 
   /**
-   * A measure of a property's universality: whether it captures the general
-   * behavior of the program. The measure ranges from 0 (no confidence) to 1
-   * (high confidence).
+   * A measure of a property's universality: whether it captures the general behavior of the
+   * program. The measure ranges from 0 (no confidence) to 1 (high confidence).
    */
   public double confidence;
 
@@ -81,19 +72,15 @@ public class Property implements Serializable {
     this.confidence = confidence;
   }
 
-  /**
-   * Easy-on-the-eye string representation.
-   */
+  /** Easy-on-the-eye string representation. */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied Property this*/) {
     return kind.toString() + " : " + daikonRep();
   }
 
   /**
-   * <p>
-   * A class representing the kind of an property. An invariant is either
-   * <code>Kind.enter</code>,<code>Kind.exit</code>, or
-   * <code>Kind.objectInvariant</code>.
+   * A class representing the kind of an property. An invariant is either <code>Kind.enter</code>,
+   * <code>Kind.exit</code>, or <code>Kind.objectInvariant</code>.
    */
   // This should be an enum.
   /*@UsesObjectEquals*/
@@ -147,10 +134,8 @@ public class Property implements Serializable {
   }
 
   /**
-   * <p>
-   * Two properties are equal if their fields <code>daikonRep</code>,
-   * <code>method</code> and <code>kind</code> are equal.
-   * The other fields may differ.
+   * Two properties are equal if their fields <code>daikonRep</code>, <code>method</code> and <code>
+   * kind</code> are equal. The other fields may differ.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
@@ -175,28 +160,24 @@ public class Property implements Serializable {
   }
 
   /**
-   * <p>
-   * Parse a String and return the property that it represents. An example of
-   * the String representation of an property is:
+   * Parse a String and return the property that it represents. An example of the String
+   * representation of an property is:
    *
    * <pre>{@code
-   *     <INVINFO>
-   *     <INV> this.topOfStack <= this.theArray.length-1 </INV>
-   *     <ENTER>
-   *     <DAIKON>  this.topOfStack <= size(this.theArray[])-1  </DAIKON>
-   *     <DAIKONCLASS>class daikon.inv.binary.twoScalar.IntLessEqual</DAIKONCLASS>
-   *     <METHOD>  isEmpty()  </METHOD>
-   *     </INVINFO>
+   * <INVINFO>
+   * <INV> this.topOfStack <= this.theArray.length-1 </INV>
+   * <ENTER>
+   * <DAIKON>  this.topOfStack <= size(this.theArray[])-1  </DAIKON>
+   * <DAIKONCLASS>class daikon.inv.binary.twoScalar.IntLessEqual</DAIKONCLASS>
+   * <METHOD>  isEmpty()  </METHOD>
+   * </INVINFO>
    * }</pre>
    *
-   * <p>
-   * The above string should actually span only one line.
+   * <p>The above string should actually span only one line.
    *
-   * <p>
-   * To be well-formed, a property should be enclosed in
-   * {@code <INVINFO>} tags, contain {@code <DAIKON>} and
-   * {@code <METHOD>} tags, and exactly one of {@code <ENTER>},
-   * {@code <EXIT>}, {@code <OBJECT>}, or {@code <CLASS>}.
+   * <p>To be well-formed, a property should be enclosed in {@code <INVINFO>} tags, contain {@code
+   * <DAIKON>} and {@code <METHOD>} tags, and exactly one of {@code <ENTER>}, {@code <EXIT>}, {@code
+   * <OBJECT>}, or {@code <CLASS>}.
    */
   // [[ Using an XML parser seems like too strong a hammer here.
   //    But should do some profiling to see if all the string
@@ -241,9 +222,8 @@ public class Property implements Serializable {
   }
 
   /**
-   * XML representation. May be diferent from the String used to parse the
-   * property; only those tags that were parsed by the get() method will be
-   * output here.
+   * XML representation. May be diferent from the String used to parse the property; only those tags
+   * that were parsed by the get() method will be output here.
    */
   public String xmlString() {
     return "<INVINFO> "
@@ -267,11 +247,10 @@ public class Property implements Serializable {
   }
 
   /**
-   * Similar to {@link #xmlString()}, but without a
-   * {@code <INV>...</INV>} tag (the JML representation).
+   * Similar to {@link #xmlString()}, but without a {@code <INV>...</INV>} tag (the JML
+   * representation).
    *
-   * Invariant:
-   * <code>this.equals(Property.get(this.xmlStringNoJml())</code>
+   * <p>Invariant: <code>this.equals(Property.get(this.xmlStringNoJml())</code>
    */
   public String xmlStringNoJml() {
     return "<INVINFO> "
@@ -292,9 +271,9 @@ public class Property implements Serializable {
   }
 
   /**
-   * Find, parse and return all well-formed XML String representing
-   * properties. String. The string <code>annoString</code> may contain
-   * none, one, or several properties. Ignores malformed properties.
+   * Find, parse and return all well-formed XML String representing properties. String. The string
+   * <code>annoString</code> may contain none, one, or several properties. Ignores malformed
+   * properties.
    */
   public static Property[] findProperties(String annoString) {
     List<String> l = Collections.singletonList(annoString);
@@ -302,9 +281,9 @@ public class Property implements Serializable {
   }
 
   /**
-   * Find, parse and return all distinct properties found in a list of
-   * strings. Each string in <code>annoStrings</code> may contain none, one,
-   * or several properties. Malformed properties are ignored.
+   * Find, parse and return all distinct properties found in a list of strings. Each string in
+   * <code>annoStrings</code> may contain none, one, or several properties. Malformed properties are
+   * ignored.
    */
   public static Property[] findProperties(List<String> annoStrings) {
 
@@ -335,10 +314,7 @@ public class Property implements Serializable {
     return annos.toArray(new Property[] {});
   }
 
-  /**
-   * <p>
-   * Get the property with the given attributes.
-   */
+  /** Get the property with the given attributes. */
   private static Property get(
       Kind kind,
       String daikonRep,
@@ -378,16 +354,14 @@ public class Property implements Serializable {
   // }
 
   /**
-   * <p>
-   * A heuristic technique that takes into account several factors when
-   * calculating the confidence of an property, among them:
+   * A heuristic technique that takes into account several factors when calculating the confidence
+   * of an property, among them:
    *
    * <ul>
-   * <li>The values of <code>property.kind()</code>.
-   * <li>The "Daikon class" of the property.
-   * <li>Whether the property relates old and new state.
-   * <li>The total number of properties in the method containing this
-   * property.
+   *   <li>The values of <code>property.kind()</code>.
+   *   <li>The "Daikon class" of the property.
+   *   <li>Whether the property relates old and new state.
+   *   <li>The total number of properties in the method containing this property.
    * </ul>
    */
   // [[ A work in progress ]]
@@ -535,9 +509,7 @@ public class Property implements Serializable {
     return ret;
   }
 
-  /**
-   * The maximum confidence value calculated among all Properties given.
-   */
+  /** The maximum confidence value calculated among all Properties given. */
   public static double maxConf(Property[] annos) {
     if (annos.length == 0) {
       return -1;
@@ -551,10 +523,7 @@ public class Property implements Serializable {
     return max;
   }
 
-  /**
-   * The confidence of a set of properties. Currently it's just the maximum
-   * confidence.
-   */
+  /** The confidence of a set of properties. Currently it's just the maximum confidence. */
   public static double confidence(Property[] annos) {
     return maxConf(annos);
   }

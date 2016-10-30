@@ -13,8 +13,8 @@ import typequals.*;
 */
 
 /**
- * Represents string sequences that contain a common subset.  Prints as
- * <code>{s1, s2, s3, ...} subset of x[]</code>.
+ * Represents string sequences that contain a common subset. Prints as <code>
+ * {s1, s2, s3, ...} subset of x[]</code>.
  */
 public class CommonStringSequence extends SingleStringSequence {
   // We are Serializable, so we specify a version to allow changes to
@@ -24,16 +24,11 @@ public class CommonStringSequence extends SingleStringSequence {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff CommonStringSequence invariants should be considered.
-   */
+  /** Boolean. True iff CommonStringSequence invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   private int elts = 0;
-  /**
-   * Null means no samples have been seen yet.
-   * Empty array means intersection is empty.
-   */
+  /** Null means no samples have been seen yet. Empty array means intersection is empty. */
   private String /*@MonotonicNonNull*/ [] intersect = null;
 
   protected CommonStringSequence(PptSlice ppt) {

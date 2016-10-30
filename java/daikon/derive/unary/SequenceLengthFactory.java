@@ -1,7 +1,6 @@
 package daikon.derive.unary;
 
 import daikon.*;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,11 +10,7 @@ import org.checkerframework.checker.nullness.qual.*;
 
 public final class SequenceLengthFactory extends UnaryDerivationFactory {
 
-  /**
-   * Debug output.
-   *
-   *
-   */
+  /** Debug output. */
   public static final Logger debug = Logger.getLogger("daikon.derive.unary.SequenceLengthFactory");
 
   public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {

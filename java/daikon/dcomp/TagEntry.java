@@ -10,9 +10,8 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * Union/Find datastructure for Objects without the ranking optimization.
- * All references to the Objects are weak so that they will be removed from
- * the sets when no longer referenced.
+ * Union/Find datastructure for Objects without the ranking optimization. All references to the
+ * Objects are weak so that they will be removed from the sets when no longer referenced.
  */
 
 /* TagEntry now implements tracing, which means that if A trace-points to B,
@@ -45,18 +44,19 @@ class TagEntry extends WeakReference<Object> {
   private static SimpleLog debug = new SimpleLog(false);
 
   /**
-   * Parent in the tree that represents the set for this element.  If this,
-   * this entry is the representative one.
+   * Parent in the tree that represents the set for this element. If this, this entry is the
+   * representative one.
    */
   private /*@Nullable*/ TagEntry parent;
 
   /**
-   * Element in the tree that this element interacted with.
-   * Important!: tracer is null if this has no tracer.
+   * Element in the tree that this element interacted with. Important!: tracer is null if this has
+   * no tracer.
    *
-   * if TRACING_ENABLED?
+   * <p>if TRACING_ENABLED?
    */
   private /*@Nullable*/ TagEntry tracer;
+
   protected String trace_loc = "";
 
   /** Create an entry as a separate set */
@@ -75,9 +75,7 @@ class TagEntry extends WeakReference<Object> {
     // System.out.printf("Made %s with parent p%s%n", this, this.parent);
   }
 
-  /**
-   * Creates a set that only contains obj.
-   */
+  /** Creates a set that only contains obj. */
   public static TagEntry create(Object obj) {
     assert !object_map.containsKey(obj);
     TagEntry entry = new TagEntry(obj);
@@ -86,8 +84,8 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /**
-   * Merge the sets that contain the specified objects.  If this is the
-   * first time either of the objects was seen, create an entry for it.
+   * Merge the sets that contain the specified objects. If this is the first time either of the
+   * objects was seen, create an entry for it.
    */
   public static void union(Object obj1, Object obj2) {
     assert (obj1 != null) && (obj2 != null);
@@ -143,10 +141,7 @@ class TagEntry extends WeakReference<Object> {
     }
   }
 
-  /**
-   * Find the entry associated with obj.  If an entry does not currently
-   * exist, create it.
-   */
+  /** Find the entry associated with obj. If an entry does not currently exist, create it. */
   public static TagEntry get_entry(Object obj) {
 
     assert obj != null;
@@ -160,9 +155,8 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /**
-   * Find the TagEntry that is the representative of this set.
-   * As part of finding the representative, the path from the specified entry
-   * to the representative is compressed.
+   * Find the TagEntry that is the representative of this set. As part of finding the
+   * representative, the path from the specified entry to the representative is compressed.
    */
   public TagEntry find() {
 
@@ -185,9 +179,8 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /**
-   * Given an Object returns the Object that is the representative for
-   * its set.  If there is no entry for Object in the map, it must be
-   * in a set by itself.
+   * Given an Object returns the Object that is the representative for its set. If there is no entry
+   * for Object in the map, it must be in a set by itself.
    */
   public static Object find(Object obj) {
     assert obj != null;
@@ -233,9 +226,9 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /**
-   * Recursively traces from this object to the root of its tracer tree,
-   * and reverses the direction of every pointer on the path, such that
-   * this object is now the root of its tracer tree. (Imprecise wording, I know.)
+   * Recursively traces from this object to the root of its tracer tree, and reverses the direction
+   * of every pointer on the path, such that this object is now the root of its tracer tree.
+   * (Imprecise wording, I know.)
    */
   @SuppressWarnings("nullness") // catches NullPointerException
   public void reroute(/*@Nullable*/ TagEntry newTracer, String tloc) {
@@ -254,10 +247,7 @@ class TagEntry extends WeakReference<Object> {
     this.reroute(null, "");
   }
 
-  /**
-   * Returns each of the sets with elements in each set on a separate
-   * line.
-   */
+  /** Returns each of the sets with elements in each set on a separate line. */
   public static String dump() {
 
     LinkedHashMap<Object, List<Object>> sets = new LinkedHashMap<Object, List<Object>>();

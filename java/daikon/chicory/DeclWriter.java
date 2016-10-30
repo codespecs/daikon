@@ -16,9 +16,9 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * DeclWriter writes the {@code .decls} file to a stream.  It
- * uses traversal pattern trees (see {@link DaikonVariableInfo})  for each
- * program point.  These are also used by the {@link DTraceWriter}.
+ * DeclWriter writes the {@code .decls} file to a stream. It uses traversal pattern trees (see
+ * {@link DaikonVariableInfo}) for each program point. These are also used by the {@link
+ * DTraceWriter}.
  */
 @SuppressWarnings("nullness") // to do
 public class DeclWriter extends DaikonWriter {
@@ -48,16 +48,15 @@ public class DeclWriter extends DaikonWriter {
   private PrintStream outFile;
 
   /**
-   * Enable parent relations other than methods to their class objects.
-   * Turned off for now to match previous behavior.
+   * Enable parent relations other than methods to their class objects. Turned off for now to match
+   * previous behavior.
    */
   private static boolean enable_object_user = false;
 
   /**
    * Constructs a DeclWriter, preparing it to receive messages.
    *
-   * @param writer
-   *            Stream to write to
+   * @param writer Stream to write to
    */
   public DeclWriter(PrintStream writer) {
     super();
@@ -66,12 +65,10 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints header information to the decls file.  Should be called once
-   * before emitting any other declarations.
+   * Prints header information to the decls file. Should be called once before emitting any other
+   * declarations.
    *
-   * @param className
-   *        Name of the top-level class (used only for printing comments)
-   *
+   * @param className Name of the top-level class (used only for printing comments)
    */
   public void printHeaderInfo(String className) {
     outFile.println("// Declarations for " + className);
@@ -99,8 +96,7 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Returns the correctly formulated ":::OBJECT" name of the class
-   * (i.e., the program point name)
+   * Returns the correctly formulated ":::OBJECT" name of the class (i.e., the program point name)
    *
    * @param type the ClassType type
    * @return the correctly formulated String
@@ -110,11 +106,10 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints declarations for all the methods in the indicated class.
-   * This method is called in Runtime to print decls info for a class.
+   * Prints declarations for all the methods in the indicated class. This method is called in
+   * Runtime to print decls info for a class.
    *
-   * @param cinfo
-   *        Class whose declarations should be printed
+   * @param cinfo Class whose declarations should be printed
    */
   public void printDeclClass(ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
     if (Chicory.new_decl_format) {
@@ -156,10 +151,10 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints a method's program point.  This includes the declare header ("DECLARE"),
-   * the program point name, and the variable information.
+   * Prints a method's program point. This includes the declare header ("DECLARE"), the program
+   * point name, and the variable information.
    *
-   * This method uses variable information from the traversal tree.
+   * <p>This method uses variable information from the traversal tree.
    *
    * @param root the root of the traversal tree
    * @param name the program point name
@@ -179,13 +174,12 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints the .decls information for a single DaikonVariableInfo
-   * object, and recurses on its children.  If the current variable has
-   * comparability defined in decl_ppt, that comparability is used.
-   * Otherwise -1 is used if there is comparability information available
-   * and the information in the variable is used if it is not.
+   * Prints the .decls information for a single DaikonVariableInfo object, and recurses on its
+   * children. If the current variable has comparability defined in decl_ppt, that comparability is
+   * used. Otherwise -1 is used if there is comparability information available and the information
+   * in the variable is used if it is not.
    */
-  private void traverseDecl(DaikonVariableInfo curInfo, DeclReader. /*@Nullable*/DeclPpt decl_ppt) {
+  private void traverseDecl(DaikonVariableInfo curInfo, DeclReader./*@Nullable*/ DeclPpt decl_ppt) {
     if (curInfo.declShouldPrint()) {
 
       if (!(curInfo instanceof StaticObjInfo)) {
@@ -209,9 +203,7 @@ public class DeclWriter extends DaikonWriter {
     }
   }
 
-  /**
-   * Prints the object program point.  This contains the "this" object and the class' fields.
-   */
+  /** Prints the object program point. This contains the "this" object and the class' fields. */
   private void printObjectPpt(ClassInfo cinfo, String name, DeclReader comp_info) {
     outFile.println(declareHeader);
     outFile.println(name);
@@ -225,9 +217,8 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints the class program point. This contains only
-   * the static variables.  If there are no static variables to print,
-   * this method does nothing.
+   * Prints the class program point. This contains only the static variables. If there are no static
+   * variables to print, this method does nothing.
    */
   private void printClassPpt(ClassInfo cinfo, String name, DeclReader comp_info) {
     if (num_class_vars(cinfo) == 0) return;
@@ -251,11 +242,10 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints declarations for all the methods in the indicated class.
-   * This method is called in Runtime to print decls info for a class.
+   * Prints declarations for all the methods in the indicated class. This method is called in
+   * Runtime to print decls info for a class.
    *
-   * @param cinfo
-   *        Class whose declarations should be printed
+   * @param cinfo Class whose declarations should be printed
    */
   public void print_decl_class(ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
 
@@ -305,10 +295,10 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints a method's program point.  This includes the ppt declaration,
-   * all of the ppt records, and records for each variable.
+   * Prints a method's program point. This includes the ppt declaration, all of the ppt records, and
+   * records for each variable.
    *
-   * This method uses variable information from the traversal tree.
+   * <p>This method uses variable information from the traversal tree.
    *
    * @param mi the method information for the method
    * @param root the root of the traversal tree
@@ -360,9 +350,8 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints the class program point. This contains only
-   * the static variables.  If there are no static variables to print,
-   * this method does nothing.
+   * Prints the class program point. This contains only the static variables. If there are no static
+   * variables to print, this method does nothing.
    */
   private void print_class_ppt(ClassInfo cinfo, String name, DeclReader comp_info) {
 
@@ -395,10 +384,7 @@ public class DeclWriter extends DaikonWriter {
     if (debug) System.out.println("Exit print_class_ppt");
   }
 
-  /**
-   * Prints the object program point.  This contains the "this"
-   * object and the class' fields.
-   */
+  /** Prints the object program point. This contains the "this" object and the class' fields. */
   private void print_object_ppt(ClassInfo cinfo, String name, DeclReader comp_info) {
 
     if (debug) System.out.println("Enter print_object_ppt: " + cinfo);
@@ -447,23 +433,20 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Object program points are constructed for invariants about an
-   * object.  We define an object invariant as one that is true at the
-   * entrance and exit of each public method and also each time an
-   * instance of the object is available to another method (eg, when it
-   * is passed as a parameter or available as a static).  Daikon implements
-   * object invariants by merging the invariants from each public method
-   * and each user of the object.  We refer to the relationship between
-   * variables at these program points as a Program point / variable
-   * hierarchy.  This relationship must be defined in the declaration
-   * record.  The VarRelation class tracks one relation.
+   * Object program points are constructed for invariants about an object. We define an object
+   * invariant as one that is true at the entrance and exit of each public method and also each time
+   * an instance of the object is available to another method (eg, when it is passed as a parameter
+   * or available as a static). Daikon implements object invariants by merging the invariants from
+   * each public method and each user of the object. We refer to the relationship between variables
+   * at these program points as a Program point / variable hierarchy. This relationship must be
+   * defined in the declaration record. The VarRelation class tracks one relation.
    */
   private static class VarRelation {
     /** Name of the program point for the parent */
     String parent_ppt_name;
     /** Prefix of the variable name that is not part of the parent name */
     String local_prefix;
-    /** Prefix of the parent that replaces the local prefix.  Normally 'this'. */
+    /** Prefix of the parent that replaces the local prefix. Normally 'this'. */
     String parent_prefix;
     /** Top level variable for the relation */
     String local_variable;
@@ -498,16 +481,12 @@ public class DeclWriter extends DaikonWriter {
     public String toString(/*>>>@GuardSatisfied VarRelation this*/) {
       return String.format(
           "VarRelation %s (%s->%s) %s [%s]",
-          parent_ppt_name,
-          local_prefix,
-          parent_prefix,
-          local_variable,
-          type);
+          parent_ppt_name, local_prefix, parent_prefix, local_variable, type);
     }
 
     /**
-     * Returns whether or not this relation is from a static variable in
-     * an object ppt to its matching variable at the class level.
+     * Returns whether or not this relation is from a static variable in an object ppt to its
+     * matching variable at the class level.
      */
     /*@Pure*/
     public boolean is_class_relation() {
@@ -515,10 +494,9 @@ public class DeclWriter extends DaikonWriter {
     }
 
     /**
-     * Returns the string defining the relation for the specified variable
-     * The format is parent-ppt-name id parent-variable-name.  If the
-     * variable is static, it always has the same name in the parent (since
-     * fully specified names are used for static variables).
+     * Returns the string defining the relation for the specified variable The format is
+     * parent-ppt-name id parent-variable-name. If the variable is static, it always has the same
+     * name in the parent (since fully specified names are used for static variables).
      */
     public String relation_str(DaikonVariableInfo var) {
       String out = parent_ppt_name + " " + id;
@@ -528,10 +506,7 @@ public class DeclWriter extends DaikonWriter {
       return out;
     }
 
-    /**
-     * Two VarRelations are equal if the refer to the same program point and
-     * local variable.
-     */
+    /** Two VarRelations are equal if the refer to the same program point and local variable. */
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
@@ -556,11 +531,10 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Prints the .decls information for a single DaikonVariableInfo
-   * object, and recurses on its children.  If the current variable has
-   * comparability defined in compare_ppt, that comparability is used.
-   * Otherwise -1 is used if there is comparability information available
-   * and the information in the variable is used if it is not.
+   * Prints the .decls information for a single DaikonVariableInfo object, and recurses on its
+   * children. If the current variable has comparability defined in compare_ppt, that comparability
+   * is used. Otherwise -1 is used if there is comparability information available and the
+   * information in the variable is used if it is not.
    */
   private void traverse_decl(
       ClassInfo cinfo,
@@ -694,22 +668,20 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Returns the string to write to the output file for the specified
-   * enum.  Currently this is just the name of the enum in lower case.
+   * Returns the string to write to the output file for the specified enum. Currently this is just
+   * the name of the enum in lower case.
    */
   private String out_name(Enum<?> e) {
     return e.name().toLowerCase();
   }
 
   /**
-   * Looks to see if there is a class that we are instrumenting that
-   * matches the type of this variable.  If so, returns a VarRelation
-   * that describes the hierarchy relationship between this variable (and
-   * its field) and the variables within the object ppt for the class.
-   * If this is an object ppt (ci != null), then each top level static
-   * variable has a relation to the class ppt.
+   * Looks to see if there is a class that we are instrumenting that matches the type of this
+   * variable. If so, returns a VarRelation that describes the hierarchy relationship between this
+   * variable (and its field) and the variables within the object ppt for the class. If this is an
+   * object ppt (ci != null), then each top level static variable has a relation to the class ppt.
    *
-   * @param cinfo class of the object ppt.  Null if this is not an object ppt.
+   * @param cinfo class of the object ppt. Null if this is not an object ppt.
    * @param is_static_method true if this ppt is a static method enter
    * @param parent parent of var in the variable tree
    * @param var variable whose relation is desired
@@ -769,16 +741,14 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Looks for all of the object-user ppt/variable hiearchy relations
-   * beginning at var.  Once a relation is found, no more relations
-   * are looked for under that variable.  In most cases, it would be
-   * expected that only one relation will be found (either var is a class
-   * with a corresponding object ppt or it is not).  However, depending
-   * on what classes are being instrumented, it might be possible for
-   * a class not to have an object ppt while multiple children do have
-   * object ppts.
+   * Looks for all of the object-user ppt/variable hiearchy relations beginning at var. Once a
+   * relation is found, no more relations are looked for under that variable. In most cases, it
+   * would be expected that only one relation will be found (either var is a class with a
+   * corresponding object ppt or it is not). However, depending on what classes are being
+   * instrumented, it might be possible for a class not to have an object ppt while multiple
+   * children do have object ppts.
    *
-   * Any relations that are found are added to the relations list.
+   * <p>Any relations that are found are added to the relations list.
    */
   private void find_relations(
       ClassInfo ci,
@@ -808,8 +778,8 @@ public class DeclWriter extends DaikonWriter {
   }
 
   /**
-   * Returns the number of variables in the CLASS program point.  The
-   * CLASS ppt contains all of the static variables in the class (if any).
+   * Returns the number of variables in the CLASS program point. The CLASS ppt contains all of the
+   * static variables in the class (if any).
    */
   private int num_class_vars(ClassInfo cinfo) {
 

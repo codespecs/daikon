@@ -1,6 +1,5 @@
 package daikon.test;
 
-import daikon.PptName;
 import daikon.tools.jtb.*;
 import java.io.*;
 import java.util.*;

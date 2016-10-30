@@ -16,9 +16,8 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * This class contains static methods {@link #parse_spinfofile(File)}
- * which  creates Splitterss from a {@code .spinfo} file, and
- * {@link #load_splitters}  which loads the splitters for a given Ppt.
+ * This class contains static methods {@link #parse_spinfofile(File)} which creates Splitterss from
+ * a {@code .spinfo} file, and {@link #load_splitters} which loads the splitters for a given Ppt.
  */
 public class SplitterFactory {
   private SplitterFactory() {
@@ -34,24 +33,20 @@ public class SplitterFactory {
   private static /*@MonotonicNonNull*/ String tempdir;
 
   /**
-   * Boolean.  If true, the temporary Splitter files are deleted on exit.
-   * Set it to "false" if you are debugging splitters.
+   * Boolean. If true, the temporary Splitter files are deleted on exit. Set it to "false" if you
+   * are debugging splitters.
    */
   public static boolean dkconfig_delete_splitters_on_exit = true;
 
   /**
-   * String.  Specifies which Java compiler is used to compile
-   * Splitters.  This can be the full path name or whatever is used on
-   * the command line.
-   * <p>
+   * String. Specifies which Java compiler is used to compile Splitters. This can be the full path
+   * name or whatever is used on the command line.
    *
-   * By default, $DAIKONDIR/java is part of the classpath. This is useful
-   * when working from the sources directly.
-   * <p>
+   * <p>By default, $DAIKONDIR/java is part of the classpath. This is useful when working from the
+   * sources directly.
    *
-   * The default value is
-   * "javac -classpath $DAIKONDIR/daikon.jar:$DAIKONDIR/java"
-   * (with appropriate classpath separator for the operating system).
+   * <p>The default value is "javac -classpath $DAIKONDIR/daikon.jar:$DAIKONDIR/java" (with
+   * appropriate classpath separator for the operating system).
    */
   public static String dkconfig_compiler
       // "-source 6 -target 6" is a hack for when using a Java 8 compiler but
@@ -65,17 +60,16 @@ public class SplitterFactory {
           + new File(System.getenv("DAIKONDIR"), "daikon.jar");
 
   /**
-   * Positive integer.  Specifies the Splitter compilation timeout, in
-   * seconds, after which the compilation process is terminated and
-   * retried, on the assumption that it has hung.
+   * Positive integer. Specifies the Splitter compilation timeout, in seconds, after which the
+   * compilation process is terminated and retried, on the assumption that it has hung.
    */
   public static int dkconfig_compile_timeout = 20;
 
   private static /*@MonotonicNonNull*/ FileCompiler fileCompiler; // lazily initialized
 
   /**
-   * guid is a counter that increments every time a file is written.  It is
-   * used to ensure that every file written has a unique name.
+   * guid is a counter that increments every time a file is written. It is used to ensure that every
+   * file written has a unique name.
    */
   private static int guid = 0;
 
@@ -83,6 +77,7 @@ public class SplitterFactory {
 
   /**
    * Parses the Splitter info.
+   *
    * @param infofile filename.spinfo
    * @return a SpinfoFile encapsulating the parsed splitter info file
    */
@@ -98,8 +93,9 @@ public class SplitterFactory {
   }
 
   /**
-   * Finds the splitters that apply to a given Ppt and loads them
-   * (that is, it populates SplitterList).
+   * Finds the splitters that apply to a given Ppt and loads them (that is, it populates
+   * SplitterList).
+   *
    * @param ppt the Ppt
    * @param spfiles a list of SpinfoFiles
    */
@@ -170,12 +166,13 @@ public class SplitterFactory {
   }
 
   /**
-   * Writes, compiles, and loads the splitter {@code .java} files for each
-   * splitterObject in splitterObjects.
+   * Writes, compiles, and loads the splitter {@code .java} files for each splitterObject in
+   * splitterObjects.
+   *
    * @param splitterObjects are the splitterObjects for ppt
    * @param ppt the Ppt for these splitterObjects
-   * @param statementReplacer a StatementReplacer for the replace statements
-   *  to be used in these splitterObjects
+   * @param statementReplacer a StatementReplacer for the replace statements to be used in these
+   *     splitterObjects
    */
   /*@RequiresNonNull("tempdir")*/
   private static void loadSplitters(
@@ -242,8 +239,8 @@ public class SplitterFactory {
   }
 
   /**
-   * Compiles the files given by fileNames.
-   * Return the error output.
+   * Compiles the files given by fileNames. Return the error output.
+   *
    * @return the error output from compiling the files
    * @param fileNames paths to the files to be compiled as Strings
    * @throws IOException if there is a problem reading a file
@@ -260,9 +257,7 @@ public class SplitterFactory {
     return fileCompiler.compileFiles(fileNames);
   }
 
-  /**
-   * Determine whether a Ppt's name matches the given pattern.
-   */
+  /** Determine whether a Ppt's name matches the given pattern. */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
     if (ppt.name.equals(ppt_name)) return true;
     if (ppt_name.endsWith(":::EXIT")) {
@@ -300,15 +295,13 @@ public class SplitterFactory {
   }
 
   /**
-   * Returns a file name for a splitter file to be used with a Ppt
-   * with the name, ppt_name.  The file name is ppt_name with all
-   * characters which are invalid for use in a java file name (such
-   * as ".") replaced with "_".  Then "_guid" is append to the end.
-   * For example if ppt_name is "myPackage.myClass.someMethod" and
-   * guid = 12, then the following would be returned:
+   * Returns a file name for a splitter file to be used with a Ppt with the name, ppt_name. The file
+   * name is ppt_name with all characters which are invalid for use in a java file name (such as
+   * ".") replaced with "_". Then "_guid" is append to the end. For example if ppt_name is
+   * "myPackage.myClass.someMethod" and guid = 12, then the following would be returned:
    * "myPackage_myClass_someMethod_12".
-   * @param ppt_name the name of the Ppt that the splitter
-   *  Java file wil be used with
+   *
+   * @param ppt_name the name of the Ppt that the splitter Java file wil be used with
    */
   private static String getFileName(String ppt_name) {
     String splitterName = clean(ppt_name);
@@ -318,11 +311,10 @@ public class SplitterFactory {
   }
 
   /**
-   * Cleans str by replacing all characters that are not
-   * valid java indentifier parts with "_".
+   * Cleans str by replacing all characters that are not valid java indentifier parts with "_".
+   *
    * @param str the string to be cleaned
-   * @return str with all non-Java-indentifier parts replaced
-   *  with "_"
+   * @return str with all non-Java-indentifier parts replaced with "_"
    */
   private static String clean(String str) {
     char[] cleaned = str.toCharArray();
@@ -336,10 +328,9 @@ public class SplitterFactory {
   }
 
   /**
-   * Creates the temporary directory in which splitter files will
-   * be stored.
-   * @return the name of the temporary directory. This is where
-   *  the Splitters are created.
+   * Creates the temporary directory in which splitter files will be stored.
+   *
+   * @return the name of the temporary directory. This is where the Splitters are created.
    */
   private static String createTempDir() {
     try {

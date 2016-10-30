@@ -19,20 +19,17 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * AnnotateNullable reads a Daikon invariant file and determines which
- * reference variables have seen any null values.  It writes to standard
- * out an <a
+ * AnnotateNullable reads a Daikon invariant file and determines which reference variables have seen
+ * any null values. It writes to standard out an <a
  * href="http://types.cs.washington.edu/annotation-file-utilities/annotation-file-format.html">annotation
- * file</a> with those variables.  It determines which variables have seen
- * null values by looking at the NonZero invariant.  If that invariant is
- * NOT present, then the variable must have been null at least once.
- * <p>
+ * file</a> with those variables. It determines which variables have seen null values by looking at
+ * the NonZero invariant. If that invariant is NOT present, then the variable must have been null at
+ * least once.
  *
- * Since only the NonZero invariant is used, Daikon processing time can be
- * significantly reduced by turning off derived variables and all
- * invariants other than daikon.inv.unary.scalar.NonZero.  This is not
- * necessary, however, for correct operation.  File
- * <tt>annotate_nullable.config</tt> in the distribution does this.
+ * <p>Since only the NonZero invariant is used, Daikon processing time can be significantly reduced
+ * by turning off derived variables and all invariants other than daikon.inv.unary.scalar.NonZero.
+ * This is not necessary, however, for correct operation. File <tt>annotate_nullable.config</tt> in
+ * the distribution does this.
  */
 public class AnnotateNullable {
 
@@ -43,9 +40,7 @@ public class AnnotateNullable {
 
   static SimpleLog debug = new SimpleLog(/*enabled=*/ false);
 
-  /**
-   * Map from a class name to the list of static functions for that class.
-   */
+  /** Map from a class name to the list of static functions for that class. */
   static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<String, List<PptTopLevel>>();
 
   // The package for the previous class.  Used to reduce duplication in
@@ -53,15 +48,15 @@ public class AnnotateNullable {
   static /*@Interned*/ String last_package = "";
 
   /**
-   * Write an output file in the stub class format (see the Checker
-   * Framework Manual), instead of in annotation file format.
+   * Write an output file in the stub class format (see the Checker Framework Manual), instead of in
+   * annotation file format.
    */
   @Option("Use the stub class file format")
   public static boolean stub_format = false;
 
   /**
-   * Adds NonNull annotations as well as Nullable annotations.  Unlike Nullable
-   * annotations, NonNull annotations are not necessarily correct.
+   * Adds NonNull annotations as well as Nullable annotations. Unlike Nullable annotations, NonNull
+   * annotations are not necessarily correct.
    */
   @Option("-n Insert NonNull as well as Nullable annotations")
   public static boolean nonnull_annotations = false;
@@ -222,16 +217,12 @@ public class AnnotateNullable {
       }
       System.out.printf(
           "class %s { // %d/%s obj/class samples%n",
-          object_ppt.ppt_name.getFullClassName(),
-          object_ppt.num_samples(),
-          class_samples);
+          object_ppt.ppt_name.getFullClassName(), object_ppt.num_samples(), class_samples);
     } else {
       System.out.printf("package %s:%n", ppt_package);
       System.out.printf(
           "class %s : // %d/%s obj/class samples%n",
-          object_ppt.ppt_name.getShortClassName(),
-          object_ppt.num_samples(),
-          class_samples);
+          object_ppt.ppt_name.getShortClassName(), object_ppt.num_samples(), class_samples);
     }
 
     // Process static fields
@@ -280,10 +271,9 @@ public class AnnotateNullable {
   }
 
   /**
-   * Get the annotation for the specified variable.  Returns @Nullable if
-   * samples were found for this variable and at least one sample contained
-   * a null value.  Returns an empty string if no annotation is applicable.
-   * Otherwise, the return value contains a trailing space.
+   * Get the annotation for the specified variable. Returns @Nullable if samples were found for this
+   * variable and at least one sample contained a null value. Returns an empty string if no
+   * annotation is applicable. Otherwise, the return value contains a trailing space.
    */
   public static String get_annotation(PptTopLevel ppt, VarInfo vi) {
 
@@ -302,9 +292,7 @@ public class AnnotateNullable {
     return annotation;
   }
 
-  /**
-   * Print out the annotations for the specified method.
-   */
+  /** Print out the annotations for the specified method. */
   public static void process_method(PptTopLevel ppt) {
 
     assert ppt.type == PptType.EXIT : ppt;
@@ -360,9 +348,7 @@ public class AnnotateNullable {
     }
   }
 
-  /**
-   * Print out the annotations for each field in the object or class.
-   */
+  /** Print out the annotations for each field in the object or class. */
   public static void process_obj_fields(PptTopLevel ppt) {
 
     for (VarInfo vi : ppt.var_infos) {
@@ -398,9 +384,7 @@ public class AnnotateNullable {
     }
   }
 
-  /**
-   * Returns a JVM signature for the method.
-   */
+  /** Returns a JVM signature for the method. */
   public static String jvm_signature(PptTopLevel ppt) {
 
     @SuppressWarnings("nullness") // Java method, so getMethodName() != null
@@ -425,10 +409,9 @@ public class AnnotateNullable {
   }
 
   /**
-   * Returns the field name of the specified variable.  This is the relative
-   * name for instance fields, but the relative name is not specified for
-   * static fields (because there is no enclosing variable with the full
-   * name).  The field name is obtained in that case, by removing the
+   * Returns the field name of the specified variable. This is the relative name for instance
+   * fields, but the relative name is not specified for static fields (because there is no enclosing
+   * variable with the full name). The field name is obtained in that case, by removing the
    * package/class specifier.
    */
   public static String field_name(VarInfo vi) {
@@ -447,11 +430,9 @@ public class AnnotateNullable {
   }
 
   /**
-   * Returns whether or not the method of the specified ppt
-   * is static or not.  The ppt must be an exit ppt.  Exit ppts
-   * that do not have an object as a parent are inferred to be static.
-   * This does not work for enter ppts, because constructors do not
-   * have the object as a parent on entry.
+   * Returns whether or not the method of the specified ppt is static or not. The ppt must be an
+   * exit ppt. Exit ppts that do not have an object as a parent are inferred to be static. This does
+   * not work for enter ppts, because constructors do not have the object as a parent on entry.
    */
   /*@Pure*/
   public static boolean is_static_method(PptTopLevel ppt) {

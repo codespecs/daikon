@@ -9,15 +9,14 @@ import plume.*;
 // (Actually, maybe it will just subclass that.)
 
 /**
- * ValueSet stores a set of unique integers.  When adding a value, for
- * efficiency its hash code is added rather than the value itself.  If the
- * set size exceeds a specified limit, then its rep is nulled.
- * <p>
+ * ValueSet stores a set of unique integers. When adding a value, for efficiency its hash code is
+ * added rather than the value itself. If the set size exceeds a specified limit, then its rep is
+ * nulled.
  *
- * This class is used for efficient justification tests.
- * <p>
+ * <p>This class is used for efficient justification tests.
  *
- * Relevant subclasses are:
+ * <p>Relevant subclasses are:
+ *
  * <ul>
  *   <li>ValueSetScalar
  *   <li>ValueSetFloat
@@ -26,6 +25,7 @@ import plume.*;
  *   <li>ValueSetString
  *   <li>ValueSetStringArray
  * </ul>
+ *
  * These subclasses store a hashcode.
  */
 public abstract class ValueSet extends LimitedSizeIntSet implements Serializable, Cloneable {
@@ -43,10 +43,9 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
   // it is, then change LimitedSizeIntSet to optionally not pre-allocate
   // the entire array.
   /**
-   * The number 44 comes from the fact that .9^44 &lt; .01.  So, if the
-   * confidence limit is .01 and the probability of a given event is set at
-   * .1, then 44 values is enough to demonstrate that never seeing the
-   * event is statistically justified (not a coincidence).
+   * The number 44 comes from the fact that .9^44 &lt; .01. So, if the confidence limit is .01 and
+   * the probability of a given event is set at .1, then 44 values is enough to demonstrate that
+   * never seeing the event is statistically justified (not a coincidence).
    */
   static final int DEFAULT_MAX_VALUES = 44;
 

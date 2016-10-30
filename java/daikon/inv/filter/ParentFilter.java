@@ -8,18 +8,13 @@ import java.util.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/**
- * Filter for not printing invariants that have a matching invariant
- * at their parent PPT.
- */
+/** Filter for not printing invariants that have a matching invariant at their parent PPT. */
 public class ParentFilter extends InvariantFilter {
   public String getDescription() {
     return "Filter invariants that match a parent program point invariant";
   }
 
-  /**
-   * Boolean. If true, ParentFilter is initially turned on.
-   */
+  /** Boolean. If true, ParentFilter is initially turned on. */
   public static boolean dkconfig_enabled = true;
 
   public ParentFilter() {
@@ -37,9 +32,7 @@ public class ParentFilter extends InvariantFilter {
       if (inv.ppt.parent.parents != null) {
         inv.log(
             "%s has PptTopLevel %s which has %d parents",
-            inv.format(),
-            inv.ppt.parent.name,
-            inv.ppt.parent.parents.size());
+            inv.format(), inv.ppt.parent.name, inv.ppt.parent.parents.size());
         for (PptRelation rel : inv.ppt.parent.parents) {
           inv.log("--%s%n", rel);
           inv.log("--variables: %s", VarInfo.arrayToString(rel.parent.var_infos));
@@ -69,9 +62,7 @@ public class ParentFilter extends InvariantFilter {
           if (Debug.logDetail()) {
             inv.log(
                 "variable %s [%s] cannot be found in %s",
-                inv.ppt.var_infos[j],
-                inv.ppt.var_infos[j].get_equalitySet_vars(),
-                rel);
+                inv.ppt.var_infos[j], inv.ppt.var_infos[j].get_equalitySet_vars(), rel);
             for (VarInfo evi : inv.ppt.var_infos[j].get_equalitySet_vars()) {
               inv.log(
                   "var %s index %d, dp %b, depth %d, complex %d, idp %s, name %s, param vars %s",
@@ -134,24 +125,14 @@ public class ParentFilter extends InvariantFilter {
             if (debug) {
               System.out.printf(
                   "Not in guarding list %s for %s: parent var %s at %s for %s at %s%n",
-                  guardedVars,
-                  pinv,
-                  pv,
-                  rel.parent,
-                  v.name(),
-                  rel.child);
+                  guardedVars, pinv, pv, rel.parent, v.name(), rel.child);
             }
             VarInfo pgv = pGuardedVars.size() > 0 ? pGuardedVars.get(0) : null;
             assert (pgv != pv);
             if (debug && pgv != null) {
               System.out.printf(
                   "%s is index %d at %s, %s is index %d at %s%n",
-                  pgv,
-                  pgv.varinfo_index,
-                  pgv.ppt.name,
-                  pv,
-                  pv.varinfo_index,
-                  pv.ppt.name);
+                  pgv, pgv.varinfo_index, pgv.ppt.name, pv, pv.varinfo_index, pv.ppt.name);
             }
             var_mismatch = true;
             break;
@@ -162,9 +143,7 @@ public class ParentFilter extends InvariantFilter {
         if (Invariant.logOn()) {
           inv.log(
               "Filtered by parent inv '%s' at ppt %s with rel %s",
-              pinv.format(),
-              pslice.name(),
-              rel);
+              pinv.format(), pslice.name(), rel);
           for (VarInfo cvi : inv.ppt.var_infos) {
             inv.log("child variable %s matches parent variable %s", cvi, rel.parentVar(cvi));
             for (VarInfo evi : cvi.get_equalitySet_vars()) {

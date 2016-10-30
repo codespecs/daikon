@@ -11,14 +11,11 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * PrefixFixer is a visitor for a jtb syntax tree that converts
- * prefixes of variable name to part of the variable name.
- * For example "prefix.x" would go to "prefix_x", "y.prefix.x"
- * would go to "y_prefix_x", and "y.x.methodName()" would be go to
- * y_x.methodName(). Prefixes that are java reserved words are not
- * affected. For example "this.x" yields "this.x". Finally, if the suffix
- * is "length", then it is not affected.  For example "x.y.length" yields
- * "x_y.length".
+ * PrefixFixer is a visitor for a jtb syntax tree that converts prefixes of variable name to part of
+ * the variable name. For example "prefix.x" would go to "prefix_x", "y.prefix.x" would go to
+ * "y_prefix_x", and "y.x.methodName()" would be go to y_x.methodName(). Prefixes that are java
+ * reserved words are not affected. For example "this.x" yields "this.x". Finally, if the suffix is
+ * "length", then it is not affected. For example "x.y.length" yields "x_y.length".
  */
 class PrefixFixer extends DepthFirstVisitor {
 
@@ -31,17 +28,15 @@ class PrefixFixer extends DepthFirstVisitor {
   /** The token visited before twoTokensAgo. */
   private /*@MonotonicNonNull*/ NodeToken threeTokensAgo;
 
-  /**
-   * Creates a new instance of PrefixFixer to fix "." prefixes.
-   */
+  /** Creates a new instance of PrefixFixer to fix "." prefixes. */
   private PrefixFixer() {
     super();
   }
 
   /**
    * Fixes prefixes located in statement (see class description).
-   * @param expression valid segment of java code from which prefix
-   *  should be fixed
+   *
+   * @param expression valid segment of java code from which prefix should be fixed
    */
   public static String fixPrefix(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
@@ -52,11 +47,9 @@ class PrefixFixer extends DepthFirstVisitor {
   }
 
   /**
-   * This method should not be directly used by users of this class;
-   * however, must be public to fulfill the visitor interface.
-   * Replaces the token image with "" if it is a prefix or a "."
-   * following a prefix. Appends to the tokenImage and "_" to the
-   * next token's image.
+   * This method should not be directly used by users of this class; however, must be public to
+   * fulfill the visitor interface. Replaces the token image with "" if it is a prefix or a "."
+   * following a prefix. Appends to the tokenImage and "_" to the next token's image.
    */
   public void visit(NodeToken n) {
     if (isMatch(n)) {
@@ -74,9 +67,7 @@ class PrefixFixer extends DepthFirstVisitor {
     super.visit(n);
   }
 
-  /**
-   * Fixes the last token if needed.
-   */
+  /** Fixes the last token if needed. */
   private void fixLastToken() {
     if (threeTokensAgo != null
         && twoTokensAgo != null
@@ -94,8 +85,8 @@ class PrefixFixer extends DepthFirstVisitor {
   }
 
   /**
-   * Return whether n is at the end of a set of node tokens
-   * that form a prefixed name needing fixing.
+   * Return whether n is at the end of a set of node tokens that form a prefixed name needing
+   * fixing.
    */
   /*@EnsuresNonNullIf(result=true, expression={"lastToken","twoTokensAgo","threeTokensAgo"})*/
   /*@Pure*/

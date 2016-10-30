@@ -11,12 +11,10 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * ThisFixer is a visitor for a jtb syntax tree that changes all instances
- * of "this." to "this_". For example "this.x" would go to "this_x".
- * It also finds unqualified member variables and inserts a preceeding
- * "this_".  These two changes allow splitter expressions that contain
- * a parameter and an unqualified member variable with the same name to
- * compile correctly.
+ * ThisFixer is a visitor for a jtb syntax tree that changes all instances of "this." to "this_".
+ * For example "this.x" would go to "this_x". It also finds unqualified member variables and inserts
+ * a preceeding "this_". These two changes allow splitter expressions that contain a parameter and
+ * an unqualified member variable with the same name to compile correctly.
  */
 class ThisFixer extends DepthFirstVisitor {
   // Note: the instances of "this." are not really being removed; instead,
@@ -36,13 +34,12 @@ class ThisFixer extends DepthFirstVisitor {
   /** All possible varInfos for the variables in the conditions. */
   private VarInfo[] varInfos;
 
-  /**
-   * The token previously visited.  Null only when visiting the first token.
-   */
+  /** The token previously visited. Null only when visiting the first token. */
   private /*@MonotonicNonNull*/ NodeToken lastToken;
 
   /**
    * Creates a new instance of ThisFixer.
+   *
    * @param varInfos is a list of the VarInfos for the ppt
    */
   private ThisFixer(VarInfo[] varInfos) {
@@ -52,9 +49,9 @@ class ThisFixer extends DepthFirstVisitor {
 
   /**
    * Modifies "this." or inserts "this_" in expression.
+   *
    * @param expression valid segment of java code which should be modified
-   * @return expression with instances of "this."
-   *    changed to "this_".
+   * @return expression with instances of "this." changed to "this_".
    */
   public static String fixThisUsage(String expression, VarInfo[] varInfos) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
@@ -64,9 +61,9 @@ class ThisFixer extends DepthFirstVisitor {
   }
 
   /**
-   * This method should not be directly used by users of this class.
-   * Replaces the token image of "." with "_" if was preceeded by "this",
-   * or adds "this_" to the token image of an unqualified member variable.
+   * This method should not be directly used by users of this class. Replaces the token image of "."
+   * with "_" if was preceeded by "this", or adds "this_" to the token image of an unqualified
+   * member variable.
    */
   public void visit(NodeToken n) {
     boolean found = false;

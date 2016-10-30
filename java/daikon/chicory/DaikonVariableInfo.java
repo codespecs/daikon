@@ -15,19 +15,17 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Each DaikonVariableInfo object is a node in the tree structure of the
- * variables in the target application.  The tree structure is built in the
- * DeclWriter and traversed in the DTraceWriter.  There is such a tree
- * structure associated with every program point.  This architecture makes
- * it possible to avoid the issue of "traversal pattern duplication" in
- * which both the DeclWriter and DTraceWriter must traverse the target
- * application's variables identically.  In general, the variable a will be
- * the parent of the variables a.b and a.c in the tree, where b and c are
- * fields in a's class.
+ * Each DaikonVariableInfo object is a node in the tree structure of the variables in the target
+ * application. The tree structure is built in the DeclWriter and traversed in the DTraceWriter.
+ * There is such a tree structure associated with every program point. This architecture makes it
+ * possible to avoid the issue of "traversal pattern duplication" in which both the DeclWriter and
+ * DTraceWriter must traverse the target application's variables identically. In general, the
+ * variable a will be the parent of the variables a.b and a.c in the tree, where b and c are fields
+ * in a's class.
  *
- * Each node can have any non-negative number of child nodes.
- * DaikonVariableInfo is an abstract class.  Its subtypes are designed to
- * represent specific types of variables, such as arguments, arrays, etc.
+ * <p>Each node can have any non-negative number of child nodes. DaikonVariableInfo is an abstract
+ * class. Its subtypes are designed to represent specific types of variables, such as arguments,
+ * arrays, etc.
  */
 public abstract class DaikonVariableInfo
     implements Iterable<DaikonVariableInfo>, Comparable<DaikonVariableInfo> {
@@ -35,7 +33,7 @@ public abstract class DaikonVariableInfo
   /** Enable experimental techniques on static constants. */
   public static boolean dkconfig_constant_infer = false;
 
-  /** The variable name.  Sensible for all subtypes except RootInfo.  */
+  /** The variable name. Sensible for all subtypes except RootInfo. */
   private final /*@Interned*/ String name;
 
   /** The child nodes */
@@ -77,24 +75,19 @@ public abstract class DaikonVariableInfo
   private static boolean skip_synthetic = true;
 
   /**
-   * The printed type that will appear in the .decls declaration.  May
-   * include aux information at the end, such as isParamString.
+   * The printed type that will appear in the .decls declaration. May include aux information at the
+   * end, such as isParamString.
+   *
    * @see #getTypeName()
    * @see #getTypeNameOnly()
    */
   protected String typeName;
-  /**
-   * The printed representation type that will appear in the .decls
-   * declaration.
-   */
+  /** The printed representation type that will appear in the .decls declaration. */
   protected String repTypeName;
-  /**
-   * The printed comparability information that will appear in the .decls
-   * declaration.
-   */
+  /** The printed comparability information that will appear in the .decls declaration. */
   protected String compareInfoString = compareInfoDefaultString;
 
-  /** Value of static constants.  Access via {@link #get_const_val} method. */
+  /** Value of static constants. Access via {@link #get_const_val} method. */
   /*@Nullable*/ String const_val = null;
 
   /** Arguments used to create a function. Access via {@link #get_func_args()} method. */
@@ -110,21 +103,21 @@ public abstract class DaikonVariableInfo
   protected boolean dtraceShouldPrintChildren = true;
 
   /**
-   * If false, use standard dfej behavior (any field in an
-   * instrumented class is visible).  If true, use standard Java
-   * behavior (if the field is in a class in a different package, it
-   * is only visible if public, etc.).
+   * If false, use standard dfej behavior (any field in an instrumented class is visible). If true,
+   * use standard Java behavior (if the field is in a class in a different package, it is only
+   * visible if public, etc.).
    */
   public static boolean std_visibility = false;
 
   /**
-   * Set of fully qualified static variable names for this ppt.  Used
-   * to ensure that each static is only included once (regardless of
-   * how many other variables may include its declaring class).
+   * Set of fully qualified static variable names for this ppt. Used to ensure that each static is
+   * only included once (regardless of how many other variables may include its declaring class).
    */
   protected static Set<String> ppt_statics = new LinkedHashSet<String>();
 
-  /** Constructs a non-array type DaikonVariableInfo object
+  /**
+   * Constructs a non-array type DaikonVariableInfo object
+   *
    * @param theName the name of the variable
    */
   public DaikonVariableInfo(String theName, String typeName, String repTypeName) {
@@ -133,6 +126,7 @@ public abstract class DaikonVariableInfo
 
   /**
    * Constructs a DaikonVariableInfo object
+   *
    * @param theName the variable's name
    * @param arr true iff the variable is an array
    */
@@ -155,9 +149,7 @@ public abstract class DaikonVariableInfo
     }
   }
 
-  /**
-   * Returns the name of this variable.
-   */
+  /** Returns the name of this variable. */
   public /*@Nullable*/ String getName(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
     if (name == null) return null;
 
@@ -169,12 +161,10 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Add a child to this node.
-   * Should only be called while the tree is being constructed.
+   * Add a child to this node. Should only be called while the tree is being constructed.
    *
-   * @param info the child object, must be non-null.  The child's
-   * fields name, typeName, repTypeName, and compareInfoString
-   * should also be non-null.
+   * @param info the child object, must be non-null. The child's fields name, typeName, repTypeName,
+   *     and compareInfoString should also be non-null.
    */
   protected void addChild(DaikonVariableInfo info) {
     assert info != null : "info cannot be null in DaikonVariableInfo.addChild()";
@@ -187,9 +177,7 @@ public abstract class DaikonVariableInfo
     children.add(info);
   }
 
-  /**
-   * Returns a string representation of this node.
-   */
+  /** Returns a string representation of this node. */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied DaikonVariableInfo this*/) {
     return getClass().getName() + ":" + getName();
@@ -201,8 +189,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Return a StringBuffer that contains the name of this node
-   * and all ancestors of this node.
+   * Return a StringBuffer that contains the name of this node and all ancestors of this node.
    * Longer indentations correspond to further distance in the tree.
    *
    * @param offset the offset to begin each line with
@@ -223,9 +210,8 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Return an iterator over all the node's children.
-   * Don't modify the list of children through the iterator,
-   * as an unmodifiable list is used to generate the iterator.
+   * Return an iterator over all the node's children. Don't modify the list of children through the
+   * iterator, as an unmodifiable list is used to generate the iterator.
    */
   public Iterator<DaikonVariableInfo> iterator() {
     return Collections.unmodifiableList(children).iterator();
@@ -242,20 +228,21 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Given an object value corresponding to the parent of this
-   * DaikonVariableInfo variable, return the value (of the corresponding
-   * value in the target application) of this DaikonVariableInfo variable.
+   * Given an object value corresponding to the parent of this DaikonVariableInfo variable, return
+   * the value (of the corresponding value in the target application) of this DaikonVariableInfo
+   * variable.
    *
-   * For instance, if the variable a has a field b, then calling
-   * getMyValFromParentVal(val_of_a) will return the value of a.b
+   * <p>For instance, if the variable a has a field b, then calling getMyValFromParentVal(val_of_a)
+   * will return the value of a.b
    *
-   * @param parentVal the parent object.  Can be null for static fields.
-   *    (Are there any other circumstances where it can be null?)
+   * @param parentVal the parent object. Can be null for static fields. (Are there any other
+   *     circumstances where it can be null?)
    */
   public abstract /*@Nullable*/ Object getMyValFromParentVal(Object parentVal);
 
   /**
    * Returns a String representation of this object suitable for a {@code .dtrace} file
+   *
    * @param val the object whose value to print
    */
   @SuppressWarnings("unchecked")
@@ -267,11 +254,7 @@ public abstract class DaikonVariableInfo
     }
   }
 
-  /**
-   *
-   * Gets the value of an object and concatenates
-   * the associated "modified" integer.
-   */
+  /** Gets the value of an object and concatenates the associated "modified" integer. */
   protected String getValueStringOfObjectWithMod(Object theValue, boolean hashArray) {
     String retString = getValueStringOfObject(theValue, hashArray) + DaikonWriter.lineSep;
 
@@ -285,9 +268,8 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Gets the value, but with no endline.
-   * If hashArray is true, it prints the "hash code" of the array
-   * and not its separate values.
+   * Gets the value, but with no endline. If hashArray is true, it prints the "hash code" of the
+   * array and not its separate values.
    */
   private String getValueStringOfObject(Object theValue, boolean hashArray) {
     if (theValue == null) {
@@ -311,9 +293,7 @@ public abstract class DaikonVariableInfo
     }
   }
 
-  /**
-   * Get value string for a primitive (wrapped) object.
-   */
+  /** Get value string for a primitive (wrapped) object. */
   private String getPrimitiveValueString(Object obj) {
     assert (obj instanceof Runtime.PrimitiveWrapper)
         : "Objects passed to showPrimitive must implement PrimitiveWrapper"
@@ -325,19 +305,13 @@ public abstract class DaikonVariableInfo
     return (obj.toString());
   }
 
-  /**
-   * Gets a string representation of the values in an array.
-   */
+  /** Gets a string representation of the values in an array. */
   private String getValueStringOfArray(Object array) {
     List<Object> theList = DTraceWriter.getListFromArray(array);
     return getValueStringOfList(theList);
   }
 
-  /**
-   *
-   *  Gets the Object's unique ID as a string.
-   *  In other words, a "hash code".
-   */
+  /** Gets the Object's unique ID as a string. In other words, a "hash code". */
   private String getObjectHashCode(Object theObject) {
     if (theObject == null) {
       return "null";
@@ -349,9 +323,8 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   *
-   *  Gets the list of values (as a string) from getValueStringOfList
-   *  and concatenates the "modified" value.
+   * Gets the list of values (as a string) from getValueStringOfList and concatenates the "modified"
+   * value.
    */
   private String getValueStringOfListWithMod(List<Object> theValues) {
     String retString = getValueStringOfList(theValues) + DaikonWriter.lineSep;
@@ -366,8 +339,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns a string representation of the values
-   * of a list of values as if it were an array.
+   * Returns a string representation of the values of a list of values as if it were an array.
    *
    * @param theValues the values to print out
    */
@@ -398,9 +370,7 @@ public abstract class DaikonVariableInfo
     return buf.toString();
   }
 
-  /**
-   * Add the parameters of the given method to this node.
-   */
+  /** Add the parameters of the given method to this node. */
   protected void addParameters(
       ClassInfo cinfo, Member method, List<String> argnames, String offset, int depth) {
     Class<?>[] arguments =
@@ -429,8 +399,9 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Adds class variables (i.e., the fields) for the given type and
-   * attach new nodes as children of this node.
+   * Adds class variables (i.e., the fields) for the given type and attach new nodes as children of
+   * this node.
+   *
    * @param type the class whose fields should all be added to this node
    */
   /*@RequiresNonNull("#1.clazz")*/
@@ -472,11 +443,7 @@ public abstract class DaikonVariableInfo
 
     debug_vars.log(
         "%s: [%s] %d dontPrintInstanceVars = %b, " + "inArray = %b%n",
-        type,
-        offset,
-        fields.length,
-        dontPrintInstanceVars,
-        isArray);
+        type, offset, fields.length, dontPrintInstanceVars, isArray);
 
     for (Field classField : fields) {
       boolean is_static = Modifier.isStatic(classField.getModifiers());
@@ -626,12 +593,10 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Adds the decl info for a single parameter as a child of this node.
-   * Also adds "derived" variables
-   * such as the runtime .class variable.
+   * Adds the decl info for a single parameter as a child of this node. Also adds "derived"
+   * variables such as the runtime .class variable.
    *
-   * @return the newly created DaikonVariableInfo object, whose
-   * parent is this
+   * @return the newly created DaikonVariableInfo object, whose parent is this
    */
   protected DaikonVariableInfo addParamDeclVar(
       ClassInfo cinfo,
@@ -654,9 +619,7 @@ public abstract class DaikonVariableInfo
     return newChild;
   }
 
-  /**
-   * Adds the decl info for a pure method.
-   */
+  /** Adds the decl info for a pure method. */
   //TODO factor out shared code with printDeclVar
   protected DaikonVariableInfo addPureMethodDecl(
       ClassInfo curClass,
@@ -727,12 +690,10 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Adds the decl info for a single class variable (a field)
-   * as a child of this node.  Also adds "derived" variables
-   * such as the runtime .class variable.
+   * Adds the decl info for a single class variable (a field) as a child of this node. Also adds
+   * "derived" variables such as the runtime .class variable.
    *
-   * @return the newly created DaikonVariableInfo object, whose
-   * parent is this
+   * @return the newly created DaikonVariableInfo object, whose parent is this
    */
   protected DaikonVariableInfo addDeclVar(Field field, String offset, StringBuffer buf) {
     debug_vars.log("enter addDeclVar(field):%n");
@@ -836,23 +797,20 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns the class name of the specified class as a binary name
-   * (i.e., as the class would have been declared in Java source code,
-   * except with '$' instead of '.' separating outer and inner classes).
+   * Returns the class name of the specified class as a binary name (i.e., as the class would have
+   * been declared in Java source code, except with '$' instead of '.' separating outer and inner
+   * classes).
    */
   public static /*@BinaryName*/ String stdClassName(Class<?> type) {
     return Runtime.classGetNameToBinaryName(type.getName());
   }
 
   /**
-   * Given a type, gets the representation type to be used in Daikon. For
-   * example, the representation type of a class object is "hashcode."
+   * Given a type, gets the representation type to be used in Daikon. For example, the
+   * representation type of a class object is "hashcode."
    *
-   * @param type
-   *            the type of the variable
-   * @param asArray
-   *            whether the variable is being output as an array (true) or as
-   *            a pointer (false)
+   * @param type the type of the variable
+   * @param asArray whether the variable is being output as an array (true) or as a pointer (false)
    * @return the representation type as a string
    */
   public static String getRepName(Class<?> type, boolean asArray) {
@@ -876,12 +834,11 @@ public abstract class DaikonVariableInfo
 
   /**
    * Determines if type needs a corresponding .class runtime class variable.
-   * <p>
-   * The .class variable is printed for interfaces, abstract classes, and
-   * Object.  For these types, the run-time class is always (or, for
-   * Object, usually) different than the declared type.  An alternate,
-   * and possibly more useful, heuristic would be to print the .class
-   * variable for any type that has subtypes.
+   *
+   * <p>The .class variable is printed for interfaces, abstract classes, and Object. For these
+   * types, the run-time class is always (or, for Object, usually) different than the declared type.
+   * An alternate, and possibly more useful, heuristic would be to print the .class variable for any
+   * type that has subtypes.
    *
    * @param type the variable's type
    */
@@ -920,9 +877,8 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns whether or not the specified field is visible from the Class
-   * current.  All fields within instrumented classes are considered
-   * visible from everywhere (to match dfej behavior).
+   * Returns whether or not the specified field is visible from the Class current. All fields within
+   * instrumented classes are considered visible from everywhere (to match dfej behavior).
    */
   public static boolean isFieldVisible(Class<?> current, Field field) {
     Class<?> fclass = field.getDeclaringClass();
@@ -984,9 +940,8 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   *
-   * Checks for "derived" Chicory variables: .class, .tostring, and java.util.List implementors
-   * and adds appropriate children to this node.
+   * Checks for "derived" Chicory variables: .class, .tostring, and java.util.List implementors and
+   * adds appropriate children to this node.
    */
   protected void checkForDerivedVariables(Class<?> type, String theName, String offset) {
     checkForListDecl(type, theName, offset); // implements java.util.List?
@@ -998,10 +953,7 @@ public abstract class DaikonVariableInfo
     checkForString(type, theName, offset); //.tostring var
   }
 
-  /**
-   * Determines if type implements list
-   * and prints associated decls, if necessary.
-   */
+  /** Determines if type implements list and prints associated decls, if necessary. */
   protected void checkForListDecl(Class<?> type, String theName, String offset) {
     if (isArray || type.isPrimitive() || type.isArray()) {
       return;
@@ -1035,9 +987,8 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Checks the given type to see if it requires a .class
-   * addition to the decls file.
-   * If so, it adds the correct child to this node.
+   * Checks the given type to see if it requires a .class addition to the decls file. If so, it adds
+   * the correct child to this node.
    */
   protected void checkForRuntimeClass(Class<?> type, String theName, String offset) {
     if (!shouldAddRuntimeClass(type)) return;
@@ -1059,8 +1010,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Checks the given type to see if it is a string.
-   * If so, it adds the correct child to this node.
+   * Checks the given type to see if it is a string. If so, it adds the correct child to this node.
    */
   private void checkForString(Class<?> type, String theName, String offset) {
     if (!type.equals(String.class)) return;
@@ -1101,22 +1051,17 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Explores the tree one level deeper (see {@link
-   * DaikonVariableInfo}).  This method adds child nodes to this node.
+   * Explores the tree one level deeper (see {@link DaikonVariableInfo}). This method adds child
+   * nodes to this node.
    *
-   * For example: "recurse" on a hashcode array object to print the
-   * actual array of values or recurse on hashcode variable to print
-   * its fields.  Also accounts for derived variables (.class,
-   * .tostring) and "recurses" on arrays (that is, adds a variable
-   * to print out the arrays's elements as opposed to just the
-   * hashcode of the array).
+   * <p>For example: "recurse" on a hashcode array object to print the actual array of values or
+   * recurse on hashcode variable to print its fields. Also accounts for derived variables (.class,
+   * .tostring) and "recurses" on arrays (that is, adds a variable to print out the arrays's
+   * elements as opposed to just the hashcode of the array).
    *
-   * @param theName the name of the variable currently being examined,
-   *             such as "ballCount"
-   * @param offset the representation of the variables we have
-   *                previously examined.  For examples, offset could
-   *                be "this." in which case offset + name would be
-   *                "this.ballCount.".
+   * @param theName the name of the variable currently being examined, such as "ballCount"
+   * @param offset the representation of the variables we have previously examined. For examples,
+   *     offset could be "this." in which case offset + name would be "this.ballCount.".
    */
   /*@RequiresNonNull("#1.clazz")*/
   protected void addChildNodes(
@@ -1199,11 +1144,9 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns whether or not the fields of the specified class
-   * should be included, based on whether the Class type
-   * is a system class or not.  Right now, any system classes are
-   * excluded, but a better way of determining this is probably
-   * necessary.
+   * Returns whether or not the fields of the specified class should be included, based on whether
+   * the Class type is a system class or not. Right now, any system classes are excluded, but a
+   * better way of determining this is probably necessary.
    */
   public static boolean systemClass(Class<?> type) {
     String class_name = type.getName();
@@ -1212,8 +1155,9 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns the declared type name of this variable.  May include
-   * auxiliary information (represented as a suffix starting with "#").
+   * Returns the declared type name of this variable. May include auxiliary information (represented
+   * as a suffix starting with "#").
+   *
    * @see #getTypeNameOnly()
    */
   public String getTypeName() {
@@ -1224,6 +1168,7 @@ public abstract class DaikonVariableInfo
 
   /**
    * Return the type name without aux information.
+   *
    * @see #getTypeName()
    */
   @SuppressWarnings("signature") // substring
@@ -1231,9 +1176,7 @@ public abstract class DaikonVariableInfo
     return typeName.replaceFirst(" # .*", "");
   }
 
-  /**
-   * Returns the representation type name of this variable.
-   */
+  /** Returns the representation type name of this variable. */
   public String getRepTypeName() {
     assert typeName != null : "Representation type name cannot be null";
 
@@ -1246,41 +1189,34 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns the constant value of the variable.  If the variable is not
-   * static and final, or if the constant value is not available in the
-   * class file, returns null.
+   * Returns the constant value of the variable. If the variable is not static and final, or if the
+   * constant value is not available in the class file, returns null.
    */
   public /*@Nullable*/ String get_const_val() {
     return const_val;
   }
 
   /**
-   * Returns the function args of the variable. If the variable is not a
-   * function, or does not have any arguments, returns null.
+   * Returns the function args of the variable. If the variable is not a function, or does not have
+   * any arguments, returns null.
    */
   public /*@Nullable*/ String get_function_args() {
     return function_args;
   }
 
-  /**
-   * Returns the comparability information for this variable.
-   */
+  /** Returns the comparability information for this variable. */
   public String getCompareString() {
     assert typeName != null : "Coparability info cannot be null";
 
     return compareInfoString;
   }
 
-  /**
-   * Return true iff the DeclWriter should print this node.
-   */
+  /** Return true iff the DeclWriter should print this node. */
   public boolean declShouldPrint() {
     return declShouldPrint;
   }
 
-  /**
-   * Return true iff the DTraceWriter should print this node.
-   */
+  /** Return true iff the DTraceWriter should print this node. */
   public boolean dTraceShouldPrint() {
     return dtraceShouldPrint;
   }
@@ -1289,9 +1225,7 @@ public abstract class DaikonVariableInfo
     return dtraceShouldPrintChildren;
   }
 
-  /**
-   * Compares based on the name of the variable.
-   */
+  /** Compares based on the name of the variable. */
   /*@Pure*/
   public int compareTo(/*>>>@GuardSatisfied DaikonVariableInfo this,*/ DaikonVariableInfo dv) {
     return name.compareTo(dv.name);
@@ -1329,8 +1263,8 @@ public abstract class DaikonVariableInfo
   public abstract VarKind get_var_kind();
 
   /**
-   * Returns the name of this variable relative to its enclosing variable.
-   * For example the relative name for 'this.a' is 'a'.
+   * Returns the name of this variable relative to its enclosing variable. For example the relative
+   * name for 'this.a' is 'a'.
    */
   public /*@Nullable*/ String get_relative_name() {
     return null;
@@ -1340,26 +1274,23 @@ public abstract class DaikonVariableInfo
   private static EnumSet<VarFlags> empty_var_flags = EnumSet.noneOf(VarFlags.class);
 
   /**
-   * Returns the variable flags for this variable.  Subclasses should call
-   * super() and or in any flags that they add.
+   * Returns the variable flags for this variable. Subclasses should call super() and or in any
+   * flags that they add.
    */
   public EnumSet<VarFlags> get_var_flags() {
     return empty_var_flags;
   }
 
-  /**
-   * Returns true iff the variable is static.  Overridden by subclasses that can
-   * be static.
-   */
+  /** Returns true iff the variable is static. Overridden by subclasses that can be static. */
   /*@Pure*/
   public boolean isStatic() {
     return false;
   }
 
   /**
-   * If the variable name has been seen before (which can happen with statics
-   * and children of statics, set the flags so that the variable is not considered
-   * for decl or dtrace and return true.  Otherwise, do nothing and return false.
+   * If the variable name has been seen before (which can happen with statics and children of
+   * statics, set the flags so that the variable is not considered for decl or dtrace and return
+   * true. Otherwise, do nothing and return false.
    */
   private boolean check_for_dup_names() {
 

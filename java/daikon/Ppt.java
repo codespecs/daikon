@@ -90,8 +90,8 @@ public abstract class Ppt implements Serializable {
   }
 
   /**
-   * Returns the varinfo_index of the variable whose name is varname.
-   * Returns -1 if there is no such variable.
+   * Returns the varinfo_index of the variable whose name is varname. Returns -1 if there is no such
+   * variable.
    */
   /*@Pure*/
   public int indexOf(String varname) {
@@ -103,10 +103,7 @@ public abstract class Ppt implements Serializable {
     return -1;
   }
 
-  /**
-   * Returns the VarInfo with the specified name.  Null if the name is
-   * not found.
-   */
+  /** Returns the VarInfo with the specified name. Null if the name is not found. */
   /*@Pure*/
   public /*@Nullable*/ VarInfo find_var_by_name(String varname) {
     // System.out.printf ("Ppt.find_var_by_name(%s): %s%n", varname, this);

@@ -8,9 +8,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Helper classes for quantification for various output formats.
- */
+/** Helper classes for quantification for various output formats. */
 public class Quantify {
 
   /** Flags describing how quantifications are to be built */
@@ -55,11 +53,11 @@ public class Quantify {
   }
 
   /**
-   * Class the represents terms that can be used in variable expressions.
-   * These include constants (such as 0 and 1), free variables used
-   * for quantification (i, j, etc), and normal daikon variables.
+   * Class the represents terms that can be used in variable expressions. These include constants
+   * (such as 0 and 1), free variables used for quantification (i, j, etc), and normal daikon
+   * variables.
    */
-  public static abstract class Term {
+  public abstract static class Term {
     /*@SideEffectFree*/
     public abstract String name(/*>>>@GuardSatisfied Term this*/);
     /*@SideEffectFree*/
@@ -92,9 +90,7 @@ public class Quantify {
     }
   }
 
-  /**
-   * Free variable normally used for quantification.
-   */
+  /** Free variable normally used for quantification. */
   public static class FreeVar extends Term {
     String name;
 
@@ -128,7 +124,7 @@ public class Quantify {
     }
   }
 
-  /** Represents the length of a sequence  and an optional offset */
+  /** Represents the length of a sequence and an optional offset */
   public static class Length extends Term {
     VarInfo sequence;
     int offset;
@@ -206,8 +202,8 @@ public class Quantify {
     }
 
     /**
-     * Looks up the array variable which is the base of this array.
-     * Throws a TerminationMessage exception if one does not exist.
+     * Looks up the array variable which is the base of this array. Throws a TerminationMessage
+     * exception if one does not exist.
      */
     @SuppressWarnings("sideeffectfree") // throws exception in case of error
     /*@SideEffectFree*/
@@ -220,15 +216,13 @@ public class Quantify {
               "Error: Can't create %s expression for the size of an array: "
                   + "No base array (hashcode) variable declared for array '%s'"
                   + " in program point %s",
-              output_format,
-              sequence.name(),
-              sequence.ppt.name()));
+              output_format, sequence.name(), sequence.ppt.name()));
     }
   }
 
   /**
-   * Represents a daikon variable with an optional integer offset.
-   * Usually used for the bounds of a slice.
+   * Represents a daikon variable with an optional integer offset. Usually used for the bounds of a
+   * slice.
    */
   public static class VarPlusOffset extends Term {
     VarInfo var;
@@ -285,7 +279,7 @@ public class Quantify {
   public static class QuantifyReturn {
     /** Variable being quantified. */
     public VarInfo var;
-    /** Index into the variable.  If null, variable is not a sequence. */
+    /** Index into the variable. If null, variable is not a sequence. */
     public /*@Nullable*/ Term index;
 
     public QuantifyReturn(VarInfo var) {
@@ -294,9 +288,8 @@ public class Quantify {
   }
 
   /**
-   * Given a list of sequences, determines a free variable that can be
-   * used as a subscript for each sequence.  If any of the vars are not
-   * sequences, no index is calculated for them.
+   * Given a list of sequences, determines a free variable that can be used as a subscript for each
+   * sequence. If any of the vars are not sequences, no index is calculated for them.
    */
   public static QuantifyReturn[] quantify(VarInfo[] vars) {
     assert vars != null;
@@ -335,9 +328,7 @@ public class Quantify {
     return result;
   }
 
-  /**
-   * Class that represents an ESC quantification over one or two variables.
-   */
+  /** Class that represents an ESC quantification over one or two variables. */
   public static class ESCQuantification {
 
     private EnumSet<QuantFlags> flags;
@@ -381,10 +372,7 @@ public class Quantify {
           quant =
               String.format(
                   "(\\forall int %s, %s; (%s && %s)",
-                  index1.esc_name(),
-                  index2.esc_name(),
-                  quant1,
-                  quant2);
+                  index1.esc_name(), index2.esc_name(), quant1, quant2);
         }
 
         VarInfo arr_var2 = vars[1].get_array_var();
@@ -401,8 +389,9 @@ public class Quantify {
     }
 
     /**
-     * Returns a string quantification expression for the array variable
-     * var using index.  The expression is of the form
+     * Returns a string quantification expression for the array variable var using index. The
+     * expression is of the form
+     *
      * <pre>{@code lower_bound <= index && index <= upper_bound}</pre>
      */
     private static String bld_quant(VarInfo var, Term index) {
@@ -415,8 +404,9 @@ public class Quantify {
     }
 
     /**
-     * Returns the quantification string.  For example, if there is one
-     * array variable (a[]) that is not a slice, it will return
+     * Returns the quantification string. For example, if there is one array variable (a[]) that is
+     * not a slice, it will return
+     *
      * <pre>{@code
      * '(\forall int i; (0 <= i <= size(a[]) ==> '
      * }</pre>
@@ -426,18 +416,15 @@ public class Quantify {
     }
 
     /**
-     * Returns the specified array variable indexed by its index.
-     * For example, if the array variable is 'a.b[]' and the index is 'i',
-     * returns a.b[i].
+     * Returns the specified array variable indexed by its index. For example, if the array variable
+     * is 'a.b[]' and the index is 'i', returns a.b[i].
      */
     public String get_arr_vars_indexed(int num) {
       return arr_vars_indexed[num];
     }
   }
 
-  /**
-   * Class that represents an Simplify quantification over one or two variables.
-   */
+  /** Class that represents an Simplify quantification over one or two variables. */
   public static class SimplifyQuantification {
 
     EnumSet<QuantFlags> flags;
@@ -545,18 +532,14 @@ public class Quantify {
       }
     }
 
-    /**
-     * Returns the quantification string that quantifies over each of the
-     * free variables.
-     */
+    /** Returns the quantification string that quantifies over each of the free variables. */
     public String get_quantification() {
       return quantification;
     }
 
     /**
-     * Returns the specified array variable indexed by its index.
-     * For example, if the array variable is 'a[]' and the index is 'i',
-     * returns 'select i a'.
+     * Returns the specified array variable indexed by its index. For example, if the array variable
+     * is 'a[]' and the index is 'i', returns 'select i a'.
      */
     public String get_arr_vars_indexed(int num) {
       return arr_vars_indexed[num];

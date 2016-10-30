@@ -6,9 +6,7 @@ import plume.Pair;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * The root of the tree.  All its children are PptNodes.
- */
+/** The root of the tree. All its children are PptNodes. */
 public class RootNode extends Node<Void, PptNode> {
 
   @SuppressWarnings({"rawtypes", "unchecked"})

@@ -9,12 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Stores the instructions associated with a generic "ppt file." Such
- * a file consists of records, each record containing information
- * about one program point. Each record begins with a record
- * separator: a line of 20 or more "=" characters.  The next line is
- * the name of the ppt, and the remaining lines (until the next record
- * separator) are lines containing the information about the ppt.
+ * Stores the instructions associated with a generic "ppt file." Such a file consists of records,
+ * each record containing information about one program point. Each record begins with a record
+ * separator: a line of 20 or more "=" characters. The next line is the name of the ppt, and the
+ * remaining lines (until the next record separator) are lines containing the information about the
+ * ppt.
  */
 public class PptFile {
 

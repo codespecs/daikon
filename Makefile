@@ -747,7 +747,7 @@ endif
 
 .PHONY: git-hooks
 git-hooks: .git/hooks/pre-commit .git/hooks/post-merge
-.git/hooks/pre-commit:
-	ln -s ../../scripts/daikon.pre-commit $@
-.git/hooks/post-merge:
-	ln -s ../../scripts/daikon.post-merge $@
+.git/hooks/pre-commit: scripts/daikon.pre-commit
+	(cd .git/hooks && ln -s ../../scripts/daikon.pre-commit pre-commit)
+.git/hooks/post-merge: scripts/daikon.post-merge
+	(cd .git/hooks && ln -s ../../scripts/daikon.post-merge post-merge)

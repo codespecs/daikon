@@ -16,9 +16,9 @@ import plume.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/** This tool is used to find the differences between two dtrace files
- *  based on analysis of the files' content, rather than a straight textual
- *  comparison.
+/**
+ * This tool is used to find the differences between two dtrace files based on analysis of the
+ * files' content, rather than a straight textual comparison.
  */
 public class DtraceDiff {
 
@@ -57,8 +57,8 @@ public class DtraceDiff {
   }
 
   /**
-   * This entry point is useful for testing.  It returns a boolean to indicate
-   * return status instead of croaking with an error.
+   * This entry point is useful for testing. It returns a boolean to indicate return status instead
+   * of croaking with an error.
    */
   public static boolean mainTester(String[] args) {
     try {
@@ -72,10 +72,10 @@ public class DtraceDiff {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing daikon.Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * daikon.Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -342,20 +342,14 @@ public class DtraceDiff {
           throw new DiffError(
               String.format(
                   "ppt %s (%s at line %d) is missing at end of %s",
-                  state2.ppt.name(),
-                  dtracefile2,
-                  state2.get_linenum(),
-                  dtracefile1));
+                  state2.ppt.name(), dtracefile2, state2.get_linenum(), dtracefile1));
         } else {
           assert state1.ppt != null
               : "@AssumeAssertion(nullness): application invariant: status is not EOF or TRUNCATED";
           throw new DiffError(
               String.format(
                   "ppt %s (%s at line %d) is missing at end of %s",
-                  state1.ppt.name(),
-                  dtracefile1,
-                  state1.get_linenum(),
-                  dtracefile2));
+                  state1.ppt.name(), dtracefile1, state1.get_linenum(), dtracefile2));
         }
       }
     } catch (IOException e) {
@@ -512,8 +506,8 @@ public class DtraceDiff {
   }
 
   /**
-   * Exception thrown for diffs.  Allows differences to be distinguished
-   * from other exceptions that might occur.
+   * Exception thrown for diffs. Allows differences to be distinguished from other exceptions that
+   * might occur.
    */
   public static class DiffError extends Error {
     static final long serialVersionUID = 20071203L;

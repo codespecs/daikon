@@ -8,44 +8,44 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/** DiscardCode is an enumeration type.
- *  It represents reasons why an invariant is falsified or disregarded.
- *  Methods that decide whether an Invariant should be printed later
- *  (such as isObviousImplied()), side effect Invariants to contain
- *  DiscardCode instances in their discardCode field slot.
+/**
+ * DiscardCode is an enumeration type. It represents reasons why an invariant is falsified or
+ * disregarded. Methods that decide whether an Invariant should be printed later (such as
+ * isObviousImplied()), side effect Invariants to contain DiscardCode instances in their discardCode
+ * field slot.
  *
- *  The different elements of the enumeration are:
+ * <p>The different elements of the enumeration are:
  *
- *  obvious // is implied by other already known invariants
+ * <p>obvious // is implied by other already known invariants
  *
- *  bad_sample // is falsified by a seen example
+ * <p>bad_sample // is falsified by a seen example
  *
- *  bad_confidence // has an unjustified confidence
+ * <p>bad_confidence // has an unjustified confidence
  *
- *  (unused) // was few_modified_samples
+ * <p>(unused) // was few_modified_samples
  *
- *  not_enough_samples // not enough samples seen for the Invariant
+ * <p>not_enough_samples // not enough samples seen for the Invariant
  *
- *  non_canonical_var // expression involves a non-canonical variable
+ * <p>non_canonical_var // expression involves a non-canonical variable
  *
- *  implied_post_condition // implied by some prestate conditions
+ * <p>implied_post_condition // implied by some prestate conditions
  *
- *  only_constant_vars // expression for invariant only contains constant variables
+ * <p>only_constant_vars // expression for invariant only contains constant variables
  *
- *  derived_param // has a VarInfo that has derived and uninteresting param
+ * <p>derived_param // has a VarInfo that has derived and uninteresting param
  *
- *  unmodified_var // invariant discarded because it says some var hasn't been modified
+ * <p>unmodified_var // invariant discarded because it says some var hasn't been modified
  *
- *  control_check // if discarded due to the ControlledInvariantFilter
+ * <p>control_check // if discarded due to the ControlledInvariantFilter
  *
- *  exact // isExact() fails
+ * <p>exact // isExact() fails
  *
- *  var_filtered // Doesn't contain a desirable variable
+ * <p>var_filtered // Doesn't contain a desirable variable
  *
- *  filtered // filtered by some other means not in the above list
+ * <p>filtered // filtered by some other means not in the above list
  *
- * There is no representation for an invariant that is *not* discarded;
- * don't use a DiscardCode in that situation.
+ * <p>There is no representation for an invariant that is *not* discarded; don't use a DiscardCode
+ * in that situation.
  */
 public class DiscardCode implements Comparable<DiscardCode>, Serializable {
 
@@ -108,9 +108,12 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
     this.enumValue = enumValue;
   }
 
-  /** The enumeration members in sorted order: <br>
+  /**
+   * The enumeration members in sorted order: <br>
    * obvious, bad_sample, bad_confidence, [unused], not_enough_samples, non_canonical_var,<br>
-   * implied_post_condition, only_constant_vars, derived_param, unmodified_var, control_check, exact, var filter
+   * implied_post_condition, only_constant_vars, derived_param, unmodified_var, control_check,
+   * exact, var filter
+   *
    * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
    */
@@ -136,11 +139,13 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
     else return filtered;
   }
 
-  /** Prints out a string describing the reason for discard
+  /**
+   * Prints out a string describing the reason for discard
+   *
    * @return one of {"Not discarded", "Obvious, "Bad sample seen", "Unjustified confidence", "Few
-   * modified samples", "Not enough samples", "Non-canonical variable", "Implied post state", "Only
-   * constant variables in this expression", "Derived Param", "Control Check", "Exact", "Variable
-   * Filter", "Filtered"}
+   *     modified samples", "Not enough samples", "Non-canonical variable", "Implied post state",
+   *     "Only constant variables in this expression", "Derived Param", "Control Check", "Exact",
+   *     "Variable Filter", "Filtered"}
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied DiscardCode this*/) {
@@ -164,7 +169,9 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
     }
   }
 
-  /** To prevent deserialization causing more DiscardCodes to be instantiated
+  /**
+   * To prevent deserialization causing more DiscardCodes to be instantiated
+   *
    * @return one of the static DiscardCode instances
    */
   public Object readResolve() throws ObjectStreamException {

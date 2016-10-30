@@ -9,34 +9,23 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Abstract class to represent a derived variable that came from
- * three base variables.
- */
+/** Abstract class to represent a derived variable that came from three base variables. */
 public abstract class TernaryDerivation extends Derivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  /**
-   * Original variable 1.
-   */
+  /** Original variable 1. */
   VarInfo base1;
 
-  /**
-   * Original variable 2.
-   */
+  /** Original variable 2. */
   VarInfo base2;
 
-  /**
-   * Original variable 3.
-   */
+  /** Original variable 3. */
   VarInfo base3;
 
-  /**
-   * Create a new TernaryDerivation from three varinfos.
-   */
+  /** Create a new TernaryDerivation from three varinfos. */
   public TernaryDerivation(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
     base1 = vi1;
     base2 = vi2;

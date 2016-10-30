@@ -5,9 +5,7 @@ import java.util.*;
 import junit.framework.*;
 import plume.*;
 
-/**
- * Tests that Annotate respects tabs.
- */
+/** Tests that Annotate respects tabs. */
 public final class TestAnnotate extends TestCase {
 
   public static void main(String[] args) {

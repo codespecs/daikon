@@ -8,10 +8,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Contains a pair of Invariants.  Resides in the third level of the tree.
- * Has no children.
- */
+/** Contains a pair of Invariants. Resides in the third level of the tree. Has no children. */
 public class InvNode extends Node</*@Nullable*/ Invariant, /*@NonNull*/ Void> {
 
   /** Either inv1 or inv2 may be null, but not both. */

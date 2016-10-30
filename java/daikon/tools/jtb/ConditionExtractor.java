@@ -70,9 +70,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     super.visit(n);
   }
 
-  /**
-   * Stores the field name, if it is a boolean.
-   */
+  /** Stores the field name, if it is a boolean. */
   public void visit(FieldDeclaration n) {
     // Grammar production:
     // f0 -> Type()
@@ -94,9 +92,8 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f4 -> ( Block() | ";" )
 
   /**
-   * It is sometimes helpful to store the method bodies of one-liner
-   * methods.  They are useful as 'replace' statements when the
-   * condition makes a call to that function. Here we keep track of
+   * It is sometimes helpful to store the method bodies of one-liner methods. They are useful as
+   * 'replace' statements when the condition makes a call to that function. Here we keep track of
    * the fact that we have reached a method declaration.
    */
   public void visit(MethodDeclaration n) {
@@ -148,10 +145,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f5 -> ( SwitchLabel() ( BlockStatement() )* )*
   // f6 -> "}"
 
-  /**
-   * Extracts the values for the different cases and creates splitting
-   * conditions out of them.
-   */
+  /** Extracts the values for the different cases and creates splitting conditions out of them. */
   public void visit(SwitchStatement n) {
     String switchExpression = Ast.format(n.f2);
     Collection<String> caseValues = getCaseValues(n.f5);
@@ -170,8 +164,8 @@ class ConditionExtractor extends DepthFirstVisitor {
   }
 
   /**
-   * @return a String[] that contains the different Integer values
-   * which the case expression is tested against
+   * @return a String[] that contains the different Integer values which the case expression is
+   *     tested against
    */
   public Collection<String> getCaseValues(NodeListOptional n) {
     ArrayList<String> values = new ArrayList<String>();
@@ -292,9 +286,8 @@ class ConditionExtractor extends DepthFirstVisitor {
 
   //////// Private methods specific to ConditionExtractor ////
   /**
-   * Keep track of the method we are currently in, and create an entry
-   * for it, so that the conditions can be associated with the right
-   * methods.
+   * Keep track of the method we are currently in, and create an entry for it, so that the
+   * conditions can be associated with the right methods.
    */
   private void addMethod(String methodDeclaration, String methodname) {
     curMethodName = methodname;

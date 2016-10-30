@@ -16,11 +16,10 @@ import org.checkerframework.checker.nullness.qual.*;
 
 /**
  * Create a splitter info file from Java source.
- * <p>
  *
- * The argument is a list of {@code .java} files.  The original {@code .java} files are
- * left unmodified.  A {@code .spinfo} file is written for every {@code .java} file, or
- * in the single file indicated as the {@code -o} command-line argument..
+ * <p>The argument is a list of {@code .java} files. The original {@code .java} files are left
+ * unmodified. A {@code .spinfo} file is written for every {@code .java} file, or in the single file
+ * indicated as the {@code -o} command-line argument..
  */
 public class CreateSpinfo {
 
@@ -58,10 +57,10 @@ public class CreateSpinfo {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -137,10 +136,9 @@ public class CreateSpinfo {
   }
 
   /**
-   * Returns the default name for a spinfo file created from
-   * a java file named javaFileName.
-   * @param javaFileName the name of the java file from which
-   *  this spinfo file is being created
+   * Returns the default name for a spinfo file created from a java file named javaFileName.
+   *
+   * @param javaFileName the name of the java file from which this spinfo file is being created
    */
   private static String spinfoFileName(String javaFileName) {
     if (javaFileName.endsWith(".java")) {
@@ -162,8 +160,8 @@ public class CreateSpinfo {
 
   /**
    * Write splitters for the Java file to the PrintWriter as a spinfo file.
-   * @param javaFileName the name of the java file from which this
-   *  spinfo file is being made
+   *
+   * @param javaFileName the name of the java file from which this spinfo file is being made
    * @param output the PrintWriter to which this spinfo file is being wrote
    */
   private static void writeSplitters(String javaFileName, PrintWriter output) throws IOException {
@@ -189,10 +187,7 @@ public class CreateSpinfo {
     printSpinfoFile(output, conditions, replaceStatements, packageName);
   }
 
-  /**
-   * Remove redundant and trivial conditions from conditionMap.
-   * Side-effects conditionMap.
-   */
+  /** Remove redundant and trivial conditions from conditionMap. Side-effects conditionMap. */
   private static void filterConditions(Map<String, List<String>> conditionMap) {
     for (String key : conditionMap.keySet()) {
       List<String> conditions = conditionMap.get(key);
@@ -204,9 +199,8 @@ public class CreateSpinfo {
   }
 
   /**
-   * For each condition in conditionMap, an additional condition is
-   * added which is identical to the initial condition with the exception
-   * that it is prefixed with "orig(" and suffixed with ")".
+   * For each condition in conditionMap, an additional condition is added which is identical to the
+   * initial condition with the exception that it is prefixed with "orig(" and suffixed with ")".
    */
   private static void addOrigConditions(Map<String, List<String>> conditionMap) {
     for (List<String> conditions : conditionMap.values()) {
@@ -217,25 +211,21 @@ public class CreateSpinfo {
     }
   }
 
-  /**
-   * Returns condition prefixed with "orig(" and suffixed with ")".
-   */
+  /** Returns condition prefixed with "orig(" and suffixed with ")". */
   private static String addOrig(String condition) {
     return "orig(" + condition + ")";
   }
 
   /**
-   * Writes the spinfo file specified by conditions, replaceStatements, and
-   * package name to output.
+   * Writes the spinfo file specified by conditions, replaceStatements, and package name to output.
+   *
    * @param output the PrintWriter to which the spinfo file is to be written
-   * @param conditions the conditions to be included in the spinfo file.
-   *  conditions should be a map from method names to the conditional
-   *  expressions for that method to split upon.
-   * @param replaceStatements the replace statements to be included in the
-   *  spinfo file.  replaceStatements should be a map from method
-   *  declarations to method bodies.
-   * @param packageName the package name of the java file for which this
-   *  spinfo file is being written
+   * @param conditions the conditions to be included in the spinfo file. conditions should be a map
+   *     from method names to the conditional expressions for that method to split upon.
+   * @param replaceStatements the replace statements to be included in the spinfo file.
+   *     replaceStatements should be a map from method declarations to method bodies.
+   * @param packageName the package name of the java file for which this spinfo file is being
+   *     written
    */
   private static void printSpinfoFile(
       PrintWriter output,
@@ -272,8 +262,8 @@ public class CreateSpinfo {
   }
 
   /**
-   * Returns target with line separators and the whitespace
-   * around a line separator replaced by a single space.
+   * Returns target with line separators and the whitespace around a line separator replaced by a
+   * single space.
    */
   private static String removeNewlines(String target) {
     String[] lines = UtilMDE.splitLines(target);

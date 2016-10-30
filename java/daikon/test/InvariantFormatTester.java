@@ -1,9 +1,7 @@
 package daikon.test;
 
 import daikon.*;
-import daikon.config.Configuration;
 import java.io.*;
-import java.net.URL;
 import java.util.List;
 import java.util.Vector;
 import junit.framework.*;
@@ -15,59 +13,43 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * This is a tester for the formatting of invariants in different
- * modes that is configurable by file input. It can test practically
- * any invariant in the Daikon system given the appropriate commands.
- * The test are configured from the {@code InvariantFormatTest.commands} file
- * and errors that occur are written to the InvariantFormatTest.diffs
- * file. More detail on the expected formats of these files is in
- * Daikon developer manual.
+ * This is a tester for the formatting of invariants in different modes that is configurable by file
+ * input. It can test practically any invariant in the Daikon system given the appropriate commands.
+ * The test are configured from the {@code InvariantFormatTest.commands} file and errors that occur
+ * are written to the InvariantFormatTest.diffs file. More detail on the expected formats of these
+ * files is in Daikon developer manual.
  */
 public class InvariantFormatTester extends TestCase {
 
   /**
-   * Maximum file size that can currently be examined by the program.
-   * It is arbitrary, but a length must be supplied to
-   * LineNumberReader.mark().
+   * Maximum file size that can currently be examined by the program. It is arbitrary, but a length
+   * must be supplied to LineNumberReader.mark().
    */
   private static final int MAX_FILE_SIZE = 262144;
 
-  /**
-   * Indicates a string that when it starts a line signifies that the
-   * line is a comment.
-   */
+  /** Indicates a string that when it starts a line signifies that the line is a comment. */
   public static final String COMMENT_STARTER_STRING = ";";
 
-  /**
-   * A list containing all of the test formats.
-   */
+  /** A list containing all of the test formats. */
   public static final List<String> TEST_FORMAT_LIST = getTestFormatList();
 
-  /**
-   * File that contains the format test commands.  Must be found as a
-   * resource.
-   */
+  /** File that contains the format test commands. Must be found as a resource. */
   private static String command_file = "InvariantFormatTest.commands";
 
   @Option("-d File to write any differences to.  Will be deleted on success")
   public static File diff_file = new File("InvariantFormatTest.diffs");
 
-  /**
-   * Determines whether the object will generate goal statements.
-   */
+  /** Determines whether the object will generate goal statements. */
   @Option("-g Filename to write goals to")
   public static /*@Nullable*/ File generate_goals = null;
 
   /**
-   * This function allows this test to be run from the command line
-   * instead of its usual method, which is through the Daikon
-   * MasterTester.
+   * This function allows this test to be run from the command line instead of its usual method,
+   * which is through the Daikon MasterTester.
    *
-   * @param args arguments to the main function, which control options
-   *        to the program. As of now there is only one option,
-   *        "--generate_goals", which will generate goal information for
-   *        the selected tests assuming the output that the tests provide
-   *        is the correct output.
+   * @param args arguments to the main function, which control options to the program. As of now
+   *     there is only one option, "--generate_goals", which will generate goal information for the
+   *     selected tests assuming the output that the tests provide is the correct output.
    */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
@@ -84,8 +66,7 @@ public class InvariantFormatTester extends TestCase {
   }
 
   /**
-   * This constructor allows the test to be created from the
-   * MasterTester class.
+   * This constructor allows the test to be created from the MasterTester class.
    *
    * @param name the desired name of the test case
    */
@@ -94,8 +75,7 @@ public class InvariantFormatTester extends TestCase {
   }
 
   /**
-   * This function produces the format list for intialization of the
-   * static format list variable.
+   * This function produces the format list for intialization of the static format list variable.
    */
   static List<String> getTestFormatList() {
     List<String> result = new Vector<String>();
@@ -112,10 +92,7 @@ public class InvariantFormatTester extends TestCase {
     return result;
   }
 
-  /**
-   * This function is the actual function performed when this class is
-   * run through JUnit.
-   */
+  /** This function is the actual function performed when this class is run through JUnit. */
   public void testFormats() {
 
     // Don't care about comparability info because we are only
@@ -134,8 +111,8 @@ public class InvariantFormatTester extends TestCase {
    * Returns the next non-comment, non-whitespace line of the input buffer.
    *
    * @param input the input buffer
-   * @return the next non-comment, non-whitespace line of the input buffer or
-   *         null if the end of the buffer is reached before such a line can be found
+   * @return the next non-comment, non-whitespace line of the input buffer or null if the end of the
+   *     buffer is reached before such a line can be found
    */
   static /*@Nullable*/ String getNextRealLine(BufferedReader input) {
     String currentLine = "";
@@ -154,12 +131,10 @@ public class InvariantFormatTester extends TestCase {
   }
 
   /**
-   * This function performs the testing for a particular format
-   * indicated by the format string. It subsequently sets up
-   * appropriate input and output streams for the format test,
-   * performs the test, and the compares the test results to the
-   * goals.  If the goals differ from the actual results the test
-   * fails.
+   * This function performs the testing for a particular format indicated by the format string. It
+   * subsequently sets up appropriate input and output streams for the format test, performs the
+   * test, and the compares the test results to the goals. If the goals differ from the actual
+   * results the test fails.
    */
   private boolean execute() {
 
@@ -240,8 +215,8 @@ public class InvariantFormatTester extends TestCase {
   }
 
   /**
-   * This function performs an individual formatting test after the
-   * input and output streams have been created.
+   * This function performs an individual formatting test after the input and output streams have
+   * been created.
    *
    * @param commands the input that decides which tests to perform
    * @param output the place to where the test output is written
@@ -312,8 +287,8 @@ public class InvariantFormatTester extends TestCase {
    * Determines whether a line is a comment or not.
    *
    * @param line the line in question
-   * @return true if the line is a comment (that is, not to be interpretted as a command);
-   *         false otherwise
+   * @return true if the line is a comment (that is, not to be interpretted as a command); false
+   *     otherwise
    */
   /*@Pure*/
   static boolean isComment(String line) {

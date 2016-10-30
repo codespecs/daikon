@@ -6,20 +6,14 @@ import jtb.visitor.*;
 import plume.*;
 
 /**
- * InsertCommentFormatter is a visitor that does not actually insert
- * comments, but instead corrects positioning fields of all the tokens
- * in the tree to accomodate already-inserted comments, while
- * modifying the formatting as little as possible.  (It edits the
- * {begin,end}{Line,Column} fields.)
- * <p>
+ * InsertCommentFormatter is a visitor that does not actually insert comments, but instead corrects
+ * positioning fields of all the tokens in the tree to accomodate already-inserted comments, while
+ * modifying the formatting as little as possible. (It edits the {begin,end}{Line,Column} fields.)
  *
- * Each inserted comment either affects only the rest of its line
- * -- by shifting all subsequent characters rightward -- or only
- * subsequent lines -- by shifting lines downward.
- * <p>
+ * <p>Each inserted comment either affects only the rest of its line -- by shifting all subsequent
+ * characters rightward -- or only subsequent lines -- by shifting lines downward.
  *
- * The caller must supply the collection of inserted comments for
- * recognition by this visitor.
+ * <p>The caller must supply the collection of inserted comments for recognition by this visitor.
  */
 public class InsertCommentFormatter extends DepthFirstVisitor {
   private boolean debug = false;

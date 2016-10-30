@@ -1,8 +1,6 @@
 package daikon.simplify;
 
-/**
- * Indicates a request timed out.
- */
+/** Indicates a request timed out. */
 public class TimeoutException extends SimplifyException {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

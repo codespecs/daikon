@@ -14,19 +14,22 @@ import java.util.logging.Level;
 /**
  * Suppress string invariants that are redundant for .NET. The following invariants will be
  * discarded:
+ *
  * <ul>
- *  <li><code>x != null</code>, if <code>!string.IsNullOrEmpty(...)</code> or <code>!string.IsNullOrWhitespace(...)</code> is inferred.</li>
- *  <li>Frame conditions for string properties, if the frame condition exists for the string (reference or value)</li>
- *  <li>String properties, if {@link OneOfString} is inferred.</li>
- *  <li><code>!string.IsNullOrEmpty(...)</code> if <code>!string.IsNullOrWhitespace(...)</code> is inferred.</li>
- *  <li><code>string.IsNullOrWhitespace(...)</code> if <code>string.IsNullOrEmpty(...)</code> is inferred.</li>
+ *   <li><code>x != null</code>, if <code>!string.IsNullOrEmpty(...)</code> or <code>
+ *       !string.IsNullOrWhitespace(...)</code> is inferred.
+ *   <li>Frame conditions for string properties, if the frame condition exists for the string
+ *       (reference or value)
+ *   <li>String properties, if {@link OneOfString} is inferred.
+ *   <li><code>!string.IsNullOrEmpty(...)</code> if <code>!string.IsNullOrWhitespace(...)</code> is
+ *       inferred.
+ *   <li><code>string.IsNullOrWhitespace(...)</code> if <code>string.IsNullOrEmpty(...)</code> is
+ *       inferred.
  * </ul>
  */
 public class StringFilter extends InvariantFilter {
 
-  /**
-   * Boolean. If true, StringFilter is initially turned on.
-   */
+  /** Boolean. If true, StringFilter is initially turned on. */
   public static boolean dkconfig_enabled = false;
 
   public StringFilter() {
@@ -58,8 +61,8 @@ public class StringFilter extends InvariantFilter {
   }
 
   /**
-   * Since strings are immutable, discard all frame conditions for the properties of the string if a frame condition for the string (reference of value)
-   * is inferred.
+   * Since strings are immutable, discard all frame conditions for the properties of the string if a
+   * frame condition for the string (reference of value) is inferred.
    */
   boolean shouldDiscardDerivedStringFrameCondition(Invariant invariant) {
     if (isFrame(invariant)
@@ -85,7 +88,8 @@ public class StringFilter extends InvariantFilter {
   }
 
   /**
-   * Since properties are pure, discard all properties of the string if the possible values are known (a {@link OneOfString} invariant is present).
+   * Since properties are pure, discard all properties of the string if the possible values are
+   * known (a {@link OneOfString} invariant is present).
    */
   boolean shouldDiscardDerivedStringInvariant(Invariant invariant) {
     if (invariant.ppt.var_infos.length == 1 && !(invariant instanceof OneOfString)) {
@@ -110,7 +114,8 @@ public class StringFilter extends InvariantFilter {
   }
 
   /**
-   * <code>true</code> iff <code>invariant</code> encodes <code>x != null</code> and <code>!string.IsNullOrEmpty(x)</code> is an inferred invariant</code>
+   * <code>true</code> iff <code>invariant</code> encodes <code>x != null</code> and <code>
+   * !string.IsNullOrEmpty(x)</code> is an inferred invariant</code>
    */
   boolean shouldDiscardNonNullInvariant(Invariant invariant) {
     if (invariant instanceof NonZero) {
@@ -136,7 +141,8 @@ public class StringFilter extends InvariantFilter {
   }
 
   /**
-   * <code>true</code> iff <code>invariant</code> encodes <code>!string.IsNullOrEmpty()</code> and <code>!string.IsNullOrWhitespace()</code> is an inferred invariant</code>.
+   * <code>true</code> iff <code>invariant</code> encodes <code>!string.IsNullOrEmpty()</code> and
+   * <code>!string.IsNullOrWhitespace()</code> is an inferred invariant</code>.
    */
   boolean shouldDiscardNullOrEmptyInvariant(Invariant invariant) {
     if (invariant instanceof OneOfScalar) {
@@ -164,7 +170,8 @@ public class StringFilter extends InvariantFilter {
   }
 
   /**
-   * <code>true</code> iff <code>invariant</code> encodes <code>string.IsNullOrWhitespace()</code> and <code>string.IsNullOrEmpty()</code> is an inferred invariant</code>.
+   * <code>true</code> iff <code>invariant</code> encodes <code>string.IsNullOrWhitespace()</code>
+   * and <code>string.IsNullOrEmpty()</code> is an inferred invariant</code>.
    */
   boolean shouldDiscardNullOrWhitespaceInvariant(Invariant invariant) {
     if (invariant instanceof OneOfScalar) {

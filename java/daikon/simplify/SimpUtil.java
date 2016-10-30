@@ -1,8 +1,6 @@
 package daikon.simplify;
 
-/**
- * Utility functions for the simplify package.
- */
+/** Utility functions for the simplify package. */
 public class SimpUtil {
   private SimpUtil() {
     throw new Error("do not instantiate");
@@ -51,11 +49,9 @@ public class SimpUtil {
   }
 
   /**
-   * Represent a Java long integer as an uninterpreted function
-   * applied to 6 moderately sized integers, to work around Simplify's
-   * numeric limitations. The first integer is a sign, and the rest
-   * are 13-bit (base 8192) limbs in order from most to least
-   * significant.
+   * Represent a Java long integer as an uninterpreted function applied to 6 moderately sized
+   * integers, to work around Simplify's numeric limitations. The first integer is a sign, and the
+   * rest are 13-bit (base 8192) limbs in order from most to least significant.
    */
   public static String formatInteger(long i) {
     int sign;

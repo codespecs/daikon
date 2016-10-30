@@ -7,8 +7,8 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * The ThisObjInfo class is a subtype of DaikonVariableInfo used for
- * variable types which represent the "this" object.
+ * The ThisObjInfo class is a subtype of DaikonVariableInfo used for variable types which represent
+ * the "this" object.
  */
 public class ThisObjInfo extends DaikonVariableInfo {
   public Class<?> type;
@@ -23,8 +23,8 @@ public class ThisObjInfo extends DaikonVariableInfo {
   }
 
   /**
-   * thisName is the name to be used to specify the variable.
-   * It's "this" except for outer classes, as in "OuterClass.this".
+   * thisName is the name to be used to specify the variable. It's "this" except for outer classes,
+   * as in "OuterClass.this".
    */
   public ThisObjInfo(String thisName, Class<?> type) {
     super(thisName, type.getName() + isNonNullParamString, getRepName(type, false));

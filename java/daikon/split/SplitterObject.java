@@ -14,10 +14,9 @@ import typequals.*;
 */
 
 /**
- * A SplitterObject is the starting point for all the information we
- * have about a splitting condition. It is created immediately when
- * the condition is read from the {@code .spinfo} file, and later contains a
- * reference to the compiled "Splitter" object.
+ * A SplitterObject is the starting point for all the information we have about a splitting
+ * condition. It is created immediately when the condition is read from the {@code .spinfo} file,
+ * and later contains a reference to the compiled "Splitter" object.
  */
 public class SplitterObject implements Comparable<SplitterObject> {
 
@@ -85,9 +84,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
     }
   }
 
-  /**
-   * Sets the "splitter" field of this object to a newly-instantiated object.
-   */
+  /** Sets the "splitter" field of this object to a newly-instantiated object. */
   public void load() {
     Class<?> tempClass = defineSplitterClass(className, directory + className + ".class");
     if (tempClass != null) {
@@ -129,16 +126,16 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
-   * @return true if the Splitter object exists for this
-   * SplitterObject, i.e. whether it successfully loaded.
+   * @return true if the Splitter object exists for this SplitterObject, i.e. whether it
+   *     successfully loaded.
    */
   public boolean splitterExists() {
     return exists;
   }
 
   /**
-   * @return true if the {@code .class} file exists for the Splitter
-   * represented by this SplitterObject, false otherwise
+   * @return true if the {@code .class} file exists for the Splitter represented by this
+   *     SplitterObject, false otherwise
    */
   public boolean compiled() {
     if (classFile != null && classFile.exists()) {
@@ -149,67 +146,51 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
-   * @return the Splitter that this SplitterObject represents. Null if
-   * splitterExists() == false.
+   * @return the Splitter that this SplitterObject represents. Null if splitterExists() == false.
    */
   public /*@Nullable*/ Splitter getSplitter() {
     return this.splitter;
   }
 
   /**
-   * Set the error message of this this SplitterObject. This indicates the status of
-   * the Splitter.
+   * Set the error message of this this SplitterObject. This indicates the status of the Splitter.
    */
   public void setError(String errorMessage) {
     this.errorMessage = errorMessage;
   }
 
-  /**
-   * Get the error message of this SplitterObject.
-   */
+  /** Get the error message of this SplitterObject. */
   public String getError() {
     return this.errorMessage;
   }
 
-  /**
-   * Set the unique ID of this splitterObject.
-   */
+  /** Set the unique ID of this splitterObject. */
   public void setGUID(int ID) {
     this.guid = ID;
   }
 
-  /**
-   * Return the unique ID of this splitterObject.
-   */
+  /** Return the unique ID of this splitterObject. */
   public int getGUID() {
     return this.guid;
   }
 
-  /**
-   * @return the full source of the Splitter
-   */
+  /** @return the full source of the Splitter */
   public String getFullSourcePath() {
     return (directory + className + ".java");
   }
 
-  /**
-   * @return the program point represented by this Splitter
-   */
+  /** @return the program point represented by this Splitter */
   public String getPptName() {
     return this.pptName;
   }
 
-  /**
-   * Set the className of this Splitter.
-   */
+  /** Set the className of this Splitter. */
   public void setClassName(/*@BinaryName*/ String className) {
     this.className = className;
     classFile = new File(directory + className + ".class");
   }
 
-  /**
-   * @return the className of the Splitter
-   */
+  /** @return the className of the Splitter */
   public /*@BinaryName*/ String getClassName() {
     return this.className;
   }
@@ -222,9 +203,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.directory;
   }
 
-  /**
-   * @return the condition represented by the Splitter
-   */
+  /** @return the condition represented by the Splitter */
   public String condition() {
     return this.condition;
   }

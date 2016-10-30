@@ -16,9 +16,8 @@ import typequals.*;
 */
 
 /**
- * Tracks every unique value and how many times it occurs.
- * Prints as either <code>x has no values</code>
- * or as <code>x has values: "v1" "v2" "v3" ...</code>.
+ * Tracks every unique value and how many times it occurs. Prints as either <code>x has no values
+ * </code> or as <code>x has values: "v1" "v2" "v3" ...</code>.
  */
 public final class CompleteOneOfString extends SingleString {
   // We are Serializable, so we specify a version to allow changes to
@@ -47,9 +46,7 @@ public final class CompleteOneOfString extends SingleString {
   /*@Unused(when=Prototype.class)*/
   public List<Info> vals;
 
-  /**
-   * Boolean.  True iff PrintableString invariants should be considered.
-   */
+  /** Boolean. True iff PrintableString invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   public CompleteOneOfString(PptSlice slice) {
@@ -80,7 +77,7 @@ public final class CompleteOneOfString extends SingleString {
     return new CompleteOneOfString(slice);
   }
 
-  /** Return description of invariant.  Only Daikon format is implemented. */
+  /** Return description of invariant. Only Daikon format is implemented. */
   /*@SideEffectFree*/
   public String format_using(/*>>>@GuardSatisfied CompleteOneOfString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
@@ -125,9 +122,8 @@ public final class CompleteOneOfString extends SingleString {
   }
 
   /**
-   * Returns whether or not this is obvious statically.  The only check
-   * is for static constants which are obviously printable (or not)
-   * from their values.
+   * Returns whether or not this is obvious statically. The only check is for static constants which
+   * are obviously printable (or not) from their values.
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
@@ -135,8 +131,8 @@ public final class CompleteOneOfString extends SingleString {
   }
 
   /**
-   * Same formula if each value is the same and has the same count.
-   * Not implemented for now, just presumed to be false.
+   * Same formula if each value is the same and has the same count. Not implemented for now, just
+   * presumed to be false.
    */
   /*@Pure*/
   public boolean isSameFormula(Invariant o) {

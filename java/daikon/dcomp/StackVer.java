@@ -72,7 +72,6 @@ import org.apache.bcel.generic.Type;
 import org.apache.bcel.verifier.VerificationResult;
 import org.apache.bcel.verifier.exc.AssertionViolatedException;
 import org.apache.bcel.verifier.exc.VerifierConstraintViolatedException;
-import org.apache.bcel.verifier.statics.Pass2Verifier;
 import org.apache.bcel.verifier.structurals.ControlFlowGraph;
 import org.apache.bcel.verifier.structurals.ExceptionHandler;
 import org.apache.bcel.verifier.structurals.ExecutionVisitor;
@@ -88,19 +87,15 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * This is a slightly modified version of Pass3bVerifier from BCEL.
- * It uses LimitedConstaintVisitor rather than InstConstraintVisitor
- * to implement the constraints.  The LimitedConstraintVisitor doesn't
- * do any checking outside of the current class and removes some checks
- * so that this will pass on the JDK.  This version also provides the
- * ability to get the contents of the stack for each instruction in
- * the method.
+ * This is a slightly modified version of Pass3bVerifier from BCEL. It uses LimitedConstaintVisitor
+ * rather than InstConstraintVisitor to implement the constraints. The LimitedConstraintVisitor
+ * doesn't do any checking outside of the current class and removes some checks so that this will
+ * pass on the JDK. This version also provides the ability to get the contents of the stack for each
+ * instruction in the method.
  *
- * This PassVerifier verifies a method of class file according to pass 3,
- * so-called structural verification as described in The Java Virtual Machine
- * Specification, 2nd edition.
- * More detailed information is to be found at the do_verify() method's
- * documentation.
+ * <p>This PassVerifier verifies a method of class file according to pass 3, so-called structural
+ * verification as described in The Java Virtual Machine Specification, 2nd edition. More detailed
+ * information is to be found at the do_verify() method's documentation.
  *
  * @version $Id$
  * @author <A HREF="http://www.inf.fu-berlin.de/~ehaase">Enver Haase</A>
@@ -113,23 +108,20 @@ public final class StackVer {
   in favour of LONG_Upper and DOUBLE_Upper as in pass 2. */
 
   /**
-   * An InstructionContextQueue is a utility class that holds
-   * (InstructionContext, ArrayList) pairs in a Queue data structure.
-   * This is used to hold information about InstructionContext objects
-   * externally --- i.e. that information is not saved inside the
-   * InstructionContext object itself. This is useful to save the
-   * execution path of the symbolic execution of the
-   * Pass3bVerifier - this is not information
-   * that belongs into the InstructionContext object itself.
-   * Only at "execute()"ing
-   * time, an InstructionContext object will get the current information
-   * we have about its symbolic execution predecessors.
+   * An InstructionContextQueue is a utility class that holds (InstructionContext, ArrayList) pairs
+   * in a Queue data structure. This is used to hold information about InstructionContext objects
+   * externally --- i.e. that information is not saved inside the InstructionContext object itself.
+   * This is useful to save the execution path of the symbolic execution of the Pass3bVerifier -
+   * this is not information that belongs into the InstructionContext object itself. Only at
+   * "execute()"ing time, an InstructionContext object will get the current information we have
+   * about its symbolic execution predecessors.
    */
   private static final class InstructionContextQueue {
     private Vector<InstructionContext> ics = new Vector<InstructionContext>();
     private Vector<ArrayList<InstructionContext>> ecs = new Vector<ArrayList<InstructionContext>>();
     /**
      * TODO
+     *
      * @param ic
      * @param executionChain
      */
@@ -139,19 +131,19 @@ public final class StackVer {
     }
     /**
      * TODO
+     *
      * @return
      */
     public boolean isEmpty() {
       return ics.isEmpty();
     }
-    /**
-     * TODO
-     */
+    /** TODO */
     public void remove() {
       this.remove(0);
     }
     /**
      * TODO
+     *
      * @param i
      */
     public void remove(int i) {
@@ -160,6 +152,7 @@ public final class StackVer {
     }
     /**
      * TODO
+     *
      * @param i
      * @return
      */
@@ -168,6 +161,7 @@ public final class StackVer {
     }
     /**
      * TODO
+     *
      * @param i
      * @return
      */
@@ -176,6 +170,7 @@ public final class StackVer {
     }
     /**
      * TODO
+     *
      * @return
      */
     public int size() {
@@ -238,19 +233,17 @@ public final class StackVer {
   public StackVer() {}
 
   /**
-   * Return the types on the stack at each byte code offset.  Only valid
-   * after do_stack_ver() is called.
+   * Return the types on the stack at each byte code offset. Only valid after do_stack_ver() is
+   * called.
    */
   public StackTypes get_stack_types() {
     return stack_types;
   }
 
   /**
-   * Whenever the outgoing frame
-   * situation of an InstructionContext changes, all its successors are
-   * put [back] into the queue [as if they were unvisited].
-   * The proof of termination is about the existence of a
-   * fix point of frame merging.
+   * Whenever the outgoing frame situation of an InstructionContext changes, all its successors are
+   * put [back] into the queue [as if they were unvisited]. The proof of termination is about the
+   * existence of a fix point of frame merging.
    */
   private void circulationPump(
       ControlFlowGraph cfg,
@@ -418,9 +411,9 @@ public final class StackVer {
   }
 
   /**
-   * Implements the pass 3b data flow analysis as described in the
-   * Java Virtual Machine Specification, Second Edition.  As it is doing
-   * so it keeps track of the stack and local variables at each instruction.
+   * Implements the pass 3b data flow analysis as described in the Java Virtual Machine
+   * Specification, Second Edition. As it is doing so it keeps track of the stack and local
+   * variables at each instruction.
    *
    * @see org.apache.bcel.verifier.statics.Pass2Verifier#getLocalVariablesInfo(int)
    */
@@ -513,10 +506,9 @@ public final class StackVer {
   private ArrayList<String> messages = new ArrayList<String>(); //Type of elements: String
 
   /**
-   * This method adds a (warning) message to the message pool of this
-   * PassVerifier. This method is normally only internally used by
-   * BCEL's class file verifier "JustIce" and should not be used from
-   * the outside.
+   * This method adds a (warning) message to the message pool of this PassVerifier. This method is
+   * normally only internally used by BCEL's class file verifier "JustIce" and should not be used
+   * from the outside.
    */
   public void addMessage(String message) {
     messages.add(message);

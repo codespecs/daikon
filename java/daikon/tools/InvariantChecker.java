@@ -16,8 +16,8 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * InvariantChecker reads an invariant file and trace file.  It prints errors
- * for any invariants that are violated by the trace file.
+ * InvariantChecker reads an invariant file and trace file. It prints errors for any invariants that
+ * are violated by the trace file.
  */
 public class InvariantChecker {
   private InvariantChecker() {
@@ -86,10 +86,10 @@ public class InvariantChecker {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -319,10 +319,7 @@ public class InvariantChecker {
     System.out.println();
     System.out.printf(
         "%s: %,d errors found in %,d samples (%s)\n",
-        inv_file,
-        error_cnt,
-        sample_cnt,
-        toPercentage(error_cnt, sample_cnt));
+        inv_file, error_cnt, sample_cnt, toPercentage(error_cnt, sample_cnt));
     int failedCount = failedInvariants.size();
     int testedCount = testedInvariants.size();
     String percent = toPercentage(failedCount, testedCount);
@@ -360,8 +357,8 @@ public class InvariantChecker {
     Map<Integer, EnterCall> call_map = new LinkedHashMap<Integer, EnterCall>();
 
     /**
-     * process the sample by checking it against each existing invariant
-     * and issuing an error if any invariant is falsified or weakened.
+     * process the sample by checking it against each existing invariant and issuing an error if any
+     * invariant is falsified or weakened.
      */
     /*@RequiresNonNull("FileIO.data_trace_state")*/
     public void process_sample(

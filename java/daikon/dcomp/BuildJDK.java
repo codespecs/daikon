@@ -15,10 +15,9 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
 
 /**
- * Converts each file in the JDK.  Each method is doubled.  The new methods
- * are distinguished by a final parameter of type ?? and are instrumented to
- * track comparability.  User code will call the new methods, but
- * instrumentation code is unchanged and calls the original methods.
+ * Converts each file in the JDK. Each method is doubled. The new methods are distinguished by a
+ * final parameter of type ?? and are instrumented to track comparability. User code will call the
+ * new methods, but instrumentation code is unchanged and calls the original methods.
  */
 public class BuildJDK {
 
@@ -31,8 +30,8 @@ public class BuildJDK {
       "daikon.BuildJDK [options] src dest [class_prefix | classfiles...]";
 
   /**
-   * Given an explicit {@code rt.jar} filename, or a root JDK or JRE directory, finds
-   * the {@code rt.jar} file.
+   * Given an explicit {@code rt.jar} filename, or a root JDK or JRE directory, finds the {@code
+   * rt.jar} file.
    */
   public static class RtJarFinder {
     private final String arg;
@@ -43,11 +42,9 @@ public class BuildJDK {
     }
 
     /**
-     * @param spaceSeparatedJarLocations a list of potential jar filenames to
-     *          look for, in case arg was a directory. For example, if arg was
-     *          /usr/bin/jd2sdk, and spaceSeparatedJarLocations was
-     *          "jre/lib/rt.jar", this could return
-     *          /usr/bin/jd2sdk/jre/lib/rt.jar, if it existed.
+     * @param spaceSeparatedJarLocations a list of potential jar filenames to look for, in case arg
+     *     was a directory. For example, if arg was /usr/bin/jd2sdk, and spaceSeparatedJarLocations
+     *     was "jre/lib/rt.jar", this could return /usr/bin/jd2sdk/jre/lib/rt.jar, if it existed.
      */
     public String findRtJar(String spaceSeparatedJarLocations) {
       String jarFilename = arg;
@@ -62,9 +59,7 @@ public class BuildJDK {
       return jarFilename;
     }
 
-    /**
-     * @return true iff libRt exists in the filesystem
-     */
+    /** @return true iff libRt exists in the filesystem */
     protected boolean exists(String libRt) {
       return new File(libRt).exists();
     }
@@ -111,17 +106,18 @@ public class BuildJDK {
       };
 
   /**
-   * Invoke as:
-   * BuildJDK jarfile dest prefix
+   * Invoke as: BuildJDK jarfile dest prefix
    *
    * <dl>
-   *    <dt>jarfile     <dd>jarfile to process
-   *    <dt>dest        <dd>destination directory in which to place instrumented classes
-   *    <dt>prefix      <dd>optional prefix of classes to be translated
+   *   <dt>jarfile
+   *   <dd>jarfile to process
+   *   <dt>dest
+   *   <dd>destination directory in which to place instrumented classes
+   *   <dt>prefix
+   *   <dd>optional prefix of classes to be translated
    * </dl>
    *
-   * Instruments each class file in jarfile that begins with prefix
-   * and puts the results in dest.
+   * Instruments each class file in jarfile that begins with prefix and puts the results in dest.
    */
   public static void main(String[] args) throws IOException {
 
@@ -208,8 +204,8 @@ public class BuildJDK {
   }
 
   /**
-   * Check the resulting arguments for legality.  Prints a message and
-   * returns false if there was an error.
+   * Check the resulting arguments for legality. Prints a message and returns false if there was an
+   * error.
    */
   public static boolean check_args(Options options, String[] target_args) {
 
@@ -351,9 +347,8 @@ public class BuildJDK {
   }
 
   /**
-   * Looks up classname in classmap and instruments the class that is
-   * found.  Writes the resulting class to its corresponding location
-   * in the directory dfile.
+   * Looks up classname in classmap and instruments the class that is found. Writes the resulting
+   * class to its corresponding location in the directory dfile.
    */
   private void processClassFile(Map<String, JavaClass> classmap, File dfile, String classname)
       throws java.io.IOException {
@@ -412,10 +407,9 @@ public class BuildJDK {
   }
 
   /**
-   * Print out information about any methods that were not instrumented.
-   * This happens when a method fails BCEL's verifier (which is more
-   * strict than Java's).  Any failures which have not been previously
-   * seen are noted.
+   * Print out information about any methods that were not instrumented. This happens when a method
+   * fails BCEL's verifier (which is more strict than Java's). Any failures which have not been
+   * previously seen are noted.
    */
   private static void print_skipped_methods() {
 

@@ -13,10 +13,9 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * <B>MultiDiffVisitor</B> is a state-storing NodeVisitor that works
- * across multiple files regardless of the current two-file infrastructure.
- * This allows the selection of very unique invariants that occur once over
- * an entire set of trace files.
+ * <B>MultiDiffVisitor</B> is a state-storing NodeVisitor that works across multiple files
+ * regardless of the current two-file infrastructure. This allows the selection of very unique
+ * invariants that occur once over an entire set of trace files.
  */
 public class MultiDiffVisitor extends PrintNullDiffVisitor {
 

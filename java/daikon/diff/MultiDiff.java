@@ -4,10 +4,10 @@ package daikon.diff;
 
 import java.io.*;
 
-/** <B>MultiDiff</B> is an executable application that performs the same
- *  functionality as Diff with a few key change.  First, it always outputs
- *  the histogram even when two files are called.  Second, it allows the
- *  option of creating *.spinfo based on the invariants found.
+/**
+ * <B>MultiDiff</B> is an executable application that performs the same functionality as Diff with a
+ * few key change. First, it always outputs the histogram even when two files are called. Second, it
+ * allows the option of creating *.spinfo based on the invariants found.
  */
 public class MultiDiff {
   private MultiDiff() {
@@ -26,10 +26,10 @@ public class MultiDiff {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing daikon.Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * daikon.Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */

@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * A command handler handles a set of commands. A command is the first argument
- * given to the instrumenter.
+ * A command handler handles a set of commands. A command is the first argument given to the
+ * instrumenter.
  */
 public class CommandHandler {
 

@@ -163,8 +163,10 @@ public class PptCountVisitor extends PrintAllVisitor {
     return s.substring(cut + 12, s.lastIndexOf('"'));
   }
 
-  /** s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)"
-   *  find the point in the string just after the EXIT107 */
+  /**
+   * s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)" find the point in
+   * the string just after the EXIT107
+   */
   private int findCutoff(String s) {
     String lastPart = "";
     int cut = 0;
@@ -215,8 +217,10 @@ public class PptCountVisitor extends PrintAllVisitor {
     //     return false;
   }
 
-  /** Returns true iff any token of inv.format_java() contains
-   *  a number other than -1, 0, 1 or is null. */
+  /**
+   * Returns true iff any token of inv.format_java() contains a number other than -1, 0, 1 or is
+   * null.
+   */
   private static boolean filterOut(/*@Nullable*/ Invariant inv) {
 
     if (inv == null) return true;
@@ -250,11 +254,11 @@ public class PptCountVisitor extends PrintAllVisitor {
     return (double) correctSet.size() / targSet.size();
   }
 
-  /** Returns true iff numLiteral represents a numeric
-   * literal string of integer or float that we believe
-   * will be useful for a splitting condition.  Usually that
-   * includes -1, 0, 1, and any other numeric literal
-   * found in the source code.  */
+  /**
+   * Returns true iff numLiteral represents a numeric literal string of integer or float that we
+   * believe will be useful for a splitting condition. Usually that includes -1, 0, 1, and any other
+   * numeric literal found in the source code.
+   */
   private static boolean acceptableNumber(String numLiteral) {
 
     // need to make sure that it is an integer vs. floating

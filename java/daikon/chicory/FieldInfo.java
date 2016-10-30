@@ -11,8 +11,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * The OjbectInfo class is a subtype of DaikonVariableInfo used for
- * variable types which are class fields.
+ * The OjbectInfo class is a subtype of DaikonVariableInfo used for variable types which are class
+ * fields.
  */
 public class FieldInfo extends DaikonVariableInfo {
   /** The corresponding Field */
@@ -34,11 +34,10 @@ public class FieldInfo extends DaikonVariableInfo {
   private boolean is_outer_this;
 
   /**
-   * Class that gets the tags for fields.  Used by DynComp.
-   * Accessed only by methods DCRuntime.get_field_tag and
-   * DCRuntime.get_field_tag_refs_only.
+   * Class that gets the tags for fields. Used by DynComp. Accessed only by methods
+   * DCRuntime.get_field_tag and DCRuntime.get_field_tag_refs_only.
    */
-  public DCRuntime. /*@MonotonicNonNull*/FieldTag field_tag = null;
+  public DCRuntime./*@MonotonicNonNull*/ FieldTag field_tag = null;
 
   public FieldInfo(
       String theName, Field field, String typeName, String repTypeName, boolean isArr) {
@@ -72,10 +71,7 @@ public class FieldInfo extends DaikonVariableInfo {
     throw new Error("Can't find " + field + " in " + field.getDeclaringClass());
   }
 
-  /**
-   * Return the number of primitive fields in clazz and all of its
-   * superclasses.
-   */
+  /** Return the number of primitive fields in clazz and all of its superclasses. */
   public static int num_prim_fields(Class<?> clazz) {
     if (clazz == Object.class) {
       return 0;
@@ -90,17 +86,13 @@ public class FieldInfo extends DaikonVariableInfo {
     }
   }
 
-  /**
-   * Returns true iff the corresponding field is static.
-   */
+  /** Returns true iff the corresponding field is static. */
   /*@Pure*/
   public boolean isStatic() {
     return is_static;
   }
 
-  /**
-   * Returns true iff the corresponding field is final.
-   */
+  /** Returns true iff the corresponding field is final. */
   /*@Pure*/
   public boolean isFinal() {
     return is_final;
@@ -152,8 +144,8 @@ public class FieldInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Returns the kind of this variable.  Statics are top level
-   * variables, instance variables are fields.
+   * Returns the kind of this variable. Statics are top level variables, instance variables are
+   * fields.
    */
   public VarKind get_var_kind() {
     if (isStatic() || is_outer_this) {
@@ -164,8 +156,8 @@ public class FieldInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Returns the name of this field.  Since statics are top level, they
-   * have no relative name.  Fields return their field name.
+   * Returns the name of this field. Since statics are top level, they have no relative name. Fields
+   * return their field name.
    */
   public /*@Nullable*/ String get_relative_name() {
     if (isStatic() || is_outer_this) {
@@ -191,9 +183,7 @@ public class FieldInfo extends DaikonVariableInfo {
   }
   */
 
-  /**
-   * static final fields are NOMOD.
-   */
+  /** static final fields are NOMOD. */
   public EnumSet<VarFlags> get_var_flags() {
     EnumSet<VarFlags> flags = super.get_var_flags();
     int modbits = field.getModifiers();

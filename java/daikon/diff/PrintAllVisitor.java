@@ -9,10 +9,7 @@ import java.text.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/**
- * Prints all the invariant pairs, including pairs containing
- * identical invariants.
- */
+/** Prints all the invariant pairs, including pairs containing identical invariants. */
 public class PrintAllVisitor extends DepthFirstVisitor {
 
   // Protected so subclasses can use it.
@@ -27,9 +24,8 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   private boolean printEmptyPpts;
 
   /**
-   * Stores the output generated when visiting invariant nodes.  This
-   * output cannot be printed directly to the print stream, because
-   * the Ppt output must come before the Invariant output.
+   * Stores the output generated when visiting invariant nodes. This output cannot be printed
+   * directly to the print stream, because the Ppt output must come before the Invariant output.
    */
   private StringBuffer bufOutput = new StringBuffer();
 
@@ -39,10 +35,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     this.printEmptyPpts = printEmptyPpts;
   }
 
-  /**
-   * Prints the pair of program points, and all the invariants
-   * contained within them.
-   */
+  /** Prints the pair of program points, and all the invariants contained within them. */
   public void visit(PptNode node) {
     // Empty the string buffer
     bufOutput.setLength(0);
@@ -73,10 +66,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     }
   }
 
-  /**
-   * Prints a pair of invariants.  Includes the type of the invariants
-   * and their relationship.
-   */
+  /** Prints a pair of invariants. Includes the type of the invariants and their relationship. */
   public void visit(InvNode node) {
 
     if (HUMAN_OUTPUT) {
@@ -113,11 +103,9 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * This method is an alternate printing procedure for
-   * an InvNode so that the output is more human readable.
-   * The format resembles cvs diff with '+' and '-' signs for
-   * the differing invariants.  There is no information
-   * on justification or invariant type.
+   * This method is an alternate printing procedure for an InvNode so that the output is more human
+   * readable. The format resembles cvs diff with '+' and '-' signs for the differing invariants.
+   * There is no information on justification or invariant type.
    */
   public void printHumanOutput(InvNode node) {
 
@@ -156,8 +144,8 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Prints an invariant, including its printability and possibly its
-   * confidence.  Example: "argv != null {0.9999+}".
+   * Prints an invariant, including its printability and possibly its confidence. Example: "argv !=
+   * null {0.9999+}".
    */
   protected void printInvariant(Invariant inv) {
     if (verbose) {
@@ -175,8 +163,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Prints the confidence of the invariant.  Confidences between
-   * .9999 and 1 are rounded to .9999.
+   * Prints the confidence of the invariant. Confidences between .9999 and 1 are rounded to .9999.
    */
   private void printConfidence(Invariant inv) {
     double conf = inv.getConfidence();

@@ -9,12 +9,12 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/** A lemma is an object that wraps a Simplify formula representing
- * some logical statement. The only other thing it adds is a short
- * human-readable description, suitable for debugging.
+/**
+ * A lemma is an object that wraps a Simplify formula representing some logical statement. The only
+ * other thing it adds is a short human-readable description, suitable for debugging.
  *
- * Members of the Lemma class proper represent general theorems, which
- * we give to Simplify as background, with hand-written descriptions.
+ * <p>Members of the Lemma class proper represent general theorems, which we give to Simplify as
+ * background, with hand-written descriptions.
  */
 public class Lemma implements Comparable<Lemma> {
   public String summary;
@@ -49,9 +49,9 @@ public class Lemma implements Comparable<Lemma> {
     return v;
   }
 
-  /** All the theorems we give Simplify (without proof) to help it
-   * reason about predicates, functions, and constants that aren't
-   * built-in.
+  /**
+   * All the theorems we give Simplify (without proof) to help it reason about predicates,
+   * functions, and constants that aren't built-in.
    */
   public static Lemma[] lemmas = {
     new Lemma("null has type T_null", "(EQ (typeof null) |T_null|)"),

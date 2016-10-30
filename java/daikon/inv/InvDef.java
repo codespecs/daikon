@@ -14,33 +14,29 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Class that defines an invariant so that it can be searched for as
- * part of suppression.
- */
+/** Class that defines an invariant so that it can be searched for as part of suppression. */
 public class InvDef {
 
   /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.inv.InvDef");
 
   /**
-   * Variables used by the invariant.  If v2 is null, this is a unary
-   * invariant, if v2 is not null, then this is a binary invariant.
+   * Variables used by the invariant. If v2 is null, this is a unary invariant, if v2 is not null,
+   * then this is a binary invariant.
    */
   VarInfo v1;
   /*@Nullable*/ VarInfo v2;
 
-  /**
-   * Argument indices used by the invariant.
-   */
+  /** Argument indices used by the invariant. */
   int v1_index = -1;
+
   int v2_index = -1;
   int v3_index = -1;
 
   /** invariant class. */
   Class<? extends Invariant> inv_class;
 
-  /** State to check.  Only for invariants with state. */
+  /** State to check. Only for invariants with state. */
   /*@Nullable*/ Object state;
 
   /** True if the order of the variables was swapped. */
@@ -166,8 +162,7 @@ public class InvDef {
   }
 
   /**
-   * Looks for this invariant (in this ppt).  Returns the invariant if it
-   * finds it, null otherwise.
+   * Looks for this invariant (in this ppt). Returns the invariant if it finds it, null otherwise.
    */
   public /*@Nullable*/ Invariant find() {
 

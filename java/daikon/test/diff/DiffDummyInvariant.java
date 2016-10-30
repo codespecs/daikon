@@ -10,9 +10,7 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * A dummy invariant used for testing purposes.
- */
+/** A dummy invariant used for testing purposes. */
 public class DiffDummyInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

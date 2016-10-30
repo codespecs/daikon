@@ -13,9 +13,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Represents additional information about a VarInfo that front ends
- * tell Daikon.  For example, whether order matters in a collection.
- * This is immutable and interned.
+ * Represents additional information about a VarInfo that front ends tell Daikon. For example,
+ * whether order matters in a collection. This is immutable and interned.
  */
 public final class VarInfoAux implements Cloneable, Serializable {
   // We are Serializable, so we specify a version to allow changes to
@@ -23,9 +22,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020614L;
 
-  /**
-   * General debug tracer.
-   */
+  /** General debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.VarInfoAux");
 
   public static final String TRUE = "true";
@@ -35,80 +32,59 @@ public final class VarInfoAux implements Cloneable, Serializable {
   // binary.  So could we make it a packed binary array?
 
   /**
-   * Whether the elements in this collection are all the meaningful
-   * elements, or whether there is a null at the end of this
-   * collection that ends the collection.
+   * Whether the elements in this collection are all the meaningful elements, or whether there is a
+   * null at the end of this collection that ends the collection.
    */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String NULL_TERMINATING = "nullTerminating";
 
   /**
-   * Whether this variable is a parameter to a method, or derived from
-   * a parameter to a method.  By default, if p is a parameter, then
-   * some EXIT invariants related to p aren't printed.  However, this
-   * does not affect the computation of invariants.
-   * <p>
-   * Frontends are
-   * responsible for setting if p is a parameter and if p.a is a
-   * parameter.  In Java, p.a is not a parameter, whereas in IOA, it
-   * is.
+   * Whether this variable is a parameter to a method, or derived from a parameter to a method. By
+   * default, if p is a parameter, then some EXIT invariants related to p aren't printed. However,
+   * this does not affect the computation of invariants.
+   *
+   * <p>Frontends are responsible for setting if p is a parameter and if p.a is a parameter. In
+   * Java, p.a is not a parameter, whereas in IOA, it is.
    */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String IS_PARAM = "isParam";
 
-  /**
-   * Whether repeated elements can exist in this collection.
-   */
+  /** Whether repeated elements can exist in this collection. */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String HAS_DUPLICATES = "hasDuplicates";
 
-  /**
-   * Whether order matters.
-   */
+  /** Whether order matters. */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String HAS_ORDER = "hasOrder";
 
-  /**
-   * Whether taking the size of this matters.
-   */
+  /** Whether taking the size of this matters. */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String HAS_SIZE = "hasSize";
 
-  /**
-   * Whether null has a special meaning for this variable or its members.
-   */
+  /** Whether null has a special meaning for this variable or its members. */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String HAS_NULL = "hasNull";
 
-  /**
-   * Indicates the minimum size of the vector, if there's any.
-   */
+  /** Indicates the minimum size of the vector, if there's any. */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String MINIMUM_LENGTH = "minlength";
 
-  /**
-   * Indicates the maximum size of the vector, if there's any.
-   */
+  /** Indicates the maximum size of the vector, if there's any. */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String MAXIMUM_LENGTH = "maxlength";
 
-  /**
-   * Indicates the minimum value of the scalar variable or the vector elements, if there's any.
-   */
+  /** Indicates the minimum value of the scalar variable or the vector elements, if there's any. */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String MINIMUM_VALUE = "minvalue";
 
-  /**
-   * Indicates the maximum value of the scalar variable or the vector elements, if there's any.
-   */
+  /** Indicates the maximum value of the scalar variable or the vector elements, if there's any. */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String MAXIMUM_VALUE = "maxvalue";
 
   /**
-   * Indicates the valid values (using string representation) for the elements
-   * of the vector, if there's any. Values are enclosed in square brackets, and each element is
-   * quoted separately, e.g.: ["a" "b"]. Parsing will be done upon
-   * call of the getList() method.
+   * Indicates the valid values (using string representation) for the elements of the vector, if
+   * there's any. Values are enclosed in square brackets, and each element is quoted separately,
+   * e.g.: ["a" "b"]. Parsing will be done upon call of the getList() method.
    *
    * @see #getList(String)
    */
@@ -116,27 +92,21 @@ public final class VarInfoAux implements Cloneable, Serializable {
   public static final /*@KeyFor("this.map")*/ String VALID_VALUES = "validvalues";
 
   /**
-   * Whether this variable is an inline structure.
-   * By default, a variable is a reference to a structure (class).  If it is
-   * an inlined structure (or array), it doesn't make sense to look
-   * for invariants over its hashcode.  Front ends include references
-   * to inlined structures as variables because some tools that follow
-   * daikon need other information about the variable.
+   * Whether this variable is an inline structure. By default, a variable is a reference to a
+   * structure (class). If it is an inlined structure (or array), it doesn't make sense to look for
+   * invariants over its hashcode. Front ends include references to inlined structures as variables
+   * because some tools that follow daikon need other information about the variable.
    */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String IS_STRUCT = "isStruct";
 
-  /**
-   * Whether this variable is known to be non-null, such as
-   * "this" in a Java program.
-   */
+  /** Whether this variable is known to be non-null, such as "this" in a Java program. */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String IS_NON_NULL = "isNonNull";
 
   /**
-   * Java-specific. The package name of the class that declares this
-   * variable, if the variable is a field. If it's not a field of some
-   * class, the value of this key is "no_package_name_string".
+   * Java-specific. The package name of the class that declares this variable, if the variable is a
+   * field. If it's not a field of some class, the value of this key is "no_package_name_string".
    */
   @SuppressWarnings("keyfor")
   public static final /*@KeyFor("this.map")*/ String PACKAGE_NAME = "declaringClassPackageName";
@@ -145,13 +115,13 @@ public final class VarInfoAux implements Cloneable, Serializable {
   public static final /*@KeyFor("this.map")*/ String NO_PACKAGE_NAME = "no_package_name_string";
 
   /**
-   * Return an interned VarInfoAux that represents a given string.
-   * Elements are separated by commas, in the form:
-   * <p>
-   * x = a, "a key" = "a value"
-   * <p>
-   * Parse allow for quoted elements.  White space to the left and
-   * right of keys and values do not matter, but inbetween does.
+   * Return an interned VarInfoAux that represents a given string. Elements are separated by commas,
+   * in the form:
+   *
+   * <p>x = a, "a key" = "a value"
+   *
+   * <p>Parse allow for quoted elements. White space to the left and right of keys and values do not
+   * matter, but inbetween does.
    */
   public static /*@Interned*/ VarInfoAux parse(String inString) throws IOException {
     Reader inStringReader = new StringReader(inString);
@@ -240,29 +210,21 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return result;
   }
 
-  /**
-   * Interned default options.
-   */
+  /** Interned default options. */
   private static /*@Interned*/ VarInfoAux theDefault = new VarInfoAux().intern();
 
-  /**
-   * Create a new VarInfoAux with default options.
-   */
+  /** Create a new VarInfoAux with default options. */
   public static /*@Interned*/ VarInfoAux getDefault() {
     return theDefault;
   }
 
-  /**
-   * Map for interning.
-   */
+  /** Map for interning. */
   private static /*@MonotonicNonNull*/ Map<VarInfoAux, /*@Interned*/ VarInfoAux> interningMap =
       // Static fields might not be initialized before static methods (which
       // call instance methods) are called, so don't bother to initialize here.
       null;
 
-  /**
-   * Special handler for deserialization.
-   */
+  /** Special handler for deserialization. */
   private /*@Interned*/ Object readResolve() throws ObjectStreamException {
     isInterned = false;
     Map</*@Interned*/ String, /*@Interned*/ String> newMap =
@@ -274,19 +236,13 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return this.intern();
   }
 
-  /**
-   * Contains the actual hashMap for this.
-   */
+  /** Contains the actual hashMap for this. */
   private Map</*@Interned*/ String, /*@Interned*/ String> map;
 
-  /**
-   * Whether this is interned.
-   */
+  /** Whether this is interned. */
   private boolean isInterned = false;
 
-  /**
-   * Make the default map here.
-   */
+  /** Make the default map here. */
   private VarInfoAux() {
     HashMap</*@Interned*/ String, /*@Interned*/ String> defaultMap =
         new HashMap</*@Interned*/ String, /*@Interned*/ String>();
@@ -304,9 +260,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     this.isInterned = false;
   }
 
-  /**
-   * Create a new VarInfoAux with default options.
-   */
+  /** Create a new VarInfoAux with default options. */
   private VarInfoAux(Map</*@Interned*/ String, /*@Interned*/ String> map) {
     this.map = map;
     this.isInterned = false;
@@ -373,8 +327,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns canonical representation of this.  Doesn't need to be
-   * called by outside classes because these are always interned.
+   * Returns canonical representation of this. Doesn't need to be called by outside classes because
+   * these are always interned.
    */
   @SuppressWarnings({"interning", "cast"}) // intern method
   private /*@Interned*/ VarInfoAux intern() {
@@ -408,9 +362,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the integer value associated with a key, assuming it is
-   * defined. It is recommended to check that it is defined first with
-   * {@link #hasValue(String)}.
+   * Returns the integer value associated with a key, assuming it is defined. It is recommended to
+   * check that it is defined first with {@link #hasValue(String)}.
    *
    * @throws RuntimeException if the key is not defined
    * @throws NumberFormatException if the value of the key cannot be parsed as an integer
@@ -424,9 +377,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the string array associated with a key, assuming it is
-   * defined. It is recommended to check that it is defined first with
-   * {@link #hasValue(String)}.
+   * Returns the string array associated with a key, assuming it is defined. It is recommended to
+   * check that it is defined first with {@link #hasValue(String)}.
    *
    * @throws RuntimeException if the key is not defined
    * @see #hasValue(String)
@@ -456,9 +408,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     }
   }
 
-  /**
-   * Returns the value for the given key, which must be present in the map.
-   */
+  /** Returns the value for the given key, which must be present in the map. */
   public String getValue(
       /*>>>@GuardSatisfied VarInfoAux this,*/
       /*@KeyFor("this.map")*/ String key) {
@@ -466,9 +416,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return map.get(key);
   }
 
-  /**
-   * Returns the value for the given key, or null if it is not present.
-   */
+  /** Returns the value for the given key, or null if it is not present. */
   public String getValueOrNull(
       /*>>>@GuardSatisfied VarInfoAux this,*/
       /*@KeyFor("this.map")*/ String key) {
@@ -476,8 +424,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Return <code>true</code> if the value for the given key is defined,
-   * and <code>false</code> otherwise.
+   * Return <code>true</code> if the value for the given key is defined, and <code>false</code>
+   * otherwise.
    */
   public boolean hasValue(String key) {
     return map.containsKey(key);
@@ -490,10 +438,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return value.equals(TRUE);
   }
 
-  /**
-   * Return a new VarInfoAux with the desired value set.
-   * Does not modify this.
-   */
+  /** Return a new VarInfoAux with the desired value set. Does not modify this. */
   public /*@Interned*/ VarInfoAux setValue(String key, String value) {
     HashMap</*@Interned*/ String, /*@Interned*/ String> newMap =
         new HashMap</*@Interned*/ String, /*@Interned*/ String>(this.map);
@@ -502,88 +447,70 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Converts the integer <code>value</code> to a String before
-   * invoking {@link #setValue(String, String)}.
+   * Converts the integer <code>value</code> to a String before invoking {@link #setValue(String,
+   * String)}.
    */
   public VarInfoAux setInt(String key, int value) {
     return setValue(key, Integer.toString(value));
   }
 
-  /**
-   * @see #NULL_TERMINATING
-   */
+  /** @see #NULL_TERMINATING */
   @SuppressWarnings("keyfor") // NULL_TERMINATING is always a key
   /*@Pure*/
   public boolean nullTerminating() {
     return getFlag(NULL_TERMINATING);
   }
 
-  /**
-   * @see #IS_PARAM
-   */
+  /** @see #IS_PARAM */
   @SuppressWarnings("keyfor") // IS_PARAM is always a key
   /*@Pure*/
   public boolean isParam() {
     return getFlag(IS_PARAM);
   }
 
-  /**
-   * @see #PACKAGE_NAME
-   */
+  /** @see #PACKAGE_NAME */
   @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
   /*@Pure*/
   public boolean packageName() {
     return getFlag(PACKAGE_NAME);
   }
 
-  /**
-   * @see #HAS_DUPLICATES
-   */
+  /** @see #HAS_DUPLICATES */
   @SuppressWarnings("keyfor") // HAS_DUPLICATES is always a key
   /*@Pure*/
   public boolean hasDuplicates() {
     return getFlag(HAS_DUPLICATES);
   }
 
-  /**
-   * @see #HAS_ORDER
-   */
+  /** @see #HAS_ORDER */
   @SuppressWarnings("keyfor") // HAS_ORDER is always a key
   /*@Pure*/
   public boolean hasOrder() {
     return getFlag(HAS_ORDER);
   }
 
-  /**
-   * @see #HAS_SIZE
-   */
+  /** @see #HAS_SIZE */
   @SuppressWarnings("keyfor") // HAS_SIZE is always a key
   /*@Pure*/
   public boolean hasSize() {
     return getFlag(HAS_SIZE);
   }
 
-  /**
-   * @see #HAS_NULL
-   */
+  /** @see #HAS_NULL */
   @SuppressWarnings("keyfor") // HAS_NULL is always a key
   /*@Pure*/
   public boolean hasNull() {
     return getFlag(HAS_NULL);
   }
 
-  /**
-   * @see #IS_STRUCT
-   */
+  /** @see #IS_STRUCT */
   @SuppressWarnings("keyfor") // IS_STRUCT is always a key
   /*@Pure*/
   public boolean isStruct() {
     return getFlag(IS_STRUCT);
   }
 
-  /**
-   * @see #IS_NON_NULL
-   */
+  /** @see #IS_NON_NULL */
   @SuppressWarnings("keyfor") // IS_NON_NULL is always a key
   /*@Pure*/
   public boolean isNonNull() {

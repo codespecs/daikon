@@ -21,16 +21,13 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * This is a standalone program that compares the invariants from two
- * versions of (and/or runs of) a program, and determines using
- * Simplify whether the invariants from one logically imply the
- * invariants from the other. These are referred to below as the
- * "test" and "application" invariants, and the conditions that are
- * checked is that the each test precondition (ENTER point invariant)
- * must be implied some combination of application preconditions, and
- * that each application postcondition (EXIT point invariant) must be
- * implied by some combination of test postconditions and application
- * preconditions.
+ * This is a standalone program that compares the invariants from two versions of (and/or runs of) a
+ * program, and determines using Simplify whether the invariants from one logically imply the
+ * invariants from the other. These are referred to below as the "test" and "application"
+ * invariants, and the conditions that are checked is that the each test precondition (ENTER point
+ * invariant) must be implied some combination of application preconditions, and that each
+ * application postcondition (EXIT point invariant) must be implied by some combination of test
+ * postconditions and application preconditions.
  */
 public class LogicalCompare {
   private LogicalCompare() {
@@ -564,10 +561,10 @@ public class LogicalCompare {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -728,9 +725,7 @@ public class LogicalCompare {
           throw new Daikon.TerminationMessage(
               String.format(
                   "Neither ppt %s nor ppt %s found in %s",
-                  exit_ppt_name,
-                  app_enter_ppt.ppt_name.makeExit(),
-                  app_filename));
+                  exit_ppt_name, app_enter_ppt.ppt_name.makeExit(), app_filename));
         }
       }
       if (test_exit_ppt == null) {
@@ -739,9 +734,7 @@ public class LogicalCompare {
           throw new Daikon.TerminationMessage(
               String.format(
                   "Neither ppt %s nor ppt %s found in %s",
-                  exit_ppt_name,
-                  test_enter_ppt.ppt_name.makeExit(),
-                  test_filename));
+                  exit_ppt_name, test_enter_ppt.ppt_name.makeExit(), test_filename));
         }
       }
 

@@ -22,9 +22,9 @@ import org.checkerframework.checker.signature.qual.*;
 public class ChicoryPremain {
 
   /**
-   * Any command line options declared here are 'hidden' as they cannot
-   * be accessed from Chicory.  These are internal debugging options that
-   * may be used when ChicoryPremain is invoked directly from the command line.
+   * Any command line options declared here are 'hidden' as they cannot be accessed from Chicory.
+   * These are internal debugging options that may be used when ChicoryPremain is invoked directly
+   * from the command line.
    */
   @Option("socket port to communicate with Daikon")
   public static int daikon_port = -1;
@@ -38,20 +38,15 @@ public class ChicoryPremain {
   // Non-null if doPurity == true
   private static /*@MonotonicNonNull*/ Set<String> pureMethods = null;
 
-  /**
-   * True iff Chicory should add variables based on pure methods
-   * during instrumentation.
-   */
+  /** True iff Chicory should add variables based on pure methods during instrumentation. */
   private static boolean doPurity = false;
 
   /**
-   * This method is the entry point of the java agent.  Its main
-   * purpose is to set up the transformer so that when classes from
-   * the target app are loaded, they are first transformed.
+   * This method is the entry point of the java agent. Its main purpose is to set up the transformer
+   * so that when classes from the target app are loaded, they are first transformed.
    *
-   * This method also sets up some other initialization tasks: it
-   * connects to Daikon over a port if necessary, or reads in a purity
-   * analysis.
+   * <p>This method also sets up some other initialization tasks: it connects to Daikon over a port
+   * if necessary, or reads in a purity analysis.
    */
   public static void premain(String agentArgs, Instrumentation inst) throws IOException {
 
@@ -136,9 +131,7 @@ public class ChicoryPremain {
     inst.addTransformer((ClassFileTransformer) transformer);
   }
 
-  /**
-   * Set up the declaration and dtrace writer.
-   */
+  /** Set up the declaration and dtrace writer. */
   // Runtime.dtrace is @GuardedBy("<self>") because in the Runtime class,
   // the printing of final lines and then closing of dtrace only happens
   // when the monitor of dtrace is held in order for the closing of the
@@ -158,26 +151,23 @@ public class ChicoryPremain {
   }
 
   /**
-   * Reads purity file.  Each line should contain exactly one method.
-   * Care must be taken to supply the correct format.
+   * Reads purity file. Each line should contain exactly one method. Care must be taken to supply
+   * the correct format.
    *
-   * From the Sun JDK API:
+   * <p>From the Sun JDK API:
    *
-   * "The string is formatted as the method access modifiers, if any,
-   * followed by the method return type, followed by a space, followed
-   * by the class declaring the method, followed by a period, followed
-   * by the method name, followed by a parenthesized, comma-separated
-   * list of the method's formal parameter types. If the method throws
-   * checked exceptions, the parameter list is followed by a space,
-   * followed by the word throws followed by a comma-separated list of
-   * the thrown exception types. For example:
+   * <p>"The string is formatted as the method access modifiers, if any, followed by the method
+   * return type, followed by a space, followed by the class declaring the method, followed by a
+   * period, followed by the method name, followed by a parenthesized, comma-separated list of the
+   * method's formal parameter types. If the method throws checked exceptions, the parameter list is
+   * followed by a space, followed by the word throws followed by a comma-separated list of the
+   * thrown exception types. For example:
    *
-   * public boolean java.lang.Object.equals(java.lang.Object)
+   * <p>public boolean java.lang.Object.equals(java.lang.Object)
    *
-   * The access modifiers are placed in canonical order as specified
-   * by "The Java Language Specification".  This is public, protected
-   * or private first, and then other modifiers in the following
-   * order: abstract, static, final, synchronized native.
+   * <p>The access modifiers are placed in canonical order as specified by "The Java Language
+   * Specification". This is public, protected or private first, and then other modifiers in the
+   * following order: abstract, static, final, synchronized native.
    */
   private static void readPurityFile(File purityFileName, /*@Nullable*/ File pathLoc) {
     pureMethods = new HashSet<String>();
@@ -226,6 +216,7 @@ public class ChicoryPremain {
 
   /**
    * Write a {@code *.pure} file to the given location.
+   *
    * @param fileName where to write the file to (full path)
    */
   // not handled: /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
@@ -248,8 +239,9 @@ public class ChicoryPremain {
   }
 
   /**
-   * Invokes Alexandru Salcianu's purity analysis on given application.
-   * Populates the pureMethods Set with pure (non side-effecting) methods.
+   * Invokes Alexandru Salcianu's purity analysis on given application. Populates the pureMethods
+   * Set with pure (non side-effecting) methods.
+   *
    * @param targetApp name of the class whose main method is the entry point of the application
    */
   //  private static void runPurityAnalysis(String targetApp)
@@ -266,9 +258,7 @@ public class ChicoryPremain {
   //      }
   //  }
 
-  /**
-   * Return true iff Chicory has run a purity analysis or read a {@code *.pure} file.
-   */
+  /** Return true iff Chicory has run a purity analysis or read a {@code *.pure} file. */
   @SuppressWarnings("nullness") // dependent:  pureMethods is non-null if doPurity is true
   // /*@EnsuresNonNullIf(result=true, expression="ChicoryPremain.pureMethods")*/
   /*@EnsuresNonNullIf(result=true, expression="pureMethods")*/
@@ -277,8 +267,8 @@ public class ChicoryPremain {
   }
 
   /**
-   * Checks if member is one of the pure methods found in a purity analysis
-   * or supplied from a {@code *.pure} file.
+   * Checks if member is one of the pure methods found in a purity analysis or supplied from a
+   * {@code *.pure} file.
    *
    * @return true iff member is a pure method
    */
@@ -297,9 +287,7 @@ public class ChicoryPremain {
     return false;
   }
 
-  /**
-   * Return an unmodifiable Set of the pure methods.
-   */
+  /** Return an unmodifiable Set of the pure methods. */
   // /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
   /*@RequiresNonNull("pureMethods")*/
   public static Set<String> getPureMethods() {
@@ -307,33 +295,29 @@ public class ChicoryPremain {
   }
 
   /**
-   * Classloader for the BCEL code.  Using this classloader guarantees
-   * that we get the 6.0 release version of BCEL and not a possible
-   * incompatible version from elsewhere on the users classpath.  We
-   * also load daikon.chicory.Instrument via this (since that class is
-   * the user of all of the BCEL classes).  All references to BCEL
-   * must be within that class (so that all references to BCEL will
-   * get resolved by this classloader).
+   * Classloader for the BCEL code. Using this classloader guarantees that we get the 6.0 release
+   * version of BCEL and not a possible incompatible version from elsewhere on the users classpath.
+   * We also load daikon.chicory.Instrument via this (since that class is the user of all of the
+   * BCEL classes). All references to BCEL must be within that class (so that all references to BCEL
+   * will get resolved by this classloader).
    *
-   * There are three general versions of BCEL to consider:
+   * <p>There are three general versions of BCEL to consider:
+   *
    * <ul>
    *   <li>the original 5.2 version
    *   <li>the interim 6.0 version
    *   <li>the offical 6.0 release version
    * </ul>
-   * We are looking for the latter one.  The first and third versions
-   * use the package name of org.apache.bcel while the interim version
-   * uses the package name of org.apache.commons.bcel6.  Also, there
-   * are several classes present in the 6.0 release version that are
-   * not in the original version. Thus, we can identify the correct
-   * version of BCEL by the presence of the class:
-   *   org.apache.bcel.util.ClassPathRepository.class
    *
-   * Earlier versions of Chicory inspected all version of BCEL found
-   * on the path and selected the correct one, if present.
-   * We now (9/15/16) simplify this to say the first BCEL found
-   * must be the correct one.
-   * This allows us to use the normal loader for all of the classes.
+   * We are looking for the latter one. The first and third versions use the package name of
+   * org.apache.bcel while the interim version uses the package name of org.apache.commons.bcel6.
+   * Also, there are several classes present in the 6.0 release version that are not in the original
+   * version. Thus, we can identify the correct version of BCEL by the presence of the class:
+   * org.apache.bcel.util.ClassPathRepository.class
+   *
+   * <p>Earlier versions of Chicory inspected all version of BCEL found on the path and selected the
+   * correct one, if present. We now (9/15/16) simplify this to say the first BCEL found must be the
+   * correct one. This allows us to use the normal loader for all of the classes.
    */
   public static class ChicoryLoader extends ClassLoader {
 
@@ -381,9 +365,8 @@ public class ChicoryPremain {
     }
 
     /**
-     * Returns whether or not the two URL represent the same location
-     * for org.apache.bcel.  Two locations match if they refer to the
-     * same jar file or the same directory in the filesystem.
+     * Returns whether or not the two URL represent the same location for org.apache.bcel. Two
+     * locations match if they refer to the same jar file or the same directory in the filesystem.
      */
     private static boolean same_location(URL url1, URL url2) {
       if (!url1.getProtocol().equals(url2.getProtocol())) {
@@ -410,8 +393,8 @@ public class ChicoryPremain {
     }
 
     /**
-     * Returns the pathname of a jar file specified in the URL.  The
-     * protocol must be 'jar'.  Only file jars are supported.
+     * Returns the pathname of a jar file specified in the URL. The protocol must be 'jar'. Only
+     * file jars are supported.
      */
     private static String extract_jar_path(URL url) {
       assert url.getProtocol().equals("jar") : url.toString();
@@ -425,10 +408,9 @@ public class ChicoryPremain {
     }
 
     /**
-     * Get all of the URLs that match the specified name in the
-     * classpath.  The name should be in normal classname format (eg,
-     * org.apache.bcel.Const).  An empty list is returned if no
-     * names match.
+     * Get all of the URLs that match the specified name in the classpath. The name should be in
+     * normal classname format (eg, org.apache.bcel.Const). An empty list is returned if no names
+     * match.
      */
     static List<URL> get_resource_list(String classname) throws IOException {
 
@@ -442,8 +424,8 @@ public class ChicoryPremain {
     }
 
     /**
-     * Changes a class name in the normal format (eg, org.apache.bcel.Const)
-     * to that used to lookup resources (eg, org/apache/bcel/Const.class).
+     * Changes a class name in the normal format (eg, org.apache.bcel.Const) to that used to lookup
+     * resources (eg, org/apache/bcel/Const.class).
      */
     private static String classname_to_resource_name(String name) {
       return (name.replace(".", "/") + ".class");

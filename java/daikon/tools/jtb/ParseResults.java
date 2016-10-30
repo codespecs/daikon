@@ -13,9 +13,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * The wrapped result of parsing a .java source file. The packageName and
- * className arguments can be obtained from root, but they are returned here
- * for convenience.
+ * The wrapped result of parsing a .java source file. The packageName and className arguments can be
+ * obtained from root, but they are returned here for convenience.
  */
 public class ParseResults {
   public String packageName;
@@ -37,9 +36,7 @@ public class ParseResults {
     return "package name: " + packageName + ", " + "file name: " + fileName;
   }
 
-  /**
-   * If one of the files declares an interfaces, an error will occur.
-   */
+  /** If one of the files declares an interfaces, an error will occur. */
   public static List<ParseResults> parse(List<String> javaFileNames) {
     return parse(javaFileNames, false);
   }
