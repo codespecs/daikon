@@ -107,7 +107,7 @@ public class Violation implements Serializable {
    * Precondition: the string is of the form:
    *
    * <p>
-   * {@code <INVINFO> property time</INVINFO></code>
+   * {@code <INVINFO> property time</INVINFO>}
    *
    * <p>
    * Where {@code property} is valid XML representation of a
