@@ -816,11 +816,13 @@ audit:
 
 .PHONY: reformat check-format
 
-reformat: ../plume-lib
-	@../plume-lib/bin/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
+reformat:
+	@-git -C .run-google-java-format pull -q || git clone -q https://github.com/plume-lib/run-google-java-format.git .run-google-java-format
+	@./.run-google-java-format/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
 
-check-format: ../plume-lib
-	@../plume-lib/bin/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && false)
+check-format:
+	@-git -C .run-google-java-format pull -q || git clone -q https://github.com/plume-lib/run-google-java-format.git .run-google-java-format
+	@./.run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && false)
 
 
 ###########################################################################
