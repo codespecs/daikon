@@ -653,7 +653,7 @@ public final class CLASSNAME
    * (indicated by line_flag and coefficients[]).  Method should only be called
    * if the current points define a line (line_flag is not Flag.NO_LINE)
    *
-   * @param x,y,z  x,y,z components of the point.
+   * @param x,y,z  x,y,z components of the point
    *
    */
   private boolean try_points_linear(double x, double y, double z) {
@@ -955,7 +955,7 @@ public final class CLASSNAME
    *            The first three elements are null if no triple of elements
    *            is NaN-free.
    *
-   * @return the maximum separation found.
+   * @return the maximum separation found
    */
  double maxsep_triples (/*@Nullable*/ Point[] pa) {
 
@@ -1042,7 +1042,7 @@ public final class CLASSNAME
    *
    * @return a four element array where a is the first element, b the
    * second, c the third, and d is the fourth.  All elements are
-   * mutually prime, integers and a is positive
+   * mutually prime, integers and a is positive.
    */
   // TODO: should just pass in the first three elements rather than passing
   // in the point array.

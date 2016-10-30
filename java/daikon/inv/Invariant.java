@@ -90,7 +90,7 @@ import typequals.*;
    * Floating-point number between 0 and 1.  Invariants are displayed only if
    * the confidence that the invariant did not occur by chance is
    * greater than this.  (May also be set
-   * via the <tt>--conf_limit</tt> switch to Daikon; refer to manual.)
+   * via the <tt>--conf_limit</tt> command-line option to Daikon; refer to manual.)
    */
   public static double dkconfig_confidence_limit = .99;
 
@@ -635,7 +635,7 @@ import typequals.*;
    * @param parent_ppt  slice that will contain the new invariant
    *
    * @return the merged invariant or null if the invariants didn't represent
-   * the same invariant.
+   * the same invariant
    */
   public /*@Nullable*/ /*@NonPrototype*/ Invariant merge(
       /*>>> @Prototype Invariant this,*/ List</*@NonPrototype*/ Invariant> invs,
@@ -779,7 +779,7 @@ import typequals.*;
   private static Pattern anontype_pat = Pattern.compile("\\\\type\\([^\\)]*\\$");
 
   /**
-   * @return true if this Invariant can be properly formatted for Java output.
+   * @return true if this Invariant can be properly formatted for Java output
    */
   /*@Pure*/
   public boolean isValidExpression(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) {
@@ -1458,7 +1458,7 @@ import typequals.*;
   }
 
   /**
-   * @return true if this invariant is only over prestate variables .
+   * @return true if this invariant is only over prestate variables
    */
   /*@Pure*/
   public boolean isAllPrestate(/*>>> @NonPrototype Invariant this*/) {

@@ -336,7 +336,7 @@ public class PptRelation implements Serializable {
    * Relates parent_var to a variable in child that matches name.
    *
    * @param parent_var      the parent variable being matched
-   * @param viname          the name to look for in child variables.
+   * @param viname          the name to look for in child variables
    *
    * @return true if there was a matching variable, false otherwise
    */

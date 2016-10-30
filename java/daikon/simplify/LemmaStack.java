@@ -243,7 +243,7 @@ public class LemmaStack {
   /** Find a subset of invs[] that imply consequence, such that no
    * subset of that set does. Note that we may not return the smallest
    * such set. The set is currently returned in the same order as the
-   * invariants appeared in invs[] */
+   * invariants appeared in invs[]. */
   private Vector<Lemma> minimizeAssumptions(Lemma[] invs, String consequence)
       throws TimeoutException {
     boolean[] excluded = new boolean[invs.length];
@@ -495,7 +495,7 @@ public class LemmaStack {
 
   /** Integers smaller in absolute value than this will be printed
    * directly. Larger integers will be printed abstractly (see
-   * Invariant.simplify_format_long and a comment there for details) */
+   * Invariant.simplify_format_long and a comment there for details). */
   public static final long SMALL_INTEGER = 32000;
 
   /** For all the integers we've seen, tell Simplify about the

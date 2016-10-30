@@ -150,14 +150,14 @@ public class SplitterObject implements Comparable<SplitterObject> {
 
   /**
    * @return the Splitter that this SplitterObject represents. Null if
-   * splitterExists() == false
+   * splitterExists() == false.
    */
   public /*@Nullable*/ Splitter getSplitter() {
     return this.splitter;
   }
 
   /**
-   * set the error message of this this SplitterObject. This indicates the status of
+   * Set the error message of this this SplitterObject. This indicates the status of
    * the Splitter.
    */
   public void setError(String errorMessage) {
@@ -165,7 +165,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
-   * get the error message of this SplitterObject.
+   * Get the error message of this SplitterObject.
    */
   public String getError() {
     return this.errorMessage;
@@ -186,14 +186,14 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
-   * @return the full source of the Splitter.
+   * @return the full source of the Splitter
    */
   public String getFullSourcePath() {
     return (directory + className + ".java");
   }
 
   /**
-   * @return the program point represented by this Splitter.
+   * @return the program point represented by this Splitter
    */
   public String getPptName() {
     return this.pptName;

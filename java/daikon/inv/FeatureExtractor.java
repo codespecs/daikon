@@ -732,16 +732,16 @@ public final class FeatureExtractor {
     return final_answer;
   }
 
-  /*********************************************
+  /**
    * This IntDoublePair represents a connected int and double.
    * This is pretty much a struct + constructor.
    * However this also implements Comparable
    * so that it can be used in a TreeSet or Sorted.
    * When two IntDoublePairs are compared, they are compared
-   * based on their integer only.  The smaller the interger -- the smaller
+   * based on their integer only.  The smaller the interger, the smaller
    * the IntDoublePair.  Two IntDoublePairs that have the same integer are
    * considered equal.
-   *********************************************/
+   */
   private static final class IntDoublePair implements Comparable<IntDoublePair> {
     // public fields
     public int number;
@@ -792,9 +792,7 @@ public final class FeatureExtractor {
     }
   }
 
-  /*********************************************
-   * A tool for combining and normalizing multiple SVMfu and C5 files.
-   *********************************************/
+  /** A tool for combining and normalizing multiple SVMfu and C5 files. */
   public static final class CombineFiles {
 
     private static String USAGE =
@@ -944,9 +942,7 @@ public final class FeatureExtractor {
     }
   }
 
-  /*********************************************
-   * A tool for classifying SVMfu and C5 files.
-   *********************************************/
+  /** A tool for classifying SVMfu and C5 files. */
   public static final class ClassifyInvariants {
 
     private static String USAGE =

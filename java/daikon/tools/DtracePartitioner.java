@@ -67,7 +67,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   /** Grabs the next invocation in the Daikon trace file by interpreting
    * a blank line as the invocation delimter.  Note that multiple blank
    * lines between invocations might occur, so the callee is responsible
-   * for checking if the returned String is a blank line */
+   * for checking if the returned String is a blank line. */
   private String grabNextInvocation() throws IOException {
     StringBuffer sb = new StringBuffer();
     while (br.ready()) {

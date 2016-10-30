@@ -55,26 +55,28 @@ import typequals.*;
  *
  * A full example test case is as follows:
  *
+ * <pre>
  * daikon.inv.binary.twoSequence.PairwiseIntEqual
  * int_array int_array
  * add: [ 1 2 3 ]; [1 2 3 ]; no_change; a[] == b[] (elementwise)
  * add: [ 10 -1 6 ]; [10 -1 6 ]; no_change; a[] == b[] (elementwise)
  * add: [ -3 -3 -9 ]; [-3 6 -9 ]; falsified; a[] == b[] (elementwise)
  * end
- *
+ * </pre>
  *
  * Alternatively, this class can be used to generate a test case
  * when given command lines that do not include expected
  * InvariantStatus or invariant format.  The proper input to
  * generate the test above would be:
  *
+ * <pre>
  * daikon.inv.binary.twoSequence.PairwiseIntEqual
  * int_array int_array
  * add: [ 1 2 3 ]; [1 2 3 ]
  * add: [ 10 -1 6 ]; [10 -1 6 ]
  * add: [ -3 -3 -9 ]; [-3 6 -9 ]
  * end
- *
+ * </pre>
  *
  * To run a test case the method runTest should be used.  To generate
  * a test case the method generateTest should be used.
@@ -215,7 +217,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * performs the test, and the compares the test results to the
    * goals.  If the goals differ from the actual results the test
    * fails.
-   * @return false if any tests fail.
+   * @return false if any tests fail
    */
   private static boolean execute() {
     LineNumberReader commandReader = getCommands();
@@ -254,8 +256,8 @@ public class InvariantAddAndCheckTester extends TestCase {
    * input and output streams have been created.
    *
    * @param commands the input that decides which tests to perform
-   * @return a String holding the error messages for any failed tests
-   *  or null if no tests are failed.
+   * @return a String holding the error messages for any failed tests,
+   *  or null if no tests are failed
    */
   private static /*@Nullable*/ String performTest(LineNumberReader commands) {
     StringBuffer output = new StringBuffer();
@@ -456,7 +458,7 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     /**
      * @return a String containing the proper add and check
-     *  commands for this input lines of this test case.
+     *  commands for this input lines of this test case
      */
     public static /*@Nullable*/ String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
@@ -484,7 +486,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * Initializes the fields of this class based on the first two
      * lines of a case which include the class name and parameter
      * types.
-     * @return true is end of file is reached.
+     * @return true is end of file is reached
      */
     private static boolean initFields(LineNumberReader commands, boolean generatingCommands) {
 
@@ -671,7 +673,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * @return an InvariantStatus that the string status parses to.
+     * @return an InvariantStatus that the string status parses to
      */
     private static InvariantStatus parseStatus(String status) {
       status = status.trim();
@@ -692,7 +694,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      *
      * @param theClass the class in which to find the add_modified method
      * @return the add_modified method if it exists, null otherwise
-     * @throws RuntimeException if check_modified does not exist.
+     * @throws RuntimeException if check_modified does not exist
      */
     private static Method getAddModified(Class<? extends Invariant> theClass) {
       Method[] methods = theClass.getMethods();
@@ -713,7 +715,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      *
      * @param theClass the class in which to find the check_modified method
      * @return the check_modified method if it exists
-     * @throws RuntimeException if check_modified does not exist.
+     * @throws RuntimeException if check_modified does not exist
      */
     private static Method getCheckModified(Class<? extends Invariant> theClass) {
       Method[] methods = theClass.getMethods();
@@ -824,7 +826,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     /**
      * This function returns a VarInfo of the given type. The name is
      * the ith letter of the alphabet. (Produces variables such that i=0
-     * -> name=a, i=1 &rarr; name=b, ...)
+     * &rarr; name=a, i=1 &rarr; name=b, ...)
      *
      * @param type the desired type that the VarInfo will represent
      * @param i a unique identifier that determines the name to be used

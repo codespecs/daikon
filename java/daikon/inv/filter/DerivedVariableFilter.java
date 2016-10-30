@@ -30,8 +30,6 @@ public class DerivedVariableFilter extends InvariantFilter {
   public static /*@Nullable*/ /*@Regex*/ String dkconfig_class_re = null;
   public static /*@Nullable*/ Pattern class_re = null;
 
-  /**
-   */
   public DerivedVariableFilter() {
     isOn = dkconfig_class_re != null;
     if (isOn) {

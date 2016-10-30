@@ -12,7 +12,7 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * Utility class to parse annotations generated with the Annotate program
- * using {@code --wrap_xml} flag.
+ * using the {@code --wrap_xml} flag.
  *
  * An example of the String representation of an annotation, as output
  * with the {@code --wrap_xml} flag, is:

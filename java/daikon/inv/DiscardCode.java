@@ -137,9 +137,10 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
   }
 
   /** Prints out a string describing the reason for discard
-   * @return one of {"Not discarded","Obvious,"Bad sample seen","Unjustified confidence","Few modified samples","Not enough samples",
-   * "Non-canonical variable","Implied post state","Only constant variables in this expression","Derived Param","Control Check"
-   * ,"Exact","Variable Filter","Filtered"}
+   * @return one of {"Not discarded", "Obvious, "Bad sample seen", "Unjustified confidence", "Few
+   * modified samples", "Not enough samples", "Non-canonical variable", "Implied post state", "Only
+   * constant variables in this expression", "Derived Param", "Control Check", "Exact", "Variable
+   * Filter", "Filtered"}
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied DiscardCode this*/) {

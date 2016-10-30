@@ -80,7 +80,7 @@ public final class CompleteOneOfString extends SingleString {
     return new CompleteOneOfString(slice);
   }
 
-  /** return description of invariant.  Only Daikon format is implemented */
+  /** Return description of invariant.  Only Daikon format is implemented. */
   /*@SideEffectFree*/
   public String format_using(/*>>>@GuardSatisfied CompleteOneOfString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {

@@ -991,8 +991,6 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
-  /**
-   */
   private void print_stack_map_table(String prefix) {
 
     if (debug) {

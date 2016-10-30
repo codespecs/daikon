@@ -23,7 +23,7 @@ public class StringInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Returns a String which contains a string representation of val, used for
+   * Returns a String that contains a string representation of val, used for
    * dtrace information.
    */
   @SuppressWarnings("unchecked")

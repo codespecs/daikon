@@ -11,8 +11,6 @@ import junit.framework.*;
  * does transform tests, and its output is compared to the
  * "varInfoNameTest.<em>foo</em>.goal" file by this.
  *
- * <br>
- *
  * To add a new test case, add a line to the <em>foo</em> file and a line to
  * the goal file with intended output.  Format of the <em>foo</em> file is
  * output method, followed by a variable name.  Output methods are

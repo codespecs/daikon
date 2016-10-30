@@ -84,7 +84,7 @@ public class SplitterFactory {
   /**
    * Parses the Splitter info.
    * @param infofile filename.spinfo
-   * @return a SpinfoFile encapsulating the parsed splitter info file.
+   * @return a SpinfoFile encapsulating the parsed splitter info file
    */
   public static SpinfoFile parse_spinfofile(File infofile)
       throws IOException, FileNotFoundException {
@@ -322,7 +322,7 @@ public class SplitterFactory {
    * valid java indentifier parts with "_".
    * @param str the string to be cleaned
    * @return str with all non-Java-indentifier parts replaced
-   *  with "_".
+   *  with "_"
    */
   private static String clean(String str) {
     char[] cleaned = str.toCharArray();

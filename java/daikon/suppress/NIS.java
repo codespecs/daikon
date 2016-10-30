@@ -180,7 +180,7 @@ public class NIS {
   /** Total time spent in NIS processing */
   public static Stopwatch watch = new Stopwatch(false);
 
-  /** First execution of dump_stats().  Used to dump a header */
+  /** First execution of dump_stats().  Used to dump a header. */
   static boolean first_time = true;
 
   /**
@@ -744,7 +744,7 @@ public class NIS {
   /**
    * Creates all suppressed invariants for the specified ppt and
    * places them in their associated slices.
-   * @return a list of created invariants.
+   * @return a list of created invariants
    */
   /*@RequiresNonNull({"all_suppressions", "suppressor_map"})*/
   public static List<Invariant> create_suppressed_invs(PptTopLevel ppt) {

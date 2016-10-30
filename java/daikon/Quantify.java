@@ -228,7 +228,7 @@ public class Quantify {
 
   /**
    * Represents a daikon variable with an optional integer offset.
-   * usually used for the bounds of a slice.
+   * Usually used for the bounds of a slice.
    */
   public static class VarPlusOffset extends Term {
     VarInfo var;
@@ -283,9 +283,9 @@ public class Quantify {
   }
 
   public static class QuantifyReturn {
-    /** variable being quantified */
+    /** Variable being quantified. */
     public VarInfo var;
-    /** index into the variable.  If null, variable is not a sequence. */
+    /** Index into the variable.  If null, variable is not a sequence. */
     public /*@Nullable*/ Term index;
 
     public QuantifyReturn(VarInfo var) {
@@ -417,9 +417,9 @@ public class Quantify {
     /**
      * Returns the quantification string.  For example, if there is one
      * array variable (a[]) that is not a slice, it will return
-     * <pre>
-     * '(\forall int i; (0 &lt;= i &lt;= size(a[]) ==&gt; '
-     * </pre>
+     * <pre>{@code
+     * '(\forall int i; (0 <= i <= size(a[]) ==> '
+     * }</pre>
      */
     public String get_quantification() {
       return quant + " ==> ";

@@ -71,7 +71,7 @@ public class Implication extends Joiner {
    * Creates a new Implication Invariant and adds it to the PptTopLevel.
    *
    * @return null if predicate and the consequent are the same, or if
-   * the PptTopLevel already contains this Implication.
+   * the PptTopLevel already contains this Implication
    */
   public static /*@Nullable*/ Implication makeImplication(
       PptTopLevel ppt,

@@ -213,7 +213,7 @@ public final class MergeInvariants {
             ".spinfo files may only be specified along " + "with a .decls file");
       }
 
-      // Read in each of the maps again to build a template which contains all
+      // Read in each of the maps again to build a template that contains all
       // of the program points from each map.
       for (File file : inv_files) {
         debugProgress.fine("Reading " + file + " as merge template");

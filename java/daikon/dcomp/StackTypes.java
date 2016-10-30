@@ -75,9 +75,6 @@ public final class StackTypes {
     return (sb.toString());
   }
 
-  /**
-   * TODO
-   */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied StackTypes this,*/ OperandStack os) {
 
@@ -96,9 +93,6 @@ public final class StackTypes {
     return ("{" + buff + "}");
   }
 
-  /**
-   * TODO
-   */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied StackTypes this,*/ LocalVariables lv) {
 

@@ -232,9 +232,9 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
   //	}
 
   /***************************************************************/
-  /* "generic"visitXXXX methods where XXXX is an interface       */
-  /* therefore, we don't know the order of visiting; but we know */
-  /* these methods are called before the visitYYYY methods below */
+  /* "generic"visitXXXX methods where XXXX is an interface.      */
+  /* Therefore, we don't know the order of visiting; but we know */
+  /* these methods are called before the visitYYYY methods below. */
   /***************************************************************/
 
   /**
@@ -255,7 +255,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
 
   /***************************************************************/
   /* "generic" visitYYYY methods where YYYY is a superclass.     */
-  /* therefore, we know the order of visiting; we know           */
+  /* Therefore, we know the order of visiting; we know           */
   /* these methods are called after the visitXXXX methods above. */
   /***************************************************************/
   /**
@@ -300,7 +300,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
   public void visitReturnInstruction(ReturnInstruction o) {}
 
   /***************************************************************/
-  /* "special"visitXXXX methods for one type of instruction each */
+  /* "special "visitXXXX methods for one type of instruction each */
   /***************************************************************/
 
   /**

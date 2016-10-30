@@ -11,7 +11,7 @@ public class ArrayInfo extends DaikonVariableInfo {
   /**
    * Constructs an ArrayInfo object with the specified name
    * and type.
-   * @param theName the variable name. Should end with "[]"
+   * @param theName the variable name. Should end with "[]".
    * @param array_type component type of the array
    */
   public ArrayInfo(String theName, Class<?> array_type) {

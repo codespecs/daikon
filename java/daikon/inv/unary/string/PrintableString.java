@@ -53,7 +53,7 @@ public final class PrintableString extends SingleString {
     return new PrintableString(slice);
   }
 
-  /** return description of invariant.  Only Daikon format is implemented */
+  /** Return description of invariant.  Only Daikon format is implemented. */
   /*@SideEffectFree*/
   public String format_using(/*>>>@GuardSatisfied PrintableString this,*/ OutputFormat format) {
     if (format == OutputFormat.DAIKON) {

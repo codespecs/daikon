@@ -2440,7 +2440,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Determines whether the order of the variables in vis is a valid
    * permutation (i.e., their varinfo_index's are ordered).  Null
-   * elements are ignored (and an all-null list is ok).
+   * elements are ignored (and an all-null list is OK).
    */
   public boolean vis_order_ok(VarInfo[] vis) {
 

@@ -77,7 +77,7 @@ public class MethodInfo {
 
   /**
    * Whether or not the method is pure (has no side-effects).
-   * Will only be set to true if the --purity-analysis switch is given
+   * Will only be set to true if the {@code --purity-analysis} command-line option is given
    * to Chicory, and the method returns some value.
    * Only set during initViaReflection() method.
    */

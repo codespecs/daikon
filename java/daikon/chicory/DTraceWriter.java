@@ -182,7 +182,7 @@ public class DTraceWriter extends DaikonWriter {
    *             (which is the declared order in the source code).
    * @param thisObj the value of the "this" object at this point in the execution
    * @param ret_val the value returned from this method, only used for
-   *                exit program points.
+   *                exit program points
    */
   private void traverse(
       /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
@@ -281,7 +281,7 @@ public class DTraceWriter extends DaikonWriter {
    * @param classField which field we are interested in
    * @param theObj the object whose field we are examining.
    * TheoObj must be null, Nonsensical, or of a type which
-   * contains the field classField
+   * contains the field classField.
    * @return the value of the classField field in theObj
    */
   public static Object getValue(Field classField, Object theObj) {

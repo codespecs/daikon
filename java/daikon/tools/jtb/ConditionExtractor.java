@@ -149,7 +149,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // f6 -> "}"
 
   /**
-   * extracts the values for the different cases and creates splitting
+   * Extracts the values for the different cases and creates splitting
    * conditions out of them.
    */
   public void visit(SwitchStatement n) {
@@ -170,7 +170,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   }
 
   /**
-   * @return a String[] which contains the different Integer values
+   * @return a String[] that contains the different Integer values
    * which the case expression is tested against
    */
   public Collection<String> getCaseValues(NodeListOptional n) {

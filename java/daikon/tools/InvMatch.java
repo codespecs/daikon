@@ -159,7 +159,7 @@ public class InvMatch {
    * @param current_translation the current translation that is being built
    * @param xlate_list          the list of possible translations for each
    *                            invariant
-   * @param index               the current index in xlate_list.
+   * @param index               the current index in xlate_list
    *
    */
   public static void consider_xlate(

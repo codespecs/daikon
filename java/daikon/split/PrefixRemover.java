@@ -53,7 +53,7 @@ class PrefixRemover extends DepthFirstVisitor {
    * @param  prefix the prefix that should be removed.
    *  Prefix can not be a java reserved word.
    * @return expression with instances of prefix
-   *    removed from prefix locations.
+   *    removed from prefix locations
    */
   public static String removePrefix(String expression, String prefix) throws ParseException {
     Node root = Visitors.getJtbTree(expression);

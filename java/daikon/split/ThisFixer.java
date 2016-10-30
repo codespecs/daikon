@@ -65,7 +65,7 @@ class ThisFixer extends DepthFirstVisitor {
 
   /**
    * This method should not be directly used by users of this class.
-   * Replaces the token image of "." with "_" if was preceeded by "this"
+   * Replaces the token image of "." with "_" if was preceeded by "this",
    * or adds "this_" to the token image of an unqualified member variable.
    */
   public void visit(NodeToken n) {

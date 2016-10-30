@@ -315,8 +315,9 @@ public class PptSliceEquality extends PptSlice {
    * no longer make sense and certainly shouldn't be equal to anything
    * else)
    * <p>
-   * pre: vis.size() &gt; 0
-   * post: result.size() &gt; 0
+   * Requires: vis.size() &gt; 0
+   *
+   * Ensures: result.size() &gt; 0
    * @param vis the VarInfos that were different from leader
    * @param vt the ValueTuple associated with the VarInfos now
    * @param leader the original leader of VarInfos
@@ -324,7 +325,7 @@ public class PptSliceEquality extends PptSlice {
    * of samples for the new Equality invariants)
    * @return a List of Equality invariants bundling together same
    * values from vis, and if needed, another representing all the
-   * missing values.
+   * missing values
    */
   private List<Equality> createEqualityInvs(
       List<VarInfo> vis, ValueTuple vt, Equality leader, int count) {
@@ -393,8 +394,9 @@ public class PptSliceEquality extends PptSlice {
    * Assumes that the VarInfos in vis are not missing.  The method is used
    * exclusively for reversing optimizations in Daikon.
    * <p>
-   * pre: vis.size() &gt; 0
-   * post: result.size() &gt; 0
+   * Requires: vis.size() &gt; 0
+   *
+   * Ensures: result.size() &gt; 0
    * @param vis the VarInfos that were different from leader
    * @param leader the original leader of VarInfos
    * @return a List of Equality invariants bundling together same
@@ -427,13 +429,14 @@ public class PptSliceEquality extends PptSlice {
    * This method adds var to the list mapped by key,
    * creating a new list for key if one doesn't already exist.
    * <p>
-   * pre: Each value in map is a list of size 1 or greater
-   * post: Each value in map is a list of size 1 or greater
+   * Requires: Each value in map is a list of size 1 or greater
+   *
+   * Ensures: Each value in map is a list of size 1 or greater
    * @param map the map to add the bindings to
    * @param key if there is already a List associated with key, then
    * add value to key.  Otherwise create a new List associated with
    * key and insert value.
-   * @param value the value to insert into the List mapped to key.
+   * @param value the value to insert into the List mapped to key
    */
   private <T> void addToBindingList(Map<T, List<VarInfo>> map, T key, VarInfo value) {
     assert key != null;

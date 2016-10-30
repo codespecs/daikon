@@ -40,11 +40,11 @@ public class ContextSplitterFactory {
   public static int dkconfig_granularity = GRAIN_METHOD;
 
   /**
-   * @param files set of File objects to read from
-   * @param grain one of the GRAIN constants defined in this class
-   *
    * Read all the map files in the given collection, create callsite
    * splitters from them, and put the splitters into SplitterList.
+   *
+   * @param files set of File objects to read from
+   * @param grain one of the GRAIN constants defined in this class
    */
   public static void load_mapfiles_into_splitterlist(Collection<File> files, int grain) {
     for (File file : files) {
@@ -188,10 +188,10 @@ public class ContextSplitterFactory {
   }
 
   /**
-   * @param grain one of the GRAIN constants defined in this class
-   *
    * Given map file data, create splitters given the requested
    * granularity.
+   *
+   * @param grain one of the GRAIN constants defined in this class
    */
   public static PptNameAndSplitters[] make_context_splitters(MapfileEntry[] entries, int grain) {
     // Use a 2-deep map structure.  First key is an identifier

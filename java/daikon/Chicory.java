@@ -135,7 +135,7 @@ public class Chicory {
   /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
 
-  /** daikon process for {@code --daikon} switch */
+  /** daikon process for {@code --daikon} command-line option */
   // non-null if either daikon==true or daikon_online==true
   public static /*@MonotonicNonNull*/ Process daikon_proc;
 
@@ -156,7 +156,7 @@ public class Chicory {
   public static final String synopsis = "daikon.Chicory [options] target [target-args]";
 
   /**
-   * Entry point of Chicory
+   * Entry point of Chicory.
    * @param args see usage for argument descriptions
    */
   public static void main(String[] args) {

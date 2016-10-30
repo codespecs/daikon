@@ -89,7 +89,7 @@ public class NISuppression {
    * Checks this suppression.  Each suppressor is checked to see
    * if it matches inv and if not, whether or not it is valid (true).
    * The results are saved in each suppressor.  The suppressor results
-   * are used later by @link{#invalidated()}
+   * are used later by @link{#invalidated()}.
    *
    * @param ppt     program point in which to check suppression
    * @param vis     variables over which to check suppression
@@ -416,12 +416,12 @@ public class NISuppression {
    * antecedent invariants must also be over the same variables.
    *
    * @param inv         the invariant to attempt to add to the suppression
-   * @param supor       the suppressor we are trying to match.
+   * @param supor       the suppressor we are trying to match
    * @param vis         the current variables (if any) that have already
-   *                    been determined by previous antecedents.
+   *                    been determined by previous antecedents
    *
-   * @return a new VarInfo[] containing the variables of inv or null if inv
-   * does not match in some way.
+   * @return a new VarInfo[] containing the variables of inv, or null if inv
+   * does not match in some way
    */
   private VarInfo /*@Nullable*/ [] consider_inv(Invariant inv, NISuppressor supor, VarInfo[] vis) {
 
@@ -499,7 +499,7 @@ public class NISuppression {
   /**
    * Determines whether the order of the variables in vis a valid
    * permutations (i.e., their varinfo_index's are ordered).  Null
-   * elements are ignored (and an all-null list is ok).
+   * elements are ignored (and an all-null list is OK).
    */
   private boolean vis_order_ok(VarInfo[] vis) {
 
@@ -608,7 +608,7 @@ public class NISuppression {
   }
 
   /**
-   * Returns 'suppressor &amp;&amp; suppressor ... ==&gt; suppressee'.
+   * Returns {@code "suppressor && suppressor ... ==> suppressee"}.
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied NISuppression this*/) {

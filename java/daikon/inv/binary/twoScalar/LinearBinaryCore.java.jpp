@@ -380,7 +380,7 @@ public final class CLASSNAME
    * Given ((x0,y0),(x1,y1)), finds a,b and c such that ax + by + c = 0.
    * Places a, b and c (if they exist) into result at indexes 0, 1 and 2
    * respectively.
-   * @return true if such an a and b exist.
+   * @return true if such an a and b exist
    */
   private static boolean find_bi_linear(PRIMITIVE x0,
                                        PRIMITIVE x1,

@@ -15,7 +15,7 @@ import org.checkerframework.checker.signature.qual.*;
 /**
  * ParameterDoclet is a JavaDoc doclet that collects information about
  * the runtime configuration options for the Daikon tools.  Refer to
- * the "--config" switch in the Daikon manual for an introduction to
+ * the {@code --config} command-line option in the Daikon manual for an introduction to
  * the configuration system.
  */
 public class ParameterDoclet {
@@ -61,7 +61,7 @@ public class ParameterDoclet {
 
   /**
    * Invoked by javadoc to query whether an option is allowed.
-   * @return number of tokens used by one option.
+   * @return number of tokens used by one option
    */
   public static int optionLength(String opt) {
     if ("--texinfo".equals(opt)) return 2; // == 1 tag + 1 argument

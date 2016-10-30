@@ -201,12 +201,12 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Return a StringBuffer which contains the name of this node
+   * Return a StringBuffer that contains the name of this node
    * and all ancestors of this node.
    * Longer indentations correspond to further distance in the tree.
    *
    * @param offset the offset to begin each line with
-   * @return StringBuffer which contains all children of this node
+   * @return StringBuffer that contains all children of this node
    */
   private StringBuffer getStringBuffer(StringBuffer offset) {
     StringBuffer theBuf = new StringBuffer();
@@ -849,10 +849,10 @@ public abstract class DaikonVariableInfo
    * example, the representation type of a class object is "hashcode."
    *
    * @param type
-   *            The type of the variable
+   *            the type of the variable
    * @param asArray
-   *            Whether the variable is being output as an array (true) or as
-   *            a pointer (false).
+   *            whether the variable is being output as an array (true) or as
+   *            a pointer (false)
    * @return the representation type as a string
    */
   public static String getRepName(Class<?> type, boolean asArray) {

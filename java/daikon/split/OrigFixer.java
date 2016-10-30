@@ -41,8 +41,8 @@ class OrigFixer extends DepthFirstVisitor {
    * "orig_x + orig_y &gt; orig_z - 3".
    * @param expression a valid segment of java code in which "orig()" is
    *  being replaced
-   * @return condition with all instances of "orig()" replaced.
-   * @throws ParseException if expression is not valid java code.
+   * @return condition with all instances of "orig()" replaced
+   * @throws ParseException if expression is not valid java code
    */
   public static String fixOrig(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
@@ -95,7 +95,7 @@ class OrigFixer extends DepthFirstVisitor {
 
   /**
    * Returns in n if an instance of the method "orig".
-   * @return true iff n is a instance of the method "orig".
+   * @return true iff n is a instance of the method "orig"
    */
   /*@Pure*/
   private boolean isOrig(PrimaryExpression n) {

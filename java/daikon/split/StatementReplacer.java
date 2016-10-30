@@ -12,16 +12,20 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * StatementReplacer is a jtb syntax tree visitor that replaces method calls
+ * StatementReplacer is a JTB syntax tree visitor that replaces method calls
  * to one line methods with their bodies.  The bodies of the methods
  * have their variable names changed to the correct argument names.
  * Replacer applies it self repeatedly such that if the body of the one
  * liner calls a one liner, it will make both replacements.
  * For example, take the methods
- * "int someMethod(int x, int y) { return  x + anotherMethod(y + 1); }" and
- * "int anotherMethod(int z) { return 2*z + 5; }"
- * a call to "makeReplacements(someMethod(a/3, b))" would yield:
- * "(a/3) + 2*((b) + 1) + 5"
+ * <pre>
+ *   int someMethod(int x, int y) { return  x + anotherMethod(y + 1); }
+ *   int anotherMethod(int z) { return 2*z + 5; }
+ * </pre>
+ * A call to "makeReplacements(someMethod(a/3, b))" would yield:
+ * <pre>
+ * (a/3) + 2*((b) + 1) + 5
+ * </pre>
  *
  * Once made from ReplaceStatements, a replacer can be used on a series of
  * statements.
@@ -55,7 +59,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * See class description for details.
    * @param expression a segment of valid java code in which the
    *  the replacements should be made
-   * @return statement with the correct replacements made.
+   * @return statement with the correct replacements made
    */
   public String makeReplacements(String expression) throws ParseException {
     // originalExpression and replacements detect loops.  Gross.
@@ -218,7 +222,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * Returns the arguments from the "this" method call n. For example
    * "method(x, y + 1)" would yield "[(x), (y + 1)]"
    * @param n the "this" method call from which the arguments should be extracted
-   * @return a list of arguments from the method call n.
+   * @return a list of arguments from the method call n
    */
   private List<String> getArgs(PrimaryExpression n) {
     List<String> args = new ArrayList<String>();
@@ -241,10 +245,10 @@ class StatementReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Returns the arguments from the "non-this" method call n. For example
-   * "method(x, y)" would yield "[x, y]"
+   * Returns the arguments from the "non-this" method call n. For example,
+   * "method(x, y)" would yield "[x, y]".
    * @param n the "non-this" method call from which the arguments should be extracted
-   * @return a list of arguments from the method call n.
+   * @return a list of arguments from the method call n
    */
   private List<String> getNonThisArgs(PrimaryExpression n) {
     List<String> args = new ArrayList<String>();

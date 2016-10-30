@@ -8,7 +8,7 @@ import org.checkerframework.checker.lock.qual.*;
 */
 
 /**
- * If a class has been instrumented with the instrumenter (
+ * If a class has been instrumented with the instrumenter,
  * invariant violations are added to the <code>violations</code> list.
  *
  */

@@ -24,7 +24,7 @@ class Visitors implements JavaParserConstants {
   /**
    * Returns the root of the JBT syntax tree for expression.
    * @param expression a valid java expression
-   * @throws ParseException if expression is not a valid java expression.
+   * @throws ParseException if expression is not a valid java expression
    */
   public static Node getJtbTree(String expression) throws ParseException {
     class ExpressionExtractor extends DepthFirstVisitor {

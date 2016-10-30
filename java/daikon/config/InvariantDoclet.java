@@ -59,7 +59,7 @@ public class InvariantDoclet {
 
   /**
    * Invoked by javadoc to query whether an option is allowed.
-   * @return number of tokens used by one option.
+   * @return number of tokens used by one option
    */
   public static int optionLength(String opt) {
     if ("--texinfo".equals(opt)) return 2; // == 1 tag + 1 argument

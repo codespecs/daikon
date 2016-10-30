@@ -53,7 +53,7 @@ public class Runtime {
   public static final /*@GuardedBy("<self>")*/ List<ClassInfo> all_classes =
       new ArrayList<ClassInfo>();
 
-  /** flag that indicates when the first class has been processed**/
+  /** Flag that indicates when the first class has been processed. */
   static boolean first_class = true;
 
   /** List of all instrumented methods */
@@ -198,8 +198,7 @@ public class Runtime {
   /**
    * Called when a method is entered.
    *
-   * @param obj receiver of the method that was entered.  Null if method is
-   *              static
+   * @param obj receiver of the method that was entered, or null if method is static
    * @param nonce nonce identifying which enter/exit pair this is
    * @param mi_index index in methods of the MethodInfo for this method
    * @param args array of arguments to method
@@ -282,12 +281,11 @@ public class Runtime {
   /**
    * Called when a method is exited.
    *
-   * @param obj receiver of the method that was entered.  Null if method is
-   *                      static
+   * @param obj receiver of the method that was entered, or null if method is static
    * @param nonce nonce identifying which enter/exit pair this is
    * @param mi_index index in methods of the MethodInfo for this method
    * @param args array of arguments to method
-   * @param ret_val return value of method.  null if method is void
+   * @param ret_val return value of method, or null if method is void
    * @param exitLineNum the line number at which this method exited
    */
   public static synchronized void exit(

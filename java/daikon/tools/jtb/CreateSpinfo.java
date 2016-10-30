@@ -164,7 +164,7 @@ public class CreateSpinfo {
    * Write splitters for the Java file to the PrintWriter as a spinfo file.
    * @param javaFileName the name of the java file from which this
    *  spinfo file is being made
-   * @param output the PrintWriter to which this spinfo file is being wrote.
+   * @param output the PrintWriter to which this spinfo file is being wrote
    */
   private static void writeSplitters(String javaFileName, PrintWriter output) throws IOException {
     Reader input = new FileReader(javaFileName);

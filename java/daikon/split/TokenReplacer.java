@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * TokenReplacer is a jtb syntax tree visitor that replaces a given set of
+ * TokenReplacer is a JTB syntax tree visitor that replaces a given set of
  * tokens that are names of a variable with another set of tokens.  Note that
  * it only replaces tokens that represent name of variables and have no prefixes.
  * For example the with the expression "i + this.i + someClass.i + i(i)" where
@@ -56,7 +56,7 @@ class TokenReplacer extends DepthFirstVisitor {
    * @param expression a segment of valid java code in which instances of
    *  oldVars should be replaced by the corresponding element of newVars
    * @param oldVars the variable names, as Strings, that should
-   *  be replaced by newVars.
+   *  be replaced by newVars
    * @param newVars the variable names, as Strings, that oldVars
    *  are replaced with
    * @return expression with all instances of an element of oldVars replaced

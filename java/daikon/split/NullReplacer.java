@@ -6,7 +6,7 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
 /**
- * NullReplacer is a jtb syntax tree visitor that replaces all instances
+ * NullReplacer is a JTB syntax tree visitor that replaces all instances
  * of "null" with "0" in a given expression. Note: "null" is
  * only referring to the java reserved word "null" not to any instances
  * of the string "null".
@@ -31,8 +31,8 @@ class NullReplacer extends DepthFirstVisitor {
    * Replaces all instance of "null" with "0".
    * @param expression a valid java expression
    * @return expression with all instances of null replaced by
-   *  instances of "0".
-   * @throws ParseException if expression is not a valid java expression.
+   *  instances of "0"
+   * @throws ParseException if expression is not a valid java expression
    */
   public static String replaceNull(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);

@@ -184,7 +184,7 @@ public final class PrintInvariants {
 
   /**
    * Switch for whether to print discarded Invariants or not, default is false.
-   * True iff --disc_reason switch was supplied on the command line.
+   * True iff {@code --disc_reason} switch was supplied on the command line.
    */
   public static boolean print_discarded_invariants = false;
 
@@ -217,12 +217,12 @@ public final class PrintInvariants {
   public static boolean wrap_xml = false;
 
   /**
-   * --output flag to redirect output to a specified file.
+   * {@code --output} flag to redirect output to a specified file.
    */
   private static String output_SWITCH = "output";
 
   /**
-   * --print_csharp_metadata flag to print extra data for contracts when the format is CSHARP_CONTRACT
+   * {@code --print_csharp_metadata} flag to print extra data for contracts when the format is CSHARP_CONTRACT.
    */
   private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
 
@@ -477,7 +477,7 @@ public final class PrintInvariants {
 
   /**
    * Prints out all the discardCodes and discardStrings of the Invariants
-   * that will not be printed if the --disc_reason switch is used.
+   * that will not be printed if the {@code --disc_reason} command-line option is used.
    */
   public static void print_reasons(PptMap ppts) {
     if (!print_discarded_invariants || Daikon.no_text_output) {
@@ -624,7 +624,7 @@ public final class PrintInvariants {
   }
 
   /**
-   * Method used to setup fields if the --disc_reason switch is used
+   * Method used to setup fields if the {@code --disc_reason} command-line option is used
    * if (arg==null) then show all discarded Invariants, otherwise just
    * show the ones specified in arg, where arg =
    * <em>class-name</em>&lt;<em>var1</em>,<em>var2</em>,...&gt;@<em>ppt.name</em> e.g.:

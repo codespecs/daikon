@@ -21,7 +21,7 @@ import org.checkerframework.dataflow.qual.*;
  * section" and "replace section" to describe what is refered to as a
  * "Program Point Section" and "replacement sections" in the Daikon User
  * Manual, respectively.  A "ppt statement" is a single line from a
- * "ppt section.".
+ * "ppt section".
  */
 public class SpinfoFile {
 
@@ -59,7 +59,7 @@ public class SpinfoFile {
   /**
    * Parses file spinfoFile.
    * @param spinfoFile the file to be parsed
-   * @param tempDir the directory in which the splitters' java files are created.
+   * @param tempDir the directory in which the splitters' java files are created
    */
   SpinfoFile(File spinfoFile, String tempDir) {
     this.tempDir = tempDir;
@@ -76,7 +76,7 @@ public class SpinfoFile {
 
   /**
    * Gets the StatementReplacer for the replace statements in the file parsed.
-   * @return the Replacer for the replace statements in the file parsed.
+   * @return the Replacer for the replace statements in the file parsed
    */
   public StatementReplacer getReplacer() {
     return statementReplacer;
@@ -86,7 +86,7 @@ public class SpinfoFile {
    * Gets the SplitterObjects for the file parsed.  For each Ppt in the
    * spinfo file, one array of SplitterObjects is created. This method
    * returns an array of those arrays.
-   * @return the SplitterObjects for the file parsed.
+   * @return the SplitterObjects for the file parsed
    */
   public SplitterObject[][] getSplitterObjects() {
     return splitterObjects;
@@ -174,7 +174,7 @@ public class SpinfoFile {
    * replaceStatements.
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @param replaceStatements the List into which the ReplaceStatements
-   *  are added.
+   *  are added
    */
   @SuppressWarnings("nullness") // bug exposed by test case Asserts.assertTwice().
   private void readReplaceStatements(
@@ -210,7 +210,7 @@ public class SpinfoFile {
    * Puts this list in pptSections.
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @param pptSections the List into which the List of lines
-   *  for this pptSection are to be added.
+   *  for this pptSection are to be added
    * @param pptName name of the ppt
    * @throws IOException if an I/O error occurs.
    */
@@ -235,7 +235,7 @@ public class SpinfoFile {
    *  should include all the lines from a single Ppt Section.
    *  This includes the first line, but without the prefix "PPT_NAME"
    * @return an array of arrays with each array containing the
-   *  SplitterObjects for one of lists of ppt statements found in pptSections.
+   *  SplitterObjects for one of lists of ppt statements found in pptSections
    */
   /*@RequiresNonNull("tempDir")*/
   private SplitterObject[][] createSplitterObjects(
@@ -280,7 +280,7 @@ public class SpinfoFile {
    * command given by command.  If the command is invalid an
    * error message is given.  Extra white space is ignored.
    * @param obj the splitterObject for which command is intended
-   * @param command the formatting command to be applied to obj.
+   * @param command the formatting command to be applied to obj
    */
   static private void setFormatting(SplitterObject obj, String command) {
     command = command.trim();
@@ -325,7 +325,7 @@ public class SpinfoFile {
   /**
    * Returns whether the line is a spinfo file formatting command.
    * A line is a formatting command if line is indented with
-   * a tab, "\t", or spaces, " ".
+   * a tab ("\t") or spaces (" ").
    */
   /*@Pure*/
   private static boolean isFormatting(String line) {

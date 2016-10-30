@@ -228,7 +228,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /**
    * @return the string representation (interned) of this name, in the
-   * Simplify tool output format in the pre-state context.
+   * Simplify tool output format in the pre-state context
    */
   public /*@Interned*/ String simplify_name() {
     return simplify_name(false);
@@ -339,7 +339,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    *        will be formatted in Jtest's DBC style, as "$pre(<em>type</em>, x)".
    *
    * @return the string representation (interned) of this name, in the
-   * dbc style output format.
+   * dbc style output format
    */
   public /*@Interned*/ String dbc_name(VarInfo var) {
     if (dbc_name_cached == null) {
@@ -412,7 +412,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   private String repr_cached = null;
 
-  /** return the name in a verbose debugging format.  Cached by repr */
+  /** Return the name in a verbose debugging format.  Cached by repr. */
   protected abstract String repr_impl(/*>>>@GuardSatisfied VarInfoName this*/);
 
   // It would be nice if a generalized form of the mechanics of
@@ -453,7 +453,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * @return the nodes of this, as given by an inorder traversal.
+   * @return the nodes of this, as given by an inorder traversal
    */
   public Collection<VarInfoName> inOrderTraversal(/*>>> @Interned VarInfoName this*/) {
     return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
@@ -506,7 +506,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /**
    * @return true if the given node is in a prestate context within
-   * this tree; the node must be a member of this tree.
+   * this tree; the node must be a member of this tree
    */
   public boolean inPrestateContext(/*>>> @Interned VarInfoName this,*/ VarInfoName node) {
     return (new NodeFinder(this, node)).inPre();
@@ -523,7 +523,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   /**
    * @return true if this VarInfoName contains a simple variable whose
-   * name is NAME.
+   * name is NAME
    */
   public boolean includesSimpleName(/*>>> @Interned VarInfoName this,*/ String name) {
     return new SimpleNamesVisitor(this).simples().contains(name);
@@ -3051,7 +3051,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
      *
      * @return a 3-element array consisting of the new root, the lower
      * bound for the index (inclusive), and the upper bound for the
-     * index (inclusive), in that order.
+     * index (inclusive), in that order
      */
     public static VarInfoName[] replace(VarInfoName root, VarInfoName needy, VarInfoName index) {
       assert root != null;

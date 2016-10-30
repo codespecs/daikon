@@ -96,7 +96,7 @@ public final class FileIO {
   public static boolean dkconfig_read_samples_only = false;
 
   /** Boolean.  When true, don't print a warning about unmatched procedure
-   * entries, which are ignored by Daikon (unless the --nohierarchy switch
+   * entries, which are ignored by Daikon (unless the <code>--nohierarchy</code> command-line argument
    * is provided).
    */
   public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
@@ -249,7 +249,7 @@ public final class FileIO {
    * @param files files to be read (java.io.File)
    * @return a new PptMap containing declarations read from the files
    * listed in the argument; connection information (controlling
-   * variables and entry ppts) is set correctly upon return.
+   * variables and entry ppts) is set correctly upon return
    */
   public static PptMap read_declaration_files(Collection<File> files) throws IOException {
     PptMap all_ppts = new PptMap();
@@ -1011,9 +1011,9 @@ public final class FileIO {
       some_program_points = some_program_points || is_program_point;
     }
 
-    // if all program points correspond to a programming language,
+    // If all program points correspond to a programming language,
     // but the dataflow hierarchy has been turned off, then
-    // suggest not using the --nohierarchy flag
+    // suggest not using the --nohierarchy flag.
     //    if (all_program_points && (!Daikon.use_dataflow_hierarchy)) {
     //      System.out.println("Warning: data trace appears to be over" +
     //                         " a program execution, but dataflow" +
@@ -2406,7 +2406,7 @@ public final class FileIO {
 
   /**
    * Returns true if the given variable is included, according to Daikon's
-   * --var-select-pattern and --var-omit-pattern flags.
+   * {@code --var-select-pattern} and {@code --var-omit-pattern} flags.
    */
   public static boolean var_included(String var_name) {
     assert !var_name.equals("");
@@ -2758,7 +2758,7 @@ public final class FileIO {
       declared_type = ProglangType.parse(declared_type_str);
     }
 
-    /** Parse the flags record.  Multiple flags can be specified */
+    /** Parse the flags record.  Multiple flags can be specified. */
     public void parse_flags(Scanner scanner) {
 
       flags.add(parse_enum_val(scanner, VarFlags.class, "Flag"));
@@ -2768,7 +2768,7 @@ public final class FileIO {
 
     /**
      * Parse the langauge specific flags record.  Multiple flags can
-     * be specified */
+     * be specified. */
     public void parse_lang_flags(Scanner scanner) {
 
       lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));

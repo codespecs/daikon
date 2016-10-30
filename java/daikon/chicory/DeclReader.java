@@ -83,7 +83,7 @@ public class DeclReader {
       return name;
     }
 
-    /** Returns the variable's declared type as specified in the decl file b.**/
+    /** Returns the variable's declared type as specified in the decl file b. */
     public String get_type() {
       return type;
     }
@@ -586,7 +586,7 @@ public class DeclReader {
 
   /**
    * Writes the declaration to the specified file.  If the filename
-   * is -, writes to stdout.
+   * is "-", writes to stdout.
    */
   public void write_decl(String filename, String comparability) throws IOException {
 

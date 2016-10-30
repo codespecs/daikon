@@ -149,7 +149,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public int value_index;
 
   /**
-   * is_static_constant == (value_index == -1);
+   * Invariants: <br>
+   * is_static_constant == (value_index == -1);<br>
    * is_static_constant == (static_constant_value != null).
    */
   // queried via isStaticConstant() method, so consider making this field private
@@ -827,7 +828,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // Derivation derived; probably can't be trimmed
   }
 
-  /** Returns the name of the variable.  For more info see repr() */
+  /**
+   * Returns the name of the variable.
+   * @see #name
+   */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied VarInfo this*/) {
     return name();
@@ -1113,10 +1117,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * this is returned.  For example, "this" is always a parameter.
    * The return value of getDerivedParam for "this.a" (which is not a
    * parameter) is "this".
+   *
    * Effects: Sets isDerivedParamCached and derivedParamCached to
    * values the first time this method is called.  Subsequent calls
    * use these cached values.
-   * @return null if the above condition doesn't hold.
+   * @return null if the above condition doesn't hold
    */
   /*@Pure*/
   public /*@Nullable*/ VarInfo getDerivedParam() {
@@ -3182,14 +3187,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns the name in java format.  This is the same as JML */
+  /** Returns the name in Java format.  This is the same as JML. */
   public String java_name() {
     if (!FileIO.new_decl_format) return var_info_name.java_name(this); // vin ok
 
     return jml_name();
   }
 
-  /** Returns the name in DBC format.  This is the same as JML */
+  /** Returns the name in DBC format.  This is the same as JML. */
   public String dbc_name() {
     if (!FileIO.new_decl_format) return var_info_name.dbc_name(this); // vin ok
 
@@ -3591,7 +3596,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * this variable.
    *
    * @param simplify_index_name name of the index.  If free is false, this
-   * must be a number or null (null implies an index of 0)
+   * must be a number or null (null implies an index of 0).
    * @param free true of simplify_index_name is variable name
    * @param index_off offset from the index
    */
@@ -4211,7 +4216,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    *
    * @param func_name name of the function
    * @param type return type of the function.  If null, the return type is
-   *             the element type of the sequence
+   *             the element type of the sequence.
    * @param seq sequence variable
    * @param shift value to add or subtract from the function.  Legal values
    *              are -1, 0, and 1.

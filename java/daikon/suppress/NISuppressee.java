@@ -184,7 +184,7 @@ public class NISuppressee {
    *
    * @param cinvs an array of the actual invariants that were found
    * for each slot.  It is used for for debug printing only.
-   * @return a list describing all of the invariants.
+   * @return a list describing all of the invariants
    */
   /*@RequiresNonNull("#2.equality_view")*/
   public List<NIS.SupInv> find_all(

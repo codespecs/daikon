@@ -43,7 +43,7 @@ public abstract class SingleScalar extends UnaryInvariant {
     return ((vis.length == 1) && vis[0].file_rep_type.isScalar());
   }
 
-  /** Returns whether or not the specified types are valid for unary scalar */
+  /** Returns whether or not the specified types are valid for unary scalar. */
   public final boolean valid_types(VarInfo[] vis) {
     return valid_types_static(vis);
   }
@@ -98,7 +98,7 @@ public abstract class SingleScalar extends UnaryInvariant {
    * @param count how many identical samples were observed in a row.
    * For example, three calls to check_modified with a count parameter of 1 is
    * equivalent to one call to check_modified with a count parameter of 3.
-   * @return whether or not the sample is consistent with the invariant.
+   * @return whether or not the sample is consistent with the invariant
    */
   public abstract InvariantStatus check_modified(long value, int count);
 

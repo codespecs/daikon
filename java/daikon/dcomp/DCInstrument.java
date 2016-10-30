@@ -439,8 +439,6 @@ class DCInstrument {
     }
   }
 
-  /**
-   */
   private byte convert_Type_to_StackMapType(Type type) {
     switch (type.getType()) {
       case Const.T_BOOLEAN:
@@ -463,8 +461,6 @@ class DCInstrument {
     }
   }
 
-  /**
-   */
   private StackMapType generate_StackMapType_from_Type(Type type) {
     switch (type.getType()) {
       case Const.T_BOOLEAN:
@@ -706,8 +702,6 @@ class DCInstrument {
     }
   }
 
-  /**
-   */
   private void print_stack_map_table(String prefix) {
 
     debug_instrument_inst.log("StackMap(%s) %s items:%n", prefix, stack_map_table.length);
@@ -719,8 +713,6 @@ class DCInstrument {
     }
   }
 
-  /**
-   */
   private void create_new_stack_map_attribute(MethodGen mg) throws IOException {
 
     if (stack_map_table.length == 0) return;
@@ -4512,7 +4504,7 @@ class DCInstrument {
    * affect comparability.
    *
    * @param gen current class
-   * @param mg the interface method. Must be native
+   * @param mg the interface method. Must be native.
    */
   public void fix_native(ClassGen gen, MethodGen mg) {
 
@@ -4607,7 +4599,7 @@ class DCInstrument {
    * (Reference comparability only.)
    *
    * @param gen current class
-   * @param mg the interface method. Must be native
+   * @param mg the interface method. Must be native.
    */
   public void fix_native_refs_only(ClassGen gen, MethodGen mg) {
 
@@ -4916,7 +4908,7 @@ class DCInstrument {
    * }</pre>
    *
    * @param gen class whose accessors are being built. Not
-   *          necessarily the class declaring f (if f is inherited)
+   *          necessarily the class declaring f (if f is inherited).
    * @param f field to build an accessor for
    * @param tag_offset offset of f in the tag storage for this field
    */
@@ -4981,7 +4973,7 @@ class DCInstrument {
    * }</pre>
    *
    * @param gen class whose accessors are being built. Not
-   *          necessarily the class declaring f (if f is inherited)
+   *          necessarily the class declaring f (if f is inherited).
    * @param f field to build an accessor for
    * @param tag_offset offset of f in the tag storage for this field
    */

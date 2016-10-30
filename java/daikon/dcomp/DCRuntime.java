@@ -665,7 +665,7 @@ public final class DCRuntime {
 
   /**
    * Clean up the tag stack on an exception exit from a method.  Pops
-   * items off of the tag stack until the method marker is found
+   * items off of the tag stack until the method marker is found.
    * (Reference comparability only.)
    */
   public static void exception_exit_refs_only() {
@@ -930,7 +930,7 @@ public final class DCRuntime {
    *
    * @param tag_frame tag_frame containing the tags for the primitive
    *        arguments of this method
-   * @param obj value of 'this'.  Null if the method is static
+   * @param obj value of 'this', or null if the method is static
    * @param mi_index index into the list of all methods (methods)
    * @param args array of the arguments to the method
    */
@@ -988,7 +988,7 @@ public final class DCRuntime {
    * values are comparable are marked as comparable.
    * (Reference comparability only.)
    *
-   * @param obj value of 'this'.  Null if the method is static
+   * @param obj value of 'this', or null if the method is static
    * @param mi_index index into the list of all methods (methods)
    * @param args array of the arguments to the method
    */
@@ -1046,11 +1046,11 @@ public final class DCRuntime {
    *
    * @param tag_frame tag_frame containing the tags for the primitive
    * arguments of this method
-   * @param obj value of 'this'.  Null if the method is static
+   * @param obj value of 'this', or null if the method is static
    * @param mi_index index into the list of all methods (methods)
    * @param args array of the arguments to the method
-   * @param ret_val value returned by the method.  Null if the method is a
-   * constructor or void,
+   * @param ret_val value returned by the method, or null if the method is a
+   * constructor or void
    * @param exit_line_number the source line number of this exit point
    */
   public static void exit(
@@ -1101,11 +1101,11 @@ public final class DCRuntime {
    * values are comparable are marked as comparable.
    * (Reference comparability only.)
    *
-   * @param obj value of 'this'.  Null if the method is static
+   * @param obj value of 'this', or null if the method is static
    * @param mi_index index into the list of all methods (methods)
    * @param args array of the arguments to the method
-   * @param ret_val value returned by the method.  Null if the method is a
-   * constructor or void,
+   * @param ret_val value returned by the method, or null if the method is a
+   * constructor or void
    * @param exit_line_number the source line number of this exit point
    */
   public static void exit_refs_only(
@@ -1425,7 +1425,7 @@ public final class DCRuntime {
    *               encountered with that leader.  Whenever a second daikon
    *               variable is encountered whose value has the same leader,
    *               that daikon variable is merged with the first daikon
-   *               variable
+   *               variable.
    * @param parent value of dv's parent
    * @param obj    value of dv
    * @param dv     DaikonVariable to process
@@ -1585,7 +1585,7 @@ public final class DCRuntime {
    *               encountered with that leader.  Whenever a second daikon
    *               variable is encountered whose value has the same leader,
    *               that daikon variable is merged with the first daikon
-   *               variable
+   *               variable.
    * @param parent value of dv's parent
    * @param obj    value of dv
    * @param dv     DaikonVariable to process

@@ -43,7 +43,7 @@ public class SplitterFactoryTestUpdater {
 
   /**
    * If one has changed the test cases used below, for best results run
-   * "rm *.java.goal" while in the targets directory before running this
+   * {@code rm *.java.goal} while in the targets directory before running this
    * method. Creates new splitter java files, moves the new files into
    * target directory, rewrites the code of SplitterFactoryTest
    * to use the new files.  One should recompile SplitterFactoryTest
@@ -80,7 +80,7 @@ public class SplitterFactoryTestUpdater {
    * @param spinfos the spinfo files that should be used in generating
    *  the splitter java files
    * @param decls the decls files that should be used in generating the
-   *  splitter java files.
+   *  splitter java files
    */
   private static void generateSplitters(List<String> spinfos, List<String> decls) {
     HashSet<File> declsFileSet = new HashSet<File>();

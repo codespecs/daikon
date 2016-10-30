@@ -7,7 +7,7 @@ import java.util.*;
 import plume.*;
 
 /** This tool fixes a Dtrace file whose invocation nonces became inaccurate
- * as a result of a "cat" command combining multiple dtrace files. Every
+ * as a result of a {@code cat} command combining multiple dtrace files. Every
  * dtrace file besides the first will have the invocation nonces increased
  * by the "correct" amount, determined in the following way:
  *
@@ -160,8 +160,8 @@ public class DtraceNonceFixer {
     return sb.toString();
   }
 
-  /** Returns the nonce of the invocation 'invo' or -1 if the
-   * String 'this_invocation_nonce' is not found in invo */
+  /** Returns the nonce of the invocation 'invo', or -1 if the
+   * String 'this_invocation_nonce' is not found in {@code invo}. */
   private static int peekNonce(String invo) {
     StringTokenizer st = new StringTokenizer(invo, lineSep);
     while (st.hasMoreTokens()) {

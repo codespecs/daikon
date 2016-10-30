@@ -114,7 +114,7 @@ public class DeclWriter extends DaikonWriter {
    * This method is called in Runtime to print decls info for a class.
    *
    * @param cinfo
-   *        Class whose declarations should be printed.
+   *        Class whose declarations should be printed
    */
   public void printDeclClass(ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
     if (Chicory.new_decl_format) {
@@ -255,7 +255,7 @@ public class DeclWriter extends DaikonWriter {
    * This method is called in Runtime to print decls info for a class.
    *
    * @param cinfo
-   *        Class whose declarations should be printed.
+   *        Class whose declarations should be printed
    */
   public void print_decl_class(ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
 
@@ -463,7 +463,7 @@ public class DeclWriter extends DaikonWriter {
     String parent_ppt_name;
     /** Prefix of the variable name that is not part of the parent name */
     String local_prefix;
-    /** Prefix of the parent that replaces the local prefix.  Normally 'this'*/
+    /** Prefix of the parent that replaces the local prefix.  Normally 'this'. */
     String parent_prefix;
     /** Top level variable for the relation */
     String local_variable;
@@ -709,7 +709,7 @@ public class DeclWriter extends DaikonWriter {
    * If this is an object ppt (ci != null), then each top level static
    * variable has a relation to the class ppt.
    *
-   * @param cinfo class of the object ppt.  Null if this is not an object ppt
+   * @param cinfo class of the object ppt.  Null if this is not an object ppt.
    * @param is_static_method true if this ppt is a static method enter
    * @param parent parent of var in the variable tree
    * @param var variable whose relation is desired

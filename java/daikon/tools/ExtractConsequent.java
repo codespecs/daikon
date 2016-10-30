@@ -241,7 +241,7 @@ public class ExtractConsequent {
 
   /**
    * Extract consequents from a implications at a single program
-   * point. It only searches for top level Program points because
+   * point. It only searches for top-level program points because
    * Implications are produced only at those points.
    */
   public static void extract_consequent_maybe(PptTopLevel ppt, PptMap all_ppts) {

@@ -412,8 +412,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * defined. It is recommended to check that it is defined first with
    * {@link #hasValue(String)}.
    *
-   * @throws RuntimeException if the key is not defined.
-   * @throws NumberFormatException if the value of the key cannot be parsed as an integer.
+   * @throws RuntimeException if the key is not defined
+   * @throws NumberFormatException if the value of the key cannot be parsed as an integer
    * @see #hasValue(String)
    */
   public int getInt(/*@KeyFor("this.map")*/ String key) {
@@ -428,7 +428,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * defined. It is recommended to check that it is defined first with
    * {@link #hasValue(String)}.
    *
-   * @throws RuntimeException if the key is not defined.
+   * @throws RuntimeException if the key is not defined
    * @see #hasValue(String)
    */
   public String[] getList(/*@KeyFor("this.map")*/ String key) {

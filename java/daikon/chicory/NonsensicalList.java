@@ -14,9 +14,6 @@ import org.checkerframework.dataflow.qual.*;
 // It's problematic to make this generic:  what would "get" return?
 public class NonsensicalList extends AbstractList<Object> implements List<Object> {
 
-  /**
-   *
-   */
   private NonsensicalList() {
     super();
   }

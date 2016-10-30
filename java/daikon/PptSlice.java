@@ -20,10 +20,10 @@ import org.checkerframework.dataflow.qual.*;
  * invariants.  Instead, slices contain the invariants that involve (all)
  * the Slice's variables.
  * <p>
- * Suppose a program point has variables A, B, C, and D.
- * There would be 4 unary slices -- one each for variables A, B, C, and D.
+ * Suppose a program point has variables A, B, C, and D.<br>
+ * There would be 4 unary slices -- one each for variables A, B, C, and D.<br>
  * There would be 6 binary slices -- for {A,B}, {A,C}, {A,D}, {B,C}, {B,D},
- * and {C,D}.
+ * and {C,D}.<br>
  * There would be 4 ternary slices -- for {A,B,C}, {A,B,D}, {A,C,D}, and
  * {B,C,D}.
  */
@@ -57,8 +57,8 @@ public abstract class PptSlice extends Ppt {
    * The invariants contained in this slice.
    * This should not be used directly, in general.  In particular,
    * subclasses such as PptSlice0 need to synchronize it with other values.
-   * Therefore, it should be manipulated via addInvariant() and
-   * removeInvariant().
+   * Therefore, it should be manipulated via {@link #addInvariant} and
+   * {@link #removeInvariant}.
    */
   public List<Invariant> invs;
 
@@ -103,7 +103,7 @@ public abstract class PptSlice extends Ppt {
 
   /**
    * @return true if any of our variables is named NAME, or is derived
-   * from a variable named NAME.
+   * from a variable named NAME
    */
   // Only called right now from tools/ExtractConsequent
   public boolean usesVarDerived(String name) {
@@ -166,7 +166,7 @@ public abstract class PptSlice extends Ppt {
    * from it, casts them to the proper types, and passes them along to the
    * invariants proper.  (The invariants accept typed values rather than a
    * ValueTuple that encapsulates objects of any type whatever.)
-   * @return a List of Invariants that weakened due to the processing.
+   * @return a List of Invariants that weakened due to the processing
    */
   abstract List<Invariant> add(ValueTuple full_vt, int count);
 
@@ -320,8 +320,8 @@ public abstract class PptSlice extends Ppt {
    * flow pointers for varInfos.  Invariants are also pivoted so that
    * any VarInfo index order swapping is handled correctly.
    *
-   * @param newVis to replace this.var_infos.
-   * @return a new PptSlice that satisfies the characteristics above.
+   * @param newVis to replace this.var_infos
+   * @return a new PptSlice that satisfies the characteristics above
    */
   PptSlice cloneAndPivot(VarInfo[] newVis) {
     throw new Error("Shouldn't get called");

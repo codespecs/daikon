@@ -147,7 +147,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return false;
   }
 
-  /** returns true iff any token of {@code inv.format_java()} contains
+  /** Returns true iff any token of {@code inv.format_java()} contains
    *  a number other than -1, 0, 1 or is null. */
   private static boolean filterOut(Invariant inv) {
     assert inv != null : "@AssumeAssertion(nullness): precondition";
@@ -181,7 +181,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return (double) recall.size() / targSet.size();
   }
 
-  /** returns true iff numLiteral represents a numeric
+  /** Returns true iff numLiteral represents a numeric
    * literal string of integer or float that we believe
    * will be useful for a splitting condition.  Usually that
    * includes -1, 0, 1, and any other numeric literal

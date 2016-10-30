@@ -53,8 +53,8 @@ class ReplaceStatement {
    *  or ";" at its end. For example "x + 2" is a valid return statement
    *  for this field.
    * @throws IllegalArgumentException if methodDeclaration is not a valid
-   *  java method declaration (with the exception of package name like
-   *  prefixes.
+   *  java method declaration (with the exception of package-name-like
+   *  prefixes)
    */
   public ReplaceStatement(String methodDeclaration, String returnStatement) throws ParseException {
     methodName = "";

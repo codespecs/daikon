@@ -12,7 +12,7 @@ public interface Cmd {
   public void apply(final /*@GuardedBy("<self>")*/ Session s);
 
   /**
-   * @return a string for debugging only.
+   * @return a string for debugging only
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied Cmd this*/);

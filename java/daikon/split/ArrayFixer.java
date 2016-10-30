@@ -62,7 +62,7 @@ class ArrayFixer extends DepthFirstVisitor {
    * @param vars is a list of strings
    *    of possible names of the variables in the condition
    * @param varInfos is a list of the corresponding VarInfos for each of the names
-   *    in vars.
+   *    in vars
    */
   private ArrayFixer(String[] vars, VarInfo[] varInfos) {
     super();
@@ -77,9 +77,9 @@ class ArrayFixer extends DepthFirstVisitor {
    * @param expression a valid segment of java code
    * @param names is a List of Strings that are the names of all the variables
    *    in statement
-   * @param varInfos is a List of VarInfos for all the variables named in names.
+   * @param varInfos is a List of VarInfos for all the variables named in names
    * @return condition with all variable referring to arrays suffixed with
-   *   "_identity" or "_array" as needed.
+   *   "_identity" or "_array" as needed
    * @throws ParseException when condition is not a valid segment of java code
    */
   public static String fixArrays(String expression, String[] names, VarInfo[] varInfos)
@@ -97,10 +97,10 @@ class ArrayFixer extends DepthFirstVisitor {
    * varInfos is the VarInfo for the ith element of names.
    * @param root the root of a jtb syntax tree
    * @param names is a List of Strings that are the names of all the variables
-   *    in statement.
+   *    in statement
    * @param varInfos is a List of VarInfos for all the variables named in names
    * @return condition with all variable referring to arrays suffixed with
-   *   "_identity" or "_array" as needed.
+   *   "_identity" or "_array" as needed
    */
   public static void fixArrays(Node root, String[] names, VarInfo[] varInfos) {
     ArrayFixer fixer = new ArrayFixer(names, varInfos);

@@ -213,7 +213,7 @@ public class NISuppressor {
    * @param vis     the slice of the suppressee.  Thus, if the suppressee is
    *                ternary, vis, should specify three variables.
    * @param inv     the falsified invariant.  inv_match indicates whether
-   *                or not inv matches this suppressor
+   *                or not inv matches this suppressor.
    *
    * @return the state of this suppressor which is one of (NIS.SuppressState.MATCH,
    *         NIS.SuppressState.VALID, NIS.SuppressState.INVALID, NIS.SuppressState.NONSENSICAL)

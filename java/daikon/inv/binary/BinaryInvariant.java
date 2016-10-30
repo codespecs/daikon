@@ -82,7 +82,7 @@ public abstract class BinaryInvariant extends Invariant {
   }
 
   /**
-   * Returns true if the binary function is symmetric (x,y ==&gt; y,x).
+   * Returns true if the binary function is symmetric (x,y &rArr; y,x).
    * Subclasses that are symmetric should override.
    */
   /*@Pure*/
