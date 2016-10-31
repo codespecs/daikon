@@ -15,17 +15,14 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * A Slice is a view of some of the variables for a program point.  A
- * program point (that is, PptTopLevel) does not directly contain
- * invariants.  Instead, slices contain the invariants that involve (all)
- * the Slice's variables.
- * <p>
- * Suppose a program point has variables A, B, C, and D.<br>
+ * A Slice is a view of some of the variables for a program point. A program point (that is,
+ * PptTopLevel) does not directly contain invariants. Instead, slices contain the invariants that
+ * involve (all) the Slice's variables.
+ *
+ * <p>Suppose a program point has variables A, B, C, and D.<br>
  * There would be 4 unary slices -- one each for variables A, B, C, and D.<br>
- * There would be 6 binary slices -- for {A,B}, {A,C}, {A,D}, {B,C}, {B,D},
- * and {C,D}.<br>
- * There would be 4 ternary slices -- for {A,B,C}, {A,B,D}, {A,C,D}, and
- * {B,C,D}.
+ * There would be 6 binary slices -- for {A,B}, {A,C}, {A,D}, {B,C}, {B,D}, and {C,D}.<br>
+ * There would be 4 ternary slices -- for {A,B,C}, {A,B,D}, {A,C,D}, and {B,C,D}.
  */
 public abstract class PptSlice extends Ppt {
   // We are Serializable, so we specify a version to allow changes to
@@ -41,6 +38,7 @@ public abstract class PptSlice extends Ppt {
 
   /** Debug tracer for debugging both this and PptSlices. */
   public static final Logger debugGeneral = Logger.getLogger("daikon.PptSlice.general");
+
   public static final Logger debugFlow = Logger.getLogger("daikon.flow.flow");
 
   public static final Logger debugGuarding = Logger.getLogger("daikon.guard");
@@ -54,11 +52,9 @@ public abstract class PptSlice extends Ppt {
       /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/);
 
   /**
-   * The invariants contained in this slice.
-   * This should not be used directly, in general.  In particular,
-   * subclasses such as PptSlice0 need to synchronize it with other values.
-   * Therefore, it should be manipulated via {@link #addInvariant} and
-   * {@link #removeInvariant}.
+   * The invariants contained in this slice. This should not be used directly, in general. In
+   * particular, subclasses such as PptSlice0 need to synchronize it with other values. Therefore,
+   * it should be manipulated via {@link #addInvariant} and {@link #removeInvariant}.
    */
   public List<Invariant> invs;
 
@@ -102,8 +98,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * @return true if any of our variables is named NAME, or is derived
-   * from a variable named NAME
+   * @return true if any of our variables is named NAME, or is derived from a variable named NAME
    */
   // Only called right now from tools/ExtractConsequent
   public boolean usesVarDerived(String name) {
@@ -162,17 +157,15 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * This procedure accepts a sample (a ValueTuple), extracts the values
-   * from it, casts them to the proper types, and passes them along to the
-   * invariants proper.  (The invariants accept typed values rather than a
-   * ValueTuple that encapsulates objects of any type whatever.)
+   * This procedure accepts a sample (a ValueTuple), extracts the values from it, casts them to the
+   * proper types, and passes them along to the invariants proper. (The invariants accept typed
+   * values rather than a ValueTuple that encapsulates objects of any type whatever.)
+   *
    * @return a List of Invariants that weakened due to the processing
    */
   abstract List<Invariant> add(ValueTuple full_vt, int count);
 
-  /**
-   * Removes any falsified invariants from our list.
-   */
+  /** Removes any falsified invariants from our list. */
   /*@RequiresNonNull("NIS.suppressor_map")*/
   protected void remove_falsified() {
 
@@ -187,11 +180,9 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Remove repeated entries in a permutation.  The repeats are a
-   * consequence of equality optimization: a VarInfo may be a
-   * destination more than once due to equality splitting.  The fix is
-   * to, for each repeat, increment the value.  So 0, 0, 2 becomes 0,
-   * 1, 2.
+   * Remove repeated entries in a permutation. The repeats are a consequence of equality
+   * optimization: a VarInfo may be a destination more than once due to equality splitting. The fix
+   * is to, for each repeat, increment the value. So 0, 0, 2 becomes 0, 1, 2.
    */
   private void fixPermutation(int[] permutation) {
     for (int i = 0; i < permutation.length; i++) {
@@ -209,20 +200,14 @@ public abstract class PptSlice extends Ppt {
   /** Return an approximation of the number of samples seen on this slice */
   public abstract int num_samples(/*>>>@UnknownInitialization @GuardSatisfied PptSlice this*/);
 
-  /**
-   * Return an approximation of the number of distinct values seen on
-   * this slice.
-   */
+  /** Return an approximation of the number of distinct values seen on this slice. */
   public abstract int num_values();
 
-  /**
-   * Instantiate invariants on the VarInfos this slice contains.
-   */
+  /** Instantiate invariants on the VarInfos this slice contains. */
   abstract void instantiate_invariants();
 
   /**
-   * This class is used for comparing PptSlice objects.
-   * It orders by arity, then by variable names.
+   * This class is used for comparing PptSlice objects. It orders by arity, then by variable names.
    * It's somewhat less efficient than ArityPptnameComparator.
    */
   public static final class ArityVarnameComparator implements Comparator<PptSlice> {
@@ -240,10 +225,8 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * This class is used for comparing PptSlice objects.
-   * It orders by arity, then by name.
-   * Because of the dependence on name, it should be used only for slices
-   * on the same Ppt.
+   * This class is used for comparing PptSlice objects. It orders by arity, then by name. Because of
+   * the dependence on name, it should be used only for slices on the same Ppt.
    */
   public static final class ArityPptnameComparator implements Comparator<PptSlice> {
     /*@Pure*/
@@ -274,9 +257,7 @@ public abstract class PptSlice extends Ppt {
   ///////////////////////////////////////////////////////////////////////////
   /// Miscellaneous
 
-  /**
-   * Remove the invariants noted in omitTypes.
-   */
+  /** Remove the invariants noted in omitTypes. */
   public void processOmissions(boolean[] omitTypes) {
     if (invs.size() == 0) return;
     List<Invariant> toRemove = new ArrayList<Invariant>();
@@ -287,8 +268,8 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Check the internals of this slice.  Each invariant in the slice
-   * is checked for consistency and each inv.ppt must equal this.
+   * Check the internals of this slice. Each invariant in the slice is checked for consistency and
+   * each inv.ppt must equal this.
    */
   public void repCheck() {
 
@@ -314,11 +295,10 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Clone self and replace this.var_infos with newVis.  Do the same
-   * in all invariants that this holds.  Return a new PptSlice that's
-   * like this except with the above replacement, along with correct
-   * flow pointers for varInfos.  Invariants are also pivoted so that
-   * any VarInfo index order swapping is handled correctly.
+   * Clone self and replace this.var_infos with newVis. Do the same in all invariants that this
+   * holds. Return a new PptSlice that's like this except with the above replacement, along with
+   * correct flow pointers for varInfos. Invariants are also pivoted so that any VarInfo index order
+   * swapping is handled correctly.
    *
    * @param newVis to replace this.var_infos
    * @return a new PptSlice that satisfies the characteristics above
@@ -331,9 +311,7 @@ public abstract class PptSlice extends Ppt {
     throw new Error("Shouldn't get called");
   }
 
-  /**
-   * For debugging only.
-   */
+  /** For debugging only. */
   @SuppressWarnings("purity") // string creation
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied PptSlice this*/) {
@@ -350,10 +328,9 @@ public abstract class PptSlice extends Ppt {
         + num_samples();
   }
   /**
-   * Returns whether or not this slice already contains the specified
-   * invariant.  Whether not invariants match is determine by Invariant.match()
-   * This will return true for invariants of the same kind with different
-   * formulas (eg, one_of, bound, linearbinary).
+   * Returns whether or not this slice already contains the specified invariant. Whether not
+   * invariants match is determine by Invariant.match() This will return true for invariants of the
+   * same kind with different formulas (eg, one_of, bound, linearbinary).
    */
   public boolean contains_inv(Invariant inv) {
 
@@ -366,9 +343,8 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Returns whether or not this slice contains an exact match
-   * for the specified invariant.  An exact match requires that the
-   * invariants be of the same class and have the same formula.
+   * Returns whether or not this slice contains an exact match for the specified invariant. An exact
+   * match requires that the invariants be of the same class and have the same formula.
    */
   /*@EnsuresNonNullIf(result=true, expression="find_inv_exact(#1)")*/
   public boolean contains_inv_exact(Invariant inv) {
@@ -377,9 +353,9 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Returns the invariant that matches the specified invariant if it
-   * exists.  Otherwise returns null.  An exact match requires that
-   * the invariants be of the same class and have the same formula.
+   * Returns the invariant that matches the specified invariant if it exists. Otherwise returns
+   * null. An exact match requires that the invariants be of the same class and have the same
+   * formula.
    */
   /*@Pure*/
   public /*@Nullable*/ Invariant find_inv_exact(Invariant inv) {
@@ -393,8 +369,7 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Returns the invariant that matches the specified class if it
-   * exists.  Otherwise returns null.
+   * Returns the invariant that matches the specified class if it exists. Otherwise returns null.
    */
   public /*@Nullable*/ Invariant find_inv_by_class(Class<? extends Invariant> cls) {
 
@@ -407,9 +382,8 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Returns true if the invariant is true in this slice.  This can
-   * occur if the invariant exists in this slice, is suppressed,
-   * or is obvious statically.
+   * Returns true if the invariant is true in this slice. This can occur if the invariant exists in
+   * this slice, is suppressed, or is obvious statically.
    */
   @SuppressWarnings("nullness") // checker bug with flow and static fields
   /*@Pure*/
@@ -441,8 +415,8 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Output specified log information if the PtpSlice class, and this ppt
-   * and variables are enabled for logging.
+   * Output specified log information if the PtpSlice class, and this ppt and variables are enabled
+   * for logging.
    */
   public void log(String msg) {
     Debug.log(getClass(), this, msg);

@@ -11,9 +11,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * OrigFixer is a visitor for a jtb syntax tree that replaces instances of
- * of "orig()" with "orig_".  For example, "orig(x) &lt; y" would yield
- * "orig_x &lt; y".
+ * OrigFixer is a visitor for a jtb syntax tree that replaces instances of of "orig()" with "orig_".
+ * For example, "orig(x) &lt; y" would yield "orig_x &lt; y".
  */
 class OrigFixer extends DepthFirstVisitor {
 
@@ -34,13 +33,12 @@ class OrigFixer extends DepthFirstVisitor {
   }
 
   /**
-   * Replaces all instance of "orig(variableName) with "orig_variableName"
-   * in expression. In the case of multiple variable names appearing within
-   * the argument of "orig()" all variable names are prefixed with "orig_".
-   * For example, "orig(x + y &gt; z - 3)" would yield,
-   * "orig_x + orig_y &gt; orig_z - 3".
-   * @param expression a valid segment of java code in which "orig()" is
-   *  being replaced
+   * Replaces all instance of "orig(variableName) with "orig_variableName" in expression. In the
+   * case of multiple variable names appearing within the argument of "orig()" all variable names
+   * are prefixed with "orig_". For example, "orig(x + y &gt; z - 3)" would yield, "orig_x + orig_y
+   * &gt; orig_z - 3".
+   *
+   * @param expression a valid segment of java code in which "orig()" is being replaced
    * @return condition with all instances of "orig()" replaced
    * @throws ParseException if expression is not valid java code
    */
@@ -52,8 +50,8 @@ class OrigFixer extends DepthFirstVisitor {
   }
 
   /**
-   * This method should not be directly used by users of this class.
-   * If n is an instance of "orig()" it is replaced.
+   * This method should not be directly used by users of this class. If n is an instance of "orig()"
+   * it is replaced.
    */
   public void visit(PrimaryExpression n) {
     if (isOrig(n)) {
@@ -79,9 +77,8 @@ class OrigFixer extends DepthFirstVisitor {
   }
 
   /**
-   * This method should not be directly used by users of this class.
-   * Marks whether this is presently visiting the arguments to an
-   * instance of "orig()".
+   * This method should not be directly used by users of this class. Marks whether this is presently
+   * visiting the arguments to an instance of "orig()".
    */
   public void visit(Arguments n) {
     if (foundOrig) {
@@ -95,6 +92,7 @@ class OrigFixer extends DepthFirstVisitor {
 
   /**
    * Returns in n if an instance of the method "orig".
+   *
    * @return true iff n is a instance of the method "orig"
    */
   /*@Pure*/
@@ -107,8 +105,8 @@ class OrigFixer extends DepthFirstVisitor {
   }
 
   /**
-   * This method should not be directly used by users of this class.
-   * Updates n to be prefixed with "orig_" if needed.
+   * This method should not be directly used by users of this class. Updates n to be prefixed with
+   * "orig_" if needed.
    */
   public void visit(NodeToken n) {
     n.beginColumn = -1;
@@ -121,10 +119,7 @@ class OrigFixer extends DepthFirstVisitor {
     lastToken = n;
   }
 
-  /**
-   * Returns if the the last token represents a
-   * variable name.
-   */
+  /** Returns if the the last token represents a variable name. */
   /*@EnsuresNonNullIf(result=true, expression="lastToken")*/
   /*@Pure*/
   private boolean isLastTokenVar(NodeToken n) {

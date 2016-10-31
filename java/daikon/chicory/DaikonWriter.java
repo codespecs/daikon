@@ -8,17 +8,12 @@ import java.lang.reflect.*;
 import org.checkerframework.checker.signature.qual.*;
 */
 
-/**
- * DaikonWriter is the parent class of DeclWriter and DTraceWriter.
- */
+/** DaikonWriter is the parent class of DeclWriter and DTraceWriter. */
 public abstract class DaikonWriter {
-  /**
-   * Controls whether modifiers and the return type are included in
-   * the decl output.
-   */
+  /** Controls whether modifiers and the return type are included in the decl output. */
   protected static final boolean no_modifiers_ppt = true;
 
-  /** Platform-dependent line separator.  Should be "\n" on Unix. */
+  /** Platform-dependent line separator. Should be "\n" on Unix. */
   public static final String lineSep = System.getProperty("line.separator");
 
   protected DaikonWriter() {}
@@ -42,6 +37,7 @@ public abstract class DaikonWriter {
 
   /**
    * Given a method, returns the method entry program point name for Daikon
+   *
    * @param method non-null method
    * @return the decorated method entry name for Daikon
    */
@@ -50,9 +46,8 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Given a method, returns the method entry program point name for Daikon
-   * method entry name for Daikon.  Used when reflection information is
-   * not available
+   * Given a method, returns the method entry program point name for Daikon method entry name for
+   * Daikon. Used when reflection information is not available
    *
    * @param types argument types
    * @return the decorated method entry name for Daikon
@@ -63,6 +58,7 @@ public abstract class DaikonWriter {
   }
   /**
    * Given a method, returns the method exit program point name for Daikon
+   *
    * @param method require method != null
    * @param lineNum the line number of the exit point of the method
    * @return the decorated method exit name for Daikon
@@ -83,18 +79,15 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Constructs the program point name (which includes the point
-   * string at the end)
+   * Constructs the program point name (which includes the point string at the end)
    *
    * @param fullClassName packageName.className
-   * @param types string representation of the declared types of the
-   *          parameters.  for example: {"int", "java.lang.Object", "float"}
+   * @param types string representation of the declared types of the parameters. for example:
+   *     {"int", "java.lang.Object", "float"}
    * @param name the method with modifiers and parameters
-   * @param short_name just the method's name (except it is "<init>"
-   * for constructors)
-   *
-   * So a corresponding name/short_name pair could be:
-   * <pre>
+   * @param short_name just the method's name (except it is "<init>" for constructors)
+   *     <p>So a corresponding name/short_name pair could be:
+   *     <pre>
    *    name: public static void DataStructures.StackArTester.doNew(int size)
    *    short_name: doNew
    * </pre>
@@ -152,8 +145,7 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Constructs the program point name (which includes the point
-   * string at the end)
+   * Constructs the program point name (which includes the point string at the end)
    *
    * @param method reflection object for the method/constructor
    * @param point usually "ENTER" or "EXIT"
@@ -188,8 +180,7 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Constructs the program point name (which includes the point
-   * string at the end)
+   * Constructs the program point name (which includes the point string at the end)
    *
    * @param method reflection object for the method/constructor
    * @param point usually "ENTER" or "EXIT"
@@ -229,12 +220,9 @@ public abstract class DaikonWriter {
   }
 
   /**
-   *
-   * Dfej repeats the name of the class for
-   * constructors (eg, DataStructures.StackAr() becomes
-   * DataStructures.StackAr.StackAr().  This makes it clear
-   * that SomePackage.ClassName.ClassName and SomePackage.ClassName.OtherMethod
-   * are in the same class. Mimic that behavior.
+   * Dfej repeats the name of the class for constructors (eg, DataStructures.StackAr() becomes
+   * DataStructures.StackAr.StackAr(). This makes it clear that SomePackage.ClassName.ClassName and
+   * SomePackage.ClassName.OtherMethod are in the same class. Mimic that behavior.
    */
   private static String fixDuplicateConstructorName(String name, String short_name) {
     // assert short_name.lastIndexOf(".") == -1 : "short_name: " + short_name
@@ -249,8 +237,7 @@ public abstract class DaikonWriter {
       if (Chicory.debug_ppt_names) {
         System.out.printf(
             "  -1: replace '%s' with '%s'%n",
-            short_name + "(",
-            short_name + "." + short_name + "(");
+            short_name + "(", short_name + "." + short_name + "(");
       }
       return name.replace(short_name + "(", short_name + "." + short_name + "(");
     } else {
@@ -261,8 +248,7 @@ public abstract class DaikonWriter {
       if (Chicory.debug_ppt_names) {
         System.out.printf(
             "  >0: replace '%s' with '%s'%n",
-            "." + short_name + "(",
-            "." + short_name + "." + short_name + "(");
+            "." + short_name + "(", "." + short_name + "." + short_name + "(");
       }
       String result =
           name.replace("." + short_name + "(", "." + short_name + "." + short_name + "(");
@@ -277,9 +263,7 @@ public abstract class DaikonWriter {
     }
   }
 
-  /**
-   * Determines if the given method should be instrumented.
-   */
+  /** Determines if the given method should be instrumented. */
   protected boolean shouldInstrumentMethod(Member method) {
     if (method == null) { // <clinit>
       return Chicory.instrument_clinit;
@@ -292,17 +276,15 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Returns the class name of the specified class as a binary name
-   * (i.e., as the class would have been declared in Java source code,
-   * except with '$' instead of '.' separating outer and inner classes).
+   * Returns the class name of the specified class as a binary name (i.e., as the class would have
+   * been declared in Java source code, except with '$' instead of '.' separating outer and inner
+   * classes).
    */
   public static /*@BinaryName*/ String stdClassName(Class<?> type) {
     return Runtime.classGetNameToBinaryName(type.getName());
   }
 
-  /**
-   * Escapes blanks and backslashes in names written to the decl/dtrace files.
-   */
+  /** Escapes blanks and backslashes in names written to the decl/dtrace files. */
   public String escape(String str) {
 
     // If there is nothing to escape, return the original string

@@ -1,32 +1,14 @@
 package daikon.tools.runtimechecker;
 
-import daikon.PptMap;
-import daikon.PptTopLevel;
-import daikon.inv.Invariant;
-import daikon.inv.OutputFormat;
-import daikon.inv.ternary.threeScalar.FunctionBinary;
 import daikon.tools.jtb.*;
-import java.io.StringWriter;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import jtb.syntaxtree.*;
-import jtb.visitor.DepthFirstVisitor;
-import jtb.visitor.TreeDumper;
-import jtb.visitor.TreeFormatter;
-import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/**
- * Represents a class created by the instrumenter to check invariants.
- */
+/** Represents a class created by the instrumenter to check invariants. */
 public class CheckerClass {
 
   String name;
@@ -77,9 +59,7 @@ public class CheckerClass {
   // See getCompilationUnit().
   private boolean alreadyCalled = false;
 
-  /**
-   * Must be called only once, when you're done creating this checker.
-   */
+  /** Must be called only once, when you're done creating this checker. */
   public CompilationUnit getCompilationUnit() {
     if (alreadyCalled) {
       throw new Error("getCompilationUnit should only be called once.");

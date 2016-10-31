@@ -2,21 +2,16 @@ package daikon.inv;
 
 import daikon.*;
 import java.util.*;
-import plume.Pair;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Enumeration type for output style.
- * (Should this be somewhere else?)
- */
+/** Enumeration type for output style. (Should this be somewhere else?) */
 public enum OutputFormat {
 
-  /** The standard, concise Daikon output format.
-   * Intended to be read by humans.  */
+  /** The standard, concise Daikon output format. Intended to be read by humans. */
   DAIKON("Daikon"),
   /** Design-By-Contract for Java (used by Parasoft JContract) */
   DBCJAVA("DBC") {
@@ -34,8 +29,7 @@ public enum OutputFormat {
   JAVA("Java"),
   /** Java Modeling Language */
   JML("JML"),
-  /** Simplify theorem prover.
-   * First order logical expressions, expressed in Lisp-style parens. */
+  /** Simplify theorem prover. First order logical expressions, expressed in Lisp-style parens. */
   SIMPLIFY("Simplify"),
   /** C# Code Contract */
   CSHARPCONTRACT("CSharpContract");
@@ -60,8 +54,8 @@ public enum OutputFormat {
   // can be case-sensitive, can permit alternative names, etc.  An enum
   // cannot override valueOf().
   /**
-   * Return the appropriate OutputFormat for the given name, or throw
-   * an error if no such OutputFormat exists.
+   * Return the appropriate OutputFormat for the given name, or throw an error if no such
+   * OutputFormat exists.
    */
   public static OutputFormat get(String name) {
     // if (name == null) { return null; }

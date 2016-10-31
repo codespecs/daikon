@@ -5,8 +5,6 @@ import daikon.inv.*;
 import gnu.getopt.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
@@ -17,32 +15,26 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Provides a variable translation over an invariant at one program
- * point (perhaps in a different program) to a similar invariant at a
- * second program point.  In general, on order for a translation to be
- * possible, the invariants must be of the same class.  For example,
- * consider the invariants (x&gt;y) at ppt1 and (p&gt;q) at ppt2.  Since the
- * invariants are the same, the translation is (x &rarr; p) and (y &rarr; q).
- * <p>
+ * Provides a variable translation over an invariant at one program point (perhaps in a different
+ * program) to a similar invariant at a second program point. In general, on order for a translation
+ * to be possible, the invariants must be of the same class. For example, consider the invariants
+ * (x&gt;y) at ppt1 and (p&gt;q) at ppt2. Since the invariants are the same, the translation is (x
+ * &rarr; p) and (y &rarr; q).
  *
- * The quality of the translation is also determined (approximately on
- * a scale of 0 to 100).  If the invariants are not of the same class,
- * no translation is possible and the quality is zero.  If the class
- * and the formula are the same, the match is excellent (80).  If the
- * class is the same and the formula is different, the match is mediocre (40).
- * The quality is increased for variables with exactly the same derivation
- * and decreased for those with different derivations.
- * <p>
+ * <p>The quality of the translation is also determined (approximately on a scale of 0 to 100). If
+ * the invariants are not of the same class, no translation is possible and the quality is zero. If
+ * the class and the formula are the same, the match is excellent (80). If the class is the same and
+ * the formula is different, the match is mediocre (40). The quality is increased for variables with
+ * exactly the same derivation and decreased for those with different derivations.
  *
- * Other checks could be added to further specify the quality.  For example,
- * if one invariant is a precondition and the other is a postcondition,
- * the quality should be reduced.
+ * <p>Other checks could be added to further specify the quality. For example, if one invariant is a
+ * precondition and the other is a postcondition, the quality should be reduced.
  */
 public class InvTranslate {
 
   /**
-   * The quality of the mapping.  0 indicates no mapping is possible.
-   * 100 indicates that there is a perfect translation.
+   * The quality of the mapping. 0 indicates no mapping is possible. 100 indicates that there is a
+   * perfect translation.
    */
   int quality = 0;
 
@@ -62,10 +54,7 @@ public class InvTranslate {
   //   quality = 0;
   // }
 
-  /**
-   * Setup a translation from i1 to i2.  The quality and the variable
-   * map is set accordingly.
-   */
+  /** Setup a translation from i1 to i2. The quality and the variable map is set accordingly. */
   public InvTranslate(Invariant i1, Invariant i2) {
 
     inv1 = i1;
@@ -107,9 +96,7 @@ public class InvTranslate {
   //   return no_translate;
   // }
 
-  /**
-   * Add the specified variable names to the variable translation.
-   */
+  /** Add the specified variable names to the variable translation. */
   private void add_variable_map(
       /*>>>@UnknownInitialization(daikon.tools.InvTranslate.class) @Raw(daikon.tools.InvTranslate.class) InvTranslate this,*/ String
           v1_name,
@@ -120,9 +107,7 @@ public class InvTranslate {
     var_map.put(v1_name, v2_name);
   }
 
-  /**
-   * Returns a somewhat verbose description of the translation.
-   */
+  /** Returns a somewhat verbose description of the translation. */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied InvTranslate this*/) {
     StringBuilder out = new StringBuilder();

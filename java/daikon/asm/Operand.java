@@ -11,10 +11,7 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.regex.qual.*;
 */
 
-/**
- * Utility methods for operands of instructions.
- *
- */
+/** Utility methods for operands of instructions. */
 public class Operand {
 
   private static Set<String> registers8Bit;

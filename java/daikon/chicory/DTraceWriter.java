@@ -11,8 +11,8 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- *  DTraceWriter writes {@code .dtrace} program points to an output stream.
- *  It uses the trees created by the {@link DeclWriter}.
+ * DTraceWriter writes {@code .dtrace} program points to an output stream. It uses the trees created
+ * by the {@link DeclWriter}.
  */
 @SuppressWarnings("nullness")
 public class DTraceWriter extends DaikonWriter {
@@ -28,38 +28,35 @@ public class DTraceWriter extends DaikonWriter {
   //          - checkForVarRecursion: recursive check on on argument
   //        - traceClassVars: prints fields in a class
 
-  /** turns off multi-dimensional array printing*/
+  /** turns off multi-dimensional array printing */
   private static final boolean NoMultiDim = true;
 
-  /**instance of a nonsensical value*/
+  /** instance of a nonsensical value */
   private static NonsensicalObject nonsenseValue = NonsensicalObject.getInstance();
-  /**instance of a nonsensical list*/
+  /** instance of a nonsensical list */
   private static List<Object> nonsenseList = NonsensicalList.getInstance();
 
   //certain class names
   protected static final String classClassName = "java.lang.Class";
   protected static final String stringClassName = "java.lang.String";
 
-  /**Where to print output*/
+  /** Where to print output */
   private PrintStream outFile;
 
-  /** debug information about daikon variables  */
+  /** debug information about daikon variables */
   private boolean debug_vars = false;
 
   /**
    * Initializes the DTraceWriter
    *
-   * @param writer
-   *            Stream to write to
+   * @param writer Stream to write to
    */
   public DTraceWriter(PrintStream writer) {
     super();
     outFile = writer;
   }
 
-  /**
-   * Prints the method entry program point in the dtrace file.
-   */
+  /** Prints the method entry program point in the dtrace file. */
   public void methodEntry(
       /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
       int nonceVal,
@@ -93,9 +90,7 @@ public class DTraceWriter extends DaikonWriter {
     Runtime.incrementRecords();
   }
 
-  /**
-   * Prints an entry program point for a static initializer in the dtrace file.
-   */
+  /** Prints an entry program point for a static initializer in the dtrace file. */
   public void clinitEntry(/*>>>@GuardSatisfied DTraceWriter this,*/ String pptname, int nonceVal) {
     //don't print
     if (Runtime.dtrace_closed) {
@@ -107,9 +102,7 @@ public class DTraceWriter extends DaikonWriter {
     Runtime.incrementRecords();
   }
 
-  /**
-   * Prints the method exit program point in the dtrace file.
-   */
+  /** Prints the method exit program point in the dtrace file. */
   public void methodExit(
       /*>>>@GuardSatisfied DTraceWriter this,*/
       MethodInfo mi,
@@ -152,9 +145,7 @@ public class DTraceWriter extends DaikonWriter {
     Runtime.incrementRecords();
   }
 
-  /**
-   * Prints an exit program point for a static initializer in the dtrace file.
-   */
+  /** Prints an exit program point for a static initializer in the dtrace file. */
   public void clinitExit(/*>>>@GuardSatisfied DTraceWriter this,*/ String pptname, int nonceVal) {
     //don't print
     if (Runtime.dtrace_closed) {
@@ -173,16 +164,15 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Prints the method's return value and all relevant variables.
-   * Uses the tree of DaikonVariableInfo objects.
+   * Prints the method's return value and all relevant variables. Uses the tree of
+   * DaikonVariableInfo objects.
+   *
    * @param mi the method whose program point we are printing
    * @param root the root of the program point's tree
-   * @param args the arguments to the method corrsponding to mi.
-   *             Must be in the same order as the .decls info is in
-   *             (which is the declared order in the source code).
+   * @param args the arguments to the method corrsponding to mi. Must be in the same order as the
+   *     .decls info is in (which is the declared order in the source code).
    * @param thisObj the value of the "this" object at this point in the execution
-   * @param ret_val the value returned from this method, only used for
-   *                exit program points
+   * @param ret_val the value returned from this method, only used for exit program points
    */
   private void traverse(
       /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
@@ -255,6 +245,7 @@ public class DTraceWriter extends DaikonWriter {
 
   /**
    * Returns a list of values of the field for each Object in theObjects
+   *
    * @param theObjects list of Objects, each must have the Field field
    * @param field which field of theObjects we are probing
    */
@@ -278,10 +269,10 @@ public class DTraceWriter extends DaikonWriter {
 
   /**
    * Get the value of a certain field in theObj.
+   *
    * @param classField which field we are interested in
-   * @param theObj the object whose field we are examining.
-   * TheoObj must be null, Nonsensical, or of a type which
-   * contains the field classField.
+   * @param theObj the object whose field we are examining. TheoObj must be null, Nonsensical, or of
+   *     a type which contains the field classField.
    * @return the value of the classField field in theObj
    */
   public static Object getValue(Field classField, Object theObj) {
@@ -321,9 +312,7 @@ public class DTraceWriter extends DaikonWriter {
     }
   }
 
-  /**
-   * Similar to {@link DTraceWriter#getValue}, but used for static fields.
-   */
+  /** Similar to {@link DTraceWriter#getValue}, but used for static fields. */
   public static Object getStaticValue(Field classField) {
     if (!classField.isAccessible()) classField.setAccessible(true);
 
@@ -365,6 +354,7 @@ public class DTraceWriter extends DaikonWriter {
 
   /**
    * Return a List derived from an aray
+   *
    * @param arrayVal must be an array type
    * @return a List (with correct primitive wrappers) corresponding to the array
    */
@@ -434,11 +424,10 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Returns a list of Strings which are the names of the runtime types in the
-   * theVals param
+   * Returns a list of Strings which are the names of the runtime types in the theVals param
+   *
    * @param theVals list of ObjectReferences
-   * @return a list of Strings which are the names of the runtime types in the
-   * theVals param
+   * @return a list of Strings which are the names of the runtime types in the theVals param
    */
   public static /*@Nullable*/ List<String> getTypeNameList(List<Object> theVals) {
     // Return null rather than NonsensicalList as NonsensicalList is
@@ -465,10 +454,9 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Get the type of val, removing any PrimitiveWrapper if it exists
-   * For example, if we execute removeWRappers(val, boolean.class, true)
-   * where (val instanceof Runtime.PrimitiveWrapper), then the method returns
-   * boolean.class
+   * Get the type of val, removing any PrimitiveWrapper if it exists For example, if we execute
+   * removeWRappers(val, boolean.class, true) where (val instanceof Runtime.PrimitiveWrapper), then
+   * the method returns boolean.class
    *
    * @param val the object whose type we are examining
    * @param declared the declared type of the variable corresponding to val

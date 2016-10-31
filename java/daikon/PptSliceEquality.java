@@ -17,9 +17,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Holds Equality invariants.
- */
+/** Holds Equality invariants. */
 public class PptSliceEquality extends PptSlice {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -30,10 +28,9 @@ public class PptSliceEquality extends PptSlice {
   // daikon.config.Configuration interface.
 
   /**
-   * If true, create one equality set for each variable.
-   * This has the effect of turning
-   * the equality optimization off, without actually removing the sets
-   * themselves (which are presumed to exist in many parts of the code).
+   * If true, create one equality set for each variable. This has the effect of turning the equality
+   * optimization off, without actually removing the sets themselves (which are presumed to exist in
+   * many parts of the code).
    */
   public static boolean dkconfig_set_per_var = false;
 
@@ -76,9 +73,8 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Encapsulates a VarInfo and its Comparability so that the two can
-   * be used to create sets of VarInfos that are initially equal. Two
-   * VarInfoAndComparability's are true iff they are
+   * Encapsulates a VarInfo and its Comparability so that the two can be used to create sets of
+   * VarInfos that are initially equal. Two VarInfoAndComparability's are true iff they are
    * VarComparability.comparable() to each other.
    */
   private static class VarInfoAndComparability {
@@ -103,9 +99,8 @@ public class PptSliceEquality extends PptSlice {
     }
 
     /**
-     * Whether two VarInfos can be set to be equal to each other is
-     * whether they are comparableNWay.  Since we do not yet handle
-     * inheritance, we require that the comparability go both ways.
+     * Whether two VarInfos can be set to be equal to each other is whether they are comparableNWay.
+     * Since we do not yet handle inheritance, we require that the comparability go both ways.
      */
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
     /*@Pure*/
@@ -123,9 +118,7 @@ public class PptSliceEquality extends PptSlice {
     }
   }
 
-  /**
-   * Actually instantiate the equality sets.
-   */
+  /** Actually instantiate the equality sets. */
   void instantiate_invariants() {
 
     // If each variable gets its own set, create those sets and return
@@ -185,8 +178,8 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Instantiate the full equality sets from a set of variable pairs where
-   * each member of a pair is equal to the other.
+   * Instantiate the full equality sets from a set of variable pairs where each member of a pair is
+   * equal to the other.
    */
   public void instantiate_from_pairs(Set<VarInfo.Pair> eset) {
 
@@ -233,9 +226,9 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Returns a List of Invariants that have been weakened/destroyed.
-   * However, this handles the creation of new Equality invariants and
-   * the instantiation of other invariants.
+   * Returns a List of Invariants that have been weakened/destroyed. However, this handles the
+   * creation of new Equality invariants and the instantiation of other invariants.
+   *
    * @return a List of invariants that have been weakened
    */
   // The basic approach is as follows:
@@ -303,29 +296,26 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Dummy value that's incomparable to everything else to indicate
-   * missings in createEqualityInvs.
+   * Dummy value that's incomparable to everything else to indicate missings in createEqualityInvs.
    */
   private static final Object dummyMissing = new Object(); // StringBuffer("Dummy missing");
 
   /**
-   * Create a List of Equality invariants based on the values given
-   * by vt for the VarInfos in vis.  Any variables that are out
-   * of bounds are forced into a separate equality set (since they
-   * no longer make sense and certainly shouldn't be equal to anything
-   * else)
-   * <p>
-   * Requires: vis.size() &gt; 0
+   * Create a List of Equality invariants based on the values given by vt for the VarInfos in vis.
+   * Any variables that are out of bounds are forced into a separate equality set (since they no
+   * longer make sense and certainly shouldn't be equal to anything else)
    *
-   * Ensures: result.size() &gt; 0
+   * <p>Requires: vis.size() &gt; 0
+   *
+   * <p>Ensures: result.size() &gt; 0
+   *
    * @param vis the VarInfos that were different from leader
    * @param vt the ValueTuple associated with the VarInfos now
    * @param leader the original leader of VarInfos
-   * @param count the number of samples seen (needed to set the number
-   * of samples for the new Equality invariants)
-   * @return a List of Equality invariants bundling together same
-   * values from vis, and if needed, another representing all the
-   * missing values
+   * @param count the number of samples seen (needed to set the number of samples for the new
+   *     Equality invariants)
+   * @return a List of Equality invariants bundling together same values from vis, and if needed,
+   *     another representing all the missing values
    */
   private List<Equality> createEqualityInvs(
       List<VarInfo> vis, ValueTuple vt, Equality leader, int count) {
@@ -342,9 +332,7 @@ public class PptSliceEquality extends PptSlice {
         if (vi.getValue(vt) == null) {
           System.out.printf(
               "null value for variable %s, mod=%d at ppt %s%n",
-              vi.name(),
-              vt.getModified(vi),
-              parent.name());
+              vi.name(), vt.getModified(vi), parent.name());
           VarInfo rv = parent.find_var_by_name("return");
           assert rv != null : "@AssumeAssertion(nullness)";
           System.out.println("return value = " + Debug.toString(rv.getValue(vt)));
@@ -390,17 +378,16 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Create a List of Equality invariants based on the VarInfos in vis.
-   * Assumes that the VarInfos in vis are not missing.  The method is used
-   * exclusively for reversing optimizations in Daikon.
-   * <p>
-   * Requires: vis.size() &gt; 0
+   * Create a List of Equality invariants based on the VarInfos in vis. Assumes that the VarInfos in
+   * vis are not missing. The method is used exclusively for reversing optimizations in Daikon.
    *
-   * Ensures: result.size() &gt; 0
+   * <p>Requires: vis.size() &gt; 0
+   *
+   * <p>Ensures: result.size() &gt; 0
+   *
    * @param vis the VarInfos that were different from leader
    * @param leader the original leader of VarInfos
-   * @return a List of Equality invariants bundling together same
-   * values from vis
+   * @return a List of Equality invariants bundling together same values from vis
    */
   public List<Equality> createEqualityInvs(List<VarInfo> vis, Equality leader) {
     assert vis.size() > 0;
@@ -425,17 +412,16 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Map maps keys to non-empty lists of elements.
-   * This method adds var to the list mapped by key,
+   * Map maps keys to non-empty lists of elements. This method adds var to the list mapped by key,
    * creating a new list for key if one doesn't already exist.
-   * <p>
-   * Requires: Each value in map is a list of size 1 or greater
    *
-   * Ensures: Each value in map is a list of size 1 or greater
+   * <p>Requires: Each value in map is a list of size 1 or greater
+   *
+   * <p>Ensures: Each value in map is a list of size 1 or greater
+   *
    * @param map the map to add the bindings to
-   * @param key if there is already a List associated with key, then
-   * add value to key.  Otherwise create a new List associated with
-   * key and insert value.
+   * @param key if there is already a List associated with key, then add value to key. Otherwise
+   *     create a new List associated with key and insert value.
    * @param value the value to insert into the List mapped to key
    */
   private <T> void addToBindingList(Map<T, List<VarInfo>> map, T key, VarInfo value) {
@@ -449,18 +435,15 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Instantiate invariants from each inv's leader.  This is like
-   * instantiate_invariants at the start of reading the trace file,
-   * where we create new PptSliceNs.  This is called when newVis have
-   * just split off from leader, and we want the leaders of newVis to
-   * have the same invariants as leader.
-   * <p>
-   * post: Adds the newly instantiated invariants and slices to
-   * this.parent.
+   * Instantiate invariants from each inv's leader. This is like instantiate_invariants at the start
+   * of reading the trace file, where we create new PptSliceNs. This is called when newVis have just
+   * split off from leader, and we want the leaders of newVis to have the same invariants as leader.
+   *
+   * <p>post: Adds the newly instantiated invariants and slices to this.parent.
+   *
    * @param leader the old leader
-   * @param newVis a List of new VarInfos that used to be equal to
-   * leader.  Actually, it's the list of canonical that were equal to
-   * leader, representing their own newly-created equality sets.
+   * @param newVis a List of new VarInfos that used to be equal to leader. Actually, it's the list
+   *     of canonical that were equal to leader, representing their own newly-created equality sets.
    */
   public List<Invariant> copyInvsFromLeader(VarInfo leader, List<VarInfo> newVis) {
 
@@ -532,33 +515,29 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Clones slice (zero or more times) such that instances of leader
-   * are replaced by members of newVis; places new slices in
-   * newSlices.  The replacement is such that we get all combinations,
-   * with repetition of newVis and leader in every slot in slice where
-   * there used to be leader.  For example, if slice contained (A1,
-   * A1, B) and A1 is leader and newVis contains A2 and A3, then the
-   * slices we produce would be: (A1, A2, B), (A1, A3, B), (A2, A2, B)
-   * (A2, A3, B), (A3, A3, B).  We do not produce (A1, A1, B) because
-   * it is already there.  We do not produce (A2, A1, B) because it is
-   * the same as (A1, A2, B) wrt combinations.  This method does the
-   * main work of copyInvsFromLeader so that each new equality set
-   * that spawned off leader has the correct slices.  It works as a
-   * nested series of for loops, whose depth is equal to the length of
-   * slice.var_infos.  The position and loop arguments along with the
-   * call stack keep track of the loop nesting.  When position reaches
-   * the end of slice.var_infos, this method attempts to instantiate
-   * the slice that has been produced.  The standard start for
-   * position is 0, and for loop is -1.
+   * Clones slice (zero or more times) such that instances of leader are replaced by members of
+   * newVis; places new slices in newSlices. The replacement is such that we get all combinations,
+   * with repetition of newVis and leader in every slot in slice where there used to be leader. For
+   * example, if slice contained (A1, A1, B) and A1 is leader and newVis contains A2 and A3, then
+   * the slices we produce would be: (A1, A2, B), (A1, A3, B), (A2, A2, B) (A2, A3, B), (A3, A3, B).
+   * We do not produce (A1, A1, B) because it is already there. We do not produce (A2, A1, B)
+   * because it is the same as (A1, A2, B) wrt combinations. This method does the main work of
+   * copyInvsFromLeader so that each new equality set that spawned off leader has the correct
+   * slices. It works as a nested series of for loops, whose depth is equal to the length of
+   * slice.var_infos. The position and loop arguments along with the call stack keep track of the
+   * loop nesting. When position reaches the end of slice.var_infos, this method attempts to
+   * instantiate the slice that has been produced. The standard start for position is 0, and for
+   * loop is -1.
+   *
    * @param leader the variable to replace in slice
    * @param newVis of VarInfos that will replace leader in combination in slice
    * @param slice the slice to clone
    * @param newSlices where to put the cloned slices
-   * @param position the position currently being replaced in source.  Starts at 0.
-   * @param loop the iteration of the loop for this position.  If -1,
-   * means the previous replacement is leader.
-   * @param soFar buffer to which assignments temporarily go before
-   * becoming instantiated.  Has to equal slice.var_infos in length.
+   * @param position the position currently being replaced in source. Starts at 0.
+   * @param loop the iteration of the loop for this position. If -1, means the previous replacement
+   *     is leader.
+   * @param soFar buffer to which assignments temporarily go before becoming instantiated. Has to
+   *     equal slice.var_infos in length.
    */
   private void copyInvsFromLeaderHelper(
       VarInfo leader,
@@ -647,9 +626,7 @@ public class PptSliceEquality extends PptSlice {
     return result.toString();
   }
 
-  /**
-   * Order Equality invariants by the indices of leaders.
-   */
+  /** Order Equality invariants by the indices of leaders. */
   public static final class EqualityComparator implements Comparator<Equality> {
     public static final EqualityComparator theInstance = new EqualityComparator();
 
@@ -661,10 +638,7 @@ public class PptSliceEquality extends PptSlice {
     }
   }
 
-  /**
-   * Returns an array of all of the leaders sorted by varinfo_index
-   * for this equality view.
-   */
+  /** Returns an array of all of the leaders sorted by varinfo_index for this equality view. */
   public VarInfo[] get_leaders_sorted() {
     List<VarInfo> leaders = new ArrayList<VarInfo>(invs.size());
     for (Invariant inv : invs) {

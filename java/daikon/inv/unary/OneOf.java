@@ -16,8 +16,8 @@ public interface OneOf {
   public int num_elts();
 
   /**
-   * The single value represented by the OneOf invariant.
-   * Throws an error if not exactly one value is represented by this.
+   * The single value represented by the OneOf invariant. Throws an error if not exactly one value
+   * is represented by this.
    */
   public Object elt();
 

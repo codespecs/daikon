@@ -24,9 +24,9 @@ import typequals.*;
 */
 
 /**
- * This class is used by InvariantFormatTester to store data
- * representing test cases and for formatting results related to that
- * data. This class is related to tests performed on one invariant.
+ * This class is used by InvariantFormatTester to store data representing test cases and for
+ * formatting results related to that data. This class is related to tests performed on one
+ * invariant.
  */
 @SuppressWarnings("nullness")
 class FormatTestCase {
@@ -34,56 +34,42 @@ class FormatTestCase {
   private static final String lineSep = Global.lineSep;
 
   /**
-   * An inner class that represents a particular test on the invariant
-   * represented by a FormatTestCase object. This is used so this code
-   * can easily be extended to incorporating more than one test case
-   * under an invariant heading, such as what is currently done in the
-   * main code with having multiple goal outputs per invariant.
+   * An inner class that represents a particular test on the invariant represented by a
+   * FormatTestCase object. This is used so this code can easily be extended to incorporating more
+   * than one test case under an invariant heading, such as what is currently done in the main code
+   * with having multiple goal outputs per invariant.
    */
   static class SingleOutputTestCase {
 
-    /**
-     * A method that produces the formatting output when invoked.
-     */
+    /** A method that produces the formatting output when invoked. */
     private Method outputProducer;
 
-    /**
-     * The arguments that must be passed to outputProducer to create the output.
-     */
+    /** The arguments that must be passed to outputProducer to create the output. */
     private Object[] outputProducerArgs;
 
-    /**
-     * The goal output for this particular test case.
-     */
+    /** The goal output for this particular test case. */
     private String goalOutput;
 
     /**
-     * The line number in the input file in which the goalOutput should occur in
-     * the output file.
+     * The line number in the input file in which the goalOutput should occur in the output file.
      */
     private int goalLineNumber;
 
-    /**
-     * A cached copy of the result achieved by invoking the output method.
-     */
+    /** A cached copy of the result achieved by invoking the output method. */
     private /*@MonotonicNonNull*/ String resultCache;
 
-    /**
-     * A string containing the format that this particular test case represented.
-     */
+    /** A string containing the format that this particular test case represented. */
     private String formatString;
 
     /**
-     * This constructor initializes all of the fields without any
-     * checking for legality (that should be done by the callers).
+     * This constructor initializes all of the fields without any checking for legality (that should
+     * be done by the callers).
      *
      * @param outputProducer the output producing function (should return a String)
-     * @param outputProducerArgs the arguments to be passed to the outputProducer
-     *        method
-     * @param goalOutput the desired output of the outputProducer function (that
-     *        would mean the test was passed
-     * @param goalLineNumber the line number in the input file in which the goal
-     * should occur
+     * @param outputProducerArgs the arguments to be passed to the outputProducer method
+     * @param goalOutput the desired output of the outputProducer function (that would mean the test
+     *     was passed
+     * @param goalLineNumber the line number in the input file in which the goal should occur
      * @param formatString the format that this test case belongs to
      */
     public SingleOutputTestCase(
@@ -139,11 +125,9 @@ class FormatTestCase {
     }
 
     /**
-     * This function returns the line number that the goal should be listed on
-     * in the commands file.
+     * This function returns the line number that the goal should be listed on in the commands file.
      *
-     * @return the line number that the goal should be listed on
-     *         in the commands file
+     * @return the line number that the goal should be listed on in the commands file
      */
     public int getGoalLineNumber() {
       return goalLineNumber;
@@ -159,8 +143,8 @@ class FormatTestCase {
     }
 
     /**
-     * This function creates a String representing the differences between the
-     * goal output and the actual output; empty if there are no differences.
+     * This function creates a String representing the differences between the goal output and the
+     * actual output; empty if there are no differences.
      *
      * @return a String as described above
      */
@@ -183,29 +167,23 @@ class FormatTestCase {
   }
   // End of SingleOutputTestCase
 
-  /**
-   * Prefix to each goal line in the file for identitication.
-   */
+  /** Prefix to each goal line in the file for identitication. */
   private static final String GOAL_PREFIX = "Goal";
 
   /**
-   * A list of all of the test cases (which are SingleOutputTestCase
-   * objects) that are to be performed on the contained Invariant.
+   * A list of all of the test cases (which are SingleOutputTestCase objects) that are to be
+   * performed on the contained Invariant.
    */
   private List<SingleOutputTestCase> testCases;
 
-  /**
-   * The Invariant object to be tested.
-   */
+  /** The Invariant object to be tested. */
   private Invariant invariantToTest;
 
   /**
-   * This function constructs a FormatTestCase object directly from passed
-   * in objects. It is to be called internally by instantiate to create an
-   * instance of FormatTestCase
+   * This function constructs a FormatTestCase object directly from passed in objects. It is to be
+   * called internally by instantiate to create an instance of FormatTestCase
    *
-   * @param testCases a List of SingleOutputTestCase objects to be performed
-   *        on an Invariant
+   * @param testCases a List of SingleOutputTestCase objects to be performed on an Invariant
    * @param invariantToTest the Invariant on which the tests are to be performed
    */
   private FormatTestCase(List<SingleOutputTestCase> testCases, Invariant invariantToTest) {
@@ -214,16 +192,13 @@ class FormatTestCase {
   }
 
   /**
-   * This function generates the way a revised input file section for
-   * a given invariant test should look upon being supplemented with
-   * generated goals. The output represents an entire invariant up
-   * until the last goal statement for any test of the invariant since
-   * the test cases do not store what their samples look like in
-   * String format.  Therefore, it is recommended that the only use of
-   * this function be to get output from the invariant tests in the
-   * order they appear in the file.  (Note: The output is done is this
-   * particular way to maintain comments and white space between
-   * Invariants)
+   * This function generates the way a revised input file section for a given invariant test should
+   * look upon being supplemented with generated goals. The output represents an entire invariant up
+   * until the last goal statement for any test of the invariant since the test cases do not store
+   * what their samples look like in String format. Therefore, it is recommended that the only use
+   * of this function be to get output from the invariant tests in the order they appear in the
+   * file. (Note: The output is done is this particular way to maintain comments and white space
+   * between Invariants)
    *
    * @param theInputFile a LineNumberReader object representing the input file
    * @throws IOException if reading operations from the input buffer fail
@@ -273,11 +248,10 @@ class FormatTestCase {
   }
 
   /**
-   * This function creates a String representing the difference between the test
-   * result and the desired result.
+   * This function creates a String representing the difference between the test result and the
+   * desired result.
    *
-   * @return a String representing the difference between the test
-   * result and the desired result
+   * @return a String representing the difference between the test result and the desired result
    */
   public String getDiffString() {
     StringBuffer result = new StringBuffer();
@@ -295,12 +269,10 @@ class FormatTestCase {
   }
 
   /**
-   * This function loads a class from file into the JVM given its
-   * fully-qualified name.
+   * This function loads a class from file into the JVM given its fully-qualified name.
    *
    * @param classInfo the fully-qualified class name
-   * @return a Class object representing the class name if such a class is
-   *         defined, otherwise null
+   * @return a Class object representing the class name if such a class is defined, otherwise null
    */
   private static Class<?> getClass(/*@BinaryName*/ String classInfo) {
     try {
@@ -311,11 +283,11 @@ class FormatTestCase {
   }
 
   /**
-   * This function takes in a String representing a goal statement
-   * and returns the actual String to be returned by a test.
+   * This function takes in a String representing a goal statement and returns the actual String to
+   * be returned by a test.
    *
-   * @return the actual result String represented by the goal statement or
-   *          null if the String isn't actually a goal statement
+   * @return the actual result String represented by the goal statement or null if the String isn't
+   *     actually a goal statement
    */
   static /*@Nullable*/ String parseGoal(String goalString) {
     if (goalString.startsWith(GOAL_PREFIX)) {
@@ -353,15 +325,13 @@ class FormatTestCase {
   }
 
   /**
-   * This function returns a FormatTestCase instance after parsing it
-   * from file or null if the end of the file has been reached.
+   * This function returns a FormatTestCase instance after parsing it from file or null if the end
+   * of the file has been reached.
    *
-   * @param commands a reader object representing the file to be parsed that
-   *        contains data necessary to initialize the new object. The file
-   *        must conform to the format described in
-   *        InvariantFormatTester.Description
-   * @param generateGoals true if goal generation is desired, false if goal testing
-   *        is desired
+   * @param commands a reader object representing the file to be parsed that contains data necessary
+   *     to initialize the new object. The file must conform to the format described in
+   *     InvariantFormatTester.Description
+   * @param generateGoals true if goal generation is desired, false if goal testing is desired
    * @return a new FormatTestCase instance
    */
   public static /*@Nullable*/ FormatTestCase instantiate(
@@ -551,15 +521,12 @@ class FormatTestCase {
   }
 
   /**
-   * This function creates an array of VarInfo objects that can
-   * represent a set of program language types provided by the
-   * caller. Their names carry no meaning except for the type.
+   * This function creates an array of VarInfo objects that can represent a set of program language
+   * types provided by the caller. Their names carry no meaning except for the type.
    *
-   * @param classToTest the invariant class for which the VarInfos
-   *        must be determined
+   * @param classToTest the invariant class for which the VarInfos must be determined
    * @param types the types that the VarInfos must have
-   * @return an array of VarInfo objects that have the types corresponding
-   *         to those in types
+   * @return an array of VarInfo objects that have the types corresponding to those in types
    */
   private static VarInfo[] getVarInfos(
       Class<? extends Invariant> classToTest, ProglangType[] types) {
@@ -591,9 +558,8 @@ class FormatTestCase {
   }
 
   /**
-   * This function returns a VarInfo of the given type. The name is
-   * the ith letter of the alphabet. (Produces variables such that i=0
-   * &rarr; name=a, i=1 &rarr; name=b, ...)
+   * This function returns a VarInfo of the given type. The name is the ith letter of the alphabet.
+   * (Produces variables such that i=0 &rarr; name=a, i=1 &rarr; name=b, ...)
    *
    * @param type the desired type that the VarInfo will represent
    * @param i a unique identifier that determines the name to be used
@@ -646,8 +612,8 @@ class FormatTestCase {
   }
 
   /**
-   * This function parses a format string -- a space separated list of
-   * types -- and determines the types of objects to be collected.
+   * This function parses a format string -- a space separated list of types -- and determines the
+   * types of objects to be collected.
    *
    * @param typeNames the type string for an invariant
    * @return an array of ProglangTypes representing the data in typeNames
@@ -891,13 +857,12 @@ class FormatTestCase {
   //    }
 
   /**
-   * This function adds the samples in the samples list to the passed
-   * in invariant by use of the appropriate add_modified function
-   * (determined by reflection).
+   * This function adds the samples in the samples list to the passed in invariant by use of the
+   * appropriate add_modified function (determined by reflection).
    *
    * @param inv an invariant to which samples are added
-   * @param samples a list of samples (each entry of type Object []) that
-   *        can be added to the variables involved
+   * @param samples a list of samples (each entry of type Object []) that can be added to the
+   *     variables involved
    */
   private static void populateWithSamples(Invariant inv, List<Object[]> samples) {
     if (samples == null || samples.size() == 0) {
@@ -1023,14 +988,12 @@ class FormatTestCase {
   }
 
   /**
-   * This function creates an appropriate PptSlice for a given set of
-   * VarInfos and a PptTopLevel.
+   * This function creates an appropriate PptSlice for a given set of VarInfos and a PptTopLevel.
    *
-   * @param vars an array of VarInfo objects for which the slice is
-   *        to be created
+   * @param vars an array of VarInfo objects for which the slice is to be created
    * @param ppt the PptTopLevel object representing the program point
-   * @return a new PptSlice object if the creation of one is possible,
-   *         else throws a RuntimeException
+   * @return a new PptSlice object if the creation of one is possible, else throws a
+   *     RuntimeException
    */
   private static PptSlice createSlice(VarInfo[] vars, PptTopLevel ppt) {
     if (vars.length == 1) {
@@ -1046,14 +1009,12 @@ class FormatTestCase {
   }
 
   /**
-   * This function instantiates an invariant class by using the
-   * <type>(PptSlice) constructor.
+   * This function instantiates an invariant class by using the <type>(PptSlice) constructor.
    *
    * @param theClass the invariant class to be instantiated
-   * @param sl the PptSlice representing the variables about
-   *        which an invariant is determined
-   * @return an instance of the class in theClass if one can be constructed,
-   *         else throw a RuntimeException
+   * @param sl the PptSlice representing the variables about which an invariant is determined
+   * @return an instance of the class in theClass if one can be constructed, else throw a
+   *     RuntimeException
    */
   private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
     try {
@@ -1072,15 +1033,14 @@ class FormatTestCase {
   }
 
   /**
-   * This function instantiates an invariant class by using the
-   * static instantiate method with the specified arguments.
+   * This function instantiates an invariant class by using the static instantiate method with the
+   * specified arguments.
    *
    * @param theClass the invariant class to be instantiated
    * @param arg_types the types of each argument
    * @param arg_vals the value of each argument
-   *
-   * @return an instance of the class in theClass if one can be constructed,
-   *         else throw a RuntimeException
+   * @return an instance of the class in theClass if one can be constructed, else throw a
+   *     RuntimeException
    */
   private static Invariant instantiateClass(
       Class<? extends Invariant> theClass,

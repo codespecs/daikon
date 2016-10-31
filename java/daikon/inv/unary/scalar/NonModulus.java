@@ -12,12 +12,10 @@ import typequals.*;
 */
 
 /**
- * Represents long scalars that are never equal to <code>r (mod m)</code>
- * where all other numbers in the same range (i.e., all the values that
- * <code>x</code> doesn't take from <code>min(x)</code> to
- * <code>max(x)</code>) are equal to <code>r (mod m)</code>.
- * Prints as <code>x != r (mod m)</code>, where <code>r</code>
- * is the remainder and <code>m</code> is the modulus.
+ * Represents long scalars that are never equal to <code>r (mod m)</code> where all other numbers in
+ * the same range (i.e., all the values that <code>x</code> doesn't take from <code>min(x)</code> to
+ * <code>max(x)</code>) are equal to <code>r (mod m)</code>. Prints as <code>x != r (mod m)</code>,
+ * where <code>r</code> is the remainder and <code>m</code> is the modulus.
  */
 public class NonModulus extends SingleScalar {
   // We are Serializable, so we specify a version to allow changes to
@@ -27,9 +25,7 @@ public class NonModulus extends SingleScalar {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff NonModulus invariants should be considered.
-   */
+  /** Boolean. True iff NonModulus invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   // Set elements = new HashSet();

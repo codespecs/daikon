@@ -28,14 +28,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
@@ -54,8 +50,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import plume.EntryReader;
-import plume.FileIOException;
-import plume.Pair;
 import plume.RegexUtil;
 import plume.Stopwatch;
 import plume.UtilMDE;
@@ -68,8 +62,8 @@ import typequals.*;
 */
 
 /**
- * The {@link #main} method is the main entry point for the Daikon invariant detector.
- * The {@link #mainHelper} method is the entry point, when called programmatically.
+ * The {@link #main} method is the main entry point for the Daikon invariant detector. The {@link
+ * #mainHelper} method is the entry point, when called programmatically.
  */
 @SuppressWarnings("initialization.fields.uninitialized") // field all_ppts; deal with it later
 public final class Daikon {
@@ -79,9 +73,8 @@ public final class Daikon {
   }
 
   /**
-   * The amount of time to wait between updates of the progress
-   * display, measured in milliseconds. A value of -1 means do not
-   * print the progress display at all.
+   * The amount of time to wait between updates of the progress display, measured in milliseconds. A
+   * value of -1 means do not print the progress display at all.
    */
   public static int dkconfig_progress_delay = 1000;
 
@@ -98,37 +91,27 @@ public final class Daikon {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  Controls whether conditional program points
-   * are displayed.
-   */
+  /** Boolean. Controls whether conditional program points are displayed. */
   public static boolean dkconfig_output_conditionals = true;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  Controls whether invariants are reported over floating-point
-   * values.
-   */
+  /** Boolean. Controls whether invariants are reported over floating-point values. */
   public static boolean dkconfig_enable_floats = true;
 
-  /**
-   * Boolean.  Just print the total number of possible invariants
-   * and exit.
-   */
+  /** Boolean. Just print the total number of possible invariants and exit. */
   public static boolean dkconfig_calc_possible_invs;
 
   /**
-   * Integer. Percentage of program points to process.  All program points
-   * are sorted by name, and all samples for
-   * the first <code>ppt_perc</code> program points are processed.
-   * A percentage of 100 matches all program points.
+   * Integer. Percentage of program points to process. All program points are sorted by name, and
+   * all samples for the first <code>ppt_perc</code> program points are processed. A percentage of
+   * 100 matches all program points.
    */
   public static int dkconfig_ppt_perc = 100;
 
   /**
-   * Boolean.  Controls whether or not the total samples read and processed
-   * are printed at the end of processing.
+   * Boolean. Controls whether or not the total samples read and processed are printed at the end of
+   * processing.
    */
   public static boolean dkconfig_print_sample_totals = false;
 
@@ -137,9 +120,8 @@ public final class Daikon {
   public static final String lineSep = Global.lineSep;
 
   /**
-   * Boolean.  Controls whether or not processing information is printed out.
-   * Setting this variable to true also automatically sets
-   * <code>progress_delay</code> to -1.
+   * Boolean. Controls whether or not processing information is printed out. Setting this variable
+   * to true also automatically sets <code>progress_delay</code> to -1.
    */
   public static boolean dkconfig_quiet = false;
 
@@ -171,62 +153,59 @@ public final class Daikon {
   public static boolean show_progress = false;
 
   /**
-   * Whether to use the "new" equality set mechanism for handling
-   * equality, using canonicals to have instantiation of invariants
-   * only over equality sets.
+   * Whether to use the "new" equality set mechanism for handling equality, using canonicals to have
+   * instantiation of invariants only over equality sets.
    */
   public static boolean use_equality_optimization = true;
 
   /**
-   * Boolean.  Controls whether the Daikon optimizations (equality
-   * sets, suppressions) are undone at the end to create a more
-   * complete set of invariants.  Output does not include
-   * conditional program points, implications, reflexive and
-   * partially reflexive invariants.
+   * Boolean. Controls whether the Daikon optimizations (equality sets, suppressions) are undone at
+   * the end to create a more complete set of invariants. Output does not include conditional
+   * program points, implications, reflexive and partially reflexive invariants.
    */
   public static boolean dkconfig_undo_opts = false;
 
   /**
-   * Boolean.  Indicates to Daikon classes and methods that the methods
-   * calls should be compatible to DaikonSimple because Daikon and DaikonSimple share
-   * methods.  Default value is 'false'.
+   * Boolean. Indicates to Daikon classes and methods that the methods calls should be compatible to
+   * DaikonSimple because Daikon and DaikonSimple share methods. Default value is 'false'.
    */
   public static boolean using_DaikonSimple = false;
 
   /**
-   * If "always", then invariants are always guarded.
-   * If "never", then invariants are never guarded.
-   * If "missing", then invariants are guarded only for variables that
-   * were missing ("can be missing") in the dtrace (the observed executions).
-   * If "default", then use "missing" mode for Java output and "never" mode otherwise.
-   * <p>
-   * Guarding means adding predicates that ensure that variables can be
-   * dereferenced.  For instance, if <code>a</code> can be null --- that is,
-   * if <code>a.b</code> can be nonsensical --- then the guarded version of
+   * If "always", then invariants are always guarded. If "never", then invariants are never guarded.
+   * If "missing", then invariants are guarded only for variables that were missing ("can be
+   * missing") in the dtrace (the observed executions). If "default", then use "missing" mode for
+   * Java output and "never" mode otherwise.
+   *
+   * <p>Guarding means adding predicates that ensure that variables can be dereferenced. For
+   * instance, if <code>a</code> can be null --- that is, if <code>a.b</code> can be nonsensical ---
+   * then the guarded version of
+   *
    * <pre>a.b == 5</pre>
+   *
    * is
-   * <pre>(a != null) &rArr; (a.b == 5)</pre>.
-   * <p>
-   * (To do:  Some configuration option (maybe this one) should add guards for
-   * other reasons that lead to nonsensical values (@pxref{Variable names}).)
-   * &#64;cindex nonsensical values for variables, guarding
+   *
+   * <pre>(a != null) &rArr; (a.b == 5)</pre>
+   *
+   * .
+   *
+   * <p>(To do: Some configuration option (maybe this one) should add guards for other reasons that
+   * lead to nonsensical values (@pxref{Variable names}).) &#64;cindex nonsensical values for
+   * variables, guarding
    */
   // Perhaps a better default would be "missing".
   public static /*@Interned*/ String dkconfig_guardNulls = "default";
 
   /**
-   * Whether to associate the program points in a dataflow hierarchy,
-   * as via Nimmer's thesis.  Deactivate only for languages and
-   * analyses where flow relation is nonsensical.
+   * Whether to associate the program points in a dataflow hierarchy, as via Nimmer's thesis.
+   * Deactivate only for languages and analyses where flow relation is nonsensical.
    */
   public static boolean use_dataflow_hierarchy = true;
 
   /**
-   * Whether to use the bottom up implementation of the dataflow
-   * hierarchy.  This mechanism builds invariants initially
-   * only at the leaves of the partial order.  Upper points are
-   * calculated by joining the invariants from each of their children
-   * points.
+   * Whether to use the bottom up implementation of the dataflow hierarchy. This mechanism builds
+   * invariants initially only at the leaves of the partial order. Upper points are calculated by
+   * joining the invariants from each of their children points.
    */
   // public static boolean dkconfig_df_bottom_up = true;
 
@@ -249,9 +228,8 @@ public final class Daikon {
   public static /*@Nullable*/ Pattern var_omit_regexp;
 
   /**
-   * If set, only ppts less than ppt_max_name are included.  Used by the
-   * configuration option dkconfig_ppt_percent to only work on a specified
-   * percent of the ppts.
+   * If set, only ppts less than ppt_max_name are included. Used by the configuration option
+   * dkconfig_ppt_percent to only work on a specified percent of the ppts.
    */
   public static /*@Nullable*/ String ppt_max_name = null;
 
@@ -262,33 +240,25 @@ public final class Daikon {
   // Whether we want the memory monitor activated
   private static boolean use_mem_monitor = false;
 
-  /**
-   * Whether Daikon should print its version number and date.
-   */
+  /** Whether Daikon should print its version number and date. */
   public static boolean noversion_output = false;
 
-  /**
-   * Whether Daikon is in its inferencing loop.  Used only for
-   * assertion checks.
-   */
+  /** Whether Daikon is in its inferencing loop. Used only for assertion checks. */
   public static boolean isInferencing = false;
 
   /**
-   * When true, omit certain invariants from the output {@code .inv}
-   * file. Generally these are invariants that wouldn't be printed in
-   * any case; but by default, they're retained in the {@code .inv} file in
-   * case they would be useful for later processing. (For instance, we
-   * might at some point in the future support resuming processing
-   * with more data from an {@code .inv} file). These invariants can increase
-   * the size of the {@code .inv} file, though, so when only limited further
-   * processing is needed, it can save space to omit them.
+   * When true, omit certain invariants from the output {@code .inv} file. Generally these are
+   * invariants that wouldn't be printed in any case; but by default, they're retained in the {@code
+   * .inv} file in case they would be useful for later processing. (For instance, we might at some
+   * point in the future support resuming processing with more data from an {@code .inv} file).
+   * These invariants can increase the size of the {@code .inv} file, though, so when only limited
+   * further processing is needed, it can save space to omit them.
    */
   public static boolean omit_from_output = false;
 
   /**
-   * An array of flags, indexed by characters, in which a true entry
-   * means that invariants of that sort should be omitted from the
-   * output {@code .inv} file.
+   * An array of flags, indexed by characters, in which a true entry means that invariants of that
+   * sort should be omitted from the output {@code .inv} file.
    */
   public static boolean[] omit_types = new boolean[256];
 
@@ -334,8 +304,9 @@ public final class Daikon {
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String wrap_xml_SWITCH = "wrap_xml";
 
-  /** Regular expression that matches class names in the format expected by
-   * {@link Class#getName(String)}.
+  /**
+   * Regular expression that matches class names in the format expected by {@link
+   * Class#getName(String)}.
    */
   // This regular expression is taken from
   // checker-framework/checker/src/org/checkerframework/checker/signature/qual/ClassGetName.java
@@ -343,6 +314,7 @@ public final class Daikon {
   // primitives.
   private static final String classGetNameRegex =
       "(^[A-Za-z_][A-Za-z_0-9]*(\\.[A-Za-z_][A-Za-z_0-9]*)*(\\$[A-Za-z_0-9]+)*$)|^\\[+([BCDFIJSZ]|L[A-Za-z_][A-Za-z_0-9]*(\\.[A-Za-z_][A-Za-z_0-9]*)*(\\$[A-Za-z_0-9]+)*;)$";
+
   private static final Pattern classGetNamePattern;
 
   static {
@@ -404,13 +376,10 @@ public final class Daikon {
           "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.");
 
   /**
-   * Thrown to indicate that main should not print a stack trace, but only
-   * print the message itself to the user.
-   * Code in Daikon should throw this Exception in cases of user error, an
-   * throw other exceptions in cases of a Daikon bug or a system problem
-   * (like unpredictable IOExceptions).
-   * If the string is null, then this is normal termination, not an error;
-   * no message is printed.
+   * Thrown to indicate that main should not print a stack trace, but only print the message itself
+   * to the user. Code in Daikon should throw this Exception in cases of user error, an throw other
+   * exceptions in cases of a Daikon bug or a system problem (like unpredictable IOExceptions). If
+   * the string is null, then this is normal termination, not an error; no message is printed.
    */
   public static class TerminationMessage extends RuntimeException {
     static final long serialVersionUID = 20050923L;
@@ -480,8 +449,8 @@ public final class Daikon {
   }
 
   /**
-   * The arguments to daikon.Daikon are file names.  Declaration file names
-   * end in ".decls", and data trace file names end in ".dtrace".
+   * The arguments to daikon.Daikon are file names. Declaration file names end in ".decls", and data
+   * trace file names end in ".dtrace".
    */
   public static void main(final String[] args) {
     try {
@@ -513,10 +482,10 @@ public final class Daikon {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * TerminationMessage.
+   *
    * @see #main(String[])
    * @see TerminationMessage
    */
@@ -724,10 +693,7 @@ public final class Daikon {
     }
   }
 
-  /**
-   * Cleans up static variables so that mainHelper can be called more
-   * than once.
-   */
+  /** Cleans up static variables so that mainHelper can be called more than once. */
   @SuppressWarnings("nullness") // reinitialization
   public static void cleanup() {
 
@@ -1243,8 +1209,8 @@ public final class Daikon {
   }
 
   /**
-   * Just like {@code g.getOptarg()}, but only to be called in circumstances when
-   * the programmer knows that the return value is non-null.
+   * Just like {@code g.getOptarg()}, but only to be called in circumstances when the programmer
+   * knows that the return value is non-null.
    */
   public static String getOptarg(Getopt g) {
     String result = g.getOptarg();
@@ -1255,16 +1221,15 @@ public final class Daikon {
   }
 
   /**
-   * Invariants passed on the command line with the
-   * {@code --user_defined_invariant} option.  A list of class names in the format
-   * required by {@link Class#forName(String)}.
+   * Invariants passed on the command line with the {@code --user_defined_invariant} option. A list
+   * of class names in the format required by {@link Class#forName(String)}.
    */
   private static List</*@ClassGetName*/ String> userDefinedInvariants =
       new ArrayList</*@ClassGetName*/ String>();
 
   /**
-   * Creates the list of prototype invariants for all Daikon invariants.
-   * New invariants must be added to this list.
+   * Creates the list of prototype invariants for all Daikon invariants. New invariants must be
+   * added to this list.
    */
   public static void setup_proto_invs() {
 
@@ -1560,8 +1525,8 @@ public final class Daikon {
   }
 
   /**
-   * Creates invariants for upper program points by merging together the invariants
-   * from all of the lower points.
+   * Creates invariants for upper program points by merging together the invariants from all of the
+   * lower points.
    */
   public static void createUpperPpts(PptMap all_ppts) {
 
@@ -1576,11 +1541,7 @@ public final class Daikon {
     }
   }
 
-  /**
-   * Setup splitters.
-   * Add orig and derived variables.
-   * Recursively call init_ppt on splits.
-   */
+  /** Setup splitters. Add orig and derived variables. Recursively call init_ppt on splits. */
   public static void init_ppt(PptTopLevel ppt, PptMap all_ppts) {
 
     if (!Daikon.using_DaikonSimple) {
@@ -1622,9 +1583,7 @@ public final class Daikon {
     }
   }
 
-  /**
-   * Create EXIT program points as needed for EXITnn program points.
-   */
+  /** Create EXIT program points as needed for EXITnn program points. */
   public static void create_combined_exits(PptMap ppts) {
 
     // We can't add the newly created exit Ppts directly to ppts while we
@@ -1720,8 +1679,8 @@ public final class Daikon {
   }
 
   /**
-   * Add orig() variables to the given EXIT/EXITnn point.
-   * Does nothing if exit_ppt is not an EXIT/EXITnn.
+   * Add orig() variables to the given EXIT/EXITnn point. Does nothing if exit_ppt is not an
+   * EXIT/EXITnn.
    */
   private static void create_orig_vars(PptTopLevel exit_ppt, PptMap ppts) {
     if (!exit_ppt.ppt_name.isExitPoint()) {
@@ -1885,9 +1844,9 @@ public final class Daikon {
   }
 
   /**
-   * Sets up splitting on all ppts.  Currently only binary splitters
-   * over boolean returns or exactly two return statements are enabled
-   * by default (though other splitters can be defined by the user).
+   * Sets up splitting on all ppts. Currently only binary splitters over boolean returns or exactly
+   * two return statements are enabled by default (though other splitters can be defined by the
+   * user).
    */
   // TODO: When Checker Framework issue 752 is fixed, remove this
   // @SuppressWarnings and address the type checking error issued
@@ -1921,16 +1880,15 @@ public final class Daikon {
   // Infer invariants over the trace data
 
   /**
-   * The number of columns of progress information to display. In many
-   * Unix shells, this can be set to an appropriate value by
-   * <tt>--config_option daikon.Daikon.progress_display_width=$COLUMNS</tt>.
+   * The number of columns of progress information to display. In many Unix shells, this can be set
+   * to an appropriate value by <tt>--config_option
+   * daikon.Daikon.progress_display_width=$COLUMNS</tt>.
    */
   public static int dkconfig_progress_display_width = 80;
 
   /**
-   * Human-friendly progress status message.
-   * If {@code fileio_progress} is non-null, then this is ignored.
-   * So this is primarily for progress reports that are not IO-related.
+   * Human-friendly progress status message. If {@code fileio_progress} is non-null, then this is
+   * ignored. So this is primarily for progress reports that are not IO-related.
    */
   public static String progress = "";
 
@@ -1938,21 +1896,19 @@ public final class Daikon {
   /** Takes precedence over the progress variable. */
   private static /*@MonotonicNonNull*/ FileIOProgress fileio_progress = null;
 
-  /**
-   * Outputs FileIO progress information.
-   * Uses global variable FileIO.data_trace_state.
-   */
+  /** Outputs FileIO progress information. Uses global variable FileIO.data_trace_state. */
   public static class FileIOProgress extends Thread {
     public FileIOProgress() {
       setDaemon(true);
       df = DateFormat.getTimeInstance(/*DateFormat.LONG*/ );
     }
     /**
-     * Clients should set this variable instead of calling Thread.stop(),
-     * which is deprecated.  Typically a client calls "display()" before
-     * setting this.  The stopping happens later, and calls clear() anyway.
+     * Clients should set this variable instead of calling Thread.stop(), which is deprecated.
+     * Typically a client calls "display()" before setting this. The stopping happens later, and
+     * calls clear() anyway.
      */
     public boolean shouldStop = false;
+
     private final DateFormat df;
 
     @Override
@@ -1982,8 +1938,8 @@ public final class Daikon {
       System.out.flush();
     }
     /**
-     * Displays the current status.
-     * Call this if you don't want to wait until the next automatic display.
+     * Displays the current status. Call this if you don't want to wait until the next automatic
+     * display.
      */
     public void display() {
       if (dkconfig_progress_delay == -1) return;
@@ -2029,11 +1985,9 @@ public final class Daikon {
   }
 
   /**
-   * The data-processing routine of the daikon engine.  At this
-   * point, the decls and spinfo files have been loaded, all of the
-   * program points have been setup, and candidate invariants have
-   * been instantiated.  This routine processes data to falsify the
-   * candidate invariants.
+   * The data-processing routine of the daikon engine. At this point, the decls and spinfo files
+   * have been loaded, all of the program points have been setup, and candidate invariants have been
+   * instantiated. This routine processes data to falsify the candidate invariants.
    */
   @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   /*@RequiresNonNull("fileio_progress")*/
@@ -2222,10 +2176,7 @@ public final class Daikon {
     }
   }
 
-  /**
-   * Print out basic statistics (samples, invariants, variables, etc)
-   * about each ppt.
-   */
+  /** Print out basic statistics (samples, invariants, variables, etc) about each ppt. */
   public static void ppt_stats(PptMap all_ppts) {
 
     int all_ppt_cnt = 0;
@@ -2258,9 +2209,7 @@ public final class Daikon {
     System.out.println("PPts w/sample count = " + ppt_w_sample_cnt);
   }
 
-  /**
-   * Process the invariants with simplify to remove redundant invariants.
-   */
+  /** Process the invariants with simplify to remove redundant invariants. */
   private static void suppressWithSimplify(PptMap all_ppts) {
     System.out.print("Invoking Simplify to identify redundant invariants");
     System.out.flush();
@@ -2278,16 +2227,12 @@ public final class Daikon {
     }
   }
 
-  /**
-   * Initialize NIS suppression.
-   */
+  /** Initialize NIS suppression. */
   public static void setup_NISuppression() {
     NIS.init_ni_suppression();
   }
 
-  /**
-   * Initialize the equality sets for each variable.
-   */
+  /** Initialize the equality sets for each variable. */
   public static void setupEquality(PptTopLevel ppt) {
 
     if (!Daikon.use_equality_optimization) return;
@@ -2323,8 +2268,8 @@ public final class Daikon {
   private static List<SpinfoFile> spinfoFiles = new ArrayList<SpinfoFile>();
 
   /**
-   * Create user-defined splitters.  For each file in the input,
-   * add a SpinfoFile to the spinfoFiles variable.
+   * Create user-defined splitters. For each file in the input, add a SpinfoFile to the spinfoFiles
+   * variable.
    */
   public static void create_splitters(Set<File> spinfo_files) throws IOException {
     for (File filename : spinfo_files) {
@@ -2356,9 +2301,7 @@ public final class Daikon {
   //     }
   //   }
 
-  /**
-   * Removed invariants as specified in omit_types.
-   */
+  /** Removed invariants as specified in omit_types. */
   private static void processOmissions(PptMap allPpts) {
     if (omit_types['0']) allPpts.removeUnsampled();
     for (PptTopLevel ppt : allPpts.asCollection()) {
@@ -2367,9 +2310,8 @@ public final class Daikon {
   }
 
   /**
-   * Returns the ppt name, max_ppt, that corresponds to the specified
-   * percentage of ppts (presuming that only those ppts &le; max_ppt will be
-   * processed).
+   * Returns the ppt name, max_ppt, that corresponds to the specified percentage of ppts (presuming
+   * that only those ppts &le; max_ppt will be processed).
    */
   private static /*@Nullable*/ String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
 
@@ -2437,9 +2379,8 @@ public final class Daikon {
   }
 
   /**
-   * Undoes the invariants suppressed for the dynamic constant,
-   * suppression and equality set optimizations (should yield the same
-   * invariants as the simple incremental algorithm.
+   * Undoes the invariants suppressed for the dynamic constant, suppression and equality set
+   * optimizations (should yield the same invariants as the simple incremental algorithm.
    */
   @SuppressWarnings("flowexpr.parse.error") // private field
   /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/

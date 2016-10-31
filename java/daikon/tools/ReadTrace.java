@@ -8,18 +8,21 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * A class that gives an example of how to use a FileIO.Processor object to
- * read a trace file.  Invoke it like:
+ * A class that gives an example of how to use a FileIO.Processor object to read a trace file.
+ * Invoke it like:
+ *
  * <pre>
  *   java daikon.tools.ReadTrace file1 file2 ...
  * </pre>
+ *
  * A concrete example invocation:
+ *
  * <pre>
  *   java -cp $DAIKONDIR/daikon.jar daikon.tools.ReadTrace /scratch/$USER/tests/daikon-tests/StackAr/StackAr.dtrace.gz
  * </pre>
- * You probably won't run this program.  Instead, you will copy
- * parts of its source code in the process of writing your own program
- * that reads a dtrace file.
+ *
+ * You probably won't run this program. Instead, you will copy parts of its source code in the
+ * process of writing your own program that reads a dtrace file.
  */
 public class ReadTrace {
 
@@ -47,9 +50,8 @@ public class ReadTrace {
   }
 
   /**
-   * Populates the <code>samples</code> map with all the data read from the file.
-   * This is only reasonable for small trace files, since all the data will
-   * be retained in memory!
+   * Populates the <code>samples</code> map with all the data read from the file. This is only
+   * reasonable for small trace files, since all the data will be retained in memory!
    */
   public static class CollectDataProcessor extends FileIO.Processor {
 

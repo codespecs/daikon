@@ -17,17 +17,14 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * The Runtime class provides methods for printing values to a Daikon data
- * trace file.  Daikon can process the data trace information, either while
- * the target program is running or after-the-fact, to produce likely
- * invariants.
- * <p>
+ * The Runtime class provides methods for printing values to a Daikon data trace file. Daikon can
+ * process the data trace information, either while the target program is running or after-the-fact,
+ * to produce likely invariants.
  *
- * The Daikon front end for Java, named Chicory, modifies the target
- * program by inserting calls to the printing routines of the Runtime
- * class.  Neither Chicory nor Daikon calls the methods of the Runtime
- * class; only the target program (as instrumented by Chicory) does, in
- * order to create input to Daikon.
+ * <p>The Daikon front end for Java, named Chicory, modifies the target program by inserting calls
+ * to the printing routines of the Runtime class. Neither Chicory nor Daikon calls the methods of
+ * the Runtime class; only the target program (as instrumented by Chicory) does, in order to create
+ * input to Daikon.
  */
 // I don't see a way to suppress per-field rather than on the whole class.
 // See Checker Framework test case
@@ -88,11 +85,11 @@ public final class Runtime {
   }
 
   /**
-   * Convert a classname from JVML format to Java format.
-   * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
-   * <p>
-   * If the argument is not a field descriptor, returns it as is.
-   * This enables this method to be used on the output of {@link Class#getName()}.
+   * Convert a classname from JVML format to Java format. For example, convert "[Ljava/lang/Object;"
+   * to "java.lang.Object[]".
+   *
+   * <p>If the argument is not a field descriptor, returns it as is. This enables this method to be
+   * used on the output of {@link Class#getName()}.
    */
   @Deprecated
   public static /*@BinaryName*/ String classnameFromJvm(/*@FieldDescriptor*/ String classname) {
@@ -100,11 +97,11 @@ public final class Runtime {
   }
 
   /**
-   * Convert a classname from JVML format to Java format.
-   * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
-   * <p>
-   * If the argument is not a field descriptor, returns it as is.
-   * This enables this method to be used on the output of {@link Class#getName()}.
+   * Convert a classname from JVML format to Java format. For example, convert "[Ljava/lang/Object;"
+   * to "java.lang.Object[]".
+   *
+   * <p>If the argument is not a field descriptor, returns it as is. This enables this method to be
+   * used on the output of {@link Class#getName()}.
    */
   @SuppressWarnings("signature") // conversion function
   public static /*@BinaryName*/ String fieldDescriptorToBinaryName(
@@ -265,11 +262,9 @@ public final class Runtime {
   }
 
   /**
-   * If the current data trace file is not yet set (and no_dtrace is not
-   * true), then set it.
-   * The value of the DTRACEFILE environment variable is used;
-   * if that environment variable is not set, then the argument
-   * to this method is used instead.
+   * If the current data trace file is not yet set (and no_dtrace is not true), then set it. The
+   * value of the DTRACEFILE environment variable is used; if that environment variable is not set,
+   * then the argument to this method is used instead.
    */
   public static void setDtraceMaybe(String default_filename) {
     // System.out.println("setDtraceMaybe(" + default_filename + "); old = " + dtrace);

@@ -14,14 +14,11 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * This data structure holds a tuple of values for a particular program
- * point.  VarInfo objects can use this to get the values of the variables
- * they represent.
- * <p>
+ * This data structure holds a tuple of values for a particular program point. VarInfo objects can
+ * use this to get the values of the variables they represent.
  *
- * It has two fields:  vals and mods.
- * While the arrays and their elements are interned, the ValueTuple objects
- * themselves are not interned.
+ * <p>It has two fields: vals and mods. While the arrays and their elements are interned, the
+ * ValueTuple objects themselves are not interned.
  */
 public final class ValueTuple implements Cloneable {
 
@@ -36,24 +33,27 @@ public final class ValueTuple implements Cloneable {
   // avoid the Object overhead of a pair of val and mods.
 
   /**
-   * Modification bit per value, possibly packed into fewer ints than the
-   * vals field.  Don't use a single int because that won't scale to (say)
-   * more than 32 values.
+   * Modification bit per value, possibly packed into fewer ints than the vals field. Don't use a
+   * single int because that won't scale to (say) more than 32 values.
    */
   public int /*@Interned*/ [] mods;
 
   // Right now there are only three meaningful values for a mod:
-  /** Not modified.  */
+  /** Not modified. */
   public static final int UNMODIFIED = 0;
-  /** Modified.  */
+  /** Modified. */
   public static final int MODIFIED = 1;
-  /** Missing value because the expression doesn't make sense: x.a
-   * when x is null.  Data trace files can contain this modbit. */
+  /**
+   * Missing value because the expression doesn't make sense: x.a when x is null. Data trace files
+   * can contain this modbit.
+   */
   public static final int MISSING_NONSENSICAL = 2;
-  /** Missing value because of data flow: this.x.x isn't available
-   * from a ppt.  Data trace files must not contain this modbit. */
+  /**
+   * Missing value because of data flow: this.x.x isn't available from a ppt. Data trace files must
+   * not contain this modbit.
+   */
   public static final int MISSING_FLOW = 3;
-  /** Maximum mod bit value.  Always set to 1+ last modbit value.  */
+  /** Maximum mod bit value. Always set to 1+ last modbit value. */
   public static final int MODBIT_VALUES = 4;
   // Out of the range of MODBIT_VALUES because this won't appear in the
   // tables; it gets converted to UNMODIFIED or MODIFIED, depending on
@@ -228,9 +228,8 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * In output, M=modified, U=unmodified, X=missing.
-   * Capital letters indicate the specified modbit does occur,
-   * lowercase letters indicate it does not occur.
+   * In output, M=modified, U=unmodified, X=missing. Capital letters indicate the specified modbit
+   * does occur, lowercase letters indicate it does not occur.
    */
   static String tuplemodToStringBrief(int tuplemod) {
     return ((tuplemodHasModified(tuplemod) ? "M" : "m")
@@ -265,6 +264,7 @@ public final class ValueTuple implements Cloneable {
 
   /**
    * Get the value of the variable vi in this ValueTuple.
+   *
    * @param vi the variable whose value is to be returned
    * @return the value of the variable at this ValueTuple
    */
@@ -274,8 +274,9 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Get the value of the variable vi in this ValueTuple, or null if it is missing.
-   * Use of this method is discouraged.
+   * Get the value of the variable vi in this ValueTuple, or null if it is missing. Use of this
+   * method is discouraged.
+   *
    * @param vi the variable whose value is to be returned
    * @return the value of the variable at this ValueTuple
    * @see #getValue(VarInfo)
@@ -286,8 +287,9 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Get the value at the val_index, which should not have a missing value.
-   * Note: For clients, getValue(VarInfo) is preferred to getValue(int).
+   * Get the value at the val_index, which should not have a missing value. Note: For clients,
+   * getValue(VarInfo) is preferred to getValue(int).
+   *
    * @see #getValue(VarInfo)
    */
   /*@Interned*/ Object getValue(int val_index) {
@@ -298,8 +300,9 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Get the value at the val_index, or null if it is missing.
-   * Use of this method is (doubly) discouraged.
+   * Get the value at the val_index, or null if it is missing. Use of this method is (doubly)
+   * discouraged.
+   *
    * @see #getValue(int)
    */
   /*@Nullable*/ /*@Interned*/ Object getValueOrNull(int val_index) {
@@ -343,14 +346,12 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * More convenient name for the constructor that doesn't intern.
-   * That is, the result is an <b>uninterned</b> ValueTuple.
+   * More convenient name for the constructor that doesn't intern. That is, the result is an
+   * <b>uninterned</b> ValueTuple.
    *
-   * This is not private because it is used (only) by read_data_trace_file,
-   * which makes a partial ValueTuple, fills it in with derived variables,
-   * and only then interns it; the alternative would be for derived
-   * variables to take separate vals and mods arguments.  No one else
-   * should use it!
+   * <p>This is not private because it is used (only) by read_data_trace_file, which makes a partial
+   * ValueTuple, fills it in with derived variables, and only then interns it; the alternative would
+   * be for derived variables to take separate vals and mods arguments. No one else should use it!
    */
   @SuppressWarnings("interning") // interning constructor
   public static ValueTuple makeUninterned(/*@Nullable*/ Object[] vals, int[] mods) {
@@ -404,9 +405,8 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Return the values of this tuple ("missing" is used for each missing value).
-   * If vis is non-null, the values are annotated with the VarInfo name that
-   * would be associated with the value.
+   * Return the values of this tuple ("missing" is used for each missing value). If vis is non-null,
+   * the values are annotated with the VarInfo name that would be associated with the value.
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied ValueTuple this,*/ VarInfo /*@Nullable*/ [] vis) {
@@ -479,8 +479,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Return a new ValueTuple consisting of the elements of this one with
-   * indices listed in indices.
+   * Return a new ValueTuple consisting of the elements of this one with indices listed in indices.
    */
   public ValueTuple slice(int[] indices) {
     int new_len = indices.length;

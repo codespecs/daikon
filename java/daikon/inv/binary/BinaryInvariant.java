@@ -15,10 +15,7 @@ import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
 
-/**
- * Provides a class that defines the functions that must exist
- * for each two variable invariant.
- */
+/** Provides a class that defines the functions that must exist for each two variable invariant. */
 public abstract class BinaryInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -40,9 +37,9 @@ public abstract class BinaryInvariant extends Invariant {
       /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count);
 
   /**
-   * Applies the variables in the correct order.  If the second variable
-   * is an array and the first variable is not, the order of the values
-   * is reversed (so that the array is always the first argument).
+   * Applies the variables in the correct order. If the second variable is an array and the first
+   * variable is not, the order of the values is reversed (so that the array is always the first
+   * argument).
    */
   public InvariantStatus add_unordered(
       /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
@@ -59,12 +56,12 @@ public abstract class BinaryInvariant extends Invariant {
   }
 
   /**
-   * Checks the specified values in the correct order.  If the second value
-   * is an array and the first value is not, the order of the values
-   * is reversed (so that the array is always the first argument).
+   * Checks the specified values in the correct order. If the second value is an array and the first
+   * value is not, the order of the values is reversed (so that the array is always the first
+   * argument).
    *
-   * The values are checked rather than the variables because this is
-   * sometimes called on prototype invariants.
+   * <p>The values are checked rather than the variables because this is sometimes called on
+   * prototype invariants.
    */
   public InvariantStatus check_unordered(
       /*>>> @Prototype BinaryInvariant this,*/
@@ -82,8 +79,8 @@ public abstract class BinaryInvariant extends Invariant {
   }
 
   /**
-   * Returns true if the binary function is symmetric (x,y &rArr; y,x).
-   * Subclasses that are symmetric should override.
+   * Returns true if the binary function is symmetric (x,y &rArr; y,x). Subclasses that are
+   * symmetric should override.
    */
   /*@Pure*/
   public boolean is_symmetric() {
@@ -91,17 +88,16 @@ public abstract class BinaryInvariant extends Invariant {
   }
 
   /**
-   * Returns the swap setting for invariants that support a swap boolean
-   * to handle different permutations.  This version should never
-   * be called.
+   * Returns the swap setting for invariants that support a swap boolean to handle different
+   * permutations. This version should never be called.
    */
   public boolean get_swap() {
     throw new Error("swap called in BinaryInvariant");
   }
 
   /**
-   * Searches for the specified binary invariant (by class) in the
-   * specified slice.  Returns null if the invariant is not found.
+   * Searches for the specified binary invariant (by class) in the specified slice. Returns null if
+   * the invariant is not found.
    */
   protected /*@Nullable*/ Invariant find(Class<? extends Invariant> cls, VarInfo v1, VarInfo v2) {
 

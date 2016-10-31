@@ -9,29 +9,20 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Abstract class to represent a derived variable that came from
- * two base variables.
- */
+/** Abstract class to represent a derived variable that came from two base variables. */
 public abstract class BinaryDerivation extends Derivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  /**
-   * Original variable 1.
-   */
+  /** Original variable 1. */
   public VarInfo base1;
 
-  /**
-   * Original variable 2.
-   */
+  /** Original variable 2. */
   public VarInfo base2;
 
-  /**
-   * Create a new BinaryDerivation from two varinfos.
-   */
+  /** Create a new BinaryDerivation from two varinfos. */
   public BinaryDerivation(VarInfo vi1, VarInfo vi2) {
     base1 = vi1;
     base2 = vi2;
@@ -90,9 +81,7 @@ public abstract class BinaryDerivation extends Derivation {
     return computeValueAndModifiedImpl(vt);
   }
 
-  /**
-   * Actual implementation once mods are handled.
-   */
+  /** Actual implementation once mods are handled. */
   protected abstract ValueAndModified computeValueAndModifiedImpl(ValueTuple vt);
 
   /*@Pure*/

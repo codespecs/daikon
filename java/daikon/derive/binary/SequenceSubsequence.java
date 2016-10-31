@@ -8,10 +8,7 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Derivations of the form A[0..i] or A[i..<em>end</em>], derived from A and
- * i.
- */
+/** Derivations of the form A[0..i] or A[i..<em>end</em>], derived from A and i. */
 public abstract class SequenceSubsequence extends BinaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -41,10 +38,10 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   public final boolean from_start;
 
   /**
-   * @param from_start true means the range goes 0..n; false means the
-   * range goes n..end.  (n might be fudged through off_by_one)
-   * @param off_by_one true means we should exclude the scalar from
-   * the range; false means we should include it
+   * @param from_start true means the range goes 0..n; false means the range goes n..end. (n might
+   *     be fudged through off_by_one)
+   * @param off_by_one true means we should exclude the scalar from the range; false means we should
+   *     include it
    */
   public SequenceSubsequence(VarInfo vi1, VarInfo vi2, boolean from_start, boolean off_by_one) {
     super(vi1, vi2);
@@ -107,9 +104,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   public String esc_name(String index) {
     return String.format(
         "%s[%s..%s]",
-        seqvar().esc_name(),
-        get_lower_bound().esc_name(),
-        get_upper_bound().esc_name());
+        seqvar().esc_name(), get_lower_bound().esc_name(), get_upper_bound().esc_name());
   }
 
   /** returns the JML name for the slice */
@@ -132,9 +127,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     } else {
       return String.format(
           "daikon.Quant.slice(%s, %s, %s)",
-          seqvar().enclosing_var.jml_name(),
-          get_lower_bound().jml_name(),
-          upper.jml_name());
+          seqvar().enclosing_var.jml_name(), get_lower_bound().jml_name(), upper.jml_name());
     }
   }
 

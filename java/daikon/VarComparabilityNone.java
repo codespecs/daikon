@@ -8,8 +8,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Used when no VarComparability information is available (in the {@code .dtrace} file).
- * Every variable is considered comparable to every other variable.
+ * Used when no VarComparability information is available (in the {@code .dtrace} file). Every
+ * variable is considered comparable to every other variable.
  */
 public final class VarComparabilityNone extends VarComparability implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
@@ -52,9 +52,9 @@ public final class VarComparabilityNone extends VarComparability implements Seri
   }
 
   /**
-   * The best we can do without comparability info is to check if the
-   * representation types in the data trace file are the same.  This
-   * lets us compare integers to longs, but not integers to arrays.
+   * The best we can do without comparability info is to check if the representation types in the
+   * data trace file are the same. This lets us compare integers to longs, but not integers to
+   * arrays.
    */
   /*@Pure*/
   static boolean comparable(

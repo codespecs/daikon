@@ -8,16 +8,15 @@ import java.io.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/** <B>XorInvariantsVisitor</B> is a visitor that performs a
- * standard Diff on two PptMaps, that is, finds the set of
- * Invariants in the XOR set of two PptMaps.  However, while
- * those XOR Invariants were the end product of standard diff,
- * this visitor is useful when the XOR set is a means to an
- * end, since you get back a data structure containing the
- * XOR set. <P> Currently, this visitor actually modifies
- * the first of the two PptMaps.  This might be an undesirable
- * design call, but creating a PptMap from scratch is difficult
- * given the constraining creational pattern in place.
+/**
+ * <B>XorInvariantsVisitor</B> is a visitor that performs a standard Diff on two PptMaps, that is,
+ * finds the set of Invariants in the XOR set of two PptMaps. However, while those XOR Invariants
+ * were the end product of standard diff, this visitor is useful when the XOR set is a means to an
+ * end, since you get back a data structure containing the XOR set.
+ *
+ * <p>Currently, this visitor actually modifies the first of the two PptMaps. This might be an
+ * undesirable design call, but creating a PptMap from scratch is difficult given the constraining
+ * creational pattern in place.
  */
 public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 
@@ -49,8 +48,8 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
   }
 
   /**
-   * Returns true if the pair of invariants should be printed,
-   * depending on their type, relationship, and printability.
+   * Returns true if the pair of invariants should be printed, depending on their type,
+   * relationship, and printability.
    */
   protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);

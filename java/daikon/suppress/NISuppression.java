@@ -7,7 +7,6 @@ import daikon.inv.*;
 import daikon.inv.binary.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
@@ -17,9 +16,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Class that defines a single non-instantiating suppression.  A suppression
- * consists of one or more suppressors and a suppressee.  If each of the
- * suppressors is true they imply the suppressee.
+ * Class that defines a single non-instantiating suppression. A suppression consists of one or more
+ * suppressors and a suppressee. If each of the suppressors is true they imply the suppressee.
  */
 public class NISuppression {
 
@@ -86,19 +84,17 @@ public class NISuppression {
   }
 
   /**
-   * Checks this suppression.  Each suppressor is checked to see
-   * if it matches inv and if not, whether or not it is valid (true).
-   * The results are saved in each suppressor.  The suppressor results
-   * are used later by @link{#invalidated()}.
+   * Checks this suppression. Each suppressor is checked to see if it matches inv and if not,
+   * whether or not it is valid (true). The results are saved in each suppressor. The suppressor
+   * results are used later by @link{#invalidated()}.
    *
-   * @param ppt     program point in which to check suppression
-   * @param vis     variables over which to check suppression
-   * @param inv     falsified invariant (if any).  Any suppressor
-   *                that matches inv will be marked as NIS.SuppressState.MATCH
-   *
-   * @return NIS.SuppressState.VALID if the suppression is valid, NIS.SuppressState.NONSENSICAL if one or
-   *         more suppressors were nonsensical and the rest were valid,
-   *         NIS.SuppressState.INVALID otherwise
+   * @param ppt program point in which to check suppression
+   * @param vis variables over which to check suppression
+   * @param inv falsified invariant (if any). Any suppressor that matches inv will be marked as
+   *     NIS.SuppressState.MATCH
+   * @return NIS.SuppressState.VALID if the suppression is valid, NIS.SuppressState.NONSENSICAL if
+   *     one or more suppressors were nonsensical and the rest were valid, NIS.SuppressState.INVALID
+   *     otherwise
    */
   public NIS.SuppressState check(PptTopLevel ppt, VarInfo[] vis, /*@Nullable*/ Invariant inv) {
 
@@ -129,11 +125,10 @@ public class NISuppression {
   }
 
   /**
-   * Determines whether or not the falsified invariant previously
-   * passed to @link{#check(PptTopLevel,VarInfo[],Invariant)} was the
-   * first suppressor to be falsified in this suppression.  If the
-   * falsified invariant is not involved in this suppression, then it
-   * can't have been invalidated.
+   * Determines whether or not the falsified invariant previously passed
+   * to @link{#check(PptTopLevel,VarInfo[],Invariant)} was the first suppressor to be falsified in
+   * this suppression. If the falsified invariant is not involved in this suppression, then it can't
+   * have been invalidated.
    */
   public boolean invalidated() {
 
@@ -157,14 +152,11 @@ public class NISuppression {
   }
 
   /**
-   * Finds all of the invariants that are suppressed by this
-   * suppression.
+   * Finds all of the invariants that are suppressed by this suppression.
    *
-   * @param suppressed_invs     any invariants that are suppressed by
-   *                            the antecedent invariants in {@code ants}
-   *                            using this suppression are added to
-   *                            this set
-   * @param ants                antecedents organized by class
+   * @param suppressed_invs any invariants that are suppressed by the antecedent invariants in
+   *     {@code ants} using this suppression are added to this set
+   * @param ants antecedents organized by class
    */
   public void find_suppressed_invs(Set<NIS.SupInv> suppressed_invs, NIS.Antecedents ants) {
 
@@ -185,16 +177,13 @@ public class NISuppression {
   }
 
   /**
-   * Finds invariants that have become unsuppressed (one or more of
-   * their antecedent invariants is falsified).  The invariant may
-   * still be suppressed by a different suppression.
+   * Finds invariants that have become unsuppressed (one or more of their antecedent invariants is
+   * falsified). The invariant may still be suppressed by a different suppression.
    *
-   * @param unsuppressed_invs   any invariants that are suppressed by
-   *                            the antecedent invariants in ants
-   *                            using this suppression are added to
-   *                            this set if one or more of the antecedents
-   *                            are falsified
-   * @param ants                antecedents organized by class
+   * @param unsuppressed_invs any invariants that are suppressed by the antecedent invariants in
+   *     ants using this suppression are added to this set if one or more of the antecedents are
+   *     falsified
+   * @param ants antecedents organized by class
    */
   public void find_unsuppressed_invs(Set<NIS.SupInv> unsuppressed_invs, NIS.Antecedents ants) {
 
@@ -231,18 +220,14 @@ public class NISuppression {
   }
 
   /**
-   * Recursively finds suppressed invariants.  The cross product
-   * of antecedents for each suppressor are examined and each
-   * valid combination will yield an entry in suppressed_invs.
+   * Recursively finds suppressed invariants. The cross product of antecedents for each suppressor
+   * are examined and each valid combination will yield an entry in suppressed_invs.
    *
-   * @param suppressed_invs     this set is updated with any invariants
-   *                            that are suppressed,
-   * @param antecedents         array of antecedents per suppressor
-   * @param vis                 current variables for the suppressed invariant
-   *                            As antecedents are chosen, their variables
-   *                            are placed into vis
-   * @param idx                 current index into suppressors and antecedents
-   *
+   * @param suppressed_invs this set is updated with any invariants that are suppressed,
+   * @param antecedents array of antecedents per suppressor
+   * @param vis current variables for the suppressed invariant As antecedents are chosen, their
+   *     variables are placed into vis
+   * @param idx current index into suppressors and antecedents
    * @see #find_unsuppressed_invs (Set, List, VarInfo[], int, boolean)
    * @see #consider_inv (Invariant, NISuppressor, VarInfo[])
    */
@@ -299,26 +284,19 @@ public class NISuppression {
   }
 
   /**
-   * Recursively finds unsuppressed invariants.  The cross product
-   * of antecedents for each suppressor is examined and each
-   * valid combination with at least one falsified antecedent
-   * will yield an entry in unsuppressed_invs.
+   * Recursively finds unsuppressed invariants. The cross product of antecedents for each suppressor
+   * is examined and each valid combination with at least one falsified antecedent will yield an
+   * entry in unsuppressed_invs.
    *
-   * @param unsuppressed_invs   this set is updated with any invariants
-   *                            that were suppressed, but one of the
-   *                            suppressors is falsified (thus, the invariant
-   *                            is no longer suppressed)
-   * @param antecedents         array of antecedents per suppressor
-   * @param vis                 current variables for the suppressed invariant
-   *                            As antecedents are chosen, their variables
-   *                            are placed into vis
-   * @param idx                 current index into suppressors and antecedents
-   * @param false_antecedents   true if a false antecedent has been found
-   * @param cinvs               the invariants associated with the current
-   *                            set of antecedents.  Used only for debug
-   *                            printing.  May be side-effected by having
-   *                            cinvs[idx] set to null.
-   *
+   * @param unsuppressed_invs this set is updated with any invariants that were suppressed, but one
+   *     of the suppressors is falsified (thus, the invariant is no longer suppressed)
+   * @param antecedents array of antecedents per suppressor
+   * @param vis current variables for the suppressed invariant As antecedents are chosen, their
+   *     variables are placed into vis
+   * @param idx current index into suppressors and antecedents
+   * @param false_antecedents true if a false antecedent has been found
+   * @param cinvs the invariants associated with the current set of antecedents. Used only for debug
+   *     printing. May be side-effected by having cinvs[idx] set to null.
    * @see find_unsuppressed_invs (Set, List, VarInfo[], int)
    * @see #consider_inv (Invariant, NISuppressor, VarInfo[])
    */
@@ -399,29 +377,24 @@ public class NISuppression {
   }
 
   /**
-   * Determine if the specified invariant can be used as part of this
-   * suppression.  The invariant must match suppressor and its variables
-   * must match up with any antecedents that have been previously processed.
-   * As invariants are processed by this method, their variables are added
-   * to the slots in vis that correspond to their suppressor.
+   * Determine if the specified invariant can be used as part of this suppression. The invariant
+   * must match suppressor and its variables must match up with any antecedents that have been
+   * previously processed. As invariants are processed by this method, their variables are added to
+   * the slots in vis that correspond to their suppressor.
    *
-   * For example, consider the invariant 'result = arg1 * arg2',
-   * the suppression '(result=arg1) ^ (arg2=1)' and the invariants
-   * 'x = y' and 'q = 1'.  If the varinfo_index of 'q' is less than
-   * 'x' then it can't be used (because it would form an invalid
-   * permutation.  Note that this set of antecedents will match
-   * a different suppression for multiply that has a different
-   * argument permutation.  More complex suppressions may refer
-   * to the same variable more than once.  In those cases, the
-   * antecedent invariants must also be over the same variables.
+   * <p>For example, consider the invariant 'result = arg1 * arg2', the suppression '(result=arg1) ^
+   * (arg2=1)' and the invariants 'x = y' and 'q = 1'. If the varinfo_index of 'q' is less than 'x'
+   * then it can't be used (because it would form an invalid permutation. Note that this set of
+   * antecedents will match a different suppression for multiply that has a different argument
+   * permutation. More complex suppressions may refer to the same variable more than once. In those
+   * cases, the antecedent invariants must also be over the same variables.
    *
-   * @param inv         the invariant to attempt to add to the suppression
-   * @param supor       the suppressor we are trying to match
-   * @param vis         the current variables (if any) that have already
-   *                    been determined by previous antecedents
-   *
-   * @return a new VarInfo[] containing the variables of inv, or null if inv
-   * does not match in some way
+   * @param inv the invariant to attempt to add to the suppression
+   * @param supor the suppressor we are trying to match
+   * @param vis the current variables (if any) that have already been determined by previous
+   *     antecedents
+   * @return a new VarInfo[] containing the variables of inv, or null if inv does not match in some
+   *     way
    */
   private VarInfo /*@Nullable*/ [] consider_inv(Invariant inv, NISuppressor supor, VarInfo[] vis) {
 
@@ -463,10 +436,9 @@ public class NISuppression {
   }
 
   /**
-   * Builds an array of lists of antecedents that corresponds to each
-   * suppressor in this suppression.  Returns null if the list is
-   * empty for any suppressor (because that means there can't be
-   * any suppressions based on these antecedents).
+   * Builds an array of lists of antecedents that corresponds to each suppressor in this
+   * suppression. Returns null if the list is empty for any suppressor (because that means there
+   * can't be any suppressions based on these antecedents).
    */
   List<Invariant> /*@Nullable*/ [] antecedents_for_suppressors(NIS.Antecedents ants) {
 
@@ -497,9 +469,8 @@ public class NISuppression {
   }
 
   /**
-   * Determines whether the order of the variables in vis a valid
-   * permutations (i.e., their varinfo_index's are ordered).  Null
-   * elements are ignored (and an all-null list is OK).
+   * Determines whether the order of the variables in vis a valid permutations (i.e., their
+   * varinfo_index's are ordered). Null elements are ignored (and an all-null list is OK).
    */
   private boolean vis_order_ok(VarInfo[] vis) {
 
@@ -516,10 +487,10 @@ public class NISuppression {
   }
 
   /**
-   * Determines if the non-null entries in vis are comparable.  Returns
-   * true if they are, false if they are not.
+   * Determines if the non-null entries in vis are comparable. Returns true if they are, false if
+   * they are not.
    *
-   * JHP: This should really be part of is_slice_ok.
+   * <p>JHP: This should really be part of is_slice_ok.
    */
   public static boolean vis_compatible(VarInfo[] vis) {
 
@@ -598,26 +569,20 @@ public class NISuppression {
     return new_suppressions;
   }
 
-  /**
-   * Clears the suppressor state in each suppressor.
-   */
+  /** Clears the suppressor state in each suppressor. */
   public void clear_state() {
     for (int i = 0; i < suppressors.length; i++) {
       suppressors[i].clear_state();
     }
   }
 
-  /**
-   * Returns {@code "suppressor && suppressor ... ==> suppressee"}.
-   */
+  /** Returns {@code "suppressor && suppressor ... ==> suppressee"}. */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied NISuppression this*/) {
     return (UtilMDE.join(suppressors, " && ") + " ==> " + suppressee);
   }
 
-  /**
-   * Returns a string describing each of the antecedents for each suppressor.
-   */
+  /** Returns a string describing each of the antecedents for each suppressor. */
   public String antecedents_for_suppression(List<Invariant> antecedents[]) {
 
     String sep = Global.lineSep;

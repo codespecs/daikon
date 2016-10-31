@@ -8,8 +8,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * NonsensicalList is similar to NonsensicalObject but it is used for
- * arrays whose value is nonsensical.
+ * NonsensicalList is similar to NonsensicalObject but it is used for arrays whose value is
+ * nonsensical.
  */
 // It's problematic to make this generic:  what would "get" return?
 public class NonsensicalList extends AbstractList<Object> implements List<Object> {

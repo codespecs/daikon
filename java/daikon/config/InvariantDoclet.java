@@ -13,17 +13,15 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * InvariantDoclet is a JavaDoc doclet that collects information about
- * the invariants defined within Daikon.  Class documentation is collected
- * about each class that is derived (either directly or indirectly) from
- * daikon.inv.Invariant.
- * To specify the output format, use one of the following:
+ * InvariantDoclet is a JavaDoc doclet that collects information about the invariants defined within
+ * Daikon. Class documentation is collected about each class that is derived (either directly or
+ * indirectly) from daikon.inv.Invariant. To specify the output format, use one of the following:
+ *
  * <dl>
  *   <dt>{@code --texinfo FILENAME}
  *   <dd>Texinfo format, for inclusion in the manual.
  *   <dt>{@code --text FILENAME}
- *   <dd>Text format, with each name preceded by "+"
- *                        characters to indicate depth in the tree.
+ *   <dd>Text format, with each name preceded by "+" characters to indicate depth in the tree.
  * </dl>
  */
 public class InvariantDoclet {
@@ -31,9 +29,8 @@ public class InvariantDoclet {
   private static final String lineSep = System.getProperty("line.separator");
 
   /**
-   * Invariants that match any of the specified regular expressions
-   * are purposefully missing enable variables.  Any others will
-   * throw an exception.
+   * Invariants that match any of the specified regular expressions are purposefully missing enable
+   * variables. Any others will throw an exception.
    */
   private static /*@Regex*/ String[] invs_without_enables =
       new /*@Regex*/ String[] {
@@ -47,9 +44,7 @@ public class InvariantDoclet {
         "Implication",
       };
 
-  /**
-   * Entry point for this doclet (invoked by javadoc).
-   */
+  /** Entry point for this doclet (invoked by javadoc). */
   public static boolean start(RootDoc doc) throws IOException {
     InvariantDoclet pd = new InvariantDoclet(doc);
     pd.process();
@@ -59,6 +54,7 @@ public class InvariantDoclet {
 
   /**
    * Invoked by javadoc to query whether an option is allowed.
+   *
    * @return number of tokens used by one option
    */
   public static int optionLength(String opt) {
@@ -81,9 +77,7 @@ public class InvariantDoclet {
     cmap = new TreeMap<ClassDoc, Set</*@KeyFor("cmap")*/ ClassDoc>>();
   }
 
-  /**
-   * Process a javadoc tree and create the specified invariant output.
-   */
+  /** Process a javadoc tree and create the specified invariant output. */
   public void process() throws IOException {
 
     @SuppressWarnings("keyfor") // the loop below makes all these keys to cmap
@@ -152,9 +146,9 @@ public class InvariantDoclet {
   /**
    * Prints a class and all of its derived classes as a simple indented tree.
    *
-   * @param out     stream to which to print
-   * @param cd      starting class
-   * @param indent  starting indent for the derived class (normally 0)
+   * @param out stream to which to print
+   * @param cd starting class
+   * @param indent starting indent for the derived class (normally 0)
    */
   public void process_class_tree_txt(
       PrintStream out, /*@KeyFor("this.cmap")*/ ClassDoc cd, int indent) {
@@ -184,12 +178,11 @@ public class InvariantDoclet {
   }
 
   /**
-   * Prints a class and all of its derived classes with their documentation
-   * in a simple sorted (by name) list in Texinfo format.  Suitable for
-   * inclusion in the manual.
+   * Prints a class and all of its derived classes with their documentation in a simple sorted (by
+   * name) list in Texinfo format. Suitable for inclusion in the manual.
    *
-   * @param out     stream to which write output
-   * @param cd      class to process
+   * @param out stream to which write output
+   * @param cd class to process
    */
   public void process_class_sorted_texinfo(PrintStream out, /*@KeyFor("this.cmap")*/ ClassDoc cd) {
 
@@ -302,11 +295,11 @@ public class InvariantDoclet {
   }
 
   /**
-   * Gathers up all of the classes under cd and adds them to the
-   * specified TreeSet.  They are sorted by their name.
+   * Gathers up all of the classes under cd and adds them to the specified TreeSet. They are sorted
+   * by their name.
    *
-   * @param cd      the base class from which to start the search
-   * @param set    the set to add classes to.  Should start out empty.
+   * @param cd the base class from which to start the search
+   * @param set the set to add classes to. Should start out empty.
    */
   public void gather_derived_classes(/*@KeyFor("this.cmap")*/ ClassDoc cd, TreeSet<ClassDoc> set) {
     assert cmap.containsKey(cd);
@@ -320,13 +313,10 @@ public class InvariantDoclet {
   }
 
   /**
-   * Looks for a field named dkconfig_enabled in the class and find
-   * out what it is initialized to.
+   * Looks for a field named dkconfig_enabled in the class and find out what it is initialized to.
    *
-   * @param cd      class in which to look for dkconfig_enabled
-   *
-   * @return 1 for true, 0 for false, -1 if there was an error or
-   * there was no such field
+   * @param cd class in which to look for dkconfig_enabled
+   * @return 1 for true, 0 for false, -1 if there was an error or there was no such field
    */
   public int find_enabled(ClassDoc cd) {
 
@@ -368,15 +358,12 @@ public class InvariantDoclet {
   }
 
   /**
-   * Look for fields in the specified class that begin with the
-   * specified prefix.
+   * Look for fields in the specified class that begin with the specified prefix.
    *
-   * @param cd          the class to search
-   * @param prefix      string that must be at the beginning of the field name
-   *
-   * @return vector of FieldDoc entries for each field that matches.
-   * If no fields are found, a zero length vector is returned (not
-   * null).
+   * @param cd the class to search
+   * @param prefix string that must be at the beginning of the field name
+   * @return vector of FieldDoc entries for each field that matches. If no fields are found, a zero
+   *     length vector is returned (not null).
    */
   public Vector<FieldDoc> find_fields(ClassDoc cd, String prefix) {
 

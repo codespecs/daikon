@@ -7,17 +7,15 @@ import daikon.inv.*;
 import java.util.logging.Level;
 
 /**
- * Suppress invariants that refer to the prestate value of a field marked with
- * {@link daikon.VarInfo.VarFlags#IS_READONLY}.
+ * Suppress invariants that refer to the prestate value of a field marked with {@link
+ * daikon.VarInfo.VarFlags#IS_READONLY}.
  */
 public class ReadonlyPrestateFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress invariants indicate that a readonly variable was unmodified";
   }
 
-  /**
-   * Boolean. If true, ReadonlyPrestateFilter is initially turned on.
-   */
+  /** Boolean. If true, ReadonlyPrestateFilter is initially turned on. */
   public static boolean dkconfig_enabled = true;
 
   public ReadonlyPrestateFilter() {

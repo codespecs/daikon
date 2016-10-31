@@ -10,25 +10,22 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * A VarComparabilityImplicit is an arbitrary integer, and comparisons
- * succeed exactly if the two integers are equal, except that negative
- * integers compare equal to everything.  Alternately, for an array
- * variable, a VarComparabilityImplicit may separately indicate
- * comparabilities for the elements and indices.
+ * A VarComparabilityImplicit is an arbitrary integer, and comparisons succeed exactly if the two
+ * integers are equal, except that negative integers compare equal to everything. Alternately, for
+ * an array variable, a VarComparabilityImplicit may separately indicate comparabilities for the
+ * elements and indices.
+ *
  * <pre>
  * VarComparabilityImplicit ::= int
  *                            | VarComparabilityImplicit "[" int "]"
  * </pre>
- * <p>
  *
- * This is called "implicit" because the comparability objects do not refer
- * to one another or refer directly to variables; whether two variables are
- * comparable depends on their comparability objects.  Implicit
- * comparability has the flavor of types in programming languages.<p>
+ * <p>This is called "implicit" because the comparability objects do not refer to one another or
+ * refer directly to variables; whether two variables are comparable depends on their comparability
+ * objects. Implicit comparability has the flavor of types in programming languages.
  *
- * Soon, this will probably be modified to permit the group identifiers to
- * be arbitrary strings (not containing square brackets) instead of
- * arbitrary integers.
+ * <p>Soon, this will probably be modified to permit the group identifiers to be arbitrary strings
+ * (not containing square brackets) instead of arbitrary integers.
  */
 public final class VarComparabilityImplicit extends VarComparability implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
@@ -36,18 +33,12 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  /**
-   * The number that indicates which comparable set the VarInfo
-   * belongs to.
-   */
+  /** The number that indicates which comparable set the VarInfo belongs to. */
   int base;
   /** indexTypes[0] is comparability of the first index of this array. */
   // null only for the "unknown" type??
   VarComparabilityImplicit /*@Nullable*/ [] indexTypes;
-  /**
-   * Indicates how many of the indices are in use; there may be more
-   * indices than this.
-   */
+  /** Indicates how many of the indices are in use; there may be more indices than this. */
   int dimensions;
 
   private /*@MonotonicNonNull*/ VarComparabilityImplicit cached_element_type;
@@ -142,9 +133,9 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   /**
-   * Determines the comparability of the length of this string.  Currently
-   * always returns unknown, but it would be best if string lengths were
-   * only comparable with other string lengths (or perhaps nothing).
+   * Determines the comparability of the length of this string. Currently always returns unknown,
+   * but it would be best if string lengths were only comparable with other string lengths (or
+   * perhaps nothing).
    */
   public VarComparability string_length_type() {
     return unknown;
@@ -185,9 +176,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   /**
-   * Same as comparable, except that variables that are comparable to
-   * everything (negative comparability value) can't be included in the
-   * same equality set as those with positive values.
+   * Same as comparable, except that variables that are comparable to everything (negative
+   * comparability value) can't be included in the same equality set as those with positive values.
    */
   public boolean equality_set_ok(
       /*>>>@GuardSatisfied VarComparabilityImplicit this,*/

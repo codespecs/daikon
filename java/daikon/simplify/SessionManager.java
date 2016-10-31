@@ -9,10 +9,7 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/**
- * A SessionManager is a component which handles the threading
- * interaction with the Session.
- */
+/** A SessionManager is a component which handles the threading interaction with the Session. */
 public class SessionManager {
   /** The command to be performed (point of communication with worker thread). */
   private /*@Nullable*/ Cmd pending;
@@ -23,9 +20,7 @@ public class SessionManager {
   // The error message returned by the worked thread, or null
   private /*@Nullable*/ String error = null;
 
-  /**
-   * Debug tracer common to all Simplify classes.
-   */
+  /** Debug tracer common to all Simplify classes. */
   public static final Logger debug = Logger.getLogger("daikon.simplify");
 
   // Deprecated method for setting the debug flag.
@@ -57,10 +52,7 @@ public class SessionManager {
     debugln("SessionManager created");
   }
 
-  /**
-   * Performs the given command, or times out if too much time
-   * elapses.
-   */
+  /** Performs the given command, or times out if too much time elapses. */
   public void request(Cmd command) throws TimeoutException {
     assert worker != null : "Cannot use closed SessionManager";
     assert pending == null : "Cannot queue requests";
@@ -94,9 +86,7 @@ public class SessionManager {
     }
   }
 
-  /**
-   * Shutdown this session.  No further commands may be executed.
-   */
+  /** Shutdown this session. No further commands may be executed. */
   @SuppressWarnings("nullness") // nulling worker for fast failure (& for GC)
   public void session_done() {
     worker.session_done();
@@ -171,10 +161,7 @@ public class SessionManager {
     return prover;
   }
 
-  /**
-   * Helper thread which interacts with a Session, according to the
-   * enclosing manager.
-   */
+  /** Helper thread which interacts with a Session, according to the enclosing manager. */
   private class Worker extends Thread {
     private final SessionManager mgr = SessionManager.this; // just sugar
 

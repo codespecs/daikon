@@ -13,8 +13,7 @@ import org.checkerframework.javacutil.InternalUtils;
 import org.checkerframework.javacutil.TypesUtils;
 
 /**
- * Adds a type qualifier from the VIndex type system to the type of tree,
- * in the following cases:
+ * Adds a type qualifier from the VIndex type system to the type of tree, in the following cases:
  * [TODO]
  */
 public class VIndexAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
@@ -39,8 +38,8 @@ public class VIndexAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     }
 
     /**
-     * Case 2: concatenation of VIndex or PolyVIndex String/char literals.
-     * Also handles concatenation of partial regular expressions.
+     * Case 2: concatenation of VIndex or PolyVIndex String/char literals. Also handles
+     * concatenation of partial regular expressions.
      */
     @Override
     public Void visitBinary(BinaryTree tree, AnnotatedTypeMirror type) {

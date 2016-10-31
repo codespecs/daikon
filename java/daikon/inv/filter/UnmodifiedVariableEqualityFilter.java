@@ -6,17 +6,15 @@ import daikon.inv.*;
 import java.util.logging.Level;
 
 /**
- * Suppress invariants that merely indicate that a variable was
- * unmodified.  Used only for ESC output.
+ * Suppress invariants that merely indicate that a variable was unmodified. Used only for ESC
+ * output.
  */
 public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress invariants that merely indicate that a variable was unmodified";
   }
 
-  /**
-   * Boolean. If true, UnmodifiedVariableEqualityFilter is initially turned on.
-   */
+  /** Boolean. If true, UnmodifiedVariableEqualityFilter is initially turned on. */
   public static boolean dkconfig_enabled = true;
 
   public UnmodifiedVariableEqualityFilter() {

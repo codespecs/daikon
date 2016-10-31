@@ -15,19 +15,16 @@ import typequals.*;
 */
 
 /**
- * IsPointer is an invariant that heuristically determines whether
- * an integer represents a pointer (a 32-bit memory address).
- * Since both a 32-bit integer and an address have the same representation,
- * sometimes a a pointer can be mistaken for an integer. When this happens,
- * several scalar invariants are computed for integer variables. Most of them
- * would not make any sense for pointers. Determining whether a 32-bit variable
- * is a pointer can thus spare the computation of many irrelevant invariants.
- * <p>
+ * IsPointer is an invariant that heuristically determines whether an integer represents a pointer
+ * (a 32-bit memory address). Since both a 32-bit integer and an address have the same
+ * representation, sometimes a a pointer can be mistaken for an integer. When this happens, several
+ * scalar invariants are computed for integer variables. Most of them would not make any sense for
+ * pointers. Determining whether a 32-bit variable is a pointer can thus spare the computation of
+ * many irrelevant invariants.
  *
- * The basic approach is to discard the invariant if any values that are
- * not valid pointers are encountered.  By default values between -100,000
- * and 100,000 (except 0) are considered to be invalid pointers.  This
- * approach has been experimentally confirmed on Windows x86 executables.
+ * <p>The basic approach is to discard the invariant if any values that are not valid pointers are
+ * encountered. By default values between -100,000 and 100,000 (except 0) are considered to be
+ * invalid pointers. This approach has been experimentally confirmed on Windows x86 executables.
  */
 public class IsPointer extends SingleScalar {
 

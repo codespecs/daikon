@@ -2,7 +2,6 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -13,9 +12,7 @@ import java.util.zip.ZipFile;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Date: 29/12/2006
- */
+/** Date: 29/12/2006 */
 public final class SplitDtrace {
   public static void main(String[] args) throws IOException {
     if (args.length != 1) {

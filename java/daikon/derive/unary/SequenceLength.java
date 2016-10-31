@@ -19,9 +19,7 @@ public final class SequenceLength extends UnaryDerivation {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff SequenceLength derived variables should be generated.
-   */
+  /** Boolean. True iff SequenceLength derived variables should be generated. */
   public static boolean dkconfig_enabled = true;
 
   public final int shift;

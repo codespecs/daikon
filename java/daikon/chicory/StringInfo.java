@@ -3,8 +3,8 @@ package daikon.chicory;
 import java.util.*;
 
 /**
- * The StringInfo class is a subtype of DaikonVariableInfo used for
- * variable types that can be converted into strings (.toString()).
+ * The StringInfo class is a subtype of DaikonVariableInfo used for variable types that can be
+ * converted into strings (.toString()).
  */
 public class StringInfo extends DaikonVariableInfo {
   public StringInfo(
@@ -22,10 +22,7 @@ public class StringInfo extends DaikonVariableInfo {
     return value;
   }
 
-  /**
-   * Returns a String that contains a string representation of val, used for
-   * dtrace information.
-   */
+  /** Returns a String that contains a string representation of val, used for dtrace information. */
   @SuppressWarnings("unchecked")
   public String getDTraceValueString(Object val) {
     if (isArray) {
@@ -38,9 +35,8 @@ public class StringInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Returns a space-separated String of the elements in theValues.
-   * If theValues is null, returns "null." If theValues is
-   * nonsensical, returns "nonsensical".
+   * Returns a space-separated String of the elements in theValues. If theValues is null, returns
+   * "null." If theValues is nonsensical, returns "nonsensical".
    *
    * @param theValues a list of values, each is a String or NonsensicalObject or NonsensicalList
    * @return a space-separated String of the elements in theValues
@@ -90,9 +86,7 @@ public class StringInfo extends DaikonVariableInfo {
     return buf.toString();
   }
 
-  /**
-   * Similar to showStringList, but used for non-array objects.
-   */
+  /** Similar to showStringList, but used for non-array objects. */
   public String getValueStringNonArr(Object val) {
     String retString;
 

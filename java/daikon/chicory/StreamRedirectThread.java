@@ -37,10 +37,10 @@ package daikon.chicory;
 import java.io.*;
 
 /**
- * StreamRedirectThread is a thread that copies its input to
- * its output and terminates when it completes.
+ * StreamRedirectThread is a thread that copies its input to its output and terminates when it
+ * completes.
  *
- * @version     (#) StreamRedirectThread.java 1.4 03/01/23 16:33:15
+ * @version (#) StreamRedirectThread.java 1.4 03/01/23 16:33:15
  * @author Robert Field
  */
 public class StreamRedirectThread extends Thread {
@@ -66,10 +66,11 @@ public class StreamRedirectThread extends Thread {
 
   /**
    * Set up for copy.
-   * @param name  name of the thread
-   * @param in    stream to copy from
-   * @param out   stream to copy to
-   * @param line_by_line   whether to copy one line at a time
+   *
+   * @param name name of the thread
+   * @param in stream to copy from
+   * @param out stream to copy to
+   * @param line_by_line whether to copy one line at a time
    * @param debug whether to enable debugging
    */
   public StreamRedirectThread(
@@ -101,9 +102,7 @@ public class StreamRedirectThread extends Thread {
     setPriority(Thread.MAX_PRIORITY - 1);
   }
 
-  /**
-   * Copy.
-   */
+  /** Copy. */
   public void run() {
     try {
       if (line_by_line) {

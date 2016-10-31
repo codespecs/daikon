@@ -12,42 +12,36 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Reads declaration files and provides methods to access the information
- * within them.  A declaration file consists of a number of program points
- * and the variables for each program point.
+ * Reads declaration files and provides methods to access the information within them. A declaration
+ * file consists of a number of program points and the variables for each program point.
  */
 public class DeclReader {
 
-  /**
-   * Prints only the average set size for each specified file.
-   */
+  /** Prints only the average set size for each specified file. */
   @Option("Print average set size (only) for each specified file")
   public static boolean avg_size = false;
 
   /**
-   * Reads in a decl file with arbitrary comparability and writes
-   * out a file with comparability based on the primitive declaration
-   * types.  All hashcodes are left in a single set.  Each named primitive
-   * type has a distinct set.
+   * Reads in a decl file with arbitrary comparability and writes out a file with comparability
+   * based on the primitive declaration types. All hashcodes are left in a single set. Each named
+   * primitive type has a distinct set.
    */
   @Option("Output a decl file with primitive declaration comparability")
   public static boolean primitive_declaration_type_comparability = false;
 
   /**
-   * Reads in a decl file with arbitrary comparability and writes
-   * out a file with comparability based on declaration
-   * types.  Each variable with a different typename will be in a different
-   * set.  For example, java.util.List, java.util.ArrayList, float, short,
-   * double, and int are each in a distinct set.
+   * Reads in a decl file with arbitrary comparability and writes out a file with comparability
+   * based on declaration types. Each variable with a different typename will be in a different set.
+   * For example, java.util.List, java.util.ArrayList, float, short, double, and int are each in a
+   * distinct set.
    */
   @Option("Output a decl file with declaration comparability")
   public static boolean declaration_type_comparability = false;
 
   /**
-   * Reads in a decl file with arbitrary comparability and writes
-   * out a file with comparability based on the rep types (ie, there
-   * are comparability sets for int, boolean, string, and hashcode)
-   * Two filenames are required:  input-filename output-filename.
+   * Reads in a decl file with arbitrary comparability and writes out a file with comparability
+   * based on the rep types (ie, there are comparability sets for int, boolean, string, and
+   * hashcode) Two filenames are required: input-filename output-filename.
    */
   @Option("Output a decl file with representation type comparability")
   public static boolean rep_type_comparability = false;
@@ -60,9 +54,7 @@ public class DeclReader {
 
   public HashMap<String, DeclPpt> ppts = new LinkedHashMap<String, DeclPpt>();
 
-  /**
-   * Information about variables within a program point.
-   */
+  /** Information about variables within a program point. */
   public static class DeclVarInfo {
     public String name;
     public String type;
@@ -89,16 +81,15 @@ public class DeclReader {
     }
 
     /**
-     * Returns the type name.  get_type() returns the entire entry including
-     * auxiliary information.
+     * Returns the type name. get_type() returns the entire entry including auxiliary information.
      */
     public String get_type_name() {
       return type.replaceFirst(" .*", "");
     }
 
     /**
-     * Returns the representation type of the variable as specified in
-     * the decl file.  The static value (if any) is discarded.
+     * Returns the representation type of the variable as specified in the decl file. The static
+     * value (if any) is discarded.
      */
     public String get_rep_type() {
       return rep_type.replaceFirst(" .*", "");
@@ -143,9 +134,8 @@ public class DeclReader {
     }
 
     /**
-     * Reads a single value for this variable and returns it.
-     * The result is null exactly if the value is nonsensical.
-     * The return value is interned.
+     * Reads a single value for this variable and returns it. The result is null exactly if the
+     * value is nonsensical. The return value is interned.
      */
     public /*@Nullable*/ /*@Interned*/ Object read_data(EntryReader reader) throws IOException {
       String var_name = reader.readLine();
@@ -189,18 +179,16 @@ public class DeclReader {
   }
 
   /**
-   * Information about the program point that is contained in the decl
-   * file.  This consists of the ppt name and a list of the declared
-   * variables.
+   * Information about the program point that is contained in the decl file. This consists of the
+   * ppt name and a list of the declared variables.
    */
   public static class DeclPpt {
     public String name;
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<String, DeclVarInfo>();
 
     /**
-     * List of values for the program point.  There is one entry in
-     * the list for each time the program point is executed.  That
-     * entry is a list of the values for each variable in the same
+     * List of values for the program point. There is one entry in the list for each time the
+     * program point is executed. That entry is a list of the values for each variable in the same
      * order as the variables were defined.
      */
     List<List</*@Interned*/ Object>> data_values = new ArrayList<List</*@Interned*/ Object>>();
@@ -210,8 +198,8 @@ public class DeclReader {
     }
 
     /**
-     * Read a single variable declaration from decl_file.  The file
-     * must be positioned immediately before the variable name.
+     * Read a single variable declaration from decl_file. The file must be positioned immediately
+     * before the variable name.
      */
     public DeclVarInfo read_var(EntryReader decl_file) throws java.io.IOException {
 
@@ -233,8 +221,8 @@ public class DeclReader {
     }
 
     /**
-     * Adds a record of data for this ppt.  The data must have one element
-     * for each variable in the ppt and be ordered in the same way.
+     * Adds a record of data for this ppt. The data must have one element for each variable in the
+     * ppt and be ordered in the same way.
      */
     public void add_var_data(List</*@Interned*/ Object> var_data_list) {
       assert var_data_list.size() == vars.size();
@@ -245,9 +233,7 @@ public class DeclReader {
       return data_values;
     }
 
-    /**
-     * Returns the DeclVarInfo named var_name or null if it doesn't exist.
-     */
+    /** Returns the DeclVarInfo named var_name or null if it doesn't exist. */
     public /*@Nullable*/ DeclVarInfo find_var(String var_name) {
       return vars.get(var_name);
     }
@@ -275,9 +261,7 @@ public class DeclReader {
 
   public DeclReader() {}
 
-  /**
-   * Read declarations from the specified pathname.
-   */
+  /** Read declarations from the specified pathname. */
   public void read(File pathname) {
     try {
 
@@ -295,8 +279,8 @@ public class DeclReader {
   }
 
   /**
-   * Reads a single declaration from decl_file.  The opening "DECLARE"
-   * line should have already been read.  Returns the ppt.
+   * Reads a single declaration from decl_file. The opening "DECLARE" line should have already been
+   * read. Returns the ppt.
    */
   protected DeclPpt read_decl(EntryReader decl_file) throws IOException {
 
@@ -341,9 +325,7 @@ public class DeclReader {
     return result;
   }
 
-  /**
-   * Reads a decl file and dumps statistics.
-   */
+  /** Reads a decl file and dumps statistics. */
   public static void main(String[] args) throws IOException {
 
     Options options = new Options("DeclReader [options] decl-files...", DeclReader.class);
@@ -449,25 +431,20 @@ public class DeclReader {
             ppt_total_set_size += vi_list.size();
             System.out.printf(
                 "  %-5s : [%d] %s%n",
-                vi_list.get(0).get_basic_comparability(),
-                vi_list.size(),
-                vi_list);
+                vi_list.get(0).get_basic_comparability(), vi_list.size(), vi_list);
           }
         }
         if (print_each_set && (ppt_num_sets > 0)) {
           System.out.printf(
               "  %d sets of average size %f%n",
-              ppt_num_sets,
-              ((double) ppt_total_set_size) / ppt_num_sets);
+              ppt_num_sets, ((double) ppt_total_set_size) / ppt_num_sets);
         }
       }
 
       if (avg_size) {
         System.out.printf(
             "%-35s %,6d sets of average size %f found%n",
-            filename,
-            num_sets,
-            ((double) total_set_size) / num_sets);
+            filename, num_sets, ((double) total_set_size) / num_sets);
       }
       for (String rep_type : rep_map.keySet()) {
         Map<String, Integer> dec_map = rep_map.get(rep_type);
@@ -483,11 +460,9 @@ public class DeclReader {
   }
 
   /**
-   * Sets the comparability to match declaration types.
-   * The comparability for each variable is set so that each
-   * declaration type is in a separate set.  Each hashcode with a
-   * different type name will be in a different set.  Primitives
-   * with different type names will be in different sets.
+   * Sets the comparability to match declaration types. The comparability for each variable is set
+   * so that each declaration type is in a separate set. Each hashcode with a different type name
+   * will be in a different set. Primitives with different type names will be in different sets.
    */
   public void declaration_types() {
 
@@ -517,9 +492,8 @@ public class DeclReader {
     }
   }
   /**
-   * Sets the comparability to match primitive declaration types.
-   * The comparability for each non-hashcode is set so that each
-   * declaration type is in a separate set.  Hashcodes are all set
+   * Sets the comparability to match primitive declaration types. The comparability for each
+   * non-hashcode is set so that each declaration type is in a separate set. Hashcodes are all set
    * to a single comparability regardless of their declared type.
    */
   public void primitive_declaration_types() {
@@ -555,9 +529,7 @@ public class DeclReader {
     }
   }
 
-  /**
-   * Sets the comparability to match the rep types.
-   */
+  /** Sets the comparability to match the rep types. */
   public void rep_types() {
 
     Map<String, Integer> type_comp = new LinkedHashMap<String, Integer>();
@@ -584,10 +556,7 @@ public class DeclReader {
     }
   }
 
-  /**
-   * Writes the declaration to the specified file.  If the filename
-   * is "-", writes to stdout.
-   */
+  /** Writes the declaration to the specified file. If the filename is "-", writes to stdout. */
   public void write_decl(String filename, String comparability) throws IOException {
 
     // Get the output stream
@@ -610,10 +579,7 @@ public class DeclReader {
       for (DeclVarInfo vi : ppt.vars.values()) {
         decl_file.printf(
             "%s%n%s%n%s%n%s%n",
-            vi.get_name(),
-            vi.get_type(),
-            vi.get_rep_type(),
-            vi.get_comparability());
+            vi.get_name(), vi.get_type(), vi.get_rep_type(), vi.get_comparability());
       }
     }
 

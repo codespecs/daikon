@@ -21,8 +21,7 @@ public abstract class SplitterList {
   // "@ref{}" produces a cross-reference in the printed manual.  It must
   // *not* come at the beginning of a line, or Javadoc will get confused.
   /**
-   * Boolean.  Enables indiscriminate splitting
-   * (see Daikon manual, @ref{Indiscriminate splitting},
+   * Boolean. Enables indiscriminate splitting (see Daikon manual, @ref{Indiscriminate splitting},
    * for an explanation of this technique).
    */
   public static boolean dkconfig_all_splitters = true;
@@ -30,9 +29,7 @@ public abstract class SplitterList {
   private static final HashMap<String, Splitter[]> ppt_splitters =
       new LinkedHashMap<String, Splitter[]>();
 
-  /**
-   * Associate an array of splitters with the program point pptname.
-   */
+  /** Associate an array of splitters with the program point pptname. */
   public static void put(String pptname, Splitter[] splits) {
     // for (int i=0; i<splits.length; i++) {
     //   assert splits[i].instantiated() == false;
@@ -160,8 +157,9 @@ public abstract class SplitterList {
   //////////////////////
 
   /**
-   * Return the splitters associated with this program point name (or null).
-   * The resulting splitters are factories, not instantiated splitters.
+   * Return the splitters associated with this program point name (or null). The resulting splitters
+   * are factories, not instantiated splitters.
+   *
    * @return an array of splitters
    */
   public static Splitter /*@Nullable*/ [] get(String pptName) {
@@ -199,8 +197,9 @@ public abstract class SplitterList {
   }
 
   /**
-   * Return all the splitters in this program,
-   * The resulting splitters are factories, not instantiated splitters.
+   * Return all the splitters in this program, The resulting splitters are factories, not
+   * instantiated splitters.
+   *
    * @return an array of splitters
    */
   public static Splitter[] get_all() {

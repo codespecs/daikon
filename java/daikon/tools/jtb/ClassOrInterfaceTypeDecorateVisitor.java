@@ -11,10 +11,7 @@ import plume.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/**
- * Replaces uses of generic type parameters with versions that do not
- * use generics.
- */
+/** Replaces uses of generic type parameters with versions that do not use generics. */
 public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
   // A map from token images to "ungenerified" versions of the classes

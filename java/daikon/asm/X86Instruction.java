@@ -8,9 +8,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Represents an x86 instruction.
- */
+/** Represents an x86 instruction. */
 public class X86Instruction implements IInstruction {
 
   private String dllName;
@@ -132,9 +130,7 @@ public class X86Instruction implements IInstruction {
     return b.toString();
   }
 
-  /**
-   * dllname:address opname arg ... arg &rarr; resultvar
-   */
+  /** dllname:address opname arg ... arg &rarr; resultvar */
   public static X86Instruction parseInstruction(String s) {
     if (s == null) throw new IllegalArgumentException("String cannot be null.");
     String[] tokens = s.trim().split("\\s+");

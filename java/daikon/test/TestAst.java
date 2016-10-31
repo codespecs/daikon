@@ -12,7 +12,7 @@ import junit.framework.*;
 /**
  * Tests functionality of some methods in daikon.tools.jtb.Ast.
  *
- * TODO implement and test handling of "..." construct.
+ * <p>TODO implement and test handling of "..." construct.
  */
 public final class TestAst extends TestCase {
 

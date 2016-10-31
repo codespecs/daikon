@@ -48,9 +48,7 @@ public abstract class UnaryDerivation extends Derivation {
     return computeValueAndModifiedImpl(vt);
   }
 
-  /**
-   * Actual implementation once mods are handled.
-   */
+  /** Actual implementation once mods are handled. */
   protected abstract ValueAndModified computeValueAndModifiedImpl(ValueTuple vt);
 
   public VarInfo base() {

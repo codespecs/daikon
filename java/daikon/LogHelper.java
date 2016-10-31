@@ -5,11 +5,9 @@ import java.util.Set;
 import java.util.logging.*;
 
 /**
- * Standard methods for setting up logging.
- * Allows creation of Console writers using one method.
- * Logger methods should only be called in a shell class
- * at setup, after which Logger calls should be used
- * for logging.
+ * Standard methods for setting up logging. Allows creation of Console writers using one method.
+ * Logger methods should only be called in a shell class at setup, after which Logger calls should
+ * be used for logging.
  */
 public final class LogHelper {
   private LogHelper() {
@@ -23,10 +21,9 @@ public final class LogHelper {
   public static final Level SEVERE = Level.SEVERE;
 
   /**
-   * Sets up global logs with a given priority and logging output
-   * pattern.  Creates one ConsoleHandler at root to receive default
-   * messages, setting priority to INFO.  Removes previous appenders
-   * at root.
+   * Sets up global logs with a given priority and logging output pattern. Creates one
+   * ConsoleHandler at root to receive default messages, setting priority to INFO. Removes previous
+   * appenders at root.
    */
   public static void setupLogs(Level l, Formatter formatter) {
     // Send debug and other info messages to System.err
@@ -124,16 +121,14 @@ public final class LogHelper {
     }
   }
 
-  /**
-   * Default method for setting up global logs.
-   */
+  /** Default method for setting up global logs. */
   public static void setupLogs() {
     setupLogs(INFO);
   }
 
   /**
-   * Sets up global logs with a given priority.
-   * Creates one ConsoleHandler.  Removes previous appenders at root.
+   * Sets up global logs with a given priority. Creates one ConsoleHandler. Removes previous
+   * appenders at root.
    */
   public static void setupLogs(Level l) {
     setupLogs(l, new DaikonLogFormatter());
@@ -142,8 +137,8 @@ public final class LogHelper {
   private static final Set<Logger> allLoggers = new HashSet<Logger>();
 
   /**
-   * Changes the logging priority of a sub category.  Also caches the
-   * logger to avoid garbage-collection and recreation with the old level.
+   * Changes the logging priority of a sub category. Also caches the logger to avoid
+   * garbage-collection and recreation with the old level.
    */
   public static void setLevel(Logger lg, Level l) {
     lg.setLevel(l);
@@ -151,8 +146,8 @@ public final class LogHelper {
   }
 
   /**
-   * Changes the logging priority of a sub category.  Also caches the
-   * logger to avoid garbage-collection and recreation with the old level.
+   * Changes the logging priority of a sub category. Also caches the logger to avoid
+   * garbage-collection and recreation with the old level.
    */
   public static void setLevel(String s, Level l) {
     setLevel(Logger.getLogger(s), l);

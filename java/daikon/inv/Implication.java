@@ -19,9 +19,8 @@ import typequals.*;
 // Joiner class
 
 /**
- * The Implication invariant class is used internally within Daikon to
- * handle invariants that are only true when certain other conditions are
- * also true (splitting).
+ * The Implication invariant class is used internally within Daikon to handle invariants that are
+ * only true when certain other conditions are also true (splitting).
  */
 public class Implication extends Joiner {
   // We are Serializable, so we specify a version to allow changes to
@@ -36,8 +35,10 @@ public class Implication extends Joiner {
   // and orig_right is used in isObvious*.
   /** The original predicate invariant from its original conditional ppt. */
   private Invariant orig_left;
-  /** The original consequent invariant from its original conditional ppt.
-   *  Or, right itself if right is a DummyInvariant from a splitter file.  */
+  /**
+   * The original consequent invariant from its original conditional ppt. Or, right itself if right
+   * is a DummyInvariant from a splitter file.
+   */
   private Invariant orig_right;
 
   public Invariant predicate() {
@@ -70,8 +71,8 @@ public class Implication extends Joiner {
   /**
    * Creates a new Implication Invariant and adds it to the PptTopLevel.
    *
-   * @return null if predicate and the consequent are the same, or if
-   * the PptTopLevel already contains this Implication
+   * @return null if predicate and the consequent are the same, or if the PptTopLevel already
+   *     contains this Implication
    */
   public static /*@Nullable*/ Implication makeImplication(
       PptTopLevel ppt,
@@ -175,18 +176,14 @@ public class Implication extends Joiner {
   }
 
   /**
-   * Return true if the right side of the implication and some
-   * equality combinations of its member variables are statically
-   * obvious.  For example, if a == b, and f(a) is obvious, then so is
-   * f(b).  We use the someInEquality (or least interesting) method
-   * during printing so we only print an invariant if all its
-   * variables are interesting, since a single, static, non
-   * interesting occurance means all the equality combinations aren't
-   * interesting.
+   * Return true if the right side of the implication and some equality combinations of its member
+   * variables are statically obvious. For example, if a == b, and f(a) is obvious, then so is f(b).
+   * We use the someInEquality (or least interesting) method during printing so we only print an
+   * invariant if all its variables are interesting, since a single, static, non interesting
+   * occurance means all the equality combinations aren't interesting.
    *
-   * This must be overridden for Implication because the right side is
-   * the invariant of interest.  The standard version passes the vis
-   * from the slice containing the implication itself (slice 0).
+   * <p>This must be overridden for Implication because the right side is the invariant of interest.
+   * The standard version passes the vis from the slice containing the implication itself (slice 0).
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
@@ -201,17 +198,14 @@ public class Implication extends Joiner {
   }
 
   /**
-   * Return true if the rightr side of the implication some equality
-   * combinations of its member variables are dynamically obvious.
-   * For example, a == b, and f(a) is obvious, so is f(b).  We use the
-   * someInEquality (or least interesting) method during printing so
-   * we only print an invariant if all its variables are interesting,
-   * since a single, dynamic, non interesting occurance means all the
-   * equality combinations aren't interesting.
+   * Return true if the rightr side of the implication some equality combinations of its member
+   * variables are dynamically obvious. For example, a == b, and f(a) is obvious, so is f(b). We use
+   * the someInEquality (or least interesting) method during printing so we only print an invariant
+   * if all its variables are interesting, since a single, dynamic, non interesting occurance means
+   * all the equality combinations aren't interesting.
    *
-   * This must be overridden for Implication because the right side is
-   * the invariant of interest.  The standard version passes the vis
-   * from the slice containing the implication itself (slice 0).
+   * <p>This must be overridden for Implication because the right side is the invariant of interest.
+   * The standard version passes the vis from the slice containing the implication itself (slice 0).
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
@@ -270,9 +264,8 @@ public class Implication extends Joiner {
   }
 
   /**
-   * Logs a description of the invariant and the specified msg via the
-   * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
-   * VarInfo[], String)}.  Uses the consequent as the logger.
+   * Logs a description of the invariant and the specified msg via the logger as described in {@link
+   * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}. Uses the consequent as the logger.
    */
   @Override
   public void log(
@@ -291,9 +284,8 @@ public class Implication extends Joiner {
   }
 
   /**
-   * Logs a description of the invariant and the specified msg via the
-   * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
-   * VarInfo[], String)}.  Uses the consequent as the logger
+   * Logs a description of the invariant and the specified msg via the logger as described in {@link
+   * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}. Uses the consequent as the logger
    *
    * @return whether or not it logged anything
    */

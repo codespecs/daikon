@@ -19,10 +19,9 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * PptSplitter contains the splitter and its associated
- * PptConditional ppts.  Currently all splitters are binary and this
- * is presumed in the implementation.  However, this could easily
- * be extended by extending this class with specific other implementations.
+ * PptSplitter contains the splitter and its associated PptConditional ppts. Currently all splitters
+ * are binary and this is presumed in the implementation. However, this could easily be extended by
+ * extending this class with specific other implementations.
  */
 /*@UsesObjectEquals*/
 public class PptSplitter implements Serializable {
@@ -33,19 +32,17 @@ public class PptSplitter implements Serializable {
   static final long serialVersionUID = 20031031L;
 
   /**
-   * Boolean.  If set, the built-in
-   * splitting rules are disabled.  The built-in rules look for implications
-   * based on boolean return values and also when there are exactly two
-   * exit points from a method.
+   * Boolean. If set, the built-in splitting rules are disabled. The built-in rules look for
+   * implications based on boolean return values and also when there are exactly two exit points
+   * from a method.
    */
   public static boolean dkconfig_disable_splitting = false;
 
   /**
-   * Integer. A value of zero indicates that DummyInvariant objects should
-   * not be created. A value of one indicates that dummy invariants
-   * should be created only when no suitable condition was found in
-   * the regular output. A value of two indicates that dummy
-   * invariants should be created for each splitting condition.
+   * Integer. A value of zero indicates that DummyInvariant objects should not be created. A value
+   * of one indicates that dummy invariants should be created only when no suitable condition was
+   * found in the regular output. A value of two indicates that dummy invariants should be created
+   * for each splitting condition.
    */
   public static int dkconfig_dummy_invariant_level = 0;
 
@@ -53,14 +50,13 @@ public class PptSplitter implements Serializable {
   // config-options.texinfo and the insertion program doesn't yet
   // understand {@code ...}.
   /**
-   * Split bi-implications ("a &lt;==&gt; b") into two separate implications
-   * ("a ==&gt; b" and "b ==&gt; a").
+   * Split bi-implications ("a &lt;==&gt; b") into two separate implications ("a ==&gt; b" and "b
+   * ==&gt; a").
    */
   public static boolean dkconfig_split_bi_implications = false;
 
   /**
-   * When true, compilation errors during splitter file generation
-   * will not be reported to the user.
+   * When true, compilation errors during splitter file generation will not be reported to the user.
    */
   public static boolean dkconfig_suppressSplitterErrors = true;
 
@@ -71,27 +67,24 @@ public class PptSplitter implements Serializable {
   private PptTopLevel parent;
 
   /**
-   * Splitter that choses to which PptConditional a sample is applied.  May
-   * be null if no computation is required (e.g., splitting over exit
-   * points).
+   * Splitter that choses to which PptConditional a sample is applied. May be null if no computation
+   * is required (e.g., splitting over exit points).
    */
   public transient /*@Nullable*/ Splitter splitter;
 
   /**
-   * PptConditionals for each splitter output.  ppts[0] is used
-   * when the splitter is true, ppts[1] when the splitter is false.  The
-   * contents are PptConditional objects if the splitter is valid, but are
-   * PptTopLevel if the PptSplitter represents two exit points (for which
-   * no splitter is required).
+   * PptConditionals for each splitter output. ppts[0] is used when the splitter is true, ppts[1]
+   * when the splitter is false. The contents are PptConditional objects if the splitter is valid,
+   * but are PptTopLevel if the PptSplitter represents two exit points (for which no splitter is
+   * required).
    */
   public PptTopLevel[] ppts;
 
   private static final Comparator<Invariant> icfp = new Invariant.InvariantComparatorForPrinting();
 
   /**
-   * Create a binary PptSplitter with the specied splitter for the specified
-   * PptTopLevel parent.  The parent should be a leaf (i.e., a numbered
-   * exit point).
+   * Create a binary PptSplitter with the specied splitter for the specified PptTopLevel parent. The
+   * parent should be a leaf (i.e., a numbered exit point).
    */
   public PptSplitter(PptTopLevel parent, Splitter splitter) {
 
@@ -125,18 +118,14 @@ public class PptSplitter implements Serializable {
     }
   }
 
-  /**
-   * Creates a PptSplitter over two exit points.  No splitter is required.
-   */
+  /** Creates a PptSplitter over two exit points. No splitter is required. */
   public PptSplitter(PptTopLevel parent, PptTopLevel exit1, PptTopLevel exit2) {
     this.parent = parent;
     this.splitter = null;
     ppts = new PptTopLevel[] {exit1, exit2};
   }
 
-  /**
-   * Returns true if the splitter is valid at this point, false otherwise.
-   */
+  /** Returns true if the splitter is valid at this point, false otherwise. */
   public boolean splitter_valid() {
 
     assert ((PptConditional) ppts[1]).splitter_valid()
@@ -167,9 +156,7 @@ public class PptSplitter implements Serializable {
     }
   }
 
-  /**
-   * Chooses the correct conditional point based on the values in this sample.
-   */
+  /** Chooses the correct conditional point based on the values in this sample. */
   public /*@Nullable*/ PptConditional choose_conditional(ValueTuple vt) {
 
     boolean splitter_test;
@@ -190,10 +177,7 @@ public class PptSplitter implements Serializable {
     return ((PptConditional) ppts[splitter_test ? 0 : 1]);
   }
 
-  /**
-   * Adds implication invariants based on the invariants found on each
-   * side of the split.
-   */
+  /** Adds implication invariants based on the invariants found on each side of the split. */
   @SuppressWarnings("flowexpr.parse.error") // private field
   /*@RequiresNonNull({"parent.equality_view", "NIS.all_suppressions", "NIS.suppressor_map"})*/
   public void add_implications() {
@@ -218,35 +202,34 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Given a pair of conditional program points, form implications from the
-   * invariants true at each one.
-   * <p>
+   * Given a pair of conditional program points, form implications from the invariants true at each
+   * one.
    *
-   * The algorithm first divides the invariants into two groups:
+   * <p>The algorithm first divides the invariants into two groups:
+   *
    * <ol>
-   *   <li>the "same" invariants:  those that are true at both program points.
-   *   <li>the "different" invariants:  all other invariants.
+   *   <li>the "same" invariants: those that are true at both program points.
+   *   <li>the "different" invariants: all other invariants.
    * </ol>
-   * The "exclusive" invariants (a subset of the "different" inviariants)
-   * are true at one program point, and their negation is true at the other
+   *
+   * The "exclusive" invariants (a subset of the "different" inviariants) are true at one program
+   * point, and their negation is true at the other program point.
+   *
+   * <p>At the first program point, for each exclusive invariant and each different invariant,
+   * create a conditional of the form "exclusive &hArr; different". Do the same at the second
    * program point.
-   * <p>
    *
-   * At the first program point, for each exclusive invariant and each
-   * different invariant, create a conditional of the form "exclusive &hArr;
-   * different".  Do the same at the second program point.
-   * <p>
+   * <p>This method is correct only if the two conditional program points fully partition the input
+   * space (their conditions are negations of one another). For instance, suppose there is a
+   * three-way split with the following invariants detected at each:
    *
-   * This method is correct only if the two conditional program points
-   * fully partition the input space (their conditions are negations of one
-   * another).  For instance, suppose there is a three-way split with the
-   * following invariants detected at each:
    * <pre>
    *   {A,B}  {!A,!B}  {A,!B}
    * </pre>
-   * Examining just the first two would suggest that "A &hArr; B" is valid,
-   * but in fact that is a false inference.  Note that this situation can
-   * occur if the splitting condition uses variables that can ever be missing.
+   *
+   * Examining just the first two would suggest that "A &hArr; B" is valid, but in fact that is a
+   * false inference. Note that this situation can occur if the splitting condition uses variables
+   * that can ever be missing.
    */
   /*@RequiresNonNull("parent.equality_view")*/
   private void add_implications_pair() {
@@ -555,14 +538,12 @@ public class PptSplitter implements Serializable {
   } // add_implications_pair
 
   /**
-   * Returns a list of all possible slices that may appear at the parent.
-   * The parent must have already been created by merging the invariants
-   * from its child conditionals.
+   * Returns a list of all possible slices that may appear at the parent. The parent must have
+   * already been created by merging the invariants from its child conditionals.
    *
-   * This is different from the slices that actually exist at the parent
-   * because there may be implications created from invariants in child
-   * slices that only exist in one child (and thus don't exists in the parent)
-   * because there may be implications created from invariants in child
+   * <p>This is different from the slices that actually exist at the parent because there may be
+   * implications created from invariants in child slices that only exist in one child (and thus
+   * don't exists in the parent) because there may be implications created from invariants in child
    * slices that only exist in one child.
    */
   /*@RequiresNonNull("parent.equality_view")*/
@@ -623,9 +604,8 @@ public class PptSplitter implements Serializable {
 
   // TODO: Should this only include invariants such that all of their variables are defined everywhere?
   /**
-   * Determine which elements of invs1 are mutually exclusive with
-   * elements of invs2.  Result elements are pairs of List<Invariant>.
-   * All the arguments should be over the same program point.
+   * Determine which elements of invs1 are mutually exclusive with elements of invs2. Result
+   * elements are pairs of List<Invariant>. All the arguments should be over the same program point.
    */
   Vector<Invariant[]> exclusive_conditions(List<Invariant> invs1, List<Invariant> invs2) {
 
@@ -651,10 +631,9 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Determine which elements of invs1 differ from elements of invs2.
-   * Result elements are pairs of List<Invariant> (with one or the other
-   * always null).
-   * All the arguments should be over the same program point.
+   * Determine which elements of invs1 differ from elements of invs2. Result elements are pairs of
+   * List<Invariant> (with one or the other always null). All the arguments should be over the same
+   * program point.
    */
   Vector</*@Nullable*/ Invariant[]> different_invariants(
       List<Invariant> invs1, List<Invariant> invs2) {
@@ -678,9 +657,8 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Determine which elements of invs1 are the same as elements of invs2.
-   * Result elements are List<Invariant> (from the invs1 list).
-   * All the arguments should be over the same program point.
+   * Determine which elements of invs1 are the same as elements of invs2. Result elements are
+   * List<Invariant> (from the invs1 list). All the arguments should be over the same program point.
    */
   Vector<Invariant> same_invariants(List<Invariant> invs1, List<Invariant> invs2) {
 
@@ -709,9 +687,9 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * If the implication specified by predicate and consequent
-   * is a valid implication, adds it to the joiner view of
-   * parent.
+   * If the implication specified by predicate and consequent is a valid implication, adds it to the
+   * joiner view of parent.
+   *
    * @param orig_invs maps permuted invariants to their original invariants
    */
   public void add_implication(
@@ -782,9 +760,9 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Adds the specified relation from each conditional ppt in this
-   * to the corresponding conditional ppt in ppt_split.  The relation
-   * specified should be a relation from this.parent to ppt_split.parent.
+   * Adds the specified relation from each conditional ppt in this to the corresponding conditional
+   * ppt in ppt_split. The relation specified should be a relation from this.parent to
+   * ppt_split.parent.
    */
   public void add_relation(PptRelation rel, PptSplitter ppt_split) {
 
@@ -797,9 +775,9 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Returns the VarInfo in ppt1 that matches the specified VarInfo in ppt2.
-   * The variables at each point must match exactly.  This is a reasonable
-   * assumption for the ppts in PptSplitter and their parent.
+   * Returns the VarInfo in ppt1 that matches the specified VarInfo in ppt2. The variables at each
+   * point must match exactly. This is a reasonable assumption for the ppts in PptSplitter and their
+   * parent.
    */
   private VarInfo matching_var(PptTopLevel ppt1, PptTopLevel ppt2, VarInfo ppt2_var) {
 

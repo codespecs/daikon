@@ -5,7 +5,6 @@ package daikon.tools.jtb;
 import daikon.*;
 import daikon.inv.Equality;
 import daikon.inv.Invariant;
-import daikon.inv.OutputFormat;
 import daikon.inv.filter.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -14,7 +13,6 @@ import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import plume.ArraysMDE;
 import plume.UtilMDE;
 
 /*>>>
@@ -456,15 +454,13 @@ public class Ast {
   }
 
   /**
-   * Add the comment to the first regular token in the tree, as a "special
-   * token" (comment).
+   * Add the comment to the first regular token in the tree, as a "special token" (comment).
    *
-   * If first is true, then it is inserted before all other special tokens;
-   * otherwise, it is inserted after them.
+   * <p>If first is true, then it is inserted before all other special tokens; otherwise, it is
+   * inserted after them.
    *
-   * Postcondition (make sure you preserve it if you modify this method):
-   * comment.beginLine and comment.beginColumn have been assigned the line
-   * and column number where this comment will go.
+   * <p>Postcondition (make sure you preserve it if you modify this method): comment.beginLine and
+   * comment.beginColumn have been assigned the line and column number where this comment will go.
    */
   public static void addComment(Node n, NodeToken comment, boolean first) {
     class AddCommentVisitor extends DepthFirstVisitor {
@@ -516,17 +512,14 @@ public class Ast {
   // do the insertion.  This should be documented/fixed.  -MDE 7/13/2003
 
   /**
-   * Add the comment to the first regular token in the tree.
-   * If first is true, then it is inserted before all other special tokens;
-   * otherwise, it is inserted after them.
+   * Add the comment to the first regular token in the tree. If first is true, then it is inserted
+   * before all other special tokens; otherwise, it is inserted after them.
    *
-   * Exception:  If first is true, may heuristically place the comment it
-   * in the middle of the list of special tokens (comments), in order to
-   * place it at the same column as the real node.
+   * <p>Exception: If first is true, may heuristically place the comment it in the middle of the
+   * list of special tokens (comments), in order to place it at the same column as the real node.
    *
-   * Postcondition (make sure you preserve it if you modify this method):
-   * comment.beginLine and comment.beginColumn have been assigned the line
-   * and column number where this comment will go.
+   * <p>Postcondition (make sure you preserve it if you modify this method): comment.beginLine and
+   * comment.beginColumn have been assigned the line and column number where this comment will go.
    */
   public static void findLineAndCol(Node n, NodeToken comment, boolean first) {
     class AddCommentVisitor extends DepthFirstVisitor {
@@ -576,20 +569,14 @@ public class Ast {
     n.accept(new AddCommentVisitor(comment, first));
   }
 
-  /**
-   * Adds the comment to the first regular token in the tree, before the
-   * ith special token.
-   */
+  /** Adds the comment to the first regular token in the tree, before the ith special token. */
   public static void addNthSpecial(NodeToken n, NodeToken s, int i) {
     if (n.specialTokens == null) n.specialTokens = new Vector<NodeToken>();
     n.specialTokens.insertElementAt(s, i);
     s.setParent(n);
   }
 
-  /**
-   * Adds the comment to the first regular token in the tree, *before* all
-   * other special tokens.
-   */
+  /** Adds the comment to the first regular token in the tree, *before* all other special tokens. */
   public static void addFirstSpecial(NodeToken n, NodeToken s) {
     addNthSpecial(n, s, 0);
   }
@@ -1139,8 +1126,8 @@ public class Ast {
   }
 
   /**
-   * Returns an Enumeration of PrimarySuffix objects (but the static type
-   * of the elements is only known to be Node).
+   * Returns an Enumeration of PrimarySuffix objects (but the static type of the elements is only
+   * known to be Node).
    */
   public static Enumeration getPrimarySuffixes(PrimaryExpression p) {
     return p.f1.elements();
@@ -1177,17 +1164,12 @@ public class Ast {
   }
 
   /**
+   * This code is taken from and modified from daikon.PrintInvariants.print_invariants. The main
+   * modification is that instead of printing the invariants, we return a list of them.
+   * modifications involve removing code that I don't need here, like printing of debugging info.
    *
-   * This code is taken from and modified from
-   * daikon.PrintInvariants.print_invariants.  The main modification
-   * is that instead of printing the invariants, we return a list of
-   * them. modifications involve removing code that I don't need here,
-   * like printing of debugging info.
-   *
-   * [[ TODO: instead of duplicating code, you should add this method
-   * to PrintInvariants (or wherever it belongs) and have
-   * PrintInvariants.print_invariants call it. ]]
-   *
+   * <p>[[ TODO: instead of duplicating code, you should add this method to PrintInvariants (or
+   * wherever it belongs) and have PrintInvariants.print_invariants call it. ]]
    */
   public static List<Invariant> getInvariants(PptTopLevel ppt, PptMap ppt_map) {
 

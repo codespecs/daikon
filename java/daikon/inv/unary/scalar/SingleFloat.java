@@ -13,9 +13,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import typequals.*;
 */
 
-/**
- * Abstract base class for invariants over one variable of type {@code double}.
- */
+/** Abstract base class for invariants over one variable of type {@code double}. */
 public abstract class SingleFloat extends UnaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -66,30 +64,26 @@ public abstract class SingleFloat extends UnaryInvariant {
   }
 
   /**
-   * Similar to {@link #check_modified} except that it can change the state
-   * of the invariant if necessary.  If the invariant doesn't have any
-   * state, then the implementation should simply call {@link
-   * #check_modified}.  This method need not check for falsification; that
-   * is done by the caller.
+   * Similar to {@link #check_modified} except that it can change the state of the invariant if
+   * necessary. If the invariant doesn't have any state, then the implementation should simply call
+   * {@link #check_modified}. This method need not check for falsification; that is done by the
+   * caller.
    */
   public abstract InvariantStatus add_modified(double value, int count);
 
-  /**
-   * By default, do nothing if the value hasn't been seen yet.
-   * Subclasses can override this.
-   */
+  /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
   public InvariantStatus add_unmodified(double value, int count) {
     // System.out.println("SingleFloat.add_unmodified " + ppt.name() + ": parent=" + ppt.parent);
     return InvariantStatus.NO_CHANGE;
   }
 
   /**
-   * Presents a sample to the invariant.
-   * Returns whether the sample is consistent with the invariant.
-   * Does not change the state of the invariant.
-   * @param count how many identical samples were observed in a row.
-   * For example, three calls to check_modified with a count parameter of 1 is
-   * equivalent to one call to check_modified with a count parameter of 3.
+   * Presents a sample to the invariant. Returns whether the sample is consistent with the
+   * invariant. Does not change the state of the invariant.
+   *
+   * @param count how many identical samples were observed in a row. For example, three calls to
+   *     check_modified with a count parameter of 1 is equivalent to one call to check_modified with
+   *     a count parameter of 3.
    * @return whether or not the sample is consistent with the invariant
    */
   public abstract InvariantStatus check_modified(double value, int count);

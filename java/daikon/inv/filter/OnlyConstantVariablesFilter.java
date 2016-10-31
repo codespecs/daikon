@@ -14,9 +14,7 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
     return "Suppress invariants containing only constants";
   }
 
-  /**
-   * Boolean. If true, OnlyConstantVariablesFilter is initially turned on.
-   */
+  /** Boolean. If true, OnlyConstantVariablesFilter is initially turned on. */
   public static boolean dkconfig_enabled = true;
 
   public OnlyConstantVariablesFilter() {

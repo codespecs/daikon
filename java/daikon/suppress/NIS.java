@@ -28,10 +28,7 @@ import typequals.*;
 //  - Move the missingOutOfBounds check to is_slice_ok()
 //
 
-/**
- * Main class for non-instantiating suppression.  Handles setup and other
- * overall functions.
- */
+/** Main class for non-instantiating suppression. Handles setup and other overall functions. */
 public class NIS {
 
   @SuppressWarnings("initialization.fields.uninitialized") // never instantiated
@@ -45,10 +42,10 @@ public class NIS {
   /** Debug Tracer for antecedent method */
   public static final Logger debugAnt = Logger.getLogger("daikon.suppress.NIS.Ant");
 
-  /** Boolean.  If true, enable non-instantiating suppressions. */
+  /** Boolean. If true, enable non-instantiating suppressions. */
   public static boolean dkconfig_enabled = true;
 
-  /** Enum.  Signifies which algorithm is used by NIS to process suppressions. */
+  /** Enum. Signifies which algorithm is used by NIS to process suppressions. */
   public enum SuppressionProcessor {
     HYBRID,
     ANTECEDENT,
@@ -56,51 +53,50 @@ public class NIS {
   }
 
   /**
-   * Specifies the algorithm that NIS uses to process suppressions.
-   * Possible selections are 'HYBRID', 'ANTECEDENT', and 'FALSIFIED'.
-   * The default is the hybrid algorithm which uses the falsified
-   * algorithm when only a small number of suppressions need to be processed
-   * and the antecedent algorithm when a large number of suppressions
-   * are processed.
+   * Specifies the algorithm that NIS uses to process suppressions. Possible selections are
+   * 'HYBRID', 'ANTECEDENT', and 'FALSIFIED'. The default is the hybrid algorithm which uses the
+   * falsified algorithm when only a small number of suppressions need to be processed and the
+   * antecedent algorithm when a large number of suppressions are processed.
    */
   public static SuppressionProcessor dkconfig_suppression_processor = SuppressionProcessor.HYBRID;
 
-  /** Boolean. If true, use antecedent method for NIS processing.
-   * If false, use falsified method for processing falsified
-   * invariants for NISuppressions.  Note this flag is for
-   * internal use only and is controlled by NIS.dkconfig_suppression_processor.
+  /**
+   * Boolean. If true, use antecedent method for NIS processing. If false, use falsified method for
+   * processing falsified invariants for NISuppressions. Note this flag is for internal use only and
+   * is controlled by NIS.dkconfig_suppression_processor.
    */
   public static boolean antecedent_method = true;
 
-  /** Boolean.  If true, use a combination of the falsified method for a small
-   * number of suppressions to be processed and the antecedent method for a large number.
-   * Number is determined by NIS.dkconfig_hybrid_threshhold. Note this flag is for
-   * internal use only and is controlled by NIS.dkconfig_suppression_processor.
+  /**
+   * Boolean. If true, use a combination of the falsified method for a small number of suppressions
+   * to be processed and the antecedent method for a large number. Number is determined by
+   * NIS.dkconfig_hybrid_threshhold. Note this flag is for internal use only and is controlled by
+   * NIS.dkconfig_suppression_processor.
    */
   public static boolean hybrid_method = true;
 
   /**
-   * Int.  Less and equal to this number means use the falsified method in
-   * the hybrid method of processing falsified invariants, while greater
-   * than this number means use the antecedent method.  Empirical data shows that
-   * number should not be more than 10000.
+   * Int. Less and equal to this number means use the falsified method in the hybrid method of
+   * processing falsified invariants, while greater than this number means use the antecedent
+   * method. Empirical data shows that number should not be more than 10000.
    */
   public static int dkconfig_hybrid_threshhold = 2500;
 
-  /** Boolean.  If true, use the specific list of suppressor related
-   * invariant prototypes when creating constant invariants in the
-   * antecedent method.
+  /**
+   * Boolean. If true, use the specific list of suppressor related invariant prototypes when
+   * creating constant invariants in the antecedent method.
    */
   public static boolean dkconfig_suppressor_list = true;
 
-  /** Boolean.  If true, skip variables of file rep type hashcode when creating
-   * invariants over constants in the antecedent method.
+  /**
+   * Boolean. If true, skip variables of file rep type hashcode when creating invariants over
+   * constants in the antecedent method.
    */
   public static boolean dkconfig_skip_hashcode_type = true;
 
   /**
-   * Possible states for suppressors and suppressions.  When a suppression
-   * is checked, it sets one of these states on each suppressor.
+   * Possible states for suppressors and suppressions. When a suppression is checked, it sets one of
+   * these states on each suppressor.
    */
   public enum SuppressState {
     /** initial state -- suppressor has not been checked yet */
@@ -120,15 +116,14 @@ public class NIS {
   static final /*@Interned*/ String NONE = "none";
 
   /**
-   * Map from invariant class to a list of all of the suppression sets
-   * that contain a suppressor of that class.
+   * Map from invariant class to a list of all of the suppression sets that contain a suppressor of
+   * that class.
    */
   public static /*@MonotonicNonNull*/ Map<Class<? extends Invariant>, List<NISuppressionSet>>
       suppressor_map;
 
   /**
-   * Map from invariant class to the number of suppressions
-   * that contain a suppressor of that class.
+   * Map from invariant class to the number of suppressions that contain a suppressor of that class.
    */
   public static /*@MonotonicNonNull*/ Map<Class<? extends Invariant>, Integer>
       suppressor_map_suppression_count;
@@ -140,18 +135,17 @@ public class NIS {
   public /*@MonotonicNonNull*/ static List</*@Prototype*/ Invariant> suppressor_proto_invs;
 
   /**
-   * List of invariants that are unsuppressed by the current sample.
-   * The {@link #falsified} and {@link #process_falsified_invs} methods add created
-   * invariants to this list.  This list is cleared by {@link #apply_samples}.
+   * List of invariants that are unsuppressed by the current sample. The {@link #falsified} and
+   * {@link #process_falsified_invs} methods add created invariants to this list. This list is
+   * cleared by {@link #apply_samples}.
    */
   public static List<Invariant> new_invs = new ArrayList<Invariant>();
 
   /**
-   * List of invariants that are unsuppressed and then falsified by
-   * the current sample.  This list is cleared at the beginning of
-   * apply_samples() and falsified invariants are added as the current
-   * sample is applied to invariants in new_invs.  The list is only
-   * used when the falsified method is used for processing suppressions.
+   * List of invariants that are unsuppressed and then falsified by the current sample. This list is
+   * cleared at the beginning of apply_samples() and falsified invariants are added as the current
+   * sample is applied to invariants in new_invs. The list is only used when the falsified method is
+   * used for processing suppressions.
    */
   public static List<Invariant> newly_falsified = new ArrayList<Invariant>();
 
@@ -168,7 +162,7 @@ public class NIS {
   public static int suppressions_processed = 0;
   /** Number of suppressions processed by the falsified method */
   public static int suppressions_processed_falsified = 0;
-  /** Number of invariants that are no longer suppressed  by a suppression */
+  /** Number of invariants that are no longer suppressed by a suppression */
   static int new_invs_cnt = 0;
   /** Number of new_invs_cnt that are falsified by the sample */
   public static int false_invs_cnt = 0;
@@ -180,13 +174,12 @@ public class NIS {
   /** Total time spent in NIS processing */
   public static Stopwatch watch = new Stopwatch(false);
 
-  /** First execution of dump_stats().  Used to dump a header. */
+  /** First execution of dump_stats(). Used to dump a header. */
   static boolean first_time = true;
 
   /**
-   * Sets up non-instantiation suppression.  Primarily this includes setting
-   * up the map from suppressor classes to all of the suppression sets
-   * associated with that suppressor invariant.
+   * Sets up non-instantiation suppression. Primarily this includes setting up the map from
+   * suppressor classes to all of the suppression sets associated with that suppressor invariant.
    */
   /*@EnsuresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions", "suppressor_proto_invs"})*/
   public static void init_ni_suppression() {
@@ -277,10 +270,10 @@ public class NIS {
   }
 
   /**
-   * Instantiates any invariants that are no longer suppressed because
-   * inv has been falsified.
+   * Instantiates any invariants that are no longer suppressed because inv has been falsified.
    *
-   * Note: this method is should NOT be used with the antecedent approach.
+   * <p>Note: this method is should NOT be used with the antecedent approach.
+   *
    * @see #process_falsified_invs
    */
   /*@RequiresNonNull("suppressor_map")*/
@@ -335,15 +328,12 @@ public class NIS {
   }
 
   /**
-   * Applies sample values to all of the newly created invariants
-   * (kept in new_invs).  The sample should never falsify the
-   * invariant (since we don't create an invariant if the sample would
-   * invalidate it).  The sample still needs to be applied, however, for
-   * sample-dependent invariants.
+   * Applies sample values to all of the newly created invariants (kept in new_invs). The sample
+   * should never falsify the invariant (since we don't create an invariant if the sample would
+   * invalidate it). The sample still needs to be applied, however, for sample-dependent invariants.
    *
-   * Clears the new_invs list after processing.  Currently this
-   * routine checks to insure that the newly falsified invariant
-   * is not itself a possible NI suppressor.
+   * <p>Clears the new_invs list after processing. Currently this routine checks to insure that the
+   * newly falsified invariant is not itself a possible NI suppressor.
    */
   public static void apply_samples(ValueTuple vt, int count) {
     newly_falsified.clear();
@@ -419,9 +409,7 @@ public class NIS {
     new_invs.clear();
   }
 
-  /**
-   * Clears the current NIS statistics and enables the keeping of statistics.
-   */
+  /** Clears the current NIS statistics and enables the keeping of statistics. */
   public static void clear_stats() {
 
     keep_stats = true;
@@ -461,9 +449,7 @@ public class NIS {
             + "ppt name");
   }
 
-  /**
-   * dump statistics on NIS to the specified logger.
-   */
+  /** dump statistics on NIS to the specified logger. */
   public static void dump_stats(Logger log, PptTopLevel ppt) {
 
     if (first_time) {
@@ -493,10 +479,9 @@ public class NIS {
   }
 
   /**
-   * Creates any invariants that were previously suppressed, but are no
-   * longer suppressed.  Must be called after the sample has been processed
-   * and any invariants falsified by the sample are marked as such, but before
-   * they have been removed.
+   * Creates any invariants that were previously suppressed, but are no longer suppressed. Must be
+   * called after the sample has been processed and any invariants falsified by the sample are
+   * marked as such, but before they have been removed.
    */
   /*@RequiresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions", "NIS.suppressor_proto_invs"})*/
   public static void process_falsified_invs(PptTopLevel ppt, ValueTuple vt) {
@@ -555,11 +540,7 @@ public class NIS {
         ValueSet vs = v.get_value_set();
         System.out.printf(
             "  %s %s %s %b %s%n",
-            v.comparability,
-            v.name(),
-            v.file_rep_type,
-            ppt.is_constant(v),
-            vs.repr_short());
+            v.comparability, v.name(), v.file_rep_type, ppt.is_constant(v), vs.repr_short());
       }
     }
 
@@ -610,9 +591,7 @@ public class NIS {
           Map<VarInfo, Count> var_map = new LinkedHashMap<VarInfo, Count>();
           System.out.printf(
               "ppt %s, comparability %s has %s equality invs%n",
-              ppt.name,
-              ants.comparability,
-              eq_invs.size());
+              ppt.name, ants.comparability, eq_invs.size());
           for (Invariant inv : eq_invs) {
             IntEqual ie = (IntEqual) inv;
             VarInfo v1 = ie.ppt.var_infos[0];
@@ -705,18 +684,15 @@ public class NIS {
   }
 
   /**
-   * Merges the always-comparable antecedents (if any) into each of the
-   * other sets of antecedents.  Also removes the always-comparable
-   * set of antecedents as a separate set (since it is now merged into
-   * each of the other sets).  Updates comp_ants accordingly.
+   * Merges the always-comparable antecedents (if any) into each of the other sets of antecedents.
+   * Also removes the always-comparable set of antecedents as a separate set (since it is now merged
+   * into each of the other sets). Updates comp_ants accordingly.
    *
-   * In general, in implicit comparability, the variables at a program
-   * point are partioned into disjoint sets of comparable variables.
-   * However, implicit comparability also allows some variables to be
-   * comparable to all others (always-comparable).  An invariant is
-   * always-comparable if all of its variables are always-comparable.
-   * Since always-comparable invariants can form suppressions with all
-   * other invariants, they must be added to each of set of comparable
+   * <p>In general, in implicit comparability, the variables at a program point are partioned into
+   * disjoint sets of comparable variables. However, implicit comparability also allows some
+   * variables to be comparable to all others (always-comparable). An invariant is always-comparable
+   * if all of its variables are always-comparable. Since always-comparable invariants can form
+   * suppressions with all other invariants, they must be added to each of set of comparable
    * antecedents.
    */
   /*@RequiresNonNull("NIS.suppressor_map")*/
@@ -742,8 +718,9 @@ public class NIS {
   }
 
   /**
-   * Creates all suppressed invariants for the specified ppt and
-   * places them in their associated slices.
+   * Creates all suppressed invariants for the specified ppt and places them in their associated
+   * slices.
+   *
    * @return a list of created invariants
    */
   /*@RequiresNonNull({"all_suppressions", "suppressor_map"})*/
@@ -784,8 +761,8 @@ public class NIS {
   }
 
   /**
-   * Adds each antecedent invariant in the specified slices to the Antecedents
-   * object in comp_ants with the corresponding VarComparability.
+   * Adds each antecedent invariant in the specified slices to the Antecedents object in comp_ants
+   * with the corresponding VarComparability.
    */
   /*@RequiresNonNull("suppressor_map")*/
   static void store_antecedents_by_comparability(
@@ -827,9 +804,8 @@ public class NIS {
   }
 
   /**
-   * Processes each slice in slice_iterator and fills the specified
-   * map with a list of all of the antecedent invariants for each
-   * class. @return the number of false antecedents found.
+   * Processes each slice in slice_iterator and fills the specified map with a list of all of the
+   * antecedent invariants for each class. @return the number of false antecedents found.
    */
   /*@RequiresNonNull("suppressor_map")*/
   static int find_antecedents(
@@ -855,9 +831,7 @@ public class NIS {
     return false_cnt;
   }
 
-  /**
-   * Removes any invariants in the specified ppt that are suppressed.
-   */
+  /** Removes any invariants in the specified ppt that are suppressed. */
   public static void remove_suppressed_invs(PptTopLevel ppt) {
 
     for (PptSlice slice : ppt.views_iterable()) {
@@ -872,18 +846,14 @@ public class NIS {
     }
   }
 
-  /**
-   * Returns true if the specified class is an antecedent in any NI suppression.
-   */
+  /** Returns true if the specified class is an antecedent in any NI suppression. */
   /*@RequiresNonNull("NIS.suppressor_map")*/
   /*@Pure*/
   public static boolean is_suppressor(Class<? extends Invariant> cls) {
     return (suppressor_map.containsKey(cls));
   }
 
-  /**
-   * Dump out the suppressor map.
-   */
+  /** Dump out the suppressor map. */
   /*@RequiresNonNull("suppressor_map")*/
   public static void dump(Logger log) {
 
@@ -903,11 +873,9 @@ public class NIS {
   }
 
   /**
-   * Class used to describe invariants without instantiating the
-   * invariant.  The invariant is defined by its NISuppressee and variables
-   * (Its ppt is also stored, but not used in comparisions, its
-   * presumed that only SupInvs from the same ppt will every be
-   * compared.)
+   * Class used to describe invariants without instantiating the invariant. The invariant is defined
+   * by its NISuppressee and variables (Its ppt is also stored, but not used in comparisions, its
+   * presumed that only SupInvs from the same ppt will every be compared.)
    */
   static class SupInv {
     NISuppressee suppressee;
@@ -989,12 +957,10 @@ public class NIS {
     }
 
     /**
-     * Returns the invariant if it already exists, or null otherwise.  Unary and
-     * and ternary invariant must match by class (there are no
-     * permutations for unary invariants and ternary invariants handle
-     * permutations as different classes).  Binary invariants must
-     * match the class and if there is an internal swap variable for
-     * variable order, that must match as well.
+     * Returns the invariant if it already exists, or null otherwise. Unary and and ternary
+     * invariant must match by class (there are no permutations for unary invariants and ternary
+     * invariants handle permutations as different classes). Binary invariants must match the class
+     * and if there is an internal swap variable for variable order, that must match as well.
      */
     public /*@Nullable*/ Invariant already_exists() {
       Invariant cinv = ppt.find_inv_by_class(vis, suppressee.sup_class);
@@ -1017,22 +983,18 @@ public class NIS {
     }
   }
 
-  /**
-   * Class that organizes all of the antecedent invariants with
-   * the same comparability by class.
-   */
+  /** Class that organizes all of the antecedent invariants with the same comparability by class. */
   static class Antecedents {
 
     /**
-     * Comparability of the variables in the antecedents.  Only
-     * variables that are comparable should be stored here.
+     * Comparability of the variables in the antecedents. Only variables that are comparable should
+     * be stored here.
      */
     VarComparability comparability;
 
     /**
-     * Map from the antecedent invariants class to a list of the
-     * antecedent invariants of that class.  Allows fast access to
-     * invariants by type.
+     * Map from the antecedent invariants class to a list of the antecedent invariants of that
+     * class. Allows fast access to invariants by type.
      */
     Map<Class<? extends Invariant>, List<Invariant>> antecedent_map;
 
@@ -1046,17 +1008,14 @@ public class NIS {
       this.comparability = comparability;
     }
 
-    /**
-     * Returns true if this contains antecedents that are always comparable.
-     */
+    /** Returns true if this contains antecedents that are always comparable. */
     public boolean alwaysComparable() {
       return comparability.alwaysComparable();
     }
 
     /**
-     * Adds the specified invariant to the list for its class.  Falsified
-     * invariants are added to the beginning of the list, non-falsified
-     * ones to the end.
+     * Adds the specified invariant to the list for its class. Falsified invariants are added to the
+     * beginning of the list, non-falsified ones to the end.
      */
     /*@RequiresNonNull("NIS.suppressor_map")*/
     public void add(Invariant inv) {
@@ -1090,9 +1049,7 @@ public class NIS {
       }
     }
 
-    /**
-     * Adds all of the antecedents specified to the lists for their class.
-     */
+    /** Adds all of the antecedents specified to the lists for their class. */
     /*@RequiresNonNull("NIS.suppressor_map")*/
     public void add(Antecedents ants) {
 
@@ -1104,17 +1061,15 @@ public class NIS {
     }
 
     /**
-     * Returns a list of all of the antecedent invariants of the specified
-     * class.  Returns null if there are none of that class.
+     * Returns a list of all of the antecedent invariants of the specified class. Returns null if
+     * there are none of that class.
      */
     public /*@Nullable*/ List<Invariant> get(Class<? extends Invariant> cls) {
 
       return antecedent_map.get(cls);
     }
 
-    /**
-     * Returns a string representation of all of the antecedents by class.
-     */
+    /** Returns a string representation of all of the antecedents by class. */
     /*@SideEffectFree*/
     public String toString(/*>>>@GuardSatisfied Antecedents this*/) {
 

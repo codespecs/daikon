@@ -5,7 +5,6 @@ import daikon.util.*;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -13,12 +12,10 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * This is the main class for Chicory which transforms the class files
- * of a program to instrument it for Daikon.  The instrumentation uses
- * the javaagent switch to java (which allows classes to be instrumented
- * as they are loaded).  This class parses the command line arguments,
- * starts java with the javaagent switch on the target program and
- * if requested starts Daikon on the result.
+ * This is the main class for Chicory which transforms the class files of a program to instrument it
+ * for Daikon. The instrumentation uses the javaagent switch to java (which allows classes to be
+ * instrumented as they are loaded). This class parses the command line arguments, starts java with
+ * the javaagent switch on the target program and if requested starts Daikon on the result.
  */
 public class Chicory {
 
@@ -45,12 +42,10 @@ public class Chicory {
   public static /*@Nullable*/ File comparability_file = null;
 
   /**
-   * If true, no variable values are printed.  Static variables are not
-   * initialized yet when the routine is entered, and static variable are
-   * not necessarily initialized to their final values when the routine is
-   * exited.  These .dtrace entries are purely for the benefit of tools
-   * that use Chicory for program tracing, to determine when methods are
-   * entered and exited.
+   * If true, no variable values are printed. Static variables are not initialized yet when the
+   * routine is entered, and static variable are not necessarily initialized to their final values
+   * when the routine is exited. These .dtrace entries are purely for the benefit of tools that use
+   * Chicory for program tracing, to determine when methods are entered and exited.
    */
   @Option("Write static initialzer program points")
   public static boolean instrument_clinit = false;
@@ -82,16 +77,15 @@ public class Chicory {
   public static boolean new_decl_format = true;
 
   /**
-   * Path to java agent jar file that performs the transformation.
-   * The "main" procedure is {@link ChicoryPremain#premain}.
+   * Path to java agent jar file that performs the transformation. The "main" procedure is {@link
+   * ChicoryPremain#premain}.
    */
   @Option("Path to the Chicory agent jar file")
   public static /*@MonotonicNonNull*/ File premain = null;
 
   /**
-   * The name of the file to read for a list of pure methods.  Should
-   * be 1 method per line.  Each method should be in the same format
-   * as format ouput by the purity analysis.
+   * The name of the file to read for a list of pure methods. Should be 1 method per line. Each
+   * method should be in the same format as format ouput by the purity analysis.
    */
   @Option("File of pure methods to use as additional Daikon variables")
   public static /*@Nullable*/ File purity_file;
@@ -107,9 +101,9 @@ public class Chicory {
   public static boolean daikon_online = false;
 
   /**
-   * Specifies Daikon arguments to be used if Daikon is run on a generated
-   * trace file or online via a socket.  If neither {@code --daikon} or {@code --daikon-online}
-   * is chosen, this option will select {@code --daikon}.
+   * Specifies Daikon arguments to be used if Daikon is run on a generated trace file or online via
+   * a socket. If neither {@code --daikon} or {@code --daikon-online} is chosen, this option will
+   * select {@code --daikon}.
    */
   @Option("Specify Daikon arguments for either --daikon or --daikon-online")
   public static String daikon_args = "";
@@ -120,10 +114,7 @@ public class Chicory {
   @Option("Number of calls after which sampling will begin")
   public static int sample_start = 0;
 
-  /**
-   * Daikon port number.  Daikon writes this to stdout when it is started
-   * in online mode.
-   */
+  /** Daikon port number. Daikon writes this to stdout when it is started in online mode. */
   private static int daikon_port = -1;
 
   /** Thread that copies output from target to our output */
@@ -157,6 +148,7 @@ public class Chicory {
 
   /**
    * Entry point of Chicory.
+   *
    * @param args see usage for argument descriptions
    */
   public static void main(String[] args) {
@@ -180,8 +172,8 @@ public class Chicory {
   }
 
   /**
-   * Check the resulting arguments for legality.  Prints a message and
-   * returns false if there was an error.
+   * Check the resulting arguments for legality. Prints a message and returns false if there was an
+   * error.
    */
   public static boolean check_args(Options options, String[] target_args) {
 
@@ -198,26 +190,24 @@ public class Chicory {
     return true;
   }
 
-  /** Return true iff argument was given to run a purity analysis.
+  /**
+   * Return true iff argument was given to run a purity analysis.
    *
-   * You should only call this after parsing arguments.
+   * <p>You should only call this after parsing arguments.
    */
   public static boolean doPurity() {
     return purityAnalysis;
   }
 
-  /**
-   * Return true iff a file name was specified to supply pure method names.
-   */
+  /** Return true iff a file name was specified to supply pure method names. */
   /*@Pure*/
   public static /*@Nullable*/ File get_purity_file() {
     return purity_file;
   }
 
   /**
-   * Starts the target program with the java agent setup to do the
-   * transforms.  All java agent arguments are passed to it.  Our
-   * classpath is passed to the new JVM.
+   * Starts the target program with the java agent setup to do the transforms. All java agent
+   * arguments are passed to it. Our classpath is passed to the new JVM.
    */
   void start_target(String premain_args, String[] target_args) {
 
@@ -446,9 +436,7 @@ public class Chicory {
     }
   }
 
-  /**
-   * Runs daikon either online or on the generated trace file.
-   */
+  /** Runs daikon either online or on the generated trace file. */
   /*@EnsuresNonNull("daikon_proc")*/
   public void runDaikon() {
 
@@ -466,11 +454,7 @@ public class Chicory {
       cmdstr =
           String.format(
               "java -Xmx%s -cp %s -ea daikon.Daikon %s %s/%s",
-              heap_size,
-              cp,
-              daikon_args,
-              output_dir,
-              dtrace_file);
+              heap_size, cp, daikon_args, output_dir, dtrace_file);
     }
 
     //System.out.println("daikon command is " + daikon_cmd);
@@ -561,10 +545,7 @@ public class Chicory {
     return (System.currentTimeMillis() - start);
   }
 
-  /**
-   * Convert a list of arguments into a command-line string.
-   * Only used for debugging output.
-   */
+  /** Convert a list of arguments into a command-line string. Only used for debugging output. */
   public String args_to_string(List<String> args) {
     String str = "";
     for (String arg : args) {

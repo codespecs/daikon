@@ -56,6 +56,7 @@ java/Test.decls-DynComp
 
 # Obtained via Git
 plume-lib
+java/.run-google-java-format
 # Generated from plume-lib
 java/daikon/util
 

@@ -6,18 +6,15 @@ import java.util.*;
 import plume.UtilMDE;
 
 /**
- * UnionInvariants is a command-line tool that will read in one (or
- * more) {@code .inv} files (possibly gzipped) and write their union into a
- * new {@code .inv} file (possibly gzipped).  Run with {@code -h} flag to view the
- * command line syntax.
+ * UnionInvariants is a command-line tool that will read in one (or more) {@code .inv} files
+ * (possibly gzipped) and write their union into a new {@code .inv} file (possibly gzipped). Run
+ * with {@code -h} flag to view the command line syntax.
  *
- * <p> Currently, UnionInvariants works at program point granularity,
- * so two inv files cannot have printable invariants at the same
- * program point.
+ * <p>Currently, UnionInvariants works at program point granularity, so two inv files cannot have
+ * printable invariants at the same program point.
  *
- * <p> You can optionally use Simplify after combination in case you
- * believe invariant context from other types will suppress some
- * invariants.  (This tool is also a nice way to run Simplify on a
+ * <p>You can optionally use Simplify after combination in case you believe invariant context from
+ * other types will suppress some invariants. (This tool is also a nice way to run Simplify on a
  * single inv file.)
  */
 public final class UnionInvariants {
@@ -45,10 +42,10 @@ public final class UnionInvariants {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -149,9 +146,7 @@ public final class UnionInvariants {
     System.out.println("Exiting");
   }
 
-  /**
-   * Union multiple PptMaps into one.
-   */
+  /** Union multiple PptMaps into one. */
   public static void union(
       PptMap collector, // mutated
       PptMap

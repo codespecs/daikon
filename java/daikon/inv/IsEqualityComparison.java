@@ -2,12 +2,15 @@ package daikon.inv;
 
 import plume.*;
 
-/** This Filter returns true if its argument is an Invariant which satisfies
- * the following conditions:
+/**
+ * This Filter returns true if its argument is an Invariant which satisfies the following
+ * conditions:
+ *
  * <ul>
- *  <li> the Invariant is a Comparison (which reports &lt;, &gt;, =, &le;, or &ge;)
- *  <li> the relationship reported by the comparison is = (not &lt;, &le;, &gt;, or &ge;)
+ *   <li> the Invariant is a Comparison (which reports &lt;, &gt;, =, &le;, or &ge;)
+ *   <li> the relationship reported by the comparison is = (not &lt;, &le;, &gt;, or &ge;)
  * </ul>
+ *
  * This does not consider PairwiseIntComparison to be an equality invariant.
  */
 public final class IsEqualityComparison implements Filter<Invariant> {

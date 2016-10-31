@@ -8,11 +8,10 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Comparator for sorting invariants.  If an invariant is an
- * implication, its consequent is used instead of the whole invariant.
- * If the consequents of two invariants are equal, the predicates are
- * compared.  The predicates and consequents themselves are compared
- * using the Comparator c passed to the constructor.  Some examples:
+ * Comparator for sorting invariants. If an invariant is an implication, its consequent is used
+ * instead of the whole invariant. If the consequents of two invariants are equal, the predicates
+ * are compared. The predicates and consequents themselves are compared using the Comparator c
+ * passed to the constructor. Some examples:
  *
  * <pre>
  * this.compare(A&rArr;B, A&rArr;C) == c.compare(B, C)

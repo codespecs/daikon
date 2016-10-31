@@ -64,10 +64,10 @@ public class TraceSelect {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing daikon.Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * daikon.Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -313,8 +313,7 @@ public class TraceSelect {
 // classes in plume.
 
 class InvocationComparator implements Comparator<String> {
-  /** Requires:  s1 and s2 are String representations of invocations
-   *  from a tracefile. */
+  /** Requires: s1 and s2 are String representations of invocations from a tracefile. */
   /*@Pure*/
   @Override
   public int compare(String s1, String s2) {

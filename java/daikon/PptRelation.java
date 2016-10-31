@@ -18,16 +18,14 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Class that builds and describes relations in the ppt hierachy.
- * Building the relationship is specific to each type of parent/child
- * relationship (eg, method to object, exit to combined exit, etc).
- * The use of the relationship is general.
+ * Class that builds and describes relations in the ppt hierachy. Building the relationship is
+ * specific to each type of parent/child relationship (eg, method to object, exit to combined exit,
+ * etc). The use of the relationship is general.
  *
- * The basic function of the class is to translate from a variable in
- * the parent to the equivalent variable in the child and vice-versa.
- * For example, in the ENTER &rarr; EXIT relationship, the parent is the
- * ENTER ppt and the child is the EXIT ppt.  Each variable in the ENTER
- * ppt is connected to the corresponding orig variable in the EXIT ppt.
+ * <p>The basic function of the class is to translate from a variable in the parent to the
+ * equivalent variable in the child and vice-versa. For example, in the ENTER &rarr; EXIT
+ * relationship, the parent is the ENTER ppt and the child is the EXIT ppt. Each variable in the
+ * ENTER ppt is connected to the corresponding orig variable in the EXIT ppt.
  */
 public class PptRelation implements Serializable {
 
@@ -37,10 +35,9 @@ public class PptRelation implements Serializable {
   static final long serialVersionUID = 20030819L;
 
   /**
-   * The different ppt/variable hierarchy relationships.  Parent and
-   * User relations are specified in the declaration record of the
-   * ppt.  ENTER_EXIT, EXIT_EXITNN, and PPT_COND are automtically constructed.
-   * MERGE_CHILD is not used by Daikon.
+   * The different ppt/variable hierarchy relationships. Parent and User relations are specified in
+   * the declaration record of the ppt. ENTER_EXIT, EXIT_EXITNN, and PPT_COND are automtically
+   * constructed. MERGE_CHILD is not used by Daikon.
    */
   public enum PptRelationType {
     /** Acyclic relationship to a parent, eg, method to its object */
@@ -59,9 +56,7 @@ public class PptRelation implements Serializable {
 
   private static final Logger debug = Logger.getLogger("daikon.PptRelation");
 
-  /**
-   * Description of type of parent-child relationship (debug output only).
-   */
+  /** Description of type of parent-child relationship (debug output only). */
   PptRelationType relationship;
 
   /** Parent of relation. */
@@ -76,16 +71,13 @@ public class PptRelation implements Serializable {
   /** Map from child vars to matching parent vars. */
   public Map<VarInfo, VarInfo> child_to_parent_map;
 
-  /**
-   * Boolean.  Controls whether the object-user relation is created in the
-   * variable hierarchy.
-   */
+  /** Boolean. Controls whether the object-user relation is created in the variable hierarchy. */
   public static boolean dkconfig_enable_object_user = false;
 
   /**
-   * Create a relation between the specified parent and child.  The actual
-   * variable relations are filled in by the caller.  Note that this creates
-   * the connection between this relation and the parent/child.
+   * Create a relation between the specified parent and child. The actual variable relations are
+   * filled in by the caller. Note that this creates the connection between this relation and the
+   * parent/child.
    */
   /*
   private PptRelation(PptTopLevel parent, PptTopLevel child, String rel_type) {
@@ -102,11 +94,10 @@ public class PptRelation implements Serializable {
   */
 
   /**
-   * Create a relation between the specified parent and child.  The actual
-   * variable relations are filled in by the caller.  Note that this creates
-   * the connection between this relation and the parent/child.
-   * As a side effect, the constructed PptRelation is stored in both the
-   * parent and the child.
+   * Create a relation between the specified parent and child. The actual variable relations are
+   * filled in by the caller. Note that this creates the connection between this relation and the
+   * parent/child. As a side effect, the constructed PptRelation is stored in both the parent and
+   * the child.
    */
   private PptRelation(PptTopLevel parent, PptTopLevel child, PptRelationType rel_type) {
 
@@ -120,10 +111,7 @@ public class PptRelation implements Serializable {
     connect();
   }
 
-  /**
-   * Adds this relation to its child's parent list and its parent's
-   * children list.
-   */
+  /** Adds this relation to its child's parent list and its parent's children list. */
   @SuppressWarnings({"rawness", "initialization"}) // won't be used until initialization is finished
   private void connect(
       /*>>>@UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/) {
@@ -133,9 +121,7 @@ public class PptRelation implements Serializable {
     parent.children.add(this);
   }
 
-  /**
-   * Returns the number of parent to child variable relations.
-   */
+  /** Returns the number of parent to child variable relations. */
   /*@Pure*/
   public int size() {
     return (parent_to_child_map.size());
@@ -146,9 +132,7 @@ public class PptRelation implements Serializable {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 
-  /**
-   * Return a string containing all of the parent&rarr;child var relations.
-   */
+  /** Return a string containing all of the parent&rarr;child var relations. */
   public String parent_to_child_var_string() {
 
     StringBuffer var_str = new StringBuffer();
@@ -162,9 +146,8 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Relates all of the variables with the same name in parent and child.
-   * Returns true if each non-static parent variable was related to a
-   * child variable.
+   * Relates all of the variables with the same name in parent and child. Returns true if each
+   * non-static parent variable was related to a child variable.
    */
   public boolean relate_same_name() {
 
@@ -182,9 +165,7 @@ public class PptRelation implements Serializable {
     return relate_all;
   }
 
-  /**
-   * Prints a ppt hierarchy of all of the ppts of this child and below.
-   */
+  /** Prints a ppt hierarchy of all of the ppts of this child and below. */
   public void debug_print_tree(Logger l, int indent) {
 
     // Print the child tree including vars and class name
@@ -192,13 +173,12 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns whether or not this relation is a primary relation.  This
-   * used to simplify debug prints of the PPt tree (so that extra relations
-   * don't result in duplicative information).
+   * Returns whether or not this relation is a primary relation. This used to simplify debug prints
+   * of the PPt tree (so that extra relations don't result in duplicative information).
    *
-   * Somewhat arbitrarily, Object&rarr;User and Enter&rarr;Exit are not considered
-   * primary while all others are.  The remaining relations (class&rarr;object,
-   * object&rarr;method,and exit&rarr;exitNN) form a simple tree without duplication.
+   * <p>Somewhat arbitrarily, Object&rarr;User and Enter&rarr;Exit are not considered primary while
+   * all others are. The remaining relations (class&rarr;object, object&rarr;method,and
+   * exit&rarr;exitNN) form a simple tree without duplication.
    */
 
   /*@Pure*/
@@ -212,17 +192,16 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns the parent variable that corresponds to childVar.  Returns
-   * null if there is no corresponding variable.
+   * Returns the parent variable that corresponds to childVar. Returns null if there is no
+   * corresponding variable.
    */
   public /*@Nullable*/ VarInfo parentVar(VarInfo childVar) {
     return child_to_parent_map.get(childVar);
   }
 
   /**
-   * Like parentVar(VarInfo), but if no parent is found, tries every
-   * variable in the equality set and returns null only if none of them has
-   * a parent.
+   * Like parentVar(VarInfo), but if no parent is found, tries every variable in the equality set
+   * and returns null only if none of them has a parent.
    */
   public /*@Nullable*/ VarInfo parentVarAnyInEquality(VarInfo childVar) {
     VarInfo result = parentVar(childVar);
@@ -242,27 +221,23 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns the child variable that corresponds to parentVar.  Returns
-   * null if there is no corresponding variable.
+   * Returns the child variable that corresponds to parentVar. Returns null if there is no
+   * corresponding variable.
    */
   public /*@Nullable*/ VarInfo childVar(VarInfo parentVar) {
     return parent_to_child_map.get(parentVar);
   }
 
-  /**
-   * Returns whether or not this relation's child has children of its own.
-   */
+  /** Returns whether or not this relation's child has children of its own. */
   public boolean hasChildren() {
     return (child.children.size() > 0);
   }
 
   /**
-   * Returns a map of VarInfo.Pair with an entry for each pair of
-   * equal variables in all of the equality sets of the child.  The
-   * variables are the corresponding parent variables and not the
-   * child variables themselves.  The map is from the pair to itself,
-   * which allows the pair to be looked up (which is not possible with
-   * a set).
+   * Returns a map of VarInfo.Pair with an entry for each pair of equal variables in all of the
+   * equality sets of the child. The variables are the corresponding parent variables and not the
+   * child variables themselves. The map is from the pair to itself, which allows the pair to be
+   * looked up (which is not possible with a set).
    */
   public Map<VarInfo.Pair, VarInfo.Pair> get_child_equalities_as_parent() {
 
@@ -335,9 +310,8 @@ public class PptRelation implements Serializable {
   /**
    * Relates parent_var to a variable in child that matches name.
    *
-   * @param parent_var      the parent variable being matched
-   * @param viname          the name to look for in child variables
-   *
+   * @param parent_var the parent variable being matched
+   * @param viname the name to look for in child variables
    * @return true if there was a matching variable, false otherwise
    */
   private boolean relate(VarInfo parent_var, String viname) {
@@ -353,8 +327,8 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns a relation in the ppt hierarchy from an object (parent) to a
-   * method (child) on that object.
+   * Returns a relation in the ppt hierarchy from an object (parent) to a method (child) on that
+   * object.
    */
   public static PptRelation newObjectMethodRel(PptTopLevel parent, PptTopLevel child) {
 
@@ -374,8 +348,8 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns a relation in the ppt hierarchy from a class (parent)
-   * to an object (child) containing static members of that class.
+   * Returns a relation in the ppt hierarchy from a class (parent) to an object (child) containing
+   * static members of that class.
    */
   public static PptRelation newClassObjectRel(PptTopLevel parent, PptTopLevel child) {
 
@@ -390,10 +364,9 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Creates a USER or PARENT relation from child to parent.  The
-   * variable relationships are specified in the declaration record
-   * and stored in the VarInfo for each variable.  RuntimeException will
-   * be thrown if any of the parent variables cannot be found.
+   * Creates a USER or PARENT relation from child to parent. The variable relationships are
+   * specified in the declaration record and stored in the VarInfo for each variable.
+   * RuntimeException will be thrown if any of the parent variables cannot be found.
    */
   public static PptRelation newParentRelation(
       ParentRelation pr, PptTopLevel parent, PptTopLevel child) {
@@ -428,11 +401,7 @@ public class PptRelation implements Serializable {
               String.format(
                   "Can't find parent variable '%s' in ppt '%s', "
                       + "with vars %s specified by var '%s' in ppt '%s'",
-                  parent_name,
-                  pi.parent_ppt,
-                  parent.var_names(),
-                  vc.name(),
-                  child.name()));
+                  parent_name, pi.parent_ppt, parent.var_names(), vc.name(), child.name()));
         }
         rel.child_to_parent_map.put(vc, vp);
         rel.parent_to_child_map.put(vp, vc);
@@ -442,9 +411,8 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns a relation in the ppt hierarchy from an object (parent)
-   * to a user (child) of that objects (eg, from the object B to the method
-   * A.foo (B arg)).
+   * Returns a relation in the ppt hierarchy from an object (parent) to a user (child) of that
+   * objects (eg, from the object B to the method A.foo (B arg)).
    *
    * @param parent ppt of the object definition
    * @param child ppt of a user of parent's object
@@ -466,8 +434,7 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns a relation in the ppt hierarchy from enter points to exit
-   * points over orig variables.
+   * Returns a relation in the ppt hierarchy from enter points to exit points over orig variables.
    */
   public static PptRelation newEnterExitRel(PptTopLevel parent, PptTopLevel child) {
 
@@ -492,11 +459,7 @@ public class PptRelation implements Serializable {
         assert found
             : String.format(
                 "vp %s orig_name %s parent %s child %s " + "with vars %s",
-                vp,
-                vp.prestate_name(),
-                parent.name(),
-                child.name(),
-                child.var_names());
+                vp, vp.prestate_name(), parent.name(), child.name(), child.var_names());
       }
     }
 
@@ -561,9 +524,8 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns a relation in the ppt hierarchy from combined
-   * exit points (parent) to an individual exit point (child).  Individual
-   * exit points are often referred to as exitNN where NN is the line
+   * Returns a relation in the ppt hierarchy from combined exit points (parent) to an individual
+   * exit point (child). Individual exit points are often referred to as exitNN where NN is the line
    * number of the exit point).
    */
   public static PptRelation newCombinedExitExitNNRel(PptTopLevel parent, PptTopLevel child) {
@@ -585,10 +547,7 @@ public class PptRelation implements Serializable {
     return rel;
   }
 
-  /**
-   * Returns a relation in the ppt hierarchy from a ppt to a
-   * PptConditional for that point.
-   */
+  /** Returns a relation in the ppt hierarchy from a ppt to a PptConditional for that point. */
   public static PptRelation newPptPptConditional(PptTopLevel parent, PptTopLevel child) {
 
     assert (parent != null) && (child != null);
@@ -609,9 +568,8 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns a an artificial relation in the Program point hierarchy
-   * between the same ppt in two different PptMaps.  Used to merge
-   * invariants between different data sets.  The parent and the
+   * Returns a an artificial relation in the Program point hierarchy between the same ppt in two
+   * different PptMaps. Used to merge invariants between different data sets. The parent and the
    * child should have exactly the same variables.
    */
   public static PptRelation newMergeChildRel(PptTopLevel parent, PptTopLevel child) {
@@ -647,9 +605,8 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Copies the relation from its current ppts to the specified
-   * ppts.  The new ppts must have the same variables in the same
-   * order as do the original ones.
+   * Copies the relation from its current ppts to the specified ppts. The new ppts must have the
+   * same variables in the same order as do the original ones.
    */
   public PptRelation copy(PptTopLevel new_parent, PptTopLevel new_child) {
 
@@ -677,13 +634,12 @@ public class PptRelation implements Serializable {
     }
   }
   /**
-   * Initialize the hierarchical relationship between ppts.  Specifically
-   * process each ppt, find its parent(s) in the partial order, and fill
-   * this point into the children field in the parent.  Note that children
-   * contains only the immediate descendants of the ppt.
+   * Initialize the hierarchical relationship between ppts. Specifically process each ppt, find its
+   * parent(s) in the partial order, and fill this point into the children field in the parent. Note
+   * that children contains only the immediate descendants of the ppt.
    *
-   * This version should be used with the old version of declaration
-   * records.  Use init_hierarchy_new() with new declararation records.
+   * <p>This version should be used with the old version of declaration records. Use
+   * init_hierarchy_new() with new declararation records.
    */
   public static void init_hierarchy(PptMap all_ppts) {
 
@@ -900,10 +856,9 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Initialize the hierarchical relationship between ppts.  Specifically
-   * process each ppt, find its parent(s) in the partial order, and fill
-   * this point into the children field in the parent.  Note that children
-   * contains only the immediate descendants of the ppt.
+   * Initialize the hierarchical relationship between ppts. Specifically process each ppt, find its
+   * parent(s) in the partial order, and fill this point into the children field in the parent. Note
+   * that children contains only the immediate descendants of the ppt.
    */
   public static void init_hierarchy_new(PptMap all_ppts) {
 

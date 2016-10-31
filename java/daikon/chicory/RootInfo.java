@@ -2,13 +2,10 @@ package daikon.chicory;
 
 import java.lang.reflect.*;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
- *  This is a subtype of DaikonVariableInfo and is used as a
- *  "placeholder" for the root of the tree.  It contains no variable
- *  information other than what is stored in its children.
+ * This is a subtype of DaikonVariableInfo and is used as a "placeholder" for the root of the tree.
+ * It contains no variable information other than what is stored in its children.
  */
 @SuppressWarnings("nullness") // to do
 public class RootInfo extends DaikonVariableInfo {
@@ -22,9 +19,7 @@ public class RootInfo extends DaikonVariableInfo {
     throw new RuntimeException("No val for RootInfo");
   }
 
-  /**
-   * Creates a RootInfo object for a method entry program point.
-   */
+  /** Creates a RootInfo object for a method entry program point. */
   public static RootInfo enter_process(MethodInfo mi, int depth) {
     debug_vars.clear("Building enter tree for %s:%s%n", mi.method_name, mi);
 
@@ -58,9 +53,7 @@ public class RootInfo extends DaikonVariableInfo {
     return root;
   }
 
-  /**
-   * Creates a RootInfo object for a method exit program point.
-   */
+  /** Creates a RootInfo object for a method exit program point. */
   public static RootInfo exit_process(MethodInfo mi, int depth) {
     debug_vars.clear("Building exit tree for %s%n", mi);
 
@@ -108,8 +101,8 @@ public class RootInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Creates a RootInfo object for an object program point.
-   * This will include the class' fields and the "this" object.
+   * Creates a RootInfo object for an object program point. This will include the class' fields and
+   * the "this" object.
    */
   public static RootInfo getObjectPpt(ClassInfo cinfo, int depth) {
     debug_vars.clear("enter getObjectPpt: %s%n", cinfo);
@@ -127,10 +120,7 @@ public class RootInfo extends DaikonVariableInfo {
     return root;
   }
 
-  /**
-   * Creates a RootInfo object for a class program point.
-   * This will just include static fields.
-   */
+  /** Creates a RootInfo object for a class program point. This will just include static fields. */
   public static RootInfo getClassPpt(ClassInfo cinfo, int depth) {
     debug_vars.clear("enter getClassPpt: %s%n", cinfo);
 

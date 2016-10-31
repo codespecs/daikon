@@ -23,9 +23,8 @@ public final class DCRuntime {
   public static final List<MethodInfo> methods = new ArrayList<MethodInfo>();
 
   /**
-   * Keep track of whether or not we are already processing an enter/exit
-   * so we can avoid recursion.  Only really necessary during debugging
-   * (where we call toString()).
+   * Keep track of whether or not we are already processing an enter/exit so we can avoid recursion.
+   * Only really necessary during debugging (where we call toString()).
    */
   private static boolean in_enter_exit = false;
 
@@ -38,15 +37,13 @@ public final class DCRuntime {
   /** Depth to follow fields in classes */
   public static int depth = 2;
 
-  /** static count of tags in the JDK.  Used as an offset for non-JDK code. */
+  /** static count of tags in the JDK. Used as an offset for non-JDK code. */
   static int max_jdk_static = 100000;
 
   /** If the application exits with an exception, it should be placed here */
   public static /*@Nullable*/ Throwable exit_exception = null;
 
-  /**
-   * Map from each primitive static name to the offset in static_tags.
-   */
+  /** Map from each primitive static name to the offset in static_tags. */
   // public static Map<String,Integer> static_map
   //   = new LinkedHashMap<String,Integer>();
 
@@ -57,10 +54,9 @@ public final class DCRuntime {
   public static Stack<Object> tag_stack = new Stack<Object>();
 
   /**
-   * Object used to mark procedure entries in the tag stack.  It is pushed
-   * on the stack at entry and checked on exit to make sure it is in on the
-   * top of the stack.  That allows us to determine which method caused
-   * a tag stack problem.
+   * Object used to mark procedure entries in the tag stack. It is pushed on the stack at entry and
+   * checked on exit to make sure it is in on the top of the stack. That allows us to determine
+   * which method caused a tag stack problem.
    */
   public static Object method_marker = new Object();
 
@@ -84,31 +80,24 @@ public final class DCRuntime {
   /** If true, merge arrays and their indices */
   private static boolean merge_arrays_and_indices = true;
 
-  /**
-   * Map from each object to the tags used for each primitive value in
-   * the object.
-   */
+  /** Map from each object to the tags used for each primitive value in the object. */
   public static WeakIdentityHashMap<Object, Object[]> field_map =
       new WeakIdentityHashMap<Object, Object[]>();
 
-  /**
-   * List of all classes encountered.  These are the classes that will
-   * have comparability output.
-   */
+  /** List of all classes encountered. These are the classes that will have comparability output. */
   private static List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
 
   /** Set of classes whose static initializer has run */
   private static Set<String> init_classes = new HashSet<String>();
 
   /**
-   * Class used as a tag for primitive constants.  Only different from
-   * Object for debugging purposes.
+   * Class used as a tag for primitive constants. Only different from Object for debugging purposes.
    */
   private static class Constant {}
 
   /**
-   * Class used as a tag for uninitialized instance fields. Only different
-   * from Object for debugging purposes.
+   * Class used as a tag for uninitialized instance fields. Only different from Object for debugging
+   * purposes.
    */
   private static class UninitFieldTag {
     String descr;
@@ -127,40 +116,35 @@ public final class DCRuntime {
   }
 
   /**
-   * Class used as a tag for uninitialized array elements.  Only different
-   * from Object for debugging purposes.
+   * Class used as a tag for uninitialized array elements. Only different from Object for debugging
+   * purposes.
    */
   private static class UninitArrayElem {}
 
   /**
-   * Class uses as a tag for the results of a binary operation.  Only
-   * different from Object for debugging purposes.
+   * Class uses as a tag for the results of a binary operation. Only different from Object for
+   * debugging purposes.
    */
   private static class BinOp {}
 
   /**
-   * Class used as a tag when a value is stored in a local in the
-   * test sequence.  Only different from object for debugging purposes.
+   * Class used as a tag when a value is stored in a local in the test sequence. Only different from
+   * object for debugging purposes.
    */
   private static class PrimStore {}
 
-  /**
-   * Map in Dataflow from tag to the set of valus that have contributed
-   * to its current value.
-   */
+  /** Map in Dataflow from tag to the set of valus that have contributed to its current value. */
   public static WeakIdentityHashMap<Object, ValueSource> tag_map =
       new WeakIdentityHashMap<Object, ValueSource>();
 
   /**
-   * Map from tag to dataflow values for the length of an array.  There
-   * should only be entries for arrays.
+   * Map from tag to dataflow values for the length of an array. There should only be entries for
+   * arrays.
    */
   public static WeakIdentityHashMap<Object, ValueSource> df_arrlen_map =
       new WeakIdentityHashMap<Object, ValueSource>();
 
-  /**
-   * Information about a value encountered at a branch.
-   */
+  /** Information about a value encountered at a branch. */
   public static class BranchInfo {
     /** the sources of the value */
     public ValueSource value_source;
@@ -177,7 +161,7 @@ public final class DCRuntime {
     }
   }
 
-  /** Information about each of the values encountered at a frontier branch**/
+  /** Information about each of the values encountered at a frontier branch* */
   public static List<BranchInfo> branch_tags = new ArrayList<BranchInfo>();
 
   /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
@@ -217,9 +201,7 @@ public final class DCRuntime {
     System.out.println();
   }
 
-  /**
-   * Handles calls to instrumented equals() methods.
-   */
+  /** Handles calls to instrumented equals() methods. */
   public static boolean dcomp_equals(Object o1, Object o2) {
     // Make obj1 and obj2 comparable
     if ((o1 != null) && (o2 != null)) TagEntry.union(o1, o2);
@@ -235,30 +217,29 @@ public final class DCRuntime {
   }
 
   /**
-   * This map keeps track of active super.equals() calls.<p>
+   * This map keeps track of active super.equals() calls.
    *
-   * Each time we make a call on a particular Object, we keep track of
-   * which superclass's equals method we called last. If that Object
-   * makes another call to super.equals before the original call is
-   * done, then invoke the equals method of the next-higher class in
-   * the class hierarchy (i.e. the next superclass).<p>
+   * <p>Each time we make a call on a particular Object, we keep track of which superclass's equals
+   * method we called last. If that Object makes another call to super.equals before the original
+   * call is done, then invoke the equals method of the next-higher class in the class hierarchy
+   * (i.e. the next superclass).
    *
-   * The map maps an Object to the last Class whose equals method we
-   * invoked while invoking that Object's original super.equals
-   * call. Once the equals call terminates, whether by returning a
-   * value or by throwing an exception, the corresponding key is
-   * removed from this map.
+   * <p>The map maps an Object to the last Class whose equals method we invoked while invoking that
+   * Object's original super.equals call. Once the equals call terminates, whether by returning a
+   * value or by throwing an exception, the corresponding key is removed from this map.
    */
   static Map<Object, Class<?>> active_equals_calls = new HashMap<Object, Class<?>>();
 
   /**
    * Tracks active {@code super.clone()} calls.
+   *
    * @see active_equals_calls
    */
   static Map<Object, Class<?>> active_clone_calls = new HashMap<Object, Class<?>>();
 
   /**
    * Handles <code>super.equals(Object)</code> calls.
+   *
    * @see #active_equals_calls
    */
   public static boolean dcomp_super_equals(Object o1, Object o2) {
@@ -346,9 +327,10 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles <code>clone()</code> calls.<p>
-   * This method throws Throwable because it may throw any checked
-   * exception that is thrown by <code>o.clone()</code>.
+   * Handles <code>clone()</code> calls.
+   *
+   * <p>This method throws Throwable because it may throw any checked exception that is thrown by
+   * <code>o.clone()</code>.
    */
   // XXX TODO consolidate this and dcomp_super_clone, since there is a
   // lot of duplicated code
@@ -405,6 +387,7 @@ public final class DCRuntime {
 
   /**
    * Handles <code>super.clone()</code> calls.
+   *
    * @see #active_clone_calls
    */
   public static Object dcomp_super_clone(Object o) throws Throwable {
@@ -475,9 +458,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Returns true if c or any of its superclasses has an instrumented
-   * version of method_name.  method_name should be an Object method with no
-   * arguments.
+   * Returns true if c or any of its superclasses has an instrumented version of method_name.
+   * method_name should be an Object method with no arguments.
    */
   public static boolean has_instrumented(Class<?> c, String method_name) {
 
@@ -516,9 +498,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Handle an uninstrumented clone call by making the two objects
-   * comparable.  Really should make all of their fields comparable
-   * instead.  Returns the cloned object.
+   * Handle an uninstrumented clone call by making the two objects comparable. Really should make
+   * all of their fields comparable instead. Returns the cloned object.
    */
   public static Object uninstrumented_clone(Object orig_obj, Object clone_obj) {
     TagEntry.union(orig_obj, clone_obj);
@@ -526,17 +507,16 @@ public final class DCRuntime {
   }
 
   /**
-   * Handle an uninstrumented toString call.  Since comparability doesn't
-   * seem to be related to toString, this does nothing.
+   * Handle an uninstrumented toString call. Since comparability doesn't seem to be related to
+   * toString, this does nothing.
    */
   public static String uninstrumented_toString(Object orig_obj, String result) {
     return result;
   }
 
   /**
-   * Handle object comparison.  Marks the two objects as comparable and
-   * returns whether or not they are equal.  Used as part of a replacement
-   * for IF_ACMPEQ.
+   * Handle object comparison. Marks the two objects as comparable and returns whether or not they
+   * are equal. Used as part of a replacement for IF_ACMPEQ.
    */
   public static boolean object_eq(Object obj1, Object obj2) {
 
@@ -551,9 +531,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Handle object comparison.  Marks the two objects as comparable and
-   * returns whether or not they are equal.  Used as part of a replacement
-   * for IF_ACMPNE.
+   * Handle object comparison. Marks the two objects as comparable and returns whether or not they
+   * are equal. Used as part of a replacement for IF_ACMPNE.
    */
   public static boolean object_ne(Object obj1, Object obj2) {
 
@@ -567,21 +546,16 @@ public final class DCRuntime {
   }
 
   /**
-   * Create the tag frame for this method.  Pop the tags for any
-   * primitive parameters off of the tag stack and store them in the
-   * tag frame.
+   * Create the tag frame for this method. Pop the tags for any primitive parameters off of the tag
+   * stack and store them in the tag frame.
    *
-   * @param params encodes the position of the primitive parameters into
-   * a string.  The first character is size of the tag frame.  The
-   * remaining characters indicate where each parameter on the tag stack
-   * should be stored into the frame.  For example "20" allocates a tag
-   * frame with two elements and stores the top of the tag stack into
-   * element 0.  A string is used for simplicity in code generation since
-   * strings can easily be placed into the constant portion of the class
-   * file.  Note that characters are determined by adding the integer
-   * value to '0'.  Values greater than 9 will have unintuitive (but
-   * printable) values.
-   *
+   * @param params encodes the position of the primitive parameters into a string. The first
+   *     character is size of the tag frame. The remaining characters indicate where each parameter
+   *     on the tag stack should be stored into the frame. For example "20" allocates a tag frame
+   *     with two elements and stores the top of the tag stack into element 0. A string is used for
+   *     simplicity in code generation since strings can easily be placed into the constant portion
+   *     of the class file. Note that characters are determined by adding the integer value to '0'.
+   *     Values greater than 9 will have unintuitive (but printable) values.
    * @return the allocated and initialized tag frame
    */
   public static Object[] create_tag_frame(String params) {
@@ -613,9 +587,7 @@ public final class DCRuntime {
     return tag_frame;
   }
 
-  /**
-   * Make sure the tag stack for this method is empty before exit.
-   */
+  /** Make sure the tag stack for this method is empty before exit. */
   public static void normal_exit() {
 
     Object top = tag_stack.pop();
@@ -624,9 +596,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Called for exits from methods with a primitive return type.  Pop the
-   * return type off of the tag stack, make sure the tags stack is empty for
-   * this method and then put the return value back on the tag stack.
+   * Called for exits from methods with a primitive return type. Pop the return type off of the tag
+   * stack, make sure the tags stack is empty for this method and then put the return value back on
+   * the tag stack.
    */
   public static void normal_exit_primitive() {
 
@@ -639,17 +611,16 @@ public final class DCRuntime {
   }
 
   /**
-   * Used when we are only interested in references. We don't use the
-   * tag stack, so nothing needs to be done here.
-   * (Reference comparability only.)
+   * Used when we are only interested in references. We don't use the tag stack, so nothing needs to
+   * be done here. (Reference comparability only.)
    */
   public static void normal_exit_refs_only() {
     if (debug) System.out.printf("Normal exit ok%n");
   }
 
   /**
-   * Clean up the tag stack on an exception exit from a method.  Pops
-   * items off of the tag stack until the method marker is found.
+   * Clean up the tag stack on an exception exit from a method. Pops items off of the tag stack
+   * until the method marker is found.
    */
   public static void exception_exit() {
 
@@ -664,17 +635,14 @@ public final class DCRuntime {
   }
 
   /**
-   * Clean up the tag stack on an exception exit from a method.  Pops
-   * items off of the tag stack until the method marker is found.
-   * (Reference comparability only.)
+   * Clean up the tag stack on an exception exit from a method. Pops items off of the tag stack
+   * until the method marker is found. (Reference comparability only.)
    */
   public static void exception_exit_refs_only() {
     if (debug) System.out.printf("Exception exit from %s%n", caller_name());
   }
 
-  /**
-   * Cleans up the tag stack when an exception is thrown.
-   */
+  /** Cleans up the tag stack when an exception is thrown. */
   public static void throw_op() {
     while (tag_stack.peek() != method_marker) tag_stack.pop();
   }
@@ -738,8 +706,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Discard the tag on the top of the tag stack.  Called when primitives
-   * are pushed but not used in expressions (such as when allocating arrays).
+   * Discard the tag on the top of the tag stack. Called when primitives are pushed but not used in
+   * expressions (such as when allocating arrays).
    */
   public static void discard_tag(int cnt) {
 
@@ -772,10 +740,7 @@ public final class DCRuntime {
     if (merge_arrays_and_indices) TagEntry.union(arr_ref, index_tag);
   }
 
-  /**
-   * Execute an aastore instruction and mark the array and its index as
-   * comparable.
-   */
+  /** Execute an aastore instruction and mark the array and its index as comparable. */
   public static void aastore(Object[] arr, int index, Object val) {
 
     // Mark the array and its index as comparable
@@ -788,14 +753,12 @@ public final class DCRuntime {
   }
 
   /**
-   * The JVM uses bastore for both boolean and byte data types.
-   * With the addition of StackMap verification in Java7 we can
-   * no longer use the same runtime routine for both data types.
-   * Hence, the addition of zastore below for boolean.
+   * The JVM uses bastore for both boolean and byte data types. With the addition of StackMap
+   * verification in Java7 we can no longer use the same runtime routine for both data types. Hence,
+   * the addition of zastore below for boolean.
    *
-   * Execute an bastore instruction and manipulate the tags accordingly.
-   * The tag at the top of stack is stored into the tag storage for the
-   * array.
+   * <p>Execute an bastore instruction and manipulate the tags accordingly. The tag at the top of
+   * stack is stored into the tag storage for the array.
    */
   public static void bastore(byte[] arr, int index, byte val) {
 
@@ -818,9 +781,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Execute an castore instruction and manipulate the tags accordingly.
-   * The tag at the top of stack is stored into the tag storage for the
-   * array.
+   * Execute an castore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * is stored into the tag storage for the array.
    */
   public static void castore(char[] arr, int index, char val) {
 
@@ -832,9 +794,8 @@ public final class DCRuntime {
     arr[index] = val;
   }
   /**
-   * Execute an dastore instruction and manipulate the tags accordingly.
-   * The tag at the top of stack is stored into the tag storage for the
-   * array.
+   * Execute an dastore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * is stored into the tag storage for the array.
    */
   public static void dastore(double[] arr, int index, double val) {
 
@@ -847,9 +808,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Execute an fastore instruction and manipulate the tags accordingly.
-   * The tag at the top of stack is stored into the tag storage for the
-   * array.
+   * Execute an fastore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * is stored into the tag storage for the array.
    */
   public static void fastore(float[] arr, int index, float val) {
 
@@ -862,9 +822,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Execute an iastore instruction and manipulate the tags accordingly.
-   * The tag at the top of stack is stored into the tag storage for the
-   * array.
+   * Execute an iastore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * is stored into the tag storage for the array.
    */
   public static void iastore(int[] arr, int index, int val) {
 
@@ -877,9 +836,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Execute an lastore instruction and manipulate the tags accordingly.
-   * The tag at the top of stack is stored into the tag storage for the
-   * array.
+   * Execute an lastore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * is stored into the tag storage for the array.
    */
   public static void lastore(long[] arr, int index, long val) {
 
@@ -892,9 +850,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Execute an sastore instruction and manipulate the tags accordingly.
-   * The tag at the top of stack is stored into the tag storage for the
-   * array.
+   * Execute an sastore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * is stored into the tag storage for the array.
    */
   public static void sastore(short[] arr, int index, short val) {
 
@@ -907,10 +864,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Make the count arguments to multianewarray comparable to the
-   * corresponding array indices. count1 is made comparable to the
-   * index of the given array (arr), and count2 is made comparable to the
-   * index of each array that is an element of arr.
+   * Make the count arguments to multianewarray comparable to the corresponding array indices.
+   * count1 is made comparable to the index of the given array (arr), and count2 is made comparable
+   * to the index of each array that is an element of arr.
    */
   public static void multianewarray2(int count1, int count2, Object[] arr) {
 
@@ -925,11 +881,10 @@ public final class DCRuntime {
   }
 
   /**
-   * Called when a user method is entered.  Any daikon variables whose current
-   * values are comparable are marked as comparable.
+   * Called when a user method is entered. Any daikon variables whose current values are comparable
+   * are marked as comparable.
    *
-   * @param tag_frame tag_frame containing the tags for the primitive
-   *        arguments of this method
+   * @param tag_frame tag_frame containing the tags for the primitive arguments of this method
    * @param obj value of 'this', or null if the method is static
    * @param mi_index index into the list of all methods (methods)
    * @param args array of the arguments to the method
@@ -984,9 +939,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Called when a user method is entered.  Any daikon variables whose current
-   * values are comparable are marked as comparable.
-   * (Reference comparability only.)
+   * Called when a user method is entered. Any daikon variables whose current values are comparable
+   * are marked as comparable. (Reference comparability only.)
    *
    * @param obj value of 'this', or null if the method is static
    * @param mi_index index into the list of all methods (methods)
@@ -1041,16 +995,14 @@ public final class DCRuntime {
   }
 
   /**
-   * Called when a user method exits.  Any daikon variables whose current
-   * values are comparable are marked as comparable.
+   * Called when a user method exits. Any daikon variables whose current values are comparable are
+   * marked as comparable.
    *
-   * @param tag_frame tag_frame containing the tags for the primitive
-   * arguments of this method
+   * @param tag_frame tag_frame containing the tags for the primitive arguments of this method
    * @param obj value of 'this', or null if the method is static
    * @param mi_index index into the list of all methods (methods)
    * @param args array of the arguments to the method
-   * @param ret_val value returned by the method, or null if the method is a
-   * constructor or void
+   * @param ret_val value returned by the method, or null if the method is a constructor or void
    * @param exit_line_number the source line number of this exit point
    */
   public static void exit(
@@ -1097,15 +1049,13 @@ public final class DCRuntime {
   }
 
   /**
-   * Called when a user method exits.  Any daikon variables whose current
-   * values are comparable are marked as comparable.
-   * (Reference comparability only.)
+   * Called when a user method exits. Any daikon variables whose current values are comparable are
+   * marked as comparable. (Reference comparability only.)
    *
    * @param obj value of 'this', or null if the method is static
    * @param mi_index index into the list of all methods (methods)
    * @param args array of the arguments to the method
-   * @param ret_val value returned by the method, or null if the method is a
-   * constructor or void
+   * @param ret_val value returned by the method, or null if the method is a constructor or void
    * @param exit_line_number the source line number of this exit point
    */
   public static void exit_refs_only(
@@ -1147,9 +1097,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Process all of the daikon variables in the tree starting at root.
-   * If the values referenced by those variables are comparable mark
-   * the variables as comparable.
+   * Process all of the daikon variables in the tree starting at root. If the values referenced by
+   * those variables are comparable mark the variables as comparable.
    */
   public static void process_all_vars(
       MethodInfo mi, RootInfo root, Object[] tag_frame, Object obj, Object[] args, Object ret_val) {
@@ -1196,10 +1145,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Process all of the daikon variables in the tree starting at root.
-   * If the values referenced by those variables are comparable mark
-   * the variables as comparable.
-   * (Reference comparability only.)
+   * Process all of the daikon variables in the tree starting at root. If the values referenced by
+   * those variables are comparable mark the variables as comparable. (Reference comparability
+   * only.)
    */
   public static void process_all_vars_refs_only(
       MethodInfo mi,
@@ -1258,8 +1206,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Returns the tag for the specified field.  If that field is an array,
-   * a list of tags will be returned.
+   * Returns the tag for the specified field. If that field is an array, a list of tags will be
+   * returned.
    */
   static Object get_field_tag(FieldInfo fi, Object parent, Object obj) {
 
@@ -1289,9 +1237,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Returns the tag for the specified field.  If that field is an array,
-   * a list of tags will be returned.
-   * (Reference comparability only.)
+   * Returns the tag for the specified field. If that field is an array, a list of tags will be
+   * returned. (Reference comparability only.)
    */
   static Object get_field_tag_refs_only(FieldInfo fi, Object parent, Object obj) {
 
@@ -1324,17 +1271,16 @@ public final class DCRuntime {
   }
 
   /**
-   * Gets the tag for the specified field.  The tags for primitive instance
-   * fields are stored in the tag storage for the parent.  Tags for
-   * primitive static fields are stored a single global list (statics_tags)
-   * indexed by the value for the static name in static_map.  If the field
-   * is in an array a List<Object> with one tag per element is returned.
+   * Gets the tag for the specified field. The tags for primitive instance fields are stored in the
+   * tag storage for the parent. Tags for primitive static fields are stored a single global list
+   * (statics_tags) indexed by the value for the static name in static_map. If the field is in an
+   * array a List<Object> with one tag per element is returned.
    *
-   * The tag for non-primitive fields is the object itself.
+   * <p>The tag for non-primitive fields is the object itself.
    *
-   * @param fi     DaikonVariable to process
+   * @param fi DaikonVariable to process
    * @param parent value of dv's parent
-   * @param obj    value of dv
+   * @param obj value of dv
    */
   static Object old_get_field_tag(FieldInfo fi, Object parent, Object obj) {
 
@@ -1405,10 +1351,7 @@ public final class DCRuntime {
     return tag;
   }
 
-  /**
-   * Gets the object in field f in object obj.  Exceptions are turned
-   * into Errors.
-   */
+  /** Gets the object in field f in object obj. Exceptions are turned into Errors. */
   public static Object get_object_field(Field f, Object obj) {
     try {
       return f.get(obj);
@@ -1418,17 +1361,15 @@ public final class DCRuntime {
   }
 
   /**
-   * Merges the comparability of the daikon variable dv and its children
-   * whose current values are comparable.
+   * Merges the comparability of the daikon variable dv and its children whose current values are
+   * comparable.
    *
-   * @param varmap map from value set leaders to the first daikon variable
-   *               encountered with that leader.  Whenever a second daikon
-   *               variable is encountered whose value has the same leader,
-   *               that daikon variable is merged with the first daikon
-   *               variable.
+   * @param varmap map from value set leaders to the first daikon variable encountered with that
+   *     leader. Whenever a second daikon variable is encountered whose value has the same leader,
+   *     that daikon variable is merged with the first daikon variable.
    * @param parent value of dv's parent
-   * @param obj    value of dv
-   * @param dv     DaikonVariable to process
+   * @param obj value of dv
+   * @param dv DaikonVariable to process
    */
   static void merge_comparability(
       IdentityHashMap<Object, DaikonVariableInfo> varmap,
@@ -1493,8 +1434,7 @@ public final class DCRuntime {
         if (debug_timing.enabled()) {
           debug_timing.log(
               "  no array tags for Variable %s : %d msecs%n",
-              dv,
-              System.currentTimeMillis() - start_millis);
+              dv, System.currentTimeMillis() - start_millis);
         }
         return;
       }
@@ -1577,18 +1517,15 @@ public final class DCRuntime {
   }
 
   /**
-   * Merges the comparability of the daikon variable dv and its children
-   * whose current values are comparable.
-   * (Reference comparability only.)
+   * Merges the comparability of the daikon variable dv and its children whose current values are
+   * comparable. (Reference comparability only.)
    *
-   * @param varmap map from value set leaders to the first daikon variable
-   *               encountered with that leader.  Whenever a second daikon
-   *               variable is encountered whose value has the same leader,
-   *               that daikon variable is merged with the first daikon
-   *               variable.
+   * @param varmap map from value set leaders to the first daikon variable encountered with that
+   *     leader. Whenever a second daikon variable is encountered whose value has the same leader,
+   *     that daikon variable is merged with the first daikon variable.
    * @param parent value of dv's parent
-   * @param obj    value of dv
-   * @param dv     DaikonVariable to process
+   * @param obj value of dv
+   * @param dv DaikonVariable to process
    */
   static void merge_comparability_refs_only(
       IdentityHashMap<Object, DaikonVariableInfo> varmap,
@@ -1653,8 +1590,7 @@ public final class DCRuntime {
         if (debug_timing.enabled()) {
           debug_timing.log(
               "  no array tags for Variable %s : %d msecs%n",
-              dv,
-              System.currentTimeMillis() - start_millis);
+              dv, System.currentTimeMillis() - start_millis);
         }
         return;
       }
@@ -1736,10 +1672,7 @@ public final class DCRuntime {
     }
   }
 
-  /**
-   * Dumps out comparability information for all classes that were
-   * processed.
-   */
+  /** Dumps out comparability information for all classes that were processed. */
   public static void print_all_comparable(PrintWriter ps) {
 
     for (ClassInfo ci : all_classes) {
@@ -1755,9 +1688,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Dumps out comparability information for all classes that were
-   * processed.
-   * (Reference comparability only.)
+   * Dumps out comparability information for all classes that were processed. (Reference
+   * comparability only.)
    */
   public static void print_all_comparable_refs_only(PrintWriter ps) {
 
@@ -1816,9 +1748,7 @@ public final class DCRuntime {
   static int synthetic_cnt = 0;
   static int enum_cnt = 0;
 
-  /**
-   * Prints statistics about the number of decls to stdout.
-   */
+  /** Prints statistics about the number of decls to stdout. */
   public static void decl_stats() {
 
     for (ClassInfo ci : all_classes) {
@@ -1899,9 +1829,7 @@ public final class DCRuntime {
     }
   }
 
-  /**
-   * Calculates and prints the declarations for the specified class.
-   */
+  /** Calculates and prints the declarations for the specified class. */
   public static void print_class_decl(PrintWriter ps, ClassInfo ci) {
 
     Stopwatch watch = null;
@@ -1945,8 +1873,8 @@ public final class DCRuntime {
   // static Stopwatch watch = new Stopwatch();
 
   /**
-   * Prints a decl ENTER/EXIT records with comparability.  Returns the
-   * list of comparabile DVSets for the exit.
+   * Prints a decl ENTER/EXIT records with comparability. Returns the list of comparabile DVSets for
+   * the exit.
    */
   public static List<DVSet> print_decl(PrintWriter ps, MethodInfo mi) {
 
@@ -1992,10 +1920,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Print the variables in sets to ps in DECL file format.  Each
-   * variable in the same set is given the same comparability.  Constructed
-   * classname variables are made comparable to opther classname variables
-   * only.
+   * Print the variables in sets to ps in DECL file format. Each variable in the same set is given
+   * the same comparability. Constructed classname variables are made comparable to opther classname
+   * variables only.
    */
   private static void print_decl_vars(PrintWriter ps, List<DVSet> sets, RootInfo dv_tree) {
 
@@ -2031,9 +1958,7 @@ public final class DCRuntime {
       }
       debug_decl_print.log(
           "        %d vars in set, hashcode/non = %b/%b%n",
-          set.size(),
-          hashcode_vars,
-          non_hashcode_vars);
+          set.size(), hashcode_vars, non_hashcode_vars);
 
       // Loop through each variable and assign its comparability
       // Since hashcodes and their indices are in the same set, assign
@@ -2110,8 +2035,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Prints comparability information for the enter and exit points of
-   * the specified method. By default, outputs to {@code foo.txt-cset}.
+   * Prints comparability information for the enter and exit points of the specified method. By
+   * default, outputs to {@code foo.txt-cset}.
    */
   /* TO DO: Find a way to make this work correctly without using normal
    * get_comparable.
@@ -2146,9 +2071,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Prints comparability information for the enter and exit points of
-   * the specified method. By default, outputs to {@code foo.txt-cset}.
-   * (Reference comparability only.)
+   * Prints comparability information for the enter and exit points of the specified method. By
+   * default, outputs to {@code foo.txt-cset}. (Reference comparability only.)
    */
   /* TO DO: Find a way to make this work correctly without using normal
    * get_comparable.
@@ -2219,9 +2143,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Prints to [stream] the segment of the tree that starts at [node],
-   * interpreting [node] as [depth] steps from the root.
-   * Requires a Map [tree] that represents a tree though key-value sets
+   * Prints to [stream] the segment of the tree that starts at [node], interpreting [node] as
+   * [depth] steps from the root. Requires a Map [tree] that represents a tree though key-value sets
    * of the form {@code <}parent, set of children{@code >}.
    */
   static void print_tree(
@@ -2246,8 +2169,7 @@ public final class DCRuntime {
       }
       ps.printf(
           "%s (%s)%n",
-          skinyOutput(node, daikon.DynComp.abridged_vars),
-          TagEntry.get_line_trace(node));
+          skinyOutput(node, daikon.DynComp.abridged_vars), TagEntry.get_line_trace(node));
       if (tree.get(node) == null) {
         return;
       }
@@ -2257,12 +2179,12 @@ public final class DCRuntime {
   }
 
   /**
-   * If on, returns an ArrayList of Strings that converts the usual
-   * DVInfo.toString() output to a more readable form
+   * If on, returns an ArrayList of Strings that converts the usual DVInfo.toString() output to a
+   * more readable form
    *
-   * e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
+   * <p>e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *
-   *    "daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
+   * <p>"daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
    */
   private static ArrayList<String> skinyOutput(DVSet l, boolean on) {
     ArrayList<String> o = new ArrayList<String>();
@@ -2299,10 +2221,7 @@ public final class DCRuntime {
     return dvtxt;
   }
 
-  /**
-   * Set of Daikon variables.  Implements comparable on first DaikonVariable
-   * in each set.
-   */
+  /** Set of Daikon variables. Implements comparable on first DaikonVariable in each set. */
   private static class DVSet extends ArrayList<DaikonVariableInfo> implements Comparable<DVSet> {
     static final long serialVersionUID = 20050923L;
 
@@ -2323,14 +2242,12 @@ public final class DCRuntime {
   }
 
   /**
-   * Gets a list of sets of comparable daikon variables.  For simplicity
-   * the sets are represented as a list as well.  If the method has never
-   * been executed returns null (it would probably be better to return
-   * each variable in a separate set, but I wanted to differentiate this
-   * case for now).
+   * Gets a list of sets of comparable daikon variables. For simplicity the sets are represented as
+   * a list as well. If the method has never been executed returns null (it would probably be better
+   * to return each variable in a separate set, but I wanted to differentiate this case for now).
    *
-   * The sets are calculated by processing each daikon variable and adding
-   * it to a list associated with the leader of that set.
+   * <p>The sets are calculated by processing each daikon variable and adding it to a list
+   * associated with the leader of that set.
    */
   static /*@Nullable*/ List<DVSet> get_comparable(RootInfo root) {
 
@@ -2357,10 +2274,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Returns a map representing the tree of tracers.
-   * Represents the tree as entries in a map with each parent node as the key
-   *   to a set contains all its children. The parameter RootInfo node is
-   *   included as a key to all its children.
+   * Returns a map representing the tree of tracers. Represents the tree as entries in a map with
+   * each parent node as the key to a set contains all its children. The parameter RootInfo node is
+   * included as a key to all its children.
    */
   static /*@PolyNull*/ Map<DaikonVariableInfo, DVSet> get_comparable_traced(
       /*@PolyNull*/ RootInfo root) {
@@ -2401,19 +2317,16 @@ public final class DCRuntime {
   }
 
   /**
-   * Merges comparability so that the same variable have the same
-   * comparability at all points in the program point hierarchy.
-   * The comparability at the class/object points is calculated by
-   * merging the comparability at each exit point (i.e., if two variables
-   * are in the same set it any exit point, they are in the same set at
-   * the class point).  That comparability is then applied back to the
-   * exit points so that if two class variables are comparable at any
-   * exit point they are comparable at each exit point.  Finally exit
-   * point comparability is merged to the enter point so that their
-   * comparabilities are the same.
+   * Merges comparability so that the same variable have the same comparability at all points in the
+   * program point hierarchy. The comparability at the class/object points is calculated by merging
+   * the comparability at each exit point (i.e., if two variables are in the same set it any exit
+   * point, they are in the same set at the class point). That comparability is then applied back to
+   * the exit points so that if two class variables are comparable at any exit point they are
+   * comparable at each exit point. Finally exit point comparability is merged to the enter point so
+   * that their comparabilities are the same.
    *
-   * This is not the only valid definition of comparability but it is
-   * the one that Daikon expects because of how equality sets are handled.
+   * <p>This is not the only valid definition of comparability but it is the one that Daikon expects
+   * because of how equality sets are handled.
    */
   static void merge_class_comparability(ClassInfo ci) {
 
@@ -2461,9 +2374,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Merges any variables in the dest tree that are in the same set in
-   * the source tree.  The source tree's comparability is unchanged.
-   * Variables are identified by name.
+   * Merges any variables in the dest tree that are in the same set in the source tree. The source
+   * tree's comparability is unchanged. Variables are identified by name.
    */
   static void merge_dv_comparability(RootInfo src, RootInfo dest) {
 
@@ -2498,8 +2410,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Adds this daikon variable and all of its children into their appropriate
-   * sets (those of their leader) in sets.
+   * Adds this daikon variable and all of its children into their appropriate sets (those of their
+   * leader) in sets.
    */
   static void add_variable(Map<DaikonVariableInfo, DVSet> sets, DaikonVariableInfo dv) {
 
@@ -2521,10 +2433,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Pushes the tag associated with field_num in obj on the tag stack.
-   * A tag value must have been previously stored for this field.  Use
-   * push_field_tag_null_ok() if the tag may not have been previously
-   * stored.
+   * Pushes the tag associated with field_num in obj on the tag stack. A tag value must have been
+   * previously stored for this field. Use push_field_tag_null_ok() if the tag may not have been
+   * previously stored.
    */
   public static void push_field_tag(Object obj, int field_num) {
 
@@ -2543,10 +2454,7 @@ public final class DCRuntime {
       if (debug_primitive.enabled()) {
         debug_primitive.log(
             "push_field_tag %s [%s] %d = %s%n",
-            obj,
-            obj.getClass().getName(),
-            field_num,
-            obj_tags[field_num]);
+            obj, obj.getClass().getName(), field_num, obj_tags[field_num]);
       }
     } else {
       if (debug_primitive.enabled()) {
@@ -2559,10 +2467,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Pushes the tag associated with field_num in obj on the tag stack.
-   * If tag storage for this object has not been previously allocated it
-   * is allocated now and a tag is allocated for this field.  This should
-   * only be called for objects whose fields can be read without having been
+   * Pushes the tag associated with field_num in obj on the tag stack. If tag storage for this
+   * object has not been previously allocated it is allocated now and a tag is allocated for this
+   * field. This should only be called for objects whose fields can be read without having been
    * previously written (in Java).
    */
   public static void push_field_tag_null_ok(Object obj, int field_num) {
@@ -2582,10 +2489,7 @@ public final class DCRuntime {
       if (debug_primitive.enabled()) {
         debug_primitive.log(
             "push_field_tag %s [%s] %d = %s%n",
-            obj,
-            obj.getClass().getName(),
-            field_num,
-            obj_tags[field_num]);
+            obj, obj.getClass().getName(), field_num, obj_tags[field_num]);
       }
     } else {
       Class<?> obj_class = obj.getClass();
@@ -2608,9 +2512,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Pops the tag from the top of the tag stack and stores it in the
-   * tag storage for the specified field of the specified object.  If
-   * tag storage was not previously allocated, it is allocated now.
+   * Pops the tag from the top of the tag stack and stores it in the tag storage for the specified
+   * field of the specified object. If tag storage was not previously allocated, it is allocated
+   * now.
    */
   public static void pop_field_tag(Object obj, int field_num) {
 
@@ -2637,16 +2541,10 @@ public final class DCRuntime {
     obj_tags[field_num] = tag;
     debug_primitive.log(
         "pop_field_tag (%s [%s] %d = %s%n",
-        obj.getClass(),
-        obj.getClass().getName(),
-        field_num,
-        obj_tags[field_num]);
+        obj.getClass(), obj.getClass().getName(), field_num, obj_tags[field_num]);
   }
 
-  /**
-   * Return the number of primitive fields in clazz and all of its
-   * superclasses.
-   */
+  /** Return the number of primitive fields in clazz and all of its superclasses. */
   public static int num_prim_fields(Class<?> clazz) {
     if (clazz == Object.class) {
       return 0;
@@ -2660,11 +2558,10 @@ public final class DCRuntime {
   }
 
   /**
-   * Handle a binary operation on the two items at the top of the tag
-   * stack.  Binary operations pop the two items off of the top of the
-   * stack perform an operation and push the result back on the stack.
-   * The tags of the two items on the top of the stack must thus be
-   * merged and a representative tag pushed back on the stack.
+   * Handle a binary operation on the two items at the top of the tag stack. Binary operations pop
+   * the two items off of the top of the stack perform an operation and push the result back on the
+   * stack. The tags of the two items on the top of the stack must thus be merged and a
+   * representative tag pushed back on the stack.
    */
   public static void binary_tag_op() {
     debug_primitive.log("binary tag op%n");
@@ -2675,11 +2572,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles an i_cmpXX operation.  This opcode compares the two integers
-   * on the top of the stack and jumps accordingly.  Thus the two tags on
-   * the top of the stack are popped from the tag stack and merged.
-   * Very similar to binary_tag_op except that nothing is pushed back on
-   * the tag stack.
+   * Handles an i_cmpXX operation. This opcode compares the two integers on the top of the stack and
+   * jumps accordingly. Thus the two tags on the top of the stack are popped from the tag stack and
+   * merged. Very similar to binary_tag_op except that nothing is pushed back on the tag stack.
    */
   public static void cmp_op() {
     debug_primitive.log("cmp_op%n");
@@ -2703,8 +2598,7 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles a dup_x2 opcode on a primitive.  Currently only support
-   * category 1 computational types.
+   * Handles a dup_x2 opcode on a primitive. Currently only support category 1 computational types.
    */
   public static void dup_x2() {
     Object top = pop_check();
@@ -2758,12 +2652,11 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles the various primitive (int, double, etc) array load instructions.
-   * The array and its index are made comparable.  The tag for the
-   * index is removed from the tag stack and the tag for the array
-   * element is pushed on the stack.  The tag for the specified index
-   * must exist.  If it is reasonable for the tag not to exist, then
-   * primitive_array_load_null_ok() should be used instead.
+   * Handles the various primitive (int, double, etc) array load instructions. The array and its
+   * index are made comparable. The tag for the index is removed from the tag stack and the tag for
+   * the array element is pushed on the stack. The tag for the specified index must exist. If it is
+   * reasonable for the tag not to exist, then primitive_array_load_null_ok() should be used
+   * instead.
    */
   public static void primitive_array_load(Object arr_ref, int index) {
 
@@ -2794,13 +2687,11 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles the various primitive (int, double, etc) array load instructions.
-   * The array and its index are made comparable.  The tag for the
-   * index is removed from the tag stack and the tag for the array
-   * element is pushed on the stack.  Unlike primitive_array_load(), this
-   * method handles array elements whose tags have not previously been
-   * set.  This can happen when the JVM sets an array element directly and
-   * there is no corresponding java code that can set the tag.
+   * Handles the various primitive (int, double, etc) array load instructions. The array and its
+   * index are made comparable. The tag for the index is removed from the tag stack and the tag for
+   * the array element is pushed on the stack. Unlike primitive_array_load(), this method handles
+   * array elements whose tags have not previously been set. This can happen when the JVM sets an
+   * array element directly and there is no corresponding java code that can set the tag.
    */
   public static void primitive_array_load_null_ok(Object arr_ref, int index) {
 
@@ -2833,9 +2724,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles the aaload instruction.  The arry and its index are made
-   * comparable.  The tag for the index is removed from the tag
-   * stack.
+   * Handles the aaload instruction. The arry and its index are made comparable. The tag for the
+   * index is removed from the tag stack.
    */
   public static void ref_array_load(Object arr_ref, int index) {
 
@@ -2846,11 +2736,10 @@ public final class DCRuntime {
   }
 
   /**
-   * Allocate a new tag for the constant and push it on the tag stack.
-   * Note that this allocates a new tag each time the constant is pushed.
-   * If the same code is executed multiple time (eg, in a loop), and
-   * different values interact with the constant each time, those values
-   * will not end up comparable to each other.
+   * Allocate a new tag for the constant and push it on the tag stack. Note that this allocates a
+   * new tag each time the constant is pushed. If the same code is executed multiple time (eg, in a
+   * loop), and different values interact with the constant each time, those values will not end up
+   * comparable to each other.
    */
   public static void push_const() {
     Object tag = new Constant();
@@ -2861,25 +2750,20 @@ public final class DCRuntime {
   }
 
   /**
-   * Marks the specified class as initialized.  We don't look at static
-   * variables in classes until they are initialized.
+   * Marks the specified class as initialized. We don't look at static variables in classes until
+   * they are initialized.
    */
   public static void class_init(String classname) {
     init_classes.add(classname);
   }
 
-  /**
-   * Returns whether or not the specified class is initialized.
-   */
+  /** Returns whether or not the specified class is initialized. */
   /*@Pure*/
   public static boolean is_class_init(Class<?> clazz) {
     return (init_classes.contains(clazz.getName()));
   }
 
-  /**
-   * Returns the name of the method that called the caller of
-   * caller_name().
-   */
+  /** Returns the name of the method that called the caller of caller_name(). */
   private static String caller_name() {
 
     Throwable stack = new Throwable("caller");
@@ -2890,8 +2774,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Make sure that the top of the stack is not the method marker.  Should
-   * be called before every pop.
+   * Make sure that the top of the stack is not the method marker. Should be called before every
+   * pop.
    */
   private static void check_method_marker() {
 
@@ -2899,8 +2783,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Pops the top item off the stack after checking to insure that it
-   * is not the marker between methods.
+   * Pops the top item off the stack after checking to insure that it is not the marker between
+   * methods.
    */
   private static Object pop_check() {
     check_method_marker();
@@ -2908,9 +2792,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Returns a string description of the object that includes its class,
-   * identity hash code, and the result of its toString() function (if it
-   * overrides the default implementation.
+   * Returns a string description of the object that includes its class, identity hash code, and the
+   * result of its toString() function (if it overrides the default implementation.
    */
   private static String obj_str(Object obj) {
 
@@ -2928,10 +2811,7 @@ public final class DCRuntime {
     }
   }
 
-  /**
-   * Returns all of the daikonvariables in the tree rooted at dvi
-   * in a list.
-   */
+  /** Returns all of the daikonvariables in the tree rooted at dvi in a list. */
   private static List<DaikonVariableInfo> varlist(DaikonVariableInfo dvi) {
 
     List<DaikonVariableInfo> list = new ArrayList<DaikonVariableInfo>();
@@ -2942,10 +2822,7 @@ public final class DCRuntime {
     return list;
   }
 
-  /**
-   * Returns the name of the tag field that corresponds to the specified
-   * field.
-   */
+  /** Returns the name of the tag field that corresponds to the specified field. */
   public static String tag_field_name(String field_name) {
     return (field_name + "__$tag");
   }
@@ -2955,9 +2832,7 @@ public final class DCRuntime {
   private static Matcher non_jdk_decl_matcher =
       Pattern.compile("(, )?daikon.dcomp.DCompMarker( marker)?").matcher("");
 
-  /**
-   * Removes DCompMarker from the signature.
-   */
+  /** Removes DCompMarker from the signature. */
   public static String clean_decl_name(String decl_name) {
 
     if (DCInstrument.jdk_instrumented) {
@@ -2970,26 +2845,24 @@ public final class DCRuntime {
   }
 
   /**
-   * Abstract base class for code that gets the tag associated with
-   * a particular field.  There are specific implementors for the various
-   * types of fields.  FieldTag instances are stored in FieldInfo so that
-   * tags can be efficiently obtained.
+   * Abstract base class for code that gets the tag associated with a particular field. There are
+   * specific implementors for the various types of fields. FieldTag instances are stored in
+   * FieldInfo so that tags can be efficiently obtained.
    */
-  public static abstract class FieldTag {
+  public abstract static class FieldTag {
 
     /**
      * Gets the tag for the field
+     *
      * @param parent object that contains the field (if any)
-     * @param obj value of the field itself (if available and if its an
-     *            object
+     * @param obj value of the field itself (if available and if its an object
      */
     abstract Object get_tag(Object parent, Object obj);
   }
 
   /**
-   * Class that gets the tag for static primitive fields.  We retrieve
-   * the static tag by using the same method as we use during runtime
-   * to push the tag on the tag stack.
+   * Class that gets the tag for static primitive fields. We retrieve the static tag by using the
+   * same method as we use during runtime to push the tag on the tag stack.
    */
   public static class StaticPrimitiveTag extends FieldTag {
 
@@ -3029,9 +2902,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Class that gets the tag for a static reference variable.  The
-   * tag for a reference variable is the object itself, so that is
-   * obtained via reflection.
+   * Class that gets the tag for a static reference variable. The tag for a reference variable is
+   * the object itself, so that is obtained via reflection.
    */
   public static class StaticReferenceTag extends FieldTag {
 
@@ -3075,10 +2947,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Class that gets the list of tags for primitive arrays.  Note that
-   * primitive arrays can both be actual arrays of primitives and also
-   * arrays of classes containing primitives.  In the second case, there
-   * is a separate object that contains each of the 'array' values.
+   * Class that gets the list of tags for primitive arrays. Note that primitive arrays can both be
+   * actual arrays of primitives and also arrays of classes containing primitives. In the second
+   * case, there is a separate object that contains each of the 'array' values.
    */
   public static class PrimitiveArrayTag extends FieldTag {
 
@@ -3109,10 +2980,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Class that gets the tag for a primitive instance field.
-   * Each object with primitive fields has a corresponding tag array
-   * in field map.  The tag for a particular field is stored at that
-   * fields offset in the tag array.
+   * Class that gets the tag for a primitive instance field. Each object with primitive fields has a
+   * corresponding tag array in field map. The tag for a particular field is stored at that fields
+   * offset in the tag array.
    */
   public static class PrimitiveTag extends FieldTag {
 
@@ -3136,8 +3006,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Class that returns the tag for a reference instance field.  In
-   * this case, the tag is just the object itself.
+   * Class that returns the tag for a reference instance field. In this case, the tag is just the
+   * object itself.
    */
   public static class ReferenceTag extends FieldTag {
 
@@ -3153,10 +3023,9 @@ public final class DCRuntime {
   // Dataflow specific routines
 
   /**
-   * Determines the values associated with the object and pushes a new
-   * tag on the tag stack that refers to those same values.  Used when
-   * the result value of an operation on an object has the same dataflow
-   * as that of the object.
+   * Determines the values associated with the object and pushes a new tag on the tag stack that
+   * refers to those same values. Used when the result value of an operation on an object has the
+   * same dataflow as that of the object.
    */
   public static void dup_obj_tag_val(Object obj) {
     ValueSource values = tag_map.get(obj);
@@ -3166,9 +3035,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Finds the DF for the length of the specified array and pushes a
-   * tag on the tag stack that refers to that DF.  Used for arraylength
-   * opcodes.
+   * Finds the DF for the length of the specified array and pushes a tag on the tag stack that
+   * refers to that DF. Used for arraylength opcodes.
    */
   public static void arraylen_df(Object arr) {
     ValueSource len_df = df_arrlen_map.get(arr);
@@ -3178,9 +3046,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Builds a new value set that contains only this value (as described
-   * in descr).  Allocates a new tag, associates it with the value set and
-   * pushes it on the tag stack.  Used when a constant is pushed.
+   * Builds a new value set that contains only this value (as described in descr). Allocates a new
+   * tag, associates it with the value set and pushes it on the tag stack. Used when a constant is
+   * pushed.
    */
   public static void push_const_src(String descr) {
     Throwable stack_trace = new Throwable();
@@ -3192,9 +3060,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Builds a new value set that contains only this value (as described
-   * in descr).  Associates the object with the value set
-   * Used when a constant string/class (ldc) is pushed.
+   * Builds a new value set that contains only this value (as described in descr). Associates the
+   * object with the value set Used when a constant string/class (ldc) is pushed.
    */
   public static void push_const_obj_src(Object obj, String descr) {
     Throwable stack_trace = new Throwable();
@@ -3204,12 +3071,10 @@ public final class DCRuntime {
   }
 
   /**
-   * Handle a binary operation on the two items at the top of the tag
-   * stack.  Binary operations pop the two items off of the top of the
-   * stack perform an operation and push the result back on the stack.
-   * The tags of the two items on the top of the stack must be popped
-   * off and a new tag created and pushed that refers to the sources
-   * of each of the operands.
+   * Handle a binary operation on the two items at the top of the tag stack. Binary operations pop
+   * the two items off of the top of the stack perform an operation and push the result back on the
+   * stack. The tags of the two items on the top of the stack must be popped off and a new tag
+   * created and pushed that refers to the sources of each of the operands.
    */
   public static void binary_tag_df() {
     debug_primitive.log("binary tag df%n");
@@ -3223,10 +3088,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Pops the top of the tag stack into tag_frame[index].
-   * Adds the local's index to the DF.  Used to determine what
-   * variables in the test sequence have seen this value.  Should
-   * only be called if the pop is in the test sequence method.
+   * Pops the top of the tag stack into tag_frame[index]. Adds the local's index to the DF. Used to
+   * determine what variables in the test sequence have seen this value. Should only be called if
+   * the pop is in the test sequence method.
    */
   public static void pop_local_tag_df(Object[] tag_frame, int index) {
 
@@ -3248,8 +3112,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Adds the specified local to the DataFlow for obj.  Should only be
-   * called if the store is in the test sequence method.
+   * Adds the specified local to the DataFlow for obj. Should only be called if the store is in the
+   * test sequence method.
    */
   public static void pop_local_obj_df(Object obj, int index) {
     if (obj == null) {
@@ -3266,8 +3130,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Sets up the dataflow information for a new object.  The object is
-   * associated with the specified description.
+   * Sets up the dataflow information for a new object. The object is associated with the specified
+   * description.
    */
   public static void setup_obj_df(Object obj, String descr) {
 
@@ -3279,9 +3143,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Sets up the dataflow information for an array allocation.  The length
-   * of the array is associated with the size argument (on the top of the
-   * tag stack).  The array itself is associated with the specified description.
+   * Sets up the dataflow information for an array allocation. The length of the array is associated
+   * with the size argument (on the top of the tag stack). The array itself is associated with the
+   * specified description.
    */
   public static void setup_array_df(Object arr_ref, String descr) {
 
@@ -3298,12 +3162,11 @@ public final class DCRuntime {
   }
 
   /**
-   * Sets up the dataflow information for an multi-dimensional array
-   * allocation.  The multi-dimensional array allocate instruction takes
-   * the size of each dimension from the stack.  The tags for each of these
-   * sizes are thus on the tag stack.  The length of each allocated array
-   * is associated with its size argument.  The array itself is
-   * associated with the specified description.
+   * Sets up the dataflow information for an multi-dimensional array allocation. The
+   * multi-dimensional array allocate instruction takes the size of each dimension from the stack.
+   * The tags for each of these sizes are thus on the tag stack. The length of each allocated array
+   * is associated with its size argument. The array itself is associated with the specified
+   * description.
    */
   public static void setup_multiarray_df(Object arr, int dims, String descr) {
 
@@ -3320,14 +3183,13 @@ public final class DCRuntime {
   }
 
   /**
-   * Recursive routine that sets up the length and reference information
-   * for an array of possibly multiple dimensions
+   * Recursive routine that sets up the length and reference information for an array of possibly
+   * multiple dimensions
    *
-   *    @param dim   index into tags array of the tag for this dimension
-   *                 of the array
-   *    @param tags  the tags for the size of each dimension of the array
-   *    @param descr description of the array allocation
-   *    @param arr   the array.  Should have tags.length - dim dimensions
+   * @param dim index into tags array of the tag for this dimension of the array
+   * @param tags the tags for the size of each dimension of the array
+   * @param descr description of the array allocation
+   * @param arr the array. Should have tags.length - dim dimensions
    */
   private static void setup_multiarray_df(int dim, Object[] tags, ValueSource descr, Object arr) {
 
@@ -3348,15 +3210,12 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles the various primitive (int, double, etc) array load
-   * instructions.  The tag for the index is removed from the tag
-   * stack and the tag for the array element is pushed on the stack.
-   * The resulting DF value is the union of the index DF and the array
-   * element DF (since the changing the index, will definitely change
-   * the value).  This method handles array elements whose tags have
-   * not previously been set.  This can happen when the JVM sets an
-   * array element directly and there is no corresponding java code
-   * that can set the tag.
+   * Handles the various primitive (int, double, etc) array load instructions. The tag for the index
+   * is removed from the tag stack and the tag for the array element is pushed on the stack. The
+   * resulting DF value is the union of the index DF and the array element DF (since the changing
+   * the index, will definitely change the value). This method handles array elements whose tags
+   * have not previously been set. This can happen when the JVM sets an array element directly and
+   * there is no corresponding java code that can set the tag.
    */
   public static void primitive_array_load_df(Object arr_ref, int index) {
 
@@ -3394,11 +3253,10 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles the aaload instruction.  The tag for the index is popped
-   * from the tag stack.  The DF value for the result is the union of
-   * the index DF and the array element DF (since the changing the
-   * index, will definitely change the value).  Note that no tag is
-   * pushed on the tag stack because the result is not a primitive.
+   * Handles the aaload instruction. The tag for the index is popped from the tag stack. The DF
+   * value for the result is the union of the index DF and the array element DF (since the changing
+   * the index, will definitely change the value). Note that no tag is pushed on the tag stack
+   * because the result is not a primitive.
    */
   public static void ref_array_load_df(Object arr_ref, int index) {
 
@@ -3417,9 +3275,7 @@ public final class DCRuntime {
       String descr =
           String.format(
               "%s.%s:uninit-arr-elem@L%d",
-              ste.getClassName(),
-              ste.getMethodName(),
-              ste.getLineNumber());
+              ste.getClassName(), ste.getMethodName(), ste.getLineNumber());
       ValueSource val = new ValueSource(descr, t);
       tag_map.put(elem, val);
     }
@@ -3429,8 +3285,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Creates a value set that is the union of the value sets from tag1
-   * and tag2 and assigns that value set to result_tag.
+   * Creates a value set that is the union of the value sets from tag1 and tag2 and assigns that
+   * value set to result_tag.
    */
   private static void binary_op_df(String descr, Object result_tag, Object tag1, Object tag2) {
 
@@ -3451,9 +3307,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Pop the tags for the value to be stored and the index off of the
-   * tag stack, create a new tag whose DF is the union of the index DF and
-   * the value DF, and store that tag in the arrays tag array.
+   * Pop the tags for the value to be stored and the index off of the tag stack, create a new tag
+   * whose DF is the union of the index DF and the value DF, and store that tag in the arrays tag
+   * array.
    */
   private static void primitive_array_store_df(Object arr_ref, int length, int index) {
 
@@ -3481,10 +3337,7 @@ public final class DCRuntime {
     obj_tags[index] = elem_tag;
   }
 
-  /**
-   * Execute an aastore instruction and mark the array and its index as
-   * comparable.
-   */
+  /** Execute an aastore instruction and mark the array and its index as comparable. */
   public static void aastore_df(Object[] arr, int index, Object val) {
 
     // Get the tag for index
@@ -3501,6 +3354,7 @@ public final class DCRuntime {
 
   /**
    * Execute an bastore instruction and manipulate the tags accordingly.
+   *
    * @see #primitive_array_store_df
    */
   public static void bastore_df(byte[] arr, int index, byte val) {
@@ -3515,6 +3369,7 @@ public final class DCRuntime {
 
   /**
    * Execute an castore instruction and manipulate the tags accordingly.
+   *
    * @see #primitive_array_store_df
    */
   public static void castore_df(char[] arr, int index, char val) {
@@ -3529,6 +3384,7 @@ public final class DCRuntime {
 
   /**
    * Execute an dastore instruction and manipulate the tags accordingly.
+   *
    * @see #primitive_array_store_df
    */
   public static void dastore_df(double[] arr, int index, double val) {
@@ -3543,6 +3399,7 @@ public final class DCRuntime {
 
   /**
    * Execute an fastore instruction and manipulate the tags accordingly.
+   *
    * @see #primitive_array_store_df
    */
   public static void fastore_df(float[] arr, int index, float val) {
@@ -3557,6 +3414,7 @@ public final class DCRuntime {
 
   /**
    * Execute an iastore instruction and manipulate the tags accordingly.
+   *
    * @see #primitive_array_store_df
    */
   public static void iastore_df(int[] arr, int index, int val) {
@@ -3571,6 +3429,7 @@ public final class DCRuntime {
 
   /**
    * Execute an lastore instruction and manipulate the tags accordingly.
+   *
    * @see #primitive_array_store_df
    */
   public static void lastore_df(long[] arr, int index, long val) {
@@ -3585,6 +3444,7 @@ public final class DCRuntime {
 
   /**
    * Execute an sastore instruction and manipulate the tags accordingly.
+   *
    * @see #primitive_array_store_df
    */
   public static void sastore_df(short[] arr, int index, short val) {
@@ -3597,9 +3457,7 @@ public final class DCRuntime {
     arr[index] = val;
   }
 
-  /**
-   * Prints the DF for the tag on the top of the tag stack.
-   */
+  /** Prints the DF for the tag on the top of the tag stack. */
   public static void prim_branch_df(int compared_to) {
     Object tag = pop_check();
     BranchInfo bi = new BranchInfo(tag_map.get(tag), String.format("%d", compared_to));
@@ -3607,9 +3465,7 @@ public final class DCRuntime {
     debug_df_branch.log("primitive DF in branch: %s", bi);
   }
 
-  /**
-   * Captures the DF information for a frontier branch over two integers.
-   */
+  /** Captures the DF information for a frontier branch over two integers. */
   public static void int2_branch_df(int val1, int val2) {
     Object tag2 = pop_check();
     Object tag1 = pop_check();
@@ -3621,8 +3477,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Captures the DF information for a branch that compares the specified
-   * object to null.  Returns the object so it can be used in the comparison.
+   * Captures the DF information for a branch that compares the specified object to null. Returns
+   * the object so it can be used in the comparison.
    */
   public static Object ref_cmp_null_df(Object obj) {
     BranchInfo bi = new BranchInfo(tag_map.get(obj), "null");
@@ -3632,12 +3488,10 @@ public final class DCRuntime {
   }
 
   /**
-   * Captures the DF information for a branch that compares the two specified
-   * objects.  Used for if_acmpeq and if_acmpne.  This should really put
-   * the DF of the object being compared to in BranchInfo, but right now
-   * it only accepts a single string.  We find the dataflow of both objects
-   * that are compared, because a BranchInfo is added to the list for both
-   * of the objects.
+   * Captures the DF information for a branch that compares the two specified objects. Used for
+   * if_acmpeq and if_acmpne. This should really put the DF of the object being compared to in
+   * BranchInfo, but right now it only accepts a single string. We find the dataflow of both objects
+   * that are compared, because a BranchInfo is added to the list for both of the objects.
    */
   public static void ref2_branch_df(Object obj1, Object obj2) {
     if (obj1 != null) {
@@ -3654,12 +3508,10 @@ public final class DCRuntime {
   }
 
   /**
-   * Returns the ValueSource tree associated with tag.  If nothing is
-   * associated with tag and the tag is an uninitialized field,
-   * creates a new ValueSource tree from the information in
-   * UninitFieldTag and associates it with tag.  If the tag is an
-   * instance of Throwable (which may be created without a
-   * corresponding new), create a ValueSource tree for this location.
+   * Returns the ValueSource tree associated with tag. If nothing is associated with tag and the tag
+   * is an uninitialized field, creates a new ValueSource tree from the information in
+   * UninitFieldTag and associates it with tag. If the tag is an instance of Throwable (which may be
+   * created without a corresponding new), create a ValueSource tree for this location.
    */
   private static ValueSource get_value_source(Object tag) {
     assert tag != null; // see whether this fails -MDE
@@ -3691,10 +3543,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Handle an uninstrumented clone call by transferring the dataflow
-   * from the original object to the clone. Really should transfer the
-   * dataflow of each primitive field instead.
-   * Returns the cloned object.
+   * Handle an uninstrumented clone call by transferring the dataflow from the original object to
+   * the clone. Really should transfer the dataflow of each primitive field instead. Returns the
+   * cloned object.
    */
   public static Object uninstrumented_clone_df(Object orig_obj, Object clone_obj) {
     obj_to_obj(orig_obj, clone_obj);
@@ -3702,8 +3553,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Handle an uninstrumented toString call.  Transfers the dataflow from
-   * the orig object to the string.
+   * Handle an uninstrumented toString call. Transfers the dataflow from the orig object to the
+   * string.
    */
   public static String uninstrumented_toString_df(Object orig_obj, String result) {
     obj_to_obj(orig_obj, result);
@@ -3715,9 +3566,8 @@ public final class DCRuntime {
   //
 
   /**
-   * Handle tags for uninstrumented methods that take one primitive
-   * argument (tag on the tag stack) and return an object.  The DF of
-   * the argument is passed to the returned object.
+   * Handle tags for uninstrumented methods that take one primitive argument (tag on the tag stack)
+   * and return an object. The DF of the argument is passed to the returned object.
    */
   private static void prim_to_obj(Object obj) {
     Object tag = pop_check();
@@ -3727,8 +3577,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles DF for methods that take one reference argument and return
-   * a reference.  The DF of the dest is set to that of the source.
+   * Handles DF for methods that take one reference argument and return a reference. The DF of the
+   * dest is set to that of the source.
    */
   private static void obj_to_obj(Object src, Object dest) {
     ValueSource vs = tag_map.get(src);
@@ -3737,9 +3587,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles tags for methods that take one reference argument and return
-   * a primitive.  A new tag is allocated for the primitive and pushed on
-   * the tag stack.  The tag has the same DF as the input object.
+   * Handles tags for methods that take one reference argument and return a primitive. A new tag is
+   * allocated for the primitive and pushed on the tag stack. The tag has the same DF as the input
+   * object.
    */
   private static void obj_to_prim(Object obj) {
     ValueSource vs = tag_map.get(obj);
@@ -3842,11 +3692,9 @@ public final class DCRuntime {
   }
 
   /**
-   * Calculates dataflow for o1.equals(o2).  If o1 is instrumented
-   * the instrumentedversion calculates the dataflow.  If o2 is not
-   * instrumented, we set the dataflow of the result to the union of
-   * the DF of each object.  This may not be optimum if o1 implements
-   * equals.
+   * Calculates dataflow for o1.equals(o2). If o1 is instrumented the instrumentedversion calculates
+   * the dataflow. If o2 is not instrumented, we set the dataflow of the result to the union of the
+   * DF of each object. This may not be optimum if o1 implements equals.
    */
   public static boolean equals_df(Object o1, Object o2) {
     if (o1 instanceof DCompInstrumented) {
@@ -3857,10 +3705,7 @@ public final class DCRuntime {
     } else { // the equals is not instrumented
       debug_df.log_tb(
           "uninstrumented equals on %X:%s and %X:%s",
-          System.identityHashCode(o1),
-          o1,
-          System.identityHashCode(o2),
-          o2);
+          System.identityHashCode(o1), o1, System.identityHashCode(o2), o2);
       Object tag = new Object();
       binary_op_df("equals", tag, o1, o2);
       push_tag(tag);
@@ -3869,9 +3714,8 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles a call to an uninstrumented super equals.  Makes the
-   * result DF depend on the DF of the two input objects.  Does not
-   * execute the super call itself, that must be done in the caller.
+   * Handles a call to an uninstrumented super equals. Makes the result DF depend on the DF of the
+   * two input objects. Does not execute the super call itself, that must be done in the caller.
    */
   public static void super_equals_df(Object o1, Object o2) {
     debug_df.log_tb("uninstrumented equals on %s and %s", o1, o2);

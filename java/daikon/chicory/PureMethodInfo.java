@@ -10,9 +10,8 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * The PureMethodInfo class is a subtype of DaikonVariableInfo used
- * for "variable types" which correspond to the values of pure method
- * invocations.
+ * The PureMethodInfo class is a subtype of DaikonVariableInfo used for "variable types" which
+ * correspond to the values of pure method invocations.
  */
 public class PureMethodInfo extends DaikonVariableInfo {
 
@@ -57,10 +56,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
     }
   }
 
-  /**
-   * Invokes this pure method on the given parentVal.
-   * This is safe because the method is pure!
-   */
+  /** Invokes this pure method on the given parentVal. This is safe because the method is pure! */
   @Override
   @SuppressWarnings("unchecked")
   public /*@Nullable*/ Object getMyValFromParentVal(Object parentVal) {
@@ -109,8 +105,8 @@ public class PureMethodInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Returns an array corresponding to the current values of this pure
-   * method's arguments based on the given parentVal.
+   * Returns an array corresponding to the current values of this pure method's arguments based on
+   * the given parentVal.
    */
   private /*@Nullable*/ Object[] getArgVals(Object parentVal) {
     /*@Nullable*/ Object[] params = new /*@Nullable*/ Object[args.length];
@@ -164,9 +160,8 @@ public class PureMethodInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Convert standard wrapped Objects (i.e., Integers) to Chicory wrappers (ie,
-   * Runtime.IntWrap).  Should not be called if the Object was not auto-boxed
-   * from from a primitive!
+   * Convert standard wrapped Objects (i.e., Integers) to Chicory wrappers (ie, Runtime.IntWrap).
+   * Should not be called if the Object was not auto-boxed from from a primitive!
    */
   public static Object convertWrapper(Object obj) {
     if (obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList) {

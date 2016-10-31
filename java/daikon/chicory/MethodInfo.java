@@ -11,9 +11,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Keeps information about a method that is useful for writing out
- * decl and/or dtrace information.  Original information is filled
- * out during the transformation and other information is added the
+ * Keeps information about a method that is useful for writing out decl and/or dtrace information.
+ * Original information is filled out during the transformation and other information is added the
  * first time a method is called.
  */
 @SuppressWarnings("nullness") // to do.  member field is tricky.
@@ -22,15 +21,15 @@ public class MethodInfo {
   /** Class that contains this method */
   public ClassInfo class_info;
 
-  /** Reflection information on this method.
-   *    Null if a class initializer, {@code <clinit>} (see {@link #is_class_init()}.
+  /**
+   * Reflection information on this method. Null if a class initializer, {@code <clinit>} (see
+   * {@link #is_class_init()}.
    */
   // The code often assumes that member != null.
   public /*@MonotonicNonNull*/ Member member = null;
 
   /**
-   * Method name.  For example: "public static void sort(int[] arr)"
-   * would have method_name "sort".
+   * Method name. For example: "public static void sort(int[] arr)" would have method_name "sort".
    */
   public String method_name;
 
@@ -38,9 +37,8 @@ public class MethodInfo {
   public String[] arg_names;
 
   /**
-   * Array of argument types for this method (fully qualified).  For
-   * example: "public static void examineObject(Object x)" would have
-   * arg_types {"java.lang.Object"}.
+   * Array of argument types for this method (fully qualified). For example: "public static void
+   * examineObject(Object x)" would have arg_types {"java.lang.Object"}.
    */
   public /*@ClassGetName*/ String[] arg_type_strings;
 
@@ -50,22 +48,20 @@ public class MethodInfo {
   /** exit locations for this method */
   public List<Integer> exit_locations;
 
-  /**
-   * Tells whether each exit point in method is instrumented, based on
-   * filters */
+  /** Tells whether each exit point in method is instrumented, based on filters */
   public List<Boolean> is_included;
 
   /**
    * The root of the variable tree for the method entry program point.
    *
-   * Set by DeclWriter and read by DTraceWriter.
+   * <p>Set by DeclWriter and read by DTraceWriter.
    */
   public /*@MonotonicNonNull*/ RootInfo traversalEnter = null;
 
   /**
    * The root of the variable tree for the method exit program point(s).
    *
-   * Set by DeclWriter and read by DTraceWriter.
+   * <p>Set by DeclWriter and read by DTraceWriter.
    */
   public /*@MonotonicNonNull*/ RootInfo traversalExit = null;
 
@@ -76,17 +72,13 @@ public class MethodInfo {
   public int capture_cnt = 0;
 
   /**
-   * Whether or not the method is pure (has no side-effects).
-   * Will only be set to true if the {@code --purity-analysis} command-line option is given
-   * to Chicory, and the method returns some value.
+   * Whether or not the method is pure (has no side-effects). Will only be set to true if the {@code
+   * --purity-analysis} command-line option is given to Chicory, and the method returns some value.
    * Only set during initViaReflection() method.
    */
   private boolean isPure;
 
-  /**
-   * Creates a MethodInfo with the specified class, arg_names, and
-   * exit locations.
-   */
+  /** Creates a MethodInfo with the specified class, arg_names, and exit locations. */
   public MethodInfo(
       ClassInfo class_info,
       String method_name,
@@ -181,6 +173,7 @@ public class MethodInfo {
 
   /**
    * Returns true iff this method is a constructor
+   *
    * @return true iff this method is a constructor
    */
   /*@Pure*/
@@ -202,9 +195,8 @@ public class MethodInfo {
   }
 
   /**
-   * Initialize the enter and exit daikon variable trees (traversalEnter and
-   * traversalExit).  The reflection information must have already been
-   * initialized.
+   * Initialize the enter and exit daikon variable trees (traversalEnter and traversalExit). The
+   * reflection information must have already been initialized.
    */
   /*TO DO: @PostNonNull({"traversalEnter", "traversalExit"})*/
   public void init_traversal(int depth) {

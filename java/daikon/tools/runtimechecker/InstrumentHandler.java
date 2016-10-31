@@ -6,36 +6,27 @@ import daikon.Global;
 import daikon.LogHelper;
 import daikon.PptMap;
 import daikon.tools.jtb.*;
-import daikon.tools.runtimechecker.InstrumentVisitor;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import jtb.JavaParser;
 import jtb.syntaxtree.*;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
-import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
 */
 
 /**
- * Instruments a file to check invariant violations at
- * runtime. Violated invariants are stored in a list in
- * daikon.tools.runtimechecker.Runtime. The control flow of the class
- * remains unchanged from the original.
+ * Instruments a file to check invariant violations at runtime. Violated invariants are stored in a
+ * list in daikon.tools.runtimechecker.Runtime. The control flow of the class remains unchanged from
+ * the original.
  *
  * @author Carlos Pacheco
  */

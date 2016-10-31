@@ -10,9 +10,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import jtb.syntaxtree.*;
@@ -26,8 +24,8 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * Visitor that instruments a Java source file (i.e. adds code at
- * certain places) to check invariant violations at runtime.
+ * Visitor that instruments a Java source file (i.e. adds code at certain places) to check invariant
+ * violations at runtime.
  */
 @SuppressWarnings("rawtypes")
 public class InstrumentVisitor extends DepthFirstVisitor {
@@ -70,10 +68,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
   private final PptNameMatcher pptMatcher;
 
-  /**
-   * Create a visitor that will insert code to check the invariants
-   * contained in pptmap.
-   */
+  /** Create a visitor that will insert code to check the invariants contained in pptmap. */
   public InstrumentVisitor(PptMap pptmap, TypeDeclaration root) {
 
     this.checkerClasses = new CheckerClasses();
@@ -95,10 +90,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
   }
 
-  /**
-   * If makeAllFieldsPublic == true, then it makes this field
-   * declaration public.
-   */
+  /** If makeAllFieldsPublic == true, then it makes this field declaration public. */
   @Override
   public void visit(FieldDeclaration fd) {
 
@@ -137,25 +129,22 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   /**
    * Adds the following new methods:
    *
-   * checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time time)
-   *   Checks the class invariants.
+   * <p>checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time time) Checks the
+   * class invariants.
    *
-   * checkObjectInvariants_instrument(daikon.tools.runtimechecker.Violation.Time time)
-   *   Check the object invariants
+   * <p>checkObjectInvariants_instrument(daikon.tools.runtimechecker.Violation.Time time) Check the
+   * object invariants
    *
-   * isDaikonInstrumented()
-   *   returns true (you can imagine calling this method to see if the class has been
-   *   instrumented).
+   * <p>isDaikonInstrumented() returns true (you can imagine calling this method to see if the class
+   * has been instrumented).
    *
-   * getDaikonInvariants()
-   *   Returns th array of properties being checked.
+   * <p>getDaikonInvariants() Returns th array of properties being checked.
    *
-   * Adds the following field:
+   * <p>Adds the following field:
    *
-   * daikon.tools.runtimechecker.Property[] daikonProperties
-   *   The properties being checked.
+   * <p>daikon.tools.runtimechecker.Property[] daikonProperties The properties being checked.
    *
-   * Adds code that initializes the properties array.
+   * <p>Adds code that initializes the properties array.
    */
   @Override
   public void visit(ClassOrInterfaceBody clazz) {
@@ -213,11 +202,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Adds code to check class invariants and preconditions on entry
-   * (but not object invariants, because there's no object yet!).
+   * Adds code to check class invariants and preconditions on entry (but not object invariants,
+   * because there's no object yet!).
    *
-   * Adds code to check postcontiions, class and object invariants
-   * on exit.
+   * <p>Adds code to check postcontiions, class and object invariants on exit.
    */
   // ConstructorDeclaration:
   // f0 -> [ TypeParameters() ]
@@ -318,9 +306,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   // Methods that we have created
   private final Set<MethodDeclaration> generated_methods = new HashSet<MethodDeclaration>();
 
-  /**
-   *
-   */
+  /** */
   // MethodDeclaration:
   // f0 -> [ TypeParameters() ]
   // f1 -> ResultType()
@@ -785,8 +771,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Return a subset of the argument list, removing invariants
-   * that do not have a properly implemented Java format.
+   * Return a subset of the argument list, removing invariants that do not have a properly
+   * implemented Java format.
    */
   private static List<Invariant> filterInvariants(List<Invariant> invariants) {
     List<Invariant> survivors = new ArrayList<Invariant>();
@@ -1111,9 +1097,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
   }
 
-  /**
-   * A pair consisting of an Invariant and its corresponding Property.
-   */
+  /** A pair consisting of an Invariant and its corresponding Property. */
   private static class InvProp {
     public InvProp(Invariant inv, Property p) {
       this.invariant = inv;
@@ -1125,8 +1109,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Returns the invariants (and their properties) that have
-   * confidence values at or above confidenceThreshold.
+   * Returns the invariants (and their properties) that have confidence values at or above
+   * confidenceThreshold.
    */
   List<InvProp> getMajor(List<Invariant> invs) {
 
@@ -1141,8 +1125,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Returns the invariants (and their properties) that have
-   * confidence values below confidenceThreshold.
+   * Returns the invariants (and their properties) that have confidence values below
+   * confidenceThreshold.
    */
   List<InvProp> getMinor(List<Invariant> invs) {
 
@@ -1157,8 +1141,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Add checker methods with empty bodies for all public
-   * methods and constuctors not explicitly declared.
+   * Add checker methods with empty bodies for all public methods and constuctors not explicitly
+   * declared.
    */
   public void add_checkers_for_nondeclared_members() {
 

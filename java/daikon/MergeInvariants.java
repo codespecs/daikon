@@ -14,15 +14,13 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * Merges invariants from multiple invariant files into a single invariant
- * file.  It does this by forming a hierarchy over the ppts from each
- * invariant file and using the normal hierarchy merging code to merge
- * the invariants.
+ * Merges invariants from multiple invariant files into a single invariant file. It does this by
+ * forming a hierarchy over the ppts from each invariant file and using the normal hierarchy merging
+ * code to merge the invariants.
  *
- * The ppts from each invariant file are merged to create a single ppt
- * map that contains the ppts from all of the files.  At each leaf of the
- * merged map, a hierarchy is formed to the ppts from each of the input
- * files.
+ * <p>The ppts from each invariant file are merged to create a single ppt map that contains the ppts
+ * from all of the files. At each leaf of the merged map, a hierarchy is formed to the ppts from
+ * each of the input files.
  */
 public final class MergeInvariants {
   private MergeInvariants() {
@@ -65,10 +63,10 @@ public final class MergeInvariants {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -406,10 +404,9 @@ public final class MergeInvariants {
   }
 
   /**
-   * Ses up the specified relation beteween each of the conditionals
-   * in ppt and the matching conditionals in child.  Each must have
-   * the same number of splitters setup in the same order.  The splitter
-   * match can't be checked because splitters can't be read back in.
+   * Ses up the specified relation beteween each of the conditionals in ppt and the matching
+   * conditionals in child. Each must have the same number of splitters setup in the same order. The
+   * splitter match can't be checked because splitters can't be read back in.
    */
   private static void setup_conditional_merge(PptTopLevel ppt, PptTopLevel child) {
 

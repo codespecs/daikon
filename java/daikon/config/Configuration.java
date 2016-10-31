@@ -3,7 +3,6 @@ package daikon.config;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import plume.EntryReader;
 import plume.UtilMDE;
@@ -14,16 +13,13 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * This class applies settings from a configuration file that lists
- * variable names and values (see "example-settings.txt" in this directory
- * for an example).  Multiple configuration files can be read, and the
- * results can be re-written to a new configuration file.
+ * This class applies settings from a configuration file that lists variable names and values (see
+ * "example-settings.txt" in this directory for an example). Multiple configuration files can be
+ * read, and the results can be re-written to a new configuration file.
  *
- * <p> Important note: classes that have fields set via this
- * Configuration (dkconfig) interface may not reference daikon.Global
- * in their static initializers, since Global loads the default
- * configuration, which classloads that class, and we would have a
- * classloading circularity.
+ * <p>Important note: classes that have fields set via this Configuration (dkconfig) interface may
+ * not reference daikon.Global in their static initializers, since Global loads the default
+ * configuration, which classloads that class, and we would have a classloading circularity.
  */
 public final class Configuration implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
@@ -51,9 +47,7 @@ public final class Configuration implements Serializable {
     }
   }
 
-  /**
-   * @return singleton instance of this class
-   */
+  /** @return singleton instance of this class */
   public static Configuration getInstance() {
     return instance;
   }
@@ -61,18 +55,14 @@ public final class Configuration implements Serializable {
   private static volatile /*@NonNull*/ Configuration instance = new Configuration();
 
   /**
-   * This used to read a file containing all of the configurable
-   * options so that when the options were saved, they would reflect
-   * not only those options specified, but the default values as well.
-   * This would guarantee that changes to the default options would be
-   * overridden by the file.
+   * This used to read a file containing all of the configurable options so that when the options
+   * were saved, they would reflect not only those options specified, but the default values as
+   * well. This would guarantee that changes to the default options would be overridden by the file.
    *
-   * Unfortunately, that required maintaining a list of all of the
-   * configuration variables by hand.  This list quickly became out of
-   * date and it seemed that the random results were better than no
-   * attempt at all.  The file has thus been removed.  If a
-   * configuration is changed it only contains those items specified,
-   * not the default values of unspecified options.
+   * <p>Unfortunately, that required maintaining a list of all of the configuration variables by
+   * hand. This list quickly became out of date and it seemed that the random results were better
+   * than no attempt at all. The file has thus been removed. If a configuration is changed it only
+   * contains those items specified, not the default values of unspecified options.
    */
   private Configuration() {}
 
@@ -107,12 +97,10 @@ public final class Configuration implements Serializable {
   }
 
   /**
-   * Take the settings given in the argument and call
-   * this.apply(String) for each of them.  This essentially overlaps
-   * the settings given in the argument over this (appending them to
-   * this in the process).  This method is intended for loading a saved
-   * configuration from a file, since calling this method with the
-   * Configuration singleton makes no sense.
+   * Take the settings given in the argument and call this.apply(String) for each of them. This
+   * essentially overlaps the settings given in the argument over this (appending them to this in
+   * the process). This method is intended for loading a saved configuration from a file, since
+   * calling this method with the Configuration singleton makes no sense.
    */
   public void overlap(Configuration config) {
     assert config != null;
@@ -180,17 +168,13 @@ public final class Configuration implements Serializable {
       throw new ConfigException(
           String.format(
               "Configuration option %s=%s attempts to use nonexistent class %s",
-              fieldname,
-              value,
-              classname),
+              fieldname, value, classname),
           e);
     } catch (LinkageError e) {
       throw new ConfigException(
           String.format(
               "Configuration option %s=%s attempts to use class with linkage error %s",
-              fieldname,
-              value,
-              classname),
+              fieldname, value, classname),
           e);
     }
 

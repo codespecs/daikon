@@ -1,12 +1,11 @@
 package daikon.tools.runtimechecker;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Main entrypoint for the instrumenter.
- * Passes control to whichever handler can handle the user-specified command.
+ * Main entrypoint for the instrumenter. Passes control to whichever handler can handle the
+ * user-specified command.
  */
 public class Main extends CommandHandler {
 

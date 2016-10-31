@@ -3,7 +3,6 @@ package daikon.dcomp;
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.dcomp.DCRuntime.BranchInfo;
-import daikon.dcomp.ValueSource;
 import daikon.util.*;
 import java.io.*;
 import java.lang.instrument.*;
@@ -22,16 +21,16 @@ import org.checkerframework.checker.signature.qual.*;
 public class Premain {
 
   /**
-   * Any command line options declared here are 'hidden' as they cannot
-   * be accessed from DynComp.  These are internal debugging options that
-   * may be used when Premain is invoked directly from the command line.
+   * Any command line options declared here are 'hidden' as they cannot be accessed from DynComp.
+   * These are internal debugging options that may be used when Premain is invoked directly from the
+   * command line.
    */
   @Option("Turn on most DCRuntime debugging options")
   public static boolean debug_dcruntime = false;
 
   /**
-   * Set of pre_instrumented jdk classes.  Needed so that we will instrument
-   * classes generated on the fly in the jdk.
+   * Set of pre_instrumented jdk classes. Needed so that we will instrument classes generated on the
+   * fly in the jdk.
    */
   public static Set<String> pre_instrumented = new LinkedHashSet<String>();
 
@@ -103,9 +102,7 @@ public class Premain {
     DCRuntime.init();
   }
 
-  /**
-   * Shutdown thread that writes out the comparability results.
-   */
+  /** Shutdown thread that writes out the comparability results. */
   public static class ShutdownThread extends Thread {
 
     public void run() {
@@ -244,10 +241,7 @@ public class Premain {
     }
   }
 
-  /**
-   * Returns the local name (eg, var0, var1) that corresponds to a specific
-   * local-store.
-   */
+  /** Returns the local name (eg, var0, var1) that corresponds to a specific local-store. */
   public static String seq_local_name(String local_store) {
     assert local_store.startsWith("local-store");
     int local_index = Integer.decode(local_store.split(" ")[1]);
