@@ -678,7 +678,19 @@ public class Instrument implements ClassFileTransformer {
         mg.update();
 
         // Update the method in the class
-        cg.replaceMethod(methods[i], mg.getMethod());
+        try {
+          cg.replaceMethod(methods[i], mg.getMethod());
+        } catch (Exception e) {
+          if ((e.getMessage()).startsWith("Branch target offset too large")) {
+            System.out.printf(
+                "Chicory warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
+                cg.getClassName(), mg.getName());
+            continue;
+          } else {
+            throw e;
+          }
+        }
+
         if (debug) {
           out.format("Modified code: %s%n", mg.getMethod().getCode());
           dump_code_attributes(mg);
