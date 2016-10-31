@@ -2665,6 +2665,15 @@ class DCInstrument {
     } else {
       classname = invoke.getClassName(pool);
       callee_instrumented = callee_instrumented(classname);
+      if (invoke instanceof INVOKEVIRTUAL) {
+        // Technically, we should verify the target class has super class
+        // of java.lang.Enum. But that can be difficult if we haven't already
+        // processed that class. And since the worst that happens is we
+        // loose some tag interactions, we just go ahead.
+        if (method_name.equals("ordinal") && DynComp.no_jdk) {
+          callee_instrumented = false;
+        }
+      }
     }
 
     if (invoke instanceof INVOKESPECIAL) {
@@ -2736,7 +2745,7 @@ class DCInstrument {
 
   /**
    * Return instructions that will discard any primitive tags corresponding to the specified
-   * arguments. An empty instruction list will be returned if there are now primitive arguments.
+   * arguments. An empty instruction list will be returned if there are no primitive arguments.
    */
   InstructionList discard_primitive_tags(Type[] arg_types) {
 
@@ -2922,6 +2931,15 @@ class DCInstrument {
     } else {
       classname = invoke.getClassName(pool);
       callee_instrumented = callee_instrumented(classname);
+      if (invoke instanceof INVOKEVIRTUAL) {
+        // Technically, we should verify the target class has super class
+        // of java.lang.Enum. But that can be difficult if we haven't already
+        // processed that class. And since the worst that happens is we
+        // loose some tag interactions, we just go ahead.
+        if (method_name.equals("ordinal") && DynComp.no_jdk) {
+          callee_instrumented = false;
+        }
+      }
     }
 
     // We don't instrument any of the Object methods
@@ -3959,10 +3977,8 @@ class DCInstrument {
     int old_length = ih.getInstruction().getLength();
 
     new_il.setPositions();
-    // There is probably a better way to get il length in
-    // code bytes, not instructions.
-    byte[] bytecode = new_il.getByteCode();
-    int new_length = bytecode.length;
+    InstructionHandle end = new_il.getEnd();
+    int new_length = end.getPosition() + end.getInstruction().getLength();
 
     debug_instrument_inst.log("  replace_inst: %s %d%n%s%n", ih, new_il.getLength(), new_il);
 
@@ -4196,8 +4212,8 @@ class DCInstrument {
                       stack_map_types,
                       pool.getConstantPool());
             }
-            new_stack_map_table[new_index + i].updateByteCodeOffset(
-                target_offsets[i] - (running_offset + 1));
+            new_stack_map_table[new_index + i]
+                .updateByteCodeOffset(target_offsets[i] - (running_offset + 1));
             running_offset = target_offsets[i];
           }
 
@@ -4210,20 +4226,22 @@ class DCInstrument {
               if (nih.hasTargeters()) {
                 for (InstructionTargeter it : nih.getTargeters()) {
                   if (it instanceof BranchInstruction) {
-                    stack_map_table[new_index].updateByteCodeOffset(
-                        nih.getPosition()
-                            - target_offsets[target_count - 1]
-                            - 1
-                            - stack_map_table[new_index].getByteCodeOffset());
+                    stack_map_table[new_index]
+                        .updateByteCodeOffset(
+                            nih.getPosition()
+                                - target_offsets[target_count - 1]
+                                - 1
+                                - stack_map_table[new_index].getByteCodeOffset());
                     break l1;
                   } else if (it instanceof CodeExceptionGen) {
                     CodeExceptionGen exc = (CodeExceptionGen) it;
                     if (exc.getHandlerPC() == nih) {
-                      stack_map_table[new_index].updateByteCodeOffset(
-                          nih.getPosition()
-                              - target_offsets[target_count - 1]
-                              - 1
-                              - stack_map_table[new_index].getByteCodeOffset());
+                      stack_map_table[new_index]
+                          .updateByteCodeOffset(
+                              nih.getPosition()
+                                  - target_offsets[target_count - 1]
+                                  - 1
+                                  - stack_map_table[new_index].getByteCodeOffset());
                       break l1;
                     }
                   }
