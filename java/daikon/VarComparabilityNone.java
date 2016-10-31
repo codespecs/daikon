@@ -58,8 +58,7 @@ public final class VarComparabilityNone extends VarComparability implements Seri
    */
   /*@Pure*/
   static boolean comparable(
-      /*@GuardSatisfied*/ VarComparabilityNone vcomp1,
-      /*@GuardSatisfied*/ VarComparabilityNone vcomp2) {
+      /*@GuardSatisfied*/ VarComparabilityNone vcomp1, /*@GuardSatisfied*/ VarComparabilityNone vcomp2) {
     return true;
   }
 

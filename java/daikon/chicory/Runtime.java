@@ -235,7 +235,7 @@ public class Runtime {
       boolean capture = true;
       if (sample_start > 0) {
         if (mi.call_cnt <= sample_start) {
-          ;
+          // nothing to do
         } else if (mi.call_cnt <= (sample_start * 10)) {
           capture = (mi.call_cnt % 10) == 0;
         } else if (mi.call_cnt <= (sample_start * 100)) {
@@ -285,12 +285,7 @@ public class Runtime {
    * @param exitLineNum the line number at which this method exited
    */
   public static synchronized void exit(
-      /*@Nullable*/ Object obj,
-      int nonce,
-      int mi_index,
-      Object[] args,
-      Object ret_val,
-      int exitLineNum) {
+      /*@Nullable*/ Object obj, int nonce, int mi_index, Object[] args, Object ret_val, int exitLineNum) {
 
     if (debug) {
       MethodInfo mi = methods.get(mi_index);

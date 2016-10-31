@@ -399,7 +399,7 @@ public class DtraceDiff {
         for (int i = 0; i < v1.length; i++) {
           // System.out.printf ("string array[%d] %s %s%n", i, v1[i], v2[i]);
           if ((v1[i] == null) && (v2[i] == null)) {
-            ;
+            // nothing to do
           } else if ((v1[i] == null) || (v2[i] == null)) {
             return false;
           } else if (!v1[i].equals(v2[i])) {

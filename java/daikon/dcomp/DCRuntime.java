@@ -1403,7 +1403,7 @@ public final class DCRuntime {
     if (dv instanceof FieldInfo) tag = get_field_tag((FieldInfo) dv, parent, obj);
 
     if (!dv.declShouldPrint()) {
-      ; // do nothing
+      // do nothing
     } else if (dv.isArray() && (tag instanceof List<?>)) {
       @SuppressWarnings("unchecked")
       List<Object> elements = (List<Object>) tag;
@@ -1559,7 +1559,7 @@ public final class DCRuntime {
     if (dv instanceof FieldInfo) tag = get_field_tag_refs_only((FieldInfo) dv, parent, obj);
 
     if (!dv.declShouldPrint()) {
-      ; // do nothing
+      // do nothing
     } else if (dv.isArray() && (tag instanceof List<?>)) {
       @SuppressWarnings("unchecked")
       List<Object> elements = (List<Object>) tag;
@@ -2278,8 +2278,7 @@ public final class DCRuntime {
    * each parent node as the key to a set contains all its children. The parameter RootInfo node is
    * included as a key to all its children.
    */
-  static /*@PolyNull*/ Map<DaikonVariableInfo, DVSet> get_comparable_traced(
-      /*@PolyNull*/ RootInfo root) {
+  static /*@PolyNull*/ Map<DaikonVariableInfo, DVSet> get_comparable_traced(/*@PolyNull*/ RootInfo root) {
     if (root == null) return null;
 
     // List of all of the parent-child relationships, where parent-child

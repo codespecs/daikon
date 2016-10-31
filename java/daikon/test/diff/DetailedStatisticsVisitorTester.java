@@ -163,9 +163,8 @@ public class DetailedStatisticsVisitorTester extends TestCase {
   public void testShouldAddFrequency() throws Exception {
     // Invoke private method using reflection
     Method m =
-        DetailedStatisticsVisitor.class
-            .getDeclaredMethod(
-                "shouldAddFrequency", new Class<?>[] {Invariant.class, Invariant.class});
+        DetailedStatisticsVisitor.class.getDeclaredMethod(
+            "shouldAddFrequency", new Class<?>[] {Invariant.class, Invariant.class});
     m.setAccessible(true);
 
     @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.
@@ -173,13 +172,11 @@ public class DetailedStatisticsVisitorTester extends TestCase {
     assert !b1.booleanValue();
 
     @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.
-    /*@NonNull*/ Boolean b2 =
-        (Boolean) m.invoke(null, new Object[] {null_int_1_just, null_int_1_just});
+    /*@NonNull*/ Boolean b2 = (Boolean) m.invoke(null, new Object[] {null_int_1_just, null_int_1_just});
     assert b2.booleanValue();
 
     @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.
-    /*@NonNull*/ Boolean b3 =
-        (Boolean) m.invoke(null, new /*@Nullable*/ Object[] {null, null_noprint});
+    /*@NonNull*/ Boolean b3 = (Boolean) m.invoke(null, new /*@Nullable*/ Object[] {null, null_noprint});
     assert !b3.booleanValue();
 
     @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.

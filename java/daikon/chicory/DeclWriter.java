@@ -548,7 +548,7 @@ public class DeclWriter extends DaikonWriter {
     if (debug) System.out.println("Enter traverse_decl: " + cinfo + ", " + var + ", " + parent);
 
     if (!var.declShouldPrint()) {
-      ; // don't do anything
+      // don't do anything
     } else if (!(var instanceof StaticObjInfo)) {
 
       // Write out the variable and its name

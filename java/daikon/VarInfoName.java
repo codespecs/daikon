@@ -240,8 +240,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return simplify_name_cached[which];
   }
 
-  private /*@Interned*/ String[] simplify_name_cached =
-      new /*@Interned*/ String[2]; // each interned
+  private /*@Interned*/ String[] simplify_name_cached = new /*@Interned*/ String[2]; // each interned
 
   /**
    * Returns the String representation of this name in the simplify output format in either prestate

@@ -319,8 +319,7 @@ public class Implication extends Joiner {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
-  protected /*@NonPrototype*/ Invariant instantiate_dyn(
-      /*>>> @Prototype Implication this,*/ PptSlice slice) {
+  protected /*@NonPrototype*/ Invariant instantiate_dyn(/*>>> @Prototype Implication this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

@@ -215,9 +215,7 @@ public class DTraceWriter extends DaikonWriter {
 
   //traverse from the traversal pattern data structure and recurse
   private void traverseValue(
-      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi,
-      DaikonVariableInfo curInfo,
-      Object val) {
+      /*>>>@GuardSatisfied DTraceWriter this,*/ MethodInfo mi, DaikonVariableInfo curInfo, Object val) {
 
     if (curInfo.dTraceShouldPrint()) {
       if (!(curInfo instanceof StaticObjInfo)) {

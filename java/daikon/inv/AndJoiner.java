@@ -125,8 +125,7 @@ public class AndJoiner extends Joiner {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
-  protected /*@NonPrototype*/ AndJoiner instantiate_dyn(
-      /*>>> @Prototype AndJoiner this,*/ PptSlice slice) {
+  protected /*@NonPrototype*/ AndJoiner instantiate_dyn(/*>>> @Prototype AndJoiner this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

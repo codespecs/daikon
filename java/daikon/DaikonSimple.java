@@ -2,7 +2,6 @@ package daikon;
 
 import static daikon.Global.lineSep;
 
-import daikon.Daikon.TerminationMessage;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.ValueSet;

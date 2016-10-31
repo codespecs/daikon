@@ -30,8 +30,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
   // Not necessarily an error message -- really just a status message.
   private String errorMessage = "Splitter not yet loaded";
   private int guid = -999; // -999 indicates not yet set
-  private /*@MonotonicNonNull*/ File
-      classFile; // class file containing compiled code for this splitter
+  /** class file containing compiled code for this splitter */
+  private /*@MonotonicNonNull*/ File classFile;
 
   public boolean dummyDesired = false;
   public /*@Nullable*/ String daikonFormat = null;
@@ -59,8 +59,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
    * @param fileName the pathname of a {@code .class} file
    * @return a Java Class corresponding to the {@code .class} file, or null
    */
-  static /*@Nullable*/ Class<?> defineSplitterClass(
-      /*@BinaryName*/ String className, String fileName) {
+  static /*@Nullable*/ Class<?> defineSplitterClass(/*@BinaryName*/ String className, String fileName) {
     try {
       return UtilMDE.defineClassFromFile(className, fileName);
     } catch (FileNotFoundException e) {

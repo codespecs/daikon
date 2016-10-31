@@ -96,11 +96,11 @@ public final class Debug {
    * methods are printed). See Functions.java for a list of function names.
    */
   public static /*@Nullable*/ String function_binary_method = null
-  // "java.lang.Math.max("
-  // "java.lang.Math.min("
-  // "plume.MathMDE.logicalXor("
-  // "plume.MathMDE.gcd("
-  ;
+      // "java.lang.Math.max("
+      // "java.lang.Math.min("
+      // "plume.MathMDE.logicalXor("
+      // "plume.MathMDE.gcd("
+      ;
 
   /**
    * List of Ppts for logging. Each name listed is compared to the full program point name. If it
@@ -204,8 +204,7 @@ public final class Debug {
    * Looks for each of the variables in vis in the DebugTrackVar list. If any match, returns that
    * variable. Returns null if there are no matches.
    */
-  public /*@Nullable*/ VarInfo visTracked(
-      /*>>>@UnknownInitialization Debug this,*/ List<VarInfo> vis) {
+  public /*@Nullable*/ VarInfo visTracked(/*>>>@UnknownInitialization Debug this,*/ List<VarInfo> vis) {
 
     for (VarInfo v : vis) {
       Set<VarInfo> evars = null;

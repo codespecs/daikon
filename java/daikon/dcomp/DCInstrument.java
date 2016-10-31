@@ -4196,8 +4196,8 @@ class DCInstrument {
                       stack_map_types,
                       pool.getConstantPool());
             }
-            new_stack_map_table[new_index + i]
-                .updateByteCodeOffset(target_offsets[i] - (running_offset + 1));
+            new_stack_map_table[new_index + i].updateByteCodeOffset(
+                target_offsets[i] - (running_offset + 1));
             running_offset = target_offsets[i];
           }
 
@@ -4210,22 +4210,20 @@ class DCInstrument {
               if (nih.hasTargeters()) {
                 for (InstructionTargeter it : nih.getTargeters()) {
                   if (it instanceof BranchInstruction) {
-                    stack_map_table[new_index]
-                        .updateByteCodeOffset(
-                            nih.getPosition()
-                                - target_offsets[target_count - 1]
-                                - 1
-                                - stack_map_table[new_index].getByteCodeOffset());
+                    stack_map_table[new_index].updateByteCodeOffset(
+                        nih.getPosition()
+                            - target_offsets[target_count - 1]
+                            - 1
+                            - stack_map_table[new_index].getByteCodeOffset());
                     break l1;
                   } else if (it instanceof CodeExceptionGen) {
                     CodeExceptionGen exc = (CodeExceptionGen) it;
                     if (exc.getHandlerPC() == nih) {
-                      stack_map_table[new_index]
-                          .updateByteCodeOffset(
-                              nih.getPosition()
-                                  - target_offsets[target_count - 1]
-                                  - 1
-                                  - stack_map_table[new_index].getByteCodeOffset());
+                      stack_map_table[new_index].updateByteCodeOffset(
+                          nih.getPosition()
+                              - target_offsets[target_count - 1]
+                              - 1
+                              - stack_map_table[new_index].getByteCodeOffset());
                       break l1;
                     }
                   }

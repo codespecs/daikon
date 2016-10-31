@@ -146,12 +146,13 @@ public final class UnionInvariants {
     System.out.println("Exiting");
   }
 
-  /** Union multiple PptMaps into one. */
-  public static void union(
-      PptMap collector, // mutated
-      PptMap
-          source // unmodified (but aliased into)
-              ) {
+  /**
+   * Union multiple PptMaps into one.
+   *
+   * @param collector is mutated
+   * @param source is unmodified (but is aliased into)
+   */
+  public static void union(PptMap collector, PptMap source) {
     for (PptTopLevel ppt : source.pptIterable()) {
 
       if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) continue;

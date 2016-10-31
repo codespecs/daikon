@@ -236,8 +236,7 @@ public class CreateSpinfo {
     if (!replaceStatements.values().isEmpty()) {
       output.println("REPLACE");
       for (
-      /*@KeyFor("replaceStatements")*/ String declaration :
-          UtilMDE.sortedKeySet(replaceStatements)) {
+      /*@KeyFor("replaceStatements")*/ String declaration : UtilMDE.sortedKeySet(replaceStatements)) {
         output.println(declaration);
         String replacement = replaceStatements.get(declaration);
         output.println(removeNewlines(replacement));
