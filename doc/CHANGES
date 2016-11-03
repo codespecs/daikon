@@ -20,6 +20,12 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.4.2 (November 3, 2016)
+
+Fixed numerous DynComp bugs.
+
+===========================================================================
+
 5.4.0 (October 4, 2016)
 
 daikon.jar now includes Apache Commons BCEL 6.0; previously it used a
