@@ -29,7 +29,7 @@ public class NonsensicalList extends AbstractList<Object> implements List<Object
 
   /*@Pure*/
   public int size(/*>>>@GuardSatisfied NonsensicalList this*/) {
-    return -1;
+    return 0;
   }
 
   /*@SideEffectFree*/
