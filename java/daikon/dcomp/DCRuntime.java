@@ -1434,8 +1434,7 @@ public final class DCRuntime {
         if (debug_timing.enabled()) {
           debug_timing.log(
               "  no array tags for Variable %s : %d msecs%n",
-              dv,
-              System.currentTimeMillis() - start_millis);
+              dv, System.currentTimeMillis() - start_millis);
         }
         return;
       }
@@ -1591,8 +1590,7 @@ public final class DCRuntime {
         if (debug_timing.enabled()) {
           debug_timing.log(
               "  no array tags for Variable %s : %d msecs%n",
-              dv,
-              System.currentTimeMillis() - start_millis);
+              dv, System.currentTimeMillis() - start_millis);
         }
         return;
       }
@@ -1960,9 +1958,7 @@ public final class DCRuntime {
       }
       debug_decl_print.log(
           "        %d vars in set, hashcode/non = %b/%b%n",
-          set.size(),
-          hashcode_vars,
-          non_hashcode_vars);
+          set.size(), hashcode_vars, non_hashcode_vars);
 
       // Loop through each variable and assign its comparability
       // Since hashcodes and their indices are in the same set, assign
@@ -2173,8 +2169,7 @@ public final class DCRuntime {
       }
       ps.printf(
           "%s (%s)%n",
-          skinyOutput(node, daikon.DynComp.abridged_vars),
-          TagEntry.get_line_trace(node));
+          skinyOutput(node, daikon.DynComp.abridged_vars), TagEntry.get_line_trace(node));
       if (tree.get(node) == null) {
         return;
       }
@@ -2283,8 +2278,7 @@ public final class DCRuntime {
    * each parent node as the key to a set contains all its children. The parameter RootInfo node is
    * included as a key to all its children.
    */
-  static /*@PolyNull*/ Map<DaikonVariableInfo, DVSet> get_comparable_traced(
-      /*@PolyNull*/ RootInfo root) {
+  static /*@PolyNull*/ Map<DaikonVariableInfo, DVSet> get_comparable_traced(/*@PolyNull*/ RootInfo root) {
     if (root == null) return null;
 
     // List of all of the parent-child relationships, where parent-child
@@ -2459,10 +2453,7 @@ public final class DCRuntime {
       if (debug_primitive.enabled()) {
         debug_primitive.log(
             "push_field_tag %s [%s] %d = %s%n",
-            obj,
-            obj.getClass().getName(),
-            field_num,
-            obj_tags[field_num]);
+            obj, obj.getClass().getName(), field_num, obj_tags[field_num]);
       }
     } else {
       if (debug_primitive.enabled()) {
@@ -2497,10 +2488,7 @@ public final class DCRuntime {
       if (debug_primitive.enabled()) {
         debug_primitive.log(
             "push_field_tag %s [%s] %d = %s%n",
-            obj,
-            obj.getClass().getName(),
-            field_num,
-            obj_tags[field_num]);
+            obj, obj.getClass().getName(), field_num, obj_tags[field_num]);
       }
     } else {
       Class<?> obj_class = obj.getClass();
@@ -2552,10 +2540,7 @@ public final class DCRuntime {
     obj_tags[field_num] = tag;
     debug_primitive.log(
         "pop_field_tag (%s [%s] %d = %s%n",
-        obj.getClass(),
-        obj.getClass().getName(),
-        field_num,
-        obj_tags[field_num]);
+        obj.getClass(), obj.getClass().getName(), field_num, obj_tags[field_num]);
   }
 
   /** Return the number of primitive fields in clazz and all of its superclasses. */
@@ -3292,9 +3277,7 @@ public final class DCRuntime {
       String descr =
           String.format(
               "%s.%s:uninit-arr-elem@L%d",
-              ste.getClassName(),
-              ste.getMethodName(),
-              ste.getLineNumber());
+              ste.getClassName(), ste.getMethodName(), ste.getLineNumber());
       ValueSource val = new ValueSource(descr, t);
       tag_map.put(elem, val);
     }
@@ -3724,10 +3707,7 @@ public final class DCRuntime {
     } else { // the equals is not instrumented
       debug_df.log_tb(
           "uninstrumented equals on %X:%s and %X:%s",
-          System.identityHashCode(o1),
-          o1,
-          System.identityHashCode(o2),
-          o2);
+          System.identityHashCode(o1), o1, System.identityHashCode(o2), o2);
       Object tag = new Object();
       binary_op_df("equals", tag, o1, o2);
       push_tag(tag);
