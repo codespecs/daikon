@@ -1524,10 +1524,12 @@ public final class PrintInvariants {
 
     // Not Map, because keys are nullable
     HashMap<
-            /*@Nullable*/ Class<? extends InvariantFilter>, Map<Class<? extends Invariant>, Integer>>
+            /*@Nullable*/ Class<? extends InvariantFilter>,
+            Map<Class<? extends Invariant>, Integer>>
         filter_map =
             new LinkedHashMap<
-                /*@Nullable*/ Class<? extends InvariantFilter>, Map<Class<? extends Invariant>, Integer>>();
+                /*@Nullable*/ Class<? extends InvariantFilter>,
+                Map<Class<? extends Invariant>, Integer>>();
 
     if (print_invs) debug.fine(ppt.name());
 

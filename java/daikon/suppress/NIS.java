@@ -892,7 +892,8 @@ public class NIS {
 
     /** Track Log the specified message */
     public void log(
-        /*>>>@UnknownInitialization(SupInv.class) @Raw(SupInv.class) SupInv this,*/ String message) {
+        /*>>>@UnknownInitialization(SupInv.class) @Raw(SupInv.class) SupInv this,*/ String
+            message) {
       if (Debug.logOn()) Debug.log(suppressee.sup_class, ppt, vis, message);
     }
 

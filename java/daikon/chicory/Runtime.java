@@ -285,7 +285,12 @@ public class Runtime {
    * @param exitLineNum the line number at which this method exited
    */
   public static synchronized void exit(
-      /*@Nullable*/ Object obj, int nonce, int mi_index, Object[] args, Object ret_val, int exitLineNum) {
+      /*@Nullable*/ Object obj,
+      int nonce,
+      int mi_index,
+      Object[] args,
+      Object ret_val,
+      int exitLineNum) {
 
     if (debug) {
       MethodInfo mi = methods.get(mi_index);

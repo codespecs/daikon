@@ -172,11 +172,13 @@ public class DetailedStatisticsVisitorTester extends TestCase {
     assert !b1.booleanValue();
 
     @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.
-    /*@NonNull*/ Boolean b2 = (Boolean) m.invoke(null, new Object[] {null_int_1_just, null_int_1_just});
+    /*@NonNull*/ Boolean b2 =
+        (Boolean) m.invoke(null, new Object[] {null_int_1_just, null_int_1_just});
     assert b2.booleanValue();
 
     @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.
-    /*@NonNull*/ Boolean b3 = (Boolean) m.invoke(null, new /*@Nullable*/ Object[] {null, null_noprint});
+    /*@NonNull*/ Boolean b3 =
+        (Boolean) m.invoke(null, new /*@Nullable*/ Object[] {null, null_noprint});
     assert !b3.booleanValue();
 
     @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.
