@@ -15,12 +15,12 @@ DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
 
 # note that for right now, we are only copying the html and texinfo
 # versions of the developer manual (though the PDF version is also built)
-IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.jpg
+IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.dot
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
 DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo \
                        config-options.texinfo invariants-doc.texinfo \
                        daikon.pdf daikon.html developer.texinfo \
-                       developer.html CHANGES VERSION
+                       developer.html CHANGES VERSION daikon-favicon.png
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 
