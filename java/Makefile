@@ -819,10 +819,12 @@ audit:
 get-run-google-java-format:
 	@-(cd .run-google-java-format && git pull -q) || git clone -q https://github.com/plume-lib/run-google-java-format.git .run-google-java-format
 
+# Requires Java 8
 reformat:
 	${MAKE} get-run-google-java-format
 	@./.run-google-java-format/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
 
+# Requires Java 8
 check-format:
 	${MAKE} get-run-google-java-format
 	@./.run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && false)
