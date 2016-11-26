@@ -507,16 +507,17 @@ doc-all:
 doc-all-except-pdf:
 	cd doc && $(MAKE) all-except-pdf
 
-# Get the current release version
+# Get the current release version,
+# if on the CSE filesystem where an old daikon-*.zip file exists.
 ifneq ($(shell ls $(WWW_DIR)/download/daikon-*.zip 2>/dev/null),)
     CUR_VER := $(shell ls $(WWW_DIR)/download/daikon-*.zip |perl -p -e 's/^.*download.daikon.//' |perl -p -e 's/.zip//')
     CUR_RELEASE_NAME := daikon-$(CUR_VER)
-    NEW_VER := $(shell cat doc/VERSION)
-    NEW_RELEASE_NAME := daikon-$(NEW_VER)
 else
     CUR_RELEASE_NAME := UNKNOWN
-    NEW_RELEASE_NAME := UNKNOWN
 endif
+# Get the new release version.
+NEW_VER := $(shell cat doc/VERSION)
+NEW_RELEASE_NAME := daikon-$(NEW_VER)
 
 check-for-broken-doc-links:
 	checklink -q -r `grep -v '^#' ${DAIKONDIR}/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/staging-daikon  >check.log 2>&1
@@ -557,7 +558,7 @@ update-doc-dist-date:
 # I removed the dependence on "update-dist-version-file" because this rule
 # is invoked at the beginning of a make.
 update-doc-dist-version:
-	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/((Daikon|Fjalar) version )[0-9]+(\.[0-9]+)*/$$1 . "$(NEW_VER)"/e;' ${DIST_VERSION_FILES}
+	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/((Daikon|Fjalar) version |[ \/]daikon-)[0-9]+(\.[0-9]+)*/$$1 . "$(NEW_VER)"/e;' ${DIST_VERSION_FILES}
 	# update the version number in the release archive file names
 	perl -wpi -e 's/(\-)[0-9]+(\.[0-9]+)+/$$1 . "$(NEW_VER)"/eg;' doc/www/download/index.html
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(NEW_VER)" . $$3/e;' java/daikon/Daikon.java
@@ -613,16 +614,16 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 # checkout.
 daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 
-	-rm -rf ${TMPDIR}/daikon-* ${TMPDIR}/daikon-*.tar ${TMPDIR}/daikon-*.zip
+	-rm -rf ${TMPDIR}/daikon-* ${TMPDIR}/daikon-*.tar ${TMPDIR}/daikon-*.zip ${TMPDIR}/daikon
 	mkdir ${TMPDIR}/daikon
 
 	mkdir ${TMPDIR}/daikon/doc
 	cp -p README ${TMPDIR}/daikon/README
 	cp -p README.source ${TMPDIR}/daikon/README.source
 	cp -p doc/README ${TMPDIR}/daikon/doc/README
-	cd doc && cp -p $(DOC_FILES_NO_IMAGES) ${TMPDIR}/daikon/doc
+	(cd doc && cp -p $(DOC_FILES_NO_IMAGES) ${TMPDIR}/daikon/doc)
 	mkdir ${TMPDIR}/daikon/doc/images
-	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) ${TMPDIR}/daikon/doc/images
+	(cd doc && cp -p $(IMAGE_PARTIAL_PATHS) ${TMPDIR}/daikon/doc/images)
 	cp -pR doc/daikon ${TMPDIR}/daikon/doc
 	cp -pR doc/developer ${TMPDIR}/daikon/doc
 	cp -pR doc/www ${TMPDIR}/daikon/doc
@@ -638,11 +639,11 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 	mkdir ${TMPDIR}/daikon/examples
 	cp -pR examples/java-examples ${TMPDIR}/daikon/examples
 	# Keep .java files, delete everything else
-	cd ${TMPDIR}/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
+	(cd ${TMPDIR}/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf)
 
 	# Perl example files
 	mkdir ${TMPDIR}/daikon/examples/perl-examples
-	cp -p examples/perl-examples/{Birthday.{pm,accessors},{test_bday,standalone}.pl} ${TMPDIR}/daikon/examples/perl-examples
+	(cd examples/perl-examples && cp -p Birthday.accessors Birthday.pm standalone.pl test_bday.pl ${TMPDIR}/daikon/examples/perl-examples)
 
 	# C example files for Kvasir
 	mkdir ${TMPDIR}/daikon/examples/c-examples
@@ -668,7 +669,7 @@ daikon.tar daikon.zip: doc-all kvasir $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) 
 	(cd ${TMPDIR}/daikon/java; $(RM_TEMP_FILES))
 
 	# Plume library
-	## cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/plume-lib/java/plume.jar
+	## (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/plume-lib/java/plume.jar)
 
 	## Front ends
 	mkdir ${TMPDIR}/daikon/front-end

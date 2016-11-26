@@ -348,16 +348,16 @@ If you wish to edit the Daikon source code and re-compile Daikon,
 @item
 Choose the directory where you want to install Daikon; we'll call this
 the @var{daikonparent} directory.  In this directory, download and
-unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
+unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-@var{#.#.#}.tar.gz
-tar zxf daikon-@var{#.#.#}.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.4.3.tar.gz
+tar zxf daikon-5.4.1.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-@var{#.#.#}/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.4.3/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:  
@@ -369,7 +369,7 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-@var{#.#.#}
+export DAIKONDIR=@var{daikonparent}/daikon-5.4.3
 # The full pathname of the directory that contains the Java JDK
 export JAVA_HOME=@var{/usr/lib/jvm/java}
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -452,12 +452,12 @@ unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-@var{#.#.#}.tar.gz
-tar zxf daikon-@var{#.#.#}.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.4.3.tar.gz
+tar zxf daikon-5.4.1.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-@var{#.#.#}/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.4.3/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{~/.bashrc}:  
@@ -467,7 +467,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-@var{#.#.#}
+export DAIKONDIR=@var{daikonparent}/daikon-5.4.3
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
