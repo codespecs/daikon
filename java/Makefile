@@ -821,13 +821,17 @@ get-run-google-java-format:
 
 # Requires Java 8
 reformat:
+ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
 	${MAKE} get-run-google-java-format
 	@./.run-google-java-format/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
+endif
 
 # Requires Java 8
 check-format:
+ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
 	${MAKE} get-run-google-java-format
 	@./.run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && false)
+endif
 
 
 ###########################################################################
