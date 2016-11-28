@@ -7,6 +7,7 @@ Variable sets for javautil.ArrayList13.<init>(int initialCapacity) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.<init>() enter
@@ -16,6 +17,7 @@ Variable sets for javautil.ArrayList13.<init>() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.<init>(javautil.Collection13 c) enter
@@ -29,6 +31,7 @@ Variable sets for javautil.ArrayList13.<init>(javautil.Collection13 c) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.trimToSize() enter
@@ -37,6 +40,7 @@ Variable sets for javautil.ArrayList13.trimToSize() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.trimToSize() exit
   [1] [this]
@@ -44,6 +48,7 @@ Variable sets for javautil.ArrayList13.trimToSize() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.ensureCapacity(int minCapacity) enter
@@ -53,6 +58,7 @@ Variable sets for javautil.ArrayList13.ensureCapacity(int minCapacity) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.ensureCapacity(int minCapacity) exit
   [1] [Parameter minCapacity]
@@ -61,6 +67,7 @@ Variable sets for javautil.ArrayList13.ensureCapacity(int minCapacity) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.size() enter
@@ -69,6 +76,7 @@ Variable sets for javautil.ArrayList13.size() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.size() exit
   [1] [return]
@@ -77,6 +85,7 @@ Variable sets for javautil.ArrayList13.size() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.isEmpty() enter
@@ -85,6 +94,7 @@ Variable sets for javautil.ArrayList13.isEmpty() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.isEmpty() exit
   [1] [return]
@@ -93,6 +103,7 @@ Variable sets for javautil.ArrayList13.isEmpty() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.contains(java.lang.Object elem) enter
@@ -103,6 +114,7 @@ Variable sets for javautil.ArrayList13.contains(java.lang.Object elem) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.contains(java.lang.Object elem) exit
   [1] [Parameter elem]
@@ -113,6 +125,7 @@ Variable sets for javautil.ArrayList13.contains(java.lang.Object elem) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.indexOf(java.lang.Object elem) enter
@@ -123,6 +136,7 @@ Variable sets for javautil.ArrayList13.indexOf(java.lang.Object elem) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.indexOf(java.lang.Object elem) exit
   [1] [Parameter elem]
@@ -133,6 +147,7 @@ Variable sets for javautil.ArrayList13.indexOf(java.lang.Object elem) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.lastIndexOf(java.lang.Object elem) enter
@@ -143,6 +158,7 @@ Variable sets for javautil.ArrayList13.lastIndexOf(java.lang.Object elem) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.lastIndexOf(java.lang.Object elem) exit
   [1] [Parameter elem]
@@ -153,6 +169,7 @@ Variable sets for javautil.ArrayList13.lastIndexOf(java.lang.Object elem) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.clone() enter
@@ -161,6 +178,7 @@ Variable sets for javautil.ArrayList13.clone() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.clone() exit
   [1] [return]
@@ -170,6 +188,7 @@ Variable sets for javautil.ArrayList13.clone() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.toArray() enter
@@ -178,6 +197,7 @@ Variable sets for javautil.ArrayList13.toArray() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.toArray() exit
   [1] [return]
@@ -188,6 +208,7 @@ Variable sets for javautil.ArrayList13.toArray() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.toArray([Ljava.lang.Object; a) enter
@@ -199,6 +220,7 @@ Variable sets for javautil.ArrayList13.toArray([Ljava.lang.Object; a) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.toArray([Ljava.lang.Object; a) exit
   [1] [Parameter a]
@@ -212,6 +234,7 @@ Variable sets for javautil.ArrayList13.toArray([Ljava.lang.Object; a) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.get(int index) enter
@@ -221,6 +244,7 @@ Variable sets for javautil.ArrayList13.get(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.get(int index) exit
   [1] [Parameter index]
@@ -231,6 +255,7 @@ Variable sets for javautil.ArrayList13.get(int index) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.set(int index, java.lang.Object element) enter
@@ -242,6 +267,7 @@ Variable sets for javautil.ArrayList13.set(int index, java.lang.Object element) 
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.set(int index, java.lang.Object element) exit
   [1] [Parameter element]
@@ -254,6 +280,7 @@ Variable sets for javautil.ArrayList13.set(int index, java.lang.Object element) 
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.add(java.lang.Object o) enter
@@ -264,6 +291,7 @@ Variable sets for javautil.ArrayList13.add(java.lang.Object o) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.add(java.lang.Object o) exit
   [1] [Parameter o]
@@ -274,6 +302,7 @@ Variable sets for javautil.ArrayList13.add(java.lang.Object o) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.add(int index, java.lang.Object element) enter
@@ -285,6 +314,7 @@ Variable sets for javautil.ArrayList13.add(int index, java.lang.Object element) 
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.add(int index, java.lang.Object element) exit
   [1] [Parameter element]
@@ -295,6 +325,7 @@ Variable sets for javautil.ArrayList13.add(int index, java.lang.Object element) 
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.remove(int index) enter
@@ -304,6 +335,7 @@ Variable sets for javautil.ArrayList13.remove(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.remove(int index) exit
   [1] [Parameter index]
@@ -314,6 +346,7 @@ Variable sets for javautil.ArrayList13.remove(int index) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.clear() enter
@@ -322,6 +355,7 @@ Variable sets for javautil.ArrayList13.clear() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.clear() exit
   [1] [this]
@@ -329,6 +363,7 @@ Variable sets for javautil.ArrayList13.clear() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.addAll(javautil.Collection13 c) enter
@@ -339,6 +374,7 @@ Variable sets for javautil.ArrayList13.addAll(javautil.Collection13 c) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.addAll(javautil.Collection13 c) exit
   [1] [Parameter c]
@@ -349,6 +385,7 @@ Variable sets for javautil.ArrayList13.addAll(javautil.Collection13 c) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.addAll(int index, javautil.Collection13 c) enter
@@ -360,6 +397,7 @@ Variable sets for javautil.ArrayList13.addAll(int index, javautil.Collection13 c
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.addAll(int index, javautil.Collection13 c) exit
   [1] [Parameter c]
@@ -371,6 +409,7 @@ Variable sets for javautil.ArrayList13.addAll(int index, javautil.Collection13 c
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.removeRange(int fromIndex, int toIndex) enter
@@ -380,6 +419,7 @@ Variable sets for javautil.ArrayList13.removeRange(int fromIndex, int toIndex) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
   [1] [Parameter toIndex]
 Variable sets for javautil.ArrayList13.removeRange(int fromIndex, int toIndex) exit
@@ -389,6 +429,7 @@ Variable sets for javautil.ArrayList13.removeRange(int fromIndex, int toIndex) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
   [1] [Parameter toIndex]
 
@@ -399,6 +440,7 @@ Variable sets for javautil.ArrayList13.RangeCheck(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.RangeCheck(int index) exit
   [1] [Parameter index]
@@ -407,6 +449,7 @@ Variable sets for javautil.ArrayList13.RangeCheck(int index) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.writeObject(java.io.ObjectOutputStream s) enter
@@ -416,6 +459,7 @@ Variable sets for javautil.ArrayList13.writeObject(java.io.ObjectOutputStream s)
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.writeObject(java.io.ObjectOutputStream s) exit
   [1] [Parameter s]
@@ -424,6 +468,7 @@ Variable sets for javautil.ArrayList13.writeObject(java.io.ObjectOutputStream s)
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.ArrayList13.readObject(java.io.ObjectInputStream s) enter
@@ -433,6 +478,7 @@ Variable sets for javautil.ArrayList13.readObject(java.io.ObjectInputStream s) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 Variable sets for javautil.ArrayList13.readObject(java.io.ObjectInputStream s) exit
   [1] [Parameter s]
@@ -441,6 +487,7 @@ Variable sets for javautil.ArrayList13.readObject(java.io.ObjectInputStream s) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Field size]
 
 Variable sets for javautil.AbstractList13.<init>() enter

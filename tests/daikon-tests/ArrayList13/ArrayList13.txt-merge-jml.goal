@@ -1165,6 +1165,7 @@ package javautil;
 
 public class ArrayList13 extends AbstractList13 implements List13, Cloneable,
 					            java.io.Serializable {
+    /*@ invariant this.size == this.modCount; */
     /*@ invariant this != null; */
     /*@ invariant this.elementData != null; */
     /*@ invariant this.elementData.getClass().getName() == java.lang.Object[].class.getName(); */

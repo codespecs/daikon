@@ -7,6 +7,7 @@ this.modCount == 0
 javautil.AbstractList13.AbstractList13():::EXIT
 ===========================================================================
 javautil.ArrayList13:::OBJECT
+this.size == this.modCount
 this has only one value
 this.elementData has only one value
 this.elementData.getClass().getName() == java.lang.Object[].class

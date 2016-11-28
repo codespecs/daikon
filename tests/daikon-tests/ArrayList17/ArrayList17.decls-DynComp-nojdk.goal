@@ -87,6 +87,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 
 DECLARE
@@ -150,6 +154,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 initialCapacity
 int # isParam=true
 int
@@ -213,6 +221,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 
 DECLARE
@@ -280,6 +292,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 c
 java.util.Collection # isParam=true
 hashcode
@@ -344,6 +360,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 DECLARE
 javautil.ArrayList17.trimToSize():::EXIT183
@@ -399,6 +419,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 
 DECLARE
@@ -455,6 +479,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 minCapacity
 int # isParam=true
 int
@@ -514,6 +542,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 minCapacity
 int # isParam=true
 int
@@ -574,6 +606,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 minCapacity
 int # isParam=true
 int
@@ -633,6 +669,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 minCapacity
 int # isParam=true
 int
@@ -693,6 +733,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 minCapacity
 int # isParam=true
 int
@@ -752,6 +796,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 minCapacity
 int # isParam=true
 int
@@ -812,6 +860,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 minCapacity
 int # isParam=true
 int
@@ -871,6 +923,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 minCapacity
 int # isParam=true
 int
@@ -1006,6 +1062,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 DECLARE
 javautil.ArrayList17.size():::EXIT261
@@ -1061,6 +1121,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 return
 int
 int
@@ -1121,6 +1185,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 DECLARE
 javautil.ArrayList17.isEmpty():::EXIT270
@@ -1176,6 +1244,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 return
 boolean
 boolean
@@ -1236,6 +1308,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 o
 java.lang.Object # isParam=true
 hashcode
@@ -1299,6 +1375,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 o
 java.lang.Object # isParam=true
 hashcode
@@ -1367,6 +1447,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 o
 java.lang.Object # isParam=true
 hashcode
@@ -1430,6 +1514,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 o
 java.lang.Object # isParam=true
 hashcode
@@ -1497,6 +1585,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 o
 java.lang.Object # isParam=true
 hashcode
@@ -1564,6 +1656,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 o
 java.lang.Object # isParam=true
 hashcode
@@ -1632,6 +1728,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 o
 java.lang.Object # isParam=true
 hashcode
@@ -1695,6 +1795,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 o
 java.lang.Object # isParam=true
 hashcode
@@ -1762,6 +1866,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 o
 java.lang.Object # isParam=true
 hashcode
@@ -1829,6 +1937,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 o
 java.lang.Object # isParam=true
 hashcode
@@ -1897,6 +2009,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 DECLARE
 javautil.ArrayList17.clone():::EXIT338
@@ -1952,6 +2068,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 return
 java.lang.Object
 hashcode
@@ -2016,6 +2136,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 DECLARE
 javautil.ArrayList17.toArray():::EXIT360
@@ -2071,6 +2195,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 return
 java.lang.Object[]
 hashcode
@@ -2082,7 +2210,7 @@ java.lang.String
 return[..]
 java.lang.Object[]
 hashcode[]
-9[12]
+9[13]
 
 
 DECLARE
@@ -2139,6 +2267,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 a
 java.lang.Object[] # isParam=true
 hashcode
@@ -2150,7 +2282,7 @@ java.lang.String
 a[..]
 java.lang.Object[]
 hashcode[]
-3[12]
+3[13]
 
 DECLARE
 javautil.ArrayList17.toArray(java.lang.Object[]):::EXIT391
@@ -2206,6 +2338,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+14
 a
 java.lang.Object[] # isParam=true
 hashcode
@@ -2217,7 +2353,7 @@ java.lang.String
 a[..]
 java.lang.Object[]
 hashcode[]
-3[14]
+3[15]
 return
 java.lang.Object[]
 hashcode
@@ -2229,7 +2365,7 @@ java.lang.String
 return[..]
 java.lang.Object[]
 hashcode[]
-11[15]
+11[16]
 
 DECLARE
 javautil.ArrayList17.toArray(java.lang.Object[]):::EXIT395
@@ -2285,6 +2421,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+14
 a
 java.lang.Object[] # isParam=true
 hashcode
@@ -2296,7 +2436,7 @@ java.lang.String
 a[..]
 java.lang.Object[]
 hashcode[]
-3[14]
+3[15]
 return
 java.lang.Object[]
 hashcode
@@ -2308,7 +2448,7 @@ java.lang.String
 return[..]
 java.lang.Object[]
 hashcode[]
-11[15]
+11[16]
 
 
 DECLARE
@@ -2365,6 +2505,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 index
 int # isParam=true
 int
@@ -2424,6 +2568,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 index
 int # isParam=true
 int
@@ -2492,6 +2640,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 index
 int # isParam=true
 int
@@ -2551,6 +2703,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 index
 int # isParam=true
 int
@@ -2619,6 +2775,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 index
 int # isParam=true
 int
@@ -2686,6 +2846,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+13
 index
 int # isParam=true
 int
@@ -2762,6 +2926,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 e
 java.lang.Object # isParam=true
 hashcode
@@ -2825,6 +2993,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 e
 java.lang.Object # isParam=true
 hashcode
@@ -2893,6 +3065,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 index
 int # isParam=true
 int
@@ -2960,6 +3136,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 index
 int # isParam=true
 int
@@ -3028,6 +3208,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 index
 int # isParam=true
 int
@@ -3087,6 +3271,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 index
 int # isParam=true
 int
@@ -3155,6 +3343,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 o
 java.lang.Object # isParam=true
 hashcode
@@ -3218,6 +3410,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 o
 java.lang.Object # isParam=true
 hashcode
@@ -3285,6 +3481,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 o
 java.lang.Object # isParam=true
 hashcode
@@ -3352,6 +3552,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 o
 java.lang.Object # isParam=true
 hashcode
@@ -3420,6 +3624,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 index
 int # isParam=true
 int
@@ -3479,6 +3687,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 index
 int # isParam=true
 int
@@ -3539,6 +3751,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 DECLARE
 javautil.ArrayList17.clear():::EXIT545
@@ -3594,6 +3810,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 
 DECLARE
@@ -3650,6 +3870,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 c
 java.util.Collection # isParam=true
 hashcode
@@ -3713,6 +3937,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 c
 java.util.Collection # isParam=true
 hashcode
@@ -3781,6 +4009,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 index
 int # isParam=true
 int
@@ -3848,6 +4080,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+13
 index
 int # isParam=true
 int
@@ -3920,6 +4156,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 fromIndex
 int # isParam=true
 int
@@ -3927,7 +4167,7 @@ int
 toIndex
 int # isParam=true
 int
-11
+12
 
 DECLARE
 javautil.ArrayList17.removeRange(int, int):::EXIT627
@@ -3983,6 +4223,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 fromIndex
 int # isParam=true
 int
@@ -3990,7 +4234,7 @@ int
 toIndex
 int # isParam=true
 int
-11
+12
 
 
 DECLARE
@@ -4047,6 +4291,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 index
 int # isParam=true
 int
@@ -4106,6 +4354,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 index
 int # isParam=true
 int
@@ -4166,6 +4418,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 index
 int # isParam=true
 int
@@ -4225,6 +4481,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 index
 int # isParam=true
 int
@@ -4285,6 +4545,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 index
 int # isParam=true
 int
@@ -4344,6 +4608,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+13
 index
 int # isParam=true
 int
@@ -4412,6 +4680,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 c
 java.util.Collection # isParam=true
 hashcode
@@ -4475,6 +4747,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 c
 java.util.Collection # isParam=true
 hashcode
@@ -4543,6 +4819,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 c
 java.util.Collection # isParam=true
 hashcode
@@ -4606,6 +4886,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 c
 java.util.Collection # isParam=true
 hashcode
@@ -4674,6 +4958,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 c
 java.util.Collection # isParam=true
 hashcode
@@ -4741,6 +5029,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 8
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+13
 c
 java.util.Collection # isParam=true
 hashcode
@@ -4813,6 +5105,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 s
 java.io.ObjectOutputStream # isParam=true
 hashcode
@@ -4872,6 +5168,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 s
 java.io.ObjectOutputStream # isParam=true
 hashcode
@@ -4932,6 +5232,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 s
 java.io.ObjectInputStream # isParam=true
 hashcode
@@ -4991,6 +5295,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 s
 java.io.ObjectInputStream # isParam=true
 hashcode
@@ -5051,6 +5359,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 index
 int # isParam=true
 int
@@ -5110,6 +5422,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+12
 index
 int # isParam=true
 int
@@ -5178,6 +5494,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 DECLARE
 javautil.ArrayList17.listIterator():::EXIT805
@@ -5233,6 +5553,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 return
 java.util.ListIterator
 hashcode
@@ -5297,6 +5621,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
 
 DECLARE
 javautil.ArrayList17.iterator():::EXIT816
@@ -5352,6 +5680,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 6
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 return
 java.util.Iterator
 hashcode
@@ -5416,6 +5748,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
 fromIndex
 int # isParam=true
 int
@@ -5423,7 +5759,7 @@ int
 toIndex
 int # isParam=true
 int
-11
+12
 
 DECLARE
 javautil.ArrayList17.subList(int, int):::EXIT957
@@ -5479,6 +5815,10 @@ javautil.ArrayList17.MAX_ARRAY_SIZE
 int # declaringClassPackageName=javautil, 
 int
 7
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+13
 fromIndex
 int # isParam=true
 int
@@ -5486,7 +5826,7 @@ int
 toIndex
 int # isParam=true
 int
-13
+14
 return
 java.util.List
 hashcode
@@ -5494,11 +5834,11 @@ hashcode
 return[..]
 java.util.List
 hashcode[]
-10[14]
+10[15]
 return[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1[15]
+1[16]
 return.getClass().getName()
 java.lang.Class
 java.lang.String
@@ -5613,69 +5953,6 @@ java.lang.String
 javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
 java.lang.Object[]
 hashcode[]
-4[12]
-javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[13]
-javautil.ArrayList17.MAX_ARRAY_SIZE
-int # declaringClassPackageName=javautil, 
-int
-5
-x0
-javautil.ArrayList17 # isParam=true
-hashcode
-7
-x0[..]
-javautil.ArrayList17
-hashcode[]
-11[14]
-x0[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[15]
-x0.elementData
-java.lang.Object[] # declaringClassPackageName=javautil, 
-hashcode
-8
-x0.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-x0.elementData[..]
-java.lang.Object[]
-hashcode[]
-9[16]
-x0.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[17]
-x0.size
-int # declaringClassPackageName=javautil, 
-int
-10
-
-DECLARE
-javautil.ArrayList17.access$100(javautil.ArrayList17):::EXIT104
-javautil.ArrayList17.serialVersionUID
-long # declaringClassPackageName=javautil, 
-int
-6
-javautil.ArrayList17.DEFAULT_CAPACITY
-int # declaringClassPackageName=javautil, 
-int
-2
-javautil.ArrayList17.EMPTY_ELEMENTDATA
-java.lang.Object[] # declaringClassPackageName=javautil, 
-hashcode
-3
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
-java.lang.Object[]
-hashcode[]
 4[13]
 javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
 java.lang.Class[]
@@ -5688,7 +5965,7 @@ int
 x0
 javautil.ArrayList17 # isParam=true
 hashcode
-8
+7
 x0[..]
 javautil.ArrayList17
 hashcode[]
@@ -5700,74 +5977,6 @@ java.lang.String[]
 x0.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
-9
-x0.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-x0.elementData[..]
-java.lang.Object[]
-hashcode[]
-10[17]
-x0.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[18]
-x0.size
-int # declaringClassPackageName=javautil, 
-int
-11
-return
-int
-int
-7
-
-
-DECLARE
-javautil.ArrayList17.access$200(javautil.ArrayList17):::ENTER
-javautil.ArrayList17.serialVersionUID
-long # declaringClassPackageName=javautil, 
-int
-6
-javautil.ArrayList17.DEFAULT_CAPACITY
-int # declaringClassPackageName=javautil, 
-int
-2
-javautil.ArrayList17.EMPTY_ELEMENTDATA
-java.lang.Object[] # declaringClassPackageName=javautil, 
-hashcode
-3
-javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
-java.lang.Object[]
-hashcode[]
-4[12]
-javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[13]
-javautil.ArrayList17.MAX_ARRAY_SIZE
-int # declaringClassPackageName=javautil, 
-int
-5
-x0
-javautil.ArrayList17 # isParam=true
-hashcode
-7
-x0[..]
-javautil.ArrayList17
-hashcode[]
-11[14]
-x0[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[15]
-x0.elementData
-java.lang.Object[] # declaringClassPackageName=javautil, 
-hashcode
 8
 x0.elementData.getClass().getName()
 java.lang.Class
@@ -5776,18 +5985,22 @@ java.lang.String
 x0.elementData[..]
 java.lang.Object[]
 hashcode[]
-9[16]
+9[17]
 x0.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1[17]
+1[18]
 x0.size
+int # declaringClassPackageName=javautil, 
+int
+11
+x0.modCount
 int # declaringClassPackageName=javautil, 
 int
 10
 
 DECLARE
-javautil.ArrayList17.access$200(javautil.ArrayList17):::EXIT104
+javautil.ArrayList17.access$100(javautil.ArrayList17):::EXIT104
 javautil.ArrayList17.serialVersionUID
 long # declaringClassPackageName=javautil, 
 int
@@ -5819,7 +6032,7 @@ int
 x0
 javautil.ArrayList17 # isParam=true
 hashcode
-9
+8
 x0[..]
 javautil.ArrayList17
 hashcode[]
@@ -5831,6 +6044,145 @@ java.lang.String[]
 x0.elementData
 java.lang.Object[] # declaringClassPackageName=javautil, 
 hashcode
+9
+x0.elementData.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+x0.elementData[..]
+java.lang.Object[]
+hashcode[]
+10[18]
+x0.elementData[..].getClass().getName()
+java.lang.Class[]
+java.lang.String[]
+1[19]
+x0.size
+int # declaringClassPackageName=javautil, 
+int
+12
+x0.modCount
+int # declaringClassPackageName=javautil, 
+int
+11
+return
+int
+int
+7
+
+
+DECLARE
+javautil.ArrayList17.access$200(javautil.ArrayList17):::ENTER
+javautil.ArrayList17.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+6
+javautil.ArrayList17.DEFAULT_CAPACITY
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.ArrayList17.EMPTY_ELEMENTDATA
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+java.lang.Object[]
+hashcode[]
+4[13]
+javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+java.lang.Class[]
+java.lang.String[]
+1[14]
+javautil.ArrayList17.MAX_ARRAY_SIZE
+int # declaringClassPackageName=javautil, 
+int
+5
+x0
+javautil.ArrayList17 # isParam=true
+hashcode
+7
+x0[..]
+javautil.ArrayList17
+hashcode[]
+12[15]
+x0[..].getClass().getName()
+java.lang.Class[]
+java.lang.String[]
+1[16]
+x0.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+8
+x0.elementData.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+x0.elementData[..]
+java.lang.Object[]
+hashcode[]
+9[17]
+x0.elementData[..].getClass().getName()
+java.lang.Class[]
+java.lang.String[]
+1[18]
+x0.size
+int # declaringClassPackageName=javautil, 
+int
+11
+x0.modCount
+int # declaringClassPackageName=javautil, 
+int
+10
+
+DECLARE
+javautil.ArrayList17.access$200(javautil.ArrayList17):::EXIT104
+javautil.ArrayList17.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+6
+javautil.ArrayList17.DEFAULT_CAPACITY
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.ArrayList17.EMPTY_ELEMENTDATA
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+javautil.ArrayList17.EMPTY_ELEMENTDATA.getClass().getName()
+java.lang.Class
+java.lang.String
+1
+javautil.ArrayList17.EMPTY_ELEMENTDATA[..]
+java.lang.Object[]
+hashcode[]
+4[15]
+javautil.ArrayList17.EMPTY_ELEMENTDATA[..].getClass().getName()
+java.lang.Class[]
+java.lang.String[]
+1[16]
+javautil.ArrayList17.MAX_ARRAY_SIZE
+int # declaringClassPackageName=javautil, 
+int
+5
+x0
+javautil.ArrayList17 # isParam=true
+hashcode
+9
+x0[..]
+javautil.ArrayList17
+hashcode[]
+14[17]
+x0[..].getClass().getName()
+java.lang.Class[]
+java.lang.String[]
+1[18]
+x0.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
 10
 x0.elementData.getClass().getName()
 java.lang.Class
@@ -5839,12 +6191,16 @@ java.lang.String
 x0.elementData[..]
 java.lang.Object[]
 hashcode[]
-11[18]
+11[19]
 x0.elementData[..].getClass().getName()
 java.lang.Class[]
 java.lang.String[]
-1[19]
+1[20]
 x0.size
+int # declaringClassPackageName=javautil, 
+int
+13
+x0.modCount
 int # declaringClassPackageName=javautil, 
 int
 12
@@ -5859,7 +6215,7 @@ java.lang.String
 return[..]
 java.lang.Object[]
 hashcode[]
-8[20]
+8[21]
 
 DECLARE
 javautil.AbstractList17:::CLASS
