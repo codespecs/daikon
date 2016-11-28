@@ -42,6 +42,9 @@ public class Instrument implements ClassFileTransformer {
 
     // System.out.printf ("transform on %s%n", className);
 
+    // See comments in Premain.java about meaning and use of in_shutdown.
+    if (Premain.in_shutdown) return null;
+
     // If already instrumented, nothing to do
     // (This set will be empty if --no-jdk)
     if (Premain.pre_instrumented.contains(className)) {

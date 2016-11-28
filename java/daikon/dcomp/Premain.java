@@ -34,6 +34,19 @@ public class Premain {
    */
   public static Set<String> pre_instrumented = new LinkedHashSet<String>();
 
+  // One of the last phases for DynComp is to write out the comparability values
+  // after the user program completes execution.  One of the steps is to assign
+  // values to the arguments of methods that have not been executed.  We use
+  // reflection to get type information about these arguments, which causes the
+  // method to be loaded; which causes the main part of DynComp to try and
+  // instrument the method.  As the user program has completed execution, doing
+  // instrumentation at this point can lead to problems.  The correct fix for
+  // this problem is to use BCEL to get the type information instead of reflection,
+  // thus avoiding loading the method into the JVM.  This will be a large change,
+  // so a temporary fix is to indicate if the program is in shutdown mode and
+  // not instrument any methods when this flag is true.
+  public static boolean in_shutdown = false;
+
   public static void premain(String agentArgs, Instrumentation inst) throws IOException {
 
     Options options = new Options(DynComp.usage_synopsis, DynComp.class, Premain.class);
@@ -106,6 +119,8 @@ public class Premain {
   public static class ShutdownThread extends Thread {
 
     public void run() {
+
+      in_shutdown = true;
 
       // If DataFlow, print out the DF for the specified branch
       if (DynComp.branch != null) {
