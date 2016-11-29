@@ -204,7 +204,8 @@ public final class Debug {
    * Looks for each of the variables in vis in the DebugTrackVar list. If any match, returns that
    * variable. Returns null if there are no matches.
    */
-  public /*@Nullable*/ VarInfo visTracked(/*>>>@UnknownInitialization Debug this,*/ List<VarInfo> vis) {
+  public /*@Nullable*/ VarInfo visTracked(
+      /*>>>@UnknownInitialization Debug this,*/ List<VarInfo> vis) {
 
     for (VarInfo v : vis) {
       Set<VarInfo> evars = null;

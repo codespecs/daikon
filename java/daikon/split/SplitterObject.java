@@ -59,7 +59,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
    * @param fileName the pathname of a {@code .class} file
    * @return a Java Class corresponding to the {@code .class} file, or null
    */
-  static /*@Nullable*/ Class<?> defineSplitterClass(/*@BinaryName*/ String className, String fileName) {
+  static /*@Nullable*/ Class<?> defineSplitterClass(
+      /*@BinaryName*/ String className, String fileName) {
     try {
       return UtilMDE.defineClassFromFile(className, fileName);
     } catch (FileNotFoundException e) {

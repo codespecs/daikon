@@ -684,8 +684,8 @@ Variable sets for daikon.dcomp.Test$E.equals(java.lang.Object obj) exit
 Variable sets for daikon.dcomp.Test$F.<init>() enter
 Variable sets for daikon.dcomp.Test$F.<init>() exit
   [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [6] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x, daikon.chicory.FieldInfo:this.os1.x, daikon.chicory.FieldInfo:this.os2.x]
+  [6] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y, daikon.chicory.FieldInfo:this.os1.y, daikon.chicory.FieldInfo:this.os2.y]
   [4] [daikon.chicory.FieldInfo:this.c1, daikon.chicory.FieldInfo:this.c2, daikon.chicory.FieldInfo:this.os1.z, daikon.chicory.FieldInfo:this.os2.z]
   [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
@@ -693,16 +693,16 @@ Variable sets for daikon.dcomp.Test$F.<init>() exit
 
 Variable sets for daikon.dcomp.Test$F.compare() enter
   [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [6] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x, daikon.chicory.FieldInfo:this.os1.x, daikon.chicory.FieldInfo:this.os2.x]
+  [6] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y, daikon.chicory.FieldInfo:this.os1.y, daikon.chicory.FieldInfo:this.os2.y]
   [4] [daikon.chicory.FieldInfo:this.c1, daikon.chicory.FieldInfo:this.c2, daikon.chicory.FieldInfo:this.os1.z, daikon.chicory.FieldInfo:this.os2.z]
   [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
   [2] [daikon.chicory.FieldInfo:this.os1, daikon.chicory.FieldInfo:this.os2]
 Variable sets for daikon.dcomp.Test$F.compare() exit
   [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [6] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x, daikon.chicory.FieldInfo:this.os1.x, daikon.chicory.FieldInfo:this.os2.x]
+  [6] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y, daikon.chicory.FieldInfo:this.os1.y, daikon.chicory.FieldInfo:this.os2.y]
   [4] [daikon.chicory.FieldInfo:this.c1, daikon.chicory.FieldInfo:this.c2, daikon.chicory.FieldInfo:this.os1.z, daikon.chicory.FieldInfo:this.os2.z]
   [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
@@ -710,16 +710,16 @@ Variable sets for daikon.dcomp.Test$F.compare() exit
 
 Variable sets for daikon.dcomp.Test$F.compare2() enter
   [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [6] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x, daikon.chicory.FieldInfo:this.os1.x, daikon.chicory.FieldInfo:this.os2.x]
+  [6] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y, daikon.chicory.FieldInfo:this.os1.y, daikon.chicory.FieldInfo:this.os2.y]
   [4] [daikon.chicory.FieldInfo:this.c1, daikon.chicory.FieldInfo:this.c2, daikon.chicory.FieldInfo:this.os1.z, daikon.chicory.FieldInfo:this.os2.z]
   [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
   [2] [daikon.chicory.FieldInfo:this.os1, daikon.chicory.FieldInfo:this.os2]
 Variable sets for daikon.dcomp.Test$F.compare2() exit
   [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [6] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x, daikon.chicory.FieldInfo:this.os1.x, daikon.chicory.FieldInfo:this.os2.x]
+  [6] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y, daikon.chicory.FieldInfo:this.os1.y, daikon.chicory.FieldInfo:this.os2.y]
   [4] [daikon.chicory.FieldInfo:this.c1, daikon.chicory.FieldInfo:this.c2, daikon.chicory.FieldInfo:this.os1.z, daikon.chicory.FieldInfo:this.os2.z]
   [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
@@ -727,16 +727,16 @@ Variable sets for daikon.dcomp.Test$F.compare2() exit
 
 Variable sets for daikon.dcomp.Test$F.compare3() enter
   [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [6] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x, daikon.chicory.FieldInfo:this.os1.x, daikon.chicory.FieldInfo:this.os2.x]
+  [6] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y, daikon.chicory.FieldInfo:this.os1.y, daikon.chicory.FieldInfo:this.os2.y]
   [4] [daikon.chicory.FieldInfo:this.c1, daikon.chicory.FieldInfo:this.c2, daikon.chicory.FieldInfo:this.os1.z, daikon.chicory.FieldInfo:this.os2.z]
   [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
   [2] [daikon.chicory.FieldInfo:this.os1, daikon.chicory.FieldInfo:this.os2]
 Variable sets for daikon.dcomp.Test$F.compare3() exit
   [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [6] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x, daikon.chicory.FieldInfo:this.os1.x, daikon.chicory.FieldInfo:this.os2.x]
+  [6] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y, daikon.chicory.FieldInfo:this.os1.y, daikon.chicory.FieldInfo:this.os2.y]
   [4] [daikon.chicory.FieldInfo:this.c1, daikon.chicory.FieldInfo:this.c2, daikon.chicory.FieldInfo:this.os1.z, daikon.chicory.FieldInfo:this.os2.z]
   [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
@@ -746,8 +746,8 @@ Variable sets for daikon.dcomp.Test$F.equals(java.lang.Object obj) enter
   [1] [daikon.chicory.ParameterInfo:obj]
   [1] [daikon.chicory.DaikonClassInfo:obj.getClass().getName()]
   [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [6] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x, daikon.chicory.FieldInfo:this.os1.x, daikon.chicory.FieldInfo:this.os2.x]
+  [6] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y, daikon.chicory.FieldInfo:this.os1.y, daikon.chicory.FieldInfo:this.os2.y]
   [4] [daikon.chicory.FieldInfo:this.c1, daikon.chicory.FieldInfo:this.c2, daikon.chicory.FieldInfo:this.os1.z, daikon.chicory.FieldInfo:this.os2.z]
   [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
@@ -757,8 +757,8 @@ Variable sets for daikon.dcomp.Test$F.equals(java.lang.Object obj) exit
   [1] [daikon.chicory.DaikonClassInfo:obj.getClass().getName()]
   [1] [daikon.chicory.ReturnInfo:return]
   [1] [daikon.chicory.ThisObjInfo:this]
-  [4] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x]
-  [4] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y]
+  [6] [daikon.chicory.FieldInfo:this.a1, daikon.chicory.FieldInfo:this.a2, daikon.chicory.FieldInfo:this.obj1.x, daikon.chicory.FieldInfo:this.obj2.x, daikon.chicory.FieldInfo:this.os1.x, daikon.chicory.FieldInfo:this.os2.x]
+  [6] [daikon.chicory.FieldInfo:this.b1, daikon.chicory.FieldInfo:this.b2, daikon.chicory.FieldInfo:this.obj1.y, daikon.chicory.FieldInfo:this.obj2.y, daikon.chicory.FieldInfo:this.os1.y, daikon.chicory.FieldInfo:this.os2.y]
   [4] [daikon.chicory.FieldInfo:this.c1, daikon.chicory.FieldInfo:this.c2, daikon.chicory.FieldInfo:this.os1.z, daikon.chicory.FieldInfo:this.os2.z]
   [2] [daikon.chicory.FieldInfo:this.int1, daikon.chicory.FieldInfo:this.int2]
   [2] [daikon.chicory.FieldInfo:this.obj1, daikon.chicory.FieldInfo:this.obj2]
@@ -810,18 +810,22 @@ Variable sets for daikon.dcomp.Test$ObjSub.<init>(int x, int y, int z) enter
   [1] [daikon.chicory.ParameterInfo:z]
 Variable sets for daikon.dcomp.Test$ObjSub.<init>(int x, int y, int z) exit
   [1] [daikon.chicory.ThisObjInfo:this]
+  [2] [daikon.chicory.FieldInfo:this.x, daikon.chicory.ParameterInfo:x]
+  [2] [daikon.chicory.FieldInfo:this.y, daikon.chicory.ParameterInfo:y]
   [2] [daikon.chicory.FieldInfo:this.z, daikon.chicory.ParameterInfo:z]
-  [1] [daikon.chicory.ParameterInfo:x]
-  [1] [daikon.chicory.ParameterInfo:y]
 
 Variable sets for daikon.dcomp.Test$ObjSub.equals(java.lang.Object obj) enter
   [2] [daikon.chicory.ParameterInfo:obj, daikon.chicory.ThisObjInfo:this]
   [1] [daikon.chicory.DaikonClassInfo:obj.getClass().getName()]
+  [1] [daikon.chicory.FieldInfo:this.x]
+  [1] [daikon.chicory.FieldInfo:this.y]
   [1] [daikon.chicory.FieldInfo:this.z]
 Variable sets for daikon.dcomp.Test$ObjSub.equals(java.lang.Object obj) exit
   [2] [daikon.chicory.ParameterInfo:obj, daikon.chicory.ThisObjInfo:this]
   [1] [daikon.chicory.DaikonClassInfo:obj.getClass().getName()]
   [1] [daikon.chicory.ReturnInfo:return]
+  [1] [daikon.chicory.FieldInfo:this.x]
+  [1] [daikon.chicory.FieldInfo:this.y]
   [1] [daikon.chicory.FieldInfo:this.z]
 
 Variable sets for daikon.dcomp.Test$G.<init>() enter

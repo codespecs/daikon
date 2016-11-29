@@ -187,11 +187,15 @@ Thus, a complete @file{.bashrc} or @file{.bash_profile} shell setup file
 that would enable you to compile Daikon might look like the following:
 
 @example
-export DAIKONDIR=$HOME/daikon
 export JAVA_HOME=/usr/lib/jvm/java
+
+export DAIKONDIR=$HOME/daikon
 source $DAIKONDIR/scripts/daikon.bashrc
-export CLASSPATH=.:$CLASSPATH
 @end example
+@c Previously contained the following, but why?  Setting classpath globally
+@c is bad style.
+@c export CLASSPATH=.:$CLASSPATH
+
 
 @cindex .jpp files
 @cindex jpp files

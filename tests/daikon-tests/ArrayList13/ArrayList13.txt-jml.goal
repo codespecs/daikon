@@ -9,7 +9,8 @@ javautil.AbstractList13.AbstractList13():::EXIT
     Variables: this this.getClass().getName() this.modCount
 ===========================================================================
 javautil.ArrayList13:::OBJECT
-    Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.size size(this.elementData[]) size(this.elementData[])-1 this.elementData[this.size] this.elementData[this.size-1] this.elementData[this.size..] this.elementData[this.size+1..] this.elementData[0..this.size] this.elementData[0..this.size-1]
+    Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.size this.modCount size(this.elementData[]) size(this.elementData[])-1 this.elementData[this.size] this.elementData[this.size-1] this.elementData[this.size..] this.elementData[this.size+1..] this.elementData[0..this.size] this.elementData[0..this.size-1] this.elementData[this.modCount] this.elementData[this.modCount-1] this.elementData[this.modCount..] this.elementData[this.modCount+1..] this.elementData[0..this.modCount] this.elementData[0..this.modCount-1]
+this.size == this.modCount
 this != null
 this.elementData != null
 this.elementData.getClass().getName() == java.lang.Object[].class.getName()
@@ -25,14 +26,14 @@ daikon.Quant.size(this.elementData) == 10
 daikon.Quant.eltsEqual(this.elementData, daikon.Quant.getElement_Object(this.elementData, this.size))
 ===========================================================================
 javautil.ArrayList13.ArrayList13():::EXIT
-    Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.size size(this.elementData[]) size(this.elementData[])-1 this.elementData[this.size] this.elementData[this.size-1] this.elementData[this.size..] this.elementData[this.size+1..] this.elementData[0..this.size] this.elementData[0..this.size-1]
+    Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.size this.modCount size(this.elementData[]) size(this.elementData[])-1 this.elementData[this.size] this.elementData[this.size-1] this.elementData[this.size..] this.elementData[this.size+1..] this.elementData[0..this.size] this.elementData[0..this.size-1] this.elementData[this.modCount] this.elementData[this.modCount-1] this.elementData[this.modCount..] this.elementData[this.modCount+1..] this.elementData[0..this.modCount] this.elementData[0..this.modCount-1]
 ===========================================================================
 javautil.ArrayList13.ArrayList13(int):::ENTER
     Variables: initialCapacity
 initialCapacity == 10
 ===========================================================================
 javautil.ArrayList13.ArrayList13(int):::EXIT
-    Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.size initialCapacity orig(initialCapacity) size(this.elementData[]) size(this.elementData[])-1 this.elementData[this.size] this.elementData[this.size-1] this.elementData[this.size..] this.elementData[this.size+1..] this.elementData[0..this.size] this.elementData[0..this.size-1] this.elementData[initialCapacity] this.elementData[initialCapacity-1] this.elementData[initialCapacity..] this.elementData[initialCapacity+1..] this.elementData[0..initialCapacity] this.elementData[0..initialCapacity-1] this.elementData[orig(initialCapacity)] this.elementData[orig(initialCapacity)-1] this.elementData[orig(initialCapacity)..] this.elementData[orig(initialCapacity)+1..] this.elementData[0..orig(initialCapacity)] this.elementData[0..orig(initialCapacity)-1]
+    Variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.size this.modCount initialCapacity orig(initialCapacity) size(this.elementData[]) size(this.elementData[])-1 this.elementData[this.size] this.elementData[this.size-1] this.elementData[this.size..] this.elementData[this.size+1..] this.elementData[0..this.size] this.elementData[0..this.size-1] this.elementData[this.modCount] this.elementData[this.modCount-1] this.elementData[this.modCount..] this.elementData[this.modCount+1..] this.elementData[0..this.modCount] this.elementData[0..this.modCount-1] this.elementData[initialCapacity] this.elementData[initialCapacity-1] this.elementData[initialCapacity..] this.elementData[initialCapacity+1..] this.elementData[0..initialCapacity] this.elementData[0..initialCapacity-1] this.elementData[orig(initialCapacity)] this.elementData[orig(initialCapacity)-1] this.elementData[orig(initialCapacity)..] this.elementData[orig(initialCapacity)+1..] this.elementData[0..orig(initialCapacity)] this.elementData[0..orig(initialCapacity)-1]
 \old(initialCapacity) == daikon.Quant.size(this.elementData)
 daikon.Quant.getElement_Object(this.elementData, this.size) == daikon.Quant.getElement_Object(this.elementData, \old(initialCapacity)-1)
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)

@@ -190,8 +190,8 @@ public final class Daikon {
    * .
    *
    * <p>(To do: Some configuration option (maybe this one) should add guards for other reasons that
-   * lead to nonsensical values (@pxref{Variable names}).) &#64;cindex nonsensical values for
-   * variables, guarding
+   * lead to nonsensical values (@pxref{Variable names}).) <br>
+   * &#64;cindex nonsensical values for variables, guarding
    */
   // Perhaps a better default would be "missing".
   public static /*@Interned*/ String dkconfig_guardNulls = "default";

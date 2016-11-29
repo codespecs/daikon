@@ -573,7 +573,8 @@ import typequals.*;
    * @return the merged invariant or null if the invariants didn't represent the same invariant
    */
   public /*@Nullable*/ /*@NonPrototype*/ Invariant merge(
-      /*>>> @Prototype Invariant this,*/ List</*@NonPrototype*/ Invariant> invs, PptSlice parent_ppt) {
+      /*>>> @Prototype Invariant this,*/ List</*@NonPrototype*/ Invariant> invs,
+      PptSlice parent_ppt) {
 
     Invariant first = invs.get(0);
     Invariant result = first.clone();
@@ -598,7 +599,8 @@ import typequals.*;
   /**
    * Permutes the invariant as specified. Often creates a new invariant (with a different class).
    */
-  public /*@NonPrototype*/ Invariant permute(/*>>> @NonPrototype Invariant this,*/ int[] permutation) {
+  public /*@NonPrototype*/ Invariant permute(
+      /*>>> @NonPrototype Invariant this,*/ int[] permutation) {
     return (resurrect_done(permutation));
   }
 
@@ -1118,7 +1120,8 @@ import typequals.*;
    *     variables is the *same* as that of this.ppt.var_infos.
    */
   /*@Pure*/
-  public /*@Nullable*/ DiscardInfo isObviousStatically(/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(
+      /*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
     return null;
   }
 

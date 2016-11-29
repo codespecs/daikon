@@ -436,14 +436,21 @@ public abstract class DaikonVariableInfo
 
     // Get the fields
     // System.out.printf ("getting fields for %s%n", type);
-    Field[] fields = type.getDeclaredFields();
+
+    // We need to get fields of superclass(es) as well.
+    List<Field> fields = new ArrayList<Field>();
+    Class<?> c = type;
+    while (c != null && c != Object.class) {
+      fields.addAll(Arrays.asList(c.getDeclaredFields()));
+      c = c.getSuperclass();
+    }
 
     // if (fields.length > 50)
     //    System.out.printf ("%d fields in %s%n", fields.length, type);
 
     debug_vars.log(
         "%s: [%s] %d dontPrintInstanceVars = %b, " + "inArray = %b%n",
-        type, offset, fields.length, dontPrintInstanceVars, isArray);
+        type, offset, fields.size(), dontPrintInstanceVars, isArray);
 
     for (Field classField : fields) {
       boolean is_static = Modifier.isStatic(classField.getModifiers());

@@ -17,6 +17,7 @@ fi
 
 # Fail the whole script if any command fails
 set -e
+set -o pipefail
 
 ## Useful for debugging and sometimes for interpreting the script.
 # # Output lines of this script as they are read.
@@ -58,6 +59,8 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   echo ".travis-build.sh is running misc tests"
 
   # Code formatting
+  # Problem: this target requires Java 8, but is being run under Java 7.
+  # It is failing, but is not failing the build.  Why?
   make -C java check-format
 
   # Documentation

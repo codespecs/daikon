@@ -13,6 +13,7 @@ Variable sets for javautil.ArrayList17.<init>(int initialCapacity) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.<init>() enter
 Variable sets for javautil.ArrayList17.<init>() exit
@@ -27,6 +28,7 @@ Variable sets for javautil.ArrayList17.<init>() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.<init>(java.util.Collection c) enter
   [1] [Parameter c]
@@ -45,6 +47,7 @@ Variable sets for javautil.ArrayList17.<init>(java.util.Collection c) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.trimToSize() enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -58,6 +61,7 @@ Variable sets for javautil.ArrayList17.trimToSize() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.trimToSize() exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -70,6 +74,7 @@ Variable sets for javautil.ArrayList17.trimToSize() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.ensureCapacity(int minCapacity) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -84,6 +89,7 @@ Variable sets for javautil.ArrayList17.ensureCapacity(int minCapacity) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.ensureCapacity(int minCapacity) exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -97,6 +103,7 @@ Variable sets for javautil.ArrayList17.ensureCapacity(int minCapacity) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.ensureCapacityInternal(int minCapacity) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -110,6 +117,7 @@ Variable sets for javautil.ArrayList17.ensureCapacityInternal(int minCapacity) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.ensureCapacityInternal(int minCapacity) exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [4] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Parameter minCapacity, Field elementData, Field size]
@@ -122,6 +130,7 @@ Variable sets for javautil.ArrayList17.ensureCapacityInternal(int minCapacity) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.ensureExplicitCapacity(int minCapacity) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -135,6 +144,7 @@ Variable sets for javautil.ArrayList17.ensureExplicitCapacity(int minCapacity) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.ensureExplicitCapacity(int minCapacity) exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [4] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Parameter minCapacity, Field elementData, Field size]
@@ -147,6 +157,7 @@ Variable sets for javautil.ArrayList17.ensureExplicitCapacity(int minCapacity) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.grow(int minCapacity) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -160,6 +171,7 @@ Variable sets for javautil.ArrayList17.grow(int minCapacity) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.grow(int minCapacity) exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [4] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Parameter minCapacity, Field elementData, Field size]
@@ -172,6 +184,7 @@ Variable sets for javautil.ArrayList17.grow(int minCapacity) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.hugeCapacity(int minCapacity) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -205,6 +218,7 @@ Variable sets for javautil.ArrayList17.size() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.size() exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -218,6 +232,7 @@ Variable sets for javautil.ArrayList17.size() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.isEmpty() enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -231,6 +246,7 @@ Variable sets for javautil.ArrayList17.isEmpty() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.isEmpty() exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -244,6 +260,7 @@ Variable sets for javautil.ArrayList17.isEmpty() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.contains(java.lang.Object o) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -259,6 +276,7 @@ Variable sets for javautil.ArrayList17.contains(java.lang.Object o) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.contains(java.lang.Object o) exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -274,6 +292,7 @@ Variable sets for javautil.ArrayList17.contains(java.lang.Object o) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.indexOf(java.lang.Object o) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -289,6 +308,7 @@ Variable sets for javautil.ArrayList17.indexOf(java.lang.Object o) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.indexOf(java.lang.Object o) exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -304,6 +324,7 @@ Variable sets for javautil.ArrayList17.indexOf(java.lang.Object o) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.lastIndexOf(java.lang.Object o) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -319,6 +340,7 @@ Variable sets for javautil.ArrayList17.lastIndexOf(java.lang.Object o) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.lastIndexOf(java.lang.Object o) exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -334,6 +356,7 @@ Variable sets for javautil.ArrayList17.lastIndexOf(java.lang.Object o) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.clone() enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -347,6 +370,7 @@ Variable sets for javautil.ArrayList17.clone() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.clone() exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -361,6 +385,7 @@ Variable sets for javautil.ArrayList17.clone() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.toArray() enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -374,6 +399,7 @@ Variable sets for javautil.ArrayList17.toArray() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.toArray() exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -389,6 +415,7 @@ Variable sets for javautil.ArrayList17.toArray() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.toArray([Ljava.lang.Object; a) enter
   [1] [Parameter a]
@@ -405,6 +432,7 @@ Variable sets for javautil.ArrayList17.toArray([Ljava.lang.Object; a) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.toArray([Ljava.lang.Object; a) exit
   [1] [Parameter a]
   [1] [Class of a]
@@ -423,6 +451,7 @@ Variable sets for javautil.ArrayList17.toArray([Ljava.lang.Object; a) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.elementData(int index) enter
   [4] [Parameter index, Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -436,6 +465,7 @@ Variable sets for javautil.ArrayList17.elementData(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.elementData(int index) exit
   [4] [Parameter index, Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -449,6 +479,7 @@ Variable sets for javautil.ArrayList17.elementData(int index) exit
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.get(int index) enter
   [1] [Parameter index]
@@ -463,6 +494,7 @@ Variable sets for javautil.ArrayList17.get(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.get(int index) exit
   [1] [Parameter index]
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -478,6 +510,7 @@ Variable sets for javautil.ArrayList17.get(int index) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.set(int index, java.lang.Object element) enter
   [1] [Parameter element]
@@ -494,6 +527,7 @@ Variable sets for javautil.ArrayList17.set(int index, java.lang.Object element) 
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.set(int index, java.lang.Object element) exit
   [1] [Parameter element]
   [1] [Class of element]
@@ -511,6 +545,7 @@ Variable sets for javautil.ArrayList17.set(int index, java.lang.Object element) 
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.add(java.lang.Object e) enter
   [2] [Parameter e, Array Field elementData[..]]
@@ -525,6 +560,7 @@ Variable sets for javautil.ArrayList17.add(java.lang.Object e) enter
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.add(java.lang.Object e) exit
   [2] [Parameter e, Array Field elementData[..]]
   [1] [Class of e]
@@ -539,6 +575,7 @@ Variable sets for javautil.ArrayList17.add(java.lang.Object e) exit
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.add(int index, java.lang.Object element) enter
   [1] [Parameter element]
@@ -555,6 +592,7 @@ Variable sets for javautil.ArrayList17.add(int index, java.lang.Object element) 
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.add(int index, java.lang.Object element) exit
   [1] [Parameter element]
   [1] [Class of element]
@@ -570,6 +608,7 @@ Variable sets for javautil.ArrayList17.add(int index, java.lang.Object element) 
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.remove(int index) enter
   [4] [Parameter index, Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -583,6 +622,7 @@ Variable sets for javautil.ArrayList17.remove(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.remove(int index) exit
   [4] [Parameter index, Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -597,6 +637,7 @@ Variable sets for javautil.ArrayList17.remove(int index) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.remove(java.lang.Object o) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -612,6 +653,7 @@ Variable sets for javautil.ArrayList17.remove(java.lang.Object o) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.remove(java.lang.Object o) exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -627,6 +669,7 @@ Variable sets for javautil.ArrayList17.remove(java.lang.Object o) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.fastRemove(int index) enter
   [1] [Parameter index]
@@ -641,6 +684,7 @@ Variable sets for javautil.ArrayList17.fastRemove(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.fastRemove(int index) exit
   [1] [Parameter index]
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -654,6 +698,7 @@ Variable sets for javautil.ArrayList17.fastRemove(int index) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.clear() enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -667,6 +712,7 @@ Variable sets for javautil.ArrayList17.clear() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.clear() exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -679,6 +725,7 @@ Variable sets for javautil.ArrayList17.clear() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.addAll(java.util.Collection c) enter
   [1] [Parameter c]
@@ -694,6 +741,7 @@ Variable sets for javautil.ArrayList17.addAll(java.util.Collection c) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.addAll(java.util.Collection c) exit
   [1] [Parameter c]
   [1] [Class of c]
@@ -709,6 +757,7 @@ Variable sets for javautil.ArrayList17.addAll(java.util.Collection c) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.addAll(int index, java.util.Collection c) enter
   [1] [Parameter c]
@@ -725,6 +774,7 @@ Variable sets for javautil.ArrayList17.addAll(int index, java.util.Collection c)
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.addAll(int index, java.util.Collection c) exit
   [1] [Parameter c]
   [1] [Class of c]
@@ -741,6 +791,7 @@ Variable sets for javautil.ArrayList17.addAll(int index, java.util.Collection c)
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.removeRange(int fromIndex, int toIndex) enter
   [1] [Parameter fromIndex]
@@ -755,6 +806,7 @@ Variable sets for javautil.ArrayList17.removeRange(int fromIndex, int toIndex) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Parameter toIndex]
 Variable sets for javautil.ArrayList17.removeRange(int fromIndex, int toIndex) exit
   [1] [Parameter fromIndex]
@@ -769,6 +821,7 @@ Variable sets for javautil.ArrayList17.removeRange(int fromIndex, int toIndex) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Parameter toIndex]
 
 Variable sets for javautil.ArrayList17.rangeCheck(int index) enter
@@ -783,6 +836,7 @@ Variable sets for javautil.ArrayList17.rangeCheck(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.rangeCheck(int index) exit
   [4] [Parameter index, Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -795,6 +849,7 @@ Variable sets for javautil.ArrayList17.rangeCheck(int index) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.rangeCheckForAdd(int index) enter
   [1] [Parameter index]
@@ -809,6 +864,7 @@ Variable sets for javautil.ArrayList17.rangeCheckForAdd(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.rangeCheckForAdd(int index) exit
   [1] [Parameter index]
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -822,6 +878,7 @@ Variable sets for javautil.ArrayList17.rangeCheckForAdd(int index) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.outOfBoundsMsg(int index) enter
   [1] [Parameter index]
@@ -836,6 +893,7 @@ Variable sets for javautil.ArrayList17.outOfBoundsMsg(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.outOfBoundsMsg(int index) exit
   [1] [Parameter index]
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -851,6 +909,7 @@ Variable sets for javautil.ArrayList17.outOfBoundsMsg(int index) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.removeAll(java.util.Collection c) enter
   [1] [Parameter c]
@@ -866,6 +925,7 @@ Variable sets for javautil.ArrayList17.removeAll(java.util.Collection c) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.removeAll(java.util.Collection c) exit
   [1] [Parameter c]
   [1] [Class of c]
@@ -881,6 +941,7 @@ Variable sets for javautil.ArrayList17.removeAll(java.util.Collection c) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.retainAll(java.util.Collection c) enter
   [1] [Parameter c]
@@ -896,6 +957,7 @@ Variable sets for javautil.ArrayList17.retainAll(java.util.Collection c) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.retainAll(java.util.Collection c) exit
   [1] [Parameter c]
   [1] [Class of c]
@@ -911,6 +973,7 @@ Variable sets for javautil.ArrayList17.retainAll(java.util.Collection c) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.batchRemove(java.util.Collection c, boolean complement) enter
   [1] [Parameter c]
@@ -927,6 +990,7 @@ Variable sets for javautil.ArrayList17.batchRemove(java.util.Collection c, boole
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.batchRemove(java.util.Collection c, boolean complement) exit
   [1] [Parameter c]
   [1] [Class of c]
@@ -943,6 +1007,7 @@ Variable sets for javautil.ArrayList17.batchRemove(java.util.Collection c, boole
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.writeObject(java.io.ObjectOutputStream s) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -957,6 +1022,7 @@ Variable sets for javautil.ArrayList17.writeObject(java.io.ObjectOutputStream s)
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.writeObject(java.io.ObjectOutputStream s) exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -970,6 +1036,7 @@ Variable sets for javautil.ArrayList17.writeObject(java.io.ObjectOutputStream s)
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.readObject(java.io.ObjectInputStream s) enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -984,6 +1051,7 @@ Variable sets for javautil.ArrayList17.readObject(java.io.ObjectInputStream s) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.readObject(java.io.ObjectInputStream s) exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -997,6 +1065,7 @@ Variable sets for javautil.ArrayList17.readObject(java.io.ObjectInputStream s) e
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.listIterator(int index) enter
   [1] [Parameter index]
@@ -1011,6 +1080,7 @@ Variable sets for javautil.ArrayList17.listIterator(int index) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.listIterator(int index) exit
   [1] [Parameter index]
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -1026,6 +1096,7 @@ Variable sets for javautil.ArrayList17.listIterator(int index) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.listIterator() enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -1039,6 +1110,7 @@ Variable sets for javautil.ArrayList17.listIterator() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.listIterator() exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -1053,6 +1125,7 @@ Variable sets for javautil.ArrayList17.listIterator() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.iterator() enter
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
@@ -1066,6 +1139,7 @@ Variable sets for javautil.ArrayList17.iterator() enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 Variable sets for javautil.ArrayList17.iterator() exit
   [1] [Field javautil.ArrayList17.DEFAULT_CAPACITY]
   [3] [Field javautil.ArrayList17.EMPTY_ELEMENTDATA, Field elementData, Field size]
@@ -1080,6 +1154,7 @@ Variable sets for javautil.ArrayList17.iterator() exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
 
 Variable sets for javautil.ArrayList17.subList(int fromIndex, int toIndex) enter
   [1] [Parameter fromIndex]
@@ -1094,6 +1169,7 @@ Variable sets for javautil.ArrayList17.subList(int fromIndex, int toIndex) enter
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Parameter toIndex]
 Variable sets for javautil.ArrayList17.subList(int fromIndex, int toIndex) exit
   [1] [Parameter fromIndex]
@@ -1112,6 +1188,7 @@ Variable sets for javautil.ArrayList17.subList(int fromIndex, int toIndex) exit
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
+  [1] [Field modCount]
   [1] [Parameter toIndex]
 
 Variable sets for javautil.ArrayList17.subListRangeCheck(int fromIndex, int toIndex, int size) enter
@@ -1150,6 +1227,7 @@ Variable sets for javautil.ArrayList17.access$100(javautil.ArrayList17 x0) enter
   [1] [Class of x0.elementData]
   [1] [Array x0.elementData[..]]
   [1] [Class of x0.elementData[..]]
+  [1] [Field x0.modCount]
   [1] [Field x0.size]
   [1] [List x0[..]]
   [1] [Class of x0[..]]
@@ -1167,6 +1245,7 @@ Variable sets for javautil.ArrayList17.access$100(javautil.ArrayList17 x0) exit
   [1] [Class of x0.elementData]
   [1] [Array x0.elementData[..]]
   [1] [Class of x0.elementData[..]]
+  [1] [Field x0.modCount]
   [1] [Field x0.size]
   [1] [List x0[..]]
   [1] [Class of x0[..]]
@@ -1184,6 +1263,7 @@ Variable sets for javautil.ArrayList17.access$200(javautil.ArrayList17 x0) enter
   [1] [Class of x0.elementData]
   [1] [Array x0.elementData[..]]
   [1] [Class of x0.elementData[..]]
+  [1] [Field x0.modCount]
   [1] [Field x0.size]
   [1] [List x0[..]]
   [1] [Class of x0[..]]
@@ -1203,6 +1283,7 @@ Variable sets for javautil.ArrayList17.access$200(javautil.ArrayList17 x0) exit
   [1] [Class of x0.elementData]
   [1] [Array x0.elementData[..]]
   [1] [Class of x0.elementData[..]]
+  [1] [Field x0.modCount]
   [1] [Field x0.size]
   [1] [List x0[..]]
   [1] [Class of x0[..]]

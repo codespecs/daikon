@@ -425,7 +425,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     super.visit(n); // call "accept(this)" on each field
 
-    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
+    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures =
+        get_requires_and_ensures(ppts, n);
 
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
@@ -513,7 +514,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     super.visit(n); // call "accept(this)" on each field
 
-    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
+    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures =
+        get_requires_and_ensures(ppts, n);
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
 

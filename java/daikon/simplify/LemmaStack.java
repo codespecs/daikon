@@ -54,7 +54,8 @@ public class LemmaStack {
 
   /** Tell Simplify to assume a lemma, which should already be on our stack. */
   private void assume(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma lemma)
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma
+          lemma)
       throws TimeoutException {
     session.request(new CmdAssume(lemma.formula));
   }
@@ -127,7 +128,8 @@ public class LemmaStack {
 
   /** Push an assumption onto our and Simplify's stacks. */
   public boolean pushLemma(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma lem)
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma
+          lem)
       throws SimplifyError {
     SimpUtil.assert_well_formed(lem.formula);
     try {
@@ -169,7 +171,8 @@ public class LemmaStack {
    * answer.
    */
   private char checkString(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ String str)
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ String
+          str)
       throws SimplifyError {
     SimpUtil.assert_well_formed(str);
     CmdCheck cc = new CmdCheck(str);

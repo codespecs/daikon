@@ -135,7 +135,8 @@ public class AnnotateNullable {
       if (ppt.is_class()) {
         @SuppressWarnings(
             "nullness") // map: retrieve class name from class Ppt name, with string manipulation
-        /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get(ppt.name().replace(":::CLASS", ""));
+        /*@NonNull*/ List<PptTopLevel> static_methods =
+            class_map.get(ppt.name().replace(":::CLASS", ""));
         int child_cnt = 0;
         // TODO: Once Checker Framework issue 565 has been fixed
         // ( https://github.com/typetools/checker-framework/issues/565 ),
