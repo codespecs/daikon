@@ -5,10 +5,8 @@ import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.*;
 import daikon.inv.unary.*;
-import daikon.suppress.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
@@ -19,11 +17,10 @@ import typequals.*;
 */
 
 /**
- * Defines a suppressee for non-instantiating suppression.  A suppressee
- * consists only of the class at this point since ternary invariants
- * only require the class to define them fully (permutations are built
- * into the class name).  When binary invariants are suppressed additional
- * information will need to be included.
+ * Defines a suppressee for non-instantiating suppression. A suppressee consists only of the class
+ * at this point since ternary invariants only require the class to define them fully (permutations
+ * are built into the class name). When binary invariants are suppressed additional information will
+ * need to be included.
  */
 public class NISuppressee {
 
@@ -48,10 +45,7 @@ public class NISuppressee {
     }
   }
 
-  /**
-   * Define a binary suppressee on the specified class with the
-   * specified variable order
-   */
+  /** Define a binary suppressee on the specified class with the specified variable order. */
   public NISuppressee(Class<? extends Invariant> cls, boolean swap) {
     sup_class = cls;
     this.var_count = 2;
@@ -69,9 +63,7 @@ public class NISuppressee {
     }
   }
 
-  /**
-   * Instantiates the suppressee invariant on the specified slice.
-   */
+  /** Instantiates the suppressee invariant on the specified slice. */
   public /*@Nullable*/ Invariant instantiate(PptSlice slice) {
 
     Invariant inv = sample_inv.instantiate(slice);
@@ -85,10 +77,7 @@ public class NISuppressee {
     return inv;
   }
 
-  /**
-   * Checks this invariant against the specified sample and returns
-   * the status
-   */
+  /** Checks this invariant against the specified sample and returns the status. */
   public InvariantStatus check(ValueTuple vt, VarInfo[] vis) {
 
     // Nothing to check if any variable is missing
@@ -117,9 +106,8 @@ public class NISuppressee {
   }
 
   /**
-   * Instantiates the suppressee invariant on the slice specified
-   * by vis in the specified ppt.  If the slice is not currently there,
-   * it will be created.
+   * Instantiates the suppressee invariant on the slice specified by vis in the specified ppt. If
+   * the slice is not currently there, it will be created.
    */
   public /*@Nullable*/ Invariant instantiate(VarInfo[] vis, PptTopLevel ppt) {
 
@@ -176,15 +164,13 @@ public class NISuppressee {
   //   }
 
   /**
-   * Finds the suppressee invariants on all of the slices
-   * specified by vis in the specified ppt.  Multiple slices can
-   * be specified by vis if a slot in vis is null.  The slot will be
-   * filled by all leaders that can correctly fill the slot and SupInv
-   * created for each.
+   * Finds the suppressee invariants on all of the slices specified by vis in the specified ppt.
+   * Multiple slices can be specified by vis if a slot in vis is null. The slot will be filled by
+   * all leaders that can correctly fill the slot and SupInv created for each.
    *
-   * @param cinvs an array of the actual invariants that were found
-   * for each slot.  It is used for for debug printing only.
-   * @return a list describing all of the invariants.
+   * @param cinvs an array of the actual invariants that were found for each slot. It is used for
+   *     for debug printing only.
+   * @return a list describing all of the invariants
    */
   /*@RequiresNonNull("#2.equality_view")*/
   public List<NIS.SupInv> find_all(
@@ -234,9 +220,8 @@ public class NISuppressee {
   }
 
   /**
-   * Returns the swap variable setting  for the suppressee.  Returns false
-   * if the suppressee is not a binary invariant, is symmetric, or permutes
-   * by changing classes
+   * Returns the swap variable setting for the suppressee. Returns false if the suppressee is not a
+   * binary invariant, is symmetric, or permutes by changing classes.
    */
   public boolean get_swap() {
 
@@ -248,8 +233,7 @@ public class NISuppressee {
   }
 
   /**
-   * Returns a new suppressee that is the same as this one except that
-   * its variables are swapped.
+   * Returns a new suppressee that is the same as this one except that its variables are swapped.
    */
   public NISuppressee swap() {
     assert var_count == 2;

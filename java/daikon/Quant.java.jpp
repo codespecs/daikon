@@ -19,13 +19,9 @@ import org.checkerframework.framework.qual.PolyAll;
  * These routines are used by the Java family of output
  * formats. This allows invariants to be output as snippets of
  * executable (Java) code. For example, an invariant like
- * <pre>
- *  a[] elements &ge; 1
- * </pre>
+ * <pre>a[] elements &ge; 1</pre>
  * is output (in the Java, JML, and DBC formats) as something like
- * <pre>
- *  daikon.Quant.eltsGTE(a, 1)
- * </pre>
+ * <pre>daikon.Quant.eltsGTE(a, 1)</pre>
  *
  * <h3>Naming</h3>
  *

@@ -13,9 +13,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * This factory creates Splitters from map files.  The splitters
- * partition the data based upon the the caller (i.e., which static
- * callgraph edge was taken).
+ * This factory creates Splitters from map files. The splitters partition the data based upon the
+ * the caller (i.e., which static callgraph edge was taken).
  */
 public class ContextSplitterFactory {
   /** Debug tracer. */
@@ -31,20 +30,19 @@ public class ContextSplitterFactory {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Enumeration (integer).  Specifies the granularity to use for
-   * callsite splitter processing.  (That is, for creating
-   * invariants for a method that are dependent on where the method
-   * was called from.)  0 is line-level granularity; 1 is
-   * method-level granularity; 2 is class-level granularity.
+   * Enumeration (integer). Specifies the granularity to use for callsite splitter processing. (That
+   * is, for creating invariants for a method that are dependent on where the method was called
+   * from.) 0 is line-level granularity; 1 is method-level granularity; 2 is class-level
+   * granularity.
    */
   public static int dkconfig_granularity = GRAIN_METHOD;
 
   /**
+   * Read all the map files in the given collection, create callsite splitters from them, and put
+   * the splitters into SplitterList.
+   *
    * @param files set of File objects to read from
    * @param grain one of the GRAIN constants defined in this class
-   *
-   * Read all the map files in the given collection, create callsite
-   * splitters from them, and put the splitters into SplitterList.
    */
   public static void load_mapfiles_into_splitterlist(Collection<File> files, int grain) {
     for (File file : files) {
@@ -68,9 +66,7 @@ public class ContextSplitterFactory {
     }
   }
 
-  /**
-   * Simple record type to store a map file entry.
-   */
+  /** Simple record type to store a map file entry. */
   public static final class MapfileEntry {
     public final long id;
     public final String fromclass;
@@ -107,9 +103,7 @@ public class ContextSplitterFactory {
     }
   }
 
-  /**
-   * Read and parse a map file.
-   */
+  /** Read and parse a map file. */
   public static MapfileEntry[] parse_mapfile(File mapfile) throws IOException {
     ArrayList<MapfileEntry> result = new ArrayList<MapfileEntry>();
 
@@ -188,10 +182,9 @@ public class ContextSplitterFactory {
   }
 
   /**
-   * @param grain one of the GRAIN constants defined in this class
+   * Given map file data, create splitters given the requested granularity.
    *
-   * Given map file data, create splitters given the requested
-   * granularity.
+   * @param grain one of the GRAIN constants defined in this class
    */
   public static PptNameAndSplitters[] make_context_splitters(MapfileEntry[] entries, int grain) {
     // Use a 2-deep map structure.  First key is an identifier
@@ -287,9 +280,7 @@ public class ContextSplitterFactory {
     return result.toArray(new PptNameAndSplitters[result.size()]);
   }
 
-  /**
-   * Simple record type to store a PptName and Splitter array.
-   */
+  /** Simple record type to store a PptName and Splitter array. */
   public static final class PptNameAndSplitters {
     public final String ppt_name; // really more like a regexp
     public final Splitter[] splitters;

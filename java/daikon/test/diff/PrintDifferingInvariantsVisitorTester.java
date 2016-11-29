@@ -31,8 +31,8 @@ public class PrintDifferingInvariantsVisitorTester extends TestCase {
   public void testShouldPrint() throws Exception {
     // Invoke private method using reflection
     Method m =
-        PrintDifferingInvariantsVisitor.class
-            .getDeclaredMethod("shouldPrint", new Class<?>[] {Invariant.class, Invariant.class});
+        PrintDifferingInvariantsVisitor.class.getDeclaredMethod(
+            "shouldPrint", new Class<?>[] {Invariant.class, Invariant.class});
     m.setAccessible(true);
 
     PrintDifferingInvariantsVisitor v =

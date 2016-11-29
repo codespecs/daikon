@@ -17,9 +17,7 @@ public final class StringLength extends UnaryDerivation {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20061016L;
 
-  /**
-   * Boolean.  True iff StringLength derived variables should be generated.
-   */
+  /** Boolean. True iff StringLength derived variables should be generated. */
   public static boolean dkconfig_enabled = false;
 
   public StringLength(VarInfo vi) {

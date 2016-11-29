@@ -10,11 +10,10 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * PrefixRemover is a visitor for a JTB syntax tree that removes all instances
- * of some prefix. For example if "prefix" is the prefix then "prefix.x" would
- * go to "x" and "y.prefix.x" would go to "y.x" .
- * However, "prefix()" would be unaffected.  Finally, the prefix cannot be a
- * Java reserved word such as "this".
+ * PrefixRemover is a visitor for a JTB syntax tree that removes all instances of some prefix. For
+ * example if "prefix" is the prefix then "prefix.x" would go to "x" and "y.prefix.x" would go to
+ * "y.x" . However, "prefix()" would be unaffected. Finally, the prefix cannot be a Java reserved
+ * word such as "this".
  */
 class PrefixRemover extends DepthFirstVisitor {
   // Note: the instances of "prefix" are not really being removed; instead,
@@ -39,6 +38,7 @@ class PrefixRemover extends DepthFirstVisitor {
 
   /**
    * Creates a new instance of PrefixRemover to remove prefix.
+   *
    * @param prefix the prefix that should be removed by this
    */
   private PrefixRemover(String prefix) {
@@ -48,12 +48,10 @@ class PrefixRemover extends DepthFirstVisitor {
 
   /**
    * Removes prefix from prefix locations in expression.
-   * @param expression valid segment of java code from which prefix
-   *  should be removed
-   * @param  prefix the prefix that should be removed.
-   *  Prefix can not be a java reserved word.
-   * @return expression with instances of prefix
-   *    removed from prefix locations.
+   *
+   * @param expression valid segment of java code from which prefix should be removed
+   * @param prefix the prefix that should be removed. Prefix can not be a java reserved word.
+   * @return expression with instances of prefix removed from prefix locations
    */
   public static String removePrefix(String expression, String prefix) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
@@ -63,9 +61,8 @@ class PrefixRemover extends DepthFirstVisitor {
   }
 
   /**
-   * This method should not be directly used by users of this class.
-   * Replaces the token image with "" if it is prefix or
-   * a "." following prefix.
+   * This method should not be directly used by users of this class. Replaces the token image with
+   * "" if it is prefix or a "." following prefix.
    */
   public void visit(NodeToken n) {
     if (Visitors.isDot(n)

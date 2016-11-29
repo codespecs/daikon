@@ -3,7 +3,6 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.derive.unary.SequenceLength;
 import daikon.inv.*;
-import java.util.Iterator;
 import plume.*;
 
 /*>>>
@@ -14,9 +13,9 @@ import typequals.*;
 */
 
 /**
- * Represents the invariant <code>x == r (mod m)</code> where <code>x</code>
- * is a long scalar variable, <code>r</code> is the (constant) remainder,
- * and <code>m</code> is the (constant) modulus.
+ * Represents the invariant <code>x == r (mod m)</code> where <code>x</code> is a long scalar
+ * variable, <code>r</code> is the (constant) remainder, and <code>m</code> is the (constant)
+ * modulus.
  */
 public class Modulus extends SingleScalar {
   // We are Serializable, so we specify a version to allow changes to
@@ -26,9 +25,7 @@ public class Modulus extends SingleScalar {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff Modulus invariants should be considered.
-   */
+  /** Boolean. True iff Modulus invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   long modulus = 0;
@@ -264,8 +261,8 @@ public class Modulus extends SingleScalar {
   }
 
   /**
-   * Checks to see if this is obvious over the specified variables.
-   * Implements the following checks:
+   * Checks to see if this is obvious over the specified variables. Implements the following checks:
+   *
    * <pre>
    *    size(x[]) = r (mod m) &rArr; size(x[])-1 = (r-1) (mod m)
    * </pre>

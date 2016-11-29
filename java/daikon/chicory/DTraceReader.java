@@ -9,14 +9,12 @@ import org.checkerframework.checker.interning.qual.*;
 */
 
 /**
- * Reads dtrace files and provides methods to access the information
- * within them.  A dtrace file contains both declarations and data.
- * <p>
+ * Reads dtrace files and provides methods to access the information within them. A dtrace file
+ * contains both declarations and data.
  *
- * Do <b>not</b> use this program as an example of how to read a dtrace file.
- * The better way to do that is to define a {@link daikon.FileIO.Processor}
- * and pass it to
- * {@link daikon.FileIO#read_data_trace_files(Collection, PptMap, daikon.FileIO.Processor, boolean)}.
+ * <p>Do <b>not</b> use this program as an example of how to read a dtrace file. The better way to
+ * do that is to define a {@link daikon.FileIO.Processor} and pass it to {@link
+ * daikon.FileIO#read_data_trace_files(Collection, PptMap, daikon.FileIO.Processor, boolean)}.
  */
 @SuppressWarnings("nullness") // to do
 public class DTraceReader extends DeclReader {
@@ -51,10 +49,7 @@ public class DTraceReader extends DeclReader {
     }
   }
 
-  /**
-   * Reads data for one ppt from the trace file.  Adds the data to
-   * the list of data for the ppt.
-   */
+  /** Reads data for one ppt from the trace file. Adds the data to the list of data for the ppt. */
   protected void read_data(String ppt_name, EntryReader dtrace_file) throws IOException {
 
     if (!ppt_name.contains(":::")) {
@@ -82,9 +77,7 @@ public class DTraceReader extends DeclReader {
     ppt.add_var_data(var_data_list);
   }
 
-  /**
-   * Dumps out each record of data for each ppt and variable
-   */
+  /** Dumps out each record of data for each ppt and variable. */
   public void dump_data() {
 
     for (String ppt_name : ppts.keySet()) {

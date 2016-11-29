@@ -69,7 +69,7 @@ import typequals.*;
 */
 
 /**
- * Contains all of the invariants over a particular set of ARITY variables
+ * Contains all of the invariants over a particular set of ARITY variables.
  */
 public final class PPTSLICE1 extends PptSlice {
   // We are Serializable, so we specify a version to allow changes to
@@ -586,17 +586,19 @@ public final class PPTSLICE1 extends PptSlice {
    *
    * The basic steps are:
    *
-   *    1)  Find all of the child invariants.  These are the invariants in
+   * <ol>
+   *    <li>  Find all of the child invariants.  These are the invariants in
    *        the matching slice of each child.
    *
-   *    2)  For each invariant class, build a list of all of the invariants
+   *    <li>  For each invariant class, build a list of all of the invariants
    *        of that class.  Note that some invariant classes
    *        (eg, functionBinary) contain distinct invariants, each of which
    *        must be merged separately.  See Invariant.Match for more
    *        information concerning what makes an invariant the 'same'
    *
-   *    3)  Each invariant that is found at each of the children is then
+   *    <li>  Each invariant that is found at each of the children is then
    *        merged to possibly create a parent invariant.
+   * </ol>
    */
   public void merge_invariants() {
 
@@ -794,7 +796,7 @@ public final class PPTSLICE1 extends PptSlice {
    * Returns whether or not the slice is missing due to having one or more
    * of its variables always missing.  This returns true only for missing
    * flow and/or missing nonsensical.  Out of Bounds is treated differently
-   * since it destroys all of its invariants
+   * since it destroys all of its invariants.
    */
   private boolean slice_missing (PptTopLevel ppt, VarInfo[] vis) {
 

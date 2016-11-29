@@ -12,9 +12,8 @@ import org.checkerframework.checker.nullness.qual.*;
 // "ModBitTracker" is a poor name for this class, since it tracks
 // whether a value is missing, not whether it is modified.
 /**
- * ModBitTracker maintains a BitSet for each variable at a program point.
- * The BitSet indicates, for each sample seen in order, whether that
- * variable was present or not.
+ * ModBitTracker maintains a BitSet for each variable at a program point. The BitSet indicates, for
+ * each sample seen in order, whether that variable was present or not.
  */
 public class ModBitTracker implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
@@ -37,17 +36,16 @@ public class ModBitTracker implements Serializable, Cloneable {
   private /*@Nullable*/ BitSet[] modbits_arrays;
 
   /**
-   * Conceptually, there is a BitSet per variable.  In actuality, when two
-   * different variables have the same modbits, they can share a single
-   * BitSet; we say the variables are in an equivalence set.  "index"
-   * indicates, for each variable, which BitSet it should use; it is the
-   * identifier of the variable's equivalence set.
+   * Conceptually, there is a BitSet per variable. In actuality, when two different variables have
+   * the same modbits, they can share a single BitSet; we say the variables are in an equivalence
+   * set. "index" indicates, for each variable, which BitSet it should use; it is the identifier of
+   * the variable's equivalence set.
    */
   private int[] index;
 
   /**
-   * The number of BitSets (equivalence sets) in use.  All elements of
-   * modbits_arrays at or past this index are null.
+   * The number of BitSets (equivalence sets) in use. All elements of modbits_arrays at or past this
+   * index are null.
    */
   private int num_sets;
 
@@ -57,9 +55,8 @@ public class ModBitTracker implements Serializable, Cloneable {
   /** True if the corresponding element of this_bits has a valid value. */
   private boolean[] this_bits_valid;
   /**
-   * The equivalence set for when an equivalence set is split:  if a
-   * variable has a conflicting bit, then it goes to the specified index
-   * instead.
+   * The equivalence set for when an equivalence set is split: if a variable has a conflicting bit,
+   * then it goes to the specified index instead.
    */
   private int[] this_bits_exception_index;
 
@@ -120,8 +117,8 @@ public class ModBitTracker implements Serializable, Cloneable {
   }
 
   /**
-   * Returns a BitSet of modbit values for the given variable.
-   * The caller must not modify the returned value!
+   * Returns a BitSet of modbit values for the given variable. The caller must not modify the
+   * returned value!
    */
   @SuppressWarnings(
       "nullness") // application invariant: index[varindex] is an index for a non-null BitSet in modbits_arrays
@@ -129,17 +126,12 @@ public class ModBitTracker implements Serializable, Cloneable {
     return modbits_arrays[index[varindex]];
   }
 
-  /**
-   * Returns the modbit for the given variable and sample number.
-   */
+  /** Returns the modbit for the given variable and sample number. */
   public boolean get(int varindex, int sampleno) {
     return get(varindex).get(sampleno);
   }
 
-  /**
-   * Split the specified equivalence set into two pieces.
-   * Returns the index of the copy.
-   */
+  /** Split the specified equivalence set into two pieces. Returns the index of the copy. */
   private int split(int split_index) {
     @SuppressWarnings("nullness") // application invariant: split_index is in range
     /*@NonNull*/ BitSet bs = (BitSet) modbits_arrays[split_index].clone();

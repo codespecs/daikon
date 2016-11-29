@@ -13,18 +13,15 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * ParameterDoclet is a JavaDoc doclet that collects information about
- * the runtime configuration options for the Daikon tools.  Refer to
- * the "--config" switch in the Daikon manual for an introduction to
- * the configuration system.
+ * ParameterDoclet is a JavaDoc doclet that collects information about the runtime configuration
+ * options for the Daikon tools. Refer to the {@code --config} command-line option in the Daikon
+ * manual for an introduction to the configuration system.
  */
 public class ParameterDoclet {
 
   private static final String lineSep = System.getProperty("line.separator");
 
-  /**
-   * Entry point for this doclet (invoked by javadoc).
-   */
+  /** Entry point for this doclet (invoked by javadoc). */
   public static boolean start(RootDoc doc) throws IOException {
     ParameterDoclet pd = new ParameterDoclet(doc);
 
@@ -61,7 +58,8 @@ public class ParameterDoclet {
 
   /**
    * Invoked by javadoc to query whether an option is allowed.
-   * @return number of tokens used by one option.
+   *
+   * @return number of tokens used by one option
    */
   public static int optionLength(String opt) {
     if ("--texinfo".equals(opt)) return 2; // == 1 tag + 1 argument
@@ -161,9 +159,7 @@ public class ParameterDoclet {
         };
   }
 
-  /**
-   * Process a javadoc tree and call processField for each field found.
-   */
+  /** Process a javadoc tree and call processField for each field found. */
   public void process() {
     ClassDoc[] clazzes = root.classes();
     for (int i = 0; i < clazzes.length; i++) {
@@ -176,8 +172,8 @@ public class ParameterDoclet {
   }
 
   /**
-   * Call Process(String, String, String) for each configuration field found.
-   * Intended to be overridden.
+   * Call Process(String, String, String) for each configuration field found. Intended to be
+   * overridden.
    */
   public void processField(FieldDoc field) {
     String name = field.name();
@@ -199,10 +195,7 @@ public class ParameterDoclet {
     endOfSentence = Pattern.compile("[.?!>](\\))?$");
   }
 
-  /**
-   * Add (name, desc) pair to the map field 'fields' for the appropriate
-   * category.
-   */
+  /** Add (name, desc) pair to the map field 'fields' for the appropriate category. */
   public void process(String fullname, String name, String desc) {
     // System.out.printf ("%s - %s%n", fullname, name);
 
@@ -262,8 +255,7 @@ public class ParameterDoclet {
       out.println();
 
       for (
-      /*@KeyFor("categories[c].fields")*/ String field :
-          UtilMDE.sortedKeySet(categories[c].fields)) {
+      /*@KeyFor("categories[c].fields")*/ String field : UtilMDE.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 
@@ -299,8 +291,7 @@ public class ParameterDoclet {
       out.println();
 
       for (
-      /*@KeyFor("categories[c].fields")*/ String field :
-          UtilMDE.sortedKeySet(categories[c].fields)) {
+      /*@KeyFor("categories[c].fields")*/ String field : UtilMDE.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 

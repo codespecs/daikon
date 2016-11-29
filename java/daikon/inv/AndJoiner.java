@@ -12,9 +12,8 @@ import typequals.*;
 */
 
 /**
- * This is a special invariant used internally by Daikon to represent
- * an antecedent invariant in an implication where that antecedent
- * consists of two invariants anded together.
+ * This is a special invariant used internally by Daikon to represent an antecedent invariant in an
+ * implication where that antecedent consists of two invariants anded together.
  */
 public class AndJoiner extends Joiner {
   // We are Serializable, so we specify a version to allow changes to
@@ -126,8 +125,7 @@ public class AndJoiner extends Joiner {
     throw new Error("do not invoke " + getClass() + ".valid_types()");
   }
 
-  protected /*@NonPrototype*/ AndJoiner instantiate_dyn(
-      /*>>> @Prototype AndJoiner this,*/ PptSlice slice) {
+  protected /*@NonPrototype*/ AndJoiner instantiate_dyn(/*>>> @Prototype AndJoiner this,*/ PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 }

@@ -9,9 +9,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * A Check command takes a given proposition and asks the Session to
- * prove it.  The apply method returns when a result is available; the
- * valid field contains the result.
+ * A Check command takes a given proposition and asks the Session to prove it. The apply method
+ * returns when a result is available; the valid field contains the result.
  */
 public class CmdCheck implements Cmd {
   public static final Logger debug = Logger.getLogger("daikon.simplify.CmdCheck");

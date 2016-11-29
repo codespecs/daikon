@@ -9,10 +9,9 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * This program runs a given program (which is assumed to contain some
- * classes that have been instrumented with the runtimechecker
- * instrumentation tool) and prints a list of all the invariant violations
- * that occur during execution.
+ * This program runs a given program (which is assumed to contain some classes that have been
+ * instrumented with the runtimechecker instrumentation tool) and prints a list of all the invariant
+ * violations that occur during execution.
  */
 class WriteViolationFile {
 

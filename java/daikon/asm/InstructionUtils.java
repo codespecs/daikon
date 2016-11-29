@@ -7,16 +7,13 @@ import java.util.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/**
- * Utility methods that operate on collections of instructions.
- *
- */
+/** Utility methods that operate on collections of instructions. */
 public class InstructionUtils {
 
   /**
-   * Computes a partition over the variables in the given path. Two variables
-   * are in the same partition iff they are comparable. Two variables are
-   * comparable if they appear in the same instruction.
+   * Computes a partition over the variables in the given path. Two variables are in the same
+   * partition iff they are comparable. Two variables are comparable if they appear in the same
+   * instruction.
    */
   public static Set<Set<String>> computeComparableSets(List<IInstruction> path) {
 
@@ -113,9 +110,8 @@ public class InstructionUtils {
   }
 
   /**
-   * A second pass on rvars analysis. If a memory location is loaded
-   * onto a register, and the register is used, the register's value
-   * will be equal to the memory location's.
+   * A second pass on rvars analysis. If a memory location is loaded onto a register, and the
+   * register is used, the register's value will be equal to the memory location's.
    */
   public static void computeRVarsLoad(List<IInstruction> path, Map<String, String> rvars) {
 
@@ -165,9 +161,8 @@ public class InstructionUtils {
   /**
    * Computes a set of binary variables that are guaranteed to be redundant.
    *
-   * The redundant variables are returned as a map. Each entry &lt;rvar, leader&gt;
-   * represents a redundant variable rvar and its leader. If a variable is
-   * not in the map, it is not redundant.
+   * <p>The redundant variables are returned as a map. Each entry &lt;rvar, leader&gt; represents a
+   * redundant variable rvar and its leader. If a variable is not in the map, it is not redundant.
    */
   @SuppressWarnings(
       "unboxing.of.nullable") // CF issue 427: https://code.google.com/p/checker-framework/issues/detail?id=427

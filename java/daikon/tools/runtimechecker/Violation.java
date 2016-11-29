@@ -32,28 +32,20 @@ public class Violation implements Serializable {
   // from method).
   private final Time time;
 
-  /**
-   * The violated property.
-   */
+  /** The violated property. */
   public Property property() {
     return property;
   }
 
-  /**
-   * The time at which the violation happened (entry or exit from method).
-   */
+  /** The time at which the violation happened (entry or exit from method). */
   public Time time() {
     return time;
   }
 
   /**
-   * <p>
-   * Indicates at which program point the violation occurred:
-   * at method entry or method exit.
+   * Indicates at which program point the violation occurred: at method entry or method exit.
    *
-   * <p>
-   * This class contains only two (static) objects: <code>onEntry</code> and
-   * <code>onExit</code>.
+   * <p>This class contains only two (static) objects: <code>onEntry</code> and <code>onExit</code>.
    */
   // This should be an enum
   /*@UsesObjectEquals*/
@@ -100,19 +92,14 @@ public class Violation implements Serializable {
   }
 
   /**
-   * <p>
    * Creates the violation represented by <code>vioString</code>.
    *
-   * <p>
-   * Precondition: the string is of the form:
+   * <p>Precondition: the string is of the form:
    *
-   * <p>
-   * <code>&lt;INVINFO&gt; property time&lt;/INVINFO&gt;</code>
+   * <p>{@code <INVINFO> property time</INVINFO>}
    *
-   * <p>
-   * Where <code>property</code> is valid XML representation of a
-   * <code>Property</code>, and time is <code>&lt;ON_ENTRY&gt;</code> or
-   * <code>&lt;ON_EXIT&gt;</code>.
+   * <p>Where {@code property} is valid XML representation of a {@code Property}, and time is {@code
+   * <ON_ENTRY>} or {@code <ON_EXIT>}.
    */
   public static Violation get(String vioString) {
 
@@ -152,9 +139,7 @@ public class Violation implements Serializable {
     this.time = t;
   }
 
-  /**
-   * Returns a violation with the given attributes.
-   */
+  /** Returns a violation with the given attributes. */
   public static Violation get(Property anno, Time t) {
     Violation vio = new Violation(anno, t);
     Integer key = new Integer(vio.hashCode());
@@ -167,9 +152,8 @@ public class Violation implements Serializable {
   }
 
   /**
-   * if <code>property</code> is an entry or exit property, returns the
-   * violation corresponding to this property. If it's an object invariant
-   * property, throws an exception.
+   * if <code>property</code> is an entry or exit property, returns the violation corresponding to
+   * this property. If it's an object invariant property, throws an exception.
    */
   public static Violation get(Property property) {
     Time t = null;
@@ -184,32 +168,24 @@ public class Violation implements Serializable {
     return get(property, t);
   }
 
-  /**
-   * The XML String representing this property.
-   */
+  /** The XML String representing this property. */
   public String xmlString() {
     return "<VIOLATION>" + property.xmlString() + time.xmlString() + "</VIOLATION>";
   }
 
-  /**
-   * String representation.
-   */
+  /** String representation. */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied Violation this*/) {
     return time.toString() + " : " + property.toString();
   }
 
-  /**
-   * String representation.
-   */
+  /** String representation. */
   /*@SideEffectFree*/
   public String toStringWithMethod(/*>>>@GuardSatisfied Violation this*/) {
     return time.toString() + "of " + property.method() + " : " + property.toString();
   }
 
-  /**
-   * Two violations are equal if their properties and times are equal.
-   */
+  /** Two violations are equal if their properties and times are equal. */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
   public boolean equals(
@@ -231,8 +207,8 @@ public class Violation implements Serializable {
   }
 
   /**
-   * Returns all violations in <code>vios</code> that violate properties
-   * with confidence greater than or equal to <code>thresh</code>.
+   * Returns all violations in <code>vios</code> that violate properties with confidence greater
+   * than or equal to <code>thresh</code>.
    */
   public static Violation[] viosWithConfGEQ(Violation[] vios, double thresh) {
     List<Violation> ret = new ArrayList<Violation>();
@@ -247,8 +223,8 @@ public class Violation implements Serializable {
   }
 
   /**
-   * Returns all violations in <code>vios</code> that violate properties
-   * with confidence less than <code>thresh</code>.
+   * Returns all violations in <code>vios</code> that violate properties with confidence less than
+   * <code>thresh</code>.
    */
   public static Violation[] viosWithConfLT(Violation[] vios, double thresh) {
     List<Violation> ret = new ArrayList<Violation>();
@@ -262,9 +238,7 @@ public class Violation implements Serializable {
     return ret.toArray(new Violation[] {});
   }
 
-  /**
-   * Returns all violations in <code>vios</code> with the given time.
-   */
+  /** Returns all violations in <code>vios</code> with the given time. */
   public static Violation[] withTime(Violation[] vios, Time time) {
     List<Violation> ret = new ArrayList<Violation>();
     for (int i = 0; i < vios.length; i++) {
@@ -276,9 +250,7 @@ public class Violation implements Serializable {
     return ret.toArray(new Violation[] {});
   }
 
-  /**
-   * Returns all violations in <code>vios</code> with the given king.
-   */
+  /** Returns all violations in <code>vios</code> with the given king. */
   public static Violation[] withKind(Violation[] vios, Property.Kind kind) {
     List<Violation> ret = new ArrayList<Violation>();
     for (int i = 0; i < vios.length; i++) {
@@ -290,9 +262,8 @@ public class Violation implements Serializable {
   }
 
   /**
-   * <p>
-   * Looks for legal XML representation of violations in the given string, and
-   * returns all violations that are successfully parsed.
+   * Looks for legal XML representation of violations in the given string, and returns all
+   * violations that are successfully parsed.
    */
   // [[[ TODO: There's something unsatisfying about this method
   // swallowing up erroneous input silently. Fix this. ]]]
@@ -327,10 +298,9 @@ public class Violation implements Serializable {
   }
 
   /**
-   * A human-readable String representation of a list of violations. The
-   * violations are sorted by "time" (which is not the same as sorting
-   * them by time!) and violations of high-confidence properties are
-   * prepended with "H".
+   * A human-readable String representation of a list of violations. The violations are sorted by
+   * "time" (which is not the same as sorting them by time!) and violations of high-confidence
+   * properties are prepended with "H".
    */
   public static String toNiceString(
       String prefix, Set<Violation> vios, double confidenceThreshold) {

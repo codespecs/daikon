@@ -196,7 +196,7 @@ public class CLASSNAME
    * </pre>
    * JHP: The first check is not valid because we can't rely on transitive
    *      checks because of missing (if B[] is missing, A[] could have dups
-   *      on those samples)
+   *      on those samples),
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {

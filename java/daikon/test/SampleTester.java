@@ -18,12 +18,11 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * This tests Daikon's state as samples are processed.  A standard
- * decl file specifies the ppts.  A sample input file specifies the
- * samples and assertions that should be true at various points while
- * processing.
+ * This tests Daikon's state as samples are processed. A standard decl file specifies the ppts. A
+ * sample input file specifies the samples and assertions that should be true at various points
+ * while processing.
  *
- * The input file format is documented in the developer manual.
+ * <p>The input file format is documented in the developer manual.
  */
 @SuppressWarnings("nullness")
 public class SampleTester extends TestCase {
@@ -133,10 +132,7 @@ public class SampleTester extends TestCase {
     }
   }
 
-  /**
-   * This function is the actual function performed when this class is
-   * run through JUnit.
-   */
+  /** This function is the actual function performed when this class is run through JUnit. */
   public void test_samples() throws IOException {
 
     FileIO.new_decl_format = null;
@@ -190,9 +186,7 @@ public class SampleTester extends TestCase {
     }
   }
 
-  /**
-   * Reads in the specified decl file and sets all_ppts accordingly.
-   */
+  /** Reads in the specified decl file and sets all_ppts accordingly. */
   private void proc_decl(String decl_file) throws IOException {
 
     debug_progress.fine("Processing " + decl_file);
@@ -219,9 +213,7 @@ public class SampleTester extends TestCase {
     ppt = null;
   }
 
-  /**
-   * Looks up the specified ppt name and set ppt accordingly.
-   */
+  /** Looks up the specified ppt name and set ppt accordingly. */
   private void proc_ppt(String ppt_name) {
 
     if (all_ppts == null) parse_error("decl file must be specified before ppt");
@@ -231,9 +223,8 @@ public class SampleTester extends TestCase {
   }
 
   /**
-   * Processes a variable list.  Sets up the vars[] array to point to the
-   * matching variables in the ppt.  The ppt must have been previously
-   * specified.  Variables are separated by spaces
+   * Processes a variable list. Sets up the vars[] array to point to the matching variables in the
+   * ppt. The ppt must have been previously specified. Variables are separated by spaces.
    */
   private void proc_vars(String var_names) {
 
@@ -257,14 +248,12 @@ public class SampleTester extends TestCase {
   }
 
   /**
-   * Processes a line of sample data.  There should be one item of
-   * data for each previously specified variable.  Each data item is
-   * separated by spaces.  Spaces cannot be included within a single
-   * item (i.e., strings and arrays can't include spaces). Missing items
-   * are indicated with a dash (-).  Any variables not specifically
-   * mentioned in the variable string are set to missing as well.
+   * Processes a line of sample data. There should be one item of data for each previously specified
+   * variable. Each data item is separated by spaces. Spaces cannot be included within a single item
+   * (i.e., strings and arrays can't include spaces). Missing items are indicated with a dash (-).
+   * Any variables not specifically mentioned in the variable string are set to missing as well.
    *
-   * Neither orig nor derived variables are added.
+   * <p>Neither orig nor derived variables are added.
    */
   private void proc_data(String data, LineNumberReader reader, String filename) {
 
@@ -309,10 +298,7 @@ public class SampleTester extends TestCase {
     ppt.add_bottom_up(vt, 1);
   }
 
-  /**
-   * Processes a string of possibly multiple assertions.  If any are false,
-   * throws an error
-   */
+  /** Processes a string of possibly multiple assertions. If any are false, throws an error. */
   private void proc_assertions(String assertions) throws IOException {
 
     String[] aa = assertions.split("\\) *");
@@ -321,10 +307,7 @@ public class SampleTester extends TestCase {
     }
   }
 
-  /**
-   * Processes a single assertion.  If the assertion is false, throws
-   * an error
-   */
+  /** Processes a single assertion. If the assertion is false, throws an error. */
   private void proc_assert(String assertion) throws IOException {
 
     // Look for negation
@@ -388,10 +371,9 @@ public class SampleTester extends TestCase {
   }
 
   /**
-   * Processes an invariant existence assertion and returns true if it is
-   * found.  The first argument should be the invariant class.  The remaining
-   * arguments are the variables.  This needs to be expanded to specify
-   * more information for invariants with state.
+   * Processes an invariant existence assertion and returns true if it is found. The first argument
+   * should be the invariant class. The remaining arguments are the variables. This needs to be
+   * expanded to specify more information for invariants with state.
    */
   private boolean proc_inv_assert(List<String> args) {
 
@@ -446,9 +428,8 @@ public class SampleTester extends TestCase {
   }
 
   /**
-   * Prints out all of the invariants in the slice identified by the
-   * argumens (each of which should be a valid variable name for this ppt).
-   * always returns true.
+   * Prints out all of the invariants in the slice identified by the argumens (each of which should
+   * be a valid variable name for this ppt). always returns true.
    */
   private boolean proc_show_invs_assert(List<String> args) {
 
@@ -481,9 +462,8 @@ public class SampleTester extends TestCase {
   }
 
   /**
-   * The constant assertion returns true if all of its arguments are constants
-   * Each argument is variable name and at least one variable number must be
-   * specified.
+   * The constant assertion returns true if all of its arguments are constants Each argument is
+   * variable name and at least one variable number must be specified.
    */
   private boolean proc_constant_assert(List<String> args) {
 

@@ -13,10 +13,9 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Keeps information about a class that is useful for writing out
- * decl and/or dtrace information.  Original information is filled
- * out during the transformation and other information is added
- * after the class is first loaded.
+ * Keeps information about a class that is useful for writing out decl and/or dtrace information.
+ * Original information is filled out during the transformation and other information is added after
+ * the class is first loaded.
  */
 public class ClassInfo {
 
@@ -45,7 +44,7 @@ public class ClassInfo {
   /** Whether or not any methods in this class were instrumented */
   public boolean shouldInclude = false;
 
-  /** Mapping from field name to string representation of its value**/
+  /** Mapping from field name to string representation of its value* */
   //only for static final primitives
   //which are declared by a CONSTANT VALUE in the code
   public Map<String, String> staticMap = new HashMap<String, String>();
@@ -66,8 +65,8 @@ public class ClassInfo {
   }
 
   /**
-   * Gets the reflection object Class for this class, and the Method objects
-   * for each method that is already in method_infos.
+   * Gets the reflection object Class for this class, and the Method objects for each method that is
+   * already in method_infos.
    */
   /*@EnsuresNonNull("clazz")*/
   public void initViaReflection() {
@@ -114,9 +113,9 @@ public class ClassInfo {
   }
 
   /**
-   * Determines if fully qualified method name is in this class.
-   * Example methodName:
-   * public static String mypackage.MyClass.doStuff(int, java.lang.Object)
+   * Determines if fully qualified method name is in this class. Example methodName:
+   *
+   * <pre>public static String mypackage.MyClass.doStuff(int, java.lang.Object)</pre>
    */
   private boolean isInThisClass(String methodName) {
     // A heuristical way to determine if the method is in this class.

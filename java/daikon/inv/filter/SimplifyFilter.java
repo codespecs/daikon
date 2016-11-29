@@ -1,7 +1,6 @@
 package daikon.inv.filter;
 
 import daikon.Daikon;
-import daikon.PptTopLevel;
 import daikon.inv.*;
 
 public class SimplifyFilter extends InvariantFilter {
@@ -11,9 +10,7 @@ public class SimplifyFilter extends InvariantFilter {
     return description;
   }
 
-  /**
-   * Boolean. If true, SimplifyFilter is initially turned on.
-   */
+  /** Boolean. If true, SimplifyFilter is initially turned on. */
   public static boolean dkconfig_enabled = true;
 
   public SimplifyFilter() {

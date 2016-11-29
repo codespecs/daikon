@@ -13,18 +13,16 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * Debug class used with the logger to create standardized output.
- * It can be setup to track combinations of classes, program points,
- * and variables.  The most common class to track is an invariant, but
- * any class can be used.
+ * Debug class used with the logger to create standardized output. It can be setup to track
+ * combinations of classes, program points, and variables. The most common class to track is an
+ * invariant, but any class can be used.
  *
- * This allows detailed information about a particular class/ppt/variable
- * combination to be printed without getting lost in a mass of other
- * information (which is a particular problem in Daikon due to the volume
- * of data considered).
+ * <p>This allows detailed information about a particular class/ppt/variable combination to be
+ * printed without getting lost in a mass of other information (which is a particular problem in
+ * Daikon due to the volume of data considered).
  *
- * Note that each of the three items (class, ppt, variable) must match
- * in order for a print to occur.
+ * <p>Note that each of the three items (class, ppt, variable) must match in order for printing to
+ * occur.
  */
 public final class Debug {
 
@@ -32,9 +30,8 @@ public final class Debug {
   public static final Logger debugTrack = Logger.getLogger("daikon.Debug");
 
   /**
-   * List of classes for logging. Each name listed is compared to the
-   * fully qualified class name.  If it matches (shows up anywhere in
-   * the class name) it will be included in debug prints.  This is
+   * List of classes for logging. Each name listed is compared to the fully qualified class name. If
+   * it matches (shows up anywhere in the class name) it will be included in debug prints. This is
    * not a regular expression match
    *
    * @see #log(Logger, Class, Ppt, String)
@@ -94,23 +91,21 @@ public final class Debug {
   };
 
   /**
-   * Restrict function binary prints to the specified method.  Implementation
-   * is in the FunctionBinary specific log functions.  If null, there is no
-   * restriction (all function binary methods are printed).  See Functions.java
-   * for a list of function names
+   * Restrict function binary prints to the specified method. Implementation is in the
+   * FunctionBinary specific log functions. If null, there is no restriction (all function binary
+   * methods are printed). See Functions.java for a list of function names.
    */
   public static /*@Nullable*/ String function_binary_method = null
-  // "java.lang.Math.max("
-  // "java.lang.Math.min("
-  // "plume.MathMDE.logicalXor("
-  // "plume.MathMDE.gcd("
-  ;
+      // "java.lang.Math.max("
+      // "java.lang.Math.min("
+      // "plume.MathMDE.logicalXor("
+      // "plume.MathMDE.gcd("
+      ;
 
   /**
-   * List of Ppts for logging. Each name listed is compared to
-   * the full program point name. If it matches (shows up anywhere in
-   * the ppt name) it will be included in the debug prints.  This is
-   * not a regular expression match
+   * List of Ppts for logging. Each name listed is compared to the full program point name. If it
+   * matches (shows up anywhere in the ppt name) it will be included in the debug prints. This is
+   * not a regular expression match.
    *
    * @see #log(Logger, Class, Ppt, String)
    */
@@ -125,11 +120,9 @@ public final class Debug {
   };
 
   /**
-   * List of variable names for logging. Each name listed is compared
-   * to each variable in turn.  If each matches exactly it will be
-   * included in track debug prints.  This is not a regular expression
-   * match.  Note that the number of variables must match the slice
-   * exactly.
+   * List of variable names for logging. Each name listed is compared to each variable in turn. If
+   * each matches exactly it will be included in track debug prints. This is not a regular
+   * expression match. Note that the number of variables must match the slice exactly.
    *
    * @see #log(Logger, Class, Ppt, String)
    */
@@ -147,43 +140,39 @@ public final class Debug {
   // of log() that take fewer arguments.
 
   /**
-   * True if the cached values should be printed --- that is, they match
-   * what is currently being debugged.
+   * True if the cached values should be printed --- that is, they match what is currently being
+   * debugged.
    */
   public boolean cache_match = true;
 
   // Note that throughout this file, inv_class is not necessarily a
   // subclass of Invariant -- for instance, it might be a subclass of
   // BinaryDerivationFactory.
-  /** cached class: class to use by default when calling variants of log()
-   * with few arguments */
+  /** cached class: class to use by default when calling variants of log() with few arguments */
   public /*@Nullable*/ Class<?> cache_class;
 
-  /** cached ppt: ppt to use by default when calling variants of log()
-   * with few arguments */
+  /** cached ppt: ppt to use by default when calling variants of log() with few arguments */
   public /*@Nullable*/ Ppt cache_ppt;
 
-  /** cached variables: variables to use by default when calling variants of
-   * log() with few arguments */
+  /**
+   * cached variables: variables to use by default when calling variants of log() with few arguments
+   */
   public VarInfo /*@Nullable*/ [] cache_vis;
 
   /**
-   * Ordinarily, a client would have to supply a Class, Ppt, and
-   * List&lt;Varinfo&gt; with each call to a log method.
-   * This constructor sets as defaults c, ppt, and whatever variable (if any) from
-   * vis that is on the debugTrackVar list.  Essentially this creates
-   * a debug object that will print if any of the variables in vis are
-   * being tracked (and c and ppt match)
+   * Ordinarily, a client would have to supply a Class, Ppt, and List&lt;Varinfo&gt; with each call
+   * to a log method. This constructor sets as defaults c, ppt, and whatever variable (if any) from
+   * vis that is on the debugTrackVar list. Essentially this creates a debug object that will print
+   * if any of the variables in vis are being tracked (and c and ppt match).
    */
   public Debug(Class<?> c, Ppt ppt, VarInfo[] vis) {
     set(c, ppt, vis);
   }
 
   /**
-   * Returns a Debug object if the specified class, ppt, and vis match
-   * what is being tracked.  Otherwise, return NULL.  Preferred over calling
-   * the constructor directly, since it doesn't create the object if it
-   * doesn't have to
+   * Returns a Debug object if the specified class, ppt, and vis match what is being tracked.
+   * Otherwise, return NULL. Preferred over calling the constructor directly, since it doesn't
+   * create the object if it doesn't have to.
    */
   public static /*@Nullable*/ Debug newDebug(Class<?> c, Ppt ppt, VarInfo[] vis) {
     if (logOn() && class_match(c) && ppt_match(ppt) && var_match(vis)) {
@@ -194,12 +183,10 @@ public final class Debug {
   }
 
   /**
-   * Ordinarily, a client would have to supply a Class, Ppt, and
-   * List&lt;Varinfo&gt; with each call to a log method.
-   * This constructor sets as defaults c, ppt, and whatever variable (if any) from
-   * vis that is on the debugTrackVar list.  Essentially this creates
-   * a debug object that will print if any of the variables in vis are
-   * being tracked (and c and ppt match)
+   * Ordinarily, a client would have to supply a Class, Ppt, and List&lt;Varinfo&gt; with each call
+   * to a log method. This constructor sets as defaults c, ppt, and whatever variable (if any) from
+   * vis that is on the debugTrackVar list. Essentially this creates a debug object that will print
+   * if any of the variables in vis are being tracked (and c and ppt match).
    */
   public Debug(Class<?> c, Ppt ppt, List<VarInfo> vis) {
 
@@ -214,12 +201,10 @@ public final class Debug {
   }
 
   /**
-   * Looks for each of the variables in vis in the DebugTrackVar list.  If
-   * any match, returns that variable.  Null is returned if there are no
-   * matches.
+   * Looks for each of the variables in vis in the DebugTrackVar list. If any match, returns that
+   * variable. Returns null if there are no matches.
    */
-  public /*@Nullable*/ VarInfo visTracked(
-      /*>>>@UnknownInitialization Debug this,*/ List<VarInfo> vis) {
+  public /*@Nullable*/ VarInfo visTracked(/*>>>@UnknownInitialization Debug this,*/ List<VarInfo> vis) {
 
     for (VarInfo v : vis) {
       Set<VarInfo> evars = null;
@@ -263,9 +248,8 @@ public final class Debug {
   }
 
   /**
-   * Sets the cache for class, ppt, and vis so that future calls to log
-   * don't have to set them -- in other words, future calls can use the
-   * versions of log with fewer arguments.
+   * Sets the cache for class, ppt, and vis so that future calls to log don't have to set them -- in
+   * other words, future calls can use the versions of log with fewer arguments.
    */
   void set(
       /*>>>@UnknownInitialization Debug this,*/
@@ -286,8 +270,8 @@ public final class Debug {
   }
 
   /**
-   * When true, perform detailed internal checking.
-   * These are essentially additional, possibly costly assert statements.
+   * When true, perform detailed internal checking. These are essentially additional, possibly
+   * costly assert statements.
    */
   public static boolean dkconfig_internal_check = false;
 
@@ -295,16 +279,14 @@ public final class Debug {
   public static boolean dkconfig_show_stack_trace = false;
 
   /**
-   * Determines whether or not traceback information is printed for each
-   * call to log.
+   * Determines whether or not traceback information is printed for each call to log.
    *
    * @see #log(Logger, Class, Ppt, String)
    */
   public static boolean dkconfig_showTraceback = false;
 
   /**
-   * Determines whether or not detailed info (such as from
-   * <code>add_modified</code>) is printed.
+   * Determines whether or not detailed info (such as from <code>add_modified</code>) is printed.
    *
    * @see #log(Logger, Class, Ppt, String)
    * @see #logDetail()
@@ -312,9 +294,8 @@ public final class Debug {
   public static boolean dkconfig_logDetail = false;
 
   /**
-   * Returns whether or not detailed logging is on.  Note that this check
-   * is not performed inside the logging calls themselves, it must be
-   * performed by the caller.
+   * Returns whether or not detailed logging is on. Note that this check is not performed inside the
+   * logging calls themselves, it must be performed by the caller.
    *
    * @see #log(Logger, Class, Ppt, String)
    * @see #logOn()
@@ -333,18 +314,16 @@ public final class Debug {
   }
 
   /**
-   * Logs the cached class, cached ppt, cached variables and the
-   * specified msg via the logger as described in {@link
-   * #log(Logger, Class, Ppt, VarInfo[], String)}.
+   * Logs the cached class, cached ppt, cached variables and the specified msg via the logger as
+   * described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
   public void log(Logger debug, String msg) {
     if (cache_match) log(debug, cache_class, cache_ppt, cache_vis, msg);
   }
 
   /**
-   * Logs a description of the class, ppt, ppt variables and the
-   * specified msg via the logger as described in {@link
-   * #log(Logger, Class, Ppt, VarInfo[], String)}.
+   * Logs a description of the class, ppt, ppt variables and the specified msg via the logger as
+   * described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
   public static void log(Logger debug, Class<?> inv_class, /*@Nullable*/ Ppt ppt, String msg) {
     if (ppt == null) {
@@ -355,35 +334,28 @@ public final class Debug {
   }
 
   /**
-   * Logs a description of the class, ppt, variables and the specified
-   * msg via the logger.  The class, ppt, and variables are
-   * checked against those described in {@link #debugTrackClass},
-   * {@link #debugTrackPpt}, and {@link #debugTrackVars}.  Only
-   * those that match are printed.  Variables will match if they are
-   * in the same equality set.  The information is written as: <p>
+   * Logs a description of the class, ppt, variables and the specified msg via the logger. The
+   * class, ppt, and variables are checked against those described in {@link #debugTrackClass},
+   * {@link #debugTrackPpt}, and {@link #debugTrackVars}. Only those that match are printed.
+   * Variables will match if they are in the same equality set. The information is written as:
    *
-   * <code> class: ppt : var1 : var2 : var3 : msg </code> <p>
+   * <p><code> class: ppt : var1 : var2 : var3 : msg </code>
    *
-   * Note that if {@link #debugTrack} is not enabled then
-   * nothing is printed.  It is somewhat faster to check {@link #logOn()}
-   * directly rather than relying on the check here. <p>
+   * <p>Note that if {@link #debugTrack} is not enabled then nothing is printed. It is somewhat
+   * faster to check {@link #logOn()} directly rather than relying on the check here.
    *
-   * Other versions of this method (noted below) work without the Logger
-   * parameter and take class, ppt, and vis from the cached values, which
-   * were set by the constructor or by the set() method.
+   * <p>Other versions of this method (noted below) work without the Logger parameter and take
+   * class, ppt, and vis from the cached values, which were set by the constructor or by the set()
+   * method.
    *
-   * @param debug       a second Logger to query if debug tracking is turned
-   *                    off or does not match.  If this logger is
-   *                    enabled, the same information will be written
-   *                    to it.  Note that the information is never
-   *                    written to both loggers.
-   * @param inv_class   the class.  Can be obtained in a static context
-   *                    by ClassName.class
-   * @param ppt         program point
-   * @param vis         variables at the program point.  These are sometimes
-   *                    different from the ones in the ppt itself.
-   * @param msg         string message to log
-   *
+   * @param debug a second Logger to query if debug tracking is turned off or does not match. If
+   *     this logger is enabled, the same information will be written to it. Note that the
+   *     information is never written to both loggers.
+   * @param inv_class the class. Can be obtained in a static context by ClassName.class
+   * @param ppt program point
+   * @param vis variables at the program point. These are sometimes different from the ones in the
+   *     ppt itself.
+   * @param msg string message to log
    * @see #logOn()
    * @see #logDetail()
    * @see #log(Class, Ppt, VarInfo[], String)
@@ -446,9 +418,8 @@ public final class Debug {
   }
 
   /**
-   * Logs a description of the cached class, ppt, and variables and the
-   * specified msg via the logger as described in {@link
-   * #log(Logger, Class, Ppt, VarInfo[], String)}
+   * Logs a description of the cached class, ppt, and variables and the specified msg via the logger
+   * as described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}
    *
    * @return whether or not it logged anything
    */
@@ -458,9 +429,8 @@ public final class Debug {
   }
 
   /**
-   * Logs a description of the class, ppt, ppt variables and the
-   * specified msg via the logger as described in {@link
-   * #log(Logger, Class, Ppt, VarInfo[], String)}.
+   * Logs a description of the class, ppt, ppt variables and the specified msg via the logger as
+   * described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}.
    *
    * @return whether or not it logged anything
    */
@@ -472,9 +442,8 @@ public final class Debug {
   }
 
   /**
-   * Logs a description of the class, ppt, variables and the specified
-   * msg via the logger as described in {@link #log(Logger,
-   * Class, Ppt, String)}.  Accepts vis because sometimes the
+   * Logs a description of the class, ppt, variables and the specified msg via the logger as
+   * described in {@link #log(Logger, Class, Ppt, String)}. Accepts vis because sometimes the
    * variables are different from those in the ppt.
    *
    * @return whether or not it logged anything
@@ -550,10 +519,7 @@ public final class Debug {
     return true;
   }
 
-  /**
-   * Returns whether or not the specified class matches the classes being
-   * tracked
-   */
+  /** Returns whether or not the specified class matches the classes being tracked. */
   public static boolean class_match(/*@Nullable*/ Class<?> inv_class) {
 
     if ((debugTrackClass.length > 0) && (inv_class != null)) {
@@ -562,9 +528,7 @@ public final class Debug {
     return true;
   }
 
-  /**
-   * Returns whether or not the specified ppt matches the ppts being tracked
-   */
+  /** Returns whether or not the specified ppt matches the ppts being tracked. */
   public static boolean ppt_match(/*@Nullable*/ Ppt ppt) {
 
     if (debugTrackPpt.length > 0) {
@@ -574,9 +538,9 @@ public final class Debug {
   }
 
   /**
-   * Returns whether or not the specified vars match the ones being tracked.
-   * Also, sets Debug.ourvars with the names of the variables matched if they
-   * are not the leader of their equality sets
+   * Returns whether or not the specified vars match the ones being tracked. Also, sets
+   * Debug.ourvars with the names of the variables matched if they are not the leader of their
+   * equality sets.
    */
   public static boolean var_match(VarInfo /*@Nullable*/ [] vis) {
 
@@ -637,9 +601,7 @@ public final class Debug {
     return match;
   }
 
-  /**
-   * Looks for an element in arr that is a substring of str.
-   */
+  /** Looks for an element in arr that is a substring of str. */
   private static boolean strContainsElem(String str, String[] arr) {
 
     for (String elt : arr) {
@@ -651,8 +613,8 @@ public final class Debug {
   }
 
   /**
-   * Looks through entire ppt tree and checks for any items we are interested
-   * in.  If found, prints them out.
+   * Looks through entire ppt tree and checks for any items we are interested in. If found, prints
+   * them out.
    */
   public static void check(PptMap all_ppts, String msg) {
 
@@ -670,10 +632,7 @@ public final class Debug {
     if (!found) debugTrack.fine("Found no points at '" + msg + "'");
   }
 
-  /**
-   * Returns a string containing the integer variables and their
-   * values
-   */
+  /** Returns a string containing the integer variables and their values. */
   public static String int_vars(PptTopLevel ppt, ValueTuple vt) {
 
     String out = "";
@@ -687,9 +646,8 @@ public final class Debug {
   }
 
   /**
-   * Returns a string containing the variable values for any variables
-   * that are currently being tracked in ppt.  The string is of the
-   * form 'v1 = val1: v2 = val2, etc.
+   * Returns a string containing the variable values for any variables that are currently being
+   * tracked in ppt. The string is of the form 'v1 = val1: v2 = val2, etc.
    */
   public static String related_vars(PptTopLevel ppt, ValueTuple vt) {
 
@@ -740,8 +698,8 @@ public final class Debug {
   }
 
   /**
-   * Returns a string containing each variable and its value
-   * The string is of the form v1 = val1: v2 = val2, etc.
+   * Returns a string containing each variable and its value The string is of the form v1 = val1: v2
+   * = val2, etc.
    */
   public static String toString(VarInfo[] vis, ValueTuple vt) {
 
@@ -764,16 +722,15 @@ public final class Debug {
   }
 
   /**
-   * Parses the specified argument to --track and sets up the track arrays
-   * accordingly.  The syntax of the argument is
+   * Parses the specified argument to {@code --track} and sets up the track arrays accordingly. The
+   * syntax of the argument is
    *
-   *    class|class|...&lt;var,var,var&gt;@ppt
+   * <pre>{@code class|class|...<var,var,var>@ppt}</pre>
    *
-   * As shown, multiple class arguments can be specified separated by pipe
-   * symbols (|).  The variables are specified in angle brackets (&lt;&gt;) and
-   * the program point is preceeded by an at sign (@).  Each is optional
-   * and can be left out.  The add_track routine can be called multiple times.
-   * An invariant that matches any of the specifications will be tracked.
+   * As shown, multiple class arguments can be specified separated by pipe symbols (|). The
+   * variables are specified in angle brackets (&lt;&gt;) and the program point is preceeded by an
+   * at sign (@). Each is optional and can be left out. The add_track routine can be called multiple
+   * times. An invariant that matches any of the specifications will be tracked.
    */
   public static /*@Nullable*/ String add_track(String def) {
 

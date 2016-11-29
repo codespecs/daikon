@@ -5,9 +5,9 @@ import java.io.*;
 import java.util.*;
 import plume.*;
 
-/** This class partitions Daikon trace files so that invocations of
- *  the same program point are grouped together for use with random
- *  selection.
+/**
+ * This class partitions Daikon trace files so that invocations of the same program point are
+ * grouped together for use with random selection.
  */
 public class DtracePartitioner implements Partitioner<String, String>, Iterator<String> {
 
@@ -18,8 +18,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
   // the name of the Daikon trace file
   private String fileName;
 
-  /** @param filename the Daikon trace file to be partitioned
-   */
+  /** @param filename the Daikon trace file to be partitioned */
   public DtracePartitioner(String filename) {
     try {
       this.fileName = filename;
@@ -41,8 +40,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     }
   }
 
-  /** Not implemented, because this class does not modify the underlying
-   * trace file. */
+  /** Not implemented, because this class does not modify the underlying trace file. */
   public void remove() {
     throw new UnsupportedOperationException("Can not remove");
   }
@@ -64,10 +62,11 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     throw new RuntimeException("Should never reach this statement");
   }
 
-  /** Grabs the next invocation in the Daikon trace file by interpreting
-   * a blank line as the invocation delimter.  Note that multiple blank
-   * lines between invocations might occur, so the callee is responsible
-   * for checking if the returned String is a blank line */
+  /**
+   * Grabs the next invocation in the Daikon trace file by interpreting a blank line as the
+   * invocation delimter. Note that multiple blank lines between invocations might occur, so the
+   * callee is responsible for checking if the returned String is a blank line.
+   */
   private String grabNextInvocation() throws IOException {
     StringBuffer sb = new StringBuffer();
     while (br.ready()) {
@@ -96,13 +95,15 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     return patchValues(enters, false);
   }
 
-  /** Finds the exits that correspond to Enters.
-   *  <br>Modifies: none
-   *  <br>Returns: An ArrayList containing all of the elements of 'enters'
-   *  <br> @param includeUnreturnedEnters
-   *    ensures that any ENTER ppt invocations will definitely have
-   *    a corresponding EXIT ppt invocation following them.
-   *  <p> The original order is NOT guaranteed.
+  /**
+   * Finds the exits that correspond to Enters.
+   *
+   * <p>Modifies: none
+   *
+   * @param includeUnreturnedEnters ensures that any ENTER ppt invocations will definitely have a
+   *     corresponding EXIT ppt invocation following them.
+   * @return an ArrayList containing all of the elements of 'enters'. The original order is NOT
+   *     guaranteed.
    */
   public List<String> patchValues(List<String> enters, boolean includeUnreturnedEnters) {
     try {

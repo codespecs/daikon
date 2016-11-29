@@ -1,7 +1,6 @@
 package daikon.inv.filter;
 
 import daikon.Daikon;
-import daikon.PptMap;
 import daikon.PrintInvariants;
 import daikon.VarInfo;
 import daikon.inv.*;
@@ -255,12 +254,11 @@ public class InvariantFilters {
   //  InvariantsGUI.java.
 
   /**
-   * This function takes a list of invariants, finds the equality
-   * Comparison invariants (x==y, y==z), and deletes and replaces them
-   * with Equality invariants (x==y==z).  The first variable in an
-   * Equality invariant is always the canonical variable of the group.
-   * The Equality invariants are inserted into the beginning.  Equality
-   * invariants are useful when it comes to displaying invariants.
+   * This function takes a list of invariants, finds the equality Comparison invariants (x==y,
+   * y==z), and deletes and replaces them with Equality invariants (x==y==z). The first variable in
+   * an Equality invariant is always the canonical variable of the group. The Equality invariants
+   * are inserted into the beginning. Equality invariants are useful when it comes to displaying
+   * invariants.
    */
   public static List<Invariant> addEqualityInvariants(List<Invariant> invariants) {
 

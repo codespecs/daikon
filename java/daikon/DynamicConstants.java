@@ -25,12 +25,11 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Class that implements dynamic constants optimization.  This
- * optimization doesn't instantiate invariants over constant
- * variables (i.e., that that have only seen one value).  When the
- * variable receives a second value, invariants are instantiated and
- * are given the sample representing the previous constant value.
- * Each DynamicConstants object is associated with a single program point, ppt.
+ * Class that implements dynamic constants optimization. This optimization doesn't instantiate
+ * invariants over constant variables (i.e., that that have only seen one value). When the variable
+ * receives a second value, invariants are instantiated and are given the sample representing the
+ * previous constant value. Each DynamicConstants object is associated with a single program point,
+ * ppt.
  */
 public class DynamicConstants implements Serializable {
 
@@ -48,28 +47,24 @@ public class DynamicConstants implements Serializable {
   // daikon.config.Configuration interface.
 
   /**
-   * Whether to use the dynamic constants optimization.  This
-   * optimization doesn't instantiate invariants over constant
-   * variables (i.e., that that have only seen one value).  When the
-   * variable receives a second value, invariants are instantiated and
-   * are given the sample representing the previous constant value.
+   * Whether to use the dynamic constants optimization. This optimization doesn't instantiate
+   * invariants over constant variables (i.e., that that have only seen one value). When the
+   * variable receives a second value, invariants are instantiated and are given the sample
+   * representing the previous constant value.
    */
   public static boolean dkconfig_use_dynamic_constant_optimization = true;
 
   /**
-   * Boolean. Controls which invariants are created for variables that
-   * are constant for the entire run.  If true, create only OneOf
-   * invariants.  If false, create all possible invariants.
+   * Boolean. Controls which invariants are created for variables that are constant for the entire
+   * run. If true, create only OneOf invariants. If false, create all possible invariants.
    *
-   * Note that setting this to true only
-   * fails to create invariants between constants.  Invariants between
-   * constants and non-constants are created regardless.
+   * <p>Note that setting this to true only fails to create invariants between constants. Invariants
+   * between constants and non-constants are created regardless.
    *
-   * A problem occurs with merging when this is turned on.  If a var_info
-   * is constant at one child slice, but not constant at the other child
-   * slice, interesting invariants may not be merged because they won't
-   * exist on the slice with the constant.  This is thus currently
-   * defaulted to false.
+   * <p>A problem occurs with merging when this is turned on. If a var_info is constant at one child
+   * slice, but not constant at the other child slice, interesting invariants may not be merged
+   * because they won't exist on the slice with the constant. This is thus currently defaulted to
+   * false.
    */
   public static boolean dkconfig_OneOf_only = false;
 
@@ -78,19 +73,22 @@ public class DynamicConstants implements Serializable {
 
   /**
    * List of dynamic constants.
-   * Each element, c, has c.constant = true, c.count &gt; 0, elt.val != null.
+   *
+   * <p>Each element, c, has c.constant = true, c.count &gt; 0, elt.val != null.
    */
   List<Constant> con_list = new ArrayList<Constant>();
 
   /**
    * List of variables that have always been missing.
-   * For each element c, c.always_missing = true or con.vi.missingOutOfBounds().
+   *
+   * <p>For each element c, c.always_missing = true or con.vi.missingOutOfBounds().
    */
   List<Constant> missing_list = new ArrayList<Constant>();
 
   // Same contents in both.  Why two data structures?
-  /** List of all variables.  Some may be non-constant. */
+  /** List of all variables. Some may be non-constant. */
   Constant[] all_vars;
+
   List<Constant> all_list = new ArrayList<Constant>();
 
   /** Program point of these constants. */
@@ -100,14 +98,11 @@ public class DynamicConstants implements Serializable {
   int sample_cnt = 0;
 
   /**
-   * Class used to indicate, for each variable, whether it is constant (see
-   * boolean field "constant").  If it is, then the class also stores its
-   * constant value and its sample count.
-   * <p>
+   * Class used to indicate, for each variable, whether it is constant (see boolean field
+   * "constant"). If it is, then the class also stores its constant value and its sample count.
    *
-   * Note that two objects of this class are equal if they refer
-   * to the same variable.  This allows these to be stored in
-   * sets.
+   * <p>Note that two objects of this class are equal if they refer to the same variable. This
+   * allows these to be stored in sets.
    */
   public static /*@Interned*/ class Constant implements Serializable {
 
@@ -119,8 +114,9 @@ public class DynamicConstants implements Serializable {
     // XXX Question: what if the constant value is itself null, as for a
     // String or pointer?  Does the code distinguish that case from val not
     // being set?
-    /** The value of the constant, or the previous constant value if
-     * constant==false  and  previous_constant==true.  Null iff count=0.
+    /**
+     * The value of the constant, or the previous constant value if constant==false and
+     * previous_constant==true. Null iff count=0.
      */
     public /*@MonotonicNonNull*/ /*@Interned*/ Object val = null;
 
@@ -137,24 +133,20 @@ public class DynamicConstants implements Serializable {
     boolean constant = false;
 
     /**
-     * Whether or not this was constant at the beginning of this sample.
-     * At the beginning of the add() method, all newly non constant variables
-     * are marked (constant=false).  It is sometimes useful within the
-     * remainder of processing that sample to know that a variable was
-     * constant at the beginning.  The field previous_constant is set to
-     * true when constant is set to false, and then is itself set to false
-     * at the end of the add() method.
+     * Whether or not this was constant at the beginning of this sample. At the beginning of the
+     * add() method, all newly non constant variables are marked (constant=false). It is sometimes
+     * useful within the remainder of processing that sample to know that a variable was constant at
+     * the beginning. The field previous_constant is set to true when constant is set to false, and
+     * then is itself set to false at the end of the add() method.
      */
     boolean previous_constant = false;
 
     /**
-     * Whether or not this was always missing at the beginning of this sample.
-     * At the beginning of the add() method, all newly non missing variables
-     * are marked (always_missing=false).  It is sometimes useful within the
-     * remainder of processing that sample to know that a variable was
-     * missing at the beginning.  The field previous_missing  set to
-     * true when missing is set to false, and then is itself set to false
-     * at the end of the add() method.
+     * Whether or not this was always missing at the beginning of this sample. At the beginning of
+     * the add() method, all newly non missing variables are marked (always_missing=false). It is
+     * sometimes useful within the remainder of processing that sample to know that a variable was
+     * missing at the beginning. The field previous_missing set to true when missing is set to
+     * false, and then is itself set to false at the end of the add() method.
      */
     boolean previous_missing = false;
 
@@ -179,8 +171,8 @@ public class DynamicConstants implements Serializable {
     }
 
     /**
-     * returns whether the specified variable is currently a constant OR
-     * was a constant at the beginning of constants processing.
+     * Returns whether the specified variable is currently a constant OR was a constant at the
+     * beginning of constants processing.
      */
     /*@Pure*/
     public boolean is_prev_constant() {
@@ -251,10 +243,7 @@ public class DynamicConstants implements Serializable {
     static final ConIndexComparator theInstance = new ConIndexComparator();
   }
 
-  /**
-   * Create an initial list of constants and missing variables for the
-   * specified ppt.
-   */
+  /** Create an initial list of constants and missing variables for the specified ppt. */
   public DynamicConstants(PptTopLevel ppt) {
 
     this.ppt = ppt;
@@ -269,14 +258,13 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Checks each current constant to see if it is still a constant.
-   * Constants must have the same value and cannot be missing.  In the
-   * long run a better job of dealing with missing might be helpful.
-   * Also checks each variable that has always been missing to date to
-   * insure that it is still missing.
+   * Checks each current constant to see if it is still a constant. Constants must have the same
+   * value and cannot be missing. In the long run a better job of dealing with missing might be
+   * helpful. Also checks each variable that has always been missing to date to insure that it is
+   * still missing.
    *
-   * Creates all new views required for the newly non constants (noncons)
-   * and the newly non-missing (non_missing)
+   * <p>Creates all new views required for the newly non constants (noncons) and the newly
+   * non-missing (non_missing).
    */
   public void add(ValueTuple vt, int count) {
 
@@ -416,8 +404,8 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * returns whether the specified variable is currently a constant OR
-   * was a constant at the beginning of constants processing.
+   * Returns whether the specified variable is currently a constant OR was a constant at the
+   * beginning of constants processing.
    */
   /*@Pure*/
   public boolean is_prev_constant(VarInfo vi) {
@@ -426,9 +414,8 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Returns the constant value of the specified variable, or null if
-   * the variable is not constant or prev_constant.  But, it is apparently
-   * only called on constants with a value.
+   * Returns the constant value of the specified variable, or null if the variable is not constant
+   * or prev_constant. But, it is apparently only called on constants with a value.
    */
   public /*@Interned*/ Object constant_value(VarInfo vi) {
 
@@ -445,8 +432,8 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * returns whether the specified variable is currently missing OR
-   * was missing at the beginning of constants processing.
+   * Returns whether the specified variable is currently missing OR was missing at the beginning of
+   * constants processing.
    */
   /*@Pure*/
   public boolean is_prev_missing(VarInfo vi) {
@@ -467,8 +454,8 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Creates all new views required for the newly non constants (noncons)
-   * and the newly non-missing (non_missing).
+   * Creates all new views required for the newly non constants (noncons) and the newly non-missing
+   * (non_missing).
    */
   public void instantiate_new_views(List<Constant> noncons, List<Constant> non_missing) {
 
@@ -525,14 +512,16 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Instantiate views and invariants across each combination of
-   * vars from list1 and list2.  If each item in a new slice
-   * was a constant, the constant values are applied.
+   * Instantiate views and invariants across each combination of vars from list1 and list2. If each
+   * item in a new slice was a constant, the constant values are applied.
    *
-   * The following slices will be created:
+   * <p>The following slices will be created:
+   *
+   * <pre>
    *    unary:   list1-vars
    *    binary:  list1-vars X list2-vars
    *    ternary: list1-vars X list2-vars X list2-vars
+   * </pre>
    */
   private void instantiate_views(List<Constant> list1, List<Constant> list2) {
 
@@ -895,8 +884,8 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Looks for a LinearBinary invariant in the specified slice.
-   * Will match either float or integer versions
+   * Looks for a LinearBinary invariant in the specified slice. Will match either float or integer
+   * versions.
    */
   private /*@Nullable*/ Invariant find_linear_binary(/*@Nullable*/ PptSlice slice) {
 
@@ -918,10 +907,9 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Create invariants for any remaining constants.  Right now, this looks
-   * for invariants between all of the constants.  It's not clear that invariants
-   * between constants are interesting, but to match previous behavior, this
-   * is what we will do for now.
+   * Create invariants for any remaining constants. Right now, this looks for invariants between all
+   * of the constants. It's not clear that invariants between constants are interesting, but to
+   * match previous behavior, this is what we will do for now.
    */
   public void post_process() {
 
@@ -982,11 +970,10 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Create unary and binary constant invariants.  The slices and
-   * invariants are created and returned, but not added to the
-   * ppt.  Note that when NIS.dkconfig_suppressor_list is turned
-   * on (default is on), only unary and binary invariants that can
-   * be suppressors in NIS suppressions are created.
+   * Create unary and binary constant invariants. The slices and invariants are created and
+   * returned, but not added to the ppt. Note that when NIS.dkconfig_suppressor_list is turned on
+   * (default is on), only unary and binary invariants that can be suppressors in NIS suppressions
+   * are created.
    */
   /*@RequiresNonNull("NIS.suppressor_proto_invs")*/
   public List<PptSlice> create_constant_invs() {
@@ -1080,9 +1067,8 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Merge dynamic constants from the children of this ppt.  Only missing
-   * is merged since constants are not used after we are done processing
-   * samples.
+   * Merge dynamic constants from the children of this ppt. Only missing is merged since constants
+   * are not used after we are done processing samples.
    */
   public void merge() {
 
@@ -1112,9 +1098,7 @@ public class DynamicConstants implements Serializable {
     }
   }
 
-  /**
-   * Creates OneOf invariants for each constant
-   */
+  /** Creates OneOf invariants for each constant. */
   public void instantiate_oneof(Constant con) {
     assert con.val != null : "@AssumeAssertion(nullness)";
 

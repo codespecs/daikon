@@ -113,7 +113,7 @@ import typequals.*;
  * Base class for each of the CLASSNAME functions and permutatons.
  * Most of the work is done here.  The subclasses basically define the
  * function and return information describing the function and permutation
- * to these methods
+ * to these methods.
  */
 public abstract class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
@@ -281,7 +281,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #endif
 
   /**
-   * Returns a list of all of the CLASSNAME prototype invariants
+   * Returns a list of all of the CLASSNAME prototype invariants.
    */
   public static List</*@Prototype*/ Invariant> get_proto_all() {
 

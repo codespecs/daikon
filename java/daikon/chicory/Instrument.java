@@ -6,7 +6,6 @@ import daikon.Chicory;
 import daikon.util.SimpleLog;
 import java.io.*;
 import java.lang.instrument.*;
-import java.lang.reflect.Modifier;
 import java.security.*;
 import java.util.*;
 import java.util.regex.*;
@@ -14,7 +13,6 @@ import org.apache.bcel.*;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.generic.InstructionFactory;
-import org.apache.bcel.verifier.VerificationResult;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
@@ -24,9 +22,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * The Instrument class is responsible for modifying another class'
- * bytecode.  Specifically, its main task is to add "hooks" into the
- * other class at method entries and exits for instrumentation
+ * The Instrument class is responsible for modifying another class' bytecode. Specifically, its main
+ * task is to add "hooks" into the other class at method entries and exits for instrumentation
  * purposes.
  */
 @SuppressWarnings("nullness")
@@ -113,10 +110,9 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Given a class, return a transformed version of the class that
-   * contains "hooks" at method entries and exits.
-   * Because Chicory is invoked as a javaagent, the transform method is
-   * called by the Java runtime each time a new class is loaded.
+   * Given a class, return a transformed version of the class that contains "hooks" at method
+   * entries and exits. Because Chicory is invoked as a javaagent, the transform method is called by
+   * the Java runtime each time a new class is loaded.
    */
   public byte /*@Nullable*/ [] transform(
       ClassLoader loader,
@@ -437,11 +433,11 @@ public class Instrument implements ClassFileTransformer {
   InstructionHandle[] offset_map;
 
   /**
-   * Instrument all the methods in a class.  For each method, add
-   * instrumentation code at the entry and at each return from the method.
-   * In addition, changes each return statement to first place the value
-   * being returned into a local and then return. This allows us to work
-   * around the JDI deficiency of not being able to query return values.
+   * Instrument all the methods in a class. For each method, add instrumentation code at the entry
+   * and at each return from the method. In addition, changes each return statement to first place
+   * the value being returned into a local and then return. This allows us to work around the JDI
+   * deficiency of not being able to query return values.
+   *
    * @param fullClassName must be fully qualified: packageName.className
    */
   private ClassInfo instrument_all_methods(ClassGen cg, String fullClassName, ClassLoader loader) {
@@ -452,8 +448,7 @@ public class Instrument implements ClassFileTransformer {
     if (cg.getMajor() < Const.MAJOR_1_6) {
       System.out.printf(
           "Chicory warning: ClassFile: %s - classfile version (%d) is out of date and may not be processed correctly.%n",
-          cg.getClassName(),
-          cg.getMajor());
+          cg.getClassName(), cg.getMajor());
     }
 
     boolean shouldInclude = false;
@@ -524,9 +519,7 @@ public class Instrument implements ClassFileTransformer {
           if (debug) {
             out.format(
                 "Attribute tag: %s length: %d nameIndex: %d%n",
-                smta.getTag(),
-                smta.getLength(),
-                smta.getNameIndex());
+                smta.getTag(), smta.getLength(), smta.getNameIndex());
           }
           mg.removeCodeAttribute(smta);
         } else {
@@ -685,7 +678,19 @@ public class Instrument implements ClassFileTransformer {
         mg.update();
 
         // Update the method in the class
-        cg.replaceMethod(methods[i], mg.getMethod());
+        try {
+          cg.replaceMethod(methods[i], mg.getMethod());
+        } catch (Exception e) {
+          if ((e.getMessage()).startsWith("Branch target offset too large")) {
+            System.out.printf(
+                "Chicory warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
+                cg.getClassName(), mg.getName());
+            continue;
+          } else {
+            throw e;
+          }
+        }
+
         if (debug) {
           out.format("Modified code: %s%n", mg.getMethod().getCode());
           dump_code_attributes(mg);
@@ -737,9 +742,9 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Transforms return instructions to first assign the result to a local
-   * variable (return__$trace2_val) and then do the return.  Also, calls
-   * Runtime.exit() immediately before the return.
+   * Transforms return instructions to first assign the result to a local variable
+   * (return__$trace2_val) and then do the return. Also, calls Runtime.exit() immediately before the
+   * return.
    */
   private /*@Nullable*/ InstructionList add_return_instrumentation(
       String fullClassName,
@@ -784,9 +789,8 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Returns the local variable used to store the return result.  If it
-   * is not present, creates it with the specified type.  If the variable
-   * is known to already exist, the type can be null.
+   * Returns the local variable used to store the return result. If it is not present, creates it
+   * with the specified type. If the variable is known to already exist, the type can be null.
    */
   private LocalVariableGen get_return_local(MethodGen mgen, /*@Nullable*/ Type return_type) {
 
@@ -815,9 +819,7 @@ public class Instrument implements ClassFileTransformer {
     return return_local;
   }
 
-  /**
-   * Finds the nonce local variable.  Returns null if not present.
-   */
+  /** Finds the nonce local variable. Returns null if not present. */
   private /*@Nullable*/ LocalVariableGen get_nonce_local(MethodGen mgen) {
 
     // Find the local used for the nonce value
@@ -831,8 +833,8 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * We have inserted an additional single byte into the instruction list;
-   * update the StackMaps, if required.
+   * We have inserted an additional single byte into the instruction list; update the StackMaps, if
+   * required.
    */
   private void update_stack_map_offset(int offset) {
 
@@ -849,9 +851,7 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
-  /**
-   * Find the StackMap entry who's offset matches the input argument
-   */
+  /** Find the StackMap entry who's offset matches the input argument. */
   private StackMapEntry find_stack_map_equal(int offset) {
 
     running_offset = -1; // no +1 on first entry
@@ -873,8 +873,8 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Find the StackMap entry who's offset is the first one after
-   * the input argument.  Only called when there must be one.
+   * Find the StackMap entry who's offset is the first one after the input argument. Only called
+   * when there must be one.
    */
   private StackMapEntry find_stack_map_after(int offset) {
 
@@ -894,10 +894,9 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Either save or update the uninitialized_variable_info
-   * offsets.  If 'save' is true, build a HashMap of
-   * offsets to InsturctionHandles.  If 'save' is false,
-   * update the offsets using the HashMap.
+   * Either save or update the uninitialized_variable_info offsets. If 'save' is true, build a
+   * HashMap of offsets to InsturctionHandles. If 'save' is false, update the offsets using the
+   * HashMap.
    */
   private void process_uninitialized_variable_info(InstructionList il, boolean save) {
     il.setPositions();
@@ -953,8 +952,8 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Check to see if there have been any changes in a switch statement's
-   * padding bytes.  If so, we need to update the corresponding StackMap.
+   * Check to see if there have been any changes in a switch statement's padding bytes. If so, we
+   * need to update the corresponding StackMap.
    */
   private void modify_stack_maps_for_switches(InstructionHandle ih, InstructionList il) {
     Instruction inst;
@@ -991,8 +990,6 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
-  /**
-   */
   private void print_stack_map_table(String prefix) {
 
     if (debug) {
@@ -1011,9 +1008,9 @@ public class Instrument implements ClassFileTransformer {
   private int nonce_offset;
 
   /**
-   * Transforms instructions that reference locals that are 'higher'
-   * in the local map that the nonce local.  Need to add one to their
-   * operand offset.  This may require changing the instruction as well.
+   * Transforms instructions that reference locals that are 'higher' in the local map that the nonce
+   * local. Need to add one to their operand offset. This may require changing the instruction as
+   * well.
    */
   private void xform_local_ref(InstructionHandle ih, InstructionList il) {
 
@@ -1112,9 +1109,8 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Create the nonce local variable.  This may have the side effect of
-   * causing us to rewrite the method byte codes to adjust the offsets
-   * of existing local variables - see below for details.
+   * Create the nonce local variable. This may have the side effect of causing us to rewrite the
+   * method byte codes to adjust the offsets of existing local variables - see below for details.
    */
   private LocalVariableGen create_local_nonce(InstructionList il, MethodContext c) {
 
@@ -1187,11 +1183,10 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Inserts instrumentation code at the start of the method.  This includes
-   * adding a local variable (this_invocation_nonce) that is initialized
-   * to Runtime.nonce++.  This provides a unique id on each method entry/exit
-   * that allows them to be matched up from the dtrace file.  Inserts code
-   * to call Runtime.enter().
+   * Inserts instrumentation code at the start of the method. This includes adding a local variable
+   * (this_invocation_nonce) that is initialized to Runtime.nonce++. This provides a unique id on
+   * each method entry/exit that allows them to be matched up from the dtrace file. Inserts code to
+   * call Runtime.enter().
    */
   private void add_entry_instrumentation(
       InstructionList il, MethodContext c, boolean shouldCallEnter) throws IOException {
@@ -1345,11 +1340,9 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Pushes the object, nonce, parameters, and return value
-   * on the stack and calls the specified Method (normally
-   * enter or exit) in Runtime.  The parameters are passed
-   * as an array of objects.  Any primitive values are wrapped
-   * in the appropriate Runtime wrapper (IntWrap, FloatWrap, etc)
+   * Pushes the object, nonce, parameters, and return value on the stack and calls the specified
+   * Method (normally enter or exit) in Runtime. The parameters are passed as an array of objects.
+   * Any primitive values are wrapped in the appropriate Runtime wrapper (IntWrap, FloatWrap, etc).
    */
   private InstructionList call_enter_exit(MethodContext c, String method_name, int line) {
 
@@ -1437,13 +1430,11 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Creates code to put the local var/param at the specified var_index
-   * into a wrapper appropriate for prim_type.  prim_type should be one
-   * of the basic types (eg, Type.INT, Type.FLOAT, etc).  The wrappers
-   * are those defined in Runtime.
+   * Creates code to put the local var/param at the specified var_index into a wrapper appropriate
+   * for prim_type. prim_type should be one of the basic types (eg, Type.INT, Type.FLOAT, etc). The
+   * wrappers are those defined in Runtime.
    *
-   * The stack is left with a pointer to the newly created wrapper at the
-   * top.
+   * <p>The stack is left with a pointer to the newly created wrapper at the top.
    */
   private InstructionList create_wrapper(MethodContext c, Type prim_type, int var_index) {
 
@@ -1491,6 +1482,7 @@ public class Instrument implements ClassFileTransformer {
 
   /**
    * Returns true iff mgen is a constructor
+   *
    * @return true iff mgen is a constructor
    */
   /*@Pure*/
@@ -1506,6 +1498,7 @@ public class Instrument implements ClassFileTransformer {
 
   /**
    * Return an array of strings, each corresponding to mgen's argument types
+   *
    * @return an array of strings, each corresponding to mgen's argument types
    */
   private /*@BinaryName*/ String[] getArgTypes(MethodGen mgen) {
@@ -1690,17 +1683,20 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Under some circumstances, there may be problems with the local
-   * variable table.
-   * 1) In some special cases where parameters are added by the Java
-   *    compiler (eg, constructors for inner classes), the local
-   *    variable table is missing the entry for this additional
-   *    parameter.
-   * 2) The Java compiler allocates unnamed local temps for:
-   *      saving the exception in a finally clause
-   *      the lock for a synchronized block
-   *      (others?)
-   *    We will create a 'fake' local for these cases.
+   * Under some circumstances, there may be problems with the local variable table.
+   *
+   * <ol>
+   *   <li> In some special cases where parameters are added by the Java compiler (eg, constructors
+   *       for inner classes), the local variable table is missing the entry for this additional
+   *       parameter.
+   *   <li> The Java compiler allocates unnamed local temps for:
+   *       <ul>
+   *         <li>saving the exception in a finally clause
+   *         <li>the lock for a synchronized block
+   *         <li>(others?)
+   *       </ul>
+   *       We will create a 'fake' local for these cases.
+   * </ol>
    */
   protected void fix_local_variable_table(MethodGen mg) {
 
@@ -1845,9 +1841,7 @@ public class Instrument implements ClassFileTransformer {
     return (get_attribute_name(a).equals("StackMapTable"));
   }
 
-  /**
-   * Returns the attribute name for the specified attribute
-   */
+  /** Returns the attribute name for the specified attribute. */
   public String get_attribute_name(Attribute a) {
 
     int con_index = a.getNameIndex();
@@ -1857,10 +1851,7 @@ public class Instrument implements ClassFileTransformer {
     return att_name;
   }
 
-  /**
-   * Any information needed by InstTransform routines about the method
-   * and class
-   */
+  /** Any information needed by InstTransform routines about the method and class. */
   private static class MethodContext {
 
     public ClassGen cg;
@@ -1883,9 +1874,8 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Returns whether or not the specified class is part of chicory
-   * itself (and thus should not be instrumented).  Some daikon classes
-   * that are used by Chicory are included here as well
+   * Returns whether or not the specified class is part of chicory itself (and thus should not be
+   * instrumented). Some Daikon classes that are used by Chicory are included here as well.
    */
   /*@Pure*/
   private static boolean is_chicory(String classname) {

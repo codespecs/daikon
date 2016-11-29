@@ -84,9 +84,8 @@ public class PptSlice0 extends PptSlice {
   }
 
   /**
-   * The invariant is typically an Implication; but PptSlice0 can contain
-   * other joiners than implications, such as "and" or "or".  That feature
-   * isn't used as of November 2003.
+   * The invariant is typically an Implication; but PptSlice0 can contain other joiners than
+   * implications, such as "and" or "or". That feature isn't used as of November 2003.
    */
   public void addInvariant(Invariant inv) {
     assert inv != null;

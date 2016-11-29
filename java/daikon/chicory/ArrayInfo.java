@@ -1,17 +1,17 @@
 package daikon.chicory;
 
 /**
- *  The ArrayInfo class is a subtype of DaikonVariableInfo used for
- * variable types which are arrays (i.e., their name ends with "[]").
+ * The ArrayInfo class is a subtype of DaikonVariableInfo used for variable types that are arrays
+ * (i.e., their name ends with "[]").
  */
 public class ArrayInfo extends DaikonVariableInfo {
   /** Component type of the array */
   Class<?> array_type;
 
   /**
-   * Constructs an ArrayInfo object with the specified name
-   * and type.
-   * @param theName the variable name. Should end with "[]"
+   * Constructs an ArrayInfo object with the specified name and type.
+   *
+   * @param theName the variable name. Should end with "[]".
    * @param array_type component type of the array
    */
   public ArrayInfo(String theName, Class<?> array_type) {

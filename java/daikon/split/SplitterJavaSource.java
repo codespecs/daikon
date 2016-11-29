@@ -2,7 +2,6 @@ package daikon.split;
 
 import daikon.*;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.regex.*;
 import jtb.ParseException;
 import jtb.syntaxtree.*;
@@ -16,8 +15,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * SplitterJavaSource writes the splitter Java file's contents to a string
- * buffer for a given condition, Ppt, and StatementReplacer.
+ * SplitterJavaSource writes the splitter Java file's contents to a string buffer for a given
+ * condition, Ppt, and StatementReplacer.
  */
 class SplitterJavaSource implements jtb.JavaParserConstants {
 
@@ -31,8 +30,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   private String fileName;
 
   /**
-   * A data structure defined in an inner-class that contains information
-   * about all the variables to be defined in fileText.
+   * A data structure defined in an inner-class that contains information about all the variables to
+   * be defined in fileText.
    */
   private VariableManager[] vars;
 
@@ -46,14 +45,13 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * Creates a new instance of SplitterJavaSource.
-   * @param splitObj the SplitterObject for which this splitter java file is
-   *  be written
-   * @param pptName the name of the Ppt to which splitObj belongs.
-   * @param fileName the name of the file that should be written by the new
-   *  SplitterJavaSource
-   * @param varInfos the varInfos for this the Ppt to which splitObj belongs.
-   * @param statementReplacer a statementReplacer for the .spinfo file from
-   *  which splitObj is being created from.
+   *
+   * @param splitObj the SplitterObject for which this splitter java file is be written
+   * @param pptName the name of the Ppt to which splitObj belongs
+   * @param fileName the name of the file that should be written by the new SplitterJavaSource
+   * @param varInfos the varInfos for this the Ppt to which splitObj belongs
+   * @param statementReplacer a statementReplacer for the {@code .spinfo} file from which {@code
+   *     splitObj} is being created
    */
   public SplitterJavaSource(
       SplitterObject splitObj,
@@ -140,16 +138,12 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     Global.debugSplit.fine("<<exit>>  SplitterJavaSource");
   }
 
-  /**
-   * Returns a StringBuffer with the file text for the java file written by this.
-   */
+  /** Returns a StringBuffer with the file text for the java file written by this. */
   public StringBuffer getFileText() {
     return fileText;
   }
 
-  /**
-   * Writes the field declarations of the class to fileText.
-   */
+  /** Writes the field declarations of the class to fileText. */
   private void writeFields(
       /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     for (int i = 0; i < vars.length; i++) {
@@ -157,9 +151,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     }
   }
 
-  /**
-   * Writes the body of the of constructor which takes a Ppt in as an argument.
-   */
+  /** Writes the body of the of constructor which takes a Ppt in as an argument. */
   private void writeConstructorBody(
       /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     for (int i = 0; i < vars.length; i++) {
@@ -172,9 +164,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     }
   }
 
-  /**
-   * Writes the body of the valid method to fileText.
-   */
+  /** Writes the body of the valid method to fileText. */
   private void writeValidBody(
       /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     if (vars.length > 0) {
@@ -189,9 +179,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     }
   }
 
-  /**
-   * Writes the body of the test method to fileText.
-   */
+  /** Writes the body of the test method to fileText. */
   private void writeTestBody(
       /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     add("    " + "/* writeTestBody: " + vars.length + " declarations */");
@@ -254,9 +242,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     }
   }
 
-  /**
-   * Writes the body of the repr method to fileText.
-   */
+  /** Writes the body of the repr method to fileText. */
   private void writeReprBody(
       /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     add("    return " + "\"" + fileName + ": \"");
@@ -271,9 +257,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     add("      ;");
   }
 
-  /**
-   * Writes the body of the instantiateDummy method to fileText.
-   */
+  /** Writes the body of the instantiateDummy method to fileText. */
   private void writeInstantiateDummyBody(
       /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     if (vars.length >= 1 && vars.length <= 3) {
@@ -303,6 +287,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * Appends st to fileText and then ends that line with lineSep.
+   *
    * @param st the string to added to fileText
    */
   private void add(
@@ -311,23 +296,18 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     fileText.append(st + lineSep);
   }
 
-  /**
-   * Skips a line in fileText by adding a black line to fileText.
-   */
+  /** Skips a line in fileText by adding a black line to fileText. */
   private void skipLine(
       /*>>>@UnknownInitialization(SplitterJavaSource.class) @Raw(SplitterJavaSource.class) SplitterJavaSource this*/) {
     fileText.append(lineSep);
   }
 
   /**
-   * Replaces instances of Java reserved words that could not appear
-   * in a valid Java condition or Java variable name that are being used
-   * as variable names in string.
+   * Replaces instances of Java reserved words that could not appear in a valid Java condition or
+   * Java variable name that are being used as variable names in string.
    *
-   * @param string the string in which the Java reserved words should be
-   *  replaced
-   * @return string with the Java reserved words replaced with a substitute
-   *  names.
+   * @param string the string in which the Java reserved words should be replaced
+   * @return string with the Java reserved words replaced with a substitute names
    */
   private static String replaceReservedWords(String string) {
     // cheap hack so that pattern never need to look for a key word at
@@ -348,19 +328,16 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Returns a version of this condition in which the variable names are
-   * converted to the names that will be used by the java class written
-   * to fileText.  Instances of "this." are removed.  Instances of the
-   * package and class names prefixing variable names are removed and
-   * reattached to the variable name with a "_" separating the two parts.
-   * Instances of a public field name suffixing a variable name are removed
-   * and appended to the end of variable name with a "_" separating the two
-   * parts.  Instances of "orig(variableName)" are replaced by instances of
-   * "orig_variableName". For example "orig(varName.publicField)" would yield
-   * "orig_varName_publicField".
+   * Returns a version of this condition in which the variable names are converted to the names that
+   * will be used by the java class written to fileText. Instances of "this." are removed. Instances
+   * of the package and class names prefixing variable names are removed and reattached to the
+   * variable name with a "_" separating the two parts. Instances of a public field name suffixing a
+   * variable name are removed and appended to the end of variable name with a "_" separating the
+   * two parts. Instances of "orig(variableName)" are replaced by instances of "orig_variableName".
+   * For example "orig(varName.publicField)" would yield "orig_varName_publicField".
    *
    * @param condition a string representation of a conditional statement
-   * @return a version of the conditional with the variable names converted.
+   * @return a version of the conditional with the variable names converted
    */
   private static String convertVariableNames(String condition, String className, VarInfo[] varInfos)
       throws ParseException {
@@ -379,10 +356,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     return condition;
   }
 
-  /**
-   * Eliminates all non-normal variables from varInfos.
-   * See isNormalVar() for details.
-   */
+  /** Eliminates all non-normal variables from varInfos. See isNormalVar() for details. */
   private static VarInfo[] filterNonVars(VarInfo[] varInfos) {
     List<VarInfo> filteredList = new ArrayList<VarInfo>();
     for (VarInfo vi : varInfos) {
@@ -397,12 +371,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Determines if the variable represented by varInfo
-   * may appear in the splitting condition.
-   * @param varInfo the VarInfo for the variable that may be
-   *  use in the condition
-   * @return true iff the variable represented by varInfo
-   *  may appear in the splitting condition.
+   * Determines if the variable represented by varInfo may appear in the splitting condition.
+   *
+   * @param varInfo the VarInfo for the variable that may be use in the condition
+   * @return true iff the variable represented by varInfo may appear in the splitting condition
    */
   /*@Pure*/
   private static boolean isNormalVar(VarInfo varInfo) {
@@ -410,10 +382,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Determines if the variable represented by varInfo contains
-   * a CLASSNAME variable.
+   * Determines if the variable represented by varInfo contains a CLASSNAME variable.
+   *
    * @param varInfo the VarInfo of the variable being tested
-   * @return true iff varInfo is a CLASSNAME variable.
+   * @return true iff varInfo is a CLASSNAME variable
    */
   /*@Pure*/
   private static boolean isTypeOfVar(VarInfo varInfo) {
@@ -421,29 +393,26 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Determines if the variable represented by varInfo is
-   * a "size" variable.
+   * Determines if the variable represented by varInfo is a "size" variable.
+   *
    * @param varInfo the VarInfo of the variable being tested
-   * @return true iff varInfo is a "size" variable.
+   * @return true iff varInfo is a "size" variable
    */
   /*@Pure*/
   private static boolean isSizeVar(VarInfo varInfo) {
     return varInfo.is_size();
   }
 
-  /**
-   * Determines if the variable represented by varInfo is a
-   * "this" variable.
-   */
+  /** Determines if the variable represented by varInfo is a "this" variable. */
   /*@Pure*/
   private static boolean isThisVar(VarInfo varInfo) {
     return varInfo.isThis();
   }
 
   /**
-   * Protects quotations that appear in fileText by placing "\" in front of
-   * quotation marks.
-   * @return condition with a backslash placed in front of every quotation mark.
+   * Protects quotations that appear in fileText by placing "\" in front of quotation marks.
+   *
+   * @return condition with a backslash placed in front of every quotation mark
    */
   private static String protectQuotations(String condition) {
     for (int i = 0; i < condition.length(); i++) {
@@ -455,9 +424,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     return condition;
   }
 
-  /**
-   * Returns the name of the class from which pptName is from.
-   */
+  /** Returns the name of the class from which pptName is from. */
   private static String getClassName(String pptName) {
     int lastIndex = pptName.lastIndexOf('.');
     if (lastIndex != -1) {
@@ -469,22 +436,24 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * Return str with the char at index removed.
-   * This method requires: 0 &le; index &lt; str.length
+   *
+   * <p>This method requires: <code>0 &le; index &lt; str.length</code>
+   *
    * @param str the String from which the char at index should be removed
-   * @param index the index of the char that should be removed from str.
-   * @return str with the char at index removed.
+   * @param index the index of the char that should be removed from str
+   * @return str with the char at index removed
    */
   private static String removeCharAt(String str, int index) {
     return str.substring(0, index) + str.substring(index + 1);
   }
 
   /**
-   * Returns str with chr inserted at index.
-   * This method requires: 0 <= index &le; str.length
+   * Returns str with chr inserted at index. This method requires: <code>
+   * 0 &le; index &le; str.length</code>
+   *
    * @param str the String in which chr should be inserted
-   * @param chr the char that should be inserted into str.
-   * @param index the index of the position where chr should be
-   *  inserted in to str
+   * @param chr the char that should be inserted into str
+   * @param index the index of the position where chr should be inserted in to str
    * @return str with chr inserted at index
    */
   private static String insertCharAt(String str, char chr, int index) {
@@ -492,16 +461,13 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Calculates the name of the variable represented by varInfo in
-   * a compilable form.  Names are the same as base names (see getBaseName)
-   * except that the names of arrays are suffixed with "_identity" if it
-   * is a variable representing the array for equality tests or "_array"
-   * if it is a variable representing the elements of the array.
+   * Calculates the name of the variable represented by varInfo in a compilable form. Names are the
+   * same as base names (see getBaseName) except that the names of arrays are suffixed with
+   * "_identity" if it is a variable representing the array for equality tests or "_array" if it is
+   * a variable representing the elements of the array.
    *
-   * @param varInfo the VarInfo of the variable whose compilable name is
-   *  desired
-   * @return the name of the variable represented by varInfo in a compilable
-   *  form.
+   * @param varInfo the VarInfo of the variable whose compilable name is desired
+   * @return the name of the variable represented by varInfo in a compilable form
    */
   private static String compilableName(VarInfo varInfo, String className) {
     String name = getBaseName(varInfo, className);
@@ -516,16 +482,13 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Calculates the base name of a variable.  The base name
-   * of a variable is the part of the variable with prefix
-   * "this." replaced by "this_", and "orig()" replaced * by "orig_".
-   * In addition, '.' are converted to '_'.  For example,
-   * orig(this.x) goes to orig_this_x.  Finally,
-   * Java Reserved words are replaced with appropriate substitutes.
+   * Calculates the base name of a variable. The base name of a variable is the part of the variable
+   * with prefix "this." replaced by "this_", and "orig()" replaced * by "orig_". In addition, '.'
+   * are converted to '_'. For example, orig(this.x) goes to orig_this_x. Finally, Java Reserved
+   * words are replaced with appropriate substitutes.
    *
-   * @param varInfo the VarInfo for the variable whose base name is
-   *  desired
-   * @return the base name of the variable represented by varInfo.
+   * @param varInfo the VarInfo for the variable whose base name is desired
+   * @return the base name of the variable represented by varInfo
    */
   private static String getBaseName(VarInfo varInfo, String className) {
     String name = varInfo.name();
@@ -552,8 +515,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Returns an array of the base names of the variable in varInfos.
-   * The returned array is in the same order as varInfos.
+   * Returns an array of the base names of the variable in varInfos. The returned array is in the
+   * same order as varInfos.
    */
   private static String[] getBaseNames(VarInfo[] varInfos, String className) {
     String[] baseNames = new String[varInfos.length];
@@ -567,8 +530,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Returns st with all instances of ch removed.
    *
    * @param st the string from which ch should be removed
-   * @param ch the character that should be removed from st.
-   * @return st with all instances of ch removed.
+   * @param ch the character that should be removed from st
+   * @return st with all instances of ch removed
    */
   private static String remove(String st, char ch) {
     int index = st.indexOf(ch);
@@ -580,23 +543,22 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Returns the name of the variable represented by varInfo as it would
-   * appear in the field declaration of a java splitter file.
-   * @param varInfo the VarInfo representing the variable for which the
-   *  field name is desired
-   * @return the name of the variable represented by varInfo as it would
-   *  appear in the field declaration of a java splitter file.
+   * Returns the name of the variable represented by varInfo as it would appear in the field
+   * declaration of a java splitter file.
+   *
+   * @param varInfo the VarInfo representing the variable for which the field name is desired
+   * @return the name of the variable represented by varInfo as it would appear in the field
+   *     declaration of a java splitter file
    */
   private static String fieldName(VarInfo varInfo, String className) throws ParseException {
     return compilableName(varInfo, className) + "_varinfo";
   }
 
   /**
-   * Returns the name of the variable used to hold this varInfo in a
-   * java splitter file.
+   * Returns the name of the variable used to hold this varInfo in a java splitter file.
+   *
    * @param varInfo the VarInfo for which the name of the variable is desired
-   * @return the name of the variable used to hold this varInfo in a java
-   *  splitter file.
+   * @return the name of the variable used to hold this varInfo in a java splitter file
    */
   private static String varName(VarInfo varInfo, String className) throws ParseException {
     return compilableName(varInfo, className) + "_vi";
@@ -604,8 +566,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * Returns the type of the variable represented by varInfo.
+   *
    * @param varInfo the VarInfo for the variable whose type is desired
-   * @return the type of the variable represented by varInfo.
+   * @return the type of the variable represented by varInfo
    */
   private static String getVarType(VarInfo varInfo) {
     if (varInfo.file_rep_type == ProglangType.HASHCODE) {
@@ -620,10 +583,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     }
   }
 
-  /**
-   * VariableManager is a data structure for containing information about
-   * a variable.
-   */
+  /** VariableManager is a data structure for containing information about a variable. */
   private static class VariableManager {
 
     /** VarInfo for the variable. */
@@ -654,44 +614,32 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       type = makeIndexIfNeeded(getVarType(varInfo), compilableName, varInfo, condition);
     }
 
-    /**
-     * @return the VarInfo of the variable.
-     */
+    /** @return the VarInfo of the variable */
     private VarInfo getVarInfo() {
       return varInfo;
     }
 
-    /**
-     * @return the name of the variable
-     */
+    /** @return the name of the variable */
     private String getNormalName() {
       return name;
     }
 
-    /**
-     * @return the compilable name of the variable
-     */
+    /** @return the compilable name of the variable */
     private String getCompilableName() {
       return compilableName;
     }
 
-    /**
-     * @return the field name of the variable.
-     */
+    /** @return the field name of the variable */
     private String getFieldName() {
       return fieldName;
     }
 
-    /**
-     * @return the VarInfo name of the variable.
-     */
+    /** @return the VarInfo name of the variable */
     private String getVarName() {
       return varName;
     }
 
-    /**
-     * @return the type of the variable.
-     */
+    /** @return the type of the variable */
     private String getType() {
       return type;
     }
@@ -701,7 +649,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Creates a new instance of VariableManager.
    *
    * @param varInfos the varInfos for the variables to be managed
-   * @param condition the condition in which the variables are used.
+   * @param condition the condition in which the variables are used
    */
   private static VariableManager[] makeVariableManagerArray(
       VarInfo[] varInfos, String condition, String className) throws ParseException {
@@ -734,10 +682,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     return variableManagerList.toArray(new VariableManager[0]);
   }
 
-  /**
-   * Returns true if the variable represented by varInfo
-   * is used in this splitting condition.
-   */
+  /** Returns true if the variable represented by varInfo is used in this splitting condition. */
   /*@Pure*/
   private static boolean isNeeded(String name, List<String> vars) {
     return vars.contains(name);
@@ -745,11 +690,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * requires: condition is a string representation of a conditional
-   * @return a list of all possible variable variable names in condition.
-   *    This attempts not to return method names nor the base names of
-   *    qualified names (why not the latter?).
-   *    Arrays appear with "[]" at the end if their elements or accessed
-   *    in the condition.
+   *
+   * @return a list of all possible variable variable names in condition. This attempts not to
+   *     return method names nor the base names of qualified names (why not the latter?). Arrays
+   *     appear with "[]" at the end if their elements or accessed in the condition.
    */
   private static List<String> findPossibleClassVariables(String condition) throws ParseException {
 
@@ -775,19 +719,17 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Returns type converted to index type if needed.  A index type
-   * variable in java splitter file has type "int" or "int[]" instead
-   * of "long" or "long[]".  This is needed if the variable or the an
-   * element of the variable is used as an index to an array.  This method
-   * converts the type of the variable to "int_index" or "index[]" if
-   * it is used as an index to an array or an element of it is used as
-   * an index to an array.
+   * Returns type converted to index type if needed. A index type variable in java splitter file has
+   * type "int" or "int[]" instead of "long" or "long[]". This is needed if the variable or the an
+   * element of the variable is used as an index to an array. This method converts the type of the
+   * variable to "int_index" or "index[]" if it is used as an index to an array or an element of it
+   * is used as an index to an array.
    *
    * @param type the original type of the variable
-   * @param name the name of the variable.
+   * @param name the name of the variable
    * @param varInfo the VarInfo of the variable
-   * @param condition the condition in which the variable occurs.
-   * @return the type converted to index type if needed.
+   * @param condition the condition in which the variable occurs
+   * @return the type converted to index type if needed
    */
   private static String makeIndexIfNeeded(
       String type, String name, VarInfo varInfo, String condition) throws ParseException {

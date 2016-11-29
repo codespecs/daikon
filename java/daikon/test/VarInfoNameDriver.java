@@ -5,9 +5,8 @@ import java.io.*;
 import java.util.*;
 
 /**
- * This is called by VarInfoName to parse varInfoNameTest<em>foo</em> files
- * and then apply various transformation tests on them.  To add your own test,
- * follow directions in VarInfoNameTest.
+ * This is called by VarInfoName to parse varInfoNameTest<em>foo</em> files and then apply various
+ * transformation tests on them. To add your own test, follow directions in VarInfoNameTest.
  */
 @SuppressWarnings("nullness") // testing code
 public class VarInfoNameDriver {

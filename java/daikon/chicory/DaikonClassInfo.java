@@ -7,15 +7,15 @@ package daikon.chicory;
 import java.util.*;
 
 /**
- * The DaikonClassInfo class is a subtype of DaikonVariableInfo used
- * for variables which represent the runtime type of a variable.
- * They will have a VarType of CLASSNAME and their VarInfoName
- * will end with the class_suffix: ".getClass().getName()".
+ * The DaikonClassInfo class is a subtype of DaikonVariableInfo used for variables which represent
+ * the runtime type of a variable. They will have a VarType of CLASSNAME and their VarInfoName will
+ * end with the class_suffix: ".getClass().getName()".
  */
 public class DaikonClassInfo extends DaikonVariableInfo {
 
   /**
    * Constructs a DaikonClassInfo object
+   *
    * @param theName the name of the variable
    * @param isArr true iff the variable represents an array of runtime classes
    */
@@ -51,11 +51,12 @@ public class DaikonClassInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Get a String representation of the given Object's runtime type and the
-   * corresponding "modified" value
+   * Get a String representation of the given Object's runtime type and the corresponding "modified"
+   * value
+   *
    * @param val the Object whose runtime class we wish to get a String representation of
-   * @return string representation (suitable for a .dtrace file) of the
-   * given Object's runtime type, and the "modified" value (modbit)
+   * @return string representation (suitable for a {@code .dtrace} file) of the given Object's
+   *     runtime type, and the "modified" value (modbit)
    */
   public String getValueStringNonArr(Object val) {
     String valString;

@@ -12,13 +12,10 @@ import daikon.inv.unary.stringsequence.OneOfStringSequence;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import plume.ArraysMDE;
 import plume.EntryReader;
-import plume.UtilMDE;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -65,17 +62,16 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public boolean lightweight;
 
   /**
-   * Whether to use reflection when trying to figure out if a method
-   * overrides/implements another method. If this variable is set to
-   * false, then Annotate will not try to determine if a method
-   * overrides/implements another method, which means that it will not
-   * try to add "also" tags to its output.
+   * Whether to use reflection when trying to figure out if a method overrides/implements another
+   * method. If this variable is set to false, then Annotate will not try to determine if a method
+   * overrides/implements another method, which means that it will not try to add "also" tags to its
+   * output.
    */
   public boolean useReflection;
 
   /**
-   * If the --max_invariants_pp option is given, this variable is set
-   * to the maximum number of invariants output by annotate per program point.
+   * If the --max_invariants_pp option is given, this variable is set to the maximum number of
+   * invariants output by annotate per program point.
    */
   public int maxInvariantsPP;
 
@@ -429,8 +425,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     super.visit(n); // call "accept(this)" on each field
 
-    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures =
-        get_requires_and_ensures(ppts, n);
+    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
 
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
@@ -518,8 +513,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     super.visit(n); // call "accept(this)" on each field
 
-    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures =
-        get_requires_and_ensures(ppts, n);
+    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
 
@@ -814,9 +808,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Find a Daikon variable for the given field.  The variable is either
-   * "this.field" (for instance variables) or "ClassName.field" (for static
-   * variables).
+   * Find a Daikon variable for the given field. The variable is either "this.field" (for instance
+   * variables) or "ClassName.field" (for static variables).
    */
   private VarInfo findVar(String field, PptTopLevel ppt) {
     String varname = "this." + field;

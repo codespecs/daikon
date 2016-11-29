@@ -11,14 +11,14 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * NameFixer is a visitor for a jtb syntax tree that checks for
- * unqualifed class member variables and adds the className as
- * a qualifier.
- * For example, the condition:
- *   "D[a]"
- * (where D is a member variable of the current class and a is a local)
- * would be changed to :
- *    "className.D[a]
+ * NameFixer is a visitor for a JTB syntax tree that checks for unqualifed class member variables
+ * and adds the className as a qualifier. For example, the condition:
+ *
+ * <pre>D[a]</pre>
+ *
+ * (where D is a member variable of the current class and a is a local) would be changed to:
+ *
+ * <pre>className.D[a]</pre>
  */
 class NameFixer extends DepthFirstVisitor {
 
@@ -31,26 +31,26 @@ class NameFixer extends DepthFirstVisitor {
   // columnshift != 0, columnshiftline != -1:
   //    column shifting being needed, applies only to specified line
 
-  /**  The name of the class containing the ppt. */
+  /** The name of the class containing the ppt. */
   private String className;
 
   /** All possible varInfos for the variables in the conditions. */
   private VarInfo[] varInfos;
 
   /**
-   * The token previously visited.  Null only when visiting the first token.
-   * Non-null if lastTokenMayBeMemberVar is true.
+   * The token previously visited. Null only when visiting the first token. Non-null if
+   * lastTokenMayBeMemberVar is true.
    */
   private /*@MonotonicNonNull*/ NodeToken lastToken;
 
   /**
-   * True if the last token visited could be the name of a variable that
-   * needs the className prefix.
+   * True if the last token visited could be the name of a variable that needs the className prefix.
    */
   private boolean lastTokenMayBeMemberVar = false;
 
   /**
    * Creates a new instance of NameFixer.
+   *
    * @param className is name of the containing class
    * @param varInfos is a list of the VarInfos for the ppt
    */
@@ -62,11 +62,11 @@ class NameFixer extends DepthFirstVisitor {
 
   /**
    * Fixes unqualifed class member variables
+   *
    * @param expression a valid segment of java code
    * @param className is name of the containing class
    * @param varInfos is a List of VarInfos for all the variables available
-   * @return condition with all unqualifed variable references now
-   *   qualified with className.
+   * @return condition with all unqualifed variable references now qualified with className
    * @throws ParseException when condition is not a valid segment of java code
    */
   public static String fixUnqualifiedMemberNames(
@@ -82,8 +82,8 @@ class NameFixer extends DepthFirstVisitor {
   }
 
   /**
-   * This method should not be directly used by users of this class;
-   * however, must be public to fulfill Visitor interface.
+   * This method should not be directly used by users of this class; however, must be public to
+   * fulfill Visitor interface.
    */
   public void visit(NodeToken n) {
     boolean found = false;

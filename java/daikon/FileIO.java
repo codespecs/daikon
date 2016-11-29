@@ -64,62 +64,51 @@ public final class FileIO {
   // daikon.config.Configuration interface.
 
   /**
-   * When true, just ignore exit ppts that don't have a matching enter
-   * ppt rather than exiting with an error.  Unmatched exits can occur
-   * if only a portion of a dtrace file is processed.
+   * When true, just ignore exit ppts that don't have a matching enter ppt rather than exiting with
+   * an error. Unmatched exits can occur if only a portion of a dtrace file is processed.
    */
   public static boolean dkconfig_ignore_missing_enter = false;
 
   /**
-   * Boolean.  When false, set modbits to 1 iff the printed
-   * representation has changed.  When true, set modbits to 1 if the
-   * printed representation has changed; leave other modbits as is.
+   * Boolean. When false, set modbits to 1 iff the printed representation has changed. When true,
+   * set modbits to 1 if the printed representation has changed; leave other modbits as is.
    */
   public static boolean dkconfig_add_changed = true;
 
-  /**
-   * Integer.  Maximum number of lines to read from the dtrace file.  If
-   * 0, reads the entire file.
-   */
+  /** Integer. Maximum number of lines to read from the dtrace file. If 0, reads the entire file. */
   public static int dkconfig_max_line_number = 0;
 
   /**
-   * Boolean. When false, don't count the number of lines in the dtrace file
-   * before reading.  This will disable the percentage progress printout.
+   * Boolean. When false, don't count the number of lines in the dtrace file before reading. This
+   * will disable the percentage progress printout.
    */
   public static boolean dkconfig_count_lines = true;
 
   /**
-   * Boolean.  When true, only read the samples, but don't process them.
-   * Used to gather timing information.
+   * Boolean. When true, only read the samples, but don't process them. Used to gather timing
+   * information.
    */
   public static boolean dkconfig_read_samples_only = false;
 
-  /** Boolean.  When true, don't print a warning about unmatched procedure
-   * entries, which are ignored by Daikon (unless the --nohierarchy switch
-   * is provided).
+  /**
+   * Boolean. When true, don't print a warning about unmatched procedure entries, which are ignored
+   * by Daikon (unless the <code>--nohierarchy</code> command-line argument is provided).
    */
   public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
 
-  /**
-   * Boolean.  If true, prints the unmatched procedure entries
-   * verbosely.
-   */
+  /** Boolean. If true, prints the unmatched procedure entries verbosely. */
   public static boolean dkconfig_verbose_unmatched_procedure_entries = false;
 
   /**
-   * Boolean.  When true, suppress exceptions related to file reading.
-   * This permits Daikon to continue even if there is a malformed trace
-   * file.  Use this with care:  in general, it is better to fix the
-   * problem that caused a bad trace file, rather than to suppress the
-   * exception.
+   * Boolean. When true, suppress exceptions related to file reading. This permits Daikon to
+   * continue even if there is a malformed trace file. Use this with care: in general, it is better
+   * to fix the problem that caused a bad trace file, rather than to suppress the exception.
    */
   public static boolean dkconfig_continue_after_file_exception = false;
 
   /**
-   * Long integer. If non-zero, this value will be used as the number
-   * of lines in (each) dtrace file input for the purposes of the
-   * progress display, and the counting of the lines in the file will
+   * Long integer. If non-zero, this value will be used as the number of lines in (each) dtrace file
+   * input for the purposes of the progress display, and the counting of the lines in the file will
    * be suppressed.
    */
   public static long dkconfig_dtrace_line_count = 0;
@@ -130,12 +119,10 @@ public final class FileIO {
   public static /*@MonotonicNonNull*/ Boolean new_decl_format = null;
 
   /**
-   * Do not use this routine unless you know what you are doing.
-   * This routine breaks the representation invariant that new_decl_format,
-   * once set, is never reset to null.
-   * This routine should be used only if you can guarantee that
-   * new_decl_format will be once again set to a non-null value before any
-   * code runs that depends on the fact that new_decl_format is non-null.
+   * Do not use this routine unless you know what you are doing. This routine breaks the
+   * representation invariant that new_decl_format, once set, is never reset to null. This routine
+   * should be used only if you can guarantee that new_decl_format will be once again set to a
+   * non-null value before any code runs that depends on the fact that new_decl_format is non-null.
    */
   @SuppressWarnings("nullness") // reinitialization
   public static void resetNewDeclFormat() {
@@ -143,10 +130,9 @@ public final class FileIO {
   }
 
   /**
-   * If true, modified all ppt names to remove duplicate routine
-   * names within the ppt name.  This is used when a stack trace
-   * (of active methods) is used as the ppt name.  The routine names
-   * must be separated by vertical bars (|)
+   * If true, modified all ppt names to remove duplicate routine names within the ppt name. This is
+   * used when a stack trace (of active methods) is used as the ppt name. The routine names must be
+   * separated by vertical bars (|).
    */
   public static boolean dkconfig_rm_stack_dups = false;
 
@@ -171,8 +157,8 @@ public final class FileIO {
   // Logging Categories
 
   /**
-   * If true, then print the variable name each time the variable's value
-   * is first missing/nonsensical.
+   * If true, then print the variable name each time the variable's value is first
+   * missing/nonsensical.
    */
   public static boolean debug_missing = false;
 
@@ -186,9 +172,7 @@ public final class FileIO {
 
   public static final SimpleLog debug_decl = new SimpleLog(false);
 
-  /**
-   * Parents in the ppt/variable hierarchy for a particular program point
-   */
+  /** Parents in the ppt/variable hierarchy for a particular program point. */
   public static final class ParentRelation implements java.io.Serializable {
     static final long serialVersionUID = 20060622L;
     public PptRelationType rel_type;
@@ -247,9 +231,8 @@ public final class FileIO {
 
   /**
    * @param files files to be read (java.io.File)
-   * @return a new PptMap containing declarations read from the files
-   * listed in the argument; connection information (controlling
-   * variables and entry ppts) is set correctly upon return.
+   * @return a new PptMap containing declarations read from the files listed in the argument;
+   *     connection information (controlling variables and entry ppts) is set correctly upon return
    */
   public static PptMap read_declaration_files(Collection<File> files) throws IOException {
     PptMap all_ppts = new PptMap();
@@ -278,11 +261,10 @@ public final class FileIO {
   // Read a declaration in the Version 2 format.  For Version 1, see
   // read_declaration.
   /**
-   * Reads one ppt declaration.  The next line should be the ppt record.
-   * After completion, the file pointer will be pointing at the next
-   * record (ie, the blank line at the end of the ppt declaration will
-   * have been read in).
-   * Returns null if the ppt is excluded/omitted from this execution of Daikon.
+   * Reads one ppt declaration. The next line should be the ppt record. After completion, the file
+   * pointer will be pointing at the next record (ie, the blank line at the end of the ppt
+   * declaration will have been read in). Returns null if the ppt is excluded/omitted from this
+   * execution of Daikon.
    */
   private static /*@Nullable*/ PptTopLevel read_ppt_decl(ParseState state, String top_line)
       throws IOException {
@@ -438,10 +420,7 @@ public final class FileIO {
     return pr;
   }
 
-  /**
-   * Parses a program point flag record.  Adds any specified flags to
-   * to flags.
-   */
+  /** Parses a program point flag record. Adds any specified flags to to flags. */
   private static void parse_ppt_flags(ParseState state, Scanner scanner, EnumSet<PptFlags> flags) {
 
     flags.add(parse_enum_val(state, scanner, PptFlags.class, "ppt flags"));
@@ -559,9 +538,8 @@ public final class FileIO {
   private static boolean seen_string_rep_type = false;
 
   /**
-   * Read a variable name, type, and comparability; construct a VarInfo.
-   * Return null after reading the last variable in this program point
-   * declaration.
+   * Read a variable name, type, and comparability; construct a VarInfo. Return null after reading
+   * the last variable in this program point declaration.
    */
   private static /*@Nullable*/ VarInfo read_VarInfo(ParseState state, String ppt_name)
       throws IOException {
@@ -660,9 +638,7 @@ public final class FileIO {
       throw new Daikon.TerminationMessage(
           String.format(
               "Error parsing comparability (%s) at line %d " + "in file %s",
-              e,
-              file.getLineNumber(),
-              filename));
+              e, file.getLineNumber(), filename));
     }
     if (!VarInfo.legalFileRepType(file_rep_type)) {
       throw new Daikon.TerminationMessage(
@@ -900,8 +876,9 @@ public final class FileIO {
   static HashMap<Integer, Invocation> call_hashmap = new HashMap<Integer, Invocation>();
 
   /**
-   * Reads data from .dtrace files.
-   * For each record in the files, calls the appropriate callback in the processor.
+   * Reads data from {@code .dtrace} files. For each record in the files, calls the appropriate
+   * callback in the processor.
+   *
    * @see #read_data_trace_files(Collection,PptMap,Processor,boolean)
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
    */
@@ -913,15 +890,11 @@ public final class FileIO {
   }
 
   /**
-   * Reads data from .dtrace files.
-   * Calls
-   * {@link #read_data_trace_file(String,PptMap,Processor,boolean,boolean)}
-   * for each element of filenames.
+   * Reads data from {@code .dtrace} files. Calls {@link
+   * #read_data_trace_file(String,PptMap,Processor,boolean,boolean)} for each element of filenames.
    *
-   * @param ppts_may_be_new true if declarations of ppts read from the data
-   *                       trace file are new (and thus are not in all_ppts).
-   *                       false if the ppts may already be there.
-   *
+   * @param ppts_may_be_new true if declarations of ppts read from the data trace file are new (and
+   *     thus are not in all_ppts). false if the ppts may already be there.
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
    */
   public static void read_data_trace_files(
@@ -1011,9 +984,9 @@ public final class FileIO {
       some_program_points = some_program_points || is_program_point;
     }
 
-    // if all program points correspond to a programming language,
+    // If all program points correspond to a programming language,
     // but the dataflow hierarchy has been turned off, then
-    // suggest not using the --nohierarchy flag
+    // suggest not using the --nohierarchy flag.
     //    if (all_program_points && (!Daikon.use_dataflow_hierarchy)) {
     //      System.out.println("Warning: data trace appears to be over" +
     //                         " a program execution, but dataflow" +
@@ -1068,30 +1041,25 @@ public final class FileIO {
   }
 
   /**
-   * A Processor is used to read a dtrace file.  A Processor defines
-   * callbacks for each record type in a dtrace file.  As each record is
-   * read from a dtrace file, the corresponding callback is called.
-   * <p>
+   * A Processor is used to read a dtrace file. A Processor defines callbacks for each record type
+   * in a dtrace file. As each record is read from a dtrace file, the corresponding callback is
+   * called.
    *
-   * to use a Processor, pass it to
-   * {@link #read_data_trace_files(Collection, PptMap, FileIO.Processor, boolean)}.
-   * {@code read_data_trace_files} will call
-   * {@link #process_sample(PptMap,PptTopLevel,ValueTuple,Integer)}
-   * once for every sample in the dtrace file, and will call other
-   * callbacks for other records in the dtrace file.
-   * <p>
+   * <p>to use a Processor, pass it to {@link #read_data_trace_files(Collection, PptMap,
+   * FileIO.Processor, boolean)}. {@code read_data_trace_files} will call {@link
+   * #process_sample(PptMap,PptTopLevel,ValueTuple,Integer)} once for every sample in the dtrace
+   * file, and will call other callbacks for other records in the dtrace file.
    *
-   * For an example of how to create and use a Processor, see
-   * {@link daikon.tools.ReadTrace}.
+   * <p>For an example of how to create and use a Processor, see {@link daikon.tools.ReadTrace}.
    *
    * @see #read_data_trace_files(Collection, PptMap, FileIO.Processor, boolean)
    * @see daikon.tools.ReadTrace
    */
   public static class Processor {
     /**
-     * Process a data sample record.
-     * This default implementation calls
-     * {@link FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)}.
+     * Process a data sample record. This default implementation calls {@link
+     * FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)}.
+     *
      * @see FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)
      */
     /*@RequiresNonNull("FileIO.data_trace_state")*/
@@ -1132,9 +1100,8 @@ public final class FileIO {
   }
 
   /**
-   * Total number of samples passed to process_sample().
-   * Not part of ParseState because it's global over all files
-   * processed by Daikon.
+   * Total number of samples passed to process_sample(). Not part of ParseState because it's global
+   * over all files processed by Daikon.
    */
   public static int samples_processed = 0;
 
@@ -1157,16 +1124,14 @@ public final class FileIO {
 
   /**
    * ParseState indicates:
+   *
    * <ol>
-   * <li>
-   *   Some global information about the state of the parser while reading
-   *   a decl or dtrace file.
-   * <li>
-   *   The record that was most recently read; thus, ParseState is
-   *   essentially a discriminated union whose tag is a RecordType.
-   *   (TODO:  These are poor names that should probably be swapped!)
-   *   ParseState is what is returned (actually, side-effected) by
-   *   method read_data_trace_record when it reads a record.
+   *   <li> Some global information about the state of the parser while reading a decl or dtrace
+   *       file.
+   *   <li> The record that was most recently read; thus, ParseState is essentially a discriminated
+   *       union whose tag is a RecordType. (TODO: These are poor names that should probably be
+   *       swapped!) ParseState is what is returned (actually, side-effected) by method
+   *       read_data_trace_record when it reads a record.
    * </ol>
    */
   /*@UsesObjectEquals*/
@@ -1182,9 +1147,9 @@ public final class FileIO {
     /** True if the current file is a declaration file. */
     public boolean is_decl_file;
 
-    /** True if ppts may be new.  If a duplicate is seen, it must match
-     * a previous point exactly.  If false, the previous ppt is used without
-     * checking for a match.
+    /**
+     * True if ppts may be new. If a duplicate is seen, it must match a previous point exactly. If
+     * false, the previous ppt is used without checking for a match.
      */
     public boolean ppts_may_be_new;
 
@@ -1197,9 +1162,7 @@ public final class FileIO {
     /** Total number of lines in the input file */
     public long total_lines;
 
-    /** Comparability format, either VarComparability.IMPLICIT or
-     * VarComparability.NONE
-     */
+    /** Comparability format, either VarComparability.IMPLICIT or VarComparability.NONE. */
     public int varcomp_format;
 
     //
@@ -1210,16 +1173,16 @@ public final class FileIO {
 
     public RecordType rtype;
 
-    /** Current ppt.  Used when status=DECL or SAMPLE.  Can be null if this
-     * declaration was skipped because of --ppt-select-pattern or
-     * --ppt-omit-pattern.
+    /**
+     * Current ppt. Used when status=DECL or SAMPLE. Can be null if this declaration was skipped
+     * because of --ppt-select-pattern or --ppt-omit-pattern.
      */
     public /*@Nullable*/ PptTopLevel ppt;
 
-    /** The current nonce.  Used when status=SAMPLE. */
+    /** The current nonce. Used when status=SAMPLE. */
     public /*@Nullable*/ Integer nonce;
 
-    /** The current set of values.  Used when status=SAMPLE. */
+    /** The current set of values. Used when status=SAMPLE. */
     public /*@Nullable*/ ValueTuple vt;
 
     /** Miscellaneous text in the parsed item */
@@ -1344,9 +1307,8 @@ public final class FileIO {
   }
 
   /**
-   * Logically, this is a local variable in static method read_data_trace_file.
-   * It is used for status output, and to give the line number at which
-   * a problem was detected.
+   * Logically, this is a local variable in static method read_data_trace_file. It is used for
+   * status output, and to give the line number at which a problem was detected.
    */
   // The @MonotonicNonNull property is not true globally, but within every
   // method it's true, so it is a useful annotation.
@@ -1358,10 +1320,9 @@ public final class FileIO {
   }
 
   /**
-   * Read only samples from .dtrace file.
-   * Uses the standard data processor which calls
-   * {@link FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)}
-   * on each record, and ignores records other than samples.
+   * Read only samples from {@code .dtrace} file. Uses the standard data processor which calls
+   * {@link FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)} on each record, and
+   * ignores records other than samples.
    */
   public static void read_data_trace_file(String filename, PptMap all_ppts) throws IOException {
     Processor processor = new Processor();
@@ -1369,9 +1330,9 @@ public final class FileIO {
   }
 
   /**
-   * Read declarations AND samples (not just sample data as the name might
-   * imply) from .dtrace file.  For each record read from the file, passes
-   * the record to a method of the processor.
+   * Read declarations AND samples (not just sample data as the name might imply) from {@code
+   * .dtrace} file. For each record read from the file, passes the record to a method of the
+   * processor.
    */
   public static void read_data_trace_file(
       String filename,
@@ -1446,9 +1407,8 @@ public final class FileIO {
   }
 
   /**
-   * Like read_data_trace_record, but sets global FileIO.data_trace_state
-   * for the duration of the call then clears it before returning.
-   * Intended for most external callers.
+   * Like read_data_trace_record, but sets global FileIO.data_trace_state for the duration of the
+   * call then clears it before returning. Intended for most external callers.
    */
   public static void read_data_trace_record_setstate(ParseState state) throws IOException {
 
@@ -1458,10 +1418,9 @@ public final class FileIO {
   }
 
   /**
-   * Read a single record of ANY type (sample, declaration, comparability,
-   * etc.) from a dtrace file.
-   * If the record is anything but a sample, also processes it.
-   * The record is stored by side effect into the state argument.
+   * Read a single record of ANY type (sample, declaration, comparability, etc.) from a dtrace file.
+   * If the record is anything but a sample, also processes it. The record is stored by side effect
+   * into the state argument.
    */
   // TODO:  For clarity, this should perhaps return its side-effected argument.
   /*@RequiresNonNull("FileIO.data_trace_state")*/
@@ -1579,16 +1538,12 @@ public final class FileIO {
           throw new Daikon.TerminationMessage(
               String.format(
                   "Declaration file %s is not version 2.0, but line %d looks like a version 2.0 declaration: %s%nPerhaps the file is missing a \"decl-version 2.0\" record at the beginning",
-                  state.filename,
-                  state.reader.getLineNumber(),
-                  line));
+                  state.filename, state.reader.getLineNumber(), line));
         }
         throw new Daikon.TerminationMessage(
             String.format(
                 "Declaration files should not contain samples, but file %s does at line %d: %s",
-                state.filename,
-                state.reader.getLineNumber(),
-                line));
+                state.filename, state.reader.getLineNumber(), line));
       }
 
       // Parse the ppt name
@@ -1705,8 +1660,9 @@ public final class FileIO {
   }
 
   /**
-   * Add orig() and derived variables to vt (by side effect), then
-   * supply it to the program point for flowing.
+   * Add orig() and derived variables to vt (by side effect), then supply it to the program point
+   * for flowing.
+   *
    * @param vt trace data only; modified by side effect to add derived vars
    */
   /*@RequiresNonNull("FileIO.data_trace_state")*/
@@ -1796,9 +1752,7 @@ public final class FileIO {
     return false;
   }
 
-  /**
-   * Print each call that does not have a matching exit
-   */
+  /** Print each call that does not have a matching exit. */
   public static void process_unmatched_procedure_entries() {
 
     if (dkconfig_unmatched_procedure_entries_quiet) return;
@@ -1853,10 +1807,7 @@ public final class FileIO {
     }
   }
 
-  /**
-   * Print the invocations in the collection, in order, and
-   * suppressing duplicates.
-   */
+  /** Print the invocations in the collection, in order, and suppressing duplicates. */
   static void print_invocations_grouped(Collection<Invocation> invocations) {
     Map</*@Interned*/ Invocation, Integer> counter =
         new HashMap</*@Interned*/ Invocation, Integer>();
@@ -2097,9 +2048,7 @@ public final class FileIO {
             if (debug_missing && !vi.canBeMissing) {
               System.out.printf(
                   "Var %s ppt %s at line %d is null, and modbit is not missing%n",
-                  vi,
-                  ppt.name(),
-                  FileIO.get_linenum());
+                  vi, ppt.name(), FileIO.get_linenum());
             }
             // The value in the trace was null even though the modbit was not
             // MISSING_NONSENSICAL.  Set the modbit to MISSING_NONSENSICAL.
@@ -2158,12 +2107,11 @@ public final class FileIO {
   }
 
   /**
-   * If this is a function entry ppt, stores the values of all of the
-   * variables away for use at the exit.  If this is an exit, finds the
-   * values at enter and adds them as the values of the orig variables.
-   * Normally returns false.  Returns true if this is an exit without
-   * a matching enter.  See dkconfig_ignore_missing_enter for more info.
-   * If true is returned, this ppt should be ignored by the caller.
+   * If this is a function entry ppt, stores the values of all of the variables away for use at the
+   * exit. If this is an exit, finds the values at enter and adds them as the values of the orig
+   * variables. Normally returns false. Returns true if this is an exit without a matching enter.
+   * See dkconfig_ignore_missing_enter for more info. If true is returned, this ppt should be
+   * ignored by the caller.
    */
   /*@RequiresNonNull("FileIO.data_trace_state")*/
   public static boolean compute_orig_variables(
@@ -2304,10 +2252,9 @@ public final class FileIO {
   ///
 
   /**
-   * Use a special record type.  Saving as one object allows for
-   * reference-sharing, easier saves and loads, and potential for
-   * later overriding of SerialFormat.readObject if the save format
-   * changes (ick).
+   * Use a special record type. Saving as one object allows for reference-sharing, easier saves and
+   * loads, and potential for later overriding of SerialFormat.readObject if the save format changes
+   * (ick).
    */
   static final class SerialFormat implements Serializable {
     // We are Serializable, so we specify a version to allow changes to
@@ -2333,8 +2280,8 @@ public final class FileIO {
   }
 
   /**
-   * Read either a serialized PptMap or a InvMap and return a
-   * PptMap.  If an InvMap is specified, it is converted to a PptMap
+   * Read either a serialized PptMap or a InvMap and return a PptMap. If an InvMap is specified, it
+   * is converted to a PptMap.
    */
   /*@EnsuresNonNull("FileIO.new_decl_format")*/
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
@@ -2385,9 +2332,9 @@ public final class FileIO {
   }
 
   /**
-   * Returns whether or not the specified ppt name should be included
-   * in processing.  Ppts can be excluded because they match the omit_regexp,
-   * don't match ppt_regexp, or are greater than ppt_max_name.
+   * Returns whether or not the specified ppt name should be included in processing. Ppts can be
+   * excluded because they match the omit_regexp, don't match ppt_regexp, or are greater than
+   * ppt_max_name.
    */
   public static boolean ppt_included(String ppt_name) {
 
@@ -2405,8 +2352,8 @@ public final class FileIO {
   }
 
   /**
-   * Returns true if the given variable is included, according to Daikon's
-   * --var-select-pattern and --var-omit-pattern flags.
+   * Returns true if the given variable is included, according to Daikon's {@code
+   * --var-select-pattern} and {@code --var-omit-pattern} flags.
    */
   public static boolean var_included(String var_name) {
     assert !var_name.equals("");
@@ -2419,10 +2366,9 @@ public final class FileIO {
   }
 
   /**
-   * Checks the specified array of variables to see if it matches
-   * exactly the variables in the existing ppt.  Throws an error if
-   * there are any differences.  Used to ensure that a new ppt with the
-   * same name as an existing ppt is exactly the same.
+   * Checks the specified array of variables to see if it matches exactly the variables in the
+   * existing ppt. Throws an error if there are any differences. Used to ensure that a new ppt with
+   * the same name as an existing ppt is exactly the same.
    */
   static void check_decl_match(ParseState state, PptTopLevel existing_ppt, VarInfo[] vi_array) {
 
@@ -2455,10 +2401,7 @@ public final class FileIO {
     }
   }
 
-  /**
-   * Skips over a decl.  Essentially reads in everything up to and including
-   * the next blank line.
-   */
+  /** Skips over a decl. Essentially reads in everything up to and including the next blank line. */
   private static void skip_decl(LineNumberReader reader) throws IOException {
     String line = reader.readLine();
     // This fails if some lines of a declaration (e.g., the comparability
@@ -2469,9 +2412,8 @@ public final class FileIO {
   }
 
   /**
-   * Converts the declaration record version of a name into its correct
-   * version.  In the declaration record, blanks are encoded as \_ and
-   * backslashes as \\.
+   * Converts the declaration record version of a name into its correct version. In the declaration
+   * record, blanks are encoded as \_ and backslashes as \\.
    */
   private static String unescape_decl(String orig) {
     StringBuilder sb = new StringBuilder(orig.length());
@@ -2527,28 +2469,24 @@ public final class FileIO {
 
   // The reverse of unescape_decl.  Test them together.
   /**
-   * Converts a name into its declaration record version.  In the
-   * declaration record, blanks are encoded as \_ and backslashes as \\.
+   * Converts a name into its declaration record version. In the declaration record, blanks are
+   * encoded as \_ and backslashes as \\.
    */
   private static String escape_decl(String orig) {
     return orig.replace("\\", "\\\\").replace(" ", "\\_").replace("\n", "\\n").replace("\r", "\\r");
   }
 
   /**
-   * Class that holds information from the declaration record (in the
-   * file).  Once collected, this information is used to create a VarInfo.
-   * This class is necessary because a VarInfo cannot be created until much
-   * of this information is present:  the constructor requires all the
-   * information at the time of construction, and some of the fields are
-   * final.
-   * <p>
-   * In general, each field has a one-to-one relation with the
-   * corresponding entry in the variable definition block in the trace
-   * file.  More detailed information about each of the fields can be found
-   * in the 'Variable declarations' section of the 'File Formats' appendix
-   * of the Daikon developers manual.  Specifics can also be found in the
-   * 'parse_[field]' methods of the class (eg, parse_var_kind,
-   * parse_enclosing_var, etc).
+   * Class that holds information from the declaration record (in the file). Once collected, this
+   * information is used to create a VarInfo. This class is necessary because a VarInfo cannot be
+   * created until much of this information is present: the constructor requires all the information
+   * at the time of construction, and some of the fields are final.
+   *
+   * <p>In general, each field has a one-to-one relation with the corresponding entry in the
+   * variable definition block in the trace file. More detailed information about each of the fields
+   * can be found in the 'Variable declarations' section of the 'File Formats' appendix of the
+   * Daikon developers manual. Specifics can also be found in the 'parse_[field]' methods of the
+   * class (eg, parse_var_kind, parse_enclosing_var, etc).
    */
   @SuppressWarnings(
       "nullness") // undocumented class needs documentation before annotating with nullness
@@ -2568,8 +2506,10 @@ public final class FileIO {
     public RefType ref_type = RefType.POINTER;
     /** Number of array dimensions (0 or 1) */
     public int arr_dims = 0;
-    /** Non-null iff (vardef.kind == VarKind.FUNCTION).
-     * The arguments that were used to create this function application. */
+    /**
+     * Non-null iff (vardef.kind == VarKind.FUNCTION). The arguments that were used to create this
+     * function application.
+     */
     public /*@Nullable*/ List<String> function_args = null;
     /** The type of the variable as stored in the dtrace file (required) */
     public ProglangType rep_type = null;
@@ -2585,9 +2525,15 @@ public final class FileIO {
     public List<VarParent> parents;
     /** Non-null if this 'variable' always has the same value (optional) */
     public /*@Nullable*/ /*@Interned*/ Object static_constant_value = null;
-    /** Non-null if it is statically known that the value of the variable will be always greater than or equal to this value. */
+    /**
+     * Non-null if it is statically known that the value of the variable will be always greater than
+     * or equal to this value.
+     */
     public /*@Nullable*/ String min_value = null;
-    /** Non-null if it is statically known that the value of the variable will be always less than or equal to this value. */
+    /**
+     * Non-null if it is statically known that the value of the variable will be always less than or
+     * equal to this value.
+     */
     public /*@Nullable*/ String max_value = null;
     /** Non-null if it is statically known that the array will have at least this many elements. */
     public /*@Nullable*/ Integer min_length = null;
@@ -2621,18 +2567,13 @@ public final class FileIO {
       assert ((kind == VarKind.FUNCTION) || (function_args == null))
           : String.format(
               "incompatible kind=%s and function_args=%s for VarDefinition %s",
-              kind,
-              function_args,
-              name);
+              kind, function_args, name);
       if ((kind == VarKind.FIELD || kind == VarKind.ARRAY) && enclosing_var == null) {
         throw new AssertionError("enclosing-var not specified for variable " + name);
       }
     }
 
-    /**
-     * Initialize from the 'variable <em>name</em>' record.  Scanner should be
-     * pointing at name.
-     */
+    /** Initialize from the 'variable <em>name</em>' record. Scanner should be pointing at name. */
     public VarDefinition(ParseState state, Scanner scanner) {
       this.state = state;
       this.parents = new LinkedList<VarParent>();
@@ -2698,10 +2639,7 @@ public final class FileIO {
       parents.clear();
     }
 
-    /**
-     * Parse a var-kind record.  Scanner should be pointing at the variable
-     * kind.
-     */
+    /** Parse a var-kind record. Scanner should be pointing at the variable kind. */
     public void parse_var_kind(Scanner scanner) {
       VarKind kind_local = parse_enum_val(scanner, VarKind.class, "variable kind");
       kind = kind_local;
@@ -2758,7 +2696,7 @@ public final class FileIO {
       declared_type = ProglangType.parse(declared_type_str);
     }
 
-    /** Parse the flags record.  Multiple flags can be specified */
+    /** Parse the flags record. Multiple flags can be specified. */
     public void parse_flags(Scanner scanner) {
 
       flags.add(parse_enum_val(scanner, VarFlags.class, "Flag"));
@@ -2766,9 +2704,7 @@ public final class FileIO {
       // System.out.printf ("flags for %s are %s%n", name, flags);
     }
 
-    /**
-     * Parse the langauge specific flags record.  Multiple flags can
-     * be specified */
+    /** Parse the langauge specific flags record. Multiple flags can be specified. */
     public void parse_lang_flags(Scanner scanner) {
 
       lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));
@@ -2854,8 +2790,8 @@ public final class FileIO {
     }
 
     /**
-     * Helper function, returns the next string token unescaped and
-     * interned.  Throw Daikon.TerminationMessage if there is no next token.
+     * Helper function, returns the next string token unescaped and interned. Throw
+     * Daikon.TerminationMessage if there is no next token.
      */
     public /*@Interned*/ String need(Scanner scanner, String description) {
       return (FileIO.need(state, scanner, description));
@@ -2867,9 +2803,9 @@ public final class FileIO {
     }
 
     /**
-     * Looks up the next token as a member of enum_class.  Throws Daikon.TerminationMessage
-     * is thrown if there is no token or if it is not valid member of
-     * the class.  Enums are presumed to be in in upper case.
+     * Looks up the next token as a member of enum_class. Throws Daikon.TerminationMessage is thrown
+     * if there is no token or if it is not valid member of the class. Enums are presumed to be in
+     * in upper case.
      */
     public <E extends Enum<E>> E parse_enum_val(
         Scanner scanner, Class<E> enum_class, String descr) {
@@ -2878,8 +2814,8 @@ public final class FileIO {
   }
 
   /**
-   * Helper function, returns the next string token unescaped and
-   * interned.  Throws Daikon.TerminationMessage if there is no next token.
+   * Helper function, returns the next string token unescaped and interned. Throws
+   * Daikon.TerminationMessage if there is no next token.
    */
   public static /*@Interned*/ String need(ParseState state, Scanner scanner, String description) {
     if (!scanner.hasNext()) {
@@ -2896,9 +2832,9 @@ public final class FileIO {
   }
 
   /**
-   * Looks up the next token as a member of enum_class.  A Daikon.TerminationMessage
-   * is thrown if there is no token or if it is not valid member of
-   * the class.  Enums are presumed to be in in upper case
+   * Looks up the next token as a member of enum_class. A Daikon.TerminationMessage is thrown if
+   * there is no token or if it is not valid member of the class. Enums are presumed to be in in
+   * upper case.
    */
   public static <E extends Enum<E>> E parse_enum_val(
       ParseState state, Scanner scanner, Class<E> enum_class, String descr) {
@@ -2958,10 +2894,9 @@ public final class FileIO {
   }
 
   /**
-   * Handle any possible modifications to the ppt name.  For now, just
-   * support the Applications Communities specific modification to remove
-   * duplicate stack entries.  But a more generic technique could be
-   * implemented in the future.
+   * Handle any possible modifications to the ppt name. For now, just support the Applications
+   * Communities specific modification to remove duplicate stack entries. But a more generic
+   * technique could be implemented in the future.
    */
   public static String user_mod_ppt_name(String ppt_name) {
 

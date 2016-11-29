@@ -56,18 +56,24 @@ public final class SEQUENCESCALARSUBSEQUENCE
   /**
    * Represents a subsequence of a sequence.  The subsequence a[i..j]
    * includes the endpoints i and j.  The subsequence is meaningful if:
+   * <pre>
    *  i &ge; 0
    *  i &le; a.length
    *  j &ge; -1
    *  j &le; a.length-1
    *  i &le; j+1
+   * </pre>
    * These are the empty array:
+   * <pre>
    *   a[0..-1]
    *   a[a.length..a.length-1]
+   * </pre>
    * These are illegal:
+   * <pre>
    *   a[1..-1]
    *   a[a.length..a.length-2]
    *   a[a.length+1..a.length]
+   * </pre>
    *
    * @param from_start true means the range goes 0..n; false means the
    * range goes n..end.  (n might be fudged through off_by_one)

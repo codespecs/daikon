@@ -10,15 +10,12 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Structure that represents a derivation; can generate values and
- * derived variables from base variables.  A Derivation has a set of
- * base VarInfo from which the Derivation is derived.  Use
- * getVarInfo() to get the VarInfo representation of this Derivation.
- * When we want the actual value of this derivation, we pass in a
- * ValueTuple; the Derivation picks out the values of its base
- * variables and finds the value of the derived variable.  Use
- * computeValueandModified() to get value.  Derivations are created by
- * DerivationFactory.
+ * Structure that represents a derivation; can generate values and derived variables from base
+ * variables. A Derivation has a set of base VarInfo from which the Derivation is derived. Use
+ * getVarInfo() to get the VarInfo representation of this Derivation. When we want the actual value
+ * of this derivation, we pass in a ValueTuple; the Derivation picks out the values of its base
+ * variables and finds the value of the derived variable. Use computeValueandModified() to get
+ * value. Derivations are created by DerivationFactory.
  */
 public abstract class Derivation implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
@@ -29,21 +26,16 @@ public abstract class Derivation implements Serializable, Cloneable {
   // This definition is here so that it will show up in the manual
   // with the other options for controlling derived variables
   /**
-   * Boolean.  If true, Daikon will not create any derived variables.
-   * Derived variables, which are combinations of variables that appeared in
-   * the program, like <code>array[index]</code> if <code>array</code> and
-   * <code>index</code> appeared, can
-   * increase the number of properties Daikon finds, especially over
-   * sequences. However, derived variables increase Daikon's time and
-   * memory usage, sometimes dramatically. If false, individual kinds of
-   * derived variables can be enabled or disabled individually using
-   * configuration options under <code>daikon.derive</code>.
+   * Boolean. If true, Daikon will not create any derived variables. Derived variables, which are
+   * combinations of variables that appeared in the program, like <code>array[index]</code> if
+   * <code>array</code> and <code>index</code> appeared, can increase the number of properties
+   * Daikon finds, especially over sequences. However, derived variables increase Daikon's time and
+   * memory usage, sometimes dramatically. If false, individual kinds of derived variables can be
+   * enabled or disabled individually using configuration options under <code>daikon.derive</code>.
    */
   public static boolean dkconfig_disable_derived_variables = false;
 
-  /**
-   * Debug tracer.
-   */
+  /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.derive.Derivation");
 
   // This is static, so we can't mention it here.
@@ -53,23 +45,17 @@ public abstract class Derivation implements Serializable, Cloneable {
   // This is essentially a clone() method that also switches the variables.
   public abstract Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars);
 
-  /**
-   * @return array of the VarInfos this was derived from
-   */
+  /** @return array of the VarInfos this was derived from */
   /*@SideEffectFree*/
   public abstract VarInfo[] getBases();
 
-  /**
-   * @return one of the VarInfos this was derived from
-   */
+  /** @return one of the VarInfos this was derived from */
   /*@Pure*/
   public abstract VarInfo getBase(int i);
 
   /**
-   * @return a pair of: the derived value and whether the variable
-   * counts as modified
-   * @param full_vt the set of values in a program point that will be
-   * used to derive the value.
+   * @return a pair of: the derived value and whether the variable counts as modified
+   * @param full_vt the set of values in a program point that will be used to derive the value
    */
   // I don't provide separate computeModified and computeValue
   // functions: they aren't so useful, and the same computation must
@@ -79,9 +65,9 @@ public abstract class Derivation implements Serializable, Cloneable {
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
 
   /**
-   * Get the VarInfo that this would represent.  However,
-   * the VarInfo can't be used to obtain values without further
-   * modification -- use computeValueAndModified() for this.
+   * Get the VarInfo that this would represent. However, the VarInfo can't be used to obtain values
+   * without further modification -- use computeValueAndModified() for this.
+   *
    * @see Derivation#computeValueAndModified
    */
   public VarInfo getVarInfo() {
@@ -95,8 +81,8 @@ public abstract class Derivation implements Serializable, Cloneable {
   private /*@MonotonicNonNull*/ VarInfo this_var_info;
 
   /**
-   * Used by all child classes to actually create the VarInfo this
-   * represents, after which it is interned for getVarInfo().
+   * Used by all child classes to actually create the VarInfo this represents, after which it is
+   * interned for getVarInfo().
    */
   // This is in each class, but I can't have a private abstract method.
   protected abstract VarInfo makeVarInfo();
@@ -120,11 +106,10 @@ public abstract class Derivation implements Serializable, Cloneable {
 
   public boolean missing_array_bounds = false;
   /**
-   * True if we have encountered to date any missing values in this
-   * derivation due to array indices being out of bounds.  This can
-   * happen with both simple subscripts and subsequences.  Note that
-   * this becomes true as we are running, it cannot be set in advance
-   * (which would require a first pass).
+   * True if we have encountered to date any missing values in this derivation due to array indices
+   * being out of bounds. This can happen with both simple subscripts and subsequences. Note that
+   * this becomes true as we are running, it cannot be set in advance (which would require a first
+   * pass).
    */
   public boolean missingOutOfBounds() {
     return missing_array_bounds;
@@ -141,16 +126,15 @@ public abstract class Derivation implements Serializable, Cloneable {
   public abstract boolean isDerivedFromNonCanonical();
 
   /**
-   * Returns how many levels of derivation this Derivation is based
-   * on.  The depth counts this as well as the depths of its bases.
+   * Returns how many levels of derivation this Derivation is based on. The depth counts this as
+   * well as the depths of its bases.
    */
   public abstract int derivedDepth();
 
   /**
-   * @return true iff other and this represent the same derivation
-   * (modulo the variable they are applied to).  Default implentation
-   * will just checks runtime type, but subclasses with state
-   * (e.g. SequenceInitial index) should match that, too.
+   * @return true iff other and this represent the same derivation (modulo the variable they are
+   *     applied to). Default implentation will just checks runtime type, but subclasses with state
+   *     (e.g. SequenceInitial index) should match that, too.
    */
   /*@Pure*/
   public abstract boolean isSameFormula(Derivation other);
@@ -159,33 +143,32 @@ public abstract class Derivation implements Serializable, Cloneable {
   public abstract boolean canBeMissing();
 
   /**
-   * Returns the lower bound of a slice.  Throws an error if this is not
-   * a slice.  Slices should override.
+   * Returns the lower bound of a slice. Throws an error if this is not a slice. Slices should
+   * override.
    */
   public Quantify.Term get_lower_bound() {
     throw new RuntimeException("not a slice derivation: " + this);
   }
 
   /**
-   * Returns the lower bound of a slice.  Throws an error if this is not
-   * a slice.  Slices should override.
+   * Returns the lower bound of a slice. Throws an error if this is not a slice. Slices should
+   * override.
    */
   public Quantify.Term get_upper_bound() {
     throw new RuntimeException("not a slice derivation: " + this);
   }
 
   /**
-   * Returns the array variable that underlies this slice.  Throws an error
-   * if this is not a slice.  Slices should override.
+   * Returns the array variable that underlies this slice. Throws an error if this is not a slice.
+   * Slices should override.
    */
   public VarInfo get_array_var() {
     throw new RuntimeException("not a slice derivation: " + this);
   }
 
   /**
-   * Returns the name of this variable in ESC format.  If an index
-   * is specified, it is used as an array index.  It is an error to
-   * specify an index on a non-array variable
+   * Returns the name of this variable in ESC format. If an index is specified, it is used as an
+   * array index. It is an error to specify an index on a non-array variable.
    */
   /*@SideEffectFree*/
   public String esc_name(String index) {
@@ -193,18 +176,16 @@ public abstract class Derivation implements Serializable, Cloneable {
   }
 
   /**
-   * Returns the name of this variable in JML format.  If an index
-   * is specified, it is used as an array index.  It is an error to
-   * specify an index on a non-array variable
+   * Returns the name of this variable in JML format. If an index is specified, it is used as an
+   * array index. It is an error to specify an index on a non-array variable.
    */
   public String jml_name(String index) {
     return esc_name(index);
   }
 
   /**
-   * Returns the name of this variable in CSHARPCONTRACT format.  If an index
-   * is specified, it is used as an array index.  It is an error to
-   * specify an index on a non-array variable
+   * Returns the name of this variable in CSHARPCONTRACT format. If an index is specified, it is
+   * used as an array index. It is an error to specify an index on a non-array variable.
    */
   /*@SideEffectFree*/
   public String csharp_name(String index) {
@@ -219,9 +200,8 @@ public abstract class Derivation implements Serializable, Cloneable {
   }
 
   /**
-   * Returns true if d is the prestate version of this.  Returns true
-   * if this and d are of the same derivation with the same formula
-   * and have the same bases.
+   * Returns true if d is the prestate version of this. Returns true if this and d are of the same
+   * derivation with the same formula and have the same bases.
    */
   /*@Pure*/
   public boolean is_prestate_version(Derivation d) {
@@ -243,11 +223,10 @@ public abstract class Derivation implements Serializable, Cloneable {
   }
 
   /**
-   * Return the complexity of this derivation.  This is only for the
-   * derivation itself and not for the variables included in the derivation.
-   * The default implementation returns 1 (which is the added complexity of
-   * an derivation).  Subclasses that add additional complexity (such as an
-   * offset) should override
+   * Return the complexity of this derivation. This is only for the derivation itself and not for
+   * the variables included in the derivation. The default implementation returns 1 (which is the
+   * added complexity of an derivation). Subclasses that add additional complexity (such as an
+   * offset) should override.
    */
   public int complexity() {
     return 1;
@@ -261,9 +240,8 @@ public abstract class Derivation implements Serializable, Cloneable {
   }
 
   /**
-   * Returns the esc name of a variable which is included inside
-   * an expression (such as orig(a[vi])).  If the expression
-   * is orig, the orig is implied for this variable.
+   * Returns the esc name of a variable which is included inside an expression (such as
+   * orig(a[vi])). If the expression is orig, the orig is implied for this variable.
    */
   protected String inside_esc_name(VarInfo vi, boolean in_orig, int shift) {
     if (vi == null) return "";
@@ -281,9 +259,8 @@ public abstract class Derivation implements Serializable, Cloneable {
   }
 
   /**
-   * Returns the jml name of a variable which is included inside
-   * an expression (such as orig(a[vi])).  If the expression
-   * is orig, the orig is implied for this variable.
+   * Returns the jml name of a variable which is included inside an expression (such as
+   * orig(a[vi])). If the expression is orig, the orig is implied for this variable.
    */
   protected String inside_jml_name(VarInfo vi, boolean in_orig, int shift) {
     if (vi == null) return "";
@@ -301,9 +278,8 @@ public abstract class Derivation implements Serializable, Cloneable {
   }
 
   /**
-   * Returns the csharp name of a variable which is included inside
-   * an expression (such as orig(a[vi])).  If the expression
-   * is orig, the orig is implied for this variable.
+   * Returns the csharp name of a variable which is included inside an expression (such as
+   * orig(a[vi])). If the expression is orig, the orig is implied for this variable.
    */
   protected String inside_csharp_name(VarInfo vi, boolean in_orig, int shift) {
     if (vi == null) return "";

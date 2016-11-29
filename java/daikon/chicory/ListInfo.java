@@ -8,8 +8,8 @@ import java.lang.reflect.*;
 import java.util.List;
 
 /**
- * The ListInfo class is a subtype of DaikonVariableInfo used for
- * variable types which implement java.util.List
+ * The ListInfo class is a subtype of DaikonVariableInfo used for variable types that implement
+ * {@code java.util.List}.
  */
 public class ListInfo extends DaikonVariableInfo {
 

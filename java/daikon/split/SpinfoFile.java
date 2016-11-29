@@ -12,41 +12,28 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * SpinfoFile stores information parsed from a .spinfo file.
- * The constructor parses the file; then clients can make calls to
- * retrieve the parsed information.
- * <p>
+ * SpinfoFile stores information parsed from a {@code .spinfo} file. The constructor parses the
+ * file; then clients can make calls to retrieve the parsed information.
  *
- * This file uses the term "ppt
- * section" and "replace section" to describe what is refered to as a
- * "Program Point Section" and "replacement sections" in the Daikon User
- * Manual, respectively.  A "ppt statement" is a single line from a
- * "ppt section."
+ * <p>This file uses the term "ppt section" and "replace section" to describe what is refered to as
+ * a "Program Point Section" and "replacement sections" in the Daikon User Manual, respectively. A
+ * "ppt statement" is a single line from a "ppt section".
  */
 public class SpinfoFile {
 
-  /**
-   * The path of the file being parsed.
-   * This is used only for debugging output.
-   */
+  /** The path of the file being parsed. This is used only for debugging output. */
   private String spinfoFileName;
 
-  /**
-   * The directory in which the java files for the
-   * splitters are kept.
-   */
+  /** The directory in which the java files for the splitters are kept. */
   private String tempDir;
 
-  /**
-   * A Replacer constructed out of the replace statements from the spinfo file.
-   */
+  /** A Replacer constructed out of the replace statements from the spinfo file. */
   // It is set by parseFile(), which is called by the constructor.
   private StatementReplacer statementReplacer;
 
   /**
-   * splitterObjects is an array of arrays of SplitterObjects where
-   * each array of SplitterObjects contains all the SplitterObjects
-   * for a single Ppt.
+   * splitterObjects is an array of arrays of SplitterObjects where each array of SplitterObjects
+   * contains all the SplitterObjects for a single Ppt.
    */
   // It is set by parseFile(), which is called by the constructor.
   // Invariant: for all i, j, and k:
@@ -58,8 +45,9 @@ public class SpinfoFile {
 
   /**
    * Parses file spinfoFile.
+   *
    * @param spinfoFile the file to be parsed
-   * @param tempDir the directory in which the splitters' java files are created.
+   * @param tempDir the directory in which the splitters' java files are created
    */
   SpinfoFile(File spinfoFile, String tempDir) {
     this.tempDir = tempDir;
@@ -76,26 +64,24 @@ public class SpinfoFile {
 
   /**
    * Gets the StatementReplacer for the replace statements in the file parsed.
-   * @return the Replacer for the replace statements in the file parsed.
+   *
+   * @return the Replacer for the replace statements in the file parsed
    */
   public StatementReplacer getReplacer() {
     return statementReplacer;
   }
 
   /**
-   * Gets the SplitterObjects for the file parsed.  For each Ppt in the
-   * spinfo file, one array of SplitterObjects is created. This method
-   * returns an array of those arrays.
-   * @return the SplitterObjects for the file parsed.
+   * Gets the SplitterObjects for the file parsed. For each Ppt in the spinfo file, one array of
+   * SplitterObjects is created. This method returns an array of those arrays.
+   *
+   * @return the SplitterObjects for the file parsed
    */
   public SplitterObject[][] getSplitterObjects() {
     return splitterObjects;
   }
 
-  /**
-   * Return the number of splitters (SplitterObject objects) represented by
-   * this file.
-   */
+  /** Return the number of splitters (SplitterObject objects) represented by this file. */
   public int numSplittterObjects() {
     int result = 0;
     for (SplitterObject[] spa : splitterObjects) {
@@ -105,10 +91,10 @@ public class SpinfoFile {
   }
 
   /**
-   * Return the number of splitters (SplitterObject objects) represented by
-   * all the files in the list.
+   * Return the number of splitters (SplitterObject objects) represented by all the files in the
+   * list.
    */
-  static public int numSplittterObjects(List<SpinfoFile> spinfoFiles) {
+  public static int numSplittterObjects(List<SpinfoFile> spinfoFiles) {
     int result = 0;
     for (SpinfoFile spf : spinfoFiles) {
       result += spf.numSplittterObjects();
@@ -117,8 +103,8 @@ public class SpinfoFile {
   }
 
   /**
-   * parseFile sets the member fields statementReplacer and splitterObjects,
-   * from the spinfoFile.
+   * parseFile sets the member fields statementReplacer and splitterObjects, from the spinfoFile.
+   *
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @throws IOException if an I/O error occurs
    */
@@ -168,13 +154,12 @@ public class SpinfoFile {
   }
 
   /**
-   * Reads a group of replace statement lines. The method declaration
-   * and the return statement of a replace statement is placed in a
-   * ReplaceStatement. The ReplaceStatements are then placed into
+   * Reads a group of replace statement lines. The method declaration and the return statement of a
+   * replace statement is placed in a ReplaceStatement. The ReplaceStatements are then placed into
    * replaceStatements.
+   *
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
-   * @param replaceStatements the List into which the ReplaceStatements
-   *  are added.
+   * @param replaceStatements the List into which the ReplaceStatements are added
    */
   @SuppressWarnings("nullness") // bug exposed by test case Asserts.assertTwice().
   private void readReplaceStatements(
@@ -203,14 +188,13 @@ public class SpinfoFile {
   }
 
   /**
-   * Reads a group of Ppt statements (statements following the line "PPT_NAME...").
-   * Makes a list whose first element is the name on the PPT_NAME line (but
-   * without the "PPT_NAME" prefix), and whose additional elements are all
-   * the non-empty lines up to the next empty line.
-   * Puts this list in pptSections.
+   * Reads a group of Ppt statements (statements following the line "PPT_NAME..."). Makes a list
+   * whose first element is the name on the PPT_NAME line (but without the "PPT_NAME" prefix), and
+   * whose additional elements are all the non-empty lines up to the next empty line. Puts this list
+   * in pptSections.
+   *
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
-   * @param pptSections the List into which the List of lines
-   *  for this pptSection are to be added.
+   * @param pptSections the List into which the List of lines for this pptSection are to be added
    * @param pptName name of the ppt
    * @throws IOException if an I/O error occurs.
    */
@@ -231,11 +215,11 @@ public class SpinfoFile {
 
   /**
    * Creates the SplitterObjects for the Ppt section in pptSections.
-   * @param pptSections is a List of Lists of Strings. Each list
-   *  should include all the lines from a single Ppt Section.
-   *  This includes the first line, but without the prefix "PPT_NAME"
-   * @return an array of arrays with each array containing the
-   *  SplitterObjects for one of lists of ppt statements found in pptSections.
+   *
+   * @param pptSections is a List of Lists of Strings. Each list should include all the lines from a
+   *     single Ppt Section. This includes the first line, but without the prefix "PPT_NAME"
+   * @return an array of arrays with each array containing the SplitterObjects for one of lists of
+   *     ppt statements found in pptSections
    */
   /*@RequiresNonNull("tempDir")*/
   private SplitterObject[][] createSplitterObjects(
@@ -276,13 +260,13 @@ public class SpinfoFile {
   }
 
   /**
-   * Updates obj's fields to take in account the formatting
-   * command given by command.  If the command is invalid an
-   * error message is given.  Extra white space is ignored.
+   * Updates obj's fields to take in account the formatting command given by command. If the command
+   * is invalid an error message is given. Extra white space is ignored.
+   *
    * @param obj the splitterObject for which command is intended
-   * @param command the formatting command to be applied to obj.
+   * @param command the formatting command to be applied to obj
    */
-  static private void setFormatting(SplitterObject obj, String command) {
+  private static void setFormatting(SplitterObject obj, String command) {
     command = command.trim();
     if (command.startsWith("DAIKON_FORMAT")) {
       obj.daikonFormat = command.substring("DAIKON_FORMAT".length()).trim();
@@ -304,9 +288,7 @@ public class SpinfoFile {
     }
   }
 
-  /**
-   * Returns whether the line is blank (or null).
-   */
+  /** Returns whether the line is blank (or null). */
   /*@EnsuresNonNullIf(result=false, expression="#1")*/
   /*@Pure*/
   private static boolean isBlank(/*@Nullable*/ String line) {
@@ -314,8 +296,8 @@ public class SpinfoFile {
   }
 
   /**
-   * Returns whether the line is a spinfo file comment line.
-   * A line is a comment if it starts with a (possibly indented) "#".
+   * Returns whether the line is a spinfo file comment line. A line is a comment if it starts with a
+   * (possibly indented) "#".
    */
   /*@Pure*/
   private static boolean isComment(String line) {
@@ -323,9 +305,8 @@ public class SpinfoFile {
   }
 
   /**
-   * Returns whether the line is a spinfo file formatting command.
-   * A line is a formatting command if line is indented with
-   * a tab, "\t", or spaces, " ".
+   * Returns whether the line is a spinfo file formatting command. A line is a formatting command if
+   * line is indented with a tab ("\t") or spaces (" ").
    */
   /*@Pure*/
   private static boolean isFormatting(String line) {

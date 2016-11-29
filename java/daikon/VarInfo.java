@@ -2,8 +2,6 @@ package daikon;
 
 import static daikon.FileIO.VarDefinition;
 
-import daikon.PrintInvariants;
-import daikon.Quantify;
 import daikon.Quantify.QuantFlags;
 import daikon.Quantify.QuantifyReturn;
 import daikon.VarInfoName.*;
@@ -31,12 +29,11 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Represents information about a particular variable for a program
- * point.  This object doesn't hold the value of the variable at a
- * particular step of the program point, but can get the value it
- * holds when given a ValueTuple using the getValue() method.  VarInfo
- * also includes info about the variable's name, its declared type, its
- * file representation type, its internal type, and its comparability.
+ * Represents information about a particular variable for a program point. This object doesn't hold
+ * the value of the variable at a particular step of the program point, but can get the value it
+ * holds when given a ValueTuple using the getValue() method. VarInfo also includes info about the
+ * variable's name, its declared type, its file representation type, its internal type, and its
+ * comparability.
  */
 @SuppressWarnings({
   "nullness",
@@ -49,20 +46,18 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   static final long serialVersionUID = 20060815L;
 
   /**
-   * If true, then variables are only considered comparable if they
-   * are declared with the same type.  For example, java.util.List
-   * is not comparable to java.util.ArrayList and float is not
-   * comparable to double.  This may miss valid invariants, but
-   * significant time can be saved and many variables with
-   * different declared types are not comparable (e.g., java.util.Date
-   * and java.util.ArrayList).
+   * If true, then variables are only considered comparable if they are declared with the same type.
+   * For example, java.util.List is not comparable to java.util.ArrayList and float is not
+   * comparable to double. This may miss valid invariants, but significant time can be saved and
+   * many variables with different declared types are not comparable (e.g., java.util.Date and
+   * java.util.ArrayList).
    */
   public static boolean dkconfig_declared_type_comparability = true;
 
   /**
-   * If true, the treat static constants (such as MapQuick.GeoPoint.FACTOR)
-   * as fields within an object rather than as a single name.  Not correct,
-   * but used to obtain compatibility with VarInfoName.
+   * If true, the treat static constants (such as MapQuick.GeoPoint.FACTOR) as fields within an
+   * object rather than as a single name. Not correct, but used to obtain compatibility with
+   * VarInfoName.
    */
   public static boolean dkconfig_constant_fields_simplify = true;
 
@@ -73,16 +68,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public PptTopLevel ppt;
 
   /**
-   * Name.  Do not compare names of invariants from different program
-   * points, because two different program points could contain unrelated
-   * variables named "x".
+   * Name. Do not compare names of invariants from different program points, because two different
+   * program points could contain unrelated variables named "x".
    */
   private VarInfoName var_info_name; // interned
 
   /**
-   * Name as specified in the program point declaration.  VarInfoName
-   * sometimes changes this name as part of parsing so that
-   * VarInfoName.name() doesn't return the original name.
+   * Name as specified in the program point declaration. VarInfoName sometimes changes this name as
+   * part of parsing so that VarInfoName.name() doesn't return the original name.
    */
   private /*@Interned*/ String str_name; // interned
 
@@ -102,30 +95,25 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Type as declared in the target program. This is seldom used
-   * within Daikon as these types vary with program language and
-   * the like.  It's here more for information than anything else.
+   * Type as declared in the target program. This is seldom used within Daikon as these types vary
+   * with program language and the like. It's here more for information than anything else.
    */
   public ProglangType type; // interned (as are all ProglangType objects)
 
   /**
-   * Type as written in the data trace file -- i.e., it is the
-   * source variable type mapped into the set of basic types
-   * recognized by Daikon.  In particular, it includes boolean and
-   * hashcode (pointer).  This is the type that is normally used
-   * when determining if an invariant is applicable to a variable.
-   * For example, the less-than invariant is not applicable to
-   * booleans or hashcodes, but is applicable to integers (of
-   * various sizes) and floats.
-   * (In the variable name, "rep" stands for "representation".)
+   * Type as written in the data trace file -- i.e., it is the source variable type mapped into the
+   * set of basic types recognized by Daikon. In particular, it includes boolean and hashcode
+   * (pointer). This is the type that is normally used when determining if an invariant is
+   * applicable to a variable. For example, the less-than invariant is not applicable to booleans or
+   * hashcodes, but is applicable to integers (of various sizes) and floats. (In the variable name,
+   * "rep" stands for "representation".)
    */
   public ProglangType file_rep_type; // interned (as are all ProglangType objects)
 
   /**
-   * Type as internally stored by Daikon.  It contains less
-   * information than file_rep_type (for example, boolean and
-   * hashcode are both stored as integers).
-   * (In the variable name, "rep" stands for "representation".)
+   * Type as internally stored by Daikon. It contains less information than file_rep_type (for
+   * example, boolean and hashcode are both stored as integers). (In the variable name, "rep" stands
+   * for "representation".)
    *
    * @see ProglangType#fileTypeToRepType()
    */
@@ -141,15 +129,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public int varinfo_index;
 
   /**
-   * The index in a ValueTuple (more generally, in a list of values).
-   * It can differ from varinfo_index due to
-   * constants (and possibly other factors).
-   * It is -1 iff is_static_constant or not yet set.
+   * The index in a ValueTuple (more generally, in a list of values). It can differ from
+   * varinfo_index due to constants (and possibly other factors). It is -1 iff is_static_constant or
+   * not yet set.
    */
   public int value_index;
 
   /**
-   * is_static_constant == (value_index == -1);
+   * Invariants: <br>
+   * is_static_constant == (value_index == -1);<br>
    * is_static_constant == (static_constant_value != null).
    */
   // queried via isStaticConstant() method, so consider making this field private
@@ -158,7 +146,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Null if not statically constant. */
   /*@Nullable*/ /*@Interned*/ Object static_constant_value;
 
-  /** Whether and how derived.  Null if this is not derived. */
+  /** Whether and how derived. Null if this is not derived. */
   public /*@MonotonicNonNull*/ Derivation derived;
 
   // Various enums used for information about variables
@@ -215,33 +203,33 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   public VarDefinition vardef;
   /**
-   * For documentation, see {@link #get_enclosing_var()}.
-   * Null if no variable encloses this one -- that is, this is not a field
-   * of another variable, nor a "method call" like tostring or class.
+   * For documentation, see {@link #get_enclosing_var()}. Null if no variable encloses this one --
+   * that is, this is not a field of another variable, nor a "method call" like tostring or class.
    */
   public /*@Nullable*/ VarInfo enclosing_var;
+
   public int arr_dims = 0;
-  /** The arguments that were used to create this function application.
-   * Null if this variable is not a function application. */
+  /**
+   * The arguments that were used to create this function application. Null if this variable is not
+   * a function application.
+   */
   public /*@MonotonicNonNull*/ List<VarInfo> function_args = null;
 
   /** Parent program points in ppt hierarchy (optional) */
   public List<VarParent> parents;
 
   /**
-   * The relative name of this variable with respect to its enclosing
-   * variable.  Field name for fields, method name for instance methods.
+   * The relative name of this variable with respect to its enclosing variable. Field name for
+   * fields, method name for instance methods.
    */
   public /*@Nullable*/ String relative_name = null;
 
   /**
-   * Returns whether or not we have encountered to date any missing values
-   * due to array indices being out of bounds.  This can happen with both
-   * subscripts and subsequences.  Note that this becomes true as we are
-   * running, it cannot be set in advance without a first pass.
+   * Returns whether or not we have encountered to date any missing values due to array indices
+   * being out of bounds. This can happen with both subscripts and subsequences. Note that this
+   * becomes true as we are running, it cannot be set in advance without a first pass.
    *
-   * This is used as we are processing data to destroy any invariants
-   * that use this variable.
+   * <p>This is used as we are processing data to destroy any invariants that use this variable.
    *
    * @see Derivation#missingOutOfBounds()
    */
@@ -253,28 +241,28 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * True if a missing/nonsensical value was ever observed for this variable.
-   * This starts out false and is set dynamically, while reading the trace file.
+   * True if a missing/nonsensical value was ever observed for this variable. This starts out false
+   * and is set dynamically, while reading the trace file.
    */
   public boolean canBeMissing = false;
 
   /**
-   * Which equality group this belongs to.  Replaces equal_to.  Never null
-   * after this is put inside equalitySet.
+   * Which equality group this belongs to. Replaces equal_to. Never null after this is put inside
+   * equalitySet.
    */
   public Equality equalitySet;
 
   /** Cached value for sequenceSize() */
   private VarInfo sequenceSize;
 
-  /** non-null if this is an orig() variable.
-   *  <b>Do not test equality!  Only use its .name slot.</b>
+  /**
+   * non-null if this is an orig() variable.
+   *
+   * <p><b>Do not test equality! Only use its .name slot.</b>
    */
   public /*@Nullable*/ VarInfo postState;
 
-  /**
-   * @exception RuntimeException if representation invariant on this is broken
-   */
+  /** @exception RuntimeException if representation invariant on this is broken */
   public void checkRep() {
     assert ppt != null;
     assert var_info_name != null; // vin ok
@@ -321,9 +309,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns whether or not file_rep_type is a legal file_rep_type.
-   * The file_rep_type matches rep_type except that it also allows
-   * the more detailed scalar types (HASHCODE, BOOLEAN, etc).
+   * Returns whether or not file_rep_type is a legal file_rep_type. The file_rep_type matches
+   * rep_type except that it also allows the more detailed scalar types (HASHCODE, BOOLEAN, etc).
    */
   static boolean legalFileRepType(ProglangType file_rep_type) {
     return (legalRepType(file_rep_type)
@@ -336,10 +323,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Create VarInfo from VarDefinition.
-   * <p>
-   * This does not create a fully initialized VarInfo.  For example, its
-   * ppt and enclosing_var fields are not yet set.  Callers need to do some
-   * work to complete the construction of the VarInfo.
+   *
+   * <p>This does not create a fully initialized VarInfo. For example, its ppt and enclosing_var
+   * fields are not yet set. Callers need to do some work to complete the construction of the
+   * VarInfo.
    */
   public VarInfo(VarDefinition vardef) {
     vardef.checkRep();
@@ -416,12 +403,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Finishes defining the variable by relating it to other variables.
-   * This cannot be done when creating the variable because the other variables
-   * it is related to, may not yet exist.  Variables are related to their
-   * enclosing variables (for fields, arrays, and functions) and to their
-   * parent variables in the PptHierarchy.  RuntimeExceptions are thrown if
-   * any related variables do not exist.
+   * Finishes defining the variable by relating it to other variables. This cannot be done when
+   * creating the variable because the other variables it is related to, may not yet exist.
+   * Variables are related to their enclosing variables (for fields, arrays, and functions) and to
+   * their parent variables in the PptHierarchy. RuntimeExceptions are thrown if any related
+   * variables do not exist.
    */
   public void relate_var() {
 
@@ -440,9 +426,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         throw new RuntimeException(
             String.format(
                 "enclosing variable '%s' for variable '%s' " + "in ppt '%s' cannot be found",
-                vardef.enclosing_var,
-                vardef.name,
-                ppt.name));
+                vardef.enclosing_var, vardef.name, ppt.name));
       }
     }
 
@@ -456,9 +440,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           throw new RuntimeException(
               String.format(
                   "function argument '%s' for variable '%s' " + " in ppt '%s' cannot be found",
-                  varname,
-                  vardef.name,
-                  ppt.name));
+                  varname, vardef.name, ppt.name));
         }
         function_args.add(vi);
       }
@@ -469,18 +451,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Setup information normally specified in the declaration record
-   * for derived variables where the new variable is the result of
-   * applying a function to the other variables.  Much of the
-   * information is inferred from (arbitrarily) the first argument to
-   * the function.
-   * <p>
-   * The parent_ppt field is set if each VarInfo in the derivation has
-   * the same parent.  The parent_variable field is set if there is a
-   * parent_ppt and one or more of the bases has a non-default parent
-   * variable.  The parent variable name is formed as
-   * function_name(arg1,arg2,...) where arg1, arg2, etc are the
-   * parent variable names of each of the arguments.
+   * Setup information normally specified in the declaration record for derived variables where the
+   * new variable is the result of applying a function to the other variables. Much of the
+   * information is inferred from (arbitrarily) the first argument to the function.
+   *
+   * <p>The parent_ppt field is set if each VarInfo in the derivation has the same parent. The
+   * parent_variable field is set if there is a parent_ppt and one or more of the bases has a
+   * non-default parent variable. The parent variable name is formed as function_name(arg1,arg2,...)
+   * where arg1, arg2, etc are the parent variable names of each of the arguments.
    */
   public void setup_derived_function(String name, VarInfo... bases) {
 
@@ -552,13 +530,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Setup information normally specified in the declaration record
-   * for derived variables where one of the variables is the base of
-   * the derivation.  In general this information is inferred
-   * from the base variable of the derived variables.  Note that
-   * parent_ppt is set if each VarInfo in the derivation has the same
-   * parent, but parent_variable is not set.  This has to be set based
-   * on the particular derivation.
+   * Setup information normally specified in the declaration record for derived variables where one
+   * of the variables is the base of the derivation. In general this information is inferred from
+   * the base variable of the derived variables. Note that parent_ppt is set if each VarInfo in the
+   * derivation has the same parent, but parent_variable is not set. This has to be set based on the
+   * particular derivation.
    */
   public void setup_derived_base(VarInfo base, /*@Nullable*/ VarInfo... others) {
 
@@ -740,10 +716,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // }
 
   /**
-   * Create the prestate, or "orig()", version of the variable.
-   * Note that the returned value is not completely initialized.
-   * The caller is still responsible for setting some fields of it,
-   * such as enclosing_var.
+   * Create the prestate, or "orig()", version of the variable. Note that the returned value is not
+   * completely initialized. The caller is still responsible for setting some fields of it, such as
+   * enclosing_var.
    */
   public static VarInfo origVarInfo(VarInfo vi) {
     // At an exit point, parameters are uninteresting, but orig(param) is not.
@@ -803,10 +778,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Given an array of VarInfo objects, return an array of clones, where
-   * references to the originals have been modified into references to the
-   * new ones (so that the new set is self-consistent).  The originals
-   * should not be modified by this operation.
+   * Given an array of VarInfo objects, return an array of clones, where references to the originals
+   * have been modified into references to the new ones (so that the new set is self-consistent).
+   * The originals should not be modified by this operation.
    */
   public static VarInfo[] arrayclone_simple(VarInfo[] a_old) {
     int len = a_old.length;
@@ -826,7 +800,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // Derivation derived; probably can't be trimmed
   }
 
-  /** Returns the name of the variable.  For more info see repr() */
+  /**
+   * Returns the name of the variable.
+   *
+   * @see #name
+   */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied VarInfo this*/) {
     return name();
@@ -885,8 +863,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the static constant value of this variable.  The variable
-   * must be a static constant.  The result is non-null.
+   * Returns the static constant value of this variable. The variable must be a static constant. The
+   * result is non-null.
    */
   public Object constantValue() {
     if (isStaticConstant()) {
@@ -958,10 +936,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns a list of all of the basic (non-derived) variables that
-   * are used to make up this variable.  If this variable is not
-   * derived, it is just this variable.  Otherwise it is all of the
-   * the bases of this derivation
+   * Returns a list of all of the basic (non-derived) variables that are used to make up this
+   * variable. If this variable is not derived, it is just this variable. Otherwise it is all of the
+   * the bases of this derivation.
    */
   public List<VarInfo> get_all_constituent_vars() {
     List<VarInfo> vars = new ArrayList<VarInfo>();
@@ -976,10 +953,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns a list of all of the simple names that make up this variable.
-   * this includes each field and function name in the variable.  If this
-   * variable is derived it includes the simple names from each of its bases.
-   * For example, 'this.item.a' would return a list with 'this', 'item', and
+   * Returns a list of all of the simple names that make up this variable. this includes each field
+   * and function name in the variable. If this variable is derived it includes the simple names
+   * from each of its bases. For example, 'this.item.a' would return a list with 'this', 'item', and
    * 'a' and 'this.theArray[i]' would return 'this', 'theArray' and 'i'.
    */
   public List<String> get_all_simple_names() {
@@ -1018,17 +994,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public /*@MonotonicNonNull*/ Boolean isDerivedParamCached = null;
 
   /**
-   * Returns true if this is a param according to aux info, or this is
-   * a front end derivation such that one of its bases is a param.  To
-   * figure this out, what we do is get all the param variables at
-   * this's program point.  Then we search in this's name to see if
-   * the name contains any of the variables.  We have to do this
-   * because we only have name info, and we assume that x and x.a are
+   * Returns true if this is a param according to aux info, or this is a front end derivation such
+   * that one of its bases is a param. To figure this out, what we do is get all the param variables
+   * at this's program point. Then we search in this's name to see if the name contains any of the
+   * variables. We have to do this because we only have name info, and we assume that x and x.a are
    * related from the names alone.
-   * <p>
-   * Effects: Sets isDerivedParamCached and derivedParamCached to
-   * values the first time this method is called.  Subsequent calls
-   * use these cached values.
+   *
+   * <p>Effects: Sets isDerivedParamCached and derivedParamCached to values the first time this
+   * method is called. Subsequent calls use these cached values.
    */
   /*@EnsuresNonNullIf(result=true, expression="getDerivedParam()")*/
   @SuppressWarnings("purity") // created object is not returned
@@ -1088,8 +1061,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the param variable that encloses this variable (if any).
-   * Returns null otherwise.  Only valid in the new decl format.
+   * Returns the param variable that encloses this variable (if any). Returns null otherwise. Only
+   * valid in the new decl format.
    */
   private /*@Nullable*/ VarInfo enclosing_param() {
     // System.out.printf ("Considering %s\n", this);
@@ -1107,15 +1080,15 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Return a VarInfo that has two properties: this is a derivation of
-   * it, and it is a parameter variable.  If this is a parameter, then
-   * this is returned.  For example, "this" is always a parameter.
-   * The return value of getDerivedParam for "this.a" (which is not a
-   * parameter) is "this".
-   * Effects: Sets isDerivedParamCached and derivedParamCached to
-   * values the first time this method is called.  Subsequent calls
-   * use these cached values.
-   * @return null if the above condition doesn't hold.
+   * Return a VarInfo that has two properties: this is a derivation of it, and it is a parameter
+   * variable. If this is a parameter, then this is returned. For example, "this" is always a
+   * parameter. The return value of getDerivedParam for "this.a" (which is not a parameter) is
+   * "this".
+   *
+   * <p>Effects: Sets isDerivedParamCached and derivedParamCached to values the first time this
+   * method is called. Subsequent calls use these cached values.
+   *
+   * @return null if the above condition doesn't hold
    */
   /*@Pure*/
   public /*@Nullable*/ VarInfo getDerivedParam() {
@@ -1129,22 +1102,19 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   private /*@MonotonicNonNull*/ Boolean isDerivedParamAndUninterestingCached = null;
 
   /**
-   * Returns true if a given VarInfo is a parameter or derived from
-   * one in such a way that changes to it wouldn't be visible to the
-   * method's caller. There are 3 such cases:
+   * Returns true if a given VarInfo is a parameter or derived from one in such a way that changes
+   * to it wouldn't be visible to the method's caller. There are 3 such cases:
    *
    * <ul>
-   * <li> The variable is a pass-by-value parameter "p".
-   * <li> The variable is of the form "p.prop" where "prop" is an
-   * immutable property of an object, like its type, or (for a Java
-   * array) its size.
-   * <li> The variable is of the form "p.prop", and "p" has been
-   * modified to point to a different object. We assume "p" has been
-   * modified if we don't have an invariant "orig(p) == p".
+   *   <li> The variable is a pass-by-value parameter "p".
+   *   <li> The variable is of the form "p.prop" where "prop" is an immutable property of an object,
+   *       like its type, or (for a Java array) its size.
+   *   <li> The variable is of the form "p.prop", and "p" has been modified to point to a different
+   *       object. We assume "p" has been modified if we don't have an invariant "orig(p) == p".
    * </ul>
    *
-   * In any case, the variable must have a postState VarInfoName, and
-   * equality invariants need to have already been computed.
+   * In any case, the variable must have a postState VarInfoName, and equality invariants need to
+   * have already been computed.
    */
   @SuppressWarnings("purity") // set cache field
   /*@Pure*/
@@ -1297,6 +1267,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Get the value of this variable from a particular sample (ValueTuple).
+   *
    * @param vt the ValueTuple from which to extract the value
    */
   public /*@Interned*/ Object getValue(ValueTuple vt) {
@@ -1319,8 +1290,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the parent relation with the specified parent_relation_id;
-   * returns null if the relation is not specified
+   * Returns the parent relation with the specified parent_relation_id; returns null if the relation
+   * is not specified.
    */
   private /*@Nullable*/ VarParent get_parent(int parent_relation_id) {
     for (VarParent vp : parents) {
@@ -1331,9 +1302,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return null;
   }
 
-  /**
-   * Returns the parent variable name for the specified parent_relation_id.
-   */
+  /** Returns the parent variable name for the specified parent_relation_id. */
   private String parent_var_name(int parent_relation_id) {
     VarParent parent = get_parent(parent_relation_id);
     if (parent == null) {
@@ -1464,18 +1433,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /**
-   * Whether this VarInfo is the leader of its equality set.
-   */
+  /** Whether this VarInfo is the leader of its equality set. */
   /*@Pure*/
   public boolean isCanonical() {
     if (equalitySet == null) return true;
     return (equalitySet.leader() == this);
   }
 
-  /**
-   * Canonical representative that's equal to this variable.
-   */
+  /** Canonical representative that's equal to this variable. */
   /*@Pure*/
   public VarInfo canonicalRep() {
     if (equalitySet == null) {
@@ -1486,9 +1451,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return equalitySet.leader();
   }
 
-  /**
-   * Return true if this is a pointer or reference to another object.
-   */
+  /** Return true if this is a pointer or reference to another object. */
   /*@Pure*/
   public boolean is_reference() {
 
@@ -1498,9 +1461,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the VarInfo for the sequence from which this was derived,
-   * or null if this wasn't derived from a sequence.
-   * Only works for scalars.
+   * Returns the VarInfo for the sequence from which this was derived, or null if this wasn't
+   * derived from a sequence. Only works for scalars.
    */
   public /*@Nullable*/ VarInfo isDerivedSequenceMember() {
     if (derived == null) return null;
@@ -1531,9 +1493,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Return the original sequence variable from which this derived sequence
-   * was derived.
-   * Only works for sequences.
+   * Return the original sequence variable from which this derived sequence was derived. Only works
+   * for sequences.
    */
   public /*@Nullable*/ VarInfo isDerivedSubSequenceOf() {
 
@@ -1605,9 +1566,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns true if the type in the original program is integer.
-   * Should perhaps check Daikon.check_program_types and behave differently
-   * depending on that.
+   * Returns true if the type in the original program is integer. Should perhaps check
+   * Daikon.check_program_types and behave differently depending on that.
    */
   /*@Pure*/
   public boolean isIndex() {
@@ -1624,9 +1584,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * @return false if this variable expression is not legal ESC
-   * syntax, except for any necessary quantifications (subscripting).
-   * We err on the side of returning true, for now.
+   * @return false if this variable expression is not legal ESC syntax, except for any necessary
+   *     quantifications (subscripting). We err on the side of returning true, for now.
    */
   /*@Pure*/
   public boolean isValidEscExpression() {
@@ -1671,15 +1630,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Return true if invariants about this quantity are really
-   * properties of a pointer, but derived variables can refer to
-   * properties of the thing pointed to. This distinction is important
-   * when making logical statements about the object, because in the
-   * presence of side effects, the pointed-to object can change even
-   * when the pointer doesn't. For instance, we might have "obj ==
-   * orig(obj)", but "obj.color != orig(obj.color)". In such a case,
-   * isPointer() would be true of obj, and for some forms of output
-   * we'd need to translate "obj == orig(obj)" into something like
+   * Return true if invariants about this quantity are really properties of a pointer, but derived
+   * variables can refer to properties of the thing pointed to. This distinction is important when
+   * making logical statements about the object, because in the presence of side effects, the
+   * pointed-to object can change even when the pointer doesn't. For instance, we might have "obj ==
+   * orig(obj)", but "obj.color != orig(obj.color)". In such a case, isPointer() would be true of
+   * obj, and for some forms of output we'd need to translate "obj == orig(obj)" into something like
    * "location(obj) == location(orig(obj))".
    */
   /*@Pure*/
@@ -1694,9 +1650,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * A wrapper around VarInfoName.simplify_name() that also uses
-   * VarInfo information to guess whether "obj" should logically be
-   * treated as just the hash code of "obj", rather than the whole
+   * A wrapper around VarInfoName.simplify_name() that also uses VarInfo information to guess
+   * whether "obj" should logically be treated as just the hash code of "obj", rather than the whole
    * object.
    */
   public String simplifyFixup(String str) {
@@ -1717,13 +1672,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // Where do these really belong?
 
   /**
-   *  Given two variables I and J, indicate whether it is necessarily the
-   *  case that i&le;j or i&ge;j.  The variables also each have a shift, so the
-   *  test can really be something like (i+1)&le;(j-1).
-   *  The test is either:  i + i_shift &le; j + j_shift (if test_lessequal)
-   *                       i + i_shift &ge; j + j_shift (if !test_lessequal)
-   *  This is a dynamic check, and so must not be called while Daikon is
-   *  inferencing.
+   * Given two variables I and J, indicate whether it is necessarily the case that i&le;j or i&ge;j.
+   * The variables also each have a shift, so the test can really be something like (i+1)&le;(j-1).
+   * The test is one of:
+   *
+   * <ul>
+   *   <li>i + i_shift &le; j + j_shift (if test_lessequal)
+   *   <li>i + i_shift &ge; j + j_shift (if !test_lessequal)
+   * </ul>
+   *
+   * This is a dynamic check, and so must not be called while Daikon is inferencing.
    */
   public static boolean compare_vars(
       VarInfo vari, int vari_shift, VarInfo varj, int varj_shift, boolean test_lessequal) {
@@ -1837,9 +1795,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Return some variable in the other state (pre-state if this is
-   * post-state, or vice versa) that equals this one, or null if no equal
-   * variable exists.
+   * Return some variable in the other state (pre-state if this is post-state, or vice versa) that
+   * equals this one, or null if no equal variable exists.
    */
   // This does *not* try the obvious thing of converting "foo" to
   // "orig(foo)"; it creates something new.  I need to clarify the
@@ -1896,10 +1853,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return null;
   }
 
-  /**
-   * Check if two VarInfos are truly (non guarded) equal to each other
-   * right now.
-   */
+  /** Check if two VarInfos are truly (non guarded) equal to each other right now. */
   /*@Pure*/
   public boolean isEqualTo(VarInfo other) {
     assert equalitySet != null;
@@ -1925,10 +1879,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Change the name of this VarInfo by side effect into a more simplified
-   * form, which is easier to read on display.  Don't call this during
-   * processing, as I think the system assumes that names don't change
-   * over time (?).
+   * Change the name of this VarInfo by side effect into a more simplified form, which is easier to
+   * read on display. Don't call this during processing, as I think the system assumes that names
+   * don't change over time (?).
    */
   public void simplify_expression() {
     if (debugSimplifyExpression.isLoggable(Level.FINE)) {
@@ -2019,12 +1972,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Two variables are "compatible" if their declared types are
-   * castable and their comparabilities are comparable.  This is a
-   * reflexive relationship, because it calls
-   * ProglangType.comparableOrSuperclassEitherWay.  However, it is not
-   * transitive because it might not hold for two children of a
-   * superclass, even though it would for each child and the superclass.
+   * Two variables are "compatible" if their declared types are castable and their comparabilities
+   * are comparable. This is a reflexive relationship, because it calls
+   * ProglangType.comparableOrSuperclassEitherWay. However, it is not transitive because it might
+   * not hold for two children of a superclass, even though it would for each child and the
+   * superclass.
    */
   public boolean compatible(VarInfo var2) {
     VarInfo var1 = this;
@@ -2045,8 +1997,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Return true if this sequence variable's element type is compatible
-   * with the scalar variable.
+   * Return true if this sequence variable's element type is compatible with the scalar variable.
    */
   public boolean eltsCompatible(VarInfo sclvar) {
     VarInfo seqvar = this;
@@ -2069,12 +2020,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Without using comparability info, check that this is comparable
-   * to var2.  This is a reflexive relationship, because it calls
-   * ProglangType.comparableOrSuperclassEitherWay.  However, it is not
-   * transitive because it might not hold for two children of a
-   * superclass, even though it would for each child and the
-   * superclass.  Does not check comparabilities.
+   * Without using comparability info, check that this is comparable to var2. This is a reflexive
+   * relationship, because it calls ProglangType.comparableOrSuperclassEitherWay. However, it is not
+   * transitive because it might not hold for two children of a superclass, even though it would for
+   * each child and the superclass. Does not check comparabilities.
    */
   public boolean comparableByType(VarInfo var2) {
     VarInfo var1 = this;
@@ -2128,9 +2077,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Without using comparability info, check that this is comparable
-   * to var2.  This is a reflexive and transitive relationship.  Does
-   * not check comparabilities.
+   * Without using comparability info, check that this is comparable to var2. This is a reflexive
+   * and transitive relationship. Does not check comparabilities.
    */
   public boolean comparableNWay(VarInfo var2) {
     VarInfo var1 = this;
@@ -2146,10 +2094,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return true;
   }
 
-  /**
-   * Return true if this sequence's first index type is compatible
-   * with the scalar variable.
-   */
+  /** Return true if this sequence's first index type is compatible with the scalar variable. */
   public boolean indexCompatible(VarInfo sclvar) {
     VarInfo seqvar = this;
     if (Daikon.check_program_types) {
@@ -2197,11 +2142,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // Is this property always guaranteed to be true?  It's placed in a
   // slice, but then might it get printed or treated as true?
   /**
-   * Create a guarding predicate for this VarInfo, that is, an
-   * invariant that ensures that this object is available for access
-   * to variables that reference it, such as fields.
-   * (The invariant is placed in the appropriate slice.)
-   * Returns null if no guarding is needed.
+   * Create a guarding predicate for this VarInfo, that is, an invariant that ensures that this
+   * object is available for access to variables that reference it, such as fields. (The invariant
+   * is placed in the appropriate slice.) Returns null if no guarding is needed.
    */
   // Adding a test against null is not quite right for C programs, where *p
   // could be nonsensical (uninitialized or freed) even when p is non-null.
@@ -2264,23 +2207,19 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   static Set<String> addVarMessages = new HashSet<String>();
 
   /**
-   * Finds a list of variables that must be guarded for this VarInfo to be
-   * guaranteed to not be missing.  This list never includes "this", as it
-   * can never be null.  The variables are returned in the order in which
-   * their guarding prefixes are supposed to print.
-   * <p>
-   * For example, if this VarInfo is "a.b.c", then the guarding list
-   * consists of the variables "a" and "a.b".  If "a" is null or "a.b" is
-   * null, then "a.b.c" is missing (does not exist).
+   * Finds a list of variables that must be guarded for this VarInfo to be guaranteed to not be
+   * missing. This list never includes "this", as it can never be null. The variables are returned
+   * in the order in which their guarding prefixes are supposed to print.
+   *
+   * <p>For example, if this VarInfo is "a.b.c", then the guarding list consists of the variables
+   * "a" and "a.b". If "a" is null or "a.b" is null, then "a.b.c" is missing (does not exist).
    */
   public List<VarInfo> getGuardingList() {
 
     /**
-     * The list returned by this visitor always includes the argument
-     * itself (if it is testable against null; for example, derived
-     * variables are not).
-     * If the caller does not want the argument to be in the list, the
-     * caller must must remove the argument.
+     * The list returned by this visitor always includes the argument itself (if it is testable
+     * against null; for example, derived variables are not). If the caller does not want the
+     * argument to be in the list, the caller must must remove the argument.
      */
     // Inner class because it uses the "ppt" variable.
     // Basic structure of each visitor:
@@ -2323,10 +2262,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
             Invariant.debugGuarding.fine(
                 String.format(
                     "shouldBeGuarded(%s) [%s] %s %b",
-                    viname,
-                    applyPreMaybe(viname),
-                    vi,
-                    ((vi == null) ? false : vi.canBeMissing)));
+                    viname, applyPreMaybe(viname), vi, ((vi == null) ? false : vi.canBeMissing)));
           }
           if (vi == null) return false;
           return vi.canBeMissing;
@@ -2524,10 +2460,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           String message =
               String.format(
                   "getGuardingList(%s, %s): did not find variable %s [inpre=%s]",
-                  name(),
-                  ppt.name(),
-                  vin.name(),
-                  inPre);
+                  name(), ppt.name(), vin.name(), inPre);
           // Only print the error message at most once per variable.
           if (addVarMessages.add(vin.name())) {
             // For now, don't print at all:  it's generally innocuous
@@ -2544,8 +2477,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       }
 
       /**
-       * Add the given variable to the result list.
-       * Does nothing if the variable is of primitive type.
+       * Add the given variable to the result list. Does nothing if the variable is of primitive
+       * type.
        */
       // Should this operate by side effect on a global variable?
       // (Then what is the type of the visitor; what does everything return?)
@@ -2612,9 +2545,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns a list of all of the variables that enclose this one.  If
-   * this is derived, this includes all of the enclosing variables of all
-   * of the bases
+   * Returns a list of all of the variables that enclose this one. If this is derived, this includes
+   * all of the enclosing variables of all of the bases.
    */
   public List<VarInfo> get_all_enclosing_vars() {
     List<VarInfo> result = new ArrayList<VarInfo>();
@@ -2630,9 +2562,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return result;
   }
 
-  /**
-   * Compare names by index.
-   */
+  /** Compare names by index. */
   public static final class IndexComparator implements Comparator<VarInfo>, Serializable {
     // This needs to be serializable because Equality invariants keep
     // a TreeSet of variables sorted by theInstance.
@@ -2663,10 +2593,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Looks for an OBJECT ppt that corresponds to the type of this
-   * variable.  Returns null if such a point is not found.
+   * Looks for an OBJECT ppt that corresponds to the type of this variable. Returns null if such a
+   * point is not found.
    *
-   * @param all_ppts    map of all program points
+   * @param all_ppts map of all program points
    */
   public /*@Nullable*/ PptTopLevel find_object_ppt(PptMap all_ppts) {
 
@@ -2680,14 +2610,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Class used to contain a pair of VarInfos and their sample count.
-   * Currently used for equality set merging as a way to store pairs
-   * of equal variables.  The variable with the smaller index is
+   * Class used to contain a pair of VarInfos and their sample count. Currently used for equality
+   * set merging as a way to store pairs of equal variables. The variable with the smaller index is
    * always stored first.
    *
-   * Pairs are equal if both of their VarInfos are identical.  Note
-   * that the content of the VarInfos are not compared, only their
-   * pointer values.
+   * <p>Pairs are equal if both of their VarInfos are identical. Note that the content of the
+   * VarInfos are not compared, only their pointer values.
    */
   public static class Pair {
 
@@ -2777,8 +2705,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the number of elements in the variable's equality set.
-   * Returns 1 if the equality optimization is turned off
+   * Returns the number of elements in the variable's equality set. Returns 1 if the equality
+   * optimization is turned off.
    */
   public int get_equalitySet_size() {
     if (equalitySet == null) {
@@ -2789,8 +2717,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the vars_info in the variable's equality set.
-   * Returns a set with just itself if the equality optimization is turned off
+   * Returns the vars_info in the variable's equality set. Returns a set with just itself if the
+   * equality optimization is turned off.
    */
   public Set<VarInfo> get_equalitySet_vars() {
     if (equalitySet == null) {
@@ -2803,8 +2731,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the leader in the variable's equality set.
-   * Returns itself if the equality optimization is turned off
+   * Returns the leader in the variable's equality set. Returns itself if the equality optimization
+   * is turned off.
    */
   public VarInfo get_equalitySet_leader() {
     // if (equalitySet == null && VarInfo.use_equality_optimization == false) {  // match } for vim
@@ -2859,9 +2787,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Adds a subscript (or sequence) to an array variable.  This should
-   * really just just substitute for '..', but the dots are currently
-   * removed for back compatability.
+   * Adds a subscript (or sequence) to an array variable. This should really just just substitute
+   * for '..', but the dots are currently removed for back compatability.
    */
   public String apply_subscript(String subscript) {
     if (FileIO.new_decl_format) {
@@ -2874,9 +2801,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Adds a subscript (or subsequence) to an array name.  This should
-   * really just substitute for '..', but the dots are currently removed
-   * for back compatibility.
+   * Adds a subscript (or subsequence) to an array name. This should really just substitute for
+   * '..', but the dots are currently removed for back compatibility.
    */
   public static String apply_subscript(String sequence, String subscript) {
     if (FileIO.new_decl_format) {
@@ -2887,9 +2813,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * For array variables, returns the variable that is a simple array.
-   * If this variable is a slice, it returns the array variable that is being
-   * sliced.  If this variable is a simple array itself, returns this.
+   * For array variables, returns the variable that is a simple array. If this variable is a slice,
+   * it returns the array variable that is being sliced. If this variable is a simple array itself,
+   * returns this.
    */
   public VarInfo get_array_var() {
     assert file_rep_type.isArray();
@@ -2901,8 +2827,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the VarInfo that represents the base array of this
-   * array.  For example, if the array is a[].b.c, returns a[]
+   * Returns the VarInfo that represents the base array of this array. For example, if the array is
+   * a[].b.c, returns a[].
    */
   /*@Pure*/
   public VarInfo get_base_array() {
@@ -2928,9 +2854,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the VarInfo that represents the hashcode of the base array
-   * of this array.  For example, if the array is a[].b.c, returns a.
-   * Returns null if there is no such variable.
+   * Returns the VarInfo that represents the hashcode of the base array of this array. For example,
+   * if the array is a[].b.c, returns a. Returns null if there is no such variable.
    */
   /*@Pure*/
   public /*@Nullable*/ VarInfo get_base_array_hashcode() {
@@ -2943,9 +2868,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /**
-   * Returns the lower bound of the array or slice.
-   */
+  /** Returns the lower bound of the array or slice. */
   public Quantify.Term get_lower_bound() {
     assert file_rep_type.isArray() : "var " + name() + " rep " + file_rep_type;
     if (isDerived()) {
@@ -2955,9 +2878,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /**
-   * Returns the upper bound of the array or slice.
-   */
+  /** Returns the upper bound of the array or slice. */
   public Quantify.Term get_upper_bound() {
     assert file_rep_type.isArray();
     if (isDerived()) {
@@ -2968,8 +2889,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the length of this array.  The array can be an array or
-   * a list.  It cannot be a slice.
+   * Returns the length of this array. The array can be an array or a list. It cannot be a slice.
    */
   public Quantify.Term get_length() {
     assert file_rep_type.isArray() && !isDerived() : this;
@@ -2977,11 +2897,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Updates any references to other variables that should be within this
-   * ppt by looking them up within the ppt.  Necessary if a variable is
-   * moved to a different program point or if cloned variable is placed
-   * in a new program point (such as is done when combined exits are
-   * created)
+   * Updates any references to other variables that should be within this ppt by looking them up
+   * within the ppt. Necessary if a variable is moved to a different program point or if cloned
+   * variable is placed in a new program point (such as is done when combined exits are created).
    */
   public void update_after_moving_to_new_ppt() {
     if (enclosing_var != null) {
@@ -2992,8 +2910,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Temporary to let things compile now that name is private.  Eventually
-   * this should be removed.
+   * Temporary to let things compile now that name is private. Eventually this should be removed.
    */
   public VarInfoName get_VarInfoName() {
     return (var_info_name); // vin ok
@@ -3014,9 +2931,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     csharp_types.put("boolean", "bool");
   }
 
-  /**
-   * Transforms a Daikon type representation into a valid C# type.
-   */
+  /** Transforms a Daikon type representation into a valid C# type. */
   public static String fix_csharp_type_name(String type) {
     if (csharp_types.containsKey(type)) {
       return csharp_types.get(type);
@@ -3026,10 +2941,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * If the variable is an array, returns a valid C# 'Select' statement representing the array.
-   * For example, this.Array[].field would become this.Array.Select(x =&gt; x.field)
+   * If the variable is an array, returns a valid C# 'Select' statement representing the array. For
+   * example, this.Array[].field would become this.Array.Select(x =&gt; x.field)
    *
-   * If the variable is not an array, csharp_name() is returned.
+   * <p>If the variable is not an array, csharp_name() is returned.
    */
   public String csharp_collection_string() {
     String[] split = csharp_array_split();
@@ -3041,15 +2956,22 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Splits an array variable into the array and field portions.
-   * For example, if the variable this.Array[].field then
+   * Splits an array variable into the array and field portions. For example, if the variable
+   * this.Array[].field then
+   *
+   * <pre>
    * result[0] = this.Array[]
    * result[1] = field
+   * </pre>
    *
    * If the variable is not an array then
+   *
+   * <pre>
    * result[0] = csharp_name()
    * result[1] = ""
-   * (there is no splitting)
+   * </pre>
+   *
+   * (there is no splitting).
    */
   public String[] csharp_array_split() {
     String[] results = new String[2];
@@ -3079,9 +3001,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return results;
   }
 
-  /**
-   * Returns the name of this variable in the specified format
-   */
+  /** Returns the name of this variable in the specified format. */
   public String name_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return name();
     if (format == OutputFormat.SIMPLIFY) return simplify_name();
@@ -3093,17 +3013,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     throw new UnsupportedOperationException("Unknown format requested: " + format);
   }
 
-  /**
-   * Returns the name of this variable as a valid C# Code Contract.
-   */
+  /** Returns the name of this variable as a valid C# Code Contract. */
   /*@SideEffectFree*/
   public String csharp_name() {
     return csharp_name(null);
   }
 
-  /**
-   * Returns the name of this variable as a valid C# Code Contract.
-   */
+  /** Returns the name of this variable as a valid C# Code Contract. */
   /*@SideEffectFree*/
   public String csharp_name(/*@Nullable*/ String index) {
     if (index != null) assert file_rep_type.isArray();
@@ -3174,23 +3090,21 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns the name in java format.  This is the same as JML */
+  /** Returns the name in Java format. This is the same as JML. */
   public String java_name() {
     if (!FileIO.new_decl_format) return var_info_name.java_name(this); // vin ok
 
     return jml_name();
   }
 
-  /** Returns the name in DBC format.  This is the same as JML */
+  /** Returns the name in DBC format. This is the same as JML. */
   public String dbc_name() {
     if (!FileIO.new_decl_format) return var_info_name.dbc_name(this); // vin ok
 
     return jml_name();
   }
 
-  /**
-   * Returns the name of this variable in ESC format.
-   */
+  /** Returns the name of this variable in ESC format. */
   /*@SideEffectFree*/
   public String esc_name() {
     if (!FileIO.new_decl_format) return var_info_name.esc_name(); // vin ok
@@ -3199,9 +3113,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the name of this variable in ESC format.  If an index
-   * is specified, it is used as an array index.  It is an error to
-   * specify an index on a non-array variable
+   * Returns the name of this variable in ESC format. If an index is specified, it is used as an
+   * array index. It is an error to specify an index on a non-array variable.
    */
   /*@SideEffectFree*/
   public String esc_name(/*@Nullable*/ String index) {
@@ -3257,9 +3170,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /**
-   * Returns the name of this variable in JML format.
-   */
+  /** Returns the name of this variable in JML format. */
   /*@SideEffectFree*/
   public String jml_name() {
     if (!FileIO.new_decl_format) return var_info_name.jml_name(this); // vin ok
@@ -3268,9 +3179,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the name of this variable in JML format.  If an index
-   * is specified, it is used as an array index.  It is an error to
-   * specify an index on a non-array variable
+   * Returns the name of this variable in JML format. If an index is specified, it is used as an
+   * array index. It is an error to specify an index on a non-array variable.
    */
   public String jml_name(/*@Nullable*/ String index) {
 
@@ -3346,9 +3256,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the name of this variable in simplify format.  If an index
-   * is specified, it is used as an array index.  It is an error to specify
-   * an index on a non-array variable.
+   * Returns the name of this variable in simplify format. If an index is specified, it is used as
+   * an array index. It is an error to specify an index on a non-array variable.
    */
   public String simplify_name(/*@Nullable*/ String index) {
     if (!FileIO.new_decl_format) return var_info_name.simplify_name(); // vin ok
@@ -3416,21 +3325,18 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /**
-   * Return the name of this variable in its prestate (orig)
-   */
+  /** Return the name of this variable in its prestate (orig). */
   /*@SideEffectFree*/
   public /*@Interned*/ String prestate_name() {
     return ("orig(" + name() + ")").intern();
   }
 
   /**
-   * Returns the name of the size variable that correponds to this
-   * array variable in simplify format.  Returns null if this variable
-   * is not an array or the size name can't be constructed for other
-   * reasons.  Note that isArray seems to distinguish between actual
-   * arrays and other sequences (such as java.util.list).  Simplify uses
-   * (it seems) the same length approach for both, so we don't check isArray()
+   * Returns the name of the size variable that correponds to this array variable in simplify
+   * format. Returns null if this variable is not an array or the size name can't be constructed for
+   * other reasons. Note that isArray seems to distinguish between actual arrays and other sequences
+   * (such as java.util.list). Simplify uses (it seems) the same length approach for both, so we
+   * don't check isArray().
    */
   public /*@Nullable*/ String get_simplify_size_name() {
     // Implement the method in two ways, to double-check results.
@@ -3452,19 +3358,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       throw new Error(
           String.format(
               "%s: '%s' '%s'%n basehashcode = %s%n",
-              this,
-              result,
-              old_result,
-              get_base_array_hashcode()));
+              this, result, old_result, get_base_array_hashcode()));
     }
 
     return old_result;
   }
 
-  /**
-   * Returns true if this variable contains a simple variable whose
-   * name is varname
-   */
+  /** Returns true if this variable contains a simple variable whose name is varname. */
   public boolean includes_simple_name(String varname) {
     if (!FileIO.new_decl_format) return var_info_name.includesSimpleName(varname); // vin ok
 
@@ -3484,22 +3384,18 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Quantifies over the specified array variables in ESC format.
-   * Returns a 4 element string array.  Element 0 is the
-   * quantification, Element 1 is the indexed form of variable 1,
-   * Element 2 is the indexed form of variable 3.  and Element 4 is
-   * unknown.
+   * Quantifies over the specified array variables in ESC format. Returns a 4 element string array.
+   * Element 0 is the quantification, Element 1 is the indexed form of variable 1, Element 2 is the
+   * indexed form of variable 3. and Element 4 is unknown.
    */
   public static String[] esc_quantify(VarInfo... vars) {
     return esc_quantify(true, vars);
   }
 
   /**
-   * Quantifies over the specified array variables in ESC format.
-   * Returns a 4 element string array.  Element 0 is the
-   * quantification, Element 1 is the indexed form of variable 1,
-   * Element 2 is the indexed form of variable 3.  and Element 4 is
-   * unknown.
+   * Quantifies over the specified array variables in ESC format. Returns a 4 element string array.
+   * Element 0 is the quantification, Element 1 is the indexed form of variable 1, Element 2 is the
+   * indexed form of variable 3. and Element 4 is unknown.
    */
   public static String[] esc_quantify(boolean elementwise, VarInfo... vars) {
 
@@ -3530,10 +3426,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns a string array with 3 elements.  The first element is
-   * the sequence, the second element is the lower bound, and the third
-   * element is the upper bound.  Returns null if this is not a direct
-   * array or slice.
+   * Returns a string array with 3 elements. The first element is the sequence, the second element
+   * is the lower bound, and the third element is the upper bound. Returns null if this is not a
+   * direct array or slice.
    */
   public String /*@Nullable*/ [] simplifyNameAndBounds() {
     if (!FileIO.new_decl_format) {
@@ -3552,9 +3447,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the upper and lower bounds of the slice in simplify format.
-   * The implementation is somewhat different that simplifyNameAndBounds
-   * (I don't know why).
+   * Returns the upper and lower bounds of the slice in simplify format. The implementation is
+   * somewhat different that simplifyNameAndBounds (I don't know why).
    */
   public String /*@Nullable*/ [] get_simplify_slice_bounds() {
     if (!FileIO.new_decl_format) {
@@ -3578,12 +3472,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Return a string in simplify format that will seclect the
-   * (index_base + index_off)-th element of the sequence specified by
-   * this variable.
+   * Return a string in simplify format that will seclect the (index_base + index_off)-th element of
+   * the sequence specified by this variable.
    *
-   * @param simplify_index_name name of the index.  If free is false, this
-   * must be a number or null (null implies an index of 0)
+   * @param simplify_index_name name of the index. If free is false, this must be a number or null
+   *     (null implies an index of 0).
    * @param free true of simplify_index_name is variable name
    * @param index_off offset from the index
    */
@@ -3629,8 +3522,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Return a string in simplify format that will seclect the
-   * index_off element in a sequence that has a lower bound.
+   * Return a string in simplify format that will seclect the index_off element in a sequence that
+   * has a lower bound.
    *
    * @param index_off offset from the index
    */
@@ -3670,10 +3563,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return simplify_name(complete_index);
   }
 
-  /**
-   * Get a fresh variable name that doesn't appear in the given
-   * variable in simplify format
-   */
+  /** Get a fresh variable name that doesn't appear in the given variable in simplify format. */
   public static String get_simplify_free_index(VarInfo... vars) {
     if (!FileIO.new_decl_format) {
       VarInfoName[] vins = new VarInfoName[vars.length];
@@ -3688,10 +3578,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return qret[0].index.simplify_name();
   }
 
-  /**
-   * Get a 2 fresh variable names that doesn't appear in the given
-   * variable in simplify format
-   */
+  /** Get a 2 fresh variable names that doesn't appear in the given variable in simplify format. */
   public static String[] get_simplify_free_indices(VarInfo... vars) {
     if (!FileIO.new_decl_format) {
       if (vars.length == 1) {
@@ -3722,18 +3609,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Quantifies over the specified array variables in Simplify format.
-   * Returns a string array that contains the quantification, indexed
-   * form of each variable, optionally the index itself, and the closer.
+   * Quantifies over the specified array variables in Simplify format. Returns a string array that
+   * contains the quantification, indexed form of each variable, optionally the index itself, and
+   * the closer.
    *
-   * If elementwise is true, include the additional contraint that
-   * the indices (there must be exactly two in this case) refer to
-   * corresponding positions. If adjacent is true, include the
-   * additional constraint that the second index be one more than
-   * the first. If distinct is true, include the constraint that the
-   * two indices are different. If includeIndex is true, return
-   * additional strings, after the roots but before the closer, with
-   * the names of the index variables.
+   * <p>If elementwise is true, include the additional contraint that the indices (there must be
+   * exactly two in this case) refer to corresponding positions. If adjacent is true, include the
+   * additional constraint that the second index be one more than the first. If distinct is true,
+   * include the constraint that the two indices are different. If includeIndex is true, return
+   * additional strings, after the roots but before the closer, with the names of the index
+   * variables.
    */
   public static String[] simplify_quantify(EnumSet<QuantFlags> flags, VarInfo... vars) {
 
@@ -3790,8 +3675,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns a rough indication of the complexity of the variable.  Higher
-   * numbers indicate more complexity.
+   * Returns a rough indication of the complexity of the variable. Higher numbers indicate more
+   * complexity.
    */
   public int complexity() {
     if (!FileIO.new_decl_format) {
@@ -3830,10 +3715,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns true if this variable can be assigned to.  Currently this is
-   * presumed true of all variable except the special variable for the type
-   * of a variable and the size of a sequence.  It should include pure
-   * functions as well
+   * Returns true if this variable can be assigned to. Currently this is presumed true of all
+   * variable except the special variable for the type of a variable and the size of a sequence. It
+   * should include pure functions as well.
    */
   /*@Pure*/
   public boolean is_assignable_var() {
@@ -3846,9 +3730,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns whether or not this variable represents the type of a variable
-   * (eg, a.getClass().getName()).  Note that this will miss prestate variables such
-   * as 'orig(a.getClass().getName())'.
+   * Returns whether or not this variable represents the type of a variable (eg,
+   * a.getClass().getName()). Note that this will miss prestate variables such as
+   * 'orig(a.getClass().getName())'.
    */
   /*@Pure*/
   public boolean is_typeof() {
@@ -3860,8 +3744,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns whether or not this variable represents the type of a variable
-   * (eg, a.getClass().getName()).  This version finds prestate variable such as
+   * Returns whether or not this variable represents the type of a variable (eg,
+   * a.getClass().getName()). This version finds prestate variable such as
    * 'org(a.getClass().getName())'.
    */
   public boolean has_typeof() {
@@ -3873,9 +3757,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return is_typeof();
   }
 
-  /**
-   * Returns whether or not this variable is the 'this' variable.
-   */
+  /** Returns whether or not this variable is the 'this' variable. */
   /*@Pure*/
   public boolean is_this() {
     return name().equals("this");
@@ -3883,8 +3765,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns whether or not this variable is the 'this' variable.
-   * True for both normal and prestate versions of the variable.
+   * Returns whether or not this variable is the 'this' variable. True for both normal and prestate
+   * versions of the variable.
    */
   /*@Pure*/
   public boolean isThis() {
@@ -3910,18 +3792,18 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the integer offset if this variable is an addition such
-   * as a+2.  Throws an exception of this variable is not an addition.
-   * see #is_add()
+   * Returns the integer offset if this variable is an addition such as a+2. Throws an exception of
+   * this variable is not an addition.
+   *
+   * @see #is_add()
    */
   public int get_add_amount() {
     return ((VarInfoName.Add) var_info_name).amount;
   }
 
   /**
-   * Returns whether or not this variable is an actual array as opposed
-   * to an array that is created over fields/methods of an array.  For
-   * example, 'a[]' is a direct array, but 'a[].b' is not.
+   * Returns whether or not this variable is an actual array as opposed to an array that is created
+   * over fields/methods of an array. For example, 'a[]' is a direct array, but 'a[].b' is not.
    */
   /*@Pure*/
   public boolean is_direct_array() {
@@ -3946,10 +3828,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns whether or not this variable is an actual array as opposed
-   * to an array that is created over fields/methods of an array or a
-   * slice.  For example, 'a[]' is a direct array, but 'a[].b' and 'a[i..]'
-   * are not.
+   * Returns whether or not this variable is an actual array as opposed to an array that is created
+   * over fields/methods of an array or a slice. For example, 'a[]' is a direct array, but 'a[].b'
+   * and 'a[i..]' are not.
    */
   /*@Pure*/
   public boolean is_direct_non_slice_array() {
@@ -3957,8 +3838,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns whether or not two variables have the same enclosing variable.
-   * If either variable is not a field, returns false
+   * Returns whether or not two variables have the same enclosing variable. If either variable is
+   * not a field, returns false.
    */
   public boolean has_same_parent(VarInfo other) {
     if (!is_field() || !other.is_field()) {
@@ -3972,8 +3853,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the variable that encloses this one.  For example if
-   * this variable is 'x.a.b', the enclosing variable is 'x.a'.
+   * Returns the variable that encloses this one. For example if this variable is 'x.a.b', the
+   * enclosing variable is 'x.a'.
    */
   public /*@Nullable*/ VarInfo get_enclosing_var() {
     if (FileIO.new_decl_format) {
@@ -3994,8 +3875,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Replaces all instances of 'this' in the variable with the
-   * name of arg.  Used to match up enter/exit variables with object variables
+   * Replaces all instances of 'this' in the variable with the name of arg. Used to match up
+   * enter/exit variables with object variables.
    */
   public String replace_this(VarInfo arg) {
     VarInfoName parent_name = var_info_name.replaceAll(VarInfoName.THIS, arg.var_info_name);
@@ -4003,9 +3884,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Creates a VarInfo that is a subsequence that begins at begin and
-   * ends at end with the specified shifts.  The begin or the end can be
-   * null, but a non-zero shift is only allowed with non-null variables.
+   * Creates a VarInfo that is a subsequence that begins at begin and ends at end with the specified
+   * shifts. The begin or the end can be null, but a non-zero shift is only allowed with non-null
+   * variables.
    */
   public static VarInfo make_subsequence(
       VarInfo seq,
@@ -4096,9 +3977,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the name to use for vi inside of a array reference.
-   * If the array reference is orig, then orig is implied.  This removes
-   * orig from orig variales and adds post to post variables.
+   * Returns the name to use for vi inside of a array reference. If the array reference is orig,
+   * then orig is implied. This removes orig from orig variales and adds post to post variables.
    */
   private static String inside_name(/*@Nullable*/ VarInfo vi, boolean in_orig, int shift) {
     if (vi == null) return "";
@@ -4118,8 +3998,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Creates a VarInfo that is an index into a sequence.  The type,
-   * file_rep_type, etc are taken from the element type of the sequence.
+   * Creates a VarInfo that is an index into a sequence. The type, file_rep_type, etc are taken from
+   * the element type of the sequence.
    */
   public static VarInfo make_subscript(VarInfo seq, /*@Nullable*/ VarInfo index, int index_shift) {
 
@@ -4176,9 +4056,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Create a VarInfo that is a function over one or more other variables.
-   * the type, rep_type, etc of the new function are taken from the first
-   * variable.
+   * Create a VarInfo that is a function over one or more other variables. the type, rep_type, etc
+   * of the new function are taken from the first variable.
    */
   public static VarInfo make_function(String function_name, VarInfo... vars) {
 
@@ -4203,7 +4082,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    *
    * @param func_name name of the function
    * @param type return type of the function.  If null, the return type is
-   *             the element type of the sequence
+   *             the element type of the sequence.
    * @param seq sequence variable
    * @param shift value to add or subtract from the function.  Legal values
    *              are -1, 0, and 1.
@@ -4327,9 +4206,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns true if vi is the prestate version of this.  If this is a
-   * derived variable, vi must be the same derivation using prestate
-   * versions of each base variable.
+   * Returns true if vi is the prestate version of this. If this is a derived variable, vi must be
+   * the same derivation using prestate versions of each base variable.
    */
   /*@Pure*/
   public boolean is_prestate_version(VarInfo vi) {
@@ -4363,9 +4241,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return isArray() && isDerived();
   }
 
-  /**
-   * Converts a variable name or expression to the old style of names
-   */
+  /** Converts a variable name or expression to the old style of names. */
   public static String old_var_names(String name) {
     if (PrintInvariants.dkconfig_old_array_names && FileIO.new_decl_format) {
       return name.replace("[..]", "[]");
@@ -4374,17 +4250,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /**
-   * Returns the old style variable name for this name
-   */
+  /** Returns the old style variable name for this name. */
   public String old_var_name() {
     return old_var_names(name());
   }
 
-  /**
-   * Rough check to ensure that the variable name and derivation match
-   * up
-   */
+  /** Rough check to ensure that the variable name and derivation match up. */
   public void var_check() {
 
     if (false) {

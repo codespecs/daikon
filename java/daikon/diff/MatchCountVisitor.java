@@ -11,12 +11,10 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * MatchCountVisitor is a visitor that almost does the opposite of
- * PrintDifferingInvariantsVisitor.  MatchCount prints invariant pairs
- * if they are the same, and only if they are a part of a conditional ppt.
- * The visitor also accumulates some state during its traversal for statistics,
- * and can report the match precision.
- *
+ * MatchCountVisitor is a visitor that almost does the opposite of PrintDifferingInvariantsVisitor.
+ * MatchCount prints invariant pairs if they are the same, and only if they are a part of a
+ * conditional ppt. The visitor also accumulates some state during its traversal for statistics, and
+ * can report the match precision.
  *
  * @author Lee Lin
  */
@@ -98,8 +96,10 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return s.substring(cut + 12, s.lastIndexOf('"'));
   }
 
-  /** s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)"
-   *  find the point just after the EXIT107 */
+  /**
+   * s is a program point name that looks like "blah blah:::EXIT107(arg1, arg2)" find the point just
+   * after the EXIT107
+   */
   private int findCutoff(String s) {
     String lastPart = "";
     int cut = 0;
@@ -147,8 +147,10 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return false;
   }
 
-  /** returns true iff any token of inv.format_java() contains
-   *  a number other than -1, 0, 1 or is null. */
+  /**
+   * Returns true iff any token of {@code inv.format_java()} contains a number other than -1, 0, 1
+   * or is null.
+   */
   private static boolean filterOut(Invariant inv) {
     assert inv != null : "@AssumeAssertion(nullness): precondition";
     String str = inv.format_using(OutputFormat.JAVA);
@@ -181,11 +183,11 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return (double) recall.size() / targSet.size();
   }
 
-  /** returns true iff numLiteral represents a numeric
-   * literal string of integer or float that we believe
-   * will be useful for a splitting condition.  Usually that
-   * includes -1, 0, 1, and any other numeric literal
-   * found in the source code.  */
+  /**
+   * Returns true iff numLiteral represents a numeric literal string of integer or float that we
+   * believe will be useful for a splitting condition. Usually that includes -1, 0, 1, and any other
+   * numeric literal found in the source code.
+   */
   private static boolean acceptableNumber(String numLiteral) {
 
     // need to make sure that it is an integer vs. floating

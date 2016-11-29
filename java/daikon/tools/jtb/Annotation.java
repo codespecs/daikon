@@ -11,45 +11,47 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Utility class to parse annotations generated with the Annotate program
- * using --wrap_xml flag.
+ * Utility class to parse annotations generated with the Annotate program using the {@code
+ * --wrap_xml} flag.
  *
- * An example of the String representation of an annotation, as output
- * with the --wrap_xml flag, is:
- * <pre>
- *  &lt;INVINFO&gt;
- *  &lt;INV&gt; this.topOfStack &le; this.theArray.length-1 &lt;/INV&gt;
- *  &lt;ENTER&gt;
- *  &lt;DAIKON&gt;  this.topOfStack &le; size(this.theArray[])-1  &lt;/DAIKON&gt;
- *  &lt;DAIKONCLASS&gt;class daikon.inv.binary.twoScalar.IntLessEqual&lt;/DAIKONCLASS&gt;
- *  &lt;METHOD&gt;  isEmpty()  &lt;/METHOD&gt;
- *  &lt;/INVINFO&gt;
- * </pre>
+ * <p>An example of the String representation of an annotation, as output with the {@code
+ * --wrap_xml} flag, is:
+ *
+ * <pre>{@code
+ * <INVINFO>
+ * <INV> this.topOfStack <= this.theArray.length-1 </INV>
+ * <ENTER>
+ * <DAIKON>  this.topOfStack <= size(this.theArray[])-1  </DAIKON>
+ * <DAIKONCLASS>class daikon.inv.binary.twoScalar.IntLessEqual</DAIKONCLASS>
+ * <METHOD>  isEmpty()  </METHOD>
+ * </INVINFO>
+ * }</pre>
+ *
  * The above string should actually span only one line.
  *
- * To be well-formed, an annotation should be enclosed in &lt;INVINFO&gt;
- * tags, contain
- * <pre>
- *   &lt;DAIKON&gt; and
- *   &lt;METHOD&gt; tags,
- * </pre>
- * and exactly one of
- * <pre>
- *   &lt;ENTER&gt;,
- *   &lt;EXIT&gt;,
- *   &lt;OBJECT&gt;, or
- *   &lt;CLASS&gt;.
- * </pre>
+ * <p>To be well-formed, an annotation should be enclosed in {@code <INVINFO>} tags, contain
  *
- * Obviously, the tool Annotate outputs well-formed annotations, so
- * the user shouldn't have to worry too much about well-formedness.
+ * <pre>{@code
+ * <DAIKON> and
+ * <METHOD>
+ * }</pre>
  *
- * Two annotations are equal iff their fields "daikonRep", "method"
- * and "kind" are equal.
+ * tags, and exactly one of
  *
- * The factory method get(String annoString) returns an annotation
- * that equals to the annotation represented by annoString. In
- * particular, if the same String is given twice to get(String
+ * <pre>{@code
+ * <ENTER>,
+ * <EXIT>,
+ * <OBJECT>, or
+ * <CLASS>.
+ * }</pre>
+ *
+ * Obviously, the tool Annotate outputs well-formed annotations, so the user shouldn't have to worry
+ * too much about well-formedness.
+ *
+ * <p>Two annotations are equal iff their fields "daikonRep", "method" and "kind" are equal.
+ *
+ * <p>The factory method get(String annoString) returns an annotation that equals to the annotation
+ * represented by annoString. In particular, if the same String is given twice to get(String
  * annoString), the method will return the same Annotation object.
  */
 public class Annotation {
@@ -78,9 +80,8 @@ public class Annotation {
 
   private String invRep;
   /**
-   * Representation of this annotation (the format depends on
-   * which output format was used to create the annotation in Daikon; it's
-   * one of JAVA, JML, ESC or DBC).
+   * Representation of this annotation (the format depends on which output format was used to create
+   * the annotation in Daikon; it's one of JAVA, JML, ESC or DBC).
    */
   public String invRep() {
     return invRep;
@@ -101,10 +102,7 @@ public class Annotation {
     this.daikonClass = daikonClass;
   }
 
-  /**
-   * <p>Parse a String and return the annotation that it represents.
-   *
-   */
+  /** Parse a String and return the annotation that it represents. */
   // [[ Note: Using an XML parser seems like too strong a hammer here,
   // and the performance of string matching is not an obvious
   // bottleneck. ]]
@@ -142,8 +140,8 @@ public class Annotation {
   }
 
   /**
-   * Thrown by method get(String annoString) if annoString doesn't
-   * represent a well-formed annotation.
+   * Thrown by method get(String annoString) if annoString doesn't represent a well-formed
+   * annotation.
    */
   public static class MalformedAnnotationException extends Exception {
     static final long serialVersionUID = 20050923L;
@@ -154,9 +152,8 @@ public class Annotation {
   }
 
   /**
-   * XML representation. May be different from the String used to
-   * generate the input; only those tags that were parsed by the
-   * get() method will be output here.
+   * XML representation. May be different from the String used to generate the input; only those
+   * tags that were parsed by the get() method will be output here.
    */
   public String xmlString() {
     return "<INVINFO> "
@@ -177,9 +174,8 @@ public class Annotation {
   }
 
   /**
-   * Find, parse and return all distinct annotations found in a
-   * String.  The string <code>annoString</code> may contain none, one,
-   * or several annotations.  Malformed annotations are ignored.
+   * Find, parse and return all distinct annotations found in a String. The string <code>annoString
+   * </code> may contain none, one, or several annotations. Malformed annotations are ignored.
    */
   public static Annotation[] findAnnotations(String annoString) {
     List<String> l = Collections.singletonList(annoString);
@@ -187,10 +183,9 @@ public class Annotation {
   }
 
   /**
-   * Find, parse and return all distinct annotations found in a list
-   * of strings.  Each string in <code>annoString</code> may contain
-   * none, one, or several annotations.  Malformed annotations are
-   * ignored.
+   * Find, parse and return all distinct annotations found in a list of strings. Each string in
+   * <code>annoString</code> may contain none, one, or several annotations. Malformed annotations
+   * are ignored.
    */
   public static Annotation[] findAnnotations(List<String> annoStrings) {
 
@@ -223,16 +218,15 @@ public class Annotation {
 
   // This class should really be an enum.
   /**
-   * <p> A class representing the kind of an annotation. An invariant
-   * is either <code>Kind.enter</code>, <code>Kind.exit</code>, or
-   * <code>Kind.objectInvariant</code>
+   * A class representing the kind of an annotation. An invariant is either <code>Kind.enter</code>,
+   * <code>Kind.exit</code>, or <code>Kind.objectInvariant</code> For well-formed Annotations, the
+   * following holds:
    *
-   * For well-formed Annotations, the following holds:
-   *
+   * <pre>
    *    a.kind == Kind.enter
    * || a.kind == Kind.exit
    * || a.kind == Kind.objectInvariant
-   *
+   * </pre>
    */
   /*@UsesObjectEquals*/
   public static class Kind {
@@ -267,10 +261,7 @@ public class Annotation {
     return kind.toString() + " : " + daikonRep();
   }
 
-  /**
-   * Two annotations are equal iff their fields "daikonRep", "method"
-   * and "kind" are equal.
-   */
+  /** Two annotations are equal iff their fields "daikonRep", "method" and "kind" are equal. */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
   public boolean equals(
@@ -293,10 +284,7 @@ public class Annotation {
     return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
   }
 
-  /**
-   * <p>Get the annotation with corresponding properties.
-   *
-   */
+  /** Get the annotation with corresponding properties. */
   public static Annotation get(
       Kind kind, String daikonRep, String method, String invRep, String daikonClass)
       throws Annotation.MalformedAnnotationException {

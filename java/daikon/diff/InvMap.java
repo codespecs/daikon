@@ -13,12 +13,11 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Maps ppts to lists of invariants.  Has an iterator to return the
- * ppts in the order they were inserted.
- * <p>
- * The ppts are used only as keys in this data structure.  Do not attempt
- * to look up invariants stored in the ppts; instead, obtain invariants via
- * the get() method.
+ * Maps ppts to lists of invariants. Has an iterator to return the ppts in the order they were
+ * inserted.
+ *
+ * <p>The ppts are used only as keys in this data structure. Do not attempt to look up invariants
+ * stored in the ppts; instead, obtain invariants via the get() method.
  */
 public class InvMap implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
@@ -61,10 +60,10 @@ public class InvMap implements Serializable {
   }
 
   /**
-   * Returns an iterator over the ppts, in the order they were added to the
-   * map.  Each element is a PptTopLevel.  These ppts are only used as
-   * keys:  do not look in these Ppts to find the invariants associated
-   * with them in the InvMap!  Use invariantIterator instead.
+   * Returns an iterator over the ppts, in the order they were added to the map. Each element is a
+   * PptTopLevel. These ppts are only used as keys: do not look in these Ppts to find the invariants
+   * associated with them in the InvMap! Use invariantIterator instead.
+   *
    * @see #invariantIterator()
    */
   public Iterator<PptTopLevel> pptIterator(/*>>>@GuardSatisfied InvMap this*/) {
@@ -72,10 +71,10 @@ public class InvMap implements Serializable {
   }
 
   /**
-   * Returns an iterable over the ppts, in the order they were added to the
-   * map.  Each element is a PptTopLevel.  These ppts are only used as
-   * keys:  do not look in these Ppts to find the invariants associated
-   * with them in the InvMap!  Use invariantIterator instead.
+   * Returns an iterable over the ppts, in the order they were added to the map. Each element is a
+   * PptTopLevel. These ppts are only used as keys: do not look in these Ppts to find the invariants
+   * associated with them in the InvMap! Use invariantIterator instead.
+   *
    * @see #invariantIterator()
    */
   public Iterable<PptTopLevel> pptIterable(/*>>>@GuardSatisfied InvMap this*/) {
@@ -89,9 +88,7 @@ public class InvMap implements Serializable {
     return ppts_copy.iterator();
   }
 
-  /**
-   * Returns an iterator over the invariants in this.
-   */
+  /** Returns an iterator over the invariants in this. */
   // The ppts are in the order added, and the invariants are in the order
   // added within each ppt, but the order of all invariants is not
   // necessarily that in which they were added, depending on calling

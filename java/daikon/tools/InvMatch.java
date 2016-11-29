@@ -7,8 +7,6 @@ import daikon.inv.unary.scalar.*;
 import gnu.getopt.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
@@ -17,16 +15,13 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Functions that look for relationships between the invariants at
- * different program points.  Relationships between individual invariants
- * are created with InvTranslate.  Currently, only invariants of the same
- * class can be related to one another.
+ * Functions that look for relationships between the invariants at different program points.
+ * Relationships between individual invariants are created with InvTranslate. Currently, only
+ * invariants of the same class can be related to one another.
  */
 public class InvMatch {
 
-  /**
-   * Main program for testing purposes
-   */
+  /** Main program for testing purposes. */
   @SuppressWarnings("nullness") // testing method, not worth type-checking
   public static void main(String[] args) throws IOException {
 
@@ -104,11 +99,10 @@ public class InvMatch {
   }
 
   /**
-   * Compares the invariants between the two program points specified
-   * and returns a list of possible translations.  A possible translation
-   * is a consistent set of translations (one for each invariant in ppt1)
-   * A set of translations is consistent if all of the variable mappings
-   * are consistent (i.e., no variable maps to more than one variable).
+   * Compares the invariants between the two program points specified and returns a list of possible
+   * translations. A possible translation is a consistent set of translations (one for each
+   * invariant in ppt1) A set of translations is consistent if all of the variable mappings are
+   * consistent (i.e., no variable maps to more than one variable).
    */
   static List<List<InvTranslate>> match_ppt(PptTopLevel ppt1, PptTopLevel ppt2) {
 
@@ -155,12 +149,10 @@ public class InvMatch {
   /**
    * Recursive routine that tries all possible combination of translations.
    *
-   * @param valid_translations  list of valid translations (updated)
+   * @param valid_translations list of valid translations (updated)
    * @param current_translation the current translation that is being built
-   * @param xlate_list          the list of possible translations for each
-   *                            invariant
-   * @param index               the current index in xlate_list.
-   *
+   * @param xlate_list the list of possible translations for each invariant
+   * @param index the current index in xlate_list
    */
   public static void consider_xlate(
       List<List<InvTranslate>> valid_translations,

@@ -1,9 +1,6 @@
 package daikon.chicory;
 
-/**
- * A subtype of DaikonVariableInfo used for variables that are
- * returned from procedures.
- */
+/** A subtype of DaikonVariableInfo used for variables that are returned from procedures. */
 public class ReturnInfo extends DaikonVariableInfo {
 
   public ReturnInfo(Class<?> returnType) {

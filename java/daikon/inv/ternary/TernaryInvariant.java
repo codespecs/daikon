@@ -9,9 +9,7 @@ import org.checkerframework.checker.interning.qual.*;
 import typequals.*;
 */
 
-/**
- * Exists simply to provide a more intelligent resusurrect_done method.
- */
+/** Exists simply to provide a more intelligent resusurrect_done method. */
 public abstract class TernaryInvariant extends Invariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

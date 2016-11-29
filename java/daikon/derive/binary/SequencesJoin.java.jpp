@@ -82,7 +82,7 @@ public final class CLASSNAME
    * hashcodes of the component sequences.  This is modified whenever
    * either component sequence is modified.
    * @param full_vt the value tuple of a program point to compute the
-   * derived value from.
+   * derived value from
    */
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);

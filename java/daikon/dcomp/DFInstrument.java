@@ -1,14 +1,9 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
-import daikon.chicory.ClassInfo;
-import daikon.chicory.DaikonWriter;
-import daikon.chicory.MethodInfo;
 import daikon.util.*;
 import daikon.util.BCELUtil;
 import java.io.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.regex.*;
 import org.apache.bcel.*;
@@ -22,9 +17,7 @@ import org.apache.commons.io.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/**
- * Instruments a class file to perform Data Flow.
- */
+/** Instruments a class file to perform Data Flow. */
 @SuppressWarnings({"nullness", "interning"})
 class DFInstrument extends DCInstrument {
 
@@ -36,19 +29,14 @@ class DFInstrument extends DCInstrument {
   /** Array from local variable index to local variable name in the test seq */
   public static String[] test_seq_locals = null;
 
-  /**
-   * Initialize with the original class and whether or not the class
-   * is part of the JDK
-   */
+  /** Initialize with the original class and whether or not the class is part of the JDK. */
   public DFInstrument(JavaClass orig_class, boolean in_jdk, ClassLoader loader) {
     super(orig_class, in_jdk, loader);
     ignore_toString = false;
     debug.log("dataflow instrumentation of %s", gen.getClassName());
   }
 
-  /**
-   * Instrument the specified method for DataFlow
-   */
+  /** Instrument the specified method for DataFlow. */
   public void instrument_method(Method m, MethodGen mg) {
 
     // See if this method has branch information
@@ -102,9 +90,8 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * Post processes instrumented methods.  If the method is the test
-   * sequence, the local variable table is saved so that we can
-   * translate from indices back to variables
+   * Post processes instrumented methods. If the method is the test sequence, the local variable
+   * table is saved so that we can translate from indices back to variables.
    */
   public void post_process(Method m, MethodGen mg) {
 
@@ -126,15 +113,14 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * Transforms instructions to track dataflow.  Returns a list
-   * of instructions that replaces the specified instruction.  Returns
-   * null if the instruction should not be replaced.
+   * Transforms instructions to track dataflow. Returns a list of instructions that replaces the
+   * specified instruction. Returns null if the instruction should not be replaced.
    *
-   *    @param mg method being instrumented
-   *    @param ih handle of Instruction to translate
-   *    @param stack current contents of the stack
-   *    @param branch_cr code range of branch whose dataflow is desired.
-   *    null indicates there are no branches of interest in this method.
+   * @param mg method being instrumented
+   * @param ih handle of Instruction to translate
+   * @param stack current contents of the stack
+   * @param branch_cr code range of branch whose dataflow is desired. null indicates there are no
+   *     branches of interest in this method.
    */
   /*@Nullable*/ InstructionList xform_inst(
       MethodGen mg, InstructionHandle ih, OperandStack stack, CodeRange branch_cr) {
@@ -398,10 +384,7 @@ class DFInstrument extends DCInstrument {
           String descr =
               String.format(
                   "%s.%s:constant@%d:%s",
-                  mg.getClassName(),
-                  mg.getName(),
-                  ih.getPosition(),
-                  cpi.getValue());
+                  mg.getClassName(), mg.getName(), ih.getPosition(), cpi.getValue());
           return build_il(
               ifact.createConstant(descr), dcr_call("push_const_src", Type.VOID, string_arg), inst);
         }
@@ -620,10 +603,9 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * Adjusts the tag stack for load constant opcodes.  If the constant is
-   * a primitive, creates a new tag and pushes it on the tag stack.
-   * A string description of the constant is included.
-   * If the constant is a reference (string, class), does nothing
+   * Adjusts the tag stack for load constant opcodes. If the constant is a primitive, creates a new
+   * tag and pushes it on the tag stack. A string description of the constant is included. If the
+   * constant is a reference (string, class), does nothing.
    */
   InstructionList ldc_tag_df(MethodGen mg, Instruction inst, OperandStack stack) {
     Type type;
@@ -650,11 +632,10 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * Creates code that creates a new tag that references the same value
-   * set as does the arrays tag.  First, the arrayref is duplicated on
-   * the stack.  Then a method is called to create a new tag with the
-   * same values as that of the array.  Finally the original arraylength
-   * instruction is performed.
+   * Creates code that creates a new tag that references the same value set as does the arrays tag.
+   * First, the arrayref is duplicated on the stack. Then a method is called to create a new tag
+   * with the same values as that of the array. Finally the original arraylength instruction is
+   * performed.
    */
   public InstructionList array_length_df(Instruction inst) {
 
@@ -672,11 +653,9 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * The new-array opcodes pop a size from the stack and push an array
-   * reference of the specified size.  We want to make the dataflow of any
-   * subsequent array-length instructions to be related to the size.
-   * We also need to initialize the array reference itself with its
-   * location.
+   * The new-array opcodes pop a size from the stack and push an array reference of the specified
+   * size. We want to make the dataflow of any subsequent array-length instructions to be related to
+   * the size. We also need to initialize the array reference itself with its location.
    */
   public InstructionList new_array_df(MethodGen mg, Instruction inst) {
     InstructionList il = new InstructionList();
@@ -697,11 +676,10 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * The multi new-array opcodes pop dim sizes from the stack and push an array
-   * reference of the specified dimenensions and size.  We want to make the
-   * dataflow of any subsequent array-length instructions to be related to
-   * the size of that array.  We also need to initialize the array references
-   * themselves with this location.
+   * The multi new-array opcodes pop dim sizes from the stack and push an array reference of the
+   * specified dimenensions and size. We want to make the dataflow of any subsequent array-length
+   * instructions to be related to the size of that array. We also need to initialize the array
+   * references themselves with this location.
    */
   public InstructionList multiarray_df(MethodGen mg, Instruction inst) {
     InstructionList il = new InstructionList();
@@ -729,11 +707,10 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * Creates code that makes the DF of an array load equal to the
-   * union of the index DF and the array element DF First the arrayref
-   * and its index are duplicated on the stack.  Then the appropriate
-   * array load method is called to calculate the DF and update the
-   * tag stack.  Finally the original load instruction is performed.
+   * Creates code that makes the DF of an array load equal to the union of the index DF and the
+   * array element DF First the arrayref and its index are duplicated on the stack. Then the
+   * appropriate array load method is called to calculate the DF and update the tag stack. Finally
+   * the original load instruction is performed.
    */
   public InstructionList array_load_df(Instruction inst) {
 
@@ -753,12 +730,10 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * Returns the code range of the branch specified in branch_id.
-   * The branch is identified as class:method;line#.  The
-   * class is the fully qualified class name.  The method is just the
-   * method name (not the full signature), and the line # is the line
-   * number in the java source of the conditional of interest.
-   * Returns null if the specified branch is not in this method.
+   * Returns the code range of the branch specified in branch_id. The branch is identified as
+   * class:method;line#. The class is the fully qualified class name. The method is just the method
+   * name (not the full signature), and the line # is the line number in the java source of the
+   * conditional of interest. Returns null if the specified branch is not in this method.
    */
   public /*@Nullable*/ CodeRange find_branch(String branch_id, String classname, Method m) {
 
@@ -823,9 +798,9 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * Discards primitive tags for each primitive argument to a non-instrumented
-   * method and adds a tag for a primitive return value.  Insures that the
-   * tag stack is correct for non-instrumented methods
+   * Discards primitive tags for each primitive argument to a non-instrumented method and adds a tag
+   * for a primitive return value. Insures that the tag stack is correct for non-instrumented
+   * methods.
    */
   InstructionList handle_invoke_df(
       MethodGen mg, InvokeInstruction invoke, OperandStack stack, int position) {
@@ -874,8 +849,7 @@ class DFInstrument extends DCInstrument {
         }
         debug.log(
             "insert call to replacement method %s(%s)%n",
-            replacement_method,
-            Arrays.toString(arg_types));
+            replacement_method, Arrays.toString(arg_types));
         return il;
       }
 
@@ -949,10 +923,7 @@ class DFInstrument extends DCInstrument {
           String descr =
               String.format(
                   "%s.%s:new-%s@%d",
-                  mg.getClassName(),
-                  mg.getName(),
-                  invoke.getClassName(pool),
-                  position);
+                  mg.getClassName(), mg.getName(), invoke.getClassName(pool), position);
           il.append(ifact.createConstant(descr));
           il.append(dcr_call("setup_obj_df", Type.VOID, new Type[] {Type.OBJECT, Type.STRING}));
         }
@@ -963,17 +934,14 @@ class DFInstrument extends DCInstrument {
   }
 
   /**
-   * Make a summary call for a constructor.  This is different from
-   * other summary calls because the summary call can't duplicate the
-   * actions of the original call.  The newly initialized object can
-   * only be passed to a constructor (until the constructor has returned).
-   * We thus duplicate the parameters to the constructor and then make
-   * the summary call.
+   * Make a summary call for a constructor. This is different from other summary calls because the
+   * summary call can't duplicate the actions of the original call. The newly initialized object can
+   * only be passed to a constructor (until the constructor has returned). We thus duplicate the
+   * parameters to the constructor and then make the summary call.
    *
-   * The current implementation only handles constructors with 8 bytes
-   * of arguments.  More arguments can be supported in the future by
-   * copying the parameters to a local.  This version uses dup which
-   * is limited to 4 or 8 bytes.
+   * <p>The current implementation only handles constructors with 8 bytes of arguments. More
+   * arguments can be supported in the future by copying the parameters to a local. This version
+   * uses dup which is limited to 4 or 8 bytes.
    */
   public void constructor_summary(
       InstructionList il, InvokeInstruction invoke, String replacement_method) {

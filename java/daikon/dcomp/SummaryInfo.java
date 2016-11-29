@@ -2,15 +2,9 @@ package daikon.dcomp;
 
 import static daikon.dcomp.DCInstrument.MethodDef;
 
-import daikon.DynComp;
-import daikon.chicory.ClassInfo;
-import daikon.chicory.DaikonWriter;
-import daikon.chicory.MethodInfo;
 import daikon.util.*;
 import java.io.*;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.regex.*;
 import org.apache.bcel.generic.*;
@@ -27,16 +21,15 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Information about DF summary routines.  These routines are called in
- * place of JDK routines when for dataflow.  In most cases, the
- * make appropriate dataflow calculations and then call the original
- * method.
+ * Information about DF summary routines. These routines are called in place of JDK routines when
+ * for dataflow. In most cases, the make appropriate dataflow calculations and then call the
+ * original method.
  *
- * Methods that are used for summaries are marked with the DFSum annotation.
- * Currently, all such methods are presumed to be in the class DCRuntime.
+ * <p>Methods that are used for summaries are marked with the DFSum annotation. Currently, all such
+ * methods are presumed to be in the class DCRuntime.
  *
- * DFInstrument looks for calls to any of the summarized methods and
- * replaces them with calls to the marked methods.
+ * <p>DFInstrument looks for calls to any of the summarized methods and replaces them with calls to
+ * the marked methods.
  */
 public class SummaryInfo {
 
@@ -59,9 +52,7 @@ public class SummaryInfo {
   String original_methodname;
   java.lang.reflect.Method method;
 
-  /**
-   * Exception thrown if the summary annotation cannot be correctly parsed
-   */
+  /** Exception thrown if the summary annotation cannot be correctly parsed. */
   public static class BadSummaryAnnotation extends RuntimeException {
     static final long serialVersionUID = 20080703L;
 
@@ -72,10 +63,9 @@ public class SummaryInfo {
   }
 
   /**
-   * Parses the annotation string to create summary information.  Throws
-   * BadSummaryAnnotation if there are any parse errors.  Does not lookup
-   * the original call to ensure that it exists so that class loading order
-   * is not changed.
+   * Parses the annotation string to create summary information. Throws BadSummaryAnnotation if
+   * there are any parse errors. Does not lookup the original call to ensure that it exists so that
+   * class loading order is not changed.
    */
   public SummaryInfo(java.lang.reflect.Method method, String annotation) {
 
@@ -106,8 +96,8 @@ public class SummaryInfo {
   }
 
   /**
-   * Returns true if the specifiec call exists, false otherwise.  Checks
-   * via reflection, so the specified class is loaded.
+   * Returns true if the specifiec call exists, false otherwise. Checks via reflection, so the
+   * specified class is loaded.
    */
   public boolean original_exists() {
 
@@ -137,8 +127,8 @@ public class SummaryInfo {
   }
 
   /**
-   * Returns the full signature of the original method.  Uses reflection
-   * to get the parameter types and may change class loading order
+   * Returns the full signature of the original method. Uses reflection to get the parameter types
+   * and may change class loading order.
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied SummaryInfo this*/) {
@@ -149,15 +139,10 @@ public class SummaryInfo {
 
     return String.format(
         "%s %s.%s(%s)",
-        invoke_type,
-        original_classname,
-        original_methodname,
-        UtilMDE.join(param_names, ","));
+        invoke_type, original_classname, original_methodname, UtilMDE.join(param_names, ","));
   }
 
-  /**
-   * Initializes the map that specifies each JDK routine that has a summary
-   */
+  /** Initializes the map that specifies each JDK routine that has a summary. */
   public static void init() {
 
     Class<DCRuntime> dcr = daikon.dcomp.DCRuntime.class;
@@ -183,9 +168,8 @@ public class SummaryInfo {
   }
 
   /**
-   * Checks all of the summaries in DCRuntime to ensure that they
-   * are syntactically correct and that the methods they describe
-   * exist
+   * Checks all of the summaries in DCRuntime to ensure that they are syntactically correct and that
+   * the methods they describe exist.
    */
   public static void main(String[] args) throws ClassNotFoundException {
 

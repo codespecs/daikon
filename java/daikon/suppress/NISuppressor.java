@@ -19,20 +19,18 @@ import typequals.*;
 */
 
 /**
- * Class that defines a suppressor invariant for use in non-instantiating
- * suppressions.  In non-instantiating suppressions, suppressor invariants
- * are defined independent of specific variables.  Instead, arguments
- * are identified by their variable index in the suppressee.
+ * Class that defines a suppressor invariant for use in non-instantiating suppressions. In
+ * non-instantiating suppressions, suppressor invariants are defined independent of specific
+ * variables. Instead, arguments are identified by their variable index in the suppressee.
  */
 public class NISuppressor {
 
   /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.inv.NISuppressor");
 
-  /**
-   * Argument indices used by the invariant.
-   */
+  /** Argument indices used by the invariant. */
   int v1_index = -1;
+
   int v2_index = -1;
   int v3_index = -1;
 
@@ -46,26 +44,24 @@ public class NISuppressor {
   boolean swap_class = false;
 
   /**
-   * State of the suppressor for the current check.  The state must be
-   * one of the defined above.  They can always be compared with ==.
+   * State of the suppressor for the current check. The state must be one of the defined above. They
+   * can always be compared with ==.
    */
   NIS.SuppressState state = NIS.SuppressState.NONE;
 
   /**
-   * information about the suppressor for the current check.  This is just
-   * used for debugging purposes
+   * information about the suppressor for the current check. This is just used for debugging
+   * purposes.
    */
   /*@Nullable*/ String current_state_str = null;
 
   /**
-   * Sample invariant - used to check the suppressor over constants.
-   * this is a prototype invariant; that is, sample_inv.ppt == null.
+   * Sample invariant - used to check the suppressor over constants. this is a prototype invariant;
+   * that is, sample_inv.ppt == null.
    */
   /*@Prototype*/ Invariant sample_inv;
 
-  /**
-   * Defines a unary suppressor.
-   */
+  /** Defines a unary suppressor. */
   public NISuppressor(int v1_index, Class<? extends Invariant> cls) {
 
     debug.fine(String.format("creating %s over arg %d", cls.getName(), v1_index));
@@ -88,9 +84,7 @@ public class NISuppressor {
     debug.fine("Created " + this);
   }
 
-  /**
-   * Defines a binary suppressor.
-   */
+  /** Defines a binary suppressor. */
   public NISuppressor(int v1_index, int v2_index, Class<? extends Invariant> cls) {
 
     debug.fine(String.format("creating %s over args %d and %d", cls.getName(), v1_index, v2_index));
@@ -149,9 +143,8 @@ public class NISuppressor {
   }
 
   /**
-   * Returns a new suppressor that is the same as this one except
-   * with its variables swapped.  Unary suppressors have their variable
-   * index swapped from 0 to 1 or 1 to 0.
+   * Returns a new suppressor that is the same as this one except with its variables swapped. Unary
+   * suppressors have their variable index swapped from 0 to 1 or 1 to 0.
    */
   public NISuppressor swap() {
 
@@ -170,8 +163,8 @@ public class NISuppressor {
   }
 
   /**
-   * Returns whether or not this suppressor is enabled.  A suppressor
-   * is enabled if the invariant on which it depends is enabled.
+   * Returns whether or not this suppressor is enabled. A suppressor is enabled if the invariant on
+   * which it depends is enabled.
    */
   /*@Pure*/
   public boolean is_enabled() {
@@ -179,44 +172,37 @@ public class NISuppressor {
   }
 
   /**
-   * Returns whether or not this suppressor invariant could be instantiated
-   * over the specified variables.  A suppressor that canot be instantiated
-   * over the variables cannot possibly suppress. Consider the NonZero
-   * invariant.  It is suppressed by EqualsOne.  But while NonZero is
-   * valid over all variables, EqualsOne is only valid over non-pointer
-   * variables.  Thus the suppression is only valid over non-pointer variables.
+   * Returns whether or not this suppressor invariant could be instantiated over the specified
+   * variables. A suppressor that canot be instantiated over the variables cannot possibly suppress.
+   * Consider the NonZero invariant. It is suppressed by EqualsOne. But while NonZero is valid over
+   * all variables, EqualsOne is only valid over non-pointer variables. Thus the suppression is only
+   * valid over non-pointer variables.
    */
   public boolean instantiate_ok(VarInfo[] vis) {
     return sample_inv.instantiate_ok(vis);
   }
 
   /**
-   * Sets the status of this suppressor with regards to the specified
-   * vis and falsified invariant.  The status consists of whether or
-   * not the suppressor is valid (true) and whether or not it matches
-   * the falsified invariant.
+   * Sets the status of this suppressor with regards to the specified vis and falsified invariant.
+   * The status consists of whether or not the suppressor is valid (true) and whether or not it
+   * matches the falsified invariant.
    *
-   * Matching a suppressor is more complex than is apparent at first
-   * glance.  The invariant AND its variables must match.  Since
-   * suppressors are specified without variables, the variables are
-   * taken from the specified vis.  The variable indices specify which
-   * variables to consider.
+   * <p>Matching a suppressor is more complex than is apparent at first glance. The invariant AND
+   * its variables must match. Since suppressors are specified without variables, the variables are
+   * taken from the specified vis. The variable indices specify which variables to consider.
    *
-   * For example consider the suppressor {1, 2, IntLessEqual} and a
-   * vis of {x, y, z}.  The suppressor is true if the IntLessEqual
-   * invariant exists in the slice {y, z}.  This allows ternary
-   * invariants to specify exactly the suppressor required for their
-   * particular permutation ofarguments.  Invariants that have an
-   * internal permute variable must match that as well.
+   * <p>For example consider the suppressor {1, 2, IntLessEqual} and a vis of {x, y, z}. The
+   * suppressor is true if the IntLessEqual invariant exists in the slice {y, z}. This allows
+   * ternary invariants to specify exactly the suppressor required for their particular permutation
+   * ofarguments. Invariants that have an internal permute variable must match that as well.
    *
-   * @param ppt     the top level program point
-   * @param vis     the slice of the suppressee.  Thus, if the suppressee is
-   *                ternary, vis, should specify three variables.
-   * @param inv     the falsified invariant.  inv_match indicates whether
-   *                or not inv matches this suppressor
-   *
+   * @param ppt the top level program point
+   * @param vis the slice of the suppressee. Thus, if the suppressee is ternary, vis, should specify
+   *     three variables.
+   * @param inv the falsified invariant. inv_match indicates whether or not inv matches this
+   *     suppressor.
    * @return the state of this suppressor which is one of (NIS.SuppressState.MATCH,
-   *         NIS.SuppressState.VALID, NIS.SuppressState.INVALID, NIS.SuppressState.NONSENSICAL)
+   *     NIS.SuppressState.VALID, NIS.SuppressState.INVALID, NIS.SuppressState.NONSENSICAL)
    */
   public NIS.SuppressState check(PptTopLevel ppt, VarInfo[] vis, /*@Nullable*/ Invariant inv) {
 
@@ -408,8 +394,8 @@ public class NISuppressor {
   }
 
   /**
-   * Returns true if inv matches this suppressor and the invariant
-   * is not falsified.
+   * Returns true if inv matches this suppressor and the invariant is not falsified.
+   *
    * @see #match(Invariant)
    */
   public boolean match_true(Invariant inv) {
@@ -421,9 +407,8 @@ public class NISuppressor {
   }
 
   /**
-   * Returns true if inv matches this suppressor.  It is assumed that
-   * inv's variables already match (i.e., that it was looked up in
-   * compatible slice
+   * Returns true if inv matches this suppressor. It is assumed that inv's variables already match
+   * (i.e., that it was looked up in compatible slice).
    */
   public boolean match(Invariant inv) {
 
@@ -442,9 +427,8 @@ public class NISuppressor {
   }
 
   /**
-   * Returns true if the suppressee matches this suppressor.  Currently
-   * only checks that the class matches but this will need to be expanded
-   * to check for a permutation match as well
+   * Returns true if the suppressee matches this suppressor. Currently only checks that the class
+   * matches but this will need to be expanded to check for a permutation match as well.
    */
   public boolean match(NISuppressee sse) {
 
@@ -463,10 +447,7 @@ public class NISuppressor {
     }
   }
 
-  /**
-   * Returns a copy of this suppressor translated to match the variable
-   * order in sor.
-   */
+  /** Returns a copy of this suppressor translated to match the variable order in sor. */
   public NISuppressor translate(NISuppressor sor) {
 
     int new_v1 = sor.translate_index(v1_index);
@@ -505,9 +486,8 @@ public class NISuppressor {
   static String[] varname = new String[] {"x", "y", "z"};
 
   /**
-   * Returns a string representation of the suppressor.  Rather than show
-   * var indices as numbers, the variables x, y, and z are shown instead
-   * with indices 0, 1, and 2 respectively
+   * Returns a string representation of the suppressor. Rather than show var indices as numbers, the
+   * variables x, y, and z are shown instead with indices 0, 1, and 2 respectively.
    */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied NISuppressor this*/) {
@@ -536,11 +516,7 @@ public class NISuppressor {
     } else {
       return (String.format(
           "%s(%s,%s,%s) [%s]",
-          cname,
-          varname[v1_index],
-          varname[v2_index],
-          varname[v3_index],
-          status));
+          cname, varname[v1_index], varname[v2_index], varname[v3_index], status));
     }
   }
 }

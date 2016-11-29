@@ -5,17 +5,15 @@ import daikon.VarInfo;
 import daikon.inv.*;
 
 /**
- * Filter for not printing an Invariant if its VarInfos return
- * isDerivedParameterAndUninteresting == true.
+ * Filter for not printing an Invariant if its VarInfos return isDerivedParameterAndUninteresting ==
+ * true.
  */
 public class DerivedParameterFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress parameter-derived postcondition invariants";
   }
 
-  /**
-   * Boolean. If true, DerivedParameterFilter is initially turned on.
-   */
+  /** Boolean. If true, DerivedParameterFilter is initially turned on. */
   public static boolean dkconfig_enabled = true;
 
   public DerivedParameterFilter() {
@@ -23,20 +21,17 @@ public class DerivedParameterFilter extends InvariantFilter {
   }
 
   /**
-   * Returns true if the invariant describes changes made to
-   * pass-by-value parameters that shouldn't be part of a routine's
-   * visible interface. E.g, suppose that "param" is a parameter to a
-   * Java method. If "param" itself is modified, that change won't be
-   * visible to a caller, so we shouldn't print it. If "param" points
-   * to an object, and that object is changed, that is visible, but
-   * only if "param" hasn't changed; otherwise, we're reporting a
-   * change in some object other than the one that was passed in.
+   * Returns true if the invariant describes changes made to pass-by-value parameters that shouldn't
+   * be part of a routine's visible interface. E.g, suppose that "param" is a parameter to a Java
+   * method. If "param" itself is modified, that change won't be visible to a caller, so we
+   * shouldn't print it. If "param" points to an object, and that object is changed, that is
+   * visible, but only if "param" hasn't changed; otherwise, we're reporting a change in some object
+   * other than the one that was passed in.
    *
-   * More specifically, return true if the invariant is a post-state
-   * invariant, and a variable in it is either a parameter, or a
-   * variable derived from a parameter, when we think that the
-   * parameter itself may have changed by virtue of not having a
-   * "param == orig(param)" invariant. */
+   * <p>More specifically, return true if the invariant is a post-state invariant, and a variable in
+   * it is either a parameter, or a variable derived from a parameter, when we think that the
+   * parameter itself may have changed by virtue of not having a "param == orig(param)" invariant.
+   */
   boolean shouldDiscardInvariant(Invariant inv) {
     if (inv.ppt.parent.ppt_name.isExitPoint()) {
       PrintInvariants.debugFiltering.fine("\tconsidering DPF for vars " + inv.ppt.varNames());

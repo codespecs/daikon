@@ -5,7 +5,6 @@ import daikon.derive.*; // see dbc_name_impl(VarInfo v)
 import daikon.derive.binary.*; // see dbc_name_impl(VarInfo v)
 import daikon.derive.ternary.*; // see dbc_name_impl(VarInfo v)
 import daikon.derive.unary.*; // see dbc_name_impl(VarInfo v)
-import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -29,15 +28,12 @@ import org.checkerframework.dataflow.qual.*;
 // If you change this file, also change class daikon.test.VarInfoNameTest.
 
 /**
- * VarInfoName represents the "name" of a variable.
- * Calling it a "name", however, is somewhat misleading.  It can be
- * some expression that includes more than one variable, term, etc.
- * We separate this from the VarInfo itself because clients wish to
- * manipulate names into new expressions independent of the VarInfo
- * that they might be associated with.  VarInfoName's child classes
- * are specific types of names, like applying a function to something.
- * For example, "a" is a name, and "sin(a)" is a name that is the name
- * "a" with the function "sin" applied to it.
+ * VarInfoName represents the "name" of a variable. Calling it a "name", however, is somewhat
+ * misleading. It can be some expression that includes more than one variable, term, etc. We
+ * separate this from the VarInfo itself because clients wish to manipulate names into new
+ * expressions independent of the VarInfo that they might be associated with. VarInfoName's child
+ * classes are specific types of names, like applying a function to something. For example, "a" is a
+ * name, and "sin(a)" is a name that is the name "a" with the function "sin" applied to it.
  */
 @SuppressWarnings({"nullness", "interning", "regex"}) // deprecated file
 public abstract /*@Interned*/ class VarInfoName implements Serializable, Comparable<VarInfoName> {
@@ -51,22 +47,18 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   static final long serialVersionUID = 20020614L;
 
   /**
-   * When true, apply orig directly to variables, do not apply
-   * orig to derived variables.  For example, create 'size(orig(a[]))'
-   * rather than 'orig(size(a[]))'
+   * When true, apply orig directly to variables, do not apply orig to derived variables. For
+   * example, create 'size(orig(a[]))' rather than 'orig(size(a[]))'.
    */
   static boolean dkconfig_direct_orig = false;
 
   /**
-   * Given the standard String representation of a variable name (like
-   * what appears in the normal output format), return the
-   * corresponding VarInfoName. This method can't parse all the
-   * strings that the VarInfoName name() method might produce, but it
-   * should be able to handle anything that appears in a decls
-   * file. Specifically, it can only handle a subset of the grammar of
-   * derived variables. For some values of "name",
-   * "name.equals(parse(e.name()))" might throw an exception, but if
-   * it completes normally, the result should be true.
+   * Given the standard String representation of a variable name (like what appears in the normal
+   * output format), return the corresponding VarInfoName. This method can't parse all the strings
+   * that the VarInfoName name() method might produce, but it should be able to handle anything that
+   * appears in a decls file. Specifically, it can only handle a subset of the grammar of derived
+   * variables. For some values of "name", "name.equals(parse(e.name()))" might throw an exception,
+   * but if it completes normally, the result should be true.
    */
   public static VarInfoName parse(String name) {
 
@@ -172,10 +164,9 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Return the String representation of this name in the default
-   * output format.
-   * @return the string representation (interned) of this name, in the
-   * default output format
+   * Return the String representation of this name in the default output format.
+   *
+   * @return the string representation (interned) of this name, in the default output format
    */
   /*@Pure*/
   public /*@Interned*/ String name(/*>>>@GuardSatisfied VarInfoName this*/) {
@@ -193,17 +184,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   private /*@Interned*/ String name_cached = null; // interned
 
   /**
-   * Returns the String representation of this name in the default output
-   * format.  Result is not interned; the client (name()) does so, then
-   * caches the interned value.
+   * Returns the String representation of this name in the default output format. Result is not
+   * interned; the client (name()) does so, then caches the interned value.
    */
   protected abstract String name_impl(/*>>>@GuardSatisfied VarInfoName this*/);
 
   /**
-   * Return the String representation of this name in the esc style
-   * output format.
-   * @return the string representation (interned) of this name, in the
-   * esc style output format
+   * Return the String representation of this name in the esc style output format.
+   *
+   * @return the string representation (interned) of this name, in the esc style output format
    */
   public /*@Interned*/ String esc_name() {
     if (esc_name_cached == null) {
@@ -221,22 +210,22 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   private /*@Interned*/ String esc_name_cached = null; // interned
 
   /**
-   * Returns the String representation of this name in the ESC style
-   * output format.  Cached by esc_name()
+   * Returns the String representation of this name in the ESC style output format. Cached by {@link
+   * #esc_name()}.
    */
   protected abstract String esc_name_impl();
 
   /**
-   * @return the string representation (interned) of this name, in the
-   * Simplify tool output format in the pre-state context.
+   * @return the string representation (interned) of this name, in the Simplify tool output format
+   *     in the pre-state context
    */
   public /*@Interned*/ String simplify_name() {
     return simplify_name(false);
   }
 
   /**
-   * @return the string representation (interned) of this name, in the
-   * Simplify tool output format, in the given pre/post-state context.
+   * @return the string representation (interned) of this name, in the Simplify tool output format,
+   *     in the given pre/post-state context.
    */
   protected /*@Interned*/ String simplify_name(boolean prestate) {
     int which = prestate ? 0 : 1;
@@ -251,21 +240,18 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return simplify_name_cached[which];
   }
 
-  private /*@Interned*/ String[] simplify_name_cached =
-      new /*@Interned*/ String[2]; // each interned
+  private /*@Interned*/ String[] simplify_name_cached = new /*@Interned*/ String[2]; // each interned
 
   /**
-   * Returns the String representation of this name in the simplify
-   * output format in either prestate or poststate context
+   * Returns the String representation of this name in the simplify output format in either prestate
+   * or poststate context.
    */
   protected abstract String simplify_name_impl(boolean prestate);
 
   /**
-   * Return the String representation of this name in the java style
-   * output format.
+   * Return the String representation of this name in the java style output format.
    *
-   * @return the string representation (interned) of this name, in the
-   * java style output format
+   * @return the string representation (interned) of this name, in the java style output format
    */
   public /*@Interned*/ String java_name(VarInfo v) {
     if (java_name_cached == null) {
@@ -282,15 +268,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   private /*@Interned*/ String java_name_cached = null; // interned
 
   /**
-   * Return the String representation of this name in java format.
-   * Cached and interned by java_name()
+   * Return the String representation of this name in java format. Cached and interned by {@link
+   * #java_name}.
    */
   protected abstract String java_name_impl(VarInfo v);
 
-  /**
-   * Return the String representation of this name in the JML style output
-   * format
-   */
+  /** Return the String representation of this name in the JML style output format. */
   public /*@Interned*/ String jml_name(VarInfo v) {
     if (jml_name_cached == null) {
       try {
@@ -305,10 +288,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   private /*@Interned*/ String jml_name_cached = null; // interned
-  /**
-   * Returns the name in JML style output format.  Cached and interned by
-   * jml_name()
-   */
+  /** Returns the name in JML style output format. Cached and interned by {@link #jml_name}. */
   protected abstract String jml_name_impl(VarInfo v);
 
   // For DBC, Java and JML formats, the formatting methods take as
@@ -325,21 +305,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   public static boolean testCall = false;
 
   /**
-   * Return the String representation of this name in the dbc style
-   * output format.
+   * Return the String representation of this name in the dbc style output format.
    *
-   * @param var the VarInfo which goes along with this VarInfoName.
-   *            Used to determine the type of the variable.
-   *
-   *        If var is null, the only repercussion is that if `this' is an
-   *        "orig(x)" expression, it will be formatted in jml-style,
-   *        something like "\old(x)".
-   *
-   *        If var is not null and `this' is an "orig(x)" expressions, it
-   *        will be formatted in Jtest's DBC style, as "$pre(<em>type</em>, x)".
-   *
-   * @return the string representation (interned) of this name, in the
-   * dbc style output format.
+   * @param var the VarInfo which goes along with this VarInfoName. Used to determine the type of
+   *     the variable.
+   *     <p>If var is null, the only repercussion is that if `this' is an "orig(x)" expression, it
+   *     will be formatted in jml-style, something like "\old(x)".
+   *     <p>If var is not null and `this' is an "orig(x)" expressions, it will be formatted in
+   *     Jtest's DBC style, as "$pre(<em>type</em>, x)".
+   * @return the string representation (interned) of this name, in the dbc style output format
    */
   public /*@Interned*/ String dbc_name(VarInfo var) {
     if (dbc_name_cached == null) {
@@ -355,15 +329,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   private /*@Interned*/ String dbc_name_cached = null; // interned
   /**
-   * Return the name in the DBC style output format.  If v is null, uses
-   * JML style instead.  Cached and interned by dbc_name()
+   * Return the name in the DBC style output format. If v is null, uses JML style instead. Cached
+   * and interned by {@link #dbc_name}.
    */
   protected abstract String dbc_name_impl(VarInfo v);
 
-  /**
-   * Return the String representation of this name using only letters,
-   * numbers, and underscores.
-   */
+  /** Return the String representation of this name using only letters, numbers, and underscores. */
   public /*@Interned*/ String identifier_name() {
     if (identifier_name_cached == null) {
       try {
@@ -380,14 +351,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   private /*@Interned*/ String identifier_name_cached = null; // interned
 
   /**
-   * Returns the name using only letters, numbers, and underscores.  Cached
-   * and interned by identifier_name()
+   * Returns the name using only letters, numbers, and underscores. Cached and interned by {@link
+   * #identifier_name()}.
    */
   protected abstract String identifier_name_impl();
 
-  /**
-   * @return name of this in the specified format
-   */
+  /** @return name of this in the specified format */
   public String name_using(OutputFormat format, VarInfo vi) {
 
     if (format == OutputFormat.DAIKON) return name();
@@ -412,7 +381,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
   private String repr_cached = null;
 
-  /** return the name in a verbose debugging format.  Cached by repr */
+  /** Return the name in a verbose debugging format. Cached by repr. */
   protected abstract String repr_impl(/*>>>@GuardSatisfied VarInfoName this*/);
 
   // It would be nice if a generalized form of the mechanics of
@@ -444,32 +413,26 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // ============================================================
   // Observers
 
-  /**
-   * @return true when this is "0", "-1", "1", etc.
-   */
+  /** @return true when this is "0", "-1", "1", etc. */
   /*@Pure*/
   public boolean isLiteralConstant() {
     return false;
   }
 
-  /**
-   * @return the nodes of this, as given by an inorder traversal.
-   */
+  /** @return the nodes of this, as given by an inorder traversal */
   public Collection<VarInfoName> inOrderTraversal(/*>>> @Interned VarInfoName this*/) {
     return Collections.unmodifiableCollection(new InorderFlattener(this).nodes());
   }
 
   /**
-   * @return true iff the given node can be found in this.  If the
-   * node has children, the whole subtree must match.
+   * @return true iff the given node can be found in this. If the node has children, the whole
+   *     subtree must match.
    */
   public boolean hasNode(VarInfoName node) {
     return inOrderTraversal().contains(node);
   }
 
-  /**
-   * @return true iff a node of the given type exists in this
-   */
+  /** @return true iff a node of the given type exists in this */
   public boolean hasNodeOfType(Class<?> type) {
     for (VarInfoName vin : inOrderTraversal()) {
       if (type.equals(vin.getClass())) {
@@ -479,17 +442,14 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return false;
   }
 
-  /**
-   * @return true iff a TypeOf node exists in this
-   */
+  /** @return true iff a TypeOf node exists in this */
   public boolean hasTypeOf() {
     return hasNodeOfType(VarInfoName.TypeOf.class);
   }
 
   /**
-   * Returns whether or not this name refers to the 'this' variable
-   * of a class.  True for both normal and prestate versions of the
-   * variable
+   * Returns whether or not this name refers to the 'this' variable of a class. True for both normal
+   * and prestate versions of the variable.
    */
   /*@Pure*/
   public boolean isThis() {
@@ -505,26 +465,20 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * @return true if the given node is in a prestate context within
-   * this tree; the node must be a member of this tree.
+   * @return true if the given node is in a prestate context within this tree; the node must be a
+   *     member of this tree
    */
   public boolean inPrestateContext(/*>>> @Interned VarInfoName this,*/ VarInfoName node) {
     return (new NodeFinder(this, node)).inPre();
   }
 
-  /**
-   * @return true if every variable in the name is an orig(...)
-   * variable.
-   */
+  /** @return true if every variable in the name is an orig(...) variable. */
   /*@Pure*/
   public boolean isAllPrestate(/*>>> @Interned VarInfoName this*/) {
     return new IsAllPrestateVisitor(this).result();
   }
 
-  /**
-   * @return true if this VarInfoName contains a simple variable whose
-   * name is NAME.
-   */
+  /** @return true if this VarInfoName contains a simple variable whose name is NAME */
   public boolean includesSimpleName(/*>>> @Interned VarInfoName this,*/ String name) {
     return new SimpleNamesVisitor(this).simples().contains(name);
   }
@@ -532,10 +486,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // ============================================================
   // Special producers, or other helpers
 
-  /**
-   * Replace the first instance of node by replacement, in the data
-   * structure rooted at this.
-   */
+  /** Replace the first instance of node by replacement, in the data structure rooted at this. */
   public VarInfoName replace(
       /*>>> @Interned VarInfoName this,*/ VarInfoName node, VarInfoName replacement) {
     if (node == replacement) // "interned": equality optimization pattern
@@ -544,10 +495,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return r.replace(this).intern();
   }
 
-  /**
-   * Replace all instances of node by replacement, in the data structure
-   * rooted at this.
-   */
+  /** Replace all instances of node by replacement, in the data structure rooted at this. */
   public VarInfoName replaceAll(
       /*>>> @Interned VarInfoName this,*/ VarInfoName node, VarInfoName replacement) {
     if (node == replacement) // "interned": equality optimization pattern
@@ -734,8 +682,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Returns a name for the size of this (this object should be a
-   * sequence).  Form is like "size(a[])" or "a.length".
+   * Returns a name for the size of this (this object should be a sequence). Form is like
+   * "size(a[])" or "a.length".
    */
   public VarInfoName applySize(/*>>> @Interned VarInfoName this*/) {
     // The simple approach:
@@ -779,9 +727,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * If this is a slice, (potentially in pre-state), return its lower
-   * and upper bounds, which can be subtracted to get one less than
-   * its size.
+   * If this is a slice, (potentially in pre-state), return its lower and upper bounds, which can be
+   * subtracted to get one less than its size.
    */
   public /*@Interned*/ VarInfoName[] getSliceBounds(/*>>> @Interned VarInfoName this*/) {
     VarInfoName vin = this;
@@ -813,10 +760,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return ret;
   }
 
-  /**
-   * The size of a contained sequence; form is like "size(sequence)"
-   * or "sequence.length".
-   */
+  /** The size of a contained sequence; form is like "size(sequence)" or "sequence.length". */
   public static /*@Interned*/ class SizeOf extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -922,17 +866,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
   }
 
-  /**
-   * Returns a name for a unary function applied to this object.
-   * The result is like "sum(this)".
-   */
+  /** Returns a name for a unary function applied to this object. The result is like "sum(this)". */
   public VarInfoName applyFunction(/*>>> @Interned VarInfoName this,*/ String function) {
     return (new FunctionOf(function, this)).intern();
   }
 
   /**
-   * Returns a name for a function applied to more than one argument.
-   * The result is like "sum(var1, var2)".
+   * Returns a name for a function applied to more than one argument. The result is like "sum(var1,
+   * var2)".
+   *
    * @param function the name of the function
    * @param vars the arguments to the function, of type VarInfoName
    */
@@ -941,8 +883,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Returns a name for a function of more than one argument.
-   * The result is like "sum(var1, var2)".
+   * Returns a name for a function of more than one argument. The result is like "sum(var1, var2)".
+   *
    * @param function the name of the function
    * @param vars the arguments to the function
    */
@@ -1041,6 +983,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
     /**
      * Construct a new function of multiple arguments.
+     *
      * @param function the name of the function
      * @param args the arguments to the function, of type VarInfoName
      */
@@ -1133,9 +1076,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return function + "_of_" + UtilMDE.join(elts, "_comma_") + "___";
     }
 
-    /**
-     * Shortcut getter to avoid repeated type casting.
-     */
+    /** Shortcut getter to avoid repeated type casting. */
     public VarInfoName getArg(int n) {
       return args.get(n);
     }
@@ -1145,18 +1086,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
   }
 
-  /**
-   * Returns a name for the intersection of with another sequence, like
-   * "intersect(a[], b[])".
-   */
+  /** Returns a name for the intersection of with another sequence, like "intersect(a[], b[])". */
   public VarInfoName applyIntersection(/*>>> @Interned VarInfoName this,*/ VarInfoName seq2) {
     assert seq2 != null;
     return (new Intersection(this, seq2)).intern();
   }
 
   /**
-   * Intersection of two sequences.  Extends FunctionOfN, and the
-   * only change is that it does special formatting for IOA.
+   * Intersection of two sequences. Extends FunctionOfN, and the only change is that it does special
+   * formatting for IOA.
    */
   public static /*@Interned*/ class Intersection extends FunctionOfN {
     // We are Serializable, so we specify a version to allow changes to
@@ -1169,18 +1107,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
   }
 
-  /**
-   * Returns a name for the union of this with another sequence, like
-   * "union(a[], b[])".
-   */
+  /** Returns a name for the union of this with another sequence, like "union(a[], b[])". */
   public VarInfoName applyUnion(/*>>> @Interned VarInfoName this,*/ VarInfoName seq2) {
     assert seq2 != null;
     return (new Union(this, seq2)).intern();
   }
 
   /**
-   * Union of two sequences.  Extends FunctionOfN, and the
-   * only change is that it does special formatting for IOA.
+   * Union of two sequences. Extends FunctionOfN, and the only change is that it does special
+   * formatting for IOA.
    */
   public static /*@Interned*/ class Union extends FunctionOfN {
     // We are Serializable, so we specify a version to allow changes to
@@ -1193,10 +1128,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
   }
 
-  /**
-   * Returns a 'getter' operation for some field of this name, like
-   * a.foo if this is a.
-   */
+  /** Returns a 'getter' operation for some field of this name, like a.foo if this is a. */
   public VarInfoName applyField(/*>>> @Interned VarInfoName this,*/ String field) {
     return (new Field(this, field)).intern();
   }
@@ -1415,8 +1347,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Returns a name for the type of this object; form is like
-   * "this.getClass().getName()" or "\typeof(this)".
+   * Returns a name for the type of this object; form is like "this.getClass().getName()" or
+   * "\typeof(this)".
    */
   public VarInfoName applyTypeOf(/*>>> @Interned VarInfoName this*/) {
     return (new TypeOf(this)).intern();
@@ -1492,8 +1424,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Returns a name for a the prestate value of this object; form is
-   * like "orig(this)" or "\old(this)".
+   * Returns a name for a the prestate value of this object; form is like "orig(this)" or
+   * "\old(this)".
    */
   public VarInfoName applyPrestate(/*>>> @Interned VarInfoName this*/) {
     if (this instanceof Poststate) {
@@ -1596,16 +1528,16 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   //        + s.substring(rparenpos+1);
 
   /**
-   * Returns a name for a the poststate value of this object; form is
-   * like "new(this)" or "\new(this)".
+   * Returns a name for a the poststate value of this object; form is like "new(this)" or
+   * "\new(this)".
    */
   public VarInfoName applyPoststate(/*>>> @Interned VarInfoName this*/) {
     return (new Poststate(this)).intern();
   }
 
   /**
-   * The poststate value of a term, like "new(term)".  Only used
-   * within prestate, so like "orig(this.myArray[new(index)]".
+   * The poststate value of a term, like "new(term)". Only used within prestate, so like
+   * "orig(this.myArray[new(index)]".
    */
   public static /*@Interned*/ class Poststate extends VarInfoName {
     // We are Serializable, so we specify a version to allow changes to
@@ -1659,10 +1591,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
   }
 
-  /**
-   * Returns a name for the this term plus a constant, like "this-1"
-   * or "this+1".
-   */
+  /** Returns a name for the this term plus a constant, like "this-1" or "this+1". */
   public VarInfoName applyAdd(/*>>> @Interned VarInfoName this,*/ int amount) {
     if (amount == 0) {
       return this;
@@ -1750,8 +1679,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Returns a name for the elements of a container (as opposed to the
-   * identity of the container) like "this[]" or "(elements this)".
+   * Returns a name for the elements of a container (as opposed to the identity of the container)
+   * like "this[]" or "(elements this)".
    */
   public VarInfoName applyElements(/*>>> @Interned VarInfoName this*/) {
     return (new Elements(this)).intern();
@@ -1874,8 +1803,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Caller is subscripting an orig(a[]) array.  Take the requested
-   * index and make it useful in that context.
+   * Caller is subscripting an orig(a[]) array. Take the requested index and make it useful in that
+   * context.
    */
   static VarInfoName indexToPrestate(VarInfoName index) {
     // 1 orig(a[]) . orig(index) -> orig(a[index])
@@ -1897,10 +1826,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     return index;
   }
 
-  /**
-   * Returns a name for an element selected from a sequence, like
-   * "this[i]".
-   */
+  /** Returns a name for an element selected from a sequence, like "this[i]". */
   public VarInfoName applySubscript(/*>>> @Interned VarInfoName this,*/ VarInfoName index) {
     assert index != null;
     ElementsFinder finder = new ElementsFinder(this);
@@ -2012,9 +1938,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Returns a name for a slice of element selected from a sequence,
-   * like "this[i..j]".  If an endpoint is null, it means "from the
-   * start" or "to the end".
+   * Returns a name for a slice of element selected from a sequence, like "this[i..j]". If an
+   * endpoint is null, it means "from the start" or "to the end".
    */
   public VarInfoName applySlice(
       /*>>> @Interned VarInfoName this,*/
@@ -2232,10 +2157,9 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Traverse the tree elements that have exactly one branch (so the
-   * traversal order doesn't matter).  Visitors need to implement
-   * methods for traversing elements (e.g. FunctionOfN) with more
-   * than one branch.
+   * Traverse the tree elements that have exactly one branch (so the traversal order doesn't
+   * matter). Visitors need to implement methods for traversing elements (e.g. FunctionOfN) with
+   * more than one branch.
    */
   public abstract static class AbstractVisitor<T> implements Visitor<T> {
     public T visitSimple(Simple o) {
@@ -2251,9 +2175,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return o.argument.accept(this);
     }
 
-    /**
-     * By default, return effect on first argument, but traverse all, backwards.
-     */
+    /** By default, return effect on first argument, but traverse all, backwards. */
     public T visitFunctionOfN(FunctionOfN o) {
       T retval = null;
       for (ListIterator<VarInfoName> i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
@@ -2294,13 +2216,14 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Use to report whether a node is in a pre- or post-state context.
-   * Throws an assertion error if a given goal isn't present.
+   * Use to report whether a node is in a pre- or post-state context. Throws an assertion error if a
+   * given goal isn't present.
    */
   @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class NodeFinder extends AbstractVisitor<VarInfoName> {
     /**
      * Creates a new NodeFinder.
+     *
      * @param root the root of the tree to search
      * @param goal the goal to find
      */
@@ -2382,9 +2305,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Finds if a given VarInfoName is contained in a set of nodes
-   * in the VarInfoName tree using == comparison.  Recurse through
-   * everything except fields, so in x.a, we don't look at a.
+   * Finds if a given VarInfoName is contained in a set of nodes in the VarInfoName tree using ==
+   * comparison. Recurse through everything except fields, so in x.a, we don't look at a.
    */
   @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class Finder extends AbstractVisitor<VarInfoName> {
@@ -2392,7 +2314,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     private final Set<VarInfoName> goals;
 
     /**
-     * Creates a new Finder.  Uses equals() to find.
+     * Creates a new Finder. Uses equals() to find.
+     *
      * @param argGoals the goals to find
      */
     public Finder(Set<VarInfoName> argGoals) {
@@ -2402,19 +2325,14 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
     }
 
-    /**
-     * Returns true iff some part of root is contained in this.goals.
-     */
+    /** Returns true iff some part of root is contained in this.goals. */
     /*@EnsuresNonNullIf(result=true, expression="getPart(#1")*/
     public boolean contains(VarInfoName root) {
       VarInfoName o = getPart(root);
       return (o != null);
     }
 
-    /**
-     * Returns the part of root that is contained in this.goals, or
-     * null if not found.
-     */
+    /** Returns the part of root that is contained in this.goals, or null if not found. */
     public /*@Nullable*/ VarInfoName getPart(VarInfoName root) {
       VarInfoName o = root.intern().accept(this);
       return o;
@@ -2584,8 +2502,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Use to traverse a tree, find the first (elements ...) node, and
-   * report whether it's in pre or post-state.
+   * Use to traverse a tree, find the first (elements ...) node, and report whether it's in pre or
+   * post-state.
    */
   @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class ElementsFinder extends AbstractVisitor<Elements> {
@@ -2654,9 +2572,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * A Replacer is a Visitor that makes a copy of a tree, but
-   * replaces some node (and its children) with another.
-   * The result is *not* interned; the client must do that if desired.
+   * A Replacer is a Visitor that makes a copy of a tree, but replaces some node (and its children)
+   * with another. The result is *not* interned; the client must do that if desired.
    */
   @SuppressWarnings("interning") // equality checking pattern, etc.
   public static class Replacer extends AbstractVisitor<VarInfoName> {
@@ -2735,10 +2652,9 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * Replace pre states by normal variables, and normal variables by
-   * post states.  We should do this for all variables except for
-   * variables derived from return.  This piggybacks on replacer but
-   * the actual replacement is done elsewhere.
+   * Replace pre states by normal variables, and normal variables by post states. We should do this
+   * for all variables except for variables derived from return. This piggybacks on replacer but the
+   * actual replacement is done elsewhere.
    */
   public static class PostPreConverter extends Replacer {
 
@@ -2759,9 +2675,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   public static class NoReturnValue {}
 
   /**
-   * Use to collect all elements in a tree into an inorder-traversal
-   * list.  Result includes the root element.
-   * All methods return null; to obtain the result, call nodes().
+   * Use to collect all elements in a tree into an inorder-traversal list. Result includes the root
+   * element. All methods return null; to obtain the result, call nodes().
    */
   public static class InorderFlattener extends AbstractVisitor<NoReturnValue> {
     public InorderFlattener(VarInfoName root) {
@@ -2860,9 +2775,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     private Set<String> simples;
 
     /**
-     * @return collection of simple identifiers used in this
-     * expression, as Strings. (Used, for instance, to check for
-     * conflict with a quantifier variable name).
+     * @return collection of simple identifiers used in this expression, as Strings. (Used, for
+     *     instance, to check for conflict with a quantifier variable name).
      */
     public Set<String> simples() {
       return Collections.unmodifiableSet(simples);
@@ -2905,8 +2819,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   }
 
   /**
-   * A quantifier visitor can be used to search a tree and return all
-   * unquantified sequences (e.g. a[] or a[i..j]).
+   * A quantifier visitor can be used to search a tree and return all unquantified sequences (e.g.
+   * a[] or a[i..j]).
    */
   public static class QuantifierVisitor extends AbstractVisitor<NoReturnValue> {
     public QuantifierVisitor(VarInfoName root) {
@@ -2920,9 +2834,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     private Set<VarInfoName> /*actually <Elements || Slice>*/ unquant;
 
     /**
-     * @return collection of the nodes under the root that need
-     * quantification.  Each node represents an array; in particular,
-     * the values are either of type Elements or Slice.
+     * @return collection of the nodes under the root that need quantification. Each node represents
+     *     an array; in particular, the values are either of type Elements or Slice.
      */
     // Here are some inputs and the corresponding output sets:
     //  terms[index].elts[num]   ==> { }
@@ -2954,11 +2867,10 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       // We only use one of them because we don't want double quantifiers
     }
     /**
-     * We do *not* want to pull out array members of FunctionOfN
-     * because a FunctionOfN creates a black-box array with respect to
-     * quantification.  (Also, otherwise, there may be two or more
-     * arrays that are returned, making the quantification engine
-     * think it's working with 2-d arrays.)
+     * We do *not* want to pull out array members of FunctionOfN because a FunctionOfN creates a
+     * black-box array with respect to quantification. (Also, otherwise, there may be two or more
+     * arrays that are returned, making the quantification engine think it's working with 2-d
+     * arrays.)
      */
     public NoReturnValue visitFunctionOfN(FunctionOfN o) {
       return null;
@@ -2997,21 +2909,18 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // Quantification for formatting in ESC or Simplify:  QuantHelper
 
   /**
-   * Helper for writing parts of quantification expressions.
-   * Formatting methods in invariants call the formatting methods in
-   * this class to get commonly-used parts, like how universal
+   * Helper for writing parts of quantification expressions. Formatting methods in invariants call
+   * the formatting methods in this class to get commonly-used parts, like how universal
    * quanitifiers look in the different formatting schemes.
    */
   public static class QuantHelper {
 
-    /**
-     * Debug tracer
-     */
+    /** Debug tracer. */
     public static final Logger debug = Logger.getLogger("daikon.inv.Invariant.print.QuantHelper");
 
     /**
-     * A FreeVar is very much like a Simple, except that it doesn't
-     * care if it's in prestate or poststate for simplify formatting.
+     * A FreeVar is very much like a Simple, except that it doesn't care if it's in prestate or
+     * poststate for simplify formatting.
      */
     public static class FreeVar extends Simple {
       // We are Serializable, so we specify a version to allow changes to
@@ -3040,18 +2949,15 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
     // <root, needy, index> -> <root', lower, upper>
     /**
-     * Replaces a needy (unquantified term) with its subscripted
-     * equivalent, using the given index variable.
+     * Replaces a needy (unquantified term) with its subscripted equivalent, using the given index
+     * variable.
      *
-     * @param root the root of the expression to be modified.
-     * Substitution occurs only in the subtree reachable from root.
-     * @param needy the term to be subscripted (must be of type Elements or
-     * Slice)
+     * @param root the root of the expression to be modified. Substitution occurs only in the
+     *     subtree reachable from root.
+     * @param needy the term to be subscripted (must be of type Elements or Slice)
      * @param index the variable to place in the subscript
-     *
-     * @return a 3-element array consisting of the new root, the lower
-     * bound for the index (inclusive), and the upper bound for the
-     * index (inclusive), in that order.
+     * @return a 3-element array consisting of the new root, the lower bound for the index
+     *     (inclusive), and the upper bound for the index (inclusive), in that order
      */
     public static VarInfoName[] replace(VarInfoName root, VarInfoName needy, VarInfoName index) {
       assert root != null;
@@ -3108,9 +3014,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /**
-     * Assuming that root is a sequence, return a VarInfoName
-     * representing the (index_base+index_off)-th element of that
-     * sequence. index_base may be null, to represent 0.
+     * Assuming that root is a sequence, return a VarInfoName representing the
+     * (index_base+index_off)-th element of that sequence. index_base may be null, to represent 0.
      */
     public static VarInfoName selectNth(
         VarInfoName root, /*@Nullable*/ VarInfoName index_base, int index_off) {
@@ -3137,9 +3042,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /**
-     * Assuming that root is a sequence, return a VarInfoName
-     * representing the (index_base+index_off)-th element of that
-     * sequence. index_base may be null, to represent 0.
+     * Assuming that root is a sequence, return a VarInfoName representing the
+     * (index_base+index_off)-th element of that sequence. index_base may be null, to represent 0.
      */
     public static VarInfoName selectNth(
         VarInfoName root, String index_base, boolean free, int index_off) {
@@ -3185,10 +3089,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return name;
     }
 
-    /**
-     * Return a fresh variable name that doesn't appear in the given
-     * variable names.
-     */
+    /** Return a fresh variable name that doesn't appear in the given variable names. */
     public static VarInfoName getFreeIndex(VarInfoName... vins) {
       Set<String> simples = new HashSet<String>();
       for (VarInfoName vin : vins) {
@@ -3197,9 +3098,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return new FreeVar(freshDistinctFrom(simples));
     }
 
-    /**
-     * Record type for return value of the quantify method below.
-     */
+    /** Record type for return value of the quantify method below. */
     public static class QuantifyReturn {
       public /*@Interned*/ VarInfoName[] root_primes;
       public Vector</*@Interned*/ VarInfoName[]>
@@ -3209,9 +3108,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     // <root*> -> <root'*, <index, lower, upper>*>
     // (The lengths of root* and root'* are the same; not sure about <i,l,u>*.)
     /**
-     * Given a list of roots, changes all Elements and Slice terms to
-     * Subscripts by inserting a new free variable; also return bounds
-     * for the new variables.
+     * Given a list of roots, changes all Elements and Slice terms to Subscripts by inserting a new
+     * free variable; also return bounds for the new variables.
      */
     public static QuantifyReturn quantify(VarInfoName[] roots) {
       assert roots != null;
@@ -3287,11 +3185,10 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
     // <root*> -> <string string* string>
     /**
-     * Given a list of roots, return a String array where the first
-     * element is a ESC-style quantification over newly-introduced
-     * bound variables, the last element is a closer, and the other
-     * elements are esc-named strings for the provided roots (with
-     * sequences subscripted by one of the new bound variables).
+     * Given a list of roots, return a String array where the first element is a ESC-style
+     * quantification over newly-introduced bound variables, the last element is a closer, and the
+     * other elements are esc-named strings for the provided roots (with sequences subscripted by
+     * one of the new bound variables).
      */
     public static String[] format_esc(VarInfoName[] roots) {
       return format_esc(roots, false);
@@ -3304,11 +3201,10 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
     // <root*> -> <string string*>
     /**
-     * Given a list of roots, return a String array where the first
-     * element is a JML-style quantification over newly-introduced
-     * bound variables, the last element is a closer, and the other
-     * elements are jml-named strings for the provided roots (with
-     * sequenced subscripted by one of the new bound variables).
+     * Given a list of roots, return a String array where the first element is a JML-style
+     * quantification over newly-introduced bound variables, the last element is a closer, and the
+     * other elements are jml-named strings for the provided roots (with sequenced subscripted by
+     * one of the new bound variables).
      */
     //     public static String[] format_jml(VarInfoName[] roots) {
     //       return format_jml(roots, false);
@@ -3496,21 +3392,17 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
     // <root*> -> <string string*>
     /**
-     * Given a list of roots, return a String array where the first
-     * element is a simplify-style quantification over
-     * newly-introduced bound variables, the last element is a closer,
-     * and the other elements are simplify-named strings for the
-     * provided roots (with sequences subscripted by one of the new
-     * bound variables).
+     * Given a list of roots, return a String array where the first element is a simplify-style
+     * quantification over newly-introduced bound variables, the last element is a closer, and the
+     * other elements are simplify-named strings for the provided roots (with sequences subscripted
+     * by one of the new bound variables).
      *
-     * If elementwise is true, include the additional contraint that
-     * the indices (there must be exactly two in this case) refer to
-     * corresponding positions. If adjacent is true, include the
-     * additional constraint that the second index be one more than
-     * the first. If distinct is true, include the constraint that the
-     * two indices are different. If includeIndex is true, return
-     * additional strings, after the roots but before the closer, with
-     * the names of the index variables.
+     * <p>If elementwise is true, include the additional contraint that the indices (there must be
+     * exactly two in this case) refer to corresponding positions. If adjacent is true, include the
+     * additional constraint that the second index be one more than the first. If distinct is true,
+     * include the constraint that the two indices are different. If includeIndex is true, return
+     * additional strings, after the roots but before the closer, with the names of the index
+     * variables.
      */
     // XXX This argument list is starting to get out of hand. -smcc
     public static String[] format_simplify(VarInfoName[] roots) {
@@ -3621,11 +3513,10 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
 
     // <root*> -> <string string* string>
     /**
-     * Given a list of roots, return a String array where the first
-     * element is a Java-style quantification over newly-introduced
-     * bound variables, the last element is a closer, and the other
-     * elements are java-named strings for the provided roots (with
-     * sequences subscripted by one of the new bound variables).
+     * Given a list of roots, return a String array where the first element is a Java-style
+     * quantification over newly-introduced bound variables, the last element is a closer, and the
+     * other elements are java-named strings for the provided roots (with sequences subscripted by
+     * one of the new bound variables).
      */
     //     public static String[] format_java(VarInfoName[] roots) {
     //       return format_java(roots, false);
@@ -3746,9 +3637,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     // This set of functions are helper functions to the quantification function.
 
     /**
-     * This function creates a string that represents how to increment
-     * the variables involved in quantification. Since the increment
-     * is not stated explicitly in the JML and ESC formats this
+     * This function creates a string that represents how to increment the variables involved in
+     * quantification. Since the increment is not stated explicitly in the JML and ESC formats this
      * function merely returns an empty string for those formats.
      */
     protected static String quant_increment(VarInfoName idx, int i, OutputFormat format) {
@@ -3764,8 +3654,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /**
-     * This function returns a string that represents the initial
-     * condition for the index variable.
+     * This function returns a string that represents the initial condition for the index variable.
      */
     protected static String quant_var_initial_state(
         VarInfoName idx, VarInfoName low, OutputFormat format) {
@@ -3777,8 +3666,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /**
-     * This function returns a string that represents the execution
-     * condition for the quantification.
+     * This function returns a string that represents the execution condition for the
+     * quantification.
      */
     protected static String quant_execution_condition(
         VarInfoName low, VarInfoName idx, VarInfoName high, OutputFormat format) {
@@ -3796,8 +3685,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /**
-     * This function returns a string representing the extra
-     * conditions necessary if the quantification is element-wise.
+     * This function returns a string representing the extra conditions necessary if the
+     * quantification is element-wise.
      */
     protected static String quant_element_conditions(
         VarInfoName _idx, VarInfoName _low, VarInfoName idx, VarInfoName low, OutputFormat format) {
@@ -3827,8 +3716,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /**
-     * This function returns a string representing how to format a
-     * forall statement in a given output mode.
+     * This function returns a string representing how to format a forall statement in a given
+     * output mode.
      */
     protected static String quant_format_forall(OutputFormat format) {
       if (format == OutputFormat.JAVA) {
@@ -3839,17 +3728,16 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /**
-     * This function returns a string representing how to format an
-     * exists statement in a given output mode.
+     * This function returns a string representing how to format an exists statement in a given
+     * output mode.
      */
     protected static String quant_format_exists(OutputFormat format) {
       return "(\\exists int ";
     }
 
     /**
-     * This function returns a string representing how to format the
-     * first seperation in the quantification, that is, the one
-     * between the intial condition and the execution condition.
+     * This function returns a string representing how to format the first seperation in the
+     * quantification, that is, the one between the intial condition and the execution condition.
      */
     protected static String quant_separator1(OutputFormat format) {
       if (format == OutputFormat.JML) {
@@ -3860,9 +3748,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /**
-     * This function returns a string representing how to format the
-     * second seperation in the quantification, that is, the one
-     * between the execution condition and the assertion.
+     * This function returns a string representing how to format the second seperation in the
+     * quantification, that is, the one between the execution condition and the assertion.
      */
     protected static String quant_separator2(OutputFormat format) {
       if (format == OutputFormat.ESCJAVA) {
@@ -3873,8 +3760,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     }
 
     /**
-     * This function returns a string representing how to format the final seperation in
-     * the quantification, that is, the one between the assertion and any closing symbols.
+     * This function returns a string representing how to format the final seperation in the
+     * quantification, that is, the one between the assertion and any closing symbols.
      */
     protected static String quant_step_terminator(OutputFormat format) {
       if (format == OutputFormat.JAVA) {
@@ -3903,17 +3790,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
   // ============================================================
   // Transformation framework
 
-  /**
-   * Specifies a function that performs a transformation on VarInfoNames.
-   */
+  /** Specifies a function that performs a transformation on VarInfoNames. */
   public interface Transformer {
     /** Perform a transformation on the argument. */
     public VarInfoName transform(VarInfoName v);
   }
 
-  /**
-   * A pass-through transformer.
-   */
+  /** A pass-through transformer. */
   public static final Transformer IDENTITY_TRANSFORMER =
       new Transformer() {
         public VarInfoName transform(VarInfoName v) {
@@ -3921,9 +3804,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         }
       };
 
-  /**
-   * Compare VarInfoNames alphabetically.
-   */
+  /** Compare VarInfoNames alphabetically. */
   public static class LexicalComparator implements Comparator<VarInfoName> {
     /*@Pure*/
     public int compare(VarInfoName name1, VarInfoName name2) {

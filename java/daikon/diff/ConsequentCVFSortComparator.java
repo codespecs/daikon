@@ -8,10 +8,9 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Comparator for sorting invariants.  Uses the
- * ConsequentSortComparator, initialized with the
- * ClassVarnameFormulaComparator.  See the documentation for those two
- * classes to figure out what this class does.
+ * Comparator for sorting invariants. Uses the ConsequentSortComparator, initialized with the
+ * ClassVarnameFormulaComparator. See the documentation for those two classes to figure out what
+ * this class does.
  */
 public class ConsequentCVFSortComparator implements Comparator<Invariant> {
   private Comparator<Invariant> c =

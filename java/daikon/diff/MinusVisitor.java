@@ -7,9 +7,7 @@ import daikon.inv.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/**
- * Computes A - B, where A and B are the two sets of invariants.
- */
+/** Computes A - B, where A and B are the two sets of invariants. */
 public class MinusVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
@@ -38,8 +36,8 @@ public class MinusVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * If the first invariant is non-null and justified, and the second
-   * one is null or unjustified, the first invariant should be added.
+   * If the first invariant is non-null and justified, and the second one is null or unjustified,
+   * the first invariant should be added.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   private static boolean shouldAdd(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {

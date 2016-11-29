@@ -16,8 +16,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Runtime support for Chicory, the Daikon front end for Java.
- * This class is a collection of methods; it should never be instantiated.
+ * Runtime support for Chicory, the Daikon front end for Java. This class is a collection of
+ * methods; it should never be instantiated.
  */
 @SuppressWarnings(
     "initialization.fields.uninitialized") // library initialized in code added by run-time instrumentation
@@ -29,10 +29,9 @@ public class Runtime {
   public static boolean debug = false;
 
   /**
-   * Flag indicating that a dtrace record is currently being written
-   * used to prevent a call to instrumented code that occurs as part
-   * of generating a dtrace record (eg, toArray when processing lists
-   * or pure functions) from generating a nested dtrace record
+   * Flag indicating that a dtrace record is currently being written used to prevent a call to
+   * instrumented code that occurs as part of generating a dtrace record (eg, toArray when
+   * processing lists or pure functions) from generating a nested dtrace record.
    */
   public static boolean in_dtrace = false;
 
@@ -40,9 +39,8 @@ public class Runtime {
   public static boolean chicoryLoaderInstantiationError = false;
 
   /**
-   * List of classes recently transformed.  This list is examined in
-   * each enter/exit and the decl information for any new classes are
-   * printed out and the class is then removed from the list.
+   * List of classes recently transformed. This list is examined in each enter/exit and the decl
+   * information for any new classes are printed out and the class is then removed from the list.
    */
   // The order of this list depends on the order of loading by the JVM.
   // Declared as LinkedList instead of List to permit use of removeFirst().
@@ -53,7 +51,7 @@ public class Runtime {
   public static final /*@GuardedBy("<self>")*/ List<ClassInfo> all_classes =
       new ArrayList<ClassInfo>();
 
-  /** flag that indicates when the first class has been processed**/
+  /** Flag that indicates when the first class has been processed. */
   static boolean first_class = true;
 
   /** List of all instrumented methods */
@@ -93,7 +91,7 @@ public class Runtime {
   /** Terminate the program when the dtrace limit is reached */
   static boolean dtraceLimitTerminate = false;
 
-  /** Dtrace output stream.  Null if no_dtrace is true. */
+  /** Dtrace output stream. Null if no_dtrace is true. */
   // Not annotated *@MonotonicNonNull* because initialization and use
   // happen in generated instrumentation code that cannot be type-checked
   // by a source code checker.
@@ -102,7 +100,7 @@ public class Runtime {
   /** Set to true when the dtrace stream is closed */
   static boolean dtrace_closed = false;
 
-  /** True if no dtrace is being generated.  */
+  /** True if no dtrace is being generated. */
   static boolean no_dtrace = false;
 
   static String method_indent = "";
@@ -116,8 +114,8 @@ public class Runtime {
   static /*@GuardedBy("Runtime.class")*/ DTraceWriter dtrace_writer;
 
   /**
-   * Which static initializers have been run.
-   * Each element of the Set is a fully qualified class name.
+   * Which static initializers have been run. Each element of the Set is a fully qualified class
+   * name.
    */
   private static Set<String> initSet = new HashSet<String>();
 
@@ -140,10 +138,9 @@ public class Runtime {
       new LinkedHashMap<Thread, Stack<CallInfo>>();
 
   /**
-   * Sample count at a call site to begin sampling.  All previous calls
-   * will be recorded.  Sampling starts at 10% and decreases by a factor
-   * of 10 each time another sample_start samples have been recorded.  If
-   * sample_start is 0, then all calls will be recorded.
+   * Sample count at a call site to begin sampling. All previous calls will be recorded. Sampling
+   * starts at 10% and decreases by a factor of 10 each time another sample_start samples have been
+   * recorded. If sample_start is 0, then all calls will be recorded.
    */
   public static int sample_start = 0;
 
@@ -153,9 +150,8 @@ public class Runtime {
   }
 
   /**
-   * Thrown to indicate that main should not print a stack trace, but only
-   * print the message itself to the user.
-   * If the string is null, then this is normal termination, not an error.
+   * Thrown to indicate that main should not print a stack trace, but only print the message itself
+   * to the user. If the string is null, then this is normal termination, not an error.
    */
   public static class TerminationMessage extends RuntimeException {
     static final long serialVersionUID = 20050923L;
@@ -198,8 +194,7 @@ public class Runtime {
   /**
    * Called when a method is entered.
    *
-   * @param obj receiver of the method that was entered.  Null if method is
-   *              static
+   * @param obj receiver of the method that was entered, or null if method is static
    * @param nonce nonce identifying which enter/exit pair this is
    * @param mi_index index in methods of the MethodInfo for this method
    * @param args array of arguments to method
@@ -240,7 +235,7 @@ public class Runtime {
       boolean capture = true;
       if (sample_start > 0) {
         if (mi.call_cnt <= sample_start) {
-          ;
+          // nothing to do
         } else if (mi.call_cnt <= (sample_start * 10)) {
           capture = (mi.call_cnt % 10) == 0;
         } else if (mi.call_cnt <= (sample_start * 100)) {
@@ -282,21 +277,15 @@ public class Runtime {
   /**
    * Called when a method is exited.
    *
-   * @param obj receiver of the method that was entered.  Null if method is
-   *                      static
+   * @param obj receiver of the method that was entered, or null if method is static
    * @param nonce nonce identifying which enter/exit pair this is
    * @param mi_index index in methods of the MethodInfo for this method
    * @param args array of arguments to method
-   * @param ret_val return value of method.  null if method is void
+   * @param ret_val return value of method, or null if method is void
    * @param exitLineNum the line number at which this method exited
    */
   public static synchronized void exit(
-      /*@Nullable*/ Object obj,
-      int nonce,
-      int mi_index,
-      Object[] args,
-      Object ret_val,
-      int exitLineNum) {
+      /*@Nullable*/ Object obj, int nonce, int mi_index, Object[] args, Object ret_val, int exitLineNum) {
 
     if (debug) {
       MethodInfo mi = methods.get(mi_index);
@@ -359,8 +348,8 @@ public class Runtime {
   }
 
   /**
-   * Checks the in_dtrace flag by looking back up the stack trace.
-   * Throws an exception if there is a discrepancy.
+   * Checks the in_dtrace flag by looking back up the stack trace. Throws an exception if there is a
+   * discrepancy.
    */
   private static void check_in_dtrace() {
 
@@ -380,12 +369,11 @@ public class Runtime {
   }
 
   /**
-   * Called by classes when they have finished initialization
-   * (i.e., their static initializer has completed).
+   * Called by classes when they have finished initialization (i.e., their static initializer has
+   * completed).
    *
-   * This functionality must be enabled by the flag
-   * Chicory.checkStaticInit.  When enabled, this method should only
-   * be called by the hooks created in the Instrument class.
+   * <p>This functionality must be enabled by the flag Chicory.checkStaticInit. When enabled, this
+   * method should only be called by the hooks created in the Instrument class.
    *
    * @param className fully qualified class name
    */
@@ -399,8 +387,7 @@ public class Runtime {
   }
 
   /**
-   * Return true iff the class with fully qualified name className
-   * has been initialized.
+   * Return true iff the class with fully qualified name className has been initialized.
    *
    * @param className fully qualified class name
    */
@@ -409,8 +396,8 @@ public class Runtime {
   }
 
   /**
-   * Writes out decl information for any new classes (those in the
-   * new_classes field) and removes them from that list.
+   * Writes out decl information for any new classes (those in the new_classes field) and removes
+   * them from that list.
    */
   /*@Holding("Runtime.class")*/
   public static void process_new_classes() {
@@ -461,9 +448,9 @@ public class Runtime {
     }
   }
 
-  /** Indicates that no more output should be printed to the dtrace file.
-   *  The file is closed and iff dtraceLimitTerminate is true the program
-   * is terminated.
+  /**
+   * Indicates that no more output should be printed to the dtrace file. The file is closed and iff
+   * dtraceLimitTerminate is true the program is terminated.
    */
   public static void noMoreOutput() {
     // The incrementRecords method (which calls this) is called inside a
@@ -586,10 +573,9 @@ public class Runtime {
   }
 
   /**
-   * If the current data trace file is not yet set, then set it.
-   * The value of the DTRACEFILE environment variable is used;
-   * if that environment variable is not set, then the argument
-   * to this method is used instead.
+   * If the current data trace file is not yet set, then set it. The value of the DTRACEFILE
+   * environment variable is used; if that environment variable is not set, then the argument to
+   * this method is used instead.
    */
   public static void setDtraceMaybe(String default_filename) {
     // Copied from daikon.Runtime
@@ -613,10 +599,7 @@ public class Runtime {
     }
   }
 
-  /**
-   * Add a shutdown hook to close the PrintStream when the program
-   * exits.
-   */
+  /** Add a shutdown hook to close the PrintStream when the program exits. */
   private static void addShutdownHook() {
     // Copied from daikon.Runtime, then modified
 
@@ -673,9 +656,7 @@ public class Runtime {
     out_thread = out;
   }
 
-  /**
-   * Wait for Daikon to terminate
-   */
+  /** Wait for Daikon to terminate. */
   public static void endDaikon() {
     try {
       int status = chicory_proc.waitFor();
@@ -694,8 +675,9 @@ public class Runtime {
   }
 
   /**
-   * Gets the ClassInfo structure corresponding to type.  Returns null
-   * if the class was not instrumented.
+   * Gets the ClassInfo structure corresponding to type. Returns null if the class was not
+   * instrumented.
+   *
    * @param type declaring class
    * @return ClassInfo structure corresponding to type
    */
@@ -966,11 +948,11 @@ public class Runtime {
   }
 
   /**
-   * Convert a classname from JVML format to Java format.
-   * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
-   * <p>
-   * If the argument is not a field descriptor, returns it as is.
-   * This enables this method to be used on the output of {@link Class#getName()}.
+   * Convert a classname from JVML format to Java format. For example, convert "[Ljava/lang/Object;"
+   * to "java.lang.Object[]".
+   *
+   * <p>If the argument is not a field descriptor, returns it as is. This enables this method to be
+   * used on the output of {@link Class#getName()}.
    */
   @Deprecated
   public static String classnameFromJvm(/*@FieldDescriptor*/ String classname) {
@@ -978,11 +960,11 @@ public class Runtime {
   }
 
   /**
-   * Convert a classname from JVML format to Java format.
-   * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
-   * <p>
-   * If the argument is not a field descriptor, returns it as is.
-   * This enables this method to be used on the output of {@link Class#getName()}.
+   * Convert a classname from JVML format to Java format. For example, convert "[Ljava/lang/Object;"
+   * to "java.lang.Object[]".
+   *
+   * <p>If the argument is not a field descriptor, returns it as is. This enables this method to be
+   * used on the output of {@link Class#getName()}.
    */
   @SuppressWarnings("signature") // conversion routine
   public static String fieldDescriptorToBinaryName(/*@FieldDescriptor*/ String classname) {

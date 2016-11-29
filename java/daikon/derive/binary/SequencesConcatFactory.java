@@ -8,14 +8,10 @@ import java.util.logging.Logger;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/**
- * Factory for SequencesConcat derived variables.
- */
+/** Factory for SequencesConcat derived variables. */
 public final class SequencesConcatFactory extends BinaryDerivationFactory {
 
-  /**
-   * Debug tracer.
-   */
+  /** Debug tracer. */
   public static final Logger debug =
       Logger.getLogger("daikon.derive.binary.SequencesConcatFactory");
 

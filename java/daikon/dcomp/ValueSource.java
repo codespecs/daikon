@@ -1,11 +1,6 @@
 package daikon.dcomp;
 
 import daikon.chicory.*;
-import daikon.util.ArraysMDE;
-import daikon.util.SimpleLog;
-import daikon.util.Stopwatch;
-import daikon.util.WeakIdentityHashMap;
-import java.io.PrintWriter;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
@@ -16,10 +11,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-/**
- * Class used in dataflow that creates a tree the defines the way that
- * each value is created.
- */
+/** Class used in dataflow that creates a tree the defines the way that each value is created. */
 @SuppressWarnings("interning")
 public class ValueSource {
 
@@ -57,9 +49,8 @@ public class ValueSource {
   }
 
   /**
-   * Returns a map from each test sequence variable (identified by
-   * local-stores) to the values they are compared against.  The
-   * compare_to param is presumed to be compared to all of the test
+   * Returns a map from each test sequence variable (identified by local-stores) to the values they
+   * are compared against. The compare_to param is presumed to be compared to all of the test
    * sequence variables found.
    */
   public Map<String, Set<String>> get_var_compares(String compare_to) {
@@ -93,10 +84,9 @@ public class ValueSource {
   }
 
   /**
-   * Returns a set of all of the test sequence variables in the tree
-   * The source name of the variable is placed in the set.  This is
-   * obtained from the local variable table information for the test
-   * sequence
+   * Returns a set of all of the test sequence variables in the tree The source name of the variable
+   * is placed in the set. This is obtained from the local variable table information for the test
+   * sequence.
    */
   public Set<String> get_vars() {
 
@@ -112,18 +102,14 @@ public class ValueSource {
     return varnames;
   }
 
-  /**
-   * Returns a list of all of the nodes in the tree
-   */
+  /** Returns a list of all of the nodes in the tree. */
   public List<ValueSource> get_node_list() {
     List<ValueSource> vs_list = new ArrayList<ValueSource>();
     add_node_list(vs_list);
     return vs_list;
   }
 
-  /**
-   * Add all of the nodes in this tree to vs_list
-   */
+  /** Add all of the nodes in this tree to vs_list. */
   private void add_node_list(List<ValueSource> vs_list) {
     vs_list.add(this);
     if (left != null) left.add_node_list(vs_list);

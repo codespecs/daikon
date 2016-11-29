@@ -8,7 +8,6 @@ import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.inv.ternary.threeScalar.ThreeScalar;
 import daikon.inv.unary.*;
-import daikon.inv.unary.sequence.CommonSequence;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.List;
@@ -24,88 +23,71 @@ import typequals.*;
 */
 
 /**
- * This is a tester for the results of adding or checking an sample
- * to an invariant.  It can test practically
- * any invariant in the Daikon system given the appropriate commands.
- * The test are configured from the InvariantTest.commands file
- * and errors that occur are written to the InvariantTest.diffs
- * file. For conveince a partcailly complete file InvariantTest.input
- * can be used to generate a complete commands file.  To generate
- * InvariantTest.commands from InvariantTest.input run this class's
- * main method with option "--generate_goals".
+ * This is a tester for the results of adding or checking an sample to an invariant. It can test
+ * practically any invariant in the Daikon system given the appropriate commands. The test are
+ * configured from the {@code InvariantTest.commands} file and errors that occur are written to the
+ * InvariantTest.diffs file. For conveince a partcailly complete file InvariantTest.input can be
+ * used to generate a complete commands file. To generate InvariantTest.commands from
+ * InvariantTest.input run this class's main method with option "--generate_goals".
  *
- * Each test case
- * starts with a line containing the full name of the invariant
- * then a second line containing the types of the arguments to
- * the invariant's check and add method (excluding the count
- * argument). After the test case's header any number of command
- * lines may be included in a command file.  Finally, after all
- * command lines, the key work "end" must appear on its own line.
+ * <p>Each test case starts with a line containing the full name of the invariant then a second line
+ * containing the types of the arguments to the invariant's check and add method (excluding the
+ * count argument). After the test case's header any number of command lines may be included in a
+ * command file. Finally, after all command lines, the key work "end" must appear on its own line.
  *
- * Each command line is starts with
- * a command: "add:" or "check:". Following the command
- * comes the arguments to be checked or added to the invariant.
- * These arguments should be in the same format as in a dtrace
- * file.  Next comes the the InvariantStatus that is expected to
- * be returned by the check or add command on checking or adding
- * the arguments.  Finally, the expected format of the Invariant
- * after checking or adding the arguments
- * is included.  (The format of the invariant is given by
- * "Invariant.format_using(OutputFormat.DAIKON)")
+ * <p>Each command line is starts with a command: "add:" or "check:". Following the command comes
+ * the arguments to be checked or added to the invariant. These arguments should be in the same
+ * format as in a dtrace file. Next comes the the InvariantStatus that is expected to be returned by
+ * the check or add command on checking or adding the arguments. Finally, the expected format of the
+ * Invariant after checking or adding the arguments is included. (The format of the invariant is
+ * given by "Invariant.format_using(OutputFormat.DAIKON)")
  *
- * A full example test case is as follows:
+ * <p>A full example test case is as follows:
  *
+ * <pre>
  * daikon.inv.binary.twoSequence.PairwiseIntEqual
  * int_array int_array
  * add: [ 1 2 3 ]; [1 2 3 ]; no_change; a[] == b[] (elementwise)
  * add: [ 10 -1 6 ]; [10 -1 6 ]; no_change; a[] == b[] (elementwise)
  * add: [ -3 -3 -9 ]; [-3 6 -9 ]; falsified; a[] == b[] (elementwise)
  * end
+ * </pre>
  *
+ * Alternatively, this class can be used to generate a test case when given command lines that do
+ * not include expected InvariantStatus or invariant format. The proper input to generate the test
+ * above would be:
  *
- * Alternatively, this class can be used to generate a test case
- * when given command lines that do not include expected
- * InvariantStatus or invariant format.  The proper input to
- * generate the test above would be:
- *
+ * <pre>
  * daikon.inv.binary.twoSequence.PairwiseIntEqual
  * int_array int_array
  * add: [ 1 2 3 ]; [1 2 3 ]
  * add: [ 10 -1 6 ]; [10 -1 6 ]
  * add: [ -3 -3 -9 ]; [-3 6 -9 ]
  * end
+ * </pre>
  *
+ * To run a test case the method runTest should be used. To generate a test case the method
+ * generateTest should be used.
  *
- * To run a test case the method runTest should be used.  To generate
- * a test case the method generateTest should be used.
- *
- * Note: no test case should contain the character ';' in any way
- * other than to divide arguments with in a command line.
+ * <p>Note: no test case should contain the character ';' in any way other than to divide arguments
+ * with in a command line.
  */
 @SuppressWarnings("nullness")
 public class InvariantAddAndCheckTester extends TestCase {
 
   /**
-   * Maximum file size that can currently be examined by the program.
-   * It is arbitrary, but a length must be supplied to
-   * LineNumberReader.mark().
+   * Maximum file size that can currently be examined by the program. It is arbitrary, but a length
+   * must be supplied to LineNumberReader.mark().
    */
   private static final int MAX_FILE_SIZE = 262144;
 
-  /**
-   * Indicates a string that when it starts a line signifies that the
-   * line is a comment.
-   */
+  /** Indicates a string that when it starts a line signifies that the line is a comment. */
   public static final String COMMENT_STARTER_STRING = "#";
 
-  /**
-   * A list containing all of the test formats.
-   */
+  /** A list containing all of the test formats. */
   public static final List<String> TEST_FORMAT_LIST = getTestFormatList();
 
-  /**
-   * Allows for the configuring of Daikon options.
-   */
+  /** Allows for the configuring of Daikon options. */
   static Configuration config = Configuration.getInstance();
 
   private static final String inputFileName = "daikon/test/inv/InvariantTest.input";
@@ -115,15 +97,12 @@ public class InvariantAddAndCheckTester extends TestCase {
   private static final String lineSep = Global.lineSep;
 
   /**
-   * This function allows this test to be run from the command line
-   * instead of its usual method, which is through the Daikon
-   * MasterTester.
+   * This function allows this test to be run from the command line instead of its usual method,
+   * which is through the Daikon MasterTester.
    *
-   * @param args arguments to the main function, which control options
-   *        to the program. As of now there is only one option,
-   *        "--generate_goals", which will generate goal information for
-   *        the selected tests assuming the output that the tests provide
-   *        is the correct output
+   * @param args arguments to the main function, which control options to the program. As of now
+   *     there is only one option, {@code --generate_goals}, which will generate goal information
+   *     for the selected tests assuming the output that the tests provide is the correct output.
    */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
@@ -138,8 +117,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   }
 
   /**
-   * This constructor allows the test to be created from the
-   * MasterTester class.
+   * This constructor allows the test to be created from the MasterTester class.
    *
    * @param name the desired name of the test case
    */
@@ -148,8 +126,7 @@ public class InvariantAddAndCheckTester extends TestCase {
   }
 
   /**
-   * This function produces the format list for intialization of the
-   * static format list variable.
+   * This function produces the format list for intialization of the static format list variable.
    */
   static List<String> getTestFormatList() {
     List<String> result = new Vector<String>();
@@ -165,10 +142,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     return result;
   }
 
-  /**
-   * This function is the actual function performed when this class is
-   * run through JUnit.
-   */
+  /** This function is the actual function performed when this class is run through JUnit. */
   public static void testFormats() {
 
     // Don't care about comparability info because we are only
@@ -189,8 +163,8 @@ public class InvariantAddAndCheckTester extends TestCase {
    * Returns the next non-comment, non-whitespace line of the input buffer.
    *
    * @param input the input buffer
-   * @return the next non-comment, non-whitespace line of the input buffer or
-   *         null if the end of the buffer is reached before such a line can be found
+   * @return the next non-comment, non-whitespace line of the input buffer or null if the end of the
+   *     buffer is reached before such a line can be found
    */
   static /*@Nullable*/ String getNextRealLine(BufferedReader input) {
     String currentLine = "";
@@ -209,13 +183,12 @@ public class InvariantAddAndCheckTester extends TestCase {
   }
 
   /**
-   * This function performs the testing for a particular format
-   * indicated by the format string. It subsequently sets up
-   * appropriate input and output streams for the format test,
-   * performs the test, and the compares the test results to the
-   * goals.  If the goals differ from the actual results the test
-   * fails.
-   * @return false if any tests fail.
+   * This function performs the testing for a particular format indicated by the format string. It
+   * subsequently sets up appropriate input and output streams for the format test, performs the
+   * test, and the compares the test results to the goals. If the goals differ from the actual
+   * results the test fails.
+   *
+   * @return false if any tests fail
    */
   private static boolean execute() {
     LineNumberReader commandReader = getCommands();
@@ -250,12 +223,12 @@ public class InvariantAddAndCheckTester extends TestCase {
   }
 
   /**
-   * This function performs an individual formatting test after the
-   * input and output streams have been created.
+   * This function performs an individual formatting test after the input and output streams have
+   * been created.
    *
    * @param commands the input that decides which tests to perform
-   * @return a String holding the error messages for any failed tests
-   *  or null if no tests are failed.
+   * @return a String holding the error messages for any failed tests, or null if no tests are
+   *     failed
    */
   private static /*@Nullable*/ String performTest(LineNumberReader commands) {
     StringBuffer output = new StringBuffer();
@@ -362,8 +335,8 @@ public class InvariantAddAndCheckTester extends TestCase {
    * Determines whether a line is a comment or not.
    *
    * @param line the line in question
-   * @return true if the line is a comment (that is, not to be interpretted as a command)
-   *         false otherwise
+   * @return true if the line is a comment (that is, not to be interpretted as a command); false
+   *     otherwise
    */
   /*@Pure*/
   static boolean isComment(String line) {
@@ -388,49 +361,34 @@ public class InvariantAddAndCheckTester extends TestCase {
 
   private static class AddAndCheckTestCase {
 
-    /**
-     * The Invariant object to be tested.
-     */
+    /** The Invariant object to be tested. */
     private static Invariant invariantToTest;
 
     /**
-     * The types of the arguments to invariantToTest's
-     * check and add commands (not including the count argument).
+     * The types of the arguments to invariantToTest's check and add commands (not including the
+     * count argument).
      */
     private static ProglangType[] types;
 
-    /**
-     * invariantToTest's addModified method.
-     */
+    /** invariantToTest's addModified method. */
     private static Method addModified;
 
-    /**
-     * invariantToTest's checkModified method.
-     */
+    /** invariantToTest's checkModified method. */
     private static Method checkModified;
 
-    /**
-     * invariantToTest's format_using method.
-     */
+    /** invariantToTest's format_using method. */
     private static Method outputProducer;
 
-    /**
-     * Contains error messages if any test commands fail.
-     */
+    /** Contains error messages if any test commands fail. */
     private static StringBuffer results;
 
-    /**
-     * The token that divides the different arguments to a
-     * test command.
-     */
+    /** The token that divides the different arguments to a test command. */
     private static final String argDivider = ";";
 
     /**
-     * @return string containing error messages for any
-     *  failed cases.  In the case that there are no failed
-     *  cases, the empty string is returned.  In the case where
-     *  commands is empty (there are no more test cases and the
-     *  end of the file has been reached), null is returned.
+     * @return string containing error messages for any failed cases. In the case that there are no
+     *     failed cases, the empty string is returned. In the case where commands is empty (there
+     *     are no more test cases and the end of the file has been reached), null is returned.
      */
     public static /*@Nullable*/ String runTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, false);
@@ -455,8 +413,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * @return a String containing the proper add and check
-     *  commands for this input lines of this test case.
+     * @return a String containing the proper add and check commands for this input lines of this
+     *     test case
      */
     public static /*@Nullable*/ String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
@@ -481,10 +439,10 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * Initializes the fields of this class based on the first two
-     * lines of a case which include the class name and parameter
-     * types.
-     * @return true is end of file is reached.
+     * Initializes the fields of this class based on the first two lines of a case which include the
+     * class name and parameter types.
+     *
+     * @return true is end of file is reached
      */
     private static boolean initFields(LineNumberReader commands, boolean generatingCommands) {
 
@@ -535,10 +493,9 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * Given a line from a command file, generates executes the
-     * appropriate check or add command and checks the results against
-     * the goal.  If the results and goal do not match, a message is
-     * added to the results string buffer.
+     * Given a line from a command file, generates executes the appropriate check or add command and
+     * checks the results against the goal. If the results and goal do not match, a message is added
+     * to the results string buffer.
      */
     private static void exicuteCheckOrAddCommand(String command, int lineNumber) {
 
@@ -580,10 +537,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       }
     }
 
-    /**
-     * Given a line from an input file, generates appropriate
-     * check or add command.
-     */
+    /** Given a line from an input file, generates appropriate check or add command. */
     private static void generateCheckOrAddCommand(String command, int lineNumber) {
       // remove the command
       String args = command.substring(command.indexOf(":") + 1);
@@ -619,8 +573,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * @return an array of the arguments to be passed into
-     *  check_modified or add_modified produced from tokens.
+     * @return an array of the arguments to be passed into check_modified or add_modified produced
+     *     from tokens
      */
     private static Object[] getParams(StringTokenizer tokens) {
       // add one for the "count" argument
@@ -633,8 +587,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * @return the InvariantStatus produced by invoking invariantToTest's
-     *  add_modified method on the arguments represented by params.
+     * @return the InvariantStatus produced by invoking invariantToTest's add_modified method on the
+     *     arguments represented by params
      */
     private static InvariantStatus getAddStatus(Object[] params) {
       try {
@@ -645,8 +599,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * @return the InvariantStatus produced by invoking invariantToTest's
-     *  check_modified method on the arguments represented by params.
+     * @return the InvariantStatus produced by invoking invariantToTest's check_modified method on
+     *     the arguments represented by params
      */
     private static InvariantStatus getCheckStatus(Object[] params) {
       try {
@@ -657,10 +611,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * @return a String representation of the invariantToTest.
-     *  This String is produced by invoking the invariant's
-     *  format_using with method with the argument
-     *  OutputFormat.Daikon.
+     * @return a String representation of the invariantToTest. This String is produced by invoking
+     *     the invariant's format_using with method with the argument {@code OutputFormat.Daikon}.
      */
     private static String getInvariantFormat() {
       try {
@@ -670,9 +622,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       }
     }
 
-    /**
-     * @return an InvariantStatus that the string status parses to.
-     */
+    /** @return an InvariantStatus that the string status parses to */
     private static InvariantStatus parseStatus(String status) {
       status = status.trim();
       if (status.equals("no_change")) {
@@ -692,7 +642,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      *
      * @param theClass the class in which to find the add_modified method
      * @return the add_modified method if it exists, null otherwise
-     * @throws RuntimeException if check_modified does not exist.
+     * @throws RuntimeException if check_modified does not exist
      */
     private static Method getAddModified(Class<? extends Invariant> theClass) {
       Method[] methods = theClass.getMethods();
@@ -713,7 +663,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      *
      * @param theClass the class in which to find the check_modified method
      * @return the check_modified method if it exists
-     * @throws RuntimeException if check_modified does not exist.
+     * @throws RuntimeException if check_modified does not exist
      */
     private static Method getCheckModified(Class<? extends Invariant> theClass) {
       Method[] methods = theClass.getMethods();
@@ -730,8 +680,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * @return the method of invariant named by theClass
-     *  that produces a String representation of the invariant.
+     * @return the method of invariant named by theClass that produces a String representation of
+     *     the invariant
      */
     private static Method getOutputProducer(Class<? extends Invariant> theClass) {
       Method[] methods = theClass.getMethods();
@@ -748,12 +698,10 @@ public class InvariantAddAndCheckTester extends TestCase {
       throw new RuntimeException("Cannot find format_using method");
     }
     /**
-     * This function loads a class from file into the JVM given its
-     * fully-qualified name.
+     * This function loads a class from file into the JVM given its fully-qualified name.
      *
      * @param classInfo the fully-qualified class name
-     * @return a Class object representing the class name if such a class is
-     *         defined, otherwise null
+     * @return a Class object representing the class name if such a class is defined, otherwise null
      */
     private static Class<?> getClass(/*@BinaryName*/ String classInfo) {
       try {
@@ -796,15 +744,12 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * This function creates an array of VarInfo objects that can
-     * represent a set of program language types provided by the
-     * caller. Their names carry no meaning except for the type.
+     * This function creates an array of VarInfo objects that can represent a set of program
+     * language types provided by the caller. Their names carry no meaning except for the type.
      *
-     * @param classToTest the invariant class for which the VarInfos
-     *        must be determined
+     * @param classToTest the invariant class for which the VarInfos must be determined
      * @param types the types that the VarInfos must have
-     * @return an array of VarInfo objects that have the types corresponding
-     *         to those in types
+     * @return an array of VarInfo objects that have the types corresponding to those in types
      */
     private static VarInfo[] getVarInfos(
         Class<? extends Invariant> classToTest, ProglangType[] types) {
@@ -822,9 +767,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * This function returns a VarInfo of the given type. The name is
-     * the ith letter of the alphabet. (Produces variables such that i=0
-     * -> name=a, i=1 &rarr; name=b, ...)
+     * This function returns a VarInfo of the given type. The name is the ith letter of the
+     * alphabet. (Produces variables such that i=0 &rarr; name=a, i=1 &rarr; name=b, ...)
      *
      * @param type the desired type that the VarInfo will represent
      * @param i a unique identifier that determines the name to be used
@@ -873,8 +817,8 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * This function parses a format string -- a space separated list of
-     * types -- and determines the types of objects to be collected.
+     * This function parses a format string -- a space separated list of types -- and determines the
+     * types of objects to be collected.
      *
      * @param typeNames the type string for an invariant
      * @return an array of ProglangTypes representing the data in typeNames
@@ -913,14 +857,12 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * This function creates an appropriate PptSlice for a given set of
-     * VarInfos and a PptTopLevel.
+     * This function creates an appropriate PptSlice for a given set of VarInfos and a PptTopLevel.
      *
-     * @param vars an array of VarInfo objects for which the slice is
-     *        to be created
+     * @param vars an array of VarInfo objects for which the slice is to be created
      * @param ppt the PptTopLevel object representing the program point
-     * @return a new PptSlice object if the creation of one is possible,
-     *         else throws a RuntimeException
+     * @return a new PptSlice object if the creation of one is possible, else throws a
+     *     RuntimeException
      */
     private static PptSlice createSlice(VarInfo[] vars, PptTopLevel ppt) {
       if (vars.length == 1) {
@@ -942,14 +884,12 @@ public class InvariantAddAndCheckTester extends TestCase {
     }
 
     /**
-     * This function instantiates an invariant class by using the
-     * <type>(PptSlice) constructor.
+     * This function instantiates an invariant class by using the <type>(PptSlice) constructor.
      *
      * @param theClass the invariant class to be instantiated
-     * @param sl the PptSlice representing the variables about
-     *        which an invariant is determined
-     * @return an instance of the class in theClass if one can be constructed,
-     *         else throw a RuntimeException
+     * @param sl the PptSlice representing the variables about which an invariant is determined
+     * @return an instance of the class in theClass if one can be constructed, else throw a
+     *     RuntimeException
      */
     private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice sl) {
       try {

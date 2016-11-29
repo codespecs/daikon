@@ -13,9 +13,8 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Represents the type of a variable, for its declared, dtrace file
- * representation, and internal representations.  ProgLangTypes are
- * interned, so they can be == compared.
+ * Represents the type of a variable, for its declared, dtrace file representation, and internal
+ * representations. ProgLangTypes are interned, so they can be == compared.
  */
 
 // I could also consider using Class; however:
@@ -54,8 +53,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   public static HashSet<String> list_implementors = new LinkedHashSet<String>();
 
   /**
-   * If true, treat 32 bit values whose high bit is on, as a negative
-   * number (rather than as a 32 bit unsigned).
+   * If true, treat 32 bit values whose high bit is on, as a negative number (rather than as a 32
+   * bit unsigned).
    */
   public static boolean dkconfig_convert_to_signed = false;
 
@@ -90,9 +89,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   /**
-   * No public constructor:  use parse() instead to get a canonical
-   * representation.
-   * basetype should be interned.
+   * No public constructor: use parse() instead to get a canonical representation. basetype should
+   * be interned.
    */
   private ProglangType(/*@Interned*/ String basetype, int dimensions) {
     assert basetype == basetype.intern();
@@ -101,11 +99,10 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   /**
-   * This can't be a constructor because it returns a canonical
-   * representation (that can be compared with ==), not necessarily a new
-   * object.
-   *  @param rep the name of the type, optionally suffixed by
-   *  (possibly multiple) "[]"
+   * This can't be a constructor because it returns a canonical representation (that can be compared
+   * with ==), not necessarily a new object.
+   *
+   * @param rep the name of the type, optionally suffixed by (possibly multiple) "[]"
    */
   public static ProglangType parse(String rep) {
     String new_base = rep;
@@ -118,10 +115,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   /**
-   * Like parse, but normalizes representation types (such as converting
-   * "float" to "double"), in order to return real file representation types
-   * even if the file contains something slightly different than the
-   * prescribed format.
+   * Like parse, but normalizes representation types (such as converting "float" to "double"), in
+   * order to return real file representation types even if the file contains something slightly
+   * different than the prescribed format.
    */
   public static ProglangType rep_parse(String rep) {
     ProglangType candidate = parse(rep);
@@ -149,9 +145,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   /**
-   * For serialization; indicates which object to return instead of the
-   * one that was just read from the file.  This obviates the need to write
-   * a readObject method that interns the interned fields (just "base").
+   * For serialization; indicates which object to return instead of the one that was just read from
+   * the file. This obviates the need to write a readObject method that interns the interned fields
+   * (just "base").
    */
   public Object readResolve() throws ObjectStreamException {
     return intern(base.intern(), dimensions);
@@ -230,8 +226,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   //                      or ((base2 == "integral") and (base1 in integral_types)))) // interned strings
 
   /**
-   * Returns the type of elements of this.
-   * They may themselves be arrays if this is multidimensional.
+   * Returns the type of elements of this. They may themselves be arrays if this is
+   * multidimensional.
    */
   public ProglangType elementType(/*>>>@GuardSatisfied ProglangType this*/) {
     // Presume that if there are no dimensions, this must be a list of
@@ -349,19 +345,15 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   /**
-   * Given a string representation of a value (of the type represented by
-   * this ProglangType), return the (canonicalized) interpretation of that value.
-   * <p>
+   * Given a string representation of a value (of the type represented by this ProglangType), return
+   * the (canonicalized) interpretation of that value.
    *
-   * This ProglangType (the method receiver) is assumed to be a representation
-   * type, not an arbitrary type in the underlying programming language.
-   * <p>
+   * <p>This ProglangType (the method receiver) is assumed to be a representation type, not an
+   * arbitrary type in the underlying programming language.
    *
-   * If the type is an array and there
-   * are any nonsensical elements in the array, the entire array is
-   * considered to be nonsensical (indicated by returning null).  This
-   * is not really correct, but it is a reasonable path to take for now.
-   * (jhp, Feb 12, 2005)
+   * <p>If the type is an array and there are any nonsensical elements in the array, the entire
+   * array is considered to be nonsensical (indicated by returning null). This is not really
+   * correct, but it is a reasonable path to take for now. (jhp, Feb 12, 2005)
    */
   public final /*@Nullable*/ /*@Interned*/ Object parse_value(
       String value, LineNumberReader reader, String filename) {
@@ -399,16 +391,12 @@ public final /*@Interned*/ class ProglangType implements Serializable {
         if (!value.startsWith("\"")) {
           System.out.printf(
               "Warning: unquoted string value at %s line %d: %s%n",
-              filename,
-              reader.getLineNumber(),
-              value);
+              filename, reader.getLineNumber(), value);
         } else {
           assert !value.endsWith("\"");
           System.out.printf(
               "Warning: unterminated string value at %s line %d: %s%n",
-              filename,
-              reader.getLineNumber(),
-              value);
+              filename, reader.getLineNumber(), value);
         }
         System.out.printf(
             "Proceeding anyway.  Please report a bug in the tool that made the data trace file.");
@@ -511,11 +499,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
           } else {
             System.out.printf(
                 "Warning: at %s line %d%n  bad ttype %c [int=%d] while parsing %s%n  Proceeding with value 'null'%n",
-                filename,
-                reader.getLineNumber(),
-                (char) parser.ttype,
-                parser.ttype,
-                value_orig);
+                filename, reader.getLineNumber(), (char) parser.ttype, parser.ttype, value_orig);
             v.add(null);
           }
         }
@@ -699,22 +683,17 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     return ((dimensions == 0) && baseIsHashcode());
   }
 
-  /**
-   * Does this type represent a pointer? Should only be applied to
-   * file_rep types.
-   */
+  /** Does this type represent a pointer? Should only be applied to file_rep types. */
   /*@Pure*/
   public boolean isPointerFileRep() {
     return (base == BASE_HASHCODE);
   }
 
   /**
-   * Return true if these two types can be sensibly compared to one
-   * another, or if one can be cast to the other.  For instance, int
-   * is castable to long, but boolean is not castable to float, and
-   * int is not castable to int[].  This is a reflexive relationship,
-   * but not a transitive one because it might not be true for two
-   * children of a superclass, even though it's true for the
+   * Return true if these two types can be sensibly compared to one another, or if one can be cast
+   * to the other. For instance, int is castable to long, but boolean is not castable to float, and
+   * int is not castable to int[]. This is a reflexive relationship, but not a transitive one
+   * because it might not be true for two children of a superclass, even though it's true for the
    * superclass.
    */
   public boolean comparableOrSuperclassEitherWay(ProglangType other) {
@@ -733,11 +712,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   /**
-   * Return true if these two types can be sensibly compared to one
-   * another, and if non-integral, whether this could be a superclass
-   * of other.  A List is comparableOrSuperclassOf to a Vector, but
-   * not the other way around.  This is a transitive method, but not
-   * reflexive.
+   * Return true if these two types can be sensibly compared to one another, and if non-integral,
+   * whether this could be a superclass of other. A List is comparableOrSuperclassOf to a Vector,
+   * but not the other way around. This is a transitive method, but not reflexive.
    */
   public boolean comparableOrSuperclassOf(ProglangType other) {
     if (this == other) // ProglangType objects are interned
@@ -781,9 +758,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   }
 
   /**
-   * Returns whether or not this declared type is a function pointer
-   * Only valid if the front end marks the function pointer with the
-   * name '*func'
+   * Returns whether or not this declared type is a function pointer Only valid if the front end
+   * marks the function pointer with the name '*func'.
    */
   /*@Pure*/
   public boolean is_function_pointer() {

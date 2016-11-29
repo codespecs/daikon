@@ -2,7 +2,6 @@ package daikon;
 
 import static daikon.Global.lineSep;
 
-import daikon.Daikon.TerminationMessage;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.ValueSet;
@@ -28,23 +27,20 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * DaikonSimple reads a declaration file and trace file and outputs a list of
- * likely invariants using the simple incremental algorithm. Its methods
- * parallel those of Daikon but oftentimes certain checks are eliminated from
- * DaikonSimple's methods because there is less filtering of invariants and
- * variables.
+ * DaikonSimple reads a declaration file and trace file and outputs a list of likely invariants
+ * using the simple incremental algorithm. Its methods parallel those of Daikon but oftentimes
+ * certain checks are eliminated from DaikonSimple's methods because there is less filtering of
+ * invariants and variables.
  *
- * DaikonSimple was written to check the implementation of the optimizations in
- * Daikon. DaikonSimple does not use an optimizations, and its processing will
- * produce a complete set of true invariants. Daikon does have flags to "turn
- * off" some of its optimizations but there are some optimizations are built
- * into the way Daikon processes the samples (e.g. variable hierarchy and bottom
- * up processing). In addition, we want to check the optimizations, so we don't
- * want to bypass them. In Daikon, code was written to "undo" the optimizations,
- * so we could recover the invariants that were previously filtered out or not
- * created (see Daikon.dkconfig_undo_opts flag). By comparing the output from
- * the two, we can find problems with the optimization implementation by
- * tracking the cause of the differences.
+ * <p>DaikonSimple was written to check the implementation of the optimizations in Daikon.
+ * DaikonSimple does not use an optimizations, and its processing will produce a complete set of
+ * true invariants. Daikon does have flags to "turn off" some of its optimizations but there are
+ * some optimizations are built into the way Daikon processes the samples (e.g. variable hierarchy
+ * and bottom up processing). In addition, we want to check the optimizations, so we don't want to
+ * bypass them. In Daikon, code was written to "undo" the optimizations, so we could recover the
+ * invariants that were previously filtered out or not created (see Daikon.dkconfig_undo_opts flag).
+ * By comparing the output from the two, we can find problems with the optimization implementation
+ * by tracking the cause of the differences.
  */
 @SuppressWarnings("nullness") // not actively maintained
 public class DaikonSimple {
@@ -90,12 +86,12 @@ public class DaikonSimple {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically. Termination of the program with a
-   * message to the user is indicated by throwing Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * Daikon.TerminationMessage.
    *
-   * Difference from Daikon's mainHelper: turn off optimization flags (equality,
-   * dynamic constants, NIS suppression).
+   * <p>Difference from Daikon's mainHelper: turn off optimization flags (equality, dynamic
+   * constants, NIS suppression).
    *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
@@ -190,13 +186,17 @@ public class DaikonSimple {
   }
 
   /**
-   * Install views and the invariants. Duplicated from PptTopLevel's version
-   * because DaikonSimple needs to use its own version of slice checking code.
+   * Install views and the invariants. Duplicated from PptTopLevel's version because DaikonSimple
+   * needs to use its own version of slice checking code.
    *
-   * Difference from PptTopLevel's version: 1. canonical (leader of equality
-   * set) check of variables is turned off because every variable is in its own
-   * equality set 2. debugging information turned off because DaikonSimple's
-   * code is more contained 3. less constraints on the slices
+   * <p>Difference from PptTopLevel's version:
+   *
+   * <ol>
+   *   <li>canonical (leader of equality set) check of variables is turned off because every
+   *       variable is in its own equality set
+   *   <li>debugging information turned off because DaikonSimple's code is more contained
+   *   <li>less constraints on the slices
+   * </ol>
    *
    * @see daikon.PptTopLevel#instantiate_views_and_invariants()
    */
@@ -320,16 +320,14 @@ public class DaikonSimple {
   }
 
   /**
-   * Returns whether or not the specified binary slice should be created. The
-   * slice should not be created if the vars not compatible.
+   * Returns whether or not the specified binary slice should be created. The slice should not be
+   * created if the vars are not compatible.
    *
-   * Since we are trying to create all of the invariants, the variables does not
-   * have to be a leader and can be a constant. Note that the always missing
-   * check is only applicable when the dynamic constants optimization is turned
-   * on (so we do not do the check here).
+   * <p>Since we are trying to create all of the invariants, the variables does not have to be a
+   * leader and can be a constant. Note that the always missing check is only applicable when the
+   * dynamic constants optimization is turned on (so we do not do the check here).
    *
    * @see daikon.PptTopLevel#is_slice_ok(VarInfo, VarInfo)
-   *
    */
   /*@Pure*/
   public static boolean is_slice_ok(VarInfo v1, VarInfo v2) {
@@ -338,19 +336,21 @@ public class DaikonSimple {
   }
 
   /**
-   * Returns whether or not the specified ternary slice should be created. The
-   * slice should not be created if any of the following are true - Any var is
-   * an array - Any of the vars are not compatible with the others - Any var is
-   * not (integral or float)
+   * Returns whether or not the specified ternary slice should be created. The slice should not be
+   * created if any of the following are true
    *
-   * Since we are trying to create all of the invariants, the variables does not
-   * have to be a leader and can be a constant. Note that the always missing
-   * check is only applicable when the dynamic constants optimization is turned
-   * on (so we do not do the check here). In addition, we do want to create the
-   * reflexive ones and partially reflexive invariants.
+   * <ul>
+   *   <li>Any var is an array
+   *   <li>Any of the vars are not compatible with the others
+   *   <li>Any var is not (integral or float)
+   * </ul>
+   *
+   * Since we are trying to create all of the invariants, the variables does not have to be a leader
+   * and can be a constant. Note that the always missing check is only applicable when the dynamic
+   * constants optimization is turned on (so we do not do the check here). In addition, we do want
+   * to create the reflexive ones and partially reflexive invariants.
    *
    * @see daikon.PptTopLevel#is_slice_ok(VarInfo, VarInfo, VarInfo)
-   *
    */
   /*@Pure*/
   public static boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
@@ -360,10 +360,9 @@ public class DaikonSimple {
   }
 
   /**
-   * The Call class helps the SimpleProcessor keep track of matching enter and
-   * exit program points and also object program points. Each Call object
-   * represents one entry in the dtrace file, i.e. enter, exit, object entry.
-   *
+   * The Call class helps the SimpleProcessor keep track of matching enter and exit program points
+   * and also object program points. Each Call object represents one entry in the dtrace file, i.e.
+   * enter, exit, object entry.
    */
   static final class Call {
 
@@ -378,10 +377,7 @@ public class DaikonSimple {
     }
   }
 
-  /**
-   * The SimpleProcessor class processes each sample in the dtrace file.
-   *
-   */
+  /** The SimpleProcessor class processes each sample in the dtrace file. */
   public static class SimpleProcessor extends FileIO.Processor {
     PptMap all_ppts = null;
 
@@ -411,11 +407,10 @@ public class DaikonSimple {
     Integer last_nonce = new Integer(-1);
 
     /**
-     * Creates a valuetuple for the receiver using the vt of the original.  The
-     * method copies over the values of variables shared by both program points
-     * and sets the rest of the variables in the receiver's valuetuple as missing.
-     * Also, adds the orig and derived variables to the receiver and returns the
-     * newly created valuetuple.
+     * Creates a valuetuple for the receiver using the vt of the original. The method copies over
+     * the values of variables shared by both program points and sets the rest of the variables in
+     * the receiver's valuetuple as missing. Also, adds the orig and derived variables to the
+     * receiver and returns the newly created valuetuple.
      */
     private static ValueTuple copySample(
         PptTopLevel receiver, PptTopLevel original, ValueTuple vt, int nonce) {
@@ -459,9 +454,8 @@ public class DaikonSimple {
     }
 
     /**
-     * Process the sample by checking it against each existing invariant at the
-     * program point and removing the invariant from the list of possibles if
-     * any invariant is falsified.
+     * Process the sample by checking it against each existing invariant at the program point and
+     * removing the invariant from the list of possibles if any invariant is falsified.
      */
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, /*@Nullable*/ Integer nonce) {

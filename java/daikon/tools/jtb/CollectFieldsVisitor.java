@@ -10,8 +10,8 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * Method "fieldDeclarations" returns a list of all FieldDeclarations
- * declared in this class (or, optionally, in nested classes).
+ * Method "fieldDeclarations" returns a list of all FieldDeclarations declared in this class (or,
+ * optionally, in nested classes).
  */
 class CollectFieldsVisitor extends DepthFirstVisitor {
 
@@ -94,8 +94,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
     return Ast.contains(n.f0, mod);
   }
 
-  /** Returns a list of all FieldDeclarations declared in this class or in
-   * nested/inner classes. */
+  /** Returns a list of all FieldDeclarations declared in this class or in nested/inner classes. */
   public List<FieldDeclaration> fieldDeclarations() {
     updateCache();
     return fieldDecls;

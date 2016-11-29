@@ -6,18 +6,15 @@ import java.io.*;
 import java.util.*;
 import plume.*;
 
-/** This tool fixes a Dtrace file whose invocation nonces became inaccurate
- * as a result of a "cat" command combining multiple dtrace files. Every
- * dtrace file besides the first will have the invocation nonces increased
- * by the "correct" amount, determined in the following way:
+/**
+ * This tool fixes a Dtrace file whose invocation nonces became inaccurate as a result of a {@code
+ * cat} command combining multiple dtrace files. Every dtrace file besides the first will have the
+ * invocation nonces increased by the "correct" amount, determined in the following way:
  *
- * <p>
- * Keep track of all the nonces you see and maintain a record
- * of the highest nonce observed.  The next time you see a '0' valued
- * nonce that is not part of an EXIT program point, then you know you have
- * reached the beginning of the next dtrace file.  Use that as the number
- * to add to the remaining nonces and repeat.  This should only require
- * one pass through the file.
+ * <p>Keep track of all the nonces you see and maintain a record of the highest nonce observed. The
+ * next time you see a '0' valued nonce that is not part of an EXIT program point, then you know you
+ * have reached the beginning of the next dtrace file. Use that as the number to add to the
+ * remaining nonces and repeat. This should only require one pass through the file.
  */
 public class DtraceNonceFixer {
 
@@ -41,10 +38,10 @@ public class DtraceNonceFixer {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing daikon.Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * daikon.Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -115,12 +112,12 @@ public class DtraceNonceFixer {
     }
   }
 
-  /** Returns a String representing an invocation with the
-   * line directly under 'this_invocation_nonce' changed
-   * to 'newNone'.  If the String 'this_invocation_nonce'
-   * is not found, then creates a line 'this_invocation_nonce'
-   * directly below the program point name and a line containing
-   * newNonce directly under that. */
+  /**
+   * Returns a String representing an invocation with the line directly under
+   * 'this_invocation_nonce' changed to 'newNone'. If the String 'this_invocation_nonce' is not
+   * found, then creates a line 'this_invocation_nonce' directly below the program point name and a
+   * line containing newNonce directly under that.
+   */
   private static String spawnWithNewNonce(String invo, int newNonce) {
 
     //    System.out.println (invo);
@@ -160,8 +157,10 @@ public class DtraceNonceFixer {
     return sb.toString();
   }
 
-  /** Returns the nonce of the invocation 'invo' or -1 if the
-   * String 'this_invocation_nonce' is not found in invo */
+  /**
+   * Returns the nonce of the invocation 'invo', or -1 if the String 'this_invocation_nonce' is not
+   * found in {@code invo}.
+   */
   private static int peekNonce(String invo) {
     StringTokenizer st = new StringTokenizer(invo, lineSep);
     while (st.hasMoreTokens()) {
@@ -173,10 +172,11 @@ public class DtraceNonceFixer {
     return -1;
   }
 
-  /** Grabs the next invocation out of the dtrace buffer and returns
-   *  a String with endline characters preserved. This method will return
-   *  a single blank line if the original dtrace file contained consecutive
-   *  blank lines. */
+  /**
+   * Grabs the next invocation out of the dtrace buffer and returns a String with endline characters
+   * preserved. This method will return a single blank line if the original dtrace file contained
+   * consecutive blank lines.
+   */
   private static String grabNextInvocation(BufferedReader br) throws IOException {
     StringBuffer sb = new StringBuffer();
     while (br.ready()) {

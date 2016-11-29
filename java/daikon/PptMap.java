@@ -11,11 +11,10 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Maps from a program point name (a String) to a PptTopLevel.<p>
+ * Maps from a program point name (a String) to a PptTopLevel.
  *
- * This is the major data structure of Daikon.  All the invariants can be
- * found in it, and an .inv file contains (only) the serialized form of
- * this object.
+ * <p>This is the major data structure of Daikon. All the invariants can be found in it, and an
+ * {@code .inv} file contains (only) the serialized form of this object.
  */
 // Why doesn't this implement Map<String,PptTopLevel> or extend
 // LinkedHashMap<String,PptTopLevel>?
@@ -38,9 +37,8 @@ public class PptMap implements Serializable {
   }
 
   /**
-   * Get the pptname named 'name' from the map.  Note that conditional
-   * program points are not stored in the map by name.  They are only
-   * available through their parent.
+   * Get the pptname named 'name' from the map. Note that conditional program points are not stored
+   * in the map by name. They are only available through their parent.
    */
   /*@Pure*/
   public /*@Nullable*/ PptTopLevel get(String name) {
@@ -48,9 +46,8 @@ public class PptMap implements Serializable {
   }
 
   /**
-   * Get the pptname 'name' from the map.  Note that conditional
-   * program points are not stored in the map by name.  They are only
-   * available through their parent.
+   * Get the pptname 'name' from the map. Note that conditional program points are not stored in the
+   * map by name. They are only available through their parent.
    */
   /*@Pure*/
   public /*@Nullable*/ PptTopLevel get(PptName name) {
@@ -58,9 +55,8 @@ public class PptMap implements Serializable {
   }
 
   /**
-   * Returns whether or not 'name' is the name of a Ppt in the map.  Note
-   * that conditional program points are not stored in the map by name.
-   * They are only available through their parent.
+   * Returns whether or not 'name' is the name of a Ppt in the map. Note that conditional program
+   * points are not stored in the map by name. They are only available through their parent.
    */
   /*@Pure*/
   @SuppressWarnings("nullness") // postcondition: linked maps
@@ -83,19 +79,16 @@ public class PptMap implements Serializable {
     return Collections.unmodifiableCollection(nameToPpt.values());
   }
 
-  /**
-   * @return an unmodifiable version of the keySet
-   */
+  /** @return an unmodifiable version of the keySet */
   public Collection</*@KeyFor("nameToPpt")*/ String> nameStringSet() {
     return Collections.unmodifiableSet(nameToPpt.keySet());
   }
 
   /**
-   * @return an iterator over the PptTopLevels in this, sorted by
-   * Ppt.NameComparator on their names.  This is good for consistency.
-   * <p>
-   * If you wish to merely iterate over the result in a Java new-style for
-   * loop ("foreach loop"), use {@link #pptIterable()} instead.
+   * @return an iterator over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   *     This is good for consistency.
+   *     <p>If you wish to merely iterate over the result in a Java new-style for loop ("foreach
+   *     loop"), use {@link #pptIterable()} instead.
    * @see #pptIterable()
    */
   public Iterator<PptTopLevel> pptIterator() {
@@ -124,11 +117,10 @@ public class PptMap implements Serializable {
   }
 
   /**
-   * @return an iterable over the PptTopLevels in this, sorted by
-   * Ppt.NameComparator on their names.  This is good for consistency.
-   * <p>
-   * It is a wrapper around {@link #pptIterator()} that can be used in a
-   * Java new-style for loop ("foreach loop").
+   * @return an iterable over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   *     This is good for consistency.
+   *     <p>It is a wrapper around {@link #pptIterator()} that can be used in a Java new-style for
+   *     loop ("foreach loop").
    * @see #pptIterator()
    */
   public Iterable<PptTopLevel> pptIterable() {
@@ -136,12 +128,10 @@ public class PptMap implements Serializable {
   }
 
   /**
-   * @return an iterator over the PptTopLevels in this, sorted by
-   * Ppt.NameComparator on their names.  This differs from pptIterator()
-   * in that it includes all ppts (including conditional ppts).
-   * <p>
-   * If you wish to merely iterate over the result in a Java new-style for
-   * loop ("foreach loop"), use {@link #ppt_all_iterable()} instead.
+   * @return an iterator over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   *     This differs from pptIterator() in that it includes all ppts (including conditional ppts).
+   *     <p>If you wish to merely iterate over the result in a Java new-style for loop ("foreach
+   *     loop"), use {@link #ppt_all_iterable()} instead.
    * @see #ppt_all_iterable()
    */
   public Iterator<PptTopLevel> ppt_all_iterator() {
@@ -180,12 +170,10 @@ public class PptMap implements Serializable {
   }
 
   /**
-   * @return an iterable over the PptTopLevels in this, sorted by
-   * Ppt.NameComparator on their names.  This differs from pptIterable()
-   * in that it includes all ppts (including conditional ppts).
-   * <p>
-   * It is a wrapper around {@link #ppt_all_iterator()} that can be used in a
-   * Java new-style for loop ("foreach loop").
+   * @return an iterable over the PptTopLevels in this, sorted by Ppt.NameComparator on their names.
+   *     This differs from pptIterable() in that it includes all ppts (including conditional ppts).
+   *     <p>It is a wrapper around {@link #ppt_all_iterator()} that can be used in a Java new-style
+   *     for loop ("foreach loop").
    * @see #ppt_all_iterator()
    */
   public Iterable<PptTopLevel> ppt_all_iterable() {
@@ -199,18 +187,14 @@ public class PptMap implements Serializable {
     }
   }
 
-  /**
-   * Check the rep invariant of this.  Throws an Error if incorrect.
-   */
+  /** Check the rep invariant of this. Throws an Error if incorrect. */
   public void repCheck() {
     for (PptTopLevel ppt : this.pptIterable()) {
       ppt.repCheck();
     }
   }
 
-  /**
-   * Return the number of active PptSlices.
-   */
+  /** Return the number of active PptSlices. */
   /*@Pure*/
   public int countSlices() {
     int result = 0;
@@ -230,9 +214,7 @@ public class PptMap implements Serializable {
     return "PptMap: " + nameToPpt.toString();
   }
 
-  /**
-   * Blow away any PptTopLevels that never saw any samples (to reclaim space).
-   */
+  /** Blow away any PptTopLevels that never saw any samples (to reclaim space). */
   public void removeUnsampled() {
     Iterator<PptTopLevel> iter = nameToPpt.values().iterator();
     while (iter.hasNext()) {

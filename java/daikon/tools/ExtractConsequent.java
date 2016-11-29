@@ -14,13 +14,11 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * Extract the consequents of all Implication invariants that are predicated
- * by membership in a cluster, from a .inv file.  An example of such an
- * implication would be "(cluster == <em>NUM</em>) ==&gt; consequent". The consequent
- * is only true in certain clusters, but is not generally true for all
- * executions of the program point to which the Implication belongs.  These
- * resulting implications are written to standard output in the format of a
- * splitter info file.
+ * Extract the consequents of all Implication invariants that are predicated by membership in a
+ * cluster, from a {@code .inv} file. An example of such an implication would be "(cluster ==
+ * <em>NUM</em>) ==&gt; consequent". The consequent is only true in certain clusters, but is not
+ * generally true for all executions of the program point to which the Implication belongs. These
+ * resulting implications are written to standard output in the format of a splitter info file.
  */
 public class ExtractConsequent {
 
@@ -78,10 +76,10 @@ public class ExtractConsequent {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -240,9 +238,8 @@ public class ExtractConsequent {
   }
 
   /**
-   * Extract consequents from a implications at a single program
-   * point. It only searches for top level Program points because
-   * Implications are produced only at those points.
+   * Extract consequents from a implications at a single program point. It only searches for
+   * top-level program points because Implications are produced only at those points.
    */
   public static void extract_consequent_maybe(PptTopLevel ppt, PptMap all_ppts) {
     ppt.simplify_variable_names();
@@ -411,12 +408,11 @@ public class ExtractConsequent {
   }
 
   /**
-   * Prevents the occurence of "equivalent" inequalities, or inequalities
-   * which produce the same pair of splits at a program point, for example
-   * "x <= y" and "x &gt; y". Replaces "&ge;" with "<", "&le;" with ">", and "!="
-   * with "==" so that the occurence of equivalent inequalities can be
-   * detected. However it tries not to be smart ... If there is more than
-   * one inequality in the expression, it doesn't perform a substitution.
+   * Prevents the occurence of "equivalent" inequalities, or inequalities which produce the same
+   * pair of splits at a program point, for example "x <= y" and "x &gt; y". Replaces "&ge;" with
+   * "<", "&le;" with ">", and "!=" with "==" so that the occurence of equivalent inequalities can
+   * be detected. However it tries not to be smart ... If there is more than one inequality in the
+   * expression, it doesn't perform a substitution.
    */
   private static String simplify_inequalities(String condition) {
     if (contains_exactly_one(condition, inequality_pattern)) {

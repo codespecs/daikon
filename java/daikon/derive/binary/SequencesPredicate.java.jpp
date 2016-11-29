@@ -123,7 +123,7 @@ public final class CLASSNAME
    * var2 equals this.choose.  It is assumed that val1 and val2
    * originated from the same, larger data structure.
    * @param full_vt the value tuple of a program point to compute the
-   * derived value from.
+   * derived value from
    */
   public ValueAndModified computeValueAndModifiedImpl (ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);

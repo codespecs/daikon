@@ -349,8 +349,10 @@ public class PAIRWISEINTEQUAL
    * Checks to see if the same invariant exists over supersequences of
    * these variables:
    *
+   * <pre>
    *    (A[] op B[]) ^ (i == j)  &rArr; A[i..] op B[j..]
    *    (A[] op B[]) ^ (i == j)  &rArr; A[..i] op B[..j]
+   * </pre>
    */
   private /*@Nullable*/ DiscardInfo superseq_implies (VarInfo[] vis) {
 

@@ -10,10 +10,9 @@ import org.checkerframework.checker.regex.qual.*;
 */
 
 /**
- * A filter that filters out invariants that contain derived variables
- * of a specified derivation.  If the derivation class name contains
- * the regular expression in dkconfig_class_re, the invariant is filtered
- * out.  By default, no derived variables are matched.
+ * A filter that filters out invariants that contain derived variables of a specified derivation. If
+ * the derivation class name contains the regular expression in dkconfig_class_re, the invariant is
+ * filtered out. By default, no derived variables are matched.
  */
 public class DerivedVariableFilter extends InvariantFilter {
 
@@ -22,16 +21,15 @@ public class DerivedVariableFilter extends InvariantFilter {
   }
 
   /**
-   * Regular expression to match against the class name of derived
-   * variables.  Invariants that contain derived variables that match will
-   * be filtered out.  If null, nothing will be filtered out.
+   * Regular expression to match against the class name of derived variables. Invariants that
+   * contain derived variables that match will be filtered out. If null, nothing will be filtered
+   * out.
    */
   // dkconfig_* means a configuration option, set from command line or file
   public static /*@Nullable*/ /*@Regex*/ String dkconfig_class_re = null;
+
   public static /*@Nullable*/ Pattern class_re = null;
 
-  /**
-   */
   public DerivedVariableFilter() {
     isOn = dkconfig_class_re != null;
     if (isOn) {

@@ -9,15 +9,14 @@ import java.util.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/** <B>ConsequentExtractorVisitor</B> is a visitor that
- *  takes in RootNode tree used by the other visitors in Diff
- *  and only modifies the first inv tree out of the pair of two
- *  inv trees (the second tree is never read or modified).
+/**
+ * <B>ConsequentExtractorVisitor</B> is a visitor that takes in RootNode tree used by the other
+ * visitors in Diff and only modifies the first inv tree out of the pair of two inv trees (the
+ * second tree is never read or modified).
  *
- *  <P>The goal is to take the right hand side of any implication
- *  and extract it for later use.  The implementation completely replaces
- *  the previous inv tree with the a new inv tree.  The new inv tree
- *  contains only the extracted consequents of the original inv tree.
+ * <p>The goal is to take the right hand side of any implication and extract it for later use. The
+ * implementation completely replaces the previous inv tree with the a new inv tree. The new inv
+ * tree contains only the extracted consequents of the original inv tree.
  */
 public class ConsequentExtractorVisitor extends DepthFirstVisitor {
 
@@ -63,9 +62,11 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor {
     System.out.println("NONCE: " + nonce);
   }
 
-  /** The idea is to check if the node is an Implication Invariant.If not,
-   *  immediately remove the invariant.  Otherwise, extract the Consequent,
-   *  remove the Implication, and then add the consequent to the list. */
+  /**
+   * The idea is to check if the node is an Implication Invariant. If not, immediately remove the
+   * invariant. Otherwise, extract the Consequent, remove the Implication, and then add the
+   * consequent to the list.
+   */
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     // do nothing if the invariant does not exist
@@ -95,8 +96,8 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Returns true if the pair of invariants should be printed,
-   * depending on their type, relationship, and printability.
+   * Returns true if the pair of invariants should be printed, depending on their type,
+   * relationship, and printability.
    */
   protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);

@@ -16,10 +16,9 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Class that defines a set of non-instantiating suppressions for a single
- * invariant (suppressee).
+ * Class that defines a set of non-instantiating suppressions for a single invariant (suppressee).
  *
- * Not immutable:  see recurse_definitions().
+ * <p>Not immutable: see recurse_definitions().
  */
 public class NISuppressionSet implements Iterable<NISuppression> {
 
@@ -39,9 +38,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Adds this set to the suppressor map.  The map is from the class of
-   * the suppressor to this. If the same suppressor class appears more
-   * than once, the suppression is only added once.
+   * Adds this set to the suppressor map. The map is from the class of the suppressor to this. If
+   * the same suppressor class appears more than once, the suppression is only added once.
    */
   public void add_to_suppressor_map(
       Map<Class<? extends Invariant>, List<NISuppressionSet>> suppressor_map) {
@@ -77,12 +75,11 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * NIS process a falsified invariant. This method should be called for
-   * each falsified invariant in turn.  Any invariants for which inv is
-   * the last valid suppressor are added to new_invs.
+   * NIS process a falsified invariant. This method should be called for each falsified invariant in
+   * turn. Any invariants for which inv is the last valid suppressor are added to new_invs.
    *
-   * Note, this is no longer the preferred approach, but is kept for
-   * informational purposes.  Use NIS.process_falsified_invs() instead.
+   * <p>Note, this is no longer the preferred approach, but is kept for informational purposes. Use
+   * NIS.process_falsified_invs() instead.
    */
   public void falsified(Invariant inv, List<Invariant> new_invs) {
 
@@ -275,9 +272,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Checks the falsified invariant against the slice specified by vis.
-   * If the falsification of inv removed the last valid suppression, then
-   * instantiates the suppressee.
+   * Checks the falsified invariant against the slice specified by vis. If the falsification of inv
+   * removed the last valid suppression, then instantiates the suppressee.
    */
   private void check_falsified(
       PptTopLevel ppt, VarInfo[] vis, Invariant inv, List<Invariant> new_invs) {
@@ -316,12 +312,11 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Determines whether or not the suppression set is valid in the
-   * specified slice.  The suppression set is valid if any of its
-   * suppressions are valid.  A suppression is valid if all of its
+   * Determines whether or not the suppression set is valid in the specified slice. The suppression
+   * set is valid if any of its suppressions are valid. A suppression is valid if all of its
    * suppressors are true.
    *
-   * Also updates the debug information in each suppressor.
+   * <p>Also updates the debug information in each suppressor.
    *
    * @see #is_instantiate_ok(PptSlice) for a check that considers missing
    */
@@ -331,15 +326,13 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Determines whether or not the suppression set is valid in the
-   * specified ppt and var_infos.  The suppression set is valid if any
-   * of its suppressions are valid.  A suppression is valid if all of
+   * Determines whether or not the suppression set is valid in the specified ppt and var_infos. The
+   * suppression set is valid if any of its suppressions are valid. A suppression is valid if all of
    * its suppressors are true.
    *
-   * Also updates the debug information in each suppressor.
+   * <p>Also updates the debug information in each suppressor.
    *
-   * @see #is_instantiate_ok(PptTopLevel,VarInfo[]) for a check that
-   * considers missing
+   * @see #is_instantiate_ok(PptTopLevel,VarInfo[]) for a check that considers missing
    */
   public boolean suppressed(PptTopLevel ppt, VarInfo[] var_infos) {
 
@@ -383,9 +376,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Determines whether or not the suppression set is valid in the
-   * specified slice.  The suppression set is valid if any of its
-   * suppressions are valid.  A suppression is valid if all of its
+   * Determines whether or not the suppression set is valid in the specified slice. The suppression
+   * set is valid if any of its suppressions are valid. A suppression is valid if all of its
    * non-missing suppressors are true.
    */
   /*@Pure*/
@@ -395,10 +387,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Determines whether or not the suppressee of the suppression set
-   * should be instantiated.  Instantiation is ok only if each
-   * suppression is invalid.  A suppression is valid if all of
-   * its non-missing suppressors are true.
+   * Determines whether or not the suppressee of the suppression set should be instantiated.
+   * Instantiation is ok only if each suppression is invalid. A suppression is valid if all of its
+   * non-missing suppressors are true.
    */
   /*@Pure*/
   public boolean is_instantiate_ok(PptTopLevel ppt, VarInfo[] var_infos) {
@@ -443,11 +434,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Instantiates the suppressee over the specified variables in the
-   * specified ppt.  The invariant is added to the new_invs list, but
-   * not to the slice.  The invariant is added to the slice later when
-   * the sample is applied to it.  That guarantees that it is only applied
-   * the sample once.
+   * Instantiates the suppressee over the specified variables in the specified ppt. The invariant is
+   * added to the new_invs list, but not to the slice. The invariant is added to the slice later
+   * when the sample is applied to it. That guarantees that it is only applied the sample once.
    *
    * @deprecated
    */
@@ -495,9 +484,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
             throw new Error(
                 String.format(
                     "inv %s:%s already in new_invs " + "(slice %s)",
-                    inv.getClass(),
-                    inv.format(),
-                    slice));
+                    inv.getClass(), inv.format(), slice));
           }
         }
       }
@@ -524,28 +511,29 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Side-effects this NISuppressionSet.
-   * Each suppression where a suppressor matches the suppressee in ss is
-   * augmented by additional suppression(s) where the suppressor is replaced
-   * by each of its suppressions.  This allows recursive suppressions.
+   * Side-effects this NISuppressionSet. Each suppression where a suppressor matches the suppressee
+   * in ss is augmented by additional suppression(s) where the suppressor is replaced by each of its
+   * suppressions. This allows recursive suppressions.
    *
-   * For example, consider the suppressions:
+   * <p>For example, consider the suppressions:
+   *
    * <pre>
    *    (r == arg1) &and; (arg2 &le; arg1) &rArr; r = max(arg1,arg2)
    *    (arg2 == arg1) &rArr; arg2 &le; arg1
    * </pre>
-   * The suppressor (arg2 &le; arg1) in the first suppression matches the
-   * suppressee in the second suppression.  In order for the first
-   * suppression to work even when (arg2 &le; arg1) is suppressed, the
-   * second suppression is added to the first:
+   *
+   * The suppressor (arg2 &le; arg1) in the first suppression matches the suppressee in the second
+   * suppression. In order for the first suppression to work even when (arg2 &le; arg1) is
+   * suppressed, the second suppression is added to the first:
+   *
    * <pre>
    *    (r == arg1) &and; (arg2 &le; arg1) &rArr; r = max(arg1,arg2)
    *    (r == arg1) &and; (arg2 == arg1) &rArr; r = max(arg1,arg2)
    * </pre>
-   * When (arg2 &le; arg1) is suppressed, the second suppression for max
-   * will still suppress max.  If (arg2 == arg1) is falsified, the
-   * (arg2 &le; arg1) invariant will be created and can continue to suppress
-   * max (as long as it is not falsified itself).
+   *
+   * When (arg2 &le; arg1) is suppressed, the second suppression for max will still suppress max. If
+   * (arg2 == arg1) is falsified, the (arg2 &le; arg1) invariant will be created and can continue to
+   * suppress max (as long as it is not falsified itself).
    */
   public void recurse_definitions(NISuppressionSet ss) {
 
@@ -572,8 +560,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Swaps each suppressor and suppressee to the opposite variable
-   * order.  Valid only on unary and binary suppressors and suppressees
+   * Swaps each suppressor and suppressee to the opposite variable order. Valid only on unary and
+   * binary suppressors and suppressees.
    */
   public NISuppressionSet swap() {
 
@@ -596,18 +584,14 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     return suppression_set[0].suppressee;
   }
 
-  /**
-   * Clears the suppressor state in each suppression.
-   */
+  /** Clears the suppressor state in each suppression. */
   public void clear_state() {
     for (int i = 0; i < suppression_set.length; i++) {
       suppression_set[i].clear_state();
     }
   }
 
-  /**
-   * Returns a string containing each suppression separated by commas.
-   */
+  /** Returns a string containing each suppression separated by commas. */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied NISuppressionSet this*/) {
     return UtilMDE.join(suppression_set, ", ");

@@ -2,9 +2,7 @@ package daikon.config;
 
 import plume.*;
 
-/**
- * Supplies a static method htmlToTexinfo that converts HTML to Texinfo format.
- */
+/** Supplies a static method htmlToTexinfo that converts HTML to Texinfo format. */
 public class HtmlToTexinfo {
 
   private static final String lineSep = System.getProperty("line.separator");

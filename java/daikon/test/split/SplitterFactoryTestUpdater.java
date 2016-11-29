@@ -11,24 +11,20 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * This class's main method can be used to update both the
- * target files of SplitterFactoryTest and the code of the
- * SplitterFactoryTest itself.
- * <p>
+ * This class's main method can be used to update both the target files of SplitterFactoryTest and
+ * the code of the SplitterFactoryTest itself.
  *
- * To use this program to update SplitterFactoryTest
- * and the target files, run
+ * <p>To use this program to update SplitterFactoryTest and the target files, run
+ *
  * <pre>    rm $inv/java/daikon/test/split/targets/*.java.goal
  *      rm $inv/java/daikon/test/split/SplitterFactoryTest.java</pre>
- * Then simply run the main method without any arguments
- * in the $INV/java directory, and then re-compile the SplitterFactoryTest.
- * <p>
  *
- * To add additional tests to this test program, place the .spinfo
- * and decls files into the "targets" directory then add a call to
- * generateSplitters with the new files.  generateSplitters is
- * overloaded, and takes either one .spinfo file and
- * one decls file, or else a list of each.
+ * Then simply run the main method without any arguments in the $INV/java directory, and then
+ * re-compile the SplitterFactoryTest.
+ *
+ * <p>To add additional tests to this test program, place the .spinfo and decls files into the
+ * "targets" directory then add a call to generateSplitters with the new files. generateSplitters is
+ * overloaded, and takes either one {@code .spinfo} file and one decls file, or else a list of each.
  */
 public class SplitterFactoryTestUpdater {
   public static java.lang.Runtime commander = java.lang.Runtime.getRuntime();
@@ -42,12 +38,11 @@ public class SplitterFactoryTestUpdater {
   private SplitterFactoryTestUpdater() {} //blocks public constructor
 
   /**
-   * If one has changed the test cases used below, for best results run
-   * "rm *.java.goal" while in the targets directory before running this
-   * method. Creates new splitter java files, moves the new files into
-   * target directory, rewrites the code of SplitterFactoryTest
-   * to use the new files.  One should recompile SplitterFactoryTest
-   * after running this method.
+   * If one has changed the test cases used below, for best results run {@code rm *.java.goal} while
+   * in the targets directory before running this method. Creates new splitter java files, moves the
+   * new files into target directory, rewrites the code of SplitterFactoryTest to use the new files.
+   * One should recompile SplitterFactoryTest after running this method.
+   *
    * @param args are ignored
    */
   public static void main(String[] args) {
@@ -63,8 +58,8 @@ public class SplitterFactoryTestUpdater {
   }
 
   /**
-   * This is a short-cut method if only one spinfo file and only
-   * one decls files is to be used.
+   * This is a short-cut method if only one spinfo file and only one decls files is to be used.
+   *
    * @see #generateSplitters(List, List)
    */
   private static void generateSplitters(String spinfoFile, String declsFile) {
@@ -76,11 +71,10 @@ public class SplitterFactoryTestUpdater {
   }
 
   /**
-   * Generates the splitter .java files.
-   * @param spinfos the spinfo files that should be used in generating
-   *  the splitter java files
-   * @param decls the decls files that should be used in generating the
-   *  splitter java files.
+   * Generates the splitter {@code .java} files.
+   *
+   * @param spinfos the spinfo files that should be used in generating the splitter java files
+   * @param decls the decls files that should be used in generating the splitter java files
    */
   private static void generateSplitters(List<String> spinfos, List<String> decls) {
     HashSet<File> declsFileSet = new HashSet<File>();
@@ -112,9 +106,7 @@ public class SplitterFactoryTestUpdater {
     }
   }
 
-  /**
-   * Moves the generated splitter files from the tempDir to the target Dir.
-   */
+  /** Moves the generated splitter files from the tempDir to the target Dir. */
   private static void moveFiles() {
     File tempDir = new File(SplitterFactory.getTempDir());
     String[] fileNames = tempDir.list();
@@ -164,9 +156,7 @@ public class SplitterFactoryTestUpdater {
     UtilMDE.writeFile(to, UtilMDE.readFile(from));
   }
 
-  /**
-   * Writes the new code for "SplitterFactoryTest.java".
-   */
+  /** Writes the new code for "SplitterFactoryTest.java". */
   private static void writeTestClass() {
     String code = getTestClassText();
     try {
@@ -181,9 +171,7 @@ public class SplitterFactoryTestUpdater {
     }
   }
 
-  /**
-   * Returns a String of the new text for the SplitterFactoryTest class.
-   */
+  /** Returns a String of the new text for the SplitterFactoryTest class. */
   private static String getTestClassText() {
     OutputStream code = new ByteArrayOutputStream();
     PrintStream ps = new PrintStream(code);
@@ -327,9 +315,8 @@ public class SplitterFactoryTestUpdater {
   }
 
   /**
-   * Appends the code to write the static block of code to code.
-   * This code is used by the SplitterFactoryTest to set up the
-   * needed files to run the tests on.
+   * Appends the code to write the static block of code to code. This code is used by the
+   * SplitterFactoryTest to set up the needed files to run the tests on.
    */
   public static void appendSetUpTest(PrintStream ps) {
     ps.println("  private static void setUpTests() {");
@@ -346,10 +333,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("  }");
   }
 
-  /**
-   * Appends the code that executes the test in SplitterFactoryTest
-   * to code.
-   */
+  /** Appends the code that executes the test in SplitterFactoryTest to code. */
   private static void appendTests(PrintStream ps) {
     ps.println("  /**");
     ps.println("   * Returns true iff files are the same (ignoring extra white space).");
@@ -374,10 +358,7 @@ public class SplitterFactoryTestUpdater {
     }
   }
 
-  /**
-   * Appends the code that generates the test suite in SplitterFactoryTest
-   * to code.
-   */
+  /** Appends the code that generates the test suite in SplitterFactoryTest to code. */
   private static void appendSuite(PrintStream ps) {
     for (String className : classNames) {
       ps.println("    suite.addTest(new SplitterFactoryTest(\"test" + className + "\"));");

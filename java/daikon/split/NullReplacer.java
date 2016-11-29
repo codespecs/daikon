@@ -6,10 +6,9 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
 /**
- * NullReplacer is a jtb syntax tree visitor that replaces all instances
- * of "null" with "0" in a given expression. Note: "null" is
- * only referring to the java reserved word "null" not to any instances
- * of the string "null".
+ * NullReplacer is a JTB syntax tree visitor that replaces all instances of "null" with "0" in a
+ * given expression. Note: "null" is only referring to the java reserved word "null" not to any
+ * instances of the string "null".
  */
 class NullReplacer extends DepthFirstVisitor {
 
@@ -29,10 +28,10 @@ class NullReplacer extends DepthFirstVisitor {
 
   /**
    * Replaces all instance of "null" with "0".
+   *
    * @param expression a valid java expression
-   * @return expression with all instances of null replaced by
-   *  instances of "0".
-   * @throws ParseException if expression is not a valid java expression.
+   * @return expression with all instances of null replaced by instances of "0"
+   * @throws ParseException if expression is not a valid java expression
    */
   public static String replaceNull(String expression) throws ParseException {
     Node root = Visitors.getJtbTree(expression);
@@ -42,8 +41,8 @@ class NullReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Replaces all instance of "null" with "0" in the JTB syntax tree rooted
-   * at root..
+   * Replaces all instance of "null" with "0" in the JTB syntax tree rooted at root..
+   *
    * @param root a JTB syntax tree
    */
   public static void replaceNull(Node root) {
@@ -52,9 +51,8 @@ class NullReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * This method should not be directly used by user of this class;
-   * however it must be public to full-fill the visitor interface.
-   * If n represents null then it is replaced by "0".
+   * This method should not be directly used by user of this class; however it must be public to
+   * full-fill the visitor interface. If n represents null then it is replaced by "0".
    */
   public void visit(NodeToken n) {
     if (n.beginLine == columnshiftline) {

@@ -1,7 +1,5 @@
 package daikon.dcomp;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.bcel.generic.InstructionList;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.Type;
@@ -17,8 +15,7 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Stores the types on the stack at each instruction (identified by
- * byte code offset) in a method
+ * Stores the types on the stack at each instruction (identified by byte code offset) in a method.
  */
 public final class StackTypes {
 
@@ -75,9 +72,6 @@ public final class StackTypes {
     return (sb.toString());
   }
 
-  /**
-   * TODO
-   */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied StackTypes this,*/ OperandStack os) {
 
@@ -96,9 +90,6 @@ public final class StackTypes {
     return ("{" + buff + "}");
   }
 
-  /**
-   * TODO
-   */
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied StackTypes this,*/ LocalVariables lv) {
 

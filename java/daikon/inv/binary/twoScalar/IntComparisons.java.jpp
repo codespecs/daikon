@@ -600,7 +600,7 @@ public final class INTEQUAL
 
   /**
    * Returns the class that corresponds to this class with its variable
-   * order swapped
+   * order swapped.
    */
   public static Class<? extends Invariant> swap_class () {
     return INTEQUAL_SWAP.class;
@@ -1121,11 +1121,13 @@ public final class INTEQUAL
 #if defined(IS_NUMERIC) && (defined(LESSTHAN_OP) || defined(GREATERTHAN_OP))
   /**
    * Checks to see if there is a linear binary relationship between the
-   * variables that implies &gt; or <
+   * variables that implies &gt; or &lt;
+   * <pre>
    *  a * x + b * y + c == 0
    *
-   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b > 0) &rArr; y &gt; x
-   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b < 0) &rArr; y &lt; x
+   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b &gt; 0) &rArr; y &gt; x
+   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b &lt; 0) &rArr; y &lt; x
+   * </pre>
    *
    *
    * Returns null if this is not true.  Appropriate DiscardInfo otherwise.

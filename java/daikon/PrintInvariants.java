@@ -24,11 +24,11 @@ import org.checkerframework.checker.nullness.qual.*;
 */
 
 /**
- * PrintInvariants prints a set of invariants from a .inv file.
- * For documentation, see section "Printing Invariants" in the Daikon
- * manual.
- * Invoke the program as follows:
+ * PrintInvariants prints a set of invariants from a {@code .inv} file. For documentation, see
+ * section "Printing Invariants" in the Daikon manual. Invoke the program as follows:
+ *
  * <pre>java daikon.PrintInvariants [flags] inv-file</pre>
+ *
  * For a list of cammand-line options, pass the "-h" flag to this program.
  */
 public final class PrintInvariants {
@@ -40,8 +40,7 @@ public final class PrintInvariants {
   /**
    * See dkconfig_replace_prestate.
    *
-   * Resets the prestate expression mapping.
-   * This is done between printing of each different
+   * <p>Resets the prestate expression mapping. This is done between printing of each different
    * program point.
    */
   public static void resetPrestateExpressions() {
@@ -58,9 +57,8 @@ public final class PrintInvariants {
   /**
    * See dkconfig_replace_prestate.
    *
-   * Return the variable name corresponding to expr.  Create a new
-   * varname and an expr &rarr; varname mapping if there is not already
-   * one.
+   * <p>Return the variable name corresponding to expr. Create a new varname and an expr &rarr;
+   * varname mapping if there is not already one.
    */
   public static String addPrestateExpression(String expr) {
     if (expr == null) {
@@ -80,11 +78,10 @@ public final class PrintInvariants {
   /**
    * This option must be given with "--format Java" option.
    *
-   * Instead of outputting prestate expressions as "\old(E)" within an
-   * invariant, output a variable name (e.g. `v1'). At the end of
-   * each program point, output the list of variable-to-expression
-   * mappings. For example: with this option set to false, a program
-   * point might print like this:
+   * <p>Instead of outputting prestate expressions as "\old(E)" within an invariant, output a
+   * variable name (e.g. `v1'). At the end of each program point, output the list of
+   * variable-to-expression mappings. For example: with this option set to false, a program point
+   * might print like this:
    *
    * <pre>
    * foo.bar.Bar(int):::EXIT
@@ -102,61 +99,52 @@ public final class PrintInvariants {
   public static boolean dkconfig_replace_prestate = true;
 
   /**
-   * Print invariant classname with invariants in output of
-   * <code>format()</code> method, normally used only for debugging output
-   * rather than ordinary printing of invariants.
+   * Print invariant classname with invariants in output of <code>format()</code> method, normally
+   * used only for debugging output rather than ordinary printing of invariants.
    */
   public static boolean dkconfig_print_inv_class = false;
 
-  /** If true, print all invariants without any filtering.  */
+  /** If true, print all invariants without any filtering. */
   public static boolean dkconfig_print_all = false;
 
   /**
-   * If true, print the total number of true invariants.  This includes
-   * invariants that are redundant and would normally not be printed
-   * or even created due to optimizations.
+   * If true, print the total number of true invariants. This includes invariants that are redundant
+   * and would normally not be printed or even created due to optimizations.
    */
   public static boolean dkconfig_true_inv_cnt = false;
 
   /**
-   * If true, remove as many variables as possible that need to be indicated
-   * as 'post'.  Post variables occur when the subscript for a derived
-   * variable with an orig sequence is not orig.  For example: orig(a[post(i)])
-   * An equivalent expression involving only orig variables is substitued
-   * for the post variable when one exists.
+   * If true, remove as many variables as possible that need to be indicated as 'post'. Post
+   * variables occur when the subscript for a derived variable with an orig sequence is not orig.
+   * For example: orig(a[post(i)]) An equivalent expression involving only orig variables is
+   * substitued for the post variable when one exists.
    */
   public static boolean dkconfig_remove_post_vars = false;
 
   /**
-   * In the new decl format, print array names as 'a[]' as
-   * opposed to 'a[..]'  This creates names that are more compatible
-   * with the old output.  This option has no effect in the old decl
-   * format.
+   * In the new decl format, print array names as 'a[]' as opposed to 'a[..]' This creates names
+   * that are more compatible with the old output. This option has no effect in the old decl format.
    */
   public static boolean dkconfig_old_array_names = true;
 
   /**
-   * This enables a different way of treating static constant variables.
-   * They are not created into invariants into slices.  Instead, they are
-   * examined during print time.  If a unary invariant contains a value
-   * which matches the value of a static constant varible, the value
-   * will be replaced by the name of the variable, "if it makes sense".
-   * For example, if there is a static constant variable a = 1.  And if there
-   * exists an invariant x &le; 1, x &le; a would be the result printed.
+   * This enables a different way of treating static constant variables. They are not created into
+   * invariants into slices. Instead, they are examined during print time. If a unary invariant
+   * contains a value which matches the value of a static constant varible, the value will be
+   * replaced by the name of the variable, "if it makes sense". For example, if there is a static
+   * constant variable a = 1. And if there exists an invariant x &le; 1, x &le; a would be the
+   * result printed.
    */
   public static boolean dkconfig_static_const_infer = false;
 
   /**
-   * If false, don't print entry method program points for methods that
-   * override or implement another method (i.e., entry program points that
-   * have a parent that is a method). Microsoft Code Contracts does not
-   * allow contracts on such methods.
+   * If false, don't print entry method program points for methods that override or implement
+   * another method (i.e., entry program points that have a parent that is a method). Microsoft Code
+   * Contracts does not allow contracts on such methods.
    */
   public static boolean dkconfig_print_implementer_entry_ppts = true;
 
-  /**
-   * Main debug tracer for PrintInvariants (for things unrelated to printing).
-   */
+  /** Main debug tracer for PrintInvariants (for things unrelated to printing). */
   public static final Logger debug = Logger.getLogger("daikon.PrintInvariants");
 
   /** Debug tracer for printing. */
@@ -183,18 +171,17 @@ public final class PrintInvariants {
   private static /*@Nullable*/ Pattern ppt_regexp;
 
   /**
-   * Switch for whether to print discarded Invariants or not, default is false.
-   * True iff --disc_reason switch was supplied on the command line.
+   * Switch for whether to print discarded Invariants or not, default is false. True iff {@code
+   * --disc_reason} switch was supplied on the command line.
    */
   public static boolean print_discarded_invariants = false;
 
   /**
-   * If true, then each invariant is printed using the current
-   * OutputFormat, but it's wrapped inside xml tags, along with other
-   * information about the invariant.  For example, if this switch is
-   * true and if the output format is JAVA, and the invariant prints
-   * as "x == null", the results of print_invariant would look
-   * something like:
+   * If true, then each invariant is printed using the current OutputFormat, but it's wrapped inside
+   * xml tags, along with other information about the invariant. For example, if this switch is true
+   * and if the output format is JAVA, and the invariant prints as "x == null", the results of
+   * print_invariant would look something like:
+   *
    * <pre>
    * &lt;INVINFO&gt;
    * &lt;INV&gt; x == null &lt;/INV&gt;
@@ -205,24 +192,22 @@ public final class PrintInvariants {
    * &lt;/INVINFO&gt;
    * </pre>
    *
-   * The above output is actually all in one line, although in this
-   * comment it's broken up into multiple lines for clarity.
+   * The above output is actually all in one line, although in this comment it's broken up into
+   * multiple lines for clarity.
    *
-   * Note the extra information printed with the invariant: the number
-   * of samples from which the invariant was derived, the daikon
-   * representation (i.e. the Daikon output format), the Java class
-   * that the invariant corresponds to, and the method that the
-   * invariant belongs to ("null" for object invariants).
+   * <p>Note the extra information printed with the invariant: the number of samples from which the
+   * invariant was derived, the daikon representation (i.e. the Daikon output format), the Java
+   * class that the invariant corresponds to, and the method that the invariant belongs to ("null"
+   * for object invariants).
    */
   public static boolean wrap_xml = false;
 
-  /**
-   * --output flag to redirect output to a specified file.
-   */
+  /** {@code --output} flag to redirect output to a specified file. */
   private static String output_SWITCH = "output";
 
   /**
-   * --extra_csharp_contract_data to print extra data for contracts when the format is CSHARP_CONTRACT
+   * {@code --print_csharp_metadata} flag to print extra data for contracts when the format is
+   * CSHARP_CONTRACT.
    */
   private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
 
@@ -268,9 +253,7 @@ public final class PrintInvariants {
           "  --" + Daikon.wrap_xml_SWITCH,
           "      Print extra info about invariants, and wrap in XML tags");
 
-  /**
-   * See the documentation for this class.
-   */
+  /** See the documentation for this class. */
   public static void main(final String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException {
@@ -286,10 +269,10 @@ public final class PrintInvariants {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -476,8 +459,8 @@ public final class PrintInvariants {
   }
 
   /**
-   * Prints out all the discardCodes and discardStrings of the Invariants
-   * that will not be printed if the --disc_reason switch is used.
+   * Prints out all the discardCodes and discardStrings of the Invariants that will not be printed
+   * if the {@code --disc_reason} command-line option is used.
    */
   public static void print_reasons(PptMap ppts) {
     if (!print_discarded_invariants || Daikon.no_text_output) {
@@ -551,9 +534,7 @@ public final class PrintInvariants {
     }
   }
 
-  /**
-   * Add discard reasons for invariants that are filtered out
-   */
+  /** Add discard reasons for invariants that are filtered out. */
   private static void add_filter_reasons(PptTopLevel ppt, PptMap ppts) {
     InvariantFilters fi = InvariantFilters.defaultFilters();
     for (Iterator<Invariant> fullInvItor = ppt.invariants_iterator(); fullInvItor.hasNext(); ) {
@@ -624,13 +605,12 @@ public final class PrintInvariants {
   }
 
   /**
-   * Method used to setup fields if the --disc_reason switch is used
-   * if (arg==null) then show all discarded Invariants, otherwise just
-   * show the ones specified in arg, where arg =
-   * <em>class-name</em>&lt;<em>var1</em>,<em>var2</em>,...&gt;@<em>ppt.name</em> e.g.:
-   * OneOf&lt;x&gt;@foo():::ENTER would only show OneOf Invariants that
-   * involve x at the program point foo:::ENTER (any of the 3 params
-   * can be ommitted, e.g. OneOf@foo:::ENTER)
+   * Method used to setup fields if the {@code --disc_reason} command-line option is used if
+   * (arg==null) then show all discarded Invariants, otherwise just show the ones specified in arg,
+   * where arg = <em>class-name</em>&lt;<em>var1</em>,<em>var2</em>,...&gt;@<em>ppt.name</em> e.g.:
+   * OneOf&lt;x&gt;@foo():::ENTER would only show OneOf Invariants that involve x at the program
+   * point foo:::ENTER (any of the 3 params can be ommitted, e.g. OneOf@foo:::ENTER)
+   *
    * @throws IllegalArgumentException if arg is not of the proper syntax
    */
   public static void discReasonSetup(String arg) {
@@ -796,8 +776,8 @@ public final class PrintInvariants {
   }
 
   /**
-   * Print invariants for a single program point and its conditionals.
-   * Does no output if no samples or no views.
+   * Print invariants for a single program point and its conditionals. Does no output if no samples
+   * or no views.
    */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariants_maybe(PptTopLevel ppt, PrintWriter out, PptMap all_ppts) {
@@ -876,10 +856,9 @@ public final class PrintInvariants {
   }
 
   /**
-   * If Daikon.output_num_samples is enabled, prints the number of samples
-   * for the specified ppt.  Also prints all of the variables for the ppt
-   * if Daikon.output_num_samples is enabled or the format is ESCJAVA,
-   * JML, or DBCJAVA.
+   * If Daikon.output_num_samples is enabled, prints the number of samples for the specified ppt.
+   * Also prints all of the variables for the ppt if Daikon.output_num_samples is enabled or the
+   * format is ESCJAVA, JML, or DBCJAVA.
    */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
@@ -910,10 +889,7 @@ public final class PrintInvariants {
     }
   }
 
-  /**
-   * Prints all variables that were modified if the format is ESCJAVA or
-   * DBCJAVA.
-   */
+  /** Prints all variables that were modified if the format is ESCJAVA or DBCJAVA. */
   public static void print_modified_vars(PptTopLevel ppt, PrintWriter out) {
 
     debugPrintModified.fine("Doing print_modified_vars for: " + ppt.name());
@@ -1138,6 +1114,7 @@ public final class PrintInvariants {
 
   /**
    * Parses the variables from varInfo.
+   *
    * @param varInfo the Daikon variable representation to parse
    * @param sort true to parse as a grouping variable, false to parse as a filtering variable
    * @return the parsed variable string
@@ -1192,6 +1169,7 @@ public final class PrintInvariants {
 
   /**
    * Parses the variables from vars.
+   *
    * @param vars an array of Daikon variable representations
    * @param variables the set to store the parsed variables
    * @param sort true to parse as group variables, false to parse as filtering variables
@@ -1205,10 +1183,12 @@ public final class PrintInvariants {
   }
 
   /**
-   *  Parses the invariant variables of invariant and stores them in variables
-   *  If group is true the invariant's grouping variables are parsed (the variables which the invariant is grouped by in the contract list view).
-   *  If group is false the invariant's filtering variables are parsed (the variables for which this invariant can be filtered by).
-   *  In the case of implications, only variables on the right side of the implication are parsed.
+   * Parses the invariant variables of invariant and stores them in variables If group is true the
+   * invariant's grouping variables are parsed (the variables which the invariant is grouped by in
+   * the contract list view). If group is false the invariant's filtering variables are parsed (the
+   * variables for which this invariant can be filtered by). In the case of implications, only
+   * variables on the right side of the implication are parsed.
+   *
    * @param invariant the invariant to parse
    * @param variables the set to store the parsed variables
    * @param group true to parse group variables, false to parse filtering variables
@@ -1235,6 +1215,7 @@ public final class PrintInvariants {
 
   /**
    * Gets the invariant type string (i.e. daikon.inv.binary.inv) of a Daikon invariant.
+   *
    * @param invariant the Daikon invariant
    * @return the invariant type string of the invariant
    */
@@ -1256,8 +1237,8 @@ public final class PrintInvariants {
   }
 
   /**
-   * Takes a list of Invariants and returns a list of Invariants that
-   * is sorted according to PptTopLevel.icfp.
+   * Takes a list of Invariants and returns a list of Invariants that is sorted according to
+   * PptTopLevel.icfp.
    */
   public static List<Invariant> sort_invariant_list(List<Invariant> invs) {
     Invariant[] invs_array = invs.toArray(new Invariant[invs.size()]);
@@ -1271,10 +1252,7 @@ public final class PrintInvariants {
     return result;
   }
 
-  /**
-   * Print invariants for a single program point, once we know that
-   * this ppt is worth printing.
-   */
+  /** Print invariants for a single program point, once we know that this ppt is worth printing. */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariants(PptTopLevel ppt, PrintWriter out, PptMap ppt_map) {
 
@@ -1392,9 +1370,7 @@ public final class PrintInvariants {
     }
   }
 
-  /**
-   * Does the actual printing of the invariants.
-   */
+  /** Does the actual printing of the invariants. */
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   private static void finally_print_the_invariants(
       List<Invariant> invariants, PrintWriter out, PptTopLevel ppt) {
@@ -1421,10 +1397,9 @@ public final class PrintInvariants {
   }
 
   /**
-   * Prints all invariants for ternary slices (organized by slice) and
-   * all of the unary and binary invariants over the same variables.
-   * The purpose of this is to look for possible ni-suppressions.  Its
-   * not intended as a normal output mechanism
+   * Prints all invariants for ternary slices (organized by slice) and all of the unary and binary
+   * invariants over the same variables. The purpose of this is to look for possible
+   * ni-suppressions. It's not intended as a normal output mechanism.
    */
   public static void print_all_ternary_invs(PptMap all_ppts) {
 
@@ -1456,11 +1431,7 @@ public final class PrintInvariants {
       System.out.println();
       System.out.printf(
           "%s - %d samples, %d slices, %d invariants " + "(%d linearternary)%n",
-          ppt.name(),
-          ppt.num_samples(),
-          slice_cnt,
-          inv_cnt,
-          lt_cnt);
+          ppt.name(), ppt.num_samples(), slice_cnt, inv_cnt, lt_cnt);
       System.out.println(
           "    total slice count = " + total_slice_cnt + ", total_inv_cnt = " + total_inv_cnt);
 
@@ -1508,9 +1479,7 @@ public final class PrintInvariants {
     }
   }
 
-  /**
-   * Prints all of the unary invariants over the specified variable
-   */
+  /** Prints all of the unary invariants over the specified variable. */
   public static void print_all_invs(PptTopLevel ppt, VarInfo vi, String indent) {
     String name = String.format("%s [%s]", vi.name(), vi.file_rep_type);
     if (ppt.is_missing(vi)) {
@@ -1545,9 +1514,7 @@ public final class PrintInvariants {
     }
   }
 
-  /**
-   * Prints how many invariants are filtered by each filter
-   */
+  /** Prints how many invariants are filtered by each filter. */
   public static void print_filter_stats(Logger log, PptTopLevel ppt, PptMap ppt_map) {
 
     boolean print_invs = false;
@@ -1557,12 +1524,10 @@ public final class PrintInvariants {
 
     // Not Map, because keys are nullable
     HashMap<
-            /*@Nullable*/ Class<? extends InvariantFilter>,
-            Map<Class<? extends Invariant>, Integer>>
+            /*@Nullable*/ Class<? extends InvariantFilter>, Map<Class<? extends Invariant>, Integer>>
         filter_map =
             new LinkedHashMap<
-                /*@Nullable*/ Class<? extends InvariantFilter>,
-                Map<Class<? extends Invariant>, Integer>>();
+                /*@Nullable*/ Class<? extends InvariantFilter>, Map<Class<? extends Invariant>, Integer>>();
 
     if (print_invs) debug.fine(ppt.name());
 

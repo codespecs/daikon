@@ -7,9 +7,7 @@ public class UnjustifiedFilter extends InvariantFilter {
     return "Suppress unjustified invariants";
   }
 
-  /**
-   * Boolean. If true, UnjustifiedFilter is initially turned on.
-   */
+  /** Boolean. If true, UnjustifiedFilter is initially turned on. */
   public static boolean dkconfig_enabled = true;
 
   public UnjustifiedFilter() {

@@ -1,6 +1,5 @@
 package daikon.inv;
 
-import static daikon.inv.Invariant.asInvClass;
 import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 
 import daikon.*;
@@ -32,14 +31,12 @@ import typequals.*;
 */
 
 /**
- * Base implementation for Invariant objects.
- * Intended to be subclassed but not to be directly instantiated.
- * Rules/assumptions for invariants:
- * <p>
- * For each program point's set of VarInfos, there exists
- * no more than one invariant of its type.  For example, between
- * variables a and b at PptTopLevel T, there will not be two instances
- * of invariant I(a, b).
+ * Base implementation for Invariant objects. Intended to be subclassed but not to be directly
+ * instantiated. Rules/assumptions for invariants:
+ *
+ * <p>For each program point's set of VarInfos, there exists no more than one invariant of its type.
+ * For example, between variables a and b at PptTopLevel T, there will not be two instances of
+ * invariant I(a, b).
  */
 /*@UsesObjectEquals*/
 /*@Prototype*/ public abstract class Invariant
@@ -50,96 +47,70 @@ import typequals.*;
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
-  /**
-   * General debug tracer.
-   */
+  /** General debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.inv.Invariant");
 
-  /**
-   * Debug tracer for printing invariants.
-   */
+  /** Debug tracer for printing invariants. */
   public static final Logger debugPrint = Logger.getLogger("daikon.print");
 
-  /**
-   * Debug tracer for invariant flow.
-   */
+  /** Debug tracer for invariant flow. */
   public static final Logger debugFlow = Logger.getLogger("daikon.flow.flow");
 
-  /**
-   * Debug tracer for printing equality invariants.
-   */
+  /** Debug tracer for printing equality invariants. */
   public static final Logger debugPrintEquality = Logger.getLogger("daikon.print.equality");
 
-  /**
-   * Debug tracer for isWorthPrinting() checks.
-   */
+  /** Debug tracer for isWorthPrinting() checks. */
   public static final Logger debugIsWorthPrinting =
       Logger.getLogger("daikon.print.isWorthPrinting");
 
-  /**
-   * Debug tracer for guarding.
-   */
+  /** Debug tracer for guarding. */
   public static final Logger debugGuarding = Logger.getLogger("daikon.guard");
 
-  /**
-   * Debug tracer for isObvious checks.
-   */
+  /** Debug tracer for isObvious checks. */
   public static final Logger debugIsObvious = Logger.getLogger("daikon.inv.Invariant.isObvious");
 
   /**
-   * Floating-point number between 0 and 1.  Invariants are displayed only if
-   * the confidence that the invariant did not occur by chance is
-   * greater than this.  (May also be set
-   * via the <tt>--conf_limit</tt> switch to Daikon; refer to manual.)
+   * Floating-point number between 0 and 1. Invariants are displayed only if the confidence that the
+   * invariant did not occur by chance is greater than this. (May also be set via the
+   * <tt>--conf_limit</tt> command-line option to Daikon; refer to manual.)
    */
   public static double dkconfig_confidence_limit = .99;
 
   /**
-   * A boolean value.  If true, Daikon's Simplify output (printed when
-   * the <tt>--format simplify</tt> flag is enabled, and used internally by
-   * <tt>--suppress_redundant</tt>)
-   * will include new predicates representing
-   * some complex relationships in invariants, such as lexical
-   * ordering among sequences.  If false, some complex relationships
-   * will appear in the output as complex quantified formulas, while
-   * others will not appear at all.  When enabled, Simplify may be able
-   * to make more inferences, allowing <tt>--suppress_redundant</tt> to
-   * suppress more redundant invariants, but Simplify may also run
-   * more slowly.
+   * A boolean value. If true, Daikon's Simplify output (printed when the <tt>--format simplify</tt>
+   * flag is enabled, and used internally by <tt>--suppress_redundant</tt>) will include new
+   * predicates representing some complex relationships in invariants, such as lexical ordering
+   * among sequences. If false, some complex relationships will appear in the output as complex
+   * quantified formulas, while others will not appear at all. When enabled, Simplify may be able to
+   * make more inferences, allowing <tt>--suppress_redundant</tt> to suppress more redundant
+   * invariants, but Simplify may also run more slowly.
    */
   public static boolean dkconfig_simplify_define_predicates = false;
 
   /**
-   * Floating-point number between 0 and 0.1, representing the maximum
-   * relative difference
-   * between two floats for fuzzy comparisons.  Larger values will
-   * result in floats that are relatively farther apart being treated
-   * as equal.  A value of 0 essentially disables fuzzy comparisons.
-   * Specifically, if <code>abs (1 - f1/f2)</code> is less than or equal
-   * to this value, then the two doubles (<code>f1</code> and <code>f2</code>)
-   * will be treated as equal by
-   * Daikon.
+   * Floating-point number between 0 and 0.1, representing the maximum relative difference between
+   * two floats for fuzzy comparisons. Larger values will result in floats that are relatively
+   * farther apart being treated as equal. A value of 0 essentially disables fuzzy comparisons.
+   * Specifically, if <code>abs (1 - f1/f2)</code> is less than or equal to this value, then the two
+   * doubles (<code>f1</code> and <code>f2</code>) will be treated as equal by Daikon.
    */
   public static double dkconfig_fuzzy_ratio = 0.0001;
 
-  /**
-   * The default for dkconfig_enabled in each subclass of Invariant.
-   */
+  /** The default for dkconfig_enabled in each subclass of Invariant. */
   public static boolean invariantEnabledDefault = true;
 
   /**
-   * The program point for this invariant; includes values, number of
-   * samples, VarInfos, etc.  Can be null for a "prototype" invariant.
+   * The program point for this invariant; includes values, number of samples, VarInfos, etc. Can be
+   * null for a "prototype" invariant.
    */
   /*@Unused(when=Prototype.class)*/
   public PptSlice ppt;
 
   // Has to be public so wrappers can read it.
   /**
-   * True exactly if the invariant has been falsified:  it is guaranteed
-   * never to hold (and should be either in the process of being destroyed
-   * or about to be destroyed.  This should never be set directly; instead,
-   * call destroy().
+   * True exactly if the invariant has been falsified: it is guaranteed never to hold (and should be
+   * either in the process of being destroyed or about to be destroyed. This should never be set
+   * directly; instead, call destroy().
    */
   protected boolean falsified = false;
 
@@ -151,46 +122,40 @@ import typequals.*;
 
   /**
    * The probability that this could have happened by chance alone. <br>
-   *   1 = could never have happened by chance; that is, we are fully confident
-   *       that this invariant is a real invariant
+   * 1 = could never have happened by chance; that is, we are fully confident that this invariant is
+   * a real invariant
    */
   public static final double CONFIDENCE_JUSTIFIED = 1;
 
   /**
    * (0..1) = greater to lesser likelihood of coincidence <br>
-   *      0 = must have happened by chance
+   * 0 = must have happened by chance
    */
   public static final double CONFIDENCE_UNJUSTIFIED = 0;
 
-  /**
-   * -1 = delete this invariant; we know it's not true
-   */
+  /** -1 = delete this invariant; we know it's not true */
   public static final double CONFIDENCE_NEVER = -1;
 
   /**
    * The probability that this could have happened by chance alone. <br>
-   *   0 = could never have happened by chance; that is, we are fully confident
-   *       that this invariant is a real invariant
+   * 0 = could never have happened by chance; that is, we are fully confident that this invariant is
+   * a real invariant
    */
   public static final double PROBABILITY_JUSTIFIED = 0;
 
   /**
    * (0..1) = lesser to greater likelihood of coincidence <br>
-   *      1 = must have happened by chance
+   * 1 = must have happened by chance
    */
   public static final double PROBABILITY_UNJUSTIFIED = 1;
 
-  /**
-   * 3 = delete this invariant; we know it's not true
-   */
+  /** 3 = delete this invariant; we know it's not true */
   public static final double PROBABILITY_NEVER = 3;
 
   /**
-   * Return Invariant.CONFIDENCE_JUSTIFIED if x&ge;goal.
-   * Return Invariant.CONFIDENCE_UNJUSTIFIED if x&le;1.
-   * For intermediate inputs, the result gives confidence that grades
-   * between the two extremes.
-   * See the discussion of gradual vs. sudden confidence transitions.
+   * Return Invariant.CONFIDENCE_JUSTIFIED if x&ge;goal. Return Invariant.CONFIDENCE_UNJUSTIFIED if
+   * x&le;1. For intermediate inputs, the result gives confidence that grades between the two
+   * extremes. See the discussion of gradual vs. sudden confidence transitions.
    */
   public static final double conf_is_ge(double x, double goal) {
     if (x >= goal) return 1;
@@ -202,11 +167,9 @@ import typequals.*;
   }
 
   /**
-   * Return Invariant.PROBABILITY_JUSTIFIED if x&ge;goal.
-   * Return Invariant.PROBABILITY_UNJUSTIFIED if x&le;1.
-   * For intermediate inputs, the result gives probability that grades
-   * between the two extremes.
-   * See the discussion of gradual vs. sudden probability transitions.
+   * Return Invariant.PROBABILITY_JUSTIFIED if x&ge;goal. Return Invariant.PROBABILITY_UNJUSTIFIED
+   * if x&le;1. For intermediate inputs, the result gives probability that grades between the two
+   * extremes. See the discussion of gradual vs. sudden probability transitions.
    */
   public static final double prob_is_ge(double x, double goal) {
     if (x >= goal) return 0;
@@ -281,15 +244,14 @@ import typequals.*;
   // Subclasses should set these; Invariant never does.
 
   /**
-   * At least this many samples are required, or else we don't report any
-   * invariant at all.  (Except that OneOf invariants are treated differently.)
+   * At least this many samples are required, or else we don't report any invariant at all. (Except
+   * that OneOf invariants are treated differently.)
    */
   public static final int min_mod_non_missing_samples = 5;
 
   /**
-   * @return true if the invariant has enough samples to have its
-   * computed constants well-formed.  Is overridden in classes like
-   * LinearBinary/Ternary and Upper/LowerBound.
+   * @return true if the invariant has enough samples to have its computed constants well-formed. Is
+   *     overridden in classes like LinearBinary/Ternary and Upper/LowerBound.
    */
   public boolean enoughSamples(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     return true;
@@ -327,54 +289,39 @@ import typequals.*;
     if (logOn()) {
       log(
           "justified = %s, confidence = %s, samples = %s",
-          just,
-          getConfidence(),
-          ppt.num_samples());
+          just, getConfidence(), ppt.num_samples());
     }
     return just;
   }
 
   // If confidence == CONFIDENCE_NEVER, then this invariant can be eliminated.
   /**
-   * Given that this invariant has been true for all values seen so far,
-   * this method returns the confidence that that situation has occurred
-   * by chance alone.
-   * <p>
+   * Given that this invariant has been true for all values seen so far, this method returns the
+   * confidence that that situation has occurred by chance alone.
    *
-   * Returns the probability that the observed data did not happen by
-   * chance alone. The result is a value between 0 and 1 inclusive.  0
-   * means that this invariant could never have occurred by chance alone;
-   * we are fully confident that its truth is no coincidence.  1 means that
-   * the invariant is certainly a happenstance, so the truth of the
-   * invariant is not relevant and it should not be reported.  Values
-   * between 0 and 1 give differing confidences in the invariant.  The
-   * method may also return {@link #CONFIDENCE_NEVER}, meaning the
-   * invariant has been falsified.
-   * <p>
-   * An invariant is printed only if its probability of not occurring by
-   * chance alone is large enough (by default, greater than .99; see
-   * Daikon's --conf_limit command-line option.
-   * <p>
+   * <p>Returns the probability that the observed data did not happen by chance alone. The result is
+   * a value between 0 and 1 inclusive. 0 means that this invariant could never have occurred by
+   * chance alone; we are fully confident that its truth is no coincidence. 1 means that the
+   * invariant is certainly a happenstance, so the truth of the invariant is not relevant and it
+   * should not be reported. Values between 0 and 1 give differing confidences in the invariant. The
+   * method may also return {@link #CONFIDENCE_NEVER}, meaning the invariant has been falsified.
    *
-   * As an example, consider the invariant "x!=0".  If only one value, 22,
-   * has been seen for x, then the conclusion "x!=0" is not justified.  But
-   * if there have been 1,000,000 values, and none of them were 0, then we
-   * may be confident that the property "x!=0" is not a coincidence.
-   * <p>
+   * <p>An invariant is printed only if its probability of not occurring by chance alone is large
+   * enough (by default, greater than .99; see Daikon's --conf_limit command-line option.
    *
-   * This method is a wrapper around {@link #computeConfidence()}, which
-   * does the actual work.
-   * <p>
+   * <p>As an example, consider the invariant "x!=0". If only one value, 22, has been seen for x,
+   * then the conclusion "x!=0" is not justified. But if there have been 1,000,000 values, and none
+   * of them were 0, then we may be confident that the property "x!=0" is not a coincidence.
    *
-   * Consider the invariant is 'x is even', which has a 50% chance of being
-   * true by chance for each sample.  Then a reasonable body for
-   * {@link #computeConfidence} would be
+   * <p>This method is a wrapper around {@link #computeConfidence()}, which does the actual work.
+   *
+   * <p>Consider the invariant is 'x is even', which has a 50% chance of being true by chance for
+   * each sample. Then a reasonable body for {@link #computeConfidence} would be
    *
    * <pre>return 1 - Math.pow(.5, ppt.num_samples());</pre>
    *
-   * If 5 values had been seen, then this implementation would return
-   * 31/32, which is the likelihood that all 5 values seen so far were even
-   * not purely by chance.
+   * If 5 values had been seen, then this implementation would return 31/32, which is the likelihood
+   * that all 5 values seen so far were even not purely by chance.
    *
    * @see #computeConfidence()
    */
@@ -402,24 +349,21 @@ import typequals.*;
   }
 
   /**
-   * This method computes the confidence that this invariant occurred by chance.
-   * Clients should call {@link #getConfidence()} instead.
-   * <p>
-   * This method need not check the value of field "falsified", as the
-   * caller does that.
+   * This method computes the confidence that this invariant occurred by chance. Clients should call
+   * {@link #getConfidence()} instead.
    *
-   * @see     #getConfidence()
+   * <p>This method need not check the value of field "falsified", as the caller does that.
+   *
+   * @see #getConfidence()
    */
   protected abstract double computeConfidence(/*>>> @NonPrototype Invariant this*/);
 
   /**
-   * Subclasses should override.  An exact invariant indicates that given
-   * all but one variable value, the last one can be computed.  (I think
-   * that's correct, anyway.)  Examples are IntComparison (when only
-   * equality is possible), LinearBinary, FunctionUnary.
-   * OneOf is treated differently, as an interface.
-   * The result of this method does not depend on whether the invariant is
-   * justified, destroyed, etc.
+   * Subclasses should override. An exact invariant indicates that given all but one variable value,
+   * the last one can be computed. (I think that's correct, anyway.) Examples are IntComparison
+   * (when only equality is possible), LinearBinary, FunctionUnary. OneOf is treated differently, as
+   * an interface. The result of this method does not depend on whether the invariant is justified,
+   * destroyed, etc.
    */
   /*@Pure*/
   public boolean isExact(/*>>> @Prototype Invariant this*/) {
@@ -446,8 +390,8 @@ import typequals.*;
   }
 
   /**
-   * Marks the invariant as falsified.  Should always be called rather
-   * than just setting the flag so that we can track when this happens
+   * Marks the invariant as falsified. Should always be called rather than just setting the flag so
+   * that we can track when this happens.
    */
   public void falsify(/*>>> @NonPrototype Invariant this*/) {
     falsified = true;
@@ -465,10 +409,7 @@ import typequals.*;
     return falsified;
   }
 
-  /**
-   * Do nothing special, Overridden to remove
-   * exception from declaration
-   */
+  /** Do nothing special, Overridden to remove exception from declaration. */
   /*@SideEffectFree*/
   public Invariant clone(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     try {
@@ -481,9 +422,9 @@ import typequals.*;
 
   /**
    * Take an invariant and transfer it into a new PptSlice.
+   *
    * @param new_ppt must have the same arity and types
-   * @param permutation gives the varinfo array index mapping in the
-   * new ppt
+   * @param permutation gives the varinfo array index mapping in the new ppt
    */
   public Invariant transfer(
       /*>>> @NonPrototype Invariant this,*/ PptSlice new_ppt, int[] permutation) {
@@ -529,9 +470,8 @@ import typequals.*;
   }
 
   /**
-   * Clones the invariant and then permutes it as specified.  Normally
-   * used to make child invariant match the variable order of the parent
-   * when merging invariants bottom up.
+   * Clones the invariant and then permutes it as specified. Normally used to make child invariant
+   * match the variable order of the parent when merging invariants bottom up.
    */
   public Invariant clone_and_permute(/*>>> @NonPrototype Invariant this,*/ int[] permutation) {
 
@@ -554,6 +494,7 @@ import typequals.*;
 
   /**
    * Take a falsified invariant and resurrect it in a new PptSlice.
+   *
    * @param new_ppt must have the same arity and types
    * @param permutation gives the varinfo array index mapping
    */
@@ -597,15 +538,12 @@ import typequals.*;
   }
 
   /**
-   * Returns a single VarComparability that describes the set of
-   * variables used by this invariant.  Since all of the variables
-   * in an invariant must be comparable, this can usually be the
-   * comparability information for any variable.  The exception is
-   * when one or more variables is always comparable (comparable to
-   * everything else).  An always comparable VarComparability is
-   * returned only if all of the variables involved are always
-   * comparable.  Otherwise the comparability information from one
-   * of the non always-comparable variables is returned.
+   * Returns a single VarComparability that describes the set of variables used by this invariant.
+   * Since all of the variables in an invariant must be comparable, this can usually be the
+   * comparability information for any variable. The exception is when one or more variables is
+   * always comparable (comparable to everything else). An always comparable VarComparability is
+   * returned only if all of the variables involved are always comparable. Otherwise the
+   * comparability information from one of the non always-comparable variables is returned.
    */
   public VarComparability get_comparability(/*>>> @NonPrototype Invariant this*/) {
 
@@ -623,32 +561,26 @@ import typequals.*;
   }
 
   /**
-   * Merge the invariants in invs to form a new invariant.  This implementation
-   * merely returns a clone of the first invariant in the list.  This is
-   * correct for simple invariants whose equation or statistics don't depend
-   * on the actual samples seen.  It should be overriden for more complex
+   * Merge the invariants in invs to form a new invariant. This implementation merely returns a
+   * clone of the first invariant in the list. This is correct for simple invariants whose equation
+   * or statistics don't depend on the actual samples seen. It should be overriden for more complex
    * invariants (eg, bound, oneof, linearbinary, etc).
    *
-   * @param invs        list of invariants to merge.  The invariants must
-   *                    all be of the same type and should come from
-   *                    the children of parent_ppt.  They should also all be
-   *                    permuted to match the variable order in parent_ppt.
-   * @param parent_ppt  slice that will contain the new invariant
-   *
-   * @return the merged invariant or null if the invariants didn't represent
-   * the same invariant.
+   * @param invs list of invariants to merge. The invariants must all be of the same type and should
+   *     come from the children of parent_ppt. They should also all be permuted to match the
+   *     variable order in parent_ppt.
+   * @param parent_ppt slice that will contain the new invariant
+   * @return the merged invariant or null if the invariants didn't represent the same invariant
    */
   public /*@Nullable*/ /*@NonPrototype*/ Invariant merge(
-      /*>>> @Prototype Invariant this,*/ List</*@NonPrototype*/ Invariant> invs,
-      PptSlice parent_ppt) {
+      /*>>> @Prototype Invariant this,*/ List</*@NonPrototype*/ Invariant> invs, PptSlice parent_ppt) {
 
     Invariant first = invs.get(0);
     Invariant result = first.clone();
     result.ppt = parent_ppt;
     result.log(
         "Merged '%s' from %s child invariants",
-        result.format(),
-        invs.size() /*, first.ppt.name() */);
+        result.format(), invs.size() /*, first.ppt.name() */);
 
     // Make sure that each invariant was really of the same type
     boolean assert_enabled = false;
@@ -664,18 +596,15 @@ import typequals.*;
   }
 
   /**
-   * Permutes the invariant as specified.  Often creates a new invariant
-   * (with a different class)
+   * Permutes the invariant as specified. Often creates a new invariant (with a different class).
    */
-  public /*@NonPrototype*/ Invariant permute(
-      /*>>> @NonPrototype Invariant this,*/ int[] permutation) {
+  public /*@NonPrototype*/ Invariant permute(/*>>> @NonPrototype Invariant this,*/ int[] permutation) {
     return (resurrect_done(permutation));
   }
 
   /**
-   * Called on the new invariant just before resurrect() returns it to
-   * allow subclasses to fix any information they might have cached
-   * from the old Ppt and VarInfos.
+   * Called on the new invariant just before resurrect() returns it to allow subclasses to fix any
+   * information they might have cached from the old Ppt and VarInfos.
    */
   protected abstract Invariant resurrect_done(
       /*>>> @NonPrototype Invariant this, */ int[] permutation);
@@ -714,10 +643,9 @@ import typequals.*;
   // repr() may be called from computeConfidence or elsewhere for
   // debugging purposes.
   /**
-   * For printing invariants, there are two interfaces:
-   * repr gives a low-level representation
-   * ({@link #repr_prob} also prints the confidence), and
-   * {@link #format} gives a high-level representation for user output.
+   * For printing invariants, there are two interfaces: repr gives a low-level representation
+   * ({@link #repr_prob} also prints the confidence), and {@link #format} gives a high-level
+   * representation for user output.
    */
   public String repr(/*>>>@GuardSatisfied @NonPrototype Invariant this*/) {
     // A better default would be to use reflection and print out all
@@ -726,20 +654,18 @@ import typequals.*;
   }
 
   /**
-   * For printing invariants, there are two interfaces:
-   * {@link #repr} gives a low-level representation
-   * (repr_prob also prints the confidence), and
-   * {@link #format} gives a high-level representation for user output.
+   * For printing invariants, there are two interfaces: {@link #repr} gives a low-level
+   * representation (repr_prob also prints the confidence), and {@link #format} gives a high-level
+   * representation for user output.
    */
   public String repr_prob(/*>>> @NonPrototype Invariant this*/) {
     return repr() + "; confidence = " + getConfidence();
   }
 
   /**
-   * Returns a high-level printed representation of the invariant, for user
-   * output. format produces normal output, while the {@link #repr}
-   * formatting routine produces low-level, detailed output for
-   * debugging, and {@link #repr_prob} also prints the confidence.
+   * Returns a high-level printed representation of the invariant, for user output. format produces
+   * normal output, while the {@link #repr} formatting routine produces low-level, detailed output
+   * for debugging, and {@link #repr_prob} also prints the confidence.
    */
   // receiver must be fully-initialized because subclasses read their fields
   /*@SideEffectFree*/
@@ -759,11 +685,9 @@ import typequals.*;
       /*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat format);
 
   /**
-   * @return conjuction of mapping the same function of our
-   * expresssions's VarInfos, in general.  Subclasses may override if
-   * they are able to handle generally-inexpressible properties in
-   * special-case ways.
-   *
+   * @return conjuction of mapping the same function of our expresssions's VarInfos, in general.
+   *     Subclasses may override if they are able to handle generally-inexpressible properties in
+   *     special-case ways.
    * @see VarInfo#isValidEscExpression
    */
   /*@Pure*/
@@ -779,9 +703,7 @@ import typequals.*;
   /** A "\type(...)" construct where the "..." contains a "$". */
   private static Pattern anontype_pat = Pattern.compile("\\\\type\\([^\\)]*\\$");
 
-  /**
-   * @return true if this Invariant can be properly formatted for Java output.
-   */
+  /** @return true if this Invariant can be properly formatted for Java output */
   /*@Pure*/
   public boolean isValidExpression(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) {
     if ((format == OutputFormat.ESCJAVA) && (!isValidEscExpression())) {
@@ -813,8 +735,8 @@ import typequals.*;
   }
 
   /**
-   * @return standard "format needs to be implemented" for the given
-   * requested format.  Made public so cores can call it.
+   * @return standard "format needs to be implemented" for the given requested format. Made public
+   *     so cores can call it.
    */
   public String format_unimplemented(
       /*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat request) {
@@ -829,11 +751,10 @@ import typequals.*;
   }
 
   /**
-   * @return standard "too few samples for to have interesting
-   * invariant" for the requested format. For machine-readable
-   * formats, this is just "true". An optional string argument, if
-   * supplied, is a human-readable description of the invariant in its
-   * uninformative state, which will be added to the message.
+   * @return standard "too few samples for to have interesting invariant" for the requested format.
+   *     For machine-readable formats, this is just "true". An optional string argument, if
+   *     supplied, is a human-readable description of the invariant in its uninformative state,
+   *     which will be added to the message.
    */
   public String format_too_few_samples(
       /*>>>@GuardSatisfied @NonPrototype Invariant this,*/ OutputFormat request,
@@ -854,8 +775,8 @@ import typequals.*;
   }
 
   /**
-   * Convert a floating point value into the weird Modula-3-like
-   * floating point format that the Simplify tool requires.
+   * Convert a floating point value into the weird Modula-3-like floating point format that the
+   * Simplify tool requires.
    */
   public static String simplify_format_double(double d) {
     String s = d + "";
@@ -877,9 +798,9 @@ import typequals.*;
   }
 
   /**
-   * Conver a long integer value into a format that Simplify can
-   * use. If the value is too big, we have to print it in a weird way,
-   * then tell Simplify about its properties specially. */
+   * Conver a long integer value into a format that Simplify can use. If the value is too big, we
+   * have to print it in a weird way, then tell Simplify about its properties specially.
+   */
   public static String simplify_format_long(long l) {
     LemmaStack.noticeInt(l);
     if (l > -LemmaStack.SMALL_INTEGER && l < LemmaStack.SMALL_INTEGER) {
@@ -915,10 +836,9 @@ import typequals.*;
   }
 
   /**
-   * Convert a string value into the weird |-quoted format that the
-   * Simplify tool requires. (Note that Simplify doesn't distinguish
-   * between variables, symbolic constants, and strings, so we prepend
-   * "_string_" to avoid collisions with variables and other symbols).
+   * Convert a string value into the weird |-quoted format that the Simplify tool requires. (Note
+   * that Simplify doesn't distinguish between variables, symbolic constants, and strings, so we
+   * prepend "_string_" to avoid collisions with variables and other symbols).
    */
   public static String simplify_format_string(String s) {
     if (s == null) return "null";
@@ -969,9 +889,7 @@ import typequals.*;
   }
 
   // This should perhaps be merged with some kind of PptSlice comparator.
-  /**
-   * Compare based on arity, then printed representation.
-   */
+  /** Compare based on arity, then printed representation. */
   public static final class InvariantComparatorForPrinting implements Comparator<Invariant> {
     /*@Pure*/
     public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
@@ -1051,36 +969,30 @@ import typequals.*;
   }
 
   /**
-   * @return true iff the two invariants represent the same
-   * mathematical formula.  Does not consider the context such as
-   * variable names, confidences, sample counts, value counts, or
-   * related quantities.  As a rule of thumb, if two invariants format
-   * the same, this method returns true.  Furthermore, in many cases,
-   * if an invariant does not involve computed constants (as "x&gt;c" and
-   * "y=ax+b" do for constants a, b, and c), then this method vacuously
-   * returns true.
-   *
+   * @return true iff the two invariants represent the same mathematical formula. Does not consider
+   *     the context such as variable names, confidences, sample counts, value counts, or related
+   *     quantities. As a rule of thumb, if two invariants format the same, this method returns
+   *     true. Furthermore, in many cases, if an invariant does not involve computed constants (as
+   *     "x&gt;c" and "y=ax+b" do for constants a, b, and c), then this method vacuously returns
+   *     true.
    * @exception RuntimeException if other.getClass() != this.getClass()
    */
   public abstract boolean isSameFormula(/*>>> @Prototype Invariant this,*/ Invariant other);
 
   /**
-   * Returns whether or not it is possible to merge invariants of the same
-   * class but with different formulas when combining invariants from lower
-   * ppts to build invariants at upper program points.  Invariants that
-   * have this characteristic (eg, bound, oneof) should override this
-   * function.  Note that invariants that can do this, normally need special
-   * merge code as well (to merge the different formulas into a single formula
-   * at the upper point
+   * Returns whether or not it is possible to merge invariants of the same class but with different
+   * formulas when combining invariants from lower ppts to build invariants at upper program points.
+   * Invariants that have this characteristic (eg, bound, oneof) should override this function. Note
+   * that invariants that can do this, normally need special merge code as well (to merge the
+   * different formulas into a single formula at the upper point.
    */
   public boolean mergeFormulasOk(/*>>> @Prototype Invariant this*/) {
     return false;
   }
 
   /**
-   * @return true iff the argument is the "same" invariant as this.
-   * Same, in this case, means a matching type, formula, and variable
-   * names.
+   * @return true iff the argument is the "same" invariant as this. Same, in this case, means a
+   *     matching type, formula, and variable names.
    */
   /*@Pure*/
   public boolean isSameInvariant(/*>>> @NonPrototype Invariant this,*/ Invariant inv2) {
@@ -1117,20 +1029,17 @@ import typequals.*;
   }
 
   /**
-   * @return true iff the two invariants represent mutually exclusive
-   * mathematical formulas -- that is, if one of them is true, then the
-   * other must be false.  This method does not consider the context such
-   * as variable names, confidences, sample counts, value counts, or
-   * related quantities.
+   * @return true iff the two invariants represent mutually exclusive mathematical formulas -- that
+   *     is, if one of them is true, then the other must be false. This method does not consider the
+   *     context such as variable names, confidences, sample counts, value counts, or related
+   *     quantities.
    */
   /*@Pure*/
   public boolean isExclusiveFormula(/*>>> @NonPrototype Invariant this,*/ Invariant other) {
     return false;
   }
 
-  /**
-   * Look up a previously instantiated Invariant.
-   */
+  /** Look up a previously instantiated Invariant. */
   // This implementation should be made more efficient, because it's used in
   // suppression.  We should somehow index invariants by their type.
   public static /*@Nullable*/ Invariant find(Class<? extends Invariant> invclass, PptSlice ppt) {
@@ -1143,18 +1052,15 @@ import typequals.*;
   }
 
   /**
-   * Returns the set of non-instantiating suppressions for this invariant.
-   * May return null instead of an empty set.
-   * Should be overridden by subclasses with non-instantiating suppressions.
+   * Returns the set of non-instantiating suppressions for this invariant. May return null instead
+   * of an empty set. Should be overridden by subclasses with non-instantiating suppressions.
    */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions(/*>>> @Prototype Invariant this*/) {
     return null;
   }
 
-  /**
-   * Returns whether or not this invariant is ni-suppressed.
-   */
+  /** Returns whether or not this invariant is ni-suppressed. */
   @SuppressWarnings(
       "nullness") // tricky control flow, need to mark get_ni_suppressions as @Pure if that's true
   /*@EnsuresNonNullIf(result=true, expression="get_ni_suppressions()")*/
@@ -1187,14 +1093,12 @@ import typequals.*;
   // Static and dynamic checks for obviousness
 
   /**
-   * Return true if this invariant is necessarily true from a fact
-   * that can be determined statically from the decls files.  (An example
-   * is being from a certain derivation.)  Intended to be overridden
-   * by subclasses.
+   * Return true if this invariant is necessarily true from a fact that can be determined statically
+   * from the decls files. (An example is being from a certain derivation.) Intended to be
+   * overridden by subclasses.
    *
-   * <p> This method is final because children of Invariant should be
-   * extending isObviousStatically(VarInfo[]) because it is more
-   * general.
+   * <p>This method is final because children of Invariant should be extending
+   * isObviousStatically(VarInfo[]) because it is more general.
    */
   /*@Pure*/
   public final /*@Nullable*/ DiscardInfo isObviousStatically(
@@ -1203,31 +1107,26 @@ import typequals.*;
   }
 
   /**
-   * Return true if this invariant is necessarily true from a fact
-   * that can be determined statically -- for the given varInfos
-   * rather than the varInfos of this.  Conceptually, this means "is
-   * this invariant statically obvious if its VarInfos were switched
-   * with vis?"  Intended to be overridden by subclasses.  Should only
-   * do static checking.
-   * <p>
-   * Precondition: vis.length == this.ppt.var_infos.length
-   * @param vis the VarInfos this invariant is obvious over.  The
-   * position and data type of the variables is the *same* as that of
-   * this.ppt.var_infos.
+   * Return true if this invariant is necessarily true from a fact that can be determined statically
+   * -- for the given varInfos rather than the varInfos of this. Conceptually, this means "is this
+   * invariant statically obvious if its VarInfos were switched with vis?" Intended to be overridden
+   * by subclasses. Should only do static checking.
+   *
+   * <p>Precondition: vis.length == this.ppt.var_infos.length
+   *
+   * @param vis the VarInfos this invariant is obvious over. The position and data type of the
+   *     variables is the *same* as that of this.ppt.var_infos.
    */
   /*@Pure*/
-  public /*@Nullable*/ DiscardInfo isObviousStatically(
-      /*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
     return null;
   }
 
   /**
-   * Return true if this invariant and all equality combinations of
-   * its member variables are necessarily true from a fact that can be
-   * determined statically (i.e., the decls files).  For example, a ==
-   * b, and f(a) is obvious, but f(b) is not.  In that case, this
-   * method on f(a) would return false.  If f(b) is also obvious, then
-   * this method would return true.
+   * Return true if this invariant and all equality combinations of its member variables are
+   * necessarily true from a fact that can be determined statically (i.e., the decls files). For
+   * example, a == b, and f(a) is obvious, but f(b) is not. In that case, this method on f(a) would
+   * return false. If f(b) is also obvious, then this method would return true.
    */
   // This is used because we cannot decide to non-instantiate some
   // invariants just because isObviousStatically is true, since some
@@ -1252,17 +1151,15 @@ import typequals.*;
   }
 
   /**
-   * Return true if this invariant and some equality combinations of
-   * its member variables are statically obvious.  For example, if a ==
-   * b, and f(a) is obvious, then so is f(b).  We use the someInEquality
-   * (or least interesting) method during printing so we only print an
-   * invariant if all its variables are interesting, since a single,
-   * static, non interesting occurance means all the equality
-   * combinations aren't interesting.
-   * @return the VarInfo array that contains the VarInfos that showed
-   * this invariant to be obvious.  The contains variables that are
-   * elementwise in the same equality set as this.ppt.var_infos.  Can
-   * be null if no such assignment exists.
+   * Return true if this invariant and some equality combinations of its member variables are
+   * statically obvious. For example, if a == b, and f(a) is obvious, then so is f(b). We use the
+   * someInEquality (or least interesting) method during printing so we only print an invariant if
+   * all its variables are interesting, since a single, static, non interesting occurance means all
+   * the equality combinations aren't interesting.
+   *
+   * @return the VarInfo array that contains the VarInfos that showed this invariant to be obvious.
+   *     The contains variables that are elementwise in the same equality set as this.ppt.var_infos.
+   *     Can be null if no such assignment exists.
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality(
@@ -1274,9 +1171,7 @@ import typequals.*;
   }
 
   // TODO: finish this comment.
-  /**
-   * Recurse through vis and generate the cartesian product of ...
-   */
+  /** Recurse through vis and generate the cartesian product of ... */
   /*@Pure*/
   protected /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEqualityHelper(
       /*>>> @NonPrototype Invariant this,*/ VarInfo[] vis,
@@ -1307,10 +1202,9 @@ import typequals.*;
   }
 
   /**
-   * Return true if this invariant is necessarily true from a fact that can
-   * be determined statically (i.e., the decls files) or dynamically (after
-   * checking data).  Intended not to be overriden, because sub-classes
-   * should override isObviousStatically or isObviousDynamically.  Wherever
+   * Return true if this invariant is necessarily true from a fact that can be determined statically
+   * (i.e., the decls files) or dynamically (after checking data). Intended not to be overriden,
+   * because sub-classes should override isObviousStatically or isObviousDynamically. Wherever
    * possible, suppression, rather than this, should do the dynamic checking.
    */
   /*@Pure*/
@@ -1341,13 +1235,11 @@ import typequals.*;
   }
 
   /**
-   * Return non-null if this invariant is necessarily true from a fact that
-   * can be determined dynamically (after checking data) -- for the given
-   * varInfos rather than the varInfos of this.  Conceptually, this means,
-   * "Is this invariant dynamically obvious if its VarInfos were switched
-   * with vis?"  Intended to be overriden by subclasses so they can filter
-   * invariants after checking; the overriding method should first call
-   * "super.isObviousDynamically(vis)".  Since this method is
+   * Return non-null if this invariant is necessarily true from a fact that can be determined
+   * dynamically (after checking data) -- for the given varInfos rather than the varInfos of this.
+   * Conceptually, this means, "Is this invariant dynamically obvious if its VarInfos were switched
+   * with vis?" Intended to be overriden by subclasses so they can filter invariants after checking;
+   * the overriding method should first call "super.isObviousDynamically(vis)". Since this method is
    * dynamic, it should only be called after all processing.
    */
   public /*@Nullable*/ DiscardInfo isObviousDynamically(
@@ -1363,17 +1255,13 @@ import typequals.*;
   }
 
   /**
-   * Return true if more than one of the variables in the invariant
-   * are the same variable. We create such invariants for the purpose
-   * of equality set processing, but they aren't intended for
-   * printing; there should be invariants with the same meaning but
-   * lower arity instead. For instance, we don't need "x = x + x"
-   * because we have "x = 0" instead.
-   * <p>
+   * Return true if more than one of the variables in the invariant are the same variable. We create
+   * such invariants for the purpose of equality set processing, but they aren't intended for
+   * printing; there should be invariants with the same meaning but lower arity instead. For
+   * instance, we don't need "x = x + x" because we have "x = 0" instead.
    *
-   * Actually, this isn't strictly true: we don't have an invariant
-   * "a[] is a palindrome" corresponding to "a[] is the reverse of
-   * a[]", for instance.
+   * <p>Actually, this isn't strictly true: we don't have an invariant "a[] is a palindrome"
+   * corresponding to "a[] is the reverse of a[]", for instance.
    */
   /*@Pure*/
   public boolean isReflexive(/*>>> @NonPrototype Invariant this*/) {
@@ -1381,20 +1269,16 @@ import typequals.*;
   }
 
   /**
-   * Return true if this invariant is necessarily true from a fact
-   * that can be determined dynamically (after checking data, based
-   * on other invariants that were inferred).  Since
-   * this method is dynamic, it should only be called after all
-   * processing.
-   * <p>
+   * Return true if this invariant is necessarily true from a fact that can be determined
+   * dynamically (after checking data, based on other invariants that were inferred). Since this
+   * method is dynamic, it should only be called after all processing.
    *
-   * If a test does not look up other inferred invariants
-   * (that is, it relies only on information in the decls file), then
-   * it should be written as an isObviousStatically test, not an
+   * <p>If a test does not look up other inferred invariants (that is, it relies only on information
+   * in the decls file), then it should be written as an isObviousStatically test, not an
    * isObviousDynamically test.
    *
-   * <p> This method is final because subclasses should extend
-   * isObviousDynamically(VarInfo[]) since that method is more general.
+   * <p>This method is final because subclasses should extend isObviousDynamically(VarInfo[]) since
+   * that method is more general.
    */
   public final /*@Nullable*/ DiscardInfo isObviousDynamically(
       /*>>> @NonPrototype Invariant this */ ) {
@@ -1403,17 +1287,15 @@ import typequals.*;
   }
 
   /**
-   * Return true if this invariant and some equality combinations of
-   * its member variables are dynamically obvious.  For example, a ==
-   * b, and f(a) is obvious, so is f(b).  We use the someInEquality
-   * (or least interesting) method during printing so we only print an
-   * invariant if all its variables are interesting, since a single,
-   * dynamic, non interesting occurance means all the equality
-   * combinations aren't interesting.
-   * @return the VarInfo array that contains the VarInfos that showed
-   * this invariant to be obvious.  The contains variables that are
-   * elementwise in the same equality set as this.ppt.var_infos.  Can
-   * be null if no such assignment exists.
+   * Return true if this invariant and some equality combinations of its member variables are
+   * dynamically obvious. For example, a == b, and f(a) is obvious, so is f(b). We use the
+   * someInEquality (or least interesting) method during printing so we only print an invariant if
+   * all its variables are interesting, since a single, dynamic, non interesting occurance means all
+   * the equality combinations aren't interesting.
+   *
+   * @return the VarInfo array that contains the VarInfos that showed this invariant to be obvious.
+   *     The contains variables that are elementwise in the same equality set as this.ppt.var_infos.
+   *     Can be null if no such assignment exists.
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality(
@@ -1425,12 +1307,10 @@ import typequals.*;
   }
 
   /**
-   * Recurse through vis (an array of leaders) and generate the cartesian
-   * product of their equality sets; in other words, every combination of
-   * one element from each equality set.  For each such combination, test
-   * isObviousDynamically; if any test is true, then return that
-   * combination.  The combinations are generated via recursive calls to
-   * this routine.
+   * Recurse through vis (an array of leaders) and generate the cartesian product of their equality
+   * sets; in other words, every combination of one element from each equality set. For each such
+   * combination, test isObviousDynamically; if any test is true, then return that combination. The
+   * combinations are generated via recursive calls to this routine.
    */
   protected /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEqualityHelper(
       /*>>> @NonPrototype Invariant this,*/ VarInfo[] vis, VarInfo[] assigned, int position) {
@@ -1458,9 +1338,7 @@ import typequals.*;
     }
   }
 
-  /**
-   * @return true if this invariant is only over prestate variables .
-   */
+  /** @return true if this invariant is only over prestate variables */
   /*@Pure*/
   public boolean isAllPrestate(/*>>> @NonPrototype Invariant this*/) {
     return ppt.allPrestate();
@@ -1476,17 +1354,16 @@ import typequals.*;
     return true;
   }
 
-  /** This is the test that's planned to replace the poorly specified
-   * "isInteresting" check. In the future, the set of interesting
-   * constants might be determined by a static analysis of the source
-   * code, but for the moment, we only consider -1, 0, 1, and 2 as
-   * interesting.
+  /**
+   * This is the test that's planned to replace the poorly specified "isInteresting" check. In the
+   * future, the set of interesting constants might be determined by a static analysis of the source
+   * code, but for the moment, we only consider -1, 0, 1, and 2 as interesting.
    *
-   * Intuitively, the justification for this test is that an invariant
-   * that includes an uninteresting constant (say, "size(x[]) &lt; 237")
-   * is likely to be an artifact of the way the program was tested,
-   * rather than a statement that would in fact hold over all possible
-   * executions. */
+   * <p>Intuitively, the justification for this test is that an invariant that includes an
+   * uninteresting constant (say, "size(x[]) &lt; 237") is likely to be an artifact of the way the
+   * program was tested, rather than a statement that would in fact hold over all possible
+   * executions.
+   */
   public boolean hasUninterestingConstant(/*>>> @NonPrototype Invariant this*/) {
     return false;
   }
@@ -1561,9 +1438,8 @@ import typequals.*;
   }
 
   /**
-   * Orders invariants by class, then variable names, then formula.
-   * If the formulas are the same, compares the printed representation
-   * obtained from the format() method.
+   * Orders invariants by class, then variable names, then formula. If the formulas are the same,
+   * compares the printed representation obtained from the format() method.
    */
   public static final class ClassVarnameFormulaComparator implements Comparator<Invariant> {
 
@@ -1604,15 +1480,13 @@ import typequals.*;
   }
 
   /**
-   * Class used as a key to store invariants in a MAP where their
-   * equality depends on the invariant representing the same invariant
-   * (i.e., their class is the same) and the same internal state (when
-   * multiple invariants with the same class are possible)
+   * Class used as a key to store invariants in a MAP where their equality depends on the invariant
+   * representing the same invariant (i.e., their class is the same) and the same internal state
+   * (when multiple invariants with the same class are possible)
    *
-   * Note that this is based on the Invariant type (i.e., class) and the
-   * internal state and not on what ppt the invariant is in or what
-   * variables it is over.  Thus, invariants from different ppts are
-   * the same if they represent the same type of invariant.
+   * <p>Note that this is based on the Invariant type (i.e., class) and the internal state and not
+   * on what ppt the invariant is in or what variables it is over. Thus, invariants from different
+   * ppts are the same if they represent the same type of invariant.
    */
   public static class Match {
 
@@ -1640,13 +1514,11 @@ import typequals.*;
   }
 
   /**
-   * Returns whether or not two invariants are of the same type.  To
-   * be of the same type, invariants must be of the same class.
-   * Some invariant classes represent multiple invariants (such as
-   * FunctionBinary).  They must also be the same formula.
-   * Note that invariants with different formulas based on their
-   * samples (LinearBinary, Bounds, etc) will still match as
-   * long as the mergeFormulaOk() method returns true.
+   * Returns whether or not two invariants are of the same type. To be of the same type, invariants
+   * must be of the same class. Some invariant classes represent multiple invariants (such as
+   * FunctionBinary). They must also be the same formula. Note that invariants with different
+   * formulas based on their samples (LinearBinary, Bounds, etc) will still match as long as the
+   * mergeFormulaOk() method returns true.
    */
   public boolean match(/*@Prototype*/ Invariant inv) {
 
@@ -1658,18 +1530,14 @@ import typequals.*;
   }
 
   /**
-   * Returns whether or not the invariant matches the specified state.
-   * Must be overriden by subclasses that support this.  Otherwise, it
-   * returns true only if the state is null.
+   * Returns whether or not the invariant matches the specified state. Must be overriden by
+   * subclasses that support this. Otherwise, it returns true only if the state is null.
    */
   public boolean state_match(/*>>> @NonPrototype Invariant this,*/ Object state) {
     return (state == null);
   }
 
-  /**
-   * Create a guarding predicate for a given invariant.
-   * Returns null if no guarding is needed.
-   */
+  /** Create a guarding predicate for a given invariant. Returns null if no guarding is needed. */
   public /*@Nullable*/ /*@NonPrototype*/ Invariant createGuardingPredicate(boolean install) {
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine("Guarding predicate being created for: ");
@@ -1715,22 +1583,17 @@ import typequals.*;
   }
 
   /**
-   * Return a list of all the variables that must be non-null in order for
-   * this invariant to be evaluated.  For instance, it this invariant is
-   * "a.b.c &gt; d.e" (where c and e are of integer type), then it doesn't
-   * make sense to evaluate the invariant unless "a" is non-null, "a.b" is
-   * non-null, and "d" is non-null.  So, another way to write the invariant
-   * (in "guarded" form) would be
-   * "a != null &amp;&amp; a.b != null &amp;&amp; d != null &amp;&amp; a.b.c &gt; d.e".
+   * Return a list of all the variables that must be non-null in order for this invariant to be
+   * evaluated. For instance, it this invariant is "a.b.c &gt; d.e" (where c and e are of integer
+   * type), then it doesn't make sense to evaluate the invariant unless "a" is non-null, "a.b" is
+   * non-null, and "d" is non-null. So, another way to write the invariant (in "guarded" form) would
+   * be "a != null &amp;&amp; a.b != null &amp;&amp; d != null &amp;&amp; a.b.c &gt; d.e".
    */
   public List<VarInfo> getGuardingList(/*>>> @NonPrototype Invariant this*/) {
     return getGuardingList(ppt.var_infos);
   }
 
-  /**
-   * Returns the union of calling VarInfo.getGuardingList on each element
-   * of the argument.
-   */
+  /** Returns the union of calling VarInfo.getGuardingList on each element of the argument. */
   public static List<VarInfo> getGuardingList(VarInfo[] varInfos) {
     List<VarInfo> guardingList = new ArrayList<VarInfo>();
 
@@ -1746,10 +1609,9 @@ import typequals.*;
   // This is called only from finally_print_the_invariants().
   // Nothing is ever done with the result except print it and discard it.
   /**
-   * This procedure guards one invariant and returns the resulting guarded
-   * invariant (implication), without placing it in any slice and without
-   * modifying the original invariant.
-   * Returns null if the invariant does not need to be guarded.
+   * This procedure guards one invariant and returns the resulting guarded invariant (implication),
+   * without placing it in any slice and without modifying the original invariant. Returns null if
+   * the invariant does not need to be guarded.
    */
   public /*@Nullable*/ /*@NonPrototype*/ Invariant createGuardedInvariant(boolean install) {
     if (Daikon.dkconfig_guardNulls == "never") { // interned
@@ -1789,47 +1651,43 @@ import typequals.*;
   }
 
   /**
-   * Instantiates (creates) an invariant of the same class on the specified
-   * slice.  Must be overridden in each class.  Must be used rather
-   * than {@link #clone} so that checks in {@link #instantiate} for
-   * reasonable invariants are done.
-   * <p>
-   * The implementation of this method is almost always
-   * {@code return new <em>InvName</em>(slice);}
+   * Instantiates (creates) an invariant of the same class on the specified slice. Must be
+   * overridden in each class. Must be used rather than {@link #clone} so that checks in {@link
+   * #instantiate} for reasonable invariants are done.
+   *
+   * <p>The implementation of this method is almost always {@code return new
+   * <em>InvName</em>(slice);}
+   *
    * @return the new invariant
    */
-  abstract protected /*@NonPrototype*/ Invariant instantiate_dyn(
+  protected abstract /*@NonPrototype*/ Invariant instantiate_dyn(
       /*>>> @Prototype Invariant this,*/ PptSlice slice);
 
   /**
-   * Returns whether or not this class of invariants is currently
-   * enabled.
-   * <p>
-   * Its implementation is almost always
-   * {@code return dkconfig_enabled;}
+   * Returns whether or not this class of invariants is currently enabled.
+   *
+   * <p>Its implementation is almost always {@code return dkconfig_enabled;}.
    */
   public abstract boolean enabled(/*>>> @Prototype Invariant this*/);
 
   /**
-   * Returns whether or not the invariant is valid over the basic types
-   * in vis.  This only checks basic types (scalar, string, array, etc)
-   * and should match the basic superclasses of invariant (SingleFloat,
-   * SingleScalarSequence, ThreeScalar, etc).  More complex checks
-   * that depend on variable details can be implemented in instantiate_ok().
+   * Returns whether or not the invariant is valid over the basic types in vis. This only checks
+   * basic types (scalar, string, array, etc) and should match the basic superclasses of invariant
+   * (SingleFloat, SingleScalarSequence, ThreeScalar, etc). More complex checks that depend on
+   * variable details can be implemented in instantiate_ok().
    *
    * @see #instantiate_ok(VarInfo[])
    */
   public abstract boolean valid_types(/*>>> @Prototype Invariant this,*/ VarInfo[] vis);
 
   /**
-   * Returns true if it makes sense to instantiate this invariant over
-   * the specified variables.  Checks details beyond what is provided
-   * by {@link #valid_types}.  This should never be called without calling
-   * valid_types() first (implementations should be able to presume that
+   * Returns true if it makes sense to instantiate this invariant over the specified variables.
+   * Checks details beyond what is provided by {@link #valid_types}. This should never be called
+   * without calling valid_types() first (implementations should be able to presume that
    * valid_types() returns true).
-   * <p>
-   * This method does not have to be overridden;
-   * the default implementation in Invariant returns true.
+   *
+   * <p>This method does not have to be overridden; the default implementation in Invariant returns
+   * true.
    *
    * @see #valid_types(VarInfo[])
    */
@@ -1863,11 +1721,10 @@ import typequals.*;
   //  * There are probably other difficulties that escape me at the moment.
 
   /**
-   * Instantiates this invariant over the specified slice.  The slice
-   * must not be null and its variables must be valid for this type of
-   * invariant.  Returns null if the invariant is not enabled or if the
-   * invariant is not reasonable over the specified variables.  Otherwise
-   * returns the new invariant.
+   * Instantiates this invariant over the specified slice. The slice must not be null and its
+   * variables must be valid for this type of invariant. Returns null if the invariant is not
+   * enabled or if the invariant is not reasonable over the specified variables. Otherwise returns
+   * the new invariant.
    */
   public /*@Nullable*/ Invariant instantiate(/*>>> @Prototype Invariant this,*/ PptSlice slice) {
 
@@ -1896,9 +1753,7 @@ import typequals.*;
     return inv;
   }
 
-  /**
-   * Adds the specified sample to the invariant and returns the result.
-   */
+  /** Adds the specified sample to the invariant and returns the result. */
   public InvariantStatus add_sample(
       /*>>> @NonPrototype Invariant this, */ ValueTuple vt, int count) {
 
@@ -1928,18 +1783,16 @@ import typequals.*;
     }
   }
 
-  /**
-   * Check the rep invariants of this.
-   */
+  /** Check the rep invariants of this. */
   public void repCheck(/*>>> @Prototype Invariant this*/) {}
 
   /**
-   * Returns whether or not the invariant is currently active.  This is
-   * used to identify those invariants that require a certain number
-   * of points before they actually do computation (eg, LinearBinary)
+   * Returns whether or not the invariant is currently active. This is used to identify those
+   * invariants that require a certain number of points before they actually do computation (eg,
+   * LinearBinary)
    *
-   * This is used during suppresion.  Any invariant that is not active
-   * cannot suppress another invariant
+   * <p>This is used during suppresion. Any invariant that is not active cannot suppress another
+   * invariant.
    */
   /*@Pure*/
   public boolean isActive(/*>>> @NonPrototype Invariant this*/) {
@@ -1952,9 +1805,8 @@ import typequals.*;
   // receiver.  This should be corrected.  -MDE
 
   /**
-   * Returns whether or not detailed logging is on.  Note that this check
-   * is not performed inside the logging calls themselves, it must be
-   * performed by the caller.
+   * Returns whether or not detailed logging is on. Note that this check is not performed inside the
+   * logging calls themselves, it must be performed by the caller.
    *
    * @see daikon.Debug#logDetail()
    * @see daikon.Debug#logOn()
@@ -1974,9 +1826,8 @@ import typequals.*;
   }
 
   /**
-   * Logs a description of the invariant and the specified msg via the
-   * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
-   * VarInfo[], String)}.
+   * Logs a description of the invariant and the specified msg via the logger as described in {@link
+   * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}.
    */
   // receiver needs to be initialized because subclass implementations will read their own fields
   public void log(/*>>> @NonPrototype Invariant this,*/ Logger log, String msg) {
@@ -1987,9 +1838,8 @@ import typequals.*;
   }
 
   /**
-   * Logs a description of the invariant and the specified msg via the
-   * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
-   * VarInfo[], String)}.
+   * Logs a description of the invariant and the specified msg via the logger as described in {@link
+   * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}.
    *
    * @return whether or not it logged anything
    */
@@ -2029,16 +1879,14 @@ import typequals.*;
   }
 
   /**
-   *  Used throught Java family formatting of invariants.
+   * Used throught Java family formatting of invariants.
    *
-   *  Returns
+   * <p>Returns
    *
-   *     "plume.FuzzyFloat.method(v1_name, v2_name)"
+   * <p>"plume.FuzzyFloat.method(v1_name, v2_name)"
    *
-   *  Where v1_name and v2_name are the properly formatted
-   *  varinfos v1 and v2, under the given format.
-   *
-   *  Author: Carlos Pacheco
+   * <p>Where v1_name and v2_name are the properly formatted varinfos v1 and v2, under the given
+   * format.
    */
   // [[ This method doesn't belong here. But where? ]]
   public static String formatFuzzy(String method, VarInfo v1, VarInfo v2, OutputFormat format) {
@@ -2060,9 +1908,7 @@ import typequals.*;
     return (Class<? extends Invariant>) x;
   }
 
-  /**
-   * @exception RuntimeException if representation invariant on this is broken
-   */
+  /** @exception RuntimeException if representation invariant on this is broken */
   public void checkRep() {
     // very partial initial implementation
     for (VarInfo vi : ppt.var_infos) {

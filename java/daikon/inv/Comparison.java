@@ -6,8 +6,8 @@ import daikon.*;
 // StringEqual, etc.  (Maybe that's the whole list.)
 public interface Comparison {
   /**
-   * If the invariant is a equality invariant, then its confidence.
-   * Otherwise, Invariant.CONFIDENCE_NEVER.
+   * If the invariant is a equality invariant, then its confidence. Otherwise,
+   * Invariant.CONFIDENCE_NEVER.
    */
   public double eq_confidence();
 

@@ -17,13 +17,10 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * An invariant feature extractor.
- * This class creates a labeling of invariants.
- * That is, it extracts features from invariants and then
- * classifies the invariants as "good" or a "bad" based
- * on which of the two input files the invariant came from.
- * The output goes to file in one of the following formats:
- * SVM-Light, SVMfu, or C5 uses.
+ * An invariant feature extractor. This class creates a labeling of invariants. That is, it extracts
+ * features from invariants and then classifies the invariants as "good" or a "bad" based on which
+ * of the two input files the invariant came from. The output goes to file in one of the following
+ * formats: SVM-Light, SVMfu, or C5 uses.
  */
 @SuppressWarnings({"unchecked", "rawtypes", "nullness"}) // not actively maintained
 public final class FeatureExtractor {
@@ -70,10 +67,10 @@ public final class FeatureExtractor {
   }
 
   /**
-   * This does the work of main, but it never calls System.exit, so it
-   * is appropriate to be called progrmmatically.
-   * Termination of the program with a message to the user is indicated by
-   * throwing Daikon.TerminationMessage.
+   * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+   * progrmmatically. Termination of the program with a message to the user is indicated by throwing
+   * Daikon.TerminationMessage.
+   *
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    */
@@ -196,9 +193,8 @@ public final class FeatureExtractor {
   }
 
   /**
-   * Takes two vectors of file names and loads the invariants in those
-   * files into two vectors, first the useful invariants and then the
-   * nonuseful invariants.
+   * Takes two vectors of file names and loads the invariants in those files into two vectors, first
+   * the useful invariants and then the nonuseful invariants.
    */
   private static Pair<ArrayList<Invariant>, ArrayList<Invariant>> getSimpleUsefulAndNonuseful(
       ArrayList<String> usefuls, ArrayList<String> nonusefuls)
@@ -732,16 +728,13 @@ public final class FeatureExtractor {
     return final_answer;
   }
 
-  /*********************************************
-   * This IntDoublePair represents a connected int and double.
-   * This is pretty much a struct + constructor.
-   * However this also implements Comparable
-   * so that it can be used in a TreeSet or Sorted.
-   * When two IntDoublePairs are compared, they are compared
-   * based on their integer only.  The smaller the interger -- the smaller
-   * the IntDoublePair.  Two IntDoublePairs that have the same integer are
-   * considered equal.
-   *********************************************/
+  /**
+   * This IntDoublePair represents a connected int and double. This is pretty much a struct +
+   * constructor. However this also implements Comparable so that it can be used in a TreeSet or
+   * Sorted. When two IntDoublePairs are compared, they are compared based on their integer only.
+   * The smaller the interger, the smaller the IntDoublePair. Two IntDoublePairs that have the same
+   * integer are considered equal.
+   */
   private static final class IntDoublePair implements Comparable<IntDoublePair> {
     // public fields
     public int number;
@@ -792,9 +785,7 @@ public final class FeatureExtractor {
     }
   }
 
-  /*********************************************
-   * A tool for combining and normalizing multiple SVMfu and C5 files.
-   *********************************************/
+  /** A tool for combining and normalizing multiple SVMfu and C5 files. */
   public static final class CombineFiles {
 
     private static String USAGE =
@@ -817,10 +808,10 @@ public final class FeatureExtractor {
     }
 
     /**
-     * This does the work of main, but it never calls System.exit, so it
-     * is appropriate to be called progrmmatically.
-     * Termination of the program with a message to the user is indicated by
+     * This does the work of main, but it never calls System.exit, so it is appropriate to be called
+     * progrmmatically. Termination of the program with a message to the user is indicated by
      * throwing Daikon.TerminationMessage.
+     *
      * @see #main(String[])
      * @see daikon.Daikon.TerminationMessage
      */
@@ -944,9 +935,7 @@ public final class FeatureExtractor {
     }
   }
 
-  /*********************************************
-   * A tool for classifying SVMfu and C5 files.
-   *********************************************/
+  /** A tool for classifying SVMfu and C5 files. */
   public static final class ClassifyInvariants {
 
     private static String USAGE =
