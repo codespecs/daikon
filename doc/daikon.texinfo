@@ -1879,7 +1879,9 @@ some exit point samples.
 @item --suppress_redundant
 Suppress display of logically redundant invariants, using the Simplify
 automatic theorem prover.  Daikon already suppresses most logically
-redundant output.  For example, if @samp{x >= 0} and @samp{x > 0} are both
+redundant output (this can be controlled by invariant filters; 
+@pxref{Invariant filters}.
+For example, if @samp{x >= 0} and @samp{x > 0} are both
 true, then Daikon outputs only @samp{x > 0}.  Use of the
 @option{--suppress_redundant} option tells Daikon to use Simplify to 
 eliminate even more redundant output, and should be used if it is
@@ -2705,6 +2707,8 @@ displayed by default.
 
 @end itemize
 
+To suppress even more invariants, use the @option{--suppress_redundant}
+command-line option; @pxref{Options to control invariant detection}.
 
 
 @cindex OnlyConstantVariablesFilter
