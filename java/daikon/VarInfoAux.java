@@ -234,8 +234,6 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * Make the default map here.
    */
   /** Make the default map here. */
-  // https://github.com/typetools/checker-framework/issues/877
-  @SuppressWarnings("keyfor:flowexpr.parse.error")
   private VarInfoAux() {
     HashMap</*@Interned*/ String, /*@Interned*/ String> defaultMap =
         new HashMap</*@Interned*/ String, /*@Interned*/ String>();
@@ -405,12 +403,12 @@ public final class VarInfoAux implements Cloneable, Serializable {
   public String getValue(
       /*>>>@GuardSatisfied VarInfoAux this,*/
       String key) {
-    assert map.containsKey(key) : "Map does not contain key " + key;
+    assert map.containsKey(key) : "@AssumeAssertion(keyfor) Map does not contain key " + key;
     return map.get(key);
   }
 
   /** Returns the value for the given key, or null if it is not present. */
-  public String getValueOrNull(
+  public /*@Nullable*/ String getValueOrNull(
       /*>>>@GuardSatisfied VarInfoAux this,*/
       String key) {
     return map.get(key);
@@ -425,7 +423,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   public boolean getFlag(String key) {
-    assert map.containsKey(key);
+    assert map.containsKey(key) : "@AssumeAssertion(keyfor)";
     Object value = map.get(key);
     assert value == TRUE || value == FALSE;
     return value.equals(TRUE);
