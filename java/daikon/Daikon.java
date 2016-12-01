@@ -556,6 +556,14 @@ public final class Daikon {
 
     all_ppts.trimToSize();
 
+    // Only for assertion checks
+    isInferencing = true;
+
+    // Infer invariants
+    process_data(all_ppts, dtrace_files);
+    isInferencing = false;
+    if (Debug.logOn()) Debug.check(all_ppts, "After process data");
+
     // If requested, just calculate the total number of invariants possible
     if (dkconfig_calc_possible_invs) {
       fileio_progress.shouldStop = true;
@@ -568,24 +576,14 @@ public final class Daikon {
         if (ppt.var_infos.length > 1600) {
           System.out.println("Skipping, too many variables!");
         } else {
-          ppt.instantiate_views_and_invariants();
-          inv_cnt = ppt.invariant_cnt();
-          ppt.clean_for_merge();
-          System.out.println(inv_cnt + " invariants in " + ppt.name());
+          inv_cnt = ppt.getInvariants().size();
+          System.out.println(" " + inv_cnt + " invariants");
           total_invs += inv_cnt;
         }
       }
       System.out.println(total_invs + "invariants total");
       return;
     }
-
-    // Only for assertion checks
-    isInferencing = true;
-
-    // Infer invariants
-    process_data(all_ppts, dtrace_files);
-    isInferencing = false;
-    if (Debug.logOn()) Debug.check(all_ppts, "After process data");
 
     if (suppress_redundant_invariants_with_simplify) {
       suppressWithSimplify(all_ppts);
