@@ -371,6 +371,8 @@ test-staged-dist: $(STAGING_DIR)
 	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(DISTTESTDIRJAVA)/lib/junit-4.12.jar junit)
 	## Test the main target of the makefile.
 	cd $(DISTTESTDIR)/daikon && make
+	## Test that we can build docs.
+	cd $(DISTTESTDIR)/daikon && $(MAKE) doc-all
 	## Test the basic operation of Chicory/Daikon.
 	cd $(DISTTESTDIR)/daikon && $(MAKE) quick-test
 
