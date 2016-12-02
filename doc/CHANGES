@@ -20,6 +20,14 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.4.4 (December 2, 2016)
+
+- Fixed calculation of a class's fields to include fields of its superclass(es).
+- Corrected files included in daikon.tar to support building the documents.
+- Corrected behavior of the calc_possible_invs configuration option.
+
+===========================================================================
+
 5.4.2 (November 3, 2016)
 
 Fixed numerous DynComp bugs.
