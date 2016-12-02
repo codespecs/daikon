@@ -1317,6 +1317,11 @@ For help understanding the invariants, see @ref{Interpreting output}.
 @end enumerate
 @exampleindent 4
 
+There is a second example C program in the @file{bzip2} directory.
+It may be run in a similar fashion as the @file{wordplay} example,
+but it is a more complex program and the @command{kvasir-dtrace}
+step may take several minutes.
+
 @node       Using DynComp with C programs
 @subsection Using DynComp with C programs
 
