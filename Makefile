@@ -560,7 +560,7 @@ update-doc-dist-date:
 # I removed the dependence on "update-dist-version-file" because this rule
 # is invoked at the beginning of a make.
 update-doc-dist-version:
-	perl -wpi -e 'BEGIN { $$/="\n"; } s/((Daikon|Fjalar) version |[ \/\\]daikon-)[0-9]+(\.[0-9]+)*/$$1 . "$(NEW_VER)"/e;' ${DIST_VERSION_FILES}
+	perl -wpi -e 'BEGIN { $$/="\n"; } s/((Daikon|Fjalar) version |[ \/\\]daikon-)[0-9]+(\.[0-9]+)+/$$1 . "$(NEW_VER)"/e;' ${DIST_VERSION_FILES}
 	# update the version number in the release archive file names
 	perl -wpi -e 's/(\-)[0-9]+(\.[0-9]+)+/$$1 . "$(NEW_VER)"/eg;' doc/www/download/index.html
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(NEW_VER)" . $$3/e;' java/daikon/Daikon.java
