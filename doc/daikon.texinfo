@@ -769,6 +769,9 @@ java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 @noindent
 and the Daikon output is written to the terminal.
 
+You are also strongly suggested to use the DynComp tool (@pxref{Using
+DynComp with Java programs}) to improve Daikon's output.
+
 
 @menu
 * StackAr example::
@@ -828,6 +831,8 @@ javac -g DataStructures/*.java
 Run the program under the control of the Chicory front end,
 pass the information to Daikon, print the inferred invariants, and write
 a binary representation of the invariants to @file{StackArTester.inv.gz}.
+(You are also strongly suggested to use the DynComp tool (@pxref{Using
+DynComp with Java programs}) to improve Daikon's output.)
 
 @example
 java daikon.Chicory --daikon DataStructures.StackArTester
@@ -1170,6 +1175,8 @@ java daikon.Daikon QueueArTester.dtrace.gz
 In order to detect invariants over C or C++ programs, you must first install
 a C/C++ front end (instrumenter).  We recommend that you use Kvasir (@pxref{Kvasir}),
 and this section gives examples using Kvasir.
+You are also strongly suggested to use the DynComp tool (@pxref{Using
+DynComp with C programs}) to improve Daikon's output.
 
 To use the C/C++ front end Kvasir with your program, first make sure that
 your program has been compiled with DWARF-2 format debugging
@@ -1244,6 +1251,8 @@ kvasir-dtrace ./wordplay -f words.txt 'daikon dynamic invariant detector'
 Any options to the program can be specified as usual; here, for
 instance, we give commands to look for anagrams of the phrase ``Daikon
 Dynamic Invariant Detector'' using words from the file @file{words.txt}.
+You are also strongly suggested to use the DynComp tool (@pxref{Using
+DynComp with C programs}) to improve Daikon's output.
 
 Executing under Kvasir, the program runs normally, but Kvasir
 executes additional checks and collects trace information (for this
