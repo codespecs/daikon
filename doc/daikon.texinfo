@@ -3846,7 +3846,8 @@ enrich the set of expressions in Daikon's output.
 @cindex pure methods
 @cindex observer methods, as synonym for pure methods
 File @var{pure-methods-file} lists the pure methods (sometimes called
-observer methods) in a Java program.  Pure methods have no externally
+observer methods; one type of obsever is getter methods)
+ in a Java program.  Pure methods have no externally
 side effects, such as setting variables or producing output.  For
 example, most implementations of the @code{hashCode()},
 @code{toString()}, and @code{equals()} methods are pure.
