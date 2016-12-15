@@ -962,7 +962,7 @@ check-nullness-raw-onefile-norecompile:
 check-nullness-fbc-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
 	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+	@time ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-all-withstubs: check-nullness-raw-all-withstubs check-nullness-fbc-all-withstubs
 

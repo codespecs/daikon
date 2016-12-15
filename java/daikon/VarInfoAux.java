@@ -49,7 +49,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * Java, p.a is not a parameter, whereas in IOA, it is.
    */
   public static final String IS_PARAM = "isParam";
-  
+
   /** Whether repeated elements can exist in this collection. */
   public static final String HAS_DUPLICATES = "hasDuplicates";
 
@@ -90,7 +90,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * because some tools that follow daikon need other information about the variable.
    */
   public static final String IS_STRUCT = "isStruct";
-  
+
   /** Whether this variable is known to be non-null, such as "this" in a Java program. */
   public static final String IS_NON_NULL = "isNonNull";
 
@@ -229,10 +229,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   /** Whether this is interned. */
   private boolean isInterned = false;
-  
-  /**
-   * Make the default map here.
-   */
+
   /** Make the default map here. */
   private VarInfoAux() {
     HashMap</*@Interned*/ String, /*@Interned*/ String> defaultMap =
@@ -360,7 +357,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @throws NumberFormatException if the value of the key cannot be parsed as an integer
    * @see #hasValue(String)
    */
-  public int getInt(String key) {
+  public int getInt(/*@KeyFor("this.map")*/ String key) {
     if (!hasValue(key)) {
       throw new RuntimeException(String.format("Key '%s' is not defined", key));
     }
@@ -374,7 +371,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * @throws RuntimeException if the key is not defined
    * @see #hasValue(String)
    */
-  public String[] getList(String key) {
+  public String[] getList(/*@KeyFor("this.map")*/ String key) {
     try {
       if (!hasValue(key)) {
         throw new RuntimeException(String.format("Key '%s' is not defined", key));
@@ -402,7 +399,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   /** Returns the value for the given key, which must be present in the map. */
   public String getValue(
       /*>>>@GuardSatisfied VarInfoAux this,*/
-      String key) {
+      /*@KeyFor("this.map")*/ String key) {
     assert map.containsKey(key) : "@AssumeAssertion(keyfor) Map does not contain key " + key;
     return map.get(key);
   }
@@ -422,8 +419,8 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return map.containsKey(key);
   }
 
-  public boolean getFlag(String key) {
-    assert map.containsKey(key) : "@AssumeAssertion(keyfor)";
+  public boolean getFlag(/*@KeyFor("this.map")*/ String key) {
+    assert map.containsKey(key);
     Object value = map.get(key);
     assert value == TRUE || value == FALSE;
     return value.equals(TRUE);
