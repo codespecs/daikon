@@ -432,25 +432,20 @@ public class DeclReader {
             ppt_total_set_size += vi_list.size();
             System.out.printf(
                 "  %-5s : [%d] %s%n",
-                vi_list.get(0).get_basic_comparability(),
-                vi_list.size(),
-                vi_list);
+                vi_list.get(0).get_basic_comparability(), vi_list.size(), vi_list);
           }
         }
         if (print_each_set && (ppt_num_sets > 0)) {
           System.out.printf(
               "  %d sets of average size %f%n",
-              ppt_num_sets,
-              ((double) ppt_total_set_size) / ppt_num_sets);
+              ppt_num_sets, ((double) ppt_total_set_size) / ppt_num_sets);
         }
       }
 
       if (avg_size) {
         System.out.printf(
             "%-35s %,6d sets of average size %f found%n",
-            filename,
-            num_sets,
-            ((double) total_set_size) / num_sets);
+            filename, num_sets, ((double) total_set_size) / num_sets);
       }
       for (String rep_type : rep_map.keySet()) {
         Map<String, Integer> dec_map = rep_map.get(rep_type);
@@ -585,10 +580,7 @@ public class DeclReader {
       for (DeclVarInfo vi : ppt.vars.values()) {
         decl_file.printf(
             "%s%n%s%n%s%n%s%n",
-            vi.get_name(),
-            vi.get_type(),
-            vi.get_rep_type(),
-            vi.get_comparability());
+            vi.get_name(), vi.get_type(), vi.get_rep_type(), vi.get_comparability());
       }
     }
 
