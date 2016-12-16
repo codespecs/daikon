@@ -80,9 +80,9 @@ public class InstructionUtils {
   // computeRedundantVars() with this call instead.
   public static Map<String, Set<String>> computeRedundantVarsFake(List<IInstruction> path) {
     Map<String, Set<String>> redundants = new LinkedHashMap<String, Set<String>>();
+    Map<String, String> leaders = new LinkedHashMap<String, String>();
     Set</*@KeyFor("leaders")*/ String> varsUsedPreviously =
         new LinkedHashSet</*@KeyFor("leaders")*/ String>();
-    Map<String, String> leaders = new LinkedHashMap<String, String>();
     for (IInstruction instr : path) {
       for (String varName : instr.getBinaryVarNames()) {
         String varFullName = "bv:" + instr.getAddress() + ":" + varName;
@@ -90,9 +90,7 @@ public class InstructionUtils {
           // Make it a leader.
           redundants.put(varFullName, new LinkedHashSet<String>());
           leaders.put(varName, varFullName);
-          @SuppressWarnings("keyfor") // checker weakness: flow and Map.put
-          /*@KeyFor("leaders")*/ String varName2 = varName;
-          varsUsedPreviously.add(varName2);
+          varsUsedPreviously.add(varName);
         } else {
           // Add it to redundants.
           @SuppressWarnings(

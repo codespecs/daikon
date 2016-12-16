@@ -744,9 +744,7 @@ public class LogicalCompare {
     } else if (num_args == 2) {
       startProver();
 
-      @SuppressWarnings("keyfor") // checker bug: KeyFor name translation
       Collection</*@KeyFor("app_ppts.nameToPpt")*/ String> app_ppt_names = app_ppts.nameStringSet();
-      @SuppressWarnings("keyfor") // checker bug: KeyFor name translation
       Collection</*@KeyFor("test_ppts.nameToPpt")*/ String> test_ppt_names =
           test_ppts.nameStringSet();
       // These are keys in both app_ppts and test_ppts.
