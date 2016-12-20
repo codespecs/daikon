@@ -452,6 +452,7 @@ all: all_stop_on_error
 
 # Don't bother to run the unit tests if the compilation failed.
 all_stop_on_error:
+	$(MAKE) -C .. git-hooks
 	$(MAKE) --stop all_directly junit
 
 ## In general, don't use this; it misses some files
