@@ -589,63 +589,91 @@ class DCInstrument {
     // additional pass to update branch targets (no - BCEL does this for
     // us) and the StackMapTable (yes - BCEL should do this, but it doesn't).
 
+    // Some nomenclature confusion:
+    // The JVM specification uses the term "index" to describe a local
+    // variable's offset into the local's frame.  Our variable naming
+    // convention is to use "index" to identify array elements and "offset"
+    // for a relative address - such as that of a local variable.
+
     LocalVariableGen lv_new;
     int max_offset = -1;
     int new_offset = -1;
     // get a copy of the local before modification
     LocalVariableGen[] locals = mg.getLocalVariables();
-    int local_temp_count = 0;
+    int local_temp_count = 0; // delete this variable?
+    int compiler_temp_i = -1;
+    int new_index = -1;
+    int i;
 
-    for (LocalVariableGen lv : mg.getLocalVariables()) {
+    compiler_temp_count = 0; // delete this variable?
+
+    for (i = 0; i < locals.length; i++) {
+      LocalVariableGen lv = locals[i];
       if (lv.getStart().getPosition() != 0) {
         if (new_offset == -1) {
-          new_offset = lv.getIndex();
-          compiler_temp_count = local_temp_count;
+          if (compiler_temp_i != -1) {
+            new_offset = locals[compiler_temp_i].getIndex();
+            new_index = compiler_temp_i;
+          } else {
+            new_offset = lv.getIndex();
+            new_index = i;
+          }
         }
-        lv.setIndex(lv.getIndex() + type.getSize());
       }
-      // need to add 1 if type is double or long
+
+      // calculate max local size seen so far
       max_offset = lv.getIndex() + lv.getType().getSize() - 1;
+
       if (lv.getName().startsWith("DaIkOnTeMp")) {
+        // Remember the index of a compiler temp.  We may wish
+        // to insert our new local prior to a temp to simplfy
+        // the generation of StackMaps.
+        if (compiler_temp_i == -1) {
+          compiler_temp_i = i;
+        }
         local_temp_count++;
       } else {
+        // If there were compiler temps prior to this local, we don't
+        // need to worry about them as the compiler will have already
+        // included them in the StackMaps. Reset the indicators.
+        compiler_temp_i = -1;
         local_temp_count = 0;
       }
     }
 
-    // System.out.printf ("new_offset %s%n", new_offset);
+    // We have looked at all the local variables; if we have not found
+    // a place for our new local, check to see if last local was a
+    // compiler temp and insert prior.
+    if ((new_offset == -1) && (compiler_temp_i != -1)) {
+      new_offset = locals[compiler_temp_i].getIndex();
+      new_index = compiler_temp_i;
+    }
 
-    // Special case: sometimes the java compiler allocates unnamed
-    // temps at the end of the locals - we want to insert before them.
+    // If new_offset is still unset, we can just add our local at the
+    // end.  There may be unnamed compiler temps here, but they don't
+    // need any special treatment.
     if (new_offset == -1) {
-      if (mg.getMaxLocals() > max_offset + 1) {
-        new_offset = max_offset + 1;
-        compiler_temp_count = 0;
+      new_offset = max_offset + 1;
+    } else {
+      // we need to adjust the offset of any locals after our insertion
+      for (i = new_index; i < locals.length; i++) {
+        LocalVariableGen lv = locals[i];
+        lv.setIndex(lv.getIndex() + type.getSize());
       }
     }
 
     // System.out.printf ("new_offset %s%n", new_offset);
+    // System.out.printf("Mod LocalVariableTable: %s%n", mg.getLocalVariableTable(pool));
 
-    if (new_offset != -1) {
-      // insert the local variable into existing table at slot 'new_offset'
-      lv_new = mg.addLocalVariable(name, type, new_offset, null, null);
-      mg.setMaxLocals(mg.getMaxLocals() + type.getSize());
+    // insert our new local variable into existing table at 'new_offset'
+    lv_new = mg.addLocalVariable(name, type, new_offset, null, null);
+    mg.setMaxLocals(mg.getMaxLocals() + type.getSize());
 
-      // Process the instruction list, adding one to the offset
-      // within each LocalVariableInstruction that references a
-      // local that is 'higher' in the local map than new local
-      // we just inserted.
-      adjust_code_for_locals_change(mg, new_offset, type.getSize());
-
-    } else {
-      // create the local variable at end of locals
-      // will automatically update max_locals
-      lv_new = mg.addLocalVariable(name, type, null, null);
-      new_offset = lv_new.getIndex();
-      compiler_temp_count = 0;
-    }
-
-    // System.out.printf ("create_method_scope_local-1 %s%n", compiler_temp_count);
+    // Process the instruction list, adding one to the offset
+    // within each LocalVariableInstruction that references a
+    // local that is 'higher' in the local map than new local
+    // we just inserted.
+    adjust_code_for_locals_change(mg, new_offset, type.getSize());
 
     // We also need to update any FULL_FRAME StackMap entries to
     // add in the new local variable type.
@@ -664,7 +692,7 @@ class DCInstrument {
       stack_map_table = ((StackMap) (smta.copy(smta.getConstantPool()))).getStackMap();
       needStackMap = true;
 
-      debug_instrument_inst.log("Original StackMap: %s%n", smta);
+      print_stack_map_table("Original");
       debug_instrument_inst.log(
           "Attribute tag: %s length: %d nameIndex: %d%n",
           smta.getTag(), smta.getLength(), smta.getNameIndex());
@@ -960,7 +988,27 @@ class DCInstrument {
 
         if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg)) {
           // doubling
-          gen.addMethod(mg.getMethod());
+          try {
+            gen.addMethod(mg.getMethod());
+          } catch (Exception e) {
+            if ((e.getMessage()).startsWith("Branch target offset too large")) {
+              System.out.printf(
+                  "DynComp warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
+                  gen.getClassName(), mg.getName());
+              // Build a dummy instrumented method that has DCompMarker
+              // argument and no instrumentation.
+              // first, restore unmodified method
+              mg = new MethodGen(m, gen.getClassName(), pool);
+              // add the java.lang.DCompMarker argument
+              add_dcomp_arg(mg);
+              // Remove any LVTT tables
+              BCELUtil.remove_local_variable_type_tables(mg);
+              // try again
+              gen.addMethod(mg.getMethod());
+            } else {
+              throw e;
+            }
+          }
         } else {
           // replacing
           gen.replaceMethod(m, mg.getMethod());
@@ -1258,7 +1306,7 @@ class DCInstrument {
         gen.addMethod(mg.getMethod());
 
       } catch (Throwable t) {
-        skipped_methods.add(gen.getClassName() + "." + m.getName());
+        skip_method(mgen);
         if (!DynComp.quit_if_error) {
           System.out.printf(
               "Unexpected error processing %s.%s: %s%n", gen.getClassName(), m.getName(), t);
@@ -1386,10 +1434,10 @@ class DCInstrument {
         gen.addMethod(mg.getMethod());
 
       } catch (Throwable t) {
+        skip_method(mgen);
         System.out.printf(
             "Unexpected error processing %s.%s: %s%n", gen.getClassName(), m.getName(), t);
         System.out.printf("Method is NOT instrumented%n");
-        skip_method(mgen);
       }
     }
 
@@ -1809,12 +1857,11 @@ class DCInstrument {
     if (il == null) return;
 
     new_il.setPositions();
-    debug_instrument_inst.log("  insert_inst: %d%n%s%n", new_il.getLength(), new_il);
+    InstructionHandle end = new_il.getEnd();
+    int new_length = end.getPosition() + end.getInstruction().getLength();
 
-    // There is probably a better way to get il length
-    // in code bytes, not instructions.
-    byte[] bytecode = new_il.getByteCode();
-    int length = bytecode.length;
+    print_stack_map_table("Before insert_inst");
+    debug_instrument_inst.log("  insert_inst: %d%n%s%n", new_il.getLength(), new_il);
 
     // Add the new code in front of the instruction handle.
     // Move any line number or local variable targeters to point to
@@ -1833,7 +1880,7 @@ class DCInstrument {
     il.setPositions();
     // We use position-1 as we want any stack map associated with the
     // old_start to stay associated and not move to new_start.
-    update_stack_map_offset(new_start.getPosition() - 1, length);
+    update_stack_map_offset(new_start.getPosition() - 1, new_length);
 
     // We need to see if inserting the additional instructions caused
     // a change in the amount of switch instruction padding bytes.
@@ -1888,7 +1935,8 @@ class DCInstrument {
     // at this point.  We have added special locals that won't
     // be included.  Commented out 5/14/2014 - markro.
     //mg.setMaxLocals();
-    int frame_size = mg.getMaxLocals();
+    // allocate an extra slot to save the tag frame depth for debugging
+    int frame_size = mg.getMaxLocals() + 1;
 
     assert frame_size < 100 : frame_size + " " + mg.getClassName() + "." + mg.getName();
     String params = "" + (char) (frame_size + '0');
@@ -1933,7 +1981,7 @@ class DCInstrument {
     Type[] arg_types = mg.getArgumentTypes();
 
     // Push the tag frame
-    il.append(InstructionFactory.createLoad(tag_frame_local.getType(), tag_frame_local.getIndex()));
+    il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
 
     // Push the object.  Null if this is a static method or a constructor
     if (mg.isStatic() || (method_name.equals("enter") && BCELUtil.is_constructor(mg))) {
@@ -2666,12 +2714,26 @@ class DCInstrument {
       classname = invoke.getClassName(pool);
       callee_instrumented = callee_instrumented(classname);
       if (invoke instanceof INVOKEVIRTUAL) {
-        // Technically, we should verify the target class has super class
-        // of java.lang.Enum. But that can be difficult if we haven't already
-        // processed that class. And since the worst that happens is we
-        // loose some tag interactions, we just go ahead.
-        if (method_name.equals("ordinal") && DynComp.no_jdk) {
-          callee_instrumented = false;
+        if (DynComp.no_jdk) {
+          //System.out.printf("invoke virtual: %s : %s%n", classname, method_name);
+          //System.out.printf("super class: %s%n", gen.getSuperclassName());
+          // Technically, we should verify the target class has super class
+          // of java.lang.Enum. But that can be difficult if we haven't already
+          // processed that class. And since the worst that happens is we
+          // loose some tag interactions, we just go ahead.
+          if (method_name.equals("ordinal")) {
+            callee_instrumented = false;
+          }
+
+          //UNDONE:
+          // This is actually a general problem.  Correct solution would seem
+          // to be a variation of "has_instrumented" to find target of virtual
+          // call at runtime.
+          // These is just a hack to get through PASCALI corpus.
+          String super_class = gen.getSuperclassName();
+          if ((!super_class.equals("java.lang.Object")) && (BCELUtil.in_jdk(super_class))) {
+            callee_instrumented = false;
+          }
         }
       }
     }
@@ -3182,9 +3244,8 @@ class DCInstrument {
     InstructionList il = new InstructionList();
 
     // Push the tag frame and the index of this local
-    il.append(InstructionFactory.createLoad(tag_frame_local.getType(), tag_frame_local.getIndex()));
-    debug_instrument_inst.log(
-        "CreateLoad %s %d%n", tag_frame_local.getType(), tag_frame_local.getIndex());
+    il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
+    debug_instrument_inst.log("CreateLoad %s %d%n", object_arr, tag_frame_local.getIndex());
     il.append(ifact.createConstant(lvi.getIndex()));
 
     // Call the runtime method to handle loading/storing the local/parameter
@@ -3893,10 +3954,14 @@ class DCInstrument {
   InstructionList return_tag(MethodGen mg, Instruction inst) {
     Type type = mg.getReturnType();
     InstructionList il = new InstructionList();
+
+    // Push the tag frame
+    il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
+
     if ((type instanceof BasicType) && (type != Type.VOID)) {
-      il.append(dcr_call("normal_exit_primitive", Type.VOID, Type.NO_ARGS));
+      il.append(dcr_call("normal_exit_primitive", Type.VOID, new Type[] {object_arr}));
     } else {
-      il.append(dcr_call("normal_exit", Type.VOID, Type.NO_ARGS));
+      il.append(dcr_call("normal_exit", Type.VOID, new Type[] {object_arr}));
     }
     il.append(inst);
     return il;
@@ -3980,6 +4045,7 @@ class DCInstrument {
     InstructionHandle end = new_il.getEnd();
     int new_length = end.getPosition() + end.getInstruction().getLength();
 
+    print_stack_map_table("Before replace_inst");
     debug_instrument_inst.log("  replace_inst: %s %d%n%s%n", ih, new_il.getLength(), new_il);
 
     if (debug_instrument_inst.enabled) {
@@ -4110,6 +4176,11 @@ class DCInstrument {
       }
 
       if (needStackMap) {
+        // Before we look for branches in the inserted code we need
+        // to update any exiting stack maps for locations in the old
+        // code that are after the inserted code.
+        update_stack_map_offset(new_start.getPosition(), (new_length - old_length));
+
         // Look for branches within the new il; i.e., both the source
         // and target must be within the new il.  If we find any, the
         // target will need a stack map entry.
@@ -4255,10 +4326,6 @@ class DCInstrument {
                 remainder);
           }
           stack_map_table = new_stack_map_table;
-        } else {
-          // no new branches, but we need to update stack map for
-          // change in length of instruction bytes.
-          update_stack_map_offset(new_start.getPosition(), (new_length - old_length));
         }
       }
     }
@@ -5290,9 +5357,9 @@ class DCInstrument {
     VerificationResult vr = null;
     try {
       vr = stackver.do_stack_ver(mg);
-    } catch (Exception e) {
+    } catch (Throwable t) {
       System.out.printf("Warning: StackVer exception for %s.%s%n", mg.getClassName(), mg.getName());
-      System.out.printf("Exception: %s%n", e);
+      System.out.printf("Exception: %s%n", t);
       System.out.printf("Method is NOT instrumented%n");
       return null;
     }
