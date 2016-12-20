@@ -223,17 +223,11 @@ question will not be answered.
 Shortcut for the impatient:  skip directly to the installation instructions
 for @ref{Unix/Linux/MacOSX installation}, or @ref{Windows installation}.
 
-There are three ways to install Daikon.
+There are two ways to install Daikon.
 @itemize @bullet
 @item @xref{Complete installation}, for a complete
 installation, in 4 easy steps, that permits you to use all of the
 functionality in the Daikon distribution.
-@item @xref{Simple installation},
-for an even simpler 2-step installation process.
-The simple installation instructions are adequate if you only wish to detect
-invariants in Java programs, and you don't want to set any environment
-variables in your startup file nor run any additional programs distributed
-with Daikon such as DynComp.
 @item @xref{Version control repository,,,developer,Daikon Developer Manual},
 to obtain the latest Daikon source code from its version control repository.
 @end itemize
@@ -245,30 +239,8 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 
 
 @menu
-* Simple installation::
 * Complete installation::
 @end menu
-
-@node    Simple installation
-@section Simple installation instructions
-
-Daikon is written in Java.  In order to run Daikon, all you really need
-is the @file{daikon.jar} file, which is included in the distribution or
-can be downloaded separately from
-@uref{http://plse.cs.washington.edu/daikon/download/daikon.jar}.  Place
-@file{daikon.jar} on your classpath so that Java can find it.  You are
-now ready to use Daikon!
-
-There are two additional requirements.  You must have a Java 7 (or later) JVM
-(@uref{http://www.oracle.com/technetwork/java/javase/overview/index.html,, Java Virtual Machine}). 
-The @file{tools.jar} file that comes with your JVM must also be on your
-classpath.
-
-See bullet point two above (@ref{Installing Daikon}), for situations where you should
-follow the complete installation instructions of
-@ref{Complete installation}.  (Also, if you do not know how to add a jar file to your
-classpath, then use the complete installation instructions, which walks
-you through the process.)
 
 
 @node    Complete installation
@@ -290,7 +262,7 @@ Place three commands in your shell initialization file.
 Optionally, customize your installation.
 
 @item
-Optionally, compile Daikon and build other tools.
+Compile Daikon and build other tools.
 
 @end enumerate
 
@@ -331,7 +303,7 @@ for whatever language your target programs are written in.  For
 instance, if you wish to analyze C or C++ programs, you need a C or C++
 compiler such as @command{GCC}.  Source code and a compiler are not necessary if
 you plan to use one of Daikon's front ends that work on binaries, such
-as Chicory (@pxref{Chicory}) or Kvasir (@pxref{Kvasir}).
+as DynComp (@pxref{DynComp for Java}), Chicory (@pxref{Chicory}) or Kvasir (@pxref{Kvasir}).
 
 If you wish to edit the Daikon source code and re-compile Daikon, 
 @pxref{Compiling Daikon,,,developer,Daikon Developer Manual}.
@@ -396,9 +368,9 @@ automatically read at the beginning of the main Makefile, and prevents
 you from having to edit the main Makefile directly).
 
 @item
-Optionally, compile Daikon and build other tools.
+Compile Daikon and build other tools.
 Note that this step is @emph{not} required if you only want to use Daikon
-with its Java front end (Chicory) or its .NET front end (Celeriac).
+with its .NET front end (Celeriac).
 This step is required for using
 Daikon with its C/C++ front end (Kvasir), and for other tools such as DynComp.
 
@@ -518,9 +490,9 @@ OSTYPE = cygwin
 @end example
 
 @item
-Optionally, compile Daikon and build other tools.
+Compile Daikon and build other tools.
 Note that this step is @emph{not} required if you only want to use Daikon
-with its Java front end (Chicory) or its .NET front end (Celeriac).
+with its .NET front end (Celeriac).
 This step is required for using other tools such as DynComp.
 
 @example
@@ -727,11 +699,6 @@ information.  You can view the invariants textually, or process them
 with a variety of tools.
 @end enumerate
 
-Often, you can run a single command that performs both steps.  Among
-other benefits, this can avoid the need to create the data trace file by
-sending trace information directly from the instrumented program to
-Daikon, which is called @dfn{online execution} of Daikon.
-
 This section briefly describes how to obtain data traces for Java, C,
 C#, Perl, and Eiffel programs, and how to run Daikon.  For detailed
 information about these and other front ends that are available for
@@ -749,12 +716,15 @@ Daikon, @pxref{Front ends (instrumentation)}.
 @node    Detecting invariants in Java programs
 @section Detecting invariants in Java programs
 
-In order to detect invariants in a Java program, run the
-program using the Chicory front end (@pxref{Chicory}) to create a data trace file, then
+In order to detect invariants in a Java program, first run the
+program using the DynComp front end (@pxref{DynComp for Java}),
+then pass the resulting @file{.decls} file to Chicory
+(@pxref{Chicory}) to create a data trace file.  Finally,
 run Daikon itself to detect invariants.
 With the @option{--daikon} option to Chicory, a single command performs
-both steps.
+the last two steps.
 
+@exampleindent 1
 For example, if you usually run
 @example
 java mypackage.MyClass arg1 arg2 arg3
@@ -763,22 +733,21 @@ java mypackage.MyClass arg1 arg2 arg3
 @noindent
 then instead you would run
 @example
-java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
+java daikon.DynComp mypackage.MyClass arg1 arg2 arg3
+java daikon.Chicory --daikon \
+                    --comparability-file=MyClass.decls-DynComp \
+                    mypackage.MyClass arg1 arg2 arg3
 @end example
+@exampleindent 4
 
 @noindent
 and the Daikon output is written to the terminal.
-
-You are also strongly suggested to use the DynComp tool (@pxref{Using
-DynComp with Java programs}) to improve Daikon's output.
 
 
 @menu
 * StackAr example::
 * Detecting invariants when running a Java program from a jar file::
-* Using DynComp with Java programs::
 * Understanding the invariants::
-* Understanding DynComp::
 * Second Java example::
 @end menu
 
@@ -828,14 +797,12 @@ javac -g DataStructures/*.java
 @end example
 
 @item
-Run the program under the control of the Chicory front end,
-pass the information to Daikon, print the inferred invariants, and write
-a binary representation of the invariants to @file{StackArTester.inv.gz}.
-(You are also strongly suggested to use the DynComp tool (@pxref{Using
-DynComp with Java programs}) to improve Daikon's output.)
+Run the program under the control of DynComp to generate comparability
+information in the file @file{StackArTester.decls-DynComp}.
 
 @example
-java daikon.Chicory --daikon DataStructures.StackArTester
+java -cp .:$CLASSPATH daikon.DynComp --no-cset-file \
+     DataStructures.StackArTester
 @end example
 
 @noindent
@@ -843,8 +810,21 @@ If you have not set the CLASSPATH as yet, you may add it to the command
 line for now --- but don't forget to set it later.
 
 @smallexample
-java -cp "../../../daikon.jar:." daikon.Chicory --daikon DataStructures.StackArTester
+java -cp "../../../daikon.jar:." daikon.DynComp --no-cset-file DataStructures.StackArTester
 @end smallexample
+
+@item
+Run the program a second time, under the control of the Chicory front end.
+Chicory observes the variable values and passes the information to Daikon.
+Daikon infers invariants, prints them, and writes a binary representation
+of them to file @file{StackArTester.inv.gz}.
+
+@example
+java -cp .:$CLASSPATH daikon.Chicory --daikon \
+     --comparability-file=StackArTester.decls-DynComp \
+     DataStructures.StackArTester
+@end example
+
 
 @noindent
 Alternately, replacing the @option{--daikon} argument by
@@ -854,25 +834,19 @@ trace file to disk.
 @end enumerate
 
 If you wish to have more control over the invariant detection process,
-you can split the second step above into multiple steps.  Then, the
-whole process is as follows:
+you can split the third step above into multiple steps.  Then, step 3
+would become:
 
-@enumerate
+@enumerate 3
 @item
-Compile the program with the @option{-g} switch to enable debugging
-symbols.  (The program and test suite appear in the
-@file{DataStructures} subdirectory.)
-@example
-cd examples/java-examples/StackAr
-javac -g DataStructures/*.java
-@end example
-
-@item
-Run the program under the control of the Chicory front end, in
-order to create a trace file named @file{StackArTester.dtrace.gz}.
+Run the program under the control of the Chicory front end, including
+comparability information, in order to create a trace file named
+@file{StackArTester.dtrace.gz}.
 
 @example
-java daikon.Chicory DataStructures.StackArTester
+java -cp .:$CLASSPATH daikon.Chicory \
+     --comparability-file=StackArTester.decls-DynComp \
+     DataStructures.StackArTester
 @end example
 
 @item
@@ -881,6 +855,8 @@ Run Daikon on the trace file.
 @example
 java daikon.Daikon StackArTester.dtrace.gz
 @end example
+(Note the classpath (@option{-cp}) argument is not needed as we are not
+running the @command{StackArTester} program.)
 
 Daikon can analyze multiple runs (executions) of the program.  You can
 supply Daikon with multiple trace files:
@@ -982,56 +958,6 @@ unzip -p mypackage.jar META-INF/MANIFEST.MF | grep '^Main-Class:'
 @exampleindent 4
 
 
-@node       Using DynComp with Java programs
-@subsection Using DynComp with Java programs
-
-DynComp can help to filter Daikon's output by omitting invariants
-involving unrelated variables (see @ref{DynComp for Java}).  To do so, run
-DynComp on the target program first, then pass the resulting
-@file{.decls} file to Chicory.  The process is as follows:
-
-@exampleindent 1
-@enumerate
-@item
-Compile the program with the @option{-g} switch to enable debugging
-symbols.  (The program and test suite appear in the
-@file{DataStructures} subdirectory of the @file{StackAr} directory.)
-@example
-cd examples/java-examples/StackAr
-javac -g DataStructures/*.java
-@end example
-
-@item
-Run the program with DynComp to generate comparability information.  You
-should produce an instrumented version of the JDK first (see
-@ref{Instrumenting the JDK with DynComp}).  By default, comparability
-information is written to @file{StackArTester.decls-DynComp}.
-
-@example
-java daikon.DynComp DataStructures.StackArTester
-@end example
-
-@item
-Run the program under the control of the Chicory front end, including
-comparability information.  Pass the information to Daikon, print the
-inferred invariants, and write a binary representation of the invariants
-to @file{StackArTester.inv.gz}.  Note that this runs the target program
-for a second time.
-
-@example
-java daikon.Chicory --daikon \
-     --comparability-file=StackArTester.decls-DynComp \
-     DataStructures.StackArTester
-@end example
-
-@end enumerate
-@exampleindent 4
-
-You could split the third step into multiple steps, as described in
-@ref{StackAr example}, to gain more control over the invariant detection
-process.
-
-
 @node       Understanding the invariants
 @subsection Understanding the invariants
 
@@ -1040,95 +966,44 @@ For more help interpreting invariants, see @ref{Interpreting output}.
 
 The @file{StackAr} example is an array-based stack implementation.  Take a
 look at @file{DataStructures/StackAr.java} to get a sense of the
-implementation.  Now, look at the first section of Daikon output.
+implementation.  Now, look at the sixth section of Daikon output.
 
 @exampleindent 1
-
 @example
 ======================================================================
 StackAr:::OBJECT
 this.theArray != null
-this.theArray.getClass() == java.lang.Object[].class
+this.theArray.getClass().getName() == java.lang.Object[].class
 this.topOfStack >= -1
-this.theArray[this.topOfStack+1..] elements == null
-this.theArray[0..this.topOfStack] elements != null
 this.topOfStack <= size(this.theArray[])-1
 ======================================================================
 @end example
 
-@noindent
-These six annotations describe the representation invariant.  The
+These four annotations describe the representation invariant.  The
 array is never null, and its runtime type is @code{Object[]}.  The
 @code{topOfStack} index is at least -1 and is less than the length
-of the array.  Finally, the elements of the array are non-null if
-their index is no more than @code{topOfStack} and are null
-otherwise.
+of the array.
 
 Next, look at the invariants for the @code{top()} method.
-@code{top()} has two different exit points, at lines 78 and 79
+@code{top()} has two different exit points, at lines 74 and 75
 in the original source.  There is a set of invariants for each exit
 point, as well as a set of invariants that hold for all exit points.
-Look at the invariants when @code{top()} returns at line 79.
+Look at the invariants when @code{top()} returns at line 75.
 
 @example
 ======================================================================
-StackAr.top():::EXIT79
+StackAr.top():::EXIT75
 return == this.theArray[this.topOfStack]
-this.theArray == orig(this.theArray)
-this.theArray[] == orig(this.theArray[])
-this.topOfStack == orig(this.topOfStack)
-return != null
+return == this.theArray[orig(this.topOfStack)]
+return == orig(this.theArray[post(this.topOfStack)])
+return == orig(this.theArray[this.topOfStack])
 this.topOfStack >= 0
-this.theArray[this.topOfStack+1..] elements == this.theArray[-1]
+return != null
 ======================================================================
 @end example
 
-@noindent
 The return value is never null, and is equal to the array element at
-index @code{topOfStack}.  The top of the stack is at least 0.  The
-array, the elements of the array, and @code{topOfStack} are not
-modified by this method --- this method is an @dfn{observer}.  The
-last invariant is not particularly interesting.
-
-
-@node       Understanding DynComp
-@subsection Understanding DynComp
-
-To get a sense of how DynComp helps eliminate uninteresting output, take
-a look at the invariants for the exit point at line 32 of the
-@code{createItem(int)} method.
-
-@example
-======================================================================
-DataStructures.StackArTester.createItem(int):::EXIT32
-this.phase == 4
-return.getClass() == int[].class
-this.s.topOfStack < orig(i)
-this.phase < orig(i)
-this.phase != size(this.s.theArray[])
-this.maxPhase < orig(i)
-======================================================================
-@end example
-
-@noindent
-The value of @code{phase} is always less than the value of
-@code{i}.  While this is true for the observed executions, it is not a
-helpful invariant, since @code{phase} and @code{i} represent different
-abstract types; @code{i} is a number to be pushed onto the stack, while
-@code{phase} is used for program flow control.  Although they are both
-@code{int}s, comparing the two is not meaningful, so this invariant,
-among others, is omitted from the output when Daikon is run with
-DynComp.
-
-@example
-======================================================================
-DataStructures.StackArTester.createItem(int):::EXIT32
-this.phase == 4
-return.getClass() == int[].class
-this.s.topOfStack < orig(i)
-======================================================================
-@end example
-
+index @code{topOfStack}.  The top of the stack is at least 0.
 @exampleindent 4
 
 @node       Second Java example
@@ -1139,6 +1014,7 @@ Run this sample using the following steps:
 
 @itemize @bullet
 @item Compile
+@exampleindent 1
 @example
 cd examples/java-examples/QueueAr
 javac -g DataStructures/*.java
@@ -1146,7 +1022,11 @@ javac -g DataStructures/*.java
 
 @item Trace file generation and invariant detection
 @example
-java daikon.Chicory --daikon DataStructures.QueueArTester
+java -cp .:$CLASSPATH daikon.DynComp --no-cset-file \
+     DataStructures.QueueArTester
+java -cp .:$CLASSPATH daikon.Chicory --daikon \
+     --comparability-file=QueueArTester.decls-DynComp \
+     DataStructures.QueueArTester
 @end example
 
 @end itemize
@@ -1157,13 +1037,16 @@ Alternately, you can split the second command into two parts:
 
 @item Trace file generation
 @example
-java daikon.Chicory DataStructures.QueueArTester
+java -cp .:$CLASSPATH daikon.Chicory \
+     --comparability-file=QueueArTester.decls-DynComp \
+     DataStructures.QueueArTester
 @end example
 
 @item Invariant detection
 @example
 java daikon.Daikon QueueArTester.dtrace.gz
 @end example
+@exampleindent 4
 
 @end itemize
 
@@ -1450,6 +1333,7 @@ must be instrumented again taking the type information into account.
 To instrument a stand-alone Perl program, invoke @command{dfepl} with
 the name of the program as an argument.
 
+@exampleindent 1
 @example
 dfepl program.pl
 @end example
@@ -1586,6 +1470,7 @@ show how Daikon can be used with the stand-alone program
 @file{standalone.pl}, also in the @file{examples/perl-examples}
 directory.
 
+@exampleindent 1
 @example
 dfepl standalone.pl
 dtype-perl daikon-untyped/standalone.pl
@@ -1595,6 +1480,7 @@ cd daikon-output
 java daikon.Daikon -o standalone.inv standalone-main.decls \
      standalone-combined.dtrace
 @end example
+@exampleindent 4
 
 @noindent
 Note two differences when running a stand-alone program.  First, the
@@ -1660,7 +1546,7 @@ include them on the command line to Daikon.
 Note that combining input files from Chicory and (Java) DynComp can lead to
 a @nospellcheck{decl} format error. The preferred usage is to use the DynComp generated
 @file{.decls} file(s) as input to Chicory. 
-See @ref{Using DynComp with Java programs} for more details.
+See @ref{Detecting invariants in Java programs} for more details.
 
 @item
 The @var{spinfo-files} are splitter info (@file{.spinfo}) files that
@@ -2933,9 +2819,11 @@ Create the splitter info file, either automatically or by hand.
 Run Daikon with the @file{.spinfo} file as one of its arguments.
 (The order of arguments does not matter.)
 For example,
+@exampleindent 1
 @example
 java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 @end example
+@exampleindent 4
 @end enumerate
 
 The term @dfn{splitter} comes from Daikon's technique for detecting
@@ -3469,7 +3357,7 @@ Daikon.
 @item
 The Java DynComp tool produces a comparability file that must then be
 supplied to the Chicory Java front-end.  For examples of using DynComp
-with Java programs, see @ref{Using DynComp with Java programs}.  For
+with Java programs, see @ref{Detecting invariants in Java programs}.  For
 full details about the DynComp tool for Java, see @ref{DynComp for
 Java}.
 
@@ -3591,6 +3479,10 @@ creates data trace (@file{.dtrace}) files, and optionally runs Daikon on
 them.  Chicory is named after the chicory plant, whose root is sometimes
 used as a coffee substitute or flavor enhancer.
 
+While Daikon can be run using only the Chicory front end, it is highly
+recommend that DynComp be run prior to Chicory. See @ref{DynComp for Java}
+for more details.
+
 To use Chicory, run your program as you normally would, but
 replace the @command{java} command with @command{java daikon.Chicory}.  For
 instance, if you usually run
@@ -3687,10 +3579,12 @@ traces only @code{bar}, you could match the method name (in any class)
 with regular expression
 @samp{bar$}, or you could match the program point name with @samp{C\.bar\(}.
 
+@exampleindent 1
 @example
 java daikon.Chicory --ppt-select-pattern='bar$' ...
 java daikon.Chicory --ppt-select-pattern='C\.bar\(' ...
 @end example
+@exampleindent 4
 
 
 @item --ppt-omit-pattern=@var{regexp}
@@ -3846,7 +3740,7 @@ enrich the set of expressions in Daikon's output.
 @cindex pure methods
 @cindex observer methods, as synonym for pure methods
 File @var{pure-methods-file} lists the pure methods (sometimes called
-observer methods; one type of obsever is getter methods)
+observer methods; one type of observer is @nospellcheck{getter} methods)
  in a Java program.  Pure methods have no externally
 side effects, such as setting variables or producing output.  For
 example, most implementations of the @code{hashCode()},
@@ -4072,6 +3966,8 @@ all times.
 @cindex comparability, for Java
 @cindex dynamic comparability, for Java
 
+While Daikon can be run using only the Chicory front end, it is highly
+recommend that DynComp be run prior to Chicory.
 The DynComp dynamic comparability analysis tool performs dynamic type
 inference to group variables at each program point into comparability sets
 (see @ref{Program point declarations,,,developer,Daikon Developer Manual}
@@ -4079,7 +3975,23 @@ for the numeric representation format of these sets.)  All variables in each
 comparability set belong to the same ``abstract type'' of data that the
 programmer likely intended to represent, which is a richer set of types
 than the few basic declared types (e.g., int, float) provided by the
-language.  Consider the example below:
+language.
+
+Without comparability information, Daikon attempts to find invariants
+over all pairs (and sometimes triples) of variables present at every
+program point.  This can lead to two negative consequences: First, it
+may take lots of time and memory to infer all of these invariants,
+especially when there are many global or derived variables present.
+Second, many of those invariants are true but meaningless because they
+relate variables which conceptually represent different types (e.g., an
+invariant such as @code{winterDays < year} is true but meaningless
+because days and years are not comparable).
+
+It should be noted that the performance of Daikon with and without the
+use of DynComp can be significant. A 10-30X improvement in the running
+time of Daikon is typical.
+
+Consider the example below:
 
 @example
 public class Year @{
@@ -4138,7 +4050,8 @@ This runs your program and creates the file @file{MyClass.decls-DynComp}
 in the current directory.  DynComp also creates @file{MyClass.txt-cset},
 which contains the same information and a further level of detail in an
 easier-to-read format.  The @file{.decls-DynComp} file may be passed to Chicory,
-as described in @ref{Using DynComp with Java programs}.
+as described in @ref{Detecting invariants in Java programs}.
+
 @example
 java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
      mypackage.MyClass arg1 arg2 arg3
@@ -7799,6 +7712,7 @@ understand Daikon's operation; @pxref{Daikon debugging options}.
 @subsection Can't run Daikon: could not find or load main class, or NoClassDefFoundError
 
 Either of these errors:
+@exampleindent 1
 @example
 Error: Could not find or load main class daikon.Chicory
 Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
@@ -7883,7 +7797,7 @@ as input to Chicory. The resulting @file{.dtrace} file will contain the
 comparability values from the @file{.decls} file(s) and can then be used
 as input to Daikon.
 Passing a @file{.decls} file to Chicory is
-described in @ref{Using DynComp with Java programs}, for example:
+described in @ref{Detecting invariants in Java programs}, for example:
 
 @example
 java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
@@ -7906,7 +7820,8 @@ Daikon provides ways for you to customize its output.  See Daikon's
 command-line options (@pxref{Running Daikon}), and the techniques for
 enhancing its output (@pxref{Enhancing Daikon output}), including its
 configuration options (@pxref{Configuration options}).  The options for
-the front ends --- such as Chicory (@pxref{Chicory options}) and Kvasir
+the front ends --- such as DynComp (@pxref{DynComp for Java options}),
+Chicory (@pxref{Chicory options}) and Kvasir
 (@pxref{Kvasir options}) --- give additional control.
 
 Some irrelevant properties are over unrelated variables, like comparing
@@ -8309,10 +8224,16 @@ Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 @cindex slow operation, of Daikon
 @cindex runtime, of Daikon
 
-If Daikon runs slowly, there are two general possible reasons:
+If Daikon runs slowly, there are three general possible reasons:
 @itemize
 @item
-The front end, such as Chicory, took a long time to collect, then output,
+You did not use the DynComp tool to generate comparability sets.
+The performance of Daikon with and without the
+use of DynComp can be significant. A 10-30X improvement in the running
+time of Daikon is typical.
+
+@item
+The front end, such as DynComp or Chicory, took a long time to collect, then output,
 large amounts of data about your program execution.
 
 @item
@@ -8682,7 +8603,7 @@ Chicory; please report it if it is not already explained in this manual.
 (If the error is ``couldn't find or load main class'' and the
 class that cannot be found is in Chicory itself, then there is not a bug in
 Chicory.  Rather, you have failed to put @file{daikon.jar} on the classpath
-when running Chicory, as described in @ref{Simple installation}.)
+when running Chicory, as described in @ref{Complete installation}.)
 @end itemize
 
 
