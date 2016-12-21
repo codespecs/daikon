@@ -440,6 +440,8 @@ tools/kmeans/*.o
 examples/**/*.class
 examples/**/*.dtrace.gz
 examples/**/*.inv.gz
+examples/c-examples/wordplay/daikon-output/
+examples/c-examples/wordplay/wordplay
 
 tests/**/*.class
 tests/**/*.comp
