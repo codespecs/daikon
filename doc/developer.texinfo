@@ -2701,6 +2701,7 @@ Send mail to the @samp{daikon-announce} mailing list.
 Use the suggested template below, replacing <version number> with
 the actual number of the release.
 
+@exampleindent 0
 @example
 <to:>  daikon-announce@@googlegroups.com
 <subject:>  Daikon version <version number> has been released
@@ -2721,7 +2722,7 @@ to 80 columns for the CHANGES file but aren't desirable in email)>
 
 Note that if you use Microsoft Outlook 2010 or 2013 as your mailer,
 by default it will insert hard breaks in your outgoing message. See
-@uref{http://blog.techhit.com/551102-how-to-prevent-outlook-2010-and-2013-from-adding-line-breaks-to-sent-plain-text-messages}
+@uref{http://blog.techhit.com/551102-how-to-prevent-outlook-2010-and-2013-from-adding-line-breaks-to-sent@/-plain-text-messages}
 for a work around.  You must quit and restart Outlook to activate
 the change.
 
@@ -3013,7 +3014,7 @@ Some additional details about the declaration file format appear in file
 @node       Declaration-related records
 @subsection Declaration-related records
 
-@exampleindent 2
+@exampleindent 1
 
 @menu
 * Declaration version::

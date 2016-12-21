@@ -333,9 +333,11 @@ source $DAIKONDIR/scripts/daikon.bashrc
 A setting of @env{JAVA_HOME} that @emph{sometimes} works (it might not
 because @command{java} might be the version in the JDK or in the JRE) is:
 
+@exampleindent 0
 @smallexample
 export JAVA_HOME=$@{JAVA_HOME:-$(dirname $(dirname $(dirname $(readlink -f $(/usr/bin/which java)))))@}
 @end smallexample
+@exampleindent 1
 
 After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
@@ -792,9 +794,11 @@ java -cp .:$CLASSPATH daikon.DynComp --no-cset-file \
 If you have not set the CLASSPATH as yet, you may add it to the command
 line for now --- but don't forget to set it later.
 
+@exampleindent 0
 @smallexample
 java -cp "../../../daikon.jar:." daikon.DynComp --no-cset-file DataStructures.StackArTester
 @end smallexample
+@exampleindent 1
 
 @item
 Run the program a second time, under the control of the Chicory front end.
@@ -844,12 +848,17 @@ running the @command{StackArTester} program.)
 Daikon can analyze multiple runs (executions) of the program.  You can
 supply Daikon with multiple trace files:
 
+@exampleindent 0
 @smallexample
-java daikon.Chicory --dtrace-file=StackArTester1.dtrace.gz --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java daikon.Chicory --dtrace-file=StackArTester2.dtrace.gz --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java daikon.Chicory --dtrace-file=StackArTester3.dtrace.gz --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java daikon.Chicory --dtrace-file=StackArTester1.dtrace.gz \
+     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java daikon.Chicory --dtrace-file=StackArTester2.dtrace.gz \
+     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java daikon.Chicory --dtrace-file=StackArTester3.dtrace.gz \
+     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
 java daikon.Daikon StackArTester*.dtrace.gz
 @end smallexample
+@exampleindent 1
 
 @c @noindent
 @c or, you can append information from multiple runs in a single trace file
@@ -924,12 +933,13 @@ java -cp <originalclasspath> mypackage.jar arguments
 
 @noindent
 then to detect invariants in that Java program,
-run one of these commands:
+run these commands:
 
-@smallexample
-java -cp mypackage.jar daikon.Chicory --daikon <MyMain> arguments
-java -cp mypackage.jar:<original classpath> daikon.Chicory --daikon <MyMain> arguments
-@end smallexample
+@example
+java -cp mypackage.jar:<original classpath> daikon.DynComp <MyMain> arguments
+java -cp mypackage.jar:<original classpath> daikon.Chicory --daikon \
+     --comparability-file=<MyMain>.decls-DynComp <MyMain> arguments
+@end example
 
 @noindent
 where @command{<MyMain>} is the Main-class of the @file{jar} file, which you
@@ -1034,6 +1044,7 @@ java daikon.Daikon QueueArTester.dtrace.gz
 @end itemize
 
 
+@page
 
 @node    Detecting invariants in C/C++ programs
 @section Detecting invariants in C/C++ programs
@@ -1041,14 +1052,29 @@ java daikon.Daikon QueueArTester.dtrace.gz
 In order to detect invariants over C or C++ programs, you must first install
 a C/C++ front end (instrumenter).  We recommend that you use Kvasir (@pxref{Kvasir}),
 and this section gives examples using Kvasir.
-You are also strongly suggested to use the DynComp tool (@pxref{Using
-DynComp with C programs}) to improve Daikon's output.
+It is also strongly recommend that you use the DynComp tool
+(via the @option{--with-dyncomp} option to Kvasir)
+to improve Daikon's output.
+
+DynComp can help to filter Daikon's output by omitting invariants
+involving unrelated variables (see @ref{DynComp for C/C++}).
+DynComp uses a dynamic analysis to infer which program variables can
+meaningfully be used together; Daikon can then use this information to
+restrict the invariants it considers, potentially improving both its
+performance and the usefulness of its results.
 
 To use the C/C++ front end Kvasir with your program, first make sure that
 your program has been compiled with DWARF-2 format debugging
 information, such as by giving the @option{-gdwarf-2} flag to @command{GCC} when
 compiling.  Then, run your program as usual, but prepend
-@command{kvasir-dtrace} to the command line.
+@command{kvasir-dtrace} @option{--with-dyncomp} to the command line.
+
+Kvasir will produce two output files:
+a @file{.dtrace} file containing a trace of a particular execution,
+and a @file{.decls} file that contains
+information about what variables and functions exist in a program, along
+with information grouping the variables into abstract types.
+Both of these files must be supplied to Daikon.
 
 For more information about Kvasir, including more detailed
 documentation on its command-line options, see @ref{Kvasir}.
@@ -1056,7 +1082,6 @@ documentation on its command-line options, see @ref{Kvasir}.
 
 @menu
 * C examples::
-* Using DynComp with C programs::
 * Dealing with large examples::
 @end menu
 
@@ -1078,9 +1103,9 @@ These examples are located in the @file{examples/c-examples} directory.
 
 
 To detect invariants for a program with Kvasir, you need to perform
-two basic tasks:  run the program under Kvasir to create a data trace
-file (steps 1--2), and run
-Daikon over the data trace file to produce invariants (steps 3--4).
+two basic tasks:  run the program under Kvasir to create a trace
+and declaration files (steps 1--3), and run
+Daikon over these files to produce invariants (step 4).
 The following instructions are for the wordplay example, which is a
 program for finding anagrams.
 
@@ -1106,26 +1131,26 @@ containing code you wish to see invariants about.
 
 @item
 Run the program just as you normally would, but prepend
-@command{kvasir-dtrace} to the command line.
-@exampleindent 0
+@command{kvasir-dtrace} @option{--with-dyncomp} to the command line.
+
 @example
-kvasir-dtrace ./wordplay -f words.txt 'daikon dynamic invariant detector'
+kvasir-dtrace --with-dyncomp \
+   ./wordplay -f words.txt 'Daikon Dynamic Invariant Detector'
 @end example
-@exampleindent 1
 
 @noindent
 Any options to the program can be specified as usual; here, for
 instance, we give commands to look for anagrams of the phrase ``Daikon
 Dynamic Invariant Detector'' using words from the file @file{words.txt}.
-You are also strongly suggested to use the DynComp tool (@pxref{Using
-DynComp with C programs}) to improve Daikon's output.
 
 Executing under Kvasir, the program runs normally, but Kvasir
 executes additional checks and collects trace information (for this
 reason, the program will run more slowly than usual).  Kvasir creates a
 directory named @file{daikon-output} under the current directory, and
-creates the @file{wordplay.dtrace} file, which lists both variable
-declarations and values.
+creates the @file{wordplay.dtrace} file, which lists variable
+values, and the @file{wordplay.decls} file that contains
+information about what variables and functions exist in a program, along
+with information grouping the variables into abstract types.
 
 Kvasir will also print messages if it observes your program doing
 something with undefined effects; these may indicate bugs in your
@@ -1136,11 +1161,11 @@ tool; if they do not appear with that tool, they are probably
 spurious).
 
 @item
-Run Daikon on the trace file.
+Run Daikon on the trace and declaration files.
 @smallexample
 java daikon.Daikon \
      --config_option daikon.derive.Derivation.disable_derived_variables=true \
-     daikon-output/wordplay.dtrace
+     daikon-output/wordplay.decls daikon-output/wordplay.dtrace
 @end smallexample
 
 The invariants are printed to standard output, and a binary representation
@@ -1153,28 +1178,30 @@ Daikon can analyze multiple runs (executions) of the program.  You can
 supply Daikon with multiple trace files:
 
 @smallexample
-kvasir-dtrace --dtrace-file=daikon-output/wordplay1.dtrace \
+kvasir-dtrace --with-dyncomp --dtrace-file=daikon-output/wordplay1.dtrace \
     ./wordplay -f words.txt 'daikon dynamic invariant detector'
 kvasir-dtrace --dtrace-file=daikon-output/wordplay2.dtrace \
     ./wordplay -f words.txt 'better results from multiple runs'
 kvasir-dtrace --dtrace-file=daikon-output/wordplay3.dtrace \
     ./wordplay -f words.txt 'more testing equals better testing'
-java -Xmx256m daikon.Daikon daikon-output/wordplay*.dtrace
+java -Xmx256m daikon.Daikon daikon-output/wordplay*.dtrace daikon-output/wordplay.decls
 @end smallexample
 
 @noindent
-or, you can append information from multiple runs in a single trace file:
+Note that you need only specify @option{--with-dyncomp} once, this
+information does not vary from run to run.
+
+Alternatively, you can append information from multiple runs in a single trace file:
 
 @smallexample
-kvasir-dtrace --dtrace-file=daikon-output/wordplay-all.dtrace \
+kvasir-dtrace --with-dyncomp --dtrace-file=daikon-output/wordplay-all.dtrace \
     ./wordplay -f words.txt 'daikon dynamic invariant detector'
 kvasir-dtrace --dtrace-append --dtrace-file=daikon-output/wordplay-all.dtrace \
     ./wordplay -f words.txt 'better results from multiple runs'
 kvasir-dtrace --dtrace-append --dtrace-file=daikon-output/wordplay-all.dtrace \
     ./wordplay -f words.txt 'more testing equals better testing'
-java -Xmx256m daikon.Daikon daikon-output/wordplay-all.dtrace
+java -Xmx256m daikon.Daikon daikon-output/wordplay-all.dtrace daikon-output/wordplay.decls
 @end smallexample
-
 
 @item
 Examine the invariants.  As described in @ref{StackAr example},
@@ -1197,53 +1224,18 @@ It may be run in a similar fashion as the @file{wordplay} example,
 but it is a more complex program and the @command{kvasir-dtrace}
 step may take several minutes.
 
-@node       Using DynComp with C programs
-@subsection Using DynComp with C programs
+@c For instance, one effect of DynComp that can be seen in the wordplay
+@c example concerns the global variables @code{largestlet},
+@c @code{rec_anag_count}, @code{adjacentdups}, @code{specfirstword},
+@c @code{maxdepthspec}, and @code{silent}.
+@c These variables are all 0 in the sample execution (for instance, several
+@c of them correspond to command-line options that are not enabled), so
+@c without DynComp, Daikon gives the invariants that they are all equal.
+@c However, DynComp's analysis finds that the variables are of different
+@c abstract types, so it is not meaningful to compare them.
+@c When DynComp information is provided, Daikon instead gives separate
+@c invariants about the value of each variable.
 
-DynComp can help to filter Daikon's output by omitting invariants
-involving unrelated variables (see @ref{DynComp for C/C++}).
-DynComp uses a dynamic analysis to infer which program variables can
-meaningfully be used together; Daikon can then use this information to
-restrict the invariants it considers, potentially improving both its
-performance and the usefulness of its results.
-
-DynComp is enabled as an extra mode of Kvasir; when running with DynComp
-enabled, Kvasir produces two output files instead of one: in addition to
-a @file{.dtrace} file containing a trace of a particular execution, the
-information about what variables and functions exist in a program, along
-with information grouping the variables into abstract types, is stored
-in a file with the extension @file{.decls}.  Both of these files must be
-supplied to Daikon.
-
-For instance, to repeat the wordplay example with DynComp, first rerun
-@command{kvasir-dtrace} giving it the option @option{--with-dyncomp}:
-
-@smallexample
-kvasir-dtrace --with-dyncomp \
-   ./wordplay -f words.txt 'daikon dynamic invariant detector'
-@end smallexample
-
-@noindent
-Then, supply the @file{.decls} file when invoking Daikon:
-
-@smallexample
-java daikon.Daikon \
-     --config_option daikon.derive.Derivation.disable_derived_variables=true \
-     daikon-output/wordplay.decls daikon-output/wordplay.dtrace
-@end smallexample
-
-@noindent
-For instance, one effect of DynComp that can be seen in the wordplay
-example concerns the global variables @code{largestlet},
-@code{rec_anag_count}, @code{adjacentdups}, @code{specfirstword},
-@code{maxdepthspec}, and @code{silent}.
-These variables are all 0 in the sample execution (for instance, several
-of them correspond to command-line options that are not enabled), so
-without DynComp, Daikon gives the invariants that they are all equal.
-However, DynComp's analysis finds that the variables are of different
-abstract types, so it is not meaningful to compare them.
-When DynComp information is provided, Daikon instead gives separate
-invariants about the value of each variable.
 
 @node       Dealing with large examples
 @subsection Dealing with large examples
@@ -1271,6 +1263,7 @@ For more techniques for using Daikon with large programs
 and long program runs, see @ref{Large dtrace files}.
 
 
+@page
 
 @node    Detecting invariants in C# programs
 @section Detecting invariants in C#, F#, and Visual Basic programs
@@ -1551,8 +1544,8 @@ information from standard input.
 The optional flags are described in the sections that follow.  For
 further ways to control Daikon's behavior via configuration options, see
 @ref{Configuration options}; also see the list of options to the front
-end such as Chicory (@pxref{Chicory options}) or Kvasir (@pxref{Kvasir
-options}).
+ends --- such as DynComp (@pxref{DynComp for Java options}),
+Chicory (@pxref{Chicory options}) or Kvasir (@pxref{Kvasir options}).
 
 
 @menu
@@ -2698,8 +2691,8 @@ Daikon's sources, you must extract the example from
 
 You can also control Daikon's output via its command-line options
 (@pxref{Running Daikon}) and via the command-line options to its front
-ends such as Chicory (@pxref{Chicory options}) or Kvasir (@pxref{Kvasir
-options}).
+ends --- such as DynComp (@pxref{DynComp for Java options}),
+Chicory (@pxref{Chicory options}) or Kvasir (@pxref{Kvasir options}).
 
 The configuration options are different from the debugging flags
 @option{--debug} and @option{--dbg @var{category}}
@@ -3344,7 +3337,7 @@ The Kvasir front-end for C/C++ binaries has a DynComp mode in which it
 produces a separate @file{.decls} file containing comparability
 information, which must be supplied to Daikon along with the
 @file{.dtrace} file.  For examples of using DynComp with C programs, see
-@ref{Using DynComp with C programs}.  For full details about the DynComp
+@ref{C examples}.  For full details about the DynComp
 tool for C/C++, see @ref{DynComp for C/C++}.
 
 @item
@@ -4460,6 +4453,12 @@ It is built upon the Fjalar dynamic analysis framework for C and C++ programs
 (available at @uref{http://pag.csail.mit.edu/fjalar/}, but already
 included in the Daikon distribution).
 
+While Daikon can be run using only @file{.dtrace} files, it is highly
+recommend that you use the @option{--with-dyncomp} option to run Kvasir
+with DynComp to generate a @file{.decls} file with comparability information
+along with the usual value trace in the @file{.dtrace} file.
+See @ref{DynComp for C/C++} for more details.
+
 To use Kvasir, first compile your program using the DWARF-2 debugging
 format (e.g., supply the @option{-gdwarf-2} option to @command{gcc}) and
 without optimizations (e.g., supply the @option{-O0} option to @command{gcc}).
@@ -4962,7 +4961,11 @@ default. These options are intended mainly for DynComp developers.
 @cindex comparability, for C/C++
 @cindex dynamic comparability, for C/C++
 
-Kvasir comes with the DynComp dynamic comparability analysis tool, which
+While Daikon can be run using only @file{.dtrace} files, it is highly
+recommend that you use the @option{--with-dyncomp} option to run Kvasir
+with DynComp to generate a @file{.decls} file with comparability information
+along with the usual value trace in the @file{.dtrace} file.
+The DynComp dynamic comparability analysis tool
 performs dynamic type inference to group variables at each program point
 into comparability sets.
 (@xref{Program point declarations,,,developer,Daikon Developer Manual},
@@ -7686,12 +7689,13 @@ understand Daikon's operation; @pxref{Daikon debugging options}.
 * Bigger traces cause invariants to appear::
 @end menu
 
+@c set reduced indent for all examples
+@exampleindent 1
 
 @node       Can't run Daikon
 @subsection Can't run Daikon: could not find or load main class, or NoClassDefFoundError
 
 Either of these errors:
-@exampleindent 1
 @example
 Error: Could not find or load main class daikon.Chicory
 Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
@@ -7706,7 +7710,6 @@ More generally, an error such as one of these:
 Error: Could not find or load main class mypackage.MyClass
 Exception in thread "main" java.lang.NoClassDefFoundError: mypackage/MyClass
 @end example
-@exampleindent 4
 
 @noindent
 means that Java did not find the class @file{mypackage.MyClass} on your
@@ -7730,7 +7733,6 @@ If the two commands behave differently, that is a bug in Daikon.
 @subsection File input errors
 @cindex file input errors
 
-@exampleindent 1
 If Daikon terminates with an error such as
 @example
 Error at line 530 in file test.dtrace
@@ -7745,14 +7747,12 @@ the @option{show_stack_trace} option.  The exact syntax for this is:
 @end example
 The additional information in the resulting exception stack trace 
 should indicate where the problem is occurring.
-@exampleindent 4
 
 
 @node       decl format errors
 @subsection decl format errors
 @cindex decl format errors
 
-@exampleindent 1
 If Daikon terminates with an error such as
 @smallexample
 decl format '2.0' does not match previous setting at line 4 in file test.dtrace
@@ -7782,7 +7782,6 @@ described in @ref{Detecting invariants in Java programs}, for example:
 java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
      mypackage.MyClass arg1 arg2 arg3
 @end example
-@exampleindent 4
 
 
 @node       Too much output
@@ -8053,9 +8052,8 @@ run Daikon, then you must separately indicate the amount of memory
 available to Chicory and to Daikon (the latter with Chicory's
 @option{--heap-size} command-line argument).  For example:
 @example
-java -Xmx256m daikon.Chicory --daikon --comparability-file=MyClass.decls-DynComp \
-    --heap-size=1600m \
-    mypackage.MyClass arg1 arg2 arg3
+java -Xmx256m daikon.Chicory --comparability-file=MyClass.decls-DynComp \
+     --heap-size=1600m --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
 
 When using the Java @command{HotSpot} JVM, an additional parameter may need to
