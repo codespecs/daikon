@@ -101,7 +101,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
    * <p>Modifies: none
    *
    * @param includeUnreturnedEnters ensures that any ENTER ppt invocations will definitely have a
-   *     corresponding EXIT ppt invocation following them.
+   *     corresponding EXIT ppt invocation following them
    * @return an ArrayList containing all of the elements of 'enters'. The original order is NOT
    *     guaranteed.
    */

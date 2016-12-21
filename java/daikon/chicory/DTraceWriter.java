@@ -49,7 +49,7 @@ public class DTraceWriter extends DaikonWriter {
   /**
    * Initializes the DTraceWriter
    *
-   * @param writer Stream to write to
+   * @param writer stream to write to
    */
   public DTraceWriter(PrintStream writer) {
     super();

@@ -846,7 +846,7 @@ public final class CLASSNAME
    *  new coefficients if they are relatively close to to the previous
    *  ones.  Kills off the invariant if they are not.
    *
-   *  @return true if the new equation worked, false otherwise.
+   *  @return true if the new equation worked, false otherwise
    */
   public boolean try_new_equation (PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
 

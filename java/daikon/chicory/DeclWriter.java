@@ -56,7 +56,7 @@ public class DeclWriter extends DaikonWriter {
   /**
    * Constructs a DeclWriter, preparing it to receive messages.
    *
-   * @param writer Stream to write to
+   * @param writer stream to write to
    */
   public DeclWriter(PrintStream writer) {
     super();
@@ -68,7 +68,7 @@ public class DeclWriter extends DaikonWriter {
    * Prints header information to the decls file. Should be called once before emitting any other
    * declarations.
    *
-   * @param className Name of the top-level class (used only for printing comments)
+   * @param className name of the top-level class (used only for printing comments)
    */
   public void printHeaderInfo(String className) {
     outFile.println("// Declarations for " + className);
@@ -109,7 +109,7 @@ public class DeclWriter extends DaikonWriter {
    * Prints declarations for all the methods in the indicated class. This method is called in
    * Runtime to print decls info for a class.
    *
-   * @param cinfo Class whose declarations should be printed
+   * @param cinfo class whose declarations should be printed
    */
   public void printDeclClass(ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
     if (Chicory.new_decl_format) {
@@ -245,7 +245,7 @@ public class DeclWriter extends DaikonWriter {
    * Prints declarations for all the methods in the indicated class. This method is called in
    * Runtime to print decls info for a class.
    *
-   * @param cinfo Class whose declarations should be printed
+   * @param cinfo class whose declarations should be printed
    */
   public void print_decl_class(ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
 

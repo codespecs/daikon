@@ -805,7 +805,7 @@ public class NIS {
 
   /**
    * Processes each slice in slice_iterator and fills the specified map with a list of all of the
-   * antecedent invariants for each class. @return the number of false antecedents found.
+   * antecedent invariants for each class. @return the number of false antecedents found
    */
   /*@RequiresNonNull("suppressor_map")*/
   static int find_antecedents(
