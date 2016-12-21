@@ -36,8 +36,6 @@ export pag=${PAG}
 ## Set this directory to the directory containing the JDK.
 export JAVA_HOME=${JAVA_HOME:-/afs/csail/group/pag/software/pkg/jdk}
 
-export PATH=/usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/binaries:$DAIKONDIR/front-end/c
-
 # "source" is a bash, not sh, feature, so use "." instead
 . ${DAIKONDIR}/scripts/daikon.bashrc
 
