@@ -699,11 +699,11 @@ Daikon, @pxref{Front ends (instrumentation)}.
 @node    Detecting invariants in Java programs
 @section Detecting invariants in Java programs
 
-In order to detect invariants in a Java program, first run the
-program using the DynComp front end (@pxref{DynComp for Java}),
-then pass the resulting @file{.decls} file to Chicory
-(@pxref{Chicory}) to create a data trace file.  Finally,
-run Daikon itself to detect invariants.
+In order to detect invariants in a Java program, you will run the program
+twice --- once using DynComp (@pxref{DynComp for Java}) to create a
+@file{.decls} file and once using Chicory (@pxref{Chicory}) to create a
+data trace file.
+Then, run Daikon on the data trace file to detect invariants.
 With the @option{--daikon} option to Chicory, a single command performs
 the last two steps.
 
@@ -822,8 +822,8 @@ would become:
 
 @enumerate 3
 @item
-Run the program under the control of the Chicory front end, including
-comparability information, in order to create a trace file named
+Run the program under the control of the Chicory front end
+in order to create a trace file named
 @file{StackArTester.dtrace.gz}.
 
 @example
@@ -845,9 +845,9 @@ Daikon can analyze multiple runs (executions) of the program.  You can
 supply Daikon with multiple trace files:
 
 @smallexample
-java daikon.Chicory --dtrace-file=StackArTester1.dtrace.gz DataStructures.StackArTester
-java daikon.Chicory --dtrace-file=StackArTester2.dtrace.gz DataStructures.StackArTester
-java daikon.Chicory --dtrace-file=StackArTester3.dtrace.gz DataStructures.StackArTester
+java daikon.Chicory --dtrace-file=StackArTester1.dtrace.gz --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java daikon.Chicory --dtrace-file=StackArTester2.dtrace.gz --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java daikon.Chicory --dtrace-file=StackArTester3.dtrace.gz --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
 java daikon.Daikon StackArTester*.dtrace.gz
 @end smallexample
 
@@ -1014,7 +1014,7 @@ java -cp .:$CLASSPATH daikon.Chicory --daikon \
 
 @end itemize
 
-Alternately, you can split the second command into two parts:
+Alternately, you can split the very last command into two parts:
 
 @itemize
 
@@ -3312,29 +3312,24 @@ Abstract types group variables that are used for related purposes in a
 program.
 For example, suppose that some @code{int} variables in your program
 are array lengths or indices, and other @code{int} variables 
-represent time.  Even thought these variables have the same type
+represent time.  Even though these variables have the same type
 (@code{int}) in the programming language, they have different abstract
 types.
 
 Abstract types can be provided as additional input to Daikon, so that it
 only infers invariants between values of the same abstract type.
-This can improve Daikon's performance, because it reduces the number of
-potential invariants that must be checked, and also improve the
-relevance of its output, since invariants over unrelated variables are
-superfluous for many tasks.
-The Daikon distribution includes a tool named DynComp that dynamically
-infers abstract types (also called comparability types) from program
-executions.
-(In fact, there are two implementations of DynComp that use the same
-algorithm, one for Java programs and one for binaries compiled from C
-and C++ source code.
-When confusion would otherwise arise, we distinguish them as @command{DynCompJ}
-(or DynComp for Java)
-and @command{DynCompB} (or DynComp for C/C++) respectively.)
+This has two benefits:  it improves Daikon's performance because it reduces
+the number of potential invariants that must be checked, and
+it reduces spurious output caused by invariants over unrelated variables.
+You are strongly recommended to supply abstract types when running Daikon;
+Daikon does not produce satisfactory output without abstract type information.
 
 Because abstract type inference must be performed before Daikon runs, it
 is integrated with the front-ends rather than directly as part of
 Daikon.
+The Daikon distribution includes three tools that
+infer abstract types (also called comparability types) from program
+executions.
 
 @itemize
 @item
@@ -9298,7 +9293,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  ifndef preinclude XTerm cl dirname cnt mwdefines url linux von
 @c  LocalWords:  libc Leitner Quinonez Rodric Rabbah DDTRACEAPPEND createItem
 @c  LocalWords:  maxPhase largestlet anag adjacentdups specfirstword DynComp's
-@c  LocalWords:  maxdepthspec DynCompJ DynCompB cset jdk dcomp BuildJDK FIFOs
+@c  LocalWords:  maxdepthspec cset jdk dcomp BuildJDK FIFOs
 @c  LocalWords:  amd Itanium Yuan schoolDays breakDays DCompInstrumented OSTYPE
 @c  LocalWords:  AnnotateNullable instrumenter toolset JHP pm PptMap loophead
 @c  LocalWords:  instrumenters NoSuchMethodException myprogram glibc NonNull XP
