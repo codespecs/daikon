@@ -758,13 +758,12 @@ else
 endif
 endif
 # A TAGS file that does not contain generated files
-tags-sans-generated: clean-generated-files tags
-
 # When doing certain search/replace tasks, it's better to omit generated files
 tags-nogen: tags-without-generated-files
+tags-sans-generated: tags-without-generated-files
 tags-without-generated-files: clean-generated-files
 	@echo etags '*.java ...'
-	@etags --language=java ${TAG_FILES}
+	$(MAKE) tags
 	$(MAKE) compile
 
 

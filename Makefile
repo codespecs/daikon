@@ -320,6 +320,8 @@ nightly-test-except-doc-pdf:
 
 ### Tags
 
+# To make a TAGS table that does not include generated files, run:
+#   make -C java tags-sans-generated
 TAGS: tags
 .PHONY: tags
 tags:
