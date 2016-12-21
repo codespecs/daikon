@@ -7031,6 +7031,7 @@ follow these steps:
 @enumerate
 @item
 Run your application one or more times to create a trace file.
+(It is not necessary to run DynComp.)
 The more thorough your test runs, the larger number of
 @code{@@Nullable} annotations @command{AnnotateNullable} will produce.
 
@@ -8052,7 +8053,8 @@ run Daikon, then you must separately indicate the amount of memory
 available to Chicory and to Daikon (the latter with Chicory's
 @option{--heap-size} command-line argument).  For example:
 @example
-java -Xmx256m daikon.Chicory --daikon --heap-size=1600m \
+java -Xmx256m daikon.Chicory --daikon --comparability-file=MyClass.decls-DynComp \
+    --heap-size=1600m \
     mypackage.MyClass arg1 arg2 arg3
 @end example
 
