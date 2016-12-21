@@ -223,33 +223,12 @@ question will not be answered.
 Shortcut for the impatient:  skip directly to the installation instructions
 for @ref{Unix/Linux/MacOSX installation}, or @ref{Windows installation}.
 
-There are two ways to install Daikon.
-@itemize @bullet
-@item @xref{Complete installation}, for a complete
-installation, in 4 easy steps, that permits you to use all of the
-functionality in the Daikon distribution.
-@item @xref{Version control repository,,,developer,Daikon Developer Manual},
-to obtain the latest Daikon source code from its version control repository.
-@end itemize
-
-Differences from previous versions of Daikon appear
-in the file @url{CHANGES,,@file{doc/CHANGES}} in the distribution.
-To be notified of new releases, or to join discussions about Daikon,
-subscribe to one of the mailing lists (@pxref{Mailing lists}).
-
-
-@menu
-* Complete installation::
-@end menu
-
-
-@node    Complete installation
-@section Complete installation instructions
-
-This section gives step-by-step instructions for installing Daikon.
-
-Here is an overview of the steps.  Details appear below; select the
-instructions for your operating system.
+The main way to install Daikon is from a release, as explained in this
+section.
+(Alternately, 
+@pxref{Version control repository,,,developer,Daikon Developer Manual},
+to obtain the latest Daikon source code from its version control repository.)
+Here is an overview of the steps.
 
 @enumerate
 @item
@@ -266,11 +245,15 @@ Compile Daikon and build other tools.
 
 @end enumerate
 
-@cindex compiling Daikon
-@cindex building Daikon from source
+Details appear below; select the
+instructions for your operating system.
 
-For more complete information on compiling Daikon,
-@pxref{Compiling Daikon,,,developer,Daikon Developer Manual}.
+
+Differences from previous versions of Daikon appear
+in the file @url{CHANGES,,@file{doc/CHANGES}} in the distribution.
+To be notified of new releases, or to join discussions about Daikon,
+subscribe to one of the mailing lists (@pxref{Mailing lists}).
+
 
 @menu
 * Requirements::
@@ -281,18 +264,18 @@ For more complete information on compiling Daikon,
 
 
 @node       Requirements
-@subsection Requirements for running Daikon
+@section    Requirements for running Daikon
 
-In order to run Daikon, you must have a Java 7 (or later) JVM
-(@uref{http://www.oracle.com/technetwork/java/javase/overview/index.html,, Java Virtual Machine}). 
-You must also have a Java 7 (or later) compiler.
+In order to run Daikon, you must have a Java 7 (or later) JDK, including a 
+(@uref{http://www.oracle.com/technetwork/java/javase/overview/index.html,,
+Java Virtual Machine}) and a Java compiler.
 
 @menu
 * Optional requirements::
 @end menu
 
 @node          Optional requirements
-@subsubsection Optional requirements for running Daikon
+@subsection    Optional requirements for running Daikon
 
 All the remaining requirements listed here are optional (they enable you
 to perform certain additional tasks with Daikon).
@@ -313,7 +296,7 @@ If you wish to edit the Daikon source code and re-compile Daikon,
 
 
 @node       Unix/Linux/MacOSX installation
-@subsection Unix/Linux/MacOSX installation
+@section    Unix/Linux/MacOSX installation
 
 @exampleindent 1
 @enumerate
@@ -369,10 +352,10 @@ you from having to edit the main Makefile directly).
 
 @item
 Compile Daikon and build other tools.
-Note that this step is @emph{not} required if you only want to use Daikon
-with its .NET front end (Celeriac).
-This step is required for using
-Daikon with its C/C++ front end (Kvasir), and for other tools such as DynComp.
+@c Note that this step is @emph{not} required if you only want to use Daikon
+@c with its .NET front end (Celeriac).
+@c This step is required for using
+@c Daikon with its C/C++ front end (Kvasir), and for other tools such as DynComp.
 
 @example
 make -C $DAIKONDIR rebuild-everything
@@ -398,7 +381,7 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @exampleindent 4
 
 @node       Windows installation
-@subsection Windows installation
+@section    Windows installation
 
 To perform a complete install on
 Windows, it is necessary to install the Cygwin toolset.
@@ -491,9 +474,9 @@ OSTYPE = cygwin
 
 @item
 Compile Daikon and build other tools.
-Note that this step is @emph{not} required if you only want to use Daikon
-with its .NET front end (Celeriac).
-This step is required for using other tools such as DynComp.
+@c Note that this step is @emph{not} required if you only want to use Daikon
+@c with its .NET front end (Celeriac).
+@c This step is required for using other tools such as DynComp.
 
 @example
 make -C $DAIKONDIR rebuild-everything
@@ -522,7 +505,7 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 
 
 @node       Running Daikon under Windows
-@subsection Running Daikon under Windows
+@section    Running Daikon under Windows
 @cindex Windows
 @cindex Microsoft Windows
 
@@ -559,7 +542,7 @@ Windows applications.
 
 
 @node          Windows command line
-@subsubsection Windows command line
+@subsection    Windows command line
 
 The first option is to run Daikon using native Windows utilities.
 The is done in the normal fashion.  However, getting the correct
@@ -585,7 +568,7 @@ directory and Daikon should start up correctly.
 
 
 @node          Cygwin shell
-@subsubsection Cygwin shell
+@subsection    Cygwin shell
 
 @cindex Cygwin toolset
 
@@ -4211,7 +4194,7 @@ turned on with @option{--abridged-vars}.
 @cindex JDK, instrumented for DynComp
 
 If you did not already do so when installing Daikon
-(@pxref{Complete installation}), follow the instructions here to build an
+(@pxref{Installing Daikon}), follow the instructions here to build an
 instrumented copy of the JDK@.  Use the following command:
 
 @example
@@ -8603,7 +8586,7 @@ Chicory; please report it if it is not already explained in this manual.
 (If the error is ``couldn't find or load main class'' and the
 class that cannot be found is in Chicory itself, then there is not a bug in
 Chicory.  Rather, you have failed to put @file{daikon.jar} on the classpath
-when running Chicory, as described in @ref{Complete installation}.)
+when running Chicory, as described in @ref{Installing Daikon}.)
 @end itemize
 
 
