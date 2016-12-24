@@ -267,32 +267,18 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 @section    Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 7 (or later) JDK, including a 
-(@uref{http://www.oracle.com/technetwork/java/javase/overview/index.html,,
-Java Virtual Machine}) and a Java compiler.
+@uref{http://www.oracle.com/technetwork/java/javase/overview/index.html,,
+Java Virtual Machine} and a Java compiler.
 
-@menu
-* Optional requirements::
-@end menu
-
-@node          Optional requirements
-@subsection    Optional requirements for running Daikon
-
-All the remaining requirements listed here are optional (they enable you
-to perform certain additional tasks with Daikon).
-
-If you plan to use one of Daikon's source-based front ends, 
-then you need a compiler
-for whatever language your target programs are written in.  For
-instance, if you wish to analyze C or C++ programs, you need a C or C++
-compiler such as @command{GCC}.  Source code and a compiler are not necessary if
-you plan to use one of Daikon's front ends that work on binaries, such
-as DynComp (@pxref{DynComp for Java}), Chicory (@pxref{Chicory}) or Kvasir (@pxref{Kvasir}).
+If you wish to analyze C or C++ programs, you need a C or C++
+compiler such as @command{GCC}.
 
 If you wish to edit the Daikon source code and re-compile Daikon, 
 @pxref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 
 
-@c The explicit examples, segregated by OS type, seem necessary for some users.
+@c The explicit installation instructions, segregated by OS type, is
+@c helpful to users.
 
 
 @node       Unix/Linux/MacOSX installation
