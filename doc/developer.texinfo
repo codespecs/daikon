@@ -2334,14 +2334,14 @@ Use JDK@tie{}7 for the release process.
 @item
 Verify that Daikon passes its tests, under both JDK 7 and JDK 8.
 
-For Jenkins, visit each of the following URLs and verify that the job is green:
-@* @url{http://tern.cs.washington.edu:8080/job/daikon/}
+@c For Jenkins, visit each of the following URLs and verify that the job is green:
+@c @* @url{http://tern.cs.washington.edu:8080/job/daikon/}
 @c There is no Fjalar job on Jenkins.  The Fjalar tests fail on
 @c tern.cs.washington.edu, which runs Jenkins, because tern uses a
 @c different version of the C runtime.  Eventually, make Fjalar work
 @c consistently across all versions of the C runtime.
 @c @* @url{http://tern.cs.washington.edu:8080/job/fjalar/}
-@* @url{http://tern.cs.washington.edu:8080/job/daikon-typecheck/}
+@c @* @url{http://tern.cs.washington.edu:8080/job/daikon-typecheck/}
 
 For Travis CI,
 all of the following jobs should be green:
