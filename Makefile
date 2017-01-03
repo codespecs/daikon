@@ -168,7 +168,7 @@ help:
 
 compile: compile-java
 
-compile-java: git-hooks
+compile-java:
 	cd java && $(MAKE) all
 
 very-clean:
