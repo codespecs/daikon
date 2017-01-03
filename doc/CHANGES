@@ -20,6 +20,24 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.4.6 (January 3, 2017)
+
+The changes in this release reflect an increased emphasis on using the
+DynComp tool for both Java and C/C++.
+
+Daikon:
+- Several improvements to the DynComp for Java tool, including:
+  - support for multi-threaded programs
+  - improved support for user programs that throw exceptions
+  - recover gracefully from methods too large to instrument
+
+Documentation:
+- Simplified and improved the Installation chapter of the User Guide.
+- Modified the Example usage chapter of the User Guide to more accurately
+  describe the tool options and expected outputs.
+
+===========================================================================
+
 5.4.4 (December 2, 2016)
 
 - Fixed calculation of a class's fields to include fields of its superclass(es).
