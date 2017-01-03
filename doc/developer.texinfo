@@ -181,7 +181,7 @@ For more information about compiling Daikon, see the comments in the Makefiles.
 When you compile Daikon, environment variables @env{DAIKONDIR}
 and @env{JAVA_HOME} must be set.
 See the installation instructions
-(@ref{Complete installation,,,daikon,Daikon User Manual}) for details.
+(@ref{Installing Daikon,,,daikon,Daikon User Manual}) for details.
 Thus, a complete @file{.bashrc} or @file{.bash_profile} shell setup file
 (for Fedora or Ubuntu)
 that would enable you to compile Daikon might look like the following:
