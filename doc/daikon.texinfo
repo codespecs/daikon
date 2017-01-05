@@ -1038,8 +1038,7 @@ java daikon.Daikon QueueArTester.dtrace.gz
 In order to detect invariants over C or C++ programs, you must first install
 a C/C++ front end (instrumenter).  We recommend that you use Kvasir (@pxref{Kvasir}),
 and this section gives examples using Kvasir.
-It is also strongly recommend that you use the DynComp tool
-(via the @option{--with-dyncomp} option to Kvasir)
+By default, Kvasir also runs the DynComp tool
 to improve Daikon's output.
 
 DynComp can help to filter Daikon's output by omitting invariants
@@ -1053,7 +1052,7 @@ To use the C/C++ front end Kvasir with your program, first make sure that
 your program has been compiled with DWARF-2 format debugging
 information, such as by giving the @option{-gdwarf-2} flag to @command{GCC} when
 compiling.  Then, run your program as usual, but prepend
-@command{kvasir-dtrace} @option{--with-dyncomp} to the command line.
+@command{kvasir-dtrace} to the command line.
 
 Kvasir will produce two output files:
 a @file{.dtrace} file containing a trace of a particular execution,
@@ -1117,11 +1116,10 @@ containing code you wish to see invariants about.
 
 @item
 Run the program just as you normally would, but prepend
-@command{kvasir-dtrace} @option{--with-dyncomp} to the command line.
+@command{kvasir-dtrace} to the command line.
 
 @example
-kvasir-dtrace --with-dyncomp \
-   ./wordplay -f words.txt 'Daikon Dynamic Invariant Detector'
+kvasir-dtrace ./wordplay -f words.txt 'Daikon Dynamic Invariant Detector'
 @end example
 
 @noindent
@@ -1164,27 +1162,30 @@ Daikon can analyze multiple runs (executions) of the program.  You can
 supply Daikon with multiple trace files:
 
 @smallexample
-kvasir-dtrace --with-dyncomp --dtrace-file=daikon-output/wordplay1.dtrace \
+kvasir-dtrace --dtrace-file=daikon-output/wordplay1.dtrace \
     ./wordplay -f words.txt 'daikon dynamic invariant detector'
-kvasir-dtrace --dtrace-file=daikon-output/wordplay2.dtrace \
+kvasir-dtrace --no-with-dyncomp --dtrace-file=daikon-output/wordplay2.dtrace \
     ./wordplay -f words.txt 'better results from multiple runs'
-kvasir-dtrace --dtrace-file=daikon-output/wordplay3.dtrace \
+kvasir-dtrace --no-with-dyncomp --dtrace-file=daikon-output/wordplay3.dtrace \
     ./wordplay -f words.txt 'more testing equals better testing'
 java -Xmx256m daikon.Daikon daikon-output/wordplay*.dtrace daikon-output/wordplay.decls
 @end smallexample
 
 @noindent
-Note that you need only specify @option{--with-dyncomp} once, this
-information does not vary from run to run.
+Note that the DynComp @file{.decls} information does not vary from run to run.
+Thus you may specify @option{--no-with-dyncomp} on subsequent runs to improve
+performance.
 
 Alternatively, you can append information from multiple runs in a single trace file:
 
 @smallexample
-kvasir-dtrace --with-dyncomp --dtrace-file=daikon-output/wordplay-all.dtrace \
+kvasir-dtrace --dtrace-file=daikon-output/wordplay-all.dtrace \
     ./wordplay -f words.txt 'daikon dynamic invariant detector'
-kvasir-dtrace --dtrace-append --dtrace-file=daikon-output/wordplay-all.dtrace \
+kvasir-dtrace --no-with-dyncomp --dtrace-append \
+    --dtrace-file=daikon-output/wordplay-all.dtrace \
     ./wordplay -f words.txt 'better results from multiple runs'
-kvasir-dtrace --dtrace-append --dtrace-file=daikon-output/wordplay-all.dtrace \
+kvasir-dtrace --no-with-dyncomp --dtrace-append \
+    --dtrace-file=daikon-output/wordplay-all.dtrace \
     ./wordplay -f words.txt 'more testing equals better testing'
 java -Xmx256m daikon.Daikon daikon-output/wordplay-all.dtrace daikon-output/wordplay.decls
 @end smallexample
@@ -4439,9 +4440,8 @@ It is built upon the Fjalar dynamic analysis framework for C and C++ programs
 (available at @uref{http://pag.csail.mit.edu/fjalar/}, but already
 included in the Daikon distribution).
 
-While Daikon can be run using only @file{.dtrace} files, it is highly
-recommend that you use the @option{--with-dyncomp} option to run Kvasir
-with DynComp to generate a @file{.decls} file with comparability information
+While Daikon can be run using only @file{.dtrace} files, the default behavior of
+Kvasir is to run with DynComp to generate a @file{.decls} file with comparability information
 along with the usual value trace in the @file{.dtrace} file.
 See @ref{DynComp for C/C++} for more details.
 
@@ -4657,8 +4657,8 @@ in the program to the specified file.  An edited version of this file can
 then be used with the @option{--ppt-list-file} (respectively
 @option{--var-list-file}) option
 (@pxref{Tracing only part of a program}).
-Note: Do not use these options with the
-@option{--with-dyncomp} option because the behavior is undefined.
+Note: You must use these options with the
+@option{--no-with-dyncomp} option because otherwise, the behavior is undefined.
 Running Kvasir with these
 options will initialize but not actually execute the target program, so
 the dynamic comparability analysis cannot be performed in the first
@@ -4807,7 +4807,8 @@ of pointer fields which all refer to one element.
 
 Run Kvasir with the DynComp dynamic
 comparability analysis tool to determine which variables have the same
-abstract type.
+abstract type.  (This is the default behavior for Kvasir and it is not
+necessary to specify this option.)
 Variable comparability information can
 improve the performance of Daikon and allow it to generate a more
 focused and relevant set of invariants.
@@ -4822,6 +4823,11 @@ This file must be provided to Daikon along with the @file{.dtrace}
 file.
 This option may also be used with @option{--decls-only} to only generate
 a @file{.decls} file without a @file{.dtrace}.
+
+Note that if you are running multiple runs (executions) of your
+test program you may use @option{--no-with-dyncomp} on the second and
+subsequent runs to reduce the time required to generate the @file{.trace}
+file(s).
 
 @item --dyncomp-interactions=all
 @item --dyncomp-interactions=units
@@ -4947,9 +4953,8 @@ default. These options are intended mainly for DynComp developers.
 @cindex comparability, for C/C++
 @cindex dynamic comparability, for C/C++
 
-While Daikon can be run using only @file{.dtrace} files, it is highly
-recommend that you use the @option{--with-dyncomp} option to run Kvasir
-with DynComp to generate a @file{.decls} file with comparability information
+While Daikon can be run using only @file{.dtrace} files, the default behavior of
+Kvasir is to run with DynComp to generate a @file{.decls} file with comparability information
 along with the usual value trace in the @file{.dtrace} file.
 The DynComp dynamic comparability analysis tool
 performs dynamic type inference to group variables at each program point
@@ -4999,7 +5004,7 @@ relate variables which conceptually represent different types (e.g., an
 invariant such as @code{winterDays < year} is true but meaningless
 because days and years are not comparable).
 
-Use the @option{--with-dyncomp} option to run Kvasir with DynComp to
+By default, Kvasir runs with DynComp to
 generate a @file{.decls} file with comparability information along with
 the usual value trace in the @file{.dtrace} file.  Using
 @option{--decls-only} will only generate the @file{.decls} file without
@@ -5872,8 +5877,8 @@ two different terminals.
 @node          Online execution with DynComp for C/C++
 @subsubsection Online execution with DynComp for C/C++
 
-When running Kvasir with DynComp (using the @option{--with-dyncomp}
-option), Kvasir generates the @file{.decls} file after it generates the @file{.dtrace}
+When running Kvasir with DynComp (the default),
+Kvasir generates the @file{.decls} file after it generates the @file{.dtrace}
 file, so it is not possible to perform online execution using one run.
 The recommended way to perform online execution with DynComp is to run
 it once and only generate a @file{.decls} file with comparability information,
@@ -5881,7 +5886,7 @@ then run Kvasir again without DynComp and pipe the @file{.dtrace} data directly
 into Daikon while using the @file{.decls} file generated from the previous run:
 
 @example
-kvasir-dtrace --with-dyncomp --decls-only ./foo
+kvasir-dtrace --decls-only ./foo
 @end example
 
 @noindent
@@ -5889,8 +5894,8 @@ This should generate a @file{.decls} file with comparability information
 named @file{daikon-@/output/@/foo.decls}.
 
 @example
-kvasir-dtrace --dtrace-no-decls --dtrace-file=- ./foo \
-    | java daikon.Daikon daikon-output/foo.decls -
+kvasir-dtrace --no-with-dyncomp --dtrace-no-decls --dtrace-file=- \
+    ./foo | java daikon.Daikon daikon-output/foo.decls -
 @end example
 
 When you run Kvasir the second time, you don't need to run DynComp
@@ -7754,8 +7759,7 @@ The most probable cause is you are using at least one Java DynComp
 generated @file{.decls} file
 (which defaults to version 1) and at least one @file{.dtrace} file (which
 defaults to version 2) as input to Daikon.
-(Note that the C/C++ front end Kvasir generates a version 2 file @file{.decls}
-with the option @option{--with-dyncomp}.)
+(Note that the C/C++ front end Kvasir generates a version 2 file @file{.decls}.)
 The way to 
 avoid this problem is to use your Java DynComp generated @file{.decls} files
 as input to Chicory. The resulting @file{.dtrace} file will contain the
