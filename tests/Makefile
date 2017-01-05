@@ -71,7 +71,7 @@ parser-tests:
 .PHONY: parser-tests
 
 dyncomp-tests:
-	$(MAKE) -C dyncomp-tests all-tests
+	$(MAKE) -C dyncomp-tests regression-tests
 .PHONY: dyncomp-tests
 
 clean:
