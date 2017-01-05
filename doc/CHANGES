@@ -20,6 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.5.0 (February 2017)
+
+Kvasir:
+- --with-daikon is now the default, use --no-with-daikon to turn off
+
+DynComp:
+- --no-cset-file option has been removed, this is now the default
+
+===========================================================================
+
 5.4.6 (January 3, 2017)
 
 The changes in this release reflect an increased emphasis on using the
