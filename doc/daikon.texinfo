@@ -772,8 +772,7 @@ Run the program under the control of DynComp to generate comparability
 information in the file @file{StackArTester.decls-DynComp}.
 
 @example
-java -cp .:$CLASSPATH daikon.DynComp --no-cset-file \
-     DataStructures.StackArTester
+java -cp .:$CLASSPATH daikon.DynComp DataStructures.StackArTester
 @end example
 
 @noindent
@@ -782,7 +781,7 @@ line for now --- but don't forget to set it later.
 
 @exampleindent 0
 @smallexample
-java -cp "../../../daikon.jar:." daikon.DynComp --no-cset-file DataStructures.StackArTester
+java -cp "../../../daikon.jar:." daikon.DynComp DataStructures.StackArTester
 @end smallexample
 @exampleindent 1
 
@@ -1001,8 +1000,7 @@ javac -g DataStructures/*.java
 
 @item Trace file generation and invariant detection
 @example
-java -cp .:$CLASSPATH daikon.DynComp --no-cset-file \
-     DataStructures.QueueArTester
+java -cp .:$CLASSPATH daikon.DynComp DataStructures.QueueArTester
 java -cp .:$CLASSPATH daikon.Chicory --daikon \
      --comparability-file=QueueArTester.decls-DynComp \
      DataStructures.QueueArTester
@@ -4256,14 +4254,10 @@ working directory.
 Output filename for @file{.decls} file suitable for input to Daikon.  Defaults to
 @file{@var{target_program}.decls-DynComp}.
 
-@item --no-cset-file
-When this switch is on, output of the @file{cset} file is suppressed.
-
 @item --compare-sets-file=@var{file}
 Output filename for a more easily human-readable file summarizing
-comparability sets.  The default behavior is to print to standard
-output.  This switch has no effect if @option{--no-cset-file} is specified
-on the command line.
+comparability sets.
+This switch has no effect if @var{file} is not specified.
 
 @item --trace-sets-file=@var{file}
 Output filename for a human-readable file showing some of the interactions

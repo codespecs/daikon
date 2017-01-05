@@ -187,31 +187,22 @@ public class Premain {
       }
 
       // If requested, write the comparability data to a file
-      if (!DynComp.no_cset_file) {
-        if (DynComp.compare_sets_file != null) {
-          if (DynComp.verbose) {
-            System.out.println("Writing comparability sets to " + DynComp.compare_sets_file);
-          }
-          assert DynComp.compare_sets_file != null
-              : "@AssumeAssertion(nullness): limited side effects don't change this field";
-          PrintWriter compare_out = open(DynComp.compare_sets_file);
-          Stopwatch watch = new Stopwatch();
-          if (DynComp.no_primitives) {
-            DCRuntime.print_all_comparable_refs_only(compare_out);
-          } else {
-            DCRuntime.print_all_comparable(compare_out);
-          }
-          compare_out.close();
-          if (DynComp.verbose) {
-            System.out.printf("Comparability sets written in %s%n", watch.format());
-          }
+      if (DynComp.compare_sets_file != null) {
+        if (DynComp.verbose) {
+          System.out.println("Writing comparability sets to " + DynComp.compare_sets_file);
+        }
+        assert DynComp.compare_sets_file != null
+            : "@AssumeAssertion(nullness): limited side effects don't change this field";
+        PrintWriter compare_out = open(DynComp.compare_sets_file);
+        Stopwatch watch = new Stopwatch();
+        if (DynComp.no_primitives) {
+          DCRuntime.print_all_comparable_refs_only(compare_out);
         } else {
-          System.out.println("Writing comparability sets to standard output");
-          if (DynComp.no_primitives) {
-            DCRuntime.print_all_comparable_refs_only(new PrintWriter(System.out, true));
-          } else {
-            DCRuntime.print_all_comparable(new PrintWriter(System.out, true));
-          }
+          DCRuntime.print_all_comparable(compare_out);
+        }
+        compare_out.close();
+        if (DynComp.verbose) {
+          System.out.printf("Comparability sets written in %s%n", watch.format());
         }
       }
 

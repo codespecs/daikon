@@ -33,9 +33,6 @@ public class DynComp {
   @Option("-f Output filename for Daikon decl file")
   public static /*@Nullable*/ String decl_file = null;
 
-  @Option("Don't output a comparability sets file")
-  public static boolean no_cset_file = false;
-
   @Option("Output file for comparability sets")
   // If null, do no output
   public static /*@Nullable*/ File compare_sets_file = null;
