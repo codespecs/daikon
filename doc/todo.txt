@@ -61,7 +61,8 @@ Testing/Validation
 
 Documentation
 
-  - The JDK8 javadoc produces hundreds of warnings. A primary cause in that
+  - When running Javadoc on the Daikon source code, the JDK8 version of
+    javadoc produces hundreds of warnings. A primary cause in that
     method @param and @return tags are now required.  To correct them all at
     once would be too large a task with too little concrete benefit.
     Whenever we edit a file/method for some other reason, we should ensure
