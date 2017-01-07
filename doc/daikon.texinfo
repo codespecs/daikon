@@ -776,7 +776,7 @@ java -cp .:$CLASSPATH daikon.DynComp DataStructures.StackArTester
 @end example
 
 @noindent
-If you have not set the CLASSPATH as yet, you may add it to the command
+If you have not yet set the CLASSPATH, you may add it to the command
 line for now --- but don't forget to set it later.
 
 @exampleindent 0
@@ -1037,14 +1037,8 @@ In order to detect invariants over C or C++ programs, you must first install
 a C/C++ front end (instrumenter).  We recommend that you use Kvasir (@pxref{Kvasir}),
 and this section gives examples using Kvasir.
 By default, Kvasir also runs the DynComp tool
-to improve Daikon's output.
-
-DynComp can help to filter Daikon's output by omitting invariants
+to improve Daikon's performance and Daikon's output by filtering out invariants
 involving unrelated variables (see @ref{DynComp for C/C++}).
-DynComp uses a dynamic analysis to infer which program variables can
-meaningfully be used together; Daikon can then use this information to
-restrict the invariants it considers, potentially improving both its
-performance and the usefulness of its results.
 
 To use the C/C++ front end Kvasir with your program, first make sure that
 your program has been compiled with DWARF-2 format debugging
@@ -1057,7 +1051,7 @@ a @file{.dtrace} file containing a trace of a particular execution,
 and a @file{.decls} file that contains
 information about what variables and functions exist in a program, along
 with information grouping the variables into abstract types.
-Both of these files must be supplied to Daikon.
+You will supply both of these files to Daikon.
 
 For more information about Kvasir, including more detailed
 documentation on its command-line options, see @ref{Kvasir}.
@@ -3289,22 +3283,22 @@ of the samples but not over the entire data set.
 Abstract types group variables that are used for related purposes in a
 program.
 For example, suppose that some @code{int} variables in your program
-are array lengths or indices, and other @code{int} variables 
+are array indices, and other @code{int} variables 
 represent time.  Even though these variables have the same type
 (@code{int}) in the programming language, they have different abstract
 types.
 
-Abstract types can be provided as additional input to Daikon, so that it
+Abstract types can be provided as input to Daikon, so that it
 only infers invariants between values of the same abstract type.
-This has two benefits:  it improves Daikon's performance because it reduces
-the number of potential invariants that must be checked, and
-it reduces spurious output caused by invariants over unrelated variables.
+This has two benefits.
+First, it improves Daikon's performance, often by over an order of magnitude,
+because it reduces
+the number of potential invariants that must be checked.
+Second, it reduces spurious output caused by invariants over unrelated variables.
 You are strongly recommended to supply abstract types when running Daikon;
 Daikon does not produce satisfactory output without abstract type information.
 
-Because abstract type inference must be performed before Daikon runs, it
-is integrated with the front-ends rather than directly as part of
-Daikon.
+Abstract type inference is performed by the front-ends, before Daikon runs.
 The Daikon distribution includes three tools that
 infer abstract types (also called comparability types) from program
 executions.
@@ -3318,7 +3312,7 @@ full details about the DynComp tool for Java, see @ref{DynComp for
 Java}.
 
 @item
-The Kvasir front-end for C/C++ binaries has a DynComp mode in which it
+The Kvasir front-end for C/C++ binaries by default uses a DynComp mode in which it
 produces a separate @file{.decls} file containing comparability
 information, which must be supplied to Daikon along with the
 @file{.dtrace} file.  For examples of using DynComp with C programs, see
@@ -3927,7 +3921,7 @@ recommend that DynComp be run prior to Chicory.
 The DynComp dynamic comparability analysis tool performs dynamic type
 inference to group variables at each program point into comparability sets
 (see @ref{Program point declarations,,,developer,Daikon Developer Manual}
-for the numeric representation format of these sets.)  All variables in each
+for the file representation of these sets).  All variables in each
 comparability set belong to the same ``abstract type'' of data that the
 programmer likely intended to represent, which is a richer set of types
 than the few basic declared types (e.g., int, float) provided by the
@@ -3942,10 +3936,6 @@ Second, many of those invariants are true but meaningless because they
 relate variables which conceptually represent different types (e.g., an
 invariant such as @code{winterDays < year} is true but meaningless
 because days and years are not comparable).
-
-It should be noted that the performance of Daikon with and without the
-use of DynComp can be significant. A 10-30X improvement in the running
-time of Daikon is typical.
 
 Consider the example below:
 
@@ -4003,10 +3993,8 @@ java daikon.DynComp mypackage.MyClass arg1 arg2 arg3
 
 @noindent
 This runs your program and creates the file @file{MyClass.decls-DynComp}
-in the current directory.  DynComp also creates @file{MyClass.txt-cset},
-which contains the same information and a further level of detail in an
-easier-to-read format.  The @file{.decls-DynComp} file may be passed to Chicory,
-as described in @ref{Detecting invariants in Java programs}.
+in the current directory.  The @file{.decls-DynComp} file may be passed to
+Chicory, as described in @ref{Detecting invariants in Java programs}.
 
 @example
 java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
@@ -4016,12 +4004,7 @@ java daikon.Chicory --comparability-file=MyClass.decls-DynComp \
 @noindent
 See below for more options.
 
-While you may run DynComp with the standard JDK, using the
-@option{--no-jdk} switch, you can obtain more accurate results by using a
-copy of the JDK that has been instrumented with DynComp.  See
-@ref{Instrumenting the JDK with DynComp}, below, for instructions.
-
-This is part of a sample @file{.decls} file generated by running DynComp on the example above:
+Here is part of a sample @file{.decls} file generated by running DynComp on the example above:
 
 @example
 DECLARE
@@ -4063,7 +4046,7 @@ int
 The declaration file format is described in
 @ref{Program point declarations,,,developer,Daikon Developer Manual}.
 
-DynComp creates two representations of the comparability information in
+DynComp optionally creates two representations of the comparability information in
 the files @file{foo.txt-cset} and @file{foo.txt-trace}.  In the @file{cset}
 file, DynComp outputs comparability sets as sets.  The above @file{.decls}
 output corresponds to the following in @file{cset}:
@@ -4256,12 +4239,12 @@ Output filename for @file{.decls} file suitable for input to Daikon.  Defaults t
 
 @item --compare-sets-file=@var{file}
 Output filename for a more easily human-readable file summarizing
-comparability sets.
+comparability sets.  The file is intended primarily for debugging.
 This switch has no effect if @var{file} is not specified.
 
 @item --trace-sets-file=@var{file}
-Output filename for a human-readable file showing some of the interactions
-that occurred.  Default behavior is to not create the file.
+If specified, write a human-readable file showing some of the interactions
+that occurred.  The file is intended primarily for debugging.
 
 @item --trace-line-depth=@var{n}
 Controls size of the stack displayed in tracing the interactions that
@@ -4309,10 +4292,11 @@ ignored.  Using this switch can greatly improve DynComp's runtime if
 you are not interested in primitive values.
 
 @item --no-jdk
-When this switch is on, DynComp runs with an uninstrumented JDK, and the
-@option{--rt-file} switch is ignored.
+Run DynComp with an uninstrumented JDK, instead of with a
+copy of the JDK that has been instrumented with DynComp.
+This yields less accurate results.
 
-@item --rt-file
+@item --rt-file=@var{jdk-jar-file}
 Specifies the location of the instrumented JDK (see @ref{Instrumenting
 the JDK with DynComp}).  This option is rarely necessary, because
 if @option{--rt-file} is not specified, DynComp
@@ -4433,11 +4417,6 @@ runtime.  Kvasir is named after the Norse god of knowledge and beet juice.
 It is built upon the Fjalar dynamic analysis framework for C and C++ programs
 (available at @uref{http://pag.csail.mit.edu/fjalar/}, but already
 included in the Daikon distribution).
-
-While Daikon can be run using only @file{.dtrace} files, the default behavior of
-Kvasir is to run with DynComp to generate a @file{.decls} file with comparability information
-along with the usual value trace in the @file{.dtrace} file.
-See @ref{DynComp for C/C++} for more details.
 
 To use Kvasir, first compile your program using the DWARF-2 debugging
 format (e.g., supply the @option{-gdwarf-2} option to @command{gcc}) and
@@ -4803,9 +4782,9 @@ Run Kvasir with the DynComp dynamic
 comparability analysis tool to determine which variables have the same
 abstract type.  (This is the default behavior for Kvasir and it is not
 necessary to specify this option.)
-Variable comparability information can
-improve the performance of Daikon and allow it to generate a more
-focused and relevant set of invariants.
+Variable comparability information
+improves the performance of Daikon and
+improves Daikon's output by filtering out irrelevant invariants.
 Because it is not available until the end of execution, comparability
 information is always written to a separate @file{.decls} file (in the
 format specified in the
@@ -4947,15 +4926,18 @@ default. These options are intended mainly for DynComp developers.
 @cindex comparability, for C/C++
 @cindex dynamic comparability, for C/C++
 
-While Daikon can be run using only @file{.dtrace} files, the default behavior of
-Kvasir is to run with DynComp to generate a @file{.decls} file with comparability information
-along with the usual value trace in the @file{.dtrace} file.
+By default, Kvasir outputs both a @file{.dtrace} file that contains value
+traces, and a @file{.decls} file with variable comparability information
+that was produced by the DynComp tool.  You can run Daikon on just the
+@file{.dtrace} file without the DynComp variable comparability information,
+but doing so is strongly discouraged.
+
 The DynComp dynamic comparability analysis tool
 performs dynamic type inference to group variables at each program point
 into comparability sets.
 (@xref{Program point declarations,,,developer,Daikon Developer Manual},
 for the
-numeric representation format of these sets.)  All variables in each
+file representation format of these sets.)  All variables in each
 comparability set belong to the same ``abstract type'' of data that the
 programmer likely intended to represent, which is a richer set of types
 than the few basic declared types (e.g., int, float) provided by the
@@ -5010,9 +4992,10 @@ the only time saved is I/O time).
 @c don't see how to do that in Texinfo.
 Other DynComp options are listed in the @ref{Kvasir options} section.
 Running Kvasir with DynComp takes
-more memory and longer time than running Kvasir alone, but remember that
-DynComp only needs to be run once to generate a @file{.decls} file with
-comparability information.  That one file can be passed into Daikon along
+more memory and longer time than Kvasir without DynComp, but Daikon will
+run faster and produce better output.  Furthermore, it is possible to run
+DynComp only once to generate a @file{.decls} file with
+comparability information, and pass that one file into Daikon along
 with many different @file{.dtrace} files generated during subsequent
 Kvasir runs without DynComp.
 
@@ -7749,13 +7732,13 @@ and they are not all in the same format.
 (See @ref{Declaration version,,,developer,Daikon Developer Manual}
 for information about how to determine a data file's format.)
 
-The most probable cause is you are using at least one Java DynComp
-generated @file{.decls} file
+The most probable cause is you are using at least one
+Java-DynComp-generated @file{.decls} file
 (which defaults to version 1) and at least one @file{.dtrace} file (which
 defaults to version 2) as input to Daikon.
 (Note that the C/C++ front end Kvasir generates a version 2 file @file{.decls}.)
 The way to 
-avoid this problem is to use your Java DynComp generated @file{.decls} files
+avoid this problem is to use your Java-DynComp-generated @file{.decls} files
 as input to Chicory. The resulting @file{.dtrace} file will contain the
 comparability values from the @file{.decls} file(s) and can then be used
 as input to Daikon.
@@ -8190,9 +8173,7 @@ If Daikon runs slowly, there are three general possible reasons:
 @itemize
 @item
 You did not use the DynComp tool to generate comparability sets.
-The performance of Daikon with and without the
-use of DynComp can be significant. A 10-30X improvement in the running
-time of Daikon is typical.
+Without DynComp, Daikon typically runs more than an order of magnitude slower.
 
 @item
 The front end, such as DynComp or Chicory, took a long time to collect, then output,
@@ -9277,7 +9258,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  ifndef preinclude XTerm cl dirname cnt mwdefines url linux von
 @c  LocalWords:  libc Leitner Quinonez Rodric Rabbah DDTRACEAPPEND createItem
 @c  LocalWords:  maxPhase largestlet anag adjacentdups specfirstword DynComp's
-@c  LocalWords:  maxdepthspec cset jdk dcomp BuildJDK FIFOs
+@c  LocalWords:  maxdepthspec cset jdk dcomp BuildJDK FIFOs EXIT75 clinit
 @c  LocalWords:  amd Itanium Yuan schoolDays breakDays DCompInstrumented OSTYPE
 @c  LocalWords:  AnnotateNullable instrumenter toolset JHP pm PptMap loophead
 @c  LocalWords:  instrumenters NoSuchMethodException myprogram glibc NonNull XP
@@ -9298,11 +9279,12 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  I' C' S' A' P' superclasses vv1 bzip2 Xmx512m bfd dev ABI
 @c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
 @c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
-@c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak
+@c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak Udon
 @c  LocalWords:  Drager MacOSX I1 I2 invSortComparator1 invSortComparator2
 @c  LocalWords:  Myprog2 isDaikonInstrumented getDaikonInvariants GeoPoint
 @c  LocalWords:  valid'' deserializing declsfiles1 dtracefile1 declsfiles2
 @c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx2048m ps1
 @c  LocalWords:  LIB2 CVC4 unformattable LinkageError SquarePanel Donohue
 @c  LocalWords:  SecurityManager setSecurityManager omitpattern Software''
-@c  LocalWords:  MyProblemMethod Liu Galeotti Mangala Gowri ABB
+@c  LocalWords:  MyProblemMethod Liu Galeotti Mangala Gowri ABB LVTT LVT
+@c  LocalWords:  ClassFormatError javautil ArrayList17
