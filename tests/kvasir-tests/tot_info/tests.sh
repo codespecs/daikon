@@ -1,2 +1,2 @@
---decls-file=daikon-output/tot_info.decls --no-with-dyncomp ./tot_info < tst45
---decls-only --with-dyncomp --decls-file=daikon-output/tot_info.dyncomp.decls --dyncomp-gc-num-tags=0 ./tot_info < tst45
+--decls-file=daikon-output/tot_info.decls --no-dyncomp ./tot_info < tst45
+--decls-only --dyncomp --decls-file=daikon-output/tot_info.dyncomp.decls --dyncomp-gc-num-tags=0 ./tot_info < tst45

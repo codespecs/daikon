@@ -15,8 +15,8 @@ CFLAGS += -fno-stack-protector
 VALGRIND = ${DAIKONDIR}/fjalar/valgrind/inst/bin/valgrind
 KVASIR_SKIN = ${DAIKONDIR}/fjalar/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux
 KVASIR_SCRIPT = ${DAIKONDIR}/scripts/kvasir-dtrace
-# --with-dyncomp is now the default; turn back off to minimize changes to this Makefile
-KVASIR_OPTIONS := $(KVASIR_OPTIONS) --no-with-dyncomp
+# --dyncomp is now the default; turn back off to minimize changes to this Makefile
+KVASIR_OPTIONS := $(KVASIR_OPTIONS) --no-dyncomp
 KVASIR_DECLS_2 := $(KVASIR_DECLS_@)
 CLEAN_OUTPUT := ../clean-output.pl
 CLEAN_DECLS := ../clean-decls.pl
@@ -150,7 +150,7 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 	$(BEFORE_RUN)
 	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls --dtrace-file=daikon-output/$(NAME).dtrace --dtrace-append ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --with-dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -170,7 +170,7 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 	$(BEFORE_RUN)
 	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --with-dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -193,7 +193,7 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
 	perl -i $(CLEAN_DECLS) $(NAME).counts
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --with-dyncomp --decls-only --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dyncomp --decls-only --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
 	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).dyncomp.decls
 	$(DECLS_2_COMP) daikon-output/$(NAME).dyncomp.decls > $(NAME).comp
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
@@ -338,5 +338,5 @@ $(VALGRIND):
 
 trace: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --with-dyncomp --decls-only --dyncomp-trace --no-var-leader --no-val-leader --no-path-compression ./$(NAME) $(PROGRAM_ARGS) 2>&1 | ${DAIKONDIR}/scripts/merge_tracker.py - $(NAME).db
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dyncomp --decls-only --dyncomp-trace --no-var-leader --no-val-leader --no-path-compression ./$(NAME) $(PROGRAM_ARGS) 2>&1 | ${DAIKONDIR}/scripts/merge_tracker.py - $(NAME).db
 	$(AFTER_RUN)
