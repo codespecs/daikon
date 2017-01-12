@@ -46,7 +46,7 @@ public class Instrument implements ClassFileTransformer {
     if (Premain.in_shutdown) return null;
 
     // If already instrumented, nothing to do
-    // (This set will be empty if --no-jdk)
+    // (This set will be empty if --no-jdk or --rt-file=NONE)
     if (Premain.pre_instrumented.contains(className)) {
       return null;
     }

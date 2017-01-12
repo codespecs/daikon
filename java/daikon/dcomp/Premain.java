@@ -49,11 +49,17 @@ public class Premain {
 
   public static void premain(String agentArgs, Instrumentation inst) throws IOException {
 
+    // Because DynComp started Premain in a separate process, we must rescan
+    // the options to setup the DynComp static variables.
     Options options = new Options(DynComp.usage_synopsis, DynComp.class, Premain.class);
     String[] args = options.parse_or_usage(agentArgs.split("  *"));
     if (args.length > 0) {
       options.print_usage("Unexpected argument %s", args[0]);
       System.exit(-1);
+    }
+    if (DynComp.rt_file != null && DynComp.rt_file.getName().equalsIgnoreCase("NONE")) {
+      DynComp.no_jdk = true;
+      DynComp.rt_file = null;
     }
 
     DaikonVariableInfo.std_visibility = DynComp.std_visibility;
@@ -187,13 +193,13 @@ public class Premain {
       }
 
       // If requested, write the comparability data to a file
-      if (DynComp.compare_sets_file != null) {
+      if (DynComp.comparability_file != null) {
         if (DynComp.verbose) {
-          System.out.println("Writing comparability sets to " + DynComp.compare_sets_file);
+          System.out.println("Writing comparability sets to " + DynComp.comparability_file);
         }
-        assert DynComp.compare_sets_file != null
+        assert DynComp.comparability_file != null
             : "@AssumeAssertion(nullness): limited side effects don't change this field";
-        PrintWriter compare_out = open(DynComp.compare_sets_file);
+        PrintWriter compare_out = open(DynComp.comparability_file);
         Stopwatch watch = new Stopwatch();
         if (DynComp.no_primitives) {
           DCRuntime.print_all_comparable_refs_only(compare_out);
@@ -206,13 +212,13 @@ public class Premain {
         }
       }
 
-      if (DynComp.trace_sets_file != null) {
+      if (DynComp.trace_file != null) {
         if (DynComp.verbose) {
-          System.out.println("Writing traced comparability sets to " + DynComp.trace_sets_file);
+          System.out.println("Writing traced comparability sets to " + DynComp.trace_file);
         }
-        assert DynComp.trace_sets_file != null
+        assert DynComp.trace_file != null
             : "@AssumeAssertion(nullness): limited side effects don't change this field";
-        PrintWriter trace_out = open(DynComp.trace_sets_file);
+        PrintWriter trace_out = open(DynComp.trace_file);
         Stopwatch watch = new Stopwatch();
         DCRuntime.trace_all_comparable(trace_out);
         trace_out.close();

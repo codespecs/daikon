@@ -584,9 +584,9 @@ ifeq (cygwin,$(OSTYPE))
 endif
 SHINY_PRINT ?= true
 DCOMP_ARGS  = '--ppt-select-pattern=$(INST_FILES)' \
-			  --compare-sets-file=$(PROJECT_FILE).txt-cset \
+			  --comparability-file=$(PROJECT_FILE).txt-cset \
 			  --decl_file $(PROJECT_FILE).decls-DynComp \
-              --trace-sets-file=$(PROJECT_FILE).txt-trace \
+              --trace-file=$(PROJECT_FILE).txt-trace \
 			  --abridged-vars=$(SHINY_PRINT)
 DCOMP_RT ?= $(wildcard ${DAIKONDIR}/java/dcomp_rt.jar)
 
@@ -616,10 +616,10 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
 	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) $(MAIN_CLASS) $(MAIN_ARGS)
 	$(RUN_JAVA) daikon.DynComp '--ppt-select-pattern=$(INST_FILES)' \
-		--compare-sets-file=$(PROJECT_FILE).txt-cset-nojdk \
+		--comparability-file=$(PROJECT_FILE).txt-cset-nojdk \
 		--decl_file $(PROJECT_FILE).decls-DynComp-nojdk \
-		--trace-sets-file=$(PROJECT_FILE).txt-trace-nojdk \
-		--abridged-vars=$(SHINY_PRINT) --no-jdk $(MAIN_CLASS) $(MAIN_ARGS)
+		--trace-file=$(PROJECT_FILE).txt-trace-nojdk \
+		--abridged-vars=$(SHINY_PRINT) --rt-file=NONE $(MAIN_CLASS) $(MAIN_ARGS)
 
 else
 dyncomp:

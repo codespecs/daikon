@@ -35,7 +35,7 @@ public class DynComp {
 
   @Option("Output file for comparability sets")
   // If null, do no output
-  public static /*@Nullable*/ File compare_sets_file = null;
+  public static /*@Nullable*/ File comparability_file = null;
 
   @Option("Only process program points matching the regex")
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
@@ -66,7 +66,7 @@ public class DynComp {
 
   @Option("Trace output file")
   // Null if shouldn't do output
-  public static /*@Nullable*/ File trace_sets_file = null;
+  public static /*@Nullable*/ File trace_file = null;
 
   @Option("Depth of call hierarchy for line tracing")
   public static int trace_line_depth = 1;
@@ -153,6 +153,10 @@ public class DynComp {
     if (target_args.length == 0) {
       options.print_usage("target program must be specified");
       return false;
+    }
+    if (rt_file != null && rt_file.getName().equalsIgnoreCase("NONE")) {
+      no_jdk = true;
+      rt_file = null;
     }
     if (!no_jdk && rt_file != null && !rt_file.exists()) {
       // if --rt-file was given, but doesn't exist
