@@ -4047,11 +4047,12 @@ int
 The declaration file format is described in
 @ref{Program point declarations,,,developer,Daikon Developer Manual}.
 
-DynComp may optionally create two additional representations of the comparability information
-with the use of the @option{--comparability-file} and @option{--trace-file} options.
-In the @file{comparability-file},
+You can 
+cause DynComp to create two additional representations of the comparability information.
+
+Given the option @option{--comparability-file=@var{filename}},
 DynComp outputs comparability sets as sets.  The above @file{.decls-DynComp}
-output corresponds to the following @file{comparability-file} output:
+output corresponds to the following comparability-file output:
 
 @exampleindent 1
 @example
@@ -4065,13 +4066,13 @@ Daikon Variable sets for Year.compute(I yr, I d1, I d2) exit
 @end example
 @exampleindent 4
 
-@noindent
-In the @file{trace-file}, DynComp outputs comparability sets as trees,
+Given the option @option{--trace-file=@var{filename}},
+DynComp outputs comparability sets as trees,
 structured such that each variable in the tree has interacted with its
 children.  The lack of a parent-child relationship between two variables
 in a set does not imply anything about whether they interacted.
 The above @file{.decls-DynComp} output corresponds to the following
-@file{trace-file} output:
+trace-file output:
 
 @exampleindent 1
 @example
@@ -4111,7 +4112,7 @@ class.
 Duplicate values in this list represent the results of separate calls to
 another method which each of the relevant variables.  For example, if @code{main} had calls
 @code{compute(year, summerDays, winterDays)} and
-@code{compute(year,schoolDays,breakDays)}, then for @code{main} we might see
+@code{compute(year, schoolDays, breakDays)}, then for @code{main} we might see
 this output:
 
 @smallexample
@@ -4128,8 +4129,8 @@ Elements of these lists are essentially parts of stack traces.  The maximum numb
 of stack trace levels displayed is set by @option{--trace-line-depth}, which is equal to 1 by default.
 
 For these files, DynComp also has a @option{--abridged-vars} option that replaces text
-like @code{daikon.chicory.ParameterInfo:d2} with text like @code{Parameter d2} in the @file{comparability-file}
-and @file{trace-file}.  It writes @code{this} instead of
+like @code{daikon.chicory.ParameterInfo:d2} with text like @code{Parameter d2} in the comparability-file
+and trace-file.  It writes @code{this} instead of
 @code{daikon.chicory.ThisObjInfo:this}; and @code{return} instead of
 @code{daikon.chicory.ReturnInfo:return}.  This option is off by default, but can be
 turned on with @option{--abridged-vars}.
@@ -4298,8 +4299,8 @@ will search for a file named @file{dcomp_rt.jar} along the classpath,
 and in @file{$DAIKONDIR/java}.  Both this file and the current classpath
 are placed on the boot classpath for DynComp's execution.
 
-@item --rt-file=NONE
-Run DynComp with an uninstrumented JDK, instead of with a
+If the filename is @code{NONE}, then
+run DynComp with an uninstrumented JDK, instead of with a
 copy of the JDK that has been instrumented with DynComp.
 This will improve runtime performance, but will
 yield less accurate results.
