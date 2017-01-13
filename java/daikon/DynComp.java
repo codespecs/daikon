@@ -46,7 +46,8 @@ public class DynComp {
   @Option("Don't track primitives")
   public static boolean no_primitives = false;
 
-  @Option("Don't use an instrumented JDK")
+  // Option("Don't use an instrumented JDK")
+  // Flag is still used, but no longer exposed as an option.
   public static boolean no_jdk = false;
 
   @Option("jar file containing an instrumented JDK")

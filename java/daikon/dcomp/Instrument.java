@@ -46,7 +46,7 @@ public class Instrument implements ClassFileTransformer {
     if (Premain.in_shutdown) return null;
 
     // If already instrumented, nothing to do
-    // (This set will be empty if --no-jdk or --rt-file=NONE)
+    // (This set will be empty if DynComp.no_jdk is true)
     if (Premain.pre_instrumented.contains(className)) {
       return null;
     }
@@ -55,7 +55,7 @@ public class Instrument implements ClassFileTransformer {
 
     // Check if class is in JDK
     if (BCELUtil.in_jdk_internalform(className)) {
-      // If --no-jdk option is active, then skip it.
+      // If we are not using an instrumented JDK, then skip this class.
       if (DynComp.no_jdk) {
         return null;
       }

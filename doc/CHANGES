@@ -23,10 +23,15 @@ Further documentation can be found in:
 5.5.0 (February 2017)
 
 Kvasir:
-- --with-daikon is now the default, use --no-with-daikon to turn off
+- The option --with-dyncomp has been changed to --dyncomp and is now the default.
+  Use --no-dyncomp to not run the DynComp portion of Kvasir.
+- Clarified instructions for building the sample Fjalar tool.
 
 DynComp:
-- --no-cset-file option has been removed, this is now the default
+- The --compare-sets-file option has been renamed to --comparability-file.
+- The --trace-sets-file option has been renamed to --trace-file.
+- The --no-cset-file option has been removed, this is now the default.
+- The --no-jdk option has been removed, use --rt-file=NONE instead.
 
 ===========================================================================
 
