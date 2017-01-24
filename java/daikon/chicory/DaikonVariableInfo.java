@@ -1023,8 +1023,7 @@ public abstract class DaikonVariableInfo
     if (!type.equals(String.class)) return;
 
     String postString = ""; //either array braces or an empty string
-
-    if ((offset + theName).contains("[]")) postString = "[]";
+    if (isArray) postString = "[]";
 
     // add DaikonVariableInfo type
     DaikonVariableInfo stringInfo =
@@ -1033,7 +1032,7 @@ public abstract class DaikonVariableInfo
             stringClassName + postString,
             stringClassName + postString,
             offset + theName,
-            (offset + theName).contains("[]"));
+            isArray);
 
     addChild(stringInfo);
   }
