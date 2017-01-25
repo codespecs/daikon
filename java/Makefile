@@ -1095,9 +1095,9 @@ interning-counts:
 # This counts annotations in comments, etc.
 # "tail -1" is required when wc is given multiple arguments
 nullness-counts:
-	@echo -n "Annotated files: "
+	@echo -n "Annotated files (lines, blank, comments, NCSL, AESL): "
 	@echo ${NULLNESS_JAVA_FILES} | xargs sclc | tail -1
-	@echo -n "Total files: "
+	@echo -n "Total files (lines, blank, comments, NCSL, AESL): "
 	@echo ${DAIKON_JAVA_FILES} | xargs sclc | tail -1
 # 	@echo -n "Annotated files: "
 # 	@echo ${NULLNESS_JAVA_FILES} | sed 's/ /\n/g' | wc -l
