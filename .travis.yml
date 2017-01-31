@@ -26,9 +26,11 @@ env:
   - OS=fedora JDKVER=jdkany GROUP=kvasir
   - OS=fedora23 JDKVER=jdk8 GROUP=nonquick-txt-diff
   - OS=centos JDKVER=jdk8 GROUP=nonquick-txt-diff
+  - OS=centos JDKVER=jdkany GROUP=kvasir
 
 # Currently-failing jobs
 # This section is temporary and should be commented out when no jobs are failing.
+# It repeats things that were listed above in the "env" section.
 matrix:
   allow_failures:
     - env: OS=fedora JDKVER=jdkany GROUP=kvasir
