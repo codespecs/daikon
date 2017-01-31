@@ -1,9 +1,0 @@
-..main() ENTER/21: 1 EXIT0/24: 1
-Stack.Stack(char*,\_int) ENTER/51: 2 EXIT0/51: 2
-Stack.getMaxElts() ENTER/45: 2 EXIT0/48: 2
-Stack.getName() ENTER/45: 2 EXIT0/48: 2
-Stack.getNumStacksCreated() ENTER/24: 2 EXIT0/27: 2
-Stack.pop() ENTER/45: 10 EXIT0/48: 10
-Stack.privateStuff() ENTER/45: 8 EXIT0/48: 8
-Stack.push(int) ENTER/48: 8 EXIT0/48: 8
-Stack.~Stack() ENTER/45: 2 EXIT0/45: 2
