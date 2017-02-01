@@ -2193,7 +2193,7 @@ nothing to commit, working directory clean
 @item
 Make sure your Checker Framework repositories are up-to-date.
 (For instructions on how to set up and build the Checker Framework, see
-@uref{http://types.cs.washington.edu/checker-framework/current/checker-framework-manual.html#build-source,Building from source}.)
+@uref{https://checkerframework.org/manual/#build-source,Building from source}.)
 Make sure the @env{CHECKERFRAMEWORK} environment
 variable points to the location of your Checker Framework directory.
 

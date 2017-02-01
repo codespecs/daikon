@@ -21,7 +21,7 @@ import org.checkerframework.dataflow.qual.*;
 /**
  * AnnotateNullable reads a Daikon invariant file and determines which reference variables have seen
  * any null values. It writes to standard out an <a
- * href="http://types.cs.washington.edu/annotation-file-utilities/annotation-file-format.html">annotation
+ * href="https://checkerframework.org/annotation-file-utilities/annotation-file-format.html">annotation
  * file</a> with those variables. It determines which variables have seen null values by looking at
  * the NonZero invariant. If that invariant is NOT present, then the variable must have been null at
  * least once.
