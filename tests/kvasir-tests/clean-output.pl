@@ -63,7 +63,6 @@ while (<>) {
     s/: __write_nocancel .*/: __write_nocancel/;
     s/Copyright \(C\) .*$/COPYRIGHT/;
     s/kvasir-[\d.]+,/kvasir-VERSION/;
-    s/kvasir-[\d.]+.x,/kvasir-VERSION/;
     s[Using Valgrind-.* and LibVEX; rerun with \-h for copyright info]
       [Using Valgrind and LibVEX; rerun with \-h for copyright info];
     s/\(vg_replace_malloc.c:(\d+)\)/(vg_replace_malloc.c:XXX)/;
