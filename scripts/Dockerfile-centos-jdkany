@@ -20,6 +20,7 @@ RUN yum -q -y upgrade && yum -q -y install \
   git \
   m4 \
   make \
+  redhat-lsb \
   tar \
   unzip \
   which \

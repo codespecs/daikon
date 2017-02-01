@@ -19,6 +19,7 @@ RUN dnf -qy upgrade && dnf -qy install \
   git \
   m4 \
   make \
+  redhat-lsb \
   tar \
   unzip \
   which \
