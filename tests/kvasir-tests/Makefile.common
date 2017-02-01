@@ -45,7 +45,7 @@ endif
 
 default: summary-w-daikon
 
-OS_ID := $(shell lsb_release -si 2>/dev/null)
+OS_ID := $(shell lsb_release -si )
 OS_REL := $(shell lsb_release -sr)
 GOAL := goal
 
