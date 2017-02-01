@@ -4107,7 +4107,7 @@ interacted with @code{d2} on line 11 of the @code{compute} method of the @code{Y
 class.
 
 Duplicate values in this list represent the results of separate calls to
-another method which each of the relevant variables.  For example, if we modifiy
+another method which each of the relevant variables.  For example, if we modify
 the sample to use global variables instead of locals and add an additional call
 to @code{compute}:
 

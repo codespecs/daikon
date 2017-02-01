@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.5.0 (February 2017)
+5.5.0 (February 1, 2017)
 
 Kvasir:
 - The option --with-dyncomp has been changed to --dyncomp and is now the default.
@@ -32,6 +32,9 @@ DynComp:
 - The --trace-sets-file option has been renamed to --trace-file.
 - The --no-cset-file option has been removed, this is now the default.
 - The --no-jdk option has been removed, use --rt-file=NONE instead.
+
+Documentation:
+- Improved discussion of DynComp and comparability sets.
 
 ===========================================================================
 
