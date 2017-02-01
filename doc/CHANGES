@@ -1280,9 +1280,10 @@ AnnotateNullable
   AnnotateNullable determines which variables in a Java program were
   ever null during execution. Its primary use is for performing
   inference for a type system that detects null dereference errors. An
-  example is the Nullness checker that is part of the JSR 308 Checker
-  Framework (see http://types.cs.washington.edu/jsr308/).  See section
-  8.1.4 of the Daikon user manual for more information.
+  example is the Nullness Checker that is part of the Checker
+  Framework (see https://checkerframework.org/manual/#nullness-checker/).
+  See section "AnnotateNullable" of the Daikon user manual for more
+  information.
 
 DynComp
 
