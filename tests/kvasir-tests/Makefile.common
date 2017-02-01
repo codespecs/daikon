@@ -86,6 +86,10 @@ SOURCES ?= $(NAME).$(C_EXT)
 
 ifndef CUSTOM_BUILD
 $(NAME): $(SOURCES) $(LIBS) $(INCLUDES)
+	@echo $(OS_ID)
+	@echo $(OS_REL)
+	@echo $(GOAL)
+	@echo $(call goal_name,foo.invs)
 	$(COMPILER) $(CFLAGS) $(DEFINES) $(SOURCES) -o $@ $(LIBFLAGS) $(LIBS)
 endif
 
