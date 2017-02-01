@@ -2346,28 +2346,37 @@ Verify that Daikon passes its tests, under both JDK 7 and JDK 8.
 For Travis CI,
 all of the following jobs should be green:
 @* @url{https://travis-ci.org/codespecs/daikon}
+@html
+<img src="https://travis-ci.org/codespecs/daikon.svg?branch=master" alt="Travis codespecs/daikon status"/>
+@end html
 @* @url{https://travis-ci.org/codespecs/fjalar}
-@* @url{https://travis-ci.org/typetools/daikon-typecheck}
-@* @url{https://travis-ci.org/typetools/daikon-typecheck-formatter}
-@* @url{https://travis-ci.org/typetools/daikon-typecheck-interning}
-@* @url{https://travis-ci.org/typetools/daikon-typecheck-nullness}
-@* @url{https://travis-ci.org/typetools/daikon-typecheck-regex}
-@* @url{https://travis-ci.org/typetools/daikon-typecheck-signature}
-
-@c I can't figure out how to insert literal HTML, which would show the job
-@c status without requiring the user to click.
-@c @inlinefmtifelse{html, all of the following icons should be green:, see the
-@c HTML version of this manual for a list of icons that must be green.}
-@c @ifhtml
-@c <img src="https://travis-ci.org/codespecs/daikon.svg?branch=master" alt="Travis CI status for codespecs/daikon"/>
-@c <img src="https://travis-ci.org/codespecs/fjalar.svg?branch=master" alt="Travis CI status for codespecs/fjalar"/>
-@c <img src="https://travis-ci.org/typetools/daikon-typecheck.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck"/>
-@c <img src="https://travis-ci.org/typetools/daikon-typecheck-formatter.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-formatter"/>
-@c <img src="https://travis-ci.org/typetools/daikon-typecheck-interning.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-interning"/>
-@c <img src="https://travis-ci.org/typetools/daikon-typecheck-nullness.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-nullness"/>
-@c <img src="https://travis-ci.org/typetools/daikon-typecheck-regex.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-regex"/>
-@c <img src="https://travis-ci.org/typetools/daikon-typecheck-signature.svg?branch=master" alt="Travis CI status for typetools/daikon-typecheck-signature"/>
-@c @end ifhtml
+@html
+<img src="https://travis-ci.org/codespecs/fjalar.svg?branch=master" alt="Travis codespecs/fjalar status"/>
+@end html
+@* @url{https://travis-ci.org/typetests/daikon-typecheck}
+@html
+<img src="https://travis-ci.org/typetests/daikon-typecheck.svg?branch=master" alt="Travis typetests/daikon-typecheck status"/>
+@end html
+@* @url{https://travis-ci.org/typetests/daikon-typecheck-formatter}
+@html
+<img src="https://travis-ci.org/typetests/daikon-typecheck-formatter.svg?branch=master" alt="Travis typetests/daikon-typecheck-formatter status"/>
+@end html
+@* @url{https://travis-ci.org/typetests/daikon-typecheck-interning}
+@html
+<img src="https://travis-ci.org/typetests/daikon-typecheck-interning.svg?branch=master" alt="Travis typetests/daikon-typecheck-interning status"/>
+@end html
+@* @url{https://travis-ci.org/typetests/daikon-typecheck-nullness}
+@html
+<img src="https://travis-ci.org/typetests/daikon-typecheck-nullness.svg?branch=master" alt="Travis typetests/daikon-typecheck-nullness status"/>
+@end html
+@* @url{https://travis-ci.org/typetests/daikon-typecheck-regex}
+@html
+<img src="https://travis-ci.org/typetests/daikon-typecheck-regex.svg?branch=master" alt="Travis typetests/daikon-typecheck-regex status"/>
+@end html
+@* @url{https://travis-ci.org/typetests/daikon-typecheck-signature}
+@html
+<img src="https://travis-ci.org/typetests/daikon-typecheck-signature.svg?branch=master" alt="Travis typetests/daikon-typecheck-signature status"/>
+@end html
 
 If any of the jobs is not passing, then correct the problem and wait for
 the jobs to complete and pass.
