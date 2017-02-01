@@ -62,6 +62,9 @@ public class DynComp {
   @Option("Display abridged variable names")
   public static boolean abridged_vars = false;
 
+  @Option("Use faster but less precise algorithm on omitted ppts")
+  public static boolean approximate_omitted_ppts = false;
+
   @Option("Don't continue after instrumentation error")
   public static boolean quit_if_error = false;
 

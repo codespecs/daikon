@@ -504,7 +504,7 @@ class DFInstrument extends DCInstrument {
       case Const.LRETURN:
       case Const.RETURN:
         {
-          return return_tag(mg, inst);
+          return return_tag(mg, inst, true);
         }
 
         // Handle subroutine calls.  Calls to instrumented code are modified

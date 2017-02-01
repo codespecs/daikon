@@ -850,9 +850,10 @@ class DCInstrument {
     // System.out.printf ("DCInstrument %s%n", orig_class.getClassName());
     // Turn on some of the logging based on debug option.
     debug_add_dcomp.enabled = DynComp.debug;
-    debug_instrument.enabled = DynComp.debug;
+    debug_instrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     debug_instrument_inst.enabled = DynComp.debug;
     debug_native.enabled = DynComp.debug;
+    debug_track.enabled = Premain.debug_dcinstrument;
   }
 
   /** Returns true if we are instrumenting for dataflow */
@@ -920,6 +921,8 @@ class DCInstrument {
         // Note whether we want to track the daikon variables in this method
         boolean track = should_track(gen.getClassName(), methodEntryName(gen.getClassName(), m));
         if (track) track_class = true;
+        boolean full_instrumentation =
+            track || !(Premain.notrack_instrumentation || DynComp.approximate_omitted_ppts);
 
         // If we are tracking variables, make sure the class is public
         if (track && !gen.isPublic()) {
@@ -966,7 +969,7 @@ class DCInstrument {
           // Create the local to store the tag frame for this method
           tag_frame_local = create_tag_frame_local(mg);
           build_exception_handler(mg);
-          instrument_method(m, mg);
+          instrument_method(m, mg, full_instrumentation);
           if (track) {
             add_enter(mg, mi, DCRuntime.methods.size() - 1);
             add_exit(mg, mi, DCRuntime.methods.size() - 1);
@@ -1032,7 +1035,7 @@ class DCInstrument {
     // needs to know what classes are instrumented.  Its looks in the
     // Chicory runtime for this information.
     if (track_class) {
-      // System.out.printf ("adding class %s to all class list%n", class_info);
+      debug_instrument.log("DCInstrument adding %s to all class list%n", class_info);
       synchronized (daikon.chicory.Runtime.all_classes) {
         daikon.chicory.Runtime.all_classes.add(class_info);
       }
@@ -1283,7 +1286,7 @@ class DCInstrument {
             // Create the local to store the tag frame for this method
             tag_frame_local = create_tag_frame_local(mg);
             build_exception_handler(mg);
-            instrument_method(m, mg);
+            instrument_method(m, mg, true);
             install_exception_handler(mg);
           }
         }
@@ -1453,7 +1456,7 @@ class DCInstrument {
   }
 
   /** Instrument the specified method for dynamic comparability. */
-  public void instrument_method(Method m, MethodGen mg) {
+  public void instrument_method(Method m, MethodGen mg, boolean full_instrumentation) {
 
     // Because the tag_frame_local is active for the entire method
     // and its creation will change the state of the locals layout,
@@ -1470,6 +1473,11 @@ class DCInstrument {
     if (stack_types == null) {
       skip_method(mg);
       return;
+    }
+
+    boolean save_jdk_instrumented = jdk_instrumented;
+    if (!full_instrumentation) {
+      jdk_instrumented = false;
     }
 
     InstructionList il = mg.getInstructionList();
@@ -1512,12 +1520,42 @@ class DCInstrument {
       // Remember the next instruction to process
       InstructionHandle next_ih = ih.getNext();
 
-      // Get the stack information
-      stack = stack_types.get(handle_offsets[index++]);
+      if (full_instrumentation) {
+        // Get the stack information
+        stack = stack_types.get(handle_offsets[index++]);
 
-      // Get the translation for this instruction (if any)
-      new_il = xform_inst(mg, ih, stack);
+        // Get the translation for this instruction (if any)
+        new_il = xform_inst(mg, ih, stack);
 
+      } else {
+        // possible change
+        // remove all this special code and just call
+        //      new_il = xform_inst_refs_only(mg, ih, stack);
+        // instead????
+        Instruction inst = ih.getInstruction();
+        switch (inst.getOpcode()) {
+            // We are not instrumenting this method, but we still want any
+            // calls to go to an instrumented version, if it exists.
+          case Const.INVOKESTATIC:
+          case Const.INVOKEVIRTUAL:
+          case Const.INVOKESPECIAL:
+          case Const.INVOKEINTERFACE:
+          case Const.INVOKEDYNAMIC:
+            new_il = handle_invoke_XXX((InvokeInstruction) inst);
+            break;
+
+            // Prefix the return with a call to the correct normal_exit method
+            // to handle the tag stack
+          case Const.ARETURN:
+          case Const.DRETURN:
+          case Const.FRETURN:
+          case Const.IRETURN:
+          case Const.LRETURN:
+          case Const.RETURN:
+            new_il = return_tag(mg, inst, full_instrumentation);
+            break;
+        }
+      }
       // If this instruction was modified, replace it with the new
       // instruction list. If this instruction was the target of any
       // jumps or line numbers , replace them with the first
@@ -1526,6 +1564,7 @@ class DCInstrument {
 
       ih = next_ih;
     }
+    jdk_instrumented = save_jdk_instrumented;
   }
 
   /** Instrument the specified method for dynamic comparability (reference comparability only). */
@@ -2486,7 +2525,7 @@ class DCInstrument {
       case Const.LRETURN:
       case Const.RETURN:
         {
-          return return_tag(mg, inst);
+          return return_tag(mg, inst, true);
         }
 
         // Handle subroutine calls.  Calls to instrumented code are modified
@@ -2794,6 +2833,83 @@ class DCInstrument {
       // methods
       il.append(discard_primitive_tags(arg_types));
 
+      // Add a tag for the return type if it is primitive
+      if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
+        // System.out.printf ("push tag for return  type of %s%n",
+        //                   invoke.getReturnType(pool));
+        il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
+      }
+      il.append(invoke);
+    }
+    return il;
+  }
+
+  /**
+   * Special version of handle_invoke for non-instrumented methods. We still want the call to go to
+   * an instrumented version, if it exists.
+   */
+  InstructionList handle_invoke_XXX(InvokeInstruction invoke) {
+    boolean callee_instrumented;
+
+    // Get information about the call
+    String method_name = invoke.getMethodName(pool);
+    String classname = null;
+    Type ret_type = invoke.getReturnType(pool);
+    Type[] arg_types = invoke.getArgumentTypes(pool);
+
+    InstructionList il = new InstructionList();
+
+    if (invoke instanceof INVOKEDYNAMIC) {
+      // we don't instrument lambda methods
+      // BUG: BCEL doesn't know how to get classname from an
+      // INVOKEDYNAMIC instruction.
+      callee_instrumented = false;
+    } else {
+      classname = invoke.getClassName(pool);
+      callee_instrumented = callee_instrumented(classname);
+      if (invoke instanceof INVOKEVIRTUAL) {
+        if (DynComp.no_jdk) {
+          //System.out.printf("invoke virtual: %s : %s%n", classname, method_name);
+          //System.out.printf("super class: %s%n", gen.getSuperclassName());
+          // Technically, we should verify the target class has super class
+          // of java.lang.Enum. But that can be difficult if we haven't already
+          // processed that class. And since the worst that happens is we
+          // loose some tag interactions, we just go ahead.
+          if (method_name.equals("ordinal")) {
+            callee_instrumented = false;
+          }
+
+          //UNDONE:
+          // This is actually a general problem.  Correct solution would seem
+          // to be a variation of "has_instrumented" to find target of virtual
+          // call at runtime.
+          // These is just a hack to get through PASCALI corpus.
+          String super_class = gen.getSuperclassName();
+          if ((!super_class.equals("java.lang.Object")) && (BCELUtil.in_jdk(super_class))) {
+            callee_instrumented = false;
+          }
+        }
+      }
+    }
+
+    if (is_object_method(method_name, invoke.getArgumentTypes(pool))) callee_instrumented = false;
+
+    if (callee_instrumented) {
+
+      // push dummy tags for args
+      for (Type arg_type : arg_types) {
+        if (arg_type instanceof BasicType) {
+          il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
+        }
+      }
+
+      // Add the DCompMarker argument so that it calls the instrumented version
+      il.append(new ACONST_NULL());
+      Type[] new_arg_types = BCELUtil.add_type(arg_types, dcomp_marker);
+      il.append(
+          ifact.createInvoke(classname, method_name, ret_type, new_arg_types, invoke.getOpcode()));
+
+    } else { // not instrumented
       // Add a tag for the return type if it is primitive
       if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
         // System.out.printf ("push tag for return  type of %s%n",
@@ -3951,7 +4067,7 @@ class DCInstrument {
   }
 
   /** Prefix the call to return with a call that handles returns for the tag stack. */
-  InstructionList return_tag(MethodGen mg, Instruction inst) {
+  InstructionList return_tag(MethodGen mg, Instruction inst, boolean full_instrumentation) {
     Type type = mg.getReturnType();
     InstructionList il = new InstructionList();
 
@@ -3959,6 +4075,10 @@ class DCInstrument {
     il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
 
     if ((type instanceof BasicType) && (type != Type.VOID)) {
+      if (!full_instrumentation) {
+        // need to push a dummy tag for return value
+        il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
+      }
       il.append(dcr_call("normal_exit_primitive", Type.VOID, new Type[] {object_arr}));
     } else {
       il.append(dcr_call("normal_exit", Type.VOID, new Type[] {object_arr}));

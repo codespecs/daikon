@@ -188,14 +188,16 @@ public final class DCRuntime {
     if (Premain.debug_dcruntime) {
       debug = true;
       debug_tag_frame = true;
+    }
+    if (Premain.debug_dcruntime_all) {
+      debug = true;
+      debug_tag_frame = true;
       debug_objects = true;
       merge_dv = new SimpleLog(true);
       debug_arr_index = new SimpleLog(true);
       debug_primitive = new SimpleLog(true);
       debug_merge_comp = new SimpleLog(true);
-      debug_timing = new SimpleLog(true);
       debug_decl_print = new SimpleLog(true);
-      time_decl = new SimpleLog(true);
     }
 
     // Initialize the array of static tags
@@ -1047,6 +1049,7 @@ public final class DCRuntime {
     ClassInfo ci = mi.class_info;
     if (ci.clazz == null) {
       ci.initViaReflection();
+      if (debug) System.out.printf("DCRuntime.enter adding %s to all class list%n", ci);
       all_classes.add(ci);
       // Moved to DCInstrument.instrument()
       // daikon.chicory.Runtime.all_classes.add (ci);

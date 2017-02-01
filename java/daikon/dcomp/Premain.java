@@ -25,8 +25,17 @@ public class Premain {
    * These are internal debugging options that may be used when Premain is invoked directly from the
    * command line.
    */
-  @Option("Turn on most DCRuntime debugging options")
+  @Option("Experimental no instrumentation if no track option")
+  public static boolean notrack_instrumentation = false;
+
+  @Option("Turn on basic DCInstrument debugging options")
+  public static boolean debug_dcinstrument = false;
+
+  @Option("Turn on basic DCRuntime debugging options")
   public static boolean debug_dcruntime = false;
+
+  @Option("Turn on most DCRuntime debugging options")
+  public static boolean debug_dcruntime_all = false;
 
   /**
    * Set of pre_instrumented jdk classes. Needed so that we will instrument classes generated on the
