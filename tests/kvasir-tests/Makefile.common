@@ -51,7 +51,7 @@ GOAL := goal
 
 ifeq ($(OS_ID),CentOS)
 ifeq ($(OS_REL),7.3.1611)
-ifeq (cxx,$findstring(cxx,$shell lsb_release -sv))
+ifeq (cxx,$(findstring cxx,$(shell lsb_release -sv)))
 # PLSE special version of CentOS
 	GOAL := goalCP
 else
