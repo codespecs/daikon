@@ -52,9 +52,13 @@ GOAL := goal
 ifeq ($(OS_ID),CentOS)
 	GOAL := goalC
 endif
+
 ifeq ($(OS_ID),Fedora)
 ifeq ($(OS_REL),24)
 	GOAL := goalF24
+endif
+ifeq ($(OS_REL),25)
+	GOAL := goalF25
 endif
 endif
 
