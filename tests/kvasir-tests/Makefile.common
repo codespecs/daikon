@@ -50,7 +50,15 @@ OS_REL := $(shell lsb_release -sr)
 GOAL := goal
 
 ifeq ($(OS_ID),CentOS)
-	GOAL := goalC
+ifeq ($(OS_REL),7.3.1611)
+ifeq (cxx,$findstring(cxx,$shell lsb_release -sv))
+# PLSE special version of CentOS
+	GOAL := goalCP
+else
+# Standard version of CentOS
+	GOAL := goalCS
+endif
+endif
 endif
 
 ifeq ($(OS_ID),Fedora)
