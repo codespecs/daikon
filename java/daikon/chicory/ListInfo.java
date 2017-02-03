@@ -47,7 +47,17 @@ public class ListInfo extends DaikonVariableInfo {
       } catch (IllegalAccessException e1) {
         throw new Error(e1);
       } catch (InvocationTargetException e1) {
-        throw new Error(e1);
+        Throwable t1 = e1.getCause();
+        if ((t1.toString()).equals("java.util.ConcurrentModificationException")) {
+          System.err.println(
+              "Detected a ConcurrentModificationException in: "
+                  + listType.getName()
+                  + " "
+                  + getName());
+          arrayVal = NonsensicalObject.getInstance();
+        } else {
+          throw new Error(e1);
+        }
       }
     } else {
       arrayVal = NonsensicalObject.getInstance();
