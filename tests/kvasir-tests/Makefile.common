@@ -185,6 +185,7 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 else
 ifeq ($(COUNTS_ONLY),)
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
+	@echo $(shell uname -a)
 	@echo $(shell lsb_release -sv)
 	@echo $(findstring cxx,$(shell lsb_release -sv))
 	@echo $(GOAL)
