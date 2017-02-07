@@ -428,8 +428,8 @@ staging:
 	/bin/rm -rf $(STAGING_DIR)
 	mkdir $(STAGING_DIR)
 	cp -pR $(WWW_DIR)/history $(STAGING_DIR)
-	$(MAKE) save-current-release
 	mkdir $(STAGING_DIR)/download
+	$(MAKE) save-current-release
 	cp -pR $(WWW_DIR)/download/inv-cvs $(STAGING_DIR)/download
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
@@ -514,7 +514,8 @@ doc-all-except-pdf:
 # Get the current release version,
 # if on the CSE filesystem where an old daikon-*.zip file exists.
 ifneq ($(shell ls $(WWW_DIR)/download/daikon-*.zip 2>/dev/null),)
-    CUR_VER := $(shell ls $(WWW_DIR)/download/daikon-*.zip |perl -p -e 's/^.*download.daikon.//' |perl -p -e 's/.zip//')
+# As we are now including links to the previous version, we must only look at the newest one to get the correct version number.
+    CUR_VER := $(shell ls -t -1 $(WWW_DIR)/download/daikon-*.zip |head -1 |perl -p -e 's/^.*download.daikon.//' |perl -p -e 's/.zip//')
     CUR_RELEASE_NAME := daikon-$(CUR_VER)
 else
     CUR_RELEASE_NAME := UNKNOWN
@@ -533,6 +534,9 @@ save-current-release:
 	mkdir $(HISTORY_DIR)/$(CUR_RELEASE_NAME)
 	-chmod u-w $(HISTORY_DIR)
 	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp -p $(WWW_DIR)/download/$(CUR_RELEASE_NAME).* . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod o-w CHANGES .
+# Create links to the previous version to help reduce confusion over a version number change.
+	cd $(STAGING_DIR)/download && ln $(HISTORY_DIR)/$(CUR_RELEASE_NAME)/$(CUR_RELEASE_NAME).zip
+	cd $(STAGING_DIR)/download && ln $(HISTORY_DIR)/$(CUR_RELEASE_NAME)/$(CUR_RELEASE_NAME).tar.gz
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 ifeq ($(origin TODAY), undefined)
