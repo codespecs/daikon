@@ -1,5 +1,6 @@
 package daikon.dcomp;
 
+import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.util.*;
 import java.lang.ref.*;
@@ -98,10 +99,12 @@ class TagEntry extends WeakReference<Object> {
 
     if (r1 != r2) {
       r2.parent = r1;
-      o1.rootMe();
-      o2.rootMe();
-      o2.tracer = o1;
-      o2.trace_loc = generateTraceString();
+      if (DynComp.trace_file != null) {
+        o1.rootMe();
+        o2.rootMe();
+        o2.tracer = o1;
+        o2.trace_loc = generateTraceString();
+      }
     }
   }
 
