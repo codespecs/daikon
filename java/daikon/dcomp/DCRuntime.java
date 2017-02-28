@@ -1,5 +1,6 @@
 package daikon.dcomp;
 
+import daikon.DynComp;
 import daikon.chicory.*;
 import daikon.util.ArraysMDE;
 import daikon.util.SimpleLog;
@@ -69,8 +70,8 @@ public final class DCRuntime {
   public static SimpleLog debug_timing = new SimpleLog(false);
   public static SimpleLog debug_decl_print = new SimpleLog(false);
   public static SimpleLog time_decl = new SimpleLog(false);
+  public static SimpleLog map_info = new SimpleLog(false);
   public static final SimpleLog debug_df = new SimpleLog(false);
-  public static final SimpleLog debug_df_branch = new SimpleLog(false, true);
 
   /** Simplifies printouts for debugging if we ignore toString */
   private static boolean ignore_toString = true;
@@ -147,37 +148,6 @@ public final class DCRuntime {
    * object for debugging purposes.
    */
   private static class PrimStore {}
-
-  /** Map in Dataflow from tag to the set of valus that have contributed to its current value. */
-  public static WeakIdentityHashMap<Object, ValueSource> tag_map =
-      new WeakIdentityHashMap<Object, ValueSource>();
-
-  /**
-   * Map from tag to dataflow values for the length of an array. There should only be entries for
-   * arrays.
-   */
-  public static WeakIdentityHashMap<Object, ValueSource> df_arrlen_map =
-      new WeakIdentityHashMap<Object, ValueSource>();
-
-  /** Information about a value encountered at a branch. */
-  public static class BranchInfo {
-    /** the sources of the value */
-    public ValueSource value_source;
-    /** What the value was compared to in the branch */
-    public String compared_to;
-
-    public BranchInfo(ValueSource value_source, String compared_to) {
-      this.value_source = value_source;
-      this.compared_to = compared_to;
-    }
-    /*@SideEffectFree*/
-    public String toString(/*>>>@GuardSatisfied BranchInfo this*/) {
-      return String.format("%s:%s", value_source, compared_to);
-    }
-  }
-
-  /** Information about each of the values encountered at a frontier branch* */
-  public static List<BranchInfo> branch_tags = new ArrayList<BranchInfo>();
 
   /** Either java.lang.DCompMarker or daikon.dcomp.DCompMarker */
   public static Class<?> dcompmarker = null;
@@ -564,6 +534,8 @@ public final class DCRuntime {
     return (obj1 != obj2);
   }
 
+  static Map<String, Integer> methodCountMap = new HashMap<String, Integer>(64);
+
   /**
    * Create the tag frame for this method. Pop the tags for any primitive parameters off of the tag
    * stack and store them in the tag frame.
@@ -579,6 +551,17 @@ public final class DCRuntime {
    */
   public static Object[] create_tag_frame(String params) {
     if (debug) System.out.printf("%nEnter: %s%n", caller_name());
+
+    if (DynComp.verbose) {
+      String method_name = caller_name();
+      Integer count = methodCountMap.get(method_name);
+      if (count == null) {
+        count = new Integer(1);
+      } else {
+        count = new Integer(count.intValue() + 1);
+      }
+      methodCountMap.put(method_name, count);
+    }
 
     // create_tag_frame is the first DCRuntime method called for an
     // instrumented user method.  Since it might be on a new thread
@@ -1243,7 +1226,7 @@ public final class DCRuntime {
     // Map from an Object to the Daikon variable that currently holds
     // that object.
     IdentityHashMap<Object, DaikonVariableInfo> varmap =
-        new IdentityHashMap<Object, DaikonVariableInfo>();
+        new IdentityHashMap<Object, DaikonVariableInfo>(2048);
 
     for (DaikonVariableInfo dv : root.children) {
       if (dv instanceof ThisObjInfo) {
@@ -1275,6 +1258,7 @@ public final class DCRuntime {
       }
     }
     debug_timing.log("exit process_all_vars for %s%n%n", mi);
+    map_info.log("varmap size: %d%n", varmap.size());
   }
 
   /**
@@ -1299,7 +1283,7 @@ public final class DCRuntime {
     // Map from an Object to the Daikon variable that currently holds
     // that object.
     IdentityHashMap<Object, DaikonVariableInfo> varmap =
-        new IdentityHashMap<Object, DaikonVariableInfo>();
+        new IdentityHashMap<Object, DaikonVariableInfo>(2048);
 
     for (DaikonVariableInfo dv : root.children) {
       if (dv instanceof ThisObjInfo) {
@@ -1825,6 +1809,14 @@ public final class DCRuntime {
       }
     }
 
+    // The section above output method count data for non-omitted user code.
+    // The section below outputs method count data for all methods - including java runtime.
+    System.out.printf("%ndisplaying all method counts%n");
+    for (String key : methodCountMap.keySet()) {
+      System.out.printf("  method %s [%d calls]%n", key, methodCountMap.get(key));
+    }
+    System.out.printf("%n");
+
     System.out.printf("Classes             = %,d%n", class_cnt);
     System.out.printf("Methods             = %,d%n", method_cnt);
     System.out.printf("------------------------------%n");
@@ -1986,7 +1978,7 @@ public final class DCRuntime {
 
     // Map from daikon variable to its comparability
     Map<DaikonVariableInfo, Integer> dv_comp_map =
-        new IdentityHashMap<DaikonVariableInfo, Integer>();
+        new IdentityHashMap<DaikonVariableInfo, Integer>(256);
 
     // Initial comparability values
     int class_comp = 1;
@@ -2083,6 +2075,7 @@ public final class DCRuntime {
     }
 
     time_decl.log_time("print_decl_vars end%n");
+    map_info.log("dv_comp_map size: %d%n", dv_comp_map.size());
     time_decl.exdent();
   }
 
@@ -2306,11 +2299,12 @@ public final class DCRuntime {
     if (root == null) return null;
 
     // List of all of the sets of comparable daikon variables
-    Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>();
+    Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>(256);
 
     for (DaikonVariableInfo dv : root) {
       add_variable(sets, dv);
     }
+    map_info.log("sets size: %d%n", sets.size());
 
     // Get each set, sort it, and add it to the list of all sets.  The sort
     // the list of all sets.  The sorting is not critical except to create
@@ -2339,7 +2333,7 @@ public final class DCRuntime {
     // The keyset of this Map is exactly the RootInfo node and the set of all
     //   nodes that have children.
     // The valueset of this Map is exactly the set of all nodes.
-    Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>();
+    Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>(256);
 
     for (DaikonVariableInfo child : root) {
       if (child.declShouldPrint()) add_variable_traced(sets, child);
@@ -2509,7 +2503,7 @@ public final class DCRuntime {
       Object tag = obj_tags[field_num];
       if (tag == null) {
         Throwable stack_trace = new Throwable();
-        stack_trace.fillInStackTrace();
+        if (debug) stack_trace.fillInStackTrace();
         obj_tags[field_num] =
             tag =
                 new UninitFieldTag(
@@ -2529,7 +2523,7 @@ public final class DCRuntime {
       field_map.put(obj, obj_tags);
       if (debug_primitive.enabled()) debug_primitive.log("push_field_tag: Created tag storage%n");
       Throwable stack_trace = new Throwable();
-      stack_trace.fillInStackTrace();
+      if (debug) stack_trace.fillInStackTrace();
       Object tag =
           new UninitFieldTag(obj.getClass().getName() + ":uninit-field" + field_num, stack_trace);
       obj_tags[field_num] = tag;
@@ -3045,732 +3039,4 @@ public final class DCRuntime {
       return obj;
     }
   }
-
-  // WARNING WARNING WARNING
-  // The rest of the code in this class is only used by the DFinstrument process.
-  // DFInstrument is only invoked if both "--branch" and "--input_method" are
-  // passed to DynComp - and neither of these options is documentd.  This code
-  // has not been tested and/or used in several years and DFInstrument has never
-  // been modifed for the StackMaps required in Java versions post 6.  The following
-  // code has not been modified to be thread safe.
-
-  // Consequently, it has been commented out pending a review to see if we ever
-  // intend to support this feature again.
-
-  // Dataflow specific routines
-
-  ///**
-  // * Determines the values associated with the object and pushes a new tag on the tag stack that
-  // * refers to those same values. Used when the result value of an operation on an object has the
-  // * same dataflow as that of the object.
-  // */
-  //public static void dup_obj_tag_val(Object obj) {
-  //  ValueSource values = tag_map.get(obj);
-  //  Object tag = new Object();
-  //  tag_map.put(tag, values);
-  //  tag_stack.push(tag);
-  //}
-
-  ///**
-  // * Finds the DF for the length of the specified array and pushes a tag on the tag stack that
-  // * refers to that DF. Used for arraylength opcodes.
-  // */
-  //public static void arraylen_df(Object arr) {
-  //  ValueSource len_df = df_arrlen_map.get(arr);
-  //  Object tag = new Object();
-  //  tag_map.put(tag, len_df);
-  //  tag_stack.push(tag);
-  //}
-
-  ///**
-  // * Builds a new value set that contains only this value (as described in descr). Allocates a new
-  // * tag, associates it with the value set and pushes it on the tag stack. Used when a constant is
-  // * pushed.
-  // */
-  //public static void push_const_src(String descr) {
-  //  Throwable stack_trace = new Throwable();
-  //  stack_trace.fillInStackTrace();
-  //  ValueSource values = new ValueSource(descr, stack_trace);
-  //  Object tag = new Constant();
-  //  tag_map.put(tag, values);
-  //  tag_stack.push(tag);
-  //}
-
-  ///**
-  // * Builds a new value set that contains only this value (as described in descr). Associates the
-  // * object with the value set Used when a constant string/class (ldc) is pushed.
-  // */
-  //public static void push_const_obj_src(Object obj, String descr) {
-  //  Throwable stack_trace = new Throwable();
-  //  stack_trace.fillInStackTrace();
-  //  ValueSource values = new ValueSource(descr, stack_trace);
-  //  tag_map.put(obj, values);
-  //}
-
-  ///**
-  // * Handle a binary operation on the two items at the top of the tag stack. Binary operations pop
-  // * the two items off of the top of the stack perform an operation and push the result back on the
-  // * stack. The tags of the two items on the top of the stack must be popped off and a new tag
-  // * created and pushed that refers to the sources of each of the operands.
-  // */
-  //public static void binary_tag_df() {
-  //  debug_primitive.log("binary tag df%n");
-  //  assert tag_stack.peek() != method_marker;
-  //  Object tag1 = tag_stack.pop();
-  //  assert tag_stack.peek() != method_marker;
-  //  Object tag2 = tag_stack.pop();
-  //  Object tag = new BinOp();
-  //  binary_op_df("math-op", tag, tag1, tag2);
-  //  tag_stack.push(tag);
-  //}
-
-  ///**
-  // * Pops the top of the tag stack into tag_frame[index]. Adds the local's index to the DF. Used to
-  // * determine what variables in the test sequence have seen this value. Should only be called if
-  // * the pop is in the test sequence method.
-  // */
-  //public static void pop_local_tag_df(Object[] tag_frame, int index) {
-
-  //  assert tag_stack.peek() != method_marker;
-  //  Object tag = tag_stack.pop();
-  //  assert tag != null : "index " + index;
-  //  Object newtag = new PrimStore();
-  //  ValueSource val = get_value_source(tag);
-  //  Throwable stack_trace = new Throwable();
-  //  stack_trace.fillInStackTrace();
-  //  ValueSource newval = new ValueSource("local-store " + index, stack_trace);
-  //  tag_map.put(newtag, newval);
-  //  tag_frame[index] = newtag;
-  //  debug_timing.log_time("Store into local %s", index);
-  //  debug_df.log_tb("primitive local-store %s->%s", index, val);
-  //  if (debug_primitive.enabled()) {
-  //    debug_primitive.log("pop_local_tag[%d] %s%n", index, tag_frame[index]);
-  //  }
-  //}
-
-  ///**
-  // * Adds the specified local to the DataFlow for obj. Should only be called if the store is in the
-  // * test sequence method.
-  // */
-  //public static void pop_local_obj_df(Object obj, int index) {
-  //  if (obj == null) {
-  //    debug_df.log_tb("object local-store %s null ignored", index);
-  //    return;
-  //  }
-  //  ValueSource val = get_value_source(obj);
-  //  Throwable stack_trace = new Throwable();
-  //  stack_trace.fillInStackTrace();
-  //  debug_timing.log_time("Store into local %s", index);
-  //  debug_df.log_tb("object local-store %s->%s", index, val);
-  //  ValueSource values = new ValueSource("local-store " + index, stack_trace, val, null);
-  //  tag_map.put(obj, values);
-  //}
-
-  ///**
-  // * Sets up the dataflow information for a new object. The object is associated with the specified
-  // * description.
-  // */
-  //public static void setup_obj_df(Object obj, String descr) {
-
-  //  // Create a new DF for the object
-  //  Throwable t = new Throwable();
-  //  t.fillInStackTrace();
-  //  ValueSource values = new ValueSource(descr, t);
-  //  tag_map.put(obj, values);
-  //}
-
-  ///**
-  // * Sets up the dataflow information for an array allocation. The length of the array is associated
-  // * with the size argument (on the top of the tag stack). The array itself is associated with the
-  // * specified description.
-  // */
-  //public static void setup_array_df(Object arr_ref, String descr) {
-
-  //  // associate the DF for the size with the length param of the array
-  //  assert tag_stack.peek() != method_marker;
-  //  Object size_tag = tag_stack.pop();
-  //  ValueSource size_values = tag_map.get(size_tag);
-  //  df_arrlen_map.put(arr_ref, size_values);
-
-  //  // Create a new DF for the array itself
-  //  Throwable t = new Throwable();
-  //  t.fillInStackTrace();
-  //  ValueSource values = new ValueSource(descr, t);
-  //  tag_map.put(arr_ref, values);
-  //}
-
-  ///**
-  // * Sets up the dataflow information for an multi-dimensional array allocation. The
-  // * multi-dimensional array allocate instruction takes the size of each dimension from the stack.
-  // * The tags for each of these sizes are thus on the tag stack. The length of each allocated array
-  // * is associated with its size argument. The array itself is associated with the specified
-  // * description.
-  // */
-  //public static void setup_multiarray_df(Object arr, int dims, String descr) {
-
-  //  // Get the tags for each dimension
-  //  Object[] tags = new Object[dims];
-  //  while (--dims >= 0) {
-  //    assert tag_stack.peek() != method_marker;
-  //    tags[dims] = tag_stack.pop();
-  //  }
-
-  //  // Create a description for the array allocation
-  //  Throwable t = new Throwable();
-  //  t.fillInStackTrace();
-  //  ValueSource values = new ValueSource(descr, t);
-
-  //  setup_multiarray_df(0, tags, values, arr);
-  //}
-
-  ///**
-  // * Recursive routine that sets up the length and reference information for an array of possibly
-  // * multiple dimensions
-  // *
-  // * @param dim index into tags array of the tag for this dimension of the array
-  // * @param tags the tags for the size of each dimension of the array
-  // * @param descr description of the array allocation
-  // * @param arr the array. Should have tags.length - dim dimensions
-  // */
-  //private static void setup_multiarray_df(int dim, Object[] tags, ValueSource descr, Object arr) {
-
-  //  // Relate array length of the outermost array to its size
-  //  Object size_tag = tags[dim];
-  //  ValueSource size_values = tag_map.get(size_tag);
-  //  df_arrlen_map.put(arr, size_values);
-
-  //  // Create a new DF for the array itself
-  //  tag_map.put(arr, descr);
-
-  //  // Loop through each element of the array
-  //  int len = Array.getLength(arr);
-  //  for (int ii = 0; ii < len; ii++) {
-  //    Object subarr = Array.get(arr, ii);
-  //    setup_multiarray_df(dim + 1, tags, descr, subarr);
-  //  }
-  //}
-
-  ///**
-  // * Handles the various primitive (int, double, etc) array load instructions. The tag for the index
-  // * is removed from the tag stack and the tag for the array element is pushed on the stack. The
-  // * resulting DF value is the union of the index DF and the array element DF (since the changing
-  // * the index, will definitely change the value). This method handles array elements whose tags
-  // * have not previously been set. This can happen when the JVM sets an array element directly and
-  // * there is no corresponding java code that can set the tag.
-  // */
-  //public static void primitive_array_load_df(Object arr_ref, int index) {
-
-  //  assert tag_stack.peek() != method_marker;
-  //  Object index_tag = tag_stack.pop();
-
-  //  // Get the tag for the element
-  //  Object elem_tag;
-  //  Object[] obj_tags = field_map.get(arr_ref);
-  //  if (obj_tags != null) {
-  //    elem_tag = obj_tags[index];
-  //    if (elem_tag == null) obj_tags[index] = elem_tag = new UninitArrayElem();
-  //    if (debug_primitive.enabled()) {
-  //      debug_primitive.log(
-  //          "arrayload null-ok %s[%d] = %s%n", arr_ref, index, obj_str(obj_tags[index]));
-  //    }
-  //  } else {
-  //    int length = Array.getLength(arr_ref);
-  //    obj_tags = new Object[length];
-  //    field_map.put(arr_ref, obj_tags);
-  //    elem_tag = new UninitArrayElem();
-  //    obj_tags[index] = elem_tag;
-  //    if (debug_primitive.enabled()) {
-  //      debug_primitive.log("arrayload null-ok %s[%d] = null%n", arr_ref, index);
-  //    }
-  //  }
-
-  //  // Create the tag for the result
-  //  Object result_tag = new Object();
-
-  //  // The result DF is the union of the index DF and the element DF
-  //  binary_op_df("array-load", result_tag, index_tag, elem_tag);
-
-  //  // Push the result tag on the tag stack
-  //  tag_stack.push(result_tag);
-  //}
-
-  ///**
-  // * Handles the aaload instruction. The tag for the index is popped from the tag stack. The DF
-  // * value for the result is the union of the index DF and the array element DF (since the changing
-  // * the index, will definitely change the value). Note that no tag is pushed on the tag stack
-  // * because the result is not a primitive.
-  // */
-  //public static void ref_array_load_df(Object arr_ref, int index) {
-
-  //  // Get the tag for the index
-  //  assert tag_stack.peek() != method_marker;
-  //  Object index_tag = tag_stack.pop();
-
-  //  // Get the element
-  //  Object elem = Array.get(arr_ref, index);
-
-  //  // If the element does not have a source, then it must have come from
-  //  // an externally initialized array (like args).  Indicate its source
-  //  // as the array.
-  //  if (tag_map.get(elem) == null) {
-  //    Throwable t = new Throwable();
-  //    StackTraceElement ste = t.getStackTrace()[1];
-  //    String descr =
-  //        String.format(
-  //            "%s.%s:uninit-arr-elem@L%d",
-  //            ste.getClassName(), ste.getMethodName(), ste.getLineNumber());
-  //    ValueSource val = new ValueSource(descr, t);
-  //    tag_map.put(elem, val);
-  //  }
-
-  //  // The result DF is the union of the element DF and the index DF
-  //  binary_op_df("array-index", elem, elem, index_tag);
-  //}
-
-  ///**
-  // * Creates a value set that is the union of the value sets from tag1 and tag2 and assigns that
-  // * value set to result_tag.
-  // */
-  //private static void binary_op_df(String descr, Object result_tag, Object tag1, Object tag2) {
-
-  //  // Get the DF for the first tag.
-  //  ValueSource val1 = get_value_source(tag1);
-
-  //  // Get the DF for the second tag.
-  //  ValueSource val2 = get_value_source(tag2);
-
-  //  // Get the stack trace of this location
-  //  Throwable stack_trace = new Throwable();
-  //  stack_trace.fillInStackTrace();
-
-  //  // Create a new ValueSource node with val1 and val2 the subtrees.
-  //  ValueSource values = new ValueSource(descr, stack_trace, val1, val2);
-  //  debug_df.log_tb("binary-op %s: %s and %s", descr, val1, val2);
-  //  tag_map.put(result_tag, values);
-  //}
-
-  ///**
-  // * Pop the tags for the value to be stored and the index off of the tag stack, create a new tag
-  // * whose DF is the union of the index DF and the value DF, and store that tag in the arrays tag
-  // * array.
-  // */
-  //private static void primitive_array_store_df(Object arr_ref, int length, int index) {
-
-  //  // look for the tag storage for this array
-  //  Object[] obj_tags = field_map.get(arr_ref);
-
-  //  // If none has been allocated, allocate the space and associate it with
-  //  // the array
-  //  if (obj_tags == null) {
-  //    obj_tags = new Object[length];
-  //    field_map.put(arr_ref, obj_tags);
-  //  }
-
-  //  // Get the tags for the value to be stored and the index off of
-  //  // the tag stack
-  //  assert tag_stack.peek() != method_marker;
-  //  Object value_tag = tag_stack.pop();
-  //  assert tag_stack.peek() != method_marker;
-  //  Object index_tag = tag_stack.pop();
-
-  //  // Create a new tag for the array element and create a new DF tree with
-  //  // the index and value as the subtrees.
-  //  Object elem_tag = new Object();
-  //  binary_op_df("array-store", elem_tag, value_tag, index_tag);
-
-  //  // Store the element tag in the tag array for the array
-  //  obj_tags[index] = elem_tag;
-  //}
-
-  ///** Execute an aastore instruction and mark the array and its index as comparable. */
-  //public static void aastore_df(Object[] arr, int index, Object val) {
-
-  //  // Get the tag for index
-  //  assert tag_stack.peek() != method_marker;
-  //  Object index_tag = tag_stack.pop();
-
-  //  debug_df.log("aastore_df: val = %s, index = %d, tag = %s%n", val, index, index_tag);
-
-  //  // The values new DF has the index and the current DF as its subtrees
-  //  if (val != null) binary_op_df("array-store", val, val, index_tag);
-
-  //  // Store the value
-  //  arr[index] = val;
-  //}
-
-  ///**
-  // * Execute an bastore instruction and manipulate the tags accordingly.
-  // *
-  // * @see #primitive_array_store_df
-  // */
-  //public static void bastore_df(byte[] arr, int index, byte val) {
-
-  //  // Store the tag for val in the tag storage for array and mark
-  //  // the array and the index as comparable.
-  //  primitive_array_store_df(arr, arr.length, index);
-
-  //  // Execute the array store
-  //  arr[index] = val;
-  //}
-
-  ///**
-  // * Execute an castore instruction and manipulate the tags accordingly.
-  // *
-  // * @see #primitive_array_store_df
-  // */
-  //public static void castore_df(char[] arr, int index, char val) {
-
-  //  // Store the tag for val in the tag storage for array and mark
-  //  // the array and the index as comparable.
-  //  primitive_array_store_df(arr, arr.length, index);
-
-  //  // Execute the array store
-  //  arr[index] = val;
-  //}
-
-  ///**
-  // * Execute an dastore instruction and manipulate the tags accordingly.
-  // *
-  // * @see #primitive_array_store_df
-  // */
-  //public static void dastore_df(double[] arr, int index, double val) {
-
-  //  // Store the tag for val in the tag storage for array and mark
-  //  // the array and the index as comparable.
-  //  primitive_array_store_df(arr, arr.length, index);
-
-  //  // Execute the array store
-  //  arr[index] = val;
-  //}
-
-  ///**
-  // * Execute an fastore instruction and manipulate the tags accordingly.
-  // *
-  // * @see #primitive_array_store_df
-  // */
-  //public static void fastore_df(float[] arr, int index, float val) {
-
-  //  // Store the tag for val in the tag storage for array and mark
-  //  // the array and the index as comparable.
-  //  primitive_array_store_df(arr, arr.length, index);
-
-  //  // Execute the array store
-  //  arr[index] = val;
-  //}
-
-  ///**
-  // * Execute an iastore instruction and manipulate the tags accordingly.
-  // *
-  // * @see #primitive_array_store_df
-  // */
-  //public static void iastore_df(int[] arr, int index, int val) {
-
-  //  // Store the tag for val in the tag storage for array and mark
-  //  // the array and the index as comparable.
-  //  primitive_array_store_df(arr, arr.length, index);
-
-  //  // Execute the array store
-  //  arr[index] = val;
-  //}
-
-  ///**
-  // * Execute an lastore instruction and manipulate the tags accordingly.
-  // *
-  // * @see #primitive_array_store_df
-  // */
-  //public static void lastore_df(long[] arr, int index, long val) {
-
-  //  // Store the tag for val in the tag storage for array and mark
-  //  // the array and the index as comparable.
-  //  primitive_array_store_df(arr, arr.length, index);
-
-  //  // Execute the array store
-  //  arr[index] = val;
-  //}
-
-  ///**
-  // * Execute an sastore instruction and manipulate the tags accordingly.
-  // *
-  // * @see #primitive_array_store_df
-  // */
-  //public static void sastore_df(short[] arr, int index, short val) {
-
-  //  // Store the tag for val in the tag storage for array and mark
-  //  // the array and the index as comparable.
-  //  primitive_array_store_df(arr, arr.length, index);
-
-  //  // Execute the array store
-  //  arr[index] = val;
-  //}
-
-  ///** Prints the DF for the tag on the top of the tag stack. */
-  //public static void prim_branch_df(int compared_to) {
-  //  assert tag_stack.peek() != method_marker;
-  //  Object tag = tag_stack.pop();
-  //  BranchInfo bi = new BranchInfo(tag_map.get(tag), String.format("%d", compared_to));
-  //  branch_tags.add(bi);
-  //  debug_df_branch.log("primitive DF in branch: %s", bi);
-  //}
-
-  ///** Captures the DF information for a frontier branch over two integers. */
-  //public static void int2_branch_df(int val1, int val2) {
-  //  assert tag_stack.peek() != method_marker;
-  //  Object tag2 = tag_stack.pop();
-  //  assert tag_stack.peek() != method_marker;
-  //  Object tag1 = tag_stack.pop();
-  //  BranchInfo bi1 = new BranchInfo(tag_map.get(tag1), String.valueOf(val2));
-  //  BranchInfo bi2 = new BranchInfo(tag_map.get(tag2), String.valueOf(val1));
-  //  branch_tags.add(bi1);
-  //  branch_tags.add(bi2);
-  //  debug_df_branch.log("int2 DF in branch: %s - %s", bi1, bi2);
-  //}
-
-  ///**
-  // * Captures the DF information for a branch that compares the specified object to null. Returns
-  // * the object so it can be used in the comparison.
-  // */
-  //public static Object ref_cmp_null_df(Object obj) {
-  //  BranchInfo bi = new BranchInfo(tag_map.get(obj), "null");
-  //  branch_tags.add(bi);
-  //  debug_df_branch.log("Reference DF for object '%s' in branch: %s\n", obj, bi);
-  //  return obj;
-  //}
-
-  ///**
-  // * Captures the DF information for a branch that compares the two specified objects. Used for
-  // * if_acmpeq and if_acmpne. This should really put the DF of the object being compared to in
-  // * BranchInfo, but right now it only accepts a single string. We find the dataflow of both objects
-  // * that are compared, because a BranchInfo is added to the list for both of the objects.
-  // */
-  //public static void ref2_branch_df(Object obj1, Object obj2) {
-  //  if (obj1 != null) {
-  //    BranchInfo bi1 = new BranchInfo(tag_map.get(obj1), ((obj2 == null) ? "null" : "object"));
-  //    branch_tags.add(bi1);
-  //    debug_df_branch.log("Reference DF for object '%s' in branch: %s\n", obj1, bi1);
-  //  }
-
-  //  if (obj2 != null) {
-  //    BranchInfo bi2 = new BranchInfo(tag_map.get(obj2), ((obj1 == null) ? "null" : "object"));
-  //    branch_tags.add(bi2);
-  //    debug_df_branch.log("Reference DF for object '%s' in branch: %s\n", obj2, bi2);
-  //  }
-  //}
-
-  ///**
-  // * Returns the ValueSource tree associated with tag. If nothing is associated with tag and the tag
-  // * is an uninitialized field, creates a new ValueSource tree from the information in
-  // * UninitFieldTag and associates it with tag. If the tag is an instance of Throwable (which may be
-  // * created without a corresponding new), create a ValueSource tree for this location.
-  // */
-  //private static ValueSource get_value_source(Object tag) {
-  //  assert tag != null; // see whether this fails -MDE
-  //  if (tag == null) {
-  //    return ValueSource.null_value_source;
-  //  }
-
-  //  ValueSource val = tag_map.get(tag);
-  //  if (val == null) {
-  //    if (tag instanceof Throwable) {
-  //      Throwable stack_trace = new Throwable();
-  //      stack_trace.fillInStackTrace();
-  //      val = new ValueSource("Throwable", stack_trace);
-  //      tag_map.put(tag, val);
-  //    } else if (tag instanceof UninitFieldTag) {
-  //      UninitFieldTag uft = (UninitFieldTag) tag;
-  //      val = new ValueSource(uft.descr, uft.stack_trace);
-  //      tag_map.put(tag, val);
-  //    } else { // unexpected null
-  //      Throwable stack_trace = new Throwable();
-  //      stack_trace.fillInStackTrace();
-  //      val = new ValueSource("no-info", stack_trace);
-  //      // tag_map.put (tag, val);
-  //      System.out.printf("WARNING: no value for tag '%s'%n", tag);
-  //      stack_trace.printStackTrace(System.out);
-  //    }
-  //  }
-  //  return val;
-  //}
-
-  ///**
-  // * Handle an uninstrumented clone call by transferring the dataflow from the original object to
-  // * the clone. Really should transfer the dataflow of each primitive field instead. Returns the
-  // * cloned object.
-  // */
-  //public static Object uninstrumented_clone_df(Object orig_obj, Object clone_obj) {
-  //  obj_to_obj(orig_obj, clone_obj);
-  //  return clone_obj;
-  //}
-
-  ///**
-  // * Handle an uninstrumented toString call. Transfers the dataflow from the orig object to the
-  // * string.
-  // */
-  //public static String uninstrumented_toString_df(Object orig_obj, String result) {
-  //  obj_to_obj(orig_obj, result);
-  //  return result;
-  //}
-
-  ////
-  //// Routines used as summaries for the JDK
-  ////
-
-  ///**
-  // * Handle tags for uninstrumented methods that take one primitive argument (tag on the tag stack)
-  // * and return an object. The DF of the argument is passed to the returned object.
-  // */
-  //private static void prim_to_obj(Object obj) {
-  //  assert tag_stack.peek() != method_marker;
-  //  Object tag = tag_stack.pop();
-  //  ValueSource vs = tag_map.get(tag);
-  //  assert (vs != null) : "no vs for " + tag;
-  //  tag_map.put(obj, vs);
-  //}
-
-  ///**
-  // * Handles DF for methods that take one reference argument and return a reference. The DF of the
-  // * dest is set to that of the source.
-  // */
-  //private static void obj_to_obj(Object src, Object dest) {
-  //  ValueSource vs = tag_map.get(src);
-  //  assert vs != null;
-  //  tag_map.put(dest, vs);
-  //}
-
-  ///**
-  // * Handles tags for methods that take one reference argument and return a primitive. A new tag is
-  // * allocated for the primitive and pushed on the tag stack. The tag has the same DF as the input
-  // * object.
-  // */
-  //private static void obj_to_prim(Object obj) {
-  //  ValueSource vs = tag_map.get(obj);
-  //  assert vs != null;
-  //  Object tag = new Object();
-  //  tag_map.put(tag, vs);
-  //  tag_stack.push(tag);
-  //}
-
-  ///** DF of result is equal to DF of argument */
-  //@DFSum("instance-java.lang.Integer.intValue")
-  //public static int Integer_intValue(Integer obj) {
-  //  obj_to_prim(obj);
-  //  return obj.intValue();
-  //}
-
-  ///** DF of result is equal to DF of argument */
-  //@DFSum("static-java.lang.Integer.valueOf")
-  //public static Integer Integer_valueOf(int val) {
-  //  Integer obj = Integer.valueOf(val);
-  //  prim_to_obj(obj);
-  //  return obj;
-  //}
-
-  ///** DF of result is equal to DF of argument */
-  //@DFSum("static-java.lang.Float.valueOf")
-  //public static Float Float_valueOf(float val) {
-  //  Float obj = Float.valueOf(val);
-  //  prim_to_obj(obj);
-  //  return obj;
-  //}
-
-  ///** DF of result is equal to DF of argument */
-  //@DFSum("static-java.lang.Double.valueOf")
-  //public static Double Double_valueOf(double val) {
-  //  Double obj = Double.valueOf(val);
-  //  prim_to_obj(obj);
-  //  return obj;
-  //}
-
-  ///** DF of result is equal to DF of argument */
-  //@DFSum("static-java.lang.Boolean.valueOf")
-  //public static Boolean Boolean_valueOf(boolean val) {
-  //  // DynComp creates a unique object rather than re-using, so that it can
-  //  // distinguish different values.
-  //  // Boolean obj = Boolean.valueOf (val);
-  //  Boolean obj = new Boolean(val);
-  //  prim_to_obj(obj);
-  //  return obj;
-  //}
-
-  ///** DF of result is equal to DF of argument */
-  //@DFSum("static-java.lang.Integer.decode")
-  //public static Integer Integer_decode(String str) {
-  //  Integer val = Integer.decode(str);
-  //  obj_to_obj(str, val);
-  //  return val;
-  //}
-
-  ///** DF of result is equal to DF of argument */
-  //@DFSum("static-java.lang.Long.valueOf")
-  //public static Long Long_valueOf(long val) {
-  //  Long obj = Long.valueOf(val);
-  //  prim_to_obj(obj);
-  //  return obj;
-  //}
-
-  ///** DF of result is equal to DF of argument */
-  //@DFSum("static-java.lang.Short.valueOf")
-  //public static Short Short_valueOf(short val) {
-  //  Short obj = Short.valueOf(val);
-  //  prim_to_obj(obj);
-  //  return obj;
-  //}
-
-  ///** DF of result is equal to DF of argument */
-  //@DFSum("static-java.lang.String.valueOf")
-  //public static String String_valueOf(Object obj) {
-  //  String str = String.valueOf(obj);
-  //  obj_to_obj(obj, str);
-  //  return str;
-  //}
-
-  ///** DF of result is equal to the union of the DF of the two arguments */
-  //@DFSum("instance-java.lang.StringBuffer.append")
-  //public static StringBuffer StringBuffer_append(StringBuffer buff, CharSequence s) {
-  //  System.out.printf("Append '%s' to '%s'%n", s, buff);
-  //  StringBuffer result = buff.append(s);
-  //  binary_op_df("StringBuffer_append", result, buff, s);
-  //  return result;
-  //}
-
-  ///** DF of result is equal to the union of the DF of the two arguments */
-  //@DFSum("instance-java.lang.StringBuffer.append")
-  //public static StringBuffer StringBuffer_append(StringBuffer buff, String s) {
-  //  System.out.printf("Append '%s' to '%s'%n", s, buff);
-  //  StringBuffer result = buff.append(s);
-  //  binary_op_df("StringBuffer_append", result, buff, s);
-  //  return result;
-  //}
-
-  ///**
-  // * Calculates dataflow for o1.equals(o2). If o1 is instrumented the instrumentedversion calculates
-  // * the dataflow. If o2 is not instrumented, we set the dataflow of the result to the union of the
-  // * DF of each object. This may not be optimum if o1 implements equals.
-  // */
-  //public static boolean equals_df(Object o1, Object o2) {
-  //  if (o1 instanceof DCompInstrumented) {
-  //    DCompInstrumented dci = (DCompInstrumented) o1;
-  //    debug_df.log_tb("calling instrumented equals on %s and %s", o1, o2);
-  //    boolean result = dci.equals_dcomp_instrumented(o2);
-  //    return result;
-  //  } else { // the equals is not instrumented
-  //    debug_df.log_tb(
-  //        "uninstrumented equals on %X:%s and %X:%s",
-  //        System.identityHashCode(o1), o1, System.identityHashCode(o2), o2);
-  //    Object tag = new Object();
-  //    binary_op_df("equals", tag, o1, o2);
-  //    tag_stack.push(tag);
-  //    return (o1.equals(o2));
-  //  }
-  //}
-
-  ///**
-  // * Handles a call to an uninstrumented super equals. Makes the result DF depend on the DF of the
-  // * two input objects. Does not execute the super call itself, that must be done in the caller.
-  // */
-  //public static void super_equals_df(Object o1, Object o2) {
-  //  debug_df.log_tb("uninstrumented equals on %s and %s", o1, o2);
-  //  Object tag = new Object();
-  //  binary_op_df("equals", tag, o1, o2);
-  //  tag_stack.push(tag);
-  //}
 }
