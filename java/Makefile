@@ -530,7 +530,6 @@ JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 dyncomp dcomp : plume-copy plume-import-check dcomp_premain.jar
 dcomp_premain.jar : $(wildcard $(INSTRUMENTATION_JAVA_FILES)) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(INSTRUMENTATION_JAVA_FILES)
-	$(JAVA) daikon.dcomp.SummaryInfo
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
 	  daikon/dcomp/Premain.class
 	$(MAKE) dcomp-test
@@ -933,7 +932,7 @@ check-signature: ${ALL_GENERATED_FILES} compile
 # Typical command:
 # SIGNATURE_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-signature-onefile
 # SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
-SIGNATURE_ONEFILE ?= daikon/dcomp/SummaryInfo.java daikon/dcomp/TypeStack.java
+SIGNATURE_ONEFILE ?= daikon/dcomp/TypeStack.java
 check-signature-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 

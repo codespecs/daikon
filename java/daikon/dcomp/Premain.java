@@ -2,7 +2,6 @@ package daikon.dcomp;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
-import daikon.dcomp.DCRuntime.BranchInfo;
 import daikon.util.*;
 import java.io.*;
 import java.lang.instrument.*;
@@ -137,70 +136,6 @@ public class Premain {
 
       in_shutdown = true;
 
-      // If DataFlow, print out the DF for the specified branch
-      if (DynComp.branch != null) {
-
-        if (DynComp.verbose) {
-          System.err.printf(
-              "Branch %s executed %d times\n", DynComp.branch, DCRuntime.branch_tags.size());
-          for (BranchInfo bi : DCRuntime.branch_tags) {
-            DCRuntime.debug_timing.log_time("writing branch data");
-            System.err.printf("  --------------- compare-to: %s%n", bi.compared_to);
-            if (bi.value_source == null) {
-              System.err.printf("  Warning: null vs encountered%n");
-              continue;
-            }
-            System.err.printf("%s%n", bi.value_source.tree_dump());
-          }
-        }
-
-        // if an output file was requested, write the index of each local
-        // in the test sequence that was associated with the dataflow to
-        // the file in the format <local-offset> <local-offset>...
-        // The file contains exactly one line.
-        if (DynComp.dataflow_out != null) {
-          PrintWriter dataflow_fp = null;
-          try {
-            dataflow_fp = new PrintWriter(DynComp.dataflow_out);
-          } catch (Exception e) {
-            throw new RuntimeException("Can't open dataflow output file" + DynComp.dataflow_out, e);
-          }
-          if (DCRuntime.exit_exception != null) {
-            System.out.printf("Writing error output to %s%n", DynComp.dataflow_out);
-            dataflow_fp.printf("Error: %s%n", DCRuntime.exit_exception);
-            assert DCRuntime.exit_exception != null
-                : "@AssumeAssertion(nullness): limited side effects don't change this field";
-            DCRuntime.exit_exception.printStackTrace(dataflow_fp);
-          } else { // no error was encountered, results should be good
-
-            System.out.printf("Writing dataflow output to %s%n", DynComp.dataflow_out);
-            Map<String, Set<String>> locals = new LinkedHashMap<String, Set<String>>();
-            for (BranchInfo bi : DCRuntime.branch_tags) {
-              DCRuntime.debug_timing.log_time("Processing bi %s%n", bi);
-              Map<String, Set<String>> bi_locals = bi.value_source.get_var_compares(bi.compared_to);
-              for (String local : bi_locals.keySet()) {
-                Set<String> compare_to_set = locals.get(local);
-                if (compare_to_set == null) {
-                  compare_to_set = new LinkedHashSet<String>();
-                  locals.put(local, compare_to_set);
-                }
-                compare_to_set.addAll(bi_locals.get(local));
-              }
-            }
-
-            for (String local : locals.keySet()) {
-              dataflow_fp.printf("%s ", local);
-              for (String ct : locals.get(local)) {
-                dataflow_fp.printf("%s ", ct);
-              }
-              dataflow_fp.println();
-            }
-          }
-          dataflow_fp.close();
-        }
-        return;
-      }
-
       // If requested, write the comparability data to a file
       if (DynComp.comparability_file != null) {
         if (DynComp.verbose) {
@@ -260,14 +195,6 @@ public class Premain {
       }
       if (DynComp.verbose) System.out.println("DynComp complete");
     }
-  }
-
-  /** Returns the local name (eg, var0, var1) that corresponds to a specific local-store. */
-  public static String seq_local_name(String local_store) {
-    assert local_store.startsWith("local-store");
-    int local_index = Integer.decode(local_store.split(" ")[1]);
-    String local_name = DFInstrument.test_seq_locals[local_index];
-    return local_name;
   }
 
   public static PrintWriter open(File filename) {

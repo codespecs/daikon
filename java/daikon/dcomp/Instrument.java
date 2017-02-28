@@ -86,12 +86,7 @@ public class Instrument implements ClassFileTransformer {
       }
 
       // Transform the file
-      DCInstrument dci;
-      if (DynComp.branch != null) {
-        dci = new DFInstrument(c, in_jdk, loader);
-      } else {
-        dci = new DCInstrument(c, in_jdk, loader);
-      }
+      DCInstrument dci = new DCInstrument(c, in_jdk, loader);
       JavaClass njc;
       if (DynComp.no_primitives) {
         njc = dci.instrument_refs_only();

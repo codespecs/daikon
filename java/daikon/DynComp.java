@@ -75,16 +75,6 @@ public class DynComp {
   @Option("Depth of call hierarchy for line tracing")
   public static int trace_line_depth = 1;
 
-  // Options for use in dynamically tracing the input parameters
-  // associated with a particular branch.  Setting these options turns
-  // off normal DynComp behavior.
-  // Invariant:  (branch == null) == (input_method == null)
-  @Option("Branch to trace")
-  public static /*@Nullable*/ String branch = null;
-
-  @Option("Method that contains a test sequence")
-  public static /*@Nullable*/ String input_method = null;
-
   @Option("Output file for DataFlow information")
   // Null if shouldn't do output
   public static /*@Nullable*/ File dataflow_out = null;
@@ -165,13 +155,6 @@ public class DynComp {
     if (!no_jdk && rt_file != null && !rt_file.exists()) {
       // if --rt-file was given, but doesn't exist
       options.print_usage("rt-file %s does not exist", rt_file);
-      return false;
-    }
-
-    if ((branch == null) != (input_method == null)) {
-      options.print_usage(
-          "Dynamic tracing options 'branch' and "
-              + "'input_method':  must specify both or neither");
       return false;
     }
 
