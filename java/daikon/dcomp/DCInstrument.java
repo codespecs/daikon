@@ -483,6 +483,7 @@ class DCInstrument {
     InstructionList il = mg.getInstructionList();
     for (InstructionHandle ih = il.getStart(); ih != null; ih = ih.getNext()) {
       Instruction inst = ih.getInstruction();
+      int orig_length = inst.getLength();
       int operand;
 
       if ((inst instanceof RET) || (inst instanceof IINC)) {
@@ -496,33 +497,23 @@ class DCInstrument {
         operand = ((LocalVariableInstruction) inst).getIndex();
         if (operand >= index_first_moved_local) {
           ((LocalVariableInstruction) inst).setIndex(operand + size);
-          // Unfortunately, it doesn't take care of incrementing the
-          // offset within StackMapEntrys.
-          if ((operand < 4) && ((operand + size) > 3)) {
-            // If operand was <= 3 (max implicit) and it is now
-            // > 3 (explicit) the instruction will be one byte longer.
-            // We need to update the instruction list to account for this.
-            il.setPositions();
-            // Which means we might need to update a StackMap offset.
-            update_stack_map_offset(ih.getPosition(), size);
-          }
+        }
+      }
+      // Unfortunately, BCEL doesn't take care of incrementing the
+      // offset within StackMapEntrys.
+      int delta = inst.getLength() - orig_length;
+      if (delta > 0) {
+        il.setPositions();
+        update_stack_map_offset(ih.getPosition(), delta);
+        if (smta != null) {
+          // Need to see if there are any switches after this location.
+          // If so, we may need to update the corresponding stackmap if
+          // the amount of the switch padding changed.
+          modify_stack_maps_for_switches(ih, il);
         }
       }
     }
-
-    // Adjusting the local's offsets may have caused the code bytes to
-    // be modified.  We need to see if this changed any of the
-    // switch instruction padding bytes.
-    //
-    // If there was no orgiinal StackMapTable (smta == null)
-    // then there are no switches and/or class was compiled for
-    // Java 5.  In either case, no need to process switches.
-    if (smta != null) {
-      // Need to see if there are any switches after this location.
-      // If so, we may need to update the corresponding stackmap if
-      // the amount of the switch padding changed.
-      modify_stack_maps_for_switches(il.getStart(), il);
-    }
+    //  System.out.printf("%n%s%n", mgen.getInstructionList());
 
     // Finally, we need to update any StackMaps that point to the NEW
     // instruction for an uninitialized variable.
@@ -854,12 +845,6 @@ class DCInstrument {
     debug_instrument_inst.enabled = DynComp.debug;
     debug_native.enabled = DynComp.debug;
     debug_track.enabled = Premain.debug_dcinstrument;
-  }
-
-  /** Returns true if we are instrumenting for dataflow */
-  /*@Pure*/
-  public boolean is_data_flow() {
-    return this instanceof DFInstrument;
   }
 
   /**
@@ -2894,7 +2879,38 @@ class DCInstrument {
 
     if (is_object_method(method_name, invoke.getArgumentTypes(pool))) callee_instrumented = false;
 
-    if (callee_instrumented) {
+    // Replace calls to Object's equals method with calls to our
+    // replacement, a static method in DCRuntime
+    if (is_object_equals(method_name, ret_type, arg_types)) {
+
+      Type[] new_arg_types = new Type[] {javalangObject, javalangObject};
+
+      if (invoke.getOpcode() == Const.INVOKESPECIAL) {
+        // this is a super.equals(Object) call
+        il.append(
+            ifact.createInvoke(
+                "daikon.dcomp.DCRuntime",
+                "dcomp_super_equals",
+                ret_type,
+                new_arg_types,
+                Const.INVOKESTATIC));
+      } else {
+        // just a regular equals(Object) call
+        il.append(
+            ifact.createInvoke(
+                "daikon.dcomp.DCRuntime",
+                "dcomp_equals",
+                ret_type,
+                new_arg_types,
+                Const.INVOKESTATIC));
+      }
+
+    } else if (is_object_clone(method_name, ret_type, arg_types)
+        || (is_object_toString(method_name, ret_type, arg_types) && !ignore_toString)) {
+
+      il = instrument_object_call(invoke, "");
+
+    } else if (callee_instrumented) {
 
       // push dummy tags for args
       for (Type arg_type : arg_types) {
@@ -2956,6 +2972,25 @@ class DCInstrument {
     // NOTE: If we find other classes that should not use the instrumented
     // versions, we should consider making this a searchable list.
     if (classname.equals("java.util.Random")) return false;
+
+    // Should we test the full_instrumentation flag?
+    // or just assume if a JDK method/class is on omit list we
+    // should always use uninstrumented version?
+
+    // We should probably change the interface to include method name
+    // and use "classname.methodname" as arg to pattern matcher.
+    // Also, perhaps check this for all methods not just jdk?
+    // in that case would definitely require testing
+    // full_instrumentation flag for non-JDK methods.
+
+    // If any of the omit patterns match, use the uninstrumented version
+    // of the JDK method
+    for (Pattern p : DynComp.ppt_omit_pattern) {
+      //  System.out.printf("pattern: %s, classname: %s%n", p.pattern(), classname);
+      if (p.matcher(classname).find()) {
+        return false;
+      }
+    }
 
     // If the JDK is instrumented, then everthing but object is instrumented
     if (jdk_instrumented && (exclude_object && !classname.equals("java.lang.Object"))) {
@@ -3754,9 +3789,6 @@ class DCInstrument {
 
     debug_track.log("Considering tracking ppt %s %s%n", classname, pptname);
 
-    // If we are tracing values to a branch, we don't track anything
-    if (is_data_flow()) return false;
-
     // Don't track any JDK classes
     if (BCELUtil.in_jdk(classname)) {
       debug_track.log("  jdk class, return false%n");
@@ -4304,6 +4336,7 @@ class DCInstrument {
         // Look for branches within the new il; i.e., both the source
         // and target must be within the new il.  If we find any, the
         // target will need a stack map entry.
+        // This situation is caused by a call to "instrument_object_call".
         InstructionHandle nih = new_start;
         int target_count = 0;
         int target_offsets[] = new int[2]; // see note below for why '2'
@@ -4366,7 +4399,16 @@ class DCInstrument {
             stack = stack_types.get(target_offsets[i]);
             debug_instrument_inst.log("stack: %s %n", stack);
 
-            if (stack.size() == 1) {
+            // The inserted code has pushed an object reference on the stack.
+            // The StackMap(s) we create as targets of the internal branch
+            // must account for this item.  Normally, we could use
+            // SAME_LOCALS_1_STACK_ITEM_FRAME to account for this extra item,
+            // but if the next StackMap after the insertion is FULL_FRAME
+            // then there is a possibility that there are extra items already
+            // on the stack and adding 1_STACK_ITEM will fail.
+            // TEMP hack for now is to just always force a FULL_FRAME.
+            // But this can sometimes fail as well for reasons as yet unkown. (markro)
+            if (stack.size() == 666) { // was  == 1
               StackMapType stack_map_type0 = generate_StackMapType_from_Type(stack.peek(0));
               StackMapType[] stack_map_types0 = {stack_map_type0};
               new_stack_map_table[new_index + i] =
