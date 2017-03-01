@@ -20,6 +20,20 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.5.2 (March 1, 2017)
+
+DynComp:
+- Fixed several issues related to StackMaps.
+- Made several performance improvements.
+
+Chicory:
+- Allow for a ConcurrentModificationException when attempting to get the
+  contents of a subList.
+
+Updated our internal version of BCEL as part of StackMap fix.
+
+===========================================================================
+
 5.5.0 (February 1, 2017)
 
 Kvasir:

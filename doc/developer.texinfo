@@ -2345,6 +2345,8 @@ Verify that Daikon passes its tests, under both JDK 7 and JDK 8.
 
 For Travis CI,
 all of the following jobs should be green:
+@exampleindent 0
+@example
 @* @url{https://travis-ci.org/codespecs/daikon}
 @html
 <img src="https://travis-ci.org/codespecs/daikon.svg?branch=master" alt="Travis codespecs/daikon status"/>
@@ -2377,6 +2379,8 @@ all of the following jobs should be green:
 @html
 <img src="https://travis-ci.org/typetests/daikon-typecheck-signature.svg?branch=master" alt="Travis typetests/daikon-typecheck-signature status"/>
 @end html
+@end example
+@exampleindent 1
 
 If any of the jobs is not passing, then correct the problem and wait for
 the jobs to complete and pass.
