@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
@@ -23,7 +24,7 @@ import org.checkerframework.dataflow.qual.*;
     "initialization.fields.uninitialized") // library initialized in code added by run-time instrumentation
 public class Runtime {
   /** Unique id for method entry/exit (so they can be matched up) */
-  public static int nonce = 0;
+  public static AtomicInteger nonce = new AtomicInteger();
 
   /** debug flag */
   public static boolean debug = false;

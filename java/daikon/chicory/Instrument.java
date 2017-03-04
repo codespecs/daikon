@@ -1191,6 +1191,9 @@ public class Instrument implements ClassFileTransformer {
   private void add_entry_instrumentation(
       InstructionList il, MethodContext c, boolean shouldCallEnter) throws IOException {
 
+    String atomic_int_classname = "java.util.concurrent.atomic.AtomicInteger";
+    Type atomic_int_type = new ObjectType(atomic_int_classname);
+
     InstructionList nl = new InstructionList();
 
     // create the local variable
@@ -1205,20 +1208,14 @@ public class Instrument implements ClassFileTransformer {
     // The following implements:
     //     this_invocation_nonce = Runtime.nonce++;
 
-    // getstatic Runtime.nonce (push its current value on stack)
-    nl.append(c.ifact.createGetStatic(runtime_classname, "nonce", Type.INT));
+    // getstatic Runtime.nonce (load reference to AtomicInteger daikon.chicory.Runtime.nonce)
+    nl.append(c.ifact.createGetStatic(runtime_classname, "nonce", atomic_int_type));
 
-    // dup (make a second copy of runtime.nonce on the stack)
-    nl.append(InstructionFactory.createDup(Type.INT.getSize()));
-
-    // iconst_1 (push 1 on the stack)
-    nl.append(c.ifact.createConstant(1));
-
-    // iadd (add the top two items on the stack together)
-    nl.append(InstructionFactory.createBinaryOperation("+", Type.INT));
-
-    // putstatic Runtime.nonce (pop result of add to Runtime.nonce)
-    nl.append(c.ifact.createPutStatic(runtime_classname, "nonce", Type.INT));
+    // do an atomic get and increment of nonce value
+    // this is multi-thread safe and leaves int value of nonce on stack
+    nl.append(
+        c.ifact.createInvoke(
+            atomic_int_classname, "getAndIncrement", Type.INT, new Type[] {}, Const.INVOKEVIRTUAL));
 
     // istore <lv> (pop original value of nonce into this_invocation_nonce)
     nl.append(InstructionFactory.createStore(Type.INT, nonce_lv.getIndex()));
