@@ -22,6 +22,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -126,14 +127,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public VarInfoAux aux;
 
   /** The index in lists of VarInfo objects. */
-  public int varinfo_index;
+  public /*@NonNegative*/ int varinfo_index;
 
   /**
    * The index in a ValueTuple (more generally, in a list of values). It can differ from
    * varinfo_index due to constants (and possibly other factors). It is -1 iff is_static_constant or
    * not yet set.
    */
-  public int value_index;
+  public /*@GTENegativeOne*/ int value_index;
 
   /**
    * Invariants: <br>

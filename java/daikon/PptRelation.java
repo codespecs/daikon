@@ -535,7 +535,7 @@ public class PptRelation implements Serializable {
     PptRelation rel = new PptRelation(parent, child, PptRelationType.EXIT_EXITNN);
 
     // Create the parent-child variable map.  This one is easy as the
-    // variables should match exactly
+    // variables should match exactly.
     assert parent.var_infos.length == child.var_infos.length;
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vc = child.var_infos[i];
@@ -587,7 +587,7 @@ public class PptRelation implements Serializable {
     }
 
     // Create the parent-child variable map.  This one is easy as the
-    // variables should match exactly
+    // variables should match exactly.
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];

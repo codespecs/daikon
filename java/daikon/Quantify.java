@@ -5,6 +5,7 @@ import java.util.*;
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -334,12 +335,12 @@ public class Quantify {
     private EnumSet<QuantFlags> flags;
     // private VarInfo[] vars;
     private VarInfo[] arr_vars;
-    private String[] arr_vars_indexed;
+    private String /*@ArrayLen({1,2})*/[] arr_vars_indexed;
     private String[] quants;
     private String quant;
     private Term[] indices;
 
-    public ESCQuantification(EnumSet<QuantFlags> flags, VarInfo... vars) {
+    public ESCQuantification(EnumSet<QuantFlags> flags, VarInfo /*@ArrayLen({1,2})*/... vars) {
       this.flags = flags.clone();
 
       assert vars != null;
@@ -419,7 +420,7 @@ public class Quantify {
      * Returns the specified array variable indexed by its index. For example, if the array variable
      * is 'a.b[]' and the index is 'i', returns a.b[i].
      */
-    public String get_arr_vars_indexed(int num) {
+    public String get_arr_vars_indexed(/*@IntVal({0,1})*/ int num) {
       return arr_vars_indexed[num];
     }
   }
@@ -430,9 +431,9 @@ public class Quantify {
     EnumSet<QuantFlags> flags;
     String quantification;
     String[] arr_vars_indexed;
-    /*@Nullable*/ String[] indices;
+    /*@Nullable*/ String /*@ArrayLen({1,2})*/[] indices;
 
-    public SimplifyQuantification(EnumSet<QuantFlags> flags, VarInfo... vars) {
+    public SimplifyQuantification(EnumSet<QuantFlags> flags, VarInfo /*@ArrayLen({1,2})*/... vars) {
       this.flags = flags.clone();
 
       assert vars != null;
@@ -541,7 +542,7 @@ public class Quantify {
      * Returns the specified array variable indexed by its index. For example, if the array variable
      * is 'a[]' and the index is 'i', returns 'select i a'.
      */
-    public String get_arr_vars_indexed(int num) {
+    public String get_arr_vars_indexed(/*@IntVal({0,1})*/ int num) {
       return arr_vars_indexed[num];
     }
 

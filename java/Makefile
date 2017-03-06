@@ -851,6 +851,7 @@ CHECKER_ARGS ?= -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.sym
 
 ## All of the following targets need to depend on "compile".
 
+JAVAC_INDEX_ARGS = -processor org.checkerframework.checker.index.IndexChecker -implicit:class -Xlint:-processing -AskipDefs='${INDEX_SKIPDEFS}' -AassumeAssertionsAreEnabled
 # JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
 JAVAC_SIGNATURE_ARGS = -processor org.checkerframework.checker.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
@@ -872,14 +873,16 @@ JAVAC_LOCK_ARGS = -processor org.checkerframework.checker.lock.LockChecker -Asup
 JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 ## Code in dcomp directory is not called directly; annotations would be useless.
+INDEX_SKIPDEFS = ^daikon\.dcomp\|^jtb\.
 INTERNING_SKIPDEFS = ^daikon\.dcomp\|^jtb\.
 ALLSYSTEMS_SKIPDEFS=^jtb\.
+INDEX_JAVA_FILES = ${DAIKON_JAVA_FILES} $(shell find daikon/util/ -name '*.java' | ${SORT_DIRECTORY_ORDER})
 # Intern.java implements interning and so has very many annotations.  VarInfoName
 # is obsolescent, retained for backward compatibility only; it is of flawed design
 # and has 60 @Interned annotations and quite a few SuppressWarnings.
 INTERNING_JAVA_FILES_SKIP_COUNTS = Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
-INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES} $(shell find daikon/util/ -name '*.java')
+INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES} $(shell find daikon/util/ -name '*.java' | ${SORT_DIRECTORY_ORDER})
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
 ## Setting this to a subset of directories only works if every file has been
 ## previously compiled with the Java 7 compiler in annotations-in-comments
@@ -901,7 +904,28 @@ show_nullness_java_files:
 # check-all: check-formatter check-interning check-nullness check-regex check-signature check-prototype check-vindex
 ## check-regex-qual target runs extremely slowly.
 # check-all: check-formatter check-interning check-nullness check-regex check-regex-qual check-signature
+## todo: add check-index here
 check-all: check-formatter check-interning check-nullness check-regex check-signature check-lock
+
+intern: check-index
+index: check-index
+check-index: daikon/util/README ${INDEX_JAVA_FILES} compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_JAVA_FILES}
+
+# Run the index checker on all Java files, not just those in the daikon package.
+# For instance, this includes jtb, which is not annotated with @Interned.
+index-all: check-index-all
+check-index-all: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+
+# This target runs the Index checker on just one file.
+# Typical command:
+# INDEX_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-index-onefile
+INDEX_ONEFILE ?= daikon/PptTopLevel.java
+check-index-onefile: ${ALL_GENERATED_FILES} compile
+	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_ONEFILE}
 
 intern: check-interning
 interning: check-interning
