@@ -3594,7 +3594,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                 vars[0].var_info_name, vars[1].var_info_name); // vin ok
         String index2 =
             VarInfoName.QuantHelper.getFreeIndex(
-                    vars[0].var_info_name, vars[2].var_info_name, index1_vin) // vin ok
+                    vars[0].var_info_name, vars[1].var_info_name, index1_vin) // vin ok
                 .simplify_name();
         return new String[] {index1_vin.name(), index2};
       } else {
