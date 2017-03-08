@@ -507,3 +507,6 @@ java/cov-int/
 
 # Directory used for creating docker images
 scripts/dockerdir/
+
+# Temporary, used in experiment
+java/check-index-output*
