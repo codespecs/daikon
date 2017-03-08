@@ -8,6 +8,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
@@ -41,7 +42,7 @@ public abstract class Ppt implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040914L;
 
-  public VarInfo /*@MinLen(!)*/[] var_infos;
+  public VarInfo /*@MinLen(1)*/[] var_infos;
 
   protected Ppt(VarInfo[] var_infos) {
     this.var_infos = var_infos;
