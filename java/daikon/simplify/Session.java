@@ -114,6 +114,7 @@ public class Session {
       String expect = ">\t";
       byte[] buf = new byte[expect.length()];
       int pos = is.read(buf);
+      assert pos != -1 : "Prompt exected, stream ended";
       String actual = new String(buf, 0, pos);
       assert expect.equals(actual) : "Prompt expected, got '" + actual + "'";
 
