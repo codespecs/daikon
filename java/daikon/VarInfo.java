@@ -1106,10 +1106,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * to it wouldn't be visible to the method's caller. There are 3 such cases:
    *
    * <ul>
-   *   <li> The variable is a pass-by-value parameter "p".
-   *   <li> The variable is of the form "p.prop" where "prop" is an immutable property of an object,
+   *   <li>The variable is a pass-by-value parameter "p".
+   *   <li>The variable is of the form "p.prop" where "prop" is an immutable property of an object,
    *       like its type, or (for a Java array) its size.
-   *   <li> The variable is of the form "p.prop", and "p" has been modified to point to a different
+   *   <li>The variable is of the form "p.prop", and "p" has been modified to point to a different
    *       object. We assume "p" has been modified if we don't have an invariant "orig(p) == p".
    * </ul>
    *

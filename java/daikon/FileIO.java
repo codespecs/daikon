@@ -1126,9 +1126,9 @@ public final class FileIO {
    * ParseState indicates:
    *
    * <ol>
-   *   <li> Some global information about the state of the parser while reading a decl or dtrace
+   *   <li>Some global information about the state of the parser while reading a decl or dtrace
    *       file.
-   *   <li> The record that was most recently read; thus, ParseState is essentially a discriminated
+   *   <li>The record that was most recently read; thus, ParseState is essentially a discriminated
    *       union whose tag is a RecordType. (TODO: These are poor names that should probably be
    *       swapped!) ParseState is what is returned (actually, side-effected) by method
    *       read_data_trace_record when it reads a record.
