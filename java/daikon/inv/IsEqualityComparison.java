@@ -7,8 +7,8 @@ import plume.*;
  * conditions:
  *
  * <ul>
- *   <li> the Invariant is a Comparison (which reports &lt;, &gt;, =, &le;, or &ge;)
- *   <li> the relationship reported by the comparison is = (not &lt;, &le;, &gt;, or &ge;)
+ *   <li>the Invariant is a Comparison (which reports &lt;, &gt;, =, &le;, or &ge;)
+ *   <li>the relationship reported by the comparison is = (not &lt;, &le;, &gt;, or &ge;)
  * </ul>
  *
  * This does not consider PairwiseIntComparison to be an equality invariant.
