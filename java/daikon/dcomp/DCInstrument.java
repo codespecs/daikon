@@ -1962,7 +1962,9 @@ class DCInstrument {
     // allocate an extra slot to save the tag frame depth for debugging
     int frame_size = mg.getMaxLocals() + 1;
 
-    assert frame_size < 100 : frame_size + " " + mg.getClassName() + "." + mg.getName();
+    // unsigned byte max = 255.  minus the character '0' (decimal 48)
+    // Largest frame size noted so far is 123.
+    assert frame_size < 207 : frame_size + " " + mg.getClassName() + "." + mg.getName();
     String params = "" + (char) (frame_size + '0');
     // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> plist = new ArrayList<Integer>();
@@ -2737,6 +2739,18 @@ class DCInstrument {
     } else {
       classname = invoke.getClassName(pool);
       callee_instrumented = callee_instrumented(classname);
+
+      // This is a bit of a hack.  An invokeinterface instruction with a
+      // a target of "java.util.stream.<something>" might be calling a
+      // Lambda method in which case we don't want to add the dcomp_marker.
+      // Might lose something in 'normal' cases, but no easy way to detect.
+      if (invoke instanceof INVOKEINTERFACE) {
+        //System.out.printf("invoke interface: %s%n", classname+"."+method_name);
+        if (classname.startsWith("java.util.stream")) {
+          callee_instrumented = false;
+        }
+      }
+
       if (invoke instanceof INVOKEVIRTUAL) {
         if (DynComp.no_jdk) {
           //System.out.printf("invoke virtual: %s : %s%n", classname, method_name);
@@ -2960,6 +2974,9 @@ class DCInstrument {
     // Our copy of daikon.util is not instrumented.  It would be odd, though,
     // to see calls to this.
     if (classname.startsWith("daikon.util")) return false;
+
+    // Special case the execution trace tool.
+    // if (classname.startsWith("minst.Minst")) return false;
 
     // If its not a JDK class, presume its instrumented.
     if (!BCELUtil.in_jdk(classname)) return true;
