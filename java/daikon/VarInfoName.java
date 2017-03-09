@@ -734,7 +734,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
    * If this is a slice, (potentially in pre-state), return its lower and upper bounds, which can be
    * subtracted to get one less than its size.
    */
-  public /*@Interned*/ VarInfoName[] getSliceBounds(/*>>> @Interned VarInfoName this*/) {
+  public /*@Interned*/ VarInfoName /*@ArrayLen(2)*/[] getSliceBounds(
+      /*>>> @Interned VarInfoName this*/) {
     VarInfoName vin = this;
     boolean inPrestate = false;
     if (vin instanceof Prestate) {
@@ -744,7 +745,9 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     while (vin instanceof Field) {
       vin = ((Field) vin).term;
     }
-    if (!(vin instanceof Slice)) return null;
+    if (!(vin instanceof Slice)) {
+      return null;
+    }
     Slice slice = (Slice) vin;
     /*@Interned*/ VarInfoName[] ret = new /*@Interned*/ VarInfoName[2];
     if (slice.i != null) {
@@ -2963,7 +2966,8 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
      * @return a 3-element array consisting of the new root, the lower bound for the index
      *     (inclusive), and the upper bound for the index (inclusive), in that order
      */
-    public static VarInfoName[] replace(VarInfoName root, VarInfoName needy, VarInfoName index) {
+    public static VarInfoName /*@ArrayLen(3)*/[] replace(
+        VarInfoName root, VarInfoName needy, VarInfoName index) {
       assert root != null;
       assert needy != null;
       assert index != null;
@@ -3105,7 +3109,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     /** Record type for return value of the quantify method below. */
     public static class QuantifyReturn {
       public /*@Interned*/ VarInfoName[] root_primes;
-      public Vector</*@Interned*/ VarInfoName[]>
+      public Vector</*@Interned*/ VarInfoName /*@ArrayLen(3)*/[]>
           bound_vars; // each element is VarInfoName[3] = <variable, lower, upper>
     }
 
@@ -3482,7 +3486,13 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           }
         }
       }
-      result[0] = "(FORALL (" + int_list + ") " + "(IMPLIES (AND " + conditions + ") ";
+      result[0] =
+          "(FORALL ("
+              + int_list
+              + ") "
+              + "(IMPLIES (AND "
+              + conditions
+              + ") "; // TODO index: issue 117
 
       // stringify the terms
       for (int i = 0; i < qret.root_primes.length; i++) {
@@ -3503,6 +3513,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
         }
       }
 
+      // TODO: index: result[0] worked above and we have not reassigned result
       result[result.length - 1] = "))"; // close IMPLIES, FORALL
 
       return result;
@@ -3616,19 +3627,19 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
 
       if (forall) {
-        result[0] = quant_format_forall(format);
+        result[0] = quant_format_forall(format); // TODO index issue 117
       } else {
-        result[0] = quant_format_exists(format);
+        result[0] = quant_format_exists(format); // TODO index issue 117
       }
 
-      result[0] +=
+      result[0] += // TODO index issue 117
           (int_list
               + quant_separator1(format)
               + conditions
               + quant_separator2(format)
               + closing
               + quant_step_terminator(format));
-      result[result.length - 1] = ")";
+      result[result.length - 1] = ")"; // TODO: index: result[0] succeeded just above
 
       // stringify the terms
       for (int i = 0; i < qret.root_primes.length; i++) {

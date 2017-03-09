@@ -20,6 +20,7 @@ import java.util.regex.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.formatter.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
@@ -427,7 +428,8 @@ import typequals.*;
    * @param permutation gives the varinfo array index mapping in the new ppt
    */
   public Invariant transfer(
-      /*>>> @NonPrototype Invariant this,*/ PptSlice new_ppt, int[] permutation) {
+      /*>>> @NonPrototype Invariant this,*/ PptSlice new_ppt,
+      /*@IndexFor("#1.var_infos")*/ int[] permutation) {
     // Check some sanity conditions
     assert new_ppt.arity() == ppt.arity();
     assert permutation.length == ppt.arity();
@@ -499,7 +501,8 @@ import typequals.*;
    * @param permutation gives the varinfo array index mapping
    */
   public Invariant resurrect(
-      /*>>> @NonPrototype Invariant this,*/ PptSlice new_ppt, int[] permutation) {
+      /*>>> @NonPrototype Invariant this,*/ PptSlice new_ppt,
+      /*@IndexFor("#1.var_infos")*/ int[] permutation) {
     // Check some sanity conditions
     assert falsified;
     assert new_ppt.arity() == ppt.arity();
@@ -1179,7 +1182,7 @@ import typequals.*;
   protected /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEqualityHelper(
       /*>>> @NonPrototype Invariant this,*/ VarInfo[] vis,
       /*NNC:@MonotonicNonNull*/ VarInfo[] assigned,
-      int position) {
+      /*@IndexOrHigh("#2")*/ int position) {
     if (position == vis.length) {
       if (debugIsObvious.isLoggable(Level.FINE)) {
         StringBuffer sb = new StringBuffer();
@@ -1316,7 +1319,9 @@ import typequals.*;
    * combinations are generated via recursive calls to this routine.
    */
   protected /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEqualityHelper(
-      /*>>> @NonPrototype Invariant this,*/ VarInfo[] vis, VarInfo[] assigned, int position) {
+      /*>>> @NonPrototype Invariant this,*/ VarInfo[] vis,
+      VarInfo[] assigned,
+      /*@IndexOrHigh("#1")*/ int position) {
     if (position == vis.length) {
       // base case
       if (debugIsObvious.isLoggable(Level.FINE)) {

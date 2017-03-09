@@ -44,7 +44,7 @@ public abstract class Ppt implements Serializable {
 
   public VarInfo /*@MinLen(1)*/[] var_infos;
 
-  protected Ppt(VarInfo[] var_infos) {
+  protected Ppt(VarInfo /*@MinLen(1)*/[] var_infos) {
     this.var_infos = var_infos;
   }
 
@@ -95,7 +95,7 @@ public abstract class Ppt implements Serializable {
    * variable.
    */
   /*@Pure*/
-  public int indexOf(String varname) {
+  public /*@IndexOrLow("var_infos")*/ int indexOf(String varname) {
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i].name().equals(varname)) {
         return i;

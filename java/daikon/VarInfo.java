@@ -27,6 +27,7 @@ import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
+import org.checkerframework.common.value.qual.*;
 */
 
 /**
@@ -126,8 +127,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Auxiliary info. */
   public VarInfoAux aux;
 
-  /** The index in lists of VarInfo objects. */
-  public /*@NonNegative*/ int varinfo_index;
+  /** The index in lists of VarInfo objects, or -1 if not yet set. */
+  public /*@GTENegativeOne*/ int varinfo_index;
 
   /**
    * The index in a ValueTuple (more generally, in a list of values). It can differ from
@@ -461,7 +462,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * non-default parent variable. The parent variable name is formed as function_name(arg1,arg2,...)
    * where arg1, arg2, etc are the parent variable names of each of the arguments.
    */
-  public void setup_derived_function(String name, VarInfo... bases) {
+  public void setup_derived_function(String name, VarInfo /*@MinLen(1)*/... bases) {
 
     // Copy variable info from the first base
     VarInfo base = bases[0];
@@ -812,6 +813,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Helper function for repr(). */
+  @SuppressWarnings("index") // issue 112
   private Object checkNull(/*@Nullable*/ Object o) {
     return (o == null) ? "null" : o;
   }
@@ -2974,7 +2976,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    *
    * (there is no splitting).
    */
-  public String[] csharp_array_split() {
+  public String /*@ArrayLen(2)*/[] csharp_array_split() {
     String[] results = new String[2];
 
     if (!is_array()) {
@@ -3300,7 +3302,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       case VARIABLE:
         if (dkconfig_constant_fields_simplify && str_name.contains(".")) {
           String sel = null;
-          String[] fields = null;
+          @SuppressWarnings("index") // fields contains "."
+          String /*@MinLen(2)*/[] fields;
           if (postState != null) {
             fields = postState.name().split("\\.");
             sel = String.format("(select |%s| |__orig__%s|)", fields[1], fields[0]);
@@ -3389,7 +3392,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Element 0 is the quantification, Element 1 is the indexed form of variable 1, Element 2 is the
    * indexed form of variable 3. and Element 4 is unknown.
    */
-  public static String[] esc_quantify(VarInfo... vars) {
+  public static String /*@ArrayLen(4)*/[] esc_quantify(VarInfo... vars) {
     return esc_quantify(true, vars);
   }
 
@@ -3398,7 +3401,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Element 0 is the quantification, Element 1 is the indexed form of variable 1, Element 2 is the
    * indexed form of variable 3. and Element 4 is unknown.
    */
-  public static String[] esc_quantify(boolean elementwise, VarInfo... vars) {
+  public static String /*@ArrayLen(4)*/[] esc_quantify(
+      boolean elementwise, VarInfo /*@ArrayLen({1,2})*/... vars) {
 
     if (FileIO.new_decl_format) {
       Quantify.ESCQuantification quant =
@@ -3454,7 +3458,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public String /*@Nullable*/ [] get_simplify_slice_bounds() {
     if (!FileIO.new_decl_format) {
       /*@Interned*/ VarInfoName[] bounds = var_info_name.getSliceBounds(); // vin ok
-      if (bounds == null) return null;
+      if (bounds == null) {
+        return null;
+      }
       String[] str_bounds = new String[2];
       str_bounds[0] = bounds[0].simplify_name();
       str_bounds[1] = bounds[1].simplify_name();
@@ -3534,7 +3540,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (!FileIO.new_decl_format) {
       /*@Interned*/ VarInfoName[] bounds = var_info_name.getSliceBounds();
       VarInfoName lower = null;
-      if (bounds != null) lower = bounds[0];
+      if (bounds != null) {
+        lower = bounds[0];
+      }
       VarInfoName select =
           VarInfoName.QuantHelper.selectNth(
               var_info_name, // vin ok
@@ -3574,13 +3582,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return VarInfoName.QuantHelper.getFreeIndex(vins).simplify_name();
     }
 
+    // TODO index: vars must now be non-empty
     // Get a free variable for each variable and return the first one
     QuantifyReturn[] qret = Quantify.quantify(vars);
     return qret[0].index.simplify_name();
   }
 
-  /** Get a 2 fresh variable names that doesn't appear in the given variable in simplify format. */
-  public static String[] get_simplify_free_indices(VarInfo... vars) {
+  /** Get 2 fresh variable names that doesn't appear in the given variable in simplify format. */
+  public static String /*@ArrayLen(2)*/[] get_simplify_free_indices(VarInfo... vars) {
     if (!FileIO.new_decl_format) {
       if (vars.length == 1) {
         VarInfoName index1_vin =
@@ -3604,7 +3613,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     // Get a free variable for each variable
-    if (vars.length == 1) vars = new VarInfo[] {vars[0], vars[0]};
+    if (vars.length == 1) {
+      vars = new VarInfo[] {vars[0], vars[0]};
+    }
     QuantifyReturn qret[] = Quantify.quantify(vars);
     return new String[] {qret[0].index.simplify_name(), qret[1].index.simplify_name()};
   }
@@ -3621,7 +3632,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * additional strings, after the roots but before the closer, with the names of the index
    * variables.
    */
-  public static String[] simplify_quantify(EnumSet<QuantFlags> flags, VarInfo... vars) {
+  public static String[] simplify_quantify(
+      EnumSet<QuantFlags> flags, VarInfo /*@ArrayLen({1,2})*/... vars) {
 
     if (!FileIO.new_decl_format) {
       // Get the names for each variable.
@@ -4060,7 +4072,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Create a VarInfo that is a function over one or more other variables. the type, rep_type, etc
    * of the new function are taken from the first variable.
    */
-  public static VarInfo make_function(String function_name, VarInfo... vars) {
+  public static VarInfo make_function(String function_name, VarInfo /*@MinLen(1)*/... vars) {
 
     VarInfoName[] vin = new VarInfoName[vars.length];
     for (int ii = 0; ii < vars.length; ii++) {

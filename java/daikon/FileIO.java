@@ -377,6 +377,7 @@ public final class FileIO {
     }
 
     // Build the var infos from the var definitions.
+    @SuppressWarnings("index") // issue 114
     List<VarInfo> vi_list = new ArrayList<VarInfo>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
       vi_list.add(new VarInfo(vd));
@@ -811,17 +812,23 @@ public final class FileIO {
       //assert ppt.var_infos.length == vals.length;
 
       for (int j = 0; j < vals.length; j++) {
-        if (j != 0) pw.print(", ");
+        if (j != 0) {
+          pw.print(", ");
+        }
 
         pw.print(ppt.var_infos[j].name() + "=");
 
         Object val = vals[j];
-        if (canonical_hashcode.equals(
-            val)) // succeeds only for canonicalized Invocations.  Can be an == test, but there is little point.  val can be null, so it cannot be the receiver.
-        pw.print("<hashcode>");
-        else if (val instanceof int[]) pw.print(ArraysMDE.toString((int[]) val));
-        else if (val instanceof String) pw.print(UtilMDE.escapeNonASCII((String) val));
-        else pw.print(val);
+        // succeeds only for canonicalized Invocations.  Can be an == test, but there is little point.  val can be null, so it cannot be the receiver.
+        if (canonical_hashcode.equals(val)) {
+          pw.print("<hashcode>");
+        } else if (val instanceof int[]) {
+          pw.print(ArraysMDE.toString((int[]) val));
+        } else if (val instanceof String) {
+          pw.print(UtilMDE.escapeNonASCII((String) val));
+        } else {
+          pw.print(val);
+        }
       }
       pw.println();
 
@@ -1580,7 +1587,7 @@ public final class FileIO {
       // Actually, we do want to leave space for _orig vars.
       // And for the time being (and possibly forever), for derived variables.
       int num_tracevars = ppt.num_tracevars;
-      int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
+      /*@NonNegative*/ int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
 
       // Read an invocation nonce if one exists
       Integer nonce = null;

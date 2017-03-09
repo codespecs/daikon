@@ -299,7 +299,7 @@ public final class PrintInvariants {
               PrintInvariants.print_csharp_metadata_SWITCH, LongOpt.OPTIONAL_ARGUMENT, null, 0),
         };
     Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
-    int c;
+    /*@IndexOrLow("args")*/ int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
         case 0:
@@ -405,7 +405,7 @@ public final class PrintInvariants {
     validateGuardNulls();
 
     // The index of the first non-option argument -- the name of the file
-    int fileIndex = g.getOptind();
+    /*@IndexFor("args")*/ int fileIndex = g.getOptind();
     if (args.length - fileIndex != 1) {
       System.out.println(usage);
       throw new Daikon.TerminationMessage("Wrong number of arguments (expected 1)");

@@ -89,6 +89,7 @@ public class DynamicConstants implements Serializable {
   /** List of all variables. Some may be non-constant. */
   Constant[] all_vars;
 
+  /** List of all variables. Some may be non-constant. */
   List<Constant> all_list = new ArrayList<Constant>();
 
   /** Program point of these constants. */
@@ -655,7 +656,9 @@ public class DynamicConstants implements Serializable {
             inv.log("Invariant %s destroyed by constant values %s", inv.format(), vals);
           }
         }
-        if (slice.invs.size() > 0) slice_cnt[slice.arity()]++;
+        if (slice.invs.size() > 0) {
+          slice_cnt[slice.arity()]++;
+        }
         inv_cnt[slice.arity()] += slice.invs.size();
         if (Debug.logDetail()) {
           StringBuffer sb = new StringBuffer();

@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -209,7 +210,7 @@ public class Chicory {
    * Starts the target program with the java agent setup to do the transforms. All java agent
    * arguments are passed to it. Our classpath is passed to the new JVM.
    */
-  void start_target(String premain_args, String[] target_args) {
+  void start_target(String premain_args, String /*@MinLen(1)*/[] target_args) {
 
     // Default the trace file name to the <target-program-name>.dtrace.gz
     if (dtrace_file == null) {

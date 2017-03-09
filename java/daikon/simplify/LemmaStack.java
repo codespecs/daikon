@@ -11,6 +11,7 @@ import java.util.Vector;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
@@ -207,7 +208,12 @@ public class LemmaStack {
    * Return true if all the invariants in invs[i] in invs[] not between min and max (inclusive) for
    * which excluded[i] is false, together imply the formula conseq.
    */
-  private boolean allExceptImply(Lemma[] invs, boolean[] excluded, int min, int max, String conseq)
+  private boolean allExceptImply(
+      Lemma /*@SameLen("#2")*/[] invs,
+      boolean /*@SameLen("#1")*/[] excluded,
+      int min,
+      int max,
+      String conseq)
       throws TimeoutException {
     int assumed = 0;
     for (int i = 0; i < invs.length; i++) {
@@ -224,7 +230,8 @@ public class LemmaStack {
   }
 
   /** Return true if all the elements of bools between min and max (inclusive) are true. */
-  private static boolean allTrue(boolean[] bools, int min, int max) {
+  private static boolean allTrue(
+      boolean[] bools, /*@IndexFor("#1")*/ int min, /*@IndexOrHigh("#1")*/ int max) {
     for (int i = min; i <= max; i++) {
       if (!bools[i]) {
         return false;

@@ -58,6 +58,7 @@ import plume.UtilMDE;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.common.value.qual.*;
 import typequals.*;
 */
 
@@ -259,8 +260,11 @@ public final class Daikon {
   /**
    * An array of flags, indexed by characters, in which a true entry means that invariants of that
    * sort should be omitted from the output {@code .inv} file.
+   *
+   * <p>The only used entries are those for '0', 'r', and 's'. (So this is a somewhat gross
+   * representation of the needed data.)
    */
-  public static boolean[] omit_types = new boolean[256];
+  public static boolean /*@ArrayLen(256)*/[] omit_types = new boolean[256];
 
   // Command-line options / command-line arguments
   // These variables are public so other programs can reuse the same
@@ -2046,7 +2050,7 @@ public final class Daikon {
     if (all_ppts.size() == 0) {
       String message = "No program point declarations were found.";
       if (FileIO.omitted_declarations != 0) {
-        message +=
+        message += // TODO index issue 119
             lineSep
                 + "  "
                 + FileIO.omitted_declarations

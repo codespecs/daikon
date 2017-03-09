@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -123,7 +124,7 @@ public class PptRelation implements Serializable {
 
   /** Returns the number of parent to child variable relations. */
   /*@Pure*/
-  public int size() {
+  public /*@NonNegative*/ int size() {
     return (parent_to_child_map.size());
   }
 
@@ -272,6 +273,7 @@ public class PptRelation implements Serializable {
       Equality e = (Equality) inv;
       debug.fine("-- processing equality set " + e);
       Set<VarInfo> eqset = e.getVars();
+      @SuppressWarnings("index") // issue 114
       VarInfo[] varr = eqset.toArray(new VarInfo[eqset.size()]);
 
       // Build each combination of variables in the equality set and produce

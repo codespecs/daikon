@@ -11,6 +11,7 @@ import java.util.logging.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
@@ -24,9 +25,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
   public static final Logger debug = Logger.getLogger("daikon.suppress.NISuppressionSet");
 
-  NISuppression[] suppression_set;
+  NISuppression /*@MinLen(1)*/[] suppression_set;
 
-  public NISuppressionSet(NISuppression[] suppressions) {
+  public NISuppressionSet(NISuppression /*@MinLen(1)*/[] suppressions) {
     assert suppressions != null;
     assert suppressions.length != 0;
     suppression_set = suppressions;

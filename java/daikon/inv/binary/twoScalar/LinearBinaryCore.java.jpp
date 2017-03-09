@@ -37,6 +37,7 @@ import java.io.Serializable;
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -332,7 +333,7 @@ public final class CLASSNAME
    * pair of points between the points represented by x_array and y_array.
    * Requires that x_array and y_array are the same length.
    */
-  static int[] maxsep_point(PRIMITIVE[] x_array, PRIMITIVE[] y_array) {
+  static int/*@ArrayLen(2)*/[] maxsep_point(PRIMITIVE[] x_array, PRIMITIVE[] y_array) {
     // Find the most separated pair.
     // Do I really need to check in two dimensions, or would one be enough?
 
@@ -366,7 +367,7 @@ public final class CLASSNAME
    * Returns a 2-element int array of the indices of the most separated
    * pair of points between the points within this.
    */
-  int[] maxsep_indices() {
+  int/*@ArrayLen(2)*/[] maxsep_indices() {
     return maxsep_point(x_cache, y_cache);
   }
 

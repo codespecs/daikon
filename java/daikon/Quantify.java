@@ -3,6 +3,7 @@ package daikon;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.common.value.qual.*;
@@ -289,8 +290,9 @@ public class Quantify {
   }
 
   /**
-   * Given a list of sequences, determines a free variable that can be used as a subscript for each
-   * sequence. If any of the vars are not sequences, no index is calculated for them.
+   * Given a list of sequence variables, determines a free variable that can be used as a subscript
+   * for each sequence. If any of the vars are not sequences, no index is calculated for its free
+   * variable.
    */
   public static QuantifyReturn[] quantify(VarInfo[] vars) {
     assert vars != null;
@@ -316,7 +318,9 @@ public class Quantify {
       VarInfo vi = vars[ii];
 
       // If this variable is not an array, there is not much to do
-      if (!vi.file_rep_type.isArray()) continue;
+      if (!vi.file_rep_type.isArray()) {
+        continue;
+      }
 
       // Get a unique free variable name
       String idx_name;
@@ -354,7 +358,7 @@ public class Quantify {
       String arr_var1_index = arr_var1.esc_name(index1.esc_name());
 
       // If there is a second array variable, get quant for it
-      if ((vars.length > 1) && (vars[1].file_rep_type.isArray())) {
+      if ((vars.length > 1) && (vars[1].file_rep_type.isArray())) { // TODO: index issue 115
         Term index2 = new FreeVar("j");
         String quant2 = bld_quant(vars[1], index2);
         indices = new Term[] {index1, index2};
@@ -420,7 +424,7 @@ public class Quantify {
      * Returns the specified array variable indexed by its index. For example, if the array variable
      * is 'a.b[]' and the index is 'i', returns a.b[i].
      */
-    public String get_arr_vars_indexed(/*@IntVal({0,1})*/ int num) {
+    public String get_arr_vars_indexed(/*@IndexFor("arr_vars_indexed")*/ int num) {
       return arr_vars_indexed[num];
     }
   }
@@ -542,13 +546,13 @@ public class Quantify {
      * Returns the specified array variable indexed by its index. For example, if the array variable
      * is 'a[]' and the index is 'i', returns 'select i a'.
      */
-    public String get_arr_vars_indexed(/*@IntVal({0,1})*/ int num) {
+    public String get_arr_vars_indexed(/*@IndexFor("arr_vars_indexed")*/ int num) {
       return arr_vars_indexed[num];
     }
 
     /** Returns the specified index */
     @SuppressWarnings("nullness:return.type.incompatible") // possible application invariant?
-    public String get_index(int num) {
+    public String get_index(/*@IndexFor("indices")*/ int num) {
       assert indices[num] != null; // will this assertion fail?
       return indices[num];
     }

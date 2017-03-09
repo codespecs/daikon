@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
@@ -171,10 +172,10 @@ public class PptTopLevel extends Ppt {
   public /*@MonotonicNonNull*/ DynamicConstants constants = null;
 
   // Invariant:  num_declvars == num_tracevars + num_orig_vars
-  public int num_declvars; // number of variables in the declaration
-  public int num_tracevars; // number of variables in the trace file
-  public int num_orig_vars; // number of _orig vars
-  public int num_static_constant_vars; // these don't appear in the trace file
+  public /*@NonNegative*/ int num_declvars; // number of variables in the declaration
+  public /*@NonNegative*/ int num_tracevars; // number of variables in the trace file
+  public /*@NonNegative*/ int num_orig_vars; // number of _orig vars
+  public /*@NonNegative*/ int num_static_constant_vars; // these don't appear in the trace file
 
   private int values_num_samples;
 
@@ -200,15 +201,19 @@ public class PptTopLevel extends Ppt {
    */
   public class CondIterator implements java.util.Iterator<PptConditional> {
 
-    int splitter_index = 0;
+    /*@NonNegative*/ int splitter_index = 0;
     int ppts_index = 0;
 
     @SuppressWarnings(
         "flowexpr.parse.error") // Checker Framework bug: splitters is a field in this class
     /*@EnsuresNonNullIf(result=true, expression="splitters")*/
     public boolean hasNext() {
-      if (splitters == null) return false;
-      if (splitter_index >= splitters.size()) return false;
+      if (splitters == null) {
+        return false;
+      }
+      if (splitter_index >= splitters.size()) {
+        return false;
+      }
       return true;
     }
 

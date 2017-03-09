@@ -5,6 +5,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -205,7 +206,7 @@ public class PptMap implements Serializable {
   }
 
   /*@Pure*/
-  public int size() {
+  public /*@NonNegative*/ int size() {
     return nameToPpt.size();
   }
 

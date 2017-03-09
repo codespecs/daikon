@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
@@ -387,7 +388,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   /*@Pure*/
-  public int size() {
+  public /*@NonNegative*/ int size() {
     assert vals.length == mods.length : "vals = " + vals + " mods = " + mods;
     return vals.length;
   }

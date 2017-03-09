@@ -7,6 +7,7 @@ import java.util.*;
 import plume.IterableIterator;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -115,7 +116,7 @@ public class InvMap implements Serializable {
   }
 
   /*@Pure*/
-  public int size() {
+  public /*@NonNegative*/ int size() {
     int size1 = ppts.size();
     int size2 = pptToInvs.size();
     assert size1 == size2;

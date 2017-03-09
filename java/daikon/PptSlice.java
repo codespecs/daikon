@@ -8,9 +8,11 @@ import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -48,7 +50,8 @@ public abstract class PptSlice extends Ppt {
   /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
 
-  public abstract int arity(
+  // returns the length of var_infos, except returns 0 for PptSlice0.
+  public abstract /*@IndexOrHigh("var_infos")*/ /*@IntVal({0,1,2,3})*/ int arity(
       /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/);
 
   /**

@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
@@ -154,6 +155,7 @@ public class PptSliceEquality extends PptSlice {
               + Integer.toString(multiMap.keySet().size())
               + " VarInfoAndComparability keys");
     }
+    @SuppressWarnings("index") // issue 114
     Equality[] newInvs = new Equality[multiMap.keySet().size()];
     int varCount = 0;
     int invCount = 0;
@@ -544,7 +546,7 @@ public class PptSliceEquality extends PptSlice {
       List<VarInfo> newVis,
       PptSlice slice,
       List<PptSlice> newSlices,
-      int position,
+      /*@NonNegative*/ int position,
       int loop,
       VarInfo[] soFar) {
 

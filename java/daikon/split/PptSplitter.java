@@ -16,6 +16,7 @@ import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
+import org.checkerframework.common.value.qual.*;
 */
 
 /**
@@ -78,7 +79,7 @@ public class PptSplitter implements Serializable {
    * but are PptTopLevel if the PptSplitter represents two exit points (for which no splitter is
    * required).
    */
-  public PptTopLevel[] ppts;
+  public PptTopLevel /*@ArrayLen(2)*/[] ppts;
 
   private static final Comparator<Invariant> icfp = new Invariant.InvariantComparatorForPrinting();
 
@@ -86,6 +87,8 @@ public class PptSplitter implements Serializable {
    * Create a binary PptSplitter with the specied splitter for the specified PptTopLevel parent. The
    * parent should be a leaf (i.e., a numbered exit point).
    */
+  @SuppressWarnings(
+      "index") // parent.var_infos, ppts[0].var_infos, and ppts[1].var_infos have the same length
   public PptSplitter(PptTopLevel parent, Splitter splitter) {
 
     this.parent = parent;
@@ -128,8 +131,8 @@ public class PptSplitter implements Serializable {
   /** Returns true if the splitter is valid at this point, false otherwise. */
   public boolean splitter_valid() {
 
-    assert ((PptConditional) ppts[1]).splitter_valid()
-        == ((PptConditional) ppts[0]).splitter_valid();
+    assert (((PptConditional) ppts[1]).splitter_valid()
+        == ((PptConditional) ppts[0]).splitter_valid());
     return ((PptConditional) ppts[0]).splitter_valid();
   }
 
@@ -270,7 +273,7 @@ public class PptSplitter implements Serializable {
 
     for (VarInfo[] vis : slices) {
 
-      int num_children = ppts.length;
+      int num_children = ppts.length; // always 2
       // Each element is an invariant from the indexth child, permuted to
       // the parent (and with a parent slice as its ppt slot).
       @SuppressWarnings({"unchecked", "rawtypes"})
@@ -375,7 +378,9 @@ public class PptSplitter implements Serializable {
 
       // If neither child slice has invariants there is nothing to do
       if ((invs[0].size() == 0) && (invs[1].size() == 0)) {
-        if (pslice.invs.size() == 0) parent.removeSlice(pslice);
+        if (pslice.invs.size() == 0) {
+          parent.removeSlice(pslice);
+        }
         continue;
       }
 

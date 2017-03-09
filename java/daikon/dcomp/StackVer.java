@@ -83,6 +83,7 @@ import org.apache.bcel.verifier.structurals.OperandStack;
 import org.apache.bcel.verifier.structurals.UninitializedObjectType;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
@@ -173,7 +174,7 @@ public final class StackVer {
      *
      * @return
      */
-    public int size() {
+    public /*@NonNegative*/ int size() {
       return ics.size();
     }
   } // end Inner Class InstructionContextQueue
