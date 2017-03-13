@@ -21,6 +21,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.index.qual.*;
 */
 
 /**
