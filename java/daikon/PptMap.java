@@ -205,6 +205,7 @@ public class PptMap implements Serializable {
     return result;
   }
 
+  @SuppressWarnings("index") // index TODO: issue #114
   /*@Pure*/
   public /*@NonNegative*/ int size() {
     return nameToPpt.size();

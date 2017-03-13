@@ -124,6 +124,7 @@ public class PptRelation implements Serializable {
 
   /** Returns the number of parent to child variable relations. */
   /*@Pure*/
+  @SuppressWarnings("index") // index TODO: issue #114
   public /*@NonNegative*/ int size() {
     return (parent_to_child_map.size());
   }

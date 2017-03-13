@@ -3573,7 +3573,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Get a fresh variable name that doesn't appear in the given variable in simplify format. */
-  public static String get_simplify_free_index(VarInfo... vars) {
+  public static String get_simplify_free_index(VarInfo /*@MinLen(1)*/... vars) {
     if (!FileIO.new_decl_format) {
       VarInfoName[] vins = new VarInfoName[vars.length];
       for (int ii = 0; ii < vars.length; ii++) {
@@ -3589,7 +3589,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Get 2 fresh variable names that doesn't appear in the given variable in simplify format. */
-  public static String /*@ArrayLen(2)*/[] get_simplify_free_indices(VarInfo... vars) {
+  public static String /*@ArrayLen(2)*/[] get_simplify_free_indices(
+      VarInfo /*@ArrayLen({1,2})*/... vars) {
     if (!FileIO.new_decl_format) {
       if (vars.length == 1) {
         VarInfoName index1_vin =

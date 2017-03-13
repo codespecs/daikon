@@ -3486,7 +3486,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           }
         }
       }
-      result[0] =
+      result[0] = // index TODO: issue #117
           "(FORALL ("
               + int_list
               + ") "

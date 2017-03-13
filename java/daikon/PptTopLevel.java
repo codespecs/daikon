@@ -1565,8 +1565,9 @@ public class PptTopLevel extends Ppt {
     return findSlice(v1, v2, v3);
   }
 
+  @SuppressWarnings("index") // issue #126
   /** Find a pptSlice without an assumed ordering. */
-  public /*@Nullable*/ PptSlice findSlice_unordered(VarInfo[] vis) {
+  public /*@Nullable*/ PptSlice findSlice_unordered(VarInfo /*@ArrayLen({1,2,3})*/[] vis) {
     switch (vis.length) {
       case 1:
         return findSlice(vis[0]);

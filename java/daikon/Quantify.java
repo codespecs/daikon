@@ -294,7 +294,7 @@ public class Quantify {
    * for each sequence. If any of the vars are not sequences, no index is calculated for its free
    * variable.
    */
-  public static QuantifyReturn[] quantify(VarInfo[] vars) {
+  public static QuantifyReturn /*@PolyMinLen*/ [] quantify(VarInfo /*@PolyMinLen*/ [] vars) {
     assert vars != null;
 
     // create empty result

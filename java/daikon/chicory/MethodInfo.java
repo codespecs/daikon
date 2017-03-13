@@ -34,16 +34,17 @@ public class MethodInfo {
   public String method_name;
 
   /** Array of argument names for this method */
-  public String[] arg_names;
+  public String /*@SameLen({"arg_names", "arg_type_strings", "arg_types"})*/[] arg_names;
 
   /**
    * Array of argument types for this method (fully qualified). For example: "public static void
    * examineObject(Object x)" would have arg_types {"java.lang.Object"}.
    */
-  public /*@ClassGetName*/ String[] arg_type_strings;
+  public /*@ClassGetName*/ String /*@SameLen({"arg_names", "arg_type_strings", "arg_types"})*/[]
+      arg_type_strings;
 
   /** Array of argument types as classes for this method */
-  public Class<?>[] arg_types;
+  public Class<?> /*@SameLen({"arg_names", "arg_type_strings", "arg_types"})*/[] arg_types;
 
   /** exit locations for this method */
   public List<Integer> exit_locations;
