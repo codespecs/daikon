@@ -36,6 +36,7 @@ import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */

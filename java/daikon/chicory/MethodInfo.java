@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
