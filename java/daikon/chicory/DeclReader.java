@@ -333,8 +333,17 @@ public class DeclReader {
     String[] files = options.parse_or_usage(args);
     boolean print_each_set = !avg_size;
 
+    if (files.length < 1) {
+      System.err.println("No decl-files provided.");
+      System.exit(1);
+    }
+
     // If reading/dumping dtrace file, just read one file and dump it
     if (dump_dtrace) {
+      if (files.length != 1) {
+        System.err.println("One decl-file expected, received " + files.length + ".");
+        System.exit(1);
+      }
       DTraceReader trace = new DTraceReader();
       trace.read(new File(files[0]));
       trace.dump_data();
@@ -345,6 +354,10 @@ public class DeclReader {
     // the comparability base on the declared type of primitives and
     // write out the result
     if (primitive_declaration_type_comparability) {
+      if (files.length != 1) {
+        System.err.println("One decl-file expected, received " + files.length + ".");
+        System.exit(1);
+      }
       DeclReader dr = new DeclReader();
       dr.read(new File(files[0]));
       dr.primitive_declaration_types();
@@ -355,6 +368,10 @@ public class DeclReader {
     // If determining declaration type comparability, setup the comparability
     // base on the declared types and write out the result
     if (declaration_type_comparability) {
+      if (files.length != 2) {
+        System.err.println("Two decl-files expected, received " + files.length + ".");
+        System.exit(1);
+      }
       DeclReader dr = new DeclReader();
       dr.read(new File(files[0]));
       dr.declaration_types();
@@ -365,6 +382,10 @@ public class DeclReader {
     // If determining representation type comparability, setup comparability
     // on the rep type of each variable and write out the result.
     if (rep_type_comparability) {
+      if (files.length != 2) {
+        System.err.println("Two decl-files expected, received " + files.length + ".");
+        System.exit(1);
+      }
       DeclReader dr = new DeclReader();
       dr.read(new File(files[0]));
       dr.rep_types();
