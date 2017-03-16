@@ -1021,8 +1021,8 @@ class DCInstrument {
     // Chicory runtime for this information.
     if (track_class) {
       debug_instrument.log("DCInstrument adding %s to all class list%n", class_info);
-      synchronized (daikon.chicory.Runtime.all_classes) {
-        daikon.chicory.Runtime.all_classes.add(class_info);
+      synchronized (daikon.chicory.SharedData.all_classes) {
+        daikon.chicory.SharedData.all_classes.add(class_info);
       }
     }
 
@@ -1180,8 +1180,8 @@ class DCInstrument {
     // Chicory runtime for this information.
     if (track_class) {
       // System.out.printf ("adding class %s to all class list%n", class_info);
-      synchronized (daikon.chicory.Runtime.all_classes) {
-        daikon.chicory.Runtime.all_classes.add(class_info);
+      synchronized (daikon.chicory.SharedData.all_classes) {
+        daikon.chicory.SharedData.all_classes.add(class_info);
       }
     }
 
@@ -2940,12 +2940,6 @@ class DCInstrument {
           ifact.createInvoke(classname, method_name, ret_type, new_arg_types, invoke.getOpcode()));
 
     } else { // not instrumented
-      // Add a tag for the return type if it is primitive
-      if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
-        // System.out.printf ("push tag for return  type of %s%n",
-        //                   invoke.getReturnType(pool));
-        il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
-      }
       il.append(invoke);
     }
     return il;

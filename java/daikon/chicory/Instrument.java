@@ -35,7 +35,7 @@ public class Instrument implements ClassFileTransformer {
   /** current Constant Pool * */
   static ConstantPoolGen pgen = null;
 
-  /** the index of this method into Runtime.methods */
+  /** the index of this method into SharedData.methods */
   int cur_method_info_index = 0;
 
   /** the location of the runtime support class */
@@ -554,9 +554,9 @@ public class Instrument implements ClassFileTransformer {
 
         method_infos.add(mi);
 
-        synchronized (Runtime.class) {
-          cur_method_info_index = Runtime.methods.size();
-          Runtime.methods.add(mi);
+        synchronized (SharedData.methods) {
+          cur_method_info_index = SharedData.methods.size();
+          SharedData.methods.add(mi);
         }
 
         // Add nonce local to matchup enter/exits
@@ -720,11 +720,11 @@ public class Instrument implements ClassFileTransformer {
 
     if (shouldInclude) {
       debug_transform.log("Added trace info to class %s%n", class_info);
-      synchronized (Runtime.new_classes) {
-        Runtime.new_classes.add(class_info);
+      synchronized (SharedData.new_classes) {
+        SharedData.new_classes.add(class_info);
       }
-      synchronized (Runtime.all_classes) {
-        Runtime.all_classes.add(class_info);
+      synchronized (SharedData.all_classes) {
+        SharedData.all_classes.add(class_info);
       }
     } else { // not included
       debug_transform.log("Trace info not added to class %s%n", class_info);
