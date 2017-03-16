@@ -294,6 +294,7 @@ public class Quantify {
    * for each sequence. If any of the vars are not sequences, no index is calculated for its free
    * variable.
    */
+  @SuppressWarnings("index") // issue #129
   public static QuantifyReturn /*@PolyMinLen*/ [] quantify(VarInfo /*@PolyMinLen*/ [] vars) {
     assert vars != null;
 
@@ -437,6 +438,7 @@ public class Quantify {
     String[] arr_vars_indexed;
     /*@Nullable*/ String /*@ArrayLen({1,2})*/[] indices;
 
+    @SuppressWarnings("index") // issue #130
     public SimplifyQuantification(EnumSet<QuantFlags> flags, VarInfo /*@ArrayLen({1,2})*/... vars) {
       this.flags = flags.clone();
 

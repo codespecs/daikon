@@ -61,7 +61,7 @@ public abstract class PptSlice extends Ppt {
    */
   public List<Invariant> invs;
 
-  PptSlice(PptTopLevel parent, VarInfo[] var_infos) {
+  PptSlice(PptTopLevel parent, VarInfo /*@ArrayLen({0,1,2,3})*/[] var_infos) {
     super(var_infos);
     this.parent = parent;
     invs = new ArrayList<Invariant>();
@@ -261,7 +261,7 @@ public abstract class PptSlice extends Ppt {
   /// Miscellaneous
 
   /** Remove the invariants noted in omitTypes. */
-  public void processOmissions(boolean[] omitTypes) {
+  public void processOmissions(boolean /*@ArrayLen(256)*/[] omitTypes) {
     if (invs.size() == 0) return;
     List<Invariant> toRemove = new ArrayList<Invariant>();
     for (Invariant inv : invs) {

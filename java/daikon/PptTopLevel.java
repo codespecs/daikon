@@ -203,7 +203,7 @@ public class PptTopLevel extends Ppt {
   public class CondIterator implements java.util.Iterator<PptConditional> {
 
     /*@NonNegative*/ int splitter_index = 0;
-    int ppts_index = 0;
+    /*@IndexOrHigh("splitters.get(splitter_index)")*/ int ppts_index = 0;
 
     @SuppressWarnings(
         "flowexpr.parse.error") // Checker Framework bug: splitters is a field in this class
@@ -325,7 +325,7 @@ public class PptTopLevel extends Ppt {
       PptType type,
       List<ParentRelation> parents,
       EnumSet<PptFlags> flags,
-      VarInfo[] var_infos) {
+      VarInfo /*@MinLen(1)*/[] var_infos) {
     super(var_infos);
 
     this.name = name;
@@ -353,7 +353,7 @@ public class PptTopLevel extends Ppt {
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
   @SuppressWarnings("fields.uninitialized") // violates invariants; also uses helper function
-  public PptTopLevel(String name, VarInfo[] var_infos) {
+  public PptTopLevel(String name, VarInfo /*@MinLen(1)*/[] var_infos) {
     super(var_infos);
     this.name = name;
     ppt_name = new PptName(name);
@@ -663,7 +663,7 @@ public class PptTopLevel extends Ppt {
    * VarInfo object at an index i such that vi_index_min &le; i &lt; vi_index_limit (and possibly
    * other VarInfos outside that range).
    */
-  private Derivation[] derive(int vi_index_min, int vi_index_limit) {
+  private Derivation[] derive(int vi_index_min, /*@IndexOrHigh("var_infos")*/ int vi_index_limit) {
     boolean debug_bin_possible = false;
 
     UnaryDerivationFactory[] unary = unaryDerivations;
@@ -2929,10 +2929,17 @@ public class PptTopLevel extends Ppt {
   /**
    * Go though an array of invariants, marking those that can be proved as consequences of others as
    * redundant.
+   *
+   * @param start first index to check, inclusive
+   * @param end last index to check, inclusive
    */
   /*@RequiresNonNull("proverStack")*/
   private void flagRedundantRecursive(
-      InvariantLemma[] lemmas, boolean[] present, int start, int end) throws SimplifyError {
+      InvariantLemma /*@SameLen({"lemmas", "present"})*/[] lemmas,
+      boolean /*@SameLen({"lemmas", "present"})*/[] present,
+      /*@IndexFor({"#1","#2"})*/ int start,
+      /*@IndexFor({"#1","#2"})*/ int end)
+      throws SimplifyError {
     assert start <= end;
 
     if (start == end) {
@@ -3142,7 +3149,7 @@ public class PptTopLevel extends Ppt {
   //   }
 
   /** Remove invariants that are marked for ommission in omitTypes. */
-  public void processOmissions(boolean[] omitTypes) {
+  public void processOmissions(boolean /*@ArrayLen(256)*/[] omitTypes) {
     // Avoid concurrent modification exceptions using arrays
     Collection<PptSlice> viewsAsCollection = viewsAsCollection();
     PptSlice[] viewArray = viewsAsCollection.toArray(new PptSlice[viewsAsCollection.size()]);
@@ -3921,8 +3928,9 @@ public class PptTopLevel extends Ppt {
 
     invariants_removed = true;
   }
-  /** Builds a permutation from vis1 to vis2. The result is vis1[i] = vis2[permute[i]]. */
-  public static int[] build_permute(VarInfo[] vis1, VarInfo[] vis2) {
+  /** Builds a permutation from vis1 to vis2. The result is such that vis1[i] = vis2[permute[i]]. */
+  public static /*@IndexFor("vis1")*/ int /*@PolySameLen*/ [] build_permute(
+      VarInfo /*@PolySameLen*/ [] vis1, VarInfo /*@PolySameLen*/ [] vis2) {
 
     int[] permute = new int[vis1.length];
     boolean[] matched = new boolean[vis1.length];

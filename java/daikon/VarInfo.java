@@ -3392,7 +3392,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Element 0 is the quantification, Element 1 is the indexed form of variable 1, Element 2 is the
    * indexed form of variable 3. and Element 4 is unknown.
    */
-  public static String /*@ArrayLen(4)*/[] esc_quantify(VarInfo... vars) {
+  public static String /*@ArrayLen({3,4})*/[] esc_quantify(VarInfo /*@ArrayLen({1, 2})*/... vars) {
     return esc_quantify(true, vars);
   }
 
@@ -3401,7 +3401,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Element 0 is the quantification, Element 1 is the indexed form of variable 1, Element 2 is the
    * indexed form of variable 3. and Element 4 is unknown.
    */
-  public static String /*@ArrayLen(4)*/[] esc_quantify(
+  public static String /*@ArrayLen({3,4})*/[] esc_quantify(
       boolean elementwise, VarInfo /*@ArrayLen({1,2})*/... vars) {
 
     if (FileIO.new_decl_format) {
@@ -3435,7 +3435,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * is the lower bound, and the third element is the upper bound. Returns null if this is not a
    * direct array or slice.
    */
-  public String /*@Nullable*/ [] simplifyNameAndBounds() {
+  public String /*@Nullable*/ /*@ArrayLen(3)*/[] simplifyNameAndBounds() {
     if (!FileIO.new_decl_format) {
       return VarInfoName.QuantHelper.simplifyNameAndBounds(var_info_name); // vin ok
     }

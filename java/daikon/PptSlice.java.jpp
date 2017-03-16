@@ -65,6 +65,7 @@ import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import typequals.*;
 */
 
@@ -88,7 +89,7 @@ public final class PPTSLICE1 extends PptSlice {
    * Create a new PPTSLICE1.  The var_infos must be in varinfo_index
    * order.
    */
-  public PPTSLICE1(PptTopLevel parent, VarInfo[] var_infos) {
+  public PPTSLICE1(PptTopLevel parent, VarInfo /*@ArrayLen(ARITY)*/ [] var_infos) {
 
     super(parent, var_infos);
     assert var_infos.length == ARITY;

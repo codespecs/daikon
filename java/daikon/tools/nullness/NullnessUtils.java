@@ -5,6 +5,7 @@ package daikon.tools.nullness;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.framework.qual.*;
 */
 
 /**
@@ -85,8 +86,9 @@ public final class NullnessUtils {
    *
    * @see #castNonNull(Object)
    */
-  public static <T extends /*@Nullable*/ Object> /*@NonNull*/ T /*@NonNull*/ [] castNonNullDeep(
-      T /*@Nullable*/ [] arr) {
+  public static <T extends /*@Nullable*/ Object>
+      /*@NonNull*/ T /*@PolyAll*/ /*@NonNull*/ [] castNonNullDeep(
+      T /*@Nullable*/ /*@PolyAll*/ [] arr) {
     return (/*@NonNull*/ T[]) castNonNullArray(arr);
   }
 

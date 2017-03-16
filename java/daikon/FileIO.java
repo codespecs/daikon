@@ -779,12 +779,15 @@ public final class FileIO {
   static final class Invocation implements Comparable<Invocation> {
     PptTopLevel ppt; // used in printing and in suppressing duplicates
     // Rather than a valuetuple, place its elements here.
-    /*@Nullable*/ Object[] vals;
-    int[] mods;
+    /*@Nullable*/ Object /*@SameLen({"mods", "vals", "ppt.var_infos"})*/[] vals;
+    int /*@SameLen({"mods", "vals", "ppt.var_infos"})*/[] mods;
 
     static Object canonical_hashcode = new Object();
 
-    Invocation(PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods) {
+    Invocation(
+        PptTopLevel ppt,
+        /*@Nullable*/ Object /*@SameLen({"mods", "vals", "ppt.var_infos"})*/[] vals,
+        int /*@SameLen({"mods", "vals", "ppt.var_infos"})*/[] mods) {
       this.ppt = ppt;
       this.vals = vals;
       this.mods = mods;

@@ -5,6 +5,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
@@ -25,9 +26,9 @@ public class ModBitTracker implements Serializable, Cloneable {
   private static boolean debug = false;
 
   /** The maximum number of BitSets; the size of modbits_arrays. */
-  private int num_vars;
+  private /*@NonNegative*/ int num_vars;
   /** The size of each BitSet in modbits_arrays. */
-  private int num_samples;
+  private /*@NonNegative*/ int num_samples;
 
   /** The BitSets themselves. */
   // In the future, I could imagine trying to optimize this with (say)
@@ -60,7 +61,7 @@ public class ModBitTracker implements Serializable, Cloneable {
    */
   private int[] this_bits_exception_index;
 
-  public ModBitTracker(int num_vars) {
+  public ModBitTracker(/*@NonNegative*/ int num_vars) {
     assert num_vars >= 0;
     this.num_vars = num_vars;
     modbits_arrays = new /*@Nullable*/ BitSet[num_vars];
@@ -76,11 +77,11 @@ public class ModBitTracker implements Serializable, Cloneable {
     if (debug) checkRep();
   }
 
-  public int num_vars() {
+  public /*@NonNegative*/ int num_vars() {
     return num_vars;
   }
 
-  public int num_samples() {
+  public /*@NonNegative*/ int num_samples() {
     return num_samples;
   }
 

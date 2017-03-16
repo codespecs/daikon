@@ -48,8 +48,10 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
@@ -513,7 +515,7 @@ public final class CLASSNAME
    * @return the status of the invariant
    *     (whether the plane fitting was successful)
    */
-  private InvariantStatus planarIntervention(/*@Nullable*/ Point[] def_point) {
+  private InvariantStatus planarIntervention(/*@Nullable*/ Point /*@MinLen(3)*/ [] def_point) {
 
     // make a copy of the array so that the points don't get clobbered
     // because we need to check all the points in def_points against the
@@ -615,7 +617,7 @@ public final class CLASSNAME
    * @param def_point  array of points.  Must have at least 2 elements.
    *
    */
-  private void linearIntervention(/*@Nullable*/ Point[] def_point) {
+  private void linearIntervention(/*@Nullable*/ Point /*@MinLen(2)*/ [] def_point) {
 
     // find the max separation points
     Point[] maxsep_doubles = maxsep_doubles(def_point);
@@ -690,13 +692,13 @@ public final class CLASSNAME
   /**
    * Returns the two points that have the maximum separation in pa.
    *
-   * @param ps  array of points.  Must have at least 2 elements.  Can be any
+   * @param pa  array of points.  Must have at least 2 elements.  Can be any
    *            length and can contain nulls (which will be ignored).
    *
    * @return a 2-element array containing the most-separated elements.
    *         Returns null if no pair of elements is NaN-free.
    */
-  private Point /*@Nullable*/ [] maxsep_doubles (/*@Nullable*/ Point[] pa) {
+  private Point /*@Nullable*/ /*@ArrayLen(2)*/ [] maxsep_doubles (/*@Nullable*/ Point /*@MinLen(2)*/ [] pa) {
 
     Point p1 = null, p2 = null;
 
@@ -957,7 +959,7 @@ public final class CLASSNAME
    *
    * @return the maximum separation found
    */
- double maxsep_triples (/*@Nullable*/ Point[] pa) {
+  double maxsep_triples (/*@Nullable*/ Point /*@MinLen(3)*/ [] pa) {
 
    // cache values for the (square of the) distance between each pair of
    // points, to avoid duplicating work

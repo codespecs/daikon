@@ -3129,7 +3129,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       // create empty result
       QuantifyReturn result = new QuantifyReturn();
       result.root_primes = new VarInfoName[roots.length];
-      result.bound_vars = new Vector<VarInfoName[]>();
+      result.bound_vars = new Vector<VarInfoName /*@ArrayLen(3)*/[]>();
 
       // all of the simple identifiers used by these roots
       Set<String> simples = new HashSet<String>();
@@ -3430,6 +3430,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return format_simplify(roots, eltwise, adjacent, distinct, false);
     }
 
+    @SuppressWarnings("index") // issue #117
     public static String[] format_simplify(
         VarInfoName[] roots,
         boolean elementwise,
@@ -3486,13 +3487,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
           }
         }
       }
-      result[0] = // index TODO: issue #117
-          "(FORALL ("
-              + int_list
-              + ") "
-              + "(IMPLIES (AND "
-              + conditions
-              + ") "; // TODO index: issue 117
+      result[0] = "(FORALL (" + int_list + ") " + "(IMPLIES (AND " + conditions + ") ";
 
       // stringify the terms
       for (int i = 0; i < qret.root_primes.length; i++) {
@@ -3588,6 +3583,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       return format_java_style(qret, elementwise, true, format);
     }
 
+    @SuppressWarnings("index") // issue #117
     protected static String[] format_java_style(
         QuantifyReturn qret, boolean elementwise, boolean forall, OutputFormat format) {
       // build the "\forall ..." predicate
@@ -3627,12 +3623,12 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       }
 
       if (forall) {
-        result[0] = quant_format_forall(format); // TODO index issue 117
+        result[0] = quant_format_forall(format);
       } else {
-        result[0] = quant_format_exists(format); // TODO index issue 117
+        result[0] = quant_format_exists(format);
       }
 
-      result[0] += // TODO index issue 117
+      result[0] +=
           (int_list
               + quant_separator1(format)
               + conditions

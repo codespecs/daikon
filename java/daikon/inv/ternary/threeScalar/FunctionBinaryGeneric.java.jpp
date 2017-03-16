@@ -101,9 +101,9 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     super ();
   }
 
-  private static String[] method_name = new String[] METHOD_NAME;
+  private static String /*@ArrayLen(3)*/ [] method_name = new String [] METHOD_NAME;
 
-  public String[] get_method_name (/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
+  public String /*@ArrayLen(3)*/ [] get_method_name (/*>>>@GuardSatisfied CNAME(FUNCTION,PERM_NAME) this*/) {
     return method_name;
   }
 
