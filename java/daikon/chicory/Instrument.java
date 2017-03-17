@@ -427,6 +427,9 @@ public class Instrument implements ClassFileTransformer {
   // kind of a hack since no pointers in Java and not
   // worth making a container object.
   private int running_offset;
+  // The index of the first 'true' local in the local variable table.
+  // (after 'this' and parameters)
+  private int first_local_index;
   // original stack map table
   private StackMap smta;
   //Map<Integer, InstructionHandle> offset_map = new HashMap<Integer, InstructionHandle>();
@@ -1124,20 +1127,28 @@ public class Instrument implements ClassFileTransformer {
     // as this would require the insertion of an offset into the byte codes.
     // This means we would need to make an additional pass to update branch
     // targets (no - BCEL does this for us) and the StackMapTable (yes).
+    //
+    // We never want to insert nonce prior to any parameters.  This would
+    // happen naturally, but some old class files have non zero addresses
+    // for 'this' and/or the parameters so we need to add an explicit
+    // check to make sure we skip these variables.
 
     LocalVariableGen lv_nonce;
 
     int max_index = -1;
     int var_index = 0;
     nonce_offset = -1;
+
     for (LocalVariableGen lv : c.mgen.getLocalVariables()) {
-      if (lv.getStart().getPosition() != 0) {
-        if (nonce_offset == -1) {
-          nonce_offset = lv.getIndex();
-          nonce_index = var_index;
+      if (var_index >= first_local_index) {
+        if (lv.getStart().getPosition() != 0) {
+          if (nonce_offset == -1) {
+            nonce_offset = lv.getIndex();
+            nonce_index = var_index;
+          }
+          lv.setIndex(lv.getIndex() + 1);
+          // UNDONE: need to update matching lvtt entry, if there is one
         }
-        lv.setIndex(lv.getIndex() + 1);
-        // UNDONE: need to update matching lvtt entry, if there is one
       }
       // need to add 1 if type is double or long
       max_index = lv.getIndex() + lv.getType().getSize() - 1;
@@ -1712,14 +1723,14 @@ public class Instrument implements ClassFileTransformer {
     // The arg types are correct and include all parameters.
     Type[] arg_types = mg.getArgumentTypes();
 
-    // Initial offset into the stack frame of the first parameter
+    // Initial offset into the stack frame
     int offset = 0;
 
     // Index into locals of the first parameter
     int loc_index = 0;
 
-    // The first 'true' local index into the local variables.
-    int first_local_index = 0;
+    // The index of the first 'true' local in the local variable table.
+    first_local_index = 0;
 
     // Remove the existing locals
     mg.removeLocalVariables();
