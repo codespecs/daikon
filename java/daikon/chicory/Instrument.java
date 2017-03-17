@@ -419,19 +419,25 @@ public class Instrument implements ClassFileTransformer {
     return invokeList;
   }
 
-  // This really should be part of the abstraction provided by BCEL,
-  // similar to LineNumberTable and LocalVariableTable.  However, for
-  // now we'll do it all within Instrument.java.
+  /**
+   * This really should be part of the abstraction provided by BCEL, similar to LineNumberTable and
+   * LocalVariableTable. However, for now we'll do it ourselves.
+   */
   private StackMapEntry[] stack_map_table;
+
   private StackMapEntry[] empty_stack_map_table = {};
+
   // kind of a hack since no pointers in Java and not
   // worth making a container object.
   private int running_offset;
+
   // The index of the first 'true' local in the local variable table.
   // (after 'this' and parameters)
   private int first_local_index;
-  // original stack map table
+
+  // original stack map table attribute
   private StackMap smta;
+
   //Map<Integer, InstructionHandle> offset_map = new HashMap<Integer, InstructionHandle>();
   InstructionHandle[] offset_map;
 
@@ -1729,13 +1735,15 @@ public class Instrument implements ClassFileTransformer {
     // Index into locals of the first parameter
     int loc_index = 0;
 
-    // The index of the first 'true' local in the local variable table.
-    first_local_index = 0;
-
     // Remove the existing locals
     mg.removeLocalVariables();
     // Reset MaxLocals to 0 and let code below rebuild it.
     mg.setMaxLocals(0);
+
+    // Determine the first 'true' local index into the local variables.
+    // The object 'this' pointer and the parameters form the first n
+    // entries in the list.
+    first_local_index = arg_types.length;
 
     if (!mg.isStatic()) {
       // Add the 'this' pointer argument back in.
@@ -1772,7 +1780,6 @@ public class Instrument implements ClassFileTransformer {
             new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
       }
       offset += arg_types[ii].getSize();
-      first_local_index++;
     }
 
     // Add back the true locals
