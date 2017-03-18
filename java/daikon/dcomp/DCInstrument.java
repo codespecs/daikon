@@ -188,11 +188,18 @@ class DCInstrument {
   private Map<InstructionHandle, Integer> uninitialized_NEW_map =
       new HashMap<InstructionHandle, Integer>();
 
+  // kind of a hack since no pointers in Java and not
+  // worth making a container object.
+  private int running_offset;
+
+  // The index of the first 'true' local in the local variable table.
+  // (after 'this' and parameters)
+  private int first_local_index;
+
   // original stack map table attribute
   private StackMap smta;
-  private int running_offset;
+
   private boolean needStackMap = false;
-  private int compiler_temp_count;
   private InstructionHandle insertion_placeholder;
 
   /**
@@ -585,29 +592,33 @@ class DCInstrument {
     // variable's offset into the local's frame.  Our variable naming
     // convention is to use "index" to identify array elements and "offset"
     // for a relative address - such as that of a local variable.
+    //
+    // We never want to insert our local prior to any parameters.  This would
+    // happen naturally, but some old class files have non zero addresses
+    // for 'this' and/or the parameters so we need to add an explicit
+    // check to make sure we skip these variables.
 
     LocalVariableGen lv_new;
     int max_offset = -1;
     int new_offset = -1;
     // get a copy of the local before modification
     LocalVariableGen[] locals = mg.getLocalVariables();
-    int local_temp_count = 0; // delete this variable?
     int compiler_temp_i = -1;
     int new_index = -1;
     int i;
 
-    compiler_temp_count = 0; // delete this variable?
-
     for (i = 0; i < locals.length; i++) {
       LocalVariableGen lv = locals[i];
-      if (lv.getStart().getPosition() != 0) {
-        if (new_offset == -1) {
-          if (compiler_temp_i != -1) {
-            new_offset = locals[compiler_temp_i].getIndex();
-            new_index = compiler_temp_i;
-          } else {
-            new_offset = lv.getIndex();
-            new_index = i;
+      if (i >= first_local_index) {
+        if (lv.getStart().getPosition() != 0) {
+          if (new_offset == -1) {
+            if (compiler_temp_i != -1) {
+              new_offset = locals[compiler_temp_i].getIndex();
+              new_index = compiler_temp_i;
+            } else {
+              new_offset = lv.getIndex();
+              new_index = i;
+            }
           }
         }
       }
@@ -622,13 +633,11 @@ class DCInstrument {
         if (compiler_temp_i == -1) {
           compiler_temp_i = i;
         }
-        local_temp_count++;
       } else {
         // If there were compiler temps prior to this local, we don't
         // need to worry about them as the compiler will have already
         // included them in the StackMaps. Reset the indicators.
         compiler_temp_i = -1;
-        local_temp_count = 0;
       }
     }
 
@@ -1021,8 +1030,8 @@ class DCInstrument {
     // Chicory runtime for this information.
     if (track_class) {
       debug_instrument.log("DCInstrument adding %s to all class list%n", class_info);
-      synchronized (daikon.chicory.Runtime.all_classes) {
-        daikon.chicory.Runtime.all_classes.add(class_info);
+      synchronized (daikon.chicory.SharedData.all_classes) {
+        daikon.chicory.SharedData.all_classes.add(class_info);
       }
     }
 
@@ -1180,8 +1189,8 @@ class DCInstrument {
     // Chicory runtime for this information.
     if (track_class) {
       // System.out.printf ("adding class %s to all class list%n", class_info);
-      synchronized (daikon.chicory.Runtime.all_classes) {
-        daikon.chicory.Runtime.all_classes.add(class_info);
+      synchronized (daikon.chicory.SharedData.all_classes) {
+        daikon.chicory.SharedData.all_classes.add(class_info);
       }
     }
 
@@ -1783,78 +1792,19 @@ class DCInstrument {
 
     int new_table_length = stack_map_table.length + 1;
     new_stack_map_table = new StackMapEntry[new_table_length];
+
+    // Insert a new StackMapEntry at the beginning of the table
+    // that adds the tag_frame variable.
     StackMapType tag_frame_type = generate_StackMapType_from_Type(object_arr);
+    StackMapType[] stack_map_type_arr = {tag_frame_type};
+    new_stack_map_table[0] =
+        new StackMapEntry(
+            Const.APPEND_FRAME, len_code, stack_map_type_arr, null, pool.getConstantPool());
 
-    // Check number of compiler temps immediately prior to the tag
-    // variable.  If > 0, we need to add a 'top' to the stack map
-    // for each of them.
-    // FYI: Sometimes the java compiler seems to leave unused local
-    // slots lying around for no apparent reason.  Cases 2 and 3 below
-    // are here just for this case.
-    switch (compiler_temp_count) {
-      case 0:
-        {
-          StackMapType[] stack_map_type_arr = {tag_frame_type};
-          new_stack_map_table[0] =
-              new StackMapEntry(
-                  Const.APPEND_FRAME, len_code, stack_map_type_arr, null, pool.getConstantPool());
-          break;
-        }
-      case 1:
-        {
-          StackMapType top_frame_type =
-              new StackMapType(Const.ITEM_Bogus, -1, pool.getConstantPool());
-          StackMapType[] stack_map_type_arr = {top_frame_type, tag_frame_type};
-          new_stack_map_table[0] =
-              new StackMapEntry(
-                  Const.APPEND_FRAME + 1,
-                  len_code,
-                  stack_map_type_arr,
-                  null,
-                  pool.getConstantPool());
-          break;
-        }
-      case 2:
-        {
-          StackMapType top_frame_type =
-              new StackMapType(Const.ITEM_Bogus, -1, pool.getConstantPool());
-          StackMapType[] stack_map_type_arr = {top_frame_type, top_frame_type, tag_frame_type};
-          new_stack_map_table[0] =
-              new StackMapEntry(
-                  Const.APPEND_FRAME + 2,
-                  len_code,
-                  stack_map_type_arr,
-                  null,
-                  pool.getConstantPool());
-          break;
-        }
-      case 3:
-        {
-          StackMapType top_frame_type =
-              new StackMapType(Const.ITEM_Bogus, -1, pool.getConstantPool());
-          StackMapType[] stack_map_type_arr = {
-            top_frame_type, top_frame_type, top_frame_type, tag_frame_type
-          };
-          new_stack_map_table[0] =
-              new StackMapEntry(
-                  Const.APPEND_FRAME + 3,
-                  len_code,
-                  stack_map_type_arr,
-                  null,
-                  pool.getConstantPool());
-          break;
-        }
-      default:
-        throw new RuntimeException("Too many hidden compiler temps: " + compiler_temp_count);
-    }
-
-    // System.out.printf ("add_create_tag_frame-1 %s%n", new_stack_map_table[0]);
-
-    // We can just copy the items over as the FULL_FRAME ones were
-    // already updated when the tag_frame variable was allocated.
-    int new_index = 1;
+    // We can just copy the rest of the stack frames over as the FULL_FRAME
+    // ones were already updated when the tag_frame variable was allocated.
     for (int i = 0; i < stack_map_table.length; i++) {
-      new_stack_map_table[new_index++] = stack_map_table[i];
+      new_stack_map_table[i + 1] = stack_map_table[i];
     }
     stack_map_table = new_stack_map_table;
     // print_stack_map_table ("add_create_tag_frame");
@@ -2940,12 +2890,6 @@ class DCInstrument {
           ifact.createInvoke(classname, method_name, ret_type, new_arg_types, invoke.getOpcode()));
 
     } else { // not instrumented
-      // Add a tag for the return type if it is primitive
-      if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
-        // System.out.printf ("push tag for return  type of %s%n",
-        //                   invoke.getReturnType(pool));
-        il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
-      }
       il.append(invoke);
     }
     return il;
@@ -5298,14 +5242,21 @@ class DCInstrument {
 
   public void add_dcomp_arg(MethodGen mg) {
 
+    // Determine the first 'true' local index into the local variables.
+    // The object 'this' pointer and the parameters form the first n
+    // entries in the list.
+    first_local_index = mg.getArgumentTypes().length;
+
+    if (!mg.isStatic()) {
+      // add 1 for 'this' pointer
+      first_local_index++;
+    }
+
     // Don't modify main or the JVM won't be able to find it.
     if (BCELUtil.is_main(mg)) return;
 
     // Don't modify class init methods, they don't take arguments
     if (BCELUtil.is_clinit(mg)) return;
-
-    //if (!mg.getName().equals("double_check"))
-    //  return;
 
     InstructionList il = mg.getInstructionList();
     boolean has_code = (il != null);
@@ -5324,15 +5275,6 @@ class DCInstrument {
       mg.removeLocalVariables();
       // Reset MaxLocals to 0 and let code below rebuild it.
       mg.setMaxLocals(0);
-
-      // Determine the first 'true' local index into the local variables.
-      // The object 'this' pointer and the parameters form the first n
-      // entries in the list.
-      int first_local_index = mg.getArgumentTypes().length;
-      if (!mg.isStatic()) {
-        // add 1 for 'this' pointer
-        first_local_index++;
-      }
 
       // Double check all is ok.
       if (first_local_index > locals.length) {

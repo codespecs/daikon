@@ -718,7 +718,7 @@ public class DeclWriter extends DaikonWriter {
     // relates directly to the class ppt, otherwise to the object
     // ppt.  Note that a relation to the class ppt is returned only if there
     // are static variables.
-    for (ClassInfo ci : Runtime.all_classes) {
+    for (ClassInfo ci : SharedData.all_classes) {
       if (ci.class_name.equals(decl_type)) {
         // System.out.printf ("*Found match for %s : %s%n", decl_type, ci);
         String ppt_marker = ":::OBJECT";
