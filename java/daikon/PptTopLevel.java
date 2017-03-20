@@ -2922,6 +2922,9 @@ public class PptTopLevel extends Ppt {
   /**
    * Go though an array of invariants, marking those that can be proved as consequences of others as
    * redundant.
+   *
+   * @param start first index to check, inclusive
+   * @param end last index to check, inclusive
    */
   /*@RequiresNonNull("proverStack")*/
   private void flagRedundantRecursive(

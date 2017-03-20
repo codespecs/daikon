@@ -41,6 +41,9 @@ public abstract class Ppt implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040914L;
 
+  // Not final:  modified by PptTopLevel.addVarInfos (which is called by
+  // Daikon.create_orig_vars and PptTopLevel.create_derived_variables)
+  // and also by PptSlice0.makeFakePrestate.
   public VarInfo[] var_infos;
 
   protected Ppt(VarInfo[] var_infos) {
