@@ -383,7 +383,8 @@ public final class FileIO {
     for (VarDefinition vd : varmap.values()) {
       vi_list.add(new VarInfo(vd));
     }
-    VarInfo[] vi_array = vi_list.toArray(new VarInfo[vi_list.size()]);
+    @SuppressWarnings("index") // list size
+    VarInfo /*@MinLen(1)*/[] vi_array = vi_list.toArray(new VarInfo[vi_list.size()]);
 
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
@@ -801,6 +802,7 @@ public final class FileIO {
 
     // Print the Invocation on one or two lines, indented by two spaces.
     // The receiver Invocation may be canonicalized or not.
+    @SuppressWarnings("index") // issue #134
     String format(/*>>>@GuardSatisfied Invocation this,*/ boolean show_values) {
       if (!show_values) {
         return "  " + ppt.ppt_name.getNameWithoutPoint();
@@ -811,9 +813,6 @@ public final class FileIO {
 
       pw.println("  " + ppt.ppt_name.getNameWithoutPoint());
       pw.print("    ");
-
-      // [adonovan] is this sound? Let me know if not (sorry).
-      //assert ppt.var_infos.length == vals.length;
 
       for (int j = 0; j < vals.length; j++) {
         if (j != 0) {
@@ -840,6 +839,7 @@ public final class FileIO {
     }
 
     /** Change uses of hashcodes to canonical_hashcode. */
+    @SuppressWarnings("index") // issue 127
     public /*@Interned*/ Invocation canonicalize() {
       /*@Nullable*/ Object[] new_vals = new /*@Nullable*/ Object[vals.length];
       System.arraycopy(vals, 0, new_vals, 0, vals.length);
@@ -2128,8 +2128,8 @@ public final class FileIO {
   public static boolean compute_orig_variables(
       PptTopLevel ppt,
       // HashMap cumulative_modbits,
-      /*@Nullable*/ Object[] vals,
-      int[] mods,
+      /*@Nullable*/ Object /*@SameLen({"#1", "#2"})*/[] vals,
+      int /*@SameLen({"#1", "#2"})*/[] mods,
       /*@Nullable*/ Integer nonce) {
     assert data_trace_state != null;
 

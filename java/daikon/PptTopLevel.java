@@ -325,7 +325,7 @@ public class PptTopLevel extends Ppt {
       PptType type,
       List<ParentRelation> parents,
       EnumSet<PptFlags> flags,
-      VarInfo /*@MinLen(1)*/[] var_infos) {
+      VarInfo[] var_infos) {
     super(var_infos);
 
     this.name = name;
@@ -353,7 +353,7 @@ public class PptTopLevel extends Ppt {
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
   @SuppressWarnings("fields.uninitialized") // violates invariants; also uses helper function
-  public PptTopLevel(String name, VarInfo /*@MinLen(1)*/[] var_infos) {
+  public PptTopLevel(String name, VarInfo[] var_infos) {
     super(var_infos);
     this.name = name;
     ppt_name = new PptName(name);

@@ -42,9 +42,9 @@ public abstract class Ppt implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040914L;
 
-  public VarInfo /*@MinLen(1)*/[] var_infos;
+  public final VarInfo[] var_infos;
 
-  protected Ppt(VarInfo /*@MinLen(1)*/[] var_infos) {
+  protected Ppt(VarInfo[] var_infos) {
     this.var_infos = var_infos;
   }
 
