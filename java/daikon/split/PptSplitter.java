@@ -68,8 +68,8 @@ public class PptSplitter implements Serializable {
   private PptTopLevel parent;
 
   /**
-   * Splitter that choses to which PptConditional a sample is applied. May be null if no computation
-   * is required (e.g., splitting over exit points).
+   * Splitter that chooses which PptConditional a sample is applied to. May be null if no
+   * computation is required (e.g., splitting over exit points).
    */
   public transient /*@Nullable*/ Splitter splitter;
 
@@ -155,7 +155,14 @@ public class PptSplitter implements Serializable {
     ppt_cond.add_bottom_up(vt, count);
 
     if (Debug.ppt_match(ppt_cond)) {
-      debug.fine("Adding sample to " + ppt_cond + " with vars " + Debug.related_vars(ppt_cond, vt));
+      String related_vars = Debug.related_vars(ppt_cond, vt);
+      debug.fine(
+          "Adding sample to "
+              + ppt_cond
+              + " with "
+              + vt.size()
+              + " vars"
+              + ((!related_vars.equals("")) ? (" including " + related_vars) : ""));
     }
   }
 

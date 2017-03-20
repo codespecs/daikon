@@ -304,7 +304,7 @@ public class Quantify {
       result[ii] = new QuantifyReturn(vars[ii]);
     }
 
-    // Determine all of the simple identifiers used by these variables
+    // Determine all of the simple identifiers used by the given variables (vars)
     Set<String> simples = new HashSet<String>();
     for (VarInfo vi : vars) {
       for (String name : vi.get_all_simple_names()) {

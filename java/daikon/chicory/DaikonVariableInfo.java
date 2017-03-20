@@ -896,8 +896,8 @@ public abstract class DaikonVariableInfo
 
     if (!std_visibility) {
       // If the field is in any instrumented class it is always visible
-      synchronized (Runtime.all_classes) {
-        for (ClassInfo ci : Runtime.all_classes) {
+      synchronized (SharedData.all_classes) {
+        for (ClassInfo ci : SharedData.all_classes) {
           // System.out.printf ("comparing %s vs %s%n", ci.class_name,
           // fclass.getName());
           if (ci.class_name.equals(fclass.getName())) {

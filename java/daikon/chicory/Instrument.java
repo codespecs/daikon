@@ -35,7 +35,7 @@ public class Instrument implements ClassFileTransformer {
   /** current Constant Pool * */
   static ConstantPoolGen pgen = null;
 
-  /** the index of this method into Runtime.methods */
+  /** the index of this method into SharedData.methods */
   int cur_method_info_index = 0;
 
   /** the location of the runtime support class */
@@ -419,16 +419,25 @@ public class Instrument implements ClassFileTransformer {
     return invokeList;
   }
 
-  // This really should be part of the abstraction provided by BCEL,
-  // similar to LineNumberTable and LocalVariableTable.  However, for
-  // now we'll do it all within Instrument.java.
+  /**
+   * This really should be part of the abstraction provided by BCEL, similar to LineNumberTable and
+   * LocalVariableTable. However, for now we'll do it ourselves.
+   */
   private StackMapEntry[] stack_map_table;
+
   private StackMapEntry[] empty_stack_map_table = {};
+
   // kind of a hack since no pointers in Java and not
   // worth making a container object.
   private int running_offset;
-  // original stack map table
+
+  // The index of the first 'true' local in the local variable table.
+  // (after 'this' and parameters)
+  private int first_local_index;
+
+  // original stack map table attribute
   private StackMap smta;
+
   //Map<Integer, InstructionHandle> offset_map = new HashMap<Integer, InstructionHandle>();
   InstructionHandle[] offset_map;
 
@@ -554,9 +563,9 @@ public class Instrument implements ClassFileTransformer {
 
         method_infos.add(mi);
 
-        synchronized (Runtime.class) {
-          cur_method_info_index = Runtime.methods.size();
-          Runtime.methods.add(mi);
+        synchronized (SharedData.methods) {
+          cur_method_info_index = SharedData.methods.size();
+          SharedData.methods.add(mi);
         }
 
         // Add nonce local to matchup enter/exits
@@ -720,11 +729,11 @@ public class Instrument implements ClassFileTransformer {
 
     if (shouldInclude) {
       debug_transform.log("Added trace info to class %s%n", class_info);
-      synchronized (Runtime.new_classes) {
-        Runtime.new_classes.add(class_info);
+      synchronized (SharedData.new_classes) {
+        SharedData.new_classes.add(class_info);
       }
-      synchronized (Runtime.all_classes) {
-        Runtime.all_classes.add(class_info);
+      synchronized (SharedData.all_classes) {
+        SharedData.all_classes.add(class_info);
       }
     } else { // not included
       debug_transform.log("Trace info not added to class %s%n", class_info);
@@ -1124,20 +1133,28 @@ public class Instrument implements ClassFileTransformer {
     // as this would require the insertion of an offset into the byte codes.
     // This means we would need to make an additional pass to update branch
     // targets (no - BCEL does this for us) and the StackMapTable (yes).
+    //
+    // We never want to insert nonce prior to any parameters.  This would
+    // happen naturally, but some old class files have non zero addresses
+    // for 'this' and/or the parameters so we need to add an explicit
+    // check to make sure we skip these variables.
 
     LocalVariableGen lv_nonce;
 
     int max_index = -1;
     int var_index = 0;
     nonce_offset = -1;
+
     for (LocalVariableGen lv : c.mgen.getLocalVariables()) {
-      if (lv.getStart().getPosition() != 0) {
-        if (nonce_offset == -1) {
-          nonce_offset = lv.getIndex();
-          nonce_index = var_index;
+      if (var_index >= first_local_index) {
+        if (lv.getStart().getPosition() != 0) {
+          if (nonce_offset == -1) {
+            nonce_offset = lv.getIndex();
+            nonce_index = var_index;
+          }
+          lv.setIndex(lv.getIndex() + 1);
+          // UNDONE: need to update matching lvtt entry, if there is one
         }
-        lv.setIndex(lv.getIndex() + 1);
-        // UNDONE: need to update matching lvtt entry, if there is one
       }
       // need to add 1 if type is double or long
       max_index = lv.getIndex() + lv.getType().getSize() - 1;
@@ -1712,19 +1729,21 @@ public class Instrument implements ClassFileTransformer {
     // The arg types are correct and include all parameters.
     Type[] arg_types = mg.getArgumentTypes();
 
-    // Initial offset into the stack frame of the first parameter
+    // Initial offset into the stack frame
     int offset = 0;
 
     // Index into locals of the first parameter
     int loc_index = 0;
 
-    // The first 'true' local index into the local variables.
-    int first_local_index = 0;
-
     // Remove the existing locals
     mg.removeLocalVariables();
     // Reset MaxLocals to 0 and let code below rebuild it.
     mg.setMaxLocals(0);
+
+    // Determine the first 'true' local index into the local variables.
+    // The object 'this' pointer and the parameters form the first n
+    // entries in the list.
+    first_local_index = arg_types.length;
 
     if (!mg.isStatic()) {
       // Add the 'this' pointer argument back in.
@@ -1761,7 +1780,6 @@ public class Instrument implements ClassFileTransformer {
             new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
       }
       offset += arg_types[ii].getSize();
-      first_local_index++;
     }
 
     // Add back the true locals

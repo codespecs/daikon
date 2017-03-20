@@ -557,7 +557,7 @@ update-doc-dist-date-and-version:
 update-doc-dist-date:
 	perl -wpi -e 's/((Daikon|Fjalar) version .*, released ).*(\.|<\/CENTER>)$$/$$1${TODAY}$$3/' ${DIST_VERSION_FILES}
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c .* Daikon version .* date\n\@center ).*(\n)/$$1${TODAY}$$2/;' doc/daikon.texinfo doc/developer.texinfo
-	perl -wpi -e 's/(public final static String release_date = ").*(";)$$/$$1${TODAY}$$2/' java/daikon/Daikon.java
+	perl -wpi -e 's/(public static final String release_date = ").*(";)$$/$$1${TODAY}$$2/' java/daikon/Daikon.java
 	touch doc/CHANGES
 
 # Update the documentation according to the version number in VERSION.
@@ -569,7 +569,7 @@ update-doc-dist-version:
 	perl -wpi -e 'BEGIN { $$/="\n"; } s/((Daikon|Fjalar) version |[ \/\\]daikon-)[0-9]+(\.[0-9]+)+/$$1 . "$(NEW_VER)"/e;' ${DIST_VERSION_FILES}
 	# update the version number in the release archive file names
 	perl -wpi -e 's/(\-)[0-9]+(\.[0-9]+)+/$$1 . "$(NEW_VER)"/eg;' doc/www/download/index.html
-	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(NEW_VER)" . $$3/e;' java/daikon/Daikon.java
+	perl -wpi -e 's/(public static final String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(NEW_VER)" . $$3/e;' java/daikon/Daikon.java
 	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(NEW_VER)" . $$3/e' fjalar/valgrind/fjalar/mc_main.c
 	touch doc/CHANGES
 

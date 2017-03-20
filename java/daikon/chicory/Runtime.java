@@ -39,25 +39,8 @@ public class Runtime {
   /** True if ChicoryPremain was unable to load. */
   public static boolean chicoryLoaderInstantiationError = false;
 
-  /**
-   * List of classes recently transformed. This list is examined in each enter/exit and the decl
-   * information for any new classes are printed out and the class is then removed from the list.
-   */
-  // The order of this list depends on the order of loading by the JVM.
-  // Declared as LinkedList instead of List to permit use of removeFirst().
-  public static final /*@GuardedBy("<self>")*/ LinkedList<ClassInfo> new_classes =
-      new LinkedList<ClassInfo>();
-
-  /** List of all instrumented classes */
-  public static final /*@GuardedBy("<self>")*/ List<ClassInfo> all_classes =
-      new ArrayList<ClassInfo>();
-
   /** Flag that indicates when the first class has been processed. */
   static boolean first_class = true;
-
-  /** List of all instrumented methods */
-  public static final /*@GuardedBy("Runtime.class")*/ List<MethodInfo> methods =
-      new ArrayList<MethodInfo>();
 
   //
   // Control over what classes (ppts) are instrumented
@@ -203,8 +186,11 @@ public class Runtime {
   public static synchronized void enter(
       /*@Nullable*/ Object obj, int nonce, int mi_index, Object[] args) {
 
+    MethodInfo mi = null;
     if (debug) {
-      MethodInfo mi = methods.get(mi_index);
+      synchronized (SharedData.methods) {
+        mi = SharedData.methods.get(mi_index);
+      }
       System.out.printf(
           "%smethod_entry %s.%s%n", method_indent, mi.class_info.class_name, mi.method_name);
       method_indent = method_indent.concat("  ");
@@ -222,14 +208,16 @@ public class Runtime {
     in_dtrace = true;
     try {
       int num_new_classes = 0;
-      synchronized (new_classes) {
-        num_new_classes = new_classes.size();
+      synchronized (SharedData.new_classes) {
+        num_new_classes = SharedData.new_classes.size();
       }
       if (num_new_classes > 0) {
         process_new_classes();
       }
 
-      MethodInfo mi = methods.get(mi_index);
+      synchronized (SharedData.methods) {
+        mi = SharedData.methods.get(mi_index);
+      }
       mi.call_cnt++;
 
       // If sampling, check to see if we are capturing this sample
@@ -293,8 +281,11 @@ public class Runtime {
       Object ret_val,
       int exitLineNum) {
 
+    MethodInfo mi = null;
     if (debug) {
-      MethodInfo mi = methods.get(mi_index);
+      synchronized (SharedData.methods) {
+        mi = SharedData.methods.get(mi_index);
+      }
       method_indent = method_indent.substring(2);
       System.out.printf(
           "%smethod_exit  %s.%s%n", method_indent, mi.class_info.class_name, mi.method_name);
@@ -313,8 +304,8 @@ public class Runtime {
     try {
 
       int num_new_classes = 0;
-      synchronized (new_classes) {
-        num_new_classes = new_classes.size();
+      synchronized (SharedData.new_classes) {
+        num_new_classes = SharedData.new_classes.size();
       }
       if (num_new_classes > 0) {
         process_new_classes();
@@ -330,7 +321,10 @@ public class Runtime {
           if (ci.nonce == nonce) break;
         }
         if (ci == null) {
-          System.out.printf("no enter for exit %s%n", methods.get(mi_index));
+          synchronized (SharedData.methods) {
+            mi = SharedData.methods.get(mi_index);
+          }
+          System.out.printf("no enter for exit %s%n", mi);
           return;
         } else if (!ci.captured) {
           return;
@@ -338,7 +332,9 @@ public class Runtime {
       }
 
       // Write out the infromation for this method
-      MethodInfo mi = methods.get(mi_index);
+      synchronized (SharedData.methods) {
+        mi = SharedData.methods.get(mi_index);
+      }
       // long start = System.currentTimeMillis();
       if (mi.member == null) {
         dtrace_writer.clinitExit(
@@ -415,9 +411,9 @@ public class Runtime {
 
       // Get the first class in the list (if any)
       ClassInfo class_info = null;
-      synchronized (new_classes) {
-        if (new_classes.size() > 0) {
-          class_info = new_classes.removeFirst();
+      synchronized (SharedData.new_classes) {
+        if (SharedData.new_classes.size() > 0) {
+          class_info = SharedData.new_classes.removeFirst();
         }
       }
       if (class_info == null) break;
@@ -637,7 +633,7 @@ public class Runtime {
 
                 if (chicoryLoaderInstantiationError) {
                   // Warning messages have already been printed.
-                } else if (all_classes.size() == 0) {
+                } else if (SharedData.all_classes.size() == 0) {
                   System.out.println("Chicory warning: No methods were instrumented.");
                   if ((!ppt_select_pattern.isEmpty()) || (!ppt_omit_pattern.isEmpty())) {
                     System.out.println(
@@ -689,8 +685,8 @@ public class Runtime {
    */
   public static /*@Nullable*/ ClassInfo getClassInfoFromClass(Class<?> type) {
     try {
-      synchronized (Runtime.all_classes) {
-        for (ClassInfo cinfo : Runtime.all_classes) {
+      synchronized (SharedData.all_classes) {
+        for (ClassInfo cinfo : SharedData.all_classes) {
           if (cinfo.clazz == null) cinfo.initViaReflection();
 
           assert cinfo.clazz != null

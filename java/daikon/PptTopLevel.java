@@ -903,7 +903,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Add the sample to the equality sets, dynamic constants and invariants at this program point.
+   * Add the sample to the equality sets, dynamic constants, and invariants at this program point.
    * This version is specific to the bottom up processing mechanism.
    *
    * <p>This routine also instantiates slices/invariants on the first call for the ppt.
