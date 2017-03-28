@@ -579,7 +579,7 @@ public final class Daikon {
           total_invs += inv_cnt;
         }
       }
-      System.out.println(total_invs + "invariants total");
+      System.out.println(total_invs + " invariants total");
       return;
     }
 
