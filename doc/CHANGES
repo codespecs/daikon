@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.5.4 (April ?, 2017)
+5.5.4 (April 3, 2017)
 
 DynComp and Chicory:
 - Improve support for programs with multiple threads.
@@ -28,8 +28,6 @@ DynComp and Chicory:
 
 Kvasir:
 - We updated the underlying Valgrind infrastructure to version 3.12.0.
-  Users of Kvasir to analyze C/C++ codes should not see any differences
-  in behavior from the previous version.
 
 ===========================================================================
 
