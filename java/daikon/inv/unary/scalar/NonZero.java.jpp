@@ -45,14 +45,13 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.unary.scalar;
 
 import daikon.*;
-import daikon.inv.*;
-import daikon.inv.unary.sequence.*;
-import daikon.inv.binary.sequenceScalar.*;
 import daikon.derive.unary.*;
-
+import daikon.inv.*;
+import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.unary.sequence.*;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import plume.*;
 
 /*>>>
@@ -67,17 +66,13 @@ import typequals.*;
 // This also serves as NonNull.
 
 /**
- * Represents long scalars that are non-zero.  Prints as <code>x != 0</code>,
- * or as <code>x != null</code> for pointer types.
+ * Represents long scalars that are non-zero. Prints as <code>x != 0</code>, or as <code>x !=
+ * null</code> for pointer types.
  */
 #else
-/**
- * Represents double scalars that are non-zero.  Prints as <code>x != 0</code>.
- */
+/** Represents double scalars that are non-zero.  Prints as <code>x != 0</code>. */
 #endif
-public class NONZERO
-  extends SINGLESCALAR
-{
+public class NONZERO extends SINGLESCALAR {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -85,9 +80,7 @@ public class NONZERO
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff NONZERO invariants should be considered.
-   */
+  /** Boolean.  True iff NONZERO invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /** Debug tracer. */
@@ -104,7 +97,7 @@ public class NONZERO
     super();
   }
 
-  private static /*@Prototype*/ NONZERO proto = new /*@Prototype*/ NONZERO ();
+  private static /*@Prototype*/ NONZERO proto = new /*@Prototype*/ NONZERO();
 
   /** Returns the prototype invariant for NONZERO */
   public static /*@Prototype*/ NONZERO get_proto() {
@@ -117,7 +110,7 @@ public class NONZERO
   }
 
   /** Make sure the NonZero make sense on these vars */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
     if (!valid_types(vis)) {
       return false;
@@ -132,8 +125,8 @@ public class NONZERO
   }
 
   /** instantiate an invariant on the specified slice */
-  public NONZERO instantiate_dyn (/*>>> @Prototype NONZERO this,*/ PptSlice slice) {
-    return new NONZERO (slice);
+  public NONZERO instantiate_dyn(/*>>> @Prototype NONZERO this,*/ PptSlice slice) {
+    return new NONZERO(slice);
   }
 
   private String zero(/*>>>@GuardSatisfied @Prototype NONZERO this,*/ OutputFormat format) {
@@ -190,16 +183,14 @@ public class NONZERO
     InvariantStatus status = check_modified(v, count);
     if (status == InvariantStatus.FALSIFIED) {
       if (logOn()) {
-        log (debug, "falsified (value = " + v + ")");
+        log(debug, "falsified (value = " + v + ")");
       }
     } // else if (logDetail())
       // log ("add_modified (" + v + ")");
     return status;
   }
 
-  /**
-   * Returns whether or not the variable is a pointer.
-   */
+  /** Returns whether or not the variable is a pointer. */
   /*@Pure*/
   private boolean is_pointer(/*>>>@GuardSatisfied NONZERO this*/) {
     return (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE);
@@ -294,10 +285,10 @@ public class NONZERO
 
     VarInfo var = vis[0];
 
-    Debug dlog = new Debug (getClass(), ppt, vis);
+    Debug dlog = new Debug(getClass(), ppt, vis);
 
     if (logOn()) {
-      dlog.log ("Checking IsObviousDynamically");
+      dlog.log("Checking IsObviousDynamically");
     }
 
     // System.out.println("isObviousImplied: " + format());
@@ -315,11 +306,11 @@ public class NONZERO
         if (MEMBER.isObviousMember(var, v2)) {
           // System.out.println(NONZEROSTRING + ".isObviousImplied: " + MEMBERSTRING + ".isObviousMember(" + var.name + ", " + v2.name + ") = true");
           if (logOn()) {
-            dlog.log ("isObvDyn- true, arg is member of nonzero sequence");
+            dlog.log("isObvDyn- true, arg is member of nonzero sequence");
           }
           String discardString = var.name() + " is a member of the non-zero sequence " + v2.name();
           if (logOn()) {
-            log ("%s obviously implied from %s", format(), inv.format());
+            log("%s obviously implied from %s", format(), inv.format());
           }
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
         }
@@ -334,7 +325,7 @@ public class NONZERO
         // For each sequence variable, if var is an obvious member, and
         // the sequence has the same invariant, then this one is obvious.
         PptTopLevel pptt = ppt.parent;
-        for (int i=0; i<pptt.var_infos.length; i++) {
+        for (int i = 0; i < pptt.var_infos.length; i++) {
           VarInfo vi = pptt.var_infos[i];
           if (MEMBER.isObviousMember(var, vi)) {
             PptSlice1 other_slice = pptt.findSlice(vi);
@@ -343,7 +334,7 @@ public class NONZERO
               if ((sine != null) && sine.enoughSamples()) {
                 // System.out.println(NONZEROSTRING + ".isObviousImplied true due to: " + sine.format());
                 if (logOn()) {
-                  dlog.log ("isObvDyn- true due to " + sine.format());
+                  dlog.log("isObvDyn- true due to " + sine.format());
                 }
                 String discardString = var.name() + " is a member of the non-zero sequence " + vi.name();
                 return new DiscardInfo(this, DiscardCode.obvious, discardString);
@@ -356,7 +347,6 @@ public class NONZERO
 
     return null;
   }
-
 
   /*@Pure*/
   public boolean isSameFormula(Invariant other) {
@@ -374,5 +364,4 @@ public class NONZERO
     }
     return false;
   }
-
 }

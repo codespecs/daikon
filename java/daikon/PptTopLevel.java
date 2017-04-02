@@ -3122,7 +3122,7 @@ public class PptTopLevel extends Ppt {
   //     // Commented this code out because conditional views are not slices.
   //     // It is not clear what this is trying to accomplish
   //     //     Object viewCondArray[] = views_cond.toArray();
-  //     //     for (int i=0; i < viewCondArray.length; i++) {
+  //     //     for (int i = 0; i < viewCondArray.length; i++) {
   //     //       PptSlice currentCondView = (PptSlice)viewCondArray[i];
   //     //       currentCondView.guardInvariants();
   //     //     }

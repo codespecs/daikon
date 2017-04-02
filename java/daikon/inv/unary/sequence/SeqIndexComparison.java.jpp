@@ -44,7 +44,7 @@
   #define EQUALSQUANTstring "Equal"
 #elif defined(EQUALFLOAT)
   #define CLASSNAME SeqIndexFloatEqual
-  #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
   #define SYMMETRIC_OP
   #define EQUALShtml ==
   #define EQUALSstring "=="
@@ -60,7 +60,7 @@
   #define EQUALSQUANTstring "NotEqual"
 #elif defined(NONEQUALFLOAT)
   #define CLASSNAME SeqIndexFloatNonEqual
-  #define EQUALS(a,b) (Global.fuzzy.ne (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.ne(a, b))
   #define SYMMETRIC_OP
   #define EQUALShtml !=
   #define EQUALSstring "!="
@@ -77,7 +77,7 @@
 #elif defined(LESSTHANFLOAT)
   #define CLASSNAME SeqIndexFloatLessThan
   #define CLASS_SWAP SeqIndexFloatGreaterThan
-  #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
   #define EQUALShtml &lt;
   #define EQUALSstring "<"
   #define EQUALSSIMPLIFYstring "<"
@@ -93,7 +93,7 @@
 #elif defined(LESSEQUALFLOAT)
   #define CLASSNAME SeqIndexFloatLessEqual
   #define CLASS_SWAP SeqIndexFloatGreaterEqual
-  #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
   #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define EQUALSSIMPLIFYstring "<="
@@ -109,7 +109,7 @@
 #elif defined(GREATERTHANFLOAT)
   #define CLASSNAME SeqIndexFloatGreaterThan
   #define CLASS_SWAP SeqIndexFloatLessThan
-  #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
   #define EQUALShtml &gt;
   #define EQUALSstring ">"
   #define EQUALSSIMPLIFYstring ">"
@@ -125,7 +125,7 @@
 #elif defined(GREATEREQUALFLOAT)
   #define CLASSNAME SeqIndexFloatGreaterEqual
   #define CLASS_SWAP SeqIndexFloatLessEqual
-  #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
   #define EQUALShtml &ge;
   #define EQUALSstring ">="
   #define EQUALSSIMPLIFYstring ">="
@@ -139,14 +139,13 @@
 package daikon.inv.unary.sequence;
 
 import daikon.*;
+import daikon.Quantify.QuantFlags;
 import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.suppress.*;
-import daikon.Quantify.QuantFlags;
-
-import plume.*;
 import java.util.Iterator;
 import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -157,9 +156,8 @@ import typequals.*;
 */
 
 /**
- * Represents an invariant over sequences of PRIMITIVE values between the
- * index of an element of the sequence and the element itself.
- * Prints as <code>x[i] EQUALShtml i</code>.
+ * Represents an invariant over sequences of PRIMITIVE values between the index of an element of the
+ * sequence and the element itself. Prints as <code>x[i] EQUALShtml i</code>.
  */
 public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
@@ -169,26 +167,24 @@ public class CLASSNAME extends SUPERCLASS {
 
   /** Debug tracer. */
   public static final Logger debug
-    = Logger.getLogger ("daikon.inv.unary.sequence." + STRING(CLASSNAME));
+    = Logger.getLogger("daikon.inv.unary.sequence." + STRING(CLASSNAME));
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff CLASSNAME invariants should be considered.
-   */
+  /** Boolean.  True iff CLASSNAME invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  private /*@Prototype*/ CLASSNAME () {
-    super ();
+  private /*@Prototype*/ CLASSNAME() {
+    super();
   }
 
-  protected CLASSNAME (PptSlice slice) {
-    super (slice);
+  protected CLASSNAME(PptSlice slice) {
+    super(slice);
     assert slice != null;
     assert var().rep_type == ProglangType.ASSERTYPE;
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
@@ -201,9 +197,9 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Check that SeqIndex comparisons make sense over these vars */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis)) {
+    if (!valid_types(vis)) {
       return false;
     }
 
@@ -218,7 +214,7 @@ public class CLASSNAME extends SUPERCLASS {
     assert seqvar.comparability != null;
     VarComparability elt_compar = seqvar.comparability.elementType();
     VarComparability index_compar = seqvar.comparability.indexType(0);
-    if (! VarComparability.comparable (elt_compar, index_compar)) {
+    if (!VarComparability.comparable(elt_compar, index_compar)) {
       return false;
     }
 
@@ -226,8 +222,8 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Instantiate the invariant on the specified slice */
-  public CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
-    return new CLASSNAME (slice);
+  public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+    return new CLASSNAME(slice);
   }
 
 #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
@@ -239,31 +235,31 @@ public class CLASSNAME extends SUPERCLASS {
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
-      NISuppressee suppressee = new NISuppressee (CLASSNAME.class, 1);
+      NISuppressee suppressee = new NISuppressee(CLASSNAME.class, 1);
       #endif
 
       // suppressor definitions (used in suppressions below)
       #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
-      NISuppressor v1_eq_v2 = new NISuppressor (0, SEQ_INDEX_EQUAL.class);
+      NISuppressor v1_eq_v2 = new NISuppressor(0, SEQ_INDEX_EQUAL.class);
       #endif
       #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
-      NISuppressor v1_gt_v2 = new NISuppressor (0,SEQ_INDEX_GREATERTHAN.class);
+      NISuppressor v1_gt_v2 = new NISuppressor(0,SEQ_INDEX_GREATERTHAN.class);
       #endif
       #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
-      NISuppressor v1_lt_v2 = new NISuppressor (0, SEQ_INDEX_LESSTHAN.class);
+      NISuppressor v1_lt_v2 = new NISuppressor(0, SEQ_INDEX_LESSTHAN.class);
       #endif
 
       suppressions = new NISuppressionSet(new NISuppression[]{
         #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
           // (v1[i] == i) ==> v1[i] <= i
-          new NISuppression (v1_eq_v2, suppressee),
+          new NISuppression(v1_eq_v2, suppressee),
           // (v1[i] < i) ==> v1[i] <= i
-          new NISuppression (v1_lt_v2, suppressee),
+          new NISuppression(v1_lt_v2, suppressee),
         #elif defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
           // (v1[i] == i) ==> v1[i] >= i
-          new NISuppression (v1_eq_v2, suppressee),
+          new NISuppression(v1_eq_v2, suppressee),
           // (v1[i] > i) ==> v1[i] >= i
-          new NISuppression (v1_gt_v2, suppressee),
+          new NISuppression(v1_gt_v2, suppressee),
         #endif
         });
     }
@@ -308,7 +304,7 @@ public class CLASSNAME extends SUPERCLASS {
 
     // If this is an array/container and not a subsequence
     if (var().isDerivedSubSequenceOf() == null) {
-      return var().apply_subscript ("i") + " " + EQUALSstring + " i";
+      return var().apply_subscript("i") + " " + EQUALSstring + " i";
     } else {
       return var().name() + " " + EQUALSstring + " (index)";
     }
@@ -316,7 +312,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   // Bad code here: if the first index is changed from i this breaks
   public String format_esc(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    String[] form = VarInfo.esc_quantify (var());
+    String[] form = VarInfo.esc_quantify(var());
     return form[0] + "(" + form[1] + " " + EQUALSstring + " i)" + form[2];
   }
 
@@ -331,14 +327,14 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    String[] form = VarInfo.simplify_quantify (QuantFlags.include_index(),
+    String[] form = VarInfo.simplify_quantify(QuantFlags.include_index(),
                                                var());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")"
       + form[3];
   }
 
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
-    for (int i=0; i<a.length; i++) {
+    for (int i = 0; i < a.length; i++) {
       if (!EQUALS(a[i], i)) {
         return InvariantStatus.FALSIFIED;
       }
@@ -349,12 +345,12 @@ public class CLASSNAME extends SUPERCLASS {
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
 
     if (logDetail()) {
-      log ("Entered add_modified: ppt.num_values()==%s, sample==%s",
+      log("Entered add_modified: ppt.num_values()==%s, sample==%s",
            ppt.num_values(), ArraysMDE.toString(a));
     }
-    InvariantStatus stat = check_modified (a, count);
+    InvariantStatus stat = check_modified(a, count);
     if (logDetail()) {
-      log ("Exiting add_modified status = %s", stat);
+      log("Exiting add_modified status = %s", stat);
     }
 
     return stat;
@@ -380,8 +376,8 @@ public class CLASSNAME extends SUPERCLASS {
       if ((vs.min() > max_indx) || (vs.max() < 0)) {
         return Invariant.CONFIDENCE_UNJUSTIFIED;
       } else {
-        long overlap = LONG_CAST(Math.min (vs.max(), max_indx)
-                               - Math.max (vs.min(), 0));
+        long overlap = LONG_CAST(Math.min(vs.max(), max_indx)
+                               - Math.max(vs.min(), 0));
         if (overlap < 0) {
           return Invariant.CONFIDENCE_UNJUSTIFIED;
         }
@@ -396,7 +392,7 @@ public class CLASSNAME extends SUPERCLASS {
         double confidence_one_nonequal = ((double)overlap)/(range1 * range2);
 
         // The factor of 2 is a hack, but this seems too stringent otherwise
-        confidence_one_nonequal = Math.min(1.0, 2.0*confidence_one_nonequal);
+        confidence_one_nonequal = Math.min(1.0, 2.0 * confidence_one_nonequal);
 
         assert ! Double.isNaN(confidence_one_nonequal) &&
                           confidence_one_nonequal >= 0 &&
@@ -405,13 +401,12 @@ public class CLASSNAME extends SUPERCLASS {
                           + ", range1=" + range1
                           + ", range2=" + range2
                           ;
-        return 1 - Math.pow (1 - confidence_one_nonequal, vs.elem_cnt());
+        return 1 - Math.pow(1 - confidence_one_nonequal, vs.elem_cnt());
       }
     #else
-      return 1 - Math.pow (.5, num_values);
+      return 1 - Math.pow(.5, num_values);
     #endif
   }
-
 
   /*@Pure*/
   public boolean isSameFormula(Invariant other) {
@@ -435,16 +430,14 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /**
-   * Checks to see if this is obvious over the specified variables
-   * Implements the following checks:
+   * Checks to see if this is obvious over the specified variables Implements the following checks:
    * <pre>
    *    (A[] subsequence B[]) ^ (B[i] op i) &rArr; A[i] op i
    * </pre>
    *
-   * JHP: Its not obvious (to me) that this is true except when the
-   * subsequence starts at index 0.  If B[] = {0, 1, 2, 3, 4} and
-   * A[] = {2, 3, 4}, A[] is a subsequence of B[] and B[i] == i,
-   * but A[i] = i is not true.
+   * JHP: Its not obvious (to me) that this is true except when the subsequence starts at index
+   * 0. If B[] = {0, 1, 2, 3, 4} and A[] = {2, 3, 4}, A[] is a subsequence of B[] and B[i] == i, but
+   * A[i] = i is not true.
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
@@ -462,7 +455,7 @@ public class CLASSNAME extends SUPERCLASS {
     // isObviousDynamically is called for each member of the equality set.
     // We don't want other members of our own equality set to make this obvious
     PptTopLevel pptt = ppt.parent;
-    for (int i=0; i<pptt.var_infos.length; i++) {
+    for (int i = 0; i < pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
       if (vi.equalitySet == seqvar.equalitySet) {
         continue;
@@ -483,6 +476,4 @@ public class CLASSNAME extends SUPERCLASS {
 
     return null;
   }
-
-
 }

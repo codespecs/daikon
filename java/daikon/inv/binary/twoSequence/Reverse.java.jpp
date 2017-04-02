@@ -30,8 +30,8 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -41,12 +41,10 @@ import typequals.*;
 */
 
 /**
- * Represents two sequences of PRIMITIVE where one is in the reverse order
- * of the other.  Prints as <code>x[] is the reverse of y[]</code>.
+ * Represents two sequences of PRIMITIVE where one is in the reverse order of the other. Prints as
+ * <code>x[] is the reverse of y[]</code>.
  */
-public class CLASSNAME
-  extends SUPERCLASS
-{
+public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -57,9 +55,7 @@ public class CLASSNAME
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff Reverse invariants should be considered.
-   */
+  /** Boolean.  True iff Reverse invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   protected CLASSNAME(PptSlice ppt) {
@@ -70,7 +66,7 @@ public class CLASSNAME
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
@@ -83,9 +79,9 @@ public class CLASSNAME
   }
 
   /** Reverse only makes sense on ordered arrays */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis)) {
+    if (!valid_types(vis)) {
       return false;
     }
 
@@ -98,7 +94,7 @@ public class CLASSNAME
   }
 
   /** instantiates the invariant on the specified slice */
-  public CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+  public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
@@ -173,7 +169,7 @@ public class CLASSNAME
         + format();
     }
 
-    String index = VarInfo.get_simplify_free_index (onevar, othervar);
+    String index = VarInfo.get_simplify_free_index(onevar, othervar);
 
     // (FORALL (a i j b ip jp)
     //  (IFF (|is-reverse-of| a i j b ip jp)
@@ -205,7 +201,7 @@ public class CLASSNAME
       return InvariantStatus.FALSIFIED;
     }
     int len = a1.length;
-    for (int i=0, j=len-1; i<len; i++, j--) {
+    for (int i = 0, j = len - 1; i < len; i++, j--) {
       if (!EQUAL(a1[i], a2[j])) {
         return InvariantStatus.FALSIFIED;
       }
@@ -226,5 +222,4 @@ public class CLASSNAME
     assert other instanceof CLASSNAME;
     return true;
   }
-
 }

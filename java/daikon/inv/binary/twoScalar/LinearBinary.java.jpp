@@ -27,11 +27,11 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.binary.twoScalar;
 
 import daikon.*;
-import daikon.inv.*;
 import daikon.derive.unary.SequenceLength;
-import plume.*;
+import daikon.inv.*;
 import java.util.*;
 import java.util.logging.Level;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -41,16 +41,11 @@ import typequals.*;
 */
 
 /**
- * Represents a Linear invariant between two PRIMITIVE
- * scalars <code>x</code> and <code>y</code>, of the form
- * <code>ax + by + c = 0</code>.
- * The constants <code>a</code>, <code>b</code> and <code>c</code> are
- * mutually relatively prime,
- * and the constant <code>a</code> is always positive.
+ * Represents a Linear invariant between two PRIMITIVE scalars <code>x</code> and <code>y</code>, of
+ * the form <code>ax + by + c = 0</code>. The constants <code>a</code>, <code>b</code> and
+ * <code>c</code> are mutually relatively prime, and the constant <code>a</code> is always positive.
  */
-public class CLASSNAME
-  extends SUPERCLASS
-{
+public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -58,9 +53,7 @@ public class CLASSNAME
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff LinearBinary invariants should be considered.
-   */
+  /** Boolean.  True iff LinearBinary invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CORECLASS core;
@@ -78,7 +71,7 @@ public class CLASSNAME
     core = new CORECLASS(this);
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns a prototype CLASSNAME invariant */
   public static /*@Prototype*/ CLASSNAME get_proto() {
@@ -91,9 +84,9 @@ public class CLASSNAME
   }
 
   /** LinearBinary is only valid on integral types */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis)) {
+    if (!valid_types(vis)) {
       return false;
     }
 
@@ -108,7 +101,7 @@ public class CLASSNAME
   }
 
   /** Instantiate an invariant on the specified slice */
-  protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+  protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
@@ -147,24 +140,24 @@ public class CLASSNAME
   }
 
   /**
-   * Merge the invariants in invs to form a new invariant.  Each must be
-   * a CLASSNAME invariant.  The work is done by the LinearBinary core
+   * Merge the invariants in invs to form a new invariant. Each must be a CLASSNAME invariant. The
+   * work is done by the LinearBinary core
    *
-   * @param invs        list of invariants to merge.  They should all be
+   * @param invs        list of invariants to merge. They should all be
    *                    permuted to match the variable order in parent_ppt.
    * @param parent_ppt  slice that will contain the new invariant
    */
-  public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
+  public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores
     List<CORECLASS> cores = new ArrayList<CORECLASS>();
     for (Invariant inv : invs) {
-      cores.add (((CLASSNAME) inv).core);
+      cores.add(((CLASSNAME) inv).core);
     }
 
     // Merge the cores and build a new invariant containing the merged core
-    CLASSNAME result = new CLASSNAME (parent_ppt);
-    CORECLASS newcore = core.merge (cores, result);
+    CLASSNAME result = new CLASSNAME(parent_ppt);
+    CORECLASS newcore = core.merge(cores, result);
     if (newcore == null) {
       return null;
     }
@@ -263,7 +256,6 @@ public class CLASSNAME
     return false;
   }
 
-
   // Look up a previously instantiated invariant.
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 2;
@@ -289,6 +281,4 @@ public class CLASSNAME
     }
     return result;
   }
-
-
 }

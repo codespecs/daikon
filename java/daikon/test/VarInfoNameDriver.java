@@ -422,10 +422,10 @@ public class VarInfoNameDriver {
   //     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
   //       assert args.length >= 1;
   //       VarInfoName roots[] = new VarInfoName [args.length];
-  //       for (int x=0; x<args.length; x++)
+  //       for (int x = 0; x<args.length; x++)
   //         roots[x] = vars.get(args[x]);
   //       String result[] = VarInfoName.QuantHelper.format_jml(roots);
-  //       for (int x=0; x<result.length; x++)
+  //       for (int x = 0; x<result.length; x++)
   //         out.println(result[x]);
   //     }
   //   }
@@ -436,10 +436,10 @@ public class VarInfoNameDriver {
   //     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
   //       assert args.length >= 1;
   //       VarInfoName roots[] = new VarInfoName [args.length];
-  //       for (int x=0; x<args.length; x++)
+  //       for (int x = 0; x<args.length; x++)
   //         roots[x] = vars.get(args[x]);
   //       String result[] = VarInfoName.QuantHelper.format_jml(roots, true);
-  //       for (int x=0; x<result.length; x++)
+  //       for (int x = 0; x<result.length; x++)
   //         out.println(result[x]);
   //     }
   //   }
@@ -450,10 +450,10 @@ public class VarInfoNameDriver {
   //     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
   //       assert args.length >= 1;
   //       VarInfoName roots[] = new VarInfoName [args.length];
-  //       for (int x=0; x<args.length; x++)
+  //       for (int x = 0; x<args.length; x++)
   //         roots[x] = vars.get(args[x]);
   //       String result[] = VarInfoName.QuantHelper.format_jml(roots, false, false);
-  //       for (int x=0; x<result.length; x++)
+  //       for (int x = 0; x<result.length; x++)
   //         out.println(result[x]);
   //     }
   //   }

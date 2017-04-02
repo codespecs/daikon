@@ -106,9 +106,8 @@ package daikon.inv.unary;
 
 import daikon.*;
 import daikon.inv.*;
-import java.text.DecimalFormat;
-
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -118,7 +117,6 @@ import org.checkerframework.dataflow.qual.*;
 // One reason not to combine LowerBound and Upperbound is that they have
 // separate justifications:  one may be justified when the other is not.
 
-
 // What should we do if there are few values in the range?
 // This can make justifying that invariant easier, because with few values
 // naturally there are more instances of each value.
@@ -126,7 +124,6 @@ import org.checkerframework.dataflow.qual.*;
 // than (say) twice the expected number of samples (under the assumption of
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
-
 
 public class LOWERBOUNDCORE
   implements Serializable, Cloneable
@@ -181,7 +178,7 @@ public class LOWERBOUNDCORE
       + ", num_" + MINSTR + "2=" + NUM_MIN2
       + ", " + MINSTR + "3=" + MIN3
       + ", num_" + MINSTR + "3=" + NUM_MIN3
-      + ", " + MAXSTR + "=" + MAX + ", " + "range=" + range + ", " +
+      + ", " + MAXSTR + "=" + MAX + ", range=" + range + ", " +
       "avg_samp=" + two_decimals.format(avg_samples_per_val);
   }
 
@@ -217,13 +214,11 @@ public class LOWERBOUNDCORE
     return 1;
   }
 
-
   /**
-   * Whether this would change if the given value was seen.  Used to
-   * test for need of cloning and flowing before this would be
-   * changed.
+   * Whether this would change if the given value was seen. Used to test for need of cloning and
+   * flowing before this would be changed.
    */
-  public boolean wouldChange (PRIMITIVE value) {
+  public boolean wouldChange(PRIMITIVE value) {
     PRIMITIVE v = value;
     return (value LT MIN1);
   }
@@ -274,7 +269,6 @@ public class LOWERBOUNDCORE
     }
   }
 
-
   public boolean enoughSamples(/*>>>@GuardSatisfied LOWERBOUNDCORE this*/) {
     return samples > required_samples;
   }
@@ -289,7 +283,6 @@ public class LOWERBOUNDCORE
   private final double prob_or(double p1, double p2) {
     return Invariant.prob_or(p1, p2);
   }
-
 
   public double computeConfidence() {
     if (PrintInvariants.dkconfig_static_const_infer && matchConstant()) {
@@ -345,14 +338,14 @@ public class LOWERBOUNDCORE
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
 
     // Value "2a" from above
-    double trunc_prob = prob_is_ge(NUM_MIN1, 5*avg_samples_per_val);
+    double trunc_prob = prob_is_ge(NUM_MIN1, 5 * avg_samples_per_val);
 
     // Value "2b" from above
     double unif_prob;
     boolean unif_mod_OK = ((SIGNADJUST(MIN3 - MIN2) == modulus)
                            && (SIGNADJUST(MIN2 - MIN1) == modulus));
     if (unif_mod_OK) {
-      double half_avg_samp = avg_samples_per_val/2;
+      double half_avg_samp = avg_samples_per_val / 2;
       double unif_prob_1 = prob_is_ge(NUM_MIN1, half_avg_samp);
       double unif_prob_2 = prob_is_ge(NUM_MIN2, half_avg_samp);
       double unif_prob_3 = prob_is_ge(NUM_MIN3, half_avg_samp);
@@ -396,32 +389,30 @@ public class LOWERBOUNDCORE
   }
 
   // Merge lbc into this.
-  public void add (LOWERBOUNDCORE lbc) {
+  public void add(LOWERBOUNDCORE lbc) {
 
     // Pass each value and its count to this invariant's add_modified.  Since
     // bound is never destroyed, we don't need to check the results.
     if (lbc.NUM_MIN1 > 0) {
-      add_modified (lbc.MIN1, lbc.NUM_MIN1);
+      add_modified(lbc.MIN1, lbc.NUM_MIN1);
     }
     if (lbc.NUM_MIN2 > 0) {
-      add_modified (lbc.MIN2, lbc.NUM_MIN2);
+      add_modified(lbc.MIN2, lbc.NUM_MIN2);
     }
     if (lbc.NUM_MIN3 > 0) {
-      add_modified (lbc.MIN3, lbc.NUM_MIN3);
+      add_modified(lbc.MIN3, lbc.NUM_MIN3);
     }
     // NUM_MIN1 will be positive if and only if we've ever seen any
     // real samples. Only then does MAX represent a real sample.
     if (lbc.NUM_MIN1 > 0) {
-      add_modified (lbc.MAX, 1);
+      add_modified(lbc.MAX, 1);
     }
     if (Debug.logDetail()) {
-      wrapper.log ("Added vals %s of %s, %s of %s, %s of %s, %s from ppt %s",
+      wrapper.log("Added vals %s of %s, %s of %s, %s of %s, %s from ppt %s",
                    lbc.NUM_MIN1, lbc.MIN1, lbc.NUM_MIN2, lbc.MIN2,
                    lbc.NUM_MIN3, lbc.MIN3,
                    ((lbc.NUM_MIN1 > 0) ?  "1 of " + lbc.MAX : ""),
                    lbc.wrapper.ppt.parent.ppt_name);
     }
   }
-
-
 }

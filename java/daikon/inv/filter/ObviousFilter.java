@@ -33,7 +33,7 @@ public class ObviousFilter extends InvariantFilter {
       // write y cmp f'(x_0,x_1,...,x_n-1), so we loop through the var_infos
       // array of invariant and return true if any var is constant since an implying
       // invariant should appear with some function over fewer variables.
-      for (int i=0; i < invariant.ppt.var_infos.length; i++) {
+      for (int i = 0; i < invariant.ppt.var_infos.length; i++) {
         VarInfo var = invariant.ppt.var_infos[i];
         PptSlice slice = invariant.ppt.parent.findSlice(var);
         if (slice != null) {

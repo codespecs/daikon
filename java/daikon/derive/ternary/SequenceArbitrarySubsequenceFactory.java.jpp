@@ -20,7 +20,6 @@ The correct way to build the system is to run 'make'.
   #define LINEARBINARY LinearBinaryFloat
 #endif
 
-
 #if defined(SCALAR)
   #undef SCALAR
   #define PROGLANG_INT ProglangType.INT
@@ -49,23 +48,20 @@ package daikon.derive.ternary;
 
 import daikon.*;
 import daikon.inv.binary.twoScalar.*; // for IntComparison
-
-import plume.*;
 import java.util.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-public final class SEQUENCESCALARSUBSCRIPTFACTORY
-  extends TernaryDerivationFactory {
+public final class SEQUENCESCALARSUBSCRIPTFACTORY extends TernaryDerivationFactory {
 
   // When calling/creating the derivations, arrange that:
   //   base1 is the sequence
   //   base2 and base3 are the scalars
 
-  public TernaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi1, VarInfo vi2,
-                                         VarInfo vi3) {
+  public TernaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
 
     // check if the derivations are globally disabled
     boolean enable_subsequence = SUBSEQUENCE.dkconfig_enabled;
@@ -106,10 +102,10 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
       return null;
     }
 
-    if (! seqvar.indexCompatible(sclvar1)) {
+    if (!seqvar.indexCompatible(sclvar1)) {
       return null;
     }
-    if (! seqvar.indexCompatible(sclvar2)) {
+    if (!seqvar.indexCompatible(sclvar2)) {
       return null;
     }
 
@@ -132,8 +128,8 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
     return results1.toArray(new TernaryDerivation[0]);
   }
 
-  private Vector<TernaryDerivation> instantiateWithOrder(VarInfo seqvar, VarInfo startvar,
-                                      VarInfo endvar) {
+  private Vector<TernaryDerivation> instantiateWithOrder(
+      VarInfo seqvar, VarInfo startvar, VarInfo endvar) {
     Vector<TernaryDerivation> results = new Vector<TernaryDerivation>();
     VarInfo seqsize = seqvar.sequenceSize();
     if (seqsize != null) {
@@ -161,31 +157,31 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
     // nonsensical/missing.  Is that what I want?
     // Find an IntComparison relationship over the scalar and the sequence
     // size, if possible.
-//     PptSlice compar_slice = null;
-//     if (seqsize != null) {
-//       assert sclvar.ppt == seqsize.ppt;
-//       compar_slice = sclvar.ppt.findSlice_unordered(sclvar, seqsize);
-//     }
-//     if (compar_slice != null) {
-//       if ((sclvar.varinfo_index < seqsize.varinfo_index)
-//           ? INTLESSEQUAL.find(compar_slice) == null // sclvar can be more than seqsize
-//           : INTGREATEREQUAL.find(compar_slice) == null // seqsize can be less than sclvar
-//           ) {
-//         Global.nonsensical_suppressed_derived_variables += 6;
-//         return null;
-//       } else if (INTEQUAL.find(compar_slice) != null) {
-//         Global.nonsensical_suppressed_derived_variables += 3;
-//         ArrayList<BinaryDerivation> result = new ArrayList<BinaryDerivation>();
-//         if (enable_subscript) {
-//           result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, true)); // a[i-1]
-//         }
-//         if (enable_subsequence) {
-//           result.add(new SUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
-//           result.add(new SUBSEQUENCE(seqvar, sclvar, false, false)); // a[i..]
-//         };
-//         return result.toArray(new BinaryDerivation[result.size()]);
-//       }
-//     }
+    //     PptSlice compar_slice = null;
+    //     if (seqsize != null) {
+    //       assert sclvar.ppt == seqsize.ppt;
+    //       compar_slice = sclvar.ppt.findSlice_unordered(sclvar, seqsize);
+    //     }
+    //     if (compar_slice != null) {
+    //       if ((sclvar.varinfo_index < seqsize.varinfo_index)
+    //           ? INTLESSEQUAL.find(compar_slice) == null // sclvar can be more than seqsize
+    //           : INTGREATEREQUAL.find(compar_slice) == null // seqsize can be less than sclvar
+    //           ) {
+    //         Global.nonsensical_suppressed_derived_variables += 6;
+    //         return null;
+    //       } else if (INTEQUAL.find(compar_slice) != null) {
+    //         Global.nonsensical_suppressed_derived_variables += 3;
+    //         ArrayList<BinaryDerivation> result = new ArrayList<BinaryDerivation>();
+    //         if (enable_subscript) {
+    //           result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, true)); // a[i-1]
+    //         }
+    //         if (enable_subsequence) {
+    //           result.add(new SUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
+    //           result.add(new SUBSEQUENCE(seqvar, sclvar, false, false)); // a[i..]
+    //         };
+    //         return result.toArray(new BinaryDerivation[result.size()]);
+    //       }
+    //     }
 
     // Abstract out these next two.
 
@@ -244,18 +240,18 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
         // or lb.var2() == - (lb.core.a / lb.core.b) * lb.var1() - lb.core.c / lb.core.b
 
       //  if (lb.core.a == 1) {
-        if (-lb.core.a/lb.core.b == 1) {
+        if (-lb.core.a / lb.core.b == 1) {
           // Don't set unconditionally, and don't break:  we want to check
           // other variables as well.
       //    if (lb.core.b == -1) {
-          if (-lb.core.c/lb.core.b == -1) {
+          if (-lb.core.c / lb.core.b == -1) {
             if (lb.var1() != startvar) {
               // i = k - 1, so k = i + 1
               suppress_i_plus_1 = true;
             }
           }
 //          if (lb.core.b == 1) {
-          if (-lb.core.c/lb.core.b == 1) {
+          if (-lb.core.c / lb.core.b == 1) {
             if (lb.var1() == startvar) {
               // k = i + 1
               suppress_i_plus_1 = true;
@@ -277,19 +273,19 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
         // lb asserts that lb.core.a * lb.var1() + lb.core.b * lb.var2() + lb.core.c == 0
         // or lb.var2() == - (lb.core.a / lb.core.b) * lb.var1() - lb.core.c / lb.core.b
 
-//        if (lb.core.a == 1) {
-        if (-lb.core.a/lb.core.b == 1) {
+        //        if (lb.core.a == 1) {
+        if (-lb.core.a / lb.core.b == 1) {
           // Don't set unconditionally, and don't break:  we want to check
           // other variables as well.
-//          if (lb.core.b == -1) {
-          if (-lb.core.c/lb.core.b == -1) {
+          //          if (lb.core.b == -1) {
+          if (-lb.core.c / lb.core.b == -1) {
             if (lb.var1() == endvar) {
               // k = j - 1
               suppress_j_minus_1 = true;
             }
           }
-//          if (lb.core.b == 1) {
-          if (-lb.core.c/lb.core.b == 1) {
+          //          if (lb.core.b == 1) {
+          if (-lb.core.c / lb.core.b == 1) {
             if (lb.var1() != endvar) {
               // j = k + 1, so k = j - 1
               suppress_j_minus_1 = true;
@@ -331,5 +327,4 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
 
     return results;
   }
-
 }

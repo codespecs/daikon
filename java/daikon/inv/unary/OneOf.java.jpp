@@ -41,7 +41,6 @@ The correct way to build the system is to run 'make'.
   #error "Impossible"
 #endif
 
-
 #define EQUALS(a,b) ((a) == (b))
 #define JAVA_EQUALS_STRING(x) " == " + x
 
@@ -98,7 +97,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR OneOfString
   #define ONEOFSCALAR_STRING "OneOfString"
   #define SINGLESCALAR SingleString
-  #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
+  #define TOSTRING(x) ((x == null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name()
 #elif defined(SEQUENCE)
@@ -139,7 +138,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR_STRING "OneOfStringSequence"
   #define SINGLESCALAR SingleStringSequence
   #define TOSTRING(x) ArraysMDE.toString(x)
-  #define TOSTRINGELEMENT(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
+  #define TOSTRINGELEMENT(x) ((x == null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name()
@@ -186,7 +185,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR EltOneOfString
   #define ONEOFSCALAR_STRING "EltOneOfString"
   #define SINGLESCALAR SingleStringSequence
-  #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
+  #define TOSTRING(x) ((x == null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define NAME var().name() + " elements"
 #else
@@ -202,23 +201,21 @@ import daikon.inv.*;
 import daikon.inv.unary.OneOf;
 #ifdef IS_NUMERIC
   import daikon.derive.unary.*;
-  import daikon.inv.unary.sequence.*;
   import daikon.inv.binary.sequenceScalar.*;
+  import daikon.inv.unary.sequence.*;
 #endif
 #ifdef IS_ELT_NUMERIC
-  import daikon.inv.unary.scalar.*;
   import daikon.inv.binary.twoSequence.SubSequence;
+  import daikon.inv.unary.scalar.*;
 #endif
-
-import plume.*;
-
 import java.io.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.*;
 #if defined(BASE_STRING)
   import java.util.regex.*;
 #endif
-import java.util.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -236,26 +233,22 @@ import typequals.*;
 
 #if defined (SCALAR)
   /**
-   * Represents long scalars that take on only a few distinct values.  Prints
-   * as either <code>x == c</code> (when there is only one value),
-   * <code>x one of {c1, c2, c3}</code> (when there are multiple values),
-   * or <code>x has only one value</code> (when <code>x</code> is
-   * a hashcode (pointer) - this is because the numerical value of the
-   * hashcode (pointer) is uninteresting).
+   * Represents long scalars that take on only a few distinct values. Prints as either <code>x ==
+   * c</code> (when there is only one value), <code>x one of {c1, c2, c3}</code> (when there are
+   * multiple values), or <code>x has only one value</code> (when <code>x</code> is a hashcode
+   * (pointer) -- this is because the numerical value of the hashcode (pointer) is uninteresting).
    */
 #elif defined (IS_SCALAR) || defined (IS_SEQUENCE)
   /**
-   * Represents INT_PRINTED variables that take on only a few distinct
-   * values. Prints as either
-   * <code>x == c</code> (when there is only one value)
-   * or as <code>x one of {c1, c2, c3}</code> (when there are multiple values).
+   * Represents INT_PRINTED variables that take on only a few distinct values. Prints as either
+   * <code>x == c</code> (when there is only one value) or as <code>x one of {c1, c2, c3}</code>
+   * (when there are multiple values).
    */
 #else
   /**
-   * Represents sequences of INT_PRINTED values where the elements of the sequence
-   * take on only a few distinct values.  Prints as either
-   * <code>x[] == c</code> (when there is only one value), or as
-   * <code>x[] one of {c1, c2, c3}</code> (when there are multiple values).
+   * Represents sequences of INT_PRINTED values where the elements of the sequence take on only a
+   * few distinct values. Prints as either <code>x[] == c</code> (when there is only one value), or
+   * as <code>x[] one of {c1, c2, c3}</code> (when there are multiple values).
    */
 #endif
 
@@ -268,22 +261,18 @@ public final class ONEOFSCALAR
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  /**
-   * Debugging logger.
-   */
+  /** Debugging logger. */
   public static final Logger debug
-    = Logger.getLogger (ONEOFSCALAR.class.getName());
+    = Logger.getLogger(ONEOFSCALAR.class.getName());
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff OneOf invariants should be considered.
-   */
+  /** Boolean.  True iff OneOf invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /**
-   * Positive integer.  Specifies the maximum set size for this type
-   * of invariant (x is one of <code>size</code> items).
+   * Positive integer. Specifies the maximum set size for this type of invariant (x is one of
+   * <code>size</code> items).
    */
 #if defined(STRINGSEQUENCE)
   public static int dkconfig_size = 2;
@@ -293,18 +282,14 @@ public final class ONEOFSCALAR
 
 #ifdef BASE_INT
   /**
-   * Boolean.  If true, invariants describing hashcode-typed variables
-   * as having any particular value will have an artificial value
-   * substituted for the exact hashhode values.  The artificial values
-   * will stay the same from run to run even if the actual hashcode
-   * values change (as long as the OneOf invariants remain the same).
-   * If false, hashcodes will be formatted as the application of a
-   * hashcode uninterpreted function to an integer representing the
-   * bit pattern of the hashcode.  One might wish to omit the exact
-   * values of the hashcodes because they are usually uninteresting;
-   * this is the same reason they print in the native Daikon format,
-   * for instance, as <code>var has only one value</code> rather than
-   * <code>var == 150924732</code>.
+   * Boolean. If true, invariants describing hashcode-typed variables as having any particular value
+   * will have an artificial value substituted for the exact hashhode values. The artificial values
+   * will stay the same from run to run even if the actual hashcode values change (as long as the
+   * OneOf invariants remain the same). If false, hashcodes will be formatted as the application of
+   * a hashcode uninterpreted function to an integer representing the bit pattern of the hashcode.
+   * One might wish to omit the exact values of the hashcodes because they are usually
+   * uninteresting; this is the same reason they print in the native Daikon format, for instance, as
+   * <code>var has only one value</code> rather than <code>var == 150924732</code>.
    */
   public static boolean dkconfig_omit_hashcode_values_Simplify = false;
 #endif
@@ -318,13 +303,12 @@ public final class ONEOFSCALAR
   /*@Unused(when=Prototype.class)*/
   private int num_elts;
 
-
-  public /*@Prototype*/ ONEOFSCALAR () {
+  public /*@Prototype*/ ONEOFSCALAR() {
     super();
   }
 
-  public ONEOFSCALAR (PptSlice slice) {
-    super (slice);
+  public ONEOFSCALAR(PptSlice slice) {
+    super(slice);
 #if defined(SEQUENCE)
     // Elements are interned, so can test with ==
     // (in the general online case, it's not worth interning).
@@ -345,12 +329,12 @@ public final class ONEOFSCALAR
 #if defined(IS_ELT) || defined(IS_SEQUENCE)
     // var() is initialized by the super constructor
     assert var().is_array() :
-      String.format ("In %s constructor, var %s (type=%s, rep_type=%s) should be an array",
+      String.format("In %s constructor, var %s (type=%s, rep_type=%s) should be an array",
                      ONEOFSCALAR_STRING, var().name(), var().type, var().rep_type);
 #endif
   }
 
-  private static /*@Prototype*/ ONEOFSCALAR proto = new /*@Prototype*/ ONEOFSCALAR ();
+  private static /*@Prototype*/ ONEOFSCALAR proto = new /*@Prototype*/ ONEOFSCALAR();
 
   /** Returns the prototype invariant for ONEOFSCALAR */
   public static /*@Prototype*/ ONEOFSCALAR get_proto() {
@@ -363,7 +347,7 @@ public final class ONEOFSCALAR
   }
 
   /** instantiate an invariant on the specified slice */
-  public ONEOFSCALAR instantiate_dyn (/*>>> @Prototype ONEOFSCALAR this,*/ PptSlice slice) {
+  public ONEOFSCALAR instantiate_dyn(/*>>> @Prototype ONEOFSCALAR this,*/ PptSlice slice) {
     return new ONEOFSCALAR(slice);
   }
 
@@ -393,7 +377,7 @@ public final class ONEOFSCALAR
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = elts.clone();
 #ifdef IS_SEQUENCE
-    for (int i=0; i < num_elts; i++) {
+    for (int i = 0; i < num_elts; i++) {
       result.elts[i] = Intern.intern(elts[i].clone());
     }
 #endif
@@ -458,7 +442,7 @@ public final class ONEOFSCALAR
       throw new Error("Represents no elements");
     }
     sort_rep();
-    return elts[num_elts-1];
+    return elts[num_elts - 1];
   }
 
   // Assumes the other array is already sorted
@@ -467,8 +451,8 @@ public final class ONEOFSCALAR
       return false;
     }
     sort_rep();
-    for (int i=0; i < num_elts; i++)
-      if (! EQUALS(elts[i],other_elts[i])) // elements are interned
+    for (int i = 0; i < num_elts; i++)
+      if (!EQUALS(elts[i],other_elts[i])) // elements are interned
         return false;
     return true;
   }
@@ -479,7 +463,7 @@ public final class ONEOFSCALAR
     sort_rep();
     StringBuffer sb = new StringBuffer();
     sb.append("{ ");
-    for (int i=0; i<num_elts; i++) {
+    for (int i = 0; i < num_elts; i++) {
       if (i != 0) {
         sb.append(", ");
       }
@@ -553,7 +537,7 @@ public final class ONEOFSCALAR
 #if defined(IS_SEQUENCE_NUMERIC)
   private boolean all_nulls(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ int value_no) {
     INT seq = elts[value_no];
-    for (int i=0; i<seq.length; i++) {
+    for (int i = 0; i < seq.length; i++) {
       if (seq[i] != 0) {
         return false;
       }
@@ -562,7 +546,7 @@ public final class ONEOFSCALAR
   }
   private boolean no_nulls(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ int value_no) {
     INT seq = elts[value_no];
-    for (int i=0; i<seq.length; i++) {
+    for (int i = 0; i < seq.length; i++) {
       if (seq[i] == 0) {
         return false;
       }
@@ -574,7 +558,7 @@ public final class ONEOFSCALAR
 #if (defined(IS_SCALAR))
   public INT[] getElts() {
     INT[] temp = new INT[elts.length];
-    for (int i=0; i < elts.length; i++) {
+    for (int i = 0; i < elts.length; i++) {
       temp[i] = elts[i];
     }
     return temp;
@@ -609,14 +593,14 @@ public final class ONEOFSCALAR
       #if defined(SCALAR) || defined(ELT)
         if (is_boolean()) {
           if ((elts[0] != 0) && (elts[0] != 1)) {
-              System.out.println ("WARNING:: Variable "
+              System.out.println("WARNING:: Variable "
               + varname + " is of type boolean, but has non boolean value: "
               + elts[0]);
           }
           return varname + " == " + ((elts[0] == 0) ? "false" : "true");
         } else if (is_hashcode()) {
           if (elts[0] == 0) {
-            return varname + " == " + "null";
+            return varname + " == null";
           } else {
             return varname + " has only one value"
               // + " (hashcode=" + elts[0] + ")"
@@ -668,13 +652,13 @@ public final class ONEOFSCALAR
         }
       #elif defined(STRING) || defined(ELTSTRING)
         boolean is_type = is_type();
-        if (! is_type) {
+        if (!is_type) {
           return varname + " == " + TOSTRING(elts[0]);
         } else {
           // It's a type
           String str = elts[0];
           if ((str == null) || "null".equals(str)) {
-            return varname + " == " + "null";
+            return varname + " == null";
           } else {
             if (str.startsWith("[")) {
               str = UtilMDE.fieldDescriptorToBinaryName(str);
@@ -723,15 +707,12 @@ public final class ONEOFSCALAR
     }
   }
 
-
 #if defined(STRING) || defined(ELTSTRING)
   /*@Pure*/
   private boolean is_type(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return var().has_typeof();
   }
 #endif
-
-
 
 #if defined(BASE_STRING)
   private static Pattern dollar_char_pat = Pattern.compile("\\$([A-Za-z])");
@@ -772,7 +753,7 @@ public final class ONEOFSCALAR
   public String format_esc(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     sort_rep();
 #if defined(IS_ELT)
-    String[] form = VarInfo.esc_quantify (var());
+    String[] form = VarInfo.esc_quantify(var());
     String varname = form[1];
 #elif defined(IS_SCALAR)
     String varname = var().esc_name();
@@ -801,7 +782,7 @@ public final class ONEOFSCALAR
 #elif defined(STRING)
     // We cannot say anything about Strings in ESC, just types (which
     // Daikon stores as Strings).
-    if (! is_type()) {
+    if (!is_type()) {
       result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
     } else {
       // Format   \typeof(theArray) = "[Ljava.lang.Object;"
@@ -811,7 +792,7 @@ public final class ONEOFSCALAR
       //   as     \typeof(other) == \type(package.SomeClass)
 
       result = "";
-      for (int i=0; i<num_elts; i++) {
+      for (int i = 0; i < num_elts; i++) {
         if (i != 0) { result += " || "; }
         result += varname + " == " + format_esc_string2type(elts[i]);
       }
@@ -825,7 +806,7 @@ public final class ONEOFSCALAR
     } else if (is_hashcode()) {
       if (num_elts == 1) {
         if (elts[0] == 0) {
-          result = varname + " == " + "null";
+          result = varname + " == null";
         } else {
           // This seems wrong, because there is already a "!= null" invariant.
           // This invariant (ONEOFSCALAR) just shouldn't print for ESC format.
@@ -842,13 +823,13 @@ public final class ONEOFSCALAR
         // Do nothing
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       } else {
-        throw new Error ("Contains more than 2 elements");
+        throw new Error("Contains more than 2 elements");
       }
     } else
   #endif
     {
       result = "";
-      for (int i=0; i<num_elts; i++) {
+      for (int i = 0; i < num_elts; i++) {
         if (i != 0) { result += " || "; }
         result += varname + " == " + TOSTRING(elts[i]);
       }
@@ -866,7 +847,7 @@ public final class ONEOFSCALAR
         if (!var().isSlice()) {
           length = var().get_length().esc_name() + " == " + value.length;
         }
-        String[] form = VarInfo.esc_quantify (var());
+        String[] form = VarInfo.esc_quantify(var());
         if (no_nulls(0)) {
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
@@ -899,9 +880,9 @@ public final class ONEOFSCALAR
       /*@NonNull*/ String varname = sequence.get_enclosing_var().esc_name();
       String type = null;
       boolean consistent = true;
-      for (int i=0; consistent && i<num_elts; i++) {
+      for (int i = 0; consistent && i < num_elts; i++) {
         String[] elt = elts[i];
-        for (int j=0; consistent && j<elt.length; j++) {
+        for (int j = 0; consistent && j < elt.length; j++) {
           String maybe = format_esc_string2type(elt[j]);
           if (type == null) {
             type = maybe;
@@ -977,7 +958,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       }
     } else {
       assert num_elts > 1;
-      result = "Contract.ForAll(" + split[0] + ", x => " + "x" + split[1] + ".OneOf(" + args + "))";
+      result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + ".OneOf(" + args + "))";
     }
 
 #elif defined(IS_SCALAR)
@@ -995,7 +976,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     } else if (is_hashcode()) {
       if (num_elts == 1) {
         if (elts[0] == 0) {
-          result = varname + " == " + "null";
+          result = varname + " == null";
         } else {
           result = varname + " != null";
         }
@@ -1017,7 +998,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         result = varname + " == " + elts[0];
       } else {
         List<String> e = new ArrayList<String>();
-        for (int i=0; i<num_elts; i++) {
+        for (int i = 0; i < num_elts; i++) {
           e.add(TOSTRING(elts[i]));
         }
         String exp = UtilMDE.join(e, ", ");
@@ -1033,7 +1014,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 
     if (is_type()) {
         List<String> names = new ArrayList<String>();
-        for (int i=0; i<num_elts; i++) {
+        for (int i = 0; i < num_elts; i++) {
              String str = elts[i];
              if ((str == null) || "null".equals(str)) {
                  names.add(varname + " == null");
@@ -1049,7 +1030,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
                : (varname + ".Equals(" + TOSTRING(str) + ")");
     } else {
         List<String> names = new ArrayList<String>();
-        for (int i=0; i<num_elts; i++) {
+        for (int i = 0; i < num_elts; i++) {
             String str = elts[i];
             names.add((str == null) ? "null" : TOSTRING(str));
         }
@@ -1135,7 +1116,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       if (num_elts == 2) {
         return "true";          // one elt is null, the other is non-null
       } else if (elts[0] == 0) {
-        result = varname + " == " + "null";
+        result = varname + " == null";
       } else {
         result = varname + " != null";
           // varname + " has only one value"
@@ -1147,7 +1128,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 
     {
       result = "";
-      for (int i=0; i<num_elts; i++) {
+      for (int i = 0; i < num_elts; i++) {
         if (i != 0) { result += " || "; }
 
         #if defined(FLOAT)
@@ -1162,7 +1143,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 
     result = "";
     boolean is_type = is_type();
-    for (int i=0; i<num_elts; i++) {
+    for (int i = 0; i < num_elts; i++) {
       if (i != 0) { result += " || "; }
       String str = elts[i];
       if (!is_type) {
@@ -1170,7 +1151,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       } else {
         // It's a type
         if ((str == null) || "null".equals(str)) {
-          result += varname + " == " + "null";
+          result += varname + " == null";
         } else {
           if (str.startsWith("[")) {
             str = UtilMDE.fieldDescriptorToBinaryName(str);
@@ -1194,7 +1175,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   #else
 
     result = "";
-    for (int i=0; i<num_elts; i++) {
+    for (int i = 0; i < num_elts; i++) {
       if (i != 0) { result += " || "; }
 
     #if defined(STRINGSEQUENCE)
@@ -1224,7 +1205,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 #endif
     sort_rep();
 #if defined(IS_ELT)
-    String[] form = VarInfo.simplify_quantify (var());
+    String[] form = VarInfo.simplify_quantify(var());
     String varname = form[1];
 #elif defined(IS_SCALAR)
     String varname =
@@ -1234,7 +1215,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 #if defined(STRING) || defined(ELTSTRING)
     result = "";
     boolean is_type = is_type();
-    for (int i=0; i<num_elts; i++) {
+    for (int i = 0; i < num_elts; i++) {
       String value = elts[i];
       if (is_type) {
         if (value == null) {
@@ -1266,7 +1247,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode()) {
       if (num_elts == 1) {
-        long hashcode_val = get_hashcode_val (elts[0]);
+        long hashcode_val = get_hashcode_val(elts[0]);
         result = "(EQ " + varname + " " +
           ((elts[0] == 0) ? "null" :
            ("(hashcode " + simplify_format_long(hashcode_val) + ")")) + ")";
@@ -1274,19 +1255,19 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         // add_modified allows two elements iff one is null
         assert elts[0] == 0;
         assert elts[1] != 0;
-        long hashcode_val = get_hashcode_val (elts[1]);
+        long hashcode_val = get_hashcode_val(elts[1]);
         result = "(OR (EQ " + varname + " null) (EQ " + varname
           + "(hashcode " + simplify_format_long(hashcode_val) + ")))";
       } else if (num_elts == 0) {
         return format_too_few_samples(OutputFormat.SIMPLIFY, null);
       } else {
-        throw new Error ("Contains more than 2 elements");
+        throw new Error("Contains more than 2 elements");
       }
     } else
   #endif
     {
       result = "";
-      for (int i=0; i<num_elts; i++) {
+      for (int i = 0; i < num_elts; i++) {
         result += " (EQ " + varname + " " + TOSTRING_SIMPLIFY(elts[i]) + ")";
       }
       if (num_elts > 1) {
@@ -1301,7 +1282,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
 #elif defined(IS_SEQUENCE)
     StringBuffer resultBuf = new StringBuffer();
-    for (int i=0; i<num_elts; i++) {
+    for (int i = 0; i < num_elts; i++) {
       INT seq = elts[i];
       String offset = null;
       String contents = null;
@@ -1320,7 +1301,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 
 #ifdef SEQUENCE
       if (is_hashcode()) {
-        String[] form = VarInfo.simplify_quantify (var());
+        String[] form = VarInfo.simplify_quantify(var());
         if (no_nulls(i)) {
           contents = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
         } else if (all_nulls(i)) {
@@ -1332,9 +1313,9 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         StringBuffer contentsBuf = new StringBuffer();
         for (int j = 0; j < seq.length; j++) {
           if (j + 3 < seq.length &&
-              ELT_EQUALS(seq[j], seq[j+1]) &&
-              ELT_EQUALS(seq[j], seq[j+2]) &&
-              ELT_EQUALS(seq[j], seq[j+3])) {
+              ELT_EQUALS(seq[j], seq[j + 1]) &&
+              ELT_EQUALS(seq[j], seq[j + 2]) &&
+              ELT_EQUALS(seq[j], seq[j + 3])) {
             // Compress a sequence of adjacent values
             int k = j + 4;
             for (; k < seq.length; k++)
@@ -1342,7 +1323,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
                 break;
               }
             k--;
-            String index_name = VarInfo.get_simplify_free_index (var());
+            String index_name = VarInfo.get_simplify_free_index(var());
             String cond_left, cond_right;
             if (offset == null) {
               cond_left  = "(<= " + j + " " + index_name + ")";
@@ -1354,7 +1335,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
                 + index_name + ")";
             }
             String cond = "(AND " + cond_left + " " + cond_right + ")";
-            String nth = var().get_simplify_selectNth (index_name, true, 0);
+            String nth = var().get_simplify_selectNth(index_name, true, 0);
             String eq = "(EQ " + nth + " " + TOSTRING_SIMPLIFY(seq[j]) + ")";
             String implies = "(IMPLIES " + cond + " " + eq + ")";
             String forall = "(FORALL (" + index_name + ") " + implies + ")";
@@ -1362,7 +1343,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
             j = k;
           } else {
             // Output a single value
-            String nth = var().get_simplify_selectNth_lower (j);
+            String nth = var().get_simplify_selectNth_lower(j);
             if (nth == null) {
               String classname = this.getClass().toString().substring(6);
               result = "warning: method " + classname
@@ -1423,7 +1404,6 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return result;
   }
 
-
 #if defined(IS_ELT)
 
   public InvariantStatus add_modified(INTARRAY a, int count) {
@@ -1450,7 +1430,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 
   private InvariantStatus runValue(INT[] a, int count, boolean mutate) {
     InvariantStatus finalStatus = InvariantStatus.NO_CHANGE;
-    for (int ai=0; ai <a.length; ai++) {
+    for (int ai = 0; ai <a.length; ai++) {
       InvariantStatus status = null;
       if (mutate) {
         status = add_mod_elem(a[ai], count);
@@ -1481,7 +1461,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         for (int i = 0; i < num_elts; i++) {
           eltString.append(TOSTRING(elts[i]) + " ");
         }
-        log ("destroyed on sample %s previous vals = {%s} num_elts = %s",
+        log("destroyed on sample %s previous vals = {%s} num_elts = %s",
              TOSTRING(v), eltString, num_elts);
       }
       return InvariantStatus.FALSIFIED;
@@ -1490,13 +1470,12 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   }
 #endif
 
-
   /**
-   * Adds a single sample to the invariant.  Returns
+   * Adds a single sample to the invariant. Returns
    * the appropriate InvariantStatus from the result
    * of adding the sample to this.
    */
-  public InvariantStatus add_mod_elem (INT v, int count) {
+  public InvariantStatus add_mod_elem(INT v, int count) {
     InvariantStatus status = check_mod_elem(v, count);
     if (status == InvariantStatus.WEAKENED) {
       elts[num_elts] = v;
@@ -1505,17 +1484,16 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return status;
   }
 
-
   /**
-   * Checks a single sample to the invariant.  Returns
+   * Checks a single sample to the invariant. Returns
    * the appropriate InvariantStatus from the result
    * of adding the sample to this.
    */
-  public InvariantStatus check_mod_elem (INT v, int count) {
+  public InvariantStatus check_mod_elem(INT v, int count) {
 
     // Look for v in our list of previously seen values.  If it's
     // found, we're all set.
-    for (int i=0; i<num_elts; i++) {
+    for (int i = 0; i < num_elts; i++) {
       //if (logDetail())
       //  log ("add_modified (" + v + ")");
       if (EQUALS(elts[i], v)) {
@@ -1547,7 +1525,6 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       }
     }
 #endif
-
 
     return InvariantStatus.WEAKENED;
   }
@@ -1596,10 +1573,10 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 
     VarInfo v = vis[0];
 
-    Debug dlog = new Debug (getClass(), ppt, vis);
+    Debug dlog = new Debug(getClass(), ppt, vis);
 
     if (logOn()) {
-      dlog.log ("enter isObviousDynamically");
+      dlog.log("enter isObviousDynamically");
     }
 
       // We can use the minvalue and maxvalue custom attributes here: if
@@ -1650,7 +1627,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       /*@NonNull*/ VarInfo b = v.derived.getBase(0);
       if (!b.isDerived()) {
         if (logOn()) {
-          dlog.log ("isObviousDynamically '" + v.name()
+          dlog.log("isObviousDynamically '" + v.name()
                     + " == 0' ==> '" + b.name() + " == []'");
         }
         return new DiscardInfo(this, DiscardCode.obvious, "size(array) == 0 is implied by array == []");
@@ -1783,7 +1760,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         ONEOFSCALAR other = (ONEOFSCALAR) inv;
         if (isSameFormula(other)
           && SubSequence.isObviousSubSequenceDynamically(this, v, other.var())) {
-          debug.fine ("isObviousDyn: Returning true because isObviousSubSequenceDynamically");
+          debug.fine("isObviousDyn: Returning true because isObviousSubSequenceDynamically");
           return new DiscardInfo(this, DiscardCode.obvious, "The same property holds over a supersequence " + other.var().name());
         }
       }
@@ -1828,8 +1805,8 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 #endif
 
   /**
-   * Oneof can merge different formulas from lower points to create a single
-   * formula at an upper point.
+   * Oneof can merge different formulas from lower points to create a single formula at an upper
+   * point.
    */
   public boolean mergeFormulasOk() {
     return true;
@@ -1898,7 +1875,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
         return false;
       }
 
-      for (int i=0; i < thisSeq.length; i++) {
+      for (int i = 0; i < thisSeq.length; i++) {
         if ((thisSeq[i] == 0 && otherSeq[i] != 0) ||
             (thisSeq[i] != 0 && otherSeq[i] == 0)) {
           return false;
@@ -1909,8 +1886,8 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
 #endif
 
-    for (int i=0; i < num_elts; i++) {
-      if (! EQUALS(elts[i],other.elts[i])) {
+    for (int i = 0; i < num_elts; i++) {
+      if (!EQUALS(elts[i],other.elts[i])) {
         return false;
       }
     }
@@ -1926,8 +1903,8 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       if (num_elts == 0 || other.num_elts == 0) {
         return false;
       }
-      for (int i=0; i < num_elts; i++) {
-        for (int j=0; j < other.num_elts; j++) {
+      for (int i = 0; i < num_elts; i++) {
+        for (int j = 0; j < other.num_elts; j++) {
           if (EQUALS(elts[i],other.elts[j])) // elements are interned
             return false;
         }
@@ -1962,7 +1939,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     }
     INT elts_min = NUMWRAPPER.MAX_VALUE;
     INT elts_max = NUMWRAPPER.MIN_VALUE;
-    for (int i=0; i < num_elts; i++) {
+    for (int i = 0; i < num_elts; i++) {
       elts_min = Math.min(elts_min, elts[i]);
       elts_max = Math.max(elts_max, elts[i]);
     }
@@ -2020,7 +1997,6 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     return false;
   }
 
-
   /*@Pure*/
   public boolean isExact() {
     return (num_elts == 1);
@@ -2046,28 +2022,28 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     #if defined (STRINGSEQUENCE)
       for (int i = 0; i < num_elts; i++) {
         for (int j = 0; j < elts[i].length; j++) {
-          elts[i][j] = Intern.intern (elts[i][j]);
+          elts[i][j] = Intern.intern(elts[i][j]);
         }
       }
     #endif
-    for (int i=0; i < num_elts; i++) {
+    for (int i = 0; i < num_elts; i++) {
       elts[i] = Intern.intern(elts[i]);
     }
   }
 
   /**
-   * Merge the invariants in invs to form a new invariant.  Each must be
-   * a ONEOFSCALAR invariant.  This code finds all of the oneof values
-   * from each of the invariants and returns the merged invariant (if any).
+   * Merge the invariants in invs to form a new invariant. Each must be a ONEOFSCALAR invariant.
+   * This code finds all of the oneof values from each of the invariants and returns the merged
+   * invariant (if any).
    *
-   * @param invs       list of invariants to merge.  The invariants must all be
+   * @param invs       list of invariants to merge. The invariants must all be
    *                   of the same type and should come from the children of
-   *                   parent_ppt.  They should also all be permuted to match
+   *                   parent_ppt. They should also all be permuted to match
    *                   the variable order in parent_ppt.
    * @param parent_ppt slice that will contain the new invariant
    */
   @SuppressWarnings("interning") // cloning requires re-interning
-  public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
+  public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child
     ONEOFSCALAR  first = (ONEOFSCALAR) invs.get(0);
@@ -2075,7 +2051,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     result.ppt = parent_ppt;
     #if defined (IS_SEQUENCE)
       for (int i = 0; i < result.num_elts; i++) {
-        result.elts[i] = Intern.intern (result.elts[i]);
+        result.elts[i] = Intern.intern(result.elts[i]);
       }
     #endif
 
@@ -2083,7 +2059,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
     for (int i = 1; i < invs.size(); i++ ) {
 
       // Get this invariant
-      ONEOFSCALAR inv = (ONEOFSCALAR) invs.get (i);
+      ONEOFSCALAR inv = (ONEOFSCALAR) invs.get(i);
 
       // Loop through each distinct value found in this child and add
       // it to the parent.  If the invariant is falsified, there is no parent
@@ -2091,46 +2067,44 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
       for (int j = 0; j < inv.num_elts; j++) {
         INT val = inv.elts[j];
         #if defined (IS_SEQUENCE)
-        val = Intern.intern (val);
+        val = Intern.intern(val);
         #endif
         InvariantStatus status = result.add_mod_elem(val, 1);
         if (status == InvariantStatus.FALSIFIED) {
-          result.log ("%s", "child value '" + val + "' destroyed oneof");
+          result.log("%s", "child value '" + val + "' destroyed oneof");
           return null;
         }
       }
     }
 
-    result.log ("Merged '%s' from %s child invariants", result.format(), invs.size());
+    result.log("Merged '%s' from %s child invariants", result.format(), invs.size());
     return result;
   }
 
   /**
-   * Setup the invariant with the specified elements.  Normally
-   * used when searching for a specified OneOf.  The elements of vals
-   * are not necessarily interned; this method interns each element.
+   * Setup the invariant with the specified elements. Normally used when searching for a specified
+   * OneOf. The elements of vals are not necessarily interned; this method interns each element.
    */
-  public void set_one_of_val (INTARRAY_UNINTERNED vals) {
+  public void set_one_of_val(INTARRAY_UNINTERNED vals) {
 
     num_elts = vals.length;
     for (int i = 0; i < num_elts; i++) {
-      elts[i] = Intern.intern (vals[i]);
+      elts[i] = Intern.intern(vals[i]);
     }
   }
 
   /**
-   * Returns true if every element in this invariant is contained in
-   * the specified state.  For example if x = 1 and the state contains
-   * 1 and 2, true will be returned.
+   * Returns true if every element in this invariant is contained in the specified state. For
+   * example if x = 1 and the state contains 1 and 2, true will be returned.
    */
-  public boolean state_match (Object state) {
+  public boolean state_match(Object state) {
 
     if (num_elts == 0) {
       return false;
     }
 
     if (!(state instanceof INT[])) {
-      System.out.println ("state is of class '" + state.getClass().getName()
+      System.out.println("state is of class '" + state.getClass().getName()
                           + "'");
     }
     INTARRAY e = (INTARRAY) state;
@@ -2151,26 +2125,24 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
 
 #ifdef BASE_INT
   /**
-   * Map that holds dummy hashcode values for hashcodes.  Each hashcode
-   * seen is assigned a small integer in the order they are seen.  These
-   * values will be consistent as long as new hashcodes do not appear
-   * in the output.  Not a perfect fix for regressions consistency, but
-   * workable.
+   * Map that holds dummy hashcode values for hashcodes. Each hashcode seen is assigned a small
+   * integer in the order they are seen. These values will be consistent as long as new hashcodes do
+   * not appear in the output. Not a perfect fix for regressions consistency, but workable.
    */
   private static Map<Long,Long> dummy_hashcode_vals
     = new LinkedHashMap<Long,Long>();
   private static long next_dummy_hashcode = 1001;
 
-  private long get_hashcode_val (/*>>>@GuardSatisfied ONEOFSCALAR this,*/ long hashcode) {
+  private long get_hashcode_val(/*>>>@GuardSatisfied ONEOFSCALAR this,*/ long hashcode) {
     if (!dkconfig_omit_hashcode_values_Simplify) {
       return hashcode;
     }
 
-    Long val = dummy_hashcode_vals.get (hashcode);
+    Long val = dummy_hashcode_vals.get(hashcode);
     if (val != null) {
       return val;
     }
-    dummy_hashcode_vals.put (hashcode, next_dummy_hashcode);
+    dummy_hashcode_vals.put(hashcode, next_dummy_hashcode);
     return (next_dummy_hashcode++);
   }
 #endif

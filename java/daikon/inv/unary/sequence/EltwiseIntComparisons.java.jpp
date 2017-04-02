@@ -81,7 +81,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(EQUALFLOAT)
   #define CLASSNAME EQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatEqual"
-  #define COMPARATOR(a,b) (Global.fuzzy.eq (a,b))
+  #define COMPARATOR(a,b) (Global.fuzzy.eq(a,b))
   #define COMPARATORhtml ==
   #define COMPARATORSTRING "=="
   #define COMPARATORSTRINGQUANT "eltwiseEqual"
@@ -89,7 +89,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(LESSTHANFLOAT)
   #define CLASSNAME LESSTHANFLOATCLASS
   #define CLASSSTRING "EltwiseFloatLessThan"
-  #define COMPARATOR(a,b) (Global.fuzzy.lt (a,b))
+  #define COMPARATOR(a,b) (Global.fuzzy.lt(a,b))
   #define COMPARATORhtml &lt;
   #define COMPARATORSTRING "<"
   #define COMPARATORSTRINGQUANT "eltwiseLT"
@@ -97,7 +97,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(LESSEQUALFLOAT)
   #define CLASSNAME LESSEQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatLessEqual"
-  #define COMPARATOR(a,b) (Global.fuzzy.lte (a,b))
+  #define COMPARATOR(a,b) (Global.fuzzy.lte(a,b))
   #define COMPARATORhtml &le;
   #define COMPARATORSTRING "<="
   #define COMPARATORSTRINGQUANT "eltwiseLTE"
@@ -105,7 +105,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(GREATERTHANFLOAT)
   #define CLASSNAME GREATERTHANFLOATCLASS
   #define CLASSSTRING "EltwiseFloatGreaterThan"
-  #define COMPARATOR(a,b) (Global.fuzzy.gt (a,b))
+  #define COMPARATOR(a,b) (Global.fuzzy.gt(a,b))
   #define COMPARATORhtml &gt;
   #define COMPARATORSTRING ">"
   #define COMPARATORSTRINGQUANT "eltwiseGT"
@@ -113,7 +113,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(GREATEREQUALFLOAT)
   #define CLASSNAME GREATEREQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatGreaterEqual"
-  #define COMPARATOR(a,b) (Global.fuzzy.gte (a,b))
+  #define COMPARATOR(a,b) (Global.fuzzy.gte(a,b))
   #define COMPARATORhtml &ge;
   #define COMPARATORSTRING ">="
   #define COMPARATORSTRINGQUANT "eltwiseGTE"
@@ -125,12 +125,12 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.unary.sequence;
 
 import daikon.*;
+import daikon.Quantify.QuantFlags;
 import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
-import daikon.Quantify.QuantFlags;
-import plume.*;
 import java.util.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -142,19 +142,17 @@ import typequals.*;
 
 #if defined(EQUAL) || defined(EQUALFLOAT)
   /**
-   * Represents equality between adjacent elements (x[i], x[i+1]) of a
-   * PRIMITIVE sequence.  Prints as <code>x[] elements are equal</code>.
+   * Represents equality between adjacent elements (x[i], x[i+1]) of a PRIMITIVE sequence. Prints as
+   * <code>x[] elements are equal</code>.
    */
 #else
   /**
    * Represents the invariant COMPARATORhtml between adjacent elements
-   * (x[i], x[i+1]) of a PRIMITIVE sequence.  Prints as
+   * (x[i], x[i+1]) of a PRIMITIVE sequence. Prints as
    * <code>x[] sorted by COMPARATORhtml</code>.
    */
 #endif
-public class CLASSNAME
-  extends SUPERCLASS
-{
+public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -162,9 +160,7 @@ public class CLASSNAME
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff EltwiseIntComparison invariants should be considered.
-   */
+  /** Boolean.  True iff EltwiseIntComparison invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   static final boolean debugEltwiseIntComparison = false;
@@ -177,7 +173,7 @@ public class CLASSNAME
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
@@ -190,9 +186,9 @@ public class CLASSNAME
   }
 
   /** Non-equality CLASSNAME invariants are only valid on integral types */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis)) {
+    if (!valid_types(vis)) {
       return false;
     }
 
@@ -206,7 +202,7 @@ public class CLASSNAME
   }
 
   /** Instantiate the invariant on the specified slice */
-  protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+  protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
@@ -245,7 +241,7 @@ public class CLASSNAME
   }
 
   public String format_esc(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    String[] form = VarInfo.esc_quantify (false, var(), var());
+    String[] form = VarInfo.esc_quantify(false, var(), var());
     #if defined(EQUAL) || defined(EQUALFLOAT)
       return form[0] + "(" + form[1] + " " + COMPARATORSTRING + " " + form[2] + ")" + form[3];
     #else
@@ -264,7 +260,7 @@ public class CLASSNAME
   }
 
   public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    String[] form = VarInfo.simplify_quantify (QuantFlags.adjacent(),
+    String[] form = VarInfo.simplify_quantify(QuantFlags.adjacent(),
                                                var(), var());
 #if defined(EQUAL) || defined(EQUALFLOAT)
     String comparator = "EQ";
@@ -276,8 +272,8 @@ public class CLASSNAME
   }
 
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
-    for (int i=1; i<a.length; i++) {
-      if (!COMPARATOR(a[i-1], a[i])) {
+    for (int i = 1; i < a.length; i++) {
+      if (!COMPARATOR(a[i - 1], a[i])) {
         return InvariantStatus.FALSIFIED;
       }
     }
@@ -360,8 +356,6 @@ public class CLASSNAME
     return null;
   }
 
-
-
   // Copied from IntComparison.
   // public boolean isExclusiveFormula(Invariant other)
   // {
@@ -375,15 +369,12 @@ public class CLASSNAME
   // }
 
   /**
-   * This function returns whether a sample has been seen by this
-   * Invariant that includes two or more entries in an array. For a 0
-   * or 1 element array a, a[] sorted by any binary operation is
-   * "vacuously true" because no check is ever made since the binary
-   * operation requires two operands.  Thus although invariants of
-   * this type are true regarding 0 or 1 length arrays, they are
-   * meaningless.  This function is meant to be used in
-   * isObviousImplied() to prevent such meaningless invariants from
-   * being printed.
+   * This function returns whether a sample has been seen by this Invariant that includes two or
+   * more entries in an array. For a 0 or 1 element array a, a[] sorted by any binary operation is
+   * "vacuously true" because no check is ever made since the binary operation requires two
+   * operands. Thus although invariants of this type are true regarding 0 or 1 length arrays, they
+   * are meaningless. This function is meant to be used in isObviousImplied() to prevent such
+   * meaningless invariants from being printed.
    */
   public boolean hasSeenNonTrivialSample() {
     VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();

@@ -46,8 +46,8 @@ package daikon.inv.ternary.threeScalar;
 
 import daikon.*;
 import daikon.inv.*        ;
-import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
+import daikon.inv.DiscardInfo;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.suppress.NIS;
@@ -71,9 +71,7 @@ import typequals.*;
  * <code>a</code> is always positive.
  */
 
-public class CLASSNAME
-  extends SUPERCLASS
-{
+public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -81,9 +79,7 @@ public class CLASSNAME
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff LinearTernary invariants should be considered.
-   */
+  /** Boolean.  True iff LinearTernary invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public static final boolean debugLinearTernary = false;
@@ -102,7 +98,7 @@ public class CLASSNAME
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
@@ -115,9 +111,9 @@ public class CLASSNAME
   }
 
   /** LinearTernary is only valid on non-constant integral types */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis)) {
+    if (!valid_types(vis)) {
       return false;
     }
 
@@ -131,9 +127,9 @@ public class CLASSNAME
     // DynamicConstants will create this from LinearBinary
     // and the constant value if/when all of its variables are non-constant
     PptTopLevel parent = vis[0].ppt;
-    if (NIS.dkconfig_enabled && (parent.is_constant (vis[0])
+    if (NIS.dkconfig_enabled && (parent.is_constant(vis[0])
                                  || parent.is_constant(vis[1])
-                                 || parent.is_constant (vis[2])))
+                                 || parent.is_constant(vis[2])))
       return false;
 
     /*
@@ -193,7 +189,7 @@ public class CLASSNAME
 
         SequenceScalarSubsequence part1 = null;
         SequenceScalarSubsequence part2 = null;
-        for (int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
           VarInfo vi = ppt.var_infos[i];
           VarInfo summand = ((SequenceSum) vi.derived).base;
           if (debugLinearTernary) {
@@ -271,7 +267,7 @@ public class CLASSNAME
           && (seq == partb.isDerivedSubSequenceOf())) {
         // For now, don't deal with case where one variable is the entire
         // sequence.
-        if (! ((parta == seq) || (partb == seq))) {
+        if (!((parta == seq) || (partb == seq))) {
           SequenceScalarSubsequence a_sss = (SequenceScalarSubsequence) parta.derived;
           SequenceScalarSubsequence b_sss = (SequenceScalarSubsequence) partb.derived;
           if ((a_sss.sclvar() == eltindex)
@@ -280,8 +276,8 @@ public class CLASSNAME
                  && b_sss.from_start
                  && (((a_sss.index_shift == -1) && (b_sss.index_shift == 0))
                      || ((a_sss.index_shift == 0) && (b_sss.index_shift == -1))))
-                || ((! a_sss.from_start)
-                    && (! b_sss.from_start)
+                || ((!a_sss.from_start)
+                    && (!b_sss.from_start)
                     && (((a_sss.index_shift == 0) && (b_sss.index_shift == 1))
                         || ((a_sss.index_shift == 1) && (b_sss.index_shift == 0))))) {
             Global.implied_noninstantiated_invariants += 1;
@@ -297,8 +293,8 @@ public class CLASSNAME
   }
 
   /** Instantiate the invariant on the specified slice */
-  public CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
-    return new CLASSNAME (slice);
+  public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+    return new CLASSNAME(slice);
   }
 
   /*@SideEffectFree*/
@@ -322,7 +318,7 @@ public class CLASSNAME
 
   /*@SideEffectFree*/
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
-    return core.format_using (format, var1().name_using (format),
+    return core.format_using(format, var1().name_using(format),
                         var2().name_using(format), var3().name_using(format));
   }
 
@@ -335,14 +331,14 @@ public class CLASSNAME
     return core.isActive();
   }
 
-  public InvariantStatus setup (LINEAR_BINARY lb, VarInfo con_var,
+  public InvariantStatus setup(LINEAR_BINARY lb, VarInfo con_var,
                                 PRIMITIVE con_val) {
-    return core.setup (lb, con_var, con_val);
+    return core.setup(lb, con_var, con_val);
   }
 
-  public InvariantStatus setup (ONEOF oo, VarInfo v1, PRIMITIVE con1,
+  public InvariantStatus setup(ONEOF oo, VarInfo v1, PRIMITIVE con1,
                                 VarInfo v2, PRIMITIVE con2) {
-    return core.setup (oo, v1, con1, v2, con2);
+    return core.setup(oo, v1, con1, v2, con2);
   }
 
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
@@ -394,7 +390,6 @@ public class CLASSNAME
     return false;
   }
 
-
   // Look up a previously instantiated invariant.
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 3;
@@ -426,29 +421,28 @@ public class CLASSNAME
   }
 
   /**
-   * Merge the invariants in invs to form a new invariant.  Each must be
-   * a CLASSNAME invariant.  The work is done by the LinearTernary core
+   * Merge the invariants in invs to form a new invariant. Each must be a CLASSNAME invariant. The
+   * work is done by the LinearTernary core
    *
-   * @param invs        list of invariants to merge.  They should all be
+   * @param invs        list of invariants to merge. They should all be
    *                    permuted to match the variable order in parent_ppt.
    * @param parent_ppt  slice that will contain the new invariant
    */
-  public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
+  public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores
     List<CORECLASS> cores = new ArrayList<CORECLASS>();
     for (Invariant inv : invs) {
-      cores.add (((CLASSNAME) inv).core);
+      cores.add(((CLASSNAME) inv).core);
     }
 
     // Merge the cores and build a new invariant containing the merged core
-    CLASSNAME result = new CLASSNAME (parent_ppt);
-    CORECLASS newcore = core.merge (cores, result);
+    CLASSNAME result = new CLASSNAME(parent_ppt);
+    CORECLASS newcore = core.merge(cores, result);
     if (newcore == null) {
       return null;
     }
     result.core = newcore;
     return result;
   }
-
 }

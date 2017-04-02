@@ -47,12 +47,11 @@ import org.checkerframework.checker.nullness.qual.*;
 public final class SCALARSEQUENCESUNIONFACTORY extends BinaryDerivationFactory {
 
   public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo seq1, VarInfo seq2) {
-    if (! SCALARSEQUENCESUNION.dkconfig_enabled) {
+    if (!SCALARSEQUENCESUNION.dkconfig_enabled) {
       return null;
     }
 
-    if ((seq1.rep_type != PROGLANG_INT_ARRAY)
-        || (seq2.rep_type != PROGLANG_INT_ARRAY)) {
+    if ((seq1.rep_type != PROGLANG_INT_ARRAY) || (seq2.rep_type != PROGLANG_INT_ARRAY)) {
       return null;
     }
 
@@ -66,7 +65,6 @@ public final class SCALARSEQUENCESUNIONFACTORY extends BinaryDerivationFactory {
       return null;
     }
 
-    return new BinaryDerivation[] {
-      new SCALARSEQUENCESUNION(seq1, seq2) };
+    return new BinaryDerivation[] {new SCALARSEQUENCESUNION(seq1, seq2)};
   }
 }

@@ -13,72 +13,64 @@ import org.checkerframework.framework.qual.PolyAll;
 */
 
 /**
- * The Quant library provides routines that operate on arrays and
- * collections.
+ * The Quant library provides routines that operate on arrays and collections.
  *
- * These routines are used by the Java family of output
- * formats. This allows invariants to be output as snippets of
- * executable (Java) code. For example, an invariant like
- * <pre>a[] elements &ge; 1</pre>
- * is output (in the Java, JML, and DBC formats) as something like
+ * <p>These routines are used by the Java family of output formats. This allows invariants to be
+ * output as snippets of executable (Java) code. For example, an invariant like <pre>a[] elements
+ * &ge; 1</pre> is output (in the Java, JML, and DBC formats) as something like
  * <pre>daikon.Quant.eltsGTE(a, 1)</pre>
  *
  * <h3>Naming</h3>
  *
- * The library methods have names of the following forms, where OP
- * indicates an operation:  Equal, NotEqual, GT (greater than), GTE
- * (greater than or equal to), LT, LTE.
+ * The library methods have names of the following forms, where OP indicates an operation: Equal,
+ * NotEqual, GT (greater than), GTE (greater than or equal to), LT, LTE.
  * <ul>
- * <li>pairwiseOP.  Apply OP to corresponding elements of two arrays:
+ * <li>pairwiseOP. Apply OP to corresponding elements of two arrays:
  *     a[0] OP b[0], a[1] OP b[1], etc.
- * <li>eltsOP.  Apply OP to each element of one array, and a scalar:
+ * <li>eltsOP. Apply OP to each element of one array, and a scalar:
  *     a[0] OP x, a[1] OP x, etc.
- * <li>eltwiseOP:  Apply OP to adjacent elements of one array:
+ * <li>eltwiseOP: Apply OP to adjacent elements of one array:
  *     a[0] OP a[1], a[1] OP a[2], etc.
- * <li>lexOP:  Determine lexical ordering:
+ * <li>lexOP: Determine lexical ordering:
  *     compare two arrays pairwise, stopping as soon as the result is known.
- * <li>eltsOPindex:  Apply op to array elements and their indices:
+ * <li>eltsOPindex: Apply op to array elements and their indices:
  *     a[0] OP 0, a[1] OP 1, etc.
  * </ul>
  *
  * <h3>Equality semantics</h3>
  *
- * Whenever a method involves comparing two elements for equality, this is
- * always "==" equality (even for Objects and Strings).
+ * <p>Whenever a method involves comparing two elements for equality, this is always "==" equality
+ * (even for Objects and Strings).
  *
  * <h3>No exceptions thrown</h3>
  *
- * The library strives not to throw exceptions, even if illegal arguments
- * are passed to the routines.  This has two consequences.<p>
+ * <p>The library strives not to throw exceptions, even if illegal arguments are passed to the
+ * routines. This has two consequences.
  *
- * First, each predicate (boolean method) returns false when invoked on an
- * illegal argument such as a null collection (array or Collection).<p>
+ * <p>First, each predicate (boolean method) returns false when invoked on an illegal argument such
+ * as a null collection (array or Collection).
  *
- * Second, each accessor method returns a default "bad" value if inovked on
- * an illegal argument.  For example, the default value for the double type
- * is Double.NaN.<p>
+ * <p>Second, each accessor method returns a default "bad" value if inovked on an illegal argument.
+ * For example, the default value for the double type is Double.NaN.
  *
- * The rationale for the decision to never throw exceptions is that we wish
- * to be able to invoke the Quant methods at run time without distrubing
- * execution of a program, and without forcing clients to write a try
- * .. catch block around each invocation.<p>
+ * <p>The rationale for the decision to never throw exceptions is that we wish to be able to invoke
+ * the Quant methods at run time without distrubing execution of a program, and without forcing
+ * clients to write a try .. catch block around each invocation.
  *
- * A downside of the decision is that if the default value is returned, it
- * may be impossible for a client to determine whether the method really
- * returned that value, or whether the invocation involved an illegal
- * argument.  To avoid this problem, it is generally better to use a Quant
- * library predicate rather than returning a value and then testing it
- * externally.
+ * <p>A downside of the decision is that if the default value is returned, it may be impossible for
+ * a client to determine whether the method really returned that value, or whether the invocation
+ * involved an illegal argument. To avoid this problem, it is generally better to use a Quant
+ * library predicate rather than returning a value and then testing it externally.
  */
 public final class Quant {
   private Quant() { throw new Error("do not instantiate"); }
 
   public static plume.FuzzyFloat fuzzy = new plume.FuzzyFloat();
 
-  /** Returns the size of the array or collection.
-   * If the argument is null or not an array or collection, returns a
-   * default value (Integer.MAX_VALUE).
-   * Thus, for an array a, this never throws an exception, though a.length may.
+  /**
+   * Returns the size of the array or collection. If the argument is null or not an array or
+   * collection, returns a default value (Integer.MAX_VALUE). Thus, for an array a, this never
+   * throws an exception, though a.length may.
    */
   // Not called from Quant; provided only for external use.
   /*@Pure*/
@@ -156,7 +148,6 @@ public final class Quant {
 #define STRING
 #include "daikon/QuantBody.java.jpp"
 #undef STRING
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// Collection methods (dispatch to array methods)
@@ -402,5 +393,4 @@ public final class Quant {
       throw new IllegalArgumentException("not an array or collection: " + o);
     }
   }
-
 }

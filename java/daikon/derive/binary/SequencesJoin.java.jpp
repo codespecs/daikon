@@ -26,11 +26,9 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
-
-import plume.*;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -38,17 +36,13 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Derived variable representing the "join" of two sequences.  That
- * is, if the two sequences came from the same original data structure
- * (like an array of multi-field objects) then we join the two
- * sequences and generate a hashcode of the join value.  This allows
- * us to detect uniqueness and equality style invariants across the
- * data structure rather than just one slice of it.  Works for number
- * and string arrays.
+ * Derived variable representing the "join" of two sequences. That is, if the two sequences came
+ * from the same original data structure (like an array of multi-field objects) then we join the two
+ * sequences and generate a hashcode of the join value. This allows us to detect uniqueness and
+ * equality style invariants across the data structure rather than just one slice of it. Works for
+ * number and string arrays.
  */
-public final class CLASSNAME
-  extends BinaryDerivation
-{
+public final class CLASSNAME extends BinaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -59,17 +53,20 @@ public final class CLASSNAME
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff SequencesJoin derived variables should be generated.
-   */
+  /** Boolean.  True iff SequencesJoin derived variables should be generated. */
   public static boolean dkconfig_enabled = false;
 
-  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) { return base1; }
-  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) { return base2; }
+  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
+    return base1;
+  }
 
+  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
+    return base2;
+  }
 
   /**
    * Create a new SequencesJoin derivation.
+   *
    * @param vi1 the first of the two variables this is based on
    * @param vi2 the second of the two variables this is based on
    */
@@ -78,11 +75,10 @@ public final class CLASSNAME
   }
 
   /**
-   * Returns a new sequence of hashcodes that is the join of the
-   * hashcodes of the component sequences.  This is modified whenever
-   * either component sequence is modified.
-   * @param full_vt the value tuple of a program point to compute the
-   * derived value from
+   * Returns a new sequence of hashcodes that is the join of the hashcodes of the component
+   * sequences. This is modified whenever either component sequence is modified.
+   *
+   * @param full_vt the value tuple of a program point to compute the derived value from
    */
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);
@@ -117,24 +113,22 @@ public final class CLASSNAME
 
     assert length1 == length2;
 
-
     PRIMITIVE[] result = new PRIMITIVE[length1];
-
 
     for (int i = 0; i < length1; i++) {
       Object e1 = null;
       Object e2 = null;
       if (val1 instanceof PRIMITIVE[]) {
-        e1 = new NUMWRAPPER (((PRIMITIVE[]) val1) [i]);
+        e1 = new NUMWRAPPER(((PRIMITIVE[]) val1)[i]);
       }
       if (val2 instanceof PRIMITIVE[]) {
-        e2 = new NUMWRAPPER (((PRIMITIVE[]) val2) [i]);
+        e2 = new NUMWRAPPER(((PRIMITIVE[]) val2)[i]);
       }
       if (val1 instanceof Object[]) {
-        e1 = ((Object[]) val1) [i];
+        e1 = ((Object[]) val1)[i];
       }
       if (val2 instanceof Object[]) {
-        e2 = ((Object[]) val2) [i];
+        e2 = ((Object[]) val2)[i];
       }
       if (e1 == null) e1 = new NUMWRAPPER(0);
       if (e2 == null) e2 = new NUMWRAPPER(0);
@@ -145,18 +139,18 @@ public final class CLASSNAME
     /*
        Use this if you don't see no duplicates where you should
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine (var1().name.toString() + " " + var2().name.toString());
+      debug.fine(var1().name.toString() + " " + var2().name.toString());
       if (val1 instanceof PRIMITIVE[]) {
-        debug.fine (ArraysMDE.toString((PRIMITIVE[]) val1));
+        debug.fine(ArraysMDE.toString((PRIMITIVE[]) val1));
       } else {
-        debug.fine (ArraysMDE.toString((Object[]) val1));
+        debug.fine(ArraysMDE.toString((Object[]) val1));
       }
       if (val2 instanceof PRIMITIVE[]) {
-        debug.fine (ArraysMDE.toString((PRIMITIVE[]) val2));
+        debug.fine(ArraysMDE.toString((PRIMITIVE[]) val2));
       } else {
-        debug.fine (ArraysMDE.toString((Object[]) val2));
+        debug.fine(ArraysMDE.toString((Object[]) val2));
       }
-      debug.fine (ArraysMDE.toString(result));
+      debug.fine(ArraysMDE.toString(result));
 
       }
     */
@@ -180,35 +174,30 @@ public final class CLASSNAME
     return new ValueAndModified(Intern.intern(result), mod);
   }
 
-
-
   protected VarInfo makeVarInfo() {
     VarInfo var1 = var1();
     VarInfo var2 = var2();
 
-    VarInfo vi = VarInfo.make_function ("join", var1, var2);
+    VarInfo vi = VarInfo.make_function("join", var1, var2);
 
     // Set the declared type and file rep types
-    String newTypeName = "Join(" + var1.type.toString() + ","
-      + var2.type.toString() + ")";
-    vi.type = ProglangType.parse (newTypeName + "[]");
+    String newTypeName = "Join(" + var1.type.toString() + "," + var2.type.toString() + ")";
+    vi.type = ProglangType.parse(newTypeName + "[]");
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("New decl type is " + vi.type.toString());
+      debug.fine("New decl type is " + vi.type.toString());
     }
     vi.file_rep_type = ProglangType.HASHCODE_ARRAY;
 
     // Generate a new comparability based on base comparabilities' indices
-    vi .comparability =
-      VarComparability.makeComparabilitySameIndices (newTypeName,
-                                                     var1.comparability);
+    vi.comparability =
+        VarComparability.makeComparabilitySameIndices(newTypeName, var1.comparability);
 
     return vi;
   }
 
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return "[" + CLASSSTRING + " of " + var1().name() + " " + var2().name()
-      + "]";
+    return "[" + CLASSSTRING + " of " + var1().name() + " " + var2().name() + "]";
   }
 
   /*@Pure*/
@@ -219,6 +208,6 @@ public final class CLASSNAME
   /** Returns the ESC name */
   /*@SideEffectFree*/
   public String esc_name(String index) {
-    return String.format ("join[%s,%s]", var1().esc_name(), var2().esc_name());
+    return String.format("join[%s,%s]", var1().esc_name(), var2().esc_name());
   }
 }

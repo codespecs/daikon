@@ -52,7 +52,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(EQUALFLOAT)
   #define PAIRWISEINTEQUAL PairwiseFloatEqual
   #define PAIRWISEINTEQUALstring "PairwiseFloatEqual"
-  #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
   #define EQUALShtml ==
   #define EQUALSstring "=="
   #define EQUALSstringDBC "pairwiseEqual"
@@ -78,7 +78,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISEINTEQUAL PairwiseFloatLessThan
   #define PAIRWISEINTEQUAL_SWAP PairwiseFloatGreaterThan
   #define PAIRWISEINTEQUALstring "PairwiseFloatLessThan"
-  #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
   #define EQUALShtml &lt;
   #define EQUALSstring "<"
   #define EQUALSstringDBC "pairwiseLT"
@@ -109,7 +109,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISELT_SUPP PairwiseFloatLessThan
   #define PAIRWISEEQ_SUPP PairwiseFloatEqual
   #define PAIRWISEINTEQUALstring "PairwiseFloatLessEqual"
-  #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
   #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define EQUALSstringDBC "pairwiseLTE"
@@ -120,7 +120,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISELT_SUPP PairwiseStringLessThan
   #define PAIRWISEEQ_SUPP PairwiseStringEqual
   #define PAIRWISEINTEQUALstring "PairwiseStringLessEqual"
-  #define EQUALS(a,b) (a != null && b != null && a.compareTo (b) <= 0)
+  #define EQUALS(a,b) (a != null && b != null && a.compareTo(b) <= 0)
   #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define EQUALSstringDBC "pairwiseLTE"
@@ -138,7 +138,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISEINTEQUAL PairwiseFloatGreaterThan
   #define PAIRWISEINTEQUAL_SWAP PairwiseFloatLessThan
   #define PAIRWISEINTEQUALstring "PairwiseFloatGreaterThan"
-  #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
   #define EQUALShtml &gt;
   #define EQUALSstring ">"
   #define EQUALSstringDBC "pairwiseGT"
@@ -169,7 +169,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISELT_SUPP PairwiseFloatGreaterThan
   #define PAIRWISEEQ_SUPP PairwiseFloatEqual
   #define PAIRWISEINTEQUALstring "PairwiseFloatGreaterEqual"
-  #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
   #define EQUALShtml &ge;
   #define EQUALSstring ">="
   #define EQUALSstringDBC "pairwiseGTE"
@@ -214,18 +214,13 @@ import typequals.*;
 */
 
 /**
- * Represents an invariant between corresponding elements of two
- * sequences of PRIMITIVE values.  The length of the sequences must match for
- * the invariant to hold.  A comparison is made over each
- * <code>(x[i], y[i])</code> pair.
- * Thus, <code>x[0]</code> is compared to <code>y[0]</code>,
- * <code>x[1]</code> to <code>y[1]</code>, and so forth.
- * Prints as <code>x[] EQUALShtml y[]</code>.
+ * Represents an invariant between corresponding elements of two sequences of PRIMITIVE values. The
+ * length of the sequences must match for the invariant to hold. A comparison is made over each
+ * <code>(x[i], y[i])</code> pair. Thus, <code>x[0]</code> is compared to <code>y[0]</code>,
+ * <code>x[1]</code> to <code>y[1]</code>, and so forth. Prints as <code>x[] EQUALShtml y[]</code>.
  */
 
-public class PAIRWISEINTEQUAL
-  extends SUPERCLASS
-{
+public class PAIRWISEINTEQUAL extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -237,9 +232,7 @@ public class PAIRWISEINTEQUAL
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff PairwiseIntComparison invariants should be considered.
-   */
+  /** Boolean.  True iff PairwiseIntComparison invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   static final boolean debugPairwiseIntComparison = false;
@@ -252,7 +245,7 @@ public class PAIRWISEINTEQUAL
     super();
   }
 
-  private static /*@Prototype*/ PAIRWISEINTEQUAL proto = new /*@Prototype*/ PAIRWISEINTEQUAL ();
+  private static /*@Prototype*/ PAIRWISEINTEQUAL proto = new /*@Prototype*/ PAIRWISEINTEQUAL();
 
   /** Returns the prototype invariant for PAIRWISEINTEQUAL */
   public static /*@Prototype*/ PAIRWISEINTEQUAL get_proto() {
@@ -265,9 +258,9 @@ public class PAIRWISEINTEQUAL
   }
 
   /** PAIRWISEINTEQUAL is only valid on integral types */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis)) {
+    if (!valid_types(vis)) {
       return false;
     }
 
@@ -281,10 +274,10 @@ public class PAIRWISEINTEQUAL
   }
 
   /** instantiates the invariant on the specified slice */
-  protected PAIRWISEINTEQUAL instantiate_dyn (/*>>> @Prototype PAIRWISEINTEQUAL this,*/ PptSlice slice) {
+  protected PAIRWISEINTEQUAL instantiate_dyn(/*>>> @Prototype PAIRWISEINTEQUAL this,*/ PptSlice slice) {
     PAIRWISEINTEQUAL inv = new PAIRWISEINTEQUAL(slice);
     if (logOn()) {
-      inv.log ("instantiate");
+      inv.log("instantiate");
     }
     return inv;
   }
@@ -293,14 +286,13 @@ public class PAIRWISEINTEQUAL
   protected PAIRWISEINTEQUAL(PAIRWISEINTEQUAL_SWAP swapped_pic) {
     super(swapped_pic.ppt);
     if (logOn()) {
-      log ("Instantiated from resurrect_done_swapped");
+      log("Instantiated from resurrect_done_swapped");
     }
   }
   #endif
 
-
   /*@Pure*/
-  public /*@Nullable*/ DiscardInfo isObviousStatically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
 
@@ -315,20 +307,19 @@ public class PAIRWISEINTEQUAL
     }
 
     // Don't instantiate if the variables can't have order
-    if (!var1.aux.hasOrder() ||
-        !var2.aux.hasOrder()) {
+    if (!var1.aux.hasOrder() || !var2.aux.hasOrder()) {
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("Not instantitating for because order has no meaning: " +
+        debug.fine("Not instantitating for because order has no meaning: " +
                      var1.name() + " and " + var2.name());
       }
       return new DiscardInfo(this, DiscardCode.obvious, "Obvious statically since order has no meaning");
     }
 
-    return super.isObviousStatically (vis);
+    return super.isObviousStatically(vis);
   }
 
   /*@Pure*/
-  public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
       return super_result;
@@ -336,7 +327,7 @@ public class PAIRWISEINTEQUAL
 
     // Subsequence invariants are implied by the same invariant over
     // the supersequence
-    DiscardInfo di = superseq_implies (vis);
+    DiscardInfo di = superseq_implies(vis);
     if (di != null) {
       return di;
     }
@@ -346,15 +337,14 @@ public class PAIRWISEINTEQUAL
     }
 
   /**
-   * Checks to see if the same invariant exists over supersequences of
-   * these variables:
+   * Checks to see if the same invariant exists over supersequences of these variables:
    *
    * <pre>
    *    (A[] op B[]) ^ (i == j)  &rArr; A[i..] op B[j..]
    *    (A[] op B[]) ^ (i == j)  &rArr; A[..i] op B[..j]
    * </pre>
    */
-  private /*@Nullable*/ DiscardInfo superseq_implies (VarInfo[] vis) {
+  private /*@Nullable*/ DiscardInfo superseq_implies(VarInfo[] vis) {
 
     // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
     VarInfo v1 = vis[0];
@@ -374,18 +364,18 @@ public class PAIRWISEINTEQUAL
       return null;
 
     // Make sure the subscripts are equal
-    DiscardInfo di = new DiscardInfo (this, DiscardCode.obvious, "");
-    if (!ppt.parent.check_implied_canonical (di, der1.sclvar(), der2.sclvar(),
+    DiscardInfo di = new DiscardInfo(this, DiscardCode.obvious, "");
+    if (!ppt.parent.check_implied_canonical(di, der1.sclvar(), der2.sclvar(),
                                              IntEqual.get_proto()))
       return null;
 
     // See if the super-sequences have the same invariant
-    if (!ppt.parent.check_implied_canonical (di, der1.seqvar(), der2.seqvar(),
+    if (!ppt.parent.check_implied_canonical(di, der1.seqvar(), der2.seqvar(),
                                              PAIRWISEINTEQUAL.get_proto()))
       return null;
 
     // Add in the vis variables to di reason (if they are different)
-    di.add_implied_vis (vis);
+    di.add_implied_vis(vis);
     return di;
   }
 
@@ -405,11 +395,8 @@ public class PAIRWISEINTEQUAL
 
 #else
 
-  /**
-   * Returns the class that corresponds to this class with its variable
-   * order swapped.
-   */
-  public static Class<PAIRWISEINTEQUAL_SWAP> swap_class () {
+  /** Returns the class that corresponds to this class with its variable order swapped. */
+  public static Class<PAIRWISEINTEQUAL_SWAP> swap_class() {
     return PAIRWISEINTEQUAL_SWAP.class;
   }
 #endif
@@ -441,12 +428,12 @@ public class PAIRWISEINTEQUAL
   }
 
   public String format_esc(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
-    String[] form = VarInfo.esc_quantify (var1(), var2());
+    String[] form = VarInfo.esc_quantify(var1(), var2());
     return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")" + form[3];
   }
 
   public String format_simplify(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
-    String[] form = VarInfo.simplify_quantify (QuantFlags.element_wise(),
+    String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(),
                                                var1(), var2());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")" + form[3];
   }
@@ -481,14 +468,13 @@ public class PAIRWISEINTEQUAL
       return InvariantStatus.FALSIFIED;
     }
 
-
     int len = a1.length;
     // int len = Math.min(a1.length, a2.length);
 
-    for (int i=0; i<len; i++) {
+    for (int i = 0; i < len; i++) {
       PRIMITIVE v1 = a1[i];
       PRIMITIVE v2 = a2[i];
-      if (! EQUALS(v1, v2) ) {
+      if (!EQUALS(v1, v2) ) {
         //  destroyAndFlow();
         return InvariantStatus.FALSIFIED;
       }
@@ -499,12 +485,11 @@ public class PAIRWISEINTEQUAL
     public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
                                         int count) {
       if (logDetail()) {
-        log (debug, "saw add_modified (" + ArraysMDE.toString(a1) +
+        log(debug, "saw add_modified (" + ArraysMDE.toString(a1) +
              ", " + ArraysMDE.toString(a2) + ")");
       }
       return check_modified(a1, a2, count);
     }
-
 
   protected double computeConfidence() {
     // num_elt_values() would be more appropriate
@@ -543,9 +528,7 @@ public class PAIRWISEINTEQUAL
     return null;
   }
 
-  /**
-   * Returns a list of non-instantiating suppressions for this invariant.
-   */
+  /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
@@ -553,34 +536,34 @@ public class PAIRWISEINTEQUAL
 
   /** Definition of this invariant (the suppressee) */
   private static NISuppressee suppressee
-    = new NISuppressee (PAIRWISEINTEQUAL.class, 2);
+    = new NISuppressee(PAIRWISEINTEQUAL.class, 2);
 
   // Suppressor definitions (used in suppressions below)
   private static NISuppressor
-    v1_eq_v2 = new NISuppressor (0, 1, EQUAL_CLASS.class),
-    v1_gt_v2 = new NISuppressor (0, 1, GREATER_THAN_CLASS.class),
-    v1_lt_v2 = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
+    v1_eq_v2 = new NISuppressor(0, 1, EQUAL_CLASS.class),
+    v1_gt_v2 = new NISuppressor(0, 1, GREATER_THAN_CLASS.class),
+    v1_lt_v2 = new NISuppressor(0, 1, LESS_THAN_CLASS.class);
 
   #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT) || defined (GREATEREQUALSTRING)
     private static NISuppressionSet suppressions =
-      new NISuppressionSet (new NISuppression[] {
+      new NISuppressionSet(new NISuppression[] {
 
         // v1 == v2 => v1 >= v2
-        new NISuppression (v1_eq_v2, suppressee),
+        new NISuppression(v1_eq_v2, suppressee),
 
         // v1 > v2 => v1 >= v2
-        new NISuppression (v1_gt_v2, suppressee),
+        new NISuppression(v1_gt_v2, suppressee),
 
       });
   #elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(LESSEQUALSTRING)
     private static NISuppressionSet suppressions =
-      new NISuppressionSet (new NISuppression[] {
+      new NISuppressionSet(new NISuppression[] {
 
         // v1 == v2 => v1 <= v2
-        new NISuppression (v1_eq_v2, suppressee),
+        new NISuppression(v1_eq_v2, suppressee),
 
         // v1 < v2 => v1 <= v2
-        new NISuppression (v1_lt_v2, suppressee),
+        new NISuppression(v1_lt_v2, suppressee),
 
       });
   #else

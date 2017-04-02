@@ -8,7 +8,6 @@ The correct way to build the system is to run 'make'.
   #error "TYPEDOUBLE or TYPELONG must be defined"
 #endif
 
-
 #if (defined(TYPELONG))
   #define CLASSNAME NoDuplicates
   #define SUPERCLASS SingleScalarSequence
@@ -27,7 +26,7 @@ The correct way to build the system is to run 'make'.
   #define SEQUENCESPREDICATE SequencesPredicate
   #define SEQUENCESJOIN SequencesJoinFloat
   #define SUBSEQUENCE SubSequenceFloat
-  #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
+  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
   #define VALUE_SET ValueSet.ValueSetFloatArray
 #endif
 
@@ -36,18 +35,16 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.unary.sequence;
 
 import daikon.*;
+import daikon.Quantify.QuantFlags;
+import daikon.derive.binary.SEQUENCESJOIN;
+import daikon.derive.binary.SEQUENCESPREDICATE;
 import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.unary.scalar.*;
 import daikon.suppress.*;
-import daikon.derive.binary.SEQUENCESPREDICATE;
-import daikon.derive.binary.SEQUENCESJOIN;
-import daikon.Quantify.QuantFlags;
-
-import plume.*;
-
 import java.util.*;
 import java.util.logging.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -57,15 +54,12 @@ import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
 
-
 /**
- * Represents sequences of PRIMITIVE that contain no duplicate elements.
- * Prints as <code>x[] contains no duplicates</code>.
+ * Represents sequences of PRIMITIVE that contain no duplicate elements. Prints as <code>x[]
+ * contains no duplicates</code>.
  */
 
-public class CLASSNAME
-  extends SUPERCLASS
-{
+public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -73,9 +67,7 @@ public class CLASSNAME
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff NoDuplicates invariants should be considered.
-   */
+  /** Boolean.  True iff NoDuplicates invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   /** Debug tracer. */
@@ -89,7 +81,7 @@ public class CLASSNAME
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
@@ -102,8 +94,8 @@ public class CLASSNAME
   }
 
   /** instantiate an invariant on the specified slice */
-  public CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
-    return new CLASSNAME (slice);
+  public CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+    return new CLASSNAME(slice);
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
@@ -113,7 +105,7 @@ public class CLASSNAME
   /*@SideEffectFree*/
   public String format_using(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine (repr());
+      debug.fine(repr());
     }
 
     if (format == OutputFormat.DAIKON) {
@@ -136,7 +128,7 @@ public class CLASSNAME
   }
 
   public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    String[] form = VarInfo.simplify_quantify (QuantFlags.distinct(), var(),
+    String[] form = VarInfo.simplify_quantify(QuantFlags.distinct(), var(),
                                                var());
     return form[0] + "(NEQ " + form[1] + " " + form[2] + ")"
       + form[3];
@@ -154,7 +146,7 @@ public class CLASSNAME
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     // if (logDetail())
     //   log ("sample " + ArraysMDE.toString (a));
-    for (int i=1; i<a.length; i++) {
+    for (int i = 1; i < a.length; i++) {
       for (int j = 0; j < i; j++) {
         if (EQUAL(a[i], a[j])) {
           return InvariantStatus.FALSIFIED;
@@ -167,8 +159,8 @@ public class CLASSNAME
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     InvariantStatus status = check_modified(a, count);
     if (debug.isLoggable(Level.FINE) && (status == InvariantStatus.FALSIFIED)) {
-      debug.fine ("Destroying myself with: " + var().name());
-      debug.fine (ArraysMDE.toString(a));
+      debug.fine("Destroying myself with: " + var().name());
+      debug.fine(ArraysMDE.toString(a));
     }
     return status;
   }
@@ -180,23 +172,19 @@ public class CLASSNAME
   }
 
   /*@Pure*/
-  public /*@Nullable*/ DiscardInfo isObviousStatically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (!vis[0].aux.hasDuplicates()) {
       return new DiscardInfo(this, DiscardCode.obvious, "Obvious statically");
     }
-    return super.isObviousStatically (vis);
+    return super.isObviousStatically(vis);
   }
 
   /**
-   * Checks to see if this is obvious over the specified variables
-   * Implements the following checks:
-   * <pre>
-   *    (A[] subsequence B[]) ^ (B[] has nodups) &rArr; A[] has nodups
-   *    (A[] sorted by &gt;) v (A[] sorted by &lt;)    &rArr; A[] has nodups
-   * </pre>
-   * JHP: The first check is not valid because we can't rely on transitive
-   *      checks because of missing (if B[] is missing, A[] could have dups
-   *      on those samples),
+   * Checks to see if this is obvious over the specified variables Implements the following checks:
+   * <pre> (A[] subsequence B[]) ^ (B[] has nodups) &rArr; A[] has nodups (A[] sorted by &gt;) v
+   * (A[] sorted by &lt;) &rArr; A[] has nodups </pre> JHP: The first check is not valid because we
+   * can't rely on transitive checks because of missing (if B[] is missing, A[] could have dups on
+   * those samples),
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
@@ -209,7 +197,7 @@ public class CLASSNAME
     // obvious
     VALUE_SET vs = (VALUE_SET) vis[0].get_value_set();
     if (vs.max_length() <= 1) {
-      return new DiscardInfo (this, DiscardCode.obvious, "Size of " + vis[0]
+      return new DiscardInfo(this, DiscardCode.obvious, "Size of " + vis[0]
                                + " is <= " + vs.max_length());
     }
 
@@ -225,7 +213,7 @@ public class CLASSNAME
         VarInfo v2 = inv.ppt.var_infos[0];
         if (SUBSEQUENCE.isObviousSubSequenceDynamically(this, v1, v2)) {
           // System.out.println("obvious: " + format() + "   because of " + inv.format());
-          log ("Obvious- Obvious sub sequence with %s", inv.format());
+          log("Obvious- Obvious sub sequence with %s", inv.format());
           return new DiscardInfo(this, DiscardCode.obvious, "Invariant holds over a supersequence");
         }
       }
@@ -233,7 +221,7 @@ public class CLASSNAME
 
     // If the sequence is sorted by < or >, then there are obviously no duplicates
 
-    PptSlice slice = this.ppt.parent.findSlice_unordered (vis);
+    PptSlice slice = this.ppt.parent.findSlice_unordered(vis);
     if (slice != null) {
       for (Invariant inv : slice.invs) {
         if ((inv instanceof EltwiseIntLessThan)
@@ -253,6 +241,4 @@ public class CLASSNAME
     assert other instanceof CLASSNAME;
     return true;
   }
-
-
 }

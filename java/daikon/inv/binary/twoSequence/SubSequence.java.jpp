@@ -78,17 +78,16 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.binary.twoSequence;
 
 import daikon.*;
-import daikon.inv.*;
-import daikon.inv.unary.sequence.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
+import daikon.inv.*;
+import daikon.inv.unary.sequence.*;
 import daikon.suppress.*;
-
-import plume.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -98,14 +97,11 @@ import typequals.*;
 */
 
 /**
- * Represents two sequences of PRIMITIVE values where one sequence is a
- * subsequence of the other.  Prints as
- * <code>x[] is a subsequence of y[]</code>.
+ * Represents two sequences of PRIMITIVE values where one sequence is a subsequence of the
+ * other. Prints as <code>x[] is a subsequence of y[]</code>.
  */
 
-public class CLASSNAME
-  extends SUPERCLASS
-{
+public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -116,9 +112,7 @@ public class CLASSNAME
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff SubSequence invariants should be considered.
-   */
+  /** Boolean.  True iff SubSequence invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   protected CLASSNAME(PptSlice ppt) {
@@ -129,7 +123,7 @@ public class CLASSNAME
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
@@ -142,12 +136,12 @@ public class CLASSNAME
   }
 
   /** instantiates the invariant on the specified slice */
-  protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
-    return new CLASSNAME (slice);
+  protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+    return new CLASSNAME(slice);
   }
 
   protected Invariant resurrect_done_swapped() {
-    return new SUBSEQ_SWAP (ppt);
+    return new SUBSEQ_SWAP(ppt);
   }
 
   /*@SideEffectFree*/
@@ -271,8 +265,7 @@ public class CLASSNAME
     */
   }
 
-
-  public InvariantStatus check_modified (PRIMITIVE[] a1, PRIMITIVE[] a2,
+  public InvariantStatus check_modified(PRIMITIVE[] a1, PRIMITIVE[] a2,
                                         int count) {
     if ((a1 == null) || (a2 == null)) {
       return InvariantStatus.FALSIFIED;
@@ -293,9 +286,9 @@ public class CLASSNAME
 
   public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2,
                                       int count) {
-    InvariantStatus is = check_modified (a1, a2, count);
+    InvariantStatus is = check_modified(a1, a2, count);
     if ((is == InvariantStatus.FALSIFIED) && Debug.logOn()) {
-      log ("%s destroyed by %s %s",
+      log("%s destroyed by %s %s",
            format(), Debug.toString(a1),
            Debug.toString(a2));
     }
@@ -306,9 +299,7 @@ public class CLASSNAME
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
-  /**
-   * @return a DiscardInfo, or null if the Invariant is not an obvious subsequence
-   */
+  /** @return a DiscardInfo, or null if the Invariant is not an obvious subsequence */
   /*@Pure*/
   public static /*@Nullable*/ DiscardInfo isObviousSubSequence(Invariant inv, VarInfo subvar, VarInfo supervar) {
     Pair<DiscardCode,String> pcds = isObviousSubSequence(subvar, supervar);
@@ -320,8 +311,8 @@ public class CLASSNAME
   }
 
   /**
-   * @return a Pair of a DiscardCode and a discardReason string,
-   * or null if the Invariant is not an obvious subsequence
+   * @return a Pair of a DiscardCode and a discardReason string, or null if the Invariant is not an
+   * obvious subsequence
    */
   /*@Pure*/
   public static /*@Nullable*/ Pair<DiscardCode,String> isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
@@ -340,7 +331,7 @@ public class CLASSNAME
     }
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("isObviousSubSequence " +
+      debug.fine("isObviousSubSequence " +
                   subvar.name() + " in " + supervar.name());
     }
 
@@ -360,7 +351,7 @@ public class CLASSNAME
         subvar.derived instanceof SEQUENCESCALARUNION) {
       discardCode = DiscardCode.obvious;
       discardString = "Invariants involving subsets/subsequences of unions/intersections are suppressed";
-      debug.fine ("  returning true because of union or intersection");
+      debug.fine("  returning true because of union or intersection");
       return Pair.<DiscardCode,String>of(discardCode, discardString);
     }
 
@@ -371,7 +362,7 @@ public class CLASSNAME
       if (derived.var1().equals(supervar)) {
         discardCode = DiscardCode.obvious;
         discardString = subvar.name()+" is derived from "+supervar.name();
-        debug.fine ("  returning true because of predicate slicing");
+        debug.fine("  returning true because of predicate slicing");
         return Pair.of(discardCode, discardString + " [pred slicing]");
       }
     }
@@ -379,7 +370,7 @@ public class CLASSNAME
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
     if (subvar_super == null) {
       // If it's not a union, intersection or a subsequence, it's not obvious
-      debug.fine ("  returning false because subvar_super == null");
+      debug.fine("  returning false because subvar_super == null");
       return null;
     }
 
@@ -388,7 +379,7 @@ public class CLASSNAME
       // System.out.println("  details: subvar_super=" + subvar_super.name + "; supervar_super=" + supervar.isDerivedSubSequenceOf() == null ? "null" : supervar.isDerivedSubSequenceOf().name);
       discardCode = DiscardCode.obvious;
       discardString = subvar.name()+"=="+supervar.name();
-      debug.fine ("  returning true because subvar_super == supervar");
+      debug.fine("  returning true because subvar_super == supervar");
       return Pair.of(discardCode,
                      discardString + " [subvar_super == supervar]");
     }
@@ -526,7 +517,7 @@ public class CLASSNAME
     // check for x[i..j] subsequence of x[]
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
     if (subvar_super == supervar) {
-      debug.fine ("  returning true because subvar_super == supervar");
+      debug.fine("  returning true because subvar_super == supervar");
       return new DiscardInfo(this, DiscardCode.obvious,
                     "x[i..j] subsequence of x[] is obvious");
     }
@@ -560,7 +551,7 @@ public class CLASSNAME
 
     // System.out.println("checking isObviousImplied for: " + format());
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("isObviousDynamically: checking " + vis[0].name() + " in " + vis[1].name());
+      debug.fine("isObviousDynamically: checking " + vis[0].name() + " in " + vis[1].name());
     }
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -579,12 +570,12 @@ public class CLASSNAME
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
     VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
     if (subvar_super != null && subvar_super == supervar_super) {
-      debug.fine ("  returning true because subvar_super == supervar_super");
+      debug.fine("  returning true because subvar_super == supervar_super");
       return new DiscardInfo(this, DiscardCode.obvious,
                     "x[0..i] subsequence of x[0..j] is uninteresting");
     }
 
-    if (isObviousSubSequenceDynamically (this, subvar, supervar)) {
+    if (isObviousSubSequenceDynamically(this, subvar, supervar)) {
       return new DiscardInfo(this, DiscardCode.obvious, subvar.name()
                              + " is an obvious subsequence of "
                              + supervar.name());
@@ -593,10 +584,10 @@ public class CLASSNAME
   }
 
   /**
-   * Returns true if the two original variables are related in a way
-   * that makes subsequence or subset detection not informative.
+   * Returns true if the two original variables are related in a way that makes subsequence or
+   * subset detection not informative.
    */
-  public static boolean isObviousSubSequenceDynamically (Invariant inv,
+  public static boolean isObviousSubSequenceDynamically(Invariant inv,
                             VarInfo subvar, VarInfo supervar) {
 
     VarInfo [] vis = {subvar, supervar};
@@ -614,16 +605,16 @@ public class CLASSNAME
           }
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Checking isObviousSubSequenceDynamically " +
+      debug.fine("Checking isObviousSubSequenceDynamically " +
                    subvar.name() + " in " + supervar.name());
     }
 
-    DiscardInfo di = isObviousSubSequence (inv, subvar, supervar);
+    DiscardInfo di = isObviousSubSequence(inv, subvar, supervar);
     if (di != null) {
-      inv.log ("ObvSubSeq- true from isObviousSubSequence: %s", di.discardString());
+      inv.log("ObvSubSeq- true from isObviousSubSequence: %s", di.discardString());
       return true;
     }
-    debug.fine ("  not isObviousSubSequence(statically)");
+    debug.fine("  not isObviousSubSequence(statically)");
 
     PptTopLevel ppt_parent = subvar.ppt;
 
@@ -641,7 +632,7 @@ public class CLASSNAME
           if (superinv instanceof ELTONEOF) {
             ELTONEOF eltinv = (ELTONEOF) superinv;
             if (eltinv.num_elts() > 0) {
-              inv.log (" obvious because of %s", eltinv.format());
+              inv.log(" obvious because of %s", eltinv.format());
               return true;
             }
           }
@@ -659,12 +650,12 @@ public class CLASSNAME
             if (seqinv.num_elts() == 1) {
               Object elt = seqinv.elt();
               if (elt instanceof long[] && ((long[]) elt).length == 0) {
-                Debug.log (debug, inv.getClass(), inv.ppt, vis,
+                Debug.log(debug, inv.getClass(), inv.ppt, vis,
                                 "ObvSubSeq- True from subvar being []");
                 return true;
               }
               if (elt instanceof double[] && ((double[]) elt).length == 0) {
-                inv.log ("ObvSubSeq- True from subvar being []");
+                inv.log("ObvSubSeq- True from subvar being []");
                 return true;
               }
             }
@@ -753,7 +744,7 @@ public class CLASSNAME
 //                            + "? left: " + left_included + ", right: "
 //                            + right_included);
         if (left_included && right_included) {
-          inv.log ("ObvSubSeq- True a[0..i] subseq a[0..j] and i < j");
+          inv.log("ObvSubSeq- True a[0..i] subseq a[0..j] and i < j");
           return true;
         }
       } else if ((subvar.derived instanceof SEQUENCESTRINGSUBSEQUENCE)
@@ -769,7 +760,7 @@ public class CLASSNAME
         boolean start2 = sss2.from_start;
         if (start1 == start2)
           if (VarInfo.compare_vars(index1, shift1, index2, shift2, start1)) {
-            inv.log ("True from comparing indices");
+            inv.log("True from comparing indices");
             return true;
           }
       } else {
@@ -785,7 +776,6 @@ public class CLASSNAME
 
     }
 
-
     // Also need to check A[0..i] subseq A[0..j] via compare_vars.
 
     // A subseq B[0..n] => A subseq B
@@ -799,27 +789,27 @@ public class CLASSNAME
         VarInfo supervar_part = der.getVarInfo();
         // Get the canonical version; being equal to it is good enough.
         if (supervar_part.get_equalitySet_leader() == subvar) {
-          Debug.log (debug, inv.getClass(), inv.ppt, vis,
+          Debug.log(debug, inv.getClass(), inv.ppt, vis,
                 "ObvSubSeq- True from canonical leader");
           return true;
         }
 
         if (supervar_part.isCanonical()) {
           if (subvar == supervar_part) {
-            System.err.println ("Error: variables " +
+            System.err.println("Error: variables " +
                                 subvar.name() +
                                 " and " +
                                 supervar_part.name() +
                                 " are identical.  Canonical");
-            System.err.println (subvar.isCanonical());
-            System.err.println (supervar_part.isCanonical());
+            System.err.println(subvar.isCanonical());
+            System.err.println(supervar_part.isCanonical());
             throw new Error();
           }
 
           // Check to see if there is a subsequence over the supervar
-          if (ppt_parent.is_subsequence (subvar, supervar_part)) {
+          if (ppt_parent.is_subsequence(subvar, supervar_part)) {
             if (Debug.logOn()) {
-              inv.log ("ObvSubSeq- true from A subseq B[0..n] %s/%s",
+              inv.log("ObvSubSeq- true from A subseq B[0..n] %s/%s",
                        subvar.name(), supervar_part.name());
             }
             return true;
@@ -844,22 +834,22 @@ public class CLASSNAME
 
   /** definition of this invariant (the suppressee) */
   private static NISuppressee suppressee
-    = new NISuppressee (CLASSNAME.class, 2);
+    = new NISuppressee(CLASSNAME.class, 2);
 
   // suppressor definitions (used in suppressions below)
   private static NISuppressor v1_eq_v2
-    = new NISuppressor (0, 1, SEQSEQ_EQ.class);
+    = new NISuppressor(0, 1, SEQSEQ_EQ.class);
   private static NISuppressor v1_pw_eq_v2
-    = new NISuppressor (0, 1, PAIRWISE_EQ.class);
+    = new NISuppressor(0, 1, PAIRWISE_EQ.class);
 
   // sub/super sequence suppressions.  We have both SeqSeq and Pairwise
   // as suppressions because each can be enabled separately.
   private static NISuppressionSet suppressions =
-    new NISuppressionSet (new NISuppression[] {
+    new NISuppressionSet(new NISuppression[] {
       // a[] == b[] ==> a[] sub/superset b[]
-      new NISuppression (v1_eq_v2, suppressee),
+      new NISuppression(v1_eq_v2, suppressee),
       // a[] == b[] ==> a[] sub/superset b[]
-      new NISuppression (v1_pw_eq_v2, suppressee),
+      new NISuppression(v1_pw_eq_v2, suppressee),
     });
 
 }
