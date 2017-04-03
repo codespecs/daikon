@@ -435,6 +435,7 @@ import typequals.*;
     assert permutation.length == ppt.arity();
     for (int i = 0; i < ppt.arity(); i++) {
       VarInfo oldvi = ppt.var_infos[i];
+      @SuppressWarnings("index") // iterating over ppt.arity() which equals permutation.length
       VarInfo newvi = new_ppt.var_infos[permutation[i]];
       // We used to check that all 3 types were equal, but we can't do
       // that anymore, because with equality, invariants may get
@@ -509,6 +510,7 @@ import typequals.*;
     assert permutation.length == ppt.arity();
     for (int i = 0; i < ppt.arity(); i++) {
       VarInfo oldvi = ppt.var_infos[i];
+      @SuppressWarnings("index") // iterating over ppt.arity() which equals permutation.length
       VarInfo newvi = new_ppt.var_infos[permutation[i]];
       // We used to check that all 3 types were equal, but we can't do
       // that anymore, because with equality, invariants may get

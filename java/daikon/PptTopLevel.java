@@ -3665,6 +3665,7 @@ public class PptTopLevel extends Ppt {
    * Merges one child. Since there is only one child, the merge is trivial (each invariant can be
    * just copied to the parent).
    */
+  @SuppressWarnings("index") // https://github.com/kelloggm/checker-framework/issues/146
   public void merge_invs_one_child() {
 
     assert views.size() == 0;
@@ -3929,8 +3930,8 @@ public class PptTopLevel extends Ppt {
     invariants_removed = true;
   }
   /** Builds a permutation from vis1 to vis2. The result is such that vis1[i] = vis2[permute[i]]. */
-  public static /*@IndexFor("vis1")*/ int /*@PolySameLen*/ [] build_permute(
-      VarInfo /*@PolySameLen*/ [] vis1, VarInfo /*@PolySameLen*/ [] vis2) {
+  public static /*@IndexFor("#1")*/ int /*@SameLen({"#1","#2"})*/[] build_permute(
+      VarInfo /*@SameLen({"#1","#2"})*/[] vis1, VarInfo /*@SameLen({"#1","#2"})*/[] vis2) {
 
     int[] permute = new int[vis1.length];
     boolean[] matched = new boolean[vis1.length];

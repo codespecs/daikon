@@ -10,6 +10,7 @@ import plume.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -33,7 +34,7 @@ public class PptSlice0 extends PptSlice {
     super(parent, new VarInfo[0]);
   }
 
-  public final int arity(
+  public final /*@IntVal(0)*/ int arity(
       /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice0 this*/) {
     return 0;
   }

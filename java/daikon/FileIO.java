@@ -787,8 +787,8 @@ public final class FileIO {
 
     Invocation(
         PptTopLevel ppt,
-        /*@Nullable*/ Object /*@SameLen({"mods", "vals", "ppt.var_infos"})*/[] vals,
-        int /*@SameLen({"mods", "vals", "ppt.var_infos"})*/[] mods) {
+        /*@Nullable*/ Object /*@SameLen({"#2", "#3", "#1.var_infos"})*/[] vals,
+        int /*@SameLen({"#2", "#3", "#1.var_infos"})*/[] mods) {
       this.ppt = ppt;
       this.vals = vals;
       this.mods = mods;
@@ -2128,8 +2128,8 @@ public final class FileIO {
   public static boolean compute_orig_variables(
       PptTopLevel ppt,
       // HashMap cumulative_modbits,
-      /*@Nullable*/ Object /*@SameLen({"#1", "#2"})*/[] vals,
-      int /*@SameLen({"#1", "#2"})*/[] mods,
+      /*@Nullable*/ Object /*@SameLen({"#2", "#3"})*/[] vals,
+      int /*@SameLen({"#2", "#3"})*/[] mods,
       /*@Nullable*/ Integer nonce) {
     assert data_trace_state != null;
 

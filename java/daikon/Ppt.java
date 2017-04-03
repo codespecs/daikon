@@ -13,6 +13,7 @@ import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -45,6 +46,7 @@ public abstract class Ppt implements Serializable {
   // Not final:  modified by PptTopLevel.addVarInfos (which is called by
   // Daikon.create_orig_vars and PptTopLevel.create_derived_variables)
   // and also by PptSlice0.makeFakePrestate.
+  // Array length is: 0 for a PptSlice0 (??), 1-3 for a real slice, arbitrary for a PptTopLevel.
   public VarInfo[] var_infos;
 
   protected Ppt(VarInfo[] var_infos) {

@@ -61,6 +61,7 @@ import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
@@ -72,6 +73,8 @@ import typequals.*;
 /**
  * Contains all of the invariants over a particular set of ARITY variables.
  */
+@SuppressWarnings("index:field.invar.not.final") // field is nearly final; isn't modified in this subclass
+/*@MinLenFieldInvariant(minLen=ARITY, field="var_infos")*/
 public final class PPTSLICE1 extends PptSlice {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -116,7 +119,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 #endif
 
-  public final int arity(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PPTSLICE1 this*/) {
+  public final /*@IntVal(ARITY)*/ int arity(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PPTSLICE1 this*/) {
     return ARITY;
   }
   /**
@@ -524,13 +527,15 @@ public final class PPTSLICE1 extends PptSlice {
    * Copy invariants from this slice to a new slice over the variables
    * argNewVarInfos.  The new slice should not already exist.
    */
+  @SuppressWarnings("index") // https://github.com/kelloggm/checker-framework/issues/146
   protected PptSlice cloneAndPivot (VarInfo[] argNewVarInfos) {
 
     // Sort the VarInfos by var_index and build a matching permutation
     // from the current order to the new order
     VarInfo[] vis_sorted = argNewVarInfos.clone();
     Arrays.sort (vis_sorted, VarInfo.IndexComparator.getInstance());
-    int[] permutation = PptTopLevel.build_permute (argNewVarInfos, vis_sorted);
+    /*@IndexFor("vis_sorted")*/ int[] permutation =
+        PptTopLevel.build_permute (argNewVarInfos, vis_sorted);
 
     // Assert sorted
     for (int i = 0; i < ARITY - 1; i++) {
@@ -799,7 +804,7 @@ public final class PPTSLICE1 extends PptSlice {
    * flow and/or missing nonsensical.  Out of Bounds is treated differently
    * since it destroys all of its invariants.
    */
-  private boolean slice_missing (PptTopLevel ppt, VarInfo[] vis) {
+  private boolean slice_missing (PptTopLevel ppt, VarInfo /*@ArrayLen(ARITY)*/ [] vis) {
 
     if (ppt.constants != null) {
       #if defined(ARITY1)

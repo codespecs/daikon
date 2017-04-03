@@ -15,6 +15,7 @@ import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -43,7 +44,7 @@ public class PptSliceEquality extends PptSlice {
     super(parent, parent.var_infos);
   }
 
-  public final int arity(
+  public final /*@BottomVal*/ int arity(
       /*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this*/) {
     throw new Error("Don't call arity on PptSliceEquality");
   }
@@ -394,7 +395,7 @@ public class PptSliceEquality extends PptSlice {
   public List<Equality> createEqualityInvs(List<VarInfo> vis, Equality leader) {
     assert vis.size() > 0;
 
-    // Why use an array?  Because we'll be sorting shortly
+    // Why use an array?  Because we'll be sorting shortly.
     /*NNC:@MonotonicNonNull*/ Equality[] resultArray = new Equality[vis.size()];
     for (int i = 0; i < vis.size(); i++) {
       VarInfo vi = vis.get(i);
@@ -548,7 +549,7 @@ public class PptSliceEquality extends PptSlice {
       List<PptSlice> newSlices,
       /*@NonNegative*/ int position,
       int loop,
-      VarInfo[] soFar) {
+      VarInfo /*@SameLen("#3.var_infos")*/ /*@ArrayLen({1,2,3})*/[] soFar) {
 
     // Track debug if any variables are in newVis
     Debug dlog = null;

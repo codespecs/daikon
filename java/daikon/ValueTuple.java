@@ -11,6 +11,7 @@ import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -28,7 +29,7 @@ public final class ValueTuple implements Cloneable {
 
   // These arrays are interned, and so are their elements.
   // Each element is null only if it is missing (according to the mods array).
-  public /*@Nullable*/ /*@Interned*/ Object /*@Interned*/ [] vals;
+  public /*@Nullable*/ /*@Interned*/ Object /*@Interned*/ /*@SameLen({"mods","vals"})*/[] vals;
 
   // Could consider putting the mods array in the first slot of "vals", to
   // avoid the Object overhead of a pair of val and mods.
@@ -37,7 +38,8 @@ public final class ValueTuple implements Cloneable {
    * Modification bit per value, possibly packed into fewer ints than the vals field. Don't use a
    * single int because that won't scale to (say) more than 32 values.
    */
-  public int /*@Interned*/ [] mods;
+  public /*@IntRange(from=0,to=MODBIT_VALUES-1)*/ int /*@Interned*/ /*@SameLen({"mods","vals"})*/[]
+      mods;
 
   // Right now there are only three meaningful values for a mod:
   /** Not modified. */
@@ -54,7 +56,7 @@ public final class ValueTuple implements Cloneable {
    * not contain this modbit.
    */
   public static final int MISSING_FLOW = 3;
-  /** Maximum mod bit value. Always set to 1+ last modbit value. */
+  /** Number of mod bit values. Always set to 1+ last modbit value. */
   public static final int MODBIT_VALUES = 4;
   // Out of the range of MODBIT_VALUES because this won't appear in the
   // tables; it gets converted to UNMODIFIED or MODIFIED, depending on
@@ -96,21 +98,21 @@ public final class ValueTuple implements Cloneable {
   }
 
   /*@Pure*/
-  int getModified(int value_index) {
+  int getModified(/*@IndexFor("mods")*/ int value_index) {
     return mods[value_index];
   }
   /*@Pure*/
-  boolean isUnmodified(int value_index) {
+  boolean isUnmodified(/*@IndexFor("mods")*/ int value_index) {
     return mods[value_index] == UNMODIFIED;
   }
   /*@Pure*/
-  boolean isModified(int value_index) {
+  boolean isModified(/*@IndexFor("mods")*/ int value_index) {
     return mods[value_index] == MODIFIED;
   }
   /*@Pure*/
   boolean isMissingNonsensical(
-      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int
-          value_index) {
+      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */
+      /*@IndexFor("mods")*/ int value_index) {
     return mods[value_index] == MISSING_NONSENSICAL;
   }
 
@@ -118,8 +120,8 @@ public final class ValueTuple implements Cloneable {
   /*@EnsuresNonNullIf(result=false, expression="this.vals[#1]")*/
   /*@Pure*/
   boolean isMissingFlow(
-      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int
-          value_index) {
+      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */
+      /*@IndexFor("mods")*/ int value_index) {
     return mods[value_index] == MISSING_FLOW;
   }
 
@@ -127,8 +129,8 @@ public final class ValueTuple implements Cloneable {
   /*@EnsuresNonNullIf(result=false, expression="vals[#1]")*/
   /*@Pure*/
   boolean isMissing(
-      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int
-          value_index) {
+      /*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */
+      /*@IndexFor("mods")*/ int value_index) {
     return (isMissingNonsensical(value_index) || isMissingFlow(value_index));
   }
 
@@ -174,11 +176,12 @@ public final class ValueTuple implements Cloneable {
   //  * no modified, no unmodified, no missing
   //    impossible
 
-  public static final int TUPLEMOD_VALUES = MathMDE.pow(2, MODBIT_VALUES);
-  public static final int UNMODIFIED_BITVAL = MathMDE.pow(2, UNMODIFIED);
-  public static final int MODIFIED_BITVAL = MathMDE.pow(2, MODIFIED);
-  public static final int MISSING_NONSENSICAL_BITVAL = MathMDE.pow(2, MISSING_NONSENSICAL);
-  public static final int MISSING_FLOW_BITVAL = MathMDE.pow(2, MISSING_FLOW);
+  public static final /*@Positive*/ int TUPLEMOD_VALUES = MathMDE.pow(2, MODBIT_VALUES);
+  public static final /*@Positive*/ int UNMODIFIED_BITVAL = MathMDE.pow(2, UNMODIFIED);
+  public static final /*@Positive*/ int MODIFIED_BITVAL = MathMDE.pow(2, MODIFIED);
+  public static final /*@Positive*/ int MISSING_NONSENSICAL_BITVAL =
+      MathMDE.pow(2, MISSING_NONSENSICAL);
+  public static final /*@Positive*/ int MISSING_FLOW_BITVAL = MathMDE.pow(2, MISSING_FLOW);
   // Various slices of the 8 (=TUPLEMOD_VALUES) possible tuplemod values.
   // The arrays are filled up in a static block below.
   // (As of 1/9/2000, tuplemod_modified_not_missing is used only in
@@ -239,7 +242,7 @@ public final class ValueTuple implements Cloneable {
         + (tuplemodHasMissingFlow(tuplemod) ? "F" : "f"));
   }
 
-  static int tupleMod(int[] mods) {
+  static int tupleMod(/*@IntRange(from=0,to=MODBIT_VALUES-1)*/ int[] mods) {
     boolean[] has_modbit_val = new boolean[MODBIT_VALUES];
     // Extraneous, as the array is initialized to all zeroes.
     Arrays.fill(has_modbit_val, false);
@@ -293,7 +296,7 @@ public final class ValueTuple implements Cloneable {
    *
    * @see #getValue(VarInfo)
    */
-  /*@Interned*/ Object getValue(int val_index) {
+  /*@Interned*/ Object getValue(/*@IndexFor("vals")*/ int val_index) {
     @SuppressWarnings("nullness") // context: precondition requires that the value isn't missing
     /*@NonNull*/ Object result = vals[val_index];
     assert result != null;
@@ -306,7 +309,7 @@ public final class ValueTuple implements Cloneable {
    *
    * @see #getValue(int)
    */
-  /*@Nullable*/ /*@Interned*/ Object getValueOrNull(int val_index) {
+  /*@Nullable*/ /*@Interned*/ Object getValueOrNull(/*@IndexFor("vals")*/ int val_index) {
     Object result = vals[val_index];
     return result;
   }
@@ -482,7 +485,7 @@ public final class ValueTuple implements Cloneable {
   /**
    * Return a new ValueTuple consisting of the elements of this one with indices listed in indices.
    */
-  public ValueTuple slice(int[] indices) {
+  public ValueTuple slice(/*@IndexFor({"mods","vals"})*/ int[] indices) {
     int new_len = indices.length;
     /*@Nullable*/ /*@Interned*/ Object[] new_vals = new /*@Nullable*/ /*@Interned*/ Object[new_len];
     int[] new_mods = new int[new_len];

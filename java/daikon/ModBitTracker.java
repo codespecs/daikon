@@ -42,13 +42,13 @@ public class ModBitTracker implements Serializable, Cloneable {
    * set. "index" indicates, for each variable, which BitSet it should use; it is the identifier of
    * the variable's equivalence set.
    */
-  private int[] index;
+  private /*@IndexFor({"this_bits", "this_bits_valid"})*/ int[] index;
 
   /**
    * The number of BitSets (equivalence sets) in use. All elements of modbits_arrays at or past this
    * index are null.
    */
-  private int num_sets;
+  private /*@IndexFor("modbits_arrays")*/ int num_sets;
 
   // Member variables to avoid re-allocating every time "add" is entered.
   /** The bits for this ValueTuple (indexed by equivalence set. */
@@ -59,7 +59,7 @@ public class ModBitTracker implements Serializable, Cloneable {
    * The equivalence set for when an equivalence set is split: if a variable has a conflicting bit,
    * then it goes to the specified index instead.
    */
-  private int[] this_bits_exception_index;
+  private /*@IndexFor({"this_bits", "this_bits_valid"})*/ int[] this_bits_exception_index;
 
   public ModBitTracker(/*@NonNegative*/ int num_vars) {
     assert num_vars >= 0;
@@ -128,12 +128,12 @@ public class ModBitTracker implements Serializable, Cloneable {
   }
 
   /** Returns the modbit for the given variable and sample number. */
-  public boolean get(int varindex, int sampleno) {
+  public boolean get(int varindex, /*@NonNegative*/ int sampleno) {
     return get(varindex).get(sampleno);
   }
 
   /** Split the specified equivalence set into two pieces. Returns the index of the copy. */
-  private int split(int split_index) {
+  private int split(/*@IndexFor("modbits_arrays")*/ int split_index) {
     @SuppressWarnings("nullness") // application invariant: split_index is in range
     /*@NonNull*/ BitSet bs = (BitSet) modbits_arrays[split_index].clone();
     modbits_arrays[num_sets] = bs;
@@ -142,7 +142,7 @@ public class ModBitTracker implements Serializable, Cloneable {
   }
 
   /** Add to this the modbits for the given ValueTuple. */
-  public void add(ValueTuple vt, int count) {
+  public void add(ValueTuple vt, /*@NonNegative*/ int count) {
     if (debug) checkRep();
     assert vt.size() == num_vars : "vt.size()=" + vt.size() + ", num_vars = " + num_vars;
     if (num_vars == 0) {

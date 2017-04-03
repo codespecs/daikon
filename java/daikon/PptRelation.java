@@ -541,6 +541,7 @@ public class PptRelation implements Serializable {
     // variables should match exactly.
     assert parent.var_infos.length == child.var_infos.length;
     for (int i = 0; i < parent.var_infos.length; i++) {
+      @SuppressWarnings("index") // same length precondition: parent.var_infos and child.var_infos
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];
       assert vc.name().equals(vp.name());
@@ -561,6 +562,7 @@ public class PptRelation implements Serializable {
     // variables should match exactly
     assert parent.var_infos.length == child.var_infos.length;
     for (int i = 0; i < parent.var_infos.length; i++) {
+      @SuppressWarnings("index") // same length precondition: parent.var_infos and child.var_infos
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];
       assert vc.name().equals(vp.name());
@@ -592,6 +594,7 @@ public class PptRelation implements Serializable {
     // Create the parent-child variable map.  This one is easy as the
     // variables should match exactly.
     for (int i = 0; i < parent.var_infos.length; i++) {
+      @SuppressWarnings("index") // same length precondition: parent.var_infos and child.var_infos
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];
       if (!vc.name().equals(vp.name())) {

@@ -398,7 +398,8 @@ public class PptSplitter implements Serializable {
 
       // Add any exclusive conditions for this slice to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      Vector</*@KeyFor("orig_invs")*/ Invariant[]> ec = exclusive_conditions(invs[0], invs[1]);
+      Vector</*@KeyFor("orig_invs")*/ Invariant /*@ArrayLen(2)*/[]> ec =
+          exclusive_conditions(invs[0], invs[1]);
       exclusive_invs_vec.addAll(ec);
 
       // Add any invariants that are the same to the list
@@ -408,7 +409,7 @@ public class PptSplitter implements Serializable {
 
       // Add any invariants that are different to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      Vector</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> di =
+      Vector</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant /*@ArrayLen(2)*/[]> di =
           different_invariants(invs[0], invs[1]);
       different_invs_vec.addAll(di);
     } // slices.iterator() loop
@@ -619,7 +620,8 @@ public class PptSplitter implements Serializable {
    * Determine which elements of invs1 are mutually exclusive with elements of invs2. Result
    * elements are pairs of List<Invariant>. All the arguments should be over the same program point.
    */
-  Vector<Invariant[]> exclusive_conditions(List<Invariant> invs1, List<Invariant> invs2) {
+  Vector<Invariant /*@ArrayLen(2)*/[]> exclusive_conditions(
+      List<Invariant> invs1, List<Invariant> invs2) {
 
     Vector<Invariant[]> result = new Vector<Invariant[]>();
     for (Invariant inv1 : invs1) {
@@ -647,7 +649,7 @@ public class PptSplitter implements Serializable {
    * List<Invariant> (with one or the other always null). All the arguments should be over the same
    * program point.
    */
-  Vector</*@Nullable*/ Invariant[]> different_invariants(
+  Vector</*@Nullable*/ Invariant /*@ArrayLen(2)*/[]> different_invariants(
       List<Invariant> invs1, List<Invariant> invs2) {
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);

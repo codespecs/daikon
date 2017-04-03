@@ -89,7 +89,7 @@ public final class NullnessUtils {
   public static <T extends /*@Nullable*/ Object>
       /*@NonNull*/ T /*@PolyAll*/ /*@NonNull*/ [] castNonNullDeep(
       T /*@Nullable*/ /*@PolyAll*/ [] arr) {
-    return (/*@NonNull*/ /*@PolyAll*/ T[]) castNonNullArray(arr);
+    return (/*@NonNull*/ T /*@PolyAll*/ /*@NonNull*/ []) castNonNullArray(arr);
   }
 
   /**

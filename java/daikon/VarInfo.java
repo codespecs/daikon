@@ -128,12 +128,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public VarInfoAux aux;
 
   /** The index in lists of VarInfo objects, or -1 if not yet set. */
-  public /*@GTENegativeOne*/ int varinfo_index;
+  // Actual annotation should be /*@GTENegativeOne*/, but write it as @NonNegative to suppress warnings
+  public /*@NonNegative*/ int varinfo_index;
 
   /**
    * The index in a ValueTuple (more generally, in a list of values). It can differ from
    * varinfo_index due to constants (and possibly other factors). It is -1 iff is_static_constant or
-   * not yet set.
+   * not yet set; otherwise, it is an index for ppt.value_sets.
    */
   public /*@GTENegativeOne*/ int value_index;
 
@@ -1239,6 +1240,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Convenience methods that return information from the ValueTuple. */
   /*@Pure*/
+  @SuppressWarnings("index") // precondition: value_index is an index for #1.mods
   public int getModified(ValueTuple vt) {
     if (is_static_constant) {
       // return ValueTuple.STATIC_CONSTANT;
@@ -1273,6 +1275,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    *
    * @param vt the ValueTuple from which to extract the value
    */
+  @SuppressWarnings("index") // precondition: value_index is an index for #1.vals
   public /*@Interned*/ Object getValue(ValueTuple vt) {
     if (is_static_constant) {
       @SuppressWarnings("nullness") // derived: is_static_constant == true
@@ -1284,6 +1287,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Use of this method is discouraged. */
+  @SuppressWarnings("index") // precondition: value_index is an index for #1.vals
   public /*@Nullable*/ /*@Interned*/ Object getValueOrNull(ValueTuple vt) {
     if (is_static_constant) {
       return static_constant_value;
@@ -3686,7 +3690,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** @see #simplify_quantify(EnumSet, VarInfo[]) */
-  public static String[] simplify_quantify(VarInfo... vars) {
+  public static String[] simplify_quantify(VarInfo /*@ArrayLen({1, 2})*/... vars) {
     return simplify_quantify(EnumSet.noneOf(QuantFlags.class), vars);
   }
 

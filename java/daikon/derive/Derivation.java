@@ -204,6 +204,7 @@ public abstract class Derivation implements Serializable, Cloneable {
    * derivation with the same formula and have the same bases.
    */
   /*@Pure*/
+  @SuppressWarnings("index") // presumably getBases().length == d.getBases().length
   public boolean is_prestate_version(Derivation d) {
 
     // The derivations must be of the same type
