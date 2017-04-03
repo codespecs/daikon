@@ -397,7 +397,7 @@ public class PptTopLevel extends Ppt {
     for (ValueSet vs : new_value_sets) {
       assert vs != null;
     }
-    new_value_sets = castNonNullDeep(new_value_sets); // issue 154
+    new_value_sets = castNonNullDeep(new_value_sets); // issue 986
     value_sets = new_value_sets;
 
     for (VarInfo vi : var_infos) {
@@ -553,7 +553,7 @@ public class PptTopLevel extends Ppt {
     mbtracker = new ModBitTracker(mbtracker.num_vars() + vis.length);
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
     System.arraycopy(vis, 0, new_var_infos, old_length, vis.length);
-    new_var_infos = castNonNullDeep(new_var_infos); // issue 154
+    new_var_infos = castNonNullDeep(new_var_infos); // issue 986
     for (int i = old_length; i < new_var_infos.length; i++) {
       VarInfo vi = new_var_infos[i];
       vi.varinfo_index = i;
@@ -567,7 +567,7 @@ public class PptTopLevel extends Ppt {
     for (int i = 0; i < vis.length; i++) {
       new_value_sets[old_vs_length + i] = ValueSet.factory(vis[i]);
     }
-    new_value_sets = castNonNullDeep(new_value_sets); // issue 154
+    new_value_sets = castNonNullDeep(new_value_sets); // issue 986
     value_sets = new_value_sets;
 
     // Relate the variables to one another
@@ -2812,7 +2812,7 @@ public class PptTopLevel extends Ppt {
     for (int i = 0; i < invs.length; i++) {
       lemmas[i] = new InvariantLemma(invs[i]);
     }
-    lemmas = castNonNullDeep(lemmas); // issue 154
+    lemmas = castNonNullDeep(lemmas); // issue 986
     boolean[] present = new boolean[lemmas.length];
     Arrays.fill(present, 0, present.length, true);
     for (int checking = invs.length - 1; checking >= 0; checking--) {
@@ -3751,7 +3751,7 @@ public class PptTopLevel extends Ppt {
 
       // assert !pv.missingOutOfBounds();
     }
-    pvis = castNonNullDeep(pvis); // issue 154
+    pvis = castNonNullDeep(pvis); // issue 986
     return pvis;
   }
 

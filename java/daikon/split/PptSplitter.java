@@ -309,9 +309,9 @@ public class PptSplitter implements Serializable {
         }
         Arrays.sort(cvis_sorted, VarInfo.IndexComparator.getInstance());
 
-        cvis_non_canonical = castNonNullDeep(cvis_non_canonical); // issue 154
-        cvis = castNonNullDeep(cvis); // issue 154
-        cvis_sorted = castNonNullDeep(cvis_sorted); // issue 154
+        cvis_non_canonical = castNonNullDeep(cvis_non_canonical); // issue 986
+        cvis = castNonNullDeep(cvis); // issue 986
+        cvis_sorted = castNonNullDeep(cvis_sorted); // issue 986
 
         // Look for an equality invariant in the non-canonical slice (if any).
         // Note that only an equality invariant can exist in a non-canonical
@@ -378,7 +378,7 @@ public class PptSplitter implements Serializable {
         }
       } // children loop
 
-      invs = castNonNullDeep(invs); // issue 154
+      invs = castNonNullDeep(invs); // issue 986
 
       // If neither child slice has invariants there is nothing to do
       if ((invs[0].size() == 0) && (invs[1].size() == 0)) {
@@ -525,7 +525,7 @@ public class PptSplitter implements Serializable {
         con_invs[jj] = first[jj];
       }
     }
-    con_invs = castNonNullDeep(con_invs); // issue 154
+    con_invs = castNonNullDeep(con_invs); // issue 986
 
     // Create double-implications for each exclusive invariant
     for (Invariant[] invs : exclusive_invs_vec) {
