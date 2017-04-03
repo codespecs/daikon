@@ -20,6 +20,17 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.5.4 (April 3, 2017)
+
+DynComp and Chicory:
+- Improve support for programs with multiple threads.
+- Improve support for older (Java5) class files.
+
+Kvasir:
+- We updated the underlying Valgrind infrastructure to version 3.12.0.
+
+===========================================================================
+
 5.5.2 (March 1, 2017)
 
 DynComp:
