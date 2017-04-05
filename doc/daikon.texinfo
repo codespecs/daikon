@@ -309,9 +309,9 @@ and source a Daikon startup file.
 We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
-# The full pathname of the directory that contains Daikon
+# The absolute pathname of the directory that contains Daikon
 export DAIKONDIR=@var{daikonparent}/daikon-5.5.3
-# The full pathname of the directory that contains the Java JDK
+# The absolute pathname of the directory that contains the Java JDK
 export JAVA_HOME=@var{/usr/lib/jvm/java}
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
