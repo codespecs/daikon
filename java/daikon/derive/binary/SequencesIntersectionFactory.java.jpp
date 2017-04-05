@@ -78,12 +78,16 @@ public final class SCALARSEQUENCESINTERSECTIONFACTORY extends BinaryDerivationFa
     // We allow double derivations of predicate slices because it may be interesting
     if ((seq1.derived != null)) {
       Derivation derivation = seq1.derived;
-      if (!(derivation instanceof SequencesPredicate)) return null;
+      if (!(derivation instanceof SequencesPredicate)) {
+        return null;
+      }
     }
 
     if ((seq2.derived != null)) {
       Derivation derivation = seq2.derived;
-      if (!(derivation instanceof SequencesPredicate)) return null;
+      if (!(derivation instanceof SequencesPredicate)) {
+        return null;
+      }
     }
 
     if (debug.isLoggable(Level.FINE)) {

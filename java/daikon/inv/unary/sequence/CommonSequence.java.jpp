@@ -43,8 +43,8 @@ import typequals.*;
 */
 
 /**
- * Represents sequences of PRIMITIVE values that contain a common subset. Prints as <code>{e1, e2,
- * e3, ...} subset of x[]</code>.
+ * Represents sequences of PRIMITIVE values that contain a common subset. Prints as
+ * <code>{e1, e2, e3, ...} subset of x[]</code>.
  */
 
 public class CLASSNAME extends SUPERCLASS {
@@ -55,10 +55,10 @@ public class CLASSNAME extends SUPERCLASS {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff CommonSequence invariants should be considered. */
+  /** Boolean. True iff CommonSequence invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  /** Boolean.  Set to true to consider common sequences over hashcodes (pointers). */
+  /** Boolean. Set to true to consider common sequences over hashcodes (pointers). */
   public static boolean dkconfig_hashcode_seqs = false;
 
   static final boolean debugCommonSequence = false;
@@ -110,8 +110,7 @@ public class CLASSNAME extends SUPERCLASS {
   // public Object clone();
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return CLASSSTRING + " " + varNames() + ": "
-      + "elts=\"" + elts;
+    return CLASSSTRING + " " + varNames() + ": elts=\"" + elts;
   }
 
   private String printIntersect(/*>>>@GuardSatisfied CLASSNAME this*/) {
@@ -122,7 +121,7 @@ public class CLASSNAME extends SUPERCLASS {
     String result = "{";
     for (int i = 0; i < intersect.length; i++) {
       result += intersect[i];
-      if (i!=intersect.length - 1) {
+      if (i != intersect.length - 1) {
         result += ", ";
       }
     }
@@ -238,8 +237,8 @@ public class CLASSNAME extends SUPERCLASS {
     for (int i = 0; i < a.length; i++) {
       // if (a[i] in intersect) && !(a[i] in tmp), add a[i] to tmp
       int ii = INDEXOF(intersect, a[i]);
-      if ((ii != -1) &&
-        (INDEXOF(ArraysMDE.subarray(tmp,0,size), a[i]) == -1)) {
+      if ((ii != -1)
+        && (INDEXOF(ArraysMDE.subarray(tmp,0,size), a[i]) == -1)) {
         //System.out.println ("adding " + intersect[ii] + " at " + size);
 
         // Carefully add the existing intersect value and not a[i].  These

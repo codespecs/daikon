@@ -71,8 +71,7 @@ public final class CLASSNAME extends UnaryDerivationFactory {
 
     int num_invs = upperbound - lowerbound + 1 - (suppress_zero ? 1 : 0);
     assert num_invs > 0
-        : "No SequenceInitial invariants to instantiate; "
-            + "lowerbound="
+        : "No SequenceInitial invariants to instantiate; lowerbound="
             + lowerbound
             + ", upperbound="
             + upperbound

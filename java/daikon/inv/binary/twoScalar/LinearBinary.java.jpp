@@ -30,7 +30,6 @@ import daikon.*;
 import daikon.derive.unary.SequenceLength;
 import daikon.inv.*;
 import java.util.*;
-import java.util.logging.Level;
 import plume.*;
 
 /*>>>
@@ -53,7 +52,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff LinearBinary invariants should be considered. */
+  /** Boolean. True iff LinearBinary invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CORECLASS core;
@@ -119,8 +118,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return CLASSSTRING + varNames() + ": "
-      + "falsified=" + falsified
+    return CLASSSTRING + varNames() + ": falsified=" + falsified
       + "; " + core.repr();
   }
 
@@ -143,9 +141,9 @@ public class CLASSNAME extends SUPERCLASS {
    * Merge the invariants in invs to form a new invariant. Each must be a CLASSNAME invariant. The
    * work is done by the LinearBinary core
    *
-   * @param invs        list of invariants to merge. They should all be
-   *                    permuted to match the variable order in parent_ppt.
-   * @param parent_ppt  slice that will contain the new invariant
+   * @param invs list of invariants to merge. They should all be permuted to match the variable
+   *     order in parent_ppt.
+   * @param parent_ppt slice that will contain the new invariant
    */
   public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 
@@ -192,8 +190,10 @@ public class CLASSNAME extends SUPERCLASS {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
     // avoid comparing "size(a)" to "size(a)-1"; yields "size(a)-1 = size(a) - 1"
-    if (var1.isDerived() && (var1.derived instanceof SequenceLength)
-        && var2.isDerived() && (var2.derived instanceof SequenceLength)) {
+    if (var1.isDerived()
+        && (var1.derived instanceof SequenceLength)
+        && var2.isDerived()
+        && (var2.derived instanceof SequenceLength)) {
       @SuppressWarnings("nullness") // checker bug: flow
       /*@NonNull*/ SequenceLength sl1 = (SequenceLength) var1.derived;
       @SuppressWarnings("nullness") // checker bug: flow
@@ -205,13 +205,15 @@ public class CLASSNAME extends SUPERCLASS {
       }
     }
     // avoid comparing "size(a)-1" to anything; should compare "size(a)" instead
-    if (var1.isDerived() && (var1.derived instanceof SequenceLength)
+    if (var1.isDerived()
+        && (var1.derived instanceof SequenceLength)
         && ((SequenceLength) var1.derived).shift != 0) {
       String discardString = "Variables of the form 'size(a)-1' are not compared since 'size(a)' "+
         "will be compared";
       return new DiscardInfo(this, DiscardCode.obvious, discardString);
     }
-    if (var2.isDerived() && (var2.derived instanceof SequenceLength)
+    if (var2.isDerived()
+        && (var2.derived instanceof SequenceLength)
         && ((SequenceLength) var2.derived).shift != 0) {
       String discardString = "Variables of the form 'size(a)-1' are not compared since 'size(a)' "+
         "will be compared";

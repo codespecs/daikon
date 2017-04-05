@@ -58,7 +58,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff PairwiseLinearBinary invariants should be considered. */
+  /** Boolean. True iff PairwiseLinearBinary invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CORECLASS core;
@@ -107,8 +107,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return CLASSSTRING + varNames() + ": "
-      + "falsified=" + falsified
+    return CLASSSTRING + varNames() + ": falsified=" + falsified
       + "; " + core.repr();
   }
 
@@ -144,10 +143,10 @@ public class CLASSNAME extends SUPERCLASS {
     String[] split1 = var1().csharp_array_split();
     String[] split2 = var2().csharp_array_split();
 
-    return "Contract.ForAll(0, " + split1[0] +
-      ".Count(), i => " +
-      core.format_using(OutputFormat.CSHARPCONTRACT, split1[0] + "[i]" + split1[1], split2[0] + "[i]" + split2[1]) +
-      ")";
+    return "Contract.ForAll(0, " + split1[0]
+      + ".Count(), i => "
+      + core.format_using(OutputFormat.CSHARPCONTRACT, split1[0] + "[i]" + split1[1], split2[0] + "[i]" + split2[1])
+      + ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] x_arr, PRIMITIVE /*@Interned*/ [] y_arr, int count) {
@@ -224,9 +223,9 @@ public class CLASSNAME extends SUPERCLASS {
    * Merge the invariants in invs to form a new invariant. Each must be a CLASSNAME invariant. The
    * work is done by the LinearBinary core
    *
-   * @param invs        list of invariants to merge. They should all be
-   *                    permuted to match the variable order in parent_ppt.
-   * @param parent_ppt  slice that will contain the new invariant
+   * @param invs list of invariants to merge. They should all be permuted to match the variable
+   *     order in parent_ppt.
+   * @param parent_ppt slice that will contain the new invariant
    */
   public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 

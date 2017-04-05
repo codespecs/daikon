@@ -48,7 +48,7 @@ import org.checkerframework.dataflow.qual.*;
 /** Intersection between two comparable sequences. */
 public final class SCALARSEQUENCESINTERSECTION extends BinaryDerivation {
   public static final Logger debug =
-      Logger.getLogger("daikon.derive.binary." + SCALARSEQUENCESINTERSECTION_STRING);
+    Logger.getLogger("daikon.derive.binary." + SCALARSEQUENCESINTERSECTION_STRING);
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -57,7 +57,7 @@ public final class SCALARSEQUENCESINTERSECTION extends BinaryDerivation {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff SCALARSEQUENCESINTERSECTION derived variables should be generated. */
+  /** Boolean. True iff SCALARSEQUENCESINTERSECTION derived variables should be generated. */
   public static boolean dkconfig_enabled = false;
 
   public SCALARSEQUENCESINTERSECTION(VarInfo vi1, VarInfo vi2) {
@@ -90,7 +90,7 @@ public final class SCALARSEQUENCESINTERSECTION extends BinaryDerivation {
     int size = 0;
     for (int i = 0; i < val1_array.length; i++) {
       SCALAR v = val1_array[i];
-      if ((ArraysMDE.indexOf(val2_array, v)!=-1)
+      if ((ArraysMDE.indexOf(val2_array, v) != -1)
           && (size == 0 || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v) == -1))) {
         tmp[size++] = v;
       }

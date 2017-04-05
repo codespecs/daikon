@@ -55,8 +55,8 @@ import typequals.*;
 */
 
 /**
- * Represents sequences of PRIMITIVE that contain no duplicate elements. Prints as <code>x[]
- * contains no duplicates</code>.
+ * Represents sequences of PRIMITIVE that contain no duplicate elements. Prints as
+ * <code>x[] contains no duplicates</code>.
  */
 
 public class CLASSNAME extends SUPERCLASS {
@@ -67,7 +67,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff NoDuplicates invariants should be considered. */
+  /** Boolean. True iff NoDuplicates invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   /** Debug tracer. */
@@ -181,10 +181,14 @@ public class CLASSNAME extends SUPERCLASS {
 
   /**
    * Checks to see if this is obvious over the specified variables Implements the following checks:
-   * <pre> (A[] subsequence B[]) ^ (B[] has nodups) &rArr; A[] has nodups (A[] sorted by &gt;) v
-   * (A[] sorted by &lt;) &rArr; A[] has nodups </pre> JHP: The first check is not valid because we
-   * can't rely on transitive checks because of missing (if B[] is missing, A[] could have dups on
-   * those samples),
+   *
+   * <pre>
+   *   (A[] subsequence B[]) ^ (B[] has nodups) &rArr; A[] has nodups
+   *   (A[] sorted by &gt;) v (A[] sorted by &lt;) &rArr; A[] has nodups
+   * </pre>
+   *
+   * JHP: The first check is not valid because we can't rely on transitive checks because of missing
+   * (if B[] is missing, A[] could have dups on those samples),
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {

@@ -79,7 +79,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff LinearTernary invariants should be considered. */
+  /** Boolean. True iff LinearTernary invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public static final boolean debugLinearTernary = false;
@@ -311,8 +311,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return CLASSSTRING + varNames() + ": "
-      + "falsified=" + falsified
+    return CLASSSTRING + varNames() + ": falsified=" + falsified
       + "; " + core.repr();
   }
 
@@ -370,8 +369,8 @@ public class CLASSNAME extends SUPERCLASS {
     }
 
     if (core.a == 0 || core.b == 0 || core.c == 0) {
-      return new DiscardInfo(this, DiscardCode.obvious, "If a coefficient is 0, a LinearBinary should" +
-                             " exist over the other two variables");
+      return new DiscardInfo(this, DiscardCode.obvious, "If a coefficient is 0, a LinearBinary should"
+                             + " exist over the other two variables");
     }
 
     return null;
@@ -424,9 +423,9 @@ public class CLASSNAME extends SUPERCLASS {
    * Merge the invariants in invs to form a new invariant. Each must be a CLASSNAME invariant. The
    * work is done by the LinearTernary core
    *
-   * @param invs        list of invariants to merge. They should all be
-   *                    permuted to match the variable order in parent_ppt.
-   * @param parent_ppt  slice that will contain the new invariant
+   * @param invs list of invariants to merge. They should all be permuted to match the variable
+   *     order in parent_ppt.
+   * @param parent_ppt slice that will contain the new invariant
    */
   public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 

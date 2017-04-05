@@ -75,9 +75,7 @@ import typequals.*;
 // planarintervention focuses on the full ternary invariant.
 
 @SuppressWarnings("nullness") // ***** TEMPORARY:  def_points is confused (is packed initially with non-nulls at beginning, but is not all non-nulls; and later may not be packed); needs review/refactoring/rewriting
-public final class CLASSNAME
-  implements Serializable, Cloneable
-{
+public final class CLASSNAME implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -493,7 +491,7 @@ public final class CLASSNAME
    * Attempts to fit the points in def_point to a plane and calculates the coefficients (a, b, c, d)
    * if possible.
    *
-   * @param def_point  array of points. Must have at least 3 elements.
+   * @param def_point array of points. Must have at least 3 elements.
    *
    * @return the status of the invariant
    *     (whether the plane fitting was successful)
@@ -537,8 +535,8 @@ public final class CLASSNAME
     // have been enough samples; but a random varying third
     // variable can create enough samples.)  Also, throw out the
     // invariant if any of the coefficients would be not-a-number.
-    if ( a == 0|| b == 0 || c == 0 ||
-        Double.isNaN(a) || Double.isNaN(b) || Double.isNaN(c)) {
+    if ( a == 0|| b == 0 || c == 0
+        || Double.isNaN(a) || Double.isNaN(b) || Double.isNaN(c)) {
 
       wrapper.log("problematic coefficient: invariant falsified");
       return InvariantStatus.FALSIFIED;
@@ -550,11 +548,11 @@ public final class CLASSNAME
 
         // Global.fuzzy.eq works by comparing ratios between numbers,
         // so comparing the sum of everything to 0 won't work.
-        //  wrapper.log("point: " + def_point[i].x + " " +
-        //  def_point[i].y + " " + def_point[i].z);
+        //  wrapper.log("point: " + def_point[i].x + " "
+        //  + def_point[i].y + " " + def_point[i].z);
         //  wrapper.log("compare: " + -c * def_point[i].z);
-        //  wrapper.log( "to: " + (a*def_point[i].x +
-        //  b*def_point[i].y + d));
+        //  wrapper.log( "to: " + (a*def_point[i].x
+        //  + b*def_point[i].y + d));
 
         wrapper.log("Trying at index %s: 0 != %s*%s+%s*%s+%s*%s+%s",
                      i, a, def_point[i].x,
@@ -565,8 +563,7 @@ public final class CLASSNAME
         if (!EQUAL(-d,
                     a * def_point[i].x + b * def_point[i].y + c * def_point[i].z)) {
           if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
-            wrapper.log(debug, "Destroying at index " + i + ": "
-                         + "0 != "
+            wrapper.log(debug, "Destroying at index " + i + ": 0 != "
                          + a + "*" + def_point[i].x
                          + "+" + b + "*" + def_point[i].y + "+" + c
                          + "*" + def_point[i].z
@@ -595,7 +592,7 @@ public final class CLASSNAME
    * classification (line_flag) and coefficients (coefficients[]) if possible. If not (points in
    * def_point form a plane) resets line_flag to Flag.NO_LINE and coefficients[] elements to -999.
    *
-   * @param def_point  array of points. Must have at least 2 elements.
+   * @param def_point array of points. Must have at least 2 elements.
    *
    */
   private void linearIntervention(/*@Nullable*/ Point[] def_point) {
@@ -633,8 +630,9 @@ public final class CLASSNAME
    * coefficients[]). Method should only be called if the current points define a line (line_flag is
    * not Flag.NO_LINE)
    *
-   * @param x,y,z  x,y,z components of the point
-   *
+   * @param x x component of the point
+   * @param x y component of the point
+   * @param x z component of the point
    */
   private boolean try_points_linear(double x, double y, double z) {
 
@@ -670,11 +668,10 @@ public final class CLASSNAME
   /**
    * Returns the two points that have the maximum separation in pa.
    *
-   * @param ps  array of points. Must have at least 2 elements. Can be any
-   *            length and can contain nulls (which will be ignored).
-   *
-   * @return a 2-element array containing the most-separated elements.
-   *         Returns null if no pair of elements is NaN-free.
+   * @param ps array of points. Must have at least 2 elements. Can be any length and can contain
+   *      nulls (which will be ignored).
+   * @return a 2-element array containing the most-separated elements. Returns null if no pair of
+   *      elements is NaN-free.
    */
   private Point /*@Nullable*/ [] maxsep_doubles(/*@Nullable*/ Point[] pa) {
 
@@ -714,7 +711,7 @@ public final class CLASSNAME
    * Calculates the coefficients for the line in 3D
    * and sets the coefficients[] by side effect.
    *
-   * @param points  2 points to use to calculate the coefficents
+   * @param points 2 points to use to calculate the coefficents
    */
   //
   //  the line can fall under 3 categories
@@ -863,19 +860,19 @@ public final class CLASSNAME
       c = (min_c + max_c) / 2;
       d = (min_d + max_d) / 2;
       if (Invariant.logOn() || debug.isLoggable(Level.FINE)) {
-        wrapper.log(debug, wrapper.ppt.name() + ": Trying new a (" + a +
-                     "), b (" + b + "), c (" + c + "), and d (" + d + ")");
+        wrapper.log(debug, wrapper.ppt.name() + ": Trying new a (" + a
+                     + "), b (" + b + "), c (" + c + "), and d (" + d + ")");
       }
       wrapper.log("min max: Trying new a (%s), b (%s), c (%s), and d (%s)",
                    a, b, c, d);
       // if the new coefficients are 'equal' to their min and max and
       // this point fits, then this new equation is good enough both
       // for existing points and the new point.
-      if (Global.fuzzy.eq(a, min_a) && Global.fuzzy.eq(a, max_a) &&
-          Global.fuzzy.eq(b, min_b) && Global.fuzzy.eq(b, max_b) &&
-          Global.fuzzy.eq(c, min_c) && Global.fuzzy.eq(c, max_c) &&
-          Global.fuzzy.eq(d, min_d) && Global.fuzzy.eq(d, max_d) &&
-          EQUAL(-d, a * x + b * y + c * z)) {
+      if (Global.fuzzy.eq(a, min_a) && Global.fuzzy.eq(a, max_a)
+          && Global.fuzzy.eq(b, min_b) && Global.fuzzy.eq(b, max_b)
+          && Global.fuzzy.eq(c, min_c) && Global.fuzzy.eq(c, max_c)
+          && Global.fuzzy.eq(d, min_d) && Global.fuzzy.eq(d, max_d)
+          && EQUAL(-d, a * x + b * y + c * z)) {
         if (debug.isLoggable(Level.FINE)) {
           debug.fine(wrapper.ppt.name() + ": New a (" + a + ") and b ("
                       + b + ") and c (" + c + ")");
@@ -893,8 +890,8 @@ public final class CLASSNAME
   /**
    * Calculates the separation between p1 and p2.
    *
-   * @param p1  first point
-   * @param p2  second point
+   * @param p1 first point
+   * @param p2 second point
    *
    * @return the distance between p1 and p2, or 0 if either point is null, or NaN if either point
    * contains a NaN
@@ -924,14 +921,10 @@ public final class CLASSNAME
    * Calculates the three points that have the maximum separation in pa and places them as the first
    * three elements of pa.
    *
-   * @param pa  array of points. Must have at least 3 elements. Can be any
-   *            length and can contain nulls (which will be ignored).
-   *            Is side-effected so that the first three elements contain the
-   *            points with the maximum total separation; this may introduce
-   *            duplicates into the array.
-   *            The first three elements are null if no triple of elements
-   *            is NaN-free.
-   *
+   * @param pa array of points. Must have at least 3 elements. Can be any length and can contain
+   *     nulls (which will be ignored). Is side-effected so that the first three elements contain
+   *     the points with the maximum total separation; this may introduce duplicates into the array.
+   *     The first three elements are null if no triple of elements is NaN-free.
    * @return the maximum separation found
    */
  double maxsep_triples(/*@Nullable*/ Point[] pa) {
@@ -1011,8 +1004,8 @@ public final class CLASSNAME
    * Calculates the coefficients (a, b, c) and constant (d) for the equation ax + by + cz + d = 0
    * using the first three points in points.
    *
-   * @param points  array of points to use to calculate the coefficents. Only
-   *                the first three points (all of which must be non-null) are used.
+   * @param points array of points to use to calculate the coefficents. Only the first three points
+   *     (all of which must be non-null) are used.
    *
    * @return a four element array where a is the first element, b the second, c the third, and d is
    * the fourth. All elements are mutually prime, integers and a is positive.
@@ -1062,10 +1055,10 @@ public final class CLASSNAME
     // If the gcd is 1, no harm done -- divide by 1.
     // Type is double to ensure floating-point division.
     double myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var) , MathMDE.gcd(k_var, Stand_const));
-    double standard_i_var = i_var/myGCD;
-    double standard_j_var = j_var/myGCD;
-    double standard_k_var = k_var/myGCD;
-    double standard_Stand_const = Stand_const/myGCD;
+    double standard_i_var = i_var / myGCD;
+    double standard_j_var = j_var / myGCD;
+    double standard_k_var = k_var / myGCD;
+    double standard_Stand_const = Stand_const / myGCD;
 
     if (wrapper != null) {
       wrapper.log("Preliminary: %s %s GCD: %s", i_var, j_var, MathMDE.gcd(i_var, j_var));
@@ -1107,8 +1100,7 @@ public final class CLASSNAME
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return CLASSSTRING + wrapper.varNames() + ": "
-      + "a=" + a
+    return CLASSSTRING + wrapper.varNames() + ": a=" + a
       + ",b=" + b
       + ",c=" + c
       + ",d=" + d
@@ -1126,7 +1118,7 @@ public final class CLASSNAME
   public String cache_repr() {
     StringBuffer result = new StringBuffer();
     for (int i = 0; i < MINTRIPLES; i++) {
-      if (i!=0) result.append("; ");
+      if (i != 0) result.append("; ");
       result.append(point_repr(def_points[i]));
     }
     return result.toString();
@@ -1278,8 +1270,8 @@ public final class CLASSNAME
 
   /*@Pure*/
   public boolean isExclusiveFormula(CLASSNAME other) {
-    if (!isActive() ||
-        !other.isActive()) {
+    if (!isActive()
+        || !other.isActive()) {
       return false;
     }
 
@@ -1304,9 +1296,8 @@ public final class CLASSNAME
    * enough points, will have each of their points applied to that invariant. The merged core is
    * returned. Null is returned if the cores don't describe the same plane
    *
-   * @param cores   list of LinearTernary cores to merge. They should
-   *                all be permuted to match the variable order in
-   *                ppt.
+   * @param cores list of LinearTernary cores to merge. They should all be permuted to match the
+   *     variable order in ppt.
    */
   public /*@Nullable*/ CLASSNAME merge(List<CLASSNAME> cores, Invariant wrapper) {
 

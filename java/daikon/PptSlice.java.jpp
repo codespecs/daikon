@@ -78,7 +78,7 @@ public final class PPTSLICE1 extends PptSlice {
 
   public static final Logger debugMerge = Logger.getLogger("daikon.PptSlice.merge");
 
-  /** Create a new PPTSLICE1.  The var_infos must be in varinfo_index order. */
+  /** Create a new PPTSLICE1. The var_infos must be in varinfo_index order. */
   public PPTSLICE1(PptTopLevel parent, VarInfo[] var_infos) {
 
     super(parent, var_infos);
@@ -402,10 +402,10 @@ public final class PPTSLICE1 extends PptSlice {
         }
         if (PrintInvariants.print_discarded_invariants && inv.is_false()) {
           DiscReasonMap.put(inv, DiscardCode.bad_sample,
-                            "Falsified from sample: " +
-                            var_infos[0].name() +
-                            " = " + val1 + "," + var_infos[1].name() +
-                            " = " + ArraysMDE.toString(val2));
+                            "Falsified from sample: "
+                            + var_infos[0].name()
+                            + " = " + val1 + "," + var_infos[1].name()
+                            + " = " + ArraysMDE.toString(val2));
         }
       }
     } else {
@@ -801,13 +801,13 @@ public final class PPTSLICE1 extends PptSlice {
     if (ppt.constants != null) {
       #if defined(ARITY1)
         if (ppt.constants.is_missing(vis[0]) && !vis[0].missingOutOfBounds()) {
-          return (true);
+          return true;
         }
       #elif defined(ARITY2)
         if ((ppt.constants.is_missing(vis[0]) || ppt.constants.is_missing(vis[1]))
             && !vis[0].missingOutOfBounds()
             && !vis[1].missingOutOfBounds()) {
-          return (true);
+          return true;
         }
       #elif defined(ARITY3)
         if ((ppt.constants.is_missing(vis[0])
@@ -816,7 +816,7 @@ public final class PPTSLICE1 extends PptSlice {
             && !vis[0].missingOutOfBounds()
             && !vis[1].missingOutOfBounds()
             && !vis[2].missingOutOfBounds()) {
-          return (true);
+          return true;
         }
       #endif
     }

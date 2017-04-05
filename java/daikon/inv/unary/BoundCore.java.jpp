@@ -125,9 +125,7 @@ import org.checkerframework.dataflow.qual.*;
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
 
-public class LOWERBOUNDCORE
-  implements Serializable, Cloneable
-{
+public class LOWERBOUNDCORE implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -178,8 +176,8 @@ public class LOWERBOUNDCORE
       + ", num_" + MINSTR + "2=" + NUM_MIN2
       + ", " + MINSTR + "3=" + MIN3
       + ", num_" + MINSTR + "3=" + NUM_MIN3
-      + ", " + MAXSTR + "=" + MAX + ", range=" + range + ", " +
-      "avg_samp=" + two_decimals.format(avg_samples_per_val);
+      + ", " + MAXSTR + "=" + MAX + ", range=" + range + ", "
+      + "avg_samp=" + two_decimals.format(avg_samples_per_val);
   }
 
   private double calc_avg_samples_per_val(/*>>>@GuardSatisfied LOWERBOUNDCORE this,*/ PRIMITIVE modulus, double range) {

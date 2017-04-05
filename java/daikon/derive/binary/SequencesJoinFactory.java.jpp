@@ -37,12 +37,14 @@ public final class CLASSNAME extends BinaryDerivationFactory {
 
   /** Debug tracer. */
   public static final Logger debug =
-      Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
+    Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
 
   public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo var1, VarInfo var2) {
 
     boolean enabled = SEQUENCESJOIN.dkconfig_enabled;
-    if (!enabled) return null;
+    if (!enabled) {
+      return null;
+    }
 
     if (!(var1.rep_type.isArray()) || !(var2.rep_type.isArray())) {
       return null;
@@ -53,8 +55,8 @@ public final class CLASSNAME extends BinaryDerivationFactory {
       return null;
     }
 
-    /*    if (!(var1.rep_type == ProglangType.INT_ARRAY)  ||
-           !(var2.rep_type == ProglangType.INT_ARRAY)) return null;
+    /*    if (!(var1.rep_type == ProglangType.INT_ARRAY) 
+           || !(var2.rep_type == ProglangType.INT_ARRAY)) return null;
     */
 
     if (var1.derived != null || var2.derived != null) {
@@ -62,7 +64,9 @@ public final class CLASSNAME extends BinaryDerivationFactory {
       return null;
     }
 
-    if (var1.name().equals(var2.name())) return null;
+    if (var1.name().equals(var2.name())) {
+      return null;
+    }
 
     if (!var1.is_field() || !var2.is_field()) {
       return null;

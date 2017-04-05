@@ -247,17 +247,14 @@ import typequals.*;
  * <code>x[] EQUALShtml y[] lexically</code>.
  *
 #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
- * If order doesn't matter for each variable, then the sequences are compared to see if they are set
- * equivalent. Prints as <code>x[] == y[]</code>.
+ * <p>If order doesn't matter for each variable, then the sequences are compared to see if they are
+ * set equivalent. Prints as <code>x[] == y[]</code>.
  *
 #endif
- * If the auxiliary information (e.g., order matters) doesn't match between two variables, then this
- * invariant cannot apply to those variables.
+ * <p>If the auxiliary information (e.g., order matters) doesn't match between two variables, then
+ * this invariant cannot apply to those variables.
  */
-public class SEQSEQINTEQUAL
-  extends SUPERCLASS
-  implements Comparison
-{
+public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -265,7 +262,7 @@ public class SEQSEQINTEQUAL
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff SEQSEQINTEQUAL invariants should be considered. */
+  /** Boolean. True iff SEQSEQINTEQUAL invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /** Debugging logger. */
@@ -320,18 +317,19 @@ public class SEQSEQINTEQUAL
 
     #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       // This intentonally checks dimensions(), not pseudoDimensions.
-      boolean only_eq = (!((type1.dimensions() == 1)
-                            && type1.BASE_IS_TYPE
-                            && (type2.dimensions() == 1)
-                            && type2.BASE_IS_TYPE));
+      boolean only_eq =
+        (!((type1.dimensions() == 1)
+           && type1.BASE_IS_TYPE
+           && (type2.dimensions() == 1)
+           && type2.BASE_IS_TYPE));
       if (only_eq) {
         return false;
       }
 
       // non equality comparisons don't make sense if the arrays aren't ordered
-      if (!var1.aux.hasOrder()
-        || !var2.aux.hasOrder())
+      if (!var1.aux.hasOrder() || !var2.aux.hasOrder()) {
         return false;
+      }
 
     #endif
 
@@ -340,8 +338,7 @@ public class SEQSEQINTEQUAL
 
   /** Instantiates the invariant on the specified slice */
   protected SEQSEQINTEQUAL instantiate_dyn(/*>>> @Prototype SEQSEQINTEQUAL this,*/ PptSlice slice) {
-    boolean has_order = slice.var_infos[0].aux.hasOrder()
-                      && slice.var_infos[1].aux.hasOrder();
+    boolean has_order = slice.var_infos[0].aux.hasOrder() && slice.var_infos[1].aux.hasOrder();
     return new SEQSEQINTEQUAL(slice, has_order);
   }
 
@@ -354,8 +351,7 @@ public class SEQSEQINTEQUAL
   }
 
   public String repr(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
-    return SEQSEQINTEQUALstring + varNames() + ": "
-      + ",orderMatters=" + orderMatters
+    return SEQSEQINTEQUALstring + varNames() + ": ,orderMatters=" + orderMatters
       + ",enoughSamples=" + enoughSamples()
       ;
   }
@@ -372,9 +368,7 @@ public class SEQSEQINTEQUAL
       String name1 = var1().name_using(format);
       String name2 = var2().name_using(format);
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
-      String lexically = (var1().aux.hasOrder()
-                          ? " (lexically)"
-                          : "");
+      String lexically = (var1().aux.hasOrder() ? " (lexically)" : "");
       return name1 + " " + EQUALSstring + " " + name2 + lexically;
       #else
       return name1 + " " + EQUALSstring + " " + name2;
@@ -406,10 +400,13 @@ public class SEQSEQINTEQUAL
       String name1 = var1().name_using(format);
       String name2 = var2().name_using(format);
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
-      return "daikon.Quant." + (var1().aux.hasOrder()
-                                ? EQUALSstringDBC
-                                : "setEqual" )
-        + "(" + name1 + ", " + name2 + ")";
+      return "daikon.Quant."
+        + (var1().aux.hasOrder() ? EQUALSstringDBC : "setEqual" )
+        + "("
+        + name1
+        + ", "
+        + name2
+        + ")";
       #else
       return "daikon.Quant." + EQUALSstringDBC + "(" + name1 + ", " + name2 + ")";
       #endif
@@ -434,9 +431,9 @@ public class SEQSEQINTEQUAL
                            getClass().getSimpleName(), this,
                            Arrays.toString(var1_name), Arrays.toString(var2_name), format());
     }
-    return "(|lexical-" + EQUALSstring + "| " +
-      var1_name[0] + " " + var1_name[1] + " " + var1_name[2] + " " +
-      var2_name[0] + " " + var2_name[1] + " " + var2_name[2] + ")";
+    return "(|lexical-" + EQUALSstring + "| "
+      + var1_name[0] + " " + var1_name[1] + " " + var1_name[2] + " "
+      + var2_name[0] + " " + var2_name[1] + " " + var2_name[2] + ")";
   }
 
   private String format_simplify_explicit(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
@@ -445,8 +442,8 @@ public class SEQSEQINTEQUAL
       // are elementwise equal.
       String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(),
                                                  var1(), var2());
-      return form[0] +
-        "(EQ " + form[1] + " " + form[2] + ")" + form[3];
+      return form[0]
+        + "(EQ " + form[1] + " " + form[2] + ")" + form[3];
     #else
       String classname = this.getClass().toString().substring(6);
       return "warning: method " + classname
@@ -454,7 +451,8 @@ public class SEQSEQINTEQUAL
     #endif
   }
 
-  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
+  public InvariantStatus check_modified(
+      PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons
     /// if one is missing, but not if one is zero-length.
     // // Don't make comparisons with empty arrays.
@@ -517,9 +515,8 @@ public class SEQSEQINTEQUAL
   }
 
   /**
-   *  Since this invariant can be a postProcessed equality, we have to
-   *  handle isObvious especially to avoid circular isObvious
-   *  relations.
+   * Since this invariant can be a postProcessed equality, we have to handle isObvious especially to
+   * avoid circular isObvious relations.
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
@@ -531,9 +528,8 @@ public class SEQSEQINTEQUAL
   }
 
   /**
-   *  Since this invariant can be a postProcessed equality, we have to
-   *  handle isObvious especially to avoid circular isObvious
-   *  relations.
+   * Since this invariant can be a postProcessed equality, we have to handle isObvious especially to
+   * avoid circular isObvious relations.
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
@@ -582,8 +578,7 @@ public class SEQSEQINTEQUAL
 
       // Check to see if the same Pairwise invariant exists
       DiscardInfo di = new DiscardInfo(this, DiscardCode.obvious, "");
-      if (ppt.parent.check_implied(di, vis[0], vis[1],
-                                              PAIRWISEINTEQUAL.get_proto())) {
+      if (ppt.parent.check_implied(di, vis[0], vis[1], PAIRWISEINTEQUAL.get_proto())) {
         di.add_implied_vis(vis);
         return di;
       }
@@ -635,8 +630,7 @@ public class SEQSEQINTEQUAL
           return new DiscardInfo(this, DiscardCode.obvious, "Supersequences are related lexically");
         }
         VarInfo[] avis = {arr1, arr2};
-        debug.log("looking for " + avis[0].name()
-             + " " + avis[1].name());
+        debug.log("looking for " + avis[0].name() + " " + avis[1].name());
         PptSlice slice = this.ppt.parent.findSlice_unordered(avis);
         debug.log("Found ppt " + slice);
         if (slice != null) {
@@ -690,8 +684,10 @@ public class SEQSEQINTEQUAL
             debug.log("Obvious SubSequence Dynamically");
           }
           assert ppt != null;
-          return new DiscardInfo(this, DiscardCode.obvious, "Both vars are derived and one is a subsequence "
-                                 + "of the other");
+          return new DiscardInfo(
+              this,
+              DiscardCode.obvious,
+              "Both vars are derived and one is a subsequence of the other");
         }
       }
 
@@ -739,19 +735,18 @@ public class SEQSEQINTEQUAL
   }
 
   /** Definition of this invariant (the suppressee) */
-  private static NISuppressee suppressee
-    = new NISuppressee(SEQSEQINTEQUAL.class, 2);
+  private static NISuppressee suppressee = new NISuppressee(SEQSEQINTEQUAL.class, 2);
 
   #if defined(PAIRWISEINTEQUAL)
     // Suppressor definitions (used in suppressions below)
-    private static NISuppressor
-      v1_pw_v2 = new NISuppressor(0, 1, PAIRWISEINTEQUAL.class);
+    private static NISuppressor v1_pw_v2 = new NISuppressor(0, 1, PAIRWISEINTEQUAL.class);
 
     private static NISuppressionSet suppressions =
-      new NISuppressionSet(new NISuppression[] {
-        // pairwise => lexical
-        new NISuppression(v1_pw_v2, suppressee),
-      });
+      new NISuppressionSet(
+          new NISuppression[] {
+            // pairwise => lexical
+            new NISuppression(v1_pw_v2, suppressee),
+          });
   #else
     private static /*@Nullable*/ NISuppressionSet suppressions = null;
   #endif

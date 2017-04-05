@@ -160,7 +160,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff EltwiseIntComparison invariants should be considered. */
+  /** Boolean. True iff EltwiseIntComparison invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   static final boolean debugEltwiseIntComparison = false;
@@ -213,8 +213,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return CLASSSTRING + varNames() + ": "
-      + "falsified=" + falsified;
+    return CLASSSTRING + varNames() + ": falsified=" + falsified;
   }
 
   /*@SideEffectFree*/

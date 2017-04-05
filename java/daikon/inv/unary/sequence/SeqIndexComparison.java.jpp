@@ -166,12 +166,12 @@ public class CLASSNAME extends SUPERCLASS {
   static final long serialVersionUID = 20040203L;
 
   /** Debug tracer. */
-  public static final Logger debug
-    = Logger.getLogger("daikon.inv.unary.sequence." + STRING(CLASSNAME));
+  public static final Logger debug =
+    Logger.getLogger("daikon.inv.unary.sequence." + STRING(CLASSNAME));
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff CLASSNAME invariants should be considered. */
+  /** Boolean. True iff CLASSNAME invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   private /*@Prototype*/ CLASSNAME() {
@@ -249,18 +249,19 @@ public class CLASSNAME extends SUPERCLASS {
       NISuppressor v1_lt_v2 = new NISuppressor(0, SEQ_INDEX_LESSTHAN.class);
       #endif
 
-      suppressions = new NISuppressionSet(new NISuppression[]{
-        #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
-          // (v1[i] == i) ==> v1[i] <= i
-          new NISuppression(v1_eq_v2, suppressee),
-          // (v1[i] < i) ==> v1[i] <= i
-          new NISuppression(v1_lt_v2, suppressee),
-        #elif defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
-          // (v1[i] == i) ==> v1[i] >= i
-          new NISuppression(v1_eq_v2, suppressee),
-          // (v1[i] > i) ==> v1[i] >= i
-          new NISuppression(v1_gt_v2, suppressee),
-        #endif
+      suppressions = new NISuppressionSet(
+          new NISuppression[]{
+            #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
+              // (v1[i] == i) ==> v1[i] <= i
+              new NISuppression(v1_eq_v2, suppressee),
+              // (v1[i] < i) ==> v1[i] <= i
+              new NISuppression(v1_lt_v2, suppressee),
+            #elif defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
+              // (v1[i] == i) ==> v1[i] >= i
+              new NISuppression(v1_eq_v2, suppressee),
+              // (v1[i] > i) ==> v1[i] >= i
+              new NISuppression(v1_gt_v2, suppressee),
+            #endif
         });
     }
     return suppressions;
@@ -394,9 +395,9 @@ public class CLASSNAME extends SUPERCLASS {
         // The factor of 2 is a hack, but this seems too stringent otherwise
         confidence_one_nonequal = Math.min(1.0, 2.0 * confidence_one_nonequal);
 
-        assert ! Double.isNaN(confidence_one_nonequal) &&
-                          confidence_one_nonequal >= 0 &&
-                          confidence_one_nonequal <= 1
+        assert ! Double.isNaN(confidence_one_nonequal)
+                          && confidence_one_nonequal >= 0
+                          && confidence_one_nonequal <= 1
         : "overlap=" + overlap
                           + ", range1=" + range1
                           + ", range2=" + range2
@@ -431,6 +432,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   /**
    * Checks to see if this is obvious over the specified variables Implements the following checks:
+   *
    * <pre>
    *    (A[] subsequence B[]) ^ (B[i] op i) &rArr; A[i] op i
    * </pre>

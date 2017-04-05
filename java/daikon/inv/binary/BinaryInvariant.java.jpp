@@ -67,10 +67,10 @@
 
 package daikon.inv.binary.PACKAGE;
 
-import daikon.inv.*;
-import daikon.inv.binary.*;
 import daikon.*;
+import daikon.inv.*;
 import daikon.inv.InvariantStatus;
+import daikon.inv.binary.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -82,22 +82,19 @@ import typequals.*;
 /**
  * Base class for invariants over two variables of type PRIMITIVENONCOMMENT.
  * EXAMPLE_INVARIANT
- * <p>
  *
- * Provides a simpler mechanism for non-symmetric invariants to function over both permutations of
- * their variables.
- * <p>
+ * <p>Provides a simpler mechanism for non-symmetric invariants to function over both permutations
+ * of their variables.
  *
- * Non-symmetric invariants must instantiate two objects (one for each argument order). This is
+ * <p>Non-symmetric invariants must instantiate two objects (one for each argument order). This is
  * tracked by the variable swap. They must always access their variables via the methods var1() and
  * var2() which return the correct variable (based on the swap setting). No other work is necessary,
  * all permuations and resurrection is handled here.
- * <p>
  *
- * Symmetric invariants should define symmetric() to return true or override resurrect_done_swapped
- * to do nothing. Non-symmetric invariants that use converse operations (eg, less than and greater
- * than) rather than argument swapping should override resurrect_done_swapped to return the correct
- * class.
+ * <p>Symmetric invariants should define symmetric() to return true or override
+ * resurrect_done_swapped to do nothing. Non-symmetric invariants that use converse operations (eg,
+ * less than and greater than) rather than argument swapping should override resurrect_done_swapped
+ * to return the correct class.
  */
 public abstract class CLASSNAME extends BinaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -124,15 +121,12 @@ public abstract class CLASSNAME extends BinaryInvariant {
     }
 
     #if defined(TYPELONG) || defined(TYPEDOUBLE) || defined(TYPESTRING)
-      boolean dim_ok = !vis[0].file_rep_type.isArray()
-                        && !vis[1].file_rep_type.isArray();
+      boolean dim_ok = !vis[0].file_rep_type.isArray() && !vis[1].file_rep_type.isArray();
     #else
-      boolean dim_ok = vis[0].file_rep_type.isArray()
-                        && vis[1].file_rep_type.isArray();
+      boolean dim_ok = vis[0].file_rep_type.isArray() && vis[1].file_rep_type.isArray();
     #endif
 
-    return (dim_ok && vis[0].file_rep_type.BASE_IS_TYPE
-            && vis[1].file_rep_type.BASE_IS_TYPE);
+    return (dim_ok && vis[0].file_rep_type.BASE_IS_TYPE && vis[1].file_rep_type.BASE_IS_TYPE);
   }
 
   /** Returns whether or not the variable order is currently swapped for this invariant. */
@@ -213,8 +207,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
     }
   }
 
-  public InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index,
-                               int count) {
+  public InvariantStatus check(
+      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;
@@ -236,7 +230,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
     }
   }
 
-  public InvariantStatus add(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
+  public InvariantStatus add(
+      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;
@@ -263,24 +258,22 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * invariant. Does not change the state of the invariant.
    *
    * @param count how many identical samples were observed in a row. For example, three calls to
-   * check_modified with a count parameter of 1 is equivalent to one call to check_modified with a
-   * count parameter of 3.
+   *     check_modified with a count parameter of 1 is equivalent to one call to check_modified with
+   *     a count parameter of 3.
    * @return whether or not the sample is consistent with the invariant
    */
-  public abstract InvariantStatus check_modified(PRIMITIVE v1,
-                                                 PRIMITIVE v2, int count);
+  public abstract InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, int count);
 
-  public InvariantStatus check_unmodified(PRIMITIVE v1,
-                                          PRIMITIVE v2, int count) {
+  public InvariantStatus check_unmodified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
-  /** Default implementation simply calls check.  Subclasses can override. */
+  /** Default implementation simply calls check. Subclasses can override. */
   public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     return (check_modified(v1, v2, count));
   }
 
-  /** By default, do nothing if the value hasn't been seen yet.  Subclasses can override this. */
+  /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
   public InvariantStatus add_unmodified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }

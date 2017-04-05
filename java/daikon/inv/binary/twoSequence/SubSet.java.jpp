@@ -65,8 +65,8 @@ import typequals.*;
 
 /**
  * Represents two sequences of LONG values where one of the sequences is a subset of the other; that
- * is each element of one sequence appears in the other. Prints as either <code>x[] is a subset of
- * y[]</code> or as <code>x[] is a superset of y[]</code>.
+ * is each element of one sequence appears in the other. Prints as either
+ * <code>x[] is a subset of y[]</code> or as <code>x[] is a superset of y[]</code>.
  */
 public class SUBSET extends TWOSEQUENCE {
   // We are Serializable, so we specify a version to allow changes to
@@ -79,7 +79,7 @@ public class SUBSET extends TWOSEQUENCE {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff SubSet invariants should be considered. */
+  /** Boolean. True iff SubSet invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   protected SUBSET(PptSlice ppt) {
@@ -144,8 +144,7 @@ public class SUBSET extends TWOSEQUENCE {
   }
 
   public String repr(/*>>>@GuardSatisfied SUBSET this*/) {
-    return SUBSETSTRING + varNames() + ": "
-      + ",falsified=" + falsified;
+    return SUBSETSTRING + varNames() + ": ,falsified=" + falsified;
   }
 
   /*@SideEffectFree*/
@@ -213,9 +212,9 @@ public class SUBSET extends TWOSEQUENCE {
                            Arrays.toString(sub_name), Arrays.toString(super_name), format());
     }
 
-    return "(subset " +
-      sub_name[0] + " " + sub_name[1] + " " + sub_name[2] + " " +
-      super_name[0] + " " + super_name[1] + " " + super_name[2] + ")";
+    return "(subset "
+      + sub_name[0] + " " + sub_name[1] + " " + sub_name[2] + " "
+      + super_name[0] + " " + super_name[1] + " " + super_name[2] + ")";
   }
 
   private String format_simplify_explicit(/*>>>@GuardSatisfied SUBSET this*/) {
@@ -380,12 +379,13 @@ public class SUBSET extends TWOSEQUENCE {
 
       // sub/super set suppressions.  We have both SeqSeq and Pairwise
       // as suppressions because each can be enabled separately.
-      suppressions = new NISuppressionSet(new NISuppression[] {
-          // a[] == b[] ==> a[] sub/superset b[]
-          new NISuppression(v1_eq_v2, suppressee),
-          // a[] == b[] ==> a[] sub/superset b[]
-          new NISuppression(v1_pw_eq_v2, suppressee),
-        });
+      suppressions = new NISuppressionSet(
+          new NISuppression[] {
+              // a[] == b[] ==> a[] sub/superset b[]
+              new NISuppression(v1_eq_v2, suppressee),
+              // a[] == b[] ==> a[] sub/superset b[]
+              new NISuppression(v1_pw_eq_v2, suppressee),
+          });
     }
 
     return suppressions;

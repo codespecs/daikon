@@ -70,7 +70,7 @@ import typequals.*;
  * null</code> for pointer types.
  */
 #else
-/** Represents double scalars that are non-zero.  Prints as <code>x != 0</code>. */
+/** Represents double scalars that are non-zero. Prints as <code>x != 0</code>. */
 #endif
 public class NONZERO extends SINGLESCALAR {
   // We are Serializable, so we specify a version to allow changes to
@@ -80,7 +80,7 @@ public class NONZERO extends SINGLESCALAR {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff NONZERO invariants should be considered. */
+  /** Boolean. True iff NONZERO invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   /** Debug tracer. */
@@ -116,9 +116,9 @@ public class NONZERO extends SINGLESCALAR {
       return false;
     }
 
-    if (vis[0].aux.isStruct() ||
-        vis[0].aux.isNonNull() ||
-        !vis[0].aux.hasNull())
+    if (vis[0].aux.isStruct()
+        || vis[0].aux.isNonNull()
+        || !vis[0].aux.hasNull())
       return false;
 
     return true;
@@ -159,8 +159,7 @@ public class NONZERO extends SINGLESCALAR {
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
-        || (format == OutputFormat.CSHARPCONTRACT))
-    {
+        || (format == OutputFormat.CSHARPCONTRACT)) {
       return name + " != " + zero(format);
     }
 

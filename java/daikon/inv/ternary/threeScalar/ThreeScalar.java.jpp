@@ -37,8 +37,8 @@ import typequals.*;
 */
 
 /**
- * Abstract base class for invariants over three numeric variables. An example is {@code z = ax +
- * by + c}.
+ * Abstract base class for invariants over three numeric variables. An example is {@code z = ax + by
+ * + c}.
  */
 public abstract class CLASSNAME extends TernaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -152,7 +152,7 @@ public abstract class CLASSNAME extends TernaryInvariant {
    */
   public abstract InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, PRIMITIVE v3, int count);
 
-  /** By default, do nothing if the value hasn't been seen yet.  Subclasses can override this. */
+  /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
   public InvariantStatus add_unmodified(PRIMITIVE v1, PRIMITIVE v2, PRIMITIVE v3, int count) {
     return InvariantStatus.NO_CHANGE;
   }

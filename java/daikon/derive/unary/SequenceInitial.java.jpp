@@ -53,10 +53,10 @@ public final class CLASSNAME extends UnaryDerivation {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff SequenceInitial derived variables should be generated. */
+  /** Boolean. True iff SequenceInitial derived variables should be generated. */
   public static boolean dkconfig_enabled = false;
 
-  /** Typically 0, 1, -1, or -2.  A negative number means counting from end. */
+  /** Typically 0, 1, -1, or -2. A negative number means counting from end. */
   public final int index;
 
   /** Array length required for the subscript to be meaningful:  (i.e., 1 or 2) */
@@ -88,7 +88,9 @@ public final class CLASSNAME extends UnaryDerivation {
     }
 
     // If order doesn't matter
-    if (!vi.aux.hasOrder()) return false;
+    if (!vi.aux.hasOrder()) {
+      return false;
+    }
 
     return true;
   }

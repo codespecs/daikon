@@ -30,7 +30,6 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*>>>
@@ -55,7 +54,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff Reverse invariants should be considered. */
+  /** Boolean. True iff Reverse invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   protected CLASSNAME(PptSlice ppt) {
@@ -86,8 +85,7 @@ public class CLASSNAME extends SUPERCLASS {
     }
 
     // Check to see that both arrays are ordered
-    if (!vis[0].aux.hasOrder() ||
-        !vis[1].aux.hasOrder())
+    if (!vis[0].aux.hasOrder() || !vis[1].aux.hasOrder())
       return false;
 
     return true;
@@ -104,8 +102,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return CLASSSTRING + varNames() + ": "
-      + "falsified=" + falsified;
+    return CLASSSTRING + varNames() + ": falsified=" + falsified;
   }
 
   /*@SideEffectFree*/
@@ -149,13 +146,12 @@ public class CLASSNAME extends SUPERCLASS {
     String[] other_name = othervar.simplifyNameAndBounds();
 
     if (one_name == null || other_name == null) {
-      return "format_simplify() can't handle one of these sequences: "
-        + format();
+      return "format_simplify() can't handle one of these sequences: " + format();
     }
 
-    return "(|is-reverse-of| " +
-      one_name[0] + " " + one_name[1] + " " + one_name[2] + " " +
-      other_name[0] + " " + other_name[1] + " " + other_name[2] + ")";
+    return "(|is-reverse-of| "
+      + one_name[0] + " " + one_name[1] + " " + one_name[2] + " "
+      + other_name[0] + " " + other_name[1] + " " + other_name[2] + ")";
   }
 
   private String format_simplify_explicit(/*>>>@GuardSatisfied CLASSNAME this*/) {
@@ -165,8 +161,7 @@ public class CLASSNAME extends SUPERCLASS {
     String[] other_name = othervar.simplifyNameAndBounds();
 
     if (one_name == null || other_name == null) {
-      return "format_simplify() can't handle one of these sequences: "
-        + format();
+      return "format_simplify() can't handle one of these sequences: " + format();
     }
 
     String index = VarInfo.get_simplify_free_index(onevar, othervar);

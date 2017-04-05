@@ -223,8 +223,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return getClass().getSimpleName() + ": " + format() +
-      (swap ? " [swapped]" : " [unswapped]");
+    return getClass().getSimpleName() + ": " + format()
+      + (swap ? " [swapped]" : " [unswapped]");
   }
 
   /**
@@ -421,8 +421,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     if (inv == null) {
       return null;
     }
-    return new DiscardInfo(this, DiscardCode.obvious, "Implied by " +
-                           inv.format());
+    return new DiscardInfo(this, DiscardCode.obvious, "Implied by "
+                           + inv.format());
   }
 #endif
 
@@ -478,8 +478,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return null;
     }
 
-    return new DiscardInfo(this, DiscardCode.obvious, "Implied by " +
-                           inv.format() + " and " + subinv.format());
+    return new DiscardInfo(this, DiscardCode.obvious, "Implied by "
+                           + inv.format() + " and " + subinv.format());
   }
 #endif
 
@@ -495,12 +495,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
       // any elementwise relation across subsequences is made obvious by
       // the same relation across the original sequence
       DiscardInfo result = is_subsequence(vis);
-      if (result != null) return result;
+      if (result != null) {
+        return result;
+      }
     #else
       // any relation across subscripts is made obvious by the same
       // relation across the original sequence if the subscripts are equal
       DiscardInfo result = is_subscript(vis);
-      if (result != null) return result;
+      if (result != null) {
+        return result;
+      }
     #endif
 
     // Check for invariant specific obvious checks.  The obvious_checks
@@ -541,9 +545,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
    *    x[n..]      - size is size(x[]) - n
    *    x[(n+1)..]  - size is size(x[]) - (n+1)
    * </pre>
+   *
    * Each combination of the above must be considered in creating the equality invariant. Not all
    * possibilities can be handled. Null is returned in that case. In the following table, s stands
    * for the size
+   *
    * <pre>
    *                    x[]     x[..(n-1)]  x[..n]  x[n..]    x[(n+1)..]
    *                  --------- ----------  ------  ------    ----------
@@ -581,9 +587,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // If both are from_start and have the same index_shift, just compare
     // the variables
     if (v1_ss.from_start && v2_ss.from_start
-        && (v1_ss.index_shift == v2_ss.index_shift))
+        && (v1_ss.index_shift == v2_ss.index_shift)) {
       return (new InvDef(v1_ss.sclvar(), v2_ss.sclvar(), IntEqual.class));
-
+    }
+    
     return null;
   }
 
@@ -685,8 +692,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
 #if !defined(STRING)
   /**
-   * Represents the divides without remainder invariant between COMMENT_TXT. Prints as <code>VAR1 %
-   * VAR2 == 0</code>.
+   * Represents the divides without remainder invariant between COMMENT_TXT.
+   * Prints as <code>VAR1 % VAR2 == 0</code>.
    */
   public static class Divides extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -716,11 +723,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff divides invariants should be considered. */
+    /** Boolean. True iff divides invariants should be considered. */
     public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() { return dkconfig_enabled; }
+    public boolean enabled() {
+      return dkconfig_enabled;
+    }
 
     protected Divides instantiate_dyn(/*>>> @Prototype Divides this,*/ PptSlice slice) {
       return new Divides(slice, swap);
@@ -773,34 +782,34 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** definition of this invariant (the suppressee) (unswapped) */
-    private static NISuppressee suppressee
-      = new NISuppressee(Divides.class, false);
+    private static NISuppressee suppressee = new NISuppressee(Divides.class, false);
 
     private static NISuppressionSet suppressions =
-      new NISuppressionSet(new NISuppression[] {
+      new NISuppressionSet(
+          new NISuppression[] {
 
-        #if !defined (SEQ)
-          // These suppressions are only valid on scalars because the length
-          // of var1 and var2 must also be the same and there is no suppressor
-          // for that.
+            #if !defined (SEQ)
+            // These suppressions are only valid on scalars because the length
+            // of var1 and var2 must also be the same and there is no suppressor
+            // for that.
 
-          // var2 == 1 ==> var1 % var2 == 0
-          new NISuppression(var2_eq_1, suppressee),
+            // var2 == 1 ==> var1 % var2 == 0
+            new NISuppression(var2_eq_1, suppressee),
 
-          // var2 == -1 ==> var1 % var2 == 0
-          new NISuppression(var2_eq_minus_1, suppressee),
+            // var2 == -1 ==> var1 % var2 == 0
+            new NISuppression(var2_eq_minus_1, suppressee),
 
-          // (var1 == 0) ^ (var2 != 0) ==> var1 % var2 == 0
-          new NISuppression(var1_eq_0, var2_ne_0, suppressee),
-        #endif
+            // (var1 == 0) ^ (var2 != 0) ==> var1 % var2 == 0
+            new NISuppression(var1_eq_0, var2_ne_0, suppressee),
+            #endif
 
-         // (var1 == var2) ^ (var2 != 0) ==> var1 % var2 == 0
-         new NISuppression(var1_eq_var2, var2_ne_0, suppressee),
+            // (var1 == var2) ^ (var2 != 0) ==> var1 % var2 == 0
+            new NISuppression(var1_eq_var2, var2_ne_0, suppressee),
 
-         // (var2 == var1) ^ (var1 != 0) ==> var2 % var1 == 0
-         new NISuppression(var2_eq_var1, var1_ne_0, suppressee),
+            // (var2 == var1) ^ (var1 != 0) ==> var2 % var1 == 0
+            new NISuppression(var2_eq_var1, var1_ne_0, suppressee),
 
-      });
+          });
     private static NISuppressionSet suppressions_swap = suppressions.swap();
 
     /**
@@ -808,8 +817,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
      * invariant in the same slice as this invariant. This invariant of the form "x % y == 0" is
      * falsified if a linear binary invariant is found of the form "a*y - 1*x + 0 == 0"
      *
-     * @return non-null value iff this invariant is obvious from
-     *          other invariants in the same slice
+     * @return non-null value iff this invariant is obvious from other invariants in the same slice
      */
     /*@Pure*/
     public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
@@ -861,11 +869,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
           //     While this means that both x % y == 0 and y % x == 0,
           //     only one of these invariants will still be true at this
           //     time, and only that one will be falsified by this test.
-          if ((!linv.is_false()) &&
-             Global.fuzzy.eq(linv.core.c, 0) &&
-             linv.core.b * linv.core.a < 0 &&
-             (Global.fuzzy.eq(linv.core.a * linv.core.a, 1) ||
-              Global.fuzzy.eq(linv.core.b * linv.core.b, 1))) {
+          if ((!linv.is_false())
+             && Global.fuzzy.eq(linv.core.c, 0)
+             && linv.core.b * linv.core.a < 0
+             && (Global.fuzzy.eq(linv.core.a * linv.core.a, 1)
+              || Global.fuzzy.eq(linv.core.b * linv.core.b, 1))) {
             return new DiscardInfo(this, DiscardCode.obvious,
                                    "Linear binary invariant implies divides");
           }
@@ -878,8 +886,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /**
-   * Represents the square invariant between
-   * COMMENT_TXT. Prints as <code>VAR1 = VAR2**2</code>.
+   * Represents the square invariant between COMMENT_TXT.
+   * Prints as <code>VAR1 = VAR2**2</code>.
    */
   public static class Square extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -909,11 +917,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff square invariants should be considered. */
+    /** Boolean. True iff square invariants should be considered. */
     public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() { return dkconfig_enabled; }
+    public boolean enabled() {
+      return dkconfig_enabled;
+    }
     protected Square instantiate_dyn(/*>>> @Prototype Square this,*/ PptSlice slice) {
       return new Square(slice, swap);
     }
@@ -985,11 +995,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff zero-track invariants should be considered. */
+    /** Boolean. True iff zero-track invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() { return dkconfig_enabled; }
+    public boolean enabled() {
+      return dkconfig_enabled;
+    }
 
     protected ZeroTrack instantiate_dyn(/*>>> @Prototype ZeroTrack this,*/ PptSlice slice) {
       return new ZeroTrack(slice, swap);
@@ -1024,18 +1036,18 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** definition of this invariant (the suppressee) (unswapped) */
-    private static NISuppressee suppressee
-      = new NISuppressee(ZeroTrack.class, false);
+    private static NISuppressee suppressee = new NISuppressee(ZeroTrack.class, false);
 
     private static NISuppressionSet suppressions =
-      new NISuppressionSet(new NISuppression[] {
-        // (var1 == var2) ==> (var1=0 ==> var2=0)
-        new NISuppression(var1_eq_var2, suppressee),
-        // (var1 != 0)    ==> (var1=0 ==> var2=0)
-        new NISuppression(var1_ne_0, suppressee),
-        // (var2 == 0) ==> (var1=0 ==> var2=0)
-        new NISuppression(var2_eq_0, suppressee),
-      });
+      new NISuppressionSet(
+          new NISuppression[] {
+            // (var1 == var2) ==> (var1=0 ==> var2=0)
+            new NISuppression(var1_eq_var2, suppressee),
+            // (var1 != 0)    ==> (var1=0 ==> var2=0)
+            new NISuppression(var1_ne_0, suppressee),
+            // (var2 == 0) ==> (var1=0 ==> var2=0)
+            new NISuppression(var2_eq_0, suppressee),
+          });
     private static NISuppressionSet suppressions_swap = suppressions.swap();
 
   }
@@ -1045,8 +1057,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #if defined(TYPELONG) || defined(TYPELONGSEQ)
 
   /**
-   * Represents the bitwise complement invariant between COMMENT_TXT. Prints as <code>VAR1 =
-   * ~VAR2</code>.
+   * Represents the bitwise complement invariant between COMMENT_TXT.
+   * Prints as <code>VAR1 = ~VAR2</code>.
    */
   public static class BitwiseComplement extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1071,11 +1083,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff bitwise complement invariants should be considered. */
+    /** Boolean. True iff bitwise complement invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() { return dkconfig_enabled; }
+    public boolean enabled() {
+      return dkconfig_enabled;
+    }
 
     protected BitwiseComplement instantiate_dyn(/*>>> @Prototype BitwiseComplement this,*/ PptSlice slice) {
       return new BitwiseComplement(slice);
@@ -1108,8 +1122,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the bitwise subset invariant between COMMENT_TXT; that is, the bits of
-   * <code>VAR2</code> are a subset of the bits of <code>VAR1</code>. Prints as <code>VAR1 = VAR2 |
-   * VAR1</code>.
+   * <code>VAR2</code> are a subset of the bits of <code>VAR1</code>.
+   * Prints as <code>VAR1 = VAR2 | VAR1</code>.
    */
   public static class BitwiseSubset extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1139,11 +1153,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff bitwise subset invariants should be considered. */
+    /** Boolean. True iff bitwise subset invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() { return dkconfig_enabled; }
+    public boolean enabled() {
+      return dkconfig_enabled;
+    }
 
     public BitwiseSubset instantiate_dyn(/*>>> @Prototype BitwiseSubset this,*/ PptSlice slice) {
       return new BitwiseSubset(slice, swap);
@@ -1196,20 +1212,20 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** definition of this invariant (the suppressee) (unswapped) */
-    private static NISuppressee suppressee
-      = new NISuppressee(BitwiseSubset.class, false);
+    private static NISuppressee suppressee = new NISuppressee(BitwiseSubset.class, false);
 
     private static NISuppressionSet suppressions =
-      new NISuppressionSet(new NISuppression[] {
-        #if !defined(SEQ)
-          // (var2 == 0) ==> var1 = (var2 | var1)
-          new NISuppression(var2_eq_0, suppressee),
+      new NISuppressionSet(
+          new NISuppression[] {
+              #if !defined(SEQ)
+                // (var2 == 0) ==> var1 = (var2 | var1)
+                new NISuppression(var2_eq_0, suppressee),
 
-          // (var1 == -1) ==> var1 = (var2 | var1)
-          new NISuppression(var1_eq_minus_1, suppressee),
-        #endif
-        // (var1 == var2) ==> var1 = (var2 | var1)
-        new NISuppression(var1_eq_var2, suppressee),
+                // (var1 == -1) ==> var1 = (var2 | var1)
+                new NISuppression(var1_eq_minus_1, suppressee),
+              #endif
+              // (var1 == var2) ==> var1 = (var2 | var1)
+              new NISuppression(var1_eq_var2, suppressee),
 
       });
     private static NISuppressionSet suppressions_swap = suppressions.swap();
@@ -1217,7 +1233,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the BitwiseAnd == 0 invariant between COMMENT_TXT; that is, <code>VAR1</code> and
-   * <code>VAR2</code> have no bits in common. Prints as <code>VAR1 &amp; VAR2 == 0</code>.
+   * <code>VAR2</code> have no bits in common.
+   * Prints as <code>VAR1 &amp; VAR2 == 0</code>.
    */
   public static class BitwiseAndZero extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1242,11 +1259,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff BitwiseAndZero invariants should be considered. */
+    /** Boolean. True iff BitwiseAndZero invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() { return dkconfig_enabled; }
+    public boolean enabled() {
+      return dkconfig_enabled;
+    }
 
     public BitwiseAndZero instantiate_dyn(/*>>> @Prototype BitwiseAndZero this,*/ PptSlice slice) {
       return new BitwiseAndZero(slice);
@@ -1282,19 +1301,18 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** definition of this invariant (the suppressee) (unswapped) */
-    private static NISuppressee suppressee
-      = new NISuppressee(BitwiseAndZero.class, 2);
+    private static NISuppressee suppressee = new NISuppressee(BitwiseAndZero.class, 2);
 
     #if !defined(SEQ)
     private static NISuppressionSet suppressions =
-      new NISuppressionSet(new NISuppression[] {
-        // (var1 == 0) ==> (var1 & var2) == 0
-        new NISuppression(var1_eq_0, suppressee),
+      new NISuppressionSet(
+          new NISuppression[] {
+            // (var1 == 0) ==> (var1 & var2) == 0
+            new NISuppression(var1_eq_0, suppressee),
 
-        // (var2 == 0) ==> (var1 & var2) == 0
-        new NISuppression(var2_eq_0, suppressee),
-
-    });
+            // (var2 == 0) ==> (var1 & var2) == 0
+            new NISuppression(var2_eq_0, suppressee),
+          });
     #else
     private static /*@Nullable*/ NISuppressionSet suppressions = null;
     #endif
@@ -1302,8 +1320,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the ShiftZero invariant between COMMENT_TXT; that is, <code>VAR1</code>
-   * right-shifted by <code>VAR2</code> is always zero. Prints as <code>VAR1 &gt;&gt; VAR2 =
-   * 0</code>.
+   * right-shifted by <code>VAR2</code> is always zero.
+   * Prints as <code>VAR1 &gt;&gt; VAR2 = 0</code>.
    */
   public static class ShiftZero  extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1333,11 +1351,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff ShiftZero invariants should be considered. */
+    /** Boolean. True iff ShiftZero invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() { return dkconfig_enabled; }
+    public boolean enabled() {
+      return dkconfig_enabled;
+    }
 
     protected ShiftZero instantiate_dyn(/*>>> @Prototype ShiftZero this,*/ PptSlice slice) {
       return new ShiftZero(slice, swap);
@@ -1375,15 +1395,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** definition of this invariant (the suppressee) (unswapped) */
-    private static NISuppressee suppressee
-      = new NISuppressee(ShiftZero.class, false);
+    private static NISuppressee suppressee = new NISuppressee(ShiftZero.class, false);
 
     private static NISuppressionSet suppressions =
-      new NISuppressionSet(new NISuppression[] {
-          // (var1>=0) ^ (var1<=var2) ^ (0<=var2<=63) ==> (var1 >> var2) == 0
-          new NISuppression(var1_ge_0, var1_le_var2, var2_valid_shift,
-                             suppressee),
-      });
+      new NISuppressionSet(
+          new NISuppression[] {
+              // (var1>=0) ^ (var1<=var2) ^ (0<=var2<=63) ==> (var1 >> var2) == 0
+              new NISuppression(var1_ge_0, var1_le_var2, var2_valid_shift,
+                                suppressee),
+          });
     private static NISuppressionSet suppressions_swap = suppressions.swap();
   }
 
@@ -1395,8 +1415,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
 #if defined(STRING)
   /**
-   * Represents the substring invariant between
-   * COMMENT_TXT. Prints as <code>VAR1 is a substring of VAR2</code>.
+   * Represents the substring invariant between COMMENT_TXT.
+   * Prints as <code>VAR1 is a substring of VAR2</code>.
    */
   public static class SubString extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1426,11 +1446,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Variables starting with dkconfig_ should only be set via the
     // daikon.config.Configuration interface.
-    /** Boolean.  True iff SubString invariants should be considered. */
+    /** Boolean. True iff SubString invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
     /** Returns whether or not this invariant is enabled */
-    public boolean enabled() { return dkconfig_enabled; }
+    public boolean enabled() {
+      return dkconfig_enabled;
+    }
 
     protected SubString instantiate_dyn(/*>>> @Prototype SubString this,*/ PptSlice slice) {
       return new SubString(slice, swap);
@@ -1476,14 +1498,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** definition of this invariant (the suppressee) (unswapped) */
-    private static NISuppressee suppressee
-      = new NISuppressee(SubString.class, false);
+    private static NISuppressee suppressee = new NISuppressee(SubString.class, false);
 
     private static NISuppressionSet suppressions =
-      new NISuppressionSet(new NISuppression[] {
-          // v1 == v2 ==> v1 subsequence v2
-          new NISuppression(var1_eq_var2, suppressee),
-      });
+      new NISuppressionSet(
+          new NISuppression[] {
+              // v1 == v2 ==> v1 subsequence v2
+              new NISuppression(var1_eq_var2, suppressee),
+          });
     private static NISuppressionSet suppressions_swap = suppressions.swap();
   }
 #endif

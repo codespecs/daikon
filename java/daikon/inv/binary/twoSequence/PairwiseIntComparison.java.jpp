@@ -194,16 +194,15 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.binary.twoSequence;
 
 import daikon.*;
+import daikon.Quantify.QuantFlags;
+import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
-import daikon.derive.binary.*;
 import daikon.suppress.*;
-import daikon.Quantify.QuantFlags;
-
-import plume.ArraysMDE;
 import java.util.Iterator;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.ArraysMDE;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -219,7 +218,6 @@ import typequals.*;
  * <code>(x[i], y[i])</code> pair. Thus, <code>x[0]</code> is compared to <code>y[0]</code>,
  * <code>x[1]</code> to <code>y[1]</code>, and so forth. Prints as <code>x[] EQUALShtml y[]</code>.
  */
-
 public class PAIRWISEINTEQUAL extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -232,7 +230,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff PairwiseIntComparison invariants should be considered. */
+  /** Boolean. True iff PairwiseIntComparison invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   static final boolean debugPairwiseIntComparison = false;
@@ -309,8 +307,8 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     // Don't instantiate if the variables can't have order
     if (!var1.aux.hasOrder() || !var2.aux.hasOrder()) {
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine("Not instantitating for because order has no meaning: " +
-                     var1.name() + " and " + var2.name());
+        debug.fine("Not instantitating for because order has no meaning: "
+                     + var1.name() + " and " + var2.name());
       }
       return new DiscardInfo(this, DiscardCode.obvious, "Obvious statically since order has no meaning");
     }
@@ -423,8 +421,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   public String format_daikon(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
-    return var1().name() + " " + EQUALSstring + " " + var2().name()
-      + " (elementwise)";
+    return var1().name() + " " + EQUALSstring + " " + var2().name() + " (elementwise)";
   }
 
   public String format_esc(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
@@ -433,8 +430,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   public String format_simplify(/*>>>@GuardSatisfied PAIRWISEINTEQUAL this*/) {
-    String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(),
-                                               var1(), var2());
+    String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(), var1(), var2());
     return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 
@@ -485,8 +481,8 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
                                         int count) {
       if (logDetail()) {
-        log(debug, "saw add_modified (" + ArraysMDE.toString(a1) +
-             ", " + ArraysMDE.toString(a2) + ")");
+        log(debug, "saw add_modified (" + ArraysMDE.toString(a1)
+             + ", " + ArraysMDE.toString(a2) + ")");
       }
       return check_modified(a1, a2, count);
     }
@@ -535,8 +531,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
   }
 
   /** Definition of this invariant (the suppressee) */
-  private static NISuppressee suppressee
-    = new NISuppressee(PAIRWISEINTEQUAL.class, 2);
+  private static NISuppressee suppressee = new NISuppressee(PAIRWISEINTEQUAL.class, 2);
 
   // Suppressor definitions (used in suppressions below)
   private static NISuppressor
@@ -546,26 +541,28 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
 
   #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT) || defined (GREATEREQUALSTRING)
     private static NISuppressionSet suppressions =
-      new NISuppressionSet(new NISuppression[] {
+      new NISuppressionSet(
+          new NISuppression[] {
 
-        // v1 == v2 => v1 >= v2
-        new NISuppression(v1_eq_v2, suppressee),
+            // v1 == v2 => v1 >= v2
+            new NISuppression(v1_eq_v2, suppressee),
 
-        // v1 > v2 => v1 >= v2
-        new NISuppression(v1_gt_v2, suppressee),
+            // v1 > v2 => v1 >= v2
+            new NISuppression(v1_gt_v2, suppressee),
 
-      });
+          });
   #elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(LESSEQUALSTRING)
     private static NISuppressionSet suppressions =
-      new NISuppressionSet(new NISuppression[] {
+      new NISuppressionSet(
+          new NISuppression[] {
 
-        // v1 == v2 => v1 <= v2
-        new NISuppression(v1_eq_v2, suppressee),
+            // v1 == v2 => v1 <= v2
+            new NISuppression(v1_eq_v2, suppressee),
 
-        // v1 < v2 => v1 <= v2
-        new NISuppression(v1_lt_v2, suppressee),
+            // v1 < v2 => v1 <= v2
+            new NISuppression(v1_lt_v2, suppressee),
 
-      });
+          });
   #else
     private static /*@Nullable*/ NISuppressionSet suppressions = null;
   #endif

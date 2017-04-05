@@ -177,8 +177,10 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   #ifdef EXACT
-    /*@Pure*/
-    public boolean isExact() { return true; }
+  /*@Pure*/
+  public boolean isExact() {
+    return true;
+  }
   #endif
 
   /** Returns a list of non-instantiating suppressions for this invariant. */
@@ -192,202 +194,204 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   /** definition of this invariant (the suppressee) */
-  private static NISuppressee suppressee
-                    = new NISuppressee(CNAME(FUNCTION,PERM_NAME).class, 3);
+  private static NISuppressee suppressee = new NISuppressee(CNAME(FUNCTION,PERM_NAME).class, 3);
 
   // suppressor definitions (used below)
-  private static NISuppressor result_eq_arg1
-    = new NISuppressor(result_index, arg1_index, EQUALITY.class);
-  private static NISuppressor result_eq_arg2
-    = new NISuppressor(result_index, arg2_index, EQUALITY.class);
-  private static NISuppressor arg1_eq_arg2
-    = new NISuppressor(arg1_index, arg2_index, EQUALITY.class);
+  private static NISuppressor result_eq_arg1 =
+      new NISuppressor(result_index, arg1_index, EQUALITY.class);
+  private static NISuppressor result_eq_arg2 =
+      new NISuppressor(result_index, arg2_index, EQUALITY.class);
+  private static NISuppressor arg1_eq_arg2 =
+      new NISuppressor(arg1_index, arg2_index, EQUALITY.class);
 
-  private static NISuppressor result_lt_arg1
-    = new NISuppressor(result_index, arg1_index, LESS_THAN.class);
-  private static NISuppressor result_lt_arg2
-    = new NISuppressor(result_index, arg2_index, LESS_THAN.class);
-  private static NISuppressor arg1_lt_arg2
-    = new NISuppressor(arg1_index, arg2_index, LESS_THAN.class);
-  private static NISuppressor arg2_lt_arg1
-    = new NISuppressor(arg2_index, arg1_index, LESS_THAN.class);
+  private static NISuppressor result_lt_arg1 =
+      new NISuppressor(result_index, arg1_index, LESS_THAN.class);
+  private static NISuppressor result_lt_arg2 =
+      new NISuppressor(result_index, arg2_index, LESS_THAN.class);
+  private static NISuppressor arg1_lt_arg2 =
+      new NISuppressor(arg1_index, arg2_index, LESS_THAN.class);
+  private static NISuppressor arg2_lt_arg1 =
+      new NISuppressor(arg2_index, arg1_index, LESS_THAN.class);
 
-  private static NISuppressor result_le_arg1
-    = new NISuppressor(result_index, arg1_index, LESS_EQUAL.class);
-  private static NISuppressor result_le_arg2
-    = new NISuppressor(result_index, arg2_index, LESS_EQUAL.class);
-  private static NISuppressor arg1_le_arg2
-    = new NISuppressor(arg1_index, arg2_index, LESS_EQUAL.class);
-  private static NISuppressor arg2_le_arg1
-    = new NISuppressor(arg2_index, arg1_index, LESS_EQUAL.class);
+  private static NISuppressor result_le_arg1 =
+      new NISuppressor(result_index, arg1_index, LESS_EQUAL.class);
+  private static NISuppressor result_le_arg2 =
+      new NISuppressor(result_index, arg2_index, LESS_EQUAL.class);
+  private static NISuppressor arg1_le_arg2 =
+      new NISuppressor(arg1_index, arg2_index, LESS_EQUAL.class);
+  private static NISuppressor arg2_le_arg1 =
+      new NISuppressor(arg2_index, arg1_index, LESS_EQUAL.class);
 
-  private static NISuppressor result_track0_arg1
-    = new NISuppressor(result_index, arg1_index, TRACK_0.class);
-  private static NISuppressor result_track0_arg2
-    = new NISuppressor(result_index, arg2_index, TRACK_0.class);
-  private static NISuppressor arg1_track0_arg2
-    = new NISuppressor(arg1_index, arg2_index, TRACK_0.class);
-  private static NISuppressor arg1_track0_result
-    = new NISuppressor(arg1_index, result_index, TRACK_0.class);
-  private static NISuppressor arg2_track0_result
-    = new NISuppressor(arg2_index, result_index, TRACK_0.class);
-  private static NISuppressor arg2_track0_arg1
-    = new NISuppressor(arg2_index, arg1_index, TRACK_0.class);
+  private static NISuppressor result_track0_arg1 =
+      new NISuppressor(result_index, arg1_index, TRACK_0.class);
+  private static NISuppressor result_track0_arg2 =
+      new NISuppressor(result_index, arg2_index, TRACK_0.class);
+  private static NISuppressor arg1_track0_arg2 =
+      new NISuppressor(arg1_index, arg2_index, TRACK_0.class);
+  private static NISuppressor arg1_track0_result =
+      new NISuppressor(arg1_index, result_index, TRACK_0.class);
+  private static NISuppressor arg2_track0_result =
+      new NISuppressor(arg2_index, result_index, TRACK_0.class);
+  private static NISuppressor arg2_track0_arg1 =
+      new NISuppressor(arg2_index, arg1_index, TRACK_0.class);
 
-  private static NISuppressor result_eq_1
-    = new NISuppressor(result_index, EQUAL_ONE.class);
-  private static NISuppressor arg1_eq_1
-    = new NISuppressor(arg1_index, EQUAL_ONE.class);
-  private static NISuppressor arg2_eq_1
-    = new NISuppressor(arg2_index, EQUAL_ONE.class);
+  private static NISuppressor result_eq_1 =
+      new NISuppressor(result_index, EQUAL_ONE.class);
+  private static NISuppressor arg1_eq_1 =
+      new NISuppressor(arg1_index, EQUAL_ONE.class);
+  private static NISuppressor arg2_eq_1 =
+      new NISuppressor(arg2_index, EQUAL_ONE.class);
 
-  private static NISuppressor result_eq_0
-    = new NISuppressor(result_index,EQUAL_ZERO.class);
-  private static NISuppressor arg1_eq_0
-    = new NISuppressor(arg1_index, EQUAL_ZERO.class);
-  private static NISuppressor arg2_eq_0
-    = new NISuppressor(arg2_index, EQUAL_ZERO.class);
+  private static NISuppressor result_eq_0 =
+      new NISuppressor(result_index,EQUAL_ZERO.class);
+  private static NISuppressor arg1_eq_0 =
+      new NISuppressor(arg1_index, EQUAL_ZERO.class);
+  private static NISuppressor arg2_eq_0 =
+      new NISuppressor(arg2_index, EQUAL_ZERO.class);
 
-  private static NISuppressor result_ne_0
-    = new NISuppressor(result_index, NONZERO.class);
-  private static NISuppressor arg1_ne_0
-    = new NISuppressor(arg1_index, NONZERO.class);
-  private static NISuppressor arg2_ne_0
-    = new NISuppressor(arg2_index, NONZERO.class);
+  private static NISuppressor result_ne_0 =
+      new NISuppressor(result_index, NONZERO.class);
+  private static NISuppressor arg1_ne_0 =
+      new NISuppressor(arg1_index, NONZERO.class);
+  private static NISuppressor arg2_ne_0 =
+      new NISuppressor(arg2_index, NONZERO.class);
 
-  private static NISuppressor result_ge_0
-    = new NISuppressor(result_index, GTE_0.class);
-  private static NISuppressor arg1_ge_0
-    = new NISuppressor(arg1_index, GTE_0.class);
-  private static NISuppressor arg2_ge_0
-    = new NISuppressor(arg2_index, GTE_0.class);
+  private static NISuppressor result_ge_0 =
+      new NISuppressor(result_index, GTE_0.class);
+  private static NISuppressor arg1_ge_0 =
+      new NISuppressor(arg1_index, GTE_0.class);
+  private static NISuppressor arg2_ge_0 =
+      new NISuppressor(arg2_index, GTE_0.class);
 
-  private static NISuppressor result_ge_64
-    = new NISuppressor(result_index, GTE_64.class);
-  private static NISuppressor arg1_ge_64
-    = new NISuppressor(arg1_index, GTE_64.class);
-  private static NISuppressor arg2_ge_64
-    = new NISuppressor(arg2_index, GTE_64.class);
+  private static NISuppressor result_ge_64 =
+      new NISuppressor(result_index, GTE_64.class);
+  private static NISuppressor arg1_ge_64 =
+      new NISuppressor(arg1_index, GTE_64.class);
+  private static NISuppressor arg2_ge_64 =
+      new NISuppressor(arg2_index, GTE_64.class);
 
 #if defined (TYPELONG)
-  private static NISuppressor result_boolean
-    = new NISuppressor(result_index,BOOLEAN.class);
-  private static NISuppressor arg1_boolean
-    = new NISuppressor(arg1_index, BOOLEAN.class);
-  private static NISuppressor arg2_boolean
-    = new NISuppressor(arg2_index, BOOLEAN.class);
+  private static NISuppressor result_boolean =
+      new NISuppressor(result_index,BOOLEAN.class);
+  private static NISuppressor arg1_boolean =
+      new NISuppressor(arg1_index, BOOLEAN.class);
+  private static NISuppressor arg2_boolean =
+      new NISuppressor(arg2_index, BOOLEAN.class);
 
-  private static NISuppressor result_even
-    = new NISuppressor(result_index, EVEN.class);
-  private static NISuppressor arg1_even
-    = new NISuppressor(arg1_index, EVEN.class);
-  private static NISuppressor arg2_even
-    = new NISuppressor(arg2_index, EVEN.class);
+  private static NISuppressor result_even =
+      new NISuppressor(result_index, EVEN.class);
+  private static NISuppressor arg1_even =
+      new NISuppressor(arg1_index, EVEN.class);
+  private static NISuppressor arg2_even =
+      new NISuppressor(arg2_index, EVEN.class);
 
-  private static NISuppressor result_power2
-    = new NISuppressor(result_index,POWER2.class);
-  private static NISuppressor arg1_power2
-    = new NISuppressor(arg1_index, POWER2.class);
-  private static NISuppressor arg2_power2
-    = new NISuppressor(arg2_index, POWER2.class);
+  private static NISuppressor result_power2 =
+      new NISuppressor(result_index,POWER2.class);
+  private static NISuppressor arg1_power2 =
+      new NISuppressor(arg1_index, POWER2.class);
+  private static NISuppressor arg2_power2 =
+      new NISuppressor(arg2_index, POWER2.class);
 
-  private static NISuppressor result_and0_arg1
-    = new NISuppressor(result_index, arg1_index, BW_AND_0.class);
-  private static NISuppressor result_and0_arg2
-    = new NISuppressor(result_index, arg2_index, BW_AND_0.class);
-  private static NISuppressor arg1_and0_arg2
-    = new NISuppressor(arg1_index, arg2_index, BW_AND_0.class);
+  private static NISuppressor result_and0_arg1 =
+      new NISuppressor(result_index, arg1_index, BW_AND_0.class);
+  private static NISuppressor result_and0_arg2 =
+      new NISuppressor(result_index, arg2_index, BW_AND_0.class);
+  private static NISuppressor arg1_and0_arg2 =
+      new NISuppressor(arg1_index, arg2_index, BW_AND_0.class);
 
   // The arguments to bitwise subset are backwards from what one
   // might expect.  The second argument is a subset of the first
   // argument
-  private static NISuppressor arg1_bw_subset_arg2
-    = new NISuppressor(arg2_index, arg1_index, BW_SUBSET.class);
-  private static NISuppressor arg2_bw_subset_arg1
-    = new NISuppressor(arg1_index, arg2_index, BW_SUBSET.class);
+  private static NISuppressor arg1_bw_subset_arg2 =
+      new NISuppressor(arg2_index, arg1_index, BW_SUBSET.class);
+  private static NISuppressor arg2_bw_subset_arg1 =
+      new NISuppressor(arg1_index, arg2_index, BW_SUBSET.class);
 
-  private static NISuppressor result_shift0_arg1
-    = new NISuppressor(result_index, arg1_index, SHIFT_0.class);
-  private static NISuppressor result_shift0_arg2
-    = new NISuppressor(result_index, arg2_index, SHIFT_0.class);
-  private static NISuppressor arg1_shift0_arg2
-    = new NISuppressor(arg1_index, arg2_index, SHIFT_0.class);
+  private static NISuppressor result_shift0_arg1 =
+      new NISuppressor(result_index, arg1_index, SHIFT_0.class);
+  private static NISuppressor result_shift0_arg2 =
+      new NISuppressor(result_index, arg2_index, SHIFT_0.class);
+  private static NISuppressor arg1_shift0_arg2 =
+      new NISuppressor(arg1_index, arg2_index, SHIFT_0.class);
 
-  private static NISuppressor arg2_divides_arg1
-    = new NISuppressor(arg1_index, arg2_index, DIVIDES.class);
-  private static NISuppressor arg1_divides_arg2
-    = new NISuppressor(arg2_index, arg1_index, DIVIDES.class);
+  private static NISuppressor arg2_divides_arg1 =
+      new NISuppressor(arg1_index, arg2_index, DIVIDES.class);
+  private static NISuppressor arg1_divides_arg2 =
+      new NISuppressor(arg2_index, arg1_index, DIVIDES.class);
 
-  private static NISuppressor arg2_valid_shift
-    = new NISuppressor(arg2_index, BOUND0_63.class);
+  private static NISuppressor arg2_valid_shift =
+      new NISuppressor(arg2_index, BOUND0_63.class);
 #endif
 
   #if FTYPE == FTYPE_Division
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet(
+          new NISuppression[] {
 
-      #if defined (TYPELONG)
-        // (r == 0) && (arg1 < arg2) && (arg1 >= 0) && (arg2 != 0) ==> r = arg1 / arg2
-        new NISuppression(result_eq_0, arg1_lt_arg2, arg1_ge_0, arg2_ne_0, suppressee),
-      #endif
+          #if defined (TYPELONG)
+            // (r == 0) && (arg1 < arg2) && (arg1 >= 0) && (arg2 != 0) ==> r = arg1 / arg2
+            new NISuppression(result_eq_0, arg1_lt_arg2, arg1_ge_0, arg2_ne_0, suppressee),
+          #endif
 
-        // (arg1 == arg2) && (arg2 != 0) && (r == 1)
-        new NISuppression(arg1_eq_arg2, arg2_ne_0, result_eq_1, suppressee),
+            // (arg1 == arg2) && (arg2 != 0) && (r == 1)
+            new NISuppression(arg1_eq_arg2, arg2_ne_0, result_eq_1, suppressee),
 
-        // (r == arg1) && (arg2 == 1) ==> r = arg1 / arg2
-        new NISuppression(result_eq_arg1, arg2_eq_1, suppressee),
-      });
+            // (r == arg1) && (arg2 == 1) ==> r = arg1 / arg2
+            new NISuppression(result_eq_arg1, arg2_eq_1, suppressee),
+          });
 
   #elif FTYPE == FTYPE_Mod
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
-    // anything mod 0 is undefined
-        // (r == arg1) && (arg1 < arg2) && (arg2 != 0) && (r >= 0) ==> r = arg1 % arg2
-        new NISuppression(result_eq_arg1, arg1_lt_arg2, arg2_ne_0, result_ge_0, suppressee),
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet(
+          new NISuppression[] {
+            // anything mod 0 is undefined
+            // (r == arg1) && (arg1 < arg2) && (arg2 != 0) && (r >= 0) ==> r = arg1 % arg2
+            new NISuppression(result_eq_arg1, arg1_lt_arg2, arg2_ne_0, result_ge_0, suppressee),
 
-        // (r == 0) && ((arg1 % arg2) == 0)
-        new NISuppression(result_eq_0, arg2_divides_arg1, suppressee),
+            // (r == 0) && ((arg1 % arg2) == 0)
+            new NISuppression(result_eq_0, arg2_divides_arg1, suppressee),
 
-        // These are unnecessary as the divides invariant handles these
-        // nicely.
-        // (r == 0) && (arg2 == 1)      ==> r = arg1 % arg2
-        // new NISuppression (result_eq_0, arg2_eq_1, suppressee),
+            // These are unnecessary as the divides invariant handles these
+            // nicely.
+            // (r == 0) && (arg2 == 1)      ==> r = arg1 % arg2
+            // new NISuppression (result_eq_0, arg2_eq_1, suppressee),
 
-        // (r == 0) && (arg1 == arg2)
-        // new NISuppression (result_eq_0, arg1_eq_arg2, suppressee),
-      });
+            // (r == 0) && (arg1 == arg2)
+            // new NISuppression (result_eq_0, arg1_eq_arg2, suppressee),
+          });
 
   #elif FTYPE == FTYPE_Multiply
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == 0) && (arg1 == 0) ==> r = arg1 * arg2
-        new NISuppression(result_eq_0, arg1_eq_0, suppressee),
+            // (r == 0) && (arg1 == 0) ==> r = arg1 * arg2
+            new NISuppression(result_eq_0, arg1_eq_0, suppressee),
 
-        // (r == 0) && (arg2 == 0) ==> r = arg1 * arg2
-        new NISuppression(result_eq_0, arg2_eq_0, suppressee),
+            // (r == 0) && (arg2 == 0) ==> r = arg1 * arg2
+            new NISuppression(result_eq_0, arg2_eq_0, suppressee),
 
-        // (r == arg1) && (arg2 == 1) ==> r = arg1 * arg2
-        new NISuppression(result_eq_arg1, arg2_eq_1, suppressee),
+            // (r == arg1) && (arg2 == 1) ==> r = arg1 * arg2
+            new NISuppression(result_eq_arg1, arg2_eq_1, suppressee),
 
-        // (r == arg2) && (arg1 == 1) ==> r = arg1 * arg2
-        new NISuppression(result_eq_arg2, arg1_eq_1, suppressee),
+            // (r == arg2) && (arg1 == 1) ==> r = arg1 * arg2
+            new NISuppression(result_eq_arg2, arg1_eq_1, suppressee),
 
-      #if defined (TYPELONG)
-        // (r == arg1) && (arg2 boolean) && (arg2==0 ==> arg1==0)
-        // x = x * 0 is true if x == 0
-        // x = x * 1 is true for all x
-        new NISuppression(arg2_boolean, arg2_track0_arg1, result_eq_arg1,
-                           suppressee),
+          #if defined (TYPELONG)
+            // (r == arg1) && (arg2 boolean) && (arg2==0 ==> arg1==0)
+            // x = x * 0 is true if x == 0
+            // x = x * 1 is true for all x
+            new NISuppression(arg2_boolean, arg2_track0_arg1, result_eq_arg1,
+                               suppressee),
 
-        // (r == arg2) && (arg1 boolean) && (arg1==0 ==> arg2=0)
-        new NISuppression(result_eq_arg2, arg1_track0_arg2, arg1_boolean,
-                           suppressee),
-      #endif
-      });
+            // (r == arg2) && (arg1 boolean) && (arg1==0 ==> arg2=0)
+            new NISuppression(result_eq_arg2, arg1_track0_arg2, arg1_boolean,
+                               suppressee),
+          #endif
+          });
 
   #elif FTYPE == FTYPE_Power
 
@@ -400,231 +404,240 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     // exponent >= 64 will yield a result of 0.  For example, pow(10,256) == 0
     // (at least for integers)
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == 1) && (arg2 == 0) ==> r = pow (arg1, arg2)
-        new NISuppression(result_eq_1, arg2_eq_0, suppressee),
+            // (r == 1) && (arg2 == 0) ==> r = pow (arg1, arg2)
+            new NISuppression(result_eq_1, arg2_eq_0, suppressee),
 
-        // (r == 1) && (arg1 == 1) && (arg2 >= 0)   ==> r = pow (arg1, arg2)
-        new NISuppression(result_eq_1, arg1_eq_1, arg2_ge_0, suppressee),
+            // (r == 1) && (arg1 == 1) && (arg2 >= 0)   ==> r = pow (arg1, arg2)
+            new NISuppression(result_eq_1, arg1_eq_1, arg2_ge_0, suppressee),
 
-        // (r == 0) && (arg1 == 0) && (arg2 > 0)
-        new NISuppression(result_eq_0, arg1_eq_0, arg2_ne_0, arg2_ge_0,
-                          suppressee),
+            // (r == 0) && (arg1 == 0) && (arg2 > 0)
+            new NISuppression(result_eq_0, arg1_eq_0, arg2_ne_0, arg2_ge_0,
+                              suppressee),
 
-        // (r == arg1) && (arg2 == 1)    ==> r = pow (arg1, arg2)
-        new NISuppression(result_eq_arg1, arg2_eq_1, suppressee),
+            // (r == arg1) && (arg2 == 1)    ==> r = pow (arg1, arg2)
+            new NISuppression(result_eq_arg1, arg2_eq_1, suppressee),
 
-      #if defined (TYPELONG)
-        // (r == 0) && (arg1 even) && (arg2 >= 64)
-        // with each multiply there is one more zero in the result and since
-        // a long has 64 bits in it, it becomes zero at that point
-        new NISuppression(result_eq_0, arg1_even, arg2_ge_64, suppressee),
+          #if defined (TYPELONG)
+            // (r == 0) && (arg1 even) && (arg2 >= 64)
+            // with each multiply there is one more zero in the result and since
+            // a long has 64 bits in it, it becomes zero at that point
+            new NISuppression(result_eq_0, arg1_even, arg2_ge_64, suppressee),
 
-        // (r == 1) && (arg1 boolean) && (arg1==0 <==> arg2==0) && (arg2 >= 0)
-        // 1 = pow (0, arg2) true iff (arg2 == 0)
-        // 1 = pow (1, arg2) true when arg2 valid exponent
-        new NISuppression(arg1_track0_arg2, arg2_ge_0, arg1_boolean,
-                           result_eq_1, suppressee),
+            // (r == 1) && (arg1 boolean) && (arg1==0 <==> arg2==0) && (arg2 >= 0)
+            // 1 = pow (0, arg2) true iff (arg2 == 0)
+            // 1 = pow (1, arg2) true when arg2 valid exponent
+            new NISuppression(arg1_track0_arg2, arg2_ge_0, arg1_boolean,
+                               result_eq_1, suppressee),
 
-        // (r == arg1) && (r boolean) && (arg2 > 0)
-        // 0 = pow (0, arg2) true when arg2 != 0
-        // 1 = pow (1, arg2) true when arg2 valid exponent
-        new NISuppression(result_eq_arg1, result_boolean, arg2_ne_0,
-                           arg2_ge_0, suppressee),
+            // (r == arg1) && (r boolean) && (arg2 > 0)
+            // 0 = pow (0, arg2) true when arg2 != 0
+            // 1 = pow (1, arg2) true when arg2 valid exponent
+            new NISuppression(result_eq_arg1, result_boolean, arg2_ne_0,
+                               arg2_ge_0, suppressee),
 
-      #endif
-      });
+          #endif
+          });
 
   #elif FTYPE == FTYPE_Minimum
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet(
+          new NISuppression[] {
 
-        // (resultvar == arg1) && (arg1 <= arg2) ==> r = min(arg1, arg2)
-        new NISuppression(result_eq_arg1, arg1_le_arg2, suppressee),
+            // (resultvar == arg1) && (arg1 <= arg2) ==> r = min(arg1, arg2)
+            new NISuppression(result_eq_arg1, arg1_le_arg2, suppressee),
 
-        // (resultvar == arg2) && (arg2 <= arg1) ==> r = min(arg1, arg2)
-        new NISuppression(result_eq_arg2, arg2_le_arg1, suppressee),
+            // (resultvar == arg2) && (arg2 <= arg1) ==> r = min(arg1, arg2)
+            new NISuppression(result_eq_arg2, arg2_le_arg1, suppressee),
 
-      #if defined (TYPELONG)
-        // (resultvar boolean) && (arg1=0 <==> r=0) && (arg2 == 1)
-        // 0 = min (arg1, 1), true when (arg1 == 0)
-        // 1 = min (arg1, 1), true when (arg1 > 0)
-        new NISuppression(result_track0_arg1, arg1_track0_result,
-                           result_boolean, arg1_ge_0, arg2_eq_1, suppressee),
+          #if defined (TYPELONG)
+            // (resultvar boolean) && (arg1=0 <==> r=0) && (arg2 == 1)
+            // 0 = min (arg1, 1), true when (arg1 == 0)
+            // 1 = min (arg1, 1), true when (arg1 > 0)
+            new NISuppression(result_track0_arg1, arg1_track0_result,
+                               result_boolean, arg1_ge_0, arg2_eq_1, suppressee),
 
-        // (resultvar boolean) && (arg2=0 <==> r=0) && (arg1 == 1)
-        new NISuppression(result_track0_arg2, arg2_track0_result,
-                           result_boolean, arg2_ge_0, arg1_eq_1, suppressee),
-      #endif
-      });
+            // (resultvar boolean) && (arg2=0 <==> r=0) && (arg1 == 1)
+            new NISuppression(result_track0_arg2, arg2_track0_result,
+                               result_boolean, arg2_ge_0, arg1_eq_1, suppressee),
+          #endif
+          });
 
   #elif FTYPE == FTYPE_Maximum
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+      new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == arg1) && (arg2 <= arg1) ==> r = max(arg1, arg2)
-        new NISuppression(result_eq_arg1, arg2_le_arg1, suppressee),
+            // (r == arg1) && (arg2 <= arg1) ==> r = max(arg1, arg2)
+            new NISuppression(result_eq_arg1, arg2_le_arg1, suppressee),
 
-        // (r == arg2) && (arg1 <= arg2) ==> r = max(arg1, arg2)
-        new NISuppression(result_eq_arg2, arg1_le_arg2, suppressee),
+            // (r == arg2) && (arg1 <= arg2) ==> r = max(arg1, arg2)
+            new NISuppression(result_eq_arg2, arg1_le_arg2, suppressee),
 
-      });
+          });
 
   #elif FTYPE == FTYPE_RshiftUnsigned
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+        new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == arg1) && (arg2 == 0) ==> r = arg1 >>> arg2
-        new NISuppression(result_eq_arg1, arg2_eq_0, suppressee),
+            // (r == arg1) && (arg2 == 0) ==> r = arg1 >>> arg2
+            new NISuppression(result_eq_arg1, arg2_eq_0, suppressee),
 
-        // (r == 0) && (arg1 == 0) && (arg2 valid shift) ==> r = arg1 >>> arg2
-        // new NISuppression (result_eq_0, arg1_eq_0, arg2_valid_shift
-        //                   ,suppressee),
+            // (r == 0) && (arg1 == 0) && (arg2 valid shift) ==> r = arg1 >>> arg2
+            // new NISuppression (result_eq_0, arg1_eq_0, arg2_valid_shift
+            //                   ,suppressee),
 
-        // (r == 0) && ((arg1 >> arg2) == 0)
-        new NISuppression(result_eq_0, arg1_shift0_arg2, suppressee),
+            // (r == 0) && ((arg1 >> arg2) == 0)
+            new NISuppression(result_eq_0, arg1_shift0_arg2, suppressee),
 
-        // (r == 0) && (arg2 >= arg1) && (arg1 >= 0) && (arg2 valid shift)
-        // This suppression really ought to have 2**arg2 >= arg1, but we
-        // don't have that suppression.  This still might catch a lot of these.
-        // new NISuppression (result_eq_0, arg1_le_arg2, arg1_ge_0,
-        //                   arg2_valid_shift, suppressee),
-      });
+            // (r == 0) && (arg2 >= arg1) && (arg1 >= 0) && (arg2 valid shift)
+            // This suppression really ought to have 2**arg2 >= arg1, but we
+            // don't have that suppression.  This still might catch a lot of these.
+            // new NISuppression (result_eq_0, arg1_le_arg2, arg1_ge_0,
+            //                   arg2_valid_shift, suppressee),
+          });
 
   #elif FTYPE == FTYPE_RshiftSigned
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+        new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == arg1) && (arg2 == 0) ==> r = arg1 >>> arg2
-        new NISuppression(result_eq_arg1, arg2_eq_0, suppressee),
+            // (r == arg1) && (arg2 == 0) ==> r = arg1 >>> arg2
+            new NISuppression(result_eq_arg1, arg2_eq_0, suppressee),
 
-        // (r == 0) && (arg1 == 0) && (0 <= arg2 <= 63)   ==> r = arg1 >>> arg2
-        // new NISuppression (result_eq_0, arg1_eq_0, arg2_valid_shift
-        //                   ,suppressee),
+            // (r == 0) && (arg1 == 0) && (0 <= arg2 <= 63)   ==> r = arg1 >>> arg2
+            // new NISuppression (result_eq_0, arg1_eq_0, arg2_valid_shift
+            //                   ,suppressee),
 
-        // (r == 0) && ((arg1 >> arg2) == 0)
-        new NISuppression(result_eq_0, arg1_shift0_arg2, suppressee),
+            // (r == 0) && ((arg1 >> arg2) == 0)
+            new NISuppression(result_eq_0, arg1_shift0_arg2, suppressee),
 
-        // (r == 0) && (arg2 >= arg1) && (arg1 >= 0) && (arg2 valid shift)
-        // This suppression really ought to have 2**arg2 >= arg1, but we
-        // don't have that invariant.  This still might catch a lot of these.
-        // new NISuppression (result_eq_0, arg1_le_arg2, arg1_ge_0,
-        //                   arg2_valid_shift, suppressee),
-      });
+            // (r == 0) && (arg2 >= arg1) && (arg1 >= 0) && (arg2 valid shift)
+            // This suppression really ought to have 2**arg2 >= arg1, but we
+            // don't have that invariant.  This still might catch a lot of these.
+            // new NISuppression (result_eq_0, arg1_le_arg2, arg1_ge_0,
+            //                   arg2_valid_shift, suppressee),
+          });
 
   #elif FTYPE == FTYPE_Lshift
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+        new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == arg1) && (arg2 == 0) ==> r = arg1 << arg2
-        new NISuppression(result_eq_arg1, arg2_eq_0, suppressee),
+            // (r == arg1) && (arg2 == 0) ==> r = arg1 << arg2
+            new NISuppression(result_eq_arg1, arg2_eq_0, suppressee),
 
-        // (r == 0) && (arg1 == 0) && (0 <= arg2 <= 63)   ==> r = arg1 << arg2
-        new NISuppression(result_eq_0, arg1_eq_0, arg2_valid_shift,
-                           suppressee),
+            // (r == 0) && (arg1 == 0) && (0 <= arg2 <= 63)   ==> r = arg1 << arg2
+            new NISuppression(result_eq_0, arg1_eq_0, arg2_valid_shift,
+                               suppressee),
 
-      });
+          });
 
   #elif FTYPE == FTYPE_BitwiseXor
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+        new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == 0) && (arg1 == arg2) ==> r = arg1 ^ arg2
-        new NISuppression(result_eq_0, arg1_eq_arg2, suppressee),
+            // (r == 0) && (arg1 == arg2) ==> r = arg1 ^ arg2
+            new NISuppression(result_eq_0, arg1_eq_arg2, suppressee),
 
-        // (r == arg1) && (arg2 == 0) ==> r = arg1 ^ arg2
-        new NISuppression(result_eq_arg1, arg2_eq_0, suppressee),
+            // (r == arg1) && (arg2 == 0) ==> r = arg1 ^ arg2
+            new NISuppression(result_eq_arg1, arg2_eq_0, suppressee),
 
-        // (r == arg2) && (arg1 == 0) ==> r = arg1 ^ arg2
-        new NISuppression(result_eq_arg2, arg1_eq_0, suppressee),
+            // (r == arg2) && (arg1 == 0) ==> r = arg1 ^ arg2
+            new NISuppression(result_eq_arg2, arg1_eq_0, suppressee),
 
-      });
+          });
 
   #elif FTYPE == FTYPE_BitwiseAnd
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+        new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == arg1) && (arg1 == arg2) && (r == arg2) ==> r = arg1 &  arg2
-        new NISuppression(result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
-                           suppressee),
+            // (r == arg1) && (arg1 == arg2) && (r == arg2) ==> r = arg1 &  arg2
+            new NISuppression(result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
+                               suppressee),
 
-        // (r == arg1) && (arg1 bitwise subset arg2)
-        new NISuppression(result_eq_arg1, arg1_bw_subset_arg2, suppressee),
+            // (r == arg1) && (arg1 bitwise subset arg2)
+            new NISuppression(result_eq_arg1, arg1_bw_subset_arg2, suppressee),
 
-        // (r == arg2) && (arg2 bitwise subset arg1)
-        new NISuppression(result_eq_arg2, arg2_bw_subset_arg1, suppressee),
+            // (r == arg2) && (arg2 bitwise subset arg1)
+            new NISuppression(result_eq_arg2, arg2_bw_subset_arg1, suppressee),
 
-        // (r == 0) && (arg1 & arg2 == 0) ==> r = arg1 & arg2
-        new NISuppression(result_eq_0, arg1_and0_arg2, suppressee),
+            // (r == 0) && (arg1 & arg2 == 0) ==> r = arg1 & arg2
+            new NISuppression(result_eq_0, arg1_and0_arg2, suppressee),
 
-        // All of these are subsummed by the prior one
-        // (r == 0) && (arg1 == 0) ==> r = arg1 & arg2
-        // new NISuppression (result_eq_0, arg1_eq_0, suppressee),
+            // All of these are subsummed by the prior one
+            // (r == 0) && (arg1 == 0) ==> r = arg1 & arg2
+            // new NISuppression (result_eq_0, arg1_eq_0, suppressee),
 
-        // (r == 0) && (arg2 == 0) ==> r = arg1 & arg2
-        // new NISuppression (result_eq_0, arg2_eq_0, suppressee),
+            // (r == 0) && (arg2 == 0) ==> r = arg1 & arg2
+            // new NISuppression (result_eq_0, arg2_eq_0, suppressee),
 
-        // (r == 0) && (arg1 boolean) && (arg2 is even)
-        // new NISuppression (result_eq_0, arg1_boolean, arg2_even,suppressee),
+            // (r == 0) && (arg1 boolean) && (arg2 is even)
+            // new NISuppression (result_eq_0, arg1_boolean, arg2_even,suppressee),
 
-        // (r == 0) && (arg2 boolean) && (arg1 is even)
-        // new NISuppression (result_eq_0, arg2_boolean, arg1_even,suppressee),
+            // (r == 0) && (arg2 boolean) && (arg1 is even)
+            // new NISuppression (result_eq_0, arg2_boolean, arg1_even,suppressee),
 
-        // (r == 0) && (arg2 > arg1) && (arg2 power2) && (arg1 >= 0)
-        // new NISuppression (result_eq_0, arg1_lt_arg2, arg2_power2,arg1_ge_0,
-        //                   suppressee),
+            // (r == 0) && (arg2 > arg1) && (arg2 power2) && (arg1 >= 0)
+            // new NISuppression (result_eq_0, arg1_lt_arg2, arg2_power2,arg1_ge_0,
+            //                   suppressee),
 
-        // (r == 0) && (arg1 > arg2) && (arg1 power2) && (arg2 >= 0)
-        // new NISuppression (result_eq_0, arg2_lt_arg1, arg1_power2,arg2_ge_0,
-        //                   suppressee),
+            // (r == 0) && (arg1 > arg2) && (arg1 power2) && (arg2 >= 0)
+            // new NISuppression (result_eq_0, arg2_lt_arg1, arg1_power2,arg2_ge_0,
+            //                   suppressee),
 
-        // (r == arg1) && (r boolean) && (arg2 == 1)
-        new NISuppression(result_eq_arg1, result_boolean, arg2_eq_1,
-                           suppressee),
+            // (r == arg1) && (r boolean) && (arg2 == 1)
+            new NISuppression(result_eq_arg1, result_boolean, arg2_eq_1,
+                               suppressee),
 
-        // (r == arg2) && (r boolean) && (arg1 == 1)
-        new NISuppression(result_eq_arg2, result_boolean, arg1_eq_1,
-                           suppressee),
+            // (r == arg2) && (r boolean) && (arg1 == 1)
+            new NISuppression(result_eq_arg2, result_boolean, arg1_eq_1,
+                               suppressee),
 
-      });
+          });
 
   #elif FTYPE == FTYPE_BitwiseOr
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+        new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == arg1) && (arg2 bitwise subset arg1)
-        new NISuppression(result_eq_arg1, arg2_bw_subset_arg1, suppressee),
+            // (r == arg1) && (arg2 bitwise subset arg1)
+            new NISuppression(result_eq_arg1, arg2_bw_subset_arg1, suppressee),
 
-        // (r == arg2) && (arg1 bitwise subset arg2)
-        new NISuppression(result_eq_arg2, arg1_bw_subset_arg2, suppressee),
+            // (r == arg2) && (arg1 bitwise subset arg2)
+            new NISuppression(result_eq_arg2, arg1_bw_subset_arg2, suppressee),
 
-        // All of the below are subsummed by the two above
-        // (r == arg1) && (arg1 == arg2) ==> r = arg1 | arg2
-        // new NISuppression (result_eq_arg1, arg1_eq_arg2, suppressee),
+            // All of the below are subsummed by the two above
+            // (r == arg1) && (arg1 == arg2) ==> r = arg1 | arg2
+            // new NISuppression (result_eq_arg1, arg1_eq_arg2, suppressee),
 
-        // (r == arg1) && (arg2 == 0) ==> r = arg1 | arg2
-        // new NISuppression (result_eq_arg1, arg2_eq_0, suppressee),
+            // (r == arg1) && (arg2 == 0) ==> r = arg1 | arg2
+            // new NISuppression (result_eq_arg1, arg2_eq_0, suppressee),
 
-        // (r == arg2) && (arg1 == 0) ==> r = arg1 | arg2
-        // new NISuppression (result_eq_arg2, arg1_eq_0, suppressee),
+            // (r == arg2) && (arg1 == 0) ==> r = arg1 | arg2
+            // new NISuppression (result_eq_arg2, arg1_eq_0, suppressee),
 
-        // (r == 1) && (arg1 == 1) && (arg2 boolean)
-        // new NISuppression (result_eq_1, arg1_eq_1, arg2_boolean, suppressee),
+            // (r == 1) && (arg1 == 1) && (arg2 boolean)
+            // new NISuppression (result_eq_1, arg1_eq_1, arg2_boolean, suppressee),
 
-        // (r == 1) && (arg2 == 1) && (arg1 boolean)
-        // new NISuppression (result_eq_1, arg2_eq_1, arg1_boolean, suppressee),
+            // (r == 1) && (arg2 == 1) && (arg1 boolean)
+            // new NISuppression (result_eq_1, arg2_eq_1, arg1_boolean, suppressee),
 
-      });
+          });
 
   #elif FTYPE == FTYPE_Gcd
 
@@ -632,134 +645,138 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     // gcd (0, 0) == 0
     // gcd (1, y) == 1
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+        new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == arg1) && (arg1 == arg2) && (r == arg2) && (r >= 0)
-        //    ==> r = Gcd (arg1, arg2)
-        new NISuppression(result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
-                           result_ge_0, suppressee),
+            // (r == arg1) && (arg1 == arg2) && (r == arg2) && (r >= 0)
+            //    ==> r = Gcd (arg1, arg2)
+            new NISuppression(result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
+                               result_ge_0, suppressee),
 
-        // (r == arg1) && (arg2 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
-        new NISuppression(result_eq_arg1, result_ge_0, arg2_eq_0, suppressee),
+            // (r == arg1) && (arg2 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
+            new NISuppression(result_eq_arg1, result_ge_0, arg2_eq_0, suppressee),
 
-        // (r == arg2) && (arg1 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
-        new NISuppression(result_eq_arg2, result_ge_0, arg1_eq_0, suppressee),
+            // (r == arg2) && (arg1 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
+            new NISuppression(result_eq_arg2, result_ge_0, arg1_eq_0, suppressee),
 
-        // (r == 1) && (arg2 == 1)        ==> r = gcd (arg1, art2)
-        new NISuppression(result_eq_1, arg2_eq_1, suppressee),
+            // (r == 1) && (arg2 == 1)        ==> r = gcd (arg1, art2)
+            new NISuppression(result_eq_1, arg2_eq_1, suppressee),
 
-        // (r == 1) && (arg1 == 1)        ==> r = gcd (arg1, art2)
-        new NISuppression(result_eq_1, arg1_eq_1, suppressee),
+            // (r == 1) && (arg1 == 1)        ==> r = gcd (arg1, art2)
+            new NISuppression(result_eq_1, arg1_eq_1, suppressee),
 
-        // (r == arg1) && (arg1 divides arg2) && (r >= 0)
-        new NISuppression(result_eq_arg1, arg1_divides_arg2, result_ge_0, suppressee),
+            // (r == arg1) && (arg1 divides arg2) && (r >= 0)
+            new NISuppression(result_eq_arg1, arg1_divides_arg2, result_ge_0, suppressee),
 
-        // (r == arg2) && (arg2 divides arg1) && (r >= 0)
-        new NISuppression(result_eq_arg2, arg2_divides_arg1, result_ge_0, suppressee),
+            // (r == arg2) && (arg2 divides arg1) && (r >= 0)
+            new NISuppression(result_eq_arg2, arg2_divides_arg1, result_ge_0, suppressee),
 
-        // (r == arg2) && (arg2 boolean) && (arg2==0 ==> arg1==0)
-        // 0 = gcd (arg1, 0) true when (arg1 == 0)
-        // 1 = gcd (arg1, 1) always true
-        new NISuppression(result_eq_arg2, arg2_track0_arg1, arg2_boolean,
-                           suppressee),
+            // (r == arg2) && (arg2 boolean) && (arg2==0 ==> arg1==0)
+            // 0 = gcd (arg1, 0) true when (arg1 == 0)
+            // 1 = gcd (arg1, 1) always true
+            new NISuppression(result_eq_arg2, arg2_track0_arg1, arg2_boolean,
+                               suppressee),
 
-        // (r == arg1) && (arg1 boolean) && (arg1==0 ==> arg2==0)
-        // 0 = gcd (0, arg2), true if (arg2 == 0)
-        // 1 = gcd (1, arg2), always true
-        new NISuppression(result_eq_arg1, arg1_boolean, arg1_track0_arg2,
-                           suppressee),
+            // (r == arg1) && (arg1 boolean) && (arg1==0 ==> arg2==0)
+            // 0 = gcd (0, arg2), true if (arg2 == 0)
+            // 1 = gcd (1, arg2), always true
+            new NISuppression(result_eq_arg1, arg1_boolean, arg1_track0_arg2,
+                               suppressee),
 
-      });
+          });
 
   #elif FTYPE == FTYPE_LogicalAnd
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+        new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == arg1) && (arg1 == arg2) && (r == arg2) && (r is boolean)
-        //    ==> r = arg1 && arg2
-        new NISuppression(result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
-                           result_boolean, suppressee),
+            // (r == arg1) && (arg1 == arg2) && (r == arg2) && (r is boolean)
+            //    ==> r = arg1 && arg2
+            new NISuppression(result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
+                               result_boolean, suppressee),
 
-        // (r == 0) && (arg1 == 0) && (arg2 is boolean) ==> r = arg1 && arg2
-        new NISuppression(result_eq_0, arg1_eq_0, arg2_boolean, suppressee),
+            // (r == 0) && (arg1 == 0) && (arg2 is boolean) ==> r = arg1 && arg2
+            new NISuppression(result_eq_0, arg1_eq_0, arg2_boolean, suppressee),
 
-        // (r == 0) && (arg2 == 0) && (arg1 is boolean) ==> r = arg1 && arg2
-        new NISuppression(result_eq_0, arg2_eq_0, arg1_boolean, suppressee),
+            // (r == 0) && (arg2 == 0) && (arg1 is boolean) ==> r = arg1 && arg2
+            new NISuppression(result_eq_0, arg2_eq_0, arg1_boolean, suppressee),
 
-        // (r == 0) && (arg1 == 0) && (arg2 boolean) ==> r = arg1 && arg2
-        new NISuppression(result_eq_0, arg1_eq_0, arg2_boolean, suppressee),
+            // (r == 0) && (arg1 == 0) && (arg2 boolean) ==> r = arg1 && arg2
+            new NISuppression(result_eq_0, arg1_eq_0, arg2_boolean, suppressee),
 
-        // (r == 0) && (arg2 == 0) && (arg1 boolean) ==> r = arg1 && arg2
-        new NISuppression(result_eq_0, arg2_eq_0, arg1_boolean, suppressee),
+            // (r == 0) && (arg2 == 0) && (arg1 boolean) ==> r = arg1 && arg2
+            new NISuppression(result_eq_0, arg2_eq_0, arg1_boolean, suppressee),
 
-        // (r == arg1) && (r boolean) && (arg2 == 1)
-        new NISuppression(result_eq_arg1, result_boolean, arg2_eq_1,
-                           suppressee),
+            // (r == arg1) && (r boolean) && (arg2 == 1)
+            new NISuppression(result_eq_arg1, result_boolean, arg2_eq_1,
+                               suppressee),
 
-        // (r == arg2) && (r boolean) && (arg1 == 1)
-        new NISuppression(result_eq_arg2, result_boolean, arg1_eq_1,
-                           suppressee),
+            // (r == arg2) && (r boolean) && (arg1 == 1)
+            new NISuppression(result_eq_arg2, result_boolean, arg1_eq_1,
+                               suppressee),
 
-      });
+          });
 
   #elif FTYPE == FTYPE_LogicalOr
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+        new NISuppressionSet(
+          new NISuppression[] {
 
-        // Note that
-        // x == y && y == z does NOT imply x == z because of possibly
-        // missing values.  For example:
-        //
-        //  Sample    X         Y           Z
-        //    1       1         1           missing
-        //    2       0         missing     1
-        //    3       missing   0           0
-        //
-        //  The best solution seems to be to include all three
-        //  equalities for the suppression
+            // Note that
+            // x == y && y == z does NOT imply x == z because of possibly
+            // missing values.  For example:
+            //
+            //  Sample    X         Y           Z
+            //    1       1         1           missing
+            //    2       0         missing     1
+            //    3       missing   0           0
+            //
+            //  The best solution seems to be to include all three
+            //  equalities for the suppression
 
-        // (r == arg1) && (arg1 == arg2) && (r == arg2) && (r is boolean)
-        //    ==> r = arg1 | arg2
-        new NISuppression(result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
-                           result_boolean, suppressee),
+            // (r == arg1) && (arg1 == arg2) && (r == arg2) && (r is boolean)
+            //    ==> r = arg1 | arg2
+            new NISuppression(result_eq_arg1, arg1_eq_arg2, result_eq_arg2,
+                               result_boolean, suppressee),
 
-        // (r == arg1) && (arg2 == 0) && (r is boolean) ==> r = arg1 | arg2
-        new NISuppression(result_eq_arg1, result_boolean, arg2_eq_0,
-                           suppressee),
+            // (r == arg1) && (arg2 == 0) && (r is boolean) ==> r = arg1 | arg2
+            new NISuppression(result_eq_arg1, result_boolean, arg2_eq_0,
+                               suppressee),
 
-        // (r == arg2) && (arg1 == 0) && (r is boolean) ==> r = arg1 | arg2
-        new NISuppression(result_eq_arg2, result_boolean, arg1_eq_0,
-                           suppressee),
+            // (r == arg2) && (arg1 == 0) && (r is boolean) ==> r = arg1 | arg2
+            new NISuppression(result_eq_arg2, result_boolean, arg1_eq_0,
+                               suppressee),
 
-        // (r == 1) && (arg1 == 1) && (arg2 boolean)
-        new NISuppression(result_eq_1, arg1_eq_1, arg2_boolean, suppressee),
+            // (r == 1) && (arg1 == 1) && (arg2 boolean)
+            new NISuppression(result_eq_1, arg1_eq_1, arg2_boolean, suppressee),
 
-        // (r == 1) && (arg2 == 1) && (arg1 boolean)
-        new NISuppression(result_eq_1, arg2_eq_1, arg1_boolean, suppressee),
+            // (r == 1) && (arg2 == 1) && (arg1 boolean)
+            new NISuppression(result_eq_1, arg2_eq_1, arg1_boolean, suppressee),
 
-      });
+          });
 
   #elif FTYPE == FTYPE_LogicalXor
 
-    private static NISuppressionSet suppressions
-      = new NISuppressionSet(new NISuppression[] {
+    private static NISuppressionSet suppressions =
+        new NISuppressionSet(
+          new NISuppression[] {
 
-        // (r == 0) && (arg1 == arg2) && (arg1 boolean) ==> r = arg1 ^ arg2
-        new NISuppression(arg1_eq_arg2, arg1_boolean, result_eq_0,
-                           suppressee),
+            // (r == 0) && (arg1 == arg2) && (arg1 boolean) ==> r = arg1 ^ arg2
+            new NISuppression(arg1_eq_arg2, arg1_boolean, result_eq_0,
+                               suppressee),
 
-        // (r == arg1) && (arg2 == 0) && (resultvar boolean) ==> r = arg1 ^ arg2
-        new NISuppression(result_eq_arg1, result_boolean, arg2_eq_0,
-                           suppressee),
+            // (r == arg1) && (arg2 == 0) && (resultvar boolean) ==> r = arg1 ^ arg2
+            new NISuppression(result_eq_arg1, result_boolean, arg2_eq_0,
+                               suppressee),
 
-        // (r == arg2) && (arg1 == 0) && (resultvar boolean)==> r = arg1 ^ arg2
-        new NISuppression(result_eq_arg2, result_boolean, arg1_eq_0,
-                           suppressee),
+            // (r == arg2) && (arg1 == 0) && (resultvar boolean)==> r = arg1 ^ arg2
+            new NISuppression(result_eq_arg2, result_boolean, arg1_eq_0,
+                               suppressee),
 
-      });
+          });
 
   #endif
 

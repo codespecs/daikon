@@ -222,7 +222,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff LOWERBOUND invariants should be considered. */
+  /** Boolean. True iff LOWERBOUND invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
   /**
    * Long integer. Together with the corresponding <code>maximal_interesting</code> parameter,
@@ -309,8 +309,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
         || (format.isJavaFamily())
-        || (format == OutputFormat.CSHARPCONTRACT))
-    {
+        || (format == OutputFormat.CSHARPCONTRACT)) {
 
       if (PrintInvariants.dkconfig_static_const_infer) {
         for (VarInfo vi : pptt.var_infos) {
@@ -612,8 +611,8 @@ public class LOWERBOUND extends SINGLESCALAR {
   public boolean hasUninterestingConstant() {
     // If the constant bound is not in some small range of interesting
     // values (by default {-1, 0, 1, 2}), call it uninteresting.
-    if ((MIN1 < dkconfig_minimal_interesting) ||
-        (MIN1 > dkconfig_maximal_interesting)) {
+    if ((MIN1 < dkconfig_minimal_interesting)
+        || (MIN1 > dkconfig_maximal_interesting)) {
       return true;
     }
 #if defined(BASE_FLOAT)
@@ -630,8 +629,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     VarInfo var = vis[0];
     if ((var.derived instanceof SequenceLength)
          && (((SequenceLength) var.derived).shift != 0)) {
-      return new DiscardInfo(this, DiscardCode.obvious, "Bounds are preferrable over"
-                             + " sequence lengths with no shift");
+      return new DiscardInfo(this, DiscardCode.obvious, "Bounds are preferrable over sequence lengths with no shift");
     }
 
     #if defined(LOWER) || defined(LOWERFLOAT) || defined(UPPER) || defined(UPPERFLOAT)
@@ -668,8 +666,8 @@ public class LOWERBOUND extends SINGLESCALAR {
     }
 
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
-    if ((MIN1 < dkconfig_minimal_interesting) ||
-        (MIN1 > dkconfig_maximal_interesting)) {
+    if ((MIN1 < dkconfig_minimal_interesting)
+        || (MIN1 > dkconfig_maximal_interesting)) {
       // XXX This check doesn't really belong here. However It
       // shouldn't get removed until hasUninterestingConstant() is
       // suitable to be turned on everywhere by default. -SMcC
@@ -812,12 +810,10 @@ public class LOWERBOUND extends SINGLESCALAR {
    * code finds all of the min/max values in each invariant, applies them to a new parent invariant
    * and returns the merged invariant (if any).
    *
-   * @param invs        list of invariants to merge. The invariants must all
-   *                    be of the same type and should come from the
-   *                    children of parent_ppt. They should also all
-   *                    be permuted to match the variable order in
-   *                    parent_ppt.
-   * @param parent_ppt  slice that will contain the new invariant
+   * @param invs list of invariants to merge. The invariants must all be of the same type and should
+   *     come from the children of parent_ppt. They should also all be permuted to match the
+   *     variable order in parent_ppt.
+   * @param parent_ppt slice that will contain the new invariant
    */
   public /*@Nullable*/ Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
 

@@ -48,7 +48,7 @@ public final class CLASSNAME extends BinaryDerivation {
 
   /** Debug tracer. */
   public static final Logger debug =
-      Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
+    Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

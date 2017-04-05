@@ -86,7 +86,7 @@ public final class CLASSNAME extends SUPERCLASS {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean.  True iff EltNonZero invariants should be considered. */
+  /** Boolean. True iff EltNonZero invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CLASSNAME(PptSlice ppt) {
@@ -236,8 +236,7 @@ public final class CLASSNAME extends SUPERCLASS {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     } else {
       double probability_one_elt_nonzero = 1 - confidence_one_elt_nonzero();
-      double result
-        = 1 - Math.pow(probability_one_elt_nonzero, ppt.num_samples());
+      double result = 1 - Math.pow(probability_one_elt_nonzero, ppt.num_samples());
       // if ((result < 0) || (result > 1))
       //  System.err.println ("bad result: vs.max=" + vs.max() + " vs.min="
       //                      + vs.min() + " conf="
@@ -347,8 +346,8 @@ public final class CLASSNAME extends SUPERCLASS {
           Daikon.current_inv = this;
         }
         if (parent.is_subsequence(v1, v2)) {
-          return new DiscardInfo(this, DiscardCode.obvious, v1.name() +
-                                  " is a subsequence of " + v2.name());
+          return new DiscardInfo(this, DiscardCode.obvious, v1.name()
+                                  + " is a subsequence of " + v2.name());
         }
       }
     }
@@ -380,12 +379,13 @@ public final class CLASSNAME extends SUPERCLASS {
       NISuppressor v_eq_one = new NISuppressor(0, EQUAL_ONE.class);
       NISuppressor v_eq_minus_one = new NISuppressor(0, EQUAL_MINUS_ONE.class);
 
-      suppressions = new NISuppressionSet(new NISuppression[] {
-          // v == 1 ==> v != 0
-          new NISuppression(v_eq_one, suppressee),
-          // v == -1 ==> v != 0
-          new NISuppression(v_eq_minus_one, suppressee),
-        });
+      suppressions = new NISuppressionSet(
+          new NISuppression[] {
+              // v == 1 ==> v != 0
+              new NISuppression(v_eq_one, suppressee),
+              // v == -1 ==> v != 0
+              new NISuppression(v_eq_minus_one, suppressee),
+          });
     }
 
     return suppressions;

@@ -123,8 +123,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /** Boolean. True if CLASSNAME invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  public static Logger debug
-    = Logger.getLogger("daikon.inv.ternary.threeScalar.#CLASSNAME");
+  public static Logger debug =
+    Logger.getLogger("daikon.inv.ternary.threeScalar.#CLASSNAME");
 
   static final int[][] var_indices;
   static {
@@ -458,8 +458,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     VarInfo[] vis = ppt.var_infos;
 
     String result = vis[var_indices[var_order][0]].simplifyFixedupName();
-    String arg1 =   vis[var_indices[var_order][1]].simplifyFixedupName();
-    String arg2 =   vis[var_indices[var_order][2]].simplifyFixedupName();
+    String arg1 = vis[var_indices[var_order][1]].simplifyFixedupName();
+    String arg2 = vis[var_indices[var_order][2]].simplifyFixedupName();
     String func = null;
     if (methodname[1].equals(" * ")) {
       func = "*";
@@ -484,8 +484,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
       func = "|java-" + methodname[1].trim() + "|";
     }
     if (func == null) {
-      return "format_simplify_contract() doesn't know function " + methodname[0] + "-" +
-        methodname[1] + "-" + methodname[2];
+      return "format_simplify_contract() doesn't know function " + methodname[0] + "-"
+        + methodname[1] + "-" + methodname[2];
     }
     return "(EQ " + result + " (" + func + " " + arg1 + " " + arg2 + "))";
   }

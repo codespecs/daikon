@@ -239,18 +239,18 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends TernaryDerivationFacto
         // lb asserts that lb.core.a * lb.var1() + lb.core.b * lb.var2() + lb.core.c == 0
         // or lb.var2() == - (lb.core.a / lb.core.b) * lb.var1() - lb.core.c / lb.core.b
 
-      //  if (lb.core.a == 1) {
+        //  if (lb.core.a == 1) {
         if (-lb.core.a / lb.core.b == 1) {
           // Don't set unconditionally, and don't break:  we want to check
           // other variables as well.
-      //    if (lb.core.b == -1) {
+          //    if (lb.core.b == -1) {
           if (-lb.core.c / lb.core.b == -1) {
             if (lb.var1() != startvar) {
               // i = k - 1, so k = i + 1
               suppress_i_plus_1 = true;
             }
           }
-//          if (lb.core.b == 1) {
+          //          if (lb.core.b == 1) {
           if (-lb.core.c / lb.core.b == 1) {
             if (lb.var1() == startvar) {
               // k = i + 1
