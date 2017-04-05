@@ -2935,8 +2935,8 @@ public class PptTopLevel extends Ppt {
    */
   /*@RequiresNonNull("proverStack")*/
   private void flagRedundantRecursive(
-      InvariantLemma /*@SameLen({"lemmas", "present"})*/[] lemmas,
-      boolean /*@SameLen({"lemmas", "present"})*/[] present,
+      InvariantLemma /*@SameLen({"#1", "#2"})*/[] lemmas,
+      boolean /*@SameLen({"#1", "#2"})*/[] present,
       /*@IndexFor({"#1","#2"})*/ int start,
       /*@IndexFor({"#1","#2"})*/ int end)
       throws SimplifyError {
