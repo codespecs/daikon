@@ -836,14 +836,6 @@ ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
 	@./.run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && false)
 endif
 
-format-auto-generated: ${AUTO_GENERATED_FILES}
-	${MAKE} get-run-google-java-format
-	chmod +w ${AUTO_GENERATED_FILES}
-	@./.run-google-java-format/run-google-java-format.py ${AUTO_GENERATED_FILES}
-
-check-format-auto-generated: ${AUTO_GENERATED_FILES}
-	-@./.run-google-java-format/check-google-java-format.py ${AUTO_GENERATED_FILES}
-
 
 ###########################################################################
 ### Pluggable type qualifier checkers
