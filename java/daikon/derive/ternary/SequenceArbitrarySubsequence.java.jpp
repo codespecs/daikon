@@ -28,7 +28,6 @@ package daikon.derive.ternary;
 
 import daikon.*;
 import daikon.derive.*;
-
 import plume.*;
 
 /*>>>
@@ -36,9 +35,7 @@ import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
-  extends TernaryDerivation
-{
+public final class SEQUENCESCALARARBITRARYSUBSEQUENCE extends TernaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -46,18 +43,23 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff SEQUENCESCALARARBITRARYSUBSEQUENCE derived variables
-   * should be generated.
-   */
+  /** Boolean. True iff SEQUENCESCALARARBITRARYSUBSEQUENCE derived variables should be generated. */
   public static boolean dkconfig_enabled = false;
 
   // base1 is the sequence
   // base2 is the starting index
   // base3 is the ending index
-  public VarInfo seqvar() { return base1; }
-  public VarInfo startvar() { return base2; }
-  public VarInfo endvar() { return base3; }
+  public VarInfo seqvar() {
+    return base1;
+  }
+
+  public VarInfo startvar() {
+    return base2;
+  }
+  
+  public VarInfo endvar() {
+    return base3;
+  }
 
   // True if the subsequence includes its left endpoint.
   public final boolean left_closed;
@@ -66,8 +68,9 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
   public final boolean right_closed;
 
   /**
-   * Represents a subsequence of a sequence.  The subsequence a[i..j]
-   * includes the endpoints i and j.  The subsequence is meaningful if:
+   * Represents a subsequence of a sequence. The subsequence a[i..j] includes the endpoints i and j.
+   * The subsequence is meaningful if:
+   *
    * <pre>
    *  i &ge; 0
    *  i &le; a.length
@@ -75,25 +78,27 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
    *  j &le; a.length-1
    *  i &le; j+1
    * </pre>
+   *
    * These are the empty array:
+   *
    * <pre>
    *   a[0..-1]
    *   a[a.length..a.length-1]
    * </pre>
+   *
    * These are illegal:
+   *
    * <pre>
    *   a[1..-1]
    *   a[a.length..a.length-2]
    *   a[a.length+1..a.length]
    * </pre>
    *
-   * @param left_closed true means the range starts at i; false means
-   * it starts at i+1
-   * @param right_closed true means the range ends at j; false means
-   * it ends at j-1
+   * @param left_closed true means the range starts at i; false means it starts at i+1
+   * @param right_closed true means the range ends at j; false means it ends at j-1
    */
-  public SEQUENCESCALARARBITRARYSUBSEQUENCE(VarInfo vi1, VarInfo vi2, VarInfo vi3,
-                                   boolean left_closed, boolean right_closed) {
+  public SEQUENCESCALARARBITRARYSUBSEQUENCE(
+      VarInfo vi1, VarInfo vi2, VarInfo vi3, boolean left_closed, boolean right_closed) {
     super(vi1, vi2, vi3);
     this.left_closed = left_closed;
     this.right_closed = right_closed;
@@ -160,37 +165,37 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
       return ValueAndModified.MISSING_NONSENSICAL;
     }
 
-    int mod = (((mod1 == ValueTuple.UNMODIFIED)
-                && (mod2 == ValueTuple.UNMODIFIED)
-                && (mod3 == ValueTuple.UNMODIFIED))
-               ? ValueTuple.UNMODIFIED
-               : ValueTuple.MODIFIED);
+    int mod =
+        (((mod1 == ValueTuple.UNMODIFIED)
+          && (mod2 == ValueTuple.UNMODIFIED)
+          && (mod3 == ValueTuple.UNMODIFIED))
+         ? ValueTuple.UNMODIFIED
+         : ValueTuple.MODIFIED);
 
     if ((begin_inclusive == 0) && (end_exclusive == val1_array.length)) {
       return new ValueAndModified(val1, mod);
     }
 
-    SCALAR[] subarr = ArraysMDE.subarray(val1_array, begin_inclusive,
-                                         end_exclusive - begin_inclusive);
+    SCALAR[] subarr =
+        ArraysMDE.subarray(val1_array, begin_inclusive, end_exclusive - begin_inclusive);
     subarr = Intern.intern(subarr);
     return new ValueAndModified(subarr, mod);
   }
 
   protected VarInfo makeVarInfo() {
 
-    return VarInfo.make_subsequence (seqvar(), startvar(),
-                                     (left_closed ? 0 : 1),
-                                     endvar(), (right_closed ? 0 : -1));
+    return VarInfo.make_subsequence(
+        seqvar(), startvar(), (left_closed ? 0 : 1), endvar(), (right_closed ? 0 : -1));
   }
 
     /** Returns the lower bound of the slice */
   public Quantify.Term get_lower_bound() {
-    return new Quantify.VarPlusOffset (startvar(), (left_closed ? 0 : 1));
+    return new Quantify.VarPlusOffset(startvar(), (left_closed ? 0 : 1));
   }
 
   /** Returns the upper bound of the slice */
   public Quantify.Term get_upper_bound() {
-    return new Quantify.VarPlusOffset (endvar(), (right_closed ? 0 : 1));
+    return new Quantify.VarPlusOffset(endvar(), (right_closed ? 0 : 1));
   }
 
   /** Returns the array variable for this slice */
@@ -201,13 +206,13 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
   /*@Pure*/
   public boolean isSameFormula(Derivation other) {
     return (other instanceof SEQUENCESCALARARBITRARYSUBSEQUENCE)
-      && (((SEQUENCESCALARARBITRARYSUBSEQUENCE)other).left_closed == this.left_closed)
-      && (((SEQUENCESCALARARBITRARYSUBSEQUENCE)other).right_closed == this.right_closed);
+        && (((SEQUENCESCALARARBITRARYSUBSEQUENCE) other).left_closed == this.left_closed)
+        && (((SEQUENCESCALARARBITRARYSUBSEQUENCE) other).right_closed == this.right_closed);
   }
 
   /** Returns the csharp name */
   /*@SideEffectFree*/
-  public String csharp_name (String index) {
+  public String csharp_name(String index) {
     String lower = get_lower_bound().csharp_name();
     String upper = get_upper_bound().csharp_name();
     // We do not need to check if seqvar().isPrestate() because it is redundant.
@@ -217,8 +222,8 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
   /** Returns the ESC name */
   /*@SideEffectFree*/
   public String esc_name(String index) {
-    return String.format ("%s[%s..%s]", seqvar().esc_name(),
-                    get_lower_bound().esc_name(), get_upper_bound().esc_name());
+    return String.format(
+       "%s[%s..%s]",
+       seqvar().esc_name(), get_lower_bound().esc_name(), get_upper_bound().esc_name());
   }
-
 }

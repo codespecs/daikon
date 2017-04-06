@@ -31,7 +31,7 @@ public abstract class SplitterList {
 
   /** Associate an array of splitters with the program point pptname. */
   public static void put(String pptname, Splitter[] splits) {
-    // for (int i=0; i<splits.length; i++) {
+    // for (int i = 0; i<splits.length; i++) {
     //   assert splits[i].instantiated() == false;
     // }
 

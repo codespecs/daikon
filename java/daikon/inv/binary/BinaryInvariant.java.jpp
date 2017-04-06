@@ -67,10 +67,10 @@
 
 package daikon.inv.binary.PACKAGE;
 
-import daikon.inv.*;
-import daikon.inv.binary.*;
 import daikon.*;
+import daikon.inv.*;
 import daikon.inv.InvariantStatus;
+import daikon.inv.binary.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -82,25 +82,19 @@ import typequals.*;
 /**
  * Base class for invariants over two variables of type PRIMITIVENONCOMMENT.
  * EXAMPLE_INVARIANT
- * <p>
  *
- * Provides a simpler
- * mechanism for non-symmetric invariants to function over both permutations
+ * <p>Provides a simpler mechanism for non-symmetric invariants to function over both permutations
  * of their variables.
- * <p>
  *
- * Non-symmetric invariants must instantiate two objects (one for each
- * argument order).  This is tracked by the variable swap.  They must always
- * access their variables via the methods var1() and var2() which return
- * the correct variable (based on the swap setting).  No other work is
- * necessary, all permuations and resurrection is handled here.
- * <p>
+ * <p>Non-symmetric invariants must instantiate two objects (one for each argument order). This is
+ * tracked by the variable swap. They must always access their variables via the methods var1() and
+ * var2() which return the correct variable (based on the swap setting). No other work is necessary,
+ * all permuations and resurrection is handled here.
  *
- * Symmetric invariants should define symmetric() to return true or
- * override resurrect_done_swapped to do nothing.  Non-symmetric
- * invariants that use converse operations (eg, less than and greater
- * than) rather than argument swapping should override
- * resurrect_done_swapped to return the correct class.
+ * <p>Symmetric invariants should define symmetric() to return true or override
+ * resurrect_done_swapped to do nothing. Non-symmetric invariants that use converse operations (eg,
+ * less than and greater than) rather than argument swapping should override resurrect_done_swapped
+ * to return the correct class.
  */
 public abstract class CLASSNAME extends BinaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
@@ -111,45 +105,36 @@ public abstract class CLASSNAME extends BinaryInvariant {
   // if true, swap the order of the invariant variables
   protected boolean swap = false;
 
-  protected CLASSNAME (PptSlice ppt) {
+  protected CLASSNAME(PptSlice ppt) {
     super(ppt);
   }
 
-  protected /*@Prototype*/ CLASSNAME () {
+  protected /*@Prototype*/ CLASSNAME() {
     super();
   }
 
   /** Returns whether or not the specified types are valid. */
-  final public boolean valid_types (VarInfo[] vis) {
+  final public boolean valid_types(VarInfo[] vis) {
 
     if (vis.length != 2) {
       return false;
     }
 
     #if defined(TYPELONG) || defined(TYPEDOUBLE) || defined(TYPESTRING)
-      boolean dim_ok = !vis[0].file_rep_type.isArray()
-                        && !vis[1].file_rep_type.isArray();
+      boolean dim_ok = !vis[0].file_rep_type.isArray() && !vis[1].file_rep_type.isArray();
     #else
-      boolean dim_ok = vis[0].file_rep_type.isArray()
-                        && vis[1].file_rep_type.isArray();
+      boolean dim_ok = vis[0].file_rep_type.isArray() && vis[1].file_rep_type.isArray();
     #endif
 
-    return (dim_ok && vis[0].file_rep_type.BASE_IS_TYPE
-            && vis[1].file_rep_type.BASE_IS_TYPE);
+    return (dim_ok && vis[0].file_rep_type.BASE_IS_TYPE && vis[1].file_rep_type.BASE_IS_TYPE);
   }
 
-  /**
-   * Returns whether or not the variable order is currently swapped
-   * for this invariant.
-   */
+  /** Returns whether or not the variable order is currently swapped for this invariant. */
   public boolean get_swap() {
     return swap;
   }
 
-  /**
-   * Checks to see if the variable order was swapped and calls the
-   * correct routine to handle it.
-   */
+  /** Checks to see if the variable order was swapped and calls the correct routine to handle it. */
   protected Invariant resurrect_done(int[] permutation) {
     assert permutation.length == 2;
     // assert ArraysMDE.fn_is_permutation(permutation);
@@ -160,9 +145,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     }
   }
 
-  /**
-   * Swaps the variables by inverting the state of swap.
-   */
+  /** Swaps the variables by inverting the state of swap. */
   protected Invariant resurrect_done_swapped() {
     if (!is_symmetric()) {
       swap = !swap;
@@ -170,18 +153,15 @@ public abstract class CLASSNAME extends BinaryInvariant {
     return this;
   }
 
-   /**
-   * Subclasses can override in the rare cases they need to fix things
-   * even when not swapped.
-   */
+   /** Subclasses can override in the rare cases they need to fix things even when not swapped. */
   protected Invariant resurrect_done_unswapped() {
     // do nothing
     return this;
   }
 
   /**
-   * Returns the first variable.  This is the only mechanism by which
-   * subclasses should access variables.
+   * Returns the first variable. This is the only mechanism by which subclasses should access
+   * variables.
    */
   public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) {
     if (swap) {
@@ -192,8 +172,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /**
-   * Returns the first variable.  This is the only mechanism by which
-   * subclasses should access variables.
+   * Returns the first variable. This is the only mechanism by which subclasses should access
+   * variables.
    */
   public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
     if (swap) {
@@ -204,10 +184,10 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /**
-   * Returns the first variable from the specified vis.  This is the
-   * only mechanism by which subclasses should access variables.
+   * Returns the first variable from the specified vis. This is the only mechanism by which
+   * subclasses should access variables.
    */
-  public VarInfo var1 (VarInfo[] vis) {
+  public VarInfo var1(VarInfo[] vis) {
     if (swap) {
       return vis[1];
     } else {
@@ -216,10 +196,10 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /**
-   * Returns the first variable in the specified vis.  This is the
-   * only mechanism by which subclasses should access variables.
+   * Returns the first variable in the specified vis. This is the only mechanism by which subclasses
+   * should access variables.
    */
-  public VarInfo var2 (VarInfo[] vis) {
+  public VarInfo var2(VarInfo[] vis) {
     if (swap) {
       return vis[0];
     } else {
@@ -227,8 +207,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
     }
   }
 
-  public InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index,
-                               int count) {
+  public InvariantStatus check(
+      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;
@@ -237,20 +217,21 @@ public abstract class CLASSNAME extends BinaryInvariant {
     PRIMITIVE v2 = GET_VAL(val2);
     if (mod_index == 0) {
       if (swap) {
-        return check_unmodified (v2, v1, count);
+        return check_unmodified(v2, v1, count);
       } else {
         return check_unmodified(v1, v2, count);
       }
     } else {
       if (swap) {
-        return check_modified (v2, v1, count);
+        return check_modified(v2, v1, count);
       } else {
         return check_modified(v1, v2, count);
       }
     }
   }
 
-  public InvariantStatus add(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
+  public InvariantStatus add(
+      /*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;
@@ -273,49 +254,39 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /**
-   * Presents a sample to the invariant.
-   * Returns whether the sample is consistent with the invariant.
-   * Does not change the state of the invariant.
-   * @param count how many identical samples were observed in a row.
-   * For example, three calls to check_modified with a count parameter of 1 is
-   * equivalent to one call to check_modified with a count parameter of 3.
+   * Presents a sample to the invariant. Returns whether the sample is consistent with the
+   * invariant. Does not change the state of the invariant.
+   *
+   * @param count how many identical samples were observed in a row. For example, three calls to
+   *     check_modified with a count parameter of 1 is equivalent to one call to check_modified with
+   *     a count parameter of 3.
    * @return whether or not the sample is consistent with the invariant
    */
-  public abstract InvariantStatus check_modified(PRIMITIVE v1,
-                                                 PRIMITIVE v2, int count);
+  public abstract InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, int count);
 
-  public InvariantStatus check_unmodified(PRIMITIVE v1,
-                                          PRIMITIVE v2, int count) {
+  public InvariantStatus check_unmodified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
-  /**
-   * Default implementation simply calls check.  Subclasses can override.
-   */
+  /** Default implementation simply calls check. Subclasses can override. */
   public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
-    return (check_modified (v1, v2, count));
+    return (check_modified(v1, v2, count));
   }
 
-  /**
-   * By default, do nothing if the value hasn't been seen yet.
-   * Subclasses can override this.
-   */
+  /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
   public InvariantStatus add_unmodified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
-  /**
-   * Returns a representation of the class.  This includes the classname,
-   * variables, and swap state.
-   */
+  /** Returns a representation of the class. This includes the classname, variables, and swap state. */
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return getClass().getName() + " (" + var1().name() + ", "
       + var2().name() + ") [swap=" + swap + "]";
   }
 
   /**
-   * Return true if both invariants are the same class and the order
-   * of the variables (swap) is the same.
+   * Return true if both invariants are the same class and the order of the variables (swap) is the
+   * same.
    */
   /*@Pure*/
   public boolean isSameFormula(Invariant other) {
@@ -326,7 +297,4 @@ public abstract class CLASSNAME extends BinaryInvariant {
   protected double computeConfidence() {
     return Invariant.conf_is_ge(ppt.num_values(), 5);
   }
-
-
-
 }

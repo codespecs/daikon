@@ -39,7 +39,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
 
   /**
    * @param from_start true means the range goes 0..n; false means the range goes n..end. (n might
-   *     be fudged through off_by_one)
+   *     be fudged through off_by_one.)
    * @param off_by_one true means we should exclude the scalar from the range; false means we should
    *     include it
    */

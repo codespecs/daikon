@@ -27,7 +27,7 @@ The correct way to build the system is to run 'make'.
   #define EQUAL_MINUS_ONE EltRangeInt.EqualMinusOne
   #define VALUE_SET ValueSet.ValueSetScalarArray
 #elif defined(TYPEDOUBLE)
-  #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
+  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
   #define CLASSNAME EltNonZeroFloat
   #define CLASSSTRING "EltNonZeroFloat"
   #define SUPERCLASS SingleFloatSequence
@@ -52,17 +52,14 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.unary.scalar.*;
-import daikon.inv.binary.twoSequence.*;
 import daikon.inv.ValueSet;
+import daikon.inv.binary.twoSequence.*;
+import daikon.inv.unary.scalar.*;
 import daikon.suppress.*;
-
-import plume.*;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -72,22 +69,15 @@ import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
 
-
-
 /**
- * Represents the invariant "x != 0" where x represents all of the elements
- * of a sequence of PRIMITIVE.  Prints as <code>x[] elements != 0</code>.
+ * Represents the invariant "x != 0" where x represents all of the elements of a sequence of
+ * PRIMITIVE. Prints as <code>x[] elements != 0</code>.
  */
 
-public final class CLASSNAME
-  extends SUPERCLASS
-{
-  /**
-   * Debug tracer.
-   */
+public final class CLASSNAME extends SUPERCLASS {
+  /** Debug tracer. */
   public static final Logger debug =
     Logger.getLogger("daikon.inv.unary.sequence." + CLASSSTRING);
-
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -96,9 +86,7 @@ public final class CLASSNAME
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff EltNonZero invariants should be considered.
-   */
+  /** Boolean. True iff EltNonZero invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   public CLASSNAME(PptSlice ppt) {
@@ -109,7 +97,7 @@ public final class CLASSNAME
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
@@ -122,13 +110,11 @@ public final class CLASSNAME
   }
 
   /** instantiate an invariant on the specified slice */
-  protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
-    return new CLASSNAME (slice);
+  protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+    return new CLASSNAME(slice);
   }
 
-  /**
-   * Returns whether or not the variable is a pointer.
-   */
+  /** Returns whether or not the variable is a pointer. */
   /*@Pure*/
   private boolean is_pointer(/*>>>@GuardSatisfied CLASSNAME this*/) {
     return (!ppt.var_infos[0].type.BASEISTYPE);
@@ -152,7 +138,7 @@ public final class CLASSNAME
   }
 
   public String format_daikon(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return var().name() + " elements " + "!=" + " "
+    return var().name() + " elements != "
            + (is_pointer() ? "null" : "0");
   }
 
@@ -175,7 +161,7 @@ public final class CLASSNAME
       String esc_name = null;
       if (term == null) {
         // Only happenes in internal format tests
-        esc_name = var().name().replace ("[]", "");
+        esc_name = var().name().replace("[]", "");
       } else {
         // System.out.printf ("term = %s, var = %s%n", term.name, var().name);
         esc_name = term.esc_name();
@@ -192,7 +178,7 @@ public final class CLASSNAME
     // exception, since var() is certainly a sequence.  So use the
     // standard quantification.
 
-    String[] form = VarInfo.esc_quantify (var());
+    String[] form = VarInfo.esc_quantify(var());
     return form[0] + "(" + form[1] + " != "
            + (is_pointer() ? "null" : "0") + ")" + form[2];
   }
@@ -211,13 +197,13 @@ public final class CLASSNAME
   }
 
   public String format_simplify(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    String[] form = VarInfo.simplify_quantify (var());
+    String[] form = VarInfo.simplify_quantify(var());
     return form[0] + "(NEQ " + form[1] + " "
       + (is_pointer() ? "null" : "0") + ")" + form[2];
   }
 
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
-    for (int ai=0; ai<a.length; ai++) {
+    for (int ai = 0; ai < a.length; ai++) {
       PRIMITIVE v = a[ai];
 
       if (EQUAL(v, 0)) {
@@ -234,7 +220,7 @@ public final class CLASSNAME
     //  log ("max=" + vs.max() + " array=" + ArraysMDE.toString (a));
     //}
 
-    return (check_modified (a, count));
+    return (check_modified(a, count));
   }
 
   protected double computeConfidence() {
@@ -250,8 +236,7 @@ public final class CLASSNAME
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     } else {
       double probability_one_elt_nonzero = 1 - confidence_one_elt_nonzero();
-      double result
-        = 1 - Math.pow(probability_one_elt_nonzero, ppt.num_samples());
+      double result = 1 - Math.pow(probability_one_elt_nonzero, ppt.num_samples());
       // if ((result < 0) || (result > 1))
       //  System.err.println ("bad result: vs.max=" + vs.max() + " vs.min="
       //                      + vs.min() + " conf="
@@ -287,7 +272,6 @@ public final class CLASSNAME
     return 1.0/range;
   }
 
-
   /*@Pure*/
   public boolean isSameFormula(Invariant other) {
     assert other instanceof CLASSNAME;
@@ -313,9 +297,8 @@ public final class CLASSNAME
       // If it's not a number and null doesn't have special meaning...
       return new DiscardInfo(this, DiscardCode.obvious, "'null' has no special meaning for " + vis[0].name());
     }
-    return super.isObviousStatically (vis);
+    return super.isObviousStatically(vis);
   }
-
 
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
@@ -327,27 +310,27 @@ public final class CLASSNAME
     VarInfo v1 = vis[0];
 
     // (a[] == []) ==> a[] != 0
-    if (ppt.parent.is_empty (v1)) {
-      return new DiscardInfo (this, DiscardCode.obvious, v1 + "is empty");
+    if (ppt.parent.is_empty(v1)) {
+      return new DiscardInfo(this, DiscardCode.obvious, v1 + "is empty");
     }
 
     // (a[] > 0) v (a[] < 0) ==> a[] != 0
     ELTLOWERBOUND lb = (ELTLOWERBOUND) ppt.parent.find_inv_by_class
                                                     (vis, ELTLOWERBOUND.class);
     if ((lb != null) && (lb.min() > 0)) {
-      return new DiscardInfo (this, DiscardCode.obvious, v1 + " > " + lb.min());
+      return new DiscardInfo(this, DiscardCode.obvious, v1 + " > " + lb.min());
     }
     ELTUPPERBOUND ub = (ELTUPPERBOUND) ppt.parent.find_inv_by_class
                                                     (vis, ELTUPPERBOUND.class);
     if ((ub != null) && (ub.max() < 0)) {
-      return new DiscardInfo (this, DiscardCode.obvious, v1 + " < " + ub.max());
+      return new DiscardInfo(this, DiscardCode.obvious, v1 + " < " + ub.max());
     }
 
     // For every other EltNonZero at this program point, see if there is a
     // subsequence relationship between that array and this one.
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Testing isObviousDynamically for " + vis[0].name());
+      debug.fine("Testing isObviousDynamically for " + vis[0].name());
     }
 
     PptTopLevel parent = ppt.parent;
@@ -356,15 +339,15 @@ public final class CLASSNAME
       if ((inv instanceof CLASSNAME) && (inv != this) && inv.enoughSamples()) {
         VarInfo v2 = inv.ppt.var_infos[0];
         if (debug.isLoggable(Level.FINE)) {
-          debug.fine ("  Have to test: " + inv.repr());
+          debug.fine("  Have to test: " + inv.repr());
         }
 
         if (Debug.logOn()) {
           Daikon.current_inv = this;
         }
-        if (parent.is_subsequence (v1, v2)) {
-          return new DiscardInfo (this, DiscardCode.obvious, v1.name() +
-                                  " is a subsequence of " + v2.name());
+        if (parent.is_subsequence(v1, v2)) {
+          return new DiscardInfo(this, DiscardCode.obvious, v1.name()
+                                  + " is a subsequence of " + v2.name());
         }
       }
     }
@@ -390,21 +373,21 @@ public final class CLASSNAME
   /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
-      NISuppressee suppressee = new NISuppressee (CLASSNAME.class, 1);
+      NISuppressee suppressee = new NISuppressee(CLASSNAME.class, 1);
 
       // suppressor definitions (used in suppressions below)
-      NISuppressor v_eq_one = new NISuppressor (0, EQUAL_ONE.class);
-      NISuppressor v_eq_minus_one = new NISuppressor (0, EQUAL_MINUS_ONE.class);
+      NISuppressor v_eq_one = new NISuppressor(0, EQUAL_ONE.class);
+      NISuppressor v_eq_minus_one = new NISuppressor(0, EQUAL_MINUS_ONE.class);
 
-      suppressions = new NISuppressionSet (new NISuppression[] {
-          // v == 1 ==> v != 0
-          new NISuppression (v_eq_one, suppressee),
-          // v == -1 ==> v != 0
-          new NISuppression (v_eq_minus_one, suppressee),
-        });
+      suppressions = new NISuppressionSet(
+          new NISuppression[] {
+              // v == 1 ==> v != 0
+              new NISuppression(v_eq_one, suppressee),
+              // v == -1 ==> v != 0
+              new NISuppression(v_eq_minus_one, suppressee),
+          });
     }
 
     return suppressions;
   }
-
 }

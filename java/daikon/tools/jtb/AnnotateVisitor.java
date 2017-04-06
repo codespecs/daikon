@@ -709,7 +709,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       NodeSequence ns = (NodeSequence) n.f0.choice;
       PrimaryExpression pe = (PrimaryExpression) ns.elementAt(0);
       // System.out.println("pe:" + Ast.format(pe));
-      // for (int i=0; i<ns.size(); i++) {
+      // for (int i = 0; i<ns.size(); i++) {
       //   System.out.println("ns #" + i + ": " + ns.elementAt(i));
       // }
       if (ns.size() == 2) {

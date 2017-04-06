@@ -770,7 +770,7 @@ class FormatTestCase {
 
   //          // Recursively call parse on the substrings to get the array
   //          // entries
-  //          for (int i=0; i<arrayLength; i++) {
+  //          for (int i = 0; i<arrayLength; i++) {
   //            parse(subType, i, temp, stok.nextToken());
   //          }
 
@@ -788,11 +788,11 @@ class FormatTestCase {
   //            arrayFunctionName = "set" + capsSubTypeName;
   //            arrayFunction = Array.class.getMethod(arrayFunctionName, new Class [] {Object.class, int.class, subType});
 
-  //            for (int i=0; i<arrayLength; i++) {
+  //            for (int i = 0; i<arrayLength; i++) {
   //              arrayFunction.invoke(null, new Object [] {result, new Integer(i), temp[i]});
   //            }
   //          } else {
-  //            for (int i=0; i<arrayLength; i++) {
+  //            for (int i = 0; i<arrayLength; i++) {
   //              Array.set(result, i, temp[i]);
   //            }
   //          }
@@ -918,11 +918,11 @@ class FormatTestCase {
       //        System.out.println("P0 is array: " + params[0].getClass().isArray() + " type: " + params[0].getClass().getComponentType());
       //        System.out.println("P1 is array: " + params[1].getClass().isArray() + " type: " + params[1].getClass().getComponentType());
 
-      //        for (int y=0; y<sampleSize; y++) {
+      //        for (int y = 0; y<sampleSize; y++) {
       //          try {
       //            if (params[y].getClass().isArray()) {
       //              System.out.print("P" + y + " array representation: ");
-      //              for (int x=0; ; x++) {
+      //              for (int x = 0; ; x++) {
       //                System.out.print(Array.get(params[y],x) + " ");
       //              }
       //            }

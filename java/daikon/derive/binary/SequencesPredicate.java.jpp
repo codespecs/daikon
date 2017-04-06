@@ -26,10 +26,8 @@ package daikon.derive.binary;
 
 import daikon.*;
 import daikon.derive.*;
-
-import plume.*;
-
 import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -38,80 +36,68 @@ import org.checkerframework.dataflow.qual.*;
 */
 
 /**
- * Derived variable representing the selecting of elements of one
- * sequence based on the values of another sequence.  We only
- * predicate if we know that both sequences came from the same
- * original data structure.  Derived type is the same as that of
- * the first sequence.
+ * Derived variable representing the selecting of elements of one sequence based on the values of
+ * another sequence. We only predicate if we know that both sequences came from the same original
+ * data structure. Derived type is the same as that of the first sequence.
  */
-public final class CLASSNAME
-  extends BinaryDerivation
-{
+public final class CLASSNAME extends BinaryDerivation {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
   /** Debug tracer. */
-  public static final Logger debug
-    = Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
+  public static final Logger debug =
+    Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff SequencesPredicate derived variables should be generated.
-   */
+  /** Boolean. True iff SequencesPredicate derived variables should be generated. */
   public static boolean dkconfig_enabled = false;
 
   /**
-   * Boolean.  True if Daikon should only generate derivations on fields
-   * of the same data structure.
+   * Boolean. True if Daikon should only generate derivations on fields of the same data structure.
    */
   public static boolean dkconfig_fieldOnly = true;
 
-  /**
-   * Boolean.  True if Daikon should only generate derivations on boolean
-   * predicates.
-   */
+  /** Boolean. True if Daikon should only generate derivations on boolean predicates. */
   public static boolean dkconfig_boolOnly = true;
 
+  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) { 
+    return base1;
+  }
 
+  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) {
+    return base2;
+  }
 
-  public VarInfo var1(/*>>>@GuardSatisfied CLASSNAME this*/) { return base1; }
-  public VarInfo var2(/*>>>@GuardSatisfied CLASSNAME this*/) { return base2; }
-
-  /**
-   * What value to predicate on.
-   */
+  /** What value to predicate on. */
   private PRIMITIVE choose;
 
-  /**
-   * Whether we keep or discard values that match this.choose.
-   */
+  /** Whether we keep or discard values that match this.choose. */
   private boolean keep;
 
-
-  /**
-   * What this predication is called (e.g. for choose == 0 and 1, use "false"
-   * and "true").
-   */
+  /** What this predication is called (e.g. for choose == 0 and 1, use "false" and "true"). */
   private String name;
 
   /**
    * Create a new SequencesJoin derivation.
+   *
    * @param vi1 the first of the two variables this is based on
    * @param vi2 the second of the two variables this is based on
    */
   public CLASSNAME(VarInfo vi1, VarInfo vi2, PRIMITIVE argChoose, String argName) {
-    this (vi1, vi2, argChoose, argName, true);
+    this(vi1, vi2, argChoose, argName, true);
   }
 
   /**
    * Create a new SequencesJoin derivation.
+   *
    * @param vi1 the first of the two variables this is based on
    * @param vi2 the second of the two variables this is based on
    */
-  public CLASSNAME(VarInfo vi1, VarInfo vi2, PRIMITIVE argChoose, String argName, boolean argKeep) {
+  public CLASSNAME(
+      VarInfo vi1, VarInfo vi2, PRIMITIVE argChoose, String argName, boolean argKeep) {
     super(vi1, vi2);
     choose = argChoose;
     name = argName;
@@ -119,13 +105,12 @@ public final class CLASSNAME
   }
 
   /**
-   * Returns a subset of val1 such that the corresponding element in
-   * var2 equals this.choose.  It is assumed that val1 and val2
-   * originated from the same, larger data structure.
-   * @param full_vt the value tuple of a program point to compute the
-   * derived value from
+   * Returns a subset of val1 such that the corresponding element in var2 equals this.choose. It is
+   * assumed that val1 and val2 originated from the same, larger data structure.
+   * 
+   * @param full_vt the value tuple of a program point to compute the derived value from
    */
-  public ValueAndModified computeValueAndModifiedImpl (ValueTuple full_vt) {
+  public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);
     Object val2 = var2().getValue(full_vt);
 
@@ -193,7 +178,7 @@ public final class CLASSNAME
           j++;
         }
       }
-      return new ValueAndModified (Intern.intern(result), mod);
+      return new ValueAndModified(Intern.intern(result), mod);
     } else if (val1 instanceof Object[]) {
       /*@Interned*/ Object[] result = new /*@Interned*/ Object[count];
       @SuppressWarnings("interning") // object invariant: array elements are interned
@@ -205,26 +190,27 @@ public final class CLASSNAME
           j++;
         }
       }
-      return new ValueAndModified (Intern.intern(result), mod);
+      return new ValueAndModified(Intern.intern(result), mod);
     } else if (val1 == null) {
-      return new ValueAndModified (null, mod);
+      return new ValueAndModified(null, mod);
     } else {
       throw new RuntimeException("Invalid input arrays");
     }
-
-
   }
 
-
-
   protected VarInfo makeVarInfo() {
-    return VarInfo.make_function ("predicateSlice", var1(), var2());
+    return VarInfo.make_function("predicateSlice", var1(), var2());
   }
 
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return "[" + CLASSSTRING + " of " + var1().name() + " " +
-      var2().name() + " for " + name + "]";
+    return "[" + CLASSSTRING + " of "
+        + var1().name()
+        + " "
+        + var2().name()
+        + " for "
+        + name
+        + "]";
   }
 
   /*@Pure*/
@@ -232,9 +218,7 @@ public final class CLASSNAME
     // For Toh (tohn) to do.
     if (other instanceof CLASSNAME) {
       CLASSNAME o = (CLASSNAME) other;
-      return o.var1().equals(var1())
-        && o.var2().equals(var2())
-        && choose == o.choose;
+      return o.var1().equals(var1()) && o.var2().equals(var2()) && choose == o.choose;
     }
     return false;
   }
@@ -242,8 +226,6 @@ public final class CLASSNAME
   /** Returns the ESC name */
   /*@SideEffectFree*/
   public String esc_name(String index) {
-    return String.format ("predicate(%s,%s)", var1().esc_name(),
-                          var2().esc_name());
+    return String.format("predicate(%s,%s)", var1().esc_name(), var2().esc_name());
   }
-
 }

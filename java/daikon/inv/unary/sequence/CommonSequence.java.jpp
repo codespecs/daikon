@@ -4,7 +4,6 @@ You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-
 #if !(defined(TYPEDOUBLE) || defined(TYPELONG))
   #error "TYPEDOUBLE or TYPELONG must be defined"
 #endif
@@ -33,7 +32,6 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-
 import plume.*;
 
 /*>>>
@@ -45,13 +43,11 @@ import typequals.*;
 */
 
 /**
- * Represents sequences of PRIMITIVE values that contain a common subset.
- * Prints as <code>{e1, e2, e3, ...} subset of x[]</code>.
+ * Represents sequences of PRIMITIVE values that contain a common subset. Prints as
+ * <code>{e1, e2, e3, ...} subset of x[]</code>.
  */
 
-public class CLASSNAME
-  extends SUPERCLASS
-{
+public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -59,14 +55,10 @@ public class CLASSNAME
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff CommonSequence invariants should be considered.
-   */
+  /** Boolean. True iff CommonSequence invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  /**
-   * Boolean.  Set to true to consider common sequences over hashcodes (pointers).
-   */
+  /** Boolean. Set to true to consider common sequences over hashcodes (pointers). */
   public static boolean dkconfig_hashcode_seqs = false;
 
   static final boolean debugCommonSequence = false;
@@ -87,7 +79,7 @@ public class CLASSNAME
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME();
 
   /** Returns the prototype invariant for CLASSNAME */
   public static /*@Prototype*/ CLASSNAME get_proto() {
@@ -99,13 +91,10 @@ public class CLASSNAME
     return dkconfig_enabled;
   }
 
-  /**
-   * Sequences of hashcode values won't be consistent and are thus
-   * not printed by default.
-   */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  /** Sequences of hashcode values won't be consistent and are thus not printed by default. */
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis)) {
+    if (!valid_types(vis)) {
       return false;
     }
 
@@ -113,7 +102,7 @@ public class CLASSNAME
   }
 
   /** instantiate an invariant on the specified slice */
-  protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
+  protected CLASSNAME instantiate_dyn(/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
@@ -121,19 +110,18 @@ public class CLASSNAME
   // public Object clone();
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return CLASSSTRING + " " + varNames() + ": "
-      + "elts=\"" + elts;
+    return CLASSSTRING + " " + varNames() + ": elts=\"" + elts;
   }
 
   private String printIntersect(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    if (intersect==null) {
+    if (intersect == null) {
       return "{}";
     }
 
     String result = "{";
-    for (int i=0; i<intersect.length; i++) {
+    for (int i = 0; i < intersect.length; i++) {
       result += intersect[i];
-      if (i!=intersect.length-1) {
+      if (i != intersect.length - 1) {
         result += ", ";
       }
     }
@@ -155,7 +143,7 @@ public class CLASSNAME
   }
 
   public String format_csharp_contract(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    if (intersect==null) {
+    if (intersect == null) {
       return "()";
     }
 
@@ -165,7 +153,7 @@ public class CLASSNAME
     }
 
     String exp = "(";
-    for (int i=0; i < intersect.length; i++) {
+    for (int i = 0; i < intersect.length; i++) {
       exp += " " + intersect[i] + " ";
       if (i != intersect.length - 1) {
         exp += ",";
@@ -193,10 +181,10 @@ public class CLASSNAME
     }
     StringBuffer pre_buf = new StringBuffer("");
     StringBuffer end_buf = new StringBuffer("");
-    for (int i=0; i<intersect.length; i++) {
-      pre_buf.append("(EXISTS ("+idx+i + ") (AND ");
-      pre_buf.append("(>= "+idx+i + " " + name[1] + ") ");
-      pre_buf.append("(<= "+idx+i + " " + name[2] + ") ");
+    for (int i = 0; i < intersect.length; i++) {
+      pre_buf.append("(EXISTS ("+idx + i + ") (AND ");
+      pre_buf.append("(>= "+idx + i + " " + name[1] + ") ");
+      pre_buf.append("(<= "+idx + i + " " + name[2] + ") ");
 
       // Based on the class name, I originally wrote this method as if
       // the invariant represented a common subsequence between two
@@ -204,12 +192,12 @@ public class CLASSNAME
       // order). In case an invariant like that is added in the
       // future, use the following:
 //       if (i == 0)
-//         pre_buf.append("(>= "+idx+i + " 0) ");
+//         pre_buf.append("(>= "+idx + i + " 0) ");
 //       else if (i > 0)
-//          pre_buf.append("(> "+idx+i + " "+idx+(i-1) +") ");
+//          pre_buf.append("(> "+idx + i + " "+idx+(i-1) +") ");
 //       if (i == intersect.length - 1)
-//         pre_buf.append("(< "+idx+i + " (select arrayLength " + name[0] + ")) ");
-      pre_buf.append("(EQ (select (select elems " + name[0] + ") "+idx+i + ") "
+//         pre_buf.append("(< "+idx + i + " (select arrayLength " + name[0] + ")) ");
+      pre_buf.append("(EQ (select (select elems " + name[0] + ") "+idx + i + ") "
                      + TOSTRING_SIMPLIFY(intersect[i]) + ")");
       if (i == intersect.length - 1) {
         pre_buf.append(" ");
@@ -223,11 +211,11 @@ public class CLASSNAME
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     if (a == null) {
       return InvariantStatus.FALSIFIED;
-    } else if (intersect==null) {
+    } else if (intersect == null) {
       return InvariantStatus.NO_CHANGE;
     } else {
       for (int i = 0; i < a.length; i++) {
-        if (INDEXOF (intersect, a[i]) != -1) {
+        if (INDEXOF(intersect, a[i]) != -1) {
           return InvariantStatus.NO_CHANGE;
         }
       }
@@ -235,23 +223,22 @@ public class CLASSNAME
     }
   }
 
-
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     // System.out.println ("common: " + ArraysMDE.toString (a));
     if (a == null) {
       return InvariantStatus.FALSIFIED;
-    } else if (intersect==null) {
+    } else if (intersect == null) {
       intersect = a;
       return InvariantStatus.NO_CHANGE;
     }
 
     PRIMITIVE[] tmp = new PRIMITIVE[intersect.length];
     int size = 0;
-    for (int i=0; i<a.length; i++) {
+    for (int i = 0; i < a.length; i++) {
       // if (a[i] in intersect) && !(a[i] in tmp), add a[i] to tmp
-      int ii = INDEXOF (intersect, a[i]);
-      if ((ii != -1) &&
-        (INDEXOF (ArraysMDE.subarray(tmp,0,size), a[i]) == -1)) {
+      int ii = INDEXOF(intersect, a[i]);
+      if ((ii != -1)
+        && (INDEXOF(ArraysMDE.subarray(tmp,0,size), a[i]) == -1)) {
         //System.out.println ("adding " + intersect[ii] + " at " + size);
 
         // Carefully add the existing intersect value and not a[i].  These
@@ -260,7 +247,7 @@ public class CLASSNAME
         tmp[size++] = intersect[ii];
       }
     }
-    if (size==0) {
+    if (size == 0) {
       return InvariantStatus.FALSIFIED;
     }
 
