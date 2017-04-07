@@ -25,7 +25,6 @@
 #define PERMUTATION PERM_ZXY
 #include "daikon/inv/ternary/threeScalar/FunctionBinaryGeneric.java.jpp"
 
-
 #if 0
   // Make sure all arguments are not inadvertantly passed to the next use
 #endif

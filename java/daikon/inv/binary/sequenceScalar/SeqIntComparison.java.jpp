@@ -45,7 +45,7 @@
 #elif defined(EQUALFLOAT)
   #define SEQINTEQUAL SeqFloatEqual
   #define SEQINTEQUALstring "SeqFloatEqual"
-  #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.eq(a, b))
   #define EQUALShtml
   #define EQUALSstring "=="
   #define EQUALSstringDBC "eltsEqual"
@@ -61,7 +61,7 @@
 #elif defined(LESSTHANFLOAT)
   #define SEQINTEQUAL SeqFloatLessThan
   #define SEQINTEQUALstring "SeqFloatLessThan"
-  #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.lt(a, b))
   #define EQUALShtml &lt;
   #define EQUALSstring "<"
   #define EQUALSstringDBC "eltsLT"
@@ -77,7 +77,7 @@
 #elif defined(LESSEQUALFLOAT)
   #define SEQINTEQUAL SeqFloatLessEqual
   #define SEQINTEQUALstring "SeqFloatLessEqual"
-  #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.lte(a, b))
   #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define EQUALSstringDBC "eltsLTE"
@@ -93,7 +93,7 @@
 #elif defined(GREATERTHANFLOAT)
   #define SEQINTEQUAL SeqFloatGreaterThan
   #define SEQINTEQUALstring "SeqFloatGreaterThan"
-  #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.gt(a, b))
   #define EQUALShtml &gt;
   #define EQUALSstring ">"
   #define EQUALSstringDBC "eltsGT"
@@ -109,7 +109,7 @@
 #elif defined(GREATEREQUALFLOAT)
   #define SEQINTEQUAL SeqFloatGreaterEqual
   #define SEQINTEQUALstring "SeqFloatGreaterEqual"
-  #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
+  #define EQUALS(a,b) (Global.fuzzy.gte(a, b))
   #define EQUALShtml &ge;
   #define EQUALSstring ">="
   #define EQUALSstringDBC "eltsGTE"
@@ -125,14 +125,12 @@ package daikon.inv.binary.sequenceScalar;
 import daikon.*;
 import daikon.derive.unary.*;
 import daikon.inv.*;
-import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.twoSequence.*;
+import daikon.inv.unary.sequence.*;
 import daikon.suppress.*;
-
-import plume.*;
-
 import java.util.*;
 import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -142,16 +140,12 @@ import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
 
-
 /**
- * Represents an invariant between a PRIMITIVE scalar and a
- * a sequence of PRIMITIVE values.
- * Prints as <code>x[] elements EQUALShtml y</code> where <code>x</code> is a
- * PRIMITIVE sequence and <code>y</code> is a PRIMITIVE scalar.
+ * Represents an invariant between a PRIMITIVE scalar and a a sequence of PRIMITIVE values. Prints
+ * as <code>x[] elements EQUALShtml y</code> where <code>x</code> is a PRIMITIVE sequence and
+ * <code>y</code> is a PRIMITIVE scalar.
  */
-public final class SEQINTEQUAL
-  extends SUPERCLASS
-{
+public final class SEQINTEQUAL extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -159,13 +153,11 @@ public final class SEQINTEQUAL
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff SEQINTEQUAL invariants should be considered.
-   */
+  /** Boolean. True iff SEQINTEQUAL invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-  public static final Logger debug
-    = Logger.getLogger("daikon.inv.binary.sequenceScalar." + SEQINTEQUALstring);
+  public static final Logger debug =
+    Logger.getLogger("daikon.inv.binary.sequenceScalar." + SEQINTEQUALstring);
 
   static boolean debugSeqIntComparison = false;
 
@@ -177,10 +169,10 @@ public final class SEQINTEQUAL
     super();
   }
 
-  private static /*@Prototype*/ SEQINTEQUAL proto = new /*@Prototype*/ SEQINTEQUAL ();
+  private static /*@Prototype*/ SEQINTEQUAL proto = new /*@Prototype*/ SEQINTEQUAL();
 
   /** Returns the prototype invariant for SEQINTEQUAL */
-  public static /*@Prototype*/ SEQINTEQUAL get_proto () {
+  public static /*@Prototype*/ SEQINTEQUAL get_proto() {
     return proto;
   }
 
@@ -190,9 +182,9 @@ public final class SEQINTEQUAL
   }
 
   /** Non-equal SeqIntComparison is only valid on integral types */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis)) {
+    if (!valid_types(vis)) {
       return false;
     }
 
@@ -219,21 +211,20 @@ public final class SEQINTEQUAL
   }
 
   /** instantiates the invariant on the specified slice */
-  protected SEQINTEQUAL instantiate_dyn (/*>>> @Prototype SEQINTEQUAL this,*/ PptSlice slice) {
-    return new SEQINTEQUAL (slice);
+  protected SEQINTEQUAL instantiate_dyn(/*>>> @Prototype SEQINTEQUAL this,*/ PptSlice slice) {
+    return new SEQINTEQUAL(slice);
   }
 
   /**
-   * Checks to see if the comparison is obvious statically.  Makes the
-   * following checks:
+   * Checks to see if the comparison is obvious statically. Makes the following checks:
+   *
    * <pre>
    *    max(A[]) op A[]
    *    min(A[]) op A[]
    * </pre>
    *
-   * JHP: Note that these are not strict implications, these are merely
-   * uninteresting comparisons (except when op is GreaterEqual for max
-   * and LessEqual for min).
+   * JHP: Note that these are not strict implications, these are merely uninteresting comparisons
+   * (except when op is GreaterEqual for max and LessEqual for min).
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
@@ -250,8 +241,7 @@ public final class SEQINTEQUAL
       sclseq = seqmax.base;
     }
     if (seqvar(vis) == sclseq) {
-      return new DiscardInfo (this, DiscardCode.obvious,
-                              sclvar(vis).name() + " is min/max ");
+      return new DiscardInfo(this, DiscardCode.obvious, sclvar(vis).name() + " is min/max ");
     }
     return null;
   }
@@ -263,8 +253,7 @@ public final class SEQINTEQUAL
   }
 
   public String repr(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
-    return SEQINTEQUALstring + varNames() + ": "
-      + ",falsified=" + falsified;
+    return SEQINTEQUALstring + varNames() + ": ,falsified=" + falsified;
   }
 
   /*@SideEffectFree*/
@@ -285,32 +274,39 @@ public final class SEQINTEQUAL
   }
 
   public String format_esc(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
-    String[] form = VarInfo.esc_quantify (seqvar(), sclvar());
-    return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")"
-      + form[3];
+    String[] form = VarInfo.esc_quantify(seqvar(), sclvar());
+    return form[0] + "(" + form[1] + " " + EQUALSstring + " " + form[2] + ")" + form[3];
   }
 
   public String format_simplify(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
-    String[] form = VarInfo.simplify_quantify (seqvar(), sclvar());
-    return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " "
-      + form[2] + ")" + form[3];
+    String[] form = VarInfo.simplify_quantify(seqvar(), sclvar());
+    return form[0] + "(" + EQUALSSIMPLIFYstring + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 
   public String format_java_family(/*>>>@GuardSatisfied SEQINTEQUAL this,*/ OutputFormat format) {
     return "daikon.Quant." + EQUALSstringDBC + "("
-      + seqvar().name_using(format) + ", " + sclvar().name_using(format) + ")";
+        + seqvar().name_using(format)
+        + ", "
+        + sclvar().name_using(format)
+        + ")";
   }
 
   public String format_csharp_contract(/*>>>@GuardSatisfied SEQINTEQUAL this*/) {
     String[] split = seqvar().csharp_array_split();
-    return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + EQUALSstring + " " + sclvar().csharp_name() + ")";
+    return "Contract.ForAll("
+        + split[0]
+        + ", x => x"
+        + split[1]
+        + " " + EQUALSstring + " "
+        + sclvar().csharp_name()
+        + ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, PRIMITIVE x, int count) {
     /*if (logDetail() || debug.isLoggable(Level.FINE))
       log(debug,"(" + EQUALSstring + " " + ArraysMDE.toString(a)
       + " " + x);*/
-    for (int i=0; i<a.length; i++) {
+    for (int i = 0; i < a.length; i++) {
       #if (!defined(EQUAL) && !defined(EQUALFLOAT))
         // assert seqvar().type.elementIsIntegral();
       #endif
@@ -380,8 +376,8 @@ public final class SEQINTEQUAL
   }
 
   /**
-   * Checks to see if this is obvious over the specified variables.
-   * Implements the following checks:
+   * Checks to see if this is obvious over the specified variables. Implements the following checks:
+   *
    * <pre>
    *  (x op B[]) ^ (B[] subsequence A[]) &rArr; (x op A[])
    *  (A[] == [])                        &rArr; (x op A[])
@@ -413,13 +409,17 @@ public final class SEQINTEQUAL
         SEQINTEQUAL other = (SEQINTEQUAL) inv;
         // System.out.printf ("considering %s seqvar=%s, other=%s%n", other.format(),
         // seqvar().name(), other.seqvar().name());
-        if (pptt.is_subsequence (seqvar(), other.seqvar())
-            && (sclvar(vis) == other.sclvar())) {
+        if (pptt.is_subsequence(seqvar(), other.seqvar()) && (sclvar(vis) == other.sclvar())) {
           // System.out.println ("is subsequence");
-          return new DiscardInfo(this, DiscardCode.obvious, seqvar().name()
-                                 + " is a subsequence of "
-                                 + other.seqvar().name() + " and "
-                                 + other.format() + " holds");
+          return new DiscardInfo(
+              this,
+              DiscardCode.obvious,
+              seqvar().name()
+                  + " is a subsequence of "
+                  + other.seqvar().name()
+                  + " and "
+                  + other.format()
+                  + " holds");
         }
       }
     }
@@ -427,9 +427,9 @@ public final class SEQINTEQUAL
     // JHP: handled in confidence test now
     // (A[] == []) ==> A[] op x
     if (false) {
-      if (pptt.is_empty (seqvar)) {
-        return new DiscardInfo (this, DiscardCode.obvious, "The sequence "
-                                + seqvar.name() + " is always empty");
+      if (pptt.is_empty(seqvar)) {
+        return new DiscardInfo(
+            this, DiscardCode.obvious, "The sequence " + seqvar.name() + " is always empty");
       }
     }
 
@@ -442,16 +442,23 @@ public final class SEQINTEQUAL
     if (sclvar.isDerived() && (sclvar.derived instanceof SequenceLength)) {
       // Sequence length tests
       SequenceLength scl_seqlen = (SequenceLength) sclvar.derived;
-
       #if (defined(LESSTHAN) || defined(LESSTHANFLOAT))
+
       if ((scl_seqlen != null) && (scl_seqlen.shift == 0)) {
         // "x < size(a)"  ("x <= size(a)-1" would be more informative)
-        return new DiscardInfo(this, DiscardCode.obvious, "An Invariant of the form x <= size(a)-1 would be more informative");
+        return new DiscardInfo(
+            this,
+            DiscardCode.obvious,
+            "An Invariant of the form x <= size(a)-1 would be more informative");
       }
       #elif (defined(GREATERTHAN) || defined(GREATERTHANFLOAT))
+
       if ((scl_seqlen != null) && (scl_seqlen.shift == -1)) {
         // "x > size(a)-1"  ("x >= size(a)" would be more informative)
-        return new DiscardInfo(this, DiscardCode.obvious, "An Invariant of the form x >= size(a) would be more informative");
+        return new DiscardInfo(
+            this,
+            DiscardCode.obvious,
+            "An Invariant of the form x >= size(a) would be more informative");
       }
       #endif
     }
@@ -471,51 +478,44 @@ public final class SEQINTEQUAL
     return null;
   }
 
-  /**
-   * Returns a list of non-instantiating suppressions for this invariant.
-   */
+  /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }
 
   /** definition of this invariant (the suppressee) */
-  private static NISuppressee suppressee
-    = new NISuppressee (SEQINTEQUAL.class, 2);
+  private static NISuppressee suppressee = new NISuppressee(SEQINTEQUAL.class, 2);
 
   // suppressor definitions (used in suppressions below)
-  private static NISuppressor v1_eq_v2
-    = new NISuppressor (0, 1, EQUAL_CLASS.class);
-  private static NISuppressor v1_gt_v2
-    = new NISuppressor (0, 1, GREATER_THAN_CLASS.class);
-  private static NISuppressor v1_lt_v2
-    = new NISuppressor (0, 1, LESS_THAN_CLASS.class);
+  private static NISuppressor v1_eq_v2 = new NISuppressor(0, 1, EQUAL_CLASS.class);
+  private static NISuppressor v1_gt_v2 = new NISuppressor(0, 1, GREATER_THAN_CLASS.class);
+  private static NISuppressor v1_lt_v2 = new NISuppressor(0, 1, LESS_THAN_CLASS.class);
 
   // NI Suppressions for each type of comparison
-  #if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
-    private static NISuppressionSet suppressions =
-      new NISuppressionSet (new NISuppression[] {
+#if defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
+  private static NISuppressionSet suppressions =
+    new NISuppressionSet(
+        new NISuppression[] {
 
-        // v1 == v2 => v1 >= v2
-        new NISuppression (v1_eq_v2, suppressee),
+            // v1 == v2 => v1 >= v2
+            new NISuppression(v1_eq_v2, suppressee),
 
-        // v1 > v2 => v1 >= v2
-        new NISuppression (v1_gt_v2, suppressee),
+            // v1 > v2 => v1 >= v2
+            new NISuppression(v1_gt_v2, suppressee),
+        });
+#elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
+  private static NISuppressionSet suppressions =
+    new NISuppressionSet(
+        new NISuppression[] {
 
-      });
-  #elif defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
-    private static NISuppressionSet suppressions =
-      new NISuppressionSet (new NISuppression[] {
+            // v1 == v2 => v1 <= v2
+            new NISuppression(v1_eq_v2, suppressee),
 
-        // v1 == v2 => v1 <= v2
-        new NISuppression (v1_eq_v2, suppressee),
-
-        // v1 < v2 => v1 <= v2
-        new NISuppression (v1_lt_v2, suppressee),
-
-      });
-  #else
-    private static /*@Nullable*/ NISuppressionSet suppressions = null;
-  #endif
-
+            // v1 < v2 => v1 <= v2
+            new NISuppression(v1_lt_v2, suppressee),
+        });
+#else
+  private static /*@Nullable*/ NISuppressionSet suppressions = null;
+#endif
 }

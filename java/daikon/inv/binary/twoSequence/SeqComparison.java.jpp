@@ -14,8 +14,8 @@ The correct way to build the system is to run 'make'.
   #define NUMERIC
   #define IS_INT
   #define ARRAYCOMPARATOR new ArraysMDE.LongArrayComparatorLexical()
-  #define ELEM_MATCH_COMPARE(v1, v2) (ArraysMDE.isSubset (v1, v2) && \
-                                      ArraysMDE.isSubset (v2, v1))
+  #define ELEM_MATCH_COMPARE(v1, v2) (ArraysMDE.isSubset(v1, v2) && \
+                                      ArraysMDE.isSubset(v2, v1))
   #define SUBSEQUENCE SubSequence
   #define BASE_IS_TYPE baseIsIntegral()
   #define BASE_IS_SCALAR baseIsScalar()
@@ -36,7 +36,7 @@ The correct way to build the system is to run 'make'.
   #define NUMERIC
   #define IS_FLOAT
   #define ARRAYCOMPARATOR Global.fuzzy.new DoubleArrayComparatorLexical()
-  #define ELEM_MATCH_COMPARE(v1, v2) Global.fuzzy.isElemMatch (v1, v2)
+  #define ELEM_MATCH_COMPARE(v1, v2) Global.fuzzy.isElemMatch(v1, v2)
   #define SUBSEQUENCE SubSequenceFloat
   #define BASE_IS_TYPE baseIsFloat()
   #define BASE_IS_SCALAR baseIsFloat()
@@ -56,8 +56,8 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE String
   #define IS_STRING
   #define ARRAYCOMPARATOR new ArraysMDE.StringArrayComparatorLexical()
-  #define ELEM_MATCH_COMPARE(v1, v2) (ArraysMDE.isSubset (v1, v2) && \
-                                      ArraysMDE.isSubset (v2, v1))
+  #define ELEM_MATCH_COMPARE(v1, v2) (ArraysMDE.isSubset(v1, v2) && \
+                                      ArraysMDE.isSubset(v2, v1))
   #define SUBSEQUENCE SubSequenceString
   #define BASE_IS_TYPE baseIsString()
   #define BASE_IS_SCALAR baseIsString()
@@ -225,14 +225,13 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.binary.twoSequence;
 
 import daikon.*;
+import daikon.Quantify.QuantFlags;
+import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.suppress.*;
-import daikon.derive.binary.*;
-import daikon.Quantify.QuantFlags;
-
-import plume.*;
-import java.util.logging.Logger;
 import java.util.*;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -242,27 +241,20 @@ import org.checkerframework.dataflow.qual.*;
 import typequals.*;
 */
 
-
 /**
- * Represents invariants between two sequences of PRIMITIVE values.  If order
- * matters for each variable (which it does by default), then the
- * sequences are compared lexically.
- * Prints as <code>x[] EQUALShtml y[] lexically</code>.
+ * Represents invariants between two sequences of PRIMITIVE values. If order matters for each
+ * variable (which it does by default), then the sequences are compared lexically. Prints as
+ * <code>x[] EQUALShtml y[] lexically</code>.
  *
 #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
- * If order doesn't matter for each variable, then the sequences
- * are compared to see if they are set equivalent.  Prints as
- * <code>x[] == y[]</code>.
+ * <p>If order doesn't matter for each variable, then the sequences are compared to see if they are
+ * set equivalent. Prints as <code>x[] == y[]</code>.
  *
 #endif
- * If the auxiliary information (e.g., order matters)
- * doesn't match between two variables, then this invariant cannot
- * apply to those variables.
+ * <p>If the auxiliary information (e.g., order matters) doesn't match between two variables, then
+ * this invariant cannot apply to those variables.
  */
-public class SEQSEQINTEQUAL
-  extends SUPERCLASS
-  implements Comparison
-{
+public class SEQSEQINTEQUAL extends SUPERCLASS implements Comparison {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -270,15 +262,11 @@ public class SEQSEQINTEQUAL
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff SEQSEQINTEQUAL invariants should be considered.
-   */
+  /** Boolean. True iff SEQSEQINTEQUAL invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-  /**
-   * Debugging logger.
-   */
-  static final Logger debug = Logger.getLogger ("daikon.inv.binary.twoSequence." + SEQSEQINTEQUALstring);
+  /** Debugging logger. */
+  static final Logger debug = Logger.getLogger("daikon.inv.binary.twoSequence." + SEQSEQINTEQUALstring);
 
   @SuppressWarnings("interning")  // bug with generics
   static Comparator<PRIMITIVE[]> comparator = ARRAYCOMPARATOR;
@@ -303,7 +291,7 @@ public class SEQSEQINTEQUAL
 
   #endif
 
-  private static /*@Prototype*/ SEQSEQINTEQUAL proto = new /*@Prototype*/ SEQSEQINTEQUAL (true);
+  private static /*@Prototype*/ SEQSEQINTEQUAL proto = new /*@Prototype*/ SEQSEQINTEQUAL(true);
 
   /** Returns the prototype invariant for SEQSEQINTEQUAL */
   public static /*@Prototype*/ SEQSEQINTEQUAL get_proto() {
@@ -316,9 +304,9 @@ public class SEQSEQINTEQUAL
   }
 
   /** Non-Equal SeqComparison is only valid on integral types */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis)) {
+    if (!valid_types(vis)) {
       return false;
     }
 
@@ -327,21 +315,21 @@ public class SEQSEQINTEQUAL
     ProglangType type1 = var1.type;
     ProglangType type2 = var2.type;
 
-
     #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       // This intentonally checks dimensions(), not pseudoDimensions.
-      boolean only_eq = (! ((type1.dimensions() == 1)
-                            && type1.BASE_IS_TYPE
-                            && (type2.dimensions() == 1)
-                            && type2.BASE_IS_TYPE));
+      boolean only_eq =
+        (!((type1.dimensions() == 1)
+           && type1.BASE_IS_TYPE
+           && (type2.dimensions() == 1)
+           && type2.BASE_IS_TYPE));
       if (only_eq) {
         return false;
       }
 
       // non equality comparisons don't make sense if the arrays aren't ordered
-      if (!var1.aux.hasOrder()
-        || !var2.aux.hasOrder())
+      if (!var1.aux.hasOrder() || !var2.aux.hasOrder()) {
         return false;
+      }
 
     #endif
 
@@ -349,9 +337,8 @@ public class SEQSEQINTEQUAL
   }
 
   /** Instantiates the invariant on the specified slice */
-  protected SEQSEQINTEQUAL instantiate_dyn (/*>>> @Prototype SEQSEQINTEQUAL this,*/ PptSlice slice) {
-    boolean has_order = slice.var_infos[0].aux.hasOrder()
-                      && slice.var_infos[1].aux.hasOrder();
+  protected SEQSEQINTEQUAL instantiate_dyn(/*>>> @Prototype SEQSEQINTEQUAL this,*/ PptSlice slice) {
+    boolean has_order = slice.var_infos[0].aux.hasOrder() && slice.var_infos[1].aux.hasOrder();
     return new SEQSEQINTEQUAL(slice, has_order);
   }
 
@@ -364,8 +351,7 @@ public class SEQSEQINTEQUAL
   }
 
   public String repr(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
-    return SEQSEQINTEQUALstring + varNames() + ": "
-      + ",orderMatters=" + orderMatters
+    return SEQSEQINTEQUALstring + varNames() + ": ,orderMatters=" + orderMatters
       + ",enoughSamples=" + enoughSamples()
       ;
   }
@@ -382,9 +368,7 @@ public class SEQSEQINTEQUAL
       String name1 = var1().name_using(format);
       String name2 = var2().name_using(format);
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
-      String lexically = (var1().aux.hasOrder()
-                          ? " (lexically)"
-                          : "");
+      String lexically = (var1().aux.hasOrder() ? " (lexically)" : "");
       return name1 + " " + EQUALSstring + " " + name2 + lexically;
       #else
       return name1 + " " + EQUALSstring + " " + name2;
@@ -412,15 +396,17 @@ public class SEQSEQINTEQUAL
 
     }
 
-
     if (format.isJavaFamily()) {
       String name1 = var1().name_using(format);
       String name2 = var2().name_using(format);
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
-      return "daikon.Quant." + (var1().aux.hasOrder()
-                                ? EQUALSstringDBC
-                                : "setEqual" )
-        + "(" + name1 + ", " + name2 + ")";
+      return "daikon.Quant."
+        + (var1().aux.hasOrder() ? EQUALSstringDBC : "setEqual" )
+        + "("
+        + name1
+        + ", "
+        + name2
+        + ")";
       #else
       return "daikon.Quant." + EQUALSstringDBC + "(" + name1 + ", " + name2 + ")";
       #endif
@@ -445,19 +431,19 @@ public class SEQSEQINTEQUAL
                            getClass().getSimpleName(), this,
                            Arrays.toString(var1_name), Arrays.toString(var2_name), format());
     }
-    return "(|lexical-" + EQUALSstring + "| " +
-      var1_name[0] + " " + var1_name[1] + " " + var1_name[2] + " " +
-      var2_name[0] + " " + var2_name[1] + " " + var2_name[2] + ")";
+    return "(|lexical-" + EQUALSstring + "| "
+      + var1_name[0] + " " + var1_name[1] + " " + var1_name[2] + " "
+      + var2_name[0] + " " + var2_name[1] + " " + var2_name[2] + ")";
   }
 
   private String format_simplify_explicit(/*>>>@GuardSatisfied SEQSEQINTEQUAL this*/) {
     #if (defined(EQUAL) || defined(EQUALSTRING) || defined(EQUALFLOAT))
       // A simple case: if two sequences are lexically equal iff they
       // are elementwise equal.
-      String[] form = VarInfo.simplify_quantify (QuantFlags.element_wise(),
+      String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(),
                                                  var1(), var2());
-      return form[0] +
-        "(EQ " + form[1] + " " + form[2] + ")" + form[3];
+      return form[0]
+        + "(EQ " + form[1] + " " + form[2] + ")" + form[3];
     #else
       String classname = this.getClass().toString().substring(6);
       return "warning: method " + classname
@@ -465,7 +451,8 @@ public class SEQSEQINTEQUAL
     #endif
   }
 
-  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
+  public InvariantStatus check_modified(
+      PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons
     /// if one is missing, but not if one is zero-length.
     // // Don't make comparisons with empty arrays.
@@ -482,7 +469,7 @@ public class SEQSEQINTEQUAL
       comparison = ELEM_MATCH_COMPARE(v1, v2) ? 0 : -1;
     }
 
-    if (! COMPAREQUALS(comparison,0) ) {
+    if (!COMPAREQUALS(comparison,0) ) {
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
@@ -490,7 +477,7 @@ public class SEQSEQINTEQUAL
 
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
     if (logDetail()) {
-      log ("add_modified (%s, %s)", ArraysMDE.toString(v1), ArraysMDE.toString(v2));
+      log("add_modified (%s, %s)", ArraysMDE.toString(v1), ArraysMDE.toString(v2));
     }
         return check_modified(v1, v2, count);
   }
@@ -528,31 +515,29 @@ public class SEQSEQINTEQUAL
   }
 
   /**
-   *  Since this invariant can be a postProcessed equality, we have to
-   *  handle isObvious especially to avoid circular isObvious
-   *  relations.
+   * Since this invariant can be a postProcessed equality, we have to handle isObvious especially to
+   * avoid circular isObvious relations.
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
-      return isObviousStatically (this.ppt.var_infos);
+      return isObviousStatically(this.ppt.var_infos);
     } else {
       return super.isObviousStatically_SomeInEquality();
     }
   }
 
   /**
-   *  Since this invariant can be a postProcessed equality, we have to
-   *  handle isObvious especially to avoid circular isObvious
-   *  relations.
+   * Since this invariant can be a postProcessed equality, we have to handle isObvious especially to
+   * avoid circular isObvious relations.
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     if (logOn()) {
-      log ("Considering dynamically_someInEquality");
+      log("Considering dynamically_someInEquality");
     }
     if (var1().equalitySet == var2().equalitySet) {
-      return isObviousDynamically (this.ppt.var_infos);
+      return isObviousDynamically(this.ppt.var_infos);
     } else {
       return super.isObviousDynamically_SomeInEquality();
     }
@@ -572,7 +557,7 @@ public class SEQSEQINTEQUAL
         return di;
       }
     #endif
-    return super.isObviousStatically (vis);
+    return super.isObviousStatically(vis);
   }
 
   /*@Pure*/
@@ -585,17 +570,16 @@ public class SEQSEQINTEQUAL
 
     #ifdef NUMERIC
 
-      Debug debug = new Debug (getClass(), ppt, vis);
+      Debug debug = new Debug(getClass(), ppt, vis);
 
       if (logOn()) {
-        debug.log ("Checking IsObviousDynamically");
+        debug.log("Checking IsObviousDynamically");
       }
 
       // Check to see if the same Pairwise invariant exists
-      DiscardInfo di = new DiscardInfo (this, DiscardCode.obvious, "");
-      if (ppt.parent.check_implied (di, vis[0], vis[1],
-                                              PAIRWISEINTEQUAL.get_proto())) {
-        di.add_implied_vis (vis);
+      DiscardInfo di = new DiscardInfo(this, DiscardCode.obvious, "");
+      if (ppt.parent.check_implied(di, vis[0], vis[1], PAIRWISEINTEQUAL.get_proto())) {
+        di.add_implied_vis(vis);
         return di;
       }
 
@@ -613,7 +597,7 @@ public class SEQSEQINTEQUAL
       }
       if (!isEqual() && ((arr1 != v1) || (arr2 != v2))) {
         VarInfo[] avis = new VarInfo [] {arr1, arr2};
-        PptSlice slice = this.ppt.parent.findSlice_unordered (avis);
+        PptSlice slice = this.ppt.parent.findSlice_unordered(avis);
         if (slice != null) {
           PAIRWISECOMP_EQ picEQ = PAIRWISECOMP_EQ.find(slice);
           if (picEQ != null) {
@@ -642,51 +626,50 @@ public class SEQSEQINTEQUAL
       // arrays are related lexically this isn't interesting
       if ((arr1 != v1) || (arr2 != v2)) {
         if (arr1 == arr2) {
-          debug.log ("Obvious Dynamic- subsequence from same array");
+          debug.log("Obvious Dynamic- subsequence from same array");
           return new DiscardInfo(this, DiscardCode.obvious, "Supersequences are related lexically");
         }
         VarInfo[] avis = {arr1, arr2};
-        debug.log ("looking for " + avis[0].name()
-             + " " + avis[1].name());
-        PptSlice slice = this.ppt.parent.findSlice_unordered (avis);
-        debug.log ("Found ppt " + slice);
+        debug.log("looking for " + avis[0].name() + " " + avis[1].name());
+        PptSlice slice = this.ppt.parent.findSlice_unordered(avis);
+        debug.log("Found ppt " + slice);
         if (slice != null) {
           for (Invariant inv : slice.invs) {
-            debug.log ("-- invariant " + inv.format());
+            debug.log("-- invariant " + inv.format());
           }
           Invariant inv;
           inv = SEQSEQ_EQ.find(slice);
           if (inv != null) {
             if (logOn()) {
-              debug.log ("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
+              debug.log("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
             }
             return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
           }
           inv = SEQSEQ_LT.find(slice);
           if (inv != null) {
             if (logOn()) {
-              debug.log ("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
+              debug.log("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
             }
             return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
           }
           inv = SEQSEQ_GT.find(slice);
           if (inv != null) {
             if (logOn()) {
-              debug.log ("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
+              debug.log("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
             }
             return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
           }
           inv = SEQSEQ_LE.find(slice);
           if (inv != null) {
             if (logOn()) {
-              debug.log ("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
+              debug.log("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
             }
             return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
           }
           inv = SEQSEQ_GE.find(slice);
           if (inv != null) {
             if (logOn()) {
-              debug.log ("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
+              debug.log("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
             }
             return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
           }
@@ -695,14 +678,16 @@ public class SEQSEQINTEQUAL
 
       // Check to see if these variables are obviously related
       if (v1.isDerived() || v2.isDerived()) {
-        if (SUBSEQUENCE.isObviousSubSequenceDynamically (this, v1, v2)
-          || SUBSEQUENCE.isObviousSubSequenceDynamically (this, v2, v1)) {
+        if (SUBSEQUENCE.isObviousSubSequenceDynamically(this, v1, v2)
+          || SUBSEQUENCE.isObviousSubSequenceDynamically(this, v2, v1)) {
           if (logOn()) {
-            debug.log ("Obvious SubSequence Dynamically");
+            debug.log("Obvious SubSequence Dynamically");
           }
           assert ppt != null;
-          return new DiscardInfo(this, DiscardCode.obvious, "Both vars are derived and one is a subsequence "
-                                 + "of the other");
+          return new DiscardInfo(
+              this,
+              DiscardCode.obvious,
+              "Both vars are derived and one is a subsequence of the other");
         }
       }
 
@@ -714,10 +699,10 @@ public class SEQSEQINTEQUAL
     super.repCheck();
     /*
       This code is no longer needed now that the can_be_x's are gone
-    if (! (this.can_be_eq || this.can_be_lt || this.can_be_gt)
+    if (!(this.can_be_eq || this.can_be_lt || this.can_be_gt)
         && ppt.num_samples() != 0) {
-      System.err.println (this.repr());
-      System.err.println (this.ppt.num_samples());
+      System.err.println(this.repr());
+      System.err.println(this.ppt.num_samples());
       throw new Error();
     }
     */
@@ -743,28 +728,25 @@ public class SEQSEQINTEQUAL
     return null;
   }
 
-  /**
-   * Returns a list of non-instantiating suppressions for this invariant.
-   */
+  /** Returns a list of non-instantiating suppressions for this invariant. */
   /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }
 
   /** Definition of this invariant (the suppressee) */
-  private static NISuppressee suppressee
-    = new NISuppressee (SEQSEQINTEQUAL.class, 2);
+  private static NISuppressee suppressee = new NISuppressee(SEQSEQINTEQUAL.class, 2);
 
   #if defined(PAIRWISEINTEQUAL)
     // Suppressor definitions (used in suppressions below)
-    private static NISuppressor
-      v1_pw_v2 = new NISuppressor (0, 1, PAIRWISEINTEQUAL.class);
+    private static NISuppressor v1_pw_v2 = new NISuppressor(0, 1, PAIRWISEINTEQUAL.class);
 
     private static NISuppressionSet suppressions =
-      new NISuppressionSet (new NISuppression[] {
-        // pairwise => lexical
-        new NISuppression (v1_pw_v2, suppressee),
-      });
+      new NISuppressionSet(
+          new NISuppression[] {
+            // pairwise => lexical
+            new NISuppression(v1_pw_v2, suppressee),
+          });
   #else
     private static /*@Nullable*/ NISuppressionSet suppressions = null;
   #endif

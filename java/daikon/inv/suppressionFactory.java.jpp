@@ -58,7 +58,6 @@
   #error "FACTORY5 defined"
 #endif
 
-
   private static SuppressionFactory[] suppressionFactories = null;
 
   public SuppressionFactory[] getSuppressionFactories() {
@@ -67,21 +66,21 @@
 
       suppressionFactories = new SuppressionFactory[supers.length
                                                         + FACTORY_CNT];
-      System.arraycopy (supers, 0, suppressionFactories, 0, supers.length);
+      System.arraycopy(supers, 0, suppressionFactories, 0, supers.length);
 
       // Fill in each specified factory
       suppressionFactories[supers.length] = factory1.getInstance();
       #if defined(FACTORY2)
-      suppressionFactories[supers.length+1] = factory2.getInstance();
+      suppressionFactories[supers.length + 1] = factory2.getInstance();
       #endif
       #if defined(FACTORY3)
-      suppressionFactories[supers.length+2] = factory3.getInstance();
+      suppressionFactories[supers.length + 2] = factory3.getInstance();
       #endif
       #if defined(FACTORY4)
-      suppressionFactories[supers.length+3] = factory4.getInstance();
+      suppressionFactories[supers.length + 3] = factory4.getInstance();
       #endif
       #if defined(FACTORY5)
-      suppressionFactories[supers.length+4] = factory5.getInstance();
+      suppressionFactories[supers.length + 4] = factory5.getInstance();
       #endif
     }
     return suppressionFactories;
@@ -106,10 +105,9 @@
 
     private transient SuppressionTemplate supTemplate;
 
-
-    public SuppressionLink generateSuppressionLink (Invariant arg) {
+    public SuppressionLink generateSuppressionLink(Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY1 ((FACTORY_INVCLASS) arg, supTemplate, this));
+      return (FACTORY1((FACTORY_INVCLASS) arg, supTemplate, this));
     }
   }
 
@@ -133,9 +131,9 @@
 
     private transient SuppressionTemplate supTemplate;
 
-    public SuppressionLink generateSuppressionLink (Invariant arg) {
+    public SuppressionLink generateSuppressionLink(Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY2 ((FACTORY_INVCLASS) arg, supTemplate, this));
+      return (FACTORY2((FACTORY_INVCLASS) arg, supTemplate, this));
     }
   }
 #endif
@@ -160,9 +158,9 @@
 
     private transient SuppressionTemplate supTemplate;
 
-    public SuppressionLink generateSuppressionLink (Invariant arg) {
+    public SuppressionLink generateSuppressionLink(Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY3 ((FACTORY_INVCLASS) arg, supTemplate, this));
+      return (FACTORY3((FACTORY_INVCLASS) arg, supTemplate, this));
     }
   }
 #endif
@@ -187,9 +185,9 @@
 
     private transient SuppressionTemplate supTemplate;
 
-    public SuppressionLink generateSuppressionLink (Invariant arg) {
+    public SuppressionLink generateSuppressionLink(Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY4 ((FACTORY_INVCLASS) arg, supTemplate, this));
+      return (FACTORY4((FACTORY_INVCLASS) arg, supTemplate, this));
     }
   }
 #endif
@@ -214,9 +212,9 @@
 
     private transient SuppressionTemplate supTemplate;
 
-    public SuppressionLink generateSuppressionLink (Invariant arg) {
+    public SuppressionLink generateSuppressionLink(Invariant arg) {
       supTemplate.resetResults();
-      return (FACTORY5 ((FACTORY_INVCLASS) arg, supTemplate, this));
+      return (FACTORY5((FACTORY_INVCLASS) arg, supTemplate, this));
     }
   }
 #endif

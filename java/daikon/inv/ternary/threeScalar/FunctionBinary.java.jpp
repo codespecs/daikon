@@ -40,7 +40,7 @@
   #define SUPERCLASS ThreeFloat
   #define PRIMITIVE double
   #define PRIMITIVE_CNAME Double
-  #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
+  #define EQUAL(a,b) (Global.fuzzy.eq(a, b))
   #define IS_INTEGRAL isFloat()
   #define POW Math.pow
   #define EQUALITY FloatEqual
@@ -92,15 +92,15 @@
 package daikon.inv.ternary.threeScalar;
 
 import daikon.*;
+import daikon.derive.unary.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
-import daikon.derive.unary.*;
 import daikon.suppress.*;
-import plume.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -111,10 +111,9 @@ import typequals.*;
 */
 
 /**
- * Base class for each of the CLASSNAME functions and permutatons.
- * Most of the work is done here.  The subclasses basically define the
- * function and return information describing the function and permutation
- * to these methods.
+ * Base class for each of the CLASSNAME functions and permutatons. Most of the work is done
+ * here. The subclasses basically define the function and return information describing the function
+ * and permutation to these methods.
  */
 public abstract class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
@@ -122,13 +121,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20031030L;
 
-  /**
-   * Boolean. True if CLASSNAME invariants should be considered.
-   */
+  /** Boolean. True if CLASSNAME invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  public static Logger debug
-    = Logger.getLogger("daikon.inv.ternary.threeScalar.#CLASSNAME");
+  public static Logger debug =
+    Logger.getLogger("daikon.inv.ternary.threeScalar.#CLASSNAME");
 
   static final int[][] var_indices;
   static {
@@ -141,12 +138,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     var_indices[PERM_ZYX] = new int[] { 2, 1, 0 };
   }
 
-  protected CLASSNAME (PptSlice ppt) {
-    super (ppt);
+  protected CLASSNAME(PptSlice ppt) {
+    super(ppt);
   }
 
-  protected /*@Prototype*/ CLASSNAME () {
-    super ();
+  protected /*@Prototype*/ CLASSNAME() {
+    super();
   }
 
   /** returns whether or not this invariant is enabled */
@@ -155,9 +152,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /** CLASSNAME is only valid on IS_INTEGRAL types */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok(VarInfo[] vis) {
 
-    if (!valid_types (vis)) {
+    if (!valid_types(vis)) {
       return false;
     }
 
@@ -171,26 +168,25 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   // check_modified relies on func having no side effects.
-  abstract PRIMITIVE func (PRIMITIVE arg1, PRIMITIVE arg2);
+  abstract PRIMITIVE func(PRIMITIVE arg1, PRIMITIVE arg2);
   /*@Pure*/
   abstract boolean is_symmetric();
   abstract String /*@ArrayLen(3)*/ [] get_method_name(/*>>>@GuardSatisfied CLASSNAME this*/);
   abstract int get_var_order(/*>>>@GuardSatisfied CLASSNAME this*/);
-  abstract void set_function_id (int function_id);
-  abstract int get_function_id ();
+  abstract void set_function_id(int function_id);
+  abstract int get_function_id();
 
   /**
-   * Map from function name (eg, MultiplyLong, MinimumFloat) to an array
-   * of instances (one for each valid permutation) for that function.
+   * Map from function name (eg, MultiplyLong, MinimumFloat) to an array of instances (one for each
+   * valid permutation) for that function.
    */
   private static Map<String,/*@Prototype*/ CLASSNAME[]> functions = new LinkedHashMap<String,/*@Prototype*/ CLASSNAME[]>();
 
   /**
-   * A list indexed by function number to an array of instances (one for
-   * each valid permutation) for that function.  The array is the same
-   * one as is stored in the functions Map.  This provides a faster access
-   * mechanism once we have the function id (which are calculated the first
-   * time through).
+   * A list indexed by function number to an array of instances (one for each valid permutation) for
+   * that function. The array is the same one as is stored in the functions Map. This provides a
+   * faster access mechanism once we have the function id (which are calculated the first time
+   * through).
    */
   private static List</*@Prototype*/ CLASSNAME[]> func_list = new ArrayList</*@Prototype*/ CLASSNAME[]>();
 
@@ -200,41 +196,41 @@ public abstract class CLASSNAME extends SUPERCLASS {
     ///CLOVER:OFF
 
     // Build the map of functions to array of instances for that function
-    debug.fine ("Processing " + #CLASSNAME);
+    debug.fine("Processing " + #CLASSNAME);
     functions = new LinkedHashMap<String,/*@Prototype*/ CLASSNAME[]>();
     @SuppressWarnings("unchecked")
     Class</*@Prototype*/ CLASSNAME>[] subclasses = (Class</*@Prototype*/ CLASSNAME>[]) CLASSNAME.class.getDeclaredClasses();
     for (int ii = 0; ii < subclasses.length; ii++) {
       Class</*@Prototype*/ CLASSNAME> subc = subclasses[ii];
       String function = subc.getName();
-      if (function.indexOf ("CLOVER") >= 0) {
+      if (function.indexOf("CLOVER") >= 0) {
         continue;
       }
-      function = function.replaceFirst (".*FunctionBinary\\$", "");
-      function = function.replaceFirst ("_.*", "");
-      if (function.equals ("SubClass")) {
+      function = function.replaceFirst(".*FunctionBinary\\$", "");
+      function = function.replaceFirst("_.*", "");
+      if (function.equals("SubClass")) {
         continue;
       }
-      /*@Prototype*/ CLASSNAME[] fb_arr = functions.get (function);
+      /*@Prototype*/ CLASSNAME[] fb_arr = functions.get(function);
       if (fb_arr == null) {
         fb_arr = new /*@Prototype*/ CLASSNAME[7];
-        functions.put (function, fb_arr);
-        func_list.add (fb_arr);
+        functions.put(function, fb_arr);
+        func_list.add(fb_arr);
       }
-      int func_id = func_list.indexOf (fb_arr);
+      int func_id = func_list.indexOf(fb_arr);
       @SuppressWarnings({"nonprototype"})
       /*@Prototype*/ CLASSNAME fb = null;
       try {
-        Constructor</*@Prototype*/ CLASSNAME> con = subc.getDeclaredConstructor (new Class<?>[] {});
-        fb = con.newInstance (new Object[] {});
+        Constructor</*@Prototype*/ CLASSNAME> con = subc.getDeclaredConstructor(new Class<?>[] {});
+        fb = con.newInstance(new Object[] {});
       }  catch (Exception e) {
-        throw new Error (" can't create instance for " + subc.getName()
+        throw new Error(" can't create instance for " + subc.getName()
                         + ": '" + e + "' ii = " + ii);
       }
       assert fb_arr[fb.get_var_order()] == null;
       fb_arr[fb.get_var_order()] = fb;
-      fb.set_function_id (func_id);
-      debug.fine ("Adding " + function + " " + fb.getClass().getName()
+      fb.set_function_id(func_id);
+      debug.fine("Adding " + function + " " + fb.getClass().getName()
                   + " " + fb.get_var_order() + " " + fb.get_function_id());
     }
     ///CLOVER:ON
@@ -243,11 +239,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #if 0
   // JHP: remove this
   /**
-   * Returns a list of all of the CLASSNAME invariants setup for the
-   * specified slice.  Any invariants are NI suppressed are not included.
-   * These are instantiated when their suppressors are falsified.
+   * Returns a list of all of the CLASSNAME invariants setup for the specified slice. Any invariants
+   * are NI suppressed are not included. These are instantiated when their suppressors are
+   * falsified.
    */
-  public static List<Invariant> instantiate_all (PptSlice slice) {
+  public static List<Invariant> instantiate_all(PptSlice slice) {
 
     // If this is the first call
     if (functions.isEmpty()) {
@@ -263,15 +259,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
           if (NIS.dkconfig_enabled) {
             NISuppressionSet ss = fb.get_ni_suppressions();
             // System.out.println ("attempting instantiation of " + fb.getClass());
-            if ((ss == null) || !ss.suppressed (slice)) {
-              Invariant inv = fb.instantiate_dyn (slice);
+            if ((ss == null) || !ss.suppressed(slice)) {
+              Invariant inv = fb.instantiate_dyn(slice);
               if (Debug.logOn() && (inv != null)) {
-                inv.log ("instantiated non-suppressed invariant %s", inv.format());
+                inv.log("instantiated non-suppressed invariant %s", inv.format());
               }
-              result.add (inv);
+              result.add(inv);
             }
           } else /* NIS not enabled */ {
-            result.add (fb.instantiate_dyn (slice));
+            result.add(fb.instantiate_dyn(slice));
           }
         }
       }
@@ -281,9 +277,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 #endif
 
-  /**
-   * Returns a list of all of the CLASSNAME prototype invariants.
-   */
+  /** Returns a list of all of the CLASSNAME prototype invariants. */
   public static List</*@Prototype*/ Invariant> get_proto_all() {
 
     List</*@Prototype*/ Invariant> result = new ArrayList</*@Prototype*/ Invariant>();
@@ -298,7 +292,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       for (int jj = 1; jj < fb_arr.length; jj++) {
         /*@Prototype*/ CLASSNAME fb = fb_arr[jj];
         if (fb != null) {
-          result.add (fb);
+          result.add(fb);
         }
       }
     }
@@ -321,14 +315,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /**
-   * Apply the specified sample to the function, returning the result.
-   * The caller is responsible for permuting the arguments.
+   * Apply the specified sample to the function, returning the result. The caller is responsible
+   * for permuting the arguments.
    */
-  public InvariantStatus check_ordered (PRIMITIVE result, PRIMITIVE arg1,
+  public InvariantStatus check_ordered(PRIMITIVE result, PRIMITIVE arg1,
                                       PRIMITIVE arg2, int count) {
     // This implementation relies on func having no side effects.
     try {
-      if (! EQUAL(result, func (arg1, arg2))) {
+      if (!EQUAL(result, func(arg1, arg2))) {
         return InvariantStatus.FALSIFIED;
       }
     } catch (Exception e) {
@@ -338,21 +332,20 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   /**
-   * Apply the specified sample to the function, returning the result.
-   * The caller is responsible for permuting the arguments.
+   * Apply the specified sample to the function, returning the result. The caller is responsible
+   * for permuting the arguments.
    */
-  public InvariantStatus add_ordered (PRIMITIVE result, PRIMITIVE arg1,
+  public InvariantStatus add_ordered(PRIMITIVE result, PRIMITIVE arg1,
                                       PRIMITIVE arg2, int count) {
     return check_ordered(result, arg1, arg2, count);
   }
 
   /**
-   * Reorganize our already-seen state as if the variables had shifted
-   * order underneath us (re-arrangement given by the permutation).
-   * We accomplish this by returning the class that corresponds to the
-   * the new permutation.
+   * Reorganize our already-seen state as if the variables had shifted order underneath us
+   * (re-arrangement given by the permutation). We accomplish this by returning the class that
+   * corresponds to the the new permutation.
    */
-  protected Invariant resurrect_done (int[] permutation) {
+  protected Invariant resurrect_done(int[] permutation) {
 
     assert permutation.length == 3;
     assert ArraysMDE.fn_is_permutation(permutation);
@@ -380,7 +373,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // For example, order of 0, 1, 2 and 0, 2, 1 represent the same
     // invariant for a symmetric function.  This forces them to always
     // be represented as 0, 1, 2
-    if (is_symmetric ()) {
+    if (is_symmetric()) {
       if (new_order[2] < new_order[1]) {
         int tmp = new_order[2];
         new_order[2] = new_order[1];
@@ -390,7 +383,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Look for the new order in the list of possible orders
     int var_order = -1;
-    for (int i=0; i < var_indices.length; i++) {
+    for (int i = 0; i < var_indices.length; i++) {
       if (Arrays.equals(new_order, var_indices[i])) {
         var_order = i;
         break;
@@ -408,14 +401,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       build_func_list();
     }
     int func_id = get_function_id();
-    /*@Prototype*/ CLASSNAME[] fb_arr = func_list.get (func_id);
+    /*@Prototype*/ CLASSNAME[] fb_arr = func_list.get(func_id);
     assert fb_arr != null;
     for (int ii = 0; ii < fb_arr.length; ii++)
       if ((fb_arr[ii] != null) && (fb_arr[ii].get_var_order() == var_order)) {
-        return (fb_arr[ii].instantiate_dyn (ppt));
+        return (fb_arr[ii].instantiate_dyn(ppt));
       }
 
-    throw new Error ("Could not find new ordering");
+    throw new Error("Could not find new ordering");
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
@@ -447,7 +440,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
         + methodname[1] + arg2_name + methodname[2] + ")";
     }
 
-
     if (format.isJavaFamily()) {
       if (methodname[1].equals(" || ") || methodname[1].equals(" && ")) {
         return "(" +  argresult_name + " != 0) == ((" + methodname[0] + arg1_name + " != 0)"
@@ -467,8 +459,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     VarInfo[] vis = ppt.var_infos;
 
     String result = vis[var_indices[var_order][0]].simplifyFixedupName();
-    String arg1 =   vis[var_indices[var_order][1]].simplifyFixedupName();
-    String arg2 =   vis[var_indices[var_order][2]].simplifyFixedupName();
+    String arg1 = vis[var_indices[var_order][1]].simplifyFixedupName();
+    String arg2 = vis[var_indices[var_order][2]].simplifyFixedupName();
     String func = null;
     if (methodname[1].equals(" * ")) {
       func = "*";
@@ -493,8 +485,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
       func = "|java-" + methodname[1].trim() + "|";
     }
     if (func == null) {
-      return "format_simplify_contract() doesn't know function " + methodname[0] + "-" +
-        methodname[1] + "-" + methodname[2];
+      return "format_simplify_contract() doesn't know function " + methodname[0] + "-"
+        + methodname[1] + "-" + methodname[2];
     }
     return "(EQ " + result + " (" + func + " " + arg1 + " " + arg2 + "))";
   }
@@ -583,9 +575,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return Invariant.conf_is_ge(ppt.num_values(), 5);
   }
 
-  /**
-   * If the arg is a sequence size, return the sequence; otherwise return null.
-   */
+  /** If the arg is a sequence size, return the sequence; otherwise return null. */
   private /*@Nullable*/ VarInfo sized_sequence(VarInfo size) {
     if (size.derived instanceof SequenceLength) {
       return ((SequenceLength)size.derived).base;
@@ -618,7 +608,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     return null;
   }
-
 
 #if 0
   // Each of the functions is defined below.  Each must define the following
@@ -666,14 +655,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #define FUNCTION Minimum
 #define FTYPE FTYPE_Minimum
   // #define EQUALITY_MIN_MAX_SUPPRESS
-#define FUNC(arg1, arg2) Math.min (arg1, arg2)
+#define FUNC(arg1, arg2) Math.min(arg1, arg2)
 #define METHOD_NAME {"java.lang.Math.min(", ", ", ")"}
 #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
 #define FUNCTION Maximum
 #define FTYPE FTYPE_Maximum
   // #define EQUALITY_MIN_MAX_SUPPRESS
-#define FUNC(arg1, arg2) Math.max (arg1, arg2)
+#define FUNC(arg1, arg2) Math.max(arg1, arg2)
 #define METHOD_NAME {"java.lang.Math.max(", ", ", ")"}
 #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
@@ -686,7 +675,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
 #define FUNCTION Power
 #define FTYPE FTYPE_Power
-#define FUNC(arg1, arg2) POW (arg1, arg2)
+#define FUNC(arg1, arg2) POW(arg1, arg2)
 #define METHOD_NAME {"java.lang.Math.pow(", ", ", ")"}
 #define EXACT
 #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
@@ -750,7 +739,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #define FUNCTION Gcd
   #define FTYPE FTYPE_Gcd
   // #define EQUALITY_SUPPRESS 1
-  #define FUNC(arg1,arg2) MathMDE.gcd (arg1, arg2)
+  #define FUNC(arg1,arg2) MathMDE.gcd(arg1, arg2)
   #define METHOD_NAME {"plume.MathMDE.gcd(", ", ", ")"}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 

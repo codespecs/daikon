@@ -560,7 +560,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     // // need to do the work of interning (I think)
     // ProglangType elt_type = elementType();
     // Object[] result = new Object[len];
-    // for (int i=0; i<len; i++)
+    // for (int i = 0; i<len; i++)
     //   result[i] = ***;
 
   }

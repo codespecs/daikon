@@ -371,7 +371,7 @@ public class PptSliceEquality extends PptSlice {
       resultArray[resultCount] = new Equality(list, this);
       resultCount++;
     }
-    resultArray = castNonNullDeep(resultArray); // issue 154
+    resultArray = castNonNullDeep(resultArray); // issue 986
 
     // Sort for determinism
     Arrays.sort(resultArray, EqualityComparator.theInstance);
@@ -405,7 +405,7 @@ public class PptSliceEquality extends PptSlice {
       eq.setSamples(leader.numSamples());
       resultArray[i] = eq;
     }
-    resultArray = castNonNullDeep(resultArray); // issue 154
+    resultArray = castNonNullDeep(resultArray); // issue 986
 
     // Sort for determinism
     Arrays.sort(resultArray, PptSliceEquality.EqualityComparator.theInstance);

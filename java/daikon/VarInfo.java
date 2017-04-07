@@ -1561,7 +1561,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         //        } else {
         //      System.out.println("Warning: Size variable " + search + " not found.");
         //      System.out.print("Variables: ");
-        //      for (int i=0; i<ppt.var_infos.length; i++) {
+        //      for (int i = 0; i<ppt.var_infos.length; i++) {
         //        VarInfo vi = ppt.var_infos[i];
         //        System.out.print(vi.name + " ");
         //      }

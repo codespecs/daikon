@@ -64,14 +64,14 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.binary.SEQUENCESCALARPKG;
 
 import daikon.*;
-import daikon.inv.*;
-import daikon.inv.binary.twoSequence.*;
-import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
-import plume.*;
-import java.util.logging.Logger;
+import daikon.derive.unary.*;
+import daikon.inv.*;
+import daikon.inv.binary.twoSequence.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
@@ -82,27 +82,21 @@ import typequals.*;
 */
 
 /**
- * Represents SCALAR scalars that are always members of a sequence of SCALAR
- * values.
- * Prints as <code>x in y[]</code> where <code>x</code> is a SCALAR scalar
- * and <code>y[]</code> is a sequence of SCALAR.
+ * Represents SCALAR scalars that are always members of a sequence of SCALAR values. Prints as
+ * <code>x in y[]</code> where <code>x</code> is a SCALAR scalar and <code>y[]</code> is a sequence
+ * of SCALAR.
  */
-public final class CLASSNAME
-  extends SEQUENCESCALAR
-{
+public final class CLASSNAME extends SEQUENCESCALAR {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20031024L;
 
-  public static final Logger debug =
-    Logger.getLogger ("daikon.inv.binary.Member");
+  public static final Logger debug = Logger.getLogger("daikon.inv.binary.Member");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  True iff Member invariants should be considered.
-   */
+  /** Boolean. True iff Member invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
   protected CLASSNAME(PptSlice ppt) {
@@ -126,24 +120,23 @@ public final class CLASSNAME
   }
 
   /** instantiates the invariant on the specified slice */
-  protected CLASSNAME instantiate_dyn (/*@Prototype*/ PptSlice slice) {
-    return new CLASSNAME (slice);
+  protected CLASSNAME instantiate_dyn(/*@Prototype*/ PptSlice slice) {
+    return new CLASSNAME(slice);
   }
 
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (isObviousMember(sclvar(vis), seqvar(vis))) {
-      log ("scalar is obvious member of");
-      return new DiscardInfo(this, DiscardCode.obvious, sclvar().name()
-                        + " is an obvious member of " + seqvar().name());
+      log("scalar is obvious member of");
+      return new DiscardInfo(
+          this,
+          DiscardCode.obvious,
+          sclvar().name() + " is an obvious member of " + seqvar().name());
     }
-    return super.isObviousStatically (vis);
+    return super.isObviousStatically(vis);
   }
 
-  /**
-   * Check whether sclvar is a member of seqvar can be determined
-   * statically.
-   */
+  /** Check whether sclvar is a member of seqvar can be determined statically. */
   /*@Pure*/
   public static boolean isObviousMember(VarInfo sclvar, VarInfo seqvar) {
 
@@ -178,8 +171,7 @@ public final class CLASSNAME
     //  * whether comparing B[I] to B[0..J]
     //  * whether comparing min(B[0..I]) to B[0..J]
     VarInfo seqvar_super = seqvar.isDerivedSubSequenceOf();
-    if ((seqvar_super != sclvar_seq)
-        && (seqvar_super != sclseqsuper)) {
+    if ((seqvar_super != sclvar_seq) && (seqvar_super != sclseqsuper)) {
       return false;
     }
 
@@ -188,8 +180,8 @@ public final class CLASSNAME
     // (mostly) obvious by comparing the length of the sequence to the
     // index.  By contrast, if the scalar is max(...) or min(...), all bets
     // are off.
-    if (seqvar.derived instanceof SEQ_SUBSEQUENCE ||
-        seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
+    if (seqvar.derived instanceof SEQ_SUBSEQUENCE
+        || seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
 
       // Determine the left index/shift and right index/shift of the
       // subsequence.  If the left VarInfo is null, the sequence starts
@@ -199,8 +191,7 @@ public final class CLASSNAME
       int seq_left_shift = 0, seq_right_shift = 0;
       if (seqvar.derived instanceof SEQ_SUBSEQUENCE) {
         // the sequence is B[0..J-1] or similar.  Get information about it.
-        SEQ_SUBSEQUENCE seqsss
-          = (SEQ_SUBSEQUENCE)seqvar.derived;
+        SEQ_SUBSEQUENCE seqsss = (SEQ_SUBSEQUENCE) seqvar.derived;
         if (seqsss.from_start) {
           seq_right_index = seqsss.sclvar();
           seq_right_shift = seqsss.index_shift;
@@ -210,7 +201,7 @@ public final class CLASSNAME
         }
       } else if (seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
         // the sequence is B[I+1..J] or similar
-        ARBITRARYSUBSEQUENCE ssass = (ARBITRARYSUBSEQUENCE)seqvar.derived;
+        ARBITRARYSUBSEQUENCE ssass = (ARBITRARYSUBSEQUENCE) seqvar.derived;
         seq_left_index = ssass.startvar();
         seq_left_shift = (ssass.left_closed ? 0 : 1);
         seq_right_index = ssass.endvar();
@@ -262,7 +253,7 @@ public final class CLASSNAME
       // else if the scalar is min or max of a sequence
       } else if ((sclvar.derived instanceof SequenceMin)
                  || (sclvar.derived instanceof SequenceMax)) {
-        Pair<DiscardCode,String> di = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
+        Pair<DiscardCode, String> di = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
         return (di != null);
       }
     }
@@ -271,8 +262,7 @@ public final class CLASSNAME
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return "Member" + varNames() + ": "
-      + "falsified=" + falsified;
+    return "Member" + varNames() + ": falsified=" + falsified;
   }
 
   /*@SideEffectFree*/
@@ -306,19 +296,20 @@ public final class CLASSNAME
   public String format_java() {
     return "( (daikon.inv.FormatJavaHelper.memberOf("
       + sclvar().name()
-      + " , " + seqvar().name() + " ) == true ) ";
+      + " , "
+      + seqvar().name()
+      + " ) == true ) ";
   }
 
   public String format_java_family(/*>>>@GuardSatisfied CLASSNAME this,*/ OutputFormat format) {
     String sclname = sclvar().name_using(format);
     String seqname = seqvar().name_using(format);
-    return "daikon.Quant.memberOf(" + sclname
-      + " , " + seqname + " )";
+    return "daikon.Quant.memberOf(" + sclname + " , " + seqname + " )";
   }
 
   public String format_esc(/*>>>@GuardSatisfied CLASSNAME this*/) {
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
-    String[] form = VarInfo.esc_quantify (seqvar(), sclvar());
+    String[] form = VarInfo.esc_quantify(seqvar(), sclvar());
     return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
   }
 
@@ -334,17 +325,24 @@ public final class CLASSNAME
       String[] seq_name = seqvar().simplifyNameAndBounds();
       String scalar_name = sclvar().simplify_name();
       if (seq_name == null) {
-        return String.format("%s.format_simplify(%s): null seq_name for %s",
-                             getClass().getSimpleName(), this, format());
+        return String.format(
+            "%s.format_simplify(%s): null seq_name for %s",
+            getClass().getSimpleName(), this, format());
       }
-      return "(member " + scalar_name + " " +
-        seq_name[0] + " " + seq_name[1] + " " + seq_name[2] + ")";
+      return "(member "
+          + scalar_name
+          + " "
+          + seq_name[0]
+          + " "
+          + seq_name[1]
+          + " "
+          + seq_name[2]
+          + ")";
     } else {
       // "exists x in a..b : P(x)" gets written as
       // "!(forall x in a..b : !P(x))"
-      String[] form = VarInfo.simplify_quantify (seqvar(), sclvar());
-      return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")"
-        + form[3] + ")";
+      String[] form = VarInfo.simplify_quantify(seqvar(), sclvar());
+      return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")" + form[3] + ")";
     }
   }
 #endif
@@ -358,13 +356,12 @@ public final class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
-
   public InvariantStatus add_modified(SCALAR /*@Interned*/ [] a, SCALAR i, int count) {
 
     InvariantStatus is = check_modified(a, i, count);
     if (debug.isLoggable(Level.FINE) && (is == InvariantStatus.FALSIFIED)) {
-      debug.fine ("Member destroyed:  " + format() + " because " + i +
-                  " not in " + ArraysMDE.toString(a));
+      debug.fine(
+          "Member destroyed:  " + format() + " because " + i + " not in " + ArraysMDE.toString(a));
     }
     return is;
   }
@@ -380,8 +377,8 @@ public final class CLASSNAME
   }
 
   /**
-   * Checks to see if this is obvious over the specified variables.
-   * Implements the following checks:
+   * Checks to see if this is obvious over the specified variables. Implements the following checks:
+   *
    * <pre>
    *   (0 &le; i &le; j) ^ (A[] == B[]) &rArr; A[i] in B[0..j]
    *   (0 &le; i &le; j) ^ (A[] == B[]) &rArr; A[j] in B[i..]
@@ -389,10 +386,10 @@ public final class CLASSNAME
    * </pre>
    */
   /*@Pure*/
-  public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     if (Debug.logOn()) {
-      Debug.log (getClass(), ppt.parent, vis, "is obvious check" + format());
+      Debug.log(getClass(), ppt.parent, vis, "is obvious check" + format());
     }
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -401,13 +398,13 @@ public final class CLASSNAME
     }
 
     // Check for subscript in subsequence
-    DiscardInfo di = subscript_in_subsequence (vis);
+    DiscardInfo di = subscript_in_subsequence(vis);
     if (di != null) {
       return di;
     }
 
     // Check for (A subset B) ==> (A[i] member B)
-    di = subset_in_subsequence (vis);
+    di = subset_in_subsequence(vis);
     if (di != null) {
       return di;
     }
@@ -415,20 +412,20 @@ public final class CLASSNAME
     return null;
   }
 
-  /*
-   * Checks to see if this is obvious over the specified variables.
-   * Implements the following check:
+  /**
+   * Checks to see if this is obvious over the specified variables. Implements the following check:
+   *
    * <pre>
    *   (A subset B) &rArr; (A[i] member B)
    * </pre>
    */
-  private /*@Nullable*/ DiscardInfo subset_in_subsequence (VarInfo[] vis) {
+  private /*@Nullable*/ DiscardInfo subset_in_subsequence(VarInfo[] vis) {
 
-    VarInfo scl_var = sclvar (vis);
-    VarInfo seq_var = seqvar (vis);
+    VarInfo scl_var = sclvar(vis);
+    VarInfo seq_var = seqvar(vis);
 
     if (Debug.logOn()) {
-      Debug.log (getClass(), ppt.parent, vis, "looking for subset in subseq");
+      Debug.log(getClass(), ppt.parent, vis, "looking for subset in subseq");
     }
 
     // If the scalar is not a subscript of a seq there is nothing to check.
@@ -440,36 +437,45 @@ public final class CLASSNAME
     }
     SEQ_SUBSCRIPT sssc = (SEQ_SUBSCRIPT) scl_var.derived;
     if (Debug.logOn()) {
-      Debug.log (getClass(), ppt.parent, vis, "Looking for "
-                 + sssc.seqvar().name() + " subset of "
-                 + seq_var.name());
+      Debug.log(
+          getClass(),
+          ppt.parent,
+          vis,
+          "Looking for " + sssc.seqvar().name() + " subset of " + seq_var.name());
     }
 
     // check to see if subscripts sequence is a subset of the sequence var
-    if (ppt.parent.is_subset (sssc.seqvar(), seq_var)) {
-      return new DiscardInfo(this, DiscardCode.obvious,
-                             "(" + sssc.seqvar().name() + " subset "
-                             + seq_var.name() + ") ==> "
-                             + sssc.seqvar().name() + "["
-                             + sssc.sclvar().name()
-                             + "] member " + seq_var.name());
-    }
+    if (ppt.parent.is_subset(sssc.seqvar(), seq_var)) {
+      return new DiscardInfo(
+          this,
+          DiscardCode.obvious,
+          "("
+              + sssc.seqvar().name()
+              + " subset "
+              + seq_var.name()
+              + ") ==> "
+              + sssc.seqvar().name()
+              + "["
+              + sssc.sclvar().name()
+              + "] member "
+              + seq_var.name());
+    }  
 
     return null;
   }
 
-  /*
-   * Checks to see if this is obvious over the specified variables.
-   * Implements the following checks:
+  /**
+   * Checks to see if this is obvious over the specified variables. Implements the following checks:
+   *
    * <pre>
    *   (0 <= i &le; j) ^ (a[] == b[]) &rArr; a[i] in b[0..j]
    *   (0 <= i &le; j) ^ (a[] == b[]) &rArr; a[j] in b[i..]
    * </pre>
    */
-  private /*@Nullable*/ DiscardInfo subscript_in_subsequence (VarInfo[] vis) {
+  private /*@Nullable*/ DiscardInfo subscript_in_subsequence(VarInfo[] vis) {
 
-    VarInfo scl_var = sclvar (vis);
-    VarInfo seq_var = seqvar (vis);
+    VarInfo scl_var = sclvar(vis);
+    VarInfo seq_var = seqvar(vis);
 
     // Both variables must be derived
     if ((scl_var.derived == null) || (seq_var.derived == null)) {
@@ -489,37 +495,51 @@ public final class CLASSNAME
     SEQ_SUBSEQUENCE ssss = (SEQ_SUBSEQUENCE) seq_var.derived;
 
     // Both variables must be derived from equal sequences
-    if (!ppt.parent.is_equal (sssc.seqvar(), ssss.seqvar())) {
+    if (!ppt.parent.is_equal(sssc.seqvar(), ssss.seqvar())) {
       return null;
     }
 
     // if a[i] in a[0..n], look for i <= n
     if (ssss.from_start) {
       if (Debug.logOn()) {
-        Debug.log (getClass(), ppt.parent, vis,
-          "Looking for " + sssc.sclvar().name() + sssc.index_shift
-           + " <= " + ssss.sclvar().name() + ssss.index_shift);
+        Debug.log(
+           getClass(),
+           ppt.parent,
+           vis,
+           "Looking for "
+               + sssc.sclvar().name()
+               + sssc.index_shift
+               + " <= "
+               + ssss.sclvar().name()
+               + ssss.index_shift);
       }
-      if (ppt.parent.is_less_equal (sssc.sclvar(), sssc.index_shift,
-                             ssss.sclvar(), ssss.index_shift))
-        return new DiscardInfo(this, DiscardCode.obvious,
-                     "i <= n ==> a[i] in a[..n] for "
-                     + scl_var.name() + " and " + seq_var.name());
+      if (ppt.parent.is_less_equal(
+          sssc.sclvar(), sssc.index_shift, ssss.sclvar(), ssss.index_shift)) {
+        return new DiscardInfo(
+           this,
+           DiscardCode.obvious,
+           "i <= n ==> a[i] in a[..n] for " + scl_var.name() + " and " + seq_var.name());
+      }
     } else { // a[i] in a[n..], look for i >= n
       if (Debug.logOn()) {
-        Debug.log (getClass(), ppt.parent, vis,
-          "Looking for " + ssss.sclvar().name() + ssss.index_shift
-           + " <= " + sssc.sclvar().name() + sssc.index_shift);
+        Debug.log(
+            getClass(),
+            ppt.parent,
+            vis,
+            "Looking for "
+                + ssss.sclvar().name()
+                + ssss.index_shift
+                + " <= "
+                + sssc.sclvar().name()
+                + sssc.index_shift);
       }
-      if (ppt.parent.is_less_equal (ssss.sclvar(), ssss.index_shift,
-                             sssc.sclvar(), sssc.index_shift))
-        return new DiscardInfo(this, DiscardCode.obvious,
-                     "i >= n ==> a[i] in a[n..] for "
-                     + scl_var.name() + " and " + seq_var.name());
+      if (ppt.parent.is_less_equal(
+          ssss.sclvar(), ssss.index_shift, sssc.sclvar(), sssc.index_shift))
+        return new DiscardInfo(
+           this,
+           DiscardCode.obvious,
+           "i >= n ==> a[i] in a[n..] for " + scl_var.name() + " and " + seq_var.name());
     }
     return null;
-
   }
-
-
 }

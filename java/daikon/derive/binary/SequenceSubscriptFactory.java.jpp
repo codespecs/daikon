@@ -20,7 +20,6 @@ The correct way to build the system is to run 'make'.
   #define LINEARBINARY LinearBinaryFloat
 #endif
 
-
 #if defined(SCALAR)
   #undef SCALAR
   #define PROGLANG_INT ProglangType.INT
@@ -53,9 +52,8 @@ package daikon.derive.binary;
 import daikon.*;
 import daikon.inv.binary.twoScalar.*; // for IntComparison
 import daikon.inv.unary.scalar.*; // for LowerBound
-
-import plume.*;
 import java.util.*;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -77,21 +75,21 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
 
     Debug debug = null;
     if (!debug_set) {
-      debug_class_match = Debug.class_match (getClass());
+      debug_class_match = Debug.class_match(getClass());
       debug_set = true;
     }
     if (debug_class_match && Debug.logOn()) {
-      debug = Debug.newDebug (getClass(), vi1.ppt, Debug.vis (vi1, vi2));
+      debug = Debug.newDebug(getClass(), vi1.ppt, Debug.vis(vi1, vi2));
     }
     if (debug != null) {
-      debug.log ("Considering Sequence Subscript Derivation");
+      debug.log("Considering Sequence Subscript Derivation");
     }
 
     // check if the derivations are globally disabled
     boolean enable_subscript = SEQUENCESCALARSUBSCRIPT.dkconfig_enabled;
     boolean enable_subsequence = SEQUENCESCALARSUBSEQUENCE.dkconfig_enabled;
     if (!enable_subscript && !enable_subsequence) {
-      if (debug != null) debug.log ("Not Enabled");
+      if (debug != null) debug.log("Not Enabled");
       return null;
     }
 
@@ -100,38 +98,36 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     VarInfo seqvar;
     VarInfo sclvar;
 
-    if ((vi1.rep_type == PROGLANG_INT_ARRAY)
-        && (vi2.rep_type == PROGLANG_INT)) {
+    if ((vi1.rep_type == PROGLANG_INT_ARRAY) && (vi2.rep_type == PROGLANG_INT)) {
       seqvar = vi1;
       sclvar = vi2;
-    } else if ((vi2.rep_type == PROGLANG_INT_ARRAY)
-               && (vi1.rep_type == PROGLANG_INT)) {
+    } else if ((vi2.rep_type == PROGLANG_INT_ARRAY) && (vi1.rep_type == PROGLANG_INT)) {
       seqvar = vi2;
       sclvar = vi1;
     } else {
-      if (debug != null) debug.log ("Not Array/Int combination");
+      if (debug != null) debug.log("Not Array/Int combination");
       return null;
     }
 
     if (!seqvar.aux.hasOrder()) {
       // Indexing doesn't make sense if order doesn't matter
-      if (debug != null) debug.log ("Not ordered");
+      if (debug != null) debug.log("Not ordered");
       return null;
     }
 
-    if (! seqvar.indexCompatible(sclvar)) {
-      if (debug != null) debug.log ("variables are not comparable");
+    if (!seqvar.indexCompatible(sclvar)) {
+      if (debug != null) debug.log("variables are not comparable");
       return null;
     }
 
     // For now, do nothing if the sequence is itself derived.
     if (seqvar.derived != null) {
-      if (debug != null) debug.log ("Sequence variable derived");
+      if (debug != null) debug.log("Sequence variable derived");
       return null;
     }
     // For now, do nothing if the scalar is itself derived.
     if (sclvar.derived != null) {
-      if (debug != null) debug.log ("Scalar variable derived");
+      if (debug != null) debug.log("Scalar variable derived");
       return null;
     }
 
@@ -152,7 +148,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     if (sclvar == seqsize) {
       // a[len] a[len-1] a[0..len] a[0..len-1] a[len..] a[len+1..]
       Global.tautological_suppressed_derived_variables += 6;
-      if (debug != null) debug.log ("sclvar related to length");
+      if (debug != null) debug.log("sclvar related to length");
       return null;
     }
 
@@ -175,7 +171,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
             : INTGREATEREQUAL.find(compar_slice) == null // seqsize can be less than sclvar
             ) {
           Global.nonsensical_suppressed_derived_variables += 6;
-          if (debug != null) debug.log ("sclvar is sometimes > length sequence");
+          if (debug != null) debug.log("sclvar is sometimes > length sequence");
           return null;
         } else if (INTEQUAL.find(compar_slice) != null) {
           Global.nonsensical_suppressed_derived_variables += 3;
@@ -187,7 +183,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
             result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
             result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, false)); // a[i..]
           }
-          if (debug != null) debug.log ("Found derivations: " + result);
+          if (debug != null) debug.log("Found derivations: " + result);
           return result.toArray(new BinaryDerivation[result.size()]);
         }
       }
@@ -250,10 +246,12 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
           return null;
         } else if (lower_bound == -1) {
           Global.nonsensical_suppressed_derived_variables += 5;
-          return (enable_subsequence) ? new BinaryDerivation[] {
-            new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, false), // a[..i]
-            new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, true), // a[i+1..]
-          } : null;
+          return (enable_subsequence)
+            ? new BinaryDerivation[] {
+                new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, false), // a[..i]
+                new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, true), // a[i+1..]
+              }
+            : null;
         } else if (lower_bound == 0) {
           Global.nonsensical_suppressed_derived_variables += 1;
           ArrayList<BinaryDerivation> result = new ArrayList<BinaryDerivation>();
@@ -292,12 +290,12 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
         // lb asserts that lb.core.a * lb.var1() + lb.core.b * lb.var2() + lb.core.c == 0
         // or lb.var2() == - (lb.core.a / lb.core.b) * lb.var1() - lb.core.c / lb.core.b
 
-//        if (lb.core.a == 1) {
-        if (-lb.core.a/lb.core.b == 1) {
+        //        if (lb.core.a == 1) {
+        if (-lb.core.a / lb.core.b == 1) {
           // Don't set unconditionally, and don't break:  we want to check
           // other variables as well.
-//          if (lb.core.b == -1) {
-          if (-lb.core.c/lb.core.b == -1) {
+          //          if (lb.core.b == -1) {
+          if (-lb.core.c / lb.core.b == -1) {
             if (lb.var1() == sclvar) {
               // j = index - 1
               suppress_minus_1 = true;
@@ -306,8 +304,8 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
               suppress_plus_1 = true;
             }
           }
-//          if (lb.core.b == 1) {
-          if (-lb.core.c/lb.core.b == -1) {
+          //          if (lb.core.b == 1) {
+          if (-lb.core.c / lb.core.b == -1) {
             if (lb.var1() == sclvar) {
               // j = index + 1
               suppress_plus_1 = true;
@@ -338,7 +336,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
       // a[i]
       result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, false));
       // a[i-1]
-      if (! suppress_minus_1) {
+      if (!suppress_minus_1) {
         result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, true));
       }
     }
@@ -346,18 +344,17 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
       // a[i..]
       result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, false));
       // a[i+1..]
-      if (! suppress_plus_1) {
+      if (!suppress_plus_1) {
         result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, true));
       }
       // a[..i]
       result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, false));
       // a[..i-1]
-      if (! suppress_minus_1) {
+      if (!suppress_minus_1) {
         result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, true));
       }
     }
-    if (debug != null) debug.log ("Found derivations " + result);
+    if (debug != null) debug.log("Found derivations " + result);
     return result.toArray(new BinaryDerivation[0]);
   }
-
 }

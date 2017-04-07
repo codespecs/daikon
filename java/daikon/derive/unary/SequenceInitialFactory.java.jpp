@@ -23,8 +23,8 @@ The correct way to build the system is to run 'make'.
 package daikon.derive.unary;
 
 import daikon.*;
-import plume.*;
 import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
@@ -39,7 +39,7 @@ public final class CLASSNAME extends UnaryDerivationFactory {
     // System.out.println("SequenceInitialFactory.instantiate(" + vi + ")");
     // return (UnaryDerivation)new SequenceFirst(vi);
 
-    if (! SEQUENCEINITIAL.dkconfig_enabled) {
+    if (!SEQUENCEINITIAL.dkconfig_enabled) {
       return null;
     }
 
@@ -50,7 +50,7 @@ public final class CLASSNAME extends UnaryDerivationFactory {
     // System.out.println("SequenceInitial.applicable(" + vi.name + ") = "
     //                    + SequenceInitial.applicable(vi));
 
-    if (! SEQUENCEINITIAL.applicable(vi)) {
+    if (!SEQUENCEINITIAL.applicable(vi)) {
       Global.tautological_suppressed_derived_variables += 4;
       return null;
     }
@@ -71,14 +71,16 @@ public final class CLASSNAME extends UnaryDerivationFactory {
 
     int num_invs = upperbound - lowerbound + 1 - (suppress_zero ? 1 : 0);
     assert num_invs > 0
-                      : "No SequenceInitial invariants to instantiate; "
-                      + "lowerbound=" + lowerbound
-                      + ", upperbound=" + upperbound
-                      + ", suppress_zero=" + suppress_zero;
+        : "No SequenceInitial invariants to instantiate; lowerbound="
+            + lowerbound
+            + ", upperbound="
+            + upperbound
+            + ", suppress_zero="
+            + suppress_zero;
     UnaryDerivation[] result = new UnaryDerivation[num_invs];
-    int j=0;
-    for (int i=lowerbound; i<=upperbound; i++) {
-      if (! ((i == 0) && suppress_zero)) {
+    int j = 0;
+    for (int i = lowerbound; i <= upperbound; i++) {
+      if (!((i == 0) && suppress_zero)) {
         result[j] = new SEQUENCEINITIAL(vi, i);
         j++;
       }
@@ -95,5 +97,4 @@ public final class CLASSNAME extends UnaryDerivationFactory {
 
     return result;
   }
-
 }

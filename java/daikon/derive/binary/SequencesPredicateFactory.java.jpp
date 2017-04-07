@@ -25,40 +25,33 @@ The correct way to build the system is to run 'make'.
 package daikon.derive.binary;
 
 import daikon.*;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 */
 
-/**
- * Factory for SequencesPredicate derived variables.
- */
+/** Factory for SequencesPredicate derived variables. */
 public final class CLASSNAME extends BinaryDerivationFactory {
 
   /** Debug tracer. */
   public static final Logger debug =
     Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
 
-
   public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo var1, VarInfo var2) {
     boolean enabled = SEQUENCESPREDICATE.dkconfig_enabled;
     if (!enabled) return null;
 
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Trying to instantiate " + var1.name() + " and "
-                  + var2.name());
+      debug.fine("Trying to instantiate " + var1.name() + " and " + var2.name());
     }
 
-    if (!(var1.rep_type.isArray()) ||
-        !(var2.rep_type.isArray())) {
+    if (!(var1.rep_type.isArray()) || !(var2.rep_type.isArray())) {
       return null;
     }
 
-    if (!var1.aux.hasOrder() ||
-        !var2.aux.hasOrder()) {
+    if (!var1.aux.hasOrder() || !var2.aux.hasOrder()) {
       // Order doesn't matter, then predication is meaningless
       return null;
     }
@@ -80,7 +73,7 @@ public final class CLASSNAME extends BinaryDerivationFactory {
         return null;
       }
 
-      if (!var1.has_same_parent (var2)) {
+      if (!var1.has_same_parent(var2)) {
         return null;
       }
 
@@ -88,39 +81,17 @@ public final class CLASSNAME extends BinaryDerivationFactory {
       // There may be predications that aren't of the x.a and x.b type
     }
 
-
     // Now we finally can derive
 
-
     if (debug.isLoggable(Level.FINE)) {
-      debug.fine (var1.ppt + ": " + var1.name() + " and " +
-                   var2.name() + " are worth deriving from");
+      debug.fine(
+         var1.ppt + ": " + var1.name() + " and " + var2.name() + " are worth deriving from");
     }
 
     return new BinaryDerivation[] {
-      new SEQUENCESPREDICATE (var1, var2, 0, "false"),
-      new SEQUENCESPREDICATE (var1, var2, 1, "true"),
+      new SEQUENCESPREDICATE(var1, var2, 0, "false"),
+      new SEQUENCESPREDICATE(var1, var2, 1, "true"),
       // new SequencesPredicate (var1, var2, 0, "nonNull", false),
     };
-
-
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

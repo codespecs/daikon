@@ -17,7 +17,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME LinearBinaryCoreFloat
   #define PRIMITIVE double
   #define CLASSSTRING "LinearBinaryCoreFloat"
-  #define EQUAL(a,b) (Global.fuzzy.eq ((a), (b)))
+  #define EQUAL(a,b) (Global.fuzzy.eq((a), (b)))
 #else
   #error "One of TYPELONG or TYPEDOUBLE must be defined"
 #endif
@@ -28,11 +28,11 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
-import plume.*;
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.io.Serializable;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import plume.*;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -41,9 +41,7 @@ import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
-public final class CLASSNAME
-  implements Serializable, Cloneable
-{
+public final class CLASSNAME implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -53,7 +51,7 @@ public final class CLASSNAME
   public static final Logger debug =
     Logger.getLogger("daikon.inv.binary.twoScalar." + CLASSSTRING);
 
-  // This invariant represents ax + by + c = 0; the first argument is x, second is y
+  /** This invariant represents ax + by + c = 0; the first argument is x, second is y. */
   public double a = 0, b = 0, c = 0;
 
   public PRIMITIVE min_x, min_y, max_x, max_y;
@@ -115,7 +113,6 @@ public final class CLASSNAME
           b = -a;
           c = -c;
         }
-
       }
     }
 
@@ -131,14 +128,11 @@ public final class CLASSNAME
     tmp_val = min_x;
     min_x = min_y;
     min_y = tmp_val;
-
-
  }
 
   /**
-   * Returns whether or not the invariant is currently active.  We become
-   * active after MINPAIRS values have been seen and a line calculated.
-   * Before that, a and b are uninitialized.
+   * Returns whether or not the invariant is currently active. We become active after MINPAIRS
+   * values have been seen and a line calculated. Before that, a and b are uninitialized.
    */
   /*@Pure*/
   public boolean isActive() {
@@ -146,9 +140,8 @@ public final class CLASSNAME
   }
 
   /**
-   * LinearBinary can't be flowed because it keeps samples to build the
-   * line.  These sample can't be flowed from ppt to ppt (since they probably
-   * didn't occur at the lower ppt).
+   * LinearBinary can't be flowed because it keeps samples to build the line. These sample can't be
+   * flowed from ppt to ppt (since they probably didn't occur at the lower ppt).
    */
   /*@Pure*/
   public boolean isFlowable() {
@@ -164,14 +157,14 @@ public final class CLASSNAME
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
     if (values_seen < MINPAIRS) {
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("min point: " + wrapper.ppt.name() +": " + x + ", " + y);
+        debug.fine("min point: " + wrapper.ppt.name() + ": " + x + ", " + y);
       }
       // We delay computation of a and b until we have seen several pairs
       // so that we can compute a and b based on a far-separated pair.  If
       // the points in a pair are nearby, then roundoff errors in the
       // computation of the slope can be non-negligible.
 
-      for (int i=0; i<values_seen; i++)
+      for (int i = 0; i < values_seen; i++)
         if ((x_cache[i] == x) && (y_cache[i] == y)) {
           return InvariantStatus.NO_CHANGE;
         }
@@ -187,7 +180,7 @@ public final class CLASSNAME
         // Set a, b and c based on that pair
         if (max_i == -1) {
           values_seen--;
-          wrapper.log ("falsified, max_i = -1");
+          wrapper.log("falsified, max_i = -1");
           return InvariantStatus.FALSIFIED;
         }
         // remember the min and max pairs
@@ -203,10 +196,9 @@ public final class CLASSNAME
         max_y = y_cache[max_j];
 
         // calculate a, b and c for this pair and remember them as min/max a,b,c
-        if (set_bi_linear(min_x, max_x, min_y, max_y) ==
-            InvariantStatus.FALSIFIED) {
+        if (set_bi_linear(min_x, max_x, min_y, max_y) == InvariantStatus.FALSIFIED) {
           values_seen--;
-          wrapper.log ("falsified, no set_bi_linear");
+          wrapper.log("falsified, no set_bi_linear");
           return InvariantStatus.FALSIFIED;
         }
         min_a = a;
@@ -216,18 +208,18 @@ public final class CLASSNAME
         min_c = c;
         max_c = c;
         if (debug.isLoggable(Level.FINE)) {
-            debug.fine (wrapper.ppt.name() + ": Initial a (" + a +
-                         ") and b (" + b + ") and c (" + c + ")");
+            debug.fine(
+                wrapper.ppt.name() + ": Initial a (" + a + ") and b (" + b + ") and c (" + c + ")");
         }
 
         // Check all values against a, b, and c.
         if (EQUAL(a, 0)) {
-          wrapper.log ("falsified, a == 0");
+          wrapper.log("falsified, a == 0");
           values_seen--;
           return InvariantStatus.FALSIFIED;
         }
 
-        for (int i=0; i<MINPAIRS; i++) {
+        for (int i = 0; i < MINPAIRS; i++) {
           // if the point is close enough in either x or y it is close enough
           // The double check is used because lines with different slopes may
           // indicate an unreasonably high x or y diff when the actual point
@@ -235,15 +227,26 @@ public final class CLASSNAME
           // actual distance from the line, but it would be unclear what to
           // compare this to (average or X and Y?).  This seems like a
           // reasonable compromise
-          if ((!EQUAL(-b*y_cache[i],  a*x_cache[i]+c))
-              && (!EQUAL(x_cache[i], ((-b*y_cache[i] - c) / a)))) {
+          if ((!EQUAL(-b * y_cache[i],  a * x_cache[i] + c))
+              && (!EQUAL(x_cache[i], ((-b * y_cache[i] - c) / a)))) {
             if (debug.isLoggable(Level.FINE)) {
-              debug.fine ("Suppressing " + CLASSSTRING + " (" + wrapper.format() + ") at index " + i + ": "
-                          + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
-              debug.fine ("    ");
+              debug.fine(
+                  "Suppressing " + CLASSSTRING + " ("
+                  + wrapper.format()
+                  + ") at index "
+                  + i
+                  + ": "
+                  + y_cache[i]
+                  + " != "
+                  + a
+                  + "*"
+                  + x_cache[i]
+                  + "+"
+                  + b);
+              debug.fine("    ");
             }
             values_seen--;
-            wrapper.log ("falsified, point in cache doesn't match");
+            wrapper.log("falsified, point in cache doesn't match");
             return InvariantStatus.FALSIFIED;
           }
         }
@@ -251,7 +254,7 @@ public final class CLASSNAME
     } else {
       // Check the new value against a and b. (see prev explanation for double
       // EQUAL check)
-      if ((! EQUAL(y, (-c-a*x)/b))  && (!EQUAL(x, (-c-b*y)/ a))) {
+      if ((!EQUAL(y, (-c - a * x)/b)) && (!EQUAL(x, (-c - b * y)/ a))) {
         // see if this new point is off one end or the other
         if (x < min_x) {
           min_x = x;
@@ -293,30 +296,33 @@ public final class CLASSNAME
         new_b = (min_b + max_b) / 2;
         new_c = (min_c + max_c) / 2;
         if (debug.isLoggable(Level.FINE)) {
-            debug.fine (wrapper.ppt.name() + ": Trying new a (" + new_a +
-                         ") and b (" + new_b + ")");
+            debug.fine(wrapper.ppt.name() + ": Trying new a (" + new_a
+                         + ") and b (" + new_b + ")");
         }
 
         // if the new a, b, c are 'equal' to min/max a, b, c and
         // this point fits, then this new equation is good enough both
         // for existing points and the new point.
 
-        if (Global.fuzzy.eq(new_a, min_a) && Global.fuzzy.eq(new_a, max_a) &&
-            Global.fuzzy.eq(new_b, min_b) && Global.fuzzy.eq(new_b, max_b) &&
-            Global.fuzzy.eq(new_c, min_c) && Global.fuzzy.eq(new_c, max_c) &&
-            EQUAL(-new_b * y, new_a*x + new_c)) {
+        if (Global.fuzzy.eq(new_a, min_a)
+            && Global.fuzzy.eq(new_a, max_a)
+            && Global.fuzzy.eq(new_b, min_b)
+            && Global.fuzzy.eq(new_b, max_b)
+            && Global.fuzzy.eq(new_c, min_c)
+            && Global.fuzzy.eq(new_c, max_c)
+            && EQUAL(-new_b * y, new_a * x + new_c)) {
           a = new_a;
           b = new_b;
           c = new_c;
           if (debug.isLoggable(Level.FINE)) {
-            debug.fine (wrapper.ppt.name() + ": New a (" + a + ") and b ("
-                         + b + ") and c (" + c + ")");
+            debug.fine(
+                wrapper.ppt.name() + ": New a (" + a + ") and b (" + b + ") and c (" + c + ")");
           }
         } else {
           if (debug.isLoggable(Level.FINE)) {
-            debug.fine ("Suppressing " + CLASSSTRING + " (" +
-                        wrapper.format() + ") at new value: " +
-                        a + " * x + " + b + " * y + " + c + " != 0");
+            debug.fine("Suppressing " + CLASSSTRING + " ("
+                        + wrapper.format() + ") at new value: "
+                        + a + " * x + " + b + " * y + " + c + " != 0");
 //                        + y + " != " + a + "*" + x + "+" + b);
           }
           return InvariantStatus.FALSIFIED;
@@ -329,9 +335,9 @@ public final class CLASSNAME
   }
 
   /**
-   * Returns a 2-element int array of the indices of the most separated
-   * pair of points between the points represented by x_array and y_array.
-   * Requires that x_array and y_array are the same length.
+   * Returns a 2-element int array of the indices of the most separated pair of points between the
+   * points represented by x_array and y_array. Requires that x_array and y_array are the same
+   * length.
    */
   static int/*@ArrayLen(2)*/[] maxsep_point(PRIMITIVE[] x_array, PRIMITIVE[] y_array) {
     // Find the most separated pair.
@@ -344,12 +350,12 @@ public final class CLASSNAME
     int max_j = -1;
     // (square of the) distance between the most separated pair
     double max_separation = 0;
-    for (int i=0; i<x_array.length-1; i++) {
-      for (int j=i+1; j<x_array.length; j++) {
+    for (int i = 0; i < x_array.length - 1; i++) {
+      for (int j = i + 1; j < x_array.length; j++) {
         // not long, lest we get wraparound
         double xsep = x_array[i] - x_array[j];
         double ysep = y_array[i] - y_array[j];
-        double separation = xsep*xsep + ysep*ysep;
+        double separation = xsep * xsep + ysep * ysep;
 #if defined(TYPEDOUBLE)
         // Roundoff error might result in 0.
         // assert separation > 0;
@@ -361,33 +367,30 @@ public final class CLASSNAME
         }
       }
     }
-    return new int[] { max_i, max_j };
+    return new int[] {max_i, max_j};
   }
   /**
-   * Returns a 2-element int array of the indices of the most separated
-   * pair of points between the points within this.
+   * Returns a 2-element int array of the indices of the most separated pair of points between the
+   * points within this.
    */
   int/*@ArrayLen(2)*/[] maxsep_indices() {
     return maxsep_point(x_cache, y_cache);
   }
 
-//  /**
-//   * Given ((x0,y0),(x1,y1)), finds a and b such that y = ax + b.
-//   * Places a and b (if they exist) into result at indexes 0 and 1
-//   * respectively.
-//   * @return true if such an a and b exist.
-//   */
-   /**
-   * Given ((x0,y0),(x1,y1)), finds a,b and c such that ax + by + c = 0.
-   * Places a, b and c (if they exist) into result at indexes 0, 1 and 2
-   * respectively.
+  //  /**
+  //   * Given ((x0,y0),(x1,y1)), finds a and b such that y = ax + b.
+  //   * Places a and b (if they exist) into result at indexes 0 and 1
+  //   * respectively.
+  //   * @return true if such an a and b exist.
+  //   */
+  /**
+   * Given ((x0,y0),(x1,y1)), finds a,b and c such that ax + by + c = 0. Places a, b and c (if they
+   * exist) into result at indexes 0, 1 and 2 respectively.
+   *
    * @return true if such an a and b exist
    */
-  private static boolean find_bi_linear(PRIMITIVE x0,
-                                       PRIMITIVE x1,
-                                       PRIMITIVE y0,
-                                       PRIMITIVE y1,
-                                       double[] result) {
+  private static boolean find_bi_linear(
+      PRIMITIVE x0, PRIMITIVE x1, PRIMITIVE y0, PRIMITIVE y1, double[] result) {
     if (x1 - x0 == 0) {         // not "x0 == x1", due to roundoff
       // x being constant would have been discovered elsewhere (and this
       // invariant would not have been instantiated).
@@ -399,23 +402,23 @@ public final class CLASSNAME
       return false;
     }
 
-    PRIMITIVE i_var = y1-y0;
-    PRIMITIVE j_var = x0-x1;
-    PRIMITIVE Stand_const = y0*x1-x0*y1;
+    PRIMITIVE i_var = y1 - y0;
+    PRIMITIVE j_var = x0 - x1;
+    PRIMITIVE Stand_const = y0 * x1 - x0 * y1;
 
     // Put the coefficients in lowest terms by dividing by the gcd.
     // If the gcd is 1, no harm done -- divide by 1.
     // Type is double to ensure floating-point division.
-    double myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var) , Stand_const);
-    double standard_i_var = i_var/myGCD;
-    double standard_j_var = j_var/myGCD;
-    double standard_Stand_const = Stand_const/myGCD;
+    double myGCD = MathMDE.gcd(MathMDE.gcd(i_var, j_var), Stand_const);
+    double standard_i_var = i_var / myGCD;
+    double standard_j_var = j_var / myGCD;
+    double standard_Stand_const = Stand_const / myGCD;
 
     // Ensure postive x coefficient by negating if "x" term is negative.
     if (i_var < 0) {
-      standard_i_var = - standard_i_var;
-      standard_j_var = - standard_j_var;
-      standard_Stand_const = - standard_Stand_const;
+      standard_i_var = -standard_i_var;
+      standard_j_var = -standard_j_var;
+      standard_Stand_const = -standard_Stand_const;
     }
 
     result[0] = standard_i_var;
@@ -425,22 +428,20 @@ public final class CLASSNAME
     return true;
   }
 
-  /**
-   * Given ((x0,y0),(x1,y1)), set a, b and c such that ax + by + c = 0.
-   */
+  /** Given ((x0,y0),(x1,y1)), set a, b and c such that ax + by + c = 0. */
   private InvariantStatus set_bi_linear(PRIMITIVE x0, PRIMITIVE x1, PRIMITIVE y0, PRIMITIVE y1) {
     double[] AandBandC = new double[3];
-    if (! find_bi_linear(x0, x1, y0, y1, AandBandC)) {
+    if (!find_bi_linear(x0, x1, y0, y1, AandBandC)) {
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("Suppressing " + CLASSSTRING + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
+        debug.fine("Suppressing " + CLASSSTRING + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
       return InvariantStatus.FALSIFIED;
     }
     a = AandBandC[0];
     b = AandBandC[1];
     c = AandBandC[2];
-    wrapper.log ("x0=%s, x1=%s, y0=%s, y1=%s", x0, x1, y0, y1);
-    wrapper.log ("a=%s, b=%s, c=%s", a, b, c);
+    wrapper.log("x0=%s, x1=%s, y0=%s, y1=%s", x0, x1, y0, y1);
+    wrapper.log("a=%s, b=%s, c=%s", a, b, c);
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -453,8 +454,7 @@ public final class CLASSNAME
   }
 
   public String repr(/*>>>@GuardSatisfied CLASSNAME this*/) {
-    return CLASSSTRING + wrapper.varNames() + ": "
-      + "a=" + a
+    return CLASSSTRING + wrapper.varNames() + ": a=" + a
       + ",b=" + b
       + ",c=" + c
       + ",values_seen=" + values_seen;
@@ -464,9 +464,7 @@ public final class CLASSNAME
   // Variable "first" indicates whether this is the leading term
   // Variable "varname" is the name of the variable; may be null
   // for the constant term.
-  public static String formatTerm (double coeff,
-                                   /*@Nullable*/ String varname,
-                                   boolean first) {
+  public static String formatTerm(double coeff, /*@Nullable*/ String varname, boolean first) {
     double ncoeff = coeff;
 
     if (ncoeff == 0) {
@@ -486,7 +484,8 @@ public final class CLASSNAME
     }
 
     //we want to ensure that the positive value is used because the sign has already been determined
-    String coeff_string = (ncoeff == (int)ncoeff) ? "" + Math.abs((int)ncoeff) : "" + Math.abs(ncoeff);
+    String coeff_string =
+        (ncoeff == (int)ncoeff) ? "" + Math.abs((int)ncoeff) : "" + Math.abs(ncoeff);
     if (varname == null) {
       return sign + coeff_string;
     }
@@ -498,25 +497,22 @@ public final class CLASSNAME
   }
 
   /*@SideEffectFree*/
-  public String format_using(OutputFormat format,
-                             String vix, String viy,
-                             double u, double v, double w) {
+  public String format_using(
+      OutputFormat format, String vix, String viy, double u, double v, double w) {
 
     //recall that a, b, c in the linear binary equation means ax + by + c = 0;
     if (u == 0 && v == 0 && w == 0) {
-      return wrapper.format_too_few_samples(format, "0 * " + vix
-                                    + "+ 0 * " + viy + " + 0 == 0");
+      return wrapper.format_too_few_samples(format, "0 * " + vix + "+ 0 * " + viy + " + 0 == 0");
     }
 
     if (format.isJavaFamily()) {
 
       #if defined(TYPEDOUBLE)
-        return
-          "daikon.Quant.fuzzy.eq(0, "
-          + formatTerm(u, vix, true)
-          + formatTerm(v, viy, false)
-          + formatTerm(w, null, false)
-          + ")";
+        return "daikon.Quant.fuzzy.eq(0, "
+            + formatTerm(u, vix, true)
+            + formatTerm(v, viy, false)
+            + formatTerm(w, null, false)
+            + ")";
       #else
         int a = (int) u;
         int b = (int) v;
@@ -530,30 +526,26 @@ public final class CLASSNAME
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
-        || (format == OutputFormat.CSHARPCONTRACT))
-    {
+        || (format == OutputFormat.CSHARPCONTRACT)) {
       String eq = " == ";
       return formatTerm(u, vix, true)
         + formatTerm(v, viy, false)
         + formatTerm(w, null, false)
-        + eq + "0";
+        + eq
+        + "0";
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return format_simplify(vix, viy, u, v,
-                             w);
+      return format_simplify(vix, viy, u, v, w);
     }
     throw new Error("Unknown OutputFormat: " + format);
   }
 
-  public static String format_simplify(String str_x, String str_y,
-                                       double a, double b, double c) {
-
+  public static String format_simplify(String str_x, String str_y, double a, double b, double c) {
 
       int ia = (int) a;
       int ib = (int) b;
       int ic = (int) c;
-
 
       String str_a, str_b, str_c;
       if (ia == a && ib == b && ic == c) {
@@ -590,35 +582,30 @@ public final class CLASSNAME
 
   // Format as "x = cy+d" instead of as "y = ax+b". [now that we print in standard format, is
   // there a point to this method?
-  public String format_reversed_using(OutputFormat format, String xname,
-                                      String yname) {
+  public String format_reversed_using(OutputFormat format, String xname, String yname) {
     assert a == 1 || a == -1;
     return format_using(format, yname, xname, b, a, c);
   }
 
   /**
-   * In general, we can't merge formulas, but we can merge invariants with
-   * too few samples to have formed a line with invariants with enough
-   * samples.  And those will appear to have different formulas.
+   * In general, we can't merge formulas, but we can merge invariants with too few samples to have
+   * formed a line with invariants with enough samples. And those will appear to have different
+   * formulas.
    */
-
   public boolean mergeFormulasOk() {
     return true;
   }
 
   /**
-   * Merge the linear binary cores in cores to form a new core. Any
-   * core in the list that has seen enough points to define a
-   * line, must define the same line.  Any cores that have not
-   * yet seen enough points, will have each of their points applied to
-   * that invariant.  The merged core is returned.  Null is
-   * returned if the cores don't describe the same line
+   * Merge the linear binary cores in cores to form a new core. Any core in the list that has seen
+   * enough points to define a line, must define the same line. Any cores that have not yet seen
+   * enough points, will have each of their points applied to that invariant. The merged core is
+   * returned. Null is returned if the cores don't describe the same line
    *
-   * @param cores   list of LinearBinary cores to merge.  They should
-   *                all be permuted to match the variable order in
-   *                ppt.
+   * @param cores list of LinearBinary cores to merge. They should all be permuted to match the
+   *     variable order in ppt.
    */
-  public /*@Nullable*/ CLASSNAME merge (List<CLASSNAME> cores, Invariant wrapper) {
+  public /*@Nullable*/ CLASSNAME merge(List<CLASSNAME> cores, Invariant wrapper) {
 
     // Look for any active lines.  All must define the same line
     CLASSNAME result = null;
@@ -629,16 +616,17 @@ public final class CLASSNAME
       if (result == null) {
         result = c.clone();
       } else {
-        if (!Global.fuzzy.eq (result.a, c.a)
-            || !Global.fuzzy.eq (result.b, c.b)
-            || !Global.fuzzy.eq(result.c, c.c))
+        if (!Global.fuzzy.eq(result.a, c.a)
+            || !Global.fuzzy.eq(result.b, c.b)
+            || !Global.fuzzy.eq(result.c, c.c)) {
           return null;
+        }
       }
     }
 
     // If no active lines were found, created an empty core
     if (result == null) {
-      result = new CLASSNAME (wrapper);
+      result = new CLASSNAME(wrapper);
     } else {
       result.wrapper = wrapper;
     }
@@ -649,8 +637,7 @@ public final class CLASSNAME
         continue;
       }
       for (int j = 0; j < c.values_seen; j++) {
-        if (result.add_modified (c.x_cache[j], c.y_cache[j], 1) ==
-            InvariantStatus.FALSIFIED) {
+        if (result.add_modified(c.x_cache[j], c.y_cache[j], 1) == InvariantStatus.FALSIFIED) {
           //        if (wrapper.falsified)
           return null;
         }
@@ -668,24 +655,20 @@ public final class CLASSNAME
     if (thisMeaningless && otherMeaningless) {
       return true;
     } else {
-      return
-        (values_seen >= MINPAIRS) &&
-        (other.values_seen >= MINPAIRS) &&
-        (a == other.a) &&
-        (b == other.b) &&
-        (c == other.c);
+      return (values_seen >= MINPAIRS)
+        && (other.values_seen >= MINPAIRS)
+        && (a == other.a)
+        && (b == other.b)
+        && (c == other.c);
     }
   }
 
   /*@Pure*/
   public boolean isExclusiveFormula(CLASSNAME other) {
-    if ((values_seen < MINPAIRS) ||
-        (other.values_seen < MINPAIRS)) {
+    if ((values_seen < MINPAIRS) || (other.values_seen < MINPAIRS)) {
       return false;
     }
 
-      return ((-a/b == -other.a/other.b)
-            && (-c/b != -other.c/other.b));
+      return ((-a / b == -other.a / other.b) && (-c / b != -other.c / other.b));
   }
-
 }

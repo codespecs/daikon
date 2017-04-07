@@ -463,7 +463,7 @@ public class NISuppression {
           suppressee.sup_class.getName() + " " + antecedents_for_suppression(antecedents));
     }
 
-    antecedents = castNonNullDeep(antecedents); // issue 154
+    antecedents = castNonNullDeep(antecedents); // issue 986
 
     return antecedents;
   }

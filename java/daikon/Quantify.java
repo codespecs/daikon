@@ -519,7 +519,7 @@ public class Quantify {
           arr_var_indexed = qret.var.simplify_name();
         }
         avi_list.add(arr_var_indexed);
-        // result[i+1] = qret.root_primes[i].simplify_name();
+        // result[i + 1] = qret.root_primes[i].simplify_name();
       }
       arr_vars_indexed = avi_list.toArray(new String[avi_list.size()]);
 

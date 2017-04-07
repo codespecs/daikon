@@ -155,7 +155,8 @@ public final class Debug {
   public /*@Nullable*/ Ppt cache_ppt;
 
   /**
-   * cached variables: variables to use by default when calling variants of log() with few arguments
+   * Cached variables: variables to use by default when calling variants of log() with few
+   * arguments.
    */
   public VarInfo /*@Nullable*/ [] cache_vis;
 
