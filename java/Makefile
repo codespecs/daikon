@@ -907,7 +907,6 @@ show_nullness_java_files:
 ## todo: add check-index here
 check-all: check-formatter check-interning check-nullness check-regex check-signature check-lock
 
-intern: check-index
 index: check-index
 check-index: daikon/util/README ${INDEX_JAVA_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
