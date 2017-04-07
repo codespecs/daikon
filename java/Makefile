@@ -879,7 +879,7 @@ ALLSYSTEMS_SKIPDEFS=^jtb\.
 # and has 60 @Interned annotations and quite a few SuppressWarnings.
 INTERNING_JAVA_FILES_SKIP_COUNTS = Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
-INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES} $(shell find daikon/util/ -name '*.java')
+INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES} $(shell find daikon/util/ -name '*.java' | ${SORT_DIRECTORY_ORDER})
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
 ## Setting this to a subset of directories only works if every file has been
 ## previously compiled with the Java 7 compiler in annotations-in-comments
