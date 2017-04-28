@@ -158,6 +158,7 @@ public final class DCRuntime {
     if (Premain.debug_dcruntime) {
       debug = true;
       debug_tag_frame = true;
+      debug_primitive = new SimpleLog(true);
     }
     if (Premain.debug_dcruntime_all) {
       debug = true;
@@ -808,7 +809,7 @@ public final class DCRuntime {
 
   /**
    * Discard the tag on the top of the tag stack. Called when primitives are pushed but not used in
-   * expressions (such as when allocating arrays).
+   * expressions (such as when allocating arrays). (No longer used?)
    */
   public static void discard_tag(int cnt) {
 
@@ -2781,6 +2782,7 @@ public final class DCRuntime {
     Object tag = new Constant();
     debug_primitive.log("push literal constant tag: %s%n", tag);
     td.tag_stack.push(tag);
+    //System.out.printf ("tag_stack size: %d%n", td.tag_stack.size());
 
     //debug_print_call_stack();
   }
