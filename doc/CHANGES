@@ -20,6 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.5.6 (May 2, 2017)
+
+DynComp:
+- Fixed a few DynComp bugs.
+
+Kvasir:
+- We updated the underlying Binutils infrastructure to version 2.27.0.
+
+===========================================================================
+
 5.5.4 (April 3, 2017)
 
 DynComp and Chicory:
