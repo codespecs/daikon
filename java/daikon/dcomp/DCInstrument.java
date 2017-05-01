@@ -986,9 +986,21 @@ class DCInstrument {
         if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg)) {
           // doubling
           try {
+            if (has_code) {
+              il = mg.getInstructionList();
+              InstructionHandle end = il.getEnd();
+              int length = end.getPosition() + end.getInstruction().getLength();
+              if (length >= Const.MAX_CODE_SIZE) {
+                throw new ClassGenException(
+                    "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
+              }
+            }
             gen.addMethod(mg.getMethod());
           } catch (Exception e) {
-            if ((e.getMessage()).startsWith("Branch target offset too large")) {
+            String s = e.getMessage();
+            if (s == null) throw e;
+            if ((s.startsWith("Branch target offset too large"))
+                || (s.startsWith("Code array too big"))) {
               System.out.printf(
                   "DynComp warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
                   gen.getClassName(), mg.getName());

@@ -280,7 +280,10 @@ public class DynComp {
     cmdlist.add(cp);
     cmdlist.add("-ea");
     cmdlist.add("-esa");
-    cmdlist.add("-Xmx1024m");
+    // get max memory given DynComp and pass on to dcomp_premain
+    // rounded up to nearest G(igabyte)
+    cmdlist.add(
+        "-Xmx" + (int) Math.ceil(java.lang.Runtime.getRuntime().maxMemory() / 1073741824.0) + "G");
     if (!no_jdk) {
       // prepend to rather than replace bootclasspath
       cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + cp);
