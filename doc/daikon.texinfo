@@ -56,14 +56,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.5.6
+@center Daikon version 5.5.7
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.5.6 release date
-@center May 1, 2017
+@c Print out the Daikon version 5.5.7 release date
+@center May 2, 2017
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.5.6, released May 1, 2017.
+It describes Daikon version 5.5.7, released May 2, 2017.
 
 @menu
 * Introduction::
@@ -293,12 +293,12 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.5.6.tar.gz
-tar zxf daikon-5.5.6.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.5.7.tar.gz
+tar zxf daikon-5.5.7.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.5.6/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.5.7/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:  
@@ -310,7 +310,7 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The absolute pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.5.6
+export DAIKONDIR=@var{daikonparent}/daikon-5.5.7
 # The absolute pathname of the directory that contains the Java JDK
 export JAVA_HOME=@var{/usr/lib/jvm/java}
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -395,12 +395,12 @@ unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.5.6.tar.gz
-tar zxf daikon-5.5.6.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.5.7.tar.gz
+tar zxf daikon-5.5.7.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.5.6/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.5.7/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{~/.bashrc}:  
@@ -410,7 +410,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.5.6
+export DAIKONDIR=@var{daikonparent}/daikon-5.5.7
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -3863,7 +3863,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.5.6.jar
+--premain=C:\lib\daikon-5.5.7.jar
 @end example
 
 @item --heap-size=@var{max_heap}
@@ -8842,7 +8842,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.5.6, released May 1, 2017.
+This manual describes Daikon version 5.5.7, released May 2, 2017.
 A more detailed list of revisions since mid-2001 can be found in file
 @url{CHANGES,,@file{doc/CHANGES}}
 in the distribution; this section gives a
@@ -8857,7 +8857,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.5.6
+@cindex Daikon version 5.5.7
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
