@@ -996,8 +996,6 @@ public class PptRelation implements Serializable {
       if ((ppt.children.size() == 0) && (ppt.equality_view == null)) {
         assert ppt.is_object() || ppt.is_class() || ppt.is_enter() : ppt;
         ppt.equality_view = new PptSliceEquality(ppt);
-        assert ppt.equality_view != null
-            : "@AssumeAssertion(nullness)"; // bug 107: http://code.google.com/p/checker-framework/issues/detail?id=107
         ppt.equality_view.instantiate_invariants();
       }
     }

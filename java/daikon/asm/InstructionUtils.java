@@ -164,8 +164,6 @@ public class InstructionUtils {
    * <p>The redundant variables are returned as a map. Each entry &lt;rvar, leader&gt; represents a
    * redundant variable rvar and its leader. If a variable is not in the map, it is not redundant.
    */
-  @SuppressWarnings(
-      "unboxing.of.nullable") // CF issue 427: https://code.google.com/p/checker-framework/issues/detail?id=427
   public static Map<String, String> computeRedundantVars(List<IInstruction> path) {
 
     // For the purposes of this code, we will say that an instruction occurs
