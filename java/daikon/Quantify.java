@@ -295,7 +295,7 @@ public class Quantify {
    * variable.
    */
   @SuppressWarnings("index") // issue #129
-  public static QuantifyReturn /*@PolyMinLen*/ [] quantify(VarInfo /*@PolyMinLen*/ [] vars) {
+  public static QuantifyReturn /*@PolyValue*/ [] quantify(VarInfo /*@PolyValue*/ [] vars) {
     assert vars != null;
 
     // create empty result

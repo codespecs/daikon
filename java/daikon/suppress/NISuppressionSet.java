@@ -13,6 +13,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.lock.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
