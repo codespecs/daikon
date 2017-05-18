@@ -106,9 +106,8 @@ public class ParameterDoclet {
     root = doc;
     categories =
         new DocCategory[] {
-          // Do not re-order these options!  The pattern-matching is sensitive
-          // to the order and the parent document knows the filter option comes
-          // first (for node linking).
+          // Do not re-order these options!  The pattern-matching is sensitive to the order
+          // and the parent document knows the filter option comes first (for node linking).
           new DocCategory(
               "daikon.inv.filter.",
               "enabled",
@@ -202,7 +201,7 @@ public class ParameterDoclet {
     if ("".equals(desc.trim())) {
       desc = NO_DESCRIPTION;
     } else if (!endOfSentence.matcher(desc).find()) {
-      // Add period if there is no end-of-sentence documentation
+      // Add period if there is no end-of-sentence delimiter
       desc = desc + ".";
     }
 
