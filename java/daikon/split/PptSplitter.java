@@ -346,10 +346,8 @@ public class PptSplitter implements Serializable {
                 System.out.println("con val = " + child_ppt.constants.getConstant(cvis_sorted[i]));
               }
             }
-            // TODO: Once Checker Framework issue 755 has been fixed
-            // ( https://github.com/typetools/checker-framework/issues/755),
-            // this warning suppression should be removed.
-            @SuppressWarnings("lock:cannot.dereference")
+            @SuppressWarnings(
+                "lock:cannot.dereference") // https://github.com/typetools/checker-framework/issues/755
             String eq_inv_ppt = eq_inv.ppt.toString();
             throw new RuntimeException(
                 "found eq_inv "

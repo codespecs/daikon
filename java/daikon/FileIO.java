@@ -1721,9 +1721,8 @@ public final class FileIO {
       return;
     }
 
-    // See Checker Framework Issue 862
-    // https://github.com/typetools/checker-framework/issues/862
-    @SuppressWarnings("flowexpr.parse.error")
+    @SuppressWarnings(
+        "flowexpr.parse.error") // https://github.com/typetools/checker-framework/issues/862
     Object dummy = ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {
