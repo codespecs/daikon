@@ -50,8 +50,8 @@ public class PptSplitter implements Serializable {
   // config-options.texinfo and the insertion program doesn't yet
   // understand {@code ...}.
   /**
-   * Split bi-implications ("a &lt;==&gt; b") into two separate implications ("a ==&gt; b" and "b
-   * ==&gt; a").
+   * Split bi-implications ("{@code a <==> b}") into two separate implications ("{@code a ==> b}"
+   * and "{@code b ==> a}").
    */
   public static boolean dkconfig_split_bi_implications = false;
 

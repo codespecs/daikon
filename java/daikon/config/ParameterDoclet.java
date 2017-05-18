@@ -270,7 +270,7 @@ public class ParameterDoclet {
         // @item [field]
         //  [desc]
         out.println("@item " + field);
-        desc = HtmlToTexinfo.htmlToTexinfo(desc);
+        desc = HtmlToTexinfo.javadocHtmlToTexinfo(desc);
         out.println(desc);
         if (!desc.contains("The default value is")) {
           out.println(defstr);
