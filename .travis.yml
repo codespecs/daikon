@@ -37,32 +37,22 @@ env:
 #     - env: OS=fedora JDKVER=jdkany GROUP=kvasir
 #     - env: OS=centos JDKVER=jdkany GROUP=kvasir
 
-# before_install:
-#   - npm install --save-dev travis-after-all
-
 before_script:
 - docker pull mdernst/$OS-for-daikon-$JDKVER > /dev/null 2>&1 || true
 
 script:
 - docker run mdernst/$OS-for-daikon-$JDKVER /bin/sh -c "export JAVA_HOME=\`which javac|xargs readlink -f|xargs dirname|xargs dirname\` && git clone --quiet -b $TRAVIS_BRANCH --depth 10 https://github.com/$TRAVIS_REPO_SLUG.git daikon && cd daikon && java -version && javac -version && ./.travis-build.sh $GROUP"
 
-#      $(npm bin)/travis-after-all
-after_script:
-  - |
-      set +e
-      declare exitCode;
-      curl -sSL https://raw.githubusercontent.com/mernst/travis-after-all/master/lib/travis-after-all.js | node
-      exitCode=$?
-
-      echo "exitCode=$exitCode TRAVIS_BRANCH=$TRAVIS_BRANCH TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
-
-      if [ "$exitCode" -eq 0 ]; then
+jobs:
+  include:
+    - stage: trigger downstream
+      script: |
+        echo "TRAVIS_BRANCH=$TRAVIS_BRANCH TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
         if [[ ($TRAVIS_BRANCH == master) &&
               ($TRAVIS_PULL_REQUEST == false) ]] ; then
           curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
           sh trigger-travis.sh typetests daikon-typecheck $TRAVISTOKEN
         fi
-      fi
 
 git:
   depth: 10
