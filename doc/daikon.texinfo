@@ -1834,7 +1834,7 @@ Specify a single configuration setting.
 These debugging options cause output to be written to a log file (by
 default, to the terminal); in other words, they enable a Logger.
 The @option{--dbg @var{category}} option
-enables debugging output for a specific part of Daikon; it may be
+enables debugging output (logging output) for a specific part of Daikon; it may be
 specified multiple times, permitting fine-grained control over debugging
 output.  The @option{--debug} option turns on all debugging flags.
 (This produces a lot of output!)  Most categories are class or
