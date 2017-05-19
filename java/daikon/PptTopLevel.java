@@ -187,6 +187,9 @@ public class PptTopLevel extends Ppt {
   /**
    * All the Views (that is, slices) on this are stored as values in the HashMap. Indexed by a
    * Arrays.asList array list of Integers holding varinfo_index values.
+   *
+   * <p>For a client to access this private variable, it should use {@link #viewsAsCollection},
+   * {@link #views_iterable}, or {@link #views_iterator}.
    */
   private Map<List<Integer>, PptSlice> views;
 
