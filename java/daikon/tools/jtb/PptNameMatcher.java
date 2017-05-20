@@ -140,9 +140,9 @@ public class PptNameMatcher {
     // 2. class name
     // 3. method parameters
 
-    String classname = null;
-    String methodname = null;
-    List<FormalParameter> params = null;
+    String classname;
+    String methodname;
+    List<FormalParameter> params;
 
     if (methodOrConstructorDeclaration instanceof MethodDeclaration) {
       classname = Ast.getClassName((MethodDeclaration) methodOrConstructorDeclaration);

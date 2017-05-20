@@ -3298,8 +3298,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return String.format("(select (select elems %s) %s)", enclosing_var.simplify_name(), index);
       case VARIABLE:
         if (dkconfig_constant_fields_simplify && str_name.contains(".")) {
-          String sel = null;
-          String[] fields = null;
+          String sel;
+          String[] fields;
           if (postState != null) {
             fields = postState.name().split("\\.");
             sel = String.format("(select |%s| |__orig__%s|)", fields[1], fields[0]);
@@ -3341,7 +3341,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public /*@Nullable*/ String get_simplify_size_name() {
     // Implement the method in two ways, to double-check results.
 
-    /*@Interned*/ String result = null;
+    /*@Interned*/ String result;
     if (!file_rep_type.isArray() || isDerived()) {
       result = null;
     } else {
@@ -3350,10 +3350,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       result = get_length().simplify_name().intern();
     }
 
-    /*@Interned*/ String old_result = null;
-    if (!var_info_name.isApplySizeSafe()) // vin ok
-    old_result = null;
-    else old_result = var_info_name.applySize().simplify_name().intern(); // vin ok
+    /*@Interned*/ String old_result;
+    if (!var_info_name.isApplySizeSafe()) { // vin ok
+      old_result = null;
+    } else {
+      old_result = var_info_name.applySize().simplify_name().intern(); // vin ok
+    }
     if (FileIO.new_decl_format && (old_result != result)) {
       throw new Error(
           String.format(
@@ -3462,8 +3464,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return str_bounds;
     }
 
-    String[] results = new String[2];
+    String[] results;
     if (derived instanceof SequenceSubsequence) {
+      results = new String[2];
       results[0] = get_lower_bound().simplify_name().intern();
       results[1] = get_upper_bound().simplify_name().intern();
     } else {
@@ -3505,7 +3508,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     // Calculate the index (including the offset if non-zero)
-    String complete_index = null;
+    String complete_index;
     if (!free) {
       int index = 0;
       if (simplify_index_name != null) index = Integer.decode(simplify_index_name);
@@ -3535,7 +3538,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (!FileIO.new_decl_format) {
       /*@Interned*/ VarInfoName[] bounds = var_info_name.getSliceBounds();
       VarInfoName lower = null;
-      if (bounds != null) lower = bounds[0];
+      if (bounds != null) {
+        lower = bounds[0];
+      }
       VarInfoName select =
           VarInfoName.QuantHelper.selectNth(
               var_info_name, // vin ok
@@ -3545,7 +3550,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     // Calculate the index (including the offset if non-zero)
-    String complete_index = null;
+    String complete_index;
     Quantify.Term lower = get_lower_bound();
     String lower_name = lower.simplify_name();
     if (!(lower instanceof Quantify.Constant)) lower_name = String.format("|%s|", lower_name);
@@ -4007,7 +4012,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     String index_str = inside_name(index, seq.isPrestate(), index_shift);
 
-    VarInfoName index_name = null;
+    VarInfoName index_name;
     if (index == null) {
       index_name = VarInfoName.parse(String.valueOf(index_shift));
     } else {

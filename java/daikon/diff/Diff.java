@@ -462,11 +462,10 @@ public final class Diff {
       // and then put them into map1, map2
 
       // Initialize it all
-      RootNode root = null;
       MultiDiffVisitor v1 = new MultiDiffVisitor(mapAr[0]);
 
       for (int i = 1; i < mapAr.length; i++) {
-        root = diff.diffPptMap(mapAr[i], v1.currMap, includeUnjustified);
+        RootNode root = diff.diffPptMap(mapAr[i], v1.currMap, includeUnjustified);
         root.accept(v1);
       }
 

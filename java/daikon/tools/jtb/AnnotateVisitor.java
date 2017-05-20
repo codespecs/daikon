@@ -567,9 +567,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // This is a hack that indicates whether an "assignable \everything"
   // clause would be legal for the given method.
   public boolean pureInJML(Node n) {
-    String name = null;
     if (n instanceof MethodDeclaration) {
-      name = ((MethodDeclaration) n).f2.f0.toString();
+      String name = ((MethodDeclaration) n).f2.f0.toString();
       if (name.equals("clone")
           || name.equals("equals")
           || name.equals("hashCode")

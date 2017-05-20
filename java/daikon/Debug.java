@@ -210,7 +210,9 @@ public final class Debug {
 
     for (VarInfo v : vis) {
       Set<VarInfo> evars = null;
-      if (v.equalitySet != null) evars = v.equalitySet.getVars();
+      if (v.equalitySet != null) {
+        evars = v.equalitySet.getVars();
+      }
       if (evars != null) {
         for (VarInfo ev : evars) {
           for (int k = 0; k < debugTrackVars.length; k++) {
@@ -572,7 +574,9 @@ public final class Debug {
 
           // Get the matching equality set
           Set<VarInfo> evars = null;
-          if (vis[k].equalitySet != null) evars = vis[k].equalitySet.getVars();
+          if (vis[k].equalitySet != null) {
+            evars = vis[k].equalitySet.getVars();
+          }
 
           // If there is an equality set
           if ((evars != null) && vis[k].isCanonical()) {

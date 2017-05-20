@@ -737,7 +737,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     PptTopLevel objectPpt = pptmap.get(objectPptname);
     if (objectPpt != null) {
       List<Invariant> objectInvariants = filterInvariants(Ast.getInvariants(objectPpt, pptmap));
-      List<InvProp> finalList = null;
+      List<InvProp> finalList;
       if (majorProperties) {
         finalList = getMajor(objectInvariants);
       } else {
@@ -758,7 +758,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     PptTopLevel classPpt = pptmap.get(classPptname);
     if (classPpt != null) {
       List<Invariant> classInvariants = filterInvariants(Ast.getInvariants(classPpt, pptmap));
-      List<InvProp> finalList = null;
+      List<InvProp> finalList;
       if (majorProperties) {
         finalList = getMajor(classInvariants);
       } else {
@@ -933,7 +933,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     for (PptTopLevel ppt : matching_ppts) {
       if (ppt.ppt_name.isEnterPoint()) {
         List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
-        List<InvProp> finalList = null;
+        List<InvProp> finalList;
         if (majorProperties) {
           finalList = getMajor(preconditions);
         } else {
@@ -971,7 +971,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     for (PptTopLevel ppt : matching_ppts) {
       if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
         List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
-        List<InvProp> finalList = null;
+        List<InvProp> finalList;
         if (majorProperties) {
           finalList = getMajor(postconditions);
         } else {
@@ -1005,7 +1005,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     for (PptTopLevel ppt : matching_ppts) {
       if (ppt.ppt_name.isEnterPoint()) {
         List<Invariant> preconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
-        List<InvProp> finalList = null;
+        List<InvProp> finalList;
         if (majorProperties) {
           finalList = getMajor(preconditions);
         } else {
@@ -1041,7 +1041,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     for (PptTopLevel ppt : matching_ppts) {
       if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
         List<Invariant> postconditions = filterInvariants(Ast.getInvariants(ppt, pptmap));
-        List<InvProp> finalList = null;
+        List<InvProp> finalList;
         if (majorProperties) {
           finalList = getMajor(postconditions);
         } else {

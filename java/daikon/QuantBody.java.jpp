@@ -1990,7 +1990,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     assert (fields != null);
     assert (fieldsStartIdx >= 0 && fieldsStartIdx < fields.length);
 
-    Object fieldObj = null;
+    Object fieldObj;
     try {
       Field field = (object instanceof java.lang.Class<?>)
         ? ((Class<?>)object).getDeclaredField(fields[fieldsStartIdx])
@@ -2003,7 +2003,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     } catch (Exception e) {
       return null;
 #if 0
-      //  String exceptionMessage = null;
+      //  String exceptionMessage;
       //  if (e instanceof NoSuchFieldException) {
       //     exceptionMessage = "daikon.Quant.fieldArray: NoSuchFieldException: ";
       //  } else if (e instanceof NullPointerException) {
@@ -2130,7 +2130,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
       } catch (Exception e) {
         return BAD_VALUE; // return default value
 #if 0
-        //             String exceptionMessage = null;
+        //             String exceptionMessage;
         //             if (e instanceof NoSuchFieldException) {
         //                 exceptionMessage = "daikon.Quant: NoSuchFieldException: ";
         //             } else if (e instanceof NullPointerException) {

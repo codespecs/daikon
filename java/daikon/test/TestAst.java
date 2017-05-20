@@ -57,18 +57,17 @@ public final class TestAst extends TestCase {
 
     PptName pptName = new PptName(pptNameString);
     boolean result = matcher.matches(pptName, decl);
-    String declString = null;
     if (result == false) {
       // Format so we can print an error message.
       decl.accept(new TreeFormatter());
-      declString = Ast.format(decl);
+      String declString = Ast.format(decl);
+      throw new Error(
+          "pptName: "
+              + pptName
+              + "\ndoesn't match method declaration:\n----------\n"
+              + declString
+              + "\n----------");
     }
-    assert result == true
-        : "pptName: "
-            + pptName
-            + "\ndoesn't match method declaration:\n----------\n"
-            + declString
-            + "\n----------";
   }
 
   public void test_Ast_Ppt_Match() {
@@ -80,7 +79,7 @@ public final class TestAst extends TestCase {
     }
     JavaParser parser = new JavaParser(sourceIn);
 
-    CompilationUnit compilationUnit = null;
+    CompilationUnit compilationUnit;
 
     try {
       compilationUnit = parser.CompilationUnit();
@@ -120,7 +119,7 @@ public final class TestAst extends TestCase {
 
     PptNameMatcher matcher = new PptNameMatcher(compilationUnit);
 
-    MethodDeclaration decl = null;
+    MethodDeclaration decl;
 
     decl = methodDecls.get(0);
     assert decl.f2.f0.tokenImage.equals("foo1") : decl.f2.f0.tokenImage;

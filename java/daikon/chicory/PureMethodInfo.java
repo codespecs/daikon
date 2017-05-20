@@ -131,7 +131,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
     // Without this synchronization, other threads would observe that
     // startPure has been called and wouldn't do any output.
     synchronized (Runtime.class) {
-      Object retVal = null;
+      Object retVal;
       try {
         // TODO is this the best way to handle this problem?
         // (when we invoke a pure method, Runtime.Enter should not be

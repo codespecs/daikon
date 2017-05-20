@@ -29,8 +29,8 @@ public class CommandHandler {
       return;
     }
     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-    String line = null;
     try {
+      String line;
       while ((line = reader.readLine()) != null) {
         System.err.println(line);
       }

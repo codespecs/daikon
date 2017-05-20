@@ -675,7 +675,8 @@ public final class CLASSNAME implements Serializable, Cloneable {
    */
   private Point /*@Nullable*/ [] maxsep_doubles(/*@Nullable*/ Point[] pa) {
 
-    Point p1 = null, p2 = null;
+    Point p1 = null;
+    Point p2 = null;
 
     // max_separation is the separation metric for the most separated
     // pair of points.  We use the sum of the separations as the
@@ -938,7 +939,9 @@ public final class CLASSNAME implements Serializable, Cloneable {
      }
    }
 
-   Point p1 = null, p2 = null, p3 = null;
+   Point p1 = null;
+   Point p2 = null;
+   Point p3 = null;
 
    // max_separation is the separation metric for the most separated
    // triple of points.  We use the sum of the separations as the

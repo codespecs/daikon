@@ -1628,7 +1628,9 @@ public class PptTopLevel extends Ppt {
         // System.out.printf ("considering invariant %s, exact = %b\n",
         //                   inv.format(), inv.isExact());
         if (inv.isExact() && inv.format_using(OutputFormat.DAIKON).startsWith(start)) {
-          if (assignment_invs == null) assignment_invs = new ArrayList<Invariant>();
+          if (assignment_invs == null) {
+            assignment_invs = new ArrayList<Invariant>();
+          }
           assignment_invs.add(inv);
         }
       }
@@ -1975,7 +1977,9 @@ public class PptTopLevel extends Ppt {
     if (inv == null) return false;
 
     // If the varinfos are out of order swap
-    if (v1.varinfo_index > v2.varinfo_index) inv = inv.permute(permute_swap);
+    if (v1.varinfo_index > v2.varinfo_index) {
+      inv = inv.permute(permute_swap);
+    }
 
     return (slice.is_inv_true(inv));
   }
@@ -3445,8 +3449,9 @@ public class PptTopLevel extends Ppt {
         // System.out.printf ("First child equality set: %s\n",
         //                     c1.child.equality_view);
         emap = c1.get_child_equalities_as_parent();
-        if (debugMerge.isLoggable(Level.FINE)) // check before stringifying emap
-        debugMerge.fine("child " + c1.child.name() + " equality = " + emap);
+        if (debugMerge.isLoggable(Level.FINE)) { // check before stringifying emap
+          debugMerge.fine("child " + c1.child.name() + " equality = " + emap);
+        }
         break;
       }
     }
@@ -3678,7 +3683,7 @@ public class PptTopLevel extends Ppt {
       Arrays.sort(pvis_sorted, VarInfo.IndexComparator.getInstance());
 
       // Create the parent slice
-      PptSlice pslice = null;
+      PptSlice pslice;
       if (pvis.length == 1) {
         pslice = new PptSlice1(this, pvis_sorted[0]);
       } else if (pvis.length == 2) {

@@ -1857,7 +1857,7 @@ public final class Daikon {
 
     SplitterFactory.load_splitters(ppt, spinfoFiles);
 
-    Splitter[] pconds = null;
+    Splitter[] pconds;
     if (SplitterList.dkconfig_all_splitters) {
       pconds = SplitterList.get_all();
     } else {

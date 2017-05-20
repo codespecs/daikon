@@ -90,7 +90,7 @@ public class InstrumentHandler extends CommandHandler {
     File outputDir = new File(instrumented_directory);
 
     System.out.println("Reading invariant file: " + arguments.invFile);
-    PptMap ppts = null;
+    PptMap ppts;
     try {
       ppts =
           FileIO.read_serialized_pptmap(new File(arguments.invFile), true /* use saved config */);

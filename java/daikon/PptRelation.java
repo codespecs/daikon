@@ -652,7 +652,9 @@ public class PptRelation implements Serializable {
       // If this is an object ppt, parent is the class point
       if (pname.isObjectInstanceSynthetic()) {
         PptTopLevel parent = all_ppts.get(pname.makeClassStatic());
-        if (parent != null) rel = newClassObjectRel(parent, ppt);
+        if (parent != null) {
+          rel = newClassObjectRel(parent, ppt);
+        }
 
         // Else if it's a method and not a constructor, parent is
         // object or class static methods will relate to the class,

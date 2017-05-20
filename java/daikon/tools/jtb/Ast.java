@@ -36,8 +36,7 @@ public class Ast {
       String javafilename, Node root, Writer output, AnnotateVisitor visitor) {
     root.accept(visitor);
     root.accept(new InsertCommentFormatter(visitor.addedComments));
-    PrintWriter writer = null;
-    writer = new PrintWriter(output, true);
+    PrintWriter writer = new PrintWriter(output, true);
     for (int i = 0; i < visitor.javaFileLines.size(); i++) {
       writer.println(visitor.javaFileLines.get(i));
     }
@@ -51,7 +50,7 @@ public class Ast {
   // the resulting AST to the output stream.
   public static void applyVisitorReformat(Reader input, Writer output, Visitor visitor) {
     JavaParser parser = new JavaParser(input);
-    Node root = null;
+    Node root;
     try {
       root = parser.CompilationUnit();
     } catch (ParseException e) {
@@ -144,7 +143,7 @@ public class Ast {
   // Creates an AST from a String
   public static Node create(String type, Class<?>[] argTypes, Object[] args, String stringRep) {
     JavaParser parser = new JavaParser(new StringReader(stringRep));
-    Node n = null;
+    Node n;
     try {
       Method m = JavaParser.class.getMethod(type, argTypes);
       n = (Node) m.invoke(parser, args);
@@ -1201,8 +1200,7 @@ public class Ast {
       InvariantFilters fi = InvariantFilters.defaultFilters();
 
       boolean fi_accepted = true;
-      InvariantFilter filter_result = null;
-      filter_result = fi.shouldKeep(inv);
+      InvariantFilter filter_result = fi.shouldKeep(inv);
       fi_accepted = (filter_result == null);
 
       // Never print the guarding predicates themselves, they should only

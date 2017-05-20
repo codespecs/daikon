@@ -725,7 +725,9 @@ public final class PrintInvariants {
       // If this point is not an exit point, print out any retained combined
       // exit point
       if (enable_exit_swap && !ppt.ppt_name.isExitPoint()) {
-        if (combined_exit != null) print_invariants_maybe(combined_exit, pw, all_ppts);
+        if (combined_exit != null) {
+          print_invariants_maybe(combined_exit, pw, all_ppts);
+        }
         combined_exit = null;
       }
 
@@ -1317,14 +1319,15 @@ public final class PrintInvariants {
       InvariantFilters fi = InvariantFilters.defaultFilters();
 
       boolean fi_accepted = true;
-      InvariantFilter filter_result = null;
-      if (!dkconfig_print_all) {
-        filter_result = fi.shouldKeep(inv);
-        fi_accepted = (filter_result == null);
-      }
-
-      if ((inv instanceof Implication) && PptSplitter.debug.isLoggable(Level.FINE)) {
-        PptSplitter.debug.fine("filter result = " + filter_result + " for inv " + inv);
+      {
+        InvariantFilter filter_result = null;
+        if (!dkconfig_print_all) {
+          filter_result = fi.shouldKeep(inv);
+          fi_accepted = (filter_result == null);
+        }
+        if ((inv instanceof Implication) && PptSplitter.debug.isLoggable(Level.FINE)) {
+          PptSplitter.debug.fine("filter result = " + filter_result + " for inv " + inv);
+        }
       }
 
       if (Invariant.logOn()) inv.log("Filtering, accepted = %s", fi_accepted);
@@ -1539,7 +1542,9 @@ public final class PrintInvariants {
       InvariantFilters fi = InvariantFilters.defaultFilters();
       InvariantFilter filter = fi.shouldKeep(inv);
       Class<? extends InvariantFilter> filter_class = null;
-      if (filter != null) filter_class = filter.getClass();
+      if (filter != null) {
+        filter_class = filter.getClass();
+      }
       Map<Class<? extends Invariant>, Integer> inv_map = filter_map.get(filter_class);
       if (inv_map == null) {
         inv_map = new LinkedHashMap<Class<? extends Invariant>, Integer>();

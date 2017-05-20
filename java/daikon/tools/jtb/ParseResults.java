@@ -59,7 +59,7 @@ public class ParseResults {
 
   public static ParseResults parse(String javaFileName, boolean discardComments) {
 
-    CompilationUnit compilationUnit = null;
+    CompilationUnit compilationUnit;
 
     System.out.println("Parsing file " + javaFileName);
 

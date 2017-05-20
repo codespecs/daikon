@@ -302,7 +302,7 @@ public class BuildJDK {
 
         // Get the binary for this class
         InputStream is = jfile.getInputStream(entry);
-        JavaClass jc = null;
+        JavaClass jc;
         try {
           ClassParser parser = new ClassParser(is, entryName);
           jc = parser.parse();
