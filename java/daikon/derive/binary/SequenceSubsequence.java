@@ -57,7 +57,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     VarInfo seqvar = seqvar();
     VarInfo sclvar = sclvar();
 
-    VarInfo vi = null;
+    VarInfo vi;
     if (from_start) {
       vi = VarInfo.make_subsequence(seqvar, null, 0, sclvar, index_shift);
     } else {

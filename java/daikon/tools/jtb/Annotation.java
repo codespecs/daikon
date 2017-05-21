@@ -117,7 +117,7 @@ public class Annotation {
     }
 
     // figure out what kind of annotation it is
-    Kind k = null;
+    Kind k;
     if (annoString.matches(".*<ENTER>.*")) {
       k = Kind.enter;
     } else if (annoString.matches(".*<EXIT>.*")) {

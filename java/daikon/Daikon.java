@@ -79,8 +79,8 @@ public final class Daikon {
    */
   public static int dkconfig_progress_delay = 1000;
 
-  public static final String release_version = "5.5.5";
-  public static final String release_date = "April 3, 2017";
+  public static final String release_version = "5.5.7";
+  public static final String release_date = "May 2, 2017";
   public static final String release_string =
       "Daikon version "
           + release_version
@@ -1861,7 +1861,7 @@ public final class Daikon {
 
     SplitterFactory.load_splitters(ppt, spinfoFiles);
 
-    Splitter[] pconds = null;
+    Splitter[] pconds;
     if (SplitterList.dkconfig_all_splitters) {
       pconds = SplitterList.get_all();
     } else {

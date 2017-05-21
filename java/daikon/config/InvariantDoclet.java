@@ -206,7 +206,7 @@ public class InvariantDoclet {
       // setup the comment for info
       String comment = dc.commentText();
 
-      comment = HtmlToTexinfo.htmlToTexinfo(comment);
+      comment = HtmlToTexinfo.javadocHtmlToTexinfo(comment);
 
       if (dc.name().startsWith("FunctionBinary")) {
         String[] parts = dc.name().split("[._]");

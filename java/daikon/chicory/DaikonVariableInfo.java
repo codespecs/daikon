@@ -525,7 +525,7 @@ public abstract class DaikonVariableInfo
     // call instance methods (all pure methods we consider are instance methods)
     // from static methods
     if (ChicoryPremain.shouldDoPurity() && !dontPrintInstanceVars) {
-      ClassInfo typeInfo = null;
+      ClassInfo typeInfo;
 
       try {
         typeInfo = Runtime.getClassInfoFromClass(type);
@@ -564,7 +564,7 @@ public abstract class DaikonVariableInfo
           if (meth.isPure() && meth.arg_names.length == 1) {
             for (DaikonVariableInfo sib : siblings) {
               String sibType = sib.getTypeNameOnly();
-              Class<?> sibClass = null;
+              Class<?> sibClass;
 
               // Get class type of the class variable
               try {

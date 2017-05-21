@@ -4,7 +4,6 @@ import daikon.DynComp;
 import daikon.chicory.*;
 import daikon.util.ArraysMDE;
 import daikon.util.SimpleLog;
-import daikon.util.Stopwatch;
 import daikon.util.WeakIdentityHashMap;
 import java.io.PrintWriter;
 import java.lang.reflect.*;
@@ -158,6 +157,7 @@ public final class DCRuntime {
     if (Premain.debug_dcruntime) {
       debug = true;
       debug_tag_frame = true;
+      debug_primitive = new SimpleLog(true);
     }
     if (Premain.debug_dcruntime_all) {
       debug = true;
@@ -808,7 +808,7 @@ public final class DCRuntime {
 
   /**
    * Discard the tag on the top of the tag stack. Called when primitives are pushed but not used in
-   * expressions (such as when allocating arrays).
+   * expressions (such as when allocating arrays). (No longer used?)
    */
   public static void discard_tag(int cnt) {
 
@@ -1537,7 +1537,7 @@ public final class DCRuntime {
 
     // Process all of the children
     for (DaikonVariableInfo child : dv) {
-      Object child_obj = null;
+      Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
         ArrayInfo ai = (ArrayInfo) child;
         // System.out.printf ("child array type %s = %s%n", ai, ai.getType());
@@ -1693,7 +1693,7 @@ public final class DCRuntime {
 
     // Process all of the children
     for (DaikonVariableInfo child : dv) {
-      Object child_obj = null;
+      Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
         ArrayInfo ai = (ArrayInfo) child;
         // System.out.printf ("child array type %s = %s%n", ai, ai.getType());
@@ -1875,8 +1875,6 @@ public final class DCRuntime {
 
   /** Calculates and prints the declarations for the specified class. */
   public static void print_class_decl(PrintWriter ps, ClassInfo ci) {
-
-    Stopwatch watch = null;
 
     time_decl.reset_start_time();
     time_decl.indent("Printing decl file for class %s%n", ci.class_name);
@@ -2781,6 +2779,7 @@ public final class DCRuntime {
     Object tag = new Constant();
     debug_primitive.log("push literal constant tag: %s%n", tag);
     td.tag_stack.push(tag);
+    //System.out.printf ("tag_stack size: %d%n", td.tag_stack.size());
 
     //debug_print_call_stack();
   }
@@ -2903,7 +2902,7 @@ public final class DCRuntime {
 
     /** Return the tag associated with this field */
     Object get_tag(Object parent, Object obj) {
-      Object tag = null;
+      Object tag;
       // jhp - not sure why these are not null...
       //assert parent == null && obj == null
       //  : " parent/obj = " + obj_str(parent) + "/" + obj_str(obj);
@@ -2988,12 +2987,14 @@ public final class DCRuntime {
       // assert obj == null: "primitive array object = " + obj_str (obj);
       @SuppressWarnings("unchecked")
       List<Object> parent_list = (List<Object>) parent;
-      Field tag_field = null;
       List<Object> tag_list = new ArrayList<Object>(parent_list.size());
       for (Object parent_element : parent_list) {
         Object[] tags = field_map.get(parent_element);
-        if (tags == null) tag_list.add(nonsensical);
-        else tag_list.add(tags[field_num]);
+        if (tags == null) {
+          tag_list.add(nonsensical);
+        } else {
+          tag_list.add(tags[field_num]);
+        }
       }
       return tag_list;
     }

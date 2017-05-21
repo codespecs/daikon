@@ -1428,7 +1428,7 @@ public String format_csharp_contract(/*>>>@GuardSatisfied ONEOFSCALAR this*/) {
   private InvariantStatus runValue(INT[] a, int count, boolean mutate) {
     InvariantStatus finalStatus = InvariantStatus.NO_CHANGE;
     for (int ai = 0; ai <a.length; ai++) {
-      InvariantStatus status = null;
+      InvariantStatus status;
       if (mutate) {
         status = add_mod_elem(a[ai], count);
       } else {

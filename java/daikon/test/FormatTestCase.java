@@ -206,7 +206,6 @@ class FormatTestCase {
    */
   public String generateGoalOutput(LineNumberReader theInputFile) throws IOException {
     StringBuffer output = new StringBuffer();
-    String currentLineOfText = null;
     int currentLine = theInputFile.getLineNumber();
 
     // System.out.println("Generating goal output");
@@ -215,8 +214,10 @@ class FormatTestCase {
       SingleOutputTestCase current = testCases.get(i);
       int currentGoalLineNumber = current.getGoalLineNumber();
       for (int j = currentLine; j < currentGoalLineNumber; j++) {
-        currentLineOfText = theInputFile.readLine();
-        if (parseGoal(currentLineOfText) == null) output.append(currentLineOfText + lineSep);
+        String currentLineOfText = theInputFile.readLine();
+        if (parseGoal(currentLineOfText) == null) {
+          output.append(currentLineOfText + lineSep);
+        }
       }
       output.append(
           GOAL_PREFIX

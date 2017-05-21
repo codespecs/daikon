@@ -103,7 +103,7 @@ public abstract class BinaryInvariant extends Invariant {
 
     // find the slice containing v1 and v2
     boolean fswap = false;
-    PptSlice ppt = null;
+    PptSlice ppt;
     if (v1.varinfo_index > v2.varinfo_index) {
       fswap = true;
       ppt = this.ppt.parent.findSlice(v2, v1);

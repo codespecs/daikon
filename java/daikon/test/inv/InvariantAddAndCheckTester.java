@@ -280,13 +280,13 @@ public class InvariantAddAndCheckTester extends TestCase {
     //            " and it must be within the classpath)");
 
     //  String inputFile = inputFileLocation.getFile();
-    LineNumberReader input = null;
+    LineNumberReader input;
     try {
       input = new LineNumberReader(new InputStreamReader(new FileInputStream(inputFileName)));
     } catch (FileNotFoundException e) {
       fail(
-          "Unexpected FileNotFoundException (very strange since the URL"
-              + " of the file was found earlier)");
+          "Unexpected FileNotFoundException (very strange since the URL of the file was found earlier)");
+      throw new Error("Unreachable control flow");
     }
     return input;
   }
@@ -312,13 +312,13 @@ public class InvariantAddAndCheckTester extends TestCase {
 
     //  String inputFile = inputFileLocation.getFile();
     //    System.out.println(System.getProperty("user.dir"));
-    LineNumberReader commands = null;
+    LineNumberReader commands;
     try {
       commands = new LineNumberReader(new InputStreamReader(new FileInputStream(commandsFileName)));
     } catch (FileNotFoundException e) {
       fail(
-          "Unexpected FileNotFoundException (very strange since the URL"
-              + " of the file was found earlier)");
+          "Unexpected FileNotFoundException (very strange since the URL of the file was found earlier)");
+      throw new Error("Unreachable control flow");
     }
     return commands;
   }
@@ -516,7 +516,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       InvariantStatus goalStatus = parseStatus(tokens.nextToken().trim());
       tokens.nextToken(); // executed for side effect
       assert !tokens.hasMoreTokens();
-      InvariantStatus resultStatus = null;
+      InvariantStatus resultStatus;
       if (isCheckCommand(command)) {
         resultStatus = getCheckStatus(params);
       } else {
@@ -554,7 +554,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       }
       Object[] params = getParams(tokens);
       assert !tokens.hasMoreTokens();
-      InvariantStatus goalStatus = null;
+      InvariantStatus goalStatus;
       if (isCheckCommand(command)) {
         goalStatus = getCheckStatus(params);
       } else {

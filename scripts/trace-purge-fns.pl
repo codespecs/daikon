@@ -7,8 +7,8 @@
 # -v flag means to retain rather than discard functions matching the
 # regular expression.
 
-# I'm intentionally not operating by paragraphs, because I want the regexp
-# to only apply to the first line.
+# This script does not operate by paragraphs, because the regexp
+# should only apply to the first line.
 
 BEGIN {
   $debug = 0;
@@ -36,6 +36,9 @@ if (/^$/) {
 } elsif (! defined($ppt)) {
   $ppt = $_;
   if ($ppt =~ /^\#/) {
+    $discarding = 0;
+  } elsif ($ppt =~ /^decl-version /) {
+    # Always retain the decl-version block
     $discarding = 0;
   } elsif ($ppt =~ /$regexp/) {
     $discarding = $discard;

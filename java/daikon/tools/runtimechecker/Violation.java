@@ -109,7 +109,7 @@ public class Violation implements Serializable {
 
     String annoString = vioString.replaceFirst(".*(<INVINFO>.*</INVINFO>).*", "$1");
 
-    Property anno = null;
+    Property anno;
     try {
       anno = Property.get(annoString);
     } catch (MalformedPropertyException e) {
@@ -156,7 +156,7 @@ public class Violation implements Serializable {
    * this property. If it's an object invariant property, throws an exception.
    */
   public static Violation get(Property property) {
-    Time t = null;
+    Time t;
     if (property.kind() == Property.Kind.enter) {
       t = Time.onEntry;
     } else if (property.kind() == Property.Kind.exit) {

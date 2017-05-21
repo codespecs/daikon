@@ -120,7 +120,7 @@ public class ChicoryPremain {
     initializeDeclAndDTraceWriters();
 
     // Setup the transformer
-    Object transformer = null;
+    Object transformer;
     // use a special classloader to ensure correct version of BCEL is used
     ClassLoader loader = new ChicoryLoader();
     try {
@@ -179,7 +179,7 @@ public class ChicoryPremain {
     pureMethods = new HashSet<String>();
     File purityFile = new File(pathLoc, purityFileName.getPath());
 
-    BufferedReader reader = null;
+    BufferedReader reader;
     try {
       reader = UtilMDE.bufferedFileReader(purityFile);
     } catch (FileNotFoundException e) {
@@ -187,6 +187,7 @@ public class ChicoryPremain {
           "%nCould not find purity file %s = %s%n", purityFileName, purityFile.getAbsolutePath());
       Runtime.chicoryLoaderInstantiationError = true;
       System.exit(1);
+      throw new Error("Unreachable control flow");
     } catch (IOException e) {
       throw new Error(
           "Problem reading purity file " + purityFileName + " = " + purityFile.getAbsolutePath(),
@@ -195,7 +196,7 @@ public class ChicoryPremain {
 
     if (Chicory.verbose) System.out.printf("Reading '%s' for pure methods %n", purityFileName);
 
-    String line;
+    String line = null;
     do {
       try {
         line = reader.readLine();
@@ -228,7 +229,7 @@ public class ChicoryPremain {
   // not handled: /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
   /*@RequiresNonNull("pureMethods")*/
   private static void writePurityFile(String fileName, String parentDir) {
-    PrintWriter pureFileWriter = null;
+    PrintWriter pureFileWriter;
     try {
       pureFileWriter = new PrintWriter(new File(parentDir, fileName));
     } catch (FileNotFoundException e) {

@@ -171,12 +171,14 @@ public class Instrument implements ClassFileTransformer {
         "transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
 
     // Parse the bytes of the classfile, die on any errors
-    JavaClass c = null;
-    ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
-    try {
-      c = parser.parse();
-    } catch (Exception e) {
-      throw new RuntimeException("Unexpected error", e);
+    JavaClass c;
+    {
+      ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
+      try {
+        c = parser.parse();
+      } catch (Exception e) {
+        throw new RuntimeException("Unexpected error", e);
+      }
     }
 
     try {
@@ -259,11 +261,10 @@ public class Instrument implements ClassFileTransformer {
     MethodContext context = new MethodContext(cg, mg);
 
     for (InstructionHandle ih = il.getStart(); ih != null; ) {
-      InstructionList new_il = null;
       Instruction inst = ih.getInstruction();
 
       // Get the translation for this instruction (if any)
-      new_il = xform_clinit(cg, cg.getConstantPool(), fullClassName, inst, context);
+      InstructionList new_il = xform_clinit(cg, cg.getConstantPool(), fullClassName, inst, context);
 
       // Remember the next instruction to process
       InstructionHandle next_ih = ih.getNext();
@@ -591,11 +592,10 @@ public class Instrument implements ClassFileTransformer {
 
         // Loop through each instruction looking for the return(s)
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
-          InstructionList new_il = null;
           Instruction inst = ih.getInstruction();
 
           // If this is a return instruction, insert method exit instrumentation
-          new_il =
+          InstructionList new_il =
               add_return_instrumentation(fullClassName, inst, context, shouldIncIter, exitIter);
 
           // Remember the next instruction to process
@@ -1431,11 +1431,13 @@ public class Instrument implements ClassFileTransformer {
     }
 
     // Call the specified method
-    Type[] method_args = null;
+    Type[] method_args;
     if (method_name.equals("exit")) {
       method_args =
           new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ, Type.OBJECT, Type.INT};
-    } else method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
+    } else {
+      method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
+    }
     il.append(
         c.ifact.createInvoke(
             runtime_classname, method_name, Type.VOID, method_args, Const.INVOKESTATIC));
@@ -1452,7 +1454,7 @@ public class Instrument implements ClassFileTransformer {
    */
   private InstructionList create_wrapper(MethodContext c, Type prim_type, int var_index) {
 
-    String wrapper = null;
+    String wrapper;
     switch (prim_type.getType()) {
       case Const.T_BOOLEAN:
         wrapper = "BooleanWrap";

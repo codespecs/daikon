@@ -553,7 +553,9 @@ public class PptSliceEquality extends PptSlice {
 
     // Track debug if any variables are in newVis
     Debug dlog = null;
-    if (Debug.logOn()) dlog = new Debug(getClass(), parent, newVis);
+    if (Debug.logOn()) {
+      dlog = new Debug(getClass(), parent, newVis);
+    }
 
     if (position >= slice.var_infos.length) {
       // Done with assigning positions and recursion

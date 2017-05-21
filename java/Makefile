@@ -90,7 +90,7 @@ JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac
 JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 # When running the checkers, it is important not to pass in "-source 5".
 # Also avoid unqualified "-Xlint" that activates warnings about failure to use == for interned values.
-JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx1024m
+JAVAC_COMMAND_FOR_CHECKER = ${JAVAC_FOR_CHECKER} -J-Xmx2048m
 
 
 
@@ -851,6 +851,9 @@ CHECKER_ARGS ?= -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.sym
 
 ## All of the following targets need to depend on "compile".
 
+# Just check that the Index Checker doesn't crash -- suppress type-checking errors.
+# Also suppressing cast.unsafe issued by the Value Checker see: https://github.com/typetools/checker-framework/issues/1264
+# JAVAC_INDEX_ARGS = -processor org.checkerframework.checker.index.IndexChecker -implicit:class -Xlint:-processing -AskipDefs='${INDEX_SKIPDEFS}' -AassumeAssertionsAreEnabled -AsuppressWarnings="index,value:cast.unsafe"
 JAVAC_INDEX_ARGS = -processor org.checkerframework.checker.index.IndexChecker -implicit:class -Xlint:-processing -AskipDefs='${INDEX_SKIPDEFS}' -AassumeAssertionsAreEnabled
 # JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'

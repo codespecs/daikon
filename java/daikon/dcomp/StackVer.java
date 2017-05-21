@@ -455,8 +455,7 @@ public final class StackVer {
             Frame.setThis(new UninitializedObjectType(new ObjectType(mg.getClassName())));
             f.getLocals().set(0, Frame.getThis());
           } else {
-            @SuppressWarnings(
-                "nullness") // unannotated: org.apache.bcel.verifier.structurals.Frame is not yet annotated
+            @SuppressWarnings("nullness") // unannotated: org.apache.bcel.verifier.structurals.Frame
             /*@NonNull*/ UninitializedObjectType dummy = null;
             Frame.setThis(dummy);
             f.getLocals().set(0, new ObjectType(mg.getClassName()));

@@ -187,7 +187,8 @@ public final class CLASSNAME extends SEQUENCESCALAR {
       // subsequence.  If the left VarInfo is null, the sequence starts
       // at the beginning.  If the right VarInfo is null, the sequence stops
       // at the end.
-      VarInfo seq_left_index = null, seq_right_index = null;
+      VarInfo seq_left_index = null;
+      VarInfo seq_right_index = null;
       int seq_left_shift = 0, seq_right_shift = 0;
       if (seqvar.derived instanceof SEQ_SUBSEQUENCE) {
         // the sequence is B[0..J-1] or similar.  Get information about it.

@@ -379,7 +379,7 @@ public class DaikonSimple {
 
   /** The SimpleProcessor class processes each sample in the dtrace file. */
   public static class SimpleProcessor extends FileIO.Processor {
-    PptMap all_ppts = null;
+    PptMap all_ppts;
 
     /** nonce -> List<Call,Call> * */
     // The first Call is the enter entry and the second is the object entry

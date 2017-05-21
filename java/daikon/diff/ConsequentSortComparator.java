@@ -32,7 +32,6 @@ public class ConsequentSortComparator implements Comparator<Invariant> {
   public int compare(Invariant inv1, Invariant inv2) {
     Implication imp1 = null;
     Implication imp2 = null;
-    ;
     if (inv1 instanceof Implication) {
       imp1 = (Implication) inv1;
       inv1 = imp1.consequent();

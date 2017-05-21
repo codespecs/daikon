@@ -986,9 +986,21 @@ class DCInstrument {
         if (double_client && !BCELUtil.is_main(mg) && !BCELUtil.is_clinit(mg)) {
           // doubling
           try {
+            if (has_code) {
+              il = mg.getInstructionList();
+              InstructionHandle end = il.getEnd();
+              int length = end.getPosition() + end.getInstruction().getLength();
+              if (length >= Const.MAX_CODE_SIZE) {
+                throw new ClassGenException(
+                    "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
+              }
+            }
             gen.addMethod(mg.getMethod());
           } catch (Exception e) {
-            if ((e.getMessage()).startsWith("Branch target offset too large")) {
+            String s = e.getMessage();
+            if (s == null) throw e;
+            if ((s.startsWith("Branch target offset too large"))
+                || (s.startsWith("Code array too big"))) {
               System.out.printf(
                   "DynComp warning: ClassFile: %s - method %s is too large to instrument and is being skipped.%n",
                   gen.getClassName(), mg.getName());
@@ -1552,8 +1564,8 @@ class DCInstrument {
       }
       // If this instruction was modified, replace it with the new
       // instruction list. If this instruction was the target of any
-      // jumps or line numbers , replace them with the first
-      // instruction in the new list
+      // jumps or line numbers, replace them with the first
+      // instruction in the new list.
       replace_instructions(il, ih, new_il);
 
       ih = next_ih;
@@ -2016,11 +2028,13 @@ class DCInstrument {
     }
 
     // Call the specified method
-    Type[] method_args = null;
+    Type[] method_args;
     if (method_name.equals("exit")) {
       method_args =
           new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr, Type.OBJECT, Type.INT};
-    } else method_args = new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr};
+    } else {
+      method_args = new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr};
+    }
     il.append(
         ifact.createInvoke(
             DCRuntime.class.getName(), method_name, Type.VOID, method_args, Const.INVOKESTATIC));
@@ -2100,7 +2114,7 @@ class DCInstrument {
     }
 
     // Call the specified method
-    Type[] method_args = null;
+    Type[] method_args;
     if (method_name.equals("exit_refs_only")) {
       method_args =
           new Type[] {
@@ -3387,7 +3401,7 @@ class DCInstrument {
 
     // Look up the class using this classes class loader.  This may
     // not be the best way to accomplish this.
-    Class<?> obj_class = null;
+    Class<?> obj_class;
     try {
       obj_class = Class.forName(obj_type.getClassName(), false, loader);
     } catch (Exception e) {
@@ -3413,7 +3427,6 @@ class DCInstrument {
     // System.out.printf ("local var name = %s%n", name);
 
     // See if the local has already been created
-    LocalVariableGen tmp_local = null;
     for (LocalVariableGen lv : mg.getLocalVariables()) {
       if (lv.getName().equals(name)) {
         assert lv.getType().equals(typ) : lv + " " + typ;
@@ -3859,7 +3872,7 @@ class DCInstrument {
    * 3 values down on the stack.
    */
   InstructionList dup2_x1_tag(Instruction inst, OperandStack stack) {
-    String op = null;
+    String op;
     Type top = stack.peek();
     if (is_category2(top)) {
       if (is_primitive(stack.peek(1))) {
@@ -3878,7 +3891,7 @@ class DCInstrument {
         op = "dup_x1";
       } else if (is_primitive(stack.peek(1))) {
         op = "dup";
-      } else { // neither of the top two values iss primitive
+      } else { // neither of the top two values is primitive
         op = null;
       }
     }
@@ -3896,7 +3909,7 @@ class DCInstrument {
    */
   InstructionList dup2_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    String op = null;
+    String op;
     if (is_category2(top)) op = "dup";
     else if (is_primitive(top) && is_primitive(stack.peek(1))) op = "dup2";
     else if (is_primitive(top) || is_primitive(stack.peek(1))) op = "dup";
@@ -3934,7 +3947,7 @@ class DCInstrument {
    */
   InstructionList dup2_x2(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    String op = null;
+    String op;
     if (is_category2(top)) {
       if (is_category2(stack.peek(1))) op = "dup_x1";
       else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup_x2";
@@ -4495,7 +4508,7 @@ class DCInstrument {
 
     // Get the class of the method
     ClassLoader loader = getClass().getClassLoader();
-    Class<?> clazz = null;
+    Class<?> clazz;
     try {
       clazz = Class.forName(invoke.getClassName(pool), false, loader);
     } catch (Exception e) {
@@ -4870,8 +4883,8 @@ class DCInstrument {
       // skip primitive fields
       if (!is_primitive(f.getType())) continue;
 
-      MethodGen get_method = null;
-      MethodGen set_method = null;
+      MethodGen get_method;
+      MethodGen set_method;
       if (f.isStatic()) {
         String full_name = full_name(orig_class, f);
         get_method = create_get_tag(gen, f, static_map.get(full_name));
@@ -4888,7 +4901,7 @@ class DCInstrument {
 
     // Build accessors for each field declared in a superclass that is
     // is not shadowed in a subclass
-    JavaClass[] super_classes = null;
+    JavaClass[] super_classes;
     try {
       super_classes = gen.getJavaClass().getSuperClasses();
     } catch (Exception e) {
@@ -4901,8 +4914,8 @@ class DCInstrument {
         if (!is_primitive(f.getType())) continue;
 
         field_set.add(f.getName());
-        MethodGen get_method = null;
-        MethodGen set_method = null;
+        MethodGen get_method;
+        MethodGen set_method;
         if (f.isStatic()) {
           String full_name = full_name(super_class, f);
           get_method = create_get_tag(gen, f, static_map.get(full_name));
@@ -4934,7 +4947,7 @@ class DCInstrument {
     }
 
     // Get the offsets for each field in the superclasses.
-    JavaClass super_jc = null;
+    JavaClass super_jc;
     try {
       super_jc = jc.getSuperClass();
     } catch (Exception e) {
@@ -5475,7 +5488,7 @@ class DCInstrument {
   protected StackTypes bcel_calc_stack_types(MethodGen mg) {
 
     StackVer stackver = new StackVer();
-    VerificationResult vr = null;
+    VerificationResult vr;
     try {
       vr = stackver.do_stack_ver(mg);
     } catch (Throwable t) {

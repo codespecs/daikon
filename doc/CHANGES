@@ -20,6 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.5.6 (May 2, 2017)
+
+DynComp:
+- Fixed a few DynComp bugs.
+
+Kvasir:
+- We updated the underlying Binutils infrastructure to version 2.27.0.
+
+===========================================================================
+
 5.5.4 (April 3, 2017)
 
 DynComp and Chicory:
@@ -435,7 +445,7 @@ Bug fixes:
   .spinfo files.
 
   Fjalar support improved for C++ static const items.  (For more information,
-  see Daikon issue #37: http://code.google.com/p/daikon/issues/detail?id=37.)
+  see Daikon issue #37: https://github.com/codespecs/daikon/issues/37.)
 
   Updated bcel.jar (within plume.jar) for some minor improvements in
   JDK 8 support.
@@ -454,7 +464,7 @@ Bug fixes:
 5.1.12 (December 2, 2014)
 
   Celeriac, Daikon's front end for .NET programs, works under Mono.
-  See https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono .
+  See https://github.com/codespecs/daikon-dot-net-front-end .
 
   The declaration file format supports five new variable-info fields:
     min-value
@@ -558,7 +568,7 @@ Bug fixes:
 
   Daikon can now infer code contracts for .NET programs, such as C# programs. 
   You will require the Celeriac front end:
-    http://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted
+    https://github.com/codespecs/daikon-dot-net-front-end
   In the past, when using Celeriac, you were required to use a special version
   of Daikon; now you should just use the regular version of Daikon.
 
@@ -587,9 +597,9 @@ General:
 
 Daikon:
   This release contains fixes for Daikon issues #10, 29 and 30.  See:
-  http://code.google.com/p/daikon/issues/detail?id=10
-  http://code.google.com/p/daikon/issues/detail?id=29
-  http://code.google.com/p/daikon/issues/detail?id=30
+  https://github.com/codespecs/daikon/issues/10
+  https://github.com/codespecs/daikon/issues/29
+  https://github.com/codespecs/daikon/issues/30
 
 Fjalar:
   No significant content changes were made.
@@ -603,7 +613,7 @@ Documentation:
 
 Daikon:
   This release contains a fix for Daikon issue #28.  See:
-  http://code.google.com/p/daikon/issues/detail?id=28
+  https://github.com/codespecs/daikon/issues/28
 
 Fjalar:
   We updated our object code reader to match version 2.24 of the GNU binutils. 
@@ -624,7 +634,7 @@ Documentation:
 
 Daikon:
   This release contains a fix for Daikon issue #27.  See:
-  http://code.google.com/p/daikon/issues/detail?id=27
+  https://github.com/codespecs/daikon/issues/27
 
 Fjalar:
   We updated the underlying Valgrind infrastructure to version 3.9.0
@@ -673,9 +683,9 @@ General
   The Daikon distribution is now hosted at the University of Washington:
     http://plse.cs.washington.edu/daikon/
 
-  Bug reporting is done using Google Code issue trackers:
-    http://code.google.com/p/daikon/issues
-    http://code.google.com/p/fjalar/issues 
+  Bug reporting is done using GitHub issue trackers:
+    https://github.com/codespecs/daikon/issues/
+    https://github.com/codespecs/fjalar/issues/
   Problems with Kvasir should be submitted against the Fjalar product.
   All other problems should be submitted against the Daikon product.  
 
@@ -701,7 +711,7 @@ Chicory front end for Java
      javac -target 5 -source 5 ...
   If this is a problem for your project, please add a comment to the issue
   tracker to let us know:
-  https://code.google.com/p/daikon/issues/detail?id=24
+  https://github.com/codespecs/daikon/issues/24
 
 
 Kvasir front end for C/C++
@@ -791,7 +801,7 @@ Daikon
 
     Extracted utilMDE and other utilities into a new library named
     plume-lib, which makes it easier to use in other programs.  See
-    http://code.google.com/p/plume-lib/.
+    https://mernst.github.io/plume-lib/.
 
     Daikon now type-checks with the Nullness Checker (which is part of
     the Checker Framework), with just a few suppressed warnings.  As

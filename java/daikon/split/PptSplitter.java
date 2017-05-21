@@ -47,12 +47,9 @@ public class PptSplitter implements Serializable {
    */
   public static int dkconfig_dummy_invariant_level = 0;
 
-  // Don't use {@code ...} here yet because it will be inserted into
-  // config-options.texinfo and the insertion program doesn't yet
-  // understand {@code ...}.
   /**
-   * Split bi-implications ("a &lt;==&gt; b") into two separate implications ("a ==&gt; b" and "b
-   * ==&gt; a").
+   * Split bi-implications ("{@code a <==> b}") into two separate implications ("{@code a ==> b}"
+   * and "{@code b ==> a}").
    */
   public static boolean dkconfig_split_bi_implications = false;
 
@@ -111,11 +108,11 @@ public class PptSplitter implements Serializable {
         debug.fine(
             "  VarInfo #"
                 + ii
-                + ": "
+                + ": at parent="
                 + parent.var_infos[ii].name()
-                + " "
+                + " at ppts[0]="
                 + ppts[0].var_infos[ii].name()
-                + " "
+                + " at ppts[1]="
                 + ppts[1].var_infos[ii].name());
       }
     }
@@ -302,7 +299,7 @@ public class PptSplitter implements Serializable {
 
         invs[childno] = new ArrayList<Invariant>(); // permuted to parent
 
-        // Get the child vis in the correct order
+        // vis is in parent order.  Find corresponding child vis, in child order.
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_non_canonical = new VarInfo[vis.length];
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis = new VarInfo[vis.length];
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_sorted = new VarInfo[vis.length];
@@ -346,24 +343,45 @@ public class PptSplitter implements Serializable {
         PptSlice cslice = child_ppt.findSlice(cvis_sorted);
         if (cslice == null) {
           if (eq_inv != null) {
+            // There is trouble.  Print a lot of debugging information.
+            System.out.println("cvis_non_canonical:");
+            for (VarInfo cvi : cvis_non_canonical) {
+              System.out.println("  " + cvi);
+            }
+            System.out.println("cvis:");
+            for (VarInfo cvi : cvis) {
+              System.out.println("  " + cvi);
+            }
+            System.out.println("cvis_sorted:");
+            for (VarInfo cvi : cvis_sorted) {
+              System.out.println("  " + cvi);
+            }
             if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
               assert child_ppt.constants != null
                   : "@AssumeAssertion(nullness):  dependent:  config var";
-              for (int i = 0; i < cvis_sorted.length; i++) {
-                System.out.println("con val = " + child_ppt.constants.getConstant(cvis_sorted[i]));
+              System.out.println("constant values for cvis_sorted:");
+              for (VarInfo cvi : cvis_sorted) {
+                System.out.println("  " + child_ppt.constants.getConstant(cvi));
               }
             }
-            // TODO: Once Checker Framework issue 755 has been fixed
-            // ( https://github.com/typetools/checker-framework/issues/755),
-            // this warning suppression should be removed.
-            @SuppressWarnings("lock:cannot.dereference")
+            @SuppressWarnings(
+                "lock:cannot.dereference") // https://github.com/typetools/checker-framework/issues/755
             String eq_inv_ppt = eq_inv.ppt.toString();
+            assert eq_inv.ppt.equals(child_ppt.findSlice(cvis_non_canonical));
+
+            System.out.println("All child_ppt slices: ");
+            for (PptSlice slice : child_ppt.views_iterable()) {
+              System.out.println("  " + slice);
+            }
+
+            // found slice on non-canonical, but didn't find it here
             throw new RuntimeException(
                 "found eq_inv "
+                    + "\n  "
                     + eq_inv
-                    + " @"
+                    + "\n  @"
                     + eq_inv_ppt
-                    + " but can't find slice for "
+                    + "\n  but can't find slice for "
                     + VarInfo.arrayToString(cvis_sorted));
           }
           continue;

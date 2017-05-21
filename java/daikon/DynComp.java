@@ -280,7 +280,10 @@ public class DynComp {
     cmdlist.add(cp);
     cmdlist.add("-ea");
     cmdlist.add("-esa");
-    cmdlist.add("-Xmx1024m");
+    // get max memory given DynComp and pass on to dcomp_premain
+    // rounded up to nearest G(igabyte)
+    cmdlist.add(
+        "-Xmx" + (int) Math.ceil(java.lang.Runtime.getRuntime().maxMemory() / 1073741824.0) + "G");
     if (!no_jdk) {
       // prepend to rather than replace bootclasspath
       cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + cp);
@@ -298,12 +301,13 @@ public class DynComp {
 
     // Execute the command, sending all output to our streams
     java.lang.Runtime rt = java.lang.Runtime.getRuntime();
-    Process dcomp_proc = null;
+    Process dcomp_proc;
     try {
       dcomp_proc = rt.exec(cmdline);
-    } catch (Exception e) {
+    } catch (Throwable e) {
       System.out.printf("Exception '%s' while executing '%s'\n", e, cmdline);
       System.exit(1);
+      throw new Error("Unreachable control flow");
     }
     int result = redirect_wait(dcomp_proc);
 
