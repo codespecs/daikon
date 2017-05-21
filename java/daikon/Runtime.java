@@ -14,6 +14,7 @@ import java.util.zip.GZIPOutputStream;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.common.value.qual.*;
 */
 
 /**
@@ -1407,7 +1408,7 @@ public final class Runtime {
 
   // From: package org.hibernate.util;
 
-  public static final int toInt(byte[] bytes) {
+  public static final int toInt(byte /*@ArrayLen(2)*/[] bytes) {
     int result = 0;
     for (int i = 0; i < 4; i++) {
       result = (result << 8) - Byte.MIN_VALUE + (int) bytes[i];
@@ -1415,14 +1416,14 @@ public final class Runtime {
     return result;
   }
 
-  public static short toShort(byte[] bytes) {
+  public static short toShort(byte /*@ArrayLen(2)*/[] bytes) {
     return (short)
         (((-(short) Byte.MIN_VALUE + (short) bytes[0]) << 8)
             - (short) Byte.MIN_VALUE
             + (short) bytes[1]);
   }
 
-  public static final byte[] toBytes(int value) {
+  public static final byte /*@ArrayLen(4)*/[] toBytes(int value) {
     byte[] result = new byte[4];
     for (int i = 3; i >= 0; i--) {
       result[i] = (byte) ((0xFFl & value) + Byte.MIN_VALUE);
@@ -1431,7 +1432,7 @@ public final class Runtime {
     return result;
   }
 
-  public static byte[] toBytes(short value) {
+  public static byte /*@ArrayLen(2)*/[] toBytes(short value) {
     byte[] result = new byte[2];
     for (int i = 1; i >= 0; i--) {
       result[i] = (byte) ((0xFFl & value) + Byte.MIN_VALUE);

@@ -187,7 +187,7 @@ The correct way to build the system is to run 'make'.
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
 #endif
   /*@Pure*/
-  public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT(_TYPE_NAME[] arr, long i) {
+  public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT(_TYPE_NAME[] arr, /*@IndexFor("#1")*/ long i) {
     if (arr == null) {
       return BAD_VALUE; // return default value
     }
@@ -640,6 +640,7 @@ The test ensures that the method only appears once in the output.
   }
 
 #ifdef COMPATIBLE
+  @SuppressWarnings("index") // length is @IndexFor("intermediate") but this is hard to express
   /*@Pure*/
   public static CAST_TYPE /*@PolyNull*/ [] intersection(_TYPE /*@PolyNull*/ [] seq1, COMPATIBLE /*@PolyNull*/ [] seq2) {
     if (seq1 == null) return null;
@@ -1217,6 +1218,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return true;
   }
 #else
+  @SuppressWarnings("index") // Needs @EnsuresQualifierIf with arguments, for sameLength's args
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
   /*@Pure*/
   public static boolean pairwiseEqual(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
@@ -1960,7 +1962,8 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * array. For example, the collection a[].b[].c will fail.
    *
    * @return if the resulting collection is of non-primitive type, then returns an array of type
-   * Object[]. Returns null if any array or field access causes an exception.
+   *     Object[]. The array may be empty. Returns null if any array or field access causes an
+   *     exception.
    */
   @SuppressWarnings("interning") // reflection
   /*@SideEffectFree*/

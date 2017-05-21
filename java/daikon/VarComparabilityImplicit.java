@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Vector;
 
 /*>>>
+import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
@@ -142,7 +143,9 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   /*@Pure*/
-  public VarComparability indexType(/*>>>@GuardSatisfied VarComparabilityImplicit this,*/ int dim) {
+  public VarComparability indexType(
+      /*>>>@GuardSatisfied VarComparabilityImplicit this,*/
+      /*@NonNegative*/ int dim) {
     // When Ajax is modified to output non-atomic info for arrays, this
     // check will no longer be necessary.
     if (dim < dimensions) {

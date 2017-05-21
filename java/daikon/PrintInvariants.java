@@ -1217,7 +1217,7 @@ public final class PrintInvariants {
   }
 
   /**
-   * Gets the invariant type string (i.e. daikon.inv.binary.inv) of a Daikon invariant.
+   * Gets the invariant type string (e.g. daikon.inv.binary.inv) of a Daikon invariant.
    *
    * @param invariant the Daikon invariant
    * @return the invariant type string of the invariant
@@ -1233,8 +1233,9 @@ public final class PrintInvariants {
       Joiner joiner = ((Joiner) invariant);
       return get_csharp_inv_type(joiner.right);
     } else {
-      String invType = invariant.getClass().toString();
-      invType = invType.split(" ")[1];
+      String invClassToString = invariant.getClass().toString();
+      @SuppressWarnings("index") // string contains one space, so split() result has length 2
+      String invType = invClassToString.split(" ")[1];
       return invType;
     }
   }
@@ -1442,7 +1443,7 @@ public final class PrintInvariants {
       // Loop through each ternary slice
       for (PptSlice slice : ppt.views_iterable()) {
         if (slice.arity() != 3) continue;
-        VarInfo[] vis = slice.var_infos;
+        VarInfo /*@ArrayLen(3)*/[] vis = slice.var_infos;
 
         String var_str = "";
         for (int i = 0; i < vis.length; i++) {
