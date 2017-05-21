@@ -294,7 +294,7 @@ public class Quantify {
    * for each sequence. If any of the vars are not sequences, no index is calculated for its free
    * variable.
    */
-  @SuppressWarnings("index") // issue #129
+  @SuppressWarnings("value") // https://github.com/kelloggm/checker-framework/issues/153
   public static QuantifyReturn /*@PolyValue*/ [] quantify(VarInfo /*@PolyValue*/ [] vars) {
     assert vars != null;
 

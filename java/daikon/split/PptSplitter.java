@@ -280,11 +280,12 @@ public class PptSplitter implements Serializable {
 
     for (VarInfo[] vis : slices) {
 
-      int num_children = ppts.length; // always 2
+      assert ppts.length == 2;
+      /*@IntVal(2)*/ int num_children = ppts.length; // always 2
       // Each element is an invariant from the indexth child, permuted to
       // the parent (and with a parent slice as its ppt slot).
       @SuppressWarnings({"unchecked", "rawtypes"})
-      /*NNC:@MonotonicNonNull*/ List<Invariant> invs[] =
+      /*NNC:@MonotonicNonNull*/ List<Invariant> invs /*@ArrayLength(2)*/[] =
           (ArrayList<Invariant>[]) new /*@Nullable*/ ArrayList[num_children];
 
       // find the parent slice

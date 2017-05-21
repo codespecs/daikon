@@ -47,6 +47,7 @@ public abstract class Ppt implements Serializable {
   // Daikon.create_orig_vars and PptTopLevel.create_derived_variables)
   // and also by PptSlice0.makeFakePrestate.
   // Array length is: 0 for a PptSlice0 (??), 1-3 for a real slice, arbitrary for a PptTopLevel.
+  // Those facts are expressed via @MinLenFieldInvariant annotations in the subclasses.
   public VarInfo[] var_infos;
 
   protected Ppt(VarInfo[] var_infos) {

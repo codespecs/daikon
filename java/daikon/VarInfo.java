@@ -3394,8 +3394,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Quantifies over the specified array variables in ESC format. Returns an array with 2 more
    * elements than the argument. Element 0 is the quantification, Element 1 is the indexed form of
-   * variable 1, Element 2 is the indexed form of variable 3, and Element 4 is syntax such as close
-   * parentheses.
+   * variable 1, Element 2 is the indexed form of variable 2 (if any), and Element 4 is syntax such
+   * as close parentheses.
    */
   public static String /*@ArrayLen({3,4})*/[] esc_quantify(VarInfo /*@ArrayLen({1, 2})*/... vars) {
     return esc_quantify(true, vars);
@@ -3639,7 +3639,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * additional strings, after the roots but before the closer, with the names of the index
    * variables.
    */
-  public static String[] simplify_quantify(
+  public static String /*@ArrayLen({3,4,5,6})*/[] simplify_quantify(
       EnumSet<QuantFlags> flags, VarInfo /*@ArrayLen({1,2})*/... vars) {
 
     if (!FileIO.new_decl_format) {

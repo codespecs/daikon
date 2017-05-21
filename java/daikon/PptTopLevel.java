@@ -914,7 +914,8 @@ public class PptTopLevel extends Ppt {
    */
   @SuppressWarnings({
     "flowexpr.parse.error",
-    "contracts.precondition.not.satisfied"
+    "contracts.precondition.not.satisfied",
+    "array.access.unsafe.high" // https://github.com/kelloggm/checker-framework/issues/156
   }) // private field
   /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public /*@Nullable*/ Set<Invariant> add_bottom_up(ValueTuple vt, int count) {
@@ -1005,6 +1006,7 @@ public class PptTopLevel extends Ppt {
         if (slice instanceof PptSlice1) slice1_cnt++;
         else if (slice instanceof PptSlice2) slice2_cnt++;
         else if (slice instanceof PptSlice3) slice3_cnt++;
+        else throw new Error();
       }
       System.out.println("ppt " + name());
       debugInstantiate.fine("slice1 (" + slice1_cnt + ") slices");
@@ -2256,7 +2258,7 @@ public class PptTopLevel extends Ppt {
 
   /** Returns whether or not the specified slice should be created. */
   /*@Pure*/
-  public boolean is_slice_ok(VarInfo[] vis, int arity) {
+  public boolean is_slice_ok(VarInfo[] vis, /*@LengthOf("#1")*/ int arity) {
     if (arity == 1) {
       return (is_slice_ok(vis[0]));
     } else if (arity == 2) {

@@ -1764,6 +1764,8 @@ import typequals.*;
   }
 
   /** Adds the specified sample to the invariant and returns the result. */
+  @SuppressWarnings(
+      "array.access.unsafe.high") // https://github.com/kelloggm/checker-framework/issues/156
   public InvariantStatus add_sample(
       /*>>> @NonPrototype Invariant this, */ ValueTuple vt, int count) {
 

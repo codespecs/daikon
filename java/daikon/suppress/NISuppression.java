@@ -12,6 +12,7 @@ import plume.*;
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 
@@ -472,7 +473,7 @@ public class NISuppression {
    * Determines whether the order of the variables in vis a valid permutations (i.e., their
    * varinfo_index's are ordered). Null elements are ignored (and an all-null list is OK).
    */
-  private boolean vis_order_ok(VarInfo[] vis) {
+  private boolean vis_order_ok(VarInfo /*@MinLen(1)*/[] vis) {
 
     VarInfo prev = vis[0];
     for (int i = 1; i < vis.length; i++) {
