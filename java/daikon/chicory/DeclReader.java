@@ -354,8 +354,8 @@ public class DeclReader {
     // the comparability based on the declared type of primitives and
     // write out the result.
     if (primitive_declaration_type_comparability) {
-      if (files.length != 1) {
-        System.err.println("One decl-file expected, received " + files.length + ".");
+      if (files.length != 2) {
+        System.err.println("Two decl-files expected, received " + files.length + ".");
         System.exit(1);
       }
       DeclReader dr = new DeclReader();
