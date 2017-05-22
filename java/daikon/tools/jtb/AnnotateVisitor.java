@@ -75,7 +75,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
    */
   public int maxInvariantsPP;
 
-  public Vector<NodeToken> addedComments = new Vector<NodeToken>();
+  public List<NodeToken> addedComments = new ArrayList<NodeToken>();
 
   private Stack<ClassFieldInfo> cfis = new Stack<ClassFieldInfo>();
 

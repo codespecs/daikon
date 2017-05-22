@@ -1,13 +1,14 @@
 package daikon.simplify;
 
 import daikon.inv.Invariant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
-import java.util.Vector;
 import plume.*;
 
 /*>>>
@@ -62,7 +63,7 @@ public class LemmaStack {
 
   /** Assume a list of lemmas. */
   private void assumeAll(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Vector<
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ List<
               Lemma>
           invs)
       throws TimeoutException {
@@ -84,7 +85,7 @@ public class LemmaStack {
    * Pop a bunch of lemmas off Simplify's stack. Since it's a stack, it only works to unassume the
    * things you most recently assumed, but we aren't smart enough to check that.
    */
-  private void unAssumeAll(Vector<Lemma> invs) {
+  private void unAssumeAll(List<Lemma> invs) {
     for (Lemma lem : invs) {
       unAssume();
     }
@@ -156,7 +157,7 @@ public class LemmaStack {
 
   /** Push a vector of assumptions onto our and Simplify's stacks. */
   public void pushLemmas(
-      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Vector<
+      /*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ List<
               Lemma>
           newLemmas)
       throws SimplifyError {
@@ -238,7 +239,7 @@ public class LemmaStack {
    * we may not return the smallest such set. The set is currently returned in the same order as the
    * invariants appeared in invs[].
    */
-  private Vector<Lemma> minimizeAssumptions(Lemma[] invs, String consequence)
+  private List<Lemma> minimizeAssumptions(Lemma[] invs, String consequence)
       throws TimeoutException {
     boolean[] excluded = new boolean[invs.length];
 
@@ -266,16 +267,16 @@ public class LemmaStack {
         }
       }
     } while (reduced);
-    Vector<Lemma> new_invs = new Vector<Lemma>();
+    List<Lemma> new_invs = new ArrayList<Lemma>();
     for (int i = 0; i < invs.length; i++) {
       if (!excluded[i]) new_invs.add(invs[i]);
     }
     return new_invs;
   }
 
-  private static Vector<Lemma> filterByClass(
-      Vector<Lemma> lems, Set<Class<? extends Invariant>> blacklist) {
-    Vector<Lemma> new_lems = new Vector<Lemma>();
+  private static List<Lemma> filterByClass(
+      List<Lemma> lems, Set<Class<? extends Invariant>> blacklist) {
+    List<Lemma> new_lems = new ArrayList<Lemma>();
     for (Lemma lem : lems) {
       if (!blacklist.contains(lem.invClass())) {
         new_lems.add(lem);
@@ -286,7 +287,7 @@ public class LemmaStack {
 
   private void minimizeClasses_rec(
       String result,
-      Vector<Lemma> lems,
+      List<Lemma> lems,
       Set<Class<? extends Invariant>> exclude,
       Set<Set<Class<? extends Invariant>>> black,
       Set<Set<Class<? extends Invariant>>> gray,
@@ -301,12 +302,12 @@ public class LemmaStack {
       }
     }
     int mark = markLevel();
-    Vector<Lemma> filtered = filterByClass(lems, exclude);
+    List<Lemma> filtered = filterByClass(lems, exclude);
     pushLemmas(filtered);
     boolean holds = checkString(result) == 'T';
     popToMark(mark);
     if (holds) {
-      Vector<Lemma> mini = minimizeAssumptions(filtered.toArray(new Lemma[0]), result);
+      List<Lemma> mini = minimizeAssumptions(filtered.toArray(new Lemma[0]), result);
       Set<Class<? extends Invariant>> used = new HashSet<Class<? extends Invariant>>();
       for (Lemma mlem : mini) {
         Class<? extends Invariant> c = mlem.invClass();
@@ -333,9 +334,9 @@ public class LemmaStack {
     black.add(exclude);
   }
 
-  public Vector<Set<Class<? extends Invariant>>> minimizeClasses(String result) {
-    Vector<Lemma> assumptions = new Vector<Lemma>(lemmas);
-    Vector<Set<Class<? extends Invariant>>> found = new Vector<Set<Class<? extends Invariant>>>();
+  public List<Set<Class<? extends Invariant>>> minimizeClasses(String result) {
+    List<Lemma> assumptions = new ArrayList<Lemma>(lemmas);
+    List<Set<Class<? extends Invariant>>> found = new ArrayList<Set<Class<? extends Invariant>>>();
     try {
       unAssumeAll(lemmas);
       if (checkString(result) == 'F') {
@@ -364,10 +365,10 @@ public class LemmaStack {
   }
 
   /** Return a minimal set of assumptions from the stack that imply a given string. */
-  private Vector<Lemma> minimizeReasons(String str) throws SimplifyError {
+  private List<Lemma> minimizeReasons(String str) throws SimplifyError {
     assert checkString(str) == 'T';
     unAssumeAll(lemmas);
-    Vector<Lemma> result;
+    List<Lemma> result;
     try {
       Lemma[] lemmaAry = lemmas.toArray(new Lemma[0]);
       // shuffle(lemmaAry, new Random());
@@ -386,7 +387,7 @@ public class LemmaStack {
    * minimal in the sense that no proper subset of them are contradictory as far as Simplify can
    * tell.
    */
-  public Vector<Lemma> minimizeContradiction() throws SimplifyError {
+  public List<Lemma> minimizeContradiction() throws SimplifyError {
     return minimizeReasons("(OR)");
   }
 
@@ -395,7 +396,7 @@ public class LemmaStack {
    * and which are minimal in the sense that no proper subset of them imply it as far as Simplify
    * can tell.
    */
-  public Vector<Lemma> minimizeProof(Lemma lem) throws SimplifyError {
+  public List<Lemma> minimizeProof(Lemma lem) throws SimplifyError {
     return minimizeReasons(lem.formula);
   }
 
@@ -406,11 +407,11 @@ public class LemmaStack {
    */
   public void removeContradiction() throws SimplifyError {
     do {
-      Vector<Lemma> problems = minimizeContradiction();
+      List<Lemma> problems = minimizeContradiction();
       if (problems.size() == 0) {
         throw new SimplifyError("Minimization failed");
       }
-      Lemma bad = problems.elementAt(problems.size() - 1);
+      Lemma bad = problems.get(problems.size() - 1);
       removeLemma(bad);
       System.err.print("x");
     } while (checkForContradiction() == 'T');
@@ -467,7 +468,7 @@ public class LemmaStack {
    * Convenience method to print a vector of lemmas, in both their human-readable and Simplify
    * forms.
    */
-  public static void printLemmas(java.io.PrintStream out, Vector<Lemma> v) {
+  public static void printLemmas(java.io.PrintStream out, List<Lemma> v) {
     for (Lemma lem : v) {
       out.println(lem.summarize());
       out.println("    " + lem.formula);

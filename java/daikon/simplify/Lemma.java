@@ -1,7 +1,8 @@
 package daikon.simplify;
 
 import daikon.inv.Invariant;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -41,8 +42,8 @@ public class Lemma implements Comparable<Lemma> {
   }
 
   /** Convenience function to give you lemmas[], but as a vector. */
-  public static Vector<Lemma> lemmasVector() {
-    Vector<Lemma> v = new Vector<Lemma>();
+  public static List<Lemma> lemmasVector() {
+    List<Lemma> v = new ArrayList<Lemma>();
     for (int i = 0; i < lemmas.length; i++) {
       v.add(lemmas[i]);
     }

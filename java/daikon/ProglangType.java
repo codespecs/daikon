@@ -44,8 +44,8 @@ public final /*@Interned*/ class ProglangType implements Serializable {
   static final long serialVersionUID = 20020122L;
 
   // With Vector search, this func was a hotspot (38%), so use a Map.
-  private static HashMap</*@Interned*/ String, Vector<ProglangType>> all_known_types =
-      new HashMap</*@Interned*/ String, Vector<ProglangType>>();
+  private static HashMap</*@Interned*/ String, List<ProglangType>> all_known_types =
+      new HashMap</*@Interned*/ String, List<ProglangType>>();
 
   // The set of (interned) names of classes that implement java.util.List.
   // For a Java class, this is a @BinaryNameForNonArray, but when Daikon is
@@ -170,7 +170,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     //    assert t_base == t_base.intern();
 
     // the string maps us to a vec of all plts with that base
-    Vector<ProglangType> v = all_known_types.get(t_base);
+    List<ProglangType> v = all_known_types.get(t_base);
     if (v == null) return null;
 
     // now search for the right dimension
@@ -206,9 +206,9 @@ public final /*@Interned*/ class ProglangType implements Serializable {
     }
     result = new ProglangType(t_base, t_dims);
 
-    Vector<ProglangType> v = all_known_types.get(t_base);
+    List<ProglangType> v = all_known_types.get(t_base);
     if (v == null) {
-      v = new Vector<ProglangType>();
+      v = new ArrayList<ProglangType>();
       all_known_types.put(t_base, v);
     }
 
@@ -479,7 +479,7 @@ public final /*@Interned*/ class ProglangType implements Serializable {
       value_strings = new String[0];
     } else if (base == BASE_STRING) {
       // This properly handles strings containing embedded spaces.
-      Vector</*@Nullable*/ String> v = new Vector</*@Nullable*/ String>();
+      List</*@Nullable*/ String> v = new ArrayList</*@Nullable*/ String>();
       StreamTokenizer parser = new StreamTokenizer(new StringReader(value));
       parser.quoteChar('\"');
       try {

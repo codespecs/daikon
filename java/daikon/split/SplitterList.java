@@ -163,19 +163,19 @@ public abstract class SplitterList {
    * @return an array of splitters
    */
   public static Splitter /*@Nullable*/ [] get(String pptName) {
-    Vector<Splitter[]> splitterArrays = new Vector<Splitter[]>();
+    List<Splitter[]> splitterArrays = new ArrayList<Splitter[]>();
 
     for (String name : ppt_splitters.keySet()) {
       // name is a ppt name, assumed to begin with "ClassName.functionName"
       if (pptName.indexOf(name) != -1) {
         Splitter[] result = get_raw(name);
         if (result != null) {
-          splitterArrays.addElement(result);
+          splitterArrays.add(result);
         }
         // For the OBJECT program point, we want to use all the splitters.
       } else if ((pptName.indexOf("OBJECT") != -1) && (name.indexOf("OBJECT") != -1)) {
         for (Splitter[] sa : ppt_splitters.values()) {
-          splitterArrays.addElement(sa);
+          splitterArrays.add(sa);
         }
       }
     }
@@ -184,10 +184,10 @@ public abstract class SplitterList {
       Global.debugSplit.fine("SplitterList.get found no splitters for " + pptName);
       return null;
     } else {
-      Vector<Splitter> splitters = new Vector<Splitter>();
+      List<Splitter> splitters = new ArrayList<Splitter>();
       for (Splitter[] tempsplitters : splitterArrays) {
         for (int j = 0; j < tempsplitters.length; j++) {
-          splitters.addElement(tempsplitters[j]);
+          splitters.add(tempsplitters[j]);
         }
       }
       Global.debugSplit.fine(
@@ -203,7 +203,7 @@ public abstract class SplitterList {
    * @return an array of splitters
    */
   public static Splitter[] get_all() {
-    Vector<Splitter> splitters = new Vector<Splitter>();
+    List<Splitter> splitters = new ArrayList<Splitter>();
     for (Splitter[] splitter_array : ppt_splitters.values()) {
       for (int i = 0; i < splitter_array.length; i++) {
         Splitter tempsplitter = splitter_array[i];
@@ -220,7 +220,7 @@ public abstract class SplitterList {
           }
         }
         if (!duplicate) {
-          splitters.addElement(tempsplitter);
+          splitters.add(tempsplitter);
         }
       }
     }

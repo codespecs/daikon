@@ -121,12 +121,12 @@ public class SplitterFactory {
             int numGood = 0;
             // Writes, compiles, and loads the splitter .java files.
             loadSplitters(splitterObjects[i], ppt, statementReplacer);
-            Vector<Splitter> sp = new Vector<Splitter>();
+            List<Splitter> sp = new ArrayList<Splitter>();
             for (int k = 0; k < numsplitters; k++) {
               if (splitterObjects[i][k].splitterExists()) {
                 @SuppressWarnings("nullness") // dependent: because splitterExists() = true
                 /*@NonNull*/ Splitter splitter = splitterObjects[i][k].getSplitter();
-                sp.addElement(splitter);
+                sp.add(splitter);
                 numGood++;
               } else {
                 // UNDONE: We should only output the load error if the

@@ -402,8 +402,8 @@ public class CLASSNAME extends SUPERCLASS {
 
   // Returns a vector of CLASSNAME objects.
   // This ought to produce an iterator instead.
-  public static Vector<CLASSNAME> findAll(VarInfo vi) {
-    Vector<CLASSNAME> result = new Vector<CLASSNAME>();
+  public static List<CLASSNAME> findAll(VarInfo vi) {
+    List<CLASSNAME> result = new ArrayList<CLASSNAME>();
     for (PptSlice view : vi.ppt.views_iterable()) {
       if ((view.arity() == 3) && view.usesVar(vi)) {
         CLASSNAME lt = CLASSNAME.find(view);

@@ -570,7 +570,9 @@ public class Ast {
 
   /** Adds the comment to the first regular token in the tree, before the ith special token. */
   public static void addNthSpecial(NodeToken n, NodeToken s, int i) {
-    if (n.specialTokens == null) n.specialTokens = new Vector<NodeToken>();
+    if (n.specialTokens == null) {
+      n.specialTokens = new Vector<NodeToken>();
+    }
     n.specialTokens.insertElementAt(s, i);
     s.setParent(n);
   }
@@ -1187,7 +1189,7 @@ public class Ast {
 
     Global.non_falsified_invariants += invs_array.length;
 
-    List<Invariant> accepted_invariants = new Vector<Invariant>();
+    List<Invariant> accepted_invariants = new ArrayList<Invariant>();
 
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
