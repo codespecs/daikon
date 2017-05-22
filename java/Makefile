@@ -911,7 +911,9 @@ show_nullness_java_files:
 check-all: check-formatter check-interning check-nullness check-regex check-signature check-lock
 
 index: check-index
-check-index: daikon/util/README ${INDEX_JAVA_FILES} compile
+check-index: daikon/util/README ${INDEX_JAVA_FILES}
+	# Compilation with CF javac to put @StaticallyExecutable annotations on classpath.
+	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_JAVA_FILES}
 
