@@ -18,7 +18,7 @@ import plume.*;
 public class InsertCommentFormatter extends DepthFirstVisitor {
   private boolean debug = false;
 
-  private Vector<NodeToken> comments;
+  private List<NodeToken> comments;
   private int columnshift = 0;
   private int lineshift = 0;
   private int columnshiftline = -1; // the line currently being column-shifted.
@@ -34,7 +34,7 @@ public class InsertCommentFormatter extends DepthFirstVisitor {
 
   private static final String lineSep = System.getProperty("line.separator");
 
-  public InsertCommentFormatter(Vector<NodeToken> comments) {
+  public InsertCommentFormatter(List<NodeToken> comments) {
     this.comments = comments;
   }
 

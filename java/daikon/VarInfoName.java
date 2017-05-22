@@ -3102,7 +3102,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
     /** Record type for return value of the quantify method below. */
     public static class QuantifyReturn {
       public /*@Interned*/ VarInfoName[] root_primes;
-      public Vector</*@Interned*/ VarInfoName[]>
+      public List</*@Interned*/ VarInfoName[]>
           bound_vars; // each element is VarInfoName[3] = <variable, lower, upper>
     }
 
@@ -3122,7 +3122,7 @@ public abstract /*@Interned*/ class VarInfoName implements Serializable, Compara
       // create empty result
       QuantifyReturn result = new QuantifyReturn();
       result.root_primes = new VarInfoName[roots.length];
-      result.bound_vars = new Vector<VarInfoName[]>();
+      result.bound_vars = new ArrayList<VarInfoName[]>();
 
       // all of the simple identifiers used by these roots
       Set<String> simples = new HashSet<String>();

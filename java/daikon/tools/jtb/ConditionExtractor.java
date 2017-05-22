@@ -301,7 +301,7 @@ class ConditionExtractor extends DepthFirstVisitor {
       meth = className + ":::OBJECT";
     }
     if (!conditions.containsKey(meth)) {
-      conditions.put(meth, new Vector<String>());
+      conditions.put(meth, new ArrayList<String>());
     }
     List<String> conds = conditions.get(meth);
     conds.add(cond);

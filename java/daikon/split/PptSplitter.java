@@ -257,16 +257,16 @@ public class PptSplitter implements Serializable {
     // Maps permuted invariants to their original invariants
     Map<Invariant, Invariant> orig_invs = new LinkedHashMap<Invariant, Invariant>();
 
-    Vector</*@KeyFor("orig_invs")*/ Invariant> same_invs_vec =
-        new Vector</*@KeyFor("orig_invs")*/ Invariant>();
+    List</*@KeyFor("orig_invs")*/ Invariant> same_invs_vec =
+        new ArrayList</*@KeyFor("orig_invs")*/ Invariant>();
 
-    Vector</*@KeyFor("orig_invs")*/ Invariant[]> exclusive_invs_vec =
-        new Vector</*@KeyFor("orig_invs")*/ Invariant[]>();
+    List</*@KeyFor("orig_invs")*/ Invariant[]> exclusive_invs_vec =
+        new ArrayList</*@KeyFor("orig_invs")*/ Invariant[]>();
 
     // Does not contain anything that is in exclusive_invs_vec.
     // (Those may be added temporarily, but are removed later.)
-    Vector</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec =
-        new Vector</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]>();
+    List</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec =
+        new ArrayList</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]>();
 
     /// ??? MDE
     // Loop through each possible parent slice
@@ -411,17 +411,17 @@ public class PptSplitter implements Serializable {
 
       // Add any exclusive conditions for this slice to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      Vector</*@KeyFor("orig_invs")*/ Invariant[]> ec = exclusive_conditions(invs[0], invs[1]);
+      List</*@KeyFor("orig_invs")*/ Invariant[]> ec = exclusive_conditions(invs[0], invs[1]);
       exclusive_invs_vec.addAll(ec);
 
       // Add any invariants that are the same to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      Vector</*@KeyFor("orig_invs")*/ Invariant> si = same_invariants(invs[0], invs[1]);
+      List</*@KeyFor("orig_invs")*/ Invariant> si = same_invariants(invs[0], invs[1]);
       same_invs_vec.addAll(si);
 
       // Add any invariants that are different to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      Vector</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> di =
+      List</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> di =
           different_invariants(invs[0], invs[1]);
       different_invs_vec.addAll(di);
     } // slices.iterator() loop
@@ -632,9 +632,9 @@ public class PptSplitter implements Serializable {
    * Determine which elements of invs1 are mutually exclusive with elements of invs2. Result
    * elements are pairs of List<Invariant>. All the arguments should be over the same program point.
    */
-  Vector<Invariant[]> exclusive_conditions(List<Invariant> invs1, List<Invariant> invs2) {
+  List<Invariant[]> exclusive_conditions(List<Invariant> invs1, List<Invariant> invs2) {
 
-    Vector<Invariant[]> result = new Vector<Invariant[]>();
+    List<Invariant[]> result = new ArrayList<Invariant[]>();
     for (Invariant inv1 : invs1) {
       for (Invariant inv2 : invs2) {
         // // This is a debugging tool, to make sure that various versions
@@ -660,13 +660,13 @@ public class PptSplitter implements Serializable {
    * List<Invariant> (with one or the other always null). All the arguments should be over the same
    * program point.
    */
-  Vector</*@Nullable*/ Invariant[]> different_invariants(
+  List</*@Nullable*/ Invariant[]> different_invariants(
       List<Invariant> invs1, List<Invariant> invs2) {
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
     SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
     ss2.addAll(invs2);
-    Vector</*@Nullable*/ Invariant[]> result = new Vector</*@Nullable*/ Invariant[]>();
+    List</*@Nullable*/ Invariant[]> result = new ArrayList</*@Nullable*/ Invariant[]>();
     for (OrderedPairIterator<Invariant> opi =
             new OrderedPairIterator<Invariant>(ss1.iterator(), ss2.iterator(), icfp);
         opi.hasNext();
@@ -685,7 +685,7 @@ public class PptSplitter implements Serializable {
    * Determine which elements of invs1 are the same as elements of invs2. Result elements are
    * List<Invariant> (from the invs1 list). All the arguments should be over the same program point.
    */
-  Vector<Invariant> same_invariants(List<Invariant> invs1, List<Invariant> invs2) {
+  List<Invariant> same_invariants(List<Invariant> invs1, List<Invariant> invs2) {
 
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
@@ -693,11 +693,11 @@ public class PptSplitter implements Serializable {
     ss2.addAll(invs2);
 
     ss1.retainAll(ss2);
-    return new Vector<Invariant>(ss1);
+    return new ArrayList<Invariant>(ss1);
 
     // // This seems like a rather complicated implementation.  Why can't it
     // // just use set intersection?
-    // Vector</*@Nullable*/ Invariant> result = new Vector</*@Nullable*/ Invariant>();
+    // List</*@Nullable*/ Invariant> result = new ArrayList</*@Nullable*/ Invariant>();
     // for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
     //                                 ss2.iterator(), icfp);
     //      opi.hasNext(); ) {

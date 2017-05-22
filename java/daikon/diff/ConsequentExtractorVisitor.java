@@ -26,7 +26,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor {
   private HashSet<String> repeatFilter = new HashSet<String>();
 
   // Accumulation of extracted consequents
-  private Vector<Invariant> accum = new Vector<Invariant>();
+  private List<Invariant> accum = new ArrayList<Invariant>();
 
   public ConsequentExtractorVisitor() {
     nonce = 0;

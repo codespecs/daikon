@@ -263,7 +263,7 @@ public class InvariantDoclet {
       }
 
       //get a list of any other configuration variables
-      Vector<FieldDoc> config_vars = find_fields(dc, Configuration.PREFIX);
+      List<FieldDoc> config_vars = find_fields(dc, Configuration.PREFIX);
       for (int i = 0; i < config_vars.size(); i++) {
         FieldDoc f = config_vars.get(i);
         if (f.name().equals(Configuration.PREFIX + "enabled")) {
@@ -365,9 +365,9 @@ public class InvariantDoclet {
    * @return vector of FieldDoc entries for each field that matches. If no fields are found, a zero
    *     length vector is returned (not null).
    */
-  public Vector<FieldDoc> find_fields(ClassDoc cd, String prefix) {
+  public List<FieldDoc> find_fields(ClassDoc cd, String prefix) {
 
-    Vector<FieldDoc> list = new Vector<FieldDoc>();
+    List<FieldDoc> list = new ArrayList<FieldDoc>();
 
     for (FieldDoc f : cd.fields()) {
       if (f.name().startsWith(prefix)) list.add(f);

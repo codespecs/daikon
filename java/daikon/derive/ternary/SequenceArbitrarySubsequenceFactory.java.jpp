@@ -121,16 +121,16 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends TernaryDerivationFacto
       return null;
     }
 
-    Vector<TernaryDerivation> results1 = instantiateWithOrder(seqvar, sclvar1, sclvar2);
-    Vector<TernaryDerivation> results2 = instantiateWithOrder(seqvar, sclvar2, sclvar1);
+    List<TernaryDerivation> results1 = instantiateWithOrder(seqvar, sclvar1, sclvar2);
+    List<TernaryDerivation> results2 = instantiateWithOrder(seqvar, sclvar2, sclvar1);
 
     results1.addAll(results2);
     return results1.toArray(new TernaryDerivation[0]);
   }
 
-  private Vector<TernaryDerivation> instantiateWithOrder(
+  private List<TernaryDerivation> instantiateWithOrder(
       VarInfo seqvar, VarInfo startvar, VarInfo endvar) {
-    Vector<TernaryDerivation> results = new Vector<TernaryDerivation>();
+    List<TernaryDerivation> results = new ArrayList<TernaryDerivation>();
     VarInfo seqsize = seqvar.sequenceSize();
     if (seqsize != null) {
       seqsize = seqsize.canonicalRep();
@@ -229,7 +229,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends TernaryDerivationFacto
 
     {
       assert startvar.ppt == seqvar.ppt;
-      Vector<LINEARBINARY> lbs = LINEARBINARY.findAll(startvar);
+      List<LINEARBINARY> lbs = LINEARBINARY.findAll(startvar);
       for (Object lbObject : lbs) {
         LINEARBINARY lb = (LINEARBINARY) lbObject;
         // lb asserts that lb.var2() = lb.core.a * lb.var1() + lb.core.b <-- old
@@ -263,7 +263,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends TernaryDerivationFacto
 
     {
       assert endvar.ppt == seqvar.ppt;
-      Vector<LINEARBINARY> lbs = LINEARBINARY.findAll(endvar);
+      List<LINEARBINARY> lbs = LINEARBINARY.findAll(endvar);
       for (Object lbObject : lbs) {
         LINEARBINARY lb = (LINEARBINARY) lbObject;
         // lb asserts that lb.var2() = lb.core.a * lb.var1() + lb.core.b <-- old

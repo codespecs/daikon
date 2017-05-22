@@ -279,7 +279,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     // This ought to be abstracted out, maybe
     {
       assert sclvar.ppt == seqvar.ppt;
-      Vector<LINEARBINARY> lbs = LINEARBINARY.findAll(sclvar);
+      List<LINEARBINARY> lbs = LINEARBINARY.findAll(sclvar);
       // System.out.println("For " + sclvar.name + ", " + lbs.size() + " LinearBinary invariants");
       for (Object lbObject : lbs) {
         LINEARBINARY lb = (LINEARBINARY) lbObject;
@@ -331,7 +331,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
 
     // End of applicability tests; now actually create the invariants
 
-    Vector<BinaryDerivation> result = new Vector<BinaryDerivation>(6);
+    List<BinaryDerivation> result = new ArrayList<BinaryDerivation>(6);
     if (enable_subscript) {
       // a[i]
       result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, false));

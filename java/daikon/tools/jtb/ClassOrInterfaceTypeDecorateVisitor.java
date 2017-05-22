@@ -209,7 +209,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
     // Drop all type arguments.
     n.f1 = new NodeOptional(); // This removes optional node, if present.
-    Vector<Node> nodeSequenceList = (n.f2).nodes;
+    List<Node> nodeSequenceList = (n.f2).nodes;
     for (int i = 0; i < nodeSequenceList.size(); i++) {
       NodeSequence oldSequence = (NodeSequence) nodeSequenceList.get(i);
       NodeSequence newSequence = new NodeSequence(3);
@@ -227,7 +227,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
       if (entry.getKey().equals(n.f0.tokenImage)) {
         ClassOrInterfaceType c = entry.getValue().peek();
         //System.out.println("c:" + Ast.format(c));
-        Vector<Node> cSequence = c.f2.nodes;
+        List<Node> cSequence = c.f2.nodes;
         //System.out.print("cSequence:");
         for (Node n2 : cSequence) {
           //System.out.print(Ast.format(n2) + " ");
