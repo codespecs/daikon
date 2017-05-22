@@ -158,7 +158,7 @@ public final class CLASSNAME extends SUPERCLASS {
     // if (var().isDerivedSubSequenceOf() == null) {
     if (var().is_direct_non_slice_array()) {
       VarInfo term = var().get_enclosing_var();
-      String esc_name = null;
+      String esc_name;
       if (term == null) {
         // Only happenes in internal format tests
         esc_name = var().name().replace("[]", "");

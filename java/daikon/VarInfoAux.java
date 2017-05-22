@@ -31,7 +31,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   // The below are all the possible keys for the map, and values tend to be
   // binary.  So could we make it a packed binary array?
 
-  // All of the keys below should be @KeyFor("this.map") but that isn't a valid expressions
+  // All of the keys below should be @KeyFor("this.map") but that isn't a valid expression.
   // See https://github.com/typetools/checker-framework/issues/877
 
   /**

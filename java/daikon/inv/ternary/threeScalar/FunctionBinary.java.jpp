@@ -218,7 +218,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
       int func_id = func_list.indexOf(fb_arr);
       @SuppressWarnings({"nonprototype"})
-      /*@Prototype*/ CLASSNAME fb = null;
+      /*@Prototype*/ CLASSNAME fb;
       try {
         Constructor</*@Prototype*/ CLASSNAME> con = subc.getDeclaredConstructor(new Class<?>[] {});
         fb = con.newInstance(new Object[] {});
@@ -500,7 +500,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     String result = argresultvi.csharp_name();
     String arg1 = arg1vi.csharp_name();
     String arg2 = arg2vi.csharp_name();
-    String func = null;
     String operator = null;
 
     if (methodname[1].equals(" * ")) {
@@ -532,6 +531,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return result + " == (" + arg1 + " " + operator + " " + arg2 + ")";
     }
 
+    String func = null;
     if (methodname[1].equals(", ")) {
       if (methodname[0].equals("java.lang.Math.min("))
         func = "Math.Min";

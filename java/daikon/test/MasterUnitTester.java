@@ -41,6 +41,7 @@ public class MasterUnitTester extends TestCase {
               daikon.test.TestClassOrInterfaceTypeDecorateVisitor.class,
               daikon.test.TestAst.class,
               daikon.test.config.ConfigurationTest.class,
+              daikon.test.config.HtmlToTexinfoTest.class,
               daikon.test.diff.ConsequentCVFPairComparatorTester.class,
               daikon.test.diff.ConsequentCVFSortComparatorTester.class,
               daikon.test.diff.DetailedStatisticsVisitorTester.class,

@@ -46,12 +46,9 @@ public class PptSplitter implements Serializable {
    */
   public static int dkconfig_dummy_invariant_level = 0;
 
-  // Don't use {@code ...} here yet because it will be inserted into
-  // config-options.texinfo and the insertion program doesn't yet
-  // understand {@code ...}.
   /**
-   * Split bi-implications ("a &lt;==&gt; b") into two separate implications ("a ==&gt; b" and "b
-   * ==&gt; a").
+   * Split bi-implications ("{@code a <==> b}") into two separate implications ("{@code a ==> b}"
+   * and "{@code b ==> a}").
    */
   public static boolean dkconfig_split_bi_implications = false;
 
@@ -108,11 +105,11 @@ public class PptSplitter implements Serializable {
         debug.fine(
             "  VarInfo #"
                 + ii
-                + ": "
+                + ": at parent="
                 + parent.var_infos[ii].name()
-                + " "
+                + " at ppts[0]="
                 + ppts[0].var_infos[ii].name()
-                + " "
+                + " at ppts[1]="
                 + ppts[1].var_infos[ii].name());
       }
     }
@@ -260,16 +257,16 @@ public class PptSplitter implements Serializable {
     // Maps permuted invariants to their original invariants
     Map<Invariant, Invariant> orig_invs = new LinkedHashMap<Invariant, Invariant>();
 
-    Vector</*@KeyFor("orig_invs")*/ Invariant> same_invs_vec =
-        new Vector</*@KeyFor("orig_invs")*/ Invariant>();
+    List</*@KeyFor("orig_invs")*/ Invariant> same_invs_vec =
+        new ArrayList</*@KeyFor("orig_invs")*/ Invariant>();
 
-    Vector</*@KeyFor("orig_invs")*/ Invariant[]> exclusive_invs_vec =
-        new Vector</*@KeyFor("orig_invs")*/ Invariant[]>();
+    List</*@KeyFor("orig_invs")*/ Invariant[]> exclusive_invs_vec =
+        new ArrayList</*@KeyFor("orig_invs")*/ Invariant[]>();
 
     // Does not contain anything that is in exclusive_invs_vec.
     // (Those may be added temporarily, but are removed later.)
-    Vector</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec =
-        new Vector</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]>();
+    List</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec =
+        new ArrayList</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]>();
 
     /// ??? MDE
     // Loop through each possible parent slice
@@ -298,7 +295,7 @@ public class PptSplitter implements Serializable {
 
         invs[childno] = new ArrayList<Invariant>(); // permuted to parent
 
-        // Get the child vis in the correct order
+        // vis is in parent order.  Find corresponding child vis, in child order.
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_non_canonical = new VarInfo[vis.length];
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis = new VarInfo[vis.length];
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_sorted = new VarInfo[vis.length];
@@ -342,24 +339,45 @@ public class PptSplitter implements Serializable {
         PptSlice cslice = child_ppt.findSlice(cvis_sorted);
         if (cslice == null) {
           if (eq_inv != null) {
+            // There is trouble.  Print a lot of debugging information.
+            System.out.println("cvis_non_canonical:");
+            for (VarInfo cvi : cvis_non_canonical) {
+              System.out.println("  " + cvi);
+            }
+            System.out.println("cvis:");
+            for (VarInfo cvi : cvis) {
+              System.out.println("  " + cvi);
+            }
+            System.out.println("cvis_sorted:");
+            for (VarInfo cvi : cvis_sorted) {
+              System.out.println("  " + cvi);
+            }
             if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
               assert child_ppt.constants != null
                   : "@AssumeAssertion(nullness):  dependent:  config var";
-              for (int i = 0; i < cvis_sorted.length; i++) {
-                System.out.println("con val = " + child_ppt.constants.getConstant(cvis_sorted[i]));
+              System.out.println("constant values for cvis_sorted:");
+              for (VarInfo cvi : cvis_sorted) {
+                System.out.println("  " + child_ppt.constants.getConstant(cvi));
               }
             }
-            // TODO: Once Checker Framework issue 755 has been fixed
-            // ( https://github.com/typetools/checker-framework/issues/755),
-            // this warning suppression should be removed.
-            @SuppressWarnings("lock:cannot.dereference")
+            @SuppressWarnings(
+                "lock:cannot.dereference") // https://github.com/typetools/checker-framework/issues/755
             String eq_inv_ppt = eq_inv.ppt.toString();
+            assert eq_inv.ppt.equals(child_ppt.findSlice(cvis_non_canonical));
+
+            System.out.println("All child_ppt slices: ");
+            for (PptSlice slice : child_ppt.views_iterable()) {
+              System.out.println("  " + slice);
+            }
+
+            // found slice on non-canonical, but didn't find it here
             throw new RuntimeException(
                 "found eq_inv "
+                    + "\n  "
                     + eq_inv
-                    + " @"
+                    + "\n  @"
                     + eq_inv_ppt
-                    + " but can't find slice for "
+                    + "\n  but can't find slice for "
                     + VarInfo.arrayToString(cvis_sorted));
           }
           // If no slice, just give up?
@@ -394,17 +412,17 @@ public class PptSplitter implements Serializable {
 
       // Add any exclusive conditions for this slice to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      Vector</*@KeyFor("orig_invs")*/ Invariant[]> ec = exclusive_conditions(invs[0], invs[1]);
+      List</*@KeyFor("orig_invs")*/ Invariant[]> ec = exclusive_conditions(invs[0], invs[1]);
       exclusive_invs_vec.addAll(ec);
 
       // Add any invariants that are the same to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      Vector</*@KeyFor("orig_invs")*/ Invariant> si = same_invariants(invs[0], invs[1]);
+      List</*@KeyFor("orig_invs")*/ Invariant> si = same_invariants(invs[0], invs[1]);
       same_invs_vec.addAll(si);
 
       // Add any invariants that are different to the list
       @SuppressWarnings("keyfor") // need qualifier parameter to Invariants
-      Vector</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> di =
+      List</*@Nullable*//*@KeyFor("orig_invs")*/ Invariant[]> di =
           different_invariants(invs[0], invs[1]);
       different_invs_vec.addAll(di);
     } // slices.iterator() loop
@@ -615,9 +633,9 @@ public class PptSplitter implements Serializable {
    * Determine which elements of invs1 are mutually exclusive with elements of invs2. Result
    * elements are pairs of List<Invariant>. All the arguments should be over the same program point.
    */
-  Vector<Invariant[]> exclusive_conditions(List<Invariant> invs1, List<Invariant> invs2) {
+  List<Invariant[]> exclusive_conditions(List<Invariant> invs1, List<Invariant> invs2) {
 
-    Vector<Invariant[]> result = new Vector<Invariant[]>();
+    List<Invariant[]> result = new ArrayList<Invariant[]>();
     for (Invariant inv1 : invs1) {
       for (Invariant inv2 : invs2) {
         // // This is a debugging tool, to make sure that various versions
@@ -643,13 +661,13 @@ public class PptSplitter implements Serializable {
    * List<Invariant> (with one or the other always null). All the arguments should be over the same
    * program point.
    */
-  Vector</*@Nullable*/ Invariant[]> different_invariants(
+  List</*@Nullable*/ Invariant[]> different_invariants(
       List<Invariant> invs1, List<Invariant> invs2) {
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
     SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
     ss2.addAll(invs2);
-    Vector</*@Nullable*/ Invariant[]> result = new Vector</*@Nullable*/ Invariant[]>();
+    List</*@Nullable*/ Invariant[]> result = new ArrayList</*@Nullable*/ Invariant[]>();
     for (OrderedPairIterator<Invariant> opi =
             new OrderedPairIterator<Invariant>(ss1.iterator(), ss2.iterator(), icfp);
         opi.hasNext();
@@ -668,7 +686,7 @@ public class PptSplitter implements Serializable {
    * Determine which elements of invs1 are the same as elements of invs2. Result elements are
    * List<Invariant> (from the invs1 list). All the arguments should be over the same program point.
    */
-  Vector<Invariant> same_invariants(List<Invariant> invs1, List<Invariant> invs2) {
+  List<Invariant> same_invariants(List<Invariant> invs1, List<Invariant> invs2) {
 
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
@@ -676,11 +694,11 @@ public class PptSplitter implements Serializable {
     ss2.addAll(invs2);
 
     ss1.retainAll(ss2);
-    return new Vector<Invariant>(ss1);
+    return new ArrayList<Invariant>(ss1);
 
     // // This seems like a rather complicated implementation.  Why can't it
     // // just use set intersection?
-    // Vector</*@Nullable*/ Invariant> result = new Vector</*@Nullable*/ Invariant>();
+    // List</*@Nullable*/ Invariant> result = new ArrayList</*@Nullable*/ Invariant>();
     // for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
     //                                 ss2.iterator(), icfp);
     //      opi.hasNext(); ) {

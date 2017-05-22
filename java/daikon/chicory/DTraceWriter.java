@@ -439,14 +439,12 @@ public class DTraceWriter extends DaikonWriter {
     List<String> typeNames = new ArrayList<String>(theVals.size());
 
     for (Object ref : theVals) {
-      Class<?> type = null;
-
-      if (ref != null) {
-        type = ref.getClass();
+      if (ref == null) {
+        typeNames.add(null);
+      } else {
+        Class<?> type = ref.getClass();
         type = removeWrappers(ref, type, true);
         typeNames.add(type.getCanonicalName());
-      } else {
-        typeNames.add(null);
       }
     }
 

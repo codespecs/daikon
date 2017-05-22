@@ -168,7 +168,7 @@ public class InvDef {
 
     PptTopLevel ppt = v1.ppt;
 
-    VarInfo[] vis = null;
+    VarInfo[] vis;
     if (v2 == null) {
       vis = new VarInfo[] {v1};
     } else {

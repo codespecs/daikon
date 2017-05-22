@@ -111,7 +111,7 @@ public class StreamRedirectThread extends Thread {
         char[] cbuf = new char[BUFFER_SIZE];
         int count;
 
-        String line = null;
+        String line;
         while ((line = br.readLine()) != null) {
           outWriter.println(line);
         }

@@ -170,12 +170,11 @@ public class AnnotateNullable {
 
   // Returns null if no corresponding class ppt exists
   private static /*@Nullable*/ PptTopLevel class_for_object(PptTopLevel object_ppt) {
-    PptTopLevel class_ppt = null;
-    if (object_ppt.parents.size() > 0) {
-      assert object_ppt.parents.size() == 1 : object_ppt;
-      class_ppt = object_ppt.parents.get(0).parent;
+    if (object_ppt.parents.size() == 0) {
+      return null;
     }
-    return class_ppt;
+    assert object_ppt.parents.size() == 1 : object_ppt;
+    return object_ppt.parents.get(0).parent;
   }
 
   // Returns null if no corresponding object ppt exists

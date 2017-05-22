@@ -187,6 +187,9 @@ public class PptTopLevel extends Ppt {
   /**
    * All the Views (that is, slices) on this are stored as values in the HashMap. Indexed by a
    * Arrays.asList array list of Integers holding varinfo_index values.
+   *
+   * <p>For a client to access this private variable, it should use {@link #viewsAsCollection},
+   * {@link #views_iterable}, or {@link #views_iterator}.
    */
   private Map<List<Integer>, PptSlice> views;
 
@@ -1420,12 +1423,12 @@ public class PptTopLevel extends Ppt {
   // the loop over samples or the loop over slices.
 
   /** Add the specified slices to this ppt */
-  public void addViews(Vector<PptSlice> slices_vector) {
+  public void addViews(List<PptSlice> slices_vector) {
     if (slices_vector.isEmpty()) return;
 
     // Don't modify the actual parameter
     @SuppressWarnings("unchecked")
-    Vector<PptSlice> slices_vector_copy = (Vector<PptSlice>) slices_vector.clone();
+    List<PptSlice> slices_vector_copy = new ArrayList<PptSlice>(slices_vector);
 
     // This might be a brand-new Slice, and instantiate_invariants for this
     // pass might not have come up with any invariants.
@@ -1625,7 +1628,9 @@ public class PptTopLevel extends Ppt {
         // System.out.printf ("considering invariant %s, exact = %b\n",
         //                   inv.format(), inv.isExact());
         if (inv.isExact() && inv.format_using(OutputFormat.DAIKON).startsWith(start)) {
-          if (assignment_invs == null) assignment_invs = new ArrayList<Invariant>();
+          if (assignment_invs == null) {
+            assignment_invs = new ArrayList<Invariant>();
+          }
           assignment_invs.add(inv);
         }
       }
@@ -1972,7 +1977,9 @@ public class PptTopLevel extends Ppt {
     if (inv == null) return false;
 
     // If the varinfos are out of order swap
-    if (v1.varinfo_index > v2.varinfo_index) inv = inv.permute(permute_swap);
+    if (v1.varinfo_index > v2.varinfo_index) {
+      inv = inv.permute(permute_swap);
+    }
 
     return (slice.is_inv_true(inv));
   }
@@ -2051,7 +2058,7 @@ public class PptTopLevel extends Ppt {
     // / 1. all unary views
 
     // Unary slices/invariants.
-    Vector<PptSlice> unary_views = new Vector<PptSlice>(var_infos.length);
+    List<PptSlice> unary_views = new ArrayList<PptSlice>(var_infos.length);
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
 
@@ -2079,7 +2086,7 @@ public class PptTopLevel extends Ppt {
     // / 2. all binary views
 
     // Binary slices/invariants.
-    Vector<PptSlice> binary_views = new Vector<PptSlice>();
+    List<PptSlice> binary_views = new ArrayList<PptSlice>();
     for (int i1 = 0; i1 < var_infos.length; i1++) {
       VarInfo var1 = var_infos[i1];
 
@@ -2125,7 +2132,7 @@ public class PptTopLevel extends Ppt {
       Global.debugInfer.fine("Trying ternary slices for " + this.name());
     }
 
-    Vector<PptSlice> ternary_views = new Vector<PptSlice>();
+    List<PptSlice> ternary_views = new ArrayList<PptSlice>();
     for (int i1 = 0; i1 < var_infos.length; i1++) {
       VarInfo var1 = var_infos[i1];
       if (!is_var_ok_ternary(var1)) continue;
@@ -2699,11 +2706,11 @@ public class PptTopLevel extends Ppt {
     Invariant[] invs;
     {
       // Replace parwise equality with an equivalence set
-      Vector<Invariant> all_noeq = invariants_vector();
+      List<Invariant> all_noeq = invariants_vector();
       Collections.sort(all_noeq, icfp);
       List<Invariant> all = InvariantFilters.addEqualityInvariants(all_noeq);
       Collections.sort(all, icfp);
-      Vector<Invariant> printing = new Vector<Invariant>();
+      List<Invariant> printing = new ArrayList<Invariant>();
       for (Iterator<Invariant> _invs = all.iterator(); _invs.hasNext(); ) {
         Invariant inv = _invs.next();
         if (test.include(inv)) { // think: inv.isWorthPrinting()
@@ -2767,7 +2774,7 @@ public class PptTopLevel extends Ppt {
     // program points, and we don't necessarily want to lose the
     // unconditional version of the invariant at the conditional ppt.
     for (PptTopLevel ppt : closure) {
-      Vector<Invariant> invs_vec = ppt.invariants_vector();
+      List<Invariant> invs_vec = ppt.invariants_vector();
       Collections.sort(invs_vec, icfp);
       for (Invariant inv : InvariantFilters.addEqualityInvariants(invs_vec)) {
         if (inv instanceof Implication) {
@@ -2857,7 +2864,7 @@ public class PptTopLevel extends Ppt {
       int worstWheel = 0;
       do {
         // But try to recover anyway
-        Vector<Lemma> problems = proverStack.minimizeContradiction();
+        List<Lemma> problems = proverStack.minimizeContradiction();
         if (LemmaStack.dkconfig_print_contradictions) {
           System.err.println("Minimal set:");
           LemmaStack.printLemmas(System.err, proverStack.minimizeContradiction());
@@ -2875,21 +2882,21 @@ public class PptTopLevel extends Ppt {
           }
         }
         int max_demerits = -1;
-        Vector<Lemma> worst = new Vector<Lemma>();
+        List<Lemma> worst = new ArrayList<Lemma>();
         for (Map.Entry</*@KeyFor("demerits")*/ Lemma, Integer> ent : demerits.entrySet()) {
           int value = ent.getValue().intValue();
           if (value == max_demerits) {
             worst.add(ent.getKey());
           } else if (value > max_demerits) {
             max_demerits = value;
-            worst = new Vector<Lemma>();
+            worst = new ArrayList<Lemma>();
             worst.add(ent.getKey());
           }
         }
         int offsetFromEnd = worstWheel % worst.size();
         worstWheel = (3 * worstWheel + 1) % 10000019;
         int index = worst.size() - 1 - offsetFromEnd;
-        Lemma bad = worst.elementAt(index);
+        Lemma bad = worst.get(index);
         demerits.remove(bad);
         proverStack.popToMark(backgroundMark);
         boolean isInvariant = false;
@@ -3019,8 +3026,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Vector version of getInvariants(). */
-  public Vector<Invariant> invariants_vector() {
-    return new Vector<Invariant>(getInvariants());
+  public List<Invariant> invariants_vector() {
+    return new ArrayList<Invariant>(getInvariants());
   }
 
   /**
@@ -3442,8 +3449,9 @@ public class PptTopLevel extends Ppt {
         // System.out.printf ("First child equality set: %s\n",
         //                     c1.child.equality_view);
         emap = c1.get_child_equalities_as_parent();
-        if (debugMerge.isLoggable(Level.FINE)) // check before stringifying emap
-        debugMerge.fine("child " + c1.child.name() + " equality = " + emap);
+        if (debugMerge.isLoggable(Level.FINE)) { // check before stringifying emap
+          debugMerge.fine("child " + c1.child.name() + " equality = " + emap);
+        }
         break;
       }
     }
@@ -3675,7 +3683,7 @@ public class PptTopLevel extends Ppt {
       Arrays.sort(pvis_sorted, VarInfo.IndexComparator.getInstance());
 
       // Create the parent slice
-      PptSlice pslice = null;
+      PptSlice pslice;
       if (pvis.length == 1) {
         pslice = new PptSlice1(this, pvis_sorted[0]);
       } else if (pvis.length == 2) {

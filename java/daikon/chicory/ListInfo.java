@@ -25,7 +25,7 @@ public class ListInfo extends DaikonVariableInfo {
   @Override
   public Object getMyValFromParentVal(Object value) {
 
-    Method arrayMethod = null;
+    Method arrayMethod;
     try {
       arrayMethod = listType.getMethod("toArray", new Class<?>[0]);
     } catch (NoSuchMethodException e) {
@@ -34,7 +34,7 @@ public class ListInfo extends DaikonVariableInfo {
               + " seems to implement java.util.List, but method toArray() not found");
     }
 
-    Object arrayVal = null;
+    Object arrayVal;
 
     if (value != null && !(value instanceof NonsensicalObject)) {
 

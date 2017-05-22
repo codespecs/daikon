@@ -167,7 +167,7 @@ public class CreateSpinfo {
   private static void writeSplitters(String javaFileName, PrintWriter output) throws IOException {
     Reader input = new FileReader(javaFileName);
     JavaParser parser = new JavaParser(input);
-    Node root = null;
+    Node root;
     try {
       root = parser.CompilationUnit();
     } catch (ParseException e) {

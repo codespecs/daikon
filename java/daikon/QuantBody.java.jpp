@@ -258,7 +258,7 @@ The correct way to build the system is to run 'make'.
    * x.getClass().toString() for each element x in the array. If an element of the array is null,
    * its slot in the returned array is null.
    */
-  @SuppressWarnings("nullness") // bug: http://code.google.com/p/checker-framework/issues/detail?id=54
+  @SuppressWarnings("nullness") // https://github.com/typetools/checker-framework/issues/58
   /*@SideEffectFree*/
   public static /*@PolyNull*//*("elt")*/ String /*@PolyNull*//*("container")*/ [] typeArray(/*@PolyNull*//*("elt")*/ _TYPE /*@PolyNull*//*("container")*/ [] seq) {
     if (seq == null) return null;
@@ -1990,7 +1990,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     assert (fields != null);
     assert (fieldsStartIdx >= 0 && fieldsStartIdx < fields.length);
 
-    Object fieldObj = null;
+    Object fieldObj;
     try {
       Field field = (object instanceof java.lang.Class<?>)
         ? ((Class<?>)object).getDeclaredField(fields[fieldsStartIdx])
@@ -2003,7 +2003,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     } catch (Exception e) {
       return null;
 #if 0
-      //  String exceptionMessage = null;
+      //  String exceptionMessage;
       //  if (e instanceof NoSuchFieldException) {
       //     exceptionMessage = "daikon.Quant.fieldArray: NoSuchFieldException: ";
       //  } else if (e instanceof NullPointerException) {
@@ -2130,7 +2130,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
       } catch (Exception e) {
         return BAD_VALUE; // return default value
 #if 0
-        //             String exceptionMessage = null;
+        //             String exceptionMessage;
         //             if (e instanceof NoSuchFieldException) {
         //                 exceptionMessage = "daikon.Quant: NoSuchFieldException: ";
         //             } else if (e instanceof NullPointerException) {

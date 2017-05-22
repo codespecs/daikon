@@ -65,7 +65,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     }
     JavaParser parser = new JavaParser(sourceIn);
 
-    CompilationUnit compilationUnit = null;
+    CompilationUnit compilationUnit;
 
     try {
       compilationUnit = parser.CompilationUnit();

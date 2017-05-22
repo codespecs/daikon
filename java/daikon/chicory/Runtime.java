@@ -499,7 +499,7 @@ public class Runtime {
     dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
     dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
 
-    Socket daikonSocket = null;
+    Socket daikonSocket;
     try {
       daikonSocket = new Socket();
       @SuppressWarnings("nullness") // unannotated: java.net.Socket is not yet annotated
@@ -511,10 +511,12 @@ public class Runtime {
       System.out.println(
           "UnknownHostException connecting to Daikon : " + e.getMessage() + ". Exiting");
       System.exit(1);
+      throw new Error("Unreachable control flow");
     } catch (IOException e) {
       System.out.println(
           "IOException, could not connect to Daikon : " + e.getMessage() + ". Exiting");
       System.exit(1);
+      throw new Error("Unreachable control flow");
     }
 
     try {

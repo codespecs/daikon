@@ -10,10 +10,10 @@ import daikon.inv.ternary.threeScalar.ThreeScalar;
 import daikon.inv.unary.UnaryInvariant;
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import plume.*;
 import plume.Intern;
 
@@ -206,7 +206,6 @@ class FormatTestCase {
    */
   public String generateGoalOutput(LineNumberReader theInputFile) throws IOException {
     StringBuffer output = new StringBuffer();
-    String currentLineOfText = null;
     int currentLine = theInputFile.getLineNumber();
 
     // System.out.println("Generating goal output");
@@ -215,8 +214,10 @@ class FormatTestCase {
       SingleOutputTestCase current = testCases.get(i);
       int currentGoalLineNumber = current.getGoalLineNumber();
       for (int j = currentLine; j < currentGoalLineNumber; j++) {
-        currentLineOfText = theInputFile.readLine();
-        if (parseGoal(currentLineOfText) == null) output.append(currentLineOfText + lineSep);
+        String currentLineOfText = theInputFile.readLine();
+        if (parseGoal(currentLineOfText) == null) {
+          output.append(currentLineOfText + lineSep);
+        }
       }
       output.append(
           GOAL_PREFIX
@@ -336,7 +337,7 @@ class FormatTestCase {
    */
   public static /*@Nullable*/ FormatTestCase instantiate(
       LineNumberReader commands, boolean generateGoals) {
-    List<SingleOutputTestCase> testCases = new Vector<SingleOutputTestCase>();
+    List<SingleOutputTestCase> testCases = new ArrayList<SingleOutputTestCase>();
 
     // The first line contains the class and its instantiate args
     // each token is separated by blanks.  Each argument to instantiate
@@ -494,7 +495,7 @@ class FormatTestCase {
       }
     }
 
-    List<Object[]> samples = new Vector<Object[]>();
+    List<Object[]> samples = new ArrayList<Object[]>();
 
     // Get samples if they are needed to determine invariant data
     // e.g. to determine the exact nature of a linear relationship
