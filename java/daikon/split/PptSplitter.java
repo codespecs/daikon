@@ -362,6 +362,7 @@ public class PptSplitter implements Serializable {
                     + " but can't find slice for "
                     + VarInfo.arrayToString(cvis_sorted));
           }
+          // If no slice, just give up?
           continue;
         }
 
@@ -772,7 +773,6 @@ public class PptSplitter implements Serializable {
    * ppt_split.parent.
    */
   public void add_relation(PptRelation rel, PptSplitter ppt_split) {
-
     for (int ii = 0; ii < ppts.length; ii++) {
       PptRelation cond_rel = rel.copy(ppts[ii], ppt_split.ppts[ii]);
       // System.out.println ("Added relation: " + cond_rel);
@@ -787,7 +787,6 @@ public class PptSplitter implements Serializable {
    * parent.
    */
   private VarInfo matching_var(PptTopLevel ppt1, PptTopLevel ppt2, VarInfo ppt2_var) {
-
     VarInfo v = ppt1.var_infos[ppt2_var.varinfo_index];
     assert v.name().equals(ppt2_var.name());
     return v;
@@ -795,7 +794,6 @@ public class PptSplitter implements Serializable {
 
   /*@SideEffectFree*/
   public String toString(/*>>>@GuardSatisfied PptSplitter this*/) {
-
     return "Splitter " + splitter + ": ppt1 " + ppts[0].name() + ": ppt2 " + ppts[1].name;
   }
 }
