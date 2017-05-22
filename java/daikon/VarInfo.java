@@ -1824,7 +1824,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     {
-      Vector<LinearBinary> lbs = LinearBinary.findAll(this);
+      List<LinearBinary> lbs = LinearBinary.findAll(this);
       for (LinearBinary lb : lbs) {
         if (this.equals(lb.var2()) && (post != lb.var1().isPrestate())) {
 

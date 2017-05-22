@@ -221,7 +221,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     List<VarInfo> valid_equiv = new ArrayList<VarInfo>();
     List<VarInfo> invalid_equiv = new ArrayList<VarInfo>();
 
-    List<VarInfo> equal_vars = new Vector<VarInfo>();
+    List<VarInfo> equal_vars = new ArrayList<VarInfo>();
 
     for (VarInfo other : vars) {
       if (other.isDerivedSequenceMinMaxSum()) {

@@ -43,7 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -944,7 +943,7 @@ public final class Daikon {
               "unchecked",
               "nullness"
             }) // type of ClassLoader.classes field is known, and is non-null
-            /*@NonNull*/ Vector<Class<?>> classes = (Vector<Class<?>>) classesAsObject;
+            /*@NonNull*/ List<Class<?>> classes = (List<Class<?>>) classesAsObject;
             for (int i = 0; i < classes.size(); i++) {
               Class<?> loadedClass = classes.get(i);
               if (Invariant.class.isAssignableFrom(loadedClass)) {

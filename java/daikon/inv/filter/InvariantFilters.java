@@ -49,7 +49,7 @@ public class InvariantFilters {
   // n) to O(n), but that functionality isn't used a whole lot and
   // there are only ~10 filters anyway.
 
-  List<InvariantFilter> propertyFilters = new Vector<InvariantFilter>();
+  List<InvariantFilter> propertyFilters = new ArrayList<InvariantFilter>();
   List<VariableFilter> variableFilters = new ArrayList<VariableFilter>();
 
   public InvariantFilters() {

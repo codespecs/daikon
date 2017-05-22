@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import plume.UtilMDE;
@@ -228,7 +227,7 @@ public class DaikonSimple {
     // dynamic constants optimization is turned on (so we do not do the
     // check here).
 
-    Vector<PptSlice> unary_views = new Vector<PptSlice>(ppt.var_infos.length);
+    List<PptSlice> unary_views = new ArrayList<PptSlice>(ppt.var_infos.length);
     for (VarInfo vi : ppt.var_infos) {
 
       // /* if (!is_slice_ok(vi))
@@ -245,7 +244,7 @@ public class DaikonSimple {
     // / 2. all binary views
 
     // Binary slices/invariants.
-    Vector<PptSlice> binary_views = new Vector<PptSlice>();
+    List<PptSlice> binary_views = new ArrayList<PptSlice>();
     for (int i1 = 0; i1 < ppt.var_infos.length; i1++) {
       VarInfo var1 = ppt.var_infos[i1];
 
@@ -276,7 +275,7 @@ public class DaikonSimple {
     binary_views = null;
 
     // 3. all ternary views
-    Vector<PptSlice> ternary_views = new Vector<PptSlice>();
+    List<PptSlice> ternary_views = new ArrayList<PptSlice>();
     for (int i1 = 0; i1 < ppt.var_infos.length; i1++) {
       VarInfo var1 = ppt.var_infos[i1];
 

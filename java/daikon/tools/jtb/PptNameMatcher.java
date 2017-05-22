@@ -69,8 +69,8 @@ public class PptNameMatcher {
         NodeSequence seq = (NodeSequence) intermediateSequence.elementAt(0);
         NodeSequence seqOrig = (NodeSequence) intermediateSequenceOrig.elementAt(0);
 
-        Vector<Node> singleElementVector = seq.nodes;
-        Vector<Node> singleElementVectorOrig = seqOrig.nodes;
+        List<Node> singleElementVector = seq.nodes;
+        List<Node> singleElementVectorOrig = seqOrig.nodes;
         // Replace the ClassOrInterfaceType with its ungenerified version.
 
         //     System.out.println("@0");

@@ -387,7 +387,7 @@ public class VarInfoNameDriver {
     public void handle(Map<String, VarInfoName> vars, String[] args, PrintStream out) {
       assert args.length >= 4;
       String func = args[1];
-      List<VarInfoName> function_vars = new Vector<VarInfoName>();
+      List<VarInfoName> function_vars = new ArrayList<VarInfoName>();
       for (int x = 2; x < args.length; x++) {
         function_vars.add(vars.get(args[x]));
       }

@@ -1249,7 +1249,7 @@ public final class PrintInvariants {
     Invariant[] invs_array = invs.toArray(new Invariant[invs.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
-    Vector<Invariant> result = new Vector<Invariant>(invs_array.length);
+    List<Invariant> result = new ArrayList<Invariant>(invs_array.length);
 
     for (int i = 0; i < invs_array.length; i++) {
       result.add(invs_array[i]);
@@ -1308,7 +1308,7 @@ public final class PrintInvariants {
 
     Global.non_falsified_invariants += invs_array.length;
 
-    List<Invariant> accepted_invariants = new Vector<Invariant>();
+    List<Invariant> accepted_invariants = new ArrayList<Invariant>();
 
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];

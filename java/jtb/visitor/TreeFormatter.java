@@ -17,7 +17,7 @@ import java.util.*;
 // Added by hand to eliminate Enumeration warnings.  (markro)
 @SuppressWarnings("rawtypes")
 public class TreeFormatter extends DepthFirstVisitor {
-   private Vector<FormatCommand> cmdQueue = new Vector<FormatCommand>();
+   private List<FormatCommand> cmdQueue = new ArrayList<FormatCommand>();
    private boolean lineWrap;
    private int wrapWidth;
    private int indentAmt;
@@ -58,7 +58,7 @@ public class TreeFormatter extends DepthFirstVisitor {
       for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); ) {
          e.nextElement().accept(this);
          if ( cmd != null && e.hasMoreElements() )
-            cmdQueue.addElement(cmd);
+            cmdQueue.add(cmd);
       }
    }
 
@@ -93,7 +93,7 @@ public class TreeFormatter extends DepthFirstVisitor {
    // Use this method to add FormatCommands to the command queue to be
    // executed when the next token in the tree is visited.
    protected void add(FormatCommand cmd) {
-      cmdQueue.addElement(cmd);
+      cmdQueue.add(cmd);
    }
 
    // Executes the commands waiting in the command queue, then inserts the
@@ -105,8 +105,7 @@ public class TreeFormatter extends DepthFirstVisitor {
    // behavior you want from special tokens, feel free to modify this
    // method.
    public void visit(NodeToken n) {
-      for ( Enumeration<FormatCommand> e = cmdQueue.elements(); e.hasMoreElements(); ) {
-         FormatCommand cmd = e.nextElement();
+      for ( FormatCommand cmd : cmdQueue ) {
          switch ( cmd.getCommand() ) {
          case FormatCommand.FORCE :
             curLine += cmd.getNumCommands();
@@ -128,7 +127,7 @@ public class TreeFormatter extends DepthFirstVisitor {
          }
       }
 
-      cmdQueue.removeAllElements();
+      cmdQueue.clear();
 
       //
       // Handle all special tokens preceding this NodeToken

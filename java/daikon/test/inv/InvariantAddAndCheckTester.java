@@ -10,9 +10,9 @@ import daikon.inv.ternary.threeScalar.ThreeScalar;
 import daikon.inv.unary.*;
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import junit.framework.*;
 
 /*>>>
@@ -129,7 +129,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * This function produces the format list for intialization of the static format list variable.
    */
   static List<String> getTestFormatList() {
-    List<String> result = new Vector<String>();
+    List<String> result = new ArrayList<String>();
 
     // Add test formats - hard coded in
     result.add("daikon");
