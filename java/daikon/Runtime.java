@@ -947,7 +947,7 @@ public final class Runtime {
     ps.print('[');
     for (int i = 0; i < a.length; i++) {
       if (i != 0) ps.print(' ');
-      char c = ((Character) a[0]).charValue();
+      char c = ((Character) a[i]).charValue();
       if (c == '\r') {
         ps.print("\\r");
       } else if (c == '\n') { // not lineSep
