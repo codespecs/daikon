@@ -6011,20 +6011,18 @@ format (DWARF-2).
 
 However, Kvasir has some limitations of its own.  Because Kvasir uses
 Valgrind, it shares Valgrind's processor and operating system limitations.
-Furthermore, of the platforms supported by Valgrind, the only ones
-currently supported by Kvasir are @code{x86-linux} and
-@code{amd64-linux}.
-@code{x86-linux} refers to Intel 386-compatible processors
+Furthermore, of the platforms supported by Valgrind, the only one
+currently supported by Kvasir is @var{amd64-linux}.
+Valgrind support for @var{x86-linux} is now in maintenance mode and Kvasir
+no longer supports this platform.
+@var{x86-linux} refers to Intel 386-compatible processors
 (the so-called IA-32 architecture) such as the Intel Pentium and the
 AMD Athlon, running Linux.
-@code{amd64-linux} refers to the 64-bit extension of the x86
+@var{amd64-linux} refers to the 64-bit extension of the x86
 architecture found in many newer Intel and AMD processors, also
 variously referred to as x86-64, @nospellcheck{IA-32e}, EM64T, and Intel 64, when
 running under a Linux kernel in 64-bit mode.
 The Itanium or IA-64 architecture is not supported.
-The Kvasir build process will automatically compile a 32-bit version, a
-64-bit version, or both, whichever are supported by your system's
-default compiler.
 
 Kvasir requires that your program have debugging
 information available in the DWARF-2 format, as produced by @command{GCC} version
