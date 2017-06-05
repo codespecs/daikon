@@ -3534,6 +3534,8 @@ Optionally specifies the minimum possible length for this variable
 (for instance, due to language-specific restrictions on the type). This
 enables Daikon to suppress invariants which would be ``obvious'' in that
 case, such as @code{size(var) >= v}.
+Note that this item should be added to the <array-name>[..] entry
+not the <array-name>[] entry.
 
 @item @code{max-length <v>}
 
@@ -3541,6 +3543,8 @@ Optionally specifies the maximum possible length for this variable
 (for instance, due to language-specific restrictions on the type). This
 enables Daikon to suppress invariants which would be ``obvious'' in that
 case, such as @code{size(var) <= v}.
+Note that this item should be added to the <array-name>[..] entry
+not the <array-name>[] entry.
 
 @item @code{valid-values [<v1> <v2> ... <vN>]}
 
