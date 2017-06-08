@@ -575,10 +575,9 @@ public class PptSplitter implements Serializable {
    * Returns a list of all possible slices that may appear at the parent. The parent must have
    * already been created by merging the invariants from its child conditionals.
    *
-   * <p>This is different from the slices that actually exist at the parent because there may be
+   * <p>This is a subset of the slices that actually exist at the parent because the parent may have
    * implications created from invariants in child slices that only exist in one child (and thus
-   * don't exists in the parent) because there may be implications created from invariants in child
-   * slices that only exist in one child.
+   * don't exist in the parent).
    */
   /*@RequiresNonNull("parent.equality_view")*/
   private List<VarInfo[]> possible_slices() {
