@@ -20,8 +20,8 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * PptSplitter contains the splitter and its associated PptConditional ppts. Currently all splitters
- * are binary and this is presumed in the implementation. However, this could easily be extended by
- * extending this class with specific other implementations.
+ * are binary (have exactly two PptConditional ppts) and this is presumed in the implementation.
+ * However, this could be extended by extending this class with specific other implementations.
  */
 /*@UsesObjectEquals*/
 public class PptSplitter implements Serializable {
@@ -32,7 +32,7 @@ public class PptSplitter implements Serializable {
   static final long serialVersionUID = 20031031L;
 
   /**
-   * Boolean. If set, the built-in splitting rules are disabled. The built-in rules look for
+   * Boolean. If true, the built-in splitting rules are disabled. The built-in rules look for
    * implications based on boolean return values and also when there are exactly two exit points
    * from a method.
    */
@@ -70,7 +70,7 @@ public class PptSplitter implements Serializable {
   public transient /*@Nullable*/ Splitter splitter;
 
   /**
-   * PptConditionals for each splitter output. ppts[0] is used when the splitter is true, ppts[1]
+   * One PptConditional for each splitter result. ppts[0] is used when the splitter is true, ppts[1]
    * when the splitter is false. The contents are PptConditional objects if the splitter is valid,
    * but are PptTopLevel if the PptSplitter represents two exit points (for which no splitter is
    * required).
@@ -130,7 +130,7 @@ public class PptSplitter implements Serializable {
     return ((PptConditional) ppts[0]).splitter_valid();
   }
 
-  /** Adds the sample to each conditional ppt in the split. */
+  /** Adds the sample to one of the conditional ppts in the split. */
   @SuppressWarnings("flowexpr.parse.error") // private field
   /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public void add_bottom_up(ValueTuple vt, int count) {
@@ -160,8 +160,14 @@ public class PptSplitter implements Serializable {
     }
   }
 
-  /** Chooses the correct conditional point based on the values in this sample. */
+  /**
+   * Chooses the correct conditional point based on the values in this sample. Returns null if none
+   * is applicable.
+   */
   public /*@Nullable*/ PptConditional choose_conditional(ValueTuple vt) {
+
+    // Currently only binary implications are supported
+    assert ppts.length == 2;
 
     boolean splitter_test;
     try {
@@ -199,7 +205,7 @@ public class PptSplitter implements Serializable {
 
     add_implications_pair();
 
-    // Remove all of the NIS suppressed invariants that we previously created
+    // Remove all of the NIS suppressed invariants that we just created.
     for (int i = 0; i < ppts.length; i++) {
       ppts[i].remove_invs(suppressed_invs[i]);
     }
@@ -233,7 +239,7 @@ public class PptSplitter implements Serializable {
    *
    * Examining just the first two would suggest that "A &hArr; B" is valid, but in fact that is a
    * false inference. Note that this situation can occur if the splitting condition uses variables
-   * that can ever be missing.
+   * that can ever be missing. (Or, presumably, if the condition ever cannot be computed.)
    */
   /*@RequiresNonNull("parent.equality_view")*/
   private void add_implications_pair() {
@@ -272,10 +278,11 @@ public class PptSplitter implements Serializable {
     // Loop through each possible parent slice
     List<VarInfo[]> slices = possible_slices();
 
+    int num_children = ppts.length;
+
     for (VarInfo[] vis : slices) {
 
-      int num_children = ppts.length;
-      // Each element is an invariant from the indexth child, permuted to
+      // Each element of invs[i] is an invariant from the i-th child, permuted to
       // the parent (and with a parent slice as its ppt slot).
       @SuppressWarnings({"unchecked", "rawtypes"})
       /*NNC:@MonotonicNonNull*/ List<Invariant> invs[] =
@@ -296,6 +303,7 @@ public class PptSplitter implements Serializable {
         invs[childno] = new ArrayList<Invariant>(); // permuted to parent
 
         // vis is in parent order.  Find corresponding child vis, in child order.
+        // Each of these arrays contains child vis.
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_non_canonical = new VarInfo[vis.length];
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis = new VarInfo[vis.length];
         /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_sorted = new VarInfo[vis.length];
