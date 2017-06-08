@@ -2080,7 +2080,7 @@ public final class FileIO {
     }
 
     // Does oldvalue_reps now have no null elements???
-    oldvalue_reps = castNonNullDeep(oldvalue_reps); // issue 986
+    oldvalue_reps = castNonNullDeep(oldvalue_reps); // https://tinyurl.com/cfissue/986
     ppt_to_value_reps.put(ppt, oldvalue_reps);
 
     if (Global.debugPrintDtrace) {

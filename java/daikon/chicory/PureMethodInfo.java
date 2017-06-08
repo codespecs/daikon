@@ -78,7 +78,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
       if (parentVal == null || parentVal instanceof NonsensicalList) {
         retVal = NonsensicalList.getInstance();
       } else {
-        List</*@Nullable*/ Object> retList = new ArrayList</*@Nullable*/ Object>();
+        ArrayList</*@Nullable*/ Object> retList = new ArrayList</*@Nullable*/ Object>();
 
         for (Object val : (List<Object>) parentVal) { // unchecked cast
           if (val == null || val instanceof NonsensicalObject) {
