@@ -351,7 +351,9 @@ public class ChicoryPremain {
       }
 
       // No need to do anything if only our versions of bcel are present
-      if (bcel_urls.size() == plse_urls.size()) return;
+      if (bcel_urls.size() == plse_urls.size()) {
+        return;
+      }
 
       URL bcel = bcel_urls.get(0);
       URL plse = plse_urls.get(0);

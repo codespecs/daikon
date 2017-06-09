@@ -629,7 +629,9 @@ public class PptSplitter implements Serializable {
       if (ppt == null) {
         ppt = inv.ppt;
       } else {
-        if (inv.ppt != ppt) return false;
+        if (inv.ppt != ppt) {
+          return false;
+        }
       }
     }
     return true;

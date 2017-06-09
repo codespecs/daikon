@@ -451,7 +451,9 @@ public final class Runtime {
           // Do nothing; i gets incremented.
       }
     }
-    if (sb.length() == 0) return orig;
+    if (sb.length() == 0) {
+      return orig;
+    }
     sb.append(orig.substring(post_esc));
     return sb.toString();
   }

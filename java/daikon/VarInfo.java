@@ -1211,7 +1211,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       // will be ignoring the fact that y has changed.
 
       // Henceforth only interesting if it's true that base = orig(base)
-      if (base.name().equals("this")) return false;
+      if (base.name().equals("this")) {
+        return false;
+      }
       Global.debugSuppressParam.fine("Base is " + base.name());
       VarInfo origBase = ppt.find_var_by_name(base.prestate_name());
       if (origBase == null) {
@@ -3092,14 +3094,18 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Returns the name in Java format. This is the same as JML. */
   public String java_name() {
-    if (!FileIO.new_decl_format) return var_info_name.java_name(this); // vin ok
+    if (!FileIO.new_decl_format) {
+      return var_info_name.java_name(this); // vin ok
+    }
 
     return jml_name();
   }
 
   /** Returns the name in DBC format. This is the same as JML. */
   public String dbc_name() {
-    if (!FileIO.new_decl_format) return var_info_name.dbc_name(this); // vin ok
+    if (!FileIO.new_decl_format) {
+      return var_info_name.dbc_name(this); // vin ok
+    }
 
     return jml_name();
   }
@@ -3107,7 +3113,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Returns the name of this variable in ESC format. */
   /*@SideEffectFree*/
   public String esc_name() {
-    if (!FileIO.new_decl_format) return var_info_name.esc_name(); // vin ok
+    if (!FileIO.new_decl_format) {
+      return var_info_name.esc_name(); // vin ok
+    }
 
     return (esc_name(null));
   }
@@ -3173,7 +3181,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Returns the name of this variable in JML format. */
   /*@SideEffectFree*/
   public String jml_name() {
-    if (!FileIO.new_decl_format) return var_info_name.jml_name(this); // vin ok
+    if (!FileIO.new_decl_format) {
+      return var_info_name.jml_name(this); // vin ok
+    }
 
     return (jml_name(null));
   }
@@ -3260,7 +3270,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * an array index. It is an error to specify an index on a non-array variable.
    */
   public String simplify_name(/*@Nullable*/ String index) {
-    if (!FileIO.new_decl_format) return var_info_name.simplify_name(); // vin ok
+    if (!FileIO.new_decl_format) {
+      return var_info_name.simplify_name(); // vin ok
+    }
 
     assert (index == null) || file_rep_type.isArray() : index + " " + name();
 
@@ -3368,7 +3380,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Returns true if this variable contains a simple variable whose name is varname. */
   public boolean includes_simple_name(String varname) {
-    if (!FileIO.new_decl_format) return var_info_name.includesSimpleName(varname); // vin ok
+    if (!FileIO.new_decl_format) {
+      return var_info_name.includesSimpleName(varname); // vin ok
+    }
 
     if (isDerived()) {
       for (VarInfo base : derived.getBases()) {
@@ -3743,7 +3757,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    */
   /*@Pure*/
   public boolean is_typeof() {
-    if (!FileIO.new_decl_format) return (var_info_name instanceof VarInfoName.TypeOf); // vin ok
+    if (!FileIO.new_decl_format) {
+      return (var_info_name instanceof VarInfoName.TypeOf); // vin ok
+    }
 
     // The isPrestate check doesn't seem necessary, but is required to
     // match old behavior.
@@ -3756,7 +3772,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * 'org(a.getClass().getName())'.
    */
   public boolean has_typeof() {
-    if (!FileIO.new_decl_format) return var_info_name.hasTypeOf(); // vin ok
+    if (!FileIO.new_decl_format) {
+      return var_info_name.hasTypeOf(); // vin ok
+    }
 
     if (isPrestate()) {
       return postState.has_typeof();

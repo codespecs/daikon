@@ -3039,8 +3039,9 @@ public final class DCRuntime {
       // obj is the wrapper for the primitive
       // assert obj == null: "primitive object = " + obj_str (obj);
       Object[] tags = field_map.get(parent);
-      if (tags == null) return (nonsensical); // happens if field has never been assigned to
-      else {
+      if (tags == null) {
+        return (nonsensical); // happens if field has never been assigned to
+      } else {
         return tags[field_num];
       }
     }

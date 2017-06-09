@@ -94,7 +94,9 @@ public class PptSliceEquality extends PptSlice {
     public boolean equals(
         /*>>>@GuardSatisfied VarInfoAndComparability this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
-      if (!(o instanceof VarInfoAndComparability)) return false;
+      if (!(o instanceof VarInfoAndComparability)) {
+        return false;
+      }
       return equals((VarInfoAndComparability) o);
     }
 

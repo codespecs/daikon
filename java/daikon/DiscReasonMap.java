@@ -44,6 +44,7 @@ public final class DiscReasonMap {
    */
   public static void put(Invariant inv, DiscardInfo disc_info) {
     if (!PrintInvariants.print_discarded_invariants) return;
+
     assert disc_info != null;
 
     // Let's not keep track of DiscardInfo's from Invariants who have
@@ -67,11 +68,13 @@ public final class DiscReasonMap {
 
   public static void put(Invariant inv, DiscardCode discardCode, String discardString) {
     if (!PrintInvariants.print_discarded_invariants) return;
+
     put(inv, new DiscardInfo(inv, discardCode, discardString));
   }
 
   public static void put(String vars, String ppt, DiscardInfo disc_info) {
     if (!PrintInvariants.print_discarded_invariants) return;
+
     assert disc_info != null;
 
     // Get the vars out of inv in our proper format
