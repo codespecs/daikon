@@ -697,16 +697,18 @@ public final /*@Interned*/ class ProglangType implements Serializable {
    * superclass.
    */
   public boolean comparableOrSuperclassEitherWay(ProglangType other) {
-    if (this == other) // ProglangType objects are interned
-    return true;
+    if (this == other) { // ProglangType objects are interned
+      return true;
+    }
     if (this.dimensions != other.dimensions) return false;
     boolean thisIntegral = this.baseIsIntegral();
     boolean otherIntegral = other.baseIsIntegral();
     if (thisIntegral && otherIntegral) return true;
     // Make Object castable to everything, except booleans
     if (((this.base == BASE_OBJECT) && other.baseIsObject()) // interned strings
-        || ((other.base == BASE_OBJECT) && baseIsObject())) // interned strings
-    return true;
+        || ((other.base == BASE_OBJECT) && baseIsObject())) { // interned strings
+      return true;
+    }
 
     return false;
   }
