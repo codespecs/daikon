@@ -340,6 +340,12 @@ you from having to edit the main Makefile directly).
 
 @item
 Compile Daikon and build other tools.
+First, make sure that you have satisfied the requirements in
+@ref{Requirements for compiling Daikon,,,developer,Daikon Developer Manual}
+and
+@ref{Requirements for compiling Kvasir,,,developer,Daikon Developer Manual}.
+Then, run:
+
 @c Note that this step is @emph{not} required if you only want to use Daikon
 @c with its .NET front end (Celeriac).
 @c This step is required for using
