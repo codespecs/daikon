@@ -2786,7 +2786,7 @@ class DCInstrument {
 
       // Add the DCompMarker argument so that it calls the instrumented version
       il.append(new ACONST_NULL());
-      Type[] new_arg_types = BCELUtil.add_type(arg_types, dcomp_marker);
+      Type[] new_arg_types = BCELUtil.postpendToArray(arg_types, dcomp_marker);
       il.append(
           ifact.createInvoke(classname, method_name, ret_type, new_arg_types, invoke.getOpcode()));
 
@@ -2899,7 +2899,7 @@ class DCInstrument {
 
       // Add the DCompMarker argument so that it calls the instrumented version
       il.append(new ACONST_NULL());
-      Type[] new_arg_types = BCELUtil.add_type(arg_types, dcomp_marker);
+      Type[] new_arg_types = BCELUtil.postpendToArray(arg_types, dcomp_marker);
       il.append(
           ifact.createInvoke(classname, method_name, ret_type, new_arg_types, invoke.getOpcode()));
 
@@ -3006,7 +3006,7 @@ class DCInstrument {
     InstructionList il = new InstructionList();
 
     Type[] arg_types = invoke.getArgumentTypes(pool);
-    Type[] new_arg_types = BCELUtil.add_type(arg_types, dcomp_marker);
+    Type[] new_arg_types = BCELUtil.postpendToArray(arg_types, dcomp_marker);
     String method_name = invoke.getMethodName(pool);
     Type ret_type = invoke.getReturnType(pool);
     String classname = invoke.getClassName(pool);
@@ -3199,7 +3199,7 @@ class DCInstrument {
       // Add the DCompMarker argument so that the instrumented version
       // will be used
       il.append(new ACONST_NULL());
-      Type[] new_arg_types = BCELUtil.add_type(arg_types, dcomp_marker);
+      Type[] new_arg_types = BCELUtil.postpendToArray(arg_types, dcomp_marker);
       il.append(
           ifact.createInvoke(classname, method_name, ret_type, new_arg_types, invoke.getOpcode()));
 
@@ -5386,7 +5386,7 @@ class DCInstrument {
 
     // Add an argument of type java.lang.DCompMarker to distinguish the
     // method as instrumented
-    Type[] arg_types = BCELUtil.add_type(mg.getArgumentTypes(), dcomp_marker);
+    Type[] arg_types = BCELUtil.postpendToArray(mg.getArgumentTypes(), dcomp_marker);
     String[] arg_names = add_string(mg.getArgumentNames(), "marker");
     debug_add_dcomp.log(
         "%s:%n  args = %s, %n  names = %s%n",
@@ -5538,7 +5538,7 @@ class DCInstrument {
     il.append(InstructionFactory.createReturn(ret_type));
 
     // Create the method
-    Type[] arg_types = BCELUtil.add_type(mg.getArgumentTypes(), dcomp_marker);
+    Type[] arg_types = BCELUtil.postpendToArray(mg.getArgumentTypes(), dcomp_marker);
     String[] arg_names = add_string(mg.getArgumentNames(), "marker");
     MethodGen dcomp_mg =
         new MethodGen(
