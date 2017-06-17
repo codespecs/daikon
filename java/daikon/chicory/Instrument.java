@@ -56,7 +56,8 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
       Matcher mMethod = pattern.matcher(methodName);
 
       if (mPpt.find() || mClass.find() || mMethod.find()) {
-        debug_transform.log("not instrumenting %s, it matches ppt_omit regex %s%n", pptName, pattern);
+        debug_transform.log(
+            "not instrumenting %s, it matches ppt_omit regex %s%n", pptName, pattern);
 
         // debug_transform.log("filtering 1 true on --- " + pptName);
 
@@ -77,7 +78,8 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
         // System.out.println("--->" + regex);
 
         if (mPpt.find() || mClass.find() || mMethod.find()) {
-          debug_transform.log("instrumenting %s, it matches ppt_select regex %s%n", pptName, pattern);
+          debug_transform.log(
+              "instrumenting %s, it matches ppt_select regex %s%n", pptName, pattern);
 
           // System.out.println("filtering 2 false on --- " + pptName);
           return false; // don't filter out
@@ -403,7 +405,8 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
     ClassInfo class_info = new ClassInfo(cg.getClassName(), loader);
     List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
 
-    if (cg.getMajor() < Const.MAJOR_1_6) { System.out.printf(
+    if (cg.getMajor() < Const.MAJOR_1_6) {
+      System.out.printf(
           "Chicory warning: ClassFile: %s - classfile version (%d) is out of date and may not be processed correctly.%n",
           cg.getClassName(), cg.getMajor());
     }
@@ -550,7 +553,8 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
                 int current_offset = next_ih.getPosition();
 
                 if (Chicory.debug) {
-                  debug_instrument.log("Current offset: %d Inserted length: %d%n", current_offset, len);
+                  debug_instrument.log(
+                      "Current offset: %d Inserted length: %d%n", current_offset, len);
                   //debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
                   //dump_code_attributes(mg);
                 }
@@ -816,7 +820,8 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
     InstructionList nl = new InstructionList();
 
     // create the local variable
-    LocalVariableGen nonce_lv = create_method_scope_local(c.mgen, "this_invocation_nonce", Type.INT);
+    LocalVariableGen nonce_lv =
+        create_method_scope_local(c.mgen, "this_invocation_nonce", Type.INT);
 
     print_stack_map_table("After cln");
 

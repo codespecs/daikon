@@ -3230,7 +3230,8 @@ class DCInstrument extends StackMapUtils {
    */
   InstructionList dup_x1_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (debug_dup.enabled) debug_dup.log("DUP -> %s [... %s]%n", "dup_x1", stack_contents(stack, 2));
+    if (debug_dup.enabled)
+      debug_dup.log("DUP -> %s [... %s]%n", "dup_x1", stack_contents(stack, 2));
     if (!is_primitive(top)) return null;
     String method = "dup_x1";
     if (!is_primitive(stack.peek(1))) method = "dup";

@@ -2,10 +2,7 @@ package daikon.chicory;
 
 import daikon.util.*;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Formatter;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import org.apache.bcel.Const;
 import org.apache.bcel.classfile.*;
@@ -17,11 +14,10 @@ import org.checkerframework.checker.signature.qual.*;
 */
 
 /**
- * BCEL should automatically build and maintain the StackMapTable in a manner similar to the LineNumberTable and
- * the LocalVariableTable. However, for historical reasons it does not.  Hence, we provide a set of methods to
- * make it easier to manipulate the StackMapTable.
+ * BCEL should automatically build and maintain the StackMapTable in a manner similar to the
+ * LineNumberTable and the LocalVariableTable. However, for historical reasons it does not. Hence,
+ * we provide a set of methods to make it easier to manipulate the StackMapTable.
  */
-
 public abstract class StackMapUtils {
 
   /*
@@ -153,9 +149,9 @@ public abstract class StackMapUtils {
   /**
    * Remove the local variable type table attribute (LVTT) from mgen. Some instrumentation changes
    * require this to be updated, but without BCEL support that would be hard to do. It should be
-   * safe to just delete it since it is optional and really only of use to a debugger.
-   * NOTE: in a future version of BCEL this will be done with the single call:
-   *    mgen.removeLocalVariableTypeTable();
+   * safe to just delete it since it is optional and really only of use to a debugger. NOTE: in a
+   * future version of BCEL this will be done with the single call:
+   * mgen.removeLocalVariableTypeTable();
    *
    * @param mgen the method to clear out
    */
@@ -190,8 +186,7 @@ public abstract class StackMapUtils {
   }
 
   /**
-   *  Find the StackMap entry who's offset matches the input argument.
-   *  Also sets running_offset.
+   * Find the StackMap entry who's offset matches the input argument. Also sets running_offset.
    *
    * @param offset byte code offset
    * @return the corresponding StackMapEntry
@@ -219,7 +214,7 @@ public abstract class StackMapUtils {
   /**
    * Find the index of the StackMap entry who's offset is the last one before the input argument.
    * Return -1 if there isn't one. Also sets running_offset.
-   * 
+   *
    * @param offset byte code offset
    * @return the corresponding StackMapEntry index
    */
@@ -253,7 +248,7 @@ public abstract class StackMapUtils {
   /**
    * Find the index of the StackMap entry who's offset is the first one after the input argument.
    * Return -1 if there isn't one. Also sets running_offset.
-   * 
+   *
    * @param offset byte code offset
    * @return the corresponding StackMapEntry index
    */
@@ -413,7 +408,8 @@ public abstract class StackMapUtils {
    * references a local that is equal or higher in the local map than index_first_moved_local. Size
    * should be the size of the new local that was just inserted at index_first_moved_local.
    */
-  protected final void adjust_code_for_locals_change(MethodGen mgen, int index_first_moved_local, int size) {
+  protected final void adjust_code_for_locals_change(
+      MethodGen mgen, int index_first_moved_local, int size) {
 
     InstructionList il = mgen.getInstructionList();
     for (InstructionHandle ih = il.getStart(); ih != null; ih = ih.getNext()) {
@@ -454,7 +450,7 @@ public abstract class StackMapUtils {
    * Get existing StackMapTable (if present). Sets both smta and stack_map_table.
    *
    * @param mgen MethodGen to search
-   * @param java_class_version 
+   * @param java_class_version
    */
   protected final void fetch_current_stack_map_table(MethodGen mgen, int java_class_version) {
 
@@ -595,12 +591,11 @@ public abstract class StackMapUtils {
   }
 
   /**
-   * Create a new argument to the method.  This will be added after last current argument and
-   * before the first local variable.  This might have the side effect of causing
-   * us to rewrite the method byte codes to adjust the offsets for the local variables -
-   * see below for details.
+   * Create a new argument to the method. This will be added after last current argument and before
+   * the first local variable. This might have the side effect of causing us to rewrite the method
+   * byte codes to adjust the offsets for the local variables - see below for details.
    *
-   * Must call fix_local_variable_table (just once per method) before calling this routine.
+   * <p>Must call fix_local_variable_table (just once per method) before calling this routine.
    */
   protected final LocalVariableGen add_new_argument(MethodGen mg, String arg_name, Type arg_type) {
     // We add a new argument, after any current ones, and then
@@ -622,16 +617,17 @@ public abstract class StackMapUtils {
     int new_offset = 0;
 
     boolean has_code = (mg.getInstructionList() != null);
-    
+
     if (has_code) {
       if (!mg.isStatic()) {
         // Skip the 'this' pointer argument.
         new_index++;
-        new_offset++;  // size of 'this' is 1
+        new_offset++; // size of 'this' is 1
       }
 
       if (arg_types.length > 0) {
-        LocalVariableGen last_arg;;
+        LocalVariableGen last_arg;
+        ;
         new_index = new_index + arg_types.length;
         last_arg = locals[new_index - 1];
         new_offset = last_arg.getIndex() + (last_arg.getType()).getSize();
@@ -657,16 +653,17 @@ public abstract class StackMapUtils {
         lv.setIndex(lv.getIndex() + arg_type.getSize());
       }
       mg.setMaxLocals(mg.getMaxLocals() + arg_type.getSize());
-  
-      debug_instrument.log("Added arg    %s%n",
-              arg_new.getIndex() + ": " + arg_new.getName() + ", " + arg_new.getType());
-  
+
+      debug_instrument.log(
+          "Added arg    %s%n",
+          arg_new.getIndex() + ": " + arg_new.getName() + ", " + arg_new.getType());
+
       // Now process the instruction list, adding one to the offset
       // within each LocalVariableInstruction that references a
       // local that is 'higher' in the local map than new local
       // we just inserted.
       adjust_code_for_locals_change(mg, new_offset, arg_type.getSize());
-  
+
       // Finally, we need to update any FULL_FRAME StackMap entries to
       // add in the new local variable type.
       update_full_frame_stack_map_entries(new_offset, arg_type, locals);
@@ -682,9 +679,10 @@ public abstract class StackMapUtils {
    * us to rewrite the method byte codes to adjust the offsets for the existing local variables -
    * see below for details.
    *
-   * Must call fix_local_variable_table (just once per method) before calling this routine.
+   * <p>Must call fix_local_variable_table (just once per method) before calling this routine.
    */
-  protected final LocalVariableGen create_method_scope_local(MethodGen mg, String local_name, Type local_type) {
+  protected final LocalVariableGen create_method_scope_local(
+      MethodGen mg, String local_name, Type local_type) {
     // BCEL sorts local vars and presents them in offset order.  Search
     // locals for first var with start != 0. If none, just add the new
     // var at the end of the table and exit. Otherwise, insert the new
@@ -774,8 +772,8 @@ public abstract class StackMapUtils {
       mg.setMaxLocals(mg.getMaxLocals() + local_type.getSize());
     }
 
-    debug_instrument.log("Added local  %s%n",
-            lv_new.getIndex() + ": " + lv_new.getName() + ", " + lv_new.getType());
+    debug_instrument.log(
+        "Added local  %s%n", lv_new.getIndex() + ": " + lv_new.getName() + ", " + lv_new.getType());
 
     // Now process the instruction list, adding one to the offset
     // within each LocalVariableInstruction that references a
@@ -847,9 +845,11 @@ public abstract class StackMapUtils {
     if (!mg.isStatic()) {
       // Add the 'this' pointer argument back in.
       l = locals[0];
-      new_lvg = mg.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
-      debug_instrument.log("Added <this> %s%n",
-            new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
+      new_lvg =
+          mg.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
+      debug_instrument.log(
+          "Added <this> %s%n",
+          new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
       loc_index = 1;
       offset = 1;
       first_local_index++;
@@ -865,11 +865,13 @@ public abstract class StackMapUtils {
         new_lvg = mg.addLocalVariable("$hidden$" + offset, arg_types[ii], offset, null, null);
       } else {
         l = locals[loc_index];
-        new_lvg = mg.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
+        new_lvg =
+            mg.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
         loc_index++;
       }
-      debug_instrument.log("Added param  %s%n",
-            new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
+      debug_instrument.log(
+          "Added param  %s%n",
+          new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
       offset += arg_types[ii].getSize();
     }
 
@@ -896,13 +898,13 @@ public abstract class StackMapUtils {
         new_lvg =
             mg.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
       }
-      debug_instrument.log("Added local  %s%n",
-            new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
+      debug_instrument.log(
+          "Added local  %s%n",
+          new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
       offset = offset + (new_lvg.getType()).getSize();
     }
 
     // Recalculate the highest local used based on looking at code offsets.
     mg.setMaxLocals();
   }
-
 }
