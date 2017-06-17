@@ -1,0 +1,62 @@
+===========================================================================
+daikon.chicory.Test:::OBJECT
+this.t1 one of { 5, 32, 55 }
+===========================================================================
+daikon.chicory.Test.Test():::EXIT
+this.t1 == 55
+===========================================================================
+daikon.chicory.Test.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass().getName() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+daikon.chicory.Test.main(java.lang.String[]):::EXIT
+args[] == orig(args[])
+args[] == []
+args[].toString == []
+===========================================================================
+daikon.chicory.Test.sample(int):::ENTER
+this has only one value
+this.t1 == 5
+myint == 0
+===========================================================================
+daikon.chicory.Test.sample(int):::EXIT49
+===========================================================================
+daikon.chicory.Test.sample(int):::EXIT
+this.t1 == orig(this.t1)
+this.t1 == 5
+return == 35
+===========================================================================
+daikon.chicory.Test.sample1():::ENTER
+this has only one value
+this.t1 == 5
+===========================================================================
+daikon.chicory.Test.sample1():::EXIT
+this.t1 == orig(this.t1)
+this.t1 == 5
+return has only one value
+return.t1 == 32
+===========================================================================
+daikon.chicory.Test.sample2():::ENTER
+this has only one value
+this.t1 == 32
+===========================================================================
+daikon.chicory.Test.sample2():::EXIT65
+===========================================================================
+daikon.chicory.Test.sample2():::EXIT
+this.t1 == orig(this.t1)
+this.t1 == 32
+return == 62.4
+===========================================================================
+daikon.chicory.Test.test_d(double, double):::ENTER
+this has only one value
+this.t1 == 32
+d1 == 1.0
+d2 == 5.0
+===========================================================================
+daikon.chicory.Test.test_d(double, double):::EXIT
+this.t1 == orig(this.t1)
+return == orig(d2)
+this.t1 == 32
+return == 5.0
