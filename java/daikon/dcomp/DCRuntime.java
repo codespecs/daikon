@@ -154,20 +154,21 @@ public final class DCRuntime {
   /** Perform any initialization required before instrumentation begins */
   public static void init() {
 
+    debug_decl_print.enabled = DynComp.debug_decl_print;
     if (Premain.debug_dcruntime) {
       debug = true;
       debug_tag_frame = true;
-      debug_primitive = new SimpleLog(true);
+      debug_primitive.enabled = true;
     }
     if (Premain.debug_dcruntime_all) {
       debug = true;
       debug_tag_frame = true;
       debug_objects = true;
-      merge_dv = new SimpleLog(true);
-      debug_arr_index = new SimpleLog(true);
-      debug_primitive = new SimpleLog(true);
-      debug_merge_comp = new SimpleLog(true);
-      debug_decl_print = new SimpleLog(true);
+      merge_dv.enabled = true;
+      debug_arr_index.enabled = true;
+      debug_primitive.enabled = true;
+      debug_merge_comp.enabled = true;
+      debug_decl_print.enabled = true;
     }
 
     // Initialize the array of static tags
@@ -1880,6 +1881,7 @@ public final class DCRuntime {
 
     time_decl.reset_start_time();
     time_decl.indent("Printing decl file for class %s%n", ci.class_name);
+    debug_decl_print.log("class %s%n", ci.class_name);
 
     // Make sure that two variables have the same comparability at all
     // program points

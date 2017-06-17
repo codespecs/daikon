@@ -61,7 +61,7 @@ public class DeclWriter extends DaikonWriter {
   public DeclWriter(PrintStream writer) {
     super();
     outFile = writer;
-    debug = Chicory.debug;
+    debug = Chicory.debug_decl_print;
   }
 
   /**
