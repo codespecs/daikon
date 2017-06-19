@@ -46,7 +46,8 @@ public abstract class StackMapUtils {
    * the byte codes.
    */
 
-  protected ConstantPoolGen pool;
+  /** The pool for the method currently being processed. Must be set by the client. */
+  protected ConstantPoolGen pool = null;
 
   protected SimpleLog debug_instrument = new SimpleLog(false);
   protected boolean needStackMap;
@@ -123,7 +124,7 @@ public abstract class StackMapUtils {
    * @param mgen the method
    * @return the StackMapTable attribute for the method (or null if not present)
    */
-  protected final Attribute get_stack_map_table_attribute(MethodGen mgen) {
+  protected final /*@Nullable*/ Attribute get_stack_map_table_attribute(MethodGen mgen) {
     for (Attribute a : mgen.getCodeAttributes()) {
       if (is_stack_map_table(a)) {
         return a;
@@ -448,11 +449,13 @@ public abstract class StackMapUtils {
   }
 
   /**
-   * Get existing StackMapTable (if present). Sets both smta and stack_map_table.
+   * Get existing StackMapTable (if present); otherwise creates a new empty one. Sets both smta and
+   * stack_map_table.
    *
    * @param mgen MethodGen to search
    * @param java_class_version
    */
+  /*@EnsuresNonNull({"smta", "stack_map_table"})*/
   protected final void fetch_current_stack_map_table(MethodGen mgen, int java_class_version) {
 
     smta = (StackMap) get_stack_map_table_attribute(mgen);
@@ -480,6 +483,7 @@ public abstract class StackMapUtils {
    *
    * @param prefix label to display with table
    */
+  /*@RequiresNonNull("stack_map_table")*/
   protected final void print_stack_map_table(String prefix) {
 
     debug_instrument.log("%nStackMap(%s) %s items:%n", prefix, stack_map_table.length);
