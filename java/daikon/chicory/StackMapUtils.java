@@ -19,6 +19,7 @@ import org.checkerframework.dataflow.qual.*;
  * LineNumberTable and the LocalVariableTable. However, for historical reasons it does not. Hence,
  * we provide a set of methods to make it easier to manipulate the StackMapTable.
  */
+@SuppressWarnings("nullness")
 public abstract class StackMapUtils {
 
   /*
@@ -47,20 +48,23 @@ public abstract class StackMapUtils {
    */
 
   /** The pool for the method currently being processed. Must be set by the client. */
-  protected ConstantPoolGen pool = null;
+  protected /*@Nullable*/ ConstantPoolGen pool = null;
 
   protected SimpleLog debug_instrument = new SimpleLog(false);
-  protected boolean needStackMap;
+  protected boolean needStackMap = false;
 
-  protected StackMapEntry[] stack_map_table;
+  /** Working copy of StackMapTable; set by fetch_current_stack_map_table. */
+  protected StackMapEntry /*@Nullable*/ [] stack_map_table = null;
 
-  // original stack map table attribute
-  protected StackMap smta;
+  /** Original stack map table attribute; set by fetch_current_stack_map_table. */
+  protected /*@Nullable*/ StackMap smta = null;
 
   protected int running_offset;
 
-  // The index of the first 'true' local in the local variable table.
-  // (after 'this' and any parameters)
+  /**
+   * The index of the first 'true' local in the local variable table. (after 'this' and any
+   * parameters)
+   */
   protected int first_local_index;
 
   private StackMapEntry[] empty_stack_map_table = {};
@@ -139,7 +143,7 @@ public abstract class StackMapUtils {
    * @param mgen the method
    * @return the LocalVariableTypeTable attribute for the method (or null if not present)
    */
-  protected final Attribute get_local_variable_type_table_attribute(MethodGen mgen) {
+  protected final /*@Nullable*/ Attribute get_local_variable_type_table_attribute(MethodGen mgen) {
     for (Attribute a : mgen.getCodeAttributes()) {
       if (is_local_variable_type_table(a)) {
         return a;
@@ -409,6 +413,10 @@ public abstract class StackMapUtils {
    * Process the instruction list, adding size (1 or 2) to the index of each Instruction that
    * references a local that is equal or higher in the local map than index_first_moved_local. Size
    * should be the size of the new local that was just inserted at index_first_moved_local.
+   *
+   * @param mgen MethodGen to be modified
+   * @param index_first_moved_local original index of first local moved "up"
+   * @param size size of new local added (1 or 2)
    */
   protected final void adjust_code_for_locals_change(
       MethodGen mgen, int index_first_moved_local, int size) {
@@ -450,12 +458,12 @@ public abstract class StackMapUtils {
 
   /**
    * Get existing StackMapTable (if present); otherwise creates a new empty one. Sets both smta and
-   * stack_map_table.
+   * stack_map_table. Must be called prior to any other methods that manipulate the stack_map_table.
    *
    * @param mgen MethodGen to search
    * @param java_class_version
    */
-  /*@EnsuresNonNull({"smta", "stack_map_table"})*/
+  /*@EnsuresNonNull({"stack_map_table"})*/
   protected final void fetch_current_stack_map_table(MethodGen mgen, int java_class_version) {
 
     smta = (StackMap) get_stack_map_table_attribute(mgen);
@@ -483,7 +491,6 @@ public abstract class StackMapUtils {
    *
    * @param prefix label to display with table
    */
-  /*@RequiresNonNull("stack_map_table")*/
   protected final void print_stack_map_table(String prefix) {
 
     debug_instrument.log("%nStackMap(%s) %s items:%n", prefix, stack_map_table.length);
@@ -511,6 +518,11 @@ public abstract class StackMapUtils {
     mgen.addCodeAttribute(map_table);
   }
 
+  /**
+   * Convert a Type name to a Class name.
+   *
+   * @param t Type whose name is to be converted
+   */
   @SuppressWarnings("signature") // conversion routine
   protected static /*@ClassGetName*/ String typeToClassGetName(Type t) {
 
@@ -526,10 +538,15 @@ public abstract class StackMapUtils {
     }
   }
 
+  /**
+   * Convert a Type name to a StackMap type name.
+   *
+   * @param t Type whose name is to be converted
+   */
   // creates a MethodInfo struct corresponding to mgen
-  protected final StackMapType generate_StackMapType_from_Type(Type type) {
+  protected final StackMapType generate_StackMapType_from_Type(Type t) {
 
-    switch (type.getType()) {
+    switch (t.getType()) {
       case Const.T_BOOLEAN:
       case Const.T_CHAR:
       case Const.T_BYTE:
@@ -545,20 +562,24 @@ public abstract class StackMapUtils {
       case Const.T_ARRAY:
       case Const.T_OBJECT:
         return new StackMapType(
-            Const.ITEM_Object, pool.addClass(typeToClassGetName(type)), pool.getConstantPool());
+            Const.ITEM_Object, pool.addClass(typeToClassGetName(t)), pool.getConstantPool());
         // UNKNOWN seems to be used for Uninitialized objects.
         // The second argument to the constructor should be the code offset
         // of the corresponding 'new' instruction.  Just using 0 for now.
       case Const.T_UNKNOWN:
         return new StackMapType(Const.ITEM_NewObject, 0, pool.getConstantPool());
       default:
-        throw new RuntimeException("Invalid type: " + type + type.getType());
+        throw new RuntimeException("Invalid type: " + t + t.getType());
     }
   }
 
   /**
    * Update any FULL_FRAME StackMap entries to include a new local var. The locals array is a copy
    * of the local variables PRIOR to the addition of the new local in question.
+   *
+   * @param offset offset into stack of the new variable we are adding
+   * @param type_new_var Type of new variable we are adding
+   * @param locals a copy of the local variable table prior to this modification
    */
   protected final void update_full_frame_stack_map_entries(
       int offset, Type type_new_var, LocalVariableGen[] locals) {
@@ -601,8 +622,13 @@ public abstract class StackMapUtils {
    * byte codes to adjust the offsets for the local variables - see below for details.
    *
    * <p>Must call fix_local_variable_table (just once per method) before calling this routine.
+   *
+   * @param mgen MethodGen to be modified
+   * @param arg_name name of new argument
+   * @param arg_type type of new argument
    */
-  protected final LocalVariableGen add_new_argument(MethodGen mg, String arg_name, Type arg_type) {
+  protected final LocalVariableGen add_new_argument(
+      MethodGen mgen, String arg_name, Type arg_type) {
     // We add a new argument, after any current ones, and then
     // we need to make a pass over the byte codes to update the local
     // offset values of all the locals we just shifted up.  This may have
@@ -616,15 +642,15 @@ public abstract class StackMapUtils {
 
     LocalVariableGen arg_new = null;
     // get a copy of the local before modification
-    LocalVariableGen[] locals = mg.getLocalVariables();
-    Type[] arg_types = mg.getArgumentTypes();
+    LocalVariableGen[] locals = mgen.getLocalVariables();
+    Type[] arg_types = mgen.getArgumentTypes();
     int new_index = 0;
     int new_offset = 0;
 
-    boolean has_code = (mg.getInstructionList() != null);
+    boolean has_code = (mgen.getInstructionList() != null);
 
     if (has_code) {
-      if (!mg.isStatic()) {
+      if (!mgen.isStatic()) {
         // Skip the 'this' pointer argument.
         new_index++;
         new_offset++; // size of 'this' is 1
@@ -639,7 +665,7 @@ public abstract class StackMapUtils {
       }
 
       // Insert our new local variable into existing table at 'new_offset'.
-      arg_new = mg.addLocalVariable(arg_name, arg_type, new_offset, null, null);
+      arg_new = mgen.addLocalVariable(arg_name, arg_type, new_offset, null, null);
 
       // Update the index of the first 'true' local in the local variable table.
       first_local_index++;
@@ -647,9 +673,9 @@ public abstract class StackMapUtils {
 
     // Update the method's argument information.
     arg_types = BCELUtil.postpendToArray(arg_types, arg_type);
-    String[] arg_names = add_string(mg.getArgumentNames(), arg_name);
-    mg.setArgumentTypes(arg_types);
-    mg.setArgumentNames(arg_names);
+    String[] arg_names = add_string(mgen.getArgumentNames(), arg_name);
+    mgen.setArgumentTypes(arg_types);
+    mgen.setArgumentNames(arg_names);
 
     if (has_code) {
       // we need to adjust the offset of any locals after our insertion
@@ -657,7 +683,7 @@ public abstract class StackMapUtils {
         LocalVariableGen lv = locals[i];
         lv.setIndex(lv.getIndex() + arg_type.getSize());
       }
-      mg.setMaxLocals(mg.getMaxLocals() + arg_type.getSize());
+      mgen.setMaxLocals(mgen.getMaxLocals() + arg_type.getSize());
 
       debug_instrument.log(
           "Added arg    %s%n",
@@ -667,13 +693,13 @@ public abstract class StackMapUtils {
       // within each LocalVariableInstruction that references a
       // local that is 'higher' in the local map than new local
       // we just inserted.
-      adjust_code_for_locals_change(mg, new_offset, arg_type.getSize());
+      adjust_code_for_locals_change(mgen, new_offset, arg_type.getSize());
 
       // Finally, we need to update any FULL_FRAME StackMap entries to
       // add in the new local variable type.
       update_full_frame_stack_map_entries(new_offset, arg_type, locals);
 
-      debug_instrument.log("New LocalVariableTable:%n%s%n", mg.getLocalVariableTable(pool));
+      debug_instrument.log("New LocalVariableTable:%n%s%n", mgen.getLocalVariableTable(pool));
     }
     return arg_new;
   }
@@ -685,9 +711,13 @@ public abstract class StackMapUtils {
    * see below for details.
    *
    * <p>Must call fix_local_variable_table (just once per method) before calling this routine.
+   *
+   * @param mgen MethodGen to be modified
+   * @param local_name name of new local
+   * @param local_type type of new local
    */
   protected final LocalVariableGen create_method_scope_local(
-      MethodGen mg, String local_name, Type local_type) {
+      MethodGen mgen, String local_name, Type local_type) {
     // BCEL sorts local vars and presents them in offset order.  Search
     // locals for first var with start != 0. If none, just add the new
     // var at the end of the table and exit. Otherwise, insert the new
@@ -710,7 +740,7 @@ public abstract class StackMapUtils {
     int max_offset = 0;
     int new_offset = -1;
     // get a copy of the local before modification
-    LocalVariableGen[] locals = mg.getLocalVariables();
+    LocalVariableGen[] locals = mgen.getLocalVariables();
     int compiler_temp_i = -1;
     int new_index = -1;
     int i;
@@ -762,19 +792,19 @@ public abstract class StackMapUtils {
     // check for this (via max_offset) and move them up.
     if (new_offset == -1) {
       new_offset = max_offset;
-      if (new_offset < mg.getMaxLocals()) {
-        mg.setMaxLocals(mg.getMaxLocals() + local_type.getSize());
+      if (new_offset < mgen.getMaxLocals()) {
+        mgen.setMaxLocals(mgen.getMaxLocals() + local_type.getSize());
       }
-      lv_new = mg.addLocalVariable(local_name, local_type, new_offset, null, null);
+      lv_new = mgen.addLocalVariable(local_name, local_type, new_offset, null, null);
     } else {
       // insert our new local variable into existing table at 'new_offset'
-      lv_new = mg.addLocalVariable(local_name, local_type, new_offset, null, null);
+      lv_new = mgen.addLocalVariable(local_name, local_type, new_offset, null, null);
       // we need to adjust the offset of any locals after our insertion
       for (i = new_index; i < locals.length; i++) {
         LocalVariableGen lv = locals[i];
         lv.setIndex(lv.getIndex() + local_type.getSize());
       }
-      mg.setMaxLocals(mg.getMaxLocals() + local_type.getSize());
+      mgen.setMaxLocals(mgen.getMaxLocals() + local_type.getSize());
     }
 
     debug_instrument.log(
@@ -784,13 +814,13 @@ public abstract class StackMapUtils {
     // within each LocalVariableInstruction that references a
     // local that is 'higher' in the local map than new local
     // we just inserted.
-    adjust_code_for_locals_change(mg, new_offset, local_type.getSize());
+    adjust_code_for_locals_change(mgen, new_offset, local_type.getSize());
 
     // Finally, we need to update any FULL_FRAME StackMap entries to
     // add in the new local variable type.
     update_full_frame_stack_map_entries(new_offset, local_type, locals);
 
-    debug_instrument.log("New LocalVariableTable:%n%s%n", mg.getLocalVariableTable(pool));
+    debug_instrument.log("New LocalVariableTable:%n%s%n", mgen.getLocalVariableTable(pool));
     return lv_new;
   }
 
@@ -809,9 +839,11 @@ public abstract class StackMapUtils {
    *       </ul>
    *       We will create a 'fake' local for these cases.
    * </ol>
+   *
+   * @param mgen MethodGen to be modified
    */
-  protected final void fix_local_variable_table(MethodGen mg) {
-    InstructionList il = mg.getInstructionList();
+  protected final void fix_local_variable_table(MethodGen mgen) {
+    InstructionList il = mgen.getInstructionList();
     if (il == null) {
       // no code so nothing to do
       first_local_index = 0;
@@ -819,7 +851,7 @@ public abstract class StackMapUtils {
     }
 
     // Get the current local variables (includes 'this' and parameters)
-    LocalVariableGen[] locals = mg.getLocalVariables();
+    LocalVariableGen[] locals = mgen.getLocalVariables();
     LocalVariableGen l;
     LocalVariableGen new_lvg;
 
@@ -829,7 +861,7 @@ public abstract class StackMapUtils {
     }
 
     // The arg types are correct and include all parameters.
-    Type[] arg_types = mg.getArgumentTypes();
+    Type[] arg_types = mgen.getArgumentTypes();
 
     // Initial offset into the stack frame
     int offset = 0;
@@ -838,20 +870,20 @@ public abstract class StackMapUtils {
     int loc_index = 0;
 
     // Remove the existing locals
-    mg.removeLocalVariables();
+    mgen.removeLocalVariables();
     // Reset MaxLocals to 0 and let code below rebuild it.
-    mg.setMaxLocals(0);
+    mgen.setMaxLocals(0);
 
     // Determine the first 'true' local index into the local variables.
     // The object 'this' pointer and the parameters form the first n
     // entries in the list.
     first_local_index = arg_types.length;
 
-    if (!mg.isStatic()) {
+    if (!mgen.isStatic()) {
       // Add the 'this' pointer argument back in.
       l = locals[0];
       new_lvg =
-          mg.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
+          mgen.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
       debug_instrument.log(
           "Added <this> %s%n",
           new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
@@ -867,11 +899,11 @@ public abstract class StackMapUtils {
       if ((loc_index >= locals.length) || (offset != locals[loc_index].getIndex())) {
 
         // Create a local variable to describe the missing argument
-        new_lvg = mg.addLocalVariable("$hidden$" + offset, arg_types[ii], offset, null, null);
+        new_lvg = mgen.addLocalVariable("$hidden$" + offset, arg_types[ii], offset, null, null);
       } else {
         l = locals[loc_index];
         new_lvg =
-            mg.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
+            mgen.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
         loc_index++;
       }
       debug_instrument.log(
@@ -896,12 +928,12 @@ public abstract class StackMapUtils {
         // We set its lifetime to start+1,end to make sure our
         // local_nonce variable is allocated prior to this temp.
         new_lvg =
-            mg.addLocalVariable(
+            mgen.addLocalVariable(
                 "DaIkOnTeMp" + offset, Type.INT, offset, (il.getStart()).getNext(), il.getEnd());
         ii--; // need to revisit same local
       } else {
         new_lvg =
-            mg.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
+            mgen.addLocalVariable(l.getName(), l.getType(), l.getIndex(), l.getStart(), l.getEnd());
       }
       debug_instrument.log(
           "Added local  %s%n",
@@ -910,6 +942,6 @@ public abstract class StackMapUtils {
     }
 
     // Recalculate the highest local used based on looking at code offsets.
-    mg.setMaxLocals();
+    mgen.setMaxLocals();
   }
 }
