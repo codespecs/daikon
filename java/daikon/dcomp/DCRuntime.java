@@ -154,20 +154,21 @@ public final class DCRuntime {
   /** Perform any initialization required before instrumentation begins */
   public static void init() {
 
+    debug_decl_print.enabled = DynComp.debug_decl_print;
     if (Premain.debug_dcruntime) {
       debug = true;
       debug_tag_frame = true;
-      debug_primitive = new SimpleLog(true);
+      debug_primitive.enabled = true;
     }
     if (Premain.debug_dcruntime_all) {
       debug = true;
       debug_tag_frame = true;
       debug_objects = true;
-      merge_dv = new SimpleLog(true);
-      debug_arr_index = new SimpleLog(true);
-      debug_primitive = new SimpleLog(true);
-      debug_merge_comp = new SimpleLog(true);
-      debug_decl_print = new SimpleLog(true);
+      merge_dv.enabled = true;
+      debug_arr_index.enabled = true;
+      debug_primitive.enabled = true;
+      debug_merge_comp.enabled = true;
+      debug_decl_print.enabled = true;
     }
 
     // Initialize the array of static tags
@@ -1220,7 +1221,9 @@ public final class DCRuntime {
 
     if (merge_dv.enabled()) {
       merge_dv.log("this: %s%n", obj);
-      merge_dv.log("arguments: %s%n", ArraysMDE.toString(args));
+      // For some reason the following line causes DynComp to behave incorrectly.
+      // I have not take the time to investigate.
+      // merge_dv.log("arguments: %s%n", ArraysMDE.toString(args));
     }
 
     // Map from an Object to the Daikon variable that currently holds
@@ -1878,6 +1881,7 @@ public final class DCRuntime {
 
     time_decl.reset_start_time();
     time_decl.indent("Printing decl file for class %s%n", ci.class_name);
+    debug_decl_print.log("class %s%n", ci.class_name);
 
     // Make sure that two variables have the same comparability at all
     // program points
@@ -1963,7 +1967,7 @@ public final class DCRuntime {
 
   /**
    * Print the variables in sets to ps in DECL file format. Each variable in the same set is given
-   * the same comparability. Constructed classname variables are made comparable to opther classname
+   * the same comparability. Constructed classname variables are made comparable to other classname
    * variables only.
    */
   private static void print_decl_vars(PrintWriter ps, List<DVSet> sets, RootInfo dv_tree) {
@@ -2020,7 +2024,10 @@ public final class DCRuntime {
           assert !dv_comp_map.containsKey(dv) : dv + " " + base_comp;
           dv_comp_map.put(dv, base_comp + 1);
           DaikonVariableInfo array_child = dv.array_child();
-          if (array_child != null) arr_index_map.put(array_child.getName(), base_comp);
+          if (array_child != null) {
+            // System.out.printf ("array_index_map put: %s, %d%n", array_child.getName(), base_comp);
+            arr_index_map.put(array_child.getName(), base_comp);
+          }
         } else {
           assert !dv_comp_map.containsKey(dv) : dv + " " + base_comp;
           dv_comp_map.put(dv, base_comp);
@@ -2046,6 +2053,7 @@ public final class DCRuntime {
       if ((dv instanceof RootInfo) || (dv instanceof StaticObjInfo) || !dv.declShouldPrint()) {
         continue;
       }
+      // System.out.printf ("Output dv: %s ", dv);
       ps.println(dv.getName());
       ps.println(dv.getTypeName());
       ps.println(dv.getRepTypeName());
@@ -2060,14 +2068,17 @@ public final class DCRuntime {
           name = name.substring(0, name.length() - ".toString".length());
         }
         Integer index_comp = arr_index_map.get(name);
-        // System.out.printf ("array dv: %s, index_comp: %s%n", dv.getName(), index_comp);
+        // System.out.printf ("compare: %d [ %s ] ", comp, index_comp);
         if (index_comp != null) {
+          // System.out.println(comp + "[" + index_comp + "]");
           ps.println(comp + "[" + index_comp + "]");
         } else {
           // There is no index comparability, so just set it to a unique value.
+          // System.out.println(comp + "[" + base_comp + "]");
           ps.println(comp + "[" + base_comp++ + "]");
         }
       } else {
+        // System.out.println(comp);
         ps.println(comp);
       }
     }
@@ -2304,7 +2315,7 @@ public final class DCRuntime {
     }
     map_info.log("sets size: %d%n", sets.size());
 
-    // Get each set, sort it, and add it to the list of all sets.  The sort
+    // Get each set, sort it, and add it to the list of all sets.  Then sort
     // the list of all sets.  The sorting is not critical except to create
     // a reproducible order
     List<DVSet> set_list = new ArrayList<DVSet>(sets.size());
@@ -2361,7 +2372,7 @@ public final class DCRuntime {
   }
 
   /**
-   * Merges comparability so that the same variable have the same comparability at all points in the
+   * Merges comparability so that the same variable has the same comparability at all points in the
    * program point hierarchy. The comparability at the class/object points is calculated by merging
    * the comparability at each exit point (i.e., if two variables are in the same set it any exit
    * point, they are in the same set at the class point). That comparability is then applied back to
@@ -2394,6 +2405,7 @@ public final class DCRuntime {
     for (MethodInfo mi : ci.method_infos) {
       if (mi.is_class_init()) continue;
       debug_merge_comp.log("Merging %s exit to object%n", mi);
+      merge_dv_comparability(mi.traversalExit, mi.traversalEnter);
       merge_dv_comparability(mi.traversalExit, ci.traversalObject);
       merge_dv_comparability(mi.traversalEnter, ci.traversalObject);
     }
@@ -2817,7 +2829,17 @@ public final class DCRuntime {
     if (obj == null) {
       return "null";
     } else {
-      String tostring = obj.toString();
+      String tostring;
+      try {
+        tostring = obj.toString();
+      } catch (Exception e) {
+        tostring =
+            "toString of "
+                + obj.getClass().getName()
+                + "@"
+                + Integer.toHexString(obj.hashCode())
+                + " failed";
+      }
       String default_tostring =
           String.format("%s@%x", obj.getClass().getName(), System.identityHashCode(obj));
       if (tostring.equals(default_tostring)) {
@@ -3019,8 +3041,9 @@ public final class DCRuntime {
       // obj is the wrapper for the primitive
       // assert obj == null: "primitive object = " + obj_str (obj);
       Object[] tags = field_map.get(parent);
-      if (tags == null) return (nonsensical); // happens if field has never been assigned to
-      else {
+      if (tags == null) {
+        return (nonsensical); // happens if field has never been assigned to
+      } else {
         return tags[field_num];
       }
     }

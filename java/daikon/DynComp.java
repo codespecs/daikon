@@ -24,6 +24,12 @@ public class DynComp {
   @Option("-d Dump the instrumented classes to disk")
   public static boolean debug = false;
 
+  @Option("Print detailed information on which classes are transformed")
+  public static boolean debug_transform = false;
+
+  @Option("Print detailed information on variables being observed")
+  public static boolean debug_decl_print = false;
+
   @Option("Directory in which to create debug files")
   public static File debug_dir = new File("debug");
 

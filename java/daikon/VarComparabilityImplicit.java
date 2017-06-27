@@ -71,7 +71,9 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   public boolean equals(
       /*>>>@GuardSatisfied VarComparabilityImplicit this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
-    if (!(o instanceof VarComparabilityImplicit)) return false;
+    if (!(o instanceof VarComparabilityImplicit)) {
+      return false;
+    }
     return equals((VarComparabilityImplicit) o);
   }
 

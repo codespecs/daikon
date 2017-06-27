@@ -511,10 +511,19 @@ ChicoryPremain.jar : $(wildcard $(CHICORY_JAVA_FILES)) \
 	$(JAVAC_COMMAND) $(CHICORY_JAVA_FILES)
 	$(JAR) cfm ChicoryPremain.jar daikon/chicory/manifest.txt \
 	  daikon/chicory/ChicoryPremain.class
+	$(MAKE) chicory-test
 
-chicory-test : ChicoryPremain.jar
-	$(JAVA) -ea daikon.Chicory --verbose --debug --output-dir=/tmp \
-	  daikon.chicory.Test
+.PHONY: chicory-test
+chicory-test : daikon/chicory/inv_out.diff
+daikon/chicory/inv_out.diff : ChicoryPremain.jar
+	cd daikon/chicory && rm -f Test.log Test.dtrace.gz Test.inv.gz Test.inv.out
+	cd daikon/chicory && $(JAVA) daikon.Chicory --verbose --debug daikon.chicory.Test > Test.log
+	cd daikon/chicory && $(JAVA) daikon.Daikon --no_text_output --no_show_progress Test.dtrace.gz
+	cd daikon/chicory && $(JAVA) daikon.PrintInvariants Test.inv.gz > Test.inv.out
+	-diff -uw daikon/chicory/Test.inv.out.goal daikon/chicory/Test.inv.out \
+	  > daikon/chicory/Test.inv.out.diff
+	@if test ! -s daikon/chicory/Test.inv.out.diff ; then echo No Errors; \
+	else echo Errors: more daikon/chicory/Test.inv.out.diff for details; fi
 
 #
 # Dynamic Comparability (DynComp/Java; also Chicory)

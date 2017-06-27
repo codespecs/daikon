@@ -406,7 +406,7 @@ public class PptTopLevel extends Ppt {
     for (ValueSet vs : new_value_sets) {
       assert vs != null;
     }
-    new_value_sets = castNonNullDeep(new_value_sets); // issue 986
+    new_value_sets = castNonNullDeep(new_value_sets); // https://tinyurl.com/cfissue/986
     value_sets = new_value_sets;
 
     for (VarInfo vi : var_infos) {
@@ -562,7 +562,7 @@ public class PptTopLevel extends Ppt {
     mbtracker = new ModBitTracker(mbtracker.num_vars() + vis.length);
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
     System.arraycopy(vis, 0, new_var_infos, old_length, vis.length);
-    new_var_infos = castNonNullDeep(new_var_infos); // issue 986
+    new_var_infos = castNonNullDeep(new_var_infos); // https://tinyurl.com/cfissue/986
     for (int i = old_length; i < new_var_infos.length; i++) {
       VarInfo vi = new_var_infos[i];
       vi.varinfo_index = i;
@@ -576,7 +576,7 @@ public class PptTopLevel extends Ppt {
     for (int i = 0; i < vis.length; i++) {
       new_value_sets[old_vs_length + i] = ValueSet.factory(vis[i]);
     }
-    new_value_sets = castNonNullDeep(new_value_sets); // issue 986
+    new_value_sets = castNonNullDeep(new_value_sets); // https://tinyurl.com/cfissue/986
     value_sets = new_value_sets;
 
     // Relate the variables to one another
@@ -1775,7 +1775,9 @@ public class PptTopLevel extends Ppt {
     if (di == null) return null;
 
     // If the variables match the leader, the current reason is good
-    if ((leader1 == v1) && (leader2 == v2)) return di;
+    if ((leader1 == v1) && (leader2 == v2)) {
+      return di;
+    }
 
     // Build a new discardString that includes the variable equality
     String reason = di.discardString();
@@ -1789,7 +1791,9 @@ public class PptTopLevel extends Ppt {
       DiscardInfo di, VarInfo v1, VarInfo v2, /*@Prototype*/ Invariant proto) {
 
     DiscardInfo di2 = check_implied_canonical(di.inv, v1, v2, proto);
-    if (di2 == null) return false;
+    if (di2 == null) {
+      return false;
+    }
 
     di.add_implied(di2.discardString());
     return true;
@@ -2299,10 +2303,14 @@ public class PptTopLevel extends Ppt {
   /*@Pure*/
   public boolean is_slice_ok(VarInfo var1, VarInfo var2) {
 
-    if (!is_var_ok_binary(var1) || !is_var_ok_binary(var2)) return false;
+    if (!is_var_ok_binary(var1) || !is_var_ok_binary(var2)) {
+      return false;
+    }
 
     // Check to see if the new slice would be over all constants
-    if (is_constant(var1) && is_constant(var2)) return false;
+    if (is_constant(var1) && is_constant(var2)) {
+      return false;
+    }
 
     if (!(var1.compatible(var2)
         || (var1.type.isArray() && var1.eltsCompatible(var2))
@@ -2317,7 +2325,9 @@ public class PptTopLevel extends Ppt {
     // This is not turned on for now since suppressions need invariants
     // of the form a == a even when a is the only item in the set.
     if (false) {
-      if ((var1 == var2) && (var1.get_equalitySet_size() == 1)) return false;
+      if ((var1 == var2) && (var1.get_equalitySet_size() == 1)) {
+        return false;
+      }
     }
 
     return true;
@@ -2346,10 +2356,14 @@ public class PptTopLevel extends Ppt {
       dlog = new Debug(getClass(), this, Debug.vis(v1, v2, v3));
     }
 
-    if (!is_var_ok_ternary(v1) || !is_var_ok_ternary(v2) || !is_var_ok_ternary(v3)) return false;
+    if (!is_var_ok_ternary(v1) || !is_var_ok_ternary(v2) || !is_var_ok_ternary(v3)) {
+      return false;
+    }
 
     // At least one variable must not be a constant
-    if (is_constant(v1) && is_constant(v2) && is_constant(v3)) return false;
+    if (is_constant(v1) && is_constant(v2) && is_constant(v3)) {
+      return false;
+    }
 
     // Vars must be compatible
     if (!v1.compatible(v2) || !v1.compatible(v3) || !v2.compatible(v3)) {
@@ -2359,13 +2373,19 @@ public class PptTopLevel extends Ppt {
 
     // Don't create a reflexive slice (all vars the same) if there are
     // only two vars in the equality set
-    if ((v1 == v2) && (v2 == v3) && (v1.get_equalitySet_size() <= 2)) return false;
+    if ((v1 == v2) && (v2 == v3) && (v1.get_equalitySet_size() <= 2)) {
+      return false;
+    }
 
     // Don't create a partially reflexive slice (two vars the same) if there
     // is only one variable in its equality set
     if (false) {
-      if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1)) return false;
-      if ((v2 == v3) && (v2.get_equalitySet_size() == 1)) return false;
+      if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1)) {
+        return false;
+      }
+      if ((v2 == v3) && (v2.get_equalitySet_size() == 1)) {
+        return false;
+      }
     }
 
     return true;
@@ -2599,6 +2619,7 @@ public class PptTopLevel extends Ppt {
       debugEqualTo.fine("PostProcessingEquality for: " + this.name());
     }
     if (num_samples() == 0) return;
+
     assert equality_view != null : "ppt = " + ppt_name + " children = " + children;
     assert equality_view != null : "@AssumeAssertion(nullness): application invariant";
     List<Invariant> equalityInvs = equality_view.invs;
@@ -2828,7 +2849,7 @@ public class PptTopLevel extends Ppt {
     for (int i = 0; i < invs.length; i++) {
       lemmas[i] = new InvariantLemma(invs[i]);
     }
-    lemmas = castNonNullDeep(lemmas); // issue 986
+    lemmas = castNonNullDeep(lemmas); // https://tinyurl.com/cfissue/986
     boolean[] present = new boolean[lemmas.length];
     Arrays.fill(present, 0, present.length, true);
     for (int checking = invs.length - 1; checking >= 0; checking--) {
@@ -3773,7 +3794,7 @@ public class PptTopLevel extends Ppt {
 
       // assert !pv.missingOutOfBounds();
     }
-    pvis = castNonNullDeep(pvis); // issue 986
+    pvis = castNonNullDeep(pvis); // https://tinyurl.com/cfissue/986
     return pvis;
   }
 
@@ -4186,6 +4207,7 @@ public class PptTopLevel extends Ppt {
   public static void print_equality_stats(Logger log, PptMap all_ppts) {
 
     if (!log.isLoggable(Level.FINE)) return;
+
     boolean show_details = true;
 
     NumberFormat dfmt = NumberFormat.getInstance();

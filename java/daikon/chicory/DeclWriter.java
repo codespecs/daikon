@@ -61,7 +61,7 @@ public class DeclWriter extends DaikonWriter {
   public DeclWriter(PrintStream writer) {
     super();
     outFile = writer;
-    debug = Chicory.debug;
+    debug = Chicory.debug_decl_print;
   }
 
   /**
@@ -700,7 +700,9 @@ public class DeclWriter extends DaikonWriter {
     }
 
     // Only hashcodes have object ppts
-    if (!var.getRepTypeNameOnly().equals("hashcode")) return null;
+    if (!var.getRepTypeNameOnly().equals("hashcode")) {
+      return null;
+    }
 
     // Get the type (class) of this variable
     String decl_type = var.getTypeNameOnly();

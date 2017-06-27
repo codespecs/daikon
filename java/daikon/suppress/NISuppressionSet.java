@@ -557,7 +557,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     for (int i = 0; i < new_suppressions.size(); i++) {
       new_array[suppression_set.length + i] = new_suppressions.get(i);
     }
-    new_array = castNonNullDeep(new_array); // issue 986
+    new_array = castNonNullDeep(new_array); // https://tinyurl.com/cfissue/986
     suppression_set = new_array;
   }
 
@@ -574,7 +574,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       for (int j = 0; j < sors.length; j++) {
         sors[j] = std_sup.suppressors[j].swap();
       }
-      sors = castNonNullDeep(sors); // issue 986
+      sors = castNonNullDeep(sors); // https://tinyurl.com/cfissue/986
       swap_sups[i] = new NISuppression(sors, std_sup.suppressee.swap());
     }
     NISuppressionSet new_ss = new NISuppressionSet(swap_sups);

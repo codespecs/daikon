@@ -1900,7 +1900,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
   /*@Pure*/
-  public static boolean  eltsGtIndex(_TYPE /*@Nullable*/ [] seq) {
+  public static boolean eltsGtIndex(_TYPE /*@Nullable*/ [] seq) {
   if (seq == null) return false;
     for (int i = 0 ; i < seq.length ; i++) {
       if (lte(seq[i], i)) {

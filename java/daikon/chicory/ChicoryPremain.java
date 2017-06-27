@@ -84,7 +84,7 @@ public class ChicoryPremain {
     Runtime.ppt_select_pattern = Chicory.ppt_select_pattern;
     Runtime.sample_start = Chicory.sample_start;
     DaikonVariableInfo.std_visibility = Chicory.std_visibility;
-    DaikonVariableInfo.debug_vars.enabled = Chicory.debug;
+    DaikonVariableInfo.debug_vars.enabled = Chicory.debug_decl_print;
     if (Chicory.comparability_file != null) {
       Runtime.comp_info = new DeclReader();
       try {
@@ -351,7 +351,9 @@ public class ChicoryPremain {
       }
 
       // No need to do anything if only our versions of bcel are present
-      if (bcel_urls.size() == plse_urls.size()) return;
+      if (bcel_urls.size() == plse_urls.size()) {
+        return;
+      }
 
       URL bcel = bcel_urls.get(0);
       URL plse = plse_urls.get(0);

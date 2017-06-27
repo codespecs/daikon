@@ -46,9 +46,14 @@ setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
 setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
 
-setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
-setenv CLASSPATH .:${CLASSPATH}:${DAIKON_LIBS}:${INV}/plume-lib/java/junit-4.12.jar:${INV}/plume-lib/java/plume.jar
-unsetenv DAIKON_LIBS
+# In general, Java programmers should not set CLASSPATH.
+# setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
+# # Using ${INV}/plume-lib seems undesirable.  If a new version of plume-lib
+# # deprecates a method, then Daikon won't compile for developers; however,
+# # changing Daikon's source code would cause Daikon not to compile for ordinary
+# # users.  
+# # setenv CLASSPATH .:${CLASSPATH}:${DAIKON_LIBS}:${INV}/plume-lib/java/junit-4.12.jar:${INV}/plume-lib/java/plume.jar
+# unsetenv DAIKON_LIBS
 
 setenv LACKWIT_HOME ${INV}/front-end/c/lackwit
 

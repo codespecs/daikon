@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.5.7
+@center Daikon version 5.5.9
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.5.7 release date
-@center May 2, 2017
+@c Print out the Daikon version 5.5.9 release date
+@center June 2, 2017
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.5.7, released May 2, 2017.
+It describes Daikon version 5.5.9, released June 2, 2017.
 
 @menu
 * Introduction::
@@ -3518,35 +3518,39 @@ be defined as variables.
 
 Optionally specifies the minimum possible value for this variable
 (for instance, due to language-specific restrictions on the type). This
-enables Daikon to suppress invariants which would be ``obvious'' in that
+enables Daikon to suppress invariants that would be ``obvious'' in that
 case, such as @code{var >= v}.
 
 @item @code{max-value <v>}
 
 Optionally specifies the maximum possible value for this variable
 (for instance, due to language-specific restrictions on the type). This
-enables Daikon to suppress invariants which would be ``obvious'' in that
+enables Daikon to suppress invariants that would be ``obvious'' in that
 case, such as @code{var <= v}.
 
 @item @code{min-length <v>}
 
 Optionally specifies the minimum possible length for this variable
 (for instance, due to language-specific restrictions on the type). This
-enables Daikon to suppress invariants which would be ``obvious'' in that
+enables Daikon to suppress invariants that would be ``obvious'' in that
 case, such as @code{size(var) >= v}.
+Note that this item should be added to the @code{@emph{arrayname}[..]} entry
+not the @code{@emph{arrayname}[..]} entry.
 
 @item @code{max-length <v>}
 
 Optionally specifies the maximum possible length for this variable
 (for instance, due to language-specific restrictions on the type). This
-enables Daikon to suppress invariants which would be ``obvious'' in that
+enables Daikon to suppress invariants that would be ``obvious'' in that
 case, such as @code{size(var) <= v}.
+Note that this item should be added to the @code{@emph{arrayname}[..]} entry
+not the @code{@emph{arrayname}[..]} entry.
 
 @item @code{valid-values [<v1> <v2> ... <vN>]}
 
 Optionally specifies all the possible values for this
 variable (for instance, due to language-specific restrictions on the
-type). This enables Daikon to suppress invariants which would be
+type). This enables Daikon to suppress invariants that would be
 ``obvious'' in that case, such as @code{v is one of @{v1, v2, ..., vN@}}.
 
 @end itemize

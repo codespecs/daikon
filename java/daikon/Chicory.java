@@ -64,6 +64,9 @@ public class Chicory {
   @Option("Print detailed information on which classes are transformed")
   public static boolean debug_transform = false;
 
+  @Option("Print detailed information on variables being observed")
+  public static boolean debug_decl_print = false;
+
   @Option("Treat classes that match the regex as boot classes (do not instrument)")
   public static /*@Nullable*/ Pattern boot_classes = null;
 

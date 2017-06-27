@@ -48,7 +48,7 @@ public class PptSlice0 extends PptSlice {
     for (int i = 0; i < fake.var_infos.length; i++) {
       fake.var_infos[i] = VarInfo.origVarInfo(sliceTemplate.var_infos[i]);
     }
-    fake.var_infos = castNonNullDeep(fake.var_infos); // issue 986
+    fake.var_infos = castNonNullDeep(fake.var_infos); // https://tinyurl.com/cfissue/986
     return fake;
   }
 
