@@ -281,12 +281,11 @@ public class PptSplitter implements Serializable {
     // Loop through each possible parent slice
     List<VarInfo[]> slices = possible_slices();
 
-    int num_children = ppts.length;
+    assert ppts.length == 2;
+    /*@IntVal(2)*/ int num_children = ppts.length; // always 2
 
     for (VarInfo[] vis : slices) {
 
-      assert ppts.length == 2;
-      /*@IntVal(2)*/ int num_children = ppts.length; // always 2
       // Each element of invs[i] is an invariant from the i-th child, permuted to
       // the parent (and with a parent slice as its ppt slot).
       @SuppressWarnings({"unchecked", "rawtypes"})
