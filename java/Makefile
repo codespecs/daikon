@@ -1315,6 +1315,11 @@ showvars:
 	@echo CLASSPATH_JARS2 = $(CLASSPATH_JARS2)
 	@echo OSTYPE = $(OSTYPE)
 	@echo PATH = $(PATH)
+	@echo MAKEFILE_LIST = "${MAKEFILE_LIST}"
+	@echo expr1 = "$(lastword $(MAKEFILE_LIST))"
+	@echo expr2 = "$(dir $(lastword $(MAKEFILE_LIST)))"
+	@echo expr3 = "$(dir $(lastword $(MAKEFILE_LIST))).."
+	@echo expr4 = "$(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)"
 	@echo DAIKONDIR_DEFAULT = "${DAIKONDIR_DEFAULT}"
 	@echo DAIKONDIR = "${DAIKONDIR}"
 	@echo DAIKONBIN = ${DAIKONBIN}
