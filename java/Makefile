@@ -1,6 +1,6 @@
 ### User customizations
 
-DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+DAIKONDIR_DEFAULT := $(dir $(realpath $(lastword $(MAKEFILE_LIST)))..)
 
 # Put user-specific changes (such as changes to the JAVAC variable:
 #   JAVAC ?= jikes -g +E +F
@@ -1317,9 +1317,9 @@ showvars:
 	@echo PATH = $(PATH)
 	@echo MAKEFILE_LIST = "${MAKEFILE_LIST}"
 	@echo expr1 = "$(lastword $(MAKEFILE_LIST))"
-	@echo expr2 = "$(dir $(lastword $(MAKEFILE_LIST)))"
-	@echo expr3 = "$(dir $(lastword $(MAKEFILE_LIST))).."
-	@echo expr4 = "$(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)"
+	@echo expr2 = "$(realpath $(lastword $(MAKEFILE_LIST)))"
+	@echo expr3 = "$(realpath $(lastword $(MAKEFILE_LIST))).."
+	@echo expr4 = "$(dir $(realpath $(lastword $(MAKEFILE_LIST)))..)"
 	@echo DAIKONDIR_DEFAULT = "${DAIKONDIR_DEFAULT}"
 	@echo DAIKONDIR = "${DAIKONDIR}"
 	@echo DAIKONBIN = ${DAIKONBIN}
