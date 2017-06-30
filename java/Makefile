@@ -649,6 +649,7 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	# change relevant imports (make sure to get "import static" as well)
 	perl -p -i -e 's/^(import .*)plume/\1daikon.util/g' daikon/util/*.java
 	# for debugging
+	echo "DAIKONDIR = ${DAIKONDIR}"
 	echo "CLASSPATH = ${CLASSPATH}"
 	$(JAVAC_COMMAND) daikon/util/*.java
 	touch daikon/util/.timestamp-daikonutil
