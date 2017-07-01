@@ -1,6 +1,6 @@
 ### User customizations
 
-MKFILE_LASTWORD := $(lastword $(MAKEFILE_LIST)))
+MKFILE_LASTWORD := $(lastword $(MAKEFILE_LIST))
 MKFILE_PATH := $(abspath $(MKFILE_LASTWORD))
 MKFILE_PATH2 := $(realpath $(MKFILE_LASTWORD))
 CURRENT_DIR := $(dir $(MKFILE_PATH))))
