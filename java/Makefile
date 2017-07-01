@@ -1,7 +1,10 @@
 ### User customizations
 
-MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-CURRENT_DIR := $(notdir $(patsubst %/,%,$(dir $(MKFILE_PATH))))
+MKFILE_LASTWORD := $(lastword $(MAKEFILE_LIST)))
+MKFILE_PATH := $(abspath $(MKFILE_LASTWORD))
+MKFILE_PATH2 := $(realpath $(MKFILE_LASTWORD))
+CURRENT_DIR := $(dir $(MKFILE_PATH))))
+CURRENT_DIR2 := $(dir $(MKFILE_PATH2))))
 DAIKONDIR_DEFAULT := $(realpath $(CURRENT_DIR)..)
 
 # Put user-specific changes (such as changes to the JAVAC variable:
@@ -1322,8 +1325,11 @@ showvars:
 	@echo expr3 = "$(abspath $(lastword $(MAKEFILE_LIST))).."
 	@echo expr4 = "$(dir $(abspath $(lastword $(MAKEFILE_LIST)))..)"
 	@echo MAKEFILE_LIST = "${MAKEFILE_LIST}"
-	@echo MKFILE_PATH = "$(MKFILE_PATH)"
-	@echo CURRENT_DIR = "$(CURRENT_DIR)"
+	@echo MKFILE_LASTWORD = "${MKFILE_LASTWORD}"
+	@echo MKFILE_PATH = "${MKFILE_PATH}"
+	@echo MKFILE_PATH2 = "${MKFILE_PATH2}"
+	@echo CURRENT_DIR = "${CURRENT_DIR}"
+	@echo CURRENT_DIR2 = "${CURRENT_DIR2}"
 	@echo DAIKONDIR_DEFAULT = "${DAIKONDIR_DEFAULT}"
 	@echo DAIKONDIR = "${DAIKONDIR}"
 	@echo DAIKONBIN = ${DAIKONBIN}
