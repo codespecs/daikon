@@ -1320,10 +1320,6 @@ showvars:
 	@echo CLASSPATH_JARS2 = $(CLASSPATH_JARS2)
 	@echo OSTYPE = $(OSTYPE)
 	@echo PATH = $(PATH)
-	@echo expr1 = "$(lastword $(MAKEFILE_LIST))"
-	@echo expr2 = "$(abspath $(lastword $(MAKEFILE_LIST)))"
-	@echo expr3 = "$(abspath $(lastword $(MAKEFILE_LIST))).."
-	@echo expr4 = "$(dir $(abspath $(lastword $(MAKEFILE_LIST)))..)"
 	@echo MAKEFILE_LIST = "${MAKEFILE_LIST}"
 	@echo MKFILE_LASTWORD = "${MKFILE_LASTWORD}"
 	@echo MKFILE_PATH = "${MKFILE_PATH}"
