@@ -649,8 +649,9 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	# change relevant imports (make sure to get "import static" as well)
 	perl -p -i -e 's/^(import .*)plume/\1daikon.util/g' daikon/util/*.java
 	# for debugging
+	echo "DAIKONDIR = ${DAIKONDIR}"
 	echo "CLASSPATH = ${CLASSPATH}"
-	$(JAVAC_COMMAND) daikon/util/*.java
+	$(JAVAC_COMMAND) -Xlint:path daikon/util/*.java
 	touch daikon/util/.timestamp-daikonutil
 
 # Checks that daikon.util, rather than plume, is imported by source files
@@ -1308,12 +1309,14 @@ daikon/config/HtmlToTexinfo.class: daikon/config/HtmlToTexinfo.java
 showvars:
 	which java
 	which javac
+	@echo PWD = $(shell pwd)
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 	@echo CLASSPATH = "${CLASSPATH}"
 	@echo CLASSPATH_JARS = $(CLASSPATH_JARS)
 	@echo CLASSPATH_JARS2 = $(CLASSPATH_JARS2)
 	@echo OSTYPE = $(OSTYPE)
 	@echo PATH = $(PATH)
+	@echo DAIKONDIR_DEFAULT = "${DAIKONDIR_DEFAULT}"
 	@echo DAIKONDIR = "${DAIKONDIR}"
 	@echo DAIKONBIN = ${DAIKONBIN}
 	@echo PLUMEBIN = ${PLUMEBIN}
