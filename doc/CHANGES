@@ -20,6 +20,13 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.5.10 (July 4, 2017)
+
+Chicory and DynComp:
+- Refactored some instrumentation code. Includes a few bug fixes.
+
+===========================================================================
+
 5.5.8 (June 2, 2017)
 
 DynComp:
