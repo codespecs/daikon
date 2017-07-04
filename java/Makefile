@@ -651,7 +651,7 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	# for debugging
 	echo "DAIKONDIR = ${DAIKONDIR}"
 	echo "CLASSPATH = ${CLASSPATH}"
-	$(JAVAC_COMMAND) -Xlint:path daikon/util/*.java
+	$(JAVAC_COMMAND) daikon/util/*.java
 	touch daikon/util/.timestamp-daikonutil
 
 # Checks that daikon.util, rather than plume, is imported by source files
