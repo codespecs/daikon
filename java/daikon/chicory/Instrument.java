@@ -219,8 +219,8 @@ class Instrument extends StackMapUtils implements ClassFileTransformer {
         //                   "Transformed.class";
         // System.out.println ("About to dump class " + className +
         //                     " to " + filename);
-        // cg.getJavaClass().dump(filename);
-        return (cg.getJavaClass().getBytes());
+        // njc.dump(filename);
+        return (njc.getBytes());
       } else {
         debug_transform.log("not including class %s (filtered out)", className);
         // No changes to the bytecodes
