@@ -1,7 +1,8 @@
 package daikon;
 
 import java.io.Serializable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
@@ -69,7 +70,9 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   public boolean equals(
       /*>>>@GuardSatisfied VarComparabilityImplicit this,*/
       /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
-    if (!(o instanceof VarComparabilityImplicit)) return false;
+    if (!(o instanceof VarComparabilityImplicit)) {
+      return false;
+    }
     return equals((VarComparabilityImplicit) o);
   }
 
@@ -93,7 +96,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   static VarComparabilityImplicit parse(String rep, /*@Nullable*/ ProglangType vartype) {
     // String rep_ = rep;          // for debugging
 
-    Vector<String> dim_reps = new Vector<String>();
+    List<String> dim_reps = new ArrayList<String>();
     // handle array types
     while (rep.endsWith("]")) {
       int openpos = rep.lastIndexOf("[");
@@ -103,7 +106,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     int dims = dim_reps.size();
     VarComparabilityImplicit[] index_types = new VarComparabilityImplicit[dims];
     for (int i = 0; i < dims; i++) {
-      index_types[i] = parse(dim_reps.elementAt(i), null);
+      index_types[i] = parse(dim_reps.get(i), null);
     }
     try {
       int base = Integer.parseInt(rep);

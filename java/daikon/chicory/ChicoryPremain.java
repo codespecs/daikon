@@ -84,7 +84,7 @@ public class ChicoryPremain {
     Runtime.ppt_select_pattern = Chicory.ppt_select_pattern;
     Runtime.sample_start = Chicory.sample_start;
     DaikonVariableInfo.std_visibility = Chicory.std_visibility;
-    DaikonVariableInfo.debug_vars.enabled = Chicory.debug;
+    DaikonVariableInfo.debug_vars.enabled = Chicory.debug_decl_print;
     if (Chicory.comparability_file != null) {
       Runtime.comp_info = new DeclReader();
       try {
@@ -120,7 +120,7 @@ public class ChicoryPremain {
     initializeDeclAndDTraceWriters();
 
     // Setup the transformer
-    Object transformer = null;
+    Object transformer;
     // use a special classloader to ensure correct version of BCEL is used
     ClassLoader loader = new ChicoryLoader();
     try {
@@ -179,7 +179,7 @@ public class ChicoryPremain {
     pureMethods = new HashSet<String>();
     File purityFile = new File(pathLoc, purityFileName.getPath());
 
-    BufferedReader reader = null;
+    BufferedReader reader;
     try {
       reader = UtilMDE.bufferedFileReader(purityFile);
     } catch (FileNotFoundException e) {
@@ -187,6 +187,7 @@ public class ChicoryPremain {
           "%nCould not find purity file %s = %s%n", purityFileName, purityFile.getAbsolutePath());
       Runtime.chicoryLoaderInstantiationError = true;
       System.exit(1);
+      throw new Error("Unreachable control flow");
     } catch (IOException e) {
       throw new Error(
           "Problem reading purity file " + purityFileName + " = " + purityFile.getAbsolutePath(),
@@ -195,7 +196,7 @@ public class ChicoryPremain {
 
     if (Chicory.verbose) System.out.printf("Reading '%s' for pure methods %n", purityFileName);
 
-    String line;
+    String line = null;
     do {
       try {
         line = reader.readLine();
@@ -228,7 +229,7 @@ public class ChicoryPremain {
   // not handled: /*@RequiresNonNull("ChicoryPremain.pureMethods")*/
   /*@RequiresNonNull("pureMethods")*/
   private static void writePurityFile(String fileName, String parentDir) {
-    PrintWriter pureFileWriter = null;
+    PrintWriter pureFileWriter;
     try {
       pureFileWriter = new PrintWriter(new File(parentDir, fileName));
     } catch (FileNotFoundException e) {
@@ -350,7 +351,9 @@ public class ChicoryPremain {
       }
 
       // No need to do anything if only our versions of bcel are present
-      if (bcel_urls.size() == plse_urls.size()) return;
+      if (bcel_urls.size() == plse_urls.size()) {
+        return;
+      }
 
       URL bcel = bcel_urls.get(0);
       URL plse = plse_urls.get(0);

@@ -57,8 +57,8 @@ package daikon.dcomp;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 import org.apache.bcel.Const;
 import org.apache.bcel.generic.ConstantPoolGen;
 import org.apache.bcel.generic.InstructionHandle;
@@ -117,8 +117,9 @@ public final class StackVer {
    * about its symbolic execution predecessors.
    */
   private static final class InstructionContextQueue {
-    private Vector<InstructionContext> ics = new Vector<InstructionContext>();
-    private Vector<ArrayList<InstructionContext>> ecs = new Vector<ArrayList<InstructionContext>>();
+    private List<InstructionContext> ics = new ArrayList<InstructionContext>();
+    private List<ArrayList<InstructionContext>> ecs =
+        new ArrayList<ArrayList<InstructionContext>>();
     /**
      * TODO
      *
@@ -454,8 +455,7 @@ public final class StackVer {
             Frame.setThis(new UninitializedObjectType(new ObjectType(mg.getClassName())));
             f.getLocals().set(0, Frame.getThis());
           } else {
-            @SuppressWarnings(
-                "nullness") // unannotated: org.apache.bcel.verifier.structurals.Frame is not yet annotated
+            @SuppressWarnings("nullness") // unannotated: org.apache.bcel.verifier.structurals.Frame
             /*@NonNull*/ UninitializedObjectType dummy = null;
             Frame.setThis(dummy);
             f.getLocals().set(0, new ObjectType(mg.getClassName()));

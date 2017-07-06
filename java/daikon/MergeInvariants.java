@@ -423,6 +423,7 @@ public final class MergeInvariants {
 
     // Nothing to do if there are no splitters here
     if (!ppt.has_splitters()) return;
+
     assert child.splitters != null
         : "@AssumeAssertion(nullness): correlated: ppt.has_splitters() == child.has_splitters(), and ppt.has_splitters() == true";
 

@@ -50,7 +50,7 @@ public class LogicalCompare {
   // method should create an instance.
 
   // key = ppt name
-  private static /*@MonotonicNonNull*/ Map<String, Vector<Lemma>> extra_assumptions;
+  private static /*@MonotonicNonNull*/ Map<String, List<Lemma>> extra_assumptions;
 
   private static /*@MonotonicNonNull*/ LemmaStack lemmas;
 
@@ -102,8 +102,8 @@ public class LogicalCompare {
 
   private static boolean[] filters = new boolean[128];
 
-  private static Vector<Invariant> filterInvariants(Vector<Invariant> invs, boolean isPost) {
-    Vector<Invariant> new_invs = new Vector<Invariant>();
+  private static List<Invariant> filterInvariants(List<Invariant> invs, boolean isPost) {
+    List<Invariant> new_invs = new ArrayList<Invariant>();
     for (Invariant inv : invs) {
       Invariant guarded_inv = inv;
       //       System.err.println("Examining " + inv.format());
@@ -175,8 +175,8 @@ public class LogicalCompare {
 
   // Translate a vector of Invariants into a vector of Lemmas, without
   // changing the invariants.
-  private static Vector<Lemma> translateStraight(Vector<Invariant> invs) {
-    Vector<Lemma> lems = new Vector<Lemma>();
+  private static List<Lemma> translateStraight(List<Invariant> invs) {
+    List<Lemma> lems = new ArrayList<Lemma>();
     for (Invariant inv : invs) {
       lems.add(new InvariantLemma(inv));
     }
@@ -186,8 +186,8 @@ public class LogicalCompare {
   // Translate a vector of Invariants into a vector of Lemmas,
   // discarding any invariants that represent only facts about a
   // routine's prestate.
-  private static Vector<Lemma> translateRemovePre(Vector<Invariant> invs) {
-    Vector<Lemma> lems = new Vector<Lemma>();
+  private static List<Lemma> translateRemovePre(List<Invariant> invs) {
+    List<Lemma> lems = new ArrayList<Lemma>();
     for (Invariant inv : invs) {
       if (!inv.isAllPrestate()) lems.add(new InvariantLemma(inv));
     }
@@ -199,8 +199,8 @@ public class LogicalCompare {
   // about the precondition of a routine when it is examined in the
   // poststate context.
   // The arguments are invariants at the entry point, where no orig(...) variables exist.
-  private static Vector<Lemma> translateAddOrig(Vector<Invariant> invs) {
-    Vector<Lemma> lems = new Vector<Lemma>();
+  private static List<Lemma> translateAddOrig(List<Invariant> invs) {
+    List<Lemma> lems = new ArrayList<Lemma>();
     for (Invariant inv : invs) {
       lems.add(InvariantLemma.makeLemmaAddOrig(inv));
     }
@@ -209,7 +209,7 @@ public class LogicalCompare {
 
   //   // Print a vector of invariants and their Simplify translations, for
   //   // debugging purposes.
-  //   private static void printInvariants(Vector<Invariant> invs) {
+  //   private static void printInvariants(List<Invariant> invs) {
   //     for (Invariant inv : invs) {
   //       System.out.println("   " + inv.format());
   //       System.out.println("(BG_PUSH "
@@ -223,7 +223,7 @@ public class LogicalCompare {
   }
 
   /*@RequiresNonNull("lemmas")*/
-  private static int checkConsequences(Vector<Lemma> assumptions, Vector<Lemma> consequences) {
+  private static int checkConsequences(List<Lemma> assumptions, List<Lemma> consequences) {
     Set<String> assumption_formulas = new HashSet<String>();
     for (Lemma lem : assumptions) {
       assumption_formulas.add(lem.formula);
@@ -242,10 +242,10 @@ public class LogicalCompare {
 
       if (opt_minimize_classes) {
         if (result == 'T' && !identical) {
-          Vector<Set<Class<? extends Invariant>>> sets = lemmas.minimizeClasses(inv.formula);
+          List<Set<Class<? extends Invariant>>> sets = lemmas.minimizeClasses(inv.formula);
           for (Set<Class<? extends Invariant>> classes : sets) {
             @SuppressWarnings(
-                "nullness") // application invariant: context; might be able to rewrite types to make consequences a Vector<InvariantLemma>";
+                "nullness") // application invariant: context; might be able to rewrite types to make consequences a List<InvariantLemma>";
             /*@NonNull*/ Class<? extends Invariant> inv_class = inv.invClass();
             System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
@@ -268,7 +268,7 @@ public class LogicalCompare {
           if (identical) {
             System.out.println("Identical");
           } else {
-            Vector<Lemma> assume = lemmas.minimizeProof(inv);
+            List<Lemma> assume = lemmas.minimizeProof(inv);
             System.out.println();
             for (Lemma lem : assume) {
               System.out.println(lem.summarize());
@@ -310,7 +310,7 @@ public class LogicalCompare {
   // zero or more of the invariants in ASSUMPTIONS. Returns the number
   // of invariants that can't be proven to follow.
   /*@RequiresNonNull("lemmas")*/
-  private static int evaluateImplications(Vector<Lemma> assumptions, Vector<Lemma> consequences)
+  private static int evaluateImplications(List<Lemma> assumptions, List<Lemma> consequences)
       throws SimplifyError {
     int mark = lemmas.markLevel();
     lemmas.pushOrdering();
@@ -322,7 +322,7 @@ public class LogicalCompare {
         System.out.println("Warning: had to remove contradiction(s)");
       } else {
         System.out.println("Contradictory assumptions:");
-        Vector<Lemma> min = lemmas.minimizeContradiction();
+        List<Lemma> min = lemmas.minimizeContradiction();
         LemmaStack.printLemmas(System.out, min);
         throw new Error("Aborting");
       }
@@ -336,15 +336,15 @@ public class LogicalCompare {
 
   /*@RequiresNonNull("lemmas")*/
   private static int evaluateImplicationsCarefully(
-      Vector<Lemma> safeAssumptions, Vector<Lemma> unsafeAssumptions, Vector<Lemma> consequences)
+      List<Lemma> safeAssumptions, List<Lemma> unsafeAssumptions, List<Lemma> consequences)
       throws SimplifyError {
     int mark = lemmas.markLevel();
-    Vector<Lemma> assumptions = new Vector<Lemma>();
+    List<Lemma> assumptions = new ArrayList<Lemma>();
     lemmas.pushOrdering();
     lemmas.pushLemmas(safeAssumptions);
     if (lemmas.checkForContradiction() == 'T') {
       System.out.println("Contradictory assumptions:");
-      Vector<Lemma> min = lemmas.minimizeContradiction();
+      List<Lemma> min = lemmas.minimizeContradiction();
       LemmaStack.printLemmas(System.out, min);
       throw new Error("Aborting");
     }
@@ -356,7 +356,7 @@ public class LogicalCompare {
       boolean safe = false;
       while (!safe && unsafe.size() > 0) {
         int innerMark = lemmas.markLevel();
-        lemmas.pushLemmas(new Vector<Lemma>(unsafe));
+        lemmas.pushLemmas(new ArrayList<Lemma>(unsafe));
         if (lemmas.checkForContradiction() == 'T') {
           lemmas.popToMark(innerMark);
           j = i + unsafe.size();
@@ -406,10 +406,10 @@ public class LogicalCompare {
     //     app_exit_ppt.guardInvariants();
     //     test_exit_ppt.guardInvariants();
 
-    Vector<Invariant> a_pre = app_enter_ppt.invariants_vector();
-    Vector<Invariant> t_pre = test_enter_ppt.invariants_vector();
-    Vector<Invariant> a_post = app_exit_ppt.invariants_vector();
-    Vector<Invariant> t_post = test_exit_ppt.invariants_vector();
+    List<Invariant> a_pre = app_enter_ppt.invariants_vector();
+    List<Invariant> t_pre = test_enter_ppt.invariants_vector();
+    List<Invariant> a_post = app_exit_ppt.invariants_vector();
+    List<Invariant> t_post = test_exit_ppt.invariants_vector();
 
     if (opt_timing) System.out.println("Starting timer");
     long processing_time_start = System.currentTimeMillis();
@@ -424,25 +424,25 @@ public class LogicalCompare {
       LemmaStack.printLemmas(System.out, Lemma.lemmasVector());
       System.out.println("");
 
-      Vector<Lemma> v = new Vector<Lemma>();
+      List<Lemma> v = new ArrayList<Lemma>();
       v.addAll(translateAddOrig(a_pre));
       System.out.println("Weak preconditions (Apre):");
       LemmaStack.printLemmas(System.out, v);
       System.out.println("");
 
-      v = new Vector<Lemma>();
+      v = new ArrayList<Lemma>();
       v.addAll(translateAddOrig(t_pre));
       System.out.println("Strong preconditions (Tpre):");
       LemmaStack.printLemmas(System.out, v);
       System.out.println("");
 
-      v = new Vector<Lemma>();
+      v = new ArrayList<Lemma>();
       v.addAll(translateRemovePre(t_post));
       System.out.println("Strong postconditions (Tpost):");
       LemmaStack.printLemmas(System.out, v);
       System.out.println("");
 
-      v = new Vector<Lemma>();
+      v = new ArrayList<Lemma>();
       v.addAll(translateRemovePre(a_post));
       System.out.println("Weak postconditions (Apost):");
       LemmaStack.printLemmas(System.out, v);
@@ -452,9 +452,9 @@ public class LogicalCompare {
     if (opt_show_count) {
       System.out.println("Strong preconditions consist of " + t_pre.size() + " invariants.");
     }
-    Vector<Lemma> pre_assumptions = new Vector<Lemma>();
+    List<Lemma> pre_assumptions = new ArrayList<Lemma>();
     pre_assumptions.addAll(translateStraight(a_pre));
-    Vector<Lemma> pre_conclusions = new Vector<Lemma>();
+    List<Lemma> pre_conclusions = new ArrayList<Lemma>();
     pre_conclusions.addAll(translateStraight(t_pre));
     Collections.sort(pre_conclusions);
 
@@ -468,15 +468,15 @@ public class LogicalCompare {
 
     System.out.println("Testing postconditions:");
 
-    Vector<Lemma> post_assumptions_safe = new Vector<Lemma>();
-    Vector<Lemma> post_assumptions_unsafe = new Vector<Lemma>();
-    Vector<Lemma> post_conclusions = new Vector<Lemma>();
+    List<Lemma> post_assumptions_safe = new ArrayList<Lemma>();
+    List<Lemma> post_assumptions_unsafe = new ArrayList<Lemma>();
+    List<Lemma> post_conclusions = new ArrayList<Lemma>();
 
     post_assumptions_unsafe.addAll(translateAddOrig(a_pre));
     post_assumptions_safe.addAll(translateStraight(t_post));
     String ppt_name = test_enter_ppt.ppt_name.name();
     if (extra_assumptions.containsKey(ppt_name)) {
-      Vector<Lemma> assumptions = extra_assumptions.get(ppt_name);
+      List<Lemma> assumptions = extra_assumptions.get(ppt_name);
       post_assumptions_unsafe.addAll(assumptions);
     }
 
@@ -509,7 +509,7 @@ public class LogicalCompare {
         } else if (line.startsWith("PPT_NAME")) {
           ppt_name = line.substring("PPT_NAME".length()).trim();
           if (!extra_assumptions.containsKey(ppt_name)) {
-            extra_assumptions.put(ppt_name, new Vector<Lemma>());
+            extra_assumptions.put(ppt_name, new ArrayList<Lemma>());
           }
         } else if (line.startsWith("(")) {
           if (ppt_name == null) {
@@ -532,7 +532,7 @@ public class LogicalCompare {
           comment = comment.trim();
           @SuppressWarnings(
               "nullness") // map: on previous loop iteration, this key was added to map
-          /*@NonNull*/ Vector<Lemma> assumption_vec = extra_assumptions.get(ppt_name);
+          /*@NonNull*/ List<Lemma> assumption_vec = extra_assumptions.get(ppt_name);
           assumption_vec.add(new Lemma(comment, formula));
         } else {
           System.err.println("Can't parse " + line + " in assumptions file");
@@ -594,7 +594,7 @@ public class LogicalCompare {
     Configuration.getInstance()
         .apply("daikon.simplify.Session." + "simplify_max_iterations=2147483647");
 
-    extra_assumptions = new LinkedHashMap<String, Vector<Lemma>>();
+    extra_assumptions = new LinkedHashMap<String, List<Lemma>>();
 
     Getopt g = new Getopt("daikon.tools.compare.LogicalCompare", args, "h", longopts);
     int c;

@@ -79,7 +79,9 @@ public class IsPointer extends SingleScalar {
   }
 
   public InvariantStatus check_modified(long v, int count) {
-    if (!isWithinPointerRange(v)) return InvariantStatus.FALSIFIED;
+    if (!isWithinPointerRange(v)) {
+      return InvariantStatus.FALSIFIED;
+    }
     return InvariantStatus.NO_CHANGE;
   }
 

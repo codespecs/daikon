@@ -56,14 +56,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.5.7
+@center Daikon version 5.5.11
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.5.7 release date
-@center May 2, 2017
+@c Print out the Daikon version 5.5.11 release date
+@center July 4, 2017
 @end ifset
 
 @ifclear final
@@ -111,7 +111,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.5.7, released May 2, 2017.
+It describes Daikon version 5.5.11, released July 4, 2017.
 
 @menu
 * Introduction::
@@ -293,12 +293,12 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.5.7.tar.gz
-tar zxf daikon-5.5.7.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.5.11.tar.gz
+tar zxf daikon-5.5.11.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.5.7/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.5.11/} subdirectory.
 
 @item
 Place three commands in your shell initialization file:  
@@ -310,7 +310,7 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The absolute pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.5.7
+export DAIKONDIR=@var{daikonparent}/daikon-5.5.11
 # The absolute pathname of the directory that contains the Java JDK
 export JAVA_HOME=@var{/usr/lib/jvm/java}
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -340,6 +340,12 @@ you from having to edit the main Makefile directly).
 
 @item
 Compile Daikon and build other tools.
+First, make sure that you have satisfied the requirements in
+@ref{Requirements for compiling Daikon,,,developer,Daikon Developer Manual}
+and
+@ref{Requirements for compiling Kvasir,,,developer,Daikon Developer Manual}.
+Then, run:
+
 @c Note that this step is @emph{not} required if you only want to use Daikon
 @c with its .NET front end (Celeriac).
 @c This step is required for using
@@ -395,12 +401,12 @@ unpack Daikon. (Substitute the current version number for @file{#.#.#}.)
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.5.7.tar.gz
-tar zxf daikon-5.5.7.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.5.11.tar.gz
+tar zxf daikon-5.5.11.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.5.7/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.5.11/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{~/.bashrc}:  
@@ -410,7 +416,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.5.7
+export DAIKONDIR=@var{daikonparent}/daikon-5.5.11
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -1834,7 +1840,7 @@ Specify a single configuration setting.
 These debugging options cause output to be written to a log file (by
 default, to the terminal); in other words, they enable a Logger.
 The @option{--dbg @var{category}} option
-enables debugging output for a specific part of Daikon; it may be
+enables debugging output (logging output) for a specific part of Daikon; it may be
 specified multiple times, permitting fine-grained control over debugging
 output.  The @option{--debug} option turns on all debugging flags.
 (This produces a lot of output!)  Most categories are class or
@@ -3863,7 +3869,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.5.7.jar
+--premain=C:\lib\daikon-5.5.11.jar
 @end example
 
 @item --heap-size=@var{max_heap}
@@ -6011,20 +6017,18 @@ format (DWARF-2).
 
 However, Kvasir has some limitations of its own.  Because Kvasir uses
 Valgrind, it shares Valgrind's processor and operating system limitations.
-Furthermore, of the platforms supported by Valgrind, the only ones
-currently supported by Kvasir are @code{x86-linux} and
-@code{amd64-linux}.
-@code{x86-linux} refers to Intel 386-compatible processors
+Furthermore, of the platforms supported by Valgrind, the only one
+currently supported by Kvasir is @var{amd64-linux}.
+Valgrind support for @var{x86-linux} is now in maintenance mode and Kvasir
+no longer supports this platform.
+@var{x86-linux} refers to Intel 386-compatible processors
 (the so-called IA-32 architecture) such as the Intel Pentium and the
 AMD Athlon, running Linux.
-@code{amd64-linux} refers to the 64-bit extension of the x86
+@var{amd64-linux} refers to the 64-bit extension of the x86
 architecture found in many newer Intel and AMD processors, also
 variously referred to as x86-64, @nospellcheck{IA-32e}, EM64T, and Intel 64, when
 running under a Linux kernel in 64-bit mode.
 The Itanium or IA-64 architecture is not supported.
-The Kvasir build process will automatically compile a 32-bit version, a
-64-bit version, or both, whichever are supported by your system's
-default compiler.
 
 Kvasir requires that your program have debugging
 information available in the DWARF-2 format, as produced by @command{GCC} version
@@ -8842,7 +8846,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.5.7, released May 2, 2017.
+This manual describes Daikon version 5.5.11, released July 4, 2017.
 A more detailed list of revisions since mid-2001 can be found in file
 @url{CHANGES,,@file{doc/CHANGES}}
 in the distribution; this section gives a
@@ -8857,7 +8861,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.5.7
+@cindex Daikon version 5.5.11
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited

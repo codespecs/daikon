@@ -294,8 +294,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
 
-    DiscardInfo di = null;
-    di = SubSequence.isObviousSubSequence(this, var1, var2);
+    DiscardInfo di = SubSequence.isObviousSubSequence(this, var1, var2);
     if (di == null) {
       di = SubSequence.isObviousSubSequence(this, var2, var1);
     }

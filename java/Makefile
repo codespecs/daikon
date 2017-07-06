@@ -511,10 +511,19 @@ ChicoryPremain.jar : $(wildcard $(CHICORY_JAVA_FILES)) \
 	$(JAVAC_COMMAND) $(CHICORY_JAVA_FILES)
 	$(JAR) cfm ChicoryPremain.jar daikon/chicory/manifest.txt \
 	  daikon/chicory/ChicoryPremain.class
+	$(MAKE) chicory-test
 
-chicory-test : ChicoryPremain.jar
-	$(JAVA) -ea daikon.Chicory --verbose --debug --output-dir=/tmp \
-	  daikon.chicory.Test
+.PHONY: chicory-test
+chicory-test : daikon/chicory/inv_out.diff
+daikon/chicory/inv_out.diff : ChicoryPremain.jar
+	cd daikon/chicory && rm -f Test.log Test.dtrace.gz Test.inv.gz Test.inv.out
+	cd daikon/chicory && $(JAVA) daikon.Chicory --verbose --debug daikon.chicory.Test > Test.log
+	cd daikon/chicory && $(JAVA) daikon.Daikon --no_text_output --no_show_progress Test.dtrace.gz
+	cd daikon/chicory && $(JAVA) daikon.PrintInvariants Test.inv.gz > Test.inv.out
+	-diff -uw daikon/chicory/Test.inv.out.goal daikon/chicory/Test.inv.out \
+	  > daikon/chicory/Test.inv.out.diff
+	@if test ! -s daikon/chicory/Test.inv.out.diff ; then echo No Errors; \
+	else echo Errors: more daikon/chicory/Test.inv.out.diff for details; fi
 
 #
 # Dynamic Comparability (DynComp/Java; also Chicory)
@@ -640,6 +649,7 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	# change relevant imports (make sure to get "import static" as well)
 	perl -p -i -e 's/^(import .*)plume/\1daikon.util/g' daikon/util/*.java
 	# for debugging
+	echo "DAIKONDIR = ${DAIKONDIR}"
 	echo "CLASSPATH = ${CLASSPATH}"
 	$(JAVAC_COMMAND) daikon/util/*.java
 	touch daikon/util/.timestamp-daikonutil
@@ -852,8 +862,7 @@ CHECKER_ARGS ?= -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.sym
 ## All of the following targets need to depend on "compile".
 
 # Just check that the Index Checker doesn't crash -- suppress type-checking errors.
-# Also suppressing cast.unsafe issued by the Value Checker see: https://github.com/typetools/checker-framework/issues/1264
-JAVAC_INDEX_ARGS = -processor org.checkerframework.checker.index.IndexChecker -implicit:class -Xlint:-processing -AskipDefs='${INDEX_SKIPDEFS}' -AassumeAssertionsAreEnabled -AsuppressWarnings="index,value:cast.unsafe"
+JAVAC_INDEX_ARGS = -processor org.checkerframework.checker.index.IndexChecker -implicit:class -Xlint:-processing -AskipDefs='${INDEX_SKIPDEFS}' -AassumeAssertionsAreEnabled -AsuppressWarnings="index"
 # JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
 JAVAC_SIGNATURE_ARGS = -processor org.checkerframework.checker.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
@@ -1300,12 +1309,14 @@ daikon/config/HtmlToTexinfo.class: daikon/config/HtmlToTexinfo.java
 showvars:
 	which java
 	which javac
+	@echo PWD = $(shell pwd)
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 	@echo CLASSPATH = "${CLASSPATH}"
 	@echo CLASSPATH_JARS = $(CLASSPATH_JARS)
 	@echo CLASSPATH_JARS2 = $(CLASSPATH_JARS2)
 	@echo OSTYPE = $(OSTYPE)
 	@echo PATH = $(PATH)
+	@echo DAIKONDIR_DEFAULT = "${DAIKONDIR_DEFAULT}"
 	@echo DAIKONDIR = "${DAIKONDIR}"
 	@echo DAIKONBIN = ${DAIKONBIN}
 	@echo PLUMEBIN = ${PLUMEBIN}

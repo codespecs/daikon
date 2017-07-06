@@ -24,6 +24,12 @@ public class DynComp {
   @Option("-d Dump the instrumented classes to disk")
   public static boolean debug = false;
 
+  @Option("Print detailed information on which classes are transformed")
+  public static boolean debug_transform = false;
+
+  @Option("Print detailed information on variables being observed")
+  public static boolean debug_decl_print = false;
+
   @Option("Directory in which to create debug files")
   public static File debug_dir = new File("debug");
 
@@ -301,12 +307,13 @@ public class DynComp {
 
     // Execute the command, sending all output to our streams
     java.lang.Runtime rt = java.lang.Runtime.getRuntime();
-    Process dcomp_proc = null;
+    Process dcomp_proc;
     try {
       dcomp_proc = rt.exec(cmdline);
-    } catch (Exception e) {
+    } catch (Throwable e) {
       System.out.printf("Exception '%s' while executing '%s'\n", e, cmdline);
       System.exit(1);
+      throw new Error("Unreachable control flow");
     }
     int result = redirect_wait(dcomp_proc);
 

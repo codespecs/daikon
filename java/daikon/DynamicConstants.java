@@ -543,7 +543,7 @@ public class DynamicConstants implements Serializable {
     }
 
     // any new views created
-    Vector<PptSlice> new_views = new Vector<PptSlice>();
+    List<PptSlice> new_views = new ArrayList<PptSlice>();
 
     int mod = ValueTuple.MODIFIED;
 

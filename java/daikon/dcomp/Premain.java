@@ -111,7 +111,7 @@ public class Premain {
     java.lang.Runtime.getRuntime().addShutdownHook(shutdown_thread);
 
     // Setup the transformer
-    Object transformer = null;
+    Object transformer;
     // use a special classloader to ensure correct version of BCEL is used
     ClassLoader loader = new daikon.chicory.ChicoryPremain.ChicoryLoader();
     try {

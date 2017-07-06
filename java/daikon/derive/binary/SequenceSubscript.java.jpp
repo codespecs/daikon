@@ -35,6 +35,7 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.binary;
 
+import java.util.logging.Logger;
 import daikon.*;
 import daikon.derive.*;
 import plume.*;
@@ -55,6 +56,9 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
   // daikon.config.Configuration interface.
   /** Boolean. True iff SEQUENCESCALARSUBSCRIPT derived variables should be generated. */
   public static boolean dkconfig_enabled = true;
+
+  /** General debug tracer. */
+  public static final Logger debug = Logger.getLogger("daikon.derive.binary." + #SEQUENCESCALARSUBSCRIPT);
 
   // base1 is the sequence
   // base2 is the scalar
@@ -85,6 +89,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     } else {
       index_shift = 0;
     }
+    debug.fine("" + #SEQUENCESCALARSUBSCRIPT + "(" + vi1 + ", " + vi2 + ", " + less1 + ") => " + this);
   }
 
   /*@SideEffectFree*/

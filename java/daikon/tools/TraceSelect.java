@@ -324,7 +324,9 @@ class InvocationComparator implements Comparator<String> {
     // sorts first by program point
     int pptCompare =
         s1.substring(0, s1.indexOf(":::")).compareTo(s2.substring(0, s2.indexOf(":::")));
-    if (pptCompare != 0) return pptCompare;
+    if (pptCompare != 0) {
+      return pptCompare;
+    }
 
     // next sorts based on the other stuff
     int nonce1 = getNonce(s1);

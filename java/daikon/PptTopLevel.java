@@ -187,6 +187,9 @@ public class PptTopLevel extends Ppt {
   /**
    * All the Views (that is, slices) on this are stored as values in the HashMap. Indexed by a
    * Arrays.asList array list of Integers holding varinfo_index values.
+   *
+   * <p>For a client to access this private variable, it should use {@link #viewsAsCollection},
+   * {@link #views_iterable}, or {@link #views_iterator}.
    */
   private Map<List<Integer>, PptSlice> views;
 
@@ -397,7 +400,7 @@ public class PptTopLevel extends Ppt {
     for (ValueSet vs : new_value_sets) {
       assert vs != null;
     }
-    new_value_sets = castNonNullDeep(new_value_sets); // issue 986
+    new_value_sets = castNonNullDeep(new_value_sets); // https://tinyurl.com/cfissue/986
     value_sets = new_value_sets;
 
     for (VarInfo vi : var_infos) {
@@ -553,7 +556,7 @@ public class PptTopLevel extends Ppt {
     mbtracker = new ModBitTracker(mbtracker.num_vars() + vis.length);
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
     System.arraycopy(vis, 0, new_var_infos, old_length, vis.length);
-    new_var_infos = castNonNullDeep(new_var_infos); // issue 986
+    new_var_infos = castNonNullDeep(new_var_infos); // https://tinyurl.com/cfissue/986
     for (int i = old_length; i < new_var_infos.length; i++) {
       VarInfo vi = new_var_infos[i];
       vi.varinfo_index = i;
@@ -567,7 +570,7 @@ public class PptTopLevel extends Ppt {
     for (int i = 0; i < vis.length; i++) {
       new_value_sets[old_vs_length + i] = ValueSet.factory(vis[i]);
     }
-    new_value_sets = castNonNullDeep(new_value_sets); // issue 986
+    new_value_sets = castNonNullDeep(new_value_sets); // https://tinyurl.com/cfissue/986
     value_sets = new_value_sets;
 
     // Relate the variables to one another
@@ -1420,12 +1423,12 @@ public class PptTopLevel extends Ppt {
   // the loop over samples or the loop over slices.
 
   /** Add the specified slices to this ppt */
-  public void addViews(Vector<PptSlice> slices_vector) {
+  public void addViews(List<PptSlice> slices_vector) {
     if (slices_vector.isEmpty()) return;
 
     // Don't modify the actual parameter
     @SuppressWarnings("unchecked")
-    Vector<PptSlice> slices_vector_copy = (Vector<PptSlice>) slices_vector.clone();
+    List<PptSlice> slices_vector_copy = new ArrayList<PptSlice>(slices_vector);
 
     // This might be a brand-new Slice, and instantiate_invariants for this
     // pass might not have come up with any invariants.
@@ -1625,7 +1628,9 @@ public class PptTopLevel extends Ppt {
         // System.out.printf ("considering invariant %s, exact = %b\n",
         //                   inv.format(), inv.isExact());
         if (inv.isExact() && inv.format_using(OutputFormat.DAIKON).startsWith(start)) {
-          if (assignment_invs == null) assignment_invs = new ArrayList<Invariant>();
+          if (assignment_invs == null) {
+            assignment_invs = new ArrayList<Invariant>();
+          }
           assignment_invs.add(inv);
         }
       }
@@ -1761,7 +1766,9 @@ public class PptTopLevel extends Ppt {
     if (di == null) return null;
 
     // If the variables match the leader, the current reason is good
-    if ((leader1 == v1) && (leader2 == v2)) return di;
+    if ((leader1 == v1) && (leader2 == v2)) {
+      return di;
+    }
 
     // Build a new discardString that includes the variable equality
     String reason = di.discardString();
@@ -1775,7 +1782,9 @@ public class PptTopLevel extends Ppt {
       DiscardInfo di, VarInfo v1, VarInfo v2, /*@Prototype*/ Invariant proto) {
 
     DiscardInfo di2 = check_implied_canonical(di.inv, v1, v2, proto);
-    if (di2 == null) return false;
+    if (di2 == null) {
+      return false;
+    }
 
     di.add_implied(di2.discardString());
     return true;
@@ -1972,7 +1981,9 @@ public class PptTopLevel extends Ppt {
     if (inv == null) return false;
 
     // If the varinfos are out of order swap
-    if (v1.varinfo_index > v2.varinfo_index) inv = inv.permute(permute_swap);
+    if (v1.varinfo_index > v2.varinfo_index) {
+      inv = inv.permute(permute_swap);
+    }
 
     return (slice.is_inv_true(inv));
   }
@@ -2051,7 +2062,7 @@ public class PptTopLevel extends Ppt {
     // / 1. all unary views
 
     // Unary slices/invariants.
-    Vector<PptSlice> unary_views = new Vector<PptSlice>(var_infos.length);
+    List<PptSlice> unary_views = new ArrayList<PptSlice>(var_infos.length);
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
 
@@ -2079,7 +2090,7 @@ public class PptTopLevel extends Ppt {
     // / 2. all binary views
 
     // Binary slices/invariants.
-    Vector<PptSlice> binary_views = new Vector<PptSlice>();
+    List<PptSlice> binary_views = new ArrayList<PptSlice>();
     for (int i1 = 0; i1 < var_infos.length; i1++) {
       VarInfo var1 = var_infos[i1];
 
@@ -2125,7 +2136,7 @@ public class PptTopLevel extends Ppt {
       Global.debugInfer.fine("Trying ternary slices for " + this.name());
     }
 
-    Vector<PptSlice> ternary_views = new Vector<PptSlice>();
+    List<PptSlice> ternary_views = new ArrayList<PptSlice>();
     for (int i1 = 0; i1 < var_infos.length; i1++) {
       VarInfo var1 = var_infos[i1];
       if (!is_var_ok_ternary(var1)) continue;
@@ -2283,10 +2294,14 @@ public class PptTopLevel extends Ppt {
   /*@Pure*/
   public boolean is_slice_ok(VarInfo var1, VarInfo var2) {
 
-    if (!is_var_ok_binary(var1) || !is_var_ok_binary(var2)) return false;
+    if (!is_var_ok_binary(var1) || !is_var_ok_binary(var2)) {
+      return false;
+    }
 
     // Check to see if the new slice would be over all constants
-    if (is_constant(var1) && is_constant(var2)) return false;
+    if (is_constant(var1) && is_constant(var2)) {
+      return false;
+    }
 
     if (!(var1.compatible(var2)
         || (var1.type.isArray() && var1.eltsCompatible(var2))
@@ -2301,7 +2316,9 @@ public class PptTopLevel extends Ppt {
     // This is not turned on for now since suppressions need invariants
     // of the form a == a even when a is the only item in the set.
     if (false) {
-      if ((var1 == var2) && (var1.get_equalitySet_size() == 1)) return false;
+      if ((var1 == var2) && (var1.get_equalitySet_size() == 1)) {
+        return false;
+      }
     }
 
     return true;
@@ -2330,10 +2347,14 @@ public class PptTopLevel extends Ppt {
       dlog = new Debug(getClass(), this, Debug.vis(v1, v2, v3));
     }
 
-    if (!is_var_ok_ternary(v1) || !is_var_ok_ternary(v2) || !is_var_ok_ternary(v3)) return false;
+    if (!is_var_ok_ternary(v1) || !is_var_ok_ternary(v2) || !is_var_ok_ternary(v3)) {
+      return false;
+    }
 
     // At least one variable must not be a constant
-    if (is_constant(v1) && is_constant(v2) && is_constant(v3)) return false;
+    if (is_constant(v1) && is_constant(v2) && is_constant(v3)) {
+      return false;
+    }
 
     // Vars must be compatible
     if (!v1.compatible(v2) || !v1.compatible(v3) || !v2.compatible(v3)) {
@@ -2343,13 +2364,19 @@ public class PptTopLevel extends Ppt {
 
     // Don't create a reflexive slice (all vars the same) if there are
     // only two vars in the equality set
-    if ((v1 == v2) && (v2 == v3) && (v1.get_equalitySet_size() <= 2)) return false;
+    if ((v1 == v2) && (v2 == v3) && (v1.get_equalitySet_size() <= 2)) {
+      return false;
+    }
 
     // Don't create a partially reflexive slice (two vars the same) if there
     // is only one variable in its equality set
     if (false) {
-      if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1)) return false;
-      if ((v2 == v3) && (v2.get_equalitySet_size() == 1)) return false;
+      if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1)) {
+        return false;
+      }
+      if ((v2 == v3) && (v2.get_equalitySet_size() == 1)) {
+        return false;
+      }
     }
 
     return true;
@@ -2583,6 +2610,7 @@ public class PptTopLevel extends Ppt {
       debugEqualTo.fine("PostProcessingEquality for: " + this.name());
     }
     if (num_samples() == 0) return;
+
     assert equality_view != null : "ppt = " + ppt_name + " children = " + children;
     assert equality_view != null : "@AssumeAssertion(nullness): application invariant";
     List<Invariant> equalityInvs = equality_view.invs;
@@ -2699,11 +2727,11 @@ public class PptTopLevel extends Ppt {
     Invariant[] invs;
     {
       // Replace parwise equality with an equivalence set
-      Vector<Invariant> all_noeq = invariants_vector();
+      List<Invariant> all_noeq = invariants_vector();
       Collections.sort(all_noeq, icfp);
       List<Invariant> all = InvariantFilters.addEqualityInvariants(all_noeq);
       Collections.sort(all, icfp);
-      Vector<Invariant> printing = new Vector<Invariant>();
+      List<Invariant> printing = new ArrayList<Invariant>();
       for (Iterator<Invariant> _invs = all.iterator(); _invs.hasNext(); ) {
         Invariant inv = _invs.next();
         if (test.include(inv)) { // think: inv.isWorthPrinting()
@@ -2767,7 +2795,7 @@ public class PptTopLevel extends Ppt {
     // program points, and we don't necessarily want to lose the
     // unconditional version of the invariant at the conditional ppt.
     for (PptTopLevel ppt : closure) {
-      Vector<Invariant> invs_vec = ppt.invariants_vector();
+      List<Invariant> invs_vec = ppt.invariants_vector();
       Collections.sort(invs_vec, icfp);
       for (Invariant inv : InvariantFilters.addEqualityInvariants(invs_vec)) {
         if (inv instanceof Implication) {
@@ -2812,7 +2840,7 @@ public class PptTopLevel extends Ppt {
     for (int i = 0; i < invs.length; i++) {
       lemmas[i] = new InvariantLemma(invs[i]);
     }
-    lemmas = castNonNullDeep(lemmas); // issue 986
+    lemmas = castNonNullDeep(lemmas); // https://tinyurl.com/cfissue/986
     boolean[] present = new boolean[lemmas.length];
     Arrays.fill(present, 0, present.length, true);
     for (int checking = invs.length - 1; checking >= 0; checking--) {
@@ -2857,7 +2885,7 @@ public class PptTopLevel extends Ppt {
       int worstWheel = 0;
       do {
         // But try to recover anyway
-        Vector<Lemma> problems = proverStack.minimizeContradiction();
+        List<Lemma> problems = proverStack.minimizeContradiction();
         if (LemmaStack.dkconfig_print_contradictions) {
           System.err.println("Minimal set:");
           LemmaStack.printLemmas(System.err, proverStack.minimizeContradiction());
@@ -2875,21 +2903,21 @@ public class PptTopLevel extends Ppt {
           }
         }
         int max_demerits = -1;
-        Vector<Lemma> worst = new Vector<Lemma>();
+        List<Lemma> worst = new ArrayList<Lemma>();
         for (Map.Entry</*@KeyFor("demerits")*/ Lemma, Integer> ent : demerits.entrySet()) {
           int value = ent.getValue().intValue();
           if (value == max_demerits) {
             worst.add(ent.getKey());
           } else if (value > max_demerits) {
             max_demerits = value;
-            worst = new Vector<Lemma>();
+            worst = new ArrayList<Lemma>();
             worst.add(ent.getKey());
           }
         }
         int offsetFromEnd = worstWheel % worst.size();
         worstWheel = (3 * worstWheel + 1) % 10000019;
         int index = worst.size() - 1 - offsetFromEnd;
-        Lemma bad = worst.elementAt(index);
+        Lemma bad = worst.get(index);
         demerits.remove(bad);
         proverStack.popToMark(backgroundMark);
         boolean isInvariant = false;
@@ -3019,8 +3047,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Vector version of getInvariants(). */
-  public Vector<Invariant> invariants_vector() {
-    return new Vector<Invariant>(getInvariants());
+  public List<Invariant> invariants_vector() {
+    return new ArrayList<Invariant>(getInvariants());
   }
 
   /**
@@ -3442,8 +3470,9 @@ public class PptTopLevel extends Ppt {
         // System.out.printf ("First child equality set: %s\n",
         //                     c1.child.equality_view);
         emap = c1.get_child_equalities_as_parent();
-        if (debugMerge.isLoggable(Level.FINE)) // check before stringifying emap
-        debugMerge.fine("child " + c1.child.name() + " equality = " + emap);
+        if (debugMerge.isLoggable(Level.FINE)) { // check before stringifying emap
+          debugMerge.fine("child " + c1.child.name() + " equality = " + emap);
+        }
         break;
       }
     }
@@ -3675,7 +3704,7 @@ public class PptTopLevel extends Ppt {
       Arrays.sort(pvis_sorted, VarInfo.IndexComparator.getInstance());
 
       // Create the parent slice
-      PptSlice pslice = null;
+      PptSlice pslice;
       if (pvis.length == 1) {
         pslice = new PptSlice1(this, pvis_sorted[0]);
       } else if (pvis.length == 2) {
@@ -3751,7 +3780,7 @@ public class PptTopLevel extends Ppt {
 
       // assert !pv.missingOutOfBounds();
     }
-    pvis = castNonNullDeep(pvis); // issue 986
+    pvis = castNonNullDeep(pvis); // https://tinyurl.com/cfissue/986
     return pvis;
   }
 
@@ -4163,6 +4192,7 @@ public class PptTopLevel extends Ppt {
   public static void print_equality_stats(Logger log, PptMap all_ppts) {
 
     if (!log.isLoggable(Level.FINE)) return;
+
     boolean show_details = true;
 
     NumberFormat dfmt = NumberFormat.getInstance();

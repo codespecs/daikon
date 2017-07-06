@@ -279,9 +279,9 @@ public final class FileIO {
     String ppt_name = need(state, scanner, "ppt name");
     ppt_name = user_mod_ppt_name(ppt_name);
 
-    // Information that will populate the new program point
+    /** Information that will populate the new program point. */
     Map<String, VarDefinition> varmap = new LinkedHashMap<String, VarDefinition>();
-    // The VarDefinition we are in the middle of reading, or null if we are not.
+    /** The VarDefinition we are in the middle of reading, or null if we are not. */
     VarDefinition vardef = null;
     List<ParentRelation> ppt_parents = new ArrayList<ParentRelation>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf(PptFlags.class);
@@ -697,7 +697,7 @@ public final class FileIO {
 
     // System.out.printf("read_var_comparability, line = '%s' %b%n", line,
     //                   new_decl_format);
-    String comp_str = null;
+    String comp_str;
     if (new_decl_format) {
       Scanner scanner = new Scanner(line);
       scanner.next();
@@ -1010,7 +1010,7 @@ public final class FileIO {
 
   private static InputStream connectToChicory() {
 
-    ServerSocket daikonServer = null;
+    ServerSocket daikonServer;
     try {
       daikonServer = new ServerSocket(0); //bind to any free port
 
@@ -1023,7 +1023,7 @@ public final class FileIO {
       throw new RuntimeException("Unable to create server", e);
     }
 
-    Socket chicSocket = null;
+    Socket chicSocket;
     try {
       daikonServer.setSoTimeout(5000);
 
@@ -1358,7 +1358,6 @@ public final class FileIO {
       Global.dtraceWriter = new PrintWriter(new FileWriter(new File(filename + ".debug")));
     }
 
-    PrintWriter pWriter = null;
     while (true) {
       read_data_trace_record(data_trace_state);
 
@@ -1583,7 +1582,7 @@ public final class FileIO {
       int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
 
       // Read an invocation nonce if one exists
-      Integer nonce = null;
+      Integer nonce;
 
       boolean nonce_exists;
       {
@@ -1598,7 +1597,9 @@ public final class FileIO {
         reader.reset();
         nonce_exists = NONCE_HEADER.equals(nonce_header_peekahead);
       }
-      if (nonce_exists) {
+      if (!nonce_exists) {
+        nonce = null;
+      } else {
         @SuppressWarnings("nullness") // nonce_exists is true, so readLine() returns non-null
         /*@NonNull*/ String nonce_header = reader.readLine(); // read & discard header
         assert NONCE_HEADER.equals(nonce_header);
@@ -1721,9 +1722,8 @@ public final class FileIO {
       return;
     }
 
-    // See Checker Framework Issue 862
-    // https://github.com/typetools/checker-framework/issues/862
-    @SuppressWarnings("flowexpr.parse.error")
+    @SuppressWarnings(
+        "flowexpr.parse.error") // https://github.com/typetools/checker-framework/issues/862
     Object dummy = ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {
@@ -2080,7 +2080,7 @@ public final class FileIO {
     }
 
     // Does oldvalue_reps now have no null elements???
-    oldvalue_reps = castNonNullDeep(oldvalue_reps); // issue 986
+    oldvalue_reps = castNonNullDeep(oldvalue_reps); // https://tinyurl.com/cfissue/986
     ppt_to_value_reps.put(ppt, oldvalue_reps);
 
     if (Global.debugPrintDtrace) {
@@ -2742,7 +2742,9 @@ public final class FileIO {
             parent_relation_id,
             name);
       }
-      if (scanner.hasNext()) parent_variable = need(scanner, "parent variable");
+      if (scanner.hasNext()) {
+        parent_variable = need(scanner, "parent variable");
+      }
 
       parents.add(new VarParent(parent_ppt, parent_relation_id, parent_variable));
 

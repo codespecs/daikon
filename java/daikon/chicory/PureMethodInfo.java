@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*>>>
+import org.checkerframework.checker.initialization.qual.*;
+import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
@@ -76,7 +78,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
       if (parentVal == null || parentVal instanceof NonsensicalList) {
         retVal = NonsensicalList.getInstance();
       } else {
-        List</*@Nullable*/ Object> retList = new ArrayList</*@Nullable*/ Object>();
+        ArrayList</*@Nullable*/ Object> retList = new ArrayList</*@Nullable*/ Object>();
 
         for (Object val : (List<Object>) parentVal) { // unchecked cast
           if (val == null || val instanceof NonsensicalObject) {
@@ -131,6 +133,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
     // Without this synchronization, other threads would observe that
     // startPure has been called and wouldn't do any output.
     synchronized (Runtime.class) {
+      // Initialization is unnecessary, but without it the Rawness Checker issues an error at the return statement.
       Object retVal = null;
       try {
         // TODO is this the best way to handle this problem?
@@ -139,10 +142,13 @@ public class PureMethodInfo extends DaikonVariableInfo {
         Runtime.startPure();
 
         @SuppressWarnings("nullness") // argVals is declared Nullable
-        /*@NonNull*/ Object tmp_retVal = meth.invoke(receiverVal, argVals);
+        /*@NonNull*/ /*@NonRaw*/ /*@Initialized*/ /*@GuardedBy({})*/ Object tmp_retVal = meth.invoke(receiverVal, argVals);
         retVal = tmp_retVal;
 
-        if (meth.getReturnType().isPrimitive()) retVal = convertWrapper(retVal);
+        if (meth.getReturnType().isPrimitive()) {
+          retVal = convertWrapper(retVal);
+        }
+
       } catch (IllegalArgumentException e) {
         throw new Error(e);
       } catch (IllegalAccessException e) {
@@ -160,10 +166,10 @@ public class PureMethodInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Convert standard wrapped Objects (i.e., Integers) to Chicory wrappers (ie, Runtime.IntWrap).
-   * Should not be called if the Object was not auto-boxed from from a primitive!
+   * Convert standard wrapped (boxed) Objects (i.e., Integers) to Chicory wrappers (ie,
+   * Runtime.IntWrap). Should not be called if the Object was not auto-boxed from from a primitive!
    */
-  public static Object convertWrapper(Object obj) {
+  public static /*@Nullable*/ Object convertWrapper(/*@Nullable*/ Object obj) {
     if (obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList) {
       return obj;
     }

@@ -39,7 +39,7 @@ public class CheckerClass {
     /*@NonNull*/ CompilationUnit clazzCU =
         (CompilationUnit) Ast.getParent(CompilationUnit.class, clazz);
     NodeOptional no = clazzCU.f0;
-    String packageName = null;
+    String packageName;
     if (no.present()) {
       packageName = Ast.format(((PackageDeclaration) no.node).f2).trim();
     } else {

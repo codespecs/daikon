@@ -451,7 +451,9 @@ public final class Runtime {
           // Do nothing; i gets incremented.
       }
     }
-    if (sb.length() == 0) return orig;
+    if (sb.length() == 0) {
+      return orig;
+    }
     sb.append(orig.substring(post_esc));
     return sb.toString();
   }
@@ -946,7 +948,7 @@ public final class Runtime {
     ps.print('[');
     for (int i = 0; i < a.length; i++) {
       if (i != 0) ps.print(' ');
-      char c = ((Character) a[0]).charValue();
+      char c = ((Character) a[i]).charValue();
       if (c == '\r') {
         ps.print("\\r");
       } else if (c == '\n') { // not lineSep

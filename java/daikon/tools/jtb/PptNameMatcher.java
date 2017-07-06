@@ -69,8 +69,8 @@ public class PptNameMatcher {
         NodeSequence seq = (NodeSequence) intermediateSequence.elementAt(0);
         NodeSequence seqOrig = (NodeSequence) intermediateSequenceOrig.elementAt(0);
 
-        Vector<Node> singleElementVector = seq.nodes;
-        Vector<Node> singleElementVectorOrig = seqOrig.nodes;
+        List<Node> singleElementVector = seq.nodes;
+        List<Node> singleElementVectorOrig = seqOrig.nodes;
         // Replace the ClassOrInterfaceType with its ungenerified version.
 
         //     System.out.println("@0");
@@ -140,9 +140,9 @@ public class PptNameMatcher {
     // 2. class name
     // 3. method parameters
 
-    String classname = null;
-    String methodname = null;
-    List<FormalParameter> params = null;
+    String classname;
+    String methodname;
+    List<FormalParameter> params;
 
     if (methodOrConstructorDeclaration instanceof MethodDeclaration) {
       classname = Ast.getClassName((MethodDeclaration) methodOrConstructorDeclaration);

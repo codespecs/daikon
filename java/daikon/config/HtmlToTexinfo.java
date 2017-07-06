@@ -1,12 +1,47 @@
 package daikon.config;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import plume.*;
+
+/*>>>
+import org.checkerframework.checker.regex.qual.*;
+*/
 
 /** Supplies a static method htmlToTexinfo that converts HTML to Texinfo format. */
 public class HtmlToTexinfo {
 
   private static final String lineSep = System.getProperty("line.separator");
 
+  public static /*@Regex(1)*/ Pattern javadocAtCode;
+
+  static {
+    // Javadoc actually permits matched braces.  Expand this in the future when needed.
+    javadocAtCode = Pattern.compile("\\{@code ([^{}]*?)\\}");
+  }
+
+  /**
+   * Converts Javadoc-flavored HTML to Texinfo.
+   *
+   * <p>In particular, handles extra tags that may occur in Javadoc code.
+   */
+  public static String javadocHtmlToTexinfo(String s) {
+
+    StringBuilder result = new StringBuilder();
+    int pos = 0;
+    Matcher m = javadocAtCode.matcher(s);
+    while (m.find(pos)) {
+      result.append(htmlToTexinfo(s.substring(pos, m.start())));
+      result.append("@code{");
+      result.append(s.substring(m.start(1), m.end(1)));
+      result.append("}");
+      pos = m.end();
+    }
+    result.append(htmlToTexinfo(s.substring(pos, s.length())));
+    return result.toString();
+  }
+
+  /** Converts HTML to Texinfo. */
   public static String htmlToTexinfo(String s) {
 
     // Remove leading spaces, which throw off Info.
@@ -16,6 +51,7 @@ public class HtmlToTexinfo {
     s = UtilMDE.replaceString(s, "}", "@}");
     s = s.replaceAll("(@p?x?ref)@\\{(.*)@\\}", "$1{$2}");
     s = UtilMDE.replaceString(s, "<br>", "@*");
+    s = UtilMDE.replaceString(s, lineSep + lineSep + "<p>", lineSep + lineSep);
     s = UtilMDE.replaceString(s, "<p>", "@*@*");
     // Sadly, Javadoc prohibits the <samp> tag.  Use <tt> instead.
     s = UtilMDE.replaceString(s, "<samp>", "@samp{");

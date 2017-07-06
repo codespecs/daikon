@@ -1190,7 +1190,7 @@ import typequals.*;
         debugIsObvious.fine(sb.toString());
       }
 
-      assigned = castNonNullDeep(assigned); // issue 986
+      assigned = castNonNullDeep(assigned); // https://tinyurl.com/cfissue/986
       return isObviousStatically(assigned);
     } else {
       for (VarInfo vi : vis[position].get_equalitySet_vars()) {

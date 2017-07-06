@@ -632,8 +632,8 @@ public final class PPTSLICE1 extends PptSlice {
         cvis_sorted[j] = cv.canonicalRep();
       }
 
-      cvis = castNonNullDeep(cvis); // issue 986
-      cvis_sorted = castNonNullDeep(cvis_sorted); // issue 986
+      cvis = castNonNullDeep(cvis); // https://tinyurl.com/cfissue/986
+      cvis_sorted = castNonNullDeep(cvis_sorted); // https://tinyurl.com/cfissue/986
 
       // If any of the child variables have always been missing, this
       // particular slice in the child received no samples.  If dynamic
@@ -707,7 +707,7 @@ public final class PPTSLICE1 extends PptSlice {
             assert cv != null;
             child_vars[k] = cv.canonicalRep();
           }
-          child_vars = castNonNullDeep(child_vars); // issue 986
+          child_vars = castNonNullDeep(child_vars); // https://tinyurl.com/cfissue/986
           orig_inv.log("org inv");
           inv.log(
               "Created %s from %s using permute %s cvis_sorted = %s cvis = %s for ppt %s",

@@ -243,7 +243,7 @@ public class Annotate {
       debug.fine("Parsing file " + javafilename);
 
       // Annotate the file
-      Reader input = null;
+      Reader input;
       try {
         input = new FileReader(javafilename);
       } catch (FileNotFoundException e) {
@@ -251,7 +251,7 @@ public class Annotate {
       }
 
       JavaParser parser = new JavaParser(input);
-      Node root = null;
+      Node root;
       try {
         root = parser.CompilationUnit();
       } catch (ParseException e) {

@@ -94,7 +94,9 @@ public class PptSliceEquality extends PptSlice {
     public boolean equals(
         /*>>>@GuardSatisfied VarInfoAndComparability this,*/
         /*@GuardSatisfied*/ /*@Nullable*/ Object o) {
-      if (!(o instanceof VarInfoAndComparability)) return false;
+      if (!(o instanceof VarInfoAndComparability)) {
+        return false;
+      }
       return equals((VarInfoAndComparability) o);
     }
 
@@ -368,7 +370,7 @@ public class PptSliceEquality extends PptSlice {
       resultArray[resultCount] = new Equality(list, this);
       resultCount++;
     }
-    resultArray = castNonNullDeep(resultArray); // issue 986
+    resultArray = castNonNullDeep(resultArray); // https://tinyurl.com/cfissue/986
 
     // Sort for determinism
     Arrays.sort(resultArray, EqualityComparator.theInstance);
@@ -402,7 +404,7 @@ public class PptSliceEquality extends PptSlice {
       eq.setSamples(leader.numSamples());
       resultArray[i] = eq;
     }
-    resultArray = castNonNullDeep(resultArray); // issue 986
+    resultArray = castNonNullDeep(resultArray); // https://tinyurl.com/cfissue/986
 
     // Sort for determinism
     Arrays.sort(resultArray, PptSliceEquality.EqualityComparator.theInstance);
@@ -550,7 +552,9 @@ public class PptSliceEquality extends PptSlice {
 
     // Track debug if any variables are in newVis
     Debug dlog = null;
-    if (Debug.logOn()) dlog = new Debug(getClass(), parent, newVis);
+    if (Debug.logOn()) {
+      dlog = new Debug(getClass(), parent, newVis);
+    }
 
     if (position >= slice.var_infos.length) {
       // Done with assigning positions and recursion

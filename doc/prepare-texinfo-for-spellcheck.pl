@@ -251,7 +251,10 @@ while (<>) {
                 }
                 when (OUTPUT_ARG) {
                     push @state_stack, $cur_state;
-                    $cur_state = PRINTING_TO_BRACE;
+                    # skipping takes precedence over printing
+                    if ($cur_state != SKIPPING_TO_BRACE) {
+                        $cur_state = PRINTING_TO_BRACE;
+                    }
                     # we assume next token is "{" - skip it
                     $index++;
                 }

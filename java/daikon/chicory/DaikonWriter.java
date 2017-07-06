@@ -151,9 +151,6 @@ public abstract class DaikonWriter {
    * @param point usually "ENTER" or "EXIT"
    */
   private static String methodName(Member member, String point) {
-
-    String ppt_name = null;
-
     String fullname;
     Class<?>[] args;
     Class<?> declaring_class = member.getDeclaringClass();
@@ -175,7 +172,7 @@ public abstract class DaikonWriter {
         arg_str += arg.getName();
       }
     }
-    ppt_name = String.format("%s(%s):::%s", fullname, arg_str, point);
+    String ppt_name = String.format("%s(%s):::%s", fullname, arg_str, point);
     return ppt_name;
   }
 
