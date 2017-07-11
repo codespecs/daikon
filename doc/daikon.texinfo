@@ -3882,7 +3882,7 @@ The size is specified in the same manner as the
 
 @item --exception-handling
 By default, Chicory only traces the call of an exception
-(@code{throw new Exception();}) which leads to an exit of the method.
+(@code{throw new Exception();}) which leads to an exit of the current method.
 With the @option{--exception-handling} parameter, Chicory will catch all
 uncaught Exceptions (thrown and delegated) in all the methods and produce a
 valid Dataflow hierarchy and trace.  To realize it, Chicory encapsulates
@@ -9174,7 +9174,7 @@ Matthew Tschantz,
 Iuliu Vasilescu,
 Chen Xiao,
 Tao Xie,
-Jeff Yuan
+Jeff Yuan.
 }
 
 @nospellcheck{Craig Kaplan} carved the Daikon logo.
